@@ -7,116 +7,11 @@
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2006/04/16 06:06:57  vapour
+ * Added notes relevant to building on Windows (MinGW).
+ *
  * Revision 1.1  2006/04/13 15:59:54  vapour
  * Initial version, copied from my local CVS repository.
- *
- * Revision 1.33  2006/04/13 15:26:17  jc
- * Added working code to make a sound beep, and shut down sound at program exit.
- *
- * Revision 1.32  2006/04/13 14:57:47  jc
- * Added a (no code) function stub for sound_beep.
- *
- * Revision 1.31  2006/04/10 07:58:14  jc
- * Slightly improved the handling of empty layers, and the warnings generated when the code hits an unknown layer type.
- *
- * Revision 1.30  2006/04/09 12:12:21  jc
- * Moved flame-types.h to the top of our own header include list.
- *
- * Revision 1.29  2006/04/07 00:59:03  jc
- * Moved the definition of external variables into its own common header file.
- *
- * Revision 1.28  2006/04/05 17:20:56  jc
- * Added a menu_enable function, to disable/greyscale and enable menu items.
- *
- * Revision 1.27  2006/03/31 05:05:02  jc
- * + Updated externs.
- * + Color of flash output text now matches user request.
- *
- * Revision 1.26  2006/03/30 14:13:40  jc
- * Text now positions on its background layer a bit better.
- *
- * Revision 1.25  2006/03/30 12:04:58  jc
- * Text layer now has both its background and text.  They just need positioning properly now.
- *
- * Revision 1.24  2006/03/30 11:02:15  jc
- * Text now embedded in its own sprite.
- *
- * Revision 1.23  2006/03/30 08:10:36  jc
- * First version where text actually gets to the screen. (yay)
- *
- * Revision 1.22  2006/03/28 14:09:47  jc
- * Added first working bitmap handling code, after coming across bug after bug in Ming. :(
- *
- * Revision 1.21  2006/03/27 22:08:44  jc
- * Some flash generation code is working, most busted.  Very early stages.
- *
- * Revision 1.20  2006/03/27 21:38:06  jc
- * Adding code, trying to get anything to work. :(
- *
- * Revision 1.19  2006/03/26 23:44:52  jc
- * + Added ming include.
- * + Removed timeline.h include.
- * + Added stub pieces of code for the flash export function.
- *
- * Revision 1.18  2006/03/26 22:02:01  jc
- * Got a boring, crap firework effect going.
- *
- * Revision 1.17  2006/03/26 21:42:39  jc
- * Playing around with various bits of Ming code, to try and get the hang of things.
- *
- * Revision 1.16  2006/03/25 05:18:49  jc
- * Updated the externs.
- *
- * Revision 1.15  2006/03/24 03:17:48  jc
- * Moved the calculation of layer object boundaries into its own function.
- *
- * Revision 1.14  2006/03/23 07:15:51  jc
- * Adding further collision detection callbacks and code.
- *
- * Revision 1.13  2006/03/22 07:09:45  jc
- * Updated with new externs.
- *
- * Revision 1.12  2006/03/21 08:10:07  jc
- * + Text layer data structure now use a GtkTextBuffer for the text data.
- * + Text layer dialogs now use a GtkTextView.
- * + Added the code to edit an image layer.
- *
- * Revision 1.11  2006/03/21 05:14:04  jc
- * Converting the text layer to use a GdkColor and color picker instead of three separate component values.
- *
- * Revision 1.10  2006/03/18 01:37:03  jc
- * Adjusted the functions to handing starting and finishing x and y offsets.
- *
- * Revision 1.9  2006/03/13 04:00:41  jc
- * Updated the includes.
- *
- * Revision 1.8  2006/03/12 10:51:05  jc
- * Fixed a bug, so the shutdown code now correctly determines if the main window is maximised.
- *
- * Revision 1.7  2006/03/12 10:12:57  jc
- * Updated to save application defaults via GConf at shutdown, and restore them at startup.
- *
- * Revision 1.6  2006/03/12 04:17:17  jc
- * Added a function to save the slide layers.
- *
- * Revision 1.5  2006/03/09 14:28:44  jc
- * + Began adding code for parsing in an XML .flame file.
- * + Added a empty stub backend function for saving an XML .flame file.
- *
- * Revision 1.4  2006/03/05 09:34:38  jc
- * + Added first working code to render slide layers using cairo.
- * + Bumped up the application version number.
- *
- * Revision 1.3  2006/03/05 02:37:02  jc
- * + Merged all of the statusbar contexts into a single global one.
- * + Updated the SVG slide export function so it again works correctly, and improved it.
- *
- * Revision 1.2  2006/03/05 01:38:21  jc
- * Added a global variable to hold the dedicated screenshots folder.
- *
- * Revision 1.1  2006/03/04 11:52:08  jc
- * Started moving backend functions into new source backend.c and header backend.h files.
- *
  */
 
 // Standard includes
