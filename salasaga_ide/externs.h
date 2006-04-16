@@ -7,12 +7,11 @@
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2006/04/16 06:04:04  vapour
+ * Removed header info copied from my local repository.
+ *
  * Revision 1.1  2006/04/13 15:59:54  vapour
  * Initial version, copied from my local CVS repository.
- *
- * Revision 1.1  2006/04/07 00:59:03  jc
- * Moved the definition of external variables into its own common header file.
- *
  */
 
 #ifndef __EXTERNS_H__

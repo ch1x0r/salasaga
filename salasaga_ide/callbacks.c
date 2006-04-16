@@ -7,85 +7,11 @@
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2006/04/16 06:05:28  vapour
+ * Removed header info copied from my local repository.
+ *
  * Revision 1.1  2006/04/13 15:59:54  vapour
  * Initial version, copied from my local CVS repository.
- *
- * Revision 1.23  2006/04/11 10:00:44  jc
- * Fixed a bug allowing background layers to be dragged.
- *
- * Revision 1.22  2006/04/11 09:51:55  jc
- * Updated calls to the thumbnail creation function to use its new parameter.
- *
- * Revision 1.21  2006/04/11 06:29:08  jc
- * Fixed a small edge condition, causing a warning.
- *
- * Revision 1.20  2006/04/10 07:59:53  jc
- * + Slightly improved the handling of empty layers, and the warnings generated when the code hits an unknown layer type.
- * + Slightly simplified the readability of the working_area_button_press_event() function.
- *
- * Revision 1.19  2006/04/09 12:13:26  jc
- * Moved the film_strip_slide_clicked function into the callbacks file.
- *
- * Revision 1.18  2006/04/07 00:59:03  jc
- * Moved the definition of external variables into its own common header file.
- *
- * Revision 1.17  2006/04/06 03:32:12  jc
- * Moved slide_insert(), slide_delete(), slide_move_up(), and slide_move_down() into gui-functions.c.
- *
- * Revision 1.16  2006/04/05 17:00:37  jc
- * Updated externs.
- *
- * Revision 1.15  2006/04/04 13:31:48  jc
- * Added stub functions for working with slides.
- *
- * Revision 1.14  2006/03/31 05:08:51  jc
- * Added working code for handling mouse drags by detecting mouse button release.
- *
- * Revision 1.13  2006/03/26 23:42:55  jc
- * + Added ming include.
- * + Removed timeline.h include.
- * + Added the frames per second extern.
- *
- * Revision 1.12  2006/03/26 06:00:25  jc
- * Updated to call the new draw_thumbnail function when a timeline layer is edited.
- *
- * Revision 1.11  2006/03/25 05:21:51  jc
- * + Updated the externs.
- * + Double clicking a layer object in the drawing area now opens it's Edit dialog.
- * + Cleaned up some older hackish code.
- *
- * Revision 1.10  2006/03/24 05:28:19  jc
- * Updated the motion event handler to move layer objects.
- *
- * Revision 1.9  2006/03/24 03:03:04  jc
- * Cleaned up collision detection and processing code.  It now also ignores double and triple clicks which previously had been caused spurious events, stuffing up usability.
- *
- * Revision 1.8  2006/03/23 07:15:51  jc
- * Adding further collision detection callbacks and code.
- *
- * Revision 1.7  2006/03/22 13:51:41  jc
- * Adding rudimentary brute force collision detection code to the drawing area button press callback.
- *
- * Revision 1.6  2006/03/22 09:24:36  jc
- * Added an initial (stub) handler for capturing mouse motion events on the drawing area.
- *
- * Revision 1.5  2006/03/22 07:33:32  jc
- * Added an event handler and initial working code to the drawing area, for catching mouse clicks.
- *
- * Revision 1.4  2006/03/22 07:09:07  jc
- * Moved the zoom and resolution selector change callbacks in here.
- *
- * Revision 1.3  2006/03/21 08:10:07  jc
- * + Text layer data structure now use a GtkTextBuffer for the text data.
- * + Text layer dialogs now use a GtkTextView.
- * + Added the code to edit an image layer.
- *
- * Revision 1.2  2006/03/18 01:37:03  jc
- * Adjusted the functions to handing starting and finishing x and y offsets.
- *
- * Revision 1.1  2006/03/13 04:02:24  jc
- * Added a new header and source file to contain callback functions.  Populated it with working callbacks triggered when the user edits fields in the timeline widget.
- *
  */
 
 // Standard includes
