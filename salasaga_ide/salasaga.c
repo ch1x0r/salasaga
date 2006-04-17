@@ -7,6 +7,10 @@
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2006/04/17 01:21:35  vapour
+ * + Fixed a bug that would allow use of GTK functions before GTK initialisation (bad).
+ * + Toolbar icons will fall back to the png version if loading of svg images isn't supported on the running platform (i.e. MinGW out-of-the-box).
+ *
  * Revision 1.2  2006/04/16 06:03:22  vapour
  * + Removed header info copied from my local repository.
  * + Removed GDK include, as it's not needed.
@@ -205,6 +209,12 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	//
 
 	// Local variables
+	gint			format_counter;							// Used to determine if SVG images can be loaded
+	GdkPixbufFormat	*format_data;							// Used to determine if SVG images can be loaded
+	GString			*icon_extension;						// Used to determine if SVG images can be loaded
+	gint			num_formats;							// Used to determine if SVG images can be loaded
+	GSList			*supported_formats;						// Used to determine if SVG images can be loaded
+
 	GtkWidget		*capture_widget, *capture_button;
 	GtkWidget		*crop_widget, *crop_button;
 	GtkWidget		*export_flash_widget, *export_flash_button;
@@ -216,12 +226,30 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	GtkWidget		*save_widget, *save_button;
 
 	GdkPixbuf		*tmp_gdk_pixbuf;				// Temporary GDK Pixbuf
+	GString			*tmp_gstring;							// Temporary GString
 
 
 	// Create the toolbar widget
 	inner_toolbar = gtk_toolbar_new();
 
-	// Create the icons with a given size
+	// Work out if SVG images can be loaded
+	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
+	supported_formats = gdk_pixbuf_get_formats();
+	num_formats = g_slist_length(supported_formats);
+	for (format_counter = 0; format_counter < num_formats; format_counter++)
+	{
+		format_data = g_slist_nth_data(supported_formats, format_counter);
+		if (0 == g_ascii_strncasecmp(gdk_pixbuf_format_get_name(format_data), "svg", 3))
+		{
+			// SVG is supported
+			g_string_assign(icon_extension, "svg");
+		}
+	}
+
+	// * Create the layer toolbar icons *
+	tmp_gstring = g_string_new(NULL);
+
+	// * Create the icons with a given size *
 
 	// Create the New button
 	new_widget = gtk_image_new_from_stock(GTK_STOCK_NEW, icon_height);
@@ -267,7 +295,8 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	gtk_toolbar_append_space(GTK_TOOLBAR(inner_toolbar));
 
 	// Create the Capture button
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size("images/capture.svg", -1, icon_height, NULL);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "capture", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	capture_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 	capture_button = gtk_toolbar_append_item(GTK_TOOLBAR(inner_toolbar),
@@ -279,7 +308,8 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Import button
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size("images/import.svg", -1, icon_height, NULL);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "import", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	import_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 	import_button = gtk_toolbar_append_item(GTK_TOOLBAR(inner_toolbar),
@@ -291,7 +321,8 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Crop button
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size("images/crop.svg", -1, icon_height, NULL);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "crop", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	crop_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 	crop_button = gtk_toolbar_append_item(GTK_TOOLBAR(inner_toolbar),
@@ -306,7 +337,8 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	gtk_toolbar_append_space(GTK_TOOLBAR(inner_toolbar));
 
 	// Create the Export Flash button
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size("images/export_flash.svg", -1, icon_height, NULL);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "export_flash", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	export_flash_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 	export_flash_button = gtk_toolbar_append_item(GTK_TOOLBAR(inner_toolbar),
@@ -318,7 +350,8 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 												NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Export SVG button
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size("images/export_svg.svg", -1, icon_height, NULL);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "export_svg", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	export_svg_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 	export_svg_button = gtk_toolbar_append_item(GTK_TOOLBAR(inner_toolbar),
@@ -365,15 +398,6 @@ void create_film_strip()
 
 	// * Create a VBox for storing the film strip thumbnails *
 	film_strip = gtk_vbox_new(FALSE, 2);
-
-	// Check if the film strip widget already contains a vbox.  If so, destroy the old one
-//	container_children = gtk_container_get_children(GTK_CONTAINER(film_strip_container));
-//	if (NULL != container_children)
-//	{
-//		// The film strip has an existing vbox in it, so destroy that one first
-//		gtk_widget_destroy(container_children->data);
-//	}
-
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(film_strip_container), film_strip);
 }
 
@@ -393,11 +417,16 @@ GtkWidget *create_time_line(void)
 	//
 
 	// Local variables
+	gint				format_counter;							// Used to determine if SVG images can be loaded
+	GdkPixbufFormat	*format_data;							// Used to determine if SVG images can be loaded
+	GString			*icon_extension;							// Used to determine if SVG images can be loaded
+	gint				num_formats;								// Used to determine if SVG images can be loaded
+	GSList			*supported_formats;						// Used to determine if SVG images can be loaded
 	GtkWidget		*time_line_toolbar;						// Widget for holding the time line toolbar
 	GtkWidget		*time_line_scrolled_window;				// Widget for holding the scrolled window
 
 	// Toolbar variables
-	GtkWidget		*crop_widget, *crop_button;			// Crop layer widgets
+	GtkWidget		*crop_widget, *crop_button;				// Crop layer widgets
 	GtkWidget		*delete_widget, *delete_button;			// Delete layer widgets
 	GtkWidget		*edit_widget, *edit_button;				// Edit layer widgets
 	GtkWidget		*highlight_widget, *highlight_button;	// Highlight layer widgets
@@ -407,6 +436,7 @@ GtkWidget *create_time_line(void)
 	GtkWidget		*text_widget, *text_button;				// Text layer widgets
 
 	GdkPixbuf		*tmp_gdk_pixbuf;							// Temporary GDK Pixbuf
+	GString			*tmp_gstring;							// Temporary GString
 
 
 	// Create the VBox the time line elements are packed into
@@ -423,10 +453,26 @@ GtkWidget *create_time_line(void)
 	time_line_toolbar = gtk_toolbar_new();
 	gtk_box_pack_start(GTK_BOX(time_line_vbox), GTK_WIDGET(time_line_toolbar), FALSE, FALSE, 0);
 
+	// Work out if SVG images can be loaded
+	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
+	supported_formats = gdk_pixbuf_get_formats();
+	num_formats = g_slist_length(supported_formats);
+	for (format_counter = 0; format_counter < num_formats; format_counter++)
+	{
+		format_data = g_slist_nth_data(supported_formats, format_counter);
+		if (0 == g_ascii_strncasecmp(gdk_pixbuf_format_get_name(format_data), "svg", 3))
+		{
+			// SVG is supported
+			g_string_assign(icon_extension, "svg");
+		}
+	}
+
 	// * Create the layer toolbar icons *
+	tmp_gstring = g_string_new(NULL);
 
 	// Create the Edit Layer button
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size("images/edit.svg", -1, icon_height, NULL);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "edit", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	edit_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 	edit_button = gtk_toolbar_append_item(GTK_TOOLBAR(time_line_toolbar),
@@ -438,7 +484,8 @@ GtkWidget *create_time_line(void)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Crop button
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size("images/crop.svg", -1, icon_height, NULL);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "crop", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	crop_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 	crop_button = gtk_toolbar_append_item(GTK_TOOLBAR(time_line_toolbar),
@@ -450,7 +497,8 @@ GtkWidget *create_time_line(void)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Delete layer button
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size("images/delete.svg", -1, icon_height, NULL);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "delete", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	delete_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 	delete_button = gtk_toolbar_append_item(GTK_TOOLBAR(time_line_toolbar),
@@ -462,7 +510,8 @@ GtkWidget *create_time_line(void)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Move Layer Down button
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size("images/down_arrow.svg", -1, icon_height, NULL);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "down_arrow", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	move_down_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 	move_down_button = gtk_toolbar_append_item(GTK_TOOLBAR(time_line_toolbar),
@@ -474,7 +523,8 @@ GtkWidget *create_time_line(void)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Move Layer Up button
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size("images/up_arrow.svg", -1, icon_height, NULL);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "up_arrow", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	move_up_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 	move_up_button = gtk_toolbar_append_item(GTK_TOOLBAR(time_line_toolbar),
@@ -489,7 +539,8 @@ GtkWidget *create_time_line(void)
 	gtk_toolbar_append_space(GTK_TOOLBAR(time_line_toolbar));
 
 	// Create the add text layer button
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size("images/add_text.svg", -1, icon_height, NULL);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "add_text", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	text_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 	text_button = gtk_toolbar_append_item(GTK_TOOLBAR(time_line_toolbar),
@@ -501,7 +552,8 @@ GtkWidget *create_time_line(void)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the add highlight layer button
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size("images/add_highlight.svg", -1, icon_height, NULL);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "add_highlight", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	highlight_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 	highlight_button = gtk_toolbar_append_item(GTK_TOOLBAR(time_line_toolbar),
@@ -513,7 +565,8 @@ GtkWidget *create_time_line(void)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the add image layer button
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size("images/add_image.svg", -1, icon_height, NULL);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "add_image", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	image_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 	image_button = gtk_toolbar_append_item(GTK_TOOLBAR(time_line_toolbar),
@@ -523,6 +576,11 @@ GtkWidget *create_time_line(void)
 										image_widget,  // Image/icon widget
 										GTK_SIGNAL_FUNC(layer_new_image),  // Function to call when clicked
 										NULL);  // Our function doesn't need any data passed to it
+
+	// Free the memory allocated during this function
+	g_string_free(icon_extension, TRUE);
+	g_string_free(tmp_gstring, TRUE);
+	g_slist_free(supported_formats);
 
 	// Return the handle of the time line container
 	return time_line_vbox;
@@ -622,6 +680,12 @@ gint main(gint argc, gchar *argv[])
 
 	// Initialise sound
 	gnome_sound_init(NULL);
+
+	// Start up the GUI part of things	
+	gtk_init(&argc, &argv);
+	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
+	gtk_window_set_default_size(GTK_WINDOW(main_window), 1024, 768);
+	gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_CENTER);
 
 	// Check if we have a saved configuration in GConf
 	gconf_engine = gconf_engine_get_default();
@@ -735,12 +799,6 @@ gint main(gint argc, gchar *argv[])
 
 	// Free our GConf engine
 	gconf_engine_unref(gconf_engine);
-
-	// Start up the GUI part of things	
-	gtk_init(&argc, &argv);
-	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_default_size(GTK_WINDOW(main_window), 1024, 768);
-	gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_CENTER);
 
 	// Maximise the window if our saved configuration says to
 	if (TRUE == should_maximise)
