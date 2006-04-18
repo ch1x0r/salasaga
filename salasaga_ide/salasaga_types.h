@@ -7,6 +7,9 @@
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2006/04/18 18:02:00  vapour
+ * Bumped the version number to 0.72, to mark the successful compilation on both Windows and Solaris as well. :)
+ *
  * Revision 1.2  2006/04/16 06:01:42  vapour
  * Removed header info copied from my local repository.
  *
@@ -25,7 +28,7 @@ extern "C" {
 
 // Set some application constants
 #define APP_NAME "Flame Project Editing GUI"
-#define	APP_VERSION "0.71"
+#define	APP_VERSION "0.72"
 
 // Define a run time check that hasn't been added to GTK
 #define GTK_TYPE_TREE_ITER				(gtk_tree_iter_get_type ())
