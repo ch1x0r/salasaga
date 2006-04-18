@@ -7,6 +7,12 @@
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2006/04/18 18:00:52  vapour
+ * Tweaks to allow compilation to succeed on both Windows and Solaris as well.
+ * On Windows, the app will fire up as it only really required changes to not use GConf.
+ * On Solaris however, a lot of stuff needed to be disabled, so it core dumps right away, prior to even displaying a window.
+ * However, this *is* progress of a sort. :)
+ *
  * Revision 1.3  2006/04/17 01:21:35  vapour
  * + Fixed a bug that would allow use of GTK functions before GTK initialisation (bad).
  * + Toolbar icons will fall back to the png version if loading of svg images isn't supported on the running platform (i.e. MinGW out-of-the-box).
@@ -32,8 +38,10 @@
 // GTK includes
 #include <gtk/gtk.h>
 
-// GConf includes
-#include <gconf/gconf.h>
+// GConf include (not for windows)
+#ifndef _WIN32
+	#include <gconf/gconf.h>
+#endif
 
 // Gnome include (for sound)
 #include <libgnome/libgnome.h>
@@ -417,10 +425,10 @@ GtkWidget *create_time_line(void)
 	//
 
 	// Local variables
-	gint				format_counter;							// Used to determine if SVG images can be loaded
+	gint			format_counter;							// Used to determine if SVG images can be loaded
 	GdkPixbufFormat	*format_data;							// Used to determine if SVG images can be loaded
-	GString			*icon_extension;							// Used to determine if SVG images can be loaded
-	gint				num_formats;								// Used to determine if SVG images can be loaded
+	GString			*icon_extension;						// Used to determine if SVG images can be loaded
+	gint			num_formats;							// Used to determine if SVG images can be loaded
 	GSList			*supported_formats;						// Used to determine if SVG images can be loaded
 	GtkWidget		*time_line_toolbar;						// Widget for holding the time line toolbar
 	GtkWidget		*time_line_scrolled_window;				// Widget for holding the scrolled window
@@ -435,7 +443,7 @@ GtkWidget *create_time_line(void)
 	GtkWidget		*move_up_widget, *move_up_button;		// Move layer up widgets
 	GtkWidget		*text_widget, *text_button;				// Text layer widgets
 
-	GdkPixbuf		*tmp_gdk_pixbuf;							// Temporary GDK Pixbuf
+	GdkPixbuf		*tmp_gdk_pixbuf;						// Temporary GDK Pixbuf
 	GString			*tmp_gstring;							// Temporary GString
 
 
@@ -643,26 +651,30 @@ GtkWidget *create_working_area(GtkWidget *working_frame)
 gint main(gint argc, gchar *argv[])
 {
 	// Local variables
-	GString				*command_key;			// Used to work out paths into the GConf structure
-	GError				*error = NULL;			// Pointer to error return structure
-	GConfEngine			*gconf_engine;			// GConf engine
-	gboolean				key_already_set = FALSE;// Used to work out which metacity run command is unassigned
 	GtkWidget			*main_area;				// Widget for the onscreen display
 	GtkTable				*message_bar;			// Widget for message bar
 	GtkWidget			*outer_box;				// Widget for the onscreen display
 	GtkLabel				*resolution_label;		// Widget for the resolution selector label
 	gboolean				should_maximise = FALSE;	// Briefly keeps track of whether the window should be maximised
 	GtkWidget			*toolbar = NULL;			// Widget for the toolbar
-	guint				unused_num = 0;			// Used to work out which metacity run command is unassigned
 	GdkScreen			*which_screen;			// Gets given the screen the monitor is on
 	gchar				wintitle[40];			// Stores the window title
 	GtkLabel				*zoom_label;				// Widget for the zoom selector label
 
+	GString				*tmp_gstring;			// Temporary GString
+	GtkWidget			*tmp_widget;				// Temporary widget
+
+	// GConf related variables (not for windows)
+#ifndef _WIN32
+	GString				*command_key;			// Used to work out paths into the GConf structure
+	GError				*error = NULL;			// Pointer to error return structure
+	gboolean				key_already_set = FALSE;// Used to work out which metacity run command is unassigned
+	GConfEngine			*gconf_engine;			// GConf engine
+	guint				unused_num = 0;			// Used to work out which metacity run command is unassigned
 	gboolean				tmp_boolean;				// Temporary boolean
 	guint				tmp_guint;				// Temporary guint
 	guint				tmp_int;					// Temporary guint
-	GString				*tmp_gstring;			// Temporary GString
-	GtkWidget			*tmp_widget;				// Temporary widget
+#endif
 
 
 	// Initialise various things
@@ -686,6 +698,10 @@ gint main(gint argc, gchar *argv[])
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(main_window), 1024, 768);
 	gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_CENTER);
+
+// fixme4: Workaround for now as GConf on windows doesn't seem optimal
+//         May be better to abstract this stuff into a function that switches backend transparently (GConf/Win Registry)
+#ifndef _WIN32  // Non-windows check
 
 	// Check if we have a saved configuration in GConf
 	gconf_engine = gconf_engine_get_default();
@@ -734,6 +750,9 @@ gint main(gint argc, gchar *argv[])
 		should_maximise = gconf_engine_get_bool(gconf_engine, "/apps/flame/defaults/window_maximised", NULL);
 	} else
 	{
+
+#endif  // Non-windows check
+
 		// Which monitor are we displaying on?
 		which_screen = gtk_window_get_screen(GTK_WINDOW(main_window));
 
@@ -749,14 +768,19 @@ gint main(gint argc, gchar *argv[])
 		default_slide_length = slide_length = 2;  // Default number of frames to use in new slides
 		default_output_quality = output_quality = 9;  // Default quality to save png images with
 		scaling_quality =  GDK_INTERP_TILES;  // Hyper is VERY, VERY slow with large high res images [GDK_INTERP_NEAREST | GDK_INTERP_TILES | GDK_INTERP_BILINEAR | GDK_INTERP_HYPER]
+
+#ifndef _WIN32  // Non-windows check
 	}
+#endif  // Non-windows check
 
 	// Set various required defaults that will be overwritten by the first project loaded
 	g_string_printf(project_folder, "%s", default_project_folder->str);
 	g_string_printf(output_folder, "%s", default_output_folder->str);
 
+// fixme4: Workaround for now as GConf on windows doesn't seem optimal
+//         May be better to abstract this stuff into a function that switches backend transparently (GConf/?)
+#ifndef _WIN32  // Non-windows check
 	// * Setup the Control-Printscreen key to capture screenshots *
-
 	// Search for the first unused run command
 	command_key = g_string_new(NULL);
 	for (tmp_guint = 10; tmp_guint >= 1; tmp_guint--)
@@ -799,6 +823,14 @@ gint main(gint argc, gchar *argv[])
 
 	// Free our GConf engine
 	gconf_engine_unref(gconf_engine);
+
+#endif  // Non-windows check
+
+#ifdef _WIN32  // Windows check
+	// On windows, we'll default to starting with the window maximised
+	// fixme4: This is also a hack until we get a storage preferences backend working on windows
+	should_maximise = TRUE;
+#endif  // Windows check
 
 	// Maximise the window if our saved configuration says to
 	if (TRUE == should_maximise)
@@ -863,7 +895,12 @@ gint main(gint argc, gchar *argv[])
 
 	// Create the zoom selector
 	zoom_selector = GTK_COMBO_BOX(gtk_combo_box_new_text());
+
+// fixme4: gtk_combo_box_set_focus_on_click function isn't present in GTK 2.4.x (shipped with Solaris 10)
+#ifndef __sun
 	gtk_combo_box_set_focus_on_click(GTK_COMBO_BOX(zoom_selector), FALSE);
+#endif
+
 	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "1600%");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "800%");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "400%");
@@ -889,7 +926,12 @@ gint main(gint argc, gchar *argv[])
 
 	// Create the resolution selector
 	resolution_selector = GTK_COMBO_BOX(gtk_combo_box_new_text());
+
+// fixme4: gtk_combo_box_set_focus_on_click function isn't present in GTK 2.4.x (shipped with Solaris 10)
+#ifndef __sun
 	gtk_combo_box_set_focus_on_click(GTK_COMBO_BOX(resolution_selector), FALSE);
+#endif
+
 	gtk_combo_box_append_text(GTK_COMBO_BOX(resolution_selector), "1600x1200 px");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(resolution_selector), "1280x1024 px");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(resolution_selector), "1024x768 px");
@@ -956,13 +998,6 @@ gint main(gint argc, gchar *argv[])
 	// Windows we'll need
 	//  + Sprite/Object window
 	//  + Layers
-
-	// Basic layout:
-	//  + Show slides on the left
-	//  + Show selected slide in working area
-	//  + Show time line up top
-	//    + Layers
-	//  + Status bar
 
 	// Display the main window
 	gtk_widget_show_all(main_window);

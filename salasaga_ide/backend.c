@@ -7,6 +7,12 @@
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2006/04/18 18:00:52  vapour
+ * Tweaks to allow compilation to succeed on both Windows and Solaris as well.
+ * On Windows, the app will fire up as it only really required changes to not use GConf.
+ * On Solaris however, a lot of stuff needed to be disabled, so it core dumps right away, prior to even displaying a window.
+ * However, this *is* progress of a sort. :)
+ *
  * Revision 1.2  2006/04/16 06:06:57  vapour
  * Added notes relevant to building on Windows (MinGW).
  *
@@ -25,10 +31,11 @@
 
 // GTK includes
 #include <gtk/gtk.h>
-#include <glib/gstdio.h>
 
-// GConf includes
-#include <gconf/gconf.h>
+// GConf include (not for windows)
+#ifndef _WIN32
+	#include <gconf/gconf.h>
+#endif
 
 // Gnome include (for sound)
 #include <libgnome/libgnome.h>
@@ -861,6 +868,7 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 void save_preferences_and_exit(void)
 {
 	// Local variables
+#ifndef _WIN32
 	GConfEngine			*gconf_engine;			// GConf engine
 
 	guint				tmp_int;					// Temporary integer
@@ -934,6 +942,7 @@ void save_preferences_and_exit(void)
 
 	// Free our GConf engine
 	gconf_engine_unref(gconf_engine);
+#endif
 
 	// Shut down sound
 	gnome_sound_shutdown();
@@ -941,6 +950,7 @@ void save_preferences_and_exit(void)
 	// Exit the application
 	gtk_main_quit();
 }
+
 
 // Function to sound a beep (on user error, etc)
 void sound_beep(void)

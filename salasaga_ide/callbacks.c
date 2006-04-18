@@ -7,6 +7,12 @@
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2006/04/18 18:00:52  vapour
+ * Tweaks to allow compilation to succeed on both Windows and Solaris as well.
+ * On Windows, the app will fire up as it only really required changes to not use GConf.
+ * On Solaris however, a lot of stuff needed to be disabled, so it core dumps right away, prior to even displaying a window.
+ * However, this *is* progress of a sort. :)
+ *
  * Revision 1.2  2006/04/16 06:05:28  vapour
  * Removed header info copied from my local repository.
  *
@@ -22,10 +28,11 @@
 
 // GTK includes
 #include <gtk/gtk.h>
-#include <glib/gstdio.h>
 
-// GConf includes
-#include <gconf/gconf.h>
+// GConf include (not for windows)
+#ifndef _WIN32
+	#include <gconf/gconf.h>
+#endif
 
 // XML includes
 #include <libxml/xmlmemory.h>
@@ -111,7 +118,11 @@ gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer da
 
 	// Get the new output resolution
 	tmp_string = g_string_new(NULL);
+
+// fixme4: gtk_combo_box_get_active_text function isn't present in GTK 2.4.x (shipped with Solaris 10)
+#ifndef __sun
 	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(resolution_selector)));
+#endif
 
 	// Parse and store the new project output size
 	tmp_string = g_string_truncate(tmp_string, tmp_string->len - 1);
@@ -730,7 +741,11 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 
 	// Get the new zoom level
 	tmp_string = g_string_new(NULL);
+
+// fixme4: gtk_combo_box_get_active_text function isn't present in GTK 2.4.x (shipped with Solaris 10)
+#ifndef __sun
 	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(zoom_selector)));
+#endif
 
 	// Parse and store the new zoom level
 	tmp_int = g_ascii_strncasecmp(tmp_string->str, "F", 1);
