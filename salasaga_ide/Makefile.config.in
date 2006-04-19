@@ -4,8 +4,8 @@ MICRO_VERSION = @MICRO_VERSION@
 FLAME_VERSION = @FLAME_VERSION@
 
 CC	= @CC@
-CFLAGS  = @CFLAGS@
-LDFLAGS = @LDFLAGS@
+CFLAGS  = @CFLAGS@ @GTK_CFLAGS@
+LDFLAGS = @LDFLAGS@ @GTK_LIBS@
 SHCFLAGS= @SHCFLAGS@
 
 INCLUDES       += -I. 
@@ -30,14 +30,8 @@ includedir = @includedir@
 mandir = @mandir@
 
 GIFLIB = @GIFLIB@
-PNGLIB = @PNGLIB@
 XLIB = @XLIB@
 ZLIB = @ZLIB@
 
-# set to your choice of png and / or gif formats
-EXTRA_OBJS = @EXTRA_OBJS@
-EXTRA_BINS = @EXTRA_BINS@
-
-# zlib required for both image formats and for compressed swf6
-LIBS = $(ZLIB) $(XLIB) $(GIFLIB) $(PNGLIB)
+LIBS = $(ZLIB) $(XLIB) $(GIFLIB)
 EXTRA_LIBS = $(LIBS)

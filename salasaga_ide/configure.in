@@ -26,10 +26,6 @@ AC_CHECK_LIB(ungif, DGifOpen, GIFLIB="-lungif")
 dnl Solaris needs -lX11 on the linker line for ungif to work
 AC_CHECK_LIB(ungif, PrintGifError, GIFLIB="-lungif",, "-lX11")
 
-dnl Check for the png library
-dnl Solaris needs -lm on the linker line, and other platforms aren't bothered having it there. :)
-AC_CHECK_LIB(png, png_read_image, PNGLIB="-lpng", PNGLIB="", "-lm")
-
 dnl Check for the zlib library
 AC_CHECK_LIB(z, compress2, ZLIB="-lz", ZLIB="")
 
@@ -38,21 +34,12 @@ dnl Note the smoke-and-mirrors setting of HAVE_LIBZ if it's found. :) (should al
 AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll", ZLIB="")
 AC_CHECK_LIB(zdll, compress2, AC_DEFINE([HAVE_LIBZ]), ZLIB="")
 
-EXTRA_OBJS=
-EXTRA_BINS=
-
-if test -n "${GIFLIB}"; then
-	EXTRA_OBJS="$EXTRA_OBJS gifdbl.o"
-	EXTRA_BINS="$EXTRA_BINS gif2dbl gif2mask"
-	AC_DEFINE(USE_GIF)
-	AC_DEFINE(USE_ZLIB)
-fi
-
-if test -n "${PNGLIB}"; then
-	EXTRA_OBJS="$EXTRA_OBJS pngdbl.o"
-	EXTRA_BINS="$EXTRA_BINS png2dbl png2swf dbl2png"
-	AC_DEFINE(USE_PNG)
-	AC_DEFINE(USE_ZLIB)
+dnl Check for the GTK, GLib, GConf, Gnome, xml, and png libraries
+AC_CHECK_PROG(PKG_CONFIG, pkg-config, [yes])
+if test x$PKG_CONFIG = xyes;
+then
+	GTK_CFLAGS=`pkg-config glib gtk+-2.0 gconf-2.0 libgnome-2.0 libpng libxml-2.0 --cflags`
+	GTK_LIBS=`pkg-config glib gtk+-2.0 gconf-2.0 libgnome-2.0 libpng libxml-2.0 --libs`
 fi
 
 case "${host_os}" in
@@ -85,13 +72,12 @@ case "${host_os}" in
 		SHLIBEXT=".so"
 esac
 
+AC_SUBST(GTK_CFLAGS)
+AC_SUBST(GTK_LIBS)
 AC_SUBST(SHLIBLDFLAGS)
 AC_SUBST(SHLIBEXT)
 AC_SUBST(SHCFLAGS)
-AC_SUBST(EXTRA_OBJS)
-AC_SUBST(EXTRA_BINS)
 AC_SUBST(GIFLIB)
-AC_SUBST(PNGLIB)
 AC_SUBST(XLIB)
 AC_SUBST(ZLIB)
 AC_SUBST(MAJOR_VERSION)
