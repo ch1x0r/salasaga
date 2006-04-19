@@ -9,9 +9,6 @@ OFILES = \
 
 all: flame-edit
 
-$(OFILES):
-	$(CC) $(CFLAGS) backend.c $(LDFLAGS) -o 
-
 backend.o:
 	$(CC) $(CFLAGS) -c backend.c -o backend.o
 
