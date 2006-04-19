@@ -25,13 +25,15 @@ INSTALL_HEADER = $(INSTALL_DATA)
 prefix = @prefix@
 exec_prefix = @exec_prefix@
 bindir = @bindir@
+datadir = @datadir@
 libdir = @libdir@
 includedir = @includedir@
 mandir = @mandir@
 
-GIFLIB = @GIFLIB@
 XLIB = @XLIB@
+GIFLIB = @GIFLIB@
+MINGLIB = @MINGLIB@
 ZLIB = @ZLIB@
 
-LIBS = $(ZLIB) $(XLIB) $(GIFLIB)
+LIBS = $(ZLIB) $(XLIB) $(GIFLIB) $(MINGLIB)
 EXTRA_LIBS = $(LIBS)

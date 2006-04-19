@@ -6,6 +6,36 @@ OFILES = \
 	flame-edit.o \
 	gui-functions.o
 
+SOUNDS = \
+	sounds/generic.wav
+
+ICONS_SIXTY = \
+	images/add_highlight.png \
+	images/add_image.png \
+	images/add_text.png \
+	images/capture.png \
+	images/crop.png \
+	images/delete.png \
+	images/down_arrow.png \
+	images/edit.png \
+	images/export_flash.png \
+	images/export_svg.png \
+	images/import.png \
+	images/up_arrow.png \
+
+ICONS_SCALABLE = \
+	images/add_highlight.svg \
+	images/add_image.svg \
+	images/add_text.svg \
+	images/capture.svg \
+	images/crop.svg \
+	images/delete.svg \
+	images/down_arrow.svg \
+	images/edit.svg \
+	images/export_flash.svg \
+	images/export_svg.svg \
+	images/import.svg \
+	images/up_arrow.svg \
 
 all: flame-edit
 
@@ -22,10 +52,18 @@ gui-functions.o:
 	$(CC) $(CFLAGS) -c gui-functions.c -o gui-functions.o
 
 flame-edit: $(OFILES)
-	$(CC) $(CFLAGS) $(OFILES) $(LDFLAGS) -o flame-edit
+	$(CC) $(CFLAGS) $(OFILES) $(LDFLAGS) $(LIBS) -o flame-edit
 
-install: 
+install:
+	$(INSTALL) -d $(bindir)
 	$(INSTALL_PROGRAM) -m 0755 flame-edit $(bindir)
+	$(INSTALL) -d $(datadir)/icons/flame/scalable/
+	$(INSTALL_DATA) $(ICONS_SCALABLE) $(datadir)/icons/flame/scalable/
+	$(INSTALL) -d $(datadir)/icons/flame/72x72/
+	# These fixed size 60x60 icons should probably be resized to 72x72
+	$(INSTALL_DATA) $(ICONS_SIXTY) $(datadir)/icons/flame/72x72/
+	$(INSTALL) -d $(datadir)/sounds/flame/
+	$(INSTALL_DATA) $(SOUNDS) $(datadir)/sounds/flame
 
 clean:
 	rm -f $(OFILES)

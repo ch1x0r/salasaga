@@ -17,29 +17,34 @@ AC_PROG_CC
 AC_PROG_INSTALL
 
 dnl Check if the X libraries are installed (needed for libungif on at least Solaris)
-AC_CHECK_LIB(X11, XGetImage, XLIB="-lX11", XLIB="")
+AC_CHECK_LIB(X11, XGetImage, XLIB="-lX11")
 
 dnl Check for the gif or ungif libraries
 AC_CHECK_LIB(gif, PrintGifError, GIFLIB="-lgif", GIFLIB="")
 dnl MinGW check for libungif
 AC_CHECK_LIB(ungif, DGifOpen, GIFLIB="-lungif")
 dnl Solaris needs -lX11 on the linker line for ungif to work
-AC_CHECK_LIB(ungif, PrintGifError, GIFLIB="-lungif",, "-lX11")
+AC_CHECK_LIB(ungif, PrintGifError, GIFLIB="-lungif",, [-lX11])
 
 dnl Check for the zlib library
-AC_CHECK_LIB(z, compress2, ZLIB="-lz", ZLIB="")
+AC_CHECK_LIB(z, compress2, ZLIB="-lz")
+
+dnl Check for the ming library
+AC_CHECK_LIB(ming, Ming_setScale, MINGLIB="-lming",, [-lX11 -lgif -lpng])
+dnl Some platforms may need libungif instead of libgif
+AC_CHECK_LIB(ming, newSWFMovie, MINGLIB="-lming",, [-lX11 -lungif -lpng])
 
 dnl Windows has the zlib library, but its named zdll instead
 dnl Note the smoke-and-mirrors setting of HAVE_LIBZ if it's found. :) (should allow MinGW to work)
-AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll", ZLIB="")
-AC_CHECK_LIB(zdll, compress2, AC_DEFINE([HAVE_LIBZ]), ZLIB="")
+AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll")
+AC_CHECK_LIB(zdll, compress2, AC_DEFINE([HAVE_LIBZ]))
 
 dnl Check for the GTK, GLib, GConf, Gnome, xml, and png libraries
 AC_CHECK_PROG(PKG_CONFIG, pkg-config, [yes])
 if test x$PKG_CONFIG = xyes;
 then
-	GTK_CFLAGS=`pkg-config glib gtk+-2.0 gconf-2.0 libgnome-2.0 libpng libxml-2.0 --cflags`
-	GTK_LIBS=`pkg-config glib gtk+-2.0 gconf-2.0 libgnome-2.0 libpng libxml-2.0 --libs`
+	GTK_CFLAGS=`pkg-config glib-2.0 gdk-2.0 gdk-pixbuf-2.0 gtk+-2.0 gconf-2.0 libgnome-2.0 libpng libxml-2.0 --cflags`
+	GTK_LIBS=`pkg-config glib-2.0 gdk-2.0 gdk-pixbuf-2.0 gtk+-2.0 gconf-2.0 libgnome-2.0 libpng libxml-2.0 --libs`
 fi
 
 case "${host_os}" in
@@ -80,6 +85,7 @@ AC_SUBST(SHCFLAGS)
 AC_SUBST(GIFLIB)
 AC_SUBST(XLIB)
 AC_SUBST(ZLIB)
+AC_SUBST(MINGLIB)
 AC_SUBST(MAJOR_VERSION)
 AC_SUBST(MINOR_VERSION)
 AC_SUBST(MICRO_VERSION)
