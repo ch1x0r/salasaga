@@ -1,0 +1,104 @@
+MAJOR_VERSION=0
+MINOR_VERSION=7
+MICRO_VERSION=2
+
+FLAME_VERSION=[${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}]
+
+AC_INIT(flame-edit, FLAME_VERSION, [flameproject-devel@lists.sourceforge.net])
+
+dnl Tell configure to look in the config subdirectory
+dnl for config.guess, config.sub, etc
+AC_CONFIG_AUX_DIR(config)
+
+dnl GNU recommended way to determine host variables (OS, etc)
+AC_CANONICAL_HOST
+
+AC_PROG_CC
+AC_PROG_INSTALL
+
+dnl Check if the X libraries are installed (needed for libungif on at least Solaris)
+AC_CHECK_LIB(X11, XGetImage, XLIB="-lX11", XLIB="")
+
+dnl Check for the gif or ungif libraries
+AC_CHECK_LIB(gif, PrintGifError, GIFLIB="-lgif", GIFLIB="")
+dnl MinGW check for libungif
+AC_CHECK_LIB(ungif, DGifOpen, GIFLIB="-lungif")
+dnl Solaris needs -lX11 on the linker line for ungif to work
+AC_CHECK_LIB(ungif, PrintGifError, GIFLIB="-lungif",, "-lX11")
+
+dnl Check for the png library
+dnl Solaris needs -lm on the linker line, and other platforms aren't bothered having it there. :)
+AC_CHECK_LIB(png, png_read_image, PNGLIB="-lpng", PNGLIB="", "-lm")
+
+dnl Check for the zlib library
+AC_CHECK_LIB(z, compress2, ZLIB="-lz", ZLIB="")
+
+dnl Windows has the zlib library, but its named zdll instead
+dnl Note the smoke-and-mirrors setting of HAVE_LIBZ if it's found. :) (should allow MinGW to work)
+AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll", ZLIB="")
+AC_CHECK_LIB(zdll, compress2, AC_DEFINE([HAVE_LIBZ]), ZLIB="")
+
+EXTRA_OBJS=
+EXTRA_BINS=
+
+if test -n "${GIFLIB}"; then
+	EXTRA_OBJS="$EXTRA_OBJS gifdbl.o"
+	EXTRA_BINS="$EXTRA_BINS gif2dbl gif2mask"
+	AC_DEFINE(USE_GIF)
+	AC_DEFINE(USE_ZLIB)
+fi
+
+if test -n "${PNGLIB}"; then
+	EXTRA_OBJS="$EXTRA_OBJS pngdbl.o"
+	EXTRA_BINS="$EXTRA_BINS png2dbl png2swf dbl2png"
+	AC_DEFINE(USE_PNG)
+	AC_DEFINE(USE_ZLIB)
+fi
+
+case "${host_os}" in
+	*darwin*)
+		SHLIBLDFLAGS="-dynamiclib \
+			-compatibility_version \
+			\`expr 1 + \"\$(MAJOR_VERSION)\"\`.\$(MINOR_VERSION) \
+			-current_version \
+			\`expr 1 + \"\$(MAJOR_VERSION)\"\`.\$(MINOR_VERSION) \
+			-install_name \$(libdir)/\$(SHAREDLIB)"
+		SHLIBEXT=".dylib"
+		CFLAGS="$CFLAGS -fno-common"
+		;;
+	*linux*)
+		SHLIBLDFLAGS="-shared -Wl"
+		SHLIBEXT=".so"
+		SHCFLAGS="-fPIC"
+		;;
+	*solaris*)
+ 		SHLIBLDFLAGS="-shared -Wl"
+		SHLIBEXT=".so"
+ 		SHCFLAGS="-fPIC"
+		;;
+	mingw*)
+		SHLIBLDFLAGS="-shared -Wl,-soname,libming.dll"
+		SHLIBEXT=".dll"
+		;;
+	*)
+		SHLIBLDFLAGS="-shared"
+		SHLIBEXT=".so"
+esac
+
+AC_SUBST(SHLIBLDFLAGS)
+AC_SUBST(SHLIBEXT)
+AC_SUBST(SHCFLAGS)
+AC_SUBST(EXTRA_OBJS)
+AC_SUBST(EXTRA_BINS)
+AC_SUBST(GIFLIB)
+AC_SUBST(PNGLIB)
+AC_SUBST(XLIB)
+AC_SUBST(ZLIB)
+AC_SUBST(MAJOR_VERSION)
+AC_SUBST(MINOR_VERSION)
+AC_SUBST(MICRO_VERSION)
+AC_SUBST(FLAME_VERSION)
+
+AC_CONFIG_HEADER(flame_config.h)
+
+AC_OUTPUT(Makefile.config)

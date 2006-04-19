@@ -1,0 +1,45 @@
+MAJOR_VERSION = @MAJOR_VERSION@
+MINOR_VERSION = @MINOR_VERSION@
+MICRO_VERSION = @MICRO_VERSION@
+FLAME_VERSION = @FLAME_VERSION@
+
+CC	= @CC@
+CXX	= @CXX@
+PYTHON	= @PYTHON@
+CFLAGS  = @CFLAGS@
+LDFLAGS = @LDFLAGS@
+SHCFLAGS= @SHCFLAGS@
+
+INCLUDES       += -I. 
+LDLIBS         = $(LIBS)
+
+SHLIBLDFLAGS   = @SHLIBLDFLAGS@
+SHLIBEXT       = @SHLIBEXT@
+
+CFLAGS  += -Wall $(INCLUDES)
+
+INSTALL = @INSTALL@
+INSTALL_PROGRAM = @INSTALL_PROGRAM@
+INSTALL_DATA = @INSTALL_DATA@
+INSTALL_SCRIPT = @INSTALL_SCRIPT@
+INSTALL_HEADER = $(INSTALL_DATA)
+
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+bindir = @bindir@
+libdir = @libdir@
+includedir = @includedir@
+mandir = @mandir@
+
+GIFLIB = @GIFLIB@
+PNGLIB = @PNGLIB@
+XLIB = @XLIB@
+ZLIB = @ZLIB@
+
+# set to your choice of png and / or gif formats
+EXTRA_OBJS = @EXTRA_OBJS@
+EXTRA_BINS = @EXTRA_BINS@
+
+# zlib required for both image formats and for compressed swf6
+LIBS = $(ZLIB) $(XLIB) $(GIFLIB) $(PNGLIB)
+EXTRA_LIBS = $(LIBS)
