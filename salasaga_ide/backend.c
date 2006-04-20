@@ -7,6 +7,9 @@
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2006/04/20 12:26:06  vapour
+ * Updated to find the sound file in /(basepath)/share/sounds/flame/.
+ *
  * Revision 1.4  2006/04/20 12:03:37  vapour
  * + Added a dialog box for the Export As Flash option, asking the user where they want to save.
  * + Quick fix to the flash exporting inner function, so it doesn't generate a warning message on empty layers.
@@ -959,5 +962,5 @@ void save_preferences_and_exit(void)
 // Function to sound a beep (on user error, etc)
 void sound_beep(void)
 {
-	gnome_sound_play("sounds/generic.wav");
+	gnome_sound_play("../share/sounds/flame/generic.wav");
 }
