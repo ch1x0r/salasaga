@@ -7,6 +7,10 @@
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2006/04/20 12:03:37  vapour
+ * + Added a dialog box for the Export As Flash option, asking the user where they want to save.
+ * + Quick fix to the flash exporting inner function, so it doesn't generate a warning message on empty layers.
+ *
  * Revision 1.3  2006/04/18 18:00:52  vapour
  * Tweaks to allow compilation to succeed on both Windows and Solaris as well.
  * On Windows, the app will fire up as it only really required changes to not use GConf.
@@ -2422,7 +2426,13 @@ void menu_edit_preferences(void)
 void menu_export_flash_animation(void)
 {
 	// Local variables
-	gint				tmp_int;
+	GtkFileFilter		*all_filter;				// Filter for *.*
+	GtkWidget 			*export_dialog;			// Dialog widget
+	gchar				*filename;				// Pointer to the chosen file name
+	GtkFileFilter		*flash_filter;			// Filter for *.swf
+
+	GString				*tmp_gstring;			// Temporary GString
+	gint					tmp_int;					// Temporary integer
 
 
 	// Check if there is an active project
@@ -2434,16 +2444,66 @@ void menu_export_flash_animation(void)
 		return;
 	}
 
-	// Determine how many slides there are in the current project
+	// * Pop open a dialog asking the user for their desired output options *
+
+	// Create the dialog asking the user for the name to save as
+	export_dialog = gtk_file_chooser_dialog_new("Export as Flash",
+						GTK_WINDOW(main_window),
+						GTK_FILE_CHOOSER_ACTION_SAVE,
+						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+						GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+						NULL);
+
+	// Create the filter so only *.flame files are displayed
+	flash_filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(flash_filter, "*.swf");
+	gtk_file_filter_set_name(flash_filter, "Macromedia Flash (*.swf)");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(export_dialog), flash_filter);
+
+	// Create the filter so all files (*.*) can be displayed
+	all_filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(all_filter, "*.*");
+	gtk_file_filter_set_name(all_filter, "All files (*.*)");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(export_dialog), all_filter);
+
+	// Set the name of the file to save as
+	tmp_gstring = g_string_new(NULL);
+	g_string_printf(tmp_gstring, "%s.swf", project_name->str);
+	gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(export_dialog), tmp_gstring->str);
+
+	// Change to the default project directory
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), output_folder->str);
+
+	// Run the dialog and wait for user input
+	if (gtk_dialog_run(GTK_DIALOG(export_dialog)) != GTK_RESPONSE_ACCEPT)
+	{
+		// The dialog was cancelled, so destroy it and return to the caller
+		gtk_widget_destroy(export_dialog);
+		return;
+	}
+
+	// * We only get to here if a file was chosen *
+
+	// Get the filename from the dialog box
+	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(export_dialog));
+
+	// Destroy the dialog box, as it's not needed any more
+	gtk_widget_destroy(export_dialog);
+
+	// Work out how many slides there are in the whole project
 	slides = g_list_first(slides);
 	tmp_int = g_list_length(slides);
 
-	// * Pop open a dialog asking the user for their desired output options *
+	// Export all slides to the flash file, with the requested file name
+	menu_export_flash_inner(filename, 0, tmp_int - 1);
 
-	// fixme2: Needs to be written
+	// * Function clean up area *
 
-	// Export the flash file using the desired options
-	menu_export_flash_inner("myfile.swf", 0, tmp_int - 1);
+	// Frees the memory holding the file name
+	g_free(filename);
+
+	// Free the temporary gstring
+	g_string_free(tmp_gstring, TRUE);
 }
 
 

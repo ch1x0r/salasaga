@@ -7,6 +7,10 @@
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2006/04/20 12:03:37  vapour
+ * + Added a dialog box for the Export As Flash option, asking the user where they want to save.
+ * + Quick fix to the flash exporting inner function, so it doesn't generate a warning message on empty layers.
+ *
  * Revision 1.3  2006/04/18 18:00:52  vapour
  * Tweaks to allow compilation to succeed on both Windows and Solaris as well.
  * On Windows, the app will fire up as it only really required changes to not use GConf.
@@ -283,7 +287,6 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 {
 	// Local variables
 	FILE					*file;
-	GString				*full_file_name;
 	slide				*processing_slide;
 	layer				*processing_layer;
 
@@ -322,14 +325,12 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 
 
 	// Initialise various things
-	full_file_name = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 
-	// Work out the target file name
-	g_string_printf(full_file_name, "%s%c%s", output_folder->str, G_DIR_SEPARATOR, file_name);
-
+	// fixme4: At the time of coding, the only scale factor that works properly with all shape types in Ming is 1.0. :(
+	//         That might have improved
 	// Create the movie structure
-	Ming_setScale(1.0);  //  The only scale factor that works properly with all Shape types in Ming is 1.0. :(
+	Ming_setScale(1.0);
 	flash_movie = newSWFMovie();
 
 	// Process the requested range of slides
@@ -518,6 +519,10 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 					SWFMovie_add(flash_movie, (SWFBlock) movie_clip);
 					break;
 
+				case TYPE_EMPTY:
+					// Empty layer, skip it
+					break;
+
 				default:
 					g_printerr("ED28: Unknown layer type\n");
 
@@ -527,15 +532,14 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 
 	}  // Slide counter
 
-
 	// Save the flash file
 	SWFMovie_setDimension(flash_movie, project_width, project_height);
 	SWFMovie_setBackground(flash_movie, 0x0, 0x0, 0x0);  // Background color
 	SWFMovie_setRate(flash_movie, frames_per_second);
-	SWFMovie_save(flash_movie, full_file_name->str);
+	SWFMovie_save(flash_movie, file_name);
 
 	// Add a message to the status bar about the successful flash export
-	g_string_printf(tmp_gstring, "Flash '%s' exported successfully.", full_file_name->str);
+	g_string_printf(tmp_gstring, "Flash '%s' exported successfully.", file_name);
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 	gdk_flush();
 
