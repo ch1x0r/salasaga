@@ -7,6 +7,9 @@
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2006/04/20 12:27:00  vapour
+ * Updated to find the icon files in /(basepath)/share/icons/flame/(scalable or 72x72)/.
+ *
  * Revision 1.4  2006/04/18 18:00:52  vapour
  * Tweaks to allow compilation to succeed on both Windows and Solaris as well.
  * On Windows, the app will fire up as it only really required changes to not use GConf.
@@ -217,11 +220,12 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	//
 
 	// Local variables
-	gint			format_counter;							// Used to determine if SVG images can be loaded
-	GdkPixbufFormat	*format_data;							// Used to determine if SVG images can be loaded
+	gint				format_counter;						// Used to determine if SVG images can be loaded
+	GdkPixbufFormat	*format_data;						// Used to determine if SVG images can be loaded
 	GString			*icon_extension;						// Used to determine if SVG images can be loaded
-	gint			num_formats;							// Used to determine if SVG images can be loaded
-	GSList			*supported_formats;						// Used to determine if SVG images can be loaded
+	GString			*icon_path;							// Used to determine if SVG images can be loaded
+	gint				num_formats;							// Used to determine if SVG images can be loaded
+	GSList			*supported_formats;					// Used to determine if SVG images can be loaded
 
 	GtkWidget		*capture_widget, *capture_button;
 	GtkWidget		*crop_widget, *crop_button;
@@ -233,8 +237,8 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	GtkWidget		*quit_widget, *quit_button;
 	GtkWidget		*save_widget, *save_button;
 
-	GdkPixbuf		*tmp_gdk_pixbuf;				// Temporary GDK Pixbuf
-	GString			*tmp_gstring;							// Temporary GString
+	GdkPixbuf		*tmp_gdk_pixbuf;						// Temporary GDK Pixbuf
+	GString			*tmp_gstring;						// Temporary GString
 
 
 	// Create the toolbar widget
@@ -242,6 +246,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	// Work out if SVG images can be loaded
 	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
+	icon_path = g_string_new("../share/icons/flame/72x72");
 	supported_formats = gdk_pixbuf_get_formats();
 	num_formats = g_slist_length(supported_formats);
 	for (format_counter = 0; format_counter < num_formats; format_counter++)
@@ -251,6 +256,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 		{
 			// SVG is supported
 			g_string_assign(icon_extension, "svg");
+			g_string_assign(icon_path, "../share/icons/flame/scalable");
 		}
 	}
 
@@ -303,7 +309,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	gtk_toolbar_append_space(GTK_TOOLBAR(inner_toolbar));
 
 	// Create the Capture button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "capture", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "capture", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	capture_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -316,7 +322,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Import button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "import", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "import", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	import_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -329,7 +335,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Crop button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "crop", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	crop_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -345,7 +351,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	gtk_toolbar_append_space(GTK_TOOLBAR(inner_toolbar));
 
 	// Create the Export Flash button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "export_flash", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "export_flash", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	export_flash_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -358,7 +364,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 												NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Export SVG button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "export_svg", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "export_svg", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	export_svg_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -425,10 +431,11 @@ GtkWidget *create_time_line(void)
 	//
 
 	// Local variables
-	gint			format_counter;							// Used to determine if SVG images can be loaded
+	gint				format_counter;							// Used to determine if SVG images can be loaded
 	GdkPixbufFormat	*format_data;							// Used to determine if SVG images can be loaded
-	GString			*icon_extension;						// Used to determine if SVG images can be loaded
-	gint			num_formats;							// Used to determine if SVG images can be loaded
+	GString			*icon_extension;							// Used to determine if SVG images can be loaded
+	GString			*icon_path;								// Used to determine if SVG images can be loaded
+	gint				num_formats;								// Used to determine if SVG images can be loaded
 	GSList			*supported_formats;						// Used to determine if SVG images can be loaded
 	GtkWidget		*time_line_toolbar;						// Widget for holding the time line toolbar
 	GtkWidget		*time_line_scrolled_window;				// Widget for holding the scrolled window
@@ -443,7 +450,7 @@ GtkWidget *create_time_line(void)
 	GtkWidget		*move_up_widget, *move_up_button;		// Move layer up widgets
 	GtkWidget		*text_widget, *text_button;				// Text layer widgets
 
-	GdkPixbuf		*tmp_gdk_pixbuf;						// Temporary GDK Pixbuf
+	GdkPixbuf		*tmp_gdk_pixbuf;							// Temporary GDK Pixbuf
 	GString			*tmp_gstring;							// Temporary GString
 
 
@@ -463,6 +470,7 @@ GtkWidget *create_time_line(void)
 
 	// Work out if SVG images can be loaded
 	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
+	icon_path = g_string_new("../share/icons/flame/72x72");
 	supported_formats = gdk_pixbuf_get_formats();
 	num_formats = g_slist_length(supported_formats);
 	for (format_counter = 0; format_counter < num_formats; format_counter++)
@@ -472,6 +480,7 @@ GtkWidget *create_time_line(void)
 		{
 			// SVG is supported
 			g_string_assign(icon_extension, "svg");
+			g_string_assign(icon_path, "../share/icons/flame/scalable");
 		}
 	}
 
@@ -479,7 +488,7 @@ GtkWidget *create_time_line(void)
 	tmp_gstring = g_string_new(NULL);
 
 	// Create the Edit Layer button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "edit", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "edit", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	edit_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -492,7 +501,7 @@ GtkWidget *create_time_line(void)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Crop button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "crop", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	crop_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -505,7 +514,7 @@ GtkWidget *create_time_line(void)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Delete layer button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "delete", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "delete", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	delete_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -518,7 +527,7 @@ GtkWidget *create_time_line(void)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Move Layer Down button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "down_arrow", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "down_arrow", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	move_down_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -531,7 +540,7 @@ GtkWidget *create_time_line(void)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the Move Layer Up button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "up_arrow", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "up_arrow", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	move_up_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -547,7 +556,7 @@ GtkWidget *create_time_line(void)
 	gtk_toolbar_append_space(GTK_TOOLBAR(time_line_toolbar));
 
 	// Create the add text layer button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "add_text", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_text", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	text_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -560,7 +569,7 @@ GtkWidget *create_time_line(void)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the add highlight layer button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "add_highlight", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_highlight", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	highlight_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -573,7 +582,7 @@ GtkWidget *create_time_line(void)
 										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the add image layer button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", "images", G_DIR_SEPARATOR, "add_image", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_image", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	image_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -662,7 +671,7 @@ gint main(gint argc, gchar *argv[])
 	GtkLabel				*zoom_label;				// Widget for the zoom selector label
 
 	GString				*tmp_gstring;			// Temporary GString
-	GtkWidget			*tmp_widget;				// Temporary widget
+	GtkWidget			*tmp_widget = NULL;		// Temporary widget
 
 	// GConf related variables (not for windows)
 #ifndef _WIN32
