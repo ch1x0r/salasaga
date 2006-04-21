@@ -7,6 +7,9 @@
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2006/04/21 05:34:47  vapour
+ * Added a dialog box for the Export As SVG option, asking the user where they want to save.
+ *
  * Revision 1.4  2006/04/20 12:03:37  vapour
  * + Added a dialog box for the Export As Flash option, asking the user where they want to save.
  * + Quick fix to the flash exporting inner function, so it doesn't generate a warning message on empty layers.
@@ -2444,7 +2447,7 @@ void menu_export_flash_animation(void)
 		return;
 	}
 
-	// * Pop open a dialog asking the user for their desired output options *
+	// * Pop open a dialog asking the user for their desired filename *
 
 	// Create the dialog asking the user for the name to save as
 	export_dialog = gtk_file_chooser_dialog_new("Export as Flash",
@@ -2454,7 +2457,7 @@ void menu_export_flash_animation(void)
 						GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 						NULL);
 
-	// Create the filter so only *.flame files are displayed
+	// Create the filter so only *.flash files are displayed
 	flash_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(flash_filter, "*.swf");
 	gtk_file_filter_set_name(flash_filter, "Macromedia Flash (*.swf)");
@@ -2471,7 +2474,7 @@ void menu_export_flash_animation(void)
 	g_string_printf(tmp_gstring, "%s.swf", project_name->str);
 	gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(export_dialog), tmp_gstring->str);
 
-	// Change to the default project directory
+	// Change to the default output directory
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), output_folder->str);
 
 	// Run the dialog and wait for user input
@@ -2514,15 +2517,18 @@ void menu_export_svg_animation(void)
 	// fixme2: Would be better to find out if there's a way to inline the image data 
 
 	// Local variables
-	GError			*error = NULL;				// Pointer to error return structure
-	GString			*file_name = NULL;			// Used to construct the file name of the output file
-	GIOStatus		return_value;				// Return value used in most GIOChannel functions
-	GList			*slide_pointer;				// Points to the presently processing slide
-	guint			image_counter = 0;			// Counter for the number of images written out
+	GtkFileFilter		*all_filter;				// Filter for *.*
+	GtkWidget 			*export_dialog;			// Dialog widget
+	gchar				*filename;				// Pointer to the chosen file name
+	GtkFileFilter		*svg_filter;				// Filter for *.svg
+	GError				*error = NULL;			// Pointer to error return structure
+	GIOStatus			return_value;			// Return value used in most GIOChannel functions
+	GList				*slide_pointer;			// Points to the presently processing slide
+	guint				image_counter = 0;		// Counter for the number of images written out
 
-	GtkWidget		*tmp_dialog;					// Temporary dialog box
-	gsize			tmp_gsize;					// Temporary gsize
-	GString			*tmp_string = NULL;			// Temporary string
+	GtkWidget			*tmp_dialog;				// Temporary dialog box
+	gsize				tmp_gsize;				// Temporary gsize
+	GString				*tmp_gstring;			// Temporary GString
 
 
 	// Check if there is an active project
@@ -2534,59 +2540,96 @@ void menu_export_svg_animation(void)
 		return;
 	}
 
-	// Work out the full path to the output file
-	file_name = g_string_new(NULL);
-	g_string_printf(file_name, "%s%c%s", output_folder->str, G_DIR_SEPARATOR, "savefile.svg");
+	// * Pop open a dialog asking the user for their desired filename *
+
+	// Create the dialog asking the user for the name to save as
+	export_dialog = gtk_file_chooser_dialog_new("Export as SVG",
+						GTK_WINDOW(main_window),
+						GTK_FILE_CHOOSER_ACTION_SAVE,
+						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+						GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+						NULL);
+
+	// Create the filter so only *.svg files are displayed
+	svg_filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(svg_filter, "*.svg");
+	gtk_file_filter_set_name(svg_filter, "Scalable Vector Graphics (*.svg)");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(export_dialog), svg_filter);
+
+	// Create the filter so all files (*.*) can be displayed
+	all_filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(all_filter, "*.*");
+	gtk_file_filter_set_name(all_filter, "All files (*.*)");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(export_dialog), all_filter);
+
+	// Set the name of the file to save as
+	tmp_gstring = g_string_new(NULL);
+	g_string_printf(tmp_gstring, "%s.svg", project_name->str);
+	gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(export_dialog), tmp_gstring->str);
+
+	// Change to the default output directory
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), output_folder->str);
+
+	// Run the dialog and wait for user input
+	if (gtk_dialog_run(GTK_DIALOG(export_dialog)) != GTK_RESPONSE_ACCEPT)
+	{
+		// The dialog was cancelled, so destroy it and return to the caller
+		gtk_widget_destroy(export_dialog);
+		return;
+	}
+
+	// * We only get to here if a file was chosen *
+
+	// Get the filename from the dialog box
+	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(export_dialog));
+
+	// Destroy the dialog box, as it's not needed any more
+	gtk_widget_destroy(export_dialog);
 
 	// Open output file for writing
-	output_file = g_io_channel_new_file(file_name->str, "w", &error);
+	output_file = g_io_channel_new_file(filename, "w", &error);
 	if (NULL == output_file)
 	{
 		// * An error occured when opening the file for writing, so alert the user, and return to the calling routine indicating failure *
-		tmp_string = g_string_new(NULL);
-		g_string_printf(tmp_string, "Error ED08: An error '%s' occured when opening '%s' for writing", error->message, file_name->str);
+		g_string_printf(tmp_gstring, "Error ED08: An error '%s' occured when opening '%s' for writing", error->message, filename);
 		tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),
 											GTK_DIALOG_MODAL,
 											GTK_MESSAGE_INFO,
 											GTK_BUTTONS_OK,
-											tmp_string->str);
+											tmp_gstring->str);
 		gtk_dialog_run(GTK_DIALOG(tmp_dialog));
 		gtk_widget_destroy(tmp_dialog);
 
 		// Send a warning to stdout as well
-		g_warning(tmp_string->str);
+		g_warning(tmp_gstring->str);
 
 		// Free the memory allocated in this function
-		g_string_free(file_name, TRUE);
-		g_string_free(tmp_string, TRUE);
+		g_string_free(tmp_gstring, TRUE);
 		g_error_free(error);
 
 		return;
 	}
 
 	// Write the SVG header to the output file
-	tmp_string = g_string_new("<svg version=\"1.1\" baseProfile=\"full\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ev=\"http://www.w3.org/2001/xml-events\">\n");
-	return_value = g_io_channel_write_chars(output_file, tmp_string->str, tmp_string->len, &tmp_gsize, &error);
+	g_string_assign(tmp_gstring, "<svg version=\"1.1\" baseProfile=\"full\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ev=\"http://www.w3.org/2001/xml-events\">\n");
+	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
 		// * An error occured when writing the SVG header to the output file, so alert the user, and return to the calling routine indicating failure *
-		g_string_free(tmp_string, TRUE);
-		tmp_string = g_string_new(NULL);
-		g_string_printf(tmp_string, "Error ED10: An error '%s' occured when writing the SVG header to the output file '%s'", error->message, file_name->str);
+		g_string_printf(tmp_gstring, "Error ED10: An error '%s' occured when writing the SVG header to the output file '%s'", error->message, filename);
 		tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),
 											GTK_DIALOG_MODAL,
 											GTK_MESSAGE_INFO,
 											GTK_BUTTONS_OK,
-											tmp_string->str);
+											tmp_gstring->str);
 		gtk_dialog_run(GTK_DIALOG(tmp_dialog));
 		gtk_widget_destroy(tmp_dialog);
 
 		// Send a warning to stdout as well
-		g_warning(tmp_string->str);
+		g_warning(tmp_gstring->str);
 
 		// Free the memory allocated in this function
-		g_string_free(file_name, TRUE);
-		g_string_free(tmp_string, TRUE);
+		g_string_free(tmp_gstring, TRUE);
 		g_error_free(error);
 
 		return;
@@ -2597,29 +2640,25 @@ void menu_export_svg_animation(void)
 	g_list_foreach(slide_pointer, menu_export_svg_animation_slide, &image_counter);
 
 	// Write the closing SVG structure to the output file
-	tmp_string = g_string_assign(tmp_string, "</svg>\n");
-	return_value = g_io_channel_write_chars(output_file, tmp_string->str, tmp_string->len, &tmp_gsize, &error);
+	g_string_assign(tmp_gstring, "</svg>\n");
+	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
 		// * An error occured when writing the SVG closing tags to the output file, so alert the user, and return to the calling routine indicating failure *
-		g_string_free(tmp_string, TRUE);
-		tmp_string = g_string_new(NULL);
-		g_string_printf(tmp_string, "Error ED11: An error '%s' occured when writing the SVG closing tags to the output file '%s'", error->message, file_name->str);
+		g_string_printf(tmp_gstring, "Error ED11: An error '%s' occured when writing the SVG closing tags to the output file '%s'", error->message, filename);
 
 		// Display the warning message using our function
-		display_warning(tmp_string->str);
+		display_warning(tmp_gstring->str);
 
 		// Free the memory allocated in this function
-		g_string_free(file_name, TRUE);
-		g_string_free(tmp_string, TRUE);
+		g_string_free(tmp_gstring, TRUE);
 		g_error_free(error);
-
 		return;
 	}
 
 	// Small update to the status bar, to show progress to the user
-	g_string_printf(tmp_string, "Wrote SVG file '%s'.", file_name->str);
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_string->str);
+	g_string_printf(tmp_gstring, "Wrote SVG file '%s'.", filename);
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 	gdk_flush();
 
 	// Close the output file
@@ -2627,23 +2666,20 @@ void menu_export_svg_animation(void)
 	if (G_IO_STATUS_ERROR == return_value)
 	{
 		// * An error occured when closing the output file, so alert the user, and return to the calling routine indicating failure *
-		tmp_string = g_string_new(NULL);
-		g_string_printf(tmp_string, "Error ED09: An error '%s' occured when closing the output file '%s'", error->message, file_name->str);
+		g_string_printf(tmp_gstring, "Error ED09: An error '%s' occured when closing the output file '%s'", error->message, filename);
 
 		// Display the warning message using our function
-		display_warning(tmp_string->str);
+		display_warning(tmp_gstring->str);
 
 		// Free the memory allocated in this function
-		g_string_free(file_name, TRUE);
-		g_string_free(tmp_string, TRUE);
+		g_string_free(tmp_gstring, TRUE);
 		g_error_free(error);
-
 		return;
 	}
 
 	// Free the memory allocated in this function
-	g_string_free(tmp_string, TRUE);
-	g_string_free(file_name, TRUE);
+	g_string_free(tmp_gstring, TRUE);
+	g_free(filename);
 }
 
 
