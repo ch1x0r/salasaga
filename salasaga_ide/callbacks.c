@@ -3,21 +3,22 @@
  * 
  * Flame Project: Source file for all callback functions
  * 
- * History
- * +++++++
+ * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
  * 
- * $Log$
- * Revision 1.3  2006/04/18 18:00:52  vapour
- * Tweaks to allow compilation to succeed on both Windows and Solaris as well.
- * On Windows, the app will fire up as it only really required changes to not use GConf.
- * On Solaris however, a lot of stuff needed to be disabled, so it core dumps right away, prior to even displaying a window.
- * However, this *is* progress of a sort. :)
- *
- * Revision 1.2  2006/04/16 06:05:28  vapour
- * Removed header info copied from my local repository.
- *
- * Revision 1.1  2006/04/13 15:59:54  vapour
- * Initial version, copied from my local CVS repository.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
  */
 
 // Standard includes
@@ -774,3 +775,26 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 	// Indicate to the calling routine that this function finished fine
 	return TRUE;
 }
+
+
+/*
+ * History
+ * +++++++
+ * 
+ * $Log$
+ * Revision 1.4  2006/04/21 17:46:13  vapour
+ * + Updated header with clearer copyright and license details.
+ * + Moved the History section to the end of the file.
+ *
+ * Revision 1.3  2006/04/18 18:00:52  vapour
+ * Tweaks to allow compilation to succeed on both Windows and Solaris as well.
+ * On Windows, the app will fire up as it only really required changes to not use GConf.
+ * On Solaris however, a lot of stuff needed to be disabled, so it core dumps right away, prior to even displaying a window.
+ * However, this *is* progress of a sort. :)
+ *
+ * Revision 1.2  2006/04/16 06:05:28  vapour
+ * Removed header info copied from my local repository.
+ *
+ * Revision 1.1  2006/04/13 15:59:54  vapour
+ * Initial version, copied from my local CVS repository.
+ */

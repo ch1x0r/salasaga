@@ -3,28 +3,22 @@
  * 
  * Flame Project: Source file for all general backend functions
  * 
- * History
- * +++++++
+ * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
  * 
- * $Log$
- * Revision 1.5  2006/04/20 12:26:06  vapour
- * Updated to find the sound file in /(basepath)/share/sounds/flame/.
- *
- * Revision 1.4  2006/04/20 12:03:37  vapour
- * + Added a dialog box for the Export As Flash option, asking the user where they want to save.
- * + Quick fix to the flash exporting inner function, so it doesn't generate a warning message on empty layers.
- *
- * Revision 1.3  2006/04/18 18:00:52  vapour
- * Tweaks to allow compilation to succeed on both Windows and Solaris as well.
- * On Windows, the app will fire up as it only really required changes to not use GConf.
- * On Solaris however, a lot of stuff needed to be disabled, so it core dumps right away, prior to even displaying a window.
- * However, this *is* progress of a sort. :)
- *
- * Revision 1.2  2006/04/16 06:06:57  vapour
- * Added notes relevant to building on Windows (MinGW).
- *
- * Revision 1.1  2006/04/13 15:59:54  vapour
- * Initial version, copied from my local CVS repository.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
  */
 
 // Standard includes
@@ -964,3 +958,33 @@ void sound_beep(void)
 {
 	gnome_sound_play("../share/sounds/flame/generic.wav");
 }
+
+
+/*
+ * History
+ * +++++++
+ * 
+ * $Log$
+ * Revision 1.6  2006/04/21 17:44:51  vapour
+ * + Updated header with clearer copyright and license details.
+ * + Moved the History section to the end of the file.
+ *
+ * Revision 1.5  2006/04/20 12:26:06  vapour
+ * Updated to find the sound file in /(basepath)/share/sounds/flame/.
+ *
+ * Revision 1.4  2006/04/20 12:03:37  vapour
+ * + Added a dialog box for the Export As Flash option, asking the user where they want to save.
+ * + Quick fix to the flash exporting inner function, so it doesn't generate a warning message on empty layers.
+ *
+ * Revision 1.3  2006/04/18 18:00:52  vapour
+ * Tweaks to allow compilation to succeed on both Windows and Solaris as well.
+ * On Windows, the app will fire up as it only really required changes to not use GConf.
+ * On Solaris however, a lot of stuff needed to be disabled, so it core dumps right away, prior to even displaying a window.
+ * However, this *is* progress of a sort. :)
+ *
+ * Revision 1.2  2006/04/16 06:06:57  vapour
+ * Added notes relevant to building on Windows (MinGW).
+ *
+ * Revision 1.1  2006/04/13 15:59:54  vapour
+ * Initial version, copied from my local CVS repository.
+ */

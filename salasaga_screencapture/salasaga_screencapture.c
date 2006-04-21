@@ -3,94 +3,22 @@
  * 
  * Flame Project: Background capture process
  * 
- * History
- * +++++++
+ * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
  * 
- * $Log$
- * Revision 1.1  2006/04/13 15:57:49  vapour
- * Initial version, copied from my local CVS repository.
- *
- * Revision 1.20  2006/01/15 05:14:24  jc
- * Adjusted a comment for clarity.
- *
- * Revision 1.19  2005/11/20 00:49:25  jc
- * Removed the last of the include files that aren't needed on my system.  Might have just made it less portable (not sure).
- *
- * Revision 1.18  2005/11/20 00:47:46  jc
- * Cleaning up the include files.
- *
- * Revision 1.17  2005/11/20 00:38:35  jc
- * Updated to use execl() instead of execve(), so it inherits the right environment variables.
- *
- * Revision 1.16  2005/11/20 00:26:56  jc
- * Small tweak so it works on my system.
- *
- * Revision 1.15  2005/11/20 00:23:04  jc
- * Added initial working code to run the old gnome-screenshot program if no lock file is found.
- *
- * Revision 1.14  2005/11/19 14:51:43  jc
- * Cleaned up take_screenshot().
- *
- * Revision 1.13  2005/11/19 14:26:03  jc
- * Debugging code removed.  Screenshotting code needs to be cleaned up next.
- *
- * Revision 1.12  2005/11/19 14:18:00  jc
- * Added working code to increment the screenshot suffix.  Not thoroughly tested yet, and still has debugging stuff in it.
- * Needs cleaning up.
- *
- * Revision 1.11  2005/11/19 13:35:38  jc
- * Late in the night/morning.  Writing ugly code. :(
- * Now extracting the number from the highest screenshot.
- *
- * Revision 1.10  2005/11/19 13:16:37  jc
- * Adding further code to work out the highest numbered screen shot.
- *
- * Revision 1.9  2005/11/19 13:05:54  jc
- * Adding untested code to determine the highest existing screenshot number.
- *
- * Revision 1.8  2005/11/19 12:23:22  jc
- * Fixed a bug where g_build_filename() wasn't given a NULL as the last argument.
- *
- * Revision 1.7  2005/11/19 12:15:52  jc
- * Writing code to determine the correct target file name, and increase portability.
- *
- * Revision 1.6  2005/11/19 10:29:11  jc
- * Tweaked code to construct the screenshot file name from the correct target components.
- *
- * Revision 1.5  2005/11/19 10:18:56  jc
- * Tweaked code (tested) to always look for the .flame-lock file in the users home directory.
- *
- * Revision 1.4  2005/11/19 09:59:38  jc
- * Added some commented pseudo code (?) logic flow, and also added working code to save the screenshot into the correct directory.
- * Still need to add the code to determine the correct file name and create the target directory if it is not there.
- *
- * Revision 1.3  2005/11/19 09:25:56  jc
- * Added initial untested code to read parameters from the users .flame-lock file.
- *
- * Revision 1.2  2005/11/19 00:29:09  jc
- * Stripped out the GUI creation code, and added comments to outline program flow.
- *
- * Revision 1.1  2005/11/17 10:47:16  jc
- * Renamed main.c to flame-capture.c.
- *
- * Revision 1.6  2005/11/12 11:12:44  jc
- * Whoo Hooo!  Now displays the screenshot. :)
- *
- * Revision 1.5  2005/11/12 10:05:39  jc
- * Added working code that saves the screenshot (in my home directory with a fixed file name for now).
- *
- * Revision 1.4  2005/11/12 09:40:21  jc
- * Tried adding a routine to automatically save the captured screen shot.  Doesn't seem to be working however. :(
- *
- * Revision 1.3  2005/11/05 22:46:01  jc
- * Added small comment.
- *
- * Revision 1.2  2005/11/05 22:44:01  jc
- * Added code from gnome-utils 2.10.1, screenshot-utils.c, to do the actual screen shot.
- *
- * Revision 1.1  2005/11/05 11:48:37  jc
- * Initial placeholder.
- *
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
  */
 
 // Standard includes
@@ -310,3 +238,99 @@ gint main(gint argc, gchar *argv[])
 	// Exit
 	exit(0);
 }
+
+
+/*
+ * History
+ * +++++++
+ * 
+ * $Log$
+ * Revision 1.2  2006/04/21 17:51:04  vapour
+ * + Updated header with clearer copyright and license details.
+ * + Moved the History section to the end of the file.
+ *
+ * Revision 1.1  2006/04/13 15:57:49  vapour
+ * Initial version, copied from my local CVS repository.
+ *
+ * Revision 1.20  2006/01/15 05:14:24  jc
+ * Adjusted a comment for clarity.
+ *
+ * Revision 1.19  2005/11/20 00:49:25  jc
+ * Removed the last of the include files that aren't needed on my system.  Might have just made it less portable (not sure).
+ *
+ * Revision 1.18  2005/11/20 00:47:46  jc
+ * Cleaning up the include files.
+ *
+ * Revision 1.17  2005/11/20 00:38:35  jc
+ * Updated to use execl() instead of execve(), so it inherits the right environment variables.
+ *
+ * Revision 1.16  2005/11/20 00:26:56  jc
+ * Small tweak so it works on my system.
+ *
+ * Revision 1.15  2005/11/20 00:23:04  jc
+ * Added initial working code to run the old gnome-screenshot program if no lock file is found.
+ *
+ * Revision 1.14  2005/11/19 14:51:43  jc
+ * Cleaned up take_screenshot().
+ *
+ * Revision 1.13  2005/11/19 14:26:03  jc
+ * Debugging code removed.  Screenshotting code needs to be cleaned up next.
+ *
+ * Revision 1.12  2005/11/19 14:18:00  jc
+ * Added working code to increment the screenshot suffix.  Not thoroughly tested yet, and still has debugging stuff in it.
+ * Needs cleaning up.
+ *
+ * Revision 1.11  2005/11/19 13:35:38  jc
+ * Late in the night/morning.  Writing ugly code. :(
+ * Now extracting the number from the highest screenshot.
+ *
+ * Revision 1.10  2005/11/19 13:16:37  jc
+ * Adding further code to work out the highest numbered screen shot.
+ *
+ * Revision 1.9  2005/11/19 13:05:54  jc
+ * Adding untested code to determine the highest existing screenshot number.
+ *
+ * Revision 1.8  2005/11/19 12:23:22  jc
+ * Fixed a bug where g_build_filename() wasn't given a NULL as the last argument.
+ *
+ * Revision 1.7  2005/11/19 12:15:52  jc
+ * Writing code to determine the correct target file name, and increase portability.
+ *
+ * Revision 1.6  2005/11/19 10:29:11  jc
+ * Tweaked code to construct the screenshot file name from the correct target components.
+ *
+ * Revision 1.5  2005/11/19 10:18:56  jc
+ * Tweaked code (tested) to always look for the .flame-lock file in the users home directory.
+ *
+ * Revision 1.4  2005/11/19 09:59:38  jc
+ * Added some commented pseudo code (?) logic flow, and also added working code to save the screenshot into the correct directory.
+ * Still need to add the code to determine the correct file name and create the target directory if it is not there.
+ *
+ * Revision 1.3  2005/11/19 09:25:56  jc
+ * Added initial untested code to read parameters from the users .flame-lock file.
+ *
+ * Revision 1.2  2005/11/19 00:29:09  jc
+ * Stripped out the GUI creation code, and added comments to outline program flow.
+ *
+ * Revision 1.1  2005/11/17 10:47:16  jc
+ * Renamed main.c to flame-capture.c.
+ *
+ * Revision 1.6  2005/11/12 11:12:44  jc
+ * Whoo Hooo!  Now displays the screenshot. :)
+ *
+ * Revision 1.5  2005/11/12 10:05:39  jc
+ * Added working code that saves the screenshot (in my home directory with a fixed file name for now).
+ *
+ * Revision 1.4  2005/11/12 09:40:21  jc
+ * Tried adding a routine to automatically save the captured screen shot.  Doesn't seem to be working however. :(
+ *
+ * Revision 1.3  2005/11/05 22:46:01  jc
+ * Added small comment.
+ *
+ * Revision 1.2  2005/11/05 22:44:01  jc
+ * Added code from gnome-utils 2.10.1, screenshot-utils.c, to do the actual screen shot.
+ *
+ * Revision 1.1  2005/11/05 11:48:37  jc
+ * Initial placeholder.
+ *
+ */

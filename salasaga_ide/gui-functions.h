@@ -3,15 +3,22 @@
  * 
  * Flame Project: Header file for all non specific GUI related funtions
  * 
- * History
- * +++++++
+ * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
  * 
- * $Log$
- * Revision 1.2  2006/04/16 05:55:12  vapour
- * Removed header info copied from my local repository.
- *
- * Revision 1.1  2006/04/13 15:59:54  vapour
- * Initial version, copied from my local CVS repository.
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
  */
 
 #ifndef __GUIFUNCTIONS_H__
@@ -74,3 +81,20 @@ void slide_move_down(void);
 #endif // __cplusplus
 
 #endif // __GUIFUNCTIONS_H__
+
+
+/*
+ * History
+ * +++++++
+ * 
+ * $Log$
+ * Revision 1.3  2006/04/21 17:49:27  vapour
+ * + Updated header with clearer copyright and license details.
+ * + Moved the History section to the end of the file.
+ *
+ * Revision 1.2  2006/04/16 05:55:12  vapour
+ * Removed header info copied from my local repository.
+ *
+ * Revision 1.1  2006/04/13 15:59:54  vapour
+ * Initial version, copied from my local CVS repository.
+ */
