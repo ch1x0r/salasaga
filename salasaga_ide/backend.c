@@ -353,7 +353,7 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 					width = (gint) ((layer_image *) processing_layer->object_data)->width;
 					height = (gint) ((layer_image *) processing_layer->object_data)->height;
 					start_frame = processing_layer->start_frame;
-					finish_frame = processing_layer->final_frame;
+					finish_frame = processing_layer->finish_frame;
 
 					// Read the image file in again (forced to by Ming :-< )
 					file = fopen(((layer_image *) processing_layer->object_data)->image_path->str, "r");
@@ -397,7 +397,7 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 					height = (gint) ((layer_text *) processing_layer->object_data)->rendered_height;
 					font_size = ((layer_text *) processing_layer->object_data)->font_size;
 					start_frame = processing_layer->start_frame;
-					finish_frame = processing_layer->final_frame;
+					finish_frame = processing_layer->finish_frame;
 
 					// Create the background for the text to go on
 					shape = newSWFShape();
@@ -480,7 +480,7 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 					width = (gint) ((layer_highlight *) processing_layer->object_data)->width;
 					height = (gint) ((layer_highlight *) processing_layer->object_data)->height;
 					start_frame = processing_layer->start_frame;
-					finish_frame = processing_layer->final_frame;
+					finish_frame = processing_layer->finish_frame;
 
 					// Create the highlight layer
 					shape = newSWFShape();
@@ -557,7 +557,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	guint			slide_number;				// The number of the presently processing slide
 	guint			object_type;					// The type of object in each layer
 	guint			start_frame;					// The first frame in which the object appears
-	guint			final_frame;					// The final frame in which the object appears
+	guint			finish_frame;					// The finish frame in which the object appears
 	GString			*file_name = NULL;			// Used to construct the file name of the output file
 	GString			*string_to_write = NULL;		// Holds SVG data to be written out
 	GString			*new_file_name = NULL;		// Holds the filename for any output files
@@ -593,18 +593,18 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	// Create some useful pointers
 	slide_number = slide_pointer->number;
 	start_frame = layer_pointer->start_frame;
-	final_frame = layer_pointer->final_frame;
+	finish_frame = layer_pointer->finish_frame;
 	object_type = layer_pointer->object_type;
 
 //g_printerr("Slide number: %u\n", slide_number);
 //g_printerr("Start frame: %u\n", start_frame);
-//g_printerr("Final frame: %u\n", final_frame);
+//g_printerr("Finish frame: %u\n", finish_frame);
 //g_printerr("Object type: %u\n", object_type);
 
 		// Work out if the present layer is visible longer than any known present
-		if (final_frame > max_frame_second)
+		if (finish_frame > max_frame_second)
 		{
-			max_frame_second = final_frame;
+			max_frame_second = finish_frame;
 		}
 
 		// Determine the type of object present in the layer
@@ -663,7 +663,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 					// Create a string to write to the output svg file
 					string_to_write = g_string_new(NULL);
-					g_string_printf(string_to_write, "<image xlink:href=\"%s\" width=\"%u\" height=\"0\">\n\t<animate attributeName=\"height\" from=\"%upx\" to=\"%upx\" begin=\"%us\" dur=\"%us\" />\n</image>\n", new_file_name->str, output_width, output_height, output_height, second_counter + start_frame, second_counter + final_frame);
+					g_string_printf(string_to_write, "<image xlink:href=\"%s\" width=\"%u\" height=\"0\">\n\t<animate attributeName=\"height\" from=\"%upx\" to=\"%upx\" begin=\"%us\" dur=\"%us\" />\n</image>\n", new_file_name->str, output_width, output_height, output_height, second_counter + start_frame, second_counter + finish_frame);
 					g_string_free(new_file_name, TRUE);
 					new_file_name = NULL;
 
@@ -720,7 +720,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 
 	guint			layer_type;					// The type of layer
 	guint			start_frame;					// The first frame in which the object appears
-	guint			final_frame;					// The final frame in which the object appears
+	guint			finish_frame;				// The finish frame in which the object appears
 	GString			*layer_name;					// Name of the layer
 
 	GtkTextIter		text_start;					// The start position of the text buffer
@@ -736,7 +736,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 
 	// Create some useful pointers
 	start_frame = layer_pointer->start_frame;
-	final_frame = layer_pointer->final_frame;
+	finish_frame = layer_pointer->finish_frame;
 	layer_type = layer_pointer->object_type;
 	layer_name	= layer_pointer->name;
 
@@ -752,8 +752,8 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	xmlNewChild(layer_node, NULL, "name", layer_name->str);
 	g_string_printf(tmp_gstring, "%u", start_frame);
 	xmlNewChild(layer_node, NULL, "start frame", tmp_gstring->str);
-	g_string_printf(tmp_gstring, "%u", final_frame);
-	xmlNewChild(layer_node, NULL, "final frame", tmp_gstring->str);
+	g_string_printf(tmp_gstring, "%u", finish_frame);
+	xmlNewChild(layer_node, NULL, "finish frame", tmp_gstring->str);
 	switch (layer_type)
 	{
 		case TYPE_GDK_PIXBUF:
@@ -965,6 +965,10 @@ void sound_beep(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2006/04/22 08:36:54  vapour
+ * + Replaced the text string display in the timeline (layer) widget area, with the x and y finish positions.
+ * + Updated the entire project to use the word "finish" consistently, instead of "final".
+ *
  * Revision 1.6  2006/04/21 17:44:51  vapour
  * + Updated header with clearer copyright and license details.
  * + Moved the History section to the end of the file.

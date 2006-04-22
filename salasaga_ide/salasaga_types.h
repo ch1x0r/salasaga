@@ -58,10 +58,11 @@ enum
 	TIMELINE_TYPE,
 	TIMELINE_VISIBILITY,
 	TIMELINE_START,
-	TIMELINE_FINAL,
-	TIMELINE_X_OFF,
-	TIMELINE_Y_OFF,
-	TIMELINE_TEXT,
+	TIMELINE_FINISH,
+	TIMELINE_X_OFF_START,
+	TIMELINE_Y_OFF_START,
+	TIMELINE_X_OFF_FINISH,
+	TIMELINE_Y_OFF_FINISH,
 	TIMELINE_N_COLUMNS
 };
 
@@ -71,7 +72,7 @@ typedef struct
 	guint			object_type;
 	GObject			*object_data;
 	guint			start_frame;
-	guint			final_frame;
+	guint			finish_frame;
 	GString			*name;
 	GtkTreeIter		*row_iter;
 } layer;
@@ -153,6 +154,10 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2006/04/22 08:36:54  vapour
+ * + Replaced the text string display in the timeline (layer) widget area, with the x and y finish positions.
+ * + Updated the entire project to use the word "finish" consistently, instead of "final".
+ *
  * Revision 1.5  2006/04/21 17:48:23  vapour
  * + Updated header with clearer copyright and license details.
  * + Moved the History section to the end of the file.

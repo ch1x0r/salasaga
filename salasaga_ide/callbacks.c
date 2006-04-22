@@ -200,8 +200,8 @@ void timeline_edited_start(GtkCellRendererText *selection, gchar *row, gchar *ne
 }
 
 
-// Function called when the final field in the timeline widget is edited
-void timeline_edited_final(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
+// Function called when the finish field in the timeline widget is edited
+void timeline_edited_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
 {
 	// Local variables
 	GList				*layer_pointer;
@@ -217,17 +217,121 @@ void timeline_edited_final(GtkCellRendererText *selection, gchar *row, gchar *ne
 	layer_data = layer_pointer->data;
 
 	// Update the layer with the new value
-	layer_data->final_frame = atoi(new_value);
+	layer_data->finish_frame = atoi(new_value);
 
 	// Update the timeline widget with the new value too
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-						TIMELINE_FINAL, atoi(new_value),
+						TIMELINE_FINISH, atoi(new_value),
 						-1);
 }
 
 
-// Function called when the x offset field in the timeline widget is edited
-void timeline_edited_x_offset(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
+// Function called when the x offset finish field in the timeline widget is edited
+void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
+{
+	// Local variables
+	GList				*layer_pointer;
+	layer				*layer_data;
+
+
+	// Set up some pointers to make things easier
+	layer_pointer = ((slide *) current_slide->data)->layers;
+
+	// Work out which layer had its value changed
+	layer_pointer = g_list_first(layer_pointer);
+	layer_pointer = g_list_nth(layer_pointer, atoi(row));
+	layer_data = layer_pointer->data;
+
+	// Update the layer with the new value
+	switch (layer_data->object_type)
+	{
+		case TYPE_EMPTY:
+			// Nothing to do here
+			break;
+
+		case TYPE_GDK_PIXBUF:
+			((layer_image *) layer_data->object_data)->x_offset_finish = atoi(new_value);
+			break;
+
+		case TYPE_HIGHLIGHT:
+			((layer_highlight *) layer_data->object_data)->x_offset_finish = atoi(new_value);
+			break;
+
+		case TYPE_TEXT:
+			((layer_text *) layer_data->object_data)->x_offset_finish = atoi(new_value);
+			break;
+
+		default:
+			g_printerr("ED30: Unknown layer type\n");
+	}
+
+	// Update the timeline widget with the new value too
+	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
+						TIMELINE_X_OFF_FINISH, atoi(new_value),
+						-1);
+
+	// Redraw the workspace
+	draw_workspace();
+
+	// Redraw the film strip thumbnail
+	draw_thumbnail(current_slide);
+}
+
+
+// Function called when the y offset finish field in the timeline widget is edited
+void timeline_edited_y_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
+{
+	// Local variables
+	GList				*layer_pointer;
+	layer				*layer_data;
+
+
+	// Set up some pointers to make things easier
+	layer_pointer = ((slide *) current_slide->data)->layers;
+
+	// Work out which layer had its value changed
+	layer_pointer = g_list_first(layer_pointer);
+	layer_pointer = g_list_nth(layer_pointer, atoi(row));
+	layer_data = layer_pointer->data;
+
+	// Update the layer with the new value
+	switch (layer_data->object_type)
+	{
+		case TYPE_EMPTY:
+			// Nothing to do here
+			break;
+
+		case TYPE_GDK_PIXBUF:
+			((layer_image *) layer_data->object_data)->y_offset_finish = atoi(new_value);
+			break;
+
+		case TYPE_HIGHLIGHT:
+			((layer_highlight *) layer_data->object_data)->y_offset_finish = atoi(new_value);
+			break;
+
+		case TYPE_TEXT:
+			((layer_text *) layer_data->object_data)->y_offset_finish = atoi(new_value);
+			break;
+
+		default:
+			g_printerr("ED31: Unknown layer type\n");
+	}
+
+	// Update the timeline widget with the new value too
+	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
+						TIMELINE_Y_OFF_FINISH, atoi(new_value),
+						-1);
+
+	// Redraw the workspace
+	draw_workspace();
+
+	// Redraw the film strip thumbnail
+	draw_thumbnail(current_slide);
+}
+
+
+// Function called when the x offset start field in the timeline widget is edited
+void timeline_edited_x_offset_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
 {
 	// Local variables
 	GList				*layer_pointer;
@@ -267,7 +371,7 @@ void timeline_edited_x_offset(GtkCellRendererText *selection, gchar *row, gchar 
 
 	// Update the timeline widget with the new value too
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-						TIMELINE_X_OFF, atoi(new_value),
+						TIMELINE_X_OFF_START, atoi(new_value),
 						-1);
 
 	// Redraw the workspace
@@ -278,8 +382,8 @@ void timeline_edited_x_offset(GtkCellRendererText *selection, gchar *row, gchar 
 }
 
 
-// Function called when the y offset field in the timeline widget is edited
-void timeline_edited_y_offset(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
+// Function called when the y offset start field in the timeline widget is edited
+void timeline_edited_y_offset_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
 {
 	// Local variables
 	GList				*layer_pointer;
@@ -319,44 +423,8 @@ void timeline_edited_y_offset(GtkCellRendererText *selection, gchar *row, gchar 
 
 	// Update the timeline widget with the new value too
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-						TIMELINE_Y_OFF, atoi(new_value),
+						TIMELINE_Y_OFF_START, atoi(new_value),
 						-1);
-
-	// Redraw the workspace
-	draw_workspace();
-
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
-}
-
-
-// Function called when the text data field in the timeline widget is edited
-void timeline_edited_text(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
-{
-	// Local variables
-	GList				*layer_pointer;
-	layer				*layer_data;
-
-
-	// Set up some pointers to make things easier
-	layer_pointer = ((slide *) current_slide->data)->layers;
-
-	// Work out which layer had its value changed
-	layer_pointer = g_list_first(layer_pointer);
-	layer_pointer = g_list_nth(layer_pointer, atoi(row));
-	layer_data = layer_pointer->data;
-
-	// If we're editing a text layer, then update it with the new value (else ignore the edit)
-	if (TYPE_TEXT == layer_data->object_type)
-	{
-		// Change the value in the text layer
-		gtk_text_buffer_set_text(GTK_TEXT_BUFFER(((layer_text *) layer_data->object_data)->text_buffer), new_value, -1);
-
-		// Update the timeline widget with the new value too
-		gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-							TIMELINE_TEXT, new_value,
-							-1);
-	}
 
 	// Redraw the workspace
 	draw_workspace();
@@ -651,7 +719,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			tmp_double = project_width - width;
 		}
 		g_string_printf(tmp_gstring, "%.0f", tmp_double);
-		timeline_edited_x_offset(NULL, selected_row, tmp_gstring->str, NULL);
+		timeline_edited_x_offset_start(NULL, selected_row, tmp_gstring->str, NULL);
 
 		// Work out and set the new Y offset for the layer object
 		// fixme3: This needs to be a lot more accurate
@@ -667,7 +735,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			tmp_double = project_height - height;
 		}
 		g_string_printf(tmp_gstring, "%.0f", tmp_double);
-		timeline_edited_y_offset(NULL, selected_row, tmp_gstring->str, NULL);
+		timeline_edited_y_offset_start(NULL, selected_row, tmp_gstring->str, NULL);
 
 		// Reset the mouse drag switch and related info
 		mouse_dragging = FALSE;
@@ -782,6 +850,10 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2006/04/22 08:36:54  vapour
+ * + Replaced the text string display in the timeline (layer) widget area, with the x and y finish positions.
+ * + Updated the entire project to use the word "finish" consistently, instead of "final".
+ *
  * Revision 1.4  2006/04/21 17:46:13  vapour
  * + Updated header with clearer copyright and license details.
  * + Moved the History section to the end of the file.

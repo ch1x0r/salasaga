@@ -35,10 +35,11 @@ gint film_strip_slide_clicked(GtkWidget *widget, GdkEvent *event, slide *clicked
 gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data);
 void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
 void timeline_edited_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
-void timeline_edited_final(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
-void timeline_edited_x_offset(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
-void timeline_edited_y_offset(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
-void timeline_edited_text(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
+void timeline_edited_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
+void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
+void timeline_edited_y_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
+void timeline_edited_x_offset_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
+void timeline_edited_y_offset_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
 gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
 gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
 gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data);
@@ -57,6 +58,10 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data);
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2006/04/22 08:36:54  vapour
+ * + Replaced the text string display in the timeline (layer) widget area, with the x and y finish positions.
+ * + Updated the entire project to use the word "finish" consistently, instead of "final".
+ *
  * Revision 1.3  2006/04/21 17:46:40  vapour
  * + Updated header with clearer copyright and license details.
  * + Moved the History section to the end of the file.
