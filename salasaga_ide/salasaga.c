@@ -438,6 +438,7 @@ GtkWidget *create_time_line(void)
 	GtkWidget		*edit_widget, *edit_button;				// Edit layer widgets
 	GtkWidget		*highlight_widget, *highlight_button;	// Highlight layer widgets
 	GtkWidget		*image_widget, *image_button;			// Highlight layer widgets
+	GtkWidget		*mouse_widget, *mouse_button;			// Mouse arryw layer widgets
 	GtkWidget		*move_down_widget, *move_down_button;	// Move layer down widgets
 	GtkWidget		*move_up_widget, *move_up_button;		// Move layer up widgets
 	GtkWidget		*text_widget, *text_button;				// Text layer widgets
@@ -546,6 +547,19 @@ GtkWidget *create_time_line(void)
 
 	// Add a spacer to the toolbar
 	gtk_toolbar_append_space(GTK_TOOLBAR(time_line_toolbar));
+
+	// Create the add mouse pointer button
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_mouse", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	mouse_widget = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	g_object_unref(tmp_gdk_pixbuf);
+	mouse_button = gtk_toolbar_append_item(GTK_TOOLBAR(time_line_toolbar),
+										"Mouse",  // Button label
+										"Add a mouse pointer",  // Tooltip
+										"Private",  // Tooltip private info
+										mouse_widget,  // Image/icon widget
+										GTK_SIGNAL_FUNC(layer_new_text),  // Function to call when clicked
+										NULL);  // Our function doesn't need any data passed to it
 
 	// Create the add text layer button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_text", icon_extension->str);
@@ -1015,6 +1029,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2006/04/23 11:29:09  vapour
+ * Added a mouse pointer icon to the timeline toolbar.  No code behind it yet.
+ *
  * Revision 1.6  2006/04/21 17:47:56  vapour
  * + Updated header with clearer copyright and license details.
  * + Moved the History section to the end of the file.

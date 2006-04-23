@@ -12,6 +12,7 @@ SOUNDS = \
 ICONS_SIXTY = \
 	images/add_highlight.png \
 	images/add_image.png \
+	images/add_mouse.png \
 	images/add_text.png \
 	images/capture.png \
 	images/crop.png \
@@ -26,6 +27,7 @@ ICONS_SIXTY = \
 ICONS_SCALABLE = \
 	images/add_highlight.svg \
 	images/add_image.svg \
+	images/add_mouse.svg \
 	images/add_text.svg \
 	images/capture.svg \
 	images/crop.svg \
