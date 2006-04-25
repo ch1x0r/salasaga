@@ -718,9 +718,13 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	xmlNodePtr		slide_node;					// Pointer to the slide node
 	xmlNodePtr		layer_node;					// Pointer to the new layer node
 
+	gboolean			return_code;					// Used to get yes/no values from functions
+	guint			file_counter;				// Used if we have to work out a new image file name
+	guint			finish_frame;				// The finish frame in which the object appears
 	guint			layer_type;					// The type of layer
 	guint			start_frame;					// The first frame in which the object appears
-	guint			finish_frame;				// The finish frame in which the object appears
+	GError			*error = NULL;				// Pointer to error return structure
+	GString			*filename;					// Used if we have to work out a new image file name
 	GString			*layer_name;					// Name of the layer
 
 	GtkTextIter		text_start;					// The start position of the text buffer
@@ -757,6 +761,55 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	switch (layer_type)
 	{
 		case TYPE_GDK_PIXBUF:
+
+			// Image layers are a bit special, because they can be modified (i.e. cropped)
+			// At least for now, as it _seems_ like a decent way forward:
+			//  If an image is modified at the time of project save, then we save the modified image
+			//  to it's own unique file, and reference that (instead of the original) in the save file.
+			//
+			//  Pros: Even if an image is modified fifty times, we only save the version that's needed
+			//
+			//  Cons: <suspect there's better ways of doing this>  ;)
+			//
+			// An alternative could be to reference the original image, keeping a note of the area needed
+			// but that could get tricky if we ever get into more advanced image manipulation (unsure)
+			//
+
+			if (TRUE == ((layer_image *) layer_pointer->object_data)->modified)
+			{
+				// * This image layer has been modified, so we save it into the projects folder *
+				// * and update the image path info to point to it                              *
+
+				// Generate new, unique file name
+				filename = g_string_new(NULL);
+				file_counter = 0;
+				g_string_printf(filename, "%s%c%s%04u.png", project_folder->str, G_DIR_SEPARATOR, project_name->str, file_counter);
+				while (TRUE == g_file_test(filename->str, G_FILE_TEST_EXISTS))
+				{
+					// The filename already exists, so increment the numerical part and try again
+					file_counter++;
+					g_string_printf(filename, "%s%c%s%04u.png", project_folder->str, G_DIR_SEPARATOR, project_name->str, file_counter);
+				}
+
+				// Save the image file
+				return_code = gdk_pixbuf_save(((layer_image *) layer_pointer->object_data)->image_data,
+									filename->str,  // Filename to save as
+									"png",  // File type to save as
+									&error,
+									"compression", "9",  // Set compression to 9 (no loss)
+									NULL);
+				if (FALSE == return_code)
+				{
+					// Some kind of error occured when saving the image file
+					g_string_printf(tmp_gstring, "ED42: Some kind of error occured when saving '%s'", filename->str);
+					display_warning(tmp_gstring->str);
+					break;  // Continue on with other layers
+				}
+
+				// Update the in memory image info with the new filename
+				g_string_assign(((layer_image *) layer_pointer->object_data)->image_path, filename->str);
+			}
+
 			xmlNewChild(layer_node, NULL, "type", "image");
 			xmlNewChild(layer_node, NULL, "path", ((layer_image *) layer_pointer->object_data)->image_path->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->x_offset_start);
@@ -971,6 +1024,9 @@ void sound_beep(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2006/04/25 10:53:05  vapour
+ * Modified images now have their own file created when the project is saved.
+ *
  * Revision 1.8  2006/04/25 09:56:24  vapour
  * Background color information is saved for empty layers.
  *
