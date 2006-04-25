@@ -775,6 +775,12 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 
 		case TYPE_EMPTY:
 			xmlNewChild(layer_node, NULL, "type", "empty");
+			g_string_printf(tmp_gstring, "%u", ((layer_empty *) layer_pointer->object_data)->bg_color.red);
+			xmlNewChild(layer_node, NULL, "red", tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_empty *) layer_pointer->object_data)->bg_color.green);
+			xmlNewChild(layer_node, NULL, "green", tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_empty *) layer_pointer->object_data)->bg_color.blue);
+			xmlNewChild(layer_node, NULL, "blue", tmp_gstring->str);
 			break;
 
 		case TYPE_TEXT:
@@ -965,6 +971,9 @@ void sound_beep(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2006/04/25 09:56:24  vapour
+ * Background color information is saved for empty layers.
+ *
  * Revision 1.7  2006/04/22 08:36:54  vapour
  * + Replaced the text string display in the timeline (layer) widget area, with the x and y finish positions.
  * + Updated the entire project to use the word "finish" consistently, instead of "final".
