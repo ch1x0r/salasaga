@@ -1455,6 +1455,7 @@ void image_crop(void)
 	((layer_image *) this_layer->object_data)->width = new_width;
 	((layer_image *) this_layer->object_data)->height = new_height;
 	g_string_assign(((layer_image *) this_layer->object_data)->image_path, "");
+	((layer_image *) this_layer->object_data)->modified = TRUE;
 
 	// Free the memory used by the old pixbuf
 	g_object_unref(tmp_pixbuf);
@@ -1929,6 +1930,7 @@ void layer_new_image(void)
 	tmp_image_ob->y_offset_finish = 100;
 	tmp_image_ob->width = 400;
 	tmp_image_ob->height = 300;
+	tmp_image_ob->modified = FALSE;
 
 	// Constuct the new image layer
 	tmp_layer = g_new(layer, 1);
@@ -3460,6 +3462,7 @@ void menu_screenshots_import(void)
 		tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_string->str, NULL);  // Load the image again, at full size.  It's the background layer
 		tmp_image_ob->width = gdk_pixbuf_get_width(tmp_image_ob->image_data);
 		tmp_image_ob->height = gdk_pixbuf_get_height(tmp_image_ob->image_data);
+		tmp_image_ob->modified = FALSE;
 
 		// Wrap the background layer info around it
 		tmp_layer->object_data = (GObject *) tmp_image_ob;
@@ -4065,6 +4068,9 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2006/04/25 10:56:26  vapour
+ * Updated to appropriately set the modified flag in image layers.
+ *
  * Revision 1.9  2006/04/25 09:55:25  vapour
  * Bug fix.  Importing screenshots into an existing project now works.
  *
