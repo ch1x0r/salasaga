@@ -105,6 +105,7 @@ typedef struct
 	gint				height;
 	GString			*image_path;
 	GdkPixbuf		*image_data;
+	gboolean			modified;			// FALSE if an image hasn't been modified, TRUE if it has (i.e. cropped)
 } layer_image;
 
 // Defines the properties making up a text layer
@@ -154,6 +155,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2006/04/25 10:54:22  vapour
+ * Definition for image layer now includes a flag to track if it has been modified.
+ *
  * Revision 1.6  2006/04/22 08:36:54  vapour
  * + Replaced the text string display in the timeline (layer) widget area, with the x and y finish positions.
  * + Updated the entire project to use the word "finish" consistently, instead of "final".
