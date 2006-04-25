@@ -1,7 +1,7 @@
 ***********
 
 Windows (MinGW) notes: After installing all of the GTK, Glib, (etc) stuff, pkg-config didn't work until I'd set the environment variable:
-PKG_CONFIG_DIR=/c/MinGW/lib/pkgconfig
+PKG_CONFIG_PATH=/c/MinGW/lib/pkgconfig
 
 $ pkg-config gtk+-2.0 --cflags
   -mms-bitfields -Ic:/MinGW/include/gtk-2.0 -Ic:/MinGW/lib/gtk-2.0/include -Ic:/MinGW/include/atk-1.0 -Ic:/MinGW/include/cairo -Ic:/MinGW/include/pango-1.0 -Ic:/devel/dist/cairo-1.0.4/include/cairo -Ic:/MinGW/include/glib-2.0 -Ic:/MinGW/lib/glib-2.0/include
