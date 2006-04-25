@@ -2891,6 +2891,8 @@ void menu_file_save(void)
 	gchar				*filename;				// Pointer to the chosen file name
 	GtkFileFilter		*flame_filter;			// Filter for *.flame
 	GtkWidget 			*save_dialog;			// Dialog widget
+	gboolean				unique_name;				// Switch used to mark when we have a valid filename
+	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
 
 	xmlDocPtr			document_pointer;		// Points to the XML document structure in memory
 	xmlNodePtr			slide_root;				// Points to the root of the slide data
@@ -2933,17 +2935,44 @@ void menu_file_save(void)
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(save_dialog), default_project_folder->str);
 
 	// Run the dialog and wait for user input
-	if (gtk_dialog_run(GTK_DIALOG(save_dialog)) != GTK_RESPONSE_ACCEPT)
+	unique_name = FALSE;
+	while (TRUE != unique_name)
 	{
-		// The dialog was cancelled, so destroy it and return to the caller
-		gtk_widget_destroy(save_dialog);
-		return;
+		// Get a filename to save as
+		if (gtk_dialog_run(GTK_DIALOG(save_dialog)) != GTK_RESPONSE_ACCEPT)
+		{
+			// The dialog was cancelled, so destroy it and return to the caller
+			gtk_widget_destroy(save_dialog);
+			return;
+		}
+
+		// Retrieve the filename from the dialog box
+		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(save_dialog));
+
+		// Check if there's an existing file of this name, and give an Overwrite? type prompt if there is
+		if (TRUE == g_file_test(filename, G_FILE_TEST_EXISTS))
+		{
+			// Something with this name already exists
+			warn_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),
+								GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+								GTK_MESSAGE_QUESTION,
+								GTK_BUTTONS_YES_NO,
+								"Overwrite existing file?");
+			if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
+			{
+				// We've been told to overwrite the existing file
+				unique_name = TRUE;
+			}
+			gtk_widget_destroy(warn_dialog);
+		} else
+		{
+			// The indicated file name is unique, we're fine to save
+			unique_name = TRUE;
+		}
 	}
 
-	// * We only get to here if a file was chosen *
-
-	// Get the filename from the dialog box
-	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(save_dialog));
+	// Destroy the dialog box, as it's not needed any more
+	gtk_widget_destroy(save_dialog);
 
 	// Create an empty document pointer
 	document_pointer = xmlNewDoc("1.0");
@@ -3033,9 +3062,6 @@ void menu_file_save(void)
 
 	// Free the temporary gstring
 	g_string_free(tmp_gstring, TRUE);
-
-	// Destroy the dialog box, as it's not needed any more
-	gtk_widget_destroy(save_dialog);
 }
 
 
@@ -4050,6 +4076,9 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2006/04/25 09:18:28  vapour
+ * Added a overwrite warning dialog to the save option.
+ *
  * Revision 1.7  2006/04/22 08:36:54  vapour
  * + Replaced the text string display in the timeline (layer) widget area, with the x and y finish positions.
  * + Updated the entire project to use the word "finish" consistently, instead of "final".
