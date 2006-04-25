@@ -3382,13 +3382,13 @@ void menu_screenshots_import(void)
 	// * Scan the given directory for screenshot files to import *
 	while ((dir_entry = g_dir_read_name(dir_ptr)) != NULL)
 	{
-		// Look for files starting with the same name as the screenshot
+		// Look for files starting with the same name as the project
 		if (g_str_has_prefix(dir_entry, project_name->str))
 		{
 			// The directory entry starts with the correct prefix, now let's check the file extension
 			if (g_str_has_suffix(dir_entry, ".png"))
 			{
-				// The directory entry has the correct prefix too, so it's very likely one of our screenshots
+				// The directory entry has the correct file extension too, so it's very likely one of our screenshots
 				// We add it to the list of screenshot entries we know about
 				entries = g_slist_append(entries, g_strdup_printf("%s", dir_entry));
 				num_screenshots += 1;
@@ -3404,10 +3404,6 @@ void menu_screenshots_import(void)
 
 		return;
 	}
-
-	// If we've already run this function, there will be an existing GList that needs freeing
-	// fixme3: Should we recurse into each slide, freeing the layer data (and others) pointed to there?
-	g_list_free(slides);
 
 	// Use the status bar to communicate the number of screenshots found
 	tmp_string = g_string_new(NULL);
@@ -3448,11 +3444,6 @@ void menu_screenshots_import(void)
 			g_string_printf(tmp_string, "Error ED06: Something went wrong when loading the screenshot '%s'", tmp_string->str);
 			display_warning(tmp_string->str);
 			g_string_free(tmp_string, TRUE);
-
-			// Enable the project based menu items (so at least a person can continue working)
-			menu_enable("/Slide", TRUE);
-			menu_enable("/Layer", TRUE);
-			menu_enable("/Export", TRUE);
 
 			return;
 		}
@@ -3513,6 +3504,7 @@ void menu_screenshots_import(void)
 		tmp_slide->event_box = gtk_event_box_new();
 
 		// Add a tooltip to the event box, displaying the slide number
+		// fixme5: This code needs to be re-worked, as it'll be getting the slide numbers wrong now
 		tmp_slide->number = tmp_int;
 		g_string_printf(tmp_string, "Slide %u", tmp_slide->number);
 		tmp_slide->tooltip = gtk_tooltips_new();
@@ -3528,7 +3520,7 @@ void menu_screenshots_import(void)
 		tmp_slide->click_handler = g_signal_connect(G_OBJECT(tmp_slide->event_box), "button_release_event", G_CALLBACK(film_strip_slide_clicked), tmp_slide);
 
 		// Add the temporary slide to the slides GList
-		slides = g_list_prepend(slides, tmp_slide);
+		slides = g_list_append(slides, tmp_slide);
 
 		// Update the status bar with a progress counter
 		g_string_printf(tmp_string, "Loaded image %u of %u.", tmp_int, num_screenshots);
@@ -3538,9 +3530,6 @@ void menu_screenshots_import(void)
 		// Redraw the main window
 		gtk_widget_draw(status_bar, &tmp_rect);
 	}
-
-	// Reverse the slide GList.  This is because it was created using g_list_prepend rather than g_list_append (faster method)
-	slides = g_list_reverse(slides);
 
 	// Free the temporary GString
 	g_string_free(tmp_string, TRUE);
@@ -4076,6 +4065,9 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2006/04/25 09:55:25  vapour
+ * Bug fix.  Importing screenshots into an existing project now works.
+ *
  * Revision 1.8  2006/04/25 09:18:28  vapour
  * Added a overwrite warning dialog to the save option.
  *
