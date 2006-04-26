@@ -55,7 +55,6 @@ typedef enum {
 enum
 {
 	TIMELINE_NAME,
-	TIMELINE_TYPE,
 	TIMELINE_VISIBILITY,
 	TIMELINE_START,
 	TIMELINE_FINISH,
@@ -155,6 +154,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2006/04/26 18:31:30  vapour
+ * Removed the layer type from the layer treeview list store enum.
+ *
  * Revision 1.7  2006/04/25 10:54:22  vapour
  * Definition for image layer now includes a flag to track if it has been modified.
  *
