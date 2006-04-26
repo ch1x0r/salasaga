@@ -32,7 +32,7 @@ extern "C" {
 
 // Set some application constants
 #define APP_NAME "Flame Project Editing GUI"
-#define	APP_VERSION "0.7.2"
+#define	APP_VERSION "0.7.3"
 
 // Define a run time check that hasn't been added to GTK
 #define GTK_TYPE_TREE_ITER				(gtk_tree_iter_get_type ())
@@ -154,6 +154,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2006/04/26 18:38:44  vapour
+ * Incremented the version number to 0.7.3 to mark (celebrate!) getting the file loading code working. :)
+ *
  * Revision 1.8  2006/04/26 18:31:30  vapour
  * Removed the layer type from the layer treeview list store enum.
  *
