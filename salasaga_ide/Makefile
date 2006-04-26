@@ -62,7 +62,6 @@ install:
 	$(INSTALL) -d $(datadir)/icons/flame/scalable/
 	$(INSTALL_DATA) $(ICONS_SCALABLE) $(datadir)/icons/flame/scalable/
 	$(INSTALL) -d $(datadir)/icons/flame/72x72/
-	# These fixed size 60x60 icons should probably be resized to 72x72
 	$(INSTALL_DATA) $(ICONS_SIXTY) $(datadir)/icons/flame/72x72/
 	$(INSTALL) -d $(datadir)/sounds/flame/
 	$(INSTALL_DATA) $(SOUNDS) $(datadir)/sounds/flame
