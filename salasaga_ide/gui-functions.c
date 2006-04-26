@@ -1877,7 +1877,6 @@ void layer_new_highlight(void)
 	gtk_list_store_prepend(((slide *) current_slide->data)->layer_store, tmp_iter);
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
-						TIMELINE_TYPE, TYPE_HIGHLIGHT,
 						TIMELINE_VISIBILITY, TRUE,
 						TIMELINE_START, tmp_layer->start_frame,
 						TIMELINE_FINISH, tmp_layer->finish_frame,
@@ -1964,7 +1963,6 @@ void layer_new_image(void)
 	gtk_list_store_prepend(((slide *) current_slide->data)->layer_store, tmp_iter);
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
-						TIMELINE_TYPE, TYPE_GDK_PIXBUF,
 						TIMELINE_VISIBILITY, TRUE,
 						TIMELINE_START, tmp_layer->start_frame,
 						TIMELINE_FINISH, tmp_layer->finish_frame,
@@ -2058,7 +2056,6 @@ void layer_new_text(void)
 	gtk_text_buffer_get_bounds(tmp_text_ob->text_buffer, &text_start, &text_end);
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
-						TIMELINE_TYPE, TYPE_TEXT,
 						TIMELINE_VISIBILITY, TRUE,
 						TIMELINE_START, tmp_layer->start_frame,
 						TIMELINE_FINISH, tmp_layer->finish_frame,
@@ -2860,6 +2857,9 @@ void menu_file_open(void)
 	gtk_file_filter_set_name(all_filter, "All files (*.*)");
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(open_dialog), all_filter);
 
+	// Change to the default project directory
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(open_dialog), default_project_folder->str);
+
 	// Run the dialog and wait for user input
 	if (gtk_dialog_run(GTK_DIALOG(open_dialog)) != GTK_RESPONSE_ACCEPT)
 	{
@@ -2873,15 +2873,14 @@ void menu_file_open(void)
 	// Get the filename from the dialog box
 	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(open_dialog));
 
+	// Destroy the dialog box, as it's not needed any more
+	gtk_widget_destroy(open_dialog);
+
 	// Open and parse the selected file
-g_printerr("The file chosen was: '%s'\n", filename);
 	return_code = flame_read(filename);
 
 	// Frees the memory holding the file name
 	g_free(filename);
-
-	// Destroy the dialog box, as it's not needed any more
-	gtk_widget_destroy(open_dialog);
 }
 
 
@@ -2985,7 +2984,7 @@ void menu_file_save(void)
 	}
 
     // Create the root node
-	root_node = xmlNewDocRawNode(document_pointer, NULL, BAD_CAST "flame project", NULL);
+	root_node = xmlNewDocRawNode(document_pointer, NULL, BAD_CAST "flame_project", NULL);
 	if (NULL == root_node)
 	{
 		display_warning("ED21: Error creating the root node\n");
@@ -2996,7 +2995,7 @@ void menu_file_save(void)
 	xmlDocSetRootElement(document_pointer, root_node);
 
     // Create the meta information container
-	meta_pointer = xmlNewChild(root_node, NULL, "Meta-data", NULL);
+	meta_pointer = xmlNewChild(root_node, NULL, "meta-data", NULL);
 	if (NULL == meta_pointer)
 	{
 		display_warning("ED25: Error creating the meta-data container\n");
@@ -3004,10 +3003,10 @@ void menu_file_save(void)
 	}
 
 	// Add the save format version number to the XML document
-	xmlNewChild(meta_pointer, NULL, "Save Format", "1.0");
+	xmlNewChild(meta_pointer, NULL, "save_format", "1.0");
 
     // Create the preferences container
-	pref_pointer = xmlNewChild(root_node, NULL, "Preferences", NULL);
+	pref_pointer = xmlNewChild(root_node, NULL, "preferences", NULL);
 	if (NULL == pref_pointer)
 	{
 		display_warning("ED20: Error creating the preferences container\n");
@@ -3015,24 +3014,23 @@ void menu_file_save(void)
 	}
 
 	// Add the preferences to the XML document
-	xmlNewChild(pref_pointer, NULL, "Project Name", project_name->str);
-	xmlNewChild(pref_pointer, NULL, "Project Folder", project_folder->str);
-	xmlNewChild(pref_pointer, NULL, "Output Folder", output_folder->str);
+	xmlNewChild(pref_pointer, NULL, "project_name", project_name->str);
+	xmlNewChild(pref_pointer, NULL, "output_folder", output_folder->str);
 	g_string_printf(tmp_gstring, "%u", output_width);
-	xmlNewChild(pref_pointer, NULL, "Output Width", tmp_gstring->str);
+	xmlNewChild(pref_pointer, NULL, "output_width", tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", output_height);
-	xmlNewChild(pref_pointer, NULL, "Output Height", tmp_gstring->str);
+	xmlNewChild(pref_pointer, NULL, "output_height", tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", output_quality);
-	xmlNewChild(pref_pointer, NULL, "Output Quality", tmp_gstring->str);
+	xmlNewChild(pref_pointer, NULL, "output_quality", tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", project_width);
-	xmlNewChild(pref_pointer, NULL, "Project Width", tmp_gstring->str);
+	xmlNewChild(pref_pointer, NULL, "project_width", tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", project_height);
-	xmlNewChild(pref_pointer, NULL, "Project Height", tmp_gstring->str);
+	xmlNewChild(pref_pointer, NULL, "project_height", tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", slide_length);
-	xmlNewChild(pref_pointer, NULL, "Slide Length", tmp_gstring->str);
+	xmlNewChild(pref_pointer, NULL, "slide_length", tmp_gstring->str);
 
     // Create a container for the slides
-	slide_root = xmlNewChild(root_node, NULL, "Slides", NULL);
+	slide_root = xmlNewChild(root_node, NULL, "slides", NULL);
 	if (NULL == slide_root)
 	{
 		display_warning("ED22: Error creating the slides container\n");
@@ -3479,7 +3477,6 @@ void menu_screenshots_import(void)
 		tmp_layer->row_iter = tmp_iter;
 		tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
 									G_TYPE_STRING,  // TIMELINE_NAME
-									G_TYPE_UINT,  // TIMELINE_TYPE
 									G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
 									G_TYPE_UINT,  // TIMELINE_START
 									G_TYPE_UINT,  // TIMELINE_FINISH
@@ -3490,7 +3487,6 @@ void menu_screenshots_import(void)
 		gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
 		gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
-						TIMELINE_TYPE, TYPE_GDK_PIXBUF,
 						TIMELINE_VISIBILITY, TRUE,
 						TIMELINE_START, 0,
 						TIMELINE_FINISH, slide_length,
@@ -3836,11 +3832,18 @@ void slide_insert(void)
 	// Create the List store the slide layer data is kept in
 	tmp_iter = g_new(GtkTreeIter, 1);
 	tmp_layer->row_iter = tmp_iter;
-	tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS, G_TYPE_STRING, G_TYPE_UINT, G_TYPE_BOOLEAN, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_UINT, G_TYPE_STRING);
+	tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
+									G_TYPE_STRING,  // TIMELINE_NAME
+									G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
+									G_TYPE_UINT,  // TIMELINE_START
+									G_TYPE_UINT,  // TIMELINE_FINISH
+									G_TYPE_UINT,  // TIMELINE_X_OFF_START
+									G_TYPE_UINT,  // TIMELINE_Y_OFF_START
+									G_TYPE_UINT,  // TIMELINE_X_OFF_FINISH
+									G_TYPE_UINT);  // TIMELINE_Y_OFF_FINISH
 	gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
 	gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 					TIMELINE_NAME, tmp_layer->name->str,
-					TIMELINE_TYPE, TYPE_GDK_PIXBUF,
 					TIMELINE_VISIBILITY, TRUE,
 					TIMELINE_START, 0,
 					TIMELINE_FINISH, slide_length,
@@ -4068,6 +4071,9 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2006/04/26 18:34:48  vapour
+ * Changes and tweaks to support the new project opening code.
+ *
  * Revision 1.10  2006/04/25 10:56:26  vapour
  * Updated to appropriately set the modified flag in image layers.
  *
