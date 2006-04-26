@@ -33,7 +33,6 @@ extern "C" {
 void calculate_object_boundaries(void);
 GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y);
 gboolean flame_read(gchar *filename);
-gboolean flame_write(gchar *filename);
 void menu_enable(const gchar *full_path, gboolean enable);
 void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_slide);
 void menu_export_svg_animation_slide(gpointer element, gpointer user_data);
@@ -54,6 +53,9 @@ void sound_beep(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2006/04/26 18:29:57  vapour
+ * Removed the flame_write function.
+ *
  * Revision 1.3  2006/04/21 17:45:31  vapour
  * + Updated header with clearer copyright and license details.
  * + Moved the History section to the end of the file.
