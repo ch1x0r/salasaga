@@ -198,10 +198,33 @@ GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y
 gboolean flame_read(gchar *filename)
 {
 	// Local variables
-	xmlDocPtr	document;
-//	xmlNodePtr	cur;
-//	xmlChar		*key;
-//	xmlChar		*language;
+	xmlDocPtr			document;						// Holds a pointer to the XML document
+	xmlNodePtr			layer_ptr;						// Temporary pointer
+	xmlNodePtr			preferences_node = NULL;			// Points to the preferences structure
+	xmlNodePtr			slides_node = NULL;				// Points to the slides structure
+	xmlNodePtr			this_layer;						// Temporary pointer
+	xmlNodePtr			this_node;						// Temporary pointer
+	xmlNodePtr			this_slide;						// Temporary pointer
+
+	xmlChar				*project_name_data = NULL;		// 
+	xmlChar				*output_folder_data = NULL;		// 
+	xmlChar				*output_width_data = NULL;		// 
+	xmlChar				*output_height_data = NULL;		// 
+	xmlChar				*output_quality_data = NULL;		// 
+	xmlChar				*project_width_data = NULL;		// 
+	xmlChar				*project_height_data = NULL;		// 
+	xmlChar				*slide_length_data = NULL;		// 
+
+	xmlChar				*tmp_char;						// Temporary string pointer
+	GList				*tmp_glist;						// 
+	GString				*tmp_gstring;					// Temporary gstring
+	layer_highlight		*tmp_highlight_ob;				// Temporary highlight layer object
+	layer_image			*tmp_image_ob;					// Temporary image layer object
+	GtkTreeIter			*tmp_iter;						// Temporary GtkTreeIter
+	layer				*tmp_layer;						// Temporary layer
+	GdkPixbuf			*tmp_pixbuf;						//
+	slide				*tmp_slide;						// Temporary slide
+	layer_text			*tmp_text_ob;					// Temporary text layer object
 
 
 	// Begin reading the file
@@ -209,62 +232,537 @@ gboolean flame_read(gchar *filename)
 	if (NULL == document)
 	{
 		// The Flame file was unable to be parsed
-		display_warning("Flame file was unable to be loaded\n");
+		display_warning("ED43: Project file was unable to be loaded\n");
 		return FALSE;
 	}
 
-/* This code copied straight from my Gentoo Application selector code
- * fixme2: Needs to be reworked to suit this
- * 
-		cur = xmlDocGetRootElement(doc);
-		if (NULL == cur)
-		{
-			fprintf(stderr, "Metadata document '%s' is empty.\n\n", tmp_string);
-			xmlFreeDoc(doc);
-			exit(16);
-		}
-
-		// Look for the "longdescription" node
-		cur = cur->xmlChildrenNode;
-		while (NULL != cur)
-		{
-			if ((!xmlStrcmp(cur->name, (const xmlChar *) "longdescription")))
-			{
-				// Find the correct language version of the string
-				language = xmlGetProp(cur, (const xmlChar *) "lang");
-				if (0 == xmlStrcmp(INTERFACE_LANGUAGE, language))
-				{
-						// Extract the text string and store it in the category info
-						key = xmlNodeListGetString(doc, cur->xmlChildrenNode, 1);
-
-						// Strip the tabs and newlines embedded in the string
-						untaint_string((char *) &tmp_cat.description, key);
-
-						// We're finished with these XML keys, so release their memory
-						xmlFree(key);
-						xmlFree(language);
-						
-						// Stop looping around, as we've finished the processing we need
-						break;
-				}
-				// We're finished with this XML key, so release its memory
-				xmlFree(language);
-			}
-			cur = cur->next;
-		}
-*/
-
-		// We're finished with this XML document, so release its memory
+	this_node = xmlDocGetRootElement(document);
+	if (NULL == this_node)
+	{
+		display_warning("ED44: Project file is empty");
 		xmlFreeDoc(document);
+		return FALSE;
+	}
 
-	return FALSE;
-}
+	// Scan for the "preferences" node
+	this_node = this_node->xmlChildrenNode;
+	while (NULL != this_node)
+	{
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "preferences")))
+		{
+			// Preferences node found
+			preferences_node = this_node;
+		}
+		this_node = this_node->next;
+	}
 
+	// Scan for the "slides" node
+	this_node = xmlDocGetRootElement(document);
+	this_node = this_node->xmlChildrenNode;
+	while (NULL != this_node)
+	{
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "slides")))
+		{
+			// slides node found
+			slides_node = this_node;
+		}
+		this_node = this_node->next;
+	}
 
-// Function to create a .flame file
-gboolean flame_write(gchar *filename)
-{
-	return FALSE;
+	// Was there a preferences structure in the save file?
+	if (NULL == preferences_node)
+	{
+		display_warning("ED45: Project preferences missing, aborting load");
+		return FALSE;
+	}
+
+	// Was there a slides structure in the save file?
+	if (NULL == slides_node)
+	{
+		display_warning("ED46: No slides in project, aborting load");
+		return FALSE;
+	}
+
+	// Read in the project preferences
+	this_node = preferences_node->xmlChildrenNode;
+	while (NULL != this_node)
+	{
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "project_name")))
+		{
+			// Project Name found.  Extract and store it
+			project_name_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "output_folder")))
+		{
+			// Output Folder found.  Extract and store it
+			output_folder_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "output_width")))
+		{
+			// Output Width found.  Extract and store it
+			output_width_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "output_height")))
+		{
+			// Output Height found.  Extract and store it
+			output_height_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "output_quality")))
+		{
+			// Output Quality found.  Extract and store it
+			output_quality_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "project_width")))
+		{
+			// Project Width found.  Extract and store it
+			project_width_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "project_height")))
+		{
+			// Project Height found.  Extract and store it
+			project_height_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "slide_length")))
+		{
+			// Slide Length found.  Extract and store it
+			slide_length_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+		this_node = this_node->next;
+	}
+
+	// If any of the critically needed preferences are missing, display a warning then abort
+	if (NULL == project_name_data)
+	{
+		g_printerr("ED47: Project Name missing, aborting project open");
+		return FALSE;
+	}
+	if (NULL == project_width_data)
+	{
+		g_printerr("ED48: Project Width missing, aborting project open");
+		return FALSE;
+	}
+	if (NULL == project_height_data)
+	{
+		g_printerr("ED49: Project Height missing, aborting project open");
+		return FALSE;
+	}
+
+	// * All of the required preferences are present, so we proceed *
+
+	// If there's a project presently loaded in memory, we unload it
+	if (NULL != slides)
+	{
+		// fixme3: We need a much better way of doing this
+		slides = NULL;
+		current_slide = NULL;
+	}
+
+	// Load project name
+	if (NULL == project_name)
+		project_name = g_string_new(NULL);
+	g_string_assign(project_name, project_name_data);
+	xmlFree(project_name_data);
+
+	// Load output folder
+	if (NULL == output_folder)
+		output_folder = g_string_new(NULL);
+	g_string_assign(output_folder, output_folder_data);
+	xmlFree(output_folder_data);
+
+	// Load output width
+	output_width = atoi(output_width_data);
+	xmlFree(output_width_data);
+
+	// Load output height
+	output_height = atoi(output_height_data);
+	xmlFree(output_height_data);
+
+	// Load output quality
+	output_quality = atoi(output_quality_data);
+	xmlFree(output_quality_data);
+
+	// Load project_width
+	project_width = atoi(project_width_data);
+	xmlFree(project_width_data);
+
+	// Load project height
+	project_height = atoi(project_height_data);
+	xmlFree(project_height_data);
+
+	// Load slide length
+	slide_length = atoi(slide_length_data);
+	xmlFree(slide_length_data);
+
+	// * Preferences are loaded, so now load the slides *
+	this_slide = slides_node->xmlChildrenNode;
+	while (NULL != this_slide)
+	{
+		if ((!xmlStrcmp(this_slide->name, (const xmlChar *) "slide")))
+		{
+			// * We're in a slide *
+
+			// Create a new slide in memory
+			tmp_slide = g_new(slide, 1);
+			tmp_slide->layers = NULL;
+			tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
+										G_TYPE_STRING,  // TIMELINE_NAME
+										G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
+										G_TYPE_UINT,  // TIMELINE_START
+										G_TYPE_UINT,  // TIMELINE_FINISH
+										G_TYPE_UINT,  // TIMELINE_X_OFF_START
+										G_TYPE_UINT,  // TIMELINE_Y_OFF_START
+										G_TYPE_UINT,  // TIMELINE_X_OFF_FINISH
+										G_TYPE_UINT);  // TIMELINE_Y_OFF_FINISH
+
+			// Process each layer
+			this_layer = this_slide->xmlChildrenNode;
+			while (NULL != this_layer)
+			{
+				if ((!xmlStrcmp(this_layer->name, (const xmlChar *) "layer")))
+				{
+					// We're in a layer, so determine the layer type and load it
+					layer_ptr = this_layer->xmlChildrenNode;
+					while (NULL != layer_ptr)
+					{
+						if ((!xmlStrcmp(layer_ptr->name, (const xmlChar *) "type")))
+						{
+							// Found the layer type attribute.  Process it
+							tmp_char = xmlNodeListGetString(document, layer_ptr->xmlChildrenNode, 1);
+
+							// Test if this layer is an image layer
+							if (!xmlStrcmp(tmp_char, (const xmlChar *) "image"))
+							{
+								// Construct a new image layer
+								tmp_image_ob = g_new(layer_image, 1);
+								tmp_layer = g_new(layer, 1);	
+								tmp_layer->object_type = TYPE_GDK_PIXBUF;
+								tmp_layer->object_data = (GObject *) tmp_image_ob;
+
+								// Load the image layer values
+								this_node = this_layer->xmlChildrenNode;
+								while (NULL != this_node)
+								{
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
+									{
+										// Get the starting x offset
+										tmp_image_ob->x_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
+									{
+										// Get the starting y offset
+										tmp_image_ob->y_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
+									{
+										// Get the finishing x offset
+										tmp_image_ob->x_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
+									{
+										// Get the finishing y offset
+										tmp_image_ob->y_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "width")))
+									{
+										// Get the width
+										tmp_image_ob->width = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "height")))
+									{
+										// Get the height
+										tmp_image_ob->height = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "path")))
+									{
+										// Get the path to the image data
+										tmp_image_ob->image_path = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
+									{
+										// Get the start frame
+										tmp_layer->start_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+									{
+										// Get the finish frame
+										tmp_layer->finish_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
+									{
+										// Get the name of the layer
+										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									this_node = this_node->next;	
+								}
+
+								// Load the image data
+								tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_image_ob->image_path->str, NULL);  // Load the image again
+
+								// Set the modified flag for this image to false
+								tmp_image_ob->modified = FALSE;
+
+								// Add the layer to the slide list store
+								tmp_iter = g_new(GtkTreeIter, 1);
+								tmp_layer->row_iter = tmp_iter;
+								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
+								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
+										TIMELINE_NAME, tmp_layer->name->str,
+										TIMELINE_VISIBILITY, TRUE,
+										TIMELINE_START, 0,
+										TIMELINE_FINISH, slide_length,
+										TIMELINE_X_OFF_START, 0,
+										TIMELINE_Y_OFF_START, 0,
+										TIMELINE_X_OFF_FINISH, 0,
+										TIMELINE_Y_OFF_FINISH, 0,
+										-1);
+
+								// Add this (now completed) image layer to the slide
+								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+							}
+
+							// Test if this layer is a highlight layer
+							if (!xmlStrcmp(tmp_char, (const xmlChar *) "highlight"))
+							{
+								// Construct a new highlight layer
+								tmp_highlight_ob = g_new(layer_highlight, 1);
+								tmp_layer = g_new(layer, 1);	
+								tmp_layer->object_type = TYPE_HIGHLIGHT;
+								tmp_layer->object_data = (GObject *) tmp_highlight_ob;
+
+								// Load the highlight layer values
+								this_node = this_layer->xmlChildrenNode;
+								while (NULL != this_node)
+								{
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
+									{
+										// Get the starting x offset
+										tmp_highlight_ob->x_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
+									{
+										// Get the starting y offset
+										tmp_highlight_ob->y_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
+									{
+										// Get the finishing x offset
+										tmp_highlight_ob->x_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
+									{
+										// Get the finishing y offset
+										tmp_highlight_ob->y_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "width")))
+									{
+										// Get the width
+										tmp_highlight_ob->width = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "height")))
+									{
+										// Get the height
+										tmp_highlight_ob->height = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
+									{
+										// Get the start frame
+										tmp_layer->start_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+									{
+										// Get the finish frame
+										tmp_layer->finish_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
+									{
+										// Get the name of the layer
+										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									this_node = this_node->next;	
+								}
+
+								// Add the layer to the slide list store
+								tmp_iter = g_new(GtkTreeIter, 1);
+								tmp_layer->row_iter = tmp_iter;
+								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
+								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
+										TIMELINE_NAME, tmp_layer->name->str,
+										TIMELINE_VISIBILITY, TRUE,
+										TIMELINE_START, 0,
+										TIMELINE_FINISH, slide_length,
+										TIMELINE_X_OFF_START, 0,
+										TIMELINE_Y_OFF_START, 0,
+										TIMELINE_X_OFF_FINISH, 0,
+										TIMELINE_Y_OFF_FINISH, 0,
+										-1);
+
+								// Add this (now completed) highlight layer to the slide
+								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+							}
+
+							// Test if this layer is a text layer
+							if (!xmlStrcmp(tmp_char, (const xmlChar *) "text"))
+							{
+								// Construct a new text layer
+								tmp_text_ob = g_new(layer_text, 1);
+								tmp_layer = g_new(layer, 1);	
+								tmp_layer->object_type = TYPE_TEXT;
+								tmp_layer->object_data = (GObject *) tmp_text_ob;
+
+								// Load the text layer values
+								this_node = this_layer->xmlChildrenNode;
+								while (NULL != this_node)
+								{
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
+									{
+										// Get the starting x offset
+										tmp_text_ob->x_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
+									{
+										// Get the starting y offset
+										tmp_text_ob->y_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
+									{
+										// Get the finishing x offset
+										tmp_text_ob->x_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
+									{
+										// Get the finishing y offset
+										tmp_text_ob->y_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "red")))
+									{
+										// Get the red value
+										tmp_text_ob->text_color.red = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "green")))
+									{
+										// Get the green value
+										tmp_text_ob->text_color.green = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "blue")))
+									{
+										// Get the blue value
+										tmp_text_ob->text_color.blue = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "font_size")))
+									{
+										// Get the font size
+										tmp_text_ob->font_size = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "text_value")))
+									{
+										// Get the text
+										tmp_text_ob->text_buffer = gtk_text_buffer_new(NULL);
+										gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), xmlNodeListGetString(document, this_node->xmlChildrenNode, 1), -1);
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
+									{
+										// Get the start frame
+										tmp_layer->start_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+									{
+										// Get the finish frame
+										tmp_layer->finish_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
+									{
+										// Get the name of the layer
+										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									this_node = this_node->next;	
+								}
+
+								// Add the layer to the slide list store
+								tmp_iter = g_new(GtkTreeIter, 1);
+								tmp_layer->row_iter = tmp_iter;
+								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
+								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
+										TIMELINE_NAME, tmp_layer->name->str,
+										TIMELINE_VISIBILITY, TRUE,
+										TIMELINE_START, 0,
+										TIMELINE_FINISH, slide_length,
+										TIMELINE_X_OFF_START, 0,
+										TIMELINE_Y_OFF_START, 0,
+										TIMELINE_X_OFF_FINISH, 0,
+										TIMELINE_Y_OFF_FINISH, 0,
+										-1);
+
+								// Add this (now completed) text layer to the slide
+								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+							}
+						}
+						layer_ptr = layer_ptr->next;
+					}  // End of "We're in a layer" loop
+				}
+				this_layer = this_layer->next;
+			}
+
+			// Fixme4: Needs fixing, as this shouldn't be hard coded
+			tmp_slide->number = 1;
+
+			// Create the thumbnail for the slide
+			tmp_glist = NULL;
+			tmp_glist = g_list_append(tmp_glist, tmp_slide);
+			tmp_pixbuf = compress_layers(tmp_glist, preview_width, 233);
+			tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(tmp_pixbuf)));
+
+			// Create the event box for the slide
+			tmp_slide->event_box = gtk_event_box_new();
+
+			// Create the tooltip for the slide
+			// Fixme4: The tooltip shouldn't be hard coded
+			tmp_slide->tooltip = gtk_tooltips_new();
+			gtk_tooltips_set_tip(tmp_slide->tooltip, GTK_WIDGET(tmp_slide->event_box), "A tooltip", NULL);
+
+			// Set the timeline widget for the slide to NULL, so we know to create it later on
+			tmp_slide->timeline_widget = NULL;
+
+			// Add the thumbnail to the event box
+			gtk_container_add(GTK_CONTAINER(tmp_slide->event_box), GTK_WIDGET(tmp_slide->thumbnail));
+
+			// Add a mouse click handler to the event box
+			tmp_slide->click_handler = g_signal_connect(G_OBJECT(tmp_slide->event_box), "button_release_event", G_CALLBACK(film_strip_slide_clicked), tmp_slide);
+
+			// To get here, we must have finished loading the present slide, so we add it to the working project
+			slides = g_list_append(slides, tmp_slide);
+
+		}  // End of "We're in a slide" loop
+
+		this_slide = this_slide->next;
+	}
+
+	// We're finished with this XML document, so release its memory
+	xmlFreeDoc(document);
+
+	// Use the status bar to communicate the successful loading of the project
+	tmp_gstring = g_string_new(NULL);
+	g_string_printf(tmp_gstring, "Project '%s' successfully loaded.", filename);
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
+	gdk_flush();
+
+	// Make the current slide point to the first slide
+	current_slide = slides;
+
+	// Update the film strip with the new slides
+	refresh_film_strip();
+
+	// Draw the timeline area
+	draw_timeline();
+
+	// Draw the workspace area
+	draw_workspace();
+
+	// Enable the project based menu items
+	menu_enable("/Slide", TRUE);
+	menu_enable("/Layer", TRUE);
+	menu_enable("/Export", TRUE);
+
+	return TRUE;
 }
 
 
@@ -755,9 +1253,9 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	// Add the layer data to the layer container
 	xmlNewChild(layer_node, NULL, "name", layer_name->str);
 	g_string_printf(tmp_gstring, "%u", start_frame);
-	xmlNewChild(layer_node, NULL, "start frame", tmp_gstring->str);
+	xmlNewChild(layer_node, NULL, "start_frame", tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", finish_frame);
-	xmlNewChild(layer_node, NULL, "finish frame", tmp_gstring->str);
+	xmlNewChild(layer_node, NULL, "finish_frame", tmp_gstring->str);
 	switch (layer_type)
 	{
 		case TYPE_GDK_PIXBUF:
@@ -813,13 +1311,13 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, "type", "image");
 			xmlNewChild(layer_node, NULL, "path", ((layer_image *) layer_pointer->object_data)->image_path->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->x_offset_start);
-			xmlNewChild(layer_node, NULL, "x offset start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, "x_offset_start", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->y_offset_start);
-			xmlNewChild(layer_node, NULL, "y offset start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, "y_offset_start", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->x_offset_finish);
-			xmlNewChild(layer_node, NULL, "x offset finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, "x_offset_finish", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->y_offset_finish);
-			xmlNewChild(layer_node, NULL, "y offset finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, "y_offset_finish", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->width);
 			xmlNewChild(layer_node, NULL, "width", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->height);
@@ -839,15 +1337,15 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 		case TYPE_TEXT:
 			xmlNewChild(layer_node, NULL, "type", "text");
 			gtk_text_buffer_get_bounds(((layer_text *) layer_pointer->object_data)->text_buffer, &text_start, &text_end);
-			xmlNewChild(layer_node, NULL, "text", gtk_text_buffer_get_text(((layer_text *) layer_pointer->object_data)->text_buffer, &text_start, &text_end, FALSE));
+			xmlNewChild(layer_node, NULL, "text_value", gtk_text_buffer_get_text(((layer_text *) layer_pointer->object_data)->text_buffer, &text_start, &text_end, FALSE));
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->x_offset_start);
-			xmlNewChild(layer_node, NULL, "x offset start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, "x_offset_start", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->y_offset_start);
-			xmlNewChild(layer_node, NULL, "y offset start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, "y_offset_start", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->x_offset_finish);
-			xmlNewChild(layer_node, NULL, "x offset finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, "x_offset_finish", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->y_offset_finish);
-			xmlNewChild(layer_node, NULL, "y offset finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, "y_offset_finish", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.red);
 			xmlNewChild(layer_node, NULL, "red", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.green);
@@ -855,19 +1353,19 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.blue);
 			xmlNewChild(layer_node, NULL, "blue", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%f", ((layer_text *) layer_pointer->object_data)->font_size);
-			xmlNewChild(layer_node, NULL, "font size", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, "font_size", tmp_gstring->str);
 			break;
 
 		case TYPE_HIGHLIGHT:
 			xmlNewChild(layer_node, NULL, "type", "highlight");
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->x_offset_start);
-			xmlNewChild(layer_node, NULL, "x offset start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, "x_offset_start", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->y_offset_start);
-			xmlNewChild(layer_node, NULL, "y offset start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, "y_offset_start", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->x_offset_finish);
-			xmlNewChild(layer_node, NULL, "x offset finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, "x_offset_finish", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->y_offset_finish);
-			xmlNewChild(layer_node, NULL, "y offset finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, "y_offset_finish", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->width);
 			xmlNewChild(layer_node, NULL, "width", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->height);
@@ -1024,6 +1522,10 @@ void sound_beep(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2006/04/26 18:28:41  vapour
+ * + Fleshed out the flame_read function so it now works.  Had to adjust the entity names being saved in order to do so however.
+ * + Removed the flame_write function, as it's function is done elsewhere.
+ *
  * Revision 1.9  2006/04/25 10:53:05  vapour
  * Modified images now have their own file created when the project is saved.
  *
