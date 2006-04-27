@@ -11,6 +11,17 @@ $ pkg-config gtk+-2.0 --libs
 
 ***********
 
+Looking around for a way to embed/inline image (bitmap) data, things are looking very sparse.
+
+Did find one reference that looked interesting though:
+
+  http://www.xml.com/pub/a/2004/05/26/qa.html
+
+It mentions using the src set to "data:stuff_goes_here", which looks like it may work.  The image data would
+be URI encoded, but that might be ok.
+
+***********
+
  It's difficult to locate some of the Gnome stuff, pre-compiled for Win32.
  ftp.gnome.org has them, under (i.e.) /platform/2.12/2.12.2/win32/
 
