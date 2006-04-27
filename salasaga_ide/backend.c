@@ -216,6 +216,7 @@ gboolean flame_read(gchar *filename)
 	xmlChar				*slide_length_data = NULL;		// 
 
 	xmlChar				*tmp_char;						// Temporary string pointer
+	layer_empty			*tmp_empty_ob;					// 
 	GList				*tmp_glist;						// 
 	GString				*tmp_gstring;					// Temporary gstring
 	layer_highlight		*tmp_highlight_ob;				// Temporary highlight layer object
@@ -428,6 +429,71 @@ gboolean flame_read(gchar *filename)
 						{
 							// Found the layer type attribute.  Process it
 							tmp_char = xmlNodeListGetString(document, layer_ptr->xmlChildrenNode, 1);
+
+							// Test if this layer is an empty layer
+							if (!xmlStrcmp(tmp_char, (const xmlChar *) "empty"))
+							{
+								// Construct a new image layer
+								tmp_empty_ob = g_new(layer_empty, 1);
+								tmp_layer = g_new(layer, 1);	
+								tmp_layer->object_type = TYPE_EMPTY;
+								tmp_layer->object_data = (GObject *) tmp_empty_ob;
+
+								// Load the empty layer values
+								this_node = this_layer->xmlChildrenNode;
+								while (NULL != this_node)
+								{
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "red")))
+									{
+										// Get the red value
+										tmp_empty_ob->bg_color.red = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "green")))
+									{
+										// Get the green value
+										tmp_empty_ob->bg_color.green = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "blue")))
+									{
+										// Get the blue value
+										tmp_empty_ob->bg_color.blue = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
+									{
+										// Get the start frame
+										tmp_layer->start_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+									{
+										// Get the finish frame
+										tmp_layer->finish_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
+									{
+										// Get the name of the layer
+										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									this_node = this_node->next;	
+								}
+
+								// Add the layer to the slide list store
+								tmp_iter = g_new(GtkTreeIter, 1);
+								tmp_layer->row_iter = tmp_iter;
+								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
+								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
+										TIMELINE_NAME, tmp_layer->name->str,
+										TIMELINE_VISIBILITY, TRUE,
+										TIMELINE_START, 0,
+										TIMELINE_FINISH, slide_length,
+										TIMELINE_X_OFF_START, 0,
+										TIMELINE_Y_OFF_START, 0,
+										TIMELINE_X_OFF_FINISH, 0,
+										TIMELINE_Y_OFF_FINISH, 0,
+										-1);
+
+								// Add this (now completed) empty layer to the slide
+								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+							}
 
 							// Test if this layer is an image layer
 							if (!xmlStrcmp(tmp_char, (const xmlChar *) "image"))
@@ -1522,6 +1588,9 @@ void sound_beep(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2006/04/27 16:03:34  vapour
+ * Added support for empty layers to the project loading function.
+ *
  * Revision 1.10  2006/04/26 18:28:41  vapour
  * + Fleshed out the flame_read function so it now works.  Had to adjust the entity names being saved in order to do so however.
  * + Removed the flame_write function, as it's function is done elsewhere.
