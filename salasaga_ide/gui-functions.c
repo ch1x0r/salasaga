@@ -2625,16 +2625,23 @@ void menu_export_svg_animation(void)
 	{
 		// * An error occured when writing the SVG header to the output file, so alert the user, and return to the calling routine indicating failure *
 		g_string_printf(tmp_gstring, "Error ED10: An error '%s' occured when writing the SVG header to the output file '%s'", error->message, filename);
-		tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),
-											GTK_DIALOG_MODAL,
-											GTK_MESSAGE_INFO,
-											GTK_BUTTONS_OK,
-											tmp_gstring->str);
-		gtk_dialog_run(GTK_DIALOG(tmp_dialog));
-		gtk_widget_destroy(tmp_dialog);
+		display_warning(tmp_gstring->str);
 
-		// Send a warning to stdout as well
-		g_warning(tmp_gstring->str);
+		// Free the memory allocated in this function
+		g_string_free(tmp_gstring, TRUE);
+		g_error_free(error);
+
+		return;
+	}
+
+	// Write a tag to advertise the SVG was created with Flame
+	g_string_assign(tmp_gstring, "<!-- Created with the Flame Project (http://www.flameproject.org) -->\n");
+	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
+	if (G_IO_STATUS_ERROR == return_value)
+	{
+		// * An error occured when writing the SVG header to the output file, so alert the user, and return to the calling routine indicating failure *
+		g_string_printf(tmp_gstring, "Error ED50: An error '%s' occured when writing to the output file '%s'", error->message, filename);
+		display_warning(tmp_gstring->str);
 
 		// Free the memory allocated in this function
 		g_string_free(tmp_gstring, TRUE);
@@ -4071,6 +4078,9 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2006/04/27 16:40:40  vapour
+ * Added a tag to the SVG output to showing it was created with the Flame Project.
+ *
  * Revision 1.11  2006/04/26 18:34:48  vapour
  * Changes and tweaks to support the new project opening code.
  *
