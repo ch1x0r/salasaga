@@ -25,9 +25,13 @@ entity.  That embedded base64 bit sounds like what we want.
 
   http://wiki.svg.org/Multimedia
 
+Found an example of how to do it, this one being for a jpeg.  It *was* using the data method mentioned above. :)
+
+<svg:image xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoL . . . ." /> 
+
 ***********
 
-Base64 defined here.  Can likely make a function directly from it.
+Base64 defined here.  Can make a function directly from it, as it seems really simple.
 
   http://en.wikipedia.org/wiki/Base64
 
