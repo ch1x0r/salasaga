@@ -20,6 +20,17 @@ Did find one reference that looked interesting though:
 It mentions using the src set to "data:stuff_goes_here", which looks like it may work.  The image data would
 be URI encoded, but that might be ok.
 
+This page mentions the svg image entity can take either an external file, OR an embedded base64 encoded text
+entity.  That embedded base64 bit sounds like what we want.
+
+  http://wiki.svg.org/Multimedia
+
+***********
+
+Base64 defined here.  Can likely make a function directly from it.
+
+  http://en.wikipedia.org/wiki/Base64
+
 ***********
 
  It's difficult to locate some of the Gnome stuff, pre-compiled for Win32.
