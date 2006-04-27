@@ -1113,29 +1113,23 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 {
 	// Local variables
+	GString			*encoding;					// "png", "jpeg", etc.  Used in part of the output stream
 	GError			*error = NULL;				// Pointer to error return structure
-	GIOStatus		return_value;				// Return value used in most GIOChannel functions
-
-	slide			*slide_pointer;				// Points to the present slide
-	layer			*layer_pointer;				// Points to the presently processing layer
-	guint			slide_number;				// The number of the presently processing slide
-	guint			object_type;					// The type of object in each layer
-	guint			start_frame;					// The first frame in which the object appears
-	guint			finish_frame;					// The finish frame in which the object appears
 	GString			*file_name = NULL;			// Used to construct the file name of the output file
-	GString			*string_to_write = NULL;		// Holds SVG data to be written out
-	GString			*new_file_name = NULL;		// Holds the filename for any output files
-	guint			second_counter = 0;			// Holds the starting second (in the whole animation) for the present layer
+	guint			finish_frame;				// The finish frame in which the object appears
+	gint				layer_counter;				// Simple counter
+	layer			*layer_data;					// Points to the presently processing layer
+	GList			*layer_pointer;				// Points to the layer structure in the slide
 	guint			max_frame_second;			// For any frame, holds the last frame number visible
-	guint			*image_counter = user_data;	// Counter for how many images have been written out
-
-	guint			recent_message;				// Message identifier, for newest status bar message
-
-	GdkRectangle		status_bar_rect =			// Rectangle covering the status bar area
-						{0,
-						 0,
-						 status_bar->allocation.width,
-						 status_bar->allocation.height};
+	GString			*new_file_name = NULL;		// Holds the filename for any output files
+	gint				num_layers;					// Number of layers in the slide
+	guint			object_type;					// The type of object in each layer
+	GIOStatus		return_value;				// Return value used in most GIOChannel functions
+	guint			second_counter = 0;			// Holds the starting second (in the whole animation) for the present layer
+	guint			slide_number;				// The number of the presently processing slide
+	slide			*slide_pointer;				// Points to the present slide
+	guint			start_frame;					// The first frame in which the object appears
+	GString			*string_to_write = NULL;		// Holds SVG data to be written out
 
 	gboolean			tmp_bool;					// Temporary boolean value
 	gsize			tmp_gsize;					// Temporary gsize
@@ -1143,22 +1137,26 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	GString			*tmp_gstring;				// Temporary GString
 
 
-	// Initialise the temporary gstring
+	// Initialise some things
 	tmp_gstring = g_string_new(NULL);
 
 	// Reset the counter for the last frame number visible in this slide
 	max_frame_second = 0;
 
 	// * For each layer, write it to the output file *
-	// fixme2: Assume each slide only has one layer for now
 	slide_pointer = element;
-	layer_pointer = ((GList *) slide_pointer->layers)->data;
+	layer_pointer = g_list_first((GList *) slide_pointer->layers);
+	num_layers = g_list_length(layer_pointer);
+	for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
+	{
+		layer_pointer = g_list_first((GList *) slide_pointer->layers);
+		layer_data = g_list_nth_data(layer_pointer, layer_counter);
 
-	// Create some useful pointers
-	slide_number = slide_pointer->number;
-	start_frame = layer_pointer->start_frame;
-	finish_frame = layer_pointer->finish_frame;
-	object_type = layer_pointer->object_type;
+		// Create some useful pointers
+		slide_number = slide_pointer->number;
+		start_frame = layer_data->start_frame;
+		finish_frame = layer_data->finish_frame;
+		object_type = layer_data->object_type;
 
 //g_printerr("Slide number: %u\n", slide_number);
 //g_printerr("Start frame: %u\n", start_frame);
@@ -1174,71 +1172,62 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 		// Determine the type of object present in the layer
 		switch (object_type)
 		{
+			case TYPE_EMPTY:
+				// fixme3: Needs writing
+				break;
+
 			case TYPE_GDK_PIXBUF:
-					// * We're processing a GDK pixbuf *
+				// * We're processing a GDK pixbuf *
 
-					// Resize the pixbuf to the output resolution
-					tmp_pixbuf = gdk_pixbuf_scale_simple(GDK_PIXBUF(layer_pointer->object_data), output_width, output_height, GDK_INTERP_BILINEAR);
-					if (NULL == tmp_pixbuf)
-					{
-						// * Something went wrong when scaling down the pixbuf *
+				// Resize the pixbuf to the output resolution
+				tmp_pixbuf = gdk_pixbuf_scale_simple(GDK_PIXBUF(layer_data->object_data), output_width, output_height, GDK_INTERP_BILINEAR);
+				if (NULL == tmp_pixbuf)
+				{
+					// * Something went wrong when scaling down the pixbuf *
 
-						// Display the warning message using our function
-						g_string_printf(tmp_gstring, "Error ED13: An error '%s' occured when scaling slide %u", error->message, slide_number);
-						display_warning(tmp_gstring->str);
+					// Display the warning message using our function
+					g_string_printf(tmp_gstring, "Error ED13: An error '%s' occured when scaling slide %u", error->message, slide_number);
+					display_warning(tmp_gstring->str);
 
-						// Free the memory allocated in this function
-						g_object_unref(tmp_pixbuf);
-						g_string_free(tmp_gstring, TRUE);
-						g_error_free(error);
-						// fixme5: Probably needs some work, as there would likely be further allocated memory by this stage
-
-						return;
-					}
-
-					// Write the pixbuf to the output file
-					new_file_name = g_string_new(NULL);
-					g_string_printf(new_file_name, "%s%coutput%u.png", output_folder->str, G_DIR_SEPARATOR, *image_counter);
-					tmp_bool = gdk_pixbuf_save(tmp_pixbuf, new_file_name->str, "png", &error, "compression", "9", NULL); // fixme2: Should use output_quality variable rather than "9"
-					if (FALSE == tmp_bool)
-					{
-						// * Some kind of error occured when saving the file *
-
-						// Display a warning message using our function
-						g_string_printf(tmp_gstring, "Error ED14: An error '%s' occured when saving the file '%s'", error->message, new_file_name->str);
-						display_warning(tmp_gstring->str);
-						g_string_free(tmp_gstring, TRUE);
-
-						return;
-					}
-
-					// Increment the image counter
-					(*image_counter)++;
-
-					// Free the allocated pixbuf memory
+					// Free the memory allocated in this function
 					g_object_unref(tmp_pixbuf);
+					g_string_free(tmp_gstring, TRUE);
+					g_error_free(error);
+					// fixme5: Probably needs some work, as there would likely be further allocated memory by this stage
 
-					// Small update to the status bar, to show progress to the user
-					// fixme5: This works, but a progress bar might be the way to go
-					g_string_printf(tmp_gstring, "Wrote component file '%s'.", new_file_name->str);
-					recent_message = gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
-					gtk_widget_draw(status_bar, &status_bar_rect);
-					gdk_flush();
+					return;
+				}
 
-					// Create a string to write to the output svg file
-					string_to_write = g_string_new(NULL);
-					g_string_printf(string_to_write, "<image xlink:href=\"%s\" width=\"%u\" height=\"0\">\n\t<animate attributeName=\"height\" from=\"%upx\" to=\"%upx\" begin=\"%us\" dur=\"%us\" />\n</image>\n", new_file_name->str, output_width, output_height, output_height, second_counter + start_frame, second_counter + finish_frame);
-					g_string_free(new_file_name, TRUE);
-					new_file_name = NULL;
+				// Base64 encode the pixbuf
+				// fixme2: Needs writing
 
-					break;
+				// Free the allocated pixbuf memory
+				g_object_unref(tmp_pixbuf);
+
+				// Create a string to write to the output svg file
+				encoding = g_string_new("png");  // Just png's for the moment
+				string_to_write = g_string_new(NULL);
+				g_string_printf(string_to_write, "<image xlink:href=\"data:image/%s;base64,%s\" width=\"%u\" height=\"0\">\n\t<animate attributeName=\"height\" from=\"%upx\" to=\"%upx\" begin=\"%us\" dur=\"%us\" />\n</image>\n", encoding->str, string_to_write->str, output_width, output_height, output_height, second_counter + start_frame, second_counter + finish_frame);
+//				g_string_printf(string_to_write, "<image xlink:href=\"%s\" width=\"%u\" height=\"0\">\n\t<animate attributeName=\"height\" from=\"%upx\" to=\"%upx\" begin=\"%us\" dur=\"%us\" />\n</image>\n", new_file_name->str, output_width, output_height, output_height, second_counter + start_frame, second_counter + finish_frame);
+				g_string_free(new_file_name, TRUE);
+				new_file_name = NULL;
+
+				break;
+
+			case TYPE_HIGHLIGHT:
+				// fixme3: Needs writing
+				break;
 
 			case TYPE_MOUSE_CURSOR:
-					g_printerr("Mouse cursor found in layer %u\n", slide_pointer->number);
-					break;
+				g_printerr("Mouse cursor found in layer %u\n", slide_pointer->number);
+				break;
+
+			case TYPE_TEXT:
+				// fixme3: Needs writing
+				break;
 
 			default:
-					g_printerr("ED29: Unknown object type found in layer %u\n", slide_pointer->number);
+				g_printerr("ED29: Unknown object type found in layer %u\n", slide_pointer->number);
 		}
 
 		// If there is a string to write to the output file, do so
@@ -1268,6 +1257,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 		// Increment the overall frame counter
 		second_counter = second_counter + max_frame_second;
+	}
 
 	return;
 }
@@ -1588,6 +1578,9 @@ void sound_beep(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2006/04/27 19:53:33  vapour
+ * Started adjusting the SVG slide output function, in preparation for further work.
+ *
  * Revision 1.11  2006/04/27 16:03:34  vapour
  * Added support for empty layers to the project loading function.
  *
