@@ -1246,7 +1246,8 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 {
 	// Local variables
-	gchar			*encoded_string;				// Pointer to an encoded PNG string
+	gchar			*base64_string;				// Pointer to an Base64 string
+	gchar			*encoded_string;				// Pointer to an URI encoded Base64 string
 	GError			*error = NULL;				// Pointer to error return structure
 	GString			*file_name = NULL;			// Used to construct the file name of the output file
 	guint			finish_frame;				// The finish frame in which the object appears
@@ -1333,7 +1334,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 								&pixbuf_size,  // Will come back filled out with size of PNG buffer
 								"png",
 								&error,
-								"compression", "9",  // Set compression to 9 (no loss I think)
+//								"compression", "9",  // Set compression to 9 (no loss I think)
 								NULL);
 				if (FALSE == tmp_bool)
 				{
@@ -1349,16 +1350,20 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					return;
 				}
 
-				// Base64 encode the PNG file
-				tmp_bool = base64_encode(pixbuf_buffer, pixbuf_size, &encoded_string);
+				// Base64 encode the PNG data
+				base64_encode(pixbuf_buffer, pixbuf_size, &base64_string);
+
+				// URI encode the Base64 data
+				uri_encode_base64(base64_string, strlen(base64_string), &encoded_string);
 
 				// Create a string to write to the output svg file
 				string_to_write = g_string_new(NULL);
-				g_string_printf(string_to_write, "<image xlink:href=\"data:image/png;base64,%s\" width=\"%u\" height=\"0\">\n\t<animate attributeName=\"height\" from=\"%upx\" to=\"%upx\" begin=\"%us\" dur=\"%us\" />\n</image>\n", encoded_string, output_width, output_height, output_height, second_counter + start_frame, second_counter + finish_frame);
+				g_string_printf(string_to_write, "<image xlink:href=\"data:image/png;base64,%s\" width=\"%u\" height=\"%u\" />\n", encoded_string, output_width, output_height);
 
 				// Free the allocated memory
 				g_object_unref(tmp_pixbuf);
 				g_free(encoded_string);
+				g_free(base64_string);
 
 				break;
 
@@ -1722,11 +1727,74 @@ void sound_beep(void)
 }
 
 
+// Function to create a URI encoded string from a Base64 encoded string
+gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
+{
+	// Local variables
+	guint		buffer_length;
+	gchar		*input_buffer;
+	gint			input_counter;				// Counter used for positioning inside the input buffer
+	gchar		*output_buffer;
+	gint			output_counter;				// Counter used for positioning inside the output buffer
+
+
+	// Initialise some things
+	input_buffer = data;
+	output_counter = 0;
+
+	// Calculate the length of the URI encoded buffer
+	buffer_length = (guint) ((float) length * 3);  // Overestimate, to be on the safe side
+
+	// Create the URI encoded buffer
+	output_buffer = g_new(gchar, buffer_length);
+
+	// Do the URI encoding into the new buffer
+	for (input_counter = 0; input_counter < length; input_counter++)
+	{
+		switch (input_buffer[input_counter])
+		{
+			case '+':
+				output_buffer[output_counter] = '%';
+				output_buffer[output_counter + 1] = '2';
+				output_buffer[output_counter + 2] = 'B';
+				output_counter = output_counter + 3;
+				break;
+
+			case '/':
+				output_buffer[output_counter] = '%';
+				output_buffer[output_counter + 1] = '2';
+				output_buffer[output_counter + 2] = 'F';
+				output_counter = output_counter + 3;
+				break;
+
+			case '\n':
+				break;
+
+			default:
+				output_buffer[output_counter] = input_buffer[input_counter];
+				output_counter++;
+				break;
+		}
+	}
+
+	// Put a NULL at the end of the URI encoded string
+	output_buffer[output_counter] = '\0';
+
+	output_string[0] = output_buffer;
+
+	return TRUE;
+}
+
+
 /*
  * History
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2006/04/29 19:11:16  vapour
+ * + Added a (very rough) function to URI encode Base64 data.
+ * + Turned off the compression = 9 option for png data, as it appears to be causing a problem of images not displaying in FireFox.
+ *
  * Revision 1.13  2006/04/29 17:41:31  vapour
  * Wrote a function to Base64 encode data.  Works ok.
  *
