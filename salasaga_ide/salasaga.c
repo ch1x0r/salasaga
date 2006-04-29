@@ -150,7 +150,7 @@ void create_menu_bar()
 		{"/Screenshots/_Capture",	NULL,					menu_screenshots_capture,		0,	"<Item>"},
 		{"/Screenshots/_Import",		NULL,					menu_screenshots_import,			0,	"<Item>"},
 
-		{"/S_lide",					NULL,					NULL,							0,	"<Branch>"},
+		{"/Sl_ide",					NULL,					NULL,							0,	"<Branch>"},
 		{"/Slide/_Insert",			NULL,					slide_insert,					0,	"<Item>"},
 		{"/Slide/De_lete",			NULL,					slide_delete,					0,	"<Item>"},
 		{"/Slide/Move _up",			NULL,					slide_move_up,					0,	"<Item>"},
@@ -1029,6 +1029,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2006/04/29 17:02:39  vapour
+ * Moved the Slide menu shortcut key to Alt-i, as it was overlapping with the Layers menu shortcut key.
+ *
  * Revision 1.7  2006/04/23 11:29:09  vapour
  * Added a mouse pointer icon to the timeline toolbar.  No code behind it yet.
  *
