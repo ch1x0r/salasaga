@@ -37,6 +37,11 @@ Base64 defined here.  Can make a function directly from it, as it seems really s
 
 ***********
 
+Just learned something new.  FireFox will only load a Base64 encoded image if it's been URI encoded as well,
+after the Base64 encoding.  Argh, they don't make things easy do they?
+
+***********
+
  It's difficult to locate some of the Gnome stuff, pre-compiled for Win32.
  ftp.gnome.org has them, under (i.e.) /platform/2.12/2.12.2/win32/
 
