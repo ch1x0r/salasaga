@@ -41,6 +41,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data);
 void menu_file_save_slide(gpointer element, gpointer user_data);
 void save_preferences_and_exit(void);
 void sound_beep(void);
+gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string);
 
 #ifdef __cplusplus
 }
@@ -54,6 +55,9 @@ void sound_beep(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2006/04/29 19:10:04  vapour
+ * Added a function to URI encode Base64 data.
+ *
  * Revision 1.5  2006/04/29 17:03:59  vapour
  * Added the base64_encode function declaration.
  *
