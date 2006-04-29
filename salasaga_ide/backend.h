@@ -30,6 +30,7 @@ extern "C" {
 #endif // __cplusplus
 
 // Functions included in this file and its corresponding source file
+gboolean base64_encode(gpointer data, guint length, gchar ** output_string);
 void calculate_object_boundaries(void);
 GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y);
 gboolean flame_read(gchar *filename);
@@ -53,6 +54,9 @@ void sound_beep(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2006/04/29 17:03:59  vapour
+ * Added the base64_encode function declaration.
+ *
  * Revision 1.4  2006/04/26 18:29:57  vapour
  * Removed the flame_write function.
  *
