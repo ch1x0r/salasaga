@@ -53,6 +53,139 @@
 #include "externs.h"
 
 
+// Function to create a Base64 encoded string from a block of data in memory
+gboolean base64_encode(gpointer data, guint length, gchar **output_string)
+{
+	// Local variables
+	gchar		*base64_dictionary = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	guint		buffer_length;
+	guint		characters_out;				// Counter of how many characters have been output
+	gchar		*input_buffer;
+	gint			input_counter;				// Counter used for positioning inside the input buffer
+	guint		offset;						// Either 0, 1, or 2.  Used to calculate the end few output bytes
+	gchar		*output_buffer;
+	gint			output_counter;				// Counter used for positioning inside the output buffer
+
+	guchar		first_byte;
+	guchar		fourth_byte;
+	guchar		second_byte;
+	guchar		third_byte;
+
+	guchar		tmp_byte;
+
+
+	// Initialise some things
+	input_buffer = data;
+	output_counter = 0;
+	characters_out = 0;
+
+	// Calculate the length of the Base64 buffer
+	buffer_length = (guint) ((float) length * 1.5);  // Overestimate, to be on the safe side
+
+	// Create the Base64 buffer
+	output_buffer = g_new(gchar, buffer_length);
+
+	// Calculate how many bytes are left hanging on the end of the input
+	offset = length % 3;
+
+	// Convert the data into Base64
+	for (input_counter = 0; input_counter < (length - offset); input_counter++)
+	{
+		first_byte = input_buffer[input_counter];
+		first_byte = first_byte >> 1;
+		first_byte = first_byte >> 1;
+		output_buffer[output_counter] = base64_dictionary[first_byte];
+		output_counter++;
+
+		second_byte = input_buffer[input_counter];
+		second_byte = second_byte << 6;
+		second_byte = second_byte >> 2;
+		input_counter++;
+		tmp_byte = input_buffer[input_counter];
+		tmp_byte = tmp_byte >> 4;
+		second_byte = second_byte + tmp_byte;
+		output_buffer[output_counter] = base64_dictionary[second_byte];
+		output_counter++;
+
+		third_byte = input_buffer[input_counter];
+		third_byte = third_byte << 4;
+		third_byte = third_byte >> 2;
+		input_counter++;
+		tmp_byte = input_buffer[input_counter];
+		tmp_byte = tmp_byte >> 6;
+		third_byte = third_byte + tmp_byte;
+		output_buffer[output_counter] = base64_dictionary[third_byte];
+		output_counter++;
+
+		fourth_byte = input_buffer[input_counter];
+		fourth_byte = fourth_byte << 2;
+		fourth_byte = fourth_byte >> 2;
+		output_buffer[output_counter] = base64_dictionary[fourth_byte];
+		output_counter++;
+
+		characters_out = characters_out + 4;
+
+		// Insert a newline into the output stream every 76 characters (as per spec)
+		if (0 == (characters_out % 76))
+		{
+			output_buffer[output_counter] = '\n';
+			output_counter++;
+		}
+	}
+
+	// Process the last one or two bytes on the end of the input data (as per Base64 requirement)
+	switch (offset)
+	{
+		case 1:
+			first_byte = input_buffer[input_counter];
+			first_byte = first_byte >> 2;
+			output_buffer[output_counter] = base64_dictionary[first_byte];
+			output_counter++;
+
+			second_byte = input_buffer[input_counter];
+			second_byte = second_byte << 6;
+			second_byte = second_byte >> 2;
+			output_buffer[output_counter] = base64_dictionary[second_byte];
+			output_counter++;
+			output_buffer[output_counter] = '=';
+			output_counter++;
+			output_buffer[output_counter] = '=';
+			break;
+
+		case 2:
+			first_byte = input_buffer[input_counter];
+			first_byte = first_byte >> 2;
+			output_buffer[output_counter] = base64_dictionary[first_byte];
+			output_counter++;
+
+			second_byte = input_buffer[input_counter];
+			second_byte = second_byte << 6;
+			second_byte = second_byte >> 2;
+			input_counter++;
+			tmp_byte = input_buffer[input_counter];
+			tmp_byte = tmp_byte >> 4;
+			second_byte = second_byte + tmp_byte;
+			output_buffer[output_counter] = base64_dictionary[second_byte];
+			output_counter++;
+
+			third_byte = input_buffer[input_counter];
+			third_byte = third_byte << 4;
+			third_byte = third_byte >> 2;
+			output_buffer[output_counter] = base64_dictionary[third_byte];
+			output_counter++;
+			output_buffer[output_counter] = '=';
+			output_counter++;
+			break;
+	}
+
+	// Put a NULL at the end of the Base64 encoded string
+	output_buffer[output_counter] = '\0';
+
+	output_string[0] = output_buffer;
+	return TRUE;
+}
+
+
 // Function to calculate collision detection boundaries
 void calculate_object_boundaries(void)
 {
@@ -1113,7 +1246,7 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 {
 	// Local variables
-	GString			*encoding;					// "png", "jpeg", etc.  Used in part of the output stream
+	gchar			*encoded_string;				// Pointer to an encoded PNG string
 	GError			*error = NULL;				// Pointer to error return structure
 	GString			*file_name = NULL;			// Used to construct the file name of the output file
 	guint			finish_frame;				// The finish frame in which the object appears
@@ -1121,9 +1254,10 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	layer			*layer_data;					// Points to the presently processing layer
 	GList			*layer_pointer;				// Points to the layer structure in the slide
 	guint			max_frame_second;			// For any frame, holds the last frame number visible
-	GString			*new_file_name = NULL;		// Holds the filename for any output files
 	gint				num_layers;					// Number of layers in the slide
 	guint			object_type;					// The type of object in each layer
+	gchar			*pixbuf_buffer;				// Gets given a pointer to a compressed PNG image
+	gsize			pixbuf_size;					// Gets given the size of a compressed PNG image
 	GIOStatus		return_value;				// Return value used in most GIOChannel functions
 	guint			second_counter = 0;			// Holds the starting second (in the whole animation) for the present layer
 	guint			slide_number;				// The number of the presently processing slide
@@ -1158,11 +1292,6 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 		finish_frame = layer_data->finish_frame;
 		object_type = layer_data->object_type;
 
-//g_printerr("Slide number: %u\n", slide_number);
-//g_printerr("Start frame: %u\n", start_frame);
-//g_printerr("Finish frame: %u\n", finish_frame);
-//g_printerr("Object type: %u\n", object_type);
-
 		// Work out if the present layer is visible longer than any known present
 		if (finish_frame > max_frame_second)
 		{
@@ -1180,7 +1309,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				// * We're processing a GDK pixbuf *
 
 				// Resize the pixbuf to the output resolution
-				tmp_pixbuf = gdk_pixbuf_scale_simple(GDK_PIXBUF(layer_data->object_data), output_width, output_height, GDK_INTERP_BILINEAR);
+				tmp_pixbuf = gdk_pixbuf_scale_simple(GDK_PIXBUF(((layer_image *) layer_data->object_data)->image_data), output_width, output_height, GDK_INTERP_BILINEAR);
 				if (NULL == tmp_pixbuf)
 				{
 					// * Something went wrong when scaling down the pixbuf *
@@ -1198,19 +1327,38 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					return;
 				}
 
-				// Base64 encode the pixbuf
-				// fixme2: Needs writing
+				// Convert the compressed image into a PNG
+				tmp_bool = gdk_pixbuf_save_to_buffer(GDK_PIXBUF(tmp_pixbuf),
+								&pixbuf_buffer,  // Will come back filled out with location of PNG image
+								&pixbuf_size,  // Will come back filled out with size of PNG buffer
+								"png",
+								&error,
+								"compression", "9",  // Set compression to 9 (no loss I think)
+								NULL);
+				if (FALSE == tmp_bool)
+				{
+					// Something went wrong when encoding the image to PNG format
+					display_warning("ED51: Something went wrong when encoding a slide to PNG format");
 
-				// Free the allocated pixbuf memory
-				g_object_unref(tmp_pixbuf);
+					// Free the memory allocated in this function
+					g_object_unref(tmp_pixbuf);
+					g_string_free(tmp_gstring, TRUE);
+					g_error_free(error);
+					// fixme5: Probably needs some work, as there would likely be further allocated memory by this stage
+
+					return;
+				}
+
+				// Base64 encode the PNG file
+				tmp_bool = base64_encode(pixbuf_buffer, pixbuf_size, &encoded_string);
 
 				// Create a string to write to the output svg file
-				encoding = g_string_new("png");  // Just png's for the moment
 				string_to_write = g_string_new(NULL);
-				g_string_printf(string_to_write, "<image xlink:href=\"data:image/%s;base64,%s\" width=\"%u\" height=\"0\">\n\t<animate attributeName=\"height\" from=\"%upx\" to=\"%upx\" begin=\"%us\" dur=\"%us\" />\n</image>\n", encoding->str, string_to_write->str, output_width, output_height, output_height, second_counter + start_frame, second_counter + finish_frame);
-//				g_string_printf(string_to_write, "<image xlink:href=\"%s\" width=\"%u\" height=\"0\">\n\t<animate attributeName=\"height\" from=\"%upx\" to=\"%upx\" begin=\"%us\" dur=\"%us\" />\n</image>\n", new_file_name->str, output_width, output_height, output_height, second_counter + start_frame, second_counter + finish_frame);
-				g_string_free(new_file_name, TRUE);
-				new_file_name = NULL;
+				g_string_printf(string_to_write, "<image xlink:href=\"data:image/png;base64,%s\" width=\"%u\" height=\"0\">\n\t<animate attributeName=\"height\" from=\"%upx\" to=\"%upx\" begin=\"%us\" dur=\"%us\" />\n</image>\n", encoded_string, output_width, output_height, output_height, second_counter + start_frame, second_counter + finish_frame);
+
+				// Free the allocated memory
+				g_object_unref(tmp_pixbuf);
+				g_free(encoded_string);
 
 				break;
 
@@ -1253,6 +1401,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 			// Reset the string to be written to the output file
 			g_string_free(string_to_write, TRUE);
+			string_to_write = NULL;
 		}
 
 		// Increment the overall frame counter
@@ -1578,6 +1727,9 @@ void sound_beep(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2006/04/29 17:41:31  vapour
+ * Wrote a function to Base64 encode data.  Works ok.
+ *
  * Revision 1.12  2006/04/27 19:53:33  vapour
  * Started adjusting the SVG slide output function, in preparation for further work.
  *
