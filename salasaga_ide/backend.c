@@ -1368,7 +1368,10 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				break;
 
 			case TYPE_HIGHLIGHT:
-				// fixme3: Needs writing
+				// We're processing a highlight layer
+				string_to_write = g_string_new(NULL);
+				g_string_printf(string_to_write, "<rect width=\"%d\" height=\"%d\" x=\"0\" y=\"0\" style=\"fill:#00ff00;fill-opacity:0.25098039;stroke:#00ff00;stroke-width:3.43300009;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\" />\n", ((layer_highlight *) layer_data->object_data)->width, ((layer_highlight *) layer_data->object_data)->height);
+
 				break;
 
 			case TYPE_MOUSE_CURSOR:
@@ -1791,6 +1794,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2006/05/01 09:20:01  vapour
+ * Added initial code for output of highlight layers to SVG.
+ *
  * Revision 1.14  2006/04/29 19:11:16  vapour
  * + Added a (very rough) function to URI encode Base64 data.
  * + Turned off the compression = 9 option for png data, as it appears to be causing a problem of images not displaying in FireFox.
