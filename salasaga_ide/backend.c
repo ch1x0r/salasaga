@@ -1370,7 +1370,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 			case TYPE_HIGHLIGHT:
 				// We're processing a highlight layer
 				string_to_write = g_string_new(NULL);
-				g_string_printf(string_to_write, "<rect width=\"%dpx\" height=\"%dpx\" x=\"%dpx\" y=\"%dpx\" style=\"fill:#00ff00;fill-opacity:0.25098039;stroke:#00ff00;stroke-width:2.0;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\" />\n", ((layer_highlight *) layer_data->object_data)->width, ((layer_highlight *) layer_data->object_data)->height, ((layer_highlight *) layer_data->object_data)->x_offset_start, ((layer_highlight *) layer_data->object_data)->y_offset_start);
+				g_string_printf(string_to_write, "<rect width=\"%dpx\" height=\"%dpx\" x=\"%dpx\" y=\"%dpx\" style=\"fill:#00ff00;fill-opacity:0.25098039;stroke:#00ff00;stroke-width:2.0;stroke-linejoin:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\" />\n", ((layer_highlight *) layer_data->object_data)->width, ((layer_highlight *) layer_data->object_data)->height, ((layer_highlight *) layer_data->object_data)->x_offset_start, ((layer_highlight *) layer_data->object_data)->y_offset_start);
 
 				break;
 
@@ -1379,6 +1379,14 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				break;
 
 			case TYPE_TEXT:
+				// We're processing a text layer
+				string_to_write = g_string_new(NULL);
+
+				// Create the background for the text to go on
+				g_string_printf(string_to_write, "<rect width=\"%dpx\" height=\"%dpx\" x=\"%dpx\" y=\"%dpx\" rx=\"10\" ry=\"10\" style=\"fill:#ffffcc;fill-opacity:1.0;stroke:#000000;stroke-width:2.0;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\" />\n", ((layer_text *) layer_data->object_data)->rendered_width, ((layer_text *) layer_data->object_data)->rendered_height, ((layer_text *) layer_data->object_data)->x_offset_start, ((layer_text *) layer_data->object_data)->y_offset_start);
+
+				// Create the text
+				// fixme3: May need to embed the font (not sure)
 				// fixme3: Needs writing
 				break;
 
@@ -1794,6 +1802,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.17  2006/05/01 13:53:21  vapour
+ * Added code to output the background for the text layer, for the SVG output.
+ *
  * Revision 1.16  2006/05/01 13:21:29  vapour
  * Improved output SVG highlight layer to include it's x and y starting offset positions.
  *
