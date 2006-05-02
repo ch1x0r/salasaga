@@ -616,12 +616,12 @@ gboolean flame_read(gchar *filename)
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 										TIMELINE_NAME, tmp_layer->name->str,
 										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_START, 0,
-										TIMELINE_FINISH, slide_length,
-										TIMELINE_X_OFF_START, 0,
-										TIMELINE_Y_OFF_START, 0,
-										TIMELINE_X_OFF_FINISH, 0,
-										TIMELINE_Y_OFF_FINISH, 0,
+										TIMELINE_START, NULL,
+										TIMELINE_FINISH, NULL,
+										TIMELINE_X_OFF_START, NULL,
+										TIMELINE_Y_OFF_START, NULL,
+										TIMELINE_X_OFF_FINISH, NULL,
+										TIMELINE_Y_OFF_FINISH, NULL,
 										-1);
 
 								// Add this (now completed) empty layer to the slide
@@ -707,12 +707,12 @@ gboolean flame_read(gchar *filename)
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 										TIMELINE_NAME, tmp_layer->name->str,
 										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_START, 0,
-										TIMELINE_FINISH, slide_length,
-										TIMELINE_X_OFF_START, 0,
-										TIMELINE_Y_OFF_START, 0,
-										TIMELINE_X_OFF_FINISH, 0,
-										TIMELINE_Y_OFF_FINISH, 0,
+										TIMELINE_START, tmp_layer->start_frame,
+										TIMELINE_FINISH, tmp_layer->finish_frame,
+										TIMELINE_X_OFF_START, tmp_image_ob->x_offset_start,
+										TIMELINE_Y_OFF_START, tmp_image_ob->y_offset_start,
+										TIMELINE_X_OFF_FINISH, tmp_image_ob->x_offset_finish,
+										TIMELINE_Y_OFF_FINISH, tmp_image_ob->y_offset_finish,
 										-1);
 
 								// Add this (now completed) image layer to the slide
@@ -787,12 +787,12 @@ gboolean flame_read(gchar *filename)
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 										TIMELINE_NAME, tmp_layer->name->str,
 										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_START, 0,
-										TIMELINE_FINISH, slide_length,
-										TIMELINE_X_OFF_START, 0,
-										TIMELINE_Y_OFF_START, 0,
-										TIMELINE_X_OFF_FINISH, 0,
-										TIMELINE_Y_OFF_FINISH, 0,
+										TIMELINE_START, tmp_layer->start_frame,
+										TIMELINE_FINISH, tmp_layer->finish_frame,
+										TIMELINE_X_OFF_START, tmp_highlight_ob->x_offset_start,
+										TIMELINE_Y_OFF_START, tmp_highlight_ob->y_offset_start,
+										TIMELINE_X_OFF_FINISH, tmp_highlight_ob->x_offset_finish,
+										TIMELINE_Y_OFF_FINISH, tmp_highlight_ob->y_offset_finish,
 										-1);
 
 								// Add this (now completed) highlight layer to the slide
@@ -883,12 +883,12 @@ gboolean flame_read(gchar *filename)
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 										TIMELINE_NAME, tmp_layer->name->str,
 										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_START, 0,
-										TIMELINE_FINISH, slide_length,
-										TIMELINE_X_OFF_START, 0,
-										TIMELINE_Y_OFF_START, 0,
-										TIMELINE_X_OFF_FINISH, 0,
-										TIMELINE_Y_OFF_FINISH, 0,
+										TIMELINE_START, tmp_layer->start_frame,
+										TIMELINE_FINISH, tmp_layer->finish_frame,
+										TIMELINE_X_OFF_START, tmp_text_ob->x_offset_start,
+										TIMELINE_Y_OFF_START, tmp_text_ob->y_offset_start,
+										TIMELINE_X_OFF_FINISH, tmp_text_ob->x_offset_finish,
+										TIMELINE_Y_OFF_FINISH, tmp_text_ob->y_offset_finish,
 										-1);
 
 								// Add this (now completed) text layer to the slide
@@ -1802,6 +1802,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.18  2006/05/02 13:06:38  vapour
+ * Fixed a bug in the project loading code, where the values weren't being transferred through to the layer area.
+ *
  * Revision 1.17  2006/05/01 13:53:21  vapour
  * Added code to output the background for the text layer, for the SVG output.
  *
