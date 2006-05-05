@@ -1282,7 +1282,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	slide_pointer = element;
 	layer_pointer = g_list_first((GList *) slide_pointer->layers);
 	num_layers = g_list_length(layer_pointer);
-	for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
+	for (layer_counter = num_layers - 1; layer_counter >= 0; layer_counter--)
 	{
 		layer_pointer = g_list_first((GList *) slide_pointer->layers);
 		layer_data = g_list_nth_data(layer_pointer, layer_counter);
@@ -1334,6 +1334,8 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 								&pixbuf_size,  // Will come back filled out with size of PNG buffer
 								"png",
 								&error,
+// Fixme4: Uncommenting the compression causes Firefox to not display the generated image.
+//         No idea why.  Would be good to understand though.
 //								"compression", "9",  // Set compression to 9 (no loss I think)
 								NULL);
 				if (FALSE == tmp_bool)
@@ -1370,7 +1372,13 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 			case TYPE_HIGHLIGHT:
 				// We're processing a highlight layer
 				string_to_write = g_string_new(NULL);
-				g_string_printf(string_to_write, "<rect width=\"%dpx\" height=\"%dpx\" x=\"%dpx\" y=\"%dpx\" style=\"fill:#00ff00;fill-opacity:0.25098039;stroke:#00ff00;stroke-width:2.0;stroke-linejoin:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\" />\n", ((layer_highlight *) layer_data->object_data)->width, ((layer_highlight *) layer_data->object_data)->height, ((layer_highlight *) layer_data->object_data)->x_offset_start, ((layer_highlight *) layer_data->object_data)->y_offset_start);
+				g_string_printf(string_to_write,
+					"<rect width=\"%.4fpx\" height=\"%.4fpx\" x=\"%.4fpx\" y=\"%.4fpx\" style=\"fill:#00ff00;fill-opacity:0.25098039;stroke:#00ff00;stroke-width:%.4fpx;stroke-linejoin:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\" />\n",
+					((float) output_width / project_width) * ((layer_highlight *) layer_data->object_data)->width,
+					((float) output_height / project_height) * ((layer_highlight *) layer_data->object_data)->height,
+					((float) output_width / project_width) * ((layer_highlight *) layer_data->object_data)->x_offset_start,
+					((float) output_height / project_height) * ((layer_highlight *) layer_data->object_data)->y_offset_start,
+					((float) output_height / project_height) * 2);
 
 				break;
 
@@ -1383,7 +1391,15 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				string_to_write = g_string_new(NULL);
 
 				// Create the background for the text to go on
-				g_string_printf(string_to_write, "<rect width=\"%dpx\" height=\"%dpx\" x=\"%dpx\" y=\"%dpx\" rx=\"10\" ry=\"10\" style=\"fill:#ffffcc;fill-opacity:1.0;stroke:#000000;stroke-width:2.0;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\" />\n", ((layer_text *) layer_data->object_data)->rendered_width, ((layer_text *) layer_data->object_data)->rendered_height, ((layer_text *) layer_data->object_data)->x_offset_start, ((layer_text *) layer_data->object_data)->y_offset_start);
+				g_string_printf(string_to_write,
+				"<rect width=\"%.4fpx\" height=\"%.4fpx\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" style=\"fill:#ffffcc;fill-opacity:1.0;stroke:#000000;stroke-width:%.4fpx;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\" />\n",
+				((float) output_width / project_width) * ((layer_text *) layer_data->object_data)->rendered_width,
+				((float) output_height / project_height) * ((layer_text *) layer_data->object_data)->rendered_height,
+				((float) output_width / project_width) * ((layer_text *) layer_data->object_data)->x_offset_start,
+				((float) output_height / project_height) * ((layer_text *) layer_data->object_data)->y_offset_start,
+				((float) output_height / project_height) * 10,
+				((float) output_height / project_height) * 10,
+				((float) output_height / project_height) * 2);
 
 				// Create the text
 				// fixme3: May need to embed the font (not sure)
@@ -1802,6 +1818,10 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.19  2006/05/05 15:01:37  vapour
+ * + Improved the SVG output code to draw layers in the correct order.
+ * + Improved the SVG output code to scale the highlight and text background boxes to the rest of the scene.
+ *
  * Revision 1.18  2006/05/02 13:06:38  vapour
  * Fixed a bug in the project loading code, where the values weren't being transferred through to the layer area.
  *
