@@ -1411,10 +1411,10 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				// fixme3: Probably need to embed the font (not sure)
 				// fixme3: Needs work
 				gtk_text_buffer_get_bounds(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end);
-				g_string_printf(string_to_write, "%s<text x=\"%.4fpx\" y=\"%.4fpx\" style=\"font-family:sans-serif;font-size:%.4f;text-anchor:start;alignment-baseline:auto;\" dx=\"%.4fpx\" dy=\"%.4fpx\">%s</text>\n", tmp_gstring->str,
+				g_string_printf(string_to_write, "%s<text x=\"%.4fpx\" y=\"%.4fpx\" style=\"font-family:sans-serif;font-size:%.4f;text-anchor:start;alignment-baseline:baseline;\" dx=\"%.4fpx\" dy=\"%.4fpx\">%s</text>\n", tmp_gstring->str,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
 					y_scale * (((layer_text *) layer_data->object_data)->y_offset_start + ((layer_text *) layer_data->object_data)->font_size),  // Y offset
-					y_scale * ((layer_text *) layer_data->object_data)->font_size,  // Font size
+					x_scale * ((layer_text *) layer_data->object_data)->font_size,  // Font size
 					x_scale * 10,  // Horizontal space between text background border and text start
 					y_scale * 20,  // Vertical space between text background border and text start
 					gtk_text_buffer_get_text(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end, FALSE));  // Text to be rendered
@@ -1833,6 +1833,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.21  2006/05/06 19:36:18  vapour
+ * Small tweaks to the font sizing for SVG export.
+ *
  * Revision 1.20  2006/05/06 19:12:33  vapour
  * Added initial semi-working code for text output in the SVG export. Still needs work.
  *
