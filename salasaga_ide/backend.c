@@ -1265,6 +1265,10 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	slide			*slide_pointer;				// Points to the present slide
 	guint			start_frame;					// The first frame in which the object appears
 	GString			*string_to_write = NULL;		// Holds SVG data to be written out
+	GtkTextIter		text_end;					// The end position of the text buffer
+	GtkTextIter		text_start;					// The start position of the text buffer
+	gfloat			x_scale;						// Width scale factor for the scene
+	gfloat			y_scale;						// Height scale factor for the scene
 
 	gboolean			tmp_bool;					// Temporary boolean value
 	gsize			tmp_gsize;					// Temporary gsize
@@ -1274,6 +1278,8 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 	// Initialise some things
 	tmp_gstring = g_string_new(NULL);
+	x_scale = (gfloat) output_width / project_width;
+	y_scale = (gfloat) output_height / project_height;
 
 	// Reset the counter for the last frame number visible in this slide
 	max_frame_second = 0;
@@ -1374,11 +1380,11 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				string_to_write = g_string_new(NULL);
 				g_string_printf(string_to_write,
 					"<rect width=\"%.4fpx\" height=\"%.4fpx\" x=\"%.4fpx\" y=\"%.4fpx\" style=\"fill:#00ff00;fill-opacity:0.25098039;stroke:#00ff00;stroke-width:%.4fpx;stroke-linejoin:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\" />\n",
-					((float) output_width / project_width) * ((layer_highlight *) layer_data->object_data)->width,
-					((float) output_height / project_height) * ((layer_highlight *) layer_data->object_data)->height,
-					((float) output_width / project_width) * ((layer_highlight *) layer_data->object_data)->x_offset_start,
-					((float) output_height / project_height) * ((layer_highlight *) layer_data->object_data)->y_offset_start,
-					((float) output_height / project_height) * 2);
+					x_scale * ((layer_highlight *) layer_data->object_data)->width,
+					y_scale * ((layer_highlight *) layer_data->object_data)->height,
+					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_start,
+					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_start,
+					y_scale * 2);
 
 				break;
 
@@ -1391,19 +1397,28 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				string_to_write = g_string_new(NULL);
 
 				// Create the background for the text to go on
-				g_string_printf(string_to_write,
-				"<rect width=\"%.4fpx\" height=\"%.4fpx\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" style=\"fill:#ffffcc;fill-opacity:1.0;stroke:#000000;stroke-width:%.4fpx;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\" />\n",
-				((float) output_width / project_width) * ((layer_text *) layer_data->object_data)->rendered_width,
-				((float) output_height / project_height) * ((layer_text *) layer_data->object_data)->rendered_height,
-				((float) output_width / project_width) * ((layer_text *) layer_data->object_data)->x_offset_start,
-				((float) output_height / project_height) * ((layer_text *) layer_data->object_data)->y_offset_start,
-				((float) output_height / project_height) * 10,
-				((float) output_height / project_height) * 10,
-				((float) output_height / project_height) * 2);
+				g_string_printf(tmp_gstring,
+					"<rect width=\"%.4fpx\" height=\"%.4fpx\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" style=\"fill:#ffffcc;fill-opacity:1.0;stroke:#000000;stroke-width:%.4fpx;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\" />\n",
+					x_scale * ((layer_text *) layer_data->object_data)->rendered_width,
+					y_scale * ((layer_text *) layer_data->object_data)->rendered_height,
+					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
+					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,
+					y_scale * 10,
+					y_scale * 10,
+					y_scale * 2);
 
 				// Create the text
-				// fixme3: May need to embed the font (not sure)
-				// fixme3: Needs writing
+				// fixme3: Probably need to embed the font (not sure)
+				// fixme3: Needs work
+				gtk_text_buffer_get_bounds(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end);
+				g_string_printf(string_to_write, "%s<text x=\"%.4fpx\" y=\"%.4fpx\" style=\"font-family:sans-serif;font-size:%.4f;text-anchor:start;alignment-baseline:auto;\" dx=\"%.4fpx\" dy=\"%.4fpx\">%s</text>\n", tmp_gstring->str,
+					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
+					y_scale * (((layer_text *) layer_data->object_data)->y_offset_start + ((layer_text *) layer_data->object_data)->font_size),  // Y offset
+					y_scale * ((layer_text *) layer_data->object_data)->font_size,  // Font size
+					x_scale * 10,  // Horizontal space between text background border and text start
+					y_scale * 20,  // Vertical space between text background border and text start
+					gtk_text_buffer_get_text(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end, FALSE));  // Text to be rendered
+
 				break;
 
 			default:
@@ -1818,6 +1833,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.20  2006/05/06 19:12:33  vapour
+ * Added initial semi-working code for text output in the SVG export. Still needs work.
+ *
  * Revision 1.19  2006/05/05 15:01:37  vapour
  * + Improved the SVG output code to draw layers in the correct order.
  * + Improved the SVG output code to scale the highlight and text background boxes to the rest of the scene.
