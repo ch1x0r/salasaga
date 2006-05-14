@@ -1257,8 +1257,8 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	guint			max_frame_second;			// For any frame, holds the last frame number visible
 	gint				num_layers;					// Number of layers in the slide
 	guint			object_type;					// The type of object in each layer
-	gchar			*pixbuf_buffer;				// Gets given a pointer to a compressed PNG image
-	gsize			pixbuf_size;					// Gets given the size of a compressed PNG image
+	gchar			*pixbuf_buffer;				// Gets given a pointer to a compressed jpeg image
+	gsize			pixbuf_size;					// Gets given the size of a compressed jpeg image
 	GIOStatus		return_value;				// Return value used in most GIOChannel functions
 	guint			second_counter = 0;			// Holds the starting second (in the whole animation) for the present layer
 	guint			slide_number;				// The number of the presently processing slide
@@ -1272,8 +1272,9 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 	gboolean			tmp_bool;					// Temporary boolean value
 	gsize			tmp_gsize;					// Temporary gsize
-	GdkPixbuf		*tmp_pixbuf;					// Temporary GDK pixbuf
 	GString			*tmp_gstring;				// Temporary GString
+	gint				tmp_int;						// Temporary integer
+	GdkPixbuf		*tmp_pixbuf;					// Temporary GDK pixbuf
 
 
 	// Initialise some things
@@ -1334,20 +1335,19 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					return;
 				}
 
-				// Convert the compressed image into a PNG
+				// Convert the compressed image into jpeg data
 				tmp_bool = gdk_pixbuf_save_to_buffer(GDK_PIXBUF(tmp_pixbuf),
-								&pixbuf_buffer,  // Will come back filled out with location of PNG image
-								&pixbuf_size,  // Will come back filled out with size of PNG buffer
-								"png",
+								&pixbuf_buffer,  // Will come back filled out with location of jpeg data
+								&pixbuf_size,  // Will come back filled out with size of jpeg data
+								"jpeg",
 								&error,
-// Fixme4: Uncommenting the compression causes Firefox to not display the generated image.
-//         No idea why.  Would be good to understand though.
-//								"compression", "9",  // Set compression to 9 (no loss I think)
+								"quality",
+								"100",
 								NULL);
 				if (FALSE == tmp_bool)
 				{
-					// Something went wrong when encoding the image to PNG format
-					display_warning("ED51: Something went wrong when encoding a slide to PNG format");
+					// Something went wrong when encoding the image to jpeg format
+					display_warning("ED51: Something went wrong when encoding a slide to jpeg format");
 
 					// Free the memory allocated in this function
 					g_object_unref(tmp_pixbuf);
@@ -1358,15 +1358,45 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					return;
 				}
 
-				// Base64 encode the PNG data
+				// Base64 encode the image data
 				base64_encode(pixbuf_buffer, pixbuf_size, &base64_string);
 
 				// URI encode the Base64 data
 				uri_encode_base64(base64_string, strlen(base64_string), &encoded_string);
 
-				// Create a string to write to the output svg file
+				// We handle background images differently to other image types
 				string_to_write = g_string_new(NULL);
-				g_string_printf(string_to_write, "<image xlink:href=\"data:image/png;base64,%s\" width=\"%u\" height=\"%u\" />\n", encoded_string, output_width, output_height);
+				tmp_int = g_ascii_strncasecmp(layer_data->name->str, "Background", 10);
+				if (0 == tmp_int)
+				{
+					// * We're processing a background layer *
+
+					// Create a string to write to the output svg file
+					g_string_printf(string_to_write, "<image xlink:href=\"data:image/jpeg;base64,%s\" width=\"%upx\" height=\"%upx\" />\n", encoded_string, output_width, output_height);
+				} else
+				{
+					// Create a string to write to the output svg file
+					g_string_printf(string_to_write, "<image xlink:href=\"data:image/jpeg;base64,%s\" width=\"%.4fpx\" height=\"%.4fpx\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\">\n",
+						encoded_string,
+						x_scale * ((layer_image *) layer_data->object_data)->width,
+						y_scale * ((layer_image *) layer_data->object_data)->height,
+						x_scale * ((layer_image *) layer_data->object_data)->x_offset_start,
+						y_scale * ((layer_image *) layer_data->object_data)->y_offset_start);
+
+					// Animate the image SVG properties to fade it in over 1 second
+					g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"0s\" dur=\"1s\" />\n");
+
+					// Animate the image SVG properties so it keeps visible after faded in
+					g_string_append_printf(string_to_write,
+						"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"1s\" dur=\"%us\" />\n",
+						layer_data->	finish_frame - 2);
+
+					// Animate the image SVG properties so they fade out over 1 second
+					g_string_append_printf(string_to_write,
+						"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%us\" dur=\"1s\" />\n</image>\n",
+						layer_data->	finish_frame - 1);
+				}
 
 				// Free the allocated memory
 				g_object_unref(tmp_pixbuf);
@@ -1378,14 +1408,29 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 			case TYPE_HIGHLIGHT:
 				// We're processing a highlight layer
 				string_to_write = g_string_new(NULL);
+
+				// Add the SVG tag, but ensure the highligh box starts out invisible
 				g_string_printf(string_to_write,
-					"<rect width=\"%.4fpx\" height=\"%.4fpx\" x=\"%.4fpx\" y=\"%.4fpx\" style=\"fill:#00ff00;fill-opacity:0.25098039;stroke:#00ff00;stroke-width:%.4fpx;stroke-linejoin:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\" />\n",
+					"<rect width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" style=\"fill:#00ff00;fill-opacity:0.25098039;stroke:#00ff00;stroke-width:%.4fpx;stroke-linejoin:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\">\n",
 					x_scale * ((layer_highlight *) layer_data->object_data)->width,
 					y_scale * ((layer_highlight *) layer_data->object_data)->height,
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_start,
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_start,
 					y_scale * 2);
 
+				// Animate the highlight box SVG properties to fade it in over 1 second
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"0s\" dur=\"1s\" />\n");
+
+				// Animate the highlight box SVG properties so it keeps visible after faded in
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"1s\" dur=\"%us\" />\n",
+					layer_data->	finish_frame - 2);
+
+				// Animate the highlight box SVG properties so they fade out over 1 second
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%us\" dur=\"1s\" />\n</rect>\n",
+					layer_data->	finish_frame - 1);
 				break;
 
 			case TYPE_MOUSE_CURSOR:
@@ -1396,9 +1441,9 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				// We're processing a text layer
 				string_to_write = g_string_new(NULL);
 
-				// Create the background for the text to go on
-				g_string_printf(tmp_gstring,
-					"<rect width=\"%.4fpx\" height=\"%.4fpx\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" style=\"fill:#ffffcc;fill-opacity:1.0;stroke:#000000;stroke-width:%.4fpx;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\" />\n",
+				// Create the SVG tag for the background box the text goes onto
+				g_string_printf(string_to_write,
+					"<rect width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" style=\"fill:#ffffcc;fill-opacity:1.0;stroke:#000000;stroke-width:%.4fpx;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\">\n",
 					x_scale * ((layer_text *) layer_data->object_data)->rendered_width,
 					y_scale * ((layer_text *) layer_data->object_data)->rendered_height,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
@@ -1407,18 +1452,48 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					y_scale * 10,
 					y_scale * 2);
 
-				// Create the text
+				// Animate the background box SVG properties to fade it in over 1 second
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"0s\" dur=\"1s\" />\n");
+
+				// Animate the background box SVG properties so it keeps visible after faded in
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"1s\" dur=\"%us\" />\n",
+					layer_data->	finish_frame - 2);
+
+				// Animate the background box SVG properties so they fade out over 1 second
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%us\" dur=\"1s\" />\n</rect>\n",
+					layer_data->	finish_frame - 1);
+
+				// Create the text tag
 				// fixme3: Probably need to embed the font (not sure)
-				// fixme3: Needs work
-				gtk_text_buffer_get_bounds(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end);
-				g_string_printf(string_to_write, "%s<text x=\"%.4fpx\" y=\"%.4fpx\" style=\"font-family:sans-serif;font-size:%.4f;text-anchor:start;alignment-baseline:baseline;\" dx=\"%.4fpx\" dy=\"%.4fpx\">%s</text>\n", tmp_gstring->str,
+				g_string_append_printf(string_to_write, "<text x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" style=\"font-family:sans-serif;font-size:%.4fpx;text-anchor:start;alignment-baseline:baseline;\" dx=\"%.4fpx\" dy=\"%.4fpx\">\n",
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
 					y_scale * (((layer_text *) layer_data->object_data)->y_offset_start + ((layer_text *) layer_data->object_data)->font_size),  // Y offset
 					x_scale * ((layer_text *) layer_data->object_data)->font_size,  // Font size
 					x_scale * 10,  // Horizontal space between text background border and text start
-					y_scale * 20,  // Vertical space between text background border and text start
-					gtk_text_buffer_get_text(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end, FALSE));  // Text to be rendered
+					y_scale * 20);  // Vertical space between text background border and text start
 
+				// Animate the text SVG properties to fade it in over 1 second
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"0s\" dur=\"1s\" />\n");
+
+				// Animate the text SVG properties so it keeps visible after faded in
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"1s\" dur=\"%us\" />\n",
+					layer_data->	finish_frame - 2);
+
+				// Animate the text SVG properties so they fade out over 1 second
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%us\" dur=\"1s\" />\n",
+					layer_data->	finish_frame - 1);
+
+				// Add the text to the text layer
+				gtk_text_buffer_get_bounds(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end);
+				g_string_append_printf(string_to_write,
+					"%s\n</text>\n",
+					gtk_text_buffer_get_text(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end, FALSE));  // Text to be rendered
 				break;
 
 			default:
@@ -1833,6 +1908,15 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.22  2006/05/14 12:34:59  vapour
+ * + Adjusted images in svg output to be sized better (maybe even properly!). :)
+ * + Added some explicit sizing info to the svg output.
+ * + Added code to the SVG output, for fading in and out image layers.
+ * + Added code to the SVG output, for fading in and out text layers.
+ * + Changed the internal image encoding for SVG data from png to jpeg format, as Firefox has less issues with it.
+ * + Improved the code for the SVG output highlight by switching to g_string_append_printf().
+ * + Added working 1 second fade in for highlights for SVG output.  Works in ASV3, not Firefox.
+ *
  * Revision 1.21  2006/05/06 19:36:18  vapour
  * Small tweaks to the font sizing for SVG export.
  *
