@@ -2441,6 +2441,8 @@ void menu_export_flash_animation(void)
 	GtkWidget 			*export_dialog;			// Dialog widget
 	gchar				*filename;				// Pointer to the chosen file name
 	GtkFileFilter		*flash_filter;			// Filter for *.swf
+	gboolean				unique_name;				// Switch used to mark when we have a valid filename
+	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
 
 	GString				*tmp_gstring;			// Temporary GString
 	gint					tmp_int;					// Temporary integer
@@ -2486,11 +2488,40 @@ void menu_export_flash_animation(void)
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), output_folder->str);
 
 	// Run the dialog and wait for user input
-	if (gtk_dialog_run(GTK_DIALOG(export_dialog)) != GTK_RESPONSE_ACCEPT)
+	unique_name = FALSE;
+	while (TRUE != unique_name)
 	{
-		// The dialog was cancelled, so destroy it and return to the caller
-		gtk_widget_destroy(export_dialog);
-		return;
+		// Get the filename to export to
+		if (gtk_dialog_run(GTK_DIALOG(export_dialog)) != GTK_RESPONSE_ACCEPT)
+		{
+			// The dialog was cancelled, so destroy it and return to the caller
+			gtk_widget_destroy(export_dialog);
+			return;
+		}
+
+		// Retrieve the filename from the dialog box
+		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(export_dialog));
+
+		// Check if there's an existing file of this name, and give an Overwrite? type prompt if there is
+		if (TRUE == g_file_test(filename, G_FILE_TEST_EXISTS))
+		{
+			// Something with this name already exists
+			warn_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),
+								GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+								GTK_MESSAGE_QUESTION,
+								GTK_BUTTONS_YES_NO,
+								"Overwrite existing file?");
+			if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
+			{
+				// We've been told to overwrite the existing file
+				unique_name = TRUE;
+			}
+			gtk_widget_destroy(warn_dialog);
+		} else
+		{
+			// The indicated file name is unique, we're fine to save
+			unique_name = TRUE;
+		}
 	}
 
 	// * We only get to here if a file was chosen *
@@ -2521,18 +2552,17 @@ void menu_export_flash_animation(void)
 // Function called when the user selects Export -> SVG Animation from the top menu
 void menu_export_svg_animation(void)
 {
-	// * This format of SVG data works with ASV3, even though it's very inefficient *
-	// fixme2: Would be better to find out if there's a way to inline the image data 
-
 	// Local variables
 	GtkFileFilter		*all_filter;				// Filter for *.*
+	GError				*error = NULL;			// Pointer to error return structure
 	GtkWidget 			*export_dialog;			// Dialog widget
 	gchar				*filename;				// Pointer to the chosen file name
-	GtkFileFilter		*svg_filter;				// Filter for *.svg
-	GError				*error = NULL;			// Pointer to error return structure
+	guint				image_counter = 0;		// Counter for the number of images written out
 	GIOStatus			return_value;			// Return value used in most GIOChannel functions
 	GList				*slide_pointer;			// Points to the presently processing slide
-	guint				image_counter = 0;		// Counter for the number of images written out
+	GtkFileFilter		*svg_filter;				// Filter for *.svg
+	gboolean				unique_name;				// Switch used to mark when we have a valid filename
+	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
 
 	GtkWidget			*tmp_dialog;				// Temporary dialog box
 	gsize				tmp_gsize;				// Temporary gsize
@@ -2579,11 +2609,40 @@ void menu_export_svg_animation(void)
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), output_folder->str);
 
 	// Run the dialog and wait for user input
-	if (gtk_dialog_run(GTK_DIALOG(export_dialog)) != GTK_RESPONSE_ACCEPT)
+	unique_name = FALSE;
+	while (TRUE != unique_name)
 	{
-		// The dialog was cancelled, so destroy it and return to the caller
-		gtk_widget_destroy(export_dialog);
-		return;
+		// Get the filename to export to
+		if (gtk_dialog_run(GTK_DIALOG(export_dialog)) != GTK_RESPONSE_ACCEPT)
+		{
+			// The dialog was cancelled, so destroy it and return to the caller
+			gtk_widget_destroy(export_dialog);
+			return;
+		}
+
+		// Retrieve the filename from the dialog box
+		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(export_dialog));
+
+		// Check if there's an existing file of this name, and give an Overwrite? type prompt if there is
+		if (TRUE == g_file_test(filename, G_FILE_TEST_EXISTS))
+		{
+			// Something with this name already exists
+			warn_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),
+								GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+								GTK_MESSAGE_QUESTION,
+								GTK_BUTTONS_YES_NO,
+								"Overwrite existing file?");
+			if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
+			{
+				// We've been told to overwrite the existing file
+				unique_name = TRUE;
+			}
+			gtk_widget_destroy(warn_dialog);
+		} else
+		{
+			// The indicated file name is unique, we're fine to save
+			unique_name = TRUE;
+		}
 	}
 
 	// * We only get to here if a file was chosen *
@@ -2619,7 +2678,7 @@ void menu_export_svg_animation(void)
 	}
 
 	// Write the SVG header to the output file
-	g_string_assign(tmp_gstring, "<svg version=\"1.1\" baseProfile=\"full\" xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" xmlns:ev=\"http://www.w3.org/2001/xml-events\">\n");
+	g_string_assign(tmp_gstring, "<svg version=\"1.1\"\n\tbaseProfile=\"full\"\n\txmlns=\"http://www.w3.org/2000/svg\"\n\txmlns:xlink=\"http://www.w3.org/1999/xlink\"\n\txmlns:ev=\"http://www.w3.org/2001/xml-events\">\n");
 	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
@@ -4078,6 +4137,12 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2006/05/14 12:31:26  vapour
+ * + Now keeps track of the last file name used in a session, and makes that the default name for opening and saving of files.
+ * + Initial SVG tag is now broken up into lines and tabbed in, as per the exampl in Jonathon Watts SVG Authoring Guidelines (http://jwatt.org/svg/authoring).
+ * + Added a warning dialog when overwriting an existing exported Flash file.
+ * + Added a warning dialog when overwriting an existing exported SVG file.
+ *
  * Revision 1.12  2006/04/27 16:40:40  vapour
  * Added a tag to the SVG output to showing it was created with the Flame Project.
  *
