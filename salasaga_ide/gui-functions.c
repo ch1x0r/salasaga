@@ -2897,7 +2897,7 @@ void menu_file_open(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;
-	gchar				*filename;
+	gchar				*filename;				// Pointer to the chosen file name
 	GtkFileFilter		*flame_filter;
 	GtkWidget 			*open_dialog;
 	gboolean				return_code;
@@ -2923,8 +2923,16 @@ void menu_file_open(void)
 	gtk_file_filter_set_name(all_filter, "All files (*.*)");
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(open_dialog), all_filter);
 
-	// Change to the default project directory
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(open_dialog), default_project_folder->str);
+	// Set the path and name of the file to open
+	if (NULL != file_name)
+	{
+		// Select the last opened file if possible
+		gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(open_dialog), file_name->str);
+	} else
+	{
+		// Change to the default project directory
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(open_dialog), default_project_folder->str);
+	}
 
 	// Run the dialog and wait for user input
 	if (gtk_dialog_run(GTK_DIALOG(open_dialog)) != GTK_RESPONSE_ACCEPT)
@@ -2945,6 +2953,10 @@ void menu_file_open(void)
 	// Open and parse the selected file
 	return_code = flame_read(filename);
 
+	// Keep the full file name around for future reference
+	file_name = g_string_new(NULL);
+	file_name = g_string_assign(file_name, filename);
+
 	// Frees the memory holding the file name
 	g_free(filename);
 }
@@ -2955,7 +2967,9 @@ void menu_file_save(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;				// Filter for *.*
+	gchar				*dir_name_part;			// Briefly used for holding a directory name
 	gchar				*filename;				// Pointer to the chosen file name
+	gchar				*file_name_part;			// Briefly used for holding a file name
 	GtkFileFilter		*flame_filter;			// Filter for *.flame
 	GtkWidget 			*save_dialog;			// Dialog widget
 	gboolean				unique_name;				// Switch used to mark when we have a valid filename
@@ -2972,6 +2986,9 @@ void menu_file_save(void)
 	gint					tmp_int;					// Temporary integer
 	glong				tmp_long;				// Temporary long integer
 
+
+	// Initialise some things
+	tmp_gstring = g_string_new(NULL);
 
 	// Create the dialog asking the user for the name to save as
 	save_dialog = gtk_file_chooser_dialog_new("Save As",
@@ -2993,13 +3010,29 @@ void menu_file_save(void)
 	gtk_file_filter_set_name(all_filter, "All files (*.*)");
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(save_dialog), all_filter);
 
-	// Set the name of the file to save as
-	tmp_gstring = g_string_new(NULL);
-	g_string_printf(tmp_gstring, "%s.flame", project_name->str);
-	gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(save_dialog), tmp_gstring->str);
+	// Set the path and name of the file to save as.  Use project_name as a default
+	if (NULL != file_name)
+	{
+		// Work out the directory and file name components
+		dir_name_part = g_path_get_dirname(file_name->str);
+		file_name_part = g_path_get_basename(file_name->str);
 
-	// Change to the default project directory
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(save_dialog), default_project_folder->str);
+		// Set the default directory and file name for the dialog		
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(save_dialog), dir_name_part);
+		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(save_dialog), file_name_part);
+
+		// Free the string
+		g_free(dir_name_part);
+		g_free(file_name_part);
+	} else
+	{
+		// Nothing has been established, so use project_name
+		g_string_printf(tmp_gstring, "%s.flame", project_name->str);
+		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(save_dialog), tmp_gstring->str);
+
+		// Change to the default project directory
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(save_dialog), default_project_folder->str);
+	}
 
 	// Run the dialog and wait for user input
 	unique_name = FALSE;
@@ -3121,6 +3154,10 @@ void menu_file_save(void)
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 	gdk_flush();
 
+	// Keep the full file name around for future reference
+	file_name = g_string_new(NULL);
+	file_name = g_string_assign(file_name, filename);
+
 	// * Function clean up area *
 
 	// Frees the memory holding the file name
@@ -3174,24 +3211,30 @@ void menu_help_about(void)
 // Function called when the user selects Help -> Register from the top menu
 void menu_help_register(void)
 {
+#ifndef _WIN32  // Non-windows check
 	// Launch a browser window of the Flame Project registration page
 	gnome_url_show ("http://www.flameproject.org/go/register", NULL);
+#endif
 }
 
 
 // Function called when the user selects Help -> Survey from the top menu
 void menu_help_survey(void)
 {
+#ifndef _WIN32  // Non-windows check
 	// Launch a browser window of the Flame Project survey
 	gnome_url_show ("http://www.flameproject.org/go/survey", NULL);
+#endif
 }
 
 
 // Function called when the user selects Help -> Website from the top menu
 void menu_help_website(void)
 {
+#ifndef _WIN32  // Non-windows check
 	// Launch a browser window of the Flame Project website
 	gnome_url_show ("http://www.flameproject.org/go/website", NULL);
+#endif
 }
 
 
@@ -4137,6 +4180,10 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2006/05/15 13:40:50  vapour
+ * + Now keeps track of the last file name used in a session, and makes that the default name for opening and saving of files.
+ * + Changed ifdefs so gnome functions aren't used on Windows.
+ *
  * Revision 1.13  2006/05/14 12:31:26  vapour
  * + Now keeps track of the last file name used in a session, and makes that the default name for opening and saving of files.
  * + Initial SVG tag is now broken up into lines and tabbed in, as per the exampl in Jonathon Watts SVG Authoring Guidelines (http://jwatt.org/svg/authoring).
