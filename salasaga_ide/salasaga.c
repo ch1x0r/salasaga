@@ -56,57 +56,56 @@
 
 
 // Global variables
-GtkWidget			*main_window;			// Widget for the main window
 GdkPixmap			*backing_store;			// Pixel buffer most drawing operations are done on
-GtkWidget			*right_side;				// Widget for the right side area
+GList				*boundary_list = NULL;	// Stores a linked list of layer object boundaries
+GList				*current_slide = NULL;	// Pointer to the presently selected slide
+GString				*file_name = NULL;		// Holds the file name the project is saved as
 GtkWidget			*film_strip;				// The film strip area
 GtkScrolledWindow	*film_strip_container;	// Container for the film strip
+guint				frames_per_second;		// Number of frames per second
+GtkWidget			*main_drawing_area;		// Widget for the drawing area
+GtkWidget			*main_window;			// Widget for the main window
+GtkItemFactory		*menu_bar = NULL;		// Widget for the menu bar
+gboolean				mouse_dragging = FALSE;	// Is the mouse being dragged?
+GIOChannel			*output_file;			// The output file handle
+GtkComboBox			*resolution_selector;	// Widget for the resolution selector
+GtkWidget			*right_side;				// Widget for the right side area
+GList				*slides = NULL;			// Linked list holding the slide info
+GtkWidget			*status_bar;				// Widget for the status bar
+guint				statusbar_context;		// Context id for the status bar messages
+gint					stored_x;				// X co-ordinate of the mouse last click
+gint					stored_y;				// Y co-ordinate of the mouse last click
 GtkWidget			*time_line_container;	// Scrolled window widget, to add scroll bars to the time line widget
 GtkWidget			*time_line_vbox;			// VBox widget holding all of the time line elements
 GtkWidget			*working;				// Widget for the working area
-GtkWidget			*main_drawing_area;		// Widget for the drawing area
-GtkItemFactory		*menu_bar = NULL;		// Widget for the menu bar
-GtkWidget			*status_bar;				// Widget for the status bar
-GtkComboBox			*zoom_selector;			// Widget for the zoom selector
-GtkComboBox			*resolution_selector;	// Widget for the resolution selector
-GList				*slides = NULL;			// Linked list holding the slide info
-GList				*current_slide = NULL;	// Pointer to the presently selected slide
-GIOChannel			*output_file;			// The output file handle
 guint				working_width;			// Width of the display portion of the working area in pixels
 guint				working_height;			// Height of the display portion of the working area in pixels
-GList				*boundary_list = NULL;	// Stores a linked list of layer object boundaries
-gint					stored_x;				// X co-ordinate of the mouse last click
-gint					stored_y;				// Y co-ordinate of the mouse last click
-guint				frames_per_second;		// Number of frames per second
 guint				zoom;					// Percentage zoom to use in the drawing area
-gboolean				mouse_dragging = FALSE;	// Is the mouse being dragged?
+GtkComboBox			*zoom_selector;			// Widget for the zoom selector
 
 // Application default preferences
-GString				*default_project_folder;	// Application default save path for project folders
+GdkColor				default_bg_colour;		// Default background color for slides
 GString				*default_output_folder;	// Application default save path for exporting animations
-guint				default_output_width;	// Application default for how wide to create project output
 guint				default_output_height;	// Application default for how high to create project output
 guint				default_output_quality;	// Application default quality level [0-9] to save output png files with
-GString				*screenshots_folder;		// Application default for where to store screenshots
-guint				preview_width = 300;		// Width in pixel for the film strip preview (might turn into a structure later)
-guint				icon_height = 30;		// Height in pixels for the toolbar icons (they're scalable SVG's)
+guint				default_output_width;	// Application default for how wide to create project output
+GString				*default_project_folder;	// Application default save path for project folders
 guint				default_slide_length;	// Default length of all new slides, in frames
-GdkColor				default_bg_colour;		// Default background color for slides
+guint				icon_height = 30;		// Height in pixels for the toolbar icons (they're scalable SVG's)
+guint				preview_width = 300;		// Width in pixel for the film strip preview (might turn into a structure later)
 guint				scaling_quality;			// Default image scaling quality used
+GString				*screenshots_folder;		// Application default for where to store screenshots
 
 // Project preferences
-GString				*project_name;			// The name of the project
-GString				*project_folder;			// The path to the project folder
 GString				*output_folder;			// Where to export animated SVG files too
-guint				output_width;			// How wide to create project output
 guint				output_height;			// How high to create project output
 guint				output_quality;			// The quality level [0-9] to save output png files with
-guint				project_width;			// The width of the project in pixels
+guint				output_width;			// How wide to create project output
+GString				*project_folder;			// The path to the project folder
 guint				project_height;			// The height of the project in pixels
+GString				*project_name;			// The name of the project
+guint				project_width;			// The width of the project in pixels
 guint				slide_length;			// Length of all new slides, in frames
-
-// Various globals
-guint				statusbar_context;		// Context id for the status bar messages
 
 
 // Callback to exit the application
@@ -238,7 +237,14 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	// Work out if SVG images can be loaded
 	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
+
+#ifdef _WIN32
+	// Hard code a different path for windows
+	icon_path = g_string_new("icons");
+#else
 	icon_path = g_string_new("../share/icons/flame/72x72");
+#endif
+
 	supported_formats = gdk_pixbuf_get_formats();
 	num_formats = g_slist_length(supported_formats);
 	for (format_counter = 0; format_counter < num_formats; format_counter++)
@@ -247,8 +253,15 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 		if (0 == g_ascii_strncasecmp(gdk_pixbuf_format_get_name(format_data), "svg", 3))
 		{
 			// SVG is supported
-			g_string_assign(icon_extension, "svg");
-			g_string_assign(icon_path, "../share/icons/flame/scalable");
+			icon_extension = g_string_assign(icon_extension, "svg");
+
+#ifdef _WIN32
+			// Hard code a different path for windows
+			icon_path = g_string_new("icons");
+#else
+			icon_path = g_string_new("../share/icons/flame/scalable");
+#endif
+
 		}
 	}
 
@@ -463,7 +476,14 @@ GtkWidget *create_time_line(void)
 
 	// Work out if SVG images can be loaded
 	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
+	
+#ifdef _WIN32
+	// Hard code a different path for windows
+	icon_path = g_string_new("icons");
+#else
 	icon_path = g_string_new("../share/icons/flame/72x72");
+#endif
+
 	supported_formats = gdk_pixbuf_get_formats();
 	num_formats = g_slist_length(supported_formats);
 	for (format_counter = 0; format_counter < num_formats; format_counter++)
@@ -472,8 +492,15 @@ GtkWidget *create_time_line(void)
 		if (0 == g_ascii_strncasecmp(gdk_pixbuf_format_get_name(format_data), "svg", 3))
 		{
 			// SVG is supported
-			g_string_assign(icon_extension, "svg");
-			g_string_assign(icon_path, "../share/icons/flame/scalable");
+			icon_extension = g_string_assign(icon_extension, "svg");
+
+#ifdef _WIN32
+			// Hard code a different path for windows
+			icon_path = g_string_new("icons");
+#else
+			icon_path = g_string_new("../share/icons/flame/scalable");
+#endif
+
 		}
 	}
 
@@ -705,8 +732,10 @@ gint main(gint argc, gchar *argv[])
 	default_bg_colour.blue = 0;
 	frames_per_second = 12;  // Half of 24 fps (film)
 
+#ifndef _WIN32  // Non-windows check
 	// Initialise sound
 	gnome_sound_init(NULL);
+#endif
 
 	// Start up the GUI part of things	
 	gtk_init(&argc, &argv);
@@ -855,7 +884,7 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// Set the application title
-	snprintf(wintitle, 40, "%s v%s\n", APP_NAME, APP_VERSION);
+	snprintf(wintitle, 40, "%s v%s", APP_NAME, APP_VERSION);
 
 	// Set the window title and border
 	gtk_window_set_title(GTK_WINDOW(main_window), wintitle);
@@ -1029,6 +1058,11 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2006/05/15 13:37:38  vapour
+ * + Sorted global definitions globally.
+ * + Removed linefeed on the end of the main window title.
+ * + Changed ifdefs so gnome functions aren't used on Windows.
+ *
  * Revision 1.8  2006/04/29 17:02:39  vapour
  * Moved the Slide menu shortcut key to Alt-i, as it was overlapping with the Layers menu shortcut key.
  *
