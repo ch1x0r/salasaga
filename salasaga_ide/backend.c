@@ -1827,10 +1827,10 @@ void save_preferences_and_exit(void)
 
 	// Free our GConf engine
 	gconf_engine_unref(gconf_engine);
-#endif
 
 	// Shut down sound
 	gnome_sound_shutdown();
+#endif
 
 	// Exit the application
 	gtk_main_quit();
@@ -1840,7 +1840,10 @@ void save_preferences_and_exit(void)
 // Function to sound a beep (on user error, etc)
 void sound_beep(void)
 {
+#ifndef _WIN32
+	// We'll have to think of a non-gnome-code way of playing sound for windows
 	gnome_sound_play("../share/sounds/flame/generic.wav");
+#endif
 }
 
 
@@ -1908,6 +1911,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.23  2006/05/15 13:35:12  vapour
+ * Changed ifdefs so gnome functions aren't used on Windows.
+ *
  * Revision 1.22  2006/05/14 12:34:59  vapour
  * + Adjusted images in svg output to be sized better (maybe even properly!). :)
  * + Added some explicit sizing info to the svg output.
