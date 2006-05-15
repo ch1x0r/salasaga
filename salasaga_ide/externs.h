@@ -30,54 +30,54 @@ extern "C" {
 #endif // __cplusplus
 
 // Variables defined elsewhere
-extern GtkWidget				*main_window;
-extern GdkPixmap				*backing_store;
-extern GtkWidget				*right_side;
-extern GtkWidget				*film_strip;
-extern GtkScrolledWindow		*film_strip_container;
-extern GtkWidget				*time_line_container;
-extern GtkWidget				*time_line_vbox;
-extern GtkWidget				*working;
-extern GtkWidget				*main_drawing_area;
+extern GdkPixmap			*backing_store;
+extern GList				*boundary_list;
+extern GList				*current_slide;
+extern GString				*file_name;
+extern GtkWidget			*film_strip;
+extern GtkScrolledWindow	*film_strip_container;
+extern guint				frames_per_second;
+extern GtkWidget			*main_drawing_area;
+extern GtkWidget			*main_window;
 extern GtkItemFactory		*menu_bar;
-extern GtkWidget				*status_bar;
-extern GtkComboBox			*zoom_selector;
-extern GtkComboBox			*resolution_selector;
-extern GList					*slides;
-extern GList					*current_slide;
+extern gboolean				mouse_dragging;
 extern GIOChannel			*output_file;
-extern guint					working_width;
-extern guint					working_height;
-extern GList					*boundary_list;
+extern GtkComboBox			*resolution_selector;
+extern GtkWidget			*right_side;
+extern GList				*slides;
+extern GtkWidget			*status_bar;
+extern guint				statusbar_context;
 extern gint					stored_x;
 extern gint					stored_y;
-extern guint					frames_per_second;
-extern guint					zoom;
-extern gboolean				mouse_dragging;
+extern GtkWidget			*time_line_container;
+extern GtkWidget			*time_line_vbox;
+extern GtkWidget			*working;
+extern guint				working_height;
+extern guint				working_width;
+extern guint				zoom;
+extern GtkComboBox			*zoom_selector;
 
-extern GString				*default_project_folder;
-extern GString				*default_output_folder;
-extern guint					default_output_width;
-extern guint					default_output_height;
-extern guint					default_output_quality;
-extern GString				*screenshots_folder;
-extern guint					preview_width;
-extern guint					icon_height;
-extern guint					default_slide_length;
 extern GdkColor				default_bg_colour;
-extern guint					scaling_quality;
+extern GString				*default_output_folder;
+extern guint				default_output_height;
+extern guint				default_output_quality;
+extern guint				default_output_width;
+extern GString				*default_project_folder;
+extern guint				default_slide_length;
+extern guint				icon_height;
+extern guint				preview_width;
+extern guint				scaling_quality;
+extern GString				*screenshots_folder;
 
-extern GString				*project_name;
-extern GString				*project_folder;
 extern GString				*output_folder;
-extern guint					output_width;
-extern guint					output_height;
-extern guint					output_quality;
-extern guint					project_width;
-extern guint					project_height;
-extern guint					slide_length;
-
-extern guint					statusbar_context;
+extern guint				output_height;
+extern guint				output_quality;
+extern guint				output_width;
+extern GString				*project_folder;
+extern guint				project_height;
+extern GString				*project_name;
+extern guint				project_width;
+extern guint				slide_length;
 
 #ifdef __cplusplus
 }
@@ -91,6 +91,9 @@ extern guint					statusbar_context;
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2006/05/15 13:41:53  vapour
+ * Sorted externs alphabetically.
+ *
  * Revision 1.3  2006/04/21 17:47:18  vapour
  * + Updated header with clearer copyright and license details.
  * + Moved the History section to the end of the file.
