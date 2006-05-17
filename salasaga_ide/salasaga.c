@@ -59,24 +59,25 @@
 GdkPixmap			*backing_store;			// Pixel buffer most drawing operations are done on
 GList				*boundary_list = NULL;	// Stores a linked list of layer object boundaries
 GList				*current_slide = NULL;	// Pointer to the presently selected slide
+gfloat				export_time_counter;	// Used when exporting, holds the number of seconds thus far
 GString				*file_name = NULL;		// Holds the file name the project is saved as
-GtkWidget			*film_strip;				// The film strip area
+GtkWidget			*film_strip;			// The film strip area
 GtkScrolledWindow	*film_strip_container;	// Container for the film strip
 guint				frames_per_second;		// Number of frames per second
 GtkWidget			*main_drawing_area;		// Widget for the drawing area
 GtkWidget			*main_window;			// Widget for the main window
 GtkItemFactory		*menu_bar = NULL;		// Widget for the menu bar
-gboolean				mouse_dragging = FALSE;	// Is the mouse being dragged?
+gboolean			mouse_dragging = FALSE;	// Is the mouse being dragged?
 GIOChannel			*output_file;			// The output file handle
 GtkComboBox			*resolution_selector;	// Widget for the resolution selector
-GtkWidget			*right_side;				// Widget for the right side area
+GtkWidget			*right_side;			// Widget for the right side area
 GList				*slides = NULL;			// Linked list holding the slide info
-GtkWidget			*status_bar;				// Widget for the status bar
+GtkWidget			*status_bar;			// Widget for the status bar
 guint				statusbar_context;		// Context id for the status bar messages
-gint					stored_x;				// X co-ordinate of the mouse last click
-gint					stored_y;				// Y co-ordinate of the mouse last click
+gint				stored_x;				// X co-ordinate of the mouse last click
+gint				stored_y;				// Y co-ordinate of the mouse last click
 GtkWidget			*time_line_container;	// Scrolled window widget, to add scroll bars to the time line widget
-GtkWidget			*time_line_vbox;			// VBox widget holding all of the time line elements
+GtkWidget			*time_line_vbox;		// VBox widget holding all of the time line elements
 GtkWidget			*working;				// Widget for the working area
 guint				working_width;			// Width of the display portion of the working area in pixels
 guint				working_height;			// Height of the display portion of the working area in pixels
@@ -1058,6 +1059,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2006/05/17 11:22:14  vapour
+ * Added the export_time_counter global variable.
+ *
  * Revision 1.9  2006/05/15 13:37:38  vapour
  * + Sorted global definitions globally.
  * + Removed linefeed on the end of the main window title.

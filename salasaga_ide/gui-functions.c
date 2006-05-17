@@ -2553,18 +2553,17 @@ void menu_export_flash_animation(void)
 void menu_export_svg_animation(void)
 {
 	// Local variables
-	GtkFileFilter		*all_filter;				// Filter for *.*
+	GtkFileFilter		*all_filter;			// Filter for *.*
 	GError				*error = NULL;			// Pointer to error return structure
 	GtkWidget 			*export_dialog;			// Dialog widget
 	gchar				*filename;				// Pointer to the chosen file name
-	guint				image_counter = 0;		// Counter for the number of images written out
 	GIOStatus			return_value;			// Return value used in most GIOChannel functions
 	GList				*slide_pointer;			// Points to the presently processing slide
-	GtkFileFilter		*svg_filter;				// Filter for *.svg
-	gboolean				unique_name;				// Switch used to mark when we have a valid filename
+	GtkFileFilter		*svg_filter;			// Filter for *.svg
+	gboolean			unique_name;			// Switch used to mark when we have a valid filename
 	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
 
-	GtkWidget			*tmp_dialog;				// Temporary dialog box
+	GtkWidget			*tmp_dialog;			// Temporary dialog box
 	gsize				tmp_gsize;				// Temporary gsize
 	GString				*tmp_gstring;			// Temporary GString
 
@@ -2710,8 +2709,9 @@ void menu_export_svg_animation(void)
 	}
 
 	// * For each slide, process and write out it's layers *
+	export_time_counter = 0;
 	slide_pointer = g_list_first(slides);
-	g_list_foreach(slide_pointer, menu_export_svg_animation_slide, &image_counter);
+	g_list_foreach(slide_pointer, menu_export_svg_animation_slide, NULL);
 
 	// Write the closing SVG structure to the output file
 	g_string_assign(tmp_gstring, "</svg>\n");
@@ -2966,13 +2966,13 @@ void menu_file_open(void)
 void menu_file_save(void)
 {
 	// Local variables
-	GtkFileFilter		*all_filter;				// Filter for *.*
+	GtkFileFilter		*all_filter;			// Filter for *.*
 	gchar				*dir_name_part;			// Briefly used for holding a directory name
 	gchar				*filename;				// Pointer to the chosen file name
-	gchar				*file_name_part;			// Briefly used for holding a file name
+	gchar				*file_name_part;		// Briefly used for holding a file name
 	GtkFileFilter		*flame_filter;			// Filter for *.flame
 	GtkWidget 			*save_dialog;			// Dialog widget
-	gboolean				unique_name;				// Switch used to mark when we have a valid filename
+	gboolean			unique_name;			// Switch used to mark when we have a valid filename
 	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
 
 	xmlDocPtr			document_pointer;		// Points to the XML document structure in memory
@@ -2983,7 +2983,7 @@ void menu_file_save(void)
 	xmlSaveCtxt			*save_context;			// Points to the save context
 
 	GString				*tmp_gstring;			// Temporary GString
-	gint					tmp_int;					// Temporary integer
+	gint				tmp_int;				// Temporary integer
 	glong				tmp_long;				// Temporary long integer
 
 
@@ -4180,6 +4180,9 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2006/05/17 11:23:51  vapour
+ * Added the export_time_counter global variable.
+ *
  * Revision 1.14  2006/05/15 13:40:50  vapour
  * + Now keeps track of the last file name used in a session, and makes that the default name for opening and saving of files.
  * + Changed ifdefs so gnome functions aren't used on Windows.

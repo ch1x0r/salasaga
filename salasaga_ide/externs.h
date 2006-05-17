@@ -33,6 +33,7 @@ extern "C" {
 extern GdkPixmap			*backing_store;
 extern GList				*boundary_list;
 extern GList				*current_slide;
+extern gfloat				export_time_counter;
 extern GString				*file_name;
 extern GtkWidget			*film_strip;
 extern GtkScrolledWindow	*film_strip_container;
@@ -91,6 +92,9 @@ extern guint				slide_length;
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2006/05/17 11:21:27  vapour
+ * Added the export_time_counter global variable.
+ *
  * Revision 1.4  2006/05/15 13:41:53  vapour
  * Sorted externs alphabetically.
  *
