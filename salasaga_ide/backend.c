@@ -1254,13 +1254,11 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	gint			layer_counter;				// Simple counter
 	layer			*layer_data;				// Points to the presently processing layer
 	GList			*layer_pointer;				// Points to the layer structure in the slide
-	guint			max_frame_second;			// For any frame, holds the last frame number visible
 	gint			num_layers;					// Number of layers in the slide
 	guint			object_type;				// The type of object in each layer
 	gchar			*pixbuf_buffer;				// Gets given a pointer to a compressed jpeg image
 	gsize			pixbuf_size;				// Gets given the size of a compressed jpeg image
 	GIOStatus		return_value;				// Return value used in most GIOChannel functions
-	guint			second_counter = 0;			// Holds the starting second (in the whole animation) for the present layer
 	guint			slide_number;				// The number of the presently processing slide
 	slide			*slide_pointer;				// Points to the present slide
 	guint			start_frame;				// The first frame in which the object appears
@@ -1306,9 +1304,6 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	// Convert time_end into seconds
 	time_end = (time_end / frames_per_second) + time_start;
 
-	// Reset the counter for the last frame number visible in this slide
-	max_frame_second = 0;
-
 	// * For each layer, write it to the output file *
 	layer_pointer = g_list_first((GList *) slide_pointer->layers);
 	num_layers = g_list_length(layer_pointer);
@@ -1322,12 +1317,6 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 		start_frame = layer_data->start_frame;
 		finish_frame = layer_data->finish_frame;
 		object_type = layer_data->object_type;
-
-		// Work out if the present layer is visible longer than any known present
-		if (finish_frame > max_frame_second)
-		{
-			max_frame_second = finish_frame;
-		}
 
 		// Determine the type of object present in the layer
 		switch (object_type)
@@ -1571,9 +1560,6 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 			g_string_free(string_to_write, TRUE);
 			string_to_write = NULL;
 		}
-
-		// Increment the overall frame counter
-		second_counter = second_counter + max_frame_second;
 	}
 
 	// Update the time counter, so the next frame starts after the end of this one
@@ -1960,6 +1946,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.25  2006/05/17 11:20:26  vapour
+ * Removed some crufty old code.
+ *
  * Revision 1.24  2006/05/17 11:05:53  vapour
  * Corrected the output timings for the SVG export.  They seem good now.
  *
