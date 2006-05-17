@@ -1247,46 +1247,69 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 {
 	// Local variables
 	gchar			*base64_string;				// Pointer to an Base64 string
-	gchar			*encoded_string;				// Pointer to an URI encoded Base64 string
+	gchar			*encoded_string;			// Pointer to an URI encoded Base64 string
 	GError			*error = NULL;				// Pointer to error return structure
 	GString			*file_name = NULL;			// Used to construct the file name of the output file
 	guint			finish_frame;				// The finish frame in which the object appears
-	gint				layer_counter;				// Simple counter
-	layer			*layer_data;					// Points to the presently processing layer
+	gint			layer_counter;				// Simple counter
+	layer			*layer_data;				// Points to the presently processing layer
 	GList			*layer_pointer;				// Points to the layer structure in the slide
 	guint			max_frame_second;			// For any frame, holds the last frame number visible
-	gint				num_layers;					// Number of layers in the slide
-	guint			object_type;					// The type of object in each layer
+	gint			num_layers;					// Number of layers in the slide
+	guint			object_type;				// The type of object in each layer
 	gchar			*pixbuf_buffer;				// Gets given a pointer to a compressed jpeg image
-	gsize			pixbuf_size;					// Gets given the size of a compressed jpeg image
+	gsize			pixbuf_size;				// Gets given the size of a compressed jpeg image
 	GIOStatus		return_value;				// Return value used in most GIOChannel functions
 	guint			second_counter = 0;			// Holds the starting second (in the whole animation) for the present layer
 	guint			slide_number;				// The number of the presently processing slide
 	slide			*slide_pointer;				// Points to the present slide
-	guint			start_frame;					// The first frame in which the object appears
-	GString			*string_to_write = NULL;		// Holds SVG data to be written out
+	guint			start_frame;				// The first frame in which the object appears
+	GString			*string_to_write = NULL;	// Holds SVG data to be written out
 	GtkTextIter		text_end;					// The end position of the text buffer
 	GtkTextIter		text_start;					// The start position of the text buffer
-	gfloat			x_scale;						// Width scale factor for the scene
-	gfloat			y_scale;						// Height scale factor for the scene
+	gfloat			time_end;					// The second (or part of) in the animation, in which this slide disappears
+	gfloat			time_start;					// The second (or part of) in the animation, in which this slide appears
+	gfloat			x_scale;					// Width scale factor for the scene
+	gfloat			y_scale;					// Height scale factor for the scene
 
-	gboolean			tmp_bool;					// Temporary boolean value
+	gboolean		tmp_bool;					// Temporary boolean value
+	gfloat			tmp_gfloat;					// Temporary gfloat
 	gsize			tmp_gsize;					// Temporary gsize
 	GString			*tmp_gstring;				// Temporary GString
-	gint				tmp_int;						// Temporary integer
-	GdkPixbuf		*tmp_pixbuf;					// Temporary GDK pixbuf
+	gint			tmp_int;					// Temporary integer
+	GdkPixbuf		*tmp_pixbuf;				// Temporary GDK pixbuf
 
 
 	// Initialise some things
+	slide_pointer = element;
+	time_start = export_time_counter;
+	time_end = 0;
 	tmp_gstring = g_string_new(NULL);
 	x_scale = (gfloat) output_width / project_width;
 	y_scale = (gfloat) output_height / project_height;
+
+	// Determine how many seconds this slide lasts for
+	layer_pointer = g_list_first((GList *) slide_pointer->layers);
+	num_layers = g_list_length(layer_pointer);
+	for (layer_counter = num_layers - 1; layer_counter >= 0; layer_counter--)
+	{
+		layer_pointer = g_list_first((GList *) slide_pointer->layers);
+		layer_data = g_list_nth_data(layer_pointer, layer_counter);
+
+		// If the present layer lasts longer than the longest known thus far, adopt the present layers version
+		if (layer_data->finish_frame > time_end)
+			time_end = layer_data->finish_frame;
+	}
+
+	// * At this point, time_end should contain the highest "finish frame" that was in any of the layers *
+	
+	// Convert time_end into seconds
+	time_end = (time_end / frames_per_second) + time_start;
 
 	// Reset the counter for the last frame number visible in this slide
 	max_frame_second = 0;
 
 	// * For each layer, write it to the output file *
-	slide_pointer = element;
 	layer_pointer = g_list_first((GList *) slide_pointer->layers);
 	num_layers = g_list_length(layer_pointer);
 	for (layer_counter = num_layers - 1; layer_counter >= 0; layer_counter--)
@@ -1372,30 +1395,41 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					// * We're processing a background layer *
 
 					// Create a string to write to the output svg file
-					g_string_printf(string_to_write, "<image xlink:href=\"data:image/jpeg;base64,%s\" width=\"%upx\" height=\"%upx\" />\n", encoded_string, output_width, output_height);
+					g_string_printf(string_to_write, "<image name=\"background\" width=\"%upx\" height=\"%upx\" opacity=\"0.0\" xlink:href=\"data:image/jpeg;base64,%s\">\n",
+						output_width,
+						output_height,
+						encoded_string);
+
+					// Animate the image SVG properties so the background is only visible for as long as the slide
+					g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />\n</image>\n",
+						time_start,
+						time_end - time_start);
 				} else
 				{
 					// Create a string to write to the output svg file
-					g_string_printf(string_to_write, "<image xlink:href=\"data:image/jpeg;base64,%s\" width=\"%.4fpx\" height=\"%.4fpx\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\">\n",
-						encoded_string,
+					g_string_printf(string_to_write, "<image name=\"standard image\" width=\"%.4fpx\" height=\"%.4fpx\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" xlink:href=\"data:image/jpeg;base64,%s\">\n",
 						x_scale * ((layer_image *) layer_data->object_data)->width,
 						y_scale * ((layer_image *) layer_data->object_data)->height,
 						x_scale * ((layer_image *) layer_data->object_data)->x_offset_start,
-						y_scale * ((layer_image *) layer_data->object_data)->y_offset_start);
+						y_scale * ((layer_image *) layer_data->object_data)->y_offset_start,
+						encoded_string);
 
 					// Animate the image SVG properties to fade it in over 1 second
 					g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"0s\" dur=\"1s\" />\n");
+					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
+						time_start + (layer_data->start_frame / frames_per_second));
 
 					// Animate the image SVG properties so it keeps visible after faded in
 					g_string_append_printf(string_to_write,
-						"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"1s\" dur=\"%us\" />\n",
-						layer_data->	finish_frame - 2);
+						"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+						time_start + 1 + (layer_data->start_frame / frames_per_second),
+						(((gfloat) layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2);
 
 					// Animate the image SVG properties so they fade out over 1 second
 					g_string_append_printf(string_to_write,
-						"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%us\" dur=\"1s\" />\n</image>\n",
-						layer_data->	finish_frame - 1);
+						"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n</image>\n",
+						time_start + (layer_data->finish_frame / frames_per_second) - 1);
 				}
 
 				// Free the allocated memory
@@ -1411,7 +1445,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Add the SVG tag, but ensure the highligh box starts out invisible
 				g_string_printf(string_to_write,
-					"<rect width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" style=\"fill:#00ff00;fill-opacity:0.25098039;stroke:#00ff00;stroke-width:%.4fpx;stroke-linejoin:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\">\n",
+					"<rect name=\"highlight\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" style=\"fill:#00ff00;fill-opacity:0.25098039;stroke:#00ff00;stroke-width:%.4fpx;stroke-linejoin:square;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\">\n",
 					x_scale * ((layer_highlight *) layer_data->object_data)->width,
 					y_scale * ((layer_highlight *) layer_data->object_data)->height,
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_start,
@@ -1420,17 +1454,22 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the highlight box SVG properties to fade it in over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"0s\" dur=\"1s\" />\n");
+					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
+					time_start + (layer_data->start_frame / frames_per_second));
 
 				// Animate the highlight box SVG properties so it keeps visible after faded in
+				tmp_gfloat = (((gfloat) layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2;
+				if (0 > tmp_gfloat)
+					tmp_gfloat = 0;
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"1s\" dur=\"%us\" />\n",
-					layer_data->	finish_frame - 2);
+					"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+					time_start + 1 + (layer_data->start_frame / frames_per_second),
+					tmp_gfloat);
 
 				// Animate the highlight box SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%us\" dur=\"1s\" />\n</rect>\n",
-					layer_data->	finish_frame - 1);
+					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n</rect>\n",
+					time_start + (layer_data->finish_frame / frames_per_second) - 1);
 				break;
 
 			case TYPE_MOUSE_CURSOR:
@@ -1443,57 +1482,64 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Create the SVG tag for the background box the text goes onto
 				g_string_printf(string_to_write,
-					"<rect width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" style=\"fill:#ffffcc;fill-opacity:1.0;stroke:#000000;stroke-width:%.4fpx;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\">\n",
+					"<rect name=\"text bg\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" style=\"fill:#ffffcc;fill-opacity:1.0;stroke:#000000;stroke-width:%.4fpx;stroke-linejoin:round;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.8\">\n",
 					x_scale * ((layer_text *) layer_data->object_data)->rendered_width,
 					y_scale * ((layer_text *) layer_data->object_data)->rendered_height,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
 					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,
-					y_scale * 10,
-					y_scale * 10,
-					y_scale * 2);
+					y_scale * 10,  // Relative X
+					y_scale * 10,  // Relative Y
+					y_scale * 2);  // Stroke width
 
 				// Animate the background box SVG properties to fade it in over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"0s\" dur=\"1s\" />\n");
+					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
+					time_start + (layer_data->start_frame / frames_per_second));
 
 				// Animate the background box SVG properties so it keeps visible after faded in
+				tmp_gfloat = (((gfloat) layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2;
+				if (0 > tmp_gfloat)
+					tmp_gfloat = 0;
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"1s\" dur=\"%us\" />\n",
-					layer_data->	finish_frame - 2);
+					"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+					time_start + 1 + (layer_data->start_frame / frames_per_second),
+					tmp_gfloat);
 
 				// Animate the background box SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%us\" dur=\"1s\" />\n</rect>\n",
-					layer_data->	finish_frame - 1);
+					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n</rect>\n",
+					time_start + (layer_data->finish_frame / frames_per_second) - 1);
 
 				// Create the text tag
 				// fixme3: Probably need to embed the font (not sure)
-				g_string_append_printf(string_to_write, "<text x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" style=\"font-family:sans-serif;font-size:%.4fpx;text-anchor:start;alignment-baseline:baseline;\" dx=\"%.4fpx\" dy=\"%.4fpx\">\n",
+				g_string_append_printf(string_to_write, "<text x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" style=\"font-family:sans-serif;font-size:%.4fpx;text-anchor:start;alignment-baseline:baseline;\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
 					y_scale * (((layer_text *) layer_data->object_data)->y_offset_start + ((layer_text *) layer_data->object_data)->font_size),  // Y offset
 					x_scale * ((layer_text *) layer_data->object_data)->font_size,  // Font size
 					x_scale * 10,  // Horizontal space between text background border and text start
 					y_scale * 20);  // Vertical space between text background border and text start
 
-				// Animate the text SVG properties to fade it in over 1 second
-				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"0s\" dur=\"1s\" />\n");
-
-				// Animate the text SVG properties so it keeps visible after faded in
-				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"1s\" dur=\"%us\" />\n",
-					layer_data->	finish_frame - 2);
-
-				// Animate the text SVG properties so they fade out over 1 second
-				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%us\" dur=\"1s\" />\n",
-					layer_data->	finish_frame - 1);
-
 				// Add the text to the text layer
 				gtk_text_buffer_get_bounds(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end);
 				g_string_append_printf(string_to_write,
-					"%s\n</text>\n",
+					"%s",
 					gtk_text_buffer_get_text(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end, FALSE));  // Text to be rendered
+
+				// Animate the text SVG properties to fade it in over 1 second
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
+					time_start + (layer_data->start_frame / frames_per_second));
+
+				// Animate the text SVG properties so it keeps visible after faded in
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+					time_start + 1 + (layer_data->start_frame / frames_per_second),
+					tmp_gfloat);
+
+				// Animate the text SVG properties so they fade out over 1 second
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n</text>\n",
+					time_start + (layer_data->finish_frame / frames_per_second) - 1);
 				break;
 
 			default:
@@ -1529,6 +1575,9 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 		// Increment the overall frame counter
 		second_counter = second_counter + max_frame_second;
 	}
+
+	// Update the time counter, so the next frame starts after the end of this one
+	export_time_counter = time_end;
 
 	return;
 }
@@ -1911,6 +1960,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.24  2006/05/17 11:05:53  vapour
+ * Corrected the output timings for the SVG export.  They seem good now.
+ *
  * Revision 1.23  2006/05/15 13:35:12  vapour
  * Changed ifdefs so gnome functions aren't used on Windows.
  *
