@@ -1396,6 +1396,8 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 						time_end - time_start);
 				} else
 				{
+					// * We're not processing a background layer *
+
 					// Create a string to write to the output svg file
 					g_string_printf(string_to_write, "<image name=\"standard image\" width=\"%.4fpx\" height=\"%.4fpx\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" xlink:href=\"data:image/jpeg;base64,%s\">\n",
 						x_scale * ((layer_image *) layer_data->object_data)->width,
@@ -1417,8 +1419,24 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 					// Animate the image SVG properties so they fade out over 1 second
 					g_string_append_printf(string_to_write,
-						"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n</image>\n",
+						"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
 						time_start + (layer_data->finish_frame / frames_per_second) - 1);
+
+					// Animate the image SVG properties to move it to it's destination location
+					g_string_append_printf(string_to_write,
+						"\t<animate attributeName=\"x\" values=\"%.4fpx;%.4fpx\" keyTimes=\"1s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+						x_scale * ((layer_image *) layer_data->object_data)->x_offset_start,
+						x_scale * ((layer_image *) layer_data->object_data)->x_offset_finish,
+						time_start + (layer_data->finish_frame / frames_per_second) - 1,
+						time_start + 1 + (layer_data->start_frame / frames_per_second),
+						time_start + (layer_data->finish_frame / frames_per_second));
+					g_string_append_printf(string_to_write,
+						"\t<animate attributeName=\"y\" values=\"%.4fpx;%.4fpx\" keyTimes=\"1s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n</image>\n",
+						y_scale * ((layer_image *) layer_data->object_data)->y_offset_start,
+						y_scale * ((layer_image *) layer_data->object_data)->y_offset_finish,
+						time_start + (layer_data->finish_frame / frames_per_second) - 1,
+						time_start + 1 + (layer_data->start_frame / frames_per_second),
+						time_start + (layer_data->finish_frame / frames_per_second));
 				}
 
 				// Free the allocated memory
@@ -1946,6 +1964,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.26  2006/05/18 13:54:18  vapour
+ * Added svg output properties to move image layers to their final positions during the animation.
+ *
  * Revision 1.25  2006/05/17 11:20:26  vapour
  * Removed some crufty old code.
  *
