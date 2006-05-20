@@ -94,10 +94,10 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
 	scaled_pixbuf = gdk_pixbuf_scale_simple(backing_pixbuf, width, height, scaling_quality);
 
 	// Free the various pixbufs, pixmaps, etc
-	g_free(backing_pixbuf);
+	g_object_unref(backing_pixbuf);
 	if (TYPE_EMPTY == layer_data->object_type)
 	{
-		g_free(bg_pixbuf);
+		g_object_unref(bg_pixbuf);
 	}
 
 	return scaled_pixbuf;
@@ -810,7 +810,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// If we already have image data loaded, get rid of it
 	if (TRUE != request_file)
 	{
-		g_free(GDK_PIXBUF(tmp_image_ob->image_data));
+		g_object_unref(GDK_PIXBUF(tmp_image_ob->image_data));
 	}
 
 	tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_image_ob->image_path->str, NULL);  // Load the image
@@ -1078,6 +1078,11 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 
 	// Create a horizontal line
 	highlight_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width, 2);
+	if (NULL == highlight_pixbuf)
+	{
+		display_warning("ED52: Not enough memory for pixbuf allocation");
+		return;
+	}
 	gdk_pixbuf_fill(highlight_pixbuf, border_color);
 
 	// Composite the line onto the backing store - top line
@@ -1105,10 +1110,15 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 		255);									// Alpha
 
 	// Free the temporary pixbuf
-	g_free(highlight_pixbuf);
+	g_object_unref(highlight_pixbuf);
 
 	// Create a vertical line
 	highlight_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, 2, height);
+	if (NULL == highlight_pixbuf)
+	{
+		display_warning("ED53: Not enough memory for pixbuf allocation");
+		return;
+	}
 	gdk_pixbuf_fill(highlight_pixbuf, border_color);
 
 	// Composite the line onto the backing store - left side
@@ -1136,7 +1146,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 		255);									// Alpha
 
 	// Free the temporary pixbuf
-	g_free(highlight_pixbuf);
+	g_object_unref(highlight_pixbuf);
 
 	// Create the inner highlight box
 	highlight_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width - 2, height - 2);
@@ -1155,7 +1165,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 		255);									// Alpha
 
 	// Free the temporary pixbuf
-	g_free(highlight_pixbuf);
+	g_object_unref(highlight_pixbuf);
 	return;
 }
 
@@ -1281,10 +1291,10 @@ void draw_workspace(void)
 	gtk_widget_queue_draw(GTK_WIDGET(main_drawing_area));
 
 	// Free allocated memory
-	g_free(tmp_pixbuf);
+	g_object_unref(tmp_pixbuf);
 	if (NULL != tmp_pixmap)
 	{
-		g_free(tmp_pixmap);
+		g_object_unref(tmp_pixmap);
 	}
 
 	// Update the collision detection boundaries
@@ -4180,6 +4190,9 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.16  2006/05/20 13:33:24  vapour
+ * Fixed several places where I was using the wrong call to free memory, leading to potential crashing bugs.
+ *
  * Revision 1.15  2006/05/17 11:23:51  vapour
  * Added the export_time_counter global variable.
  *
