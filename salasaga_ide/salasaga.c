@@ -713,8 +713,10 @@ gint main(gint argc, gchar *argv[])
 	GError				*error = NULL;			// Pointer to error return structure
 	gboolean				key_already_set = FALSE;// Used to work out which metacity run command is unassigned
 	GConfEngine			*gconf_engine;			// GConf engine
+	gchar				*gconf_value;			//
 	guint				unused_num = 0;			// Used to work out which metacity run command is unassigned
 	gboolean				tmp_boolean;				// Temporary boolean
+
 	guint				tmp_guint;				// Temporary guint
 	guint				tmp_int;					// Temporary guint
 #endif
@@ -733,16 +735,16 @@ gint main(gint argc, gchar *argv[])
 	default_bg_colour.blue = 0;
 	frames_per_second = 12;  // Half of 24 fps (film)
 
-#ifndef _WIN32  // Non-windows check
-	// Initialise sound
-	gnome_sound_init(NULL);
-#endif
-
 	// Start up the GUI part of things	
 	gtk_init(&argc, &argv);
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(main_window), 1024, 768);
 	gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_CENTER);
+
+#ifndef _WIN32  // Non-windows check
+	// Initialise sound
+	gnome_sound_init(NULL);
+#endif
 
 // fixme4: Workaround for now as GConf on windows doesn't seem optimal
 //         May be better to abstract this stuff into a function that switches backend transparently (GConf/Win Registry)
@@ -834,10 +836,10 @@ gint main(gint argc, gchar *argv[])
 		g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", tmp_guint);
 
 		// Get the value for the key
-		g_string_printf(tmp_gstring, "%s", gconf_engine_get_string(gconf_engine, command_key->str, NULL));
+		gconf_value = gconf_engine_get_string(gconf_engine, command_key->str, NULL);
 
 		// Check if the key is unused
-		tmp_int = g_ascii_strncasecmp(tmp_gstring->str, "", 1);
+		tmp_int = g_ascii_strncasecmp(gconf_value, "", 1);
 		if (0 == tmp_int)
 		{
 			// Yes it's unused, so make a note of it
@@ -845,7 +847,7 @@ gint main(gint argc, gchar *argv[])
 		} else
 		{
 			// This command is being used, so check if it's already assigned to flame-capture
-			tmp_int = g_ascii_strncasecmp(tmp_gstring->str, "flame-capture", 13);
+			tmp_int = g_ascii_strncasecmp(gconf_value, "flame-capture", 13);
 			if (0 == tmp_int)
 			{
 				key_already_set = TRUE;
@@ -1059,6 +1061,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2006/05/20 12:46:24  vapour
+ * Fixed a bug in the gconf calling code that was causing a realloc crash.
+ *
  * Revision 1.10  2006/05/17 11:22:14  vapour
  * Added the export_time_counter global variable.
  *
