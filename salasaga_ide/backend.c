@@ -214,7 +214,7 @@ void calculate_object_boundaries(void)
 	if (NULL != boundary_list)
 	{
 		boundary_list = g_list_first(boundary_list);
-		g_list_foreach(boundary_list, (gpointer) g_free, NULL);  // I *think* this will free the memory allocated for the GdkRegions.  Disabled for now while debugging other stuff
+		g_list_foreach(boundary_list, (gpointer) g_free, NULL);  // I *think* this will free the memory allocated for the GdkRegions.
 		g_list_free(boundary_list);
 		boundary_list = NULL;
 	}
@@ -2012,6 +2012,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.28  2006/05/20 13:30:46  vapour
+ * Fixed a comment.
+ *
  * Revision 1.27  2006/05/20 12:52:11  vapour
  * Added svg output tags to move the highlight and text layers into their final positions over the course of each slide.
  *
