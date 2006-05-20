@@ -1475,8 +1475,24 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the highlight box SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n</rect>\n",
+					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
 					time_start + (layer_data->finish_frame / frames_per_second) - 1);
+
+				// Animate the SVG properties to move it to it's destination location
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"x\" values=\"%.4fpx;%.4fpx\" keyTimes=\"1s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_start,
+					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_finish,
+					time_start + (layer_data->finish_frame / frames_per_second) - 1,
+					time_start + 1 + (layer_data->start_frame / frames_per_second),
+					time_start + (layer_data->finish_frame / frames_per_second));
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"y\" values=\"%.4fpx;%.4fpx\" keyTimes=\"1s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n</rect>\n",
+					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_start,
+					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_finish,
+					time_start + (layer_data->finish_frame / frames_per_second) - 1,
+					time_start + 1 + (layer_data->start_frame / frames_per_second),
+					time_start + (layer_data->finish_frame / frames_per_second));
 				break;
 
 			case TYPE_MOUSE_CURSOR:
@@ -1514,8 +1530,24 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the background box SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n</rect>\n",
+					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
 					time_start + (layer_data->finish_frame / frames_per_second) - 1);
+
+				// Animate the SVG properties to move it to it's destination location
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"x\" values=\"%.4fpx;%.4fpx\" keyTimes=\"1s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_start,
+					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_finish,
+					time_start + (layer_data->finish_frame / frames_per_second) - 1,
+					time_start + 1 + (layer_data->start_frame / frames_per_second),
+					time_start + (layer_data->finish_frame / frames_per_second));
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"y\" values=\"%.4fpx;%.4fpx\" keyTimes=\"1s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n</rect>\n",
+					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_start,
+					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_finish,
+					time_start + (layer_data->finish_frame / frames_per_second) - 1,
+					time_start + 1 + (layer_data->start_frame / frames_per_second),
+					time_start + (layer_data->finish_frame / frames_per_second));
 
 				// Create the text tag
 				// fixme3: Probably need to embed the font (not sure)
@@ -1545,8 +1577,24 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the text SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n</text>\n",
+					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
 					time_start + (layer_data->finish_frame / frames_per_second) - 1);
+
+				// Animate the SVG properties to move it to it's destination location
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"x\" values=\"%.4fpx;%.4fpx\" keyTimes=\"1s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
+					x_scale * ((layer_text *) layer_data->object_data)->x_offset_finish,
+					time_start + (layer_data->finish_frame / frames_per_second) - 1,
+					time_start + 1 + (layer_data->start_frame / frames_per_second),
+					time_start + (layer_data->finish_frame / frames_per_second));
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"y\" values=\"%.4fpx;%.4fpx\" keyTimes=\"1s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n</text>\n",
+					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,
+					y_scale * ((layer_text *) layer_data->object_data)->y_offset_finish,
+					time_start + (layer_data->finish_frame / frames_per_second) - 1,
+					time_start + 1 + (layer_data->start_frame / frames_per_second),
+					time_start + (layer_data->finish_frame / frames_per_second));
 				break;
 
 			default:
@@ -1964,6 +2012,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.27  2006/05/20 12:52:11  vapour
+ * Added svg output tags to move the highlight and text layers into their final positions over the course of each slide.
+ *
  * Revision 1.26  2006/05/18 13:54:18  vapour
  * Added svg output properties to move image layers to their final positions during the animation.
  *
