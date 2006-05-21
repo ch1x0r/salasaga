@@ -1461,7 +1461,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the highlight box SVG properties to fade it in over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
+					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" calcMode=\"linear\" begin=\"%.4fs\" dur=\"1s\" />\n",
 					time_start + (layer_data->start_frame / frames_per_second));
 
 				// Animate the highlight box SVG properties so it keeps visible after faded in
@@ -1475,20 +1475,15 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the highlight box SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
+					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" calcMode=\"linear\" begin=\"%.4fs\" dur=\"1s\" />\n",
 					time_start + (layer_data->finish_frame / frames_per_second) - 1);
 
 				// Animate the SVG properties to move it to it's destination location
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"x\" values=\"%.4fpx;%.4fpx\" keyTimes=\"1s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+					"\t<animateMotion calcMode=\"linear\" values=\"%.4fpx,%.4fpx;%.4fpx,%.4fpx\" keyTimes=\"1s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" fill=\"freeze\" />\n</rect>\n",
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_start,
-					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_finish,
-					time_start + (layer_data->finish_frame / frames_per_second) - 1,
-					time_start + 1 + (layer_data->start_frame / frames_per_second),
-					time_start + (layer_data->finish_frame / frames_per_second));
-				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"y\" values=\"%.4fpx;%.4fpx\" keyTimes=\"1s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n</rect>\n",
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_start,
+					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_finish,
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_finish,
 					time_start + (layer_data->finish_frame / frames_per_second) - 1,
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
@@ -1553,8 +1548,8 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				// fixme3: Probably need to embed the font (not sure)
 				g_string_append_printf(string_to_write, "<text x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" style=\"font-family:sans-serif;font-size:%.4fpx;text-anchor:start;alignment-baseline:baseline;\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
-					y_scale * (((layer_text *) layer_data->object_data)->y_offset_start + ((layer_text *) layer_data->object_data)->font_size),  // Y offset
-					x_scale * ((layer_text *) layer_data->object_data)->font_size,  // Font size
+					y_scale * (((layer_text *) layer_data->object_data)->y_offset_start + ((layer_text *) layer_data->object_data)->rendered_height),  // Y offset
+					y_scale * ((layer_text *) layer_data->object_data)->rendered_height,  // Font size
 					x_scale * 10,  // Horizontal space between text background border and text start
 					y_scale * 20);  // Vertical space between text background border and text start
 
@@ -1577,24 +1572,33 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the text SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
+					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n</text>\n",
 					time_start + (layer_data->finish_frame / frames_per_second) - 1);
-
+/*
 				// Animate the SVG properties to move it to it's destination location
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"x\" values=\"%.4fpx;%.4fpx\" keyTimes=\"1s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+					"\t<animate attributeName=\"x\" values=\"%.4fpx\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"1s\" />\n",
+					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
+					time_start + (layer_data->start_frame / frames_per_second));
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"x\" values=\"%.4fpx;%.4fpx\" keyTimes=\"0s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_finish,
 					time_start + (layer_data->finish_frame / frames_per_second) - 1,
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
-					time_start + (layer_data->finish_frame / frames_per_second));
+					((gfloat) ((gfloat) layer_data->finish_frame - (gfloat) layer_data->start_frame) / frames_per_second));
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"y\" values=\"%.4fpx;%.4fpx\" keyTimes=\"1s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n</text>\n",
+					"\t<animate attributeName=\"y\" values=\"%.4fpx\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"1s\" />\n",
+					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,
+					time_start + (layer_data->start_frame / frames_per_second));
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"y\" values=\"%.4fpx;%.4fpx\" keyTimes=\"0s;%.4fs\" begin=\"%.4fs\" dur=\"%.4fs\" />\n</text>\n",
 					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,
 					y_scale * ((layer_text *) layer_data->object_data)->y_offset_finish,
 					time_start + (layer_data->finish_frame / frames_per_second) - 1,
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
-					time_start + (layer_data->finish_frame / frames_per_second));
+					((gfloat) ((gfloat) layer_data->finish_frame - (gfloat) layer_data->start_frame) / frames_per_second));
+*/
 				break;
 
 			default:
@@ -2012,6 +2016,10 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.29  2006/05/21 13:47:46  vapour
+ * + Trying out the animateMotion keyword in the svg output.  Can't see much difference (i.e. needs more work), but it sounds like the right way forward.
+ * + Trying out a new way of calculating font size in the svg output, and it's looking better already.
+ *
  * Revision 1.28  2006/05/20 13:30:46  vapour
  * Fixed a comment.
  *
