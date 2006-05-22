@@ -1391,7 +1391,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 					// Animate the image SVG properties so the background is only visible for as long as the slide
 					g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />\n</image>\n",
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />\n</image>\n",
 						time_start,
 						time_end - time_start);
 				} else
@@ -1408,18 +1408,18 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 					// Animate the image SVG properties to fade it in over 1 second
 					g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />\n",
 						time_start + (layer_data->start_frame / frames_per_second));
 
 					// Animate the image SVG properties so it keeps visible after faded in
 					g_string_append_printf(string_to_write,
-						"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+						"\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
 						time_start + 1 + (layer_data->start_frame / frames_per_second),
 						(((gfloat) layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2);
 
 					// Animate the image SVG properties so they fade out over 1 second
 					g_string_append_printf(string_to_write,
-						"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
+						"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n",
 						time_start + (layer_data->finish_frame / frames_per_second) - 1);
 
 					// Animate the SVG properties to move it to it's destination location
@@ -1459,7 +1459,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the highlight box SVG properties to fade it in over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" calcMode=\"linear\" begin=\"%.4fs\" dur=\"1s\" />\n",
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />\n",
 					time_start + (layer_data->start_frame / frames_per_second));
 
 				// Animate the highlight box SVG properties so it keeps visible after faded in
@@ -1467,13 +1467,13 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				if (0 > tmp_gfloat)
 					tmp_gfloat = 0;
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					tmp_gfloat);
 
 				// Animate the highlight box SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" calcMode=\"linear\" begin=\"%.4fs\" dur=\"1s\" />\n",
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n",
 					time_start + (layer_data->finish_frame / frames_per_second) - 1);
 
 				// Animate the SVG properties to move it to it's destination location
@@ -1512,7 +1512,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the background box SVG properties to fade it in over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />\n",
 					time_start + (layer_data->start_frame / frames_per_second));
 
 				// Animate the background box SVG properties so it keeps visible after faded in
@@ -1520,13 +1520,13 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				if (0 > tmp_gfloat)
 					tmp_gfloat = 0;
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					tmp_gfloat);
 
 				// Animate the background box SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />\n",
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n",
 					time_start + (layer_data->finish_frame / frames_per_second) - 1);
 
 				// Animate the SVG properties to move it to it's destination location
@@ -1560,18 +1560,18 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the text SVG properties to fade it in over 1 second
 				g_string_append_printf(string_to_write,
-					"<animate attributeName=\"opacity\" values=\"0.0;1.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />",
+					"<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />",
 					time_start + (layer_data->start_frame / frames_per_second));
 
 				// Animate the text SVG properties so it keeps visible after faded in
 				g_string_append_printf(string_to_write,
-					"<animate attributeName=\"opacity\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />",
+					"<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0s\" begin=\"%.4fs\" dur=\"%.4fs\" />",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					tmp_gfloat);
 
 				// Animate the text SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"<animate attributeName=\"opacity\" values=\"1.0;0.0\" keyTimes=\"0s;1s\" begin=\"%.4fs\" dur=\"1s\" />",
+					"<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />",
 					time_start + (layer_data->finish_frame / frames_per_second) - 1);
 
 				// Animate the SVG properties to move it to it's destination location
@@ -2004,6 +2004,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.31  2006/05/22 13:09:36  vapour
+ * Fades (in and out) now work correctly in SVG output too (for Opera 9 at least).
+ *
  * Revision 1.30  2006/05/22 12:51:17  vapour
  * Animation (i.e. movement) in the SVG output now occurs.  In Opera anyway.  Made it work by copying the W3C example at: http://www.w3.org/TR/SVG/animate.html#Animation.classExample, and adjusting to suit.
  *
