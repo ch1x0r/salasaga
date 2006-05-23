@@ -51,6 +51,12 @@ typedef enum {
 	TYPE_HIGHLIGHT
 } ObjectType;
 
+// Resolution storing structure
+typedef struct {
+	guint		width;
+	guint		height;
+} ResolutionStructure;
+
 // Fields of the timeline widget
 enum
 {
@@ -154,6 +160,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2006/05/23 13:08:32  vapour
+ * Added a new ResolutionStructure data type.
+ *
  * Revision 1.10  2006/05/17 11:24:11  vapour
  * Incremented the app version number to 0.7.4.
  *
