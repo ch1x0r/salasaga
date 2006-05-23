@@ -437,6 +437,38 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
 }
 
 
+// Function to create the zoom resolution selector
+GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_resolutions, guint initial_width, guint initial_height)
+{
+	// Local variables
+	guint		res_counter;			// Used as a simple counter
+	GString		*res_string;			// Used for constructing resolution strings
+	GtkWidget	*res_widget;			// ComboBox widget that gets returned
+
+
+	// Initialise various things
+	res_string = g_string_new(NULL);
+	res_widget = gtk_combo_box_new_text();
+
+	// Construct the GtkComboBox
+	for (res_counter = 0; res_counter < num_resolutions; res_counter++)
+	{
+		g_string_printf(res_string, "%ux%u px", (res_array + res_counter)->width, (res_array + res_counter)->height);
+		gtk_combo_box_append_text(GTK_COMBO_BOX(res_widget), res_string->str);
+	}
+
+	// Select the chosen resolution as the default
+	// fixme3: Needs to be coded, for the moment, just pick one
+	gtk_combo_box_set_active(GTK_COMBO_BOX(res_widget), 5);
+
+	// Free memory allocated during this function
+	g_string_free(res_string, TRUE);
+
+	// Return the resolution widget
+	return res_widget;
+}
+
+
 // Display a warning message to the user
 gint display_warning(gchar *warning_string)
 {
@@ -4190,6 +4222,9 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.17  2006/05/23 13:12:55  vapour
+ * Added an initial function to create the selection of available output resolutions dynamically from a list.
+ *
  * Revision 1.16  2006/05/20 13:33:24  vapour
  * Fixed several places where I was using the wrong call to free memory, leading to potential crashing bugs.
  *

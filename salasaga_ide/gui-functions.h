@@ -52,6 +52,7 @@ void menu_screenshots_import(void);
 GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height);
 void compress_layers_inner(gpointer element, gpointer user_data);
 GtkWidget *construct_timeline_widget(slide *slide_data);
+GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_resolutions, guint initial_width, guint initial_height);
 gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title);
 gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean request_file);
 gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title);
@@ -88,6 +89,9 @@ void slide_move_down(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2006/05/23 13:12:55  vapour
+ * Added an initial function to create the selection of available output resolutions dynamically from a list.
+ *
  * Revision 1.3  2006/04/21 17:49:27  vapour
  * + Updated header with clearer copyright and license details.
  * + Moved the History section to the end of the file.
