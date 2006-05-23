@@ -148,31 +148,31 @@ void create_menu_bar()
 
 		{"/_Screenshots",			NULL,					NULL,							0,	"<Branch>"},
 		{"/Screenshots/_Capture",	NULL,					menu_screenshots_capture,		0,	"<Item>"},
-		{"/Screenshots/_Import",		NULL,					menu_screenshots_import,			0,	"<Item>"},
+		{"/Screenshots/_Import",	NULL,					menu_screenshots_import,		0,	"<Item>"},
 
 		{"/Sl_ide",					NULL,					NULL,							0,	"<Branch>"},
 		{"/Slide/_Insert",			NULL,					slide_insert,					0,	"<Item>"},
 		{"/Slide/De_lete",			NULL,					slide_delete,					0,	"<Item>"},
 		{"/Slide/Move _up",			NULL,					slide_move_up,					0,	"<Item>"},
-		{"/Slide/Move _down",		NULL,					slide_move_down,					0,	"<Item>"},
+		{"/Slide/Move _down",		NULL,					slide_move_down,				0,	"<Item>"},
 
 		{"/_Layer",					NULL,					NULL,							0,	"<Branch>"},
-		{"/Layer/_Edit",				NULL,					layer_edit,						0,	"<Item>"},
+		{"/Layer/_Edit",			NULL,					layer_edit,						0,	"<Item>"},
 		{"/Layer/_Delete",			NULL,					NULL,							0,	"<Item>"},
-		{"/Layer/Add _Text",			NULL,					layer_new_text,					0,	"<Item>"},
-		{"/Layer/Add _Highlight",	NULL,					layer_new_highlight,				0,	"<Item>"},
-		{"/Layer/Add _Image",		NULL,					layer_new_image,					0,	"<Item>"},
+		{"/Layer/Add _Text",		NULL,					layer_new_text,					0,	"<Item>"},
+		{"/Layer/Add _Highlight",	NULL,					layer_new_highlight,			0,	"<Item>"},
+		{"/Layer/Add _Image",		NULL,					layer_new_image,				0,	"<Item>"},
 
-		{"/E_xport",					NULL,					NULL,							0,	"<Branch>"},
-		{"/Export/_Flash Animation",	"<control><shift>F",		menu_export_flash_animation,		0,	"<Item>"},
-		{"/Export/_SVG Animation",	"<control><shift>S",		menu_export_svg_animation,		0,	"<Item>"},
+		{"/E_xport",				NULL,					NULL,							0,	"<Branch>"},
+		{"/Export/_Flash Animation","<control><shift>F",	menu_export_flash_animation,	0,	"<Item>"},
+		{"/Export/_SVG Animation",	"<control><shift>S",	menu_export_svg_animation,		0,	"<Item>"},
 
 		{"/_Help",					NULL,					NULL,							0,	"<LastBranch>"},
-		{"/_Help/_About",			NULL,					menu_help_about,					0,	"<Item>"	},
+		{"/_Help/_About",			NULL,					menu_help_about,				0,	"<Item>"	},
 		{"/_Help/Sep",				NULL,					NULL,							0,	"<Separator>"},
-		{"/_Help/_Register",			NULL,					menu_help_register,				0,	"<Item>"	},
+		{"/_Help/_Register",		NULL,					menu_help_register,				0,	"<Item>"	},
 		{"/_Help/_Survey",			NULL,					menu_help_survey,				0,	"<Item>"	},
-		{"/_Help/_Website",			NULL,					menu_help_website,				0,	"<Item>"	},
+		{"/_Help/_Website",			NULL,					menu_help_website,				0,	"<Item>"	}
 	};  // The menu structure
 	static gint					num_items = sizeof(menu_items) / sizeof(menu_items[0]);	// The number of menu items
 
@@ -694,28 +694,41 @@ GtkWidget *create_working_area(GtkWidget *working_frame)
 gint main(gint argc, gchar *argv[])
 {
 	// Local variables
-	GtkWidget			*main_area;				// Widget for the onscreen display
-	GtkTable				*message_bar;			// Widget for message bar
-	GtkWidget			*outer_box;				// Widget for the onscreen display
-	GtkLabel				*resolution_label;		// Widget for the resolution selector label
-	gboolean				should_maximise = FALSE;	// Briefly keeps track of whether the window should be maximised
-	GtkWidget			*toolbar = NULL;			// Widget for the toolbar
-	GdkScreen			*which_screen;			// Gets given the screen the monitor is on
-	gchar				wintitle[40];			// Stores the window title
-	GtkLabel				*zoom_label;				// Widget for the zoom selector label
+	GtkWidget					*main_area;				// Widget for the onscreen display
+	GtkTable					*message_bar;			// Widget for message bar
+	GtkWidget					*outer_box;				// Widget for the onscreen display
+	GtkLabel					*resolution_label;		// Widget for the resolution selector label
+	gboolean					should_maximise = FALSE;// Briefly keeps track of whether the window should be maximised
+	GtkWidget					*toolbar = NULL;		// Widget for the toolbar
+	GdkScreen					*which_screen;			// Gets given the screen the monitor is on
+	gchar						wintitle[40];			// Stores the window title
+	GtkLabel					*zoom_label;			// Widget for the zoom selector label
 
-	GString				*tmp_gstring;			// Temporary GString
-	GtkWidget			*tmp_widget = NULL;		// Temporary widget
+	GString						*tmp_gstring;			// Temporary GString
+	GtkWidget					*tmp_widget = NULL;		// Temporary widget
+
+	// Possible output resolutions
+	static ResolutionStructure	res_array[] =
+	{
+		{ 1600, 1200 },
+		{ 1280, 1024 },
+		{ 1024, 768 },
+		{ 800, 600 },
+		{ 640, 480 },
+		{ 320, 240 },
+		{ 160, 120 }
+	};  // The menu structure
+	static gint					num_res_items = sizeof(res_array) / sizeof(res_array[0]);	// The number of resolution items
 
 	// GConf related variables (not for windows)
 #ifndef _WIN32
 	GString				*command_key;			// Used to work out paths into the GConf structure
 	GError				*error = NULL;			// Pointer to error return structure
-	gboolean				key_already_set = FALSE;// Used to work out which metacity run command is unassigned
+	gboolean			key_already_set = FALSE;// Used to work out which metacity run command is unassigned
 	GConfEngine			*gconf_engine;			// GConf engine
 	gchar				*gconf_value;			//
 	guint				unused_num = 0;			// Used to work out which metacity run command is unassigned
-	gboolean				tmp_boolean;				// Temporary boolean
+	gboolean			tmp_boolean;				// Temporary boolean
 
 	guint				tmp_guint;				// Temporary guint
 	guint				tmp_int;					// Temporary guint
@@ -810,8 +823,8 @@ gint main(gint argc, gchar *argv[])
 		g_string_printf(project_name, "%s", "New Project");
 		project_width = gdk_screen_get_width(which_screen);
 		project_height = gdk_screen_get_height(which_screen);
-		default_output_width = 320;
-		default_output_height = 240;
+		default_output_width = 640;
+		default_output_height = 480;
 		default_slide_length = slide_length = 2;  // Default number of frames to use in new slides
 		default_output_quality = output_quality = 9;  // Default quality to save png images with
 		scaling_quality =  GDK_INTERP_TILES;  // Hyper is VERY, VERY slow with large high res images [GDK_INTERP_NEAREST | GDK_INTERP_TILES | GDK_INTERP_BILINEAR | GDK_INTERP_HYPER]
@@ -971,21 +984,9 @@ gint main(gint argc, gchar *argv[])
 	gtk_misc_set_alignment(GTK_MISC(resolution_label), 1, 0.5);
 	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_label), 7, 8, 0, 1);
 
-	// Create the resolution selector
-	resolution_selector = GTK_COMBO_BOX(gtk_combo_box_new_text());
-
-// fixme4: gtk_combo_box_set_focus_on_click function isn't present in GTK 2.4.x (shipped with Solaris 10)
-#ifndef __sun
-	gtk_combo_box_set_focus_on_click(GTK_COMBO_BOX(resolution_selector), FALSE);
-#endif
-
-	gtk_combo_box_append_text(GTK_COMBO_BOX(resolution_selector), "1600x1200 px");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(resolution_selector), "1280x1024 px");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(resolution_selector), "1024x768 px");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(resolution_selector), "800x600 px");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(resolution_selector), "640x480 px");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(resolution_selector), "320x240 px");
-	gtk_combo_box_set_active(GTK_COMBO_BOX(resolution_selector), 5);
+	// Create the resolution selector, setting 640x480 as the default
+	// fixme3: The setting of default doesn't work yet.  Needs to be changed directly in the function for now
+	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(res_array, num_res_items, 640, 480));
 	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_selector), 8, 9, 0, 1);
 
 	// Link the resolution selector to the function that stores the new values in global variables
@@ -1061,6 +1062,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2006/05/23 13:28:44  vapour
+ * Now uses the new function for creating the zoom resolution selection from a list.
+ *
  * Revision 1.11  2006/05/20 12:46:24  vapour
  * Fixed a bug in the gconf calling code that was causing a realloc crash.
  *
