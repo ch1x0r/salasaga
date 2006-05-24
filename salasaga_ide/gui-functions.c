@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  * Flame Project: Source file for all non specific GUI related funtions
  * 
  * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
@@ -441,25 +441,50 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
 GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_resolutions, guint initial_width, guint initial_height)
 {
 	// Local variables
+	gboolean	match_found;			// Simple toggle used to indiate the requested resolution has been found
+	gint		match_at;				// If a resolution match was found, this contains where
 	guint		res_counter;			// Used as a simple counter
 	GString		*res_string;			// Used for constructing resolution strings
 	GtkWidget	*res_widget;			// ComboBox widget that gets returned
 
 
 	// Initialise various things
+	match_found = FALSE;
+	match_at = -1;
 	res_string = g_string_new(NULL);
 	res_widget = gtk_combo_box_new_text();
 
-	// Construct the GtkComboBox
+	// Check if the requested resolution is present in the resolution array
+	for (res_counter = 0; res_counter < num_resolutions; res_counter++)
+	{
+		if ((res_array + res_counter)->width == initial_width)
+		{
+			// There's a match on width, so check for a match on height
+			if ((res_array + res_counter)->height == initial_height)
+			{
+				match_found = 0;
+				match_at = res_counter;
+			}
+		}
+	}
+
+	// Construct the GtkComboBox from the supplied list of resolutions
 	for (res_counter = 0; res_counter < num_resolutions; res_counter++)
 	{
 		g_string_printf(res_string, "%ux%u px", (res_array + res_counter)->width, (res_array + res_counter)->height);
 		gtk_combo_box_append_text(GTK_COMBO_BOX(res_widget), res_string->str);
 	}
 
+	// If no match was found we add the requested resolution on to the end of the list
+	if (TRUE != match_found)
+	{
+		g_string_printf(res_string, "%ux%u px", initial_width, initial_height);
+		gtk_combo_box_append_text(GTK_COMBO_BOX(res_widget), res_string->str);
+		match_at = num_resolutions;  // Point to the new entry
+	}
+
 	// Select the chosen resolution as the default
-	// fixme3: Needs to be coded, for the moment, just pick one
-	gtk_combo_box_set_active(GTK_COMBO_BOX(res_widget), 5);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(res_widget), match_at);
 
 	// Free memory allocated during this function
 	g_string_free(res_string, TRUE);
@@ -4222,6 +4247,9 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.18  2006/05/24 14:57:32  vapour
+ * Updated the zoom_selector creation function to dynamically include a new resolution if required.
+ *
  * Revision 1.17  2006/05/23 13:12:55  vapour
  * Added an initial function to create the selection of available output resolutions dynamically from a list.
  *
