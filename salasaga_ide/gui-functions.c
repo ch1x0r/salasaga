@@ -437,7 +437,7 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
 }
 
 
-// Function to create the zoom resolution selector
+// Function to create the output resolution selector
 GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_resolutions, guint initial_width, guint initial_height)
 {
 	// Local variables
@@ -3502,12 +3502,12 @@ void menu_screenshots_capture(void)
 void menu_screenshots_import(void)
 {
 	// Local variables
-	GDir				*dir_ptr;					// Pointer to the directory entry structure
+	GDir			*dir_ptr;					// Pointer to the directory entry structure
 	const gchar		*dir_entry;					// Holds a file name
 
-	GSList			*entries = NULL;				// Holds a list of screen shot file names
+	GSList			*entries = NULL;			// Holds a list of screen shot file names
 
-	gint				num_screenshots = 0;			// Switch to track if other screenshots already exist
+	gint			num_screenshots = 0;		// Switch to track if other screenshots already exist
 
 	GError			*error = NULL;				// Pointer to error return structure
 
@@ -3517,10 +3517,10 @@ void menu_screenshots_import(void)
 	layer			*tmp_layer;					// Temporary layer
 	layer_image		*tmp_image_ob;				// Temporary image layer
 	GtkTreeIter		*tmp_iter;					// Temporary GtkTreeIter
-	GdkPixbuf		*tmp_gdk_pixbuf;				// Temporary GDK Pixbuf
-	GString			*tmp_string;					// Temporary string
-	gint				tmp_int = 0;					// Temporary integer
-	GdkRectangle		tmp_rect =					// Temporary rectangle covering the area of the status bar
+	GdkPixbuf		*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
+	GString			*tmp_string;				// Temporary string
+	gint			tmp_int = 0;				// Temporary integer
+	GdkRectangle	tmp_rect =					// Temporary rectangle covering the area of the status bar
 						{0,
 						 0,
 						 status_bar->allocation.width,
@@ -4247,6 +4247,10 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.19  2006/05/28 09:39:16  vapour
+ * + Fixed a misleading comment.
+ * + Re-tab aligned some variables for my Linux Eclipse.
+ *
  * Revision 1.18  2006/05/24 14:57:32  vapour
  * Updated the zoom_selector creation function to dynamically include a new resolution if required.
  *
