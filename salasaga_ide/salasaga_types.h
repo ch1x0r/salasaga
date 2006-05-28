@@ -131,13 +131,13 @@ typedef struct
 typedef struct
 {
 	GtkWidget		*event_box;
-	GtkImage			*thumbnail;
+	GtkImage		*thumbnail;
 	gulong			click_handler;
 	GList			*layers;
 	GtkTooltips		*tooltip;
 	guint			number;
 	GtkWidget		*timeline_widget;
-	GtkListStore		*layer_store;
+	GtkListStore	*layer_store;
 } slide;
 
 // Defines the structure of a boundary box
@@ -160,6 +160,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2006/05/28 09:36:44  vapour
+ * Re-tab aligned some variables for my Linux Eclipse.
+ *
  * Revision 1.11  2006/05/23 13:08:32  vapour
  * Added a new ResolutionStructure data type.
  *
