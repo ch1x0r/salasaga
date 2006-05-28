@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  * Flame Project: Editing GUI
  * 
  * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
@@ -33,9 +33,12 @@
 // GTK includes
 #include <gtk/gtk.h>
 
-// GConf include (not for windows)
 #ifndef _WIN32
+	// Non-windows code
 	#include <gconf/gconf.h>
+#else
+	// Windows only code
+	#include <windows.h>
 #endif
 
 // Gnome include (for sound)
@@ -721,8 +724,8 @@ gint main(gint argc, gchar *argv[])
 	GString						*tmp_gstring;			// Temporary GString
 	GtkWidget					*tmp_widget = NULL;		// Temporary widget
 
-	// GConf related variables (not for windows)
 #ifndef _WIN32
+	// GConf related variables (not for windows)
 	GString				*command_key;			// Used to work out paths into the GConf structure
 	GError				*error = NULL;			// Pointer to error return structure
 	gboolean			key_already_set = FALSE;// Used to work out which metacity run command is unassigned
@@ -733,6 +736,10 @@ gint main(gint argc, gchar *argv[])
 
 	guint				tmp_guint;				// Temporary guint
 	guint				tmp_int;					// Temporary guint
+#else
+	// Registry related variables (windows only)
+	
+
 #endif
 
 
@@ -811,7 +818,314 @@ gint main(gint argc, gchar *argv[])
 		should_maximise = gconf_engine_get_bool(gconf_engine, "/apps/flame/defaults/window_maximised", NULL);
 	} else
 	{
+#else
 
+	// * Registry related code (windows only) *
+
+	// Check if we have a saved configuration in the windows registry
+	HKEY		hkey;
+	guchar		buffer_data[1000];
+	LPSTR		buffer_ptr = &buffer_data[0];
+	glong		buffer_size;
+	gboolean	missing_keys = FALSE;
+	glong		return_code;
+
+
+	// Check if the Flame Project registry keys exist
+	if (!RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject", 0, KEY_QUERY_VALUE, &hkey))
+	{
+		// They do, so load the default values
+		RegCloseKey(hkey);
+
+		// Retrieve the value for the project folder
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			g_string_printf(default_project_folder, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "projects");
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "project_folder", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				g_string_printf(default_project_folder, "%s", buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the screenshots folder
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			g_string_printf(screenshots_folder, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "screenshots");
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "screenshots_folder", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				g_string_printf(screenshots_folder, "%s", buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the default output folder
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			g_string_printf(default_output_folder, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "output");
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "default_output_folder", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				g_string_printf(default_output_folder, "%s", buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the project name
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			g_string_printf(project_name, "%s", "New Project");
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "project_name", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				g_string_printf(project_name, "%s", buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the project width
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			which_screen = gtk_window_get_screen(GTK_WINDOW(main_window));
+			project_width = gdk_screen_get_width(which_screen);
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "project_width", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				project_width = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the project height
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			which_screen = gtk_window_get_screen(GTK_WINDOW(main_window));
+			project_height = gdk_screen_get_height(which_screen);
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "project_height", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				project_height = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the output width
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			default_output_width = 640;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "output_width", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				default_output_width = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the output height
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			default_output_height = 480;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "output_height", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				default_output_height = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the default slide length
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			default_slide_length = slide_length = 60;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "slide_length", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				default_slide_length = slide_length = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the default output quality
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			default_output_quality = output_quality = 9;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "output_quality", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				default_output_quality = output_quality = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the default scaling quality
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			scaling_quality =  GDK_INTERP_TILES;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "scaling_quality", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				scaling_quality = GDK_INTERP_TILES;  // A backup, just in case someone sets an invalid value
+				if (0 == g_ascii_strncasecmp(buffer_ptr, "N", 1))
+				{
+					// Scaling quality should be GDK_INTERP_NEAREST
+					scaling_quality = GDK_INTERP_NEAREST;
+				}
+				if (0 == g_ascii_strncasecmp(buffer_ptr, "T", 1))
+				{
+					// Scaling quality should be GDK_INTERP_TILES
+					scaling_quality = GDK_INTERP_TILES;
+				}
+				if (0 == g_ascii_strncasecmp(buffer_ptr, "B", 1))
+				{
+					// Scaling quality should be GDK_INTERP_BILINEAR
+					scaling_quality = GDK_INTERP_BILINEAR;
+				}
+				if (0 == g_ascii_strncasecmp(buffer_ptr, "H", 1))
+				{
+					// Scaling quality should be GDK_INTERP_HYPER
+					scaling_quality = GDK_INTERP_HYPER;
+				}
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the default slide length
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			default_slide_length = slide_length = 60;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "slide_length", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				default_slide_length = slide_length = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the initial window maximisation
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "window_maximised", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				should_maximise = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// If some of the registry keys were missing then alert the user
+		if (TRUE == missing_keys)
+		{
+			display_warning("Some of the project default registry keys are missing\n");
+		}
+
+	} else
+	{
 #endif  // Non-windows check
 
 		// Which monitor are we displaying on?
@@ -826,20 +1140,17 @@ gint main(gint argc, gchar *argv[])
 		project_height = gdk_screen_get_height(which_screen);
 		default_output_width = 640;
 		default_output_height = 480;
-		default_slide_length = slide_length = 2;  // Default number of frames to use in new slides
+		default_slide_length = slide_length = 60;  // Default number of frames to use in new slides
 		default_output_quality = output_quality = 9;  // Default quality to save png images with
 		scaling_quality =  GDK_INTERP_TILES;  // Hyper is VERY, VERY slow with large high res images [GDK_INTERP_NEAREST | GDK_INTERP_TILES | GDK_INTERP_BILINEAR | GDK_INTERP_HYPER]
-
-#ifndef _WIN32  // Non-windows check
 	}
-#endif  // Non-windows check
 
 	// Set various required defaults that will be overwritten by the first project loaded
 	g_string_printf(project_folder, "%s", default_project_folder->str);
 	g_string_printf(output_folder, "%s", default_output_folder->str);
 
 // fixme4: Workaround for now as GConf on windows doesn't seem optimal
-//         May be better to abstract this stuff into a function that switches backend transparently (GConf/?)
+//         May be better to abstract this stuff into a function that switches backend transparently (GConf/Windows-registry)
 #ifndef _WIN32  // Non-windows check
 	// * Setup the Control-Printscreen key to capture screenshots *
 	// Search for the first unused run command
@@ -886,12 +1197,6 @@ gint main(gint argc, gchar *argv[])
 	gconf_engine_unref(gconf_engine);
 
 #endif  // Non-windows check
-
-#ifdef _WIN32  // Windows check
-	// On windows, we'll default to starting with the window maximised
-	// fixme4: This is also a hack until we get a storage preferences backend working on windows
-	should_maximise = TRUE;
-#endif  // Windows check
 
 	// Maximise the window if our saved configuration says to
 	if (TRUE == should_maximise)
@@ -1063,6 +1368,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2006/05/28 17:36:05  vapour
+ * Completed first pass of working code for loading default values stored in the windows registry.
+ *
  * Revision 1.13  2006/05/28 09:35:31  vapour
  * + Moved some structures from the main function to the global context.
  * + Re-tab aligned some variables for my Linux Eclipse.
