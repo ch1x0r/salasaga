@@ -462,7 +462,7 @@ GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_
 			// There's a match on width, so check for a match on height
 			if ((res_array + res_counter)->height == initial_height)
 			{
-				match_found = 0;
+				match_found = TRUE;
 				match_at = res_counter;
 			}
 		}
@@ -4247,6 +4247,9 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.20  2006/05/28 09:52:59  vapour
+ * Fixed a small bug, where the output resolution function wasn't detecting an existing match properly.
+ *
  * Revision 1.19  2006/05/28 09:39:16  vapour
  * + Fixed a misleading comment.
  * + Re-tab aligned some variables for my Linux Eclipse.
