@@ -938,6 +938,16 @@ gboolean flame_read(gchar *filename)
 	// We're finished with this XML document, so release its memory
 	xmlFreeDoc(document);
 
+	// Destroy the existing output resolution selector
+	g_signal_handler_disconnect(G_OBJECT(resolution_selector), resolution_callback);
+	gtk_container_remove(GTK_CONTAINER(message_bar), GTK_WIDGET(resolution_selector));
+
+	// Create a new output resolution selector, including the resolution of the loaded project
+	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(res_array, num_res_items, output_width, output_height));
+	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_selector), 8, 9, 0, 1);
+	resolution_callback = g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL);
+	gtk_widget_show_all(GTK_WIDGET(message_bar));
+
 	// Use the status bar to communicate the successful loading of the project
 	tmp_gstring = g_string_new(NULL);
 	g_string_printf(tmp_gstring, "Project '%s' successfully loaded.", filename);
@@ -2004,6 +2014,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.32  2006/05/28 09:41:01  vapour
+ * Added code so the output resolution selector is recreated each time a project is loaded, including whatever resolution is specified in the loaded project.
+ *
  * Revision 1.31  2006/05/22 13:09:36  vapour
  * Fades (in and out) now work correctly in SVG output too (for Opera 9 at least).
  *
