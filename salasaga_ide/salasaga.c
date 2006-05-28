@@ -67,8 +67,10 @@ guint				frames_per_second;		// Number of frames per second
 GtkWidget			*main_drawing_area;		// Widget for the drawing area
 GtkWidget			*main_window;			// Widget for the main window
 GtkItemFactory		*menu_bar = NULL;		// Widget for the menu bar
+GtkTable			*message_bar;			// Widget for message bar
 gboolean			mouse_dragging = FALSE;	// Is the mouse being dragged?
 GIOChannel			*output_file;			// The output file handle
+gulong				resolution_callback;	// Holds the id of the resolution selector callback
 GtkComboBox			*resolution_selector;	// Widget for the resolution selector
 GtkWidget			*right_side;			// Widget for the right side area
 GList				*slides = NULL;			// Linked list holding the slide info
@@ -85,28 +87,41 @@ guint				zoom;					// Percentage zoom to use in the drawing area
 GtkComboBox			*zoom_selector;			// Widget for the zoom selector
 
 // Application default preferences
-GdkColor				default_bg_colour;		// Default background color for slides
+GdkColor			default_bg_colour;		// Default background color for slides
 GString				*default_output_folder;	// Application default save path for exporting animations
 guint				default_output_height;	// Application default for how high to create project output
 guint				default_output_quality;	// Application default quality level [0-9] to save output png files with
 guint				default_output_width;	// Application default for how wide to create project output
-GString				*default_project_folder;	// Application default save path for project folders
+GString				*default_project_folder;// Application default save path for project folders
 guint				default_slide_length;	// Default length of all new slides, in frames
 guint				icon_height = 30;		// Height in pixels for the toolbar icons (they're scalable SVG's)
-guint				preview_width = 300;		// Width in pixel for the film strip preview (might turn into a structure later)
-guint				scaling_quality;			// Default image scaling quality used
-GString				*screenshots_folder;		// Application default for where to store screenshots
+guint				preview_width = 300;	// Width in pixel for the film strip preview (might turn into a structure later)
+guint				scaling_quality;		// Default image scaling quality used
+GString				*screenshots_folder;	// Application default for where to store screenshots
 
 // Project preferences
 GString				*output_folder;			// Where to export animated SVG files too
 guint				output_height;			// How high to create project output
 guint				output_quality;			// The quality level [0-9] to save output png files with
 guint				output_width;			// How wide to create project output
-GString				*project_folder;			// The path to the project folder
+GString				*project_folder;		// The path to the project folder
 guint				project_height;			// The height of the project in pixels
 GString				*project_name;			// The name of the project
 guint				project_width;			// The width of the project in pixels
 guint				slide_length;			// Length of all new slides, in frames
+
+// Possible output resolutions
+ResolutionStructure	res_array[] =
+{
+	{ 1600, 1200 },
+	{ 1280, 1024 },
+	{ 1024, 768 },
+	{ 800, 600 },
+	{ 640, 480 },
+	{ 320, 240 },
+	{ 160, 120 }
+};  // The menu structure
+gint				num_res_items = sizeof(res_array) / sizeof(res_array[0]);	// The number of resolution items
 
 
 // Callback to exit the application
@@ -695,7 +710,6 @@ gint main(gint argc, gchar *argv[])
 {
 	// Local variables
 	GtkWidget					*main_area;				// Widget for the onscreen display
-	GtkTable					*message_bar;			// Widget for message bar
 	GtkWidget					*outer_box;				// Widget for the onscreen display
 	GtkLabel					*resolution_label;		// Widget for the resolution selector label
 	gboolean					should_maximise = FALSE;// Briefly keeps track of whether the window should be maximised
@@ -706,19 +720,6 @@ gint main(gint argc, gchar *argv[])
 
 	GString						*tmp_gstring;			// Temporary GString
 	GtkWidget					*tmp_widget = NULL;		// Temporary widget
-
-	// Possible output resolutions
-	static ResolutionStructure	res_array[] =
-	{
-		{ 1600, 1200 },
-		{ 1280, 1024 },
-		{ 1024, 768 },
-		{ 800, 600 },
-		{ 640, 480 },
-		{ 320, 240 },
-		{ 160, 120 }
-	};  // The menu structure
-	static gint					num_res_items = sizeof(res_array) / sizeof(res_array[0]);	// The number of resolution items
 
 	// GConf related variables (not for windows)
 #ifndef _WIN32
@@ -990,7 +991,7 @@ gint main(gint argc, gchar *argv[])
 	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_selector), 8, 9, 0, 1);
 
 	// Link the resolution selector to the function that stores the new values in global variables
-	g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL);
+	resolution_callback = g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL);
 
 	// * Create the film strip area *
 	create_film_strip();
@@ -1062,6 +1063,10 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2006/05/28 09:35:31  vapour
+ * + Moved some structures from the main function to the global context.
+ * + Re-tab aligned some variables for my Linux Eclipse.
+ *
  * Revision 1.12  2006/05/23 13:28:44  vapour
  * Now uses the new function for creating the zoom resolution selection from a list.
  *

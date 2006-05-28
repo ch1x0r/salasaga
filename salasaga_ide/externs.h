@@ -41,8 +41,10 @@ extern guint				frames_per_second;
 extern GtkWidget			*main_drawing_area;
 extern GtkWidget			*main_window;
 extern GtkItemFactory		*menu_bar;
+extern GtkTable				*message_bar;
 extern gboolean				mouse_dragging;
 extern GIOChannel			*output_file;
+extern gulong				resolution_callback;
 extern GtkComboBox			*resolution_selector;
 extern GtkWidget			*right_side;
 extern GList				*slides;
@@ -80,6 +82,10 @@ extern GString				*project_name;
 extern guint				project_width;
 extern guint				slide_length;
 
+extern ResolutionStructure	res_array[];
+extern gint					num_res_items;
+
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus
@@ -92,6 +98,10 @@ extern guint				slide_length;
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2006/05/28 09:37:45  vapour
+ * + Moved some structures from the main function to the global context.
+ * + Re-tab aligned some variables for my Linux Eclipse.
+ *
  * Revision 1.5  2006/05/17 11:21:27  vapour
  * Added the export_time_counter global variable.
  *
