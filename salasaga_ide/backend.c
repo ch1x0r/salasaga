@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  * Flame Project: Source file for all general backend functions
  * 
  * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
@@ -33,9 +33,12 @@
 // GTK includes
 #include <gtk/gtk.h>
 
-// GConf include (not for windows)
 #ifndef _WIN32
+	// Non-windows code
 	#include <gconf/gconf.h>
+#else
+	// Windows only code
+	#include <windows.h>
 #endif
 
 // Gnome include (for sound)
@@ -1855,8 +1858,10 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 // fixme3: This doesn't seem to be getting called when the user presses Alt-F4
 void save_preferences_and_exit(void)
 {
-	// Local variables
 #ifndef _WIN32
+	// * Non-windows code *
+
+	// Local variables
 	GConfEngine			*gconf_engine;			// GConf engine
 
 	guint				tmp_int;					// Temporary integer
@@ -1933,6 +1938,147 @@ void save_preferences_and_exit(void)
 
 	// Shut down sound
 	gnome_sound_shutdown();
+
+#else
+
+	// * Windows-only code *
+
+
+	// * Registry related code (windows only) *
+
+	// Check if we have a saved configuration in the windows registry
+	HKEY		hkey;
+	glong		return_code;
+	glong		string_size;
+
+	GString		*tmp_gstring;
+
+
+	// Initialise some things
+	tmp_gstring = g_string_new(NULL);
+
+
+	// Check if the base Flame Project registry key exists
+	if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject", 0, KEY_QUERY_VALUE, &hkey))
+	{
+		// It doesn't, so create it
+		return_code = RegCreateKeyEx(HKEY_CURRENT_USER, "Software\\FlameProject", 0, NULL,
+						REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkey, NULL);
+		if (ERROR_SUCCESS != return_code)
+		{
+			// Creating the base registry key failed, so display a warning then exit
+			display_warning("ED54: Saving preferences in the registry failed\n");
+			gtk_main_quit();
+		}
+	} else
+	{
+		// The base Flame Project registry key exists, so we don't need to create it
+		RegCloseKey(hkey);
+	}
+
+	// Check if the defaults registry key exists
+	if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+	{
+		// It doesn't, so create it
+		return_code = RegCreateKeyEx(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, NULL,
+						REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkey, NULL);
+		if (ERROR_SUCCESS != return_code)
+		{
+			// Creating the defaults registry key failed, so display a warning then exit
+			display_warning("ED55: Saving preferences in the registry failed\n");
+			gtk_main_quit();
+		}
+	}
+
+	// * At this point, the variable hkey should point to the opened defaults registry key *
+
+	// Set the value for the project folder
+	string_size = (default_project_folder->len) + 1;
+	return_code = RegSetValueEx(hkey, "project_folder", 0, REG_SZ, default_project_folder->str, string_size);
+
+	// Set the value for the screenshots folder
+	string_size = (screenshots_folder->len) + 1;
+	return_code = RegSetValueEx(hkey, "screenshots_folder", 0, REG_SZ, screenshots_folder->str, string_size);
+
+	// Set the value for the output folder
+	string_size = (default_output_folder->len) + 1;
+	return_code = RegSetValueEx(hkey, "output_folder", 0, REG_SZ, default_output_folder->str, string_size);
+
+	// Set the value for the project name
+	string_size = (project_name->len) + 1;
+	return_code = RegSetValueEx(hkey, "project_name", 0, REG_SZ, project_name->str, string_size);
+
+	// Set the value for the project width
+	g_string_printf(tmp_gstring, "%d", project_width);
+	string_size = (tmp_gstring->len) + 1;
+	return_code = RegSetValueEx(hkey, "project_width", 0, REG_SZ, tmp_gstring->str, string_size);
+
+	// Set the value for the project height
+	g_string_printf(tmp_gstring, "%d", project_height);
+	string_size = (tmp_gstring->len) + 1;
+	return_code = RegSetValueEx(hkey, "project_height", 0, REG_SZ, tmp_gstring->str, string_size);
+
+	// Set the value for the default output width
+	g_string_printf(tmp_gstring, "%d", default_output_width);
+	string_size = (tmp_gstring->len) + 1;
+	return_code = RegSetValueEx(hkey, "output_width", 0, REG_SZ, tmp_gstring->str, string_size);
+
+	// Set the value for the default output height
+	g_string_printf(tmp_gstring, "%d", default_output_height);
+	string_size = (tmp_gstring->len) + 1;
+	return_code = RegSetValueEx(hkey, "output_height", 0, REG_SZ, tmp_gstring->str, string_size);
+
+	// Set the value for the default slide length
+	g_string_printf(tmp_gstring, "%d", slide_length);
+	string_size = (tmp_gstring->len) + 1;
+	return_code = RegSetValueEx(hkey, "slide_length", 0, REG_SZ, tmp_gstring->str, string_size);
+
+	// Set the value for the default output quality
+	g_string_printf(tmp_gstring, "%d", output_quality);
+	string_size = (tmp_gstring->len) + 1;
+	return_code = RegSetValueEx(hkey, "output_quality", 0, REG_SZ, tmp_gstring->str, string_size);
+
+	// Set the value for the frames per second
+	g_string_printf(tmp_gstring, "%d", frames_per_second);
+	string_size = (tmp_gstring->len) + 1;
+	return_code = RegSetValueEx(hkey, "frames_per_second", 0, REG_SZ, tmp_gstring->str, string_size);
+
+	// Set the value for the window maximisation to TRUE (hard coded for now)
+	// fixme4: We should make this dynamic rather than hard coded on
+	g_string_printf(tmp_gstring, "%d", TRUE);
+	string_size = (tmp_gstring->len) + 1;
+	return_code = RegSetValueEx(hkey, "window_maximised", 0, REG_SZ, tmp_gstring->str, string_size);
+
+	// Set the value for the scaling quality
+	switch (scaling_quality)
+	{
+		case GDK_INTERP_NEAREST:
+			g_string_printf(tmp_gstring, "%s", "Nearest");
+			string_size = (tmp_gstring->len) + 1;
+			return_code = RegSetValueEx(hkey, "scaling_quality", 0, REG_SZ, tmp_gstring->str, string_size);
+			break;
+			
+		case GDK_INTERP_TILES:
+			g_string_printf(tmp_gstring, "%s", "Tiles");
+			string_size = (tmp_gstring->len) + 1;
+			return_code = RegSetValueEx(hkey, "scaling_quality", 0, REG_SZ, tmp_gstring->str, string_size);
+			break;
+		
+		case GDK_INTERP_BILINEAR:
+			g_string_printf(tmp_gstring, "%s", "Bilinear");
+			string_size = (tmp_gstring->len) + 1;
+			return_code = RegSetValueEx(hkey, "scaling_quality", 0, REG_SZ, tmp_gstring->str, string_size);
+			break;
+		
+		case GDK_INTERP_HYPER:
+			g_string_printf(tmp_gstring, "%s", "Hyper");
+			string_size = (tmp_gstring->len) + 1;
+			return_code = RegSetValueEx(hkey, "scaling_quality", 0, REG_SZ, tmp_gstring->str, string_size);
+	}
+
+	// All values saved in the windows registry
+	RegCloseKey(hkey);
+
 #endif
 
 	// Exit the application
@@ -2014,6 +2160,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.33  2006/05/29 14:08:54  vapour
+ * Added initial working code to save project preferences in the windows registry.
+ *
  * Revision 1.32  2006/05/28 09:41:01  vapour
  * Added code so the output resolution selector is recreated each time a project is loaded, including whatever resolution is specified in the loaded project.
  *
