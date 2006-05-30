@@ -1977,7 +1977,7 @@ void save_preferences_and_exit(void)
 	}
 
 	// Check if the defaults registry key exists
-	if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+	if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE | KEY_SET_VALUE, &hkey))
 	{
 		// It doesn't, so create it
 		return_code = RegCreateKeyEx(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, NULL,
@@ -2160,6 +2160,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.34  2006/05/30 12:43:38  vapour
+ * Tweaked so new windows registry values will correctly overwrite old ones.
+ *
  * Revision 1.33  2006/05/29 14:08:54  vapour
  * Added initial working code to save project preferences in the windows registry.
  *
