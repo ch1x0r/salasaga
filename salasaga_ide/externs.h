@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  * Flame Project: Include file for global variables
  * 
  * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
@@ -32,6 +32,10 @@ extern "C" {
 // Variables defined elsewhere
 extern GdkPixmap			*backing_store;
 extern GList				*boundary_list;
+extern guint				capture_height;
+extern guint				capture_width;
+extern guint				capture_x;
+extern guint				capture_y;
 extern GList				*current_slide;
 extern gfloat				export_time_counter;
 extern GString				*file_name;
@@ -98,6 +102,9 @@ extern gint					num_res_items;
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2006/05/31 13:59:24  vapour
+ * Added the capture globals.
+ *
  * Revision 1.6  2006/05/28 09:37:45  vapour
  * + Moved some structures from the main function to the global context.
  * + Re-tab aligned some variables for my Linux Eclipse.
