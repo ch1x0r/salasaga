@@ -1465,7 +1465,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Add the SVG tag, but ensure the highligh box starts out invisible
 				g_string_printf(string_to_write,
-					"<rect id=\"%s-highlight\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" fill=\"#00ff00\" fill-opacity=\"0.25098039\" stroke=\"#00ff00\" stroke-width=\"%.4fpx\" stroke-linejoin=\"square\" stroke-miterlimit=\"4\" stroke-dasharray=\"none\" stroke-opacity=\"0.8\">\n",
+					"<rect id=\"%s-highlight\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" fill=\"#00ff00\" fill-opacity=\"0.25098039\" stroke=\"#00ff00\" stroke-width=\"%.4fpx\" stroke-linejoin=\"round\" stroke-dasharray=\"none\" stroke-opacity=\"0.8\">\n",
 					layer_data->name->str,
 					x_scale * ((layer_highlight *) layer_data->object_data)->width,
 					y_scale * ((layer_highlight *) layer_data->object_data)->height,
@@ -1517,7 +1517,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Create the SVG tag for the background box the text goes onto
 				g_string_printf(string_to_write,
-					"<rect id=\"%s-text_bg\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" fill=\"#ffffcc\" fill-opacity=\"1.0\" stroke=\"#000000\" stroke-width=\"%.4fpx\" stroke-linejoin=\"round\" stroke-miterlimit=\"4\" stroke-dasharray=\"none\" stroke-opacity=\"0.8\">\n",
+					"<rect id=\"%s-text_bg\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" fill=\"#ffffcc\" fill-opacity=\"1.0\" stroke=\"#000000\" stroke-width=\"%.4fpx\" stroke-linejoin=\"round\" stroke-dasharray=\"none\" stroke-opacity=\"0.8\">\n",
 					layer_data->name->str,
 					x_scale * ((layer_text *) layer_data->object_data)->rendered_width,
 					y_scale * ((layer_text *) layer_data->object_data)->rendered_height,
@@ -2165,6 +2165,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.36  2006/05/31 11:30:54  vapour
+ * Updated the stroke-linejoin attribute in the SVG output to be SVG 1.1 compliant.  Opera loads the output with 0 warnings now. :)
+ *
  * Revision 1.35  2006/05/30 22:49:24  vapour
  * Fixed the keyTimes attribute being output for SVG, so Opera 9 beta 2 should be happy with it.  Also broke out the elements from the style attribute into their own component attributes.
  *
