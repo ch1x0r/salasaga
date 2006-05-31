@@ -61,6 +61,10 @@
 // Global variables
 GdkPixmap			*backing_store;			// Pixel buffer most drawing operations are done on
 GList				*boundary_list = NULL;	// Stores a linked list of layer object boundaries
+guint				capture_height;			// Height for screen captures
+guint				capture_width;			// Width for screen captures
+guint				capture_x;				// X offset for screen captures
+guint				capture_y;				// Y offset for screen captures
 GList				*current_slide = NULL;	// Pointer to the presently selected slide
 gfloat				export_time_counter;	// Used when exporting, holds the number of seconds thus far
 GString				*file_name = NULL;		// Holds the file name the project is saved as
@@ -1205,6 +1209,12 @@ gint main(gint argc, gchar *argv[])
 		gtk_window_maximize(GTK_WINDOW(main_window));
 	}
 
+	// Set defaults values for the window capture code
+	capture_height = project_height;
+	capture_width = project_width;
+	capture_x = 0;
+	capture_y = 0;
+
 	// Set the application title
 	snprintf(wintitle, 40, "%s v%s", APP_NAME, APP_VERSION);
 
@@ -1368,6 +1378,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2006/05/31 14:02:03  vapour
+ * Added code so the capture offsets are kept through a session.
+ *
  * Revision 1.14  2006/05/28 17:36:05  vapour
  * Completed first pass of working code for loading default values stored in the windows registry.
  *

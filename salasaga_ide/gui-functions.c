@@ -3310,37 +3310,37 @@ void menu_screenshots_capture(void)
 {
 	// Local variables
 	GError				*error = NULL;			// Pointer to error return structure
-	gchar				*full_file_name;			// Holds the fully worked out file name to save as
+	gchar				*full_file_name;		// Holds the fully worked out file name to save as
 	GIOChannel			*output_file;			// The output file handle
 	GIOStatus			return_value;			// Return value used in most GIOChannel functions
 
-	GtkDialog			*capture_dialog;			// Widget for the dialog
+	GtkDialog			*capture_dialog;		// Widget for the dialog
 	GtkWidget			*capture_table;			// Table used for neat layout of the dialog box
 
-	GtkWidget			*x_offset_label;			// Label widget
+	GtkWidget			*x_offset_label;		// Label widget
 	GtkWidget			*x_offset_button;		// Widget for accepting the new X Offset data
 
-	GtkWidget			*y_offset_label;			// Label widget
+	GtkWidget			*y_offset_label;		// Label widget
 	GtkWidget			*y_offset_button;		// Widget for accepting the new Y Offset data
 
-	GtkWidget			*x_length_label;			// Label widget
+	GtkWidget			*x_length_label;		// Label widget
 	GtkWidget			*x_length_button;		// Widget for accepting the new X Length data
 
-	GtkWidget			*y_length_label;			// Label widget
+	GtkWidget			*y_length_label;		// Label widget
 	GtkWidget			*y_length_button;		// Widget for accepting the new Y Length data
 
-	gint					dialog_result;			// Catches the return code from the dialog box
+	gint				dialog_result;			// Catches the return code from the dialog box
 
 	GdkScreen			*which_screen;			// Gets given the screen the monitor is on
 
 	gchar				*tmp_gchar;				// Temporary gchar
 	gsize				tmp_gsize;				// Temporary gsize
-	gpointer				tmp_ptr;					// Temporary pointer
+	gpointer			tmp_ptr;				// Temporary pointer
 	GString				*tmp_gstring;			// Temporary string
 
 // fixme4: Stuff not present in the shipping version of Solaris 10 :(
 #ifndef __sun
-	GKeyFile				*lock_file;				// Pointer to the lock file structure
+	GKeyFile			*lock_file;				// Pointer to the lock file structure
 #endif
 
 	// Initialise various things
@@ -3360,7 +3360,7 @@ void menu_screenshots_capture(void)
 
 	// Create the entry that accepts the new X Offset data
 	x_offset_button = gtk_spin_button_new_with_range(0, project_width, 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_offset_button), 0);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_offset_button), capture_x);
 	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(x_offset_button), 1, 2, 0, 1);
 
 	// Create the label asking for the Y Offset
@@ -3370,7 +3370,7 @@ void menu_screenshots_capture(void)
 
 	// Create the entry that accepts the new Y Offset data
 	y_offset_button = gtk_spin_button_new_with_range(0, project_height, 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_offset_button), 0);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_offset_button), capture_y);
 	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(y_offset_button), 1, 2, 1, 2);
 
 	// Which monitor are we displaying on?
@@ -3383,7 +3383,7 @@ void menu_screenshots_capture(void)
 
 	// Create the entry that accepts the new X Length data
 	x_length_button = gtk_spin_button_new_with_range(0, gdk_screen_get_width(which_screen), 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_length_button), gdk_screen_get_width(which_screen));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_length_button), capture_width);
 	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(x_length_button), 1, 2, 2, 3);
 
 	// Create the label asking for the Y Length
@@ -3393,7 +3393,7 @@ void menu_screenshots_capture(void)
 
 	// Create the entry that accepts the new Y Length data
 	y_length_button = gtk_spin_button_new_with_range(0, gdk_screen_get_height(which_screen), 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_length_button), gdk_screen_get_height(which_screen));
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_length_button), capture_height);
 	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(y_length_button), 1, 2, 3, 4);
 
 	// Run the dialog
@@ -3412,16 +3412,22 @@ void menu_screenshots_capture(void)
 	tmp_ptr = (gchar *) g_get_home_dir();
 	full_file_name = g_build_filename(tmp_ptr, ".flame-lock", NULL);
 
+	// Retrieve the values given by the user
+	capture_x = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_offset_button));
+	capture_y = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_offset_button));
+	capture_width = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_length_button));
+	capture_height = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_length_button));
+
 // fixme4: Key file functions aren't present in the shipping version of Solaris 10 :(
 #ifndef __sun
 	// Create the contents of the ~/.flame-lock file in memory
 	lock_file = g_key_file_new();
 	g_key_file_set_string(lock_file, "Project", "Name", project_name->str);  // Name of project
 	g_key_file_set_string(lock_file, "Project", "Directory", screenshots_folder->str);  // Directory to save screenshots in
-	g_key_file_set_integer(lock_file, "Project", "X_Offset", (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_offset_button)));  // Top left X coordinate of screen area
-	g_key_file_set_integer(lock_file, "Project", "X_Length", (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_length_button)));  // Width of screen area to grab
-	g_key_file_set_integer(lock_file, "Project", "Y_Offset", (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_offset_button)));  // Top left Y coordinate of screen area
-	g_key_file_set_integer(lock_file, "Project", "Y_Length", (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_length_button)));  // Height of screen area to grab
+	g_key_file_set_integer(lock_file, "Project", "X_Offset", capture_x);  // Top left X coordinate of screen area
+	g_key_file_set_integer(lock_file, "Project", "X_Length", capture_width);  // Width of screen area to grab
+	g_key_file_set_integer(lock_file, "Project", "Y_Offset", capture_y);  // Top left Y coordinate of screen area
+	g_key_file_set_integer(lock_file, "Project", "Y_Length", capture_height);  // Height of screen area to grab
 #endif
 
 	// Create IO channel for writing to
@@ -4247,6 +4253,9 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.21  2006/05/31 14:02:03  vapour
+ * Added code so the capture offsets are kept through a session.
+ *
  * Revision 1.20  2006/05/28 09:52:59  vapour
  * Fixed a small bug, where the output resolution function wasn't detecting an existing match properly.
  *
