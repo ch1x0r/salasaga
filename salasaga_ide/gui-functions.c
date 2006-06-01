@@ -3512,6 +3512,8 @@ void menu_screenshots_import(void)
 	const gchar		*dir_entry;					// Holds a file name
 
 	GSList			*entries = NULL;			// Holds a list of screen shot file names
+	guint			largest_height = 0;			// Holds the height of the largest screenshot thus far
+	guint			largest_width = 0;			// Holds the width of the largest screenshot thus far
 
 	gint			num_screenshots = 0;		// Switch to track if other screenshots already exist
 
@@ -3644,6 +3646,16 @@ void menu_screenshots_import(void)
 		tmp_image_ob->height = gdk_pixbuf_get_height(tmp_image_ob->image_data);
 		tmp_image_ob->modified = FALSE;
 
+		// If the new image is larger than the others loaded, we keep the new dimensions
+		if (tmp_image_ob->height > largest_height)
+		{
+			largest_height = tmp_image_ob->height;
+		}
+		if (tmp_image_ob->width > largest_width)
+		{
+			largest_width = tmp_image_ob->width;
+		}
+
 		// Wrap the background layer info around it
 		tmp_layer->object_data = (GObject *) tmp_image_ob;
 		tmp_layer->object_type = TYPE_GDK_PIXBUF;
@@ -3714,6 +3726,10 @@ void menu_screenshots_import(void)
 
 	// Free the temporary GString
 	g_string_free(tmp_string, TRUE);
+
+	// Update the project with the new height and width
+	project_height = largest_height;
+	project_width = largest_width;
 
 	// Update the film strip with the new slides
 	refresh_film_strip();
@@ -4130,8 +4146,8 @@ void slide_delete(void)
 	g_signal_handler_disconnect(G_OBJECT(slide_data->event_box), slide_data->click_handler);
 
 	// Free the memory allocated to the deleted slide
-	g_free(slide_data->thumbnail);
-	g_free(slide_data->event_box);
+	g_object_unref(slide_data->thumbnail);
+	g_object_unref(slide_data->event_box);
 	g_free(slide_data->tooltip);
 	g_object_unref(slide_data->layer_store);
 	g_object_unref(slide_data->timeline_widget);
@@ -4253,6 +4269,9 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.22  2006/06/01 10:08:20  vapour
+ * Updated to calculate the project height and width from imported screenshots.
+ *
  * Revision 1.21  2006/05/31 14:02:03  vapour
  * Added code so the capture offsets are kept through a session.
  *
