@@ -11,37 +11,6 @@ $ pkg-config gtk+-2.0 --libs
 
 ***********
 
-Looking around for a way to embed/inline image (bitmap) data, things are looking very sparse.
-
-Did find one reference that looked interesting though:
-
-  http://www.xml.com/pub/a/2004/05/26/qa.html
-
-It mentions using the src set to "data:stuff_goes_here", which looks like it may work.  The image data would
-be URI encoded, but that might be ok.
-
-This page mentions the svg image entity can take either an external file, OR an embedded base64 encoded text
-entity.  That embedded base64 bit sounds like what we want.
-
-  http://wiki.svg.org/Multimedia
-
-Found an example of how to do it, this one being for a jpeg.  It *was* using the data method mentioned above. :)
-
-<svg:image xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAoHBwgHBgoICAgLCgoL . . . ." /> 
-
-***********
-
-Base64 defined here.  Can make a function directly from it, as it seems really simple.
-
-  http://en.wikipedia.org/wiki/Base64
-
-***********
-
-Just learned something new.  FireFox will only load a Base64 encoded image if it's been URI encoded as well,
-after the Base64 encoding.  Argh, they don't make things easy do they?
-
-***********
-
  It's difficult to locate some of the Gnome stuff, pre-compiled for Win32.
  ftp.gnome.org has them, under (i.e.) /platform/2.12/2.12.2/win32/
 
