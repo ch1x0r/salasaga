@@ -1465,7 +1465,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Add the SVG tag, but ensure the highligh box starts out invisible
 				g_string_printf(string_to_write,
-					"<rect id=\"%s-highlight\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" fill=\"#00ff00\" fill-opacity=\"0.25098039\" stroke=\"#00ff00\" stroke-width=\"%.4fpx\" stroke-linejoin=\"round\" stroke-dasharray=\"none\" stroke-opacity=\"0.8\">\n",
+					"<rect id=\"%s-highlight\" class=\"highlight\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" stroke-width=\"%.4fpx\">\n",
 					layer_data->name->str,
 					x_scale * ((layer_highlight *) layer_data->object_data)->width,
 					y_scale * ((layer_highlight *) layer_data->object_data)->height,
@@ -1520,7 +1520,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Create the SVG tag for the background box the text goes onto
 				g_string_append_printf(string_to_write,
-					"\t<rect id=\"%s-bg\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" fill=\"#ffffcc\" fill-opacity=\"1.0\" stroke=\"#000000\" stroke-width=\"%.4fpx\" stroke-linejoin=\"round\" stroke-dasharray=\"none\" stroke-opacity=\"0.8\">\n",
+					"\t<rect id=\"%s-bg\" class=\"text\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" stroke-width=\"%.4fpx\">\n",
 					layer_data->name->str,
 					x_scale * ((layer_text *) layer_data->object_data)->rendered_width,
 					y_scale * ((layer_text *) layer_data->object_data)->rendered_height,
@@ -1565,10 +1565,10 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Create the text tag
 				// fixme3: Probably need to embed the font (not sure)
-				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-family=\"sans-serif\" font-size=\"%.4fpx\" text-anchor=\"start\" alignment-baseline=\"baseline\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
+				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" class=\"text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-size=\"%.4fpx\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
 					layer_data->name->str,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
-					y_scale * (((layer_text *) layer_data->object_data)->y_offset_start + ((layer_text *) layer_data->object_data)->rendered_height),  // Y offset
+					y_scale * (((layer_text *) layer_data->object_data)->y_offset_start),  // Y offset
 					y_scale * ((layer_text *) layer_data->object_data)->rendered_height,  // Font size
 					x_scale * 10,  // Horizontal space between text background border and text start
 					y_scale * 20);  // Vertical space between text background border and text start
@@ -1606,8 +1606,8 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					"<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" /></text>\n",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
-					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,
-					y_scale * ((layer_text *) layer_data->object_data)->y_offset_finish);
+					(y_scale * (((layer_text *) layer_data->object_data)->y_offset_start)),  // Y start
+					(y_scale * ((layer_text *) layer_data->object_data)->y_offset_finish));  // Y finish
 
 				// Close the group
 				g_string_append_printf(string_to_write, "</g>\n");
@@ -2172,6 +2172,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.38  2006/06/04 06:12:33  vapour
+ * Updated the svg output so element properties are initially defined in a <defs> section.
+ *
  * Revision 1.37  2006/06/04 04:07:56  vapour
  * Updated the SVG output, so the elements of the text layer are grouped together logically.
  *

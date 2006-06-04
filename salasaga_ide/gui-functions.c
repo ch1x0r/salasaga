@@ -2775,6 +2775,47 @@ void menu_export_svg_animation(void)
 		return;
 	}
 
+	// Write element definitions to the output file
+	g_string_assign(tmp_gstring, "<defs>\n"
+		"\t<style type=\"text/css\"><![CDATA[\n"
+		"\t\trect.highlight {\n"
+		"\t\t\tfill: #0f0;\n"
+		"\t\t\tfill-opacity: 0.25;\n"
+		"\t\t\tstroke: #0f0;\n"
+		"\t\t\tstroke-linejoin: round;\n"
+		"\t\t\tstroke-dasharray: none;\n"
+		"\t\t\tstroke-opacity=0.8\n"
+		"\t\t}\n"
+		"\t\trect.text {\n"
+		"\t\t\tfill: #ffc;\n"
+		"\t\t\tfill-opacity: 1.0;\n"
+		"\t\t\tstroke: black;\n"
+		"\t\t\tstroke-linejoin: round;\n"
+		"\t\t\tstroke-dasharray: none;\n"
+		"\t\t\tstroke-opacity: 0.8\n"
+		"\t\t}\n"
+		"\t\ttext.text {\n"
+		"\t\t\tfont-family: sans-serif;\n"
+		"\t\t\ttext-anchor: start;\n"
+		"\t\t\talignment-baseline: baseline\n"
+		"\t\t}\n"
+		"]]>\n"
+		"\t</style>\n"
+		"</defs>");
+	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
+	if (G_IO_STATUS_ERROR == return_value)
+	{
+		// * An error occured when writing the SVG definitions to the output file, so alert the user, and return to the calling routine indicating failure *
+		g_string_printf(tmp_gstring, "Error ED56: An error '%s' occured when writing to the output file '%s'", error->message, filename);
+		display_warning(tmp_gstring->str);
+
+		// Free the memory allocated in this function
+		g_string_free(tmp_gstring, TRUE);
+		g_error_free(error);
+
+		return;
+	}
+
 	// * For each slide, process and write out it's layers *
 	export_time_counter = 0;
 	slide_pointer = g_list_first(slides);
@@ -4269,6 +4310,9 @@ void slide_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.23  2006/06/04 06:12:33  vapour
+ * Updated the svg output so element properties are initially defined in a <defs> section.
+ *
  * Revision 1.22  2006/06/01 10:08:20  vapour
  * Updated to calculate the project height and width from imported screenshots.
  *
