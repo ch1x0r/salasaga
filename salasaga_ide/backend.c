@@ -1565,13 +1565,14 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Create the text tag
 				// fixme3: Probably need to embed the font (not sure)
-				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" class=\"text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-size=\"%.4fpx\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
+				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" class=\"text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-size=\"%.4fpx\" textLength=\"%.4fpx\" lengthAdjust=\"spacingAndGlyphs\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
 					layer_data->name->str,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
-					y_scale * (((layer_text *) layer_data->object_data)->y_offset_start),  // Y offset
-					y_scale * ((layer_text *) layer_data->object_data)->rendered_height,  // Font size
+					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,  // Y offset
+					(y_scale * ((layer_text *) layer_data->object_data)->rendered_height - 2),  // Font size
+					x_scale * (((layer_text *) layer_data->object_data)->rendered_width - 20),  // How wide to make the entire string
 					x_scale * 10,  // Horizontal space between text background border and text start
-					y_scale * 20);  // Vertical space between text background border and text start
+					y_scale * ((((layer_text *) layer_data->object_data)->rendered_height / 2) + 25));  // Vertical space between text background border and text start
 
 				// Add the text to the text layer
 				gtk_text_buffer_get_bounds(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end);
@@ -2172,6 +2173,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.39  2006/06/04 06:59:54  vapour
+ * Updated to correctly size text in the SVG output.
+ *
  * Revision 1.38  2006/06/04 06:12:33  vapour
  * Updated the svg output so element properties are initially defined in a <defs> section.
  *
