@@ -1515,9 +1515,12 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				// We're processing a text layer
 				string_to_write = g_string_new(NULL);
 
+				// Start the group enclosing the text layer elements
+				g_string_printf(string_to_write, "<g id=\"%s\">\n", layer_data->name->str);
+
 				// Create the SVG tag for the background box the text goes onto
-				g_string_printf(string_to_write,
-					"<rect id=\"%s-text_bg\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" fill=\"#ffffcc\" fill-opacity=\"1.0\" stroke=\"#000000\" stroke-width=\"%.4fpx\" stroke-linejoin=\"round\" stroke-dasharray=\"none\" stroke-opacity=\"0.8\">\n",
+				g_string_append_printf(string_to_write,
+					"\t<rect id=\"%s-bg\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" fill=\"#ffffcc\" fill-opacity=\"1.0\" stroke=\"#000000\" stroke-width=\"%.4fpx\" stroke-linejoin=\"round\" stroke-dasharray=\"none\" stroke-opacity=\"0.8\">\n",
 					layer_data->name->str,
 					x_scale * ((layer_text *) layer_data->object_data)->rendered_width,
 					y_scale * ((layer_text *) layer_data->object_data)->rendered_height,
@@ -1529,7 +1532,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the background box SVG properties to fade it in over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />\n",
+					"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />\n",
 					time_start + (layer_data->start_frame / frames_per_second));
 
 				// Animate the background box SVG properties so it keeps visible after faded in
@@ -1537,24 +1540,24 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				if (0 > tmp_gfloat)
 					tmp_gfloat = 0;
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+					"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					tmp_gfloat);
 
 				// Animate the background box SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n",
+					"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n",
 					time_start + (layer_data->finish_frame / frames_per_second) - 1);
 
 				// Animate the SVG properties to move it to it's destination location
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"x\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n",
+					"\t\t<animate attributeName=\"x\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_start,
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_finish);
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n</rect>\n",
+					"\t\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n\t</rect>\n",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_start,
@@ -1562,7 +1565,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Create the text tag
 				// fixme3: Probably need to embed the font (not sure)
-				g_string_append_printf(string_to_write, "<text id=\"%s-text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-family=\"sans-serif\" font-size=\"%.4fpx\" text-anchor=\"start\" alignment-baseline=\"baseline\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
+				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-family=\"sans-serif\" font-size=\"%.4fpx\" text-anchor=\"start\" alignment-baseline=\"baseline\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
 					layer_data->name->str,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
 					y_scale * (((layer_text *) layer_data->object_data)->y_offset_start + ((layer_text *) layer_data->object_data)->rendered_height),  // Y offset
@@ -1605,6 +1608,10 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,
 					y_scale * ((layer_text *) layer_data->object_data)->y_offset_finish);
+
+				// Close the group
+				g_string_append_printf(string_to_write, "</g>\n");
+
 				break;
 
 			default:
@@ -2165,6 +2172,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.37  2006/06/04 04:07:56  vapour
+ * Updated the SVG output, so the elements of the text layer are grouped together logically.
+ *
  * Revision 1.36  2006/05/31 11:30:54  vapour
  * Updated the stroke-linejoin attribute in the SVG output to be SVG 1.1 compliant.  Opera loads the output with 0 warnings now. :)
  *
