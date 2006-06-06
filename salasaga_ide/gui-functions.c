@@ -3799,37 +3799,37 @@ void project_crop(void)
 {
 	// Local variables
 	GtkDialog			*crop_dialog;			// Widget for the dialog
-	GtkWidget			*crop_table;				// Table used for neat layout of the dialog box
-	guint				row_counter = 0;			// Used to count which row things are up to
-	gint					dialog_result;			// Catches the return code from the dialog box
+	GtkWidget			*crop_table;			// Table used for neat layout of the dialog box
+	guint				row_counter = 0;		// Used to count which row things are up to
+	gint				dialog_result;			// Catches the return code from the dialog box
 
-	gint					bottom_value;
-	layer				*last_layer;				// Temporary layer
+	gint				bottom_value;
+	layer				*last_layer;			// Temporary layer
 	GList				*layer_pointer;			// Points to the layers in the selected slide
-	gint					left_value;
-	gint					new_height;				// Hold the height of the cropped area
-	GdkPixbuf			*new_pixbuf;				// Holds the cropped image data
-	gint					new_width;				// Hold the width of the cropped area
-	gint					num_slides;				// Total number of layers
-	gint					right_value;
-	gint					slide_counter;
+	gint				left_value;
+	gint				new_height;				// Hold the height of the cropped area
+	GdkPixbuf			*new_pixbuf;			// Holds the cropped image data
+	gint				new_width;				// Hold the width of the cropped area
+	gint				num_slides;				// Total number of layers
+	gint				right_value;
+	gint				slide_counter;
 	slide				*slide_data;
-	gint					top_value;
+	gint				top_value;
 
-	GtkWidget			*left_label;				// Label widget
+	GtkWidget			*left_label;			// Label widget
 	GtkWidget			*left_button;			//
 
 	GtkWidget			*right_label;			// Label widget
 	GtkWidget			*right_button;			//
 
 	GtkWidget			*top_label;				// Label widget
-	GtkWidget			*top_button;				//
+	GtkWidget			*top_button;			//
 
 	GtkWidget			*bottom_label;			// Label widget
 	GtkWidget			*bottom_button;			//
 
-	gint					tmp_int;					// Temporary int
-	GdkPixbuf			*tmp_pixbuf;				// Temporary pixbuf
+	gint				tmp_int;				// Temporary int
+	GdkPixbuf			*tmp_pixbuf;			// Temporary pixbuf
 
 
 	// If no project is loaded then don't run this function
@@ -3990,7 +3990,7 @@ void project_crop(void)
 void refresh_film_strip(void)
 {
 	// Local variables
-	gint					num_slides;
+	gint				num_slides;
 	guint				slide_counter;
 
 	GList				*tmp_glist;
@@ -4031,123 +4031,19 @@ void refresh_film_strip(void)
 }
 
 
-// Function called when the user selects Slide -> Insert from the top menu
-void slide_insert(void)
-{
-	// Local variables
-	gint				slide_position;				// Which slide in the slide list we have selected
-
-	GdkPixbuf		*tmp_gdk_pixbuf;				// Temporary GDK Pixbuf
-	GString			*tmp_gstring;				// Temporary gstring
-	GtkTreeIter		*tmp_iter;					// Temporary GtkTreeIter
-	layer			*tmp_layer;					// Temporary layer
-	slide			*tmp_slide;					// Temporary slide
-
-
-	// Create a new, empty slide
-	tmp_slide = g_new(slide, 1);
-	tmp_slide->layers = NULL;
-
-	// Allocate a new layer structure for use in the slide
-	tmp_layer = g_new(layer, 1);
-	tmp_layer->object_type = TYPE_EMPTY;
-	tmp_layer->start_frame = 0;
-	tmp_layer->finish_frame = slide_length;
-	tmp_layer->name = g_string_new("Empty");
-	tmp_layer->object_data = (GObject *) g_new(layer_empty, 1);
-	((layer_empty *) tmp_layer->object_data)->bg_color.red = default_bg_colour.red;
-	((layer_empty *) tmp_layer->object_data)->bg_color.green = default_bg_colour.green;
-	((layer_empty *) tmp_layer->object_data)->bg_color.blue = default_bg_colour.blue;
-
-	// Create a blank thumbnail using the default background color
-	tmp_gdk_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, 233);
-	gdk_pixbuf_fill(tmp_gdk_pixbuf, ((default_bg_colour.red / 255) << 24)
-		+ ((default_bg_colour.green / 255) << 16)
-		+ ((default_bg_colour.blue / 255) << 8) + 0xff);
-
-	// Add the empty layer to the new slide being created
-	tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
-
-	// Create the List store the slide layer data is kept in
-	tmp_iter = g_new(GtkTreeIter, 1);
-	tmp_layer->row_iter = tmp_iter;
-	tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
-									G_TYPE_STRING,  // TIMELINE_NAME
-									G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
-									G_TYPE_UINT,  // TIMELINE_START
-									G_TYPE_UINT,  // TIMELINE_FINISH
-									G_TYPE_UINT,  // TIMELINE_X_OFF_START
-									G_TYPE_UINT,  // TIMELINE_Y_OFF_START
-									G_TYPE_UINT,  // TIMELINE_X_OFF_FINISH
-									G_TYPE_UINT);  // TIMELINE_Y_OFF_FINISH
-	gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
-	gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
-					TIMELINE_NAME, tmp_layer->name->str,
-					TIMELINE_VISIBILITY, TRUE,
-					TIMELINE_START, 0,
-					TIMELINE_FINISH, slide_length,
-					TIMELINE_X_OFF_START, 0,
-					TIMELINE_Y_OFF_START, 0,
-					TIMELINE_X_OFF_FINISH, 0,
-					TIMELINE_Y_OFF_FINISH, 0,
-					-1);
-
-	// Add the thumbnail to the new slide structure
-	tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(tmp_gdk_pixbuf));
-
-	// Create an event box for adding the thumbnail image to, so it can receive events and display tool tips
-	tmp_slide->event_box = gtk_event_box_new();
-
-	// Add a tooltip to the event box, displaying the slide number
-	// fixme3: Slide numbers need to be recalculated
-	tmp_gstring = g_string_new("Slide x");
-	tmp_slide->tooltip = gtk_tooltips_new();
-	gtk_tooltips_set_tip(tmp_slide->tooltip, GTK_WIDGET(tmp_slide->event_box), tmp_gstring->str, NULL);
-
-	// Set the timeline widget for the slide to NULL, so we know to create it later on
-	tmp_slide->timeline_widget = NULL;
-
-	// Add the thumbnail to the event box
-	gtk_container_add(GTK_CONTAINER(tmp_slide->event_box), GTK_WIDGET(tmp_slide->thumbnail));
-
-	// Add a mouse click handler to the event box
-	tmp_slide->click_handler = g_signal_connect(G_OBJECT(tmp_slide->event_box), "button_release_event", G_CALLBACK(film_strip_slide_clicked), tmp_slide);
-
-	// If the current slide hasn't been initialised (this is the first slide), then we initialise it
-	if (NULL == current_slide)
-	{
-		slides = g_list_append(slides, tmp_slide);
-		current_slide = slides;
-	} else
-	{
-		// Add the temporary slide after the presently selected slide
-		slide_position = g_list_position(slides, current_slide);
-		slides = g_list_insert(slides, tmp_slide, slide_position + 1);
-	}
-
-	// Update the film strip area
-	refresh_film_strip();
-
-	// Update the status bar
-	g_string_printf(tmp_gstring, "Added new slide.");
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
-	gdk_flush();
-}
-
-
 // Function called when the user selects Slide -> Delete from the top menu
 void slide_delete(void)
 {
 	// Local variables
-	gint				layer_counter;				// Standard counter
-	layer			*layer_data;					// Used for freeing the elements of the deleted slide
-	gint				num_layers;					// Number of layers in the slide
-	gint				num_slides;					// Number of slides in the whole slide list
-	GList			*removed_layer;				// Used for freeing the elements of the deleted slide
-	slide			*slide_data;					// Used for freeing the elements of the deleted slide
-	gint				slide_position;				// Which slide in the slide list we are deleting
+	gint				layer_counter;			// Standard counter
+	layer				*layer_data;			// Used for freeing the elements of the deleted slide
+	gint				num_layers;				// Number of layers in the slide
+	gint				num_slides;				// Number of slides in the whole slide list
+	GList				*removed_layer;			// Used for freeing the elements of the deleted slide
+	slide				*slide_data;			// Used for freeing the elements of the deleted slide
+	gint				slide_position;			// Which slide in the slide list we are deleting
 
-	GList			*tmp_glist;					// Temporary GList
+	GList				*tmp_glist;				// Temporary GList
 
 
 	// Are we trying to delete the only slide in the project (not good)?
@@ -4243,33 +4139,107 @@ void slide_delete(void)
 }
 
 
-// Function called when the user selects Slide -> Move up from the top menu
-void slide_move_up(void)
+// Function called when the user selects Slide -> Insert from the top menu
+void slide_insert(void)
 {
 	// Local variables
-	GList			*previous_slide;				// Pointer to the slide above
-	gint				slide_position;				// Which slide in the slide list we are moving
-	gpointer			this_slide_data;				// Pointer to the data for this slide
+	gint				slide_position;			// Which slide in the slide list we have selected
+
+	GdkPixbuf			*tmp_gdk_pixbuf;		// Temporary GDK Pixbuf
+	GString				*tmp_gstring;			// Temporary gstring
+	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
+	layer				*tmp_layer;				// Temporary layer
+	slide				*tmp_slide;				// Temporary slide
 
 
-	// Safety check
-	slides = g_list_first(slides);
-	slide_position = g_list_position(slides, current_slide);
-	if (0 == slide_position)
+	// Create a new, empty slide
+	tmp_slide = g_new(slide, 1);
+	tmp_slide->layers = NULL;
+
+	// Allocate a new layer structure for use in the slide
+	tmp_layer = g_new(layer, 1);
+	tmp_layer->object_type = TYPE_EMPTY;
+	tmp_layer->start_frame = 0;
+	tmp_layer->finish_frame = slide_length;
+	tmp_layer->name = g_string_new("Empty");
+	tmp_layer->object_data = (GObject *) g_new(layer_empty, 1);
+	((layer_empty *) tmp_layer->object_data)->bg_color.red = default_bg_colour.red;
+	((layer_empty *) tmp_layer->object_data)->bg_color.green = default_bg_colour.green;
+	((layer_empty *) tmp_layer->object_data)->bg_color.blue = default_bg_colour.blue;
+
+	// Create a blank thumbnail using the default background color
+	tmp_gdk_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, 233);
+	gdk_pixbuf_fill(tmp_gdk_pixbuf, ((default_bg_colour.red / 255) << 24)
+		+ ((default_bg_colour.green / 255) << 16)
+		+ ((default_bg_colour.blue / 255) << 8) + 0xff);
+
+	// Add the empty layer to the new slide being created
+	tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+
+	// Create the List store the slide layer data is kept in
+	tmp_iter = g_new(GtkTreeIter, 1);
+	tmp_layer->row_iter = tmp_iter;
+	tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
+									G_TYPE_STRING,  // TIMELINE_NAME
+									G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
+									G_TYPE_UINT,  // TIMELINE_START
+									G_TYPE_UINT,  // TIMELINE_FINISH
+									G_TYPE_UINT,  // TIMELINE_X_OFF_START
+									G_TYPE_UINT,  // TIMELINE_Y_OFF_START
+									G_TYPE_UINT,  // TIMELINE_X_OFF_FINISH
+									G_TYPE_UINT);  // TIMELINE_Y_OFF_FINISH
+	gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
+	gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
+					TIMELINE_NAME, tmp_layer->name->str,
+					TIMELINE_VISIBILITY, TRUE,
+					TIMELINE_START, 0,
+					TIMELINE_FINISH, slide_length,
+					TIMELINE_X_OFF_START, 0,
+					TIMELINE_Y_OFF_START, 0,
+					TIMELINE_X_OFF_FINISH, 0,
+					TIMELINE_Y_OFF_FINISH, 0,
+					-1);
+
+	// Add the thumbnail to the new slide structure
+	tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(tmp_gdk_pixbuf));
+
+	// Create an event box for adding the thumbnail image to, so it can receive events and display tool tips
+	tmp_slide->event_box = gtk_event_box_new();
+
+	// Add a tooltip to the event box, displaying the slide number
+	// fixme3: Slide numbers need to be recalculated
+	tmp_gstring = g_string_new("Slide x");
+	tmp_slide->tooltip = gtk_tooltips_new();
+	gtk_tooltips_set_tip(tmp_slide->tooltip, GTK_WIDGET(tmp_slide->event_box), tmp_gstring->str, NULL);
+
+	// Set the timeline widget for the slide to NULL, so we know to create it later on
+	tmp_slide->timeline_widget = NULL;
+
+	// Add the thumbnail to the event box
+	gtk_container_add(GTK_CONTAINER(tmp_slide->event_box), GTK_WIDGET(tmp_slide->thumbnail));
+
+	// Add a mouse click handler to the event box
+	tmp_slide->click_handler = g_signal_connect(G_OBJECT(tmp_slide->event_box), "button_release_event", G_CALLBACK(film_strip_slide_clicked), tmp_slide);
+
+	// If the current slide hasn't been initialised (this is the first slide), then we initialise it
+	if (NULL == current_slide)
 	{
-		// We can't move the upper most slide any further up, so just return
-		return;
+		slides = g_list_append(slides, tmp_slide);
+		current_slide = slides;
+	} else
+	{
+		// Add the temporary slide after the presently selected slide
+		slide_position = g_list_position(slides, current_slide);
+		slides = g_list_insert(slides, tmp_slide, slide_position + 1);
 	}
 
-	// Swap the slides around
-	this_slide_data = current_slide->data;
-	previous_slide = g_list_nth(slides, slide_position - 1);
-	current_slide->data = previous_slide->data;
-	previous_slide->data = this_slide_data;
-	current_slide = previous_slide;
-
-	// Refresh the film strip area
+	// Update the film strip area
 	refresh_film_strip();
+
+	// Update the status bar
+	g_string_printf(tmp_gstring, "Added new slide.");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
+	gdk_flush();
 }
 
 
@@ -4277,10 +4247,10 @@ void slide_move_up(void)
 void slide_move_down(void)
 {
 	// Local variables
-	GList			*next_slide;					// Pointer to the slide below
-	gint				num_slides;					// The total number of slides
-	gint				slide_position;				// Which slide in the slide list we are moving
-	gpointer			this_slide_data;				// Pointer to the data for this slide
+	GList				*next_slide;			// Pointer to the slide below
+	gint				num_slides;				// The total number of slides
+	gint				slide_position;			// Which slide in the slide list we are moving
+	gpointer			this_slide_data;		// Pointer to the data for this slide
 
 
 	// Safety check
@@ -4305,11 +4275,44 @@ void slide_move_down(void)
 }
 
 
-/*
+// Function called when the user selects Slide -> Move up from the top menu
+void slide_move_up(void)
+{
+	// Local variables
+	GList				*previous_slide;		// Pointer to the slide above
+	gint				slide_position;			// Which slide in the slide list we are moving
+	gpointer			this_slide_data;		// Pointer to the data for this slide
+
+
+	// Safety check
+	slides = g_list_first(slides);
+	slide_position = g_list_position(slides, current_slide);
+	if (0 == slide_position)
+	{
+		// We can't move the upper most slide any further up, so just return
+		return;
+	}
+
+	// Swap the slides around
+	this_slide_data = current_slide->data;
+	previous_slide = g_list_nth(slides, slide_position - 1);
+	current_slide->data = previous_slide->data;
+	previous_slide->data = this_slide_data;
+	current_slide = previous_slide;
+
+	// Refresh the film strip area
+	refresh_film_strip();
+}
+
+
+/* 
  * History
  * +++++++
  * 
  * $Log$
+ * Revision 1.24  2006/06/06 12:25:45  vapour
+ * Improved the alphabetical order of functions.
+ *
  * Revision 1.23  2006/06/04 06:12:33  vapour
  * Updated the svg output so element properties are initially defined in a <defs> section.
  *

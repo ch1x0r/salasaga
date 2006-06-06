@@ -72,10 +72,10 @@ void layer_new_image(void);
 void layer_new_text(void);
 void project_crop(void);
 void refresh_film_strip(void);
-void slide_insert(void);
 void slide_delete(void);
-void slide_move_up(void);
+void slide_insert(void);
 void slide_move_down(void);
+void slide_move_up(void);
 
 #ifdef __cplusplus
 }
@@ -89,6 +89,9 @@ void slide_move_down(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2006/06/06 12:22:47  vapour
+ * Improved the alphabetical order of functions.
+ *
  * Revision 1.4  2006/05/23 13:12:55  vapour
  * Added an initial function to create the selection of available output resolutions dynamically from a list.
  *
