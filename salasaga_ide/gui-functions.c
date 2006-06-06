@@ -4061,7 +4061,7 @@ void slide_delete(void)
 	tmp_glist = current_slide;
 	slides = g_list_remove_link(slides, current_slide);
 
-	// Update the currently selected slide to point to the next slide
+	// * Update the currently selected slide to point to the next slide *
 	if (num_slides == (slide_position + 1))
 	{
 		// If we're deleting the last slide, we'll need to point to the previous one instead
@@ -4083,9 +4083,7 @@ void slide_delete(void)
 	g_signal_handler_disconnect(G_OBJECT(slide_data->event_box), slide_data->click_handler);
 
 	// Free the memory allocated to the deleted slide
-	g_object_unref(slide_data->thumbnail);
-	g_object_unref(slide_data->event_box);
-	g_free(slide_data->tooltip);
+	gtk_object_destroy(GTK_OBJECT(slide_data->tooltip));
 	g_object_unref(slide_data->layer_store);
 	g_object_unref(slide_data->timeline_widget);
 
@@ -4310,6 +4308,9 @@ void slide_move_up(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.25  2006/06/06 12:51:35  vapour
+ * Fixed the bug causing deletion of slides to crash.
+ *
  * Revision 1.24  2006/06/06 12:25:45  vapour
  * Improved the alphabetical order of functions.
  *
