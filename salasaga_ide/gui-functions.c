@@ -2890,6 +2890,17 @@ void menu_file_new(void)
 	GtkWidget			*bg_color_button;		// Background color selection button
 
 
+	// If there's a project presently loaded in memory, we unload it
+	if (NULL != slides)
+	{
+		// Free the resources presently allocated to slides
+		g_list_foreach(slides, destroy_slide, NULL);
+
+		// Re-initialise pointers
+		slides = NULL;
+		current_slide = NULL;
+	}
+
 	// * Pop open a dialog box asking the user for the details of the new project *
 
 	// Create the dialog window, and table to hold its children
@@ -4035,12 +4046,7 @@ void refresh_film_strip(void)
 void slide_delete(void)
 {
 	// Local variables
-	gint				layer_counter;			// Standard counter
-	layer				*layer_data;			// Used for freeing the elements of the deleted slide
-	gint				num_layers;				// Number of layers in the slide
 	gint				num_slides;				// Number of slides in the whole slide list
-	GList				*removed_layer;			// Used for freeing the elements of the deleted slide
-	slide				*slide_data;			// Used for freeing the elements of the deleted slide
 	gint				slide_position;			// Which slide in the slide list we are deleting
 
 	GList				*tmp_glist;				// Temporary GList
@@ -4078,61 +4084,8 @@ void slide_delete(void)
 	// Refresh the film strip area
 	refresh_film_strip();
 
-	// Remove the mouse click handler from the event box of the deleted slide
-	slide_data = tmp_glist->data;
-	g_signal_handler_disconnect(G_OBJECT(slide_data->event_box), slide_data->click_handler);
-
-	// Free the memory allocated to the deleted slide
-	gtk_object_destroy(GTK_OBJECT(slide_data->tooltip));
-	g_object_unref(slide_data->layer_store);
-	g_object_unref(slide_data->timeline_widget);
-
-	// Free the memory allocated to the deleted slides' layers
-	slide_data->layers = g_list_first(slide_data->layers);
-	num_layers = g_list_length(slide_data->layers);
-	for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
-	{
-		// Point to the first remaining layer in the list
-		slide_data->layers = g_list_first(slide_data->layers);
-		layer_data = (slide_data->layers)->data;
-
-		// Free its elements
-		g_string_free(layer_data->name, TRUE);
-		g_free(layer_data->row_iter);
-		switch (layer_data->object_type)
-		{
-			case TYPE_GDK_PIXBUF:
-				g_string_free(((layer_image *) layer_data->object_data)->image_path, TRUE);
-				g_object_unref(((layer_image *) layer_data->object_data)->image_data);
-				break;
-
-			case TYPE_MOUSE_CURSOR:
-				// Nothing here needs freeing
-				break;
-
-			case TYPE_EMPTY:
-				// Nothing here needs freeing
-				break;
-
-			case TYPE_TEXT:
-				g_object_unref(((layer_text *) layer_data->object_data)->text_buffer);
-				break;
-
-			case TYPE_HIGHLIGHT:
-				// Nothing here needs freeing
-				break;
-
-			default:
-				g_printerr("ED26: Unknown layer type.\n");
-		}
-		g_free(layer_data->object_data);
-
-		// Remove the layer from the list
-		removed_layer = slide_data->layers;
-		slide_data->layers = g_list_remove_link(slide_data->layers, slide_data->layers);
-		g_list_free(removed_layer);
-	}
-	// Free the GList entry for the deleted slide itself
+	// Free the resources allocated to the deleted slide
+	destroy_slide(tmp_glist->data, NULL);
 	g_list_free(tmp_glist);
 }
 
@@ -4308,6 +4261,10 @@ void slide_move_up(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.26  2006/06/07 15:24:06  vapour
+ * + Updated the slide deletion code to use the new destroy_slide function.
+ * + Updated so the resources presently allocated to a project are freed up when beginning a new project.
+ *
  * Revision 1.25  2006/06/06 12:51:35  vapour
  * Fixed the bug causing deletion of slides to crash.
  *
