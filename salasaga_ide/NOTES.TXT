@@ -1,5 +1,17 @@
 ***********
 
+Information that may be useful when figuring out how to create onscreen playback controls for SVG
+http://olaf.kilu.de/opera/
+
+The line that got my attention:
+
+  2005-06-27
+  SVG-tiny allows interactivity with declarative animation.
+  For example with attributes like begin="accessKey(b)" and end="accessKey(e)"
+  it should be possible to start and stop an animation.
+
+***********
+
 Windows (MinGW) notes: After installing all of the GTK, Glib, (etc) stuff, pkg-config didn't work until I'd set the environment variable:
 PKG_CONFIG_PATH=/c/MinGW/lib/pkgconfig
 
