@@ -288,6 +288,76 @@ void calculate_object_boundaries(void)
 }
 
 
+// Function to free the memory for a given slide
+void destroy_slide(gpointer element, gpointer user_data)
+{
+	// Local variables
+	gint				layer_counter;			// Standard counter
+	layer				*layer_data;			// Used for freeing the elements of a deleted slide
+	gint				num_layers;				// Number of layers in a slide
+	GList				*removed_layer;			// Used for freeing the elements of a deleted slide
+	slide				*slide_data;			// Used for freeing the elements of a deleted slide
+
+
+	// Initialise some things
+	slide_data = element;
+
+	// Remove the mouse click handler from the event box of the deleted slide
+	g_signal_handler_disconnect(G_OBJECT(slide_data->event_box), slide_data->click_handler);
+
+	// Free the memory allocated to the deleted slide
+	gtk_object_destroy(GTK_OBJECT(slide_data->tooltip));
+	g_object_unref(slide_data->layer_store);
+	g_object_unref(slide_data->timeline_widget);
+
+	// Free the memory allocated to the deleted slides' layers
+	slide_data->layers = g_list_first(slide_data->layers);
+	num_layers = g_list_length(slide_data->layers);
+	for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
+	{
+		// Point to the first remaining layer in the list
+		slide_data->layers = g_list_first(slide_data->layers);
+		layer_data = (slide_data->layers)->data;
+
+		// Free its elements
+		g_string_free(layer_data->name, TRUE);
+		g_free(layer_data->row_iter);
+		switch (layer_data->object_type)
+		{
+			case TYPE_GDK_PIXBUF:
+				g_string_free(((layer_image *) layer_data->object_data)->image_path, TRUE);
+				g_object_unref(((layer_image *) layer_data->object_data)->image_data);
+				break;
+
+			case TYPE_MOUSE_CURSOR:
+				// Nothing here needs freeing
+				break;
+
+			case TYPE_EMPTY:
+				// Nothing here needs freeing
+				break;
+
+			case TYPE_TEXT:
+				g_object_unref(((layer_text *) layer_data->object_data)->text_buffer);
+				break;
+
+			case TYPE_HIGHLIGHT:
+				// Nothing here needs freeing
+				break;
+
+			default:
+				g_printerr("ED57: Unknown layer type when destroying a slide.\n");
+		}
+		g_free(layer_data->object_data);
+
+		// Remove the layer from the list
+		removed_layer = slide_data->layers;
+		slide_data->layers = g_list_remove_link(slide_data->layers, slide_data->layers);
+		g_list_free(removed_layer);
+	}
+}
+
+
 // Function to detect collisions between a given coordinate and a GList of boundary boxes
 GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y)
 {
@@ -489,7 +559,10 @@ gboolean flame_read(gchar *filename)
 	// If there's a project presently loaded in memory, we unload it
 	if (NULL != slides)
 	{
-		// fixme3: We need a much better way of doing this
+		// Free the resources presently allocated to slides
+		g_list_foreach(slides, destroy_slide, NULL);
+
+		// Re-initialise pointers
 		slides = NULL;
 		current_slide = NULL;
 	}
@@ -2173,6 +2246,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.40  2006/06/07 15:21:09  vapour
+ * Created a function for freeing the resources allocated to a slide.
+ *
  * Revision 1.39  2006/06/04 06:59:54  vapour
  * Updated to correctly size text in the SVG output.
  *

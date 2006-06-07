@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  * Flame Project: Header file for all general backend functions
  * 
  * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
@@ -32,6 +32,7 @@ extern "C" {
 // Functions included in this file and its corresponding source file
 gboolean base64_encode(gpointer data, guint length, gchar ** output_string);
 void calculate_object_boundaries(void);
+void destroy_slide(gpointer element, gpointer user_data);
 GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y);
 gboolean flame_read(gchar *filename);
 void menu_enable(const gchar *full_path, gboolean enable);
@@ -55,6 +56,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string);
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2006/06/07 15:21:09  vapour
+ * Created a function for freeing the resources allocated to a slide.
+ *
  * Revision 1.6  2006/04/29 19:10:04  vapour
  * Added a function to URI encode Base64 data.
  *
