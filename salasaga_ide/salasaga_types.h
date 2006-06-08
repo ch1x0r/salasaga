@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  * Flame Project: Include file for structures and similar used throughout the code
  * 
  * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
@@ -32,7 +32,7 @@ extern "C" {
 
 // Set some application constants
 #define APP_NAME "Flame Project Editing GUI"
-#define	APP_VERSION "0.7.4"
+#define	APP_VERSION "0.7.5"
 
 // Define a run time check that hasn't been added to GTK
 #define GTK_TYPE_TREE_ITER				(gtk_tree_iter_get_type ())
@@ -53,8 +53,8 @@ typedef enum {
 
 // Resolution storing structure
 typedef struct {
-	guint		width;
-	guint		height;
+	guint				width;
+	guint				height;
 } ResolutionStructure;
 
 // Fields of the timeline widget
@@ -74,12 +74,12 @@ enum
 // Defines the object and properties making up a layer
 typedef struct
 {
-	guint			object_type;
-	GObject			*object_data;
-	guint			start_frame;
-	guint			finish_frame;
-	GString			*name;
-	GtkTreeIter		*row_iter;
+	guint				object_type;
+	GObject				*object_data;
+	guint				start_frame;
+	guint				finish_frame;
+	GString				*name;
+	GtkTreeIter			*row_iter;
 } layer;
 
 // Defines the properties making up an empty layer
@@ -108,8 +108,8 @@ typedef struct
 	gint				y_offset_finish;
 	gint				width;
 	gint				height;
-	GString			*image_path;
-	GdkPixbuf		*image_data;
+	GString				*image_path;
+	GdkPixbuf			*image_data;
 	gboolean			modified;			// FALSE if an image hasn't been modified, TRUE if it has (i.e. cropped)
 } layer_image;
 
@@ -120,31 +120,31 @@ typedef struct
 	gint				y_offset_start;
 	gint				x_offset_finish;
 	gint				y_offset_finish;
-	guint			rendered_width;
-	guint			rendered_height;
+	guint				rendered_width;
+	guint				rendered_height;
 	GdkColor			text_color;
-	gfloat			font_size;
-	GtkTextBuffer	*text_buffer;
+	gfloat				font_size;
+	GtkTextBuffer		*text_buffer;
 } layer_text;
 
 // Defines the collection of objects and properties making up a slide
 typedef struct
 {
-	GtkWidget		*event_box;
-	GtkImage		*thumbnail;
-	gulong			click_handler;
-	GList			*layers;
-	GtkTooltips		*tooltip;
-	guint			number;
-	GtkWidget		*timeline_widget;
-	GtkListStore	*layer_store;
+	GtkWidget			*event_box;
+	GtkImage			*thumbnail;
+	gulong				click_handler;
+	GList				*layers;
+	GtkTooltips			*tooltip;
+	guint				number;
+	GtkWidget			*timeline_widget;
+	GtkListStore		*layer_store;
 } slide;
 
 // Defines the structure of a boundary box
 typedef struct
 {
-	GdkRegion		*region_ptr;
-	GList			*layer_ptr;
+	GdkRegion			*region_ptr;
+	GList				*layer_ptr;
 } boundary_box;
 
 
@@ -160,6 +160,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2006/06/08 11:35:59  vapour
+ * Visually lined up variables names for my Linux system.
+ *
  * Revision 1.12  2006/05/28 09:36:44  vapour
  * Re-tab aligned some variables for my Linux Eclipse.
  *
