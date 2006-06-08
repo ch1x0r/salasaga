@@ -135,7 +135,7 @@ typedef struct
 	gulong				click_handler;
 	GList				*layers;
 	GtkTooltips			*tooltip;
-	guint				number;
+	GString				*name;
 	GtkWidget			*timeline_widget;
 	GtkListStore		*layer_store;
 } slide;
@@ -160,6 +160,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2006/06/08 12:17:10  vapour
+ * Replaced slide number with slide name.
+ *
  * Revision 1.13  2006/06/08 11:35:59  vapour
  * Visually lined up variables names for my Linux system.
  *
