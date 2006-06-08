@@ -977,8 +977,8 @@ gboolean flame_read(gchar *filename)
 				this_layer = this_layer->next;
 			}
 
-			// Fixme4: Needs fixing, as this shouldn't be hard coded
-			tmp_slide->number = 1;
+			// Fixme4: Needs fixing, as this should read the slide name from the save file
+			tmp_slide->name = NULL;
 
 			// Create the thumbnail for the slide
 			tmp_glist = NULL;
@@ -989,10 +989,8 @@ gboolean flame_read(gchar *filename)
 			// Create the event box for the slide
 			tmp_slide->event_box = gtk_event_box_new();
 
-			// Create the tooltip for the slide
-			// Fixme4: The tooltip shouldn't be hard coded
-			tmp_slide->tooltip = gtk_tooltips_new();
-			gtk_tooltips_set_tip(tmp_slide->tooltip, GTK_WIDGET(tmp_slide->event_box), "A tooltip", NULL);
+			// Mark the tooltip as uncreated
+			tmp_slide->tooltip = NULL;
 
 			// Set the timeline widget for the slide to NULL, so we know to create it later on
 			tmp_slide->timeline_widget = NULL;
@@ -1032,6 +1030,9 @@ gboolean flame_read(gchar *filename)
 
 	// Make the current slide point to the first slide
 	current_slide = slides;
+
+	// Create the tooltips for the slides
+	create_tooltips();
 
 	// Update the film strip with the new slides
 	refresh_film_strip();
@@ -1345,7 +1346,6 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	gchar			*pixbuf_buffer;				// Gets given a pointer to a compressed jpeg image
 	gsize			pixbuf_size;				// Gets given the size of a compressed jpeg image
 	GIOStatus		return_value;				// Return value used in most GIOChannel functions
-	guint			slide_number;				// The number of the presently processing slide
 	slide			*slide_pointer;				// Points to the present slide
 	guint			start_frame;				// The first frame in which the object appears
 	GString			*string_to_write = NULL;	// Holds SVG data to be written out
@@ -1399,7 +1399,6 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 		layer_data = g_list_nth_data(layer_pointer, layer_counter);
 
 		// Create some useful pointers
-		slide_number = slide_pointer->number;
 		start_frame = layer_data->start_frame;
 		finish_frame = layer_data->finish_frame;
 		object_type = layer_data->object_type;
@@ -1421,7 +1420,13 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					// * Something went wrong when scaling down the pixbuf *
 
 					// Display the warning message using our function
-					g_string_printf(tmp_gstring, "Error ED13: An error '%s' occured when scaling slide %u", error->message, slide_number);
+					if (NULL == slide_pointer->name)
+					{
+						g_string_printf(tmp_gstring, "Error ED13: An error '%s' occured when scaling a slide", error->message);
+					} else
+					{
+						g_string_printf(tmp_gstring, "Error ED13: An error '%s' occured when scaling slide '%s'", error->message, slide_pointer->name->str);
+					}
 					display_warning(tmp_gstring->str);
 
 					// Free the memory allocated in this function
@@ -1581,7 +1586,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				break;
 
 			case TYPE_MOUSE_CURSOR:
-				g_printerr("Mouse cursor found in layer %u\n", slide_pointer->number);
+				g_printerr("Mouse cursor found in layer '%s'\n", layer_data->name->str);
 				break;
 
 			case TYPE_TEXT:
@@ -1689,7 +1694,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				break;
 
 			default:
-				g_printerr("ED29: Unknown object type found in layer %u\n", slide_pointer->number);
+				g_printerr("ED29: Unknown object type found in layer '%s'\n", layer_data->name->str);
 		}
 
 		// If there is a string to write to the output file, do so
@@ -1903,22 +1908,14 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 	slide			*slide_pointer;				// Points to the present slide
 	GList			*layer_pointer;				// Points to the presently processing layer
 
-	guint			slide_number;				// The number of the presently processing slide
-
 	xmlNodePtr		slide_root;					// Points to the root of the slide data
 	xmlNodePtr		slide_node;					// Pointer to the new slide node
 
-	GString			*tmp_gstring;				// Temporary GString
-
 
 	// Initialise various things
-	tmp_gstring = g_string_new(NULL);
 	slide_pointer = element;
 	slide_root = user_data;
 	layer_pointer = slide_pointer->layers;
-
-	// Create some useful pointers
-	slide_number = slide_pointer->number;
 
     // Create the slide container
 	slide_node = xmlNewChild(slide_root, NULL, "slide", NULL);
@@ -1929,8 +1926,7 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 	}
 
 	// Add the slide number to the slide container attributes
-	g_string_printf(tmp_gstring, "%u", slide_number);
-	xmlNewProp(slide_node, "number", tmp_gstring->str);
+	xmlNewProp(slide_node, "name", slide_pointer->name->str);
 
 	// Add the layer data to the slide container
 	layer_pointer = g_list_first(layer_pointer);
@@ -2246,6 +2242,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.41  2006/06/08 12:16:14  vapour
+ * Updated to use the new function for generating tooltips.
+ *
  * Revision 1.40  2006/06/07 15:21:09  vapour
  * Created a function for freeing the resources allocated to a slide.
  *
