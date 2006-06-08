@@ -494,6 +494,40 @@ GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_
 }
 
 
+// Recreate the tooltips for the slides
+void create_tooltips(void)
+{
+	// Local variables
+	guint				counter;				// Used as a standard counter
+	GString				*name_string;			// Used for generating a name string
+	guint				num_slides;				// Number of slides in the whole slide list
+	slide				*slide_data;			// Points to the actual data in the given slide
+
+
+	// Initialise some things
+	name_string = g_string_new(NULL);
+	slides = g_list_first(slides);
+	num_slides = g_list_length(slides);
+
+	// Loop through each slide, creating an appropriate tooltip for it
+	for (counter = 0; counter < num_slides; counter++)
+	{
+		slide_data = g_list_nth_data(slides, counter);
+		slide_data->tooltip = gtk_tooltips_new();
+		if (NULL == slide_data->name)
+		{
+			// The user hasn't given a name to the slide, so use a default
+			g_string_printf(name_string, "Slide %u", counter + 1);
+			gtk_tooltips_set_tip(slide_data->tooltip, GTK_WIDGET(slide_data->event_box), name_string->str, NULL);
+		} else
+		{
+			// The user has named the slide, so use the name
+			gtk_tooltips_set_tip(slide_data->tooltip, GTK_WIDGET(slide_data->event_box), slide_data->name->str, NULL);
+		}
+	}
+}
+
+
 // Display a warning message to the user
 gint display_warning(gchar *warning_string)
 {
@@ -3748,12 +3782,9 @@ void menu_screenshots_import(void)
 		// Create an event box for adding the thumbnail image to, so it can receive events and display tool tips
 		tmp_slide->event_box = gtk_event_box_new();
 
-		// Add a tooltip to the event box, displaying the slide number
-		// fixme5: This code needs to be re-worked, as it'll be getting the slide numbers wrong now
-		tmp_slide->number = tmp_int;
-		g_string_printf(tmp_string, "Slide %u", tmp_slide->number);
-		tmp_slide->tooltip = gtk_tooltips_new();
-		gtk_tooltips_set_tip(tmp_slide->tooltip, GTK_WIDGET(tmp_slide->event_box), tmp_string->str, NULL);
+		// Mark the name for the slide as unset
+		tmp_slide->name = NULL;
+		tmp_slide->tooltip = NULL;
 
 		// Set the timeline widget for the slide to NULL, so we know to create it later on
 		tmp_slide->timeline_widget = NULL;
@@ -4075,6 +4106,9 @@ void slide_delete(void)
 	}
 	current_slide = g_list_nth(slides, slide_position);
 
+	// Recreate the slide tooltips
+	create_tooltips();
+
 	// Redraw the timeline
 	draw_timeline();
 
@@ -4157,11 +4191,8 @@ void slide_insert(void)
 	// Create an event box for adding the thumbnail image to, so it can receive events and display tool tips
 	tmp_slide->event_box = gtk_event_box_new();
 
-	// Add a tooltip to the event box, displaying the slide number
-	// fixme3: Slide numbers need to be recalculated
-	tmp_gstring = g_string_new("Slide x");
-	tmp_slide->tooltip = gtk_tooltips_new();
-	gtk_tooltips_set_tip(tmp_slide->tooltip, GTK_WIDGET(tmp_slide->event_box), tmp_gstring->str, NULL);
+	// Mark the tooltip for the slide as not-yet-created
+	tmp_slide->tooltip = NULL;
 
 	// Set the timeline widget for the slide to NULL, so we know to create it later on
 	tmp_slide->timeline_widget = NULL;
@@ -4183,6 +4214,9 @@ void slide_insert(void)
 		slide_position = g_list_position(slides, current_slide);
 		slides = g_list_insert(slides, tmp_slide, slide_position + 1);
 	}
+
+	// Recreate the slide tooltips
+	create_tooltips();
 
 	// Update the film strip area
 	refresh_film_strip();
@@ -4221,6 +4255,9 @@ void slide_move_down(void)
 	next_slide->data = this_slide_data;
 	current_slide = next_slide;
 
+	// Recreate the slide tooltips
+	create_tooltips();
+
 	// Refresh the film strip area
 	refresh_film_strip();
 }
@@ -4251,6 +4288,9 @@ void slide_move_up(void)
 	previous_slide->data = this_slide_data;
 	current_slide = previous_slide;
 
+	// Recreate the slide tooltips
+	create_tooltips();
+
 	// Refresh the film strip area
 	refresh_film_strip();
 }
@@ -4261,6 +4301,9 @@ void slide_move_up(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.27  2006/06/08 12:13:32  vapour
+ * Created a new function that generates tooltips.
+ *
  * Revision 1.26  2006/06/07 15:24:06  vapour
  * + Updated the slide deletion code to use the new destroy_slide function.
  * + Updated so the resources presently allocated to a project are freed up when beginning a new project.

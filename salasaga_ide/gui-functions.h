@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  * Flame Project: Header file for all non specific GUI related funtions
  * 
  * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
@@ -53,6 +53,7 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height);
 void compress_layers_inner(gpointer element, gpointer user_data);
 GtkWidget *construct_timeline_widget(slide *slide_data);
 GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_resolutions, guint initial_width, guint initial_height);
+void create_tooltips(void);
 gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title);
 gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean request_file);
 gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title);
@@ -89,6 +90,9 @@ void slide_move_up(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2006/06/08 12:14:20  vapour
+ * Created a new function that generates tooltips.
+ *
  * Revision 1.5  2006/06/06 12:22:47  vapour
  * Improved the alphabetical order of functions.
  *
