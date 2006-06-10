@@ -161,7 +161,6 @@ void create_menu_bar()
 		{"/File/_New",				"<control>N",			menu_file_new,					0,	"<Item>"},
 		{"/File/_Open",				"<control>O",			menu_file_open,					0,	"<Item>"},
 		{"/File/_Save",				"<control>S",			menu_file_save,					0,	"<Item>"},
-		{"/File/Save _As",			NULL,					menu_file_save_as,				0,	"<Item>"},
 		{"/File/Sep",				NULL,					NULL,							0,	"<Separator>"},
 		{"/File/_Quit",				"<control>Q",			save_preferences_and_exit,		0,	"<Item>"},
 
@@ -177,6 +176,8 @@ void create_menu_bar()
 		{"/Slide/De_lete",			NULL,					slide_delete,					0,	"<Item>"},
 		{"/Slide/Move _up",			NULL,					slide_move_up,					0,	"<Item>"},
 		{"/Slide/Move _down",		NULL,					slide_move_down,				0,	"<Item>"},
+		{"/Slide/_Edit slide name",	NULL,					slide_name_set,					0,	"<Item>"},
+		{"/Slide/_Reset slide name",NULL,					slide_name_reset,				0,	"<Item>"},
 
 		{"/_Layer",					NULL,					NULL,							0,	"<Branch>"},
 		{"/Layer/_Edit",			NULL,					layer_edit,						0,	"<Item>"},
@@ -1378,6 +1379,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.16  2006/06/10 14:48:30  vapour
+ * Removed File -> Save As menu option (not needed), and added menu items for editing the name of a slide.
+ *
  * Revision 1.15  2006/05/31 14:02:03  vapour
  * Added code so the capture offsets are kept through a session.
  *
