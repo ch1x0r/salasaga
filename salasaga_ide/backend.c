@@ -306,6 +306,10 @@ void destroy_slide(gpointer element, gpointer user_data)
 	g_signal_handler_disconnect(G_OBJECT(slide_data->event_box), slide_data->click_handler);
 
 	// Free the memory allocated to the deleted slide
+	if (NULL != slide_data->name)
+	{
+		g_string_free(slide_data->name, TRUE);
+	}
 	gtk_object_destroy(GTK_OBJECT(slide_data->tooltip));
 	g_object_unref(slide_data->layer_store);
 	g_object_unref(slide_data->timeline_widget);
@@ -2251,6 +2255,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.43  2006/06/10 15:31:52  vapour
+ * Added code to free slide name memory when destroying slides.
+ *
  * Revision 1.42  2006/06/10 15:10:59  vapour
  * + More visual realignment of variable names for my Linux system.
  * + Improved the code for saving slide names to a project file.
