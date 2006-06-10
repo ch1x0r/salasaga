@@ -404,34 +404,34 @@ GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y
 gboolean flame_read(gchar *filename)
 {
 	// Local variables
-	xmlDocPtr			document;						// Holds a pointer to the XML document
-	xmlNodePtr			layer_ptr;						// Temporary pointer
-	xmlNodePtr			preferences_node = NULL;			// Points to the preferences structure
-	xmlNodePtr			slides_node = NULL;				// Points to the slides structure
-	xmlNodePtr			this_layer;						// Temporary pointer
-	xmlNodePtr			this_node;						// Temporary pointer
-	xmlNodePtr			this_slide;						// Temporary pointer
+	xmlDocPtr			document;				// Holds a pointer to the XML document
+	xmlNodePtr			layer_ptr;				// Temporary pointer
+	xmlNodePtr			preferences_node = NULL;// Points to the preferences structure
+	xmlNodePtr			slides_node = NULL;		// Points to the slides structure
+	xmlNodePtr			this_layer;				// Temporary pointer
+	xmlNodePtr			this_node;				// Temporary pointer
+	xmlNodePtr			this_slide;				// Temporary pointer
 
-	xmlChar				*project_name_data = NULL;		// 
-	xmlChar				*output_folder_data = NULL;		// 
-	xmlChar				*output_width_data = NULL;		// 
-	xmlChar				*output_height_data = NULL;		// 
-	xmlChar				*output_quality_data = NULL;		// 
-	xmlChar				*project_width_data = NULL;		// 
-	xmlChar				*project_height_data = NULL;		// 
-	xmlChar				*slide_length_data = NULL;		// 
+	xmlChar				*project_name_data = NULL;
+	xmlChar				*output_folder_data = NULL;
+	xmlChar				*output_width_data = NULL;
+	xmlChar				*output_height_data = NULL;
+	xmlChar				*output_quality_data = NULL;
+	xmlChar				*project_width_data = NULL;
+	xmlChar				*project_height_data = NULL;
+	xmlChar				*slide_length_data = NULL;
 
-	xmlChar				*tmp_char;						// Temporary string pointer
-	layer_empty			*tmp_empty_ob;					// 
-	GList				*tmp_glist;						// 
-	GString				*tmp_gstring;					// Temporary gstring
-	layer_highlight		*tmp_highlight_ob;				// Temporary highlight layer object
-	layer_image			*tmp_image_ob;					// Temporary image layer object
-	GtkTreeIter			*tmp_iter;						// Temporary GtkTreeIter
-	layer				*tmp_layer;						// Temporary layer
-	GdkPixbuf			*tmp_pixbuf;						//
-	slide				*tmp_slide;						// Temporary slide
-	layer_text			*tmp_text_ob;					// Temporary text layer object
+	xmlChar				*tmp_char;				// Temporary string pointer
+	layer_empty			*tmp_empty_ob;			// 
+	GList				*tmp_glist;				// 
+	GString				*tmp_gstring;			// Temporary gstring
+	layer_highlight		*tmp_highlight_ob;		// Temporary highlight layer object
+	layer_image			*tmp_image_ob;			// Temporary image layer object
+	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
+	layer				*tmp_layer;				// Temporary layer
+	GdkPixbuf			*tmp_pixbuf;			//
+	slide				*tmp_slide;				// Temporary slide
+	layer_text			*tmp_text_ob;			// Temporary text layer object
 
 
 	// Begin reading the file
@@ -977,8 +977,14 @@ gboolean flame_read(gchar *filename)
 				this_layer = this_layer->next;
 			}
 
-			// Fixme4: Needs fixing, as this should read the slide name from the save file
+			// Read the slide name from the save file
 			tmp_slide->name = NULL;
+			tmp_char = xmlGetProp(this_slide, "name");
+			if (NULL != tmp_char)
+			{
+				// A name for the slide is in the project file, so use that
+				tmp_slide->name = g_string_new(tmp_char);
+			}
 
 			// Create the thumbnail for the slide
 			tmp_glist = NULL;
@@ -1925,8 +1931,11 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 		return;
 	}
 
-	// Add the slide number to the slide container attributes
-	xmlNewProp(slide_node, "name", slide_pointer->name->str);
+	// Add the slide name to the slide container attributes
+	if (NULL != slide_pointer->name)
+	{
+		xmlNewProp(slide_node, "name", slide_pointer->name->str);
+	}
 
 	// Add the layer data to the slide container
 	layer_pointer = g_list_first(layer_pointer);
@@ -2242,6 +2251,11 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.42  2006/06/10 15:10:59  vapour
+ * + More visual realignment of variable names for my Linux system.
+ * + Improved the code for saving slide names to a project file.
+ * + Added working code for reading slide names from a project file.
+ *
  * Revision 1.41  2006/06/08 12:16:14  vapour
  * Updated to use the new function for generating tooltips.
  *
