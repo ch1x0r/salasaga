@@ -2924,17 +2924,6 @@ void menu_file_new(void)
 	GtkWidget			*bg_color_button;		// Background color selection button
 
 
-	// If there's a project presently loaded in memory, we unload it
-	if (NULL != slides)
-	{
-		// Free the resources presently allocated to slides
-		g_list_foreach(slides, destroy_slide, NULL);
-
-		// Re-initialise pointers
-		slides = NULL;
-		current_slide = NULL;
-	}
-
 	// * Pop open a dialog box asking the user for the details of the new project *
 
 	// Create the dialog window, and table to hold its children
@@ -3008,6 +2997,17 @@ void menu_file_new(void)
 		// The dialog was cancelled, so destroy the dialog box and return
 		gtk_widget_destroy(GTK_WIDGET(project_dialog));
 		return;
+	}
+
+	// If there's a project presently loaded in memory, we unload it
+	if (NULL != slides)
+	{
+		// Free the resources presently allocated to slides
+		g_list_foreach(slides, destroy_slide, NULL);
+
+		// Re-initialise pointers
+		slides = NULL;
+		current_slide = NULL;
 	}
 
 	// Set the project name
@@ -4287,6 +4287,9 @@ void slide_move_up(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.30  2006/06/10 15:35:26  vapour
+ * The File -> New option no longer unloads the presently loaded project if the user cancels out.
+ *
  * Revision 1.29  2006/06/10 15:28:14  vapour
  * Added slide name support to the slide_insert function.
  *
