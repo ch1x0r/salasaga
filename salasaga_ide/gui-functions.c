@@ -4118,7 +4118,6 @@ void slide_insert(void)
 	gint				slide_position;			// Which slide in the slide list we have selected
 
 	GdkPixbuf			*tmp_gdk_pixbuf;		// Temporary GDK Pixbuf
-	GString				*tmp_gstring;			// Temporary gstring
 	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
 	layer				*tmp_layer;				// Temporary layer
 	slide				*tmp_slide;				// Temporary slide
@@ -4127,6 +4126,7 @@ void slide_insert(void)
 	// Create a new, empty slide
 	tmp_slide = g_new(slide, 1);
 	tmp_slide->layers = NULL;
+	tmp_slide->name = NULL;
 
 	// Allocate a new layer structure for use in the slide
 	tmp_layer = g_new(layer, 1);
@@ -4209,8 +4209,7 @@ void slide_insert(void)
 	refresh_film_strip();
 
 	// Update the status bar
-	g_string_printf(tmp_gstring, "Added new slide.");
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, "Added new slide.");
 	gdk_flush();
 }
 
@@ -4288,6 +4287,9 @@ void slide_move_up(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.29  2006/06/10 15:28:14  vapour
+ * Added slide name support to the slide_insert function.
+ *
  * Revision 1.28  2006/06/10 15:07:24  vapour
  * + More visual realignment of variable names for my Linux system.
  * + Added functions to set and reset slide names.
