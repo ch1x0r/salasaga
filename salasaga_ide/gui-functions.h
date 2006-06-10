@@ -40,7 +40,6 @@ void menu_export_svg_animation(void);
 void menu_file_new(void);
 void menu_file_open(void);
 void menu_file_save(void);
-void menu_file_save_as(void);
 void menu_help_about(void);
 void menu_help_register(void);
 void menu_help_survey(void);
@@ -77,6 +76,8 @@ void slide_delete(void);
 void slide_insert(void);
 void slide_move_down(void);
 void slide_move_up(void);
+void slide_name_reset(void);
+void slide_name_set(void);
 
 #ifdef __cplusplus
 }
@@ -90,6 +91,10 @@ void slide_move_up(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2006/06/10 15:01:57  vapour
+ * + Removed File -> Save as function.
+ * + Added functions to set and reset slide names.
+ *
  * Revision 1.6  2006/06/08 12:14:20  vapour
  * Created a new function that generates tooltips.
  *
