@@ -1610,8 +1610,8 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				g_string_append_printf(string_to_write,
 					"\t<rect id=\"%s-bg\" class=\"text\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" stroke-width=\"%.4fpx\">\n",
 					layer_data->name->str,
-					x_scale * ((layer_text *) layer_data->object_data)->rendered_width,
-					y_scale * ((layer_text *) layer_data->object_data)->rendered_height,
+					x_scale * (((layer_text *) layer_data->object_data)->rendered_width + 10),
+					y_scale * (((layer_text *) layer_data->object_data)->rendered_height + 10),
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
 					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,
 					y_scale * 10,  // Relative X
@@ -1660,7 +1660,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					(y_scale * ((layer_text *) layer_data->object_data)->rendered_height - 2),  // Font size
 					x_scale * (((layer_text *) layer_data->object_data)->rendered_width - 20),  // How wide to make the entire string
 					x_scale * 10,  // Horizontal space between text background border and text start
-					y_scale * ((((layer_text *) layer_data->object_data)->rendered_height / 2) + 25));  // Vertical space between text background border and text start
+					y_scale * ((((layer_text *) layer_data->object_data)->rendered_height + 34) / 2));  // Vertical space between text background border and text start
 
 				// Add the text to the text layer
 				gtk_text_buffer_get_bounds(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end);
@@ -2255,6 +2255,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.44  2006/06/10 16:03:50  vapour
+ * Adjusted the text positioning properties when outputting svg.
+ *
  * Revision 1.43  2006/06/10 15:31:52  vapour
  * Added code to free slide name memory when destroying slides.
  *
