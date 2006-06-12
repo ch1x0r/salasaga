@@ -1503,7 +1503,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 					// Animate the image SVG properties so the background is only visible for as long as the slide
 					g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0\" begin=\"%.4fs\" dur=\"%.4fs\" />\n</image>\n",
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0\" begin=\"playbackPlay.click + %.4fs\" dur=\"%.4fs\" />\n</image>\n",
 						time_start,
 						time_end - time_start);
 				} else
@@ -1521,29 +1521,29 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 					// Animate the image SVG properties to fade it in over 1 second
 					g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />\n",
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />\n",
 						time_start + (layer_data->start_frame / frames_per_second));
 
 					// Animate the image SVG properties so it keeps visible after faded in
 					g_string_append_printf(string_to_write,
-						"\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+						"\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0\" begin=\"playbackPlay.click + %.4fs\" dur=\"%.4fs\" />\n",
 						time_start + 1 + (layer_data->start_frame / frames_per_second),
 						(((gfloat) layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2);
 
 					// Animate the image SVG properties so they fade out over 1 second
 					g_string_append_printf(string_to_write,
-						"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n",
+						"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n",
 						time_start + (layer_data->finish_frame / frames_per_second) - 1);
 
 					// Animate the SVG properties to move it to it's destination location
 					g_string_append_printf(string_to_write,
-						"\t<animate attributeName=\"x\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n",
+						"\t<animate attributeName=\"x\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n",
 						time_start + 1 + (layer_data->start_frame / frames_per_second),
 						time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 						x_scale * ((layer_image *) layer_data->object_data)->x_offset_start,
 						x_scale * ((layer_image *) layer_data->object_data)->x_offset_finish);
 					g_string_append_printf(string_to_write,
-						"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n</image>\n",
+						"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n</image>\n",
 						time_start + 1 + (layer_data->start_frame / frames_per_second),
 						time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 						y_scale * ((layer_image *) layer_data->object_data)->y_offset_start,
@@ -1573,7 +1573,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the highlight box SVG properties to fade it in over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />\n",
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />\n",
 					time_start + (layer_data->start_frame / frames_per_second));
 
 				// Animate the highlight box SVG properties so it keeps visible after faded in
@@ -1581,24 +1581,24 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				if (0 > tmp_gfloat)
 					tmp_gfloat = 0;
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0\" begin=\"playbackPlay.click + %.4fs\" dur=\"%.4fs\" />\n",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					tmp_gfloat);
 
 				// Animate the highlight box SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n",
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n",
 					time_start + (layer_data->finish_frame / frames_per_second) - 1);
 
 				// Animate the SVG properties to move it to it's destination location
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"x\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n",
+					"\t<animate attributeName=\"x\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_start,
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_finish);
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n</rect>\n",
+					"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n</rect>\n",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_start,
@@ -1631,7 +1631,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the background box SVG properties to fade it in over 1 second
 				g_string_append_printf(string_to_write,
-					"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />\n",
+					"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />\n",
 					time_start + (layer_data->start_frame / frames_per_second));
 
 				// Animate the background box SVG properties so it keeps visible after faded in
@@ -1639,24 +1639,24 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				if (0 > tmp_gfloat)
 					tmp_gfloat = 0;
 				g_string_append_printf(string_to_write,
-					"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0\" begin=\"%.4fs\" dur=\"%.4fs\" />\n",
+					"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0\" begin=\"playbackPlay.click + %.4fs\" dur=\"%.4fs\" />\n",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					tmp_gfloat);
 
 				// Animate the background box SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n",
+					"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n",
 					time_start + (layer_data->finish_frame / frames_per_second) - 1);
 
 				// Animate the SVG properties to move it to it's destination location
 				g_string_append_printf(string_to_write,
-					"\t\t<animate attributeName=\"x\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n",
+					"\t\t<animate attributeName=\"x\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_start,
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_finish);
 				g_string_append_printf(string_to_write,
-					"\t\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n\t</rect>\n",
+					"\t\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n\t</rect>\n",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_start,
@@ -1681,29 +1681,29 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the text SVG properties to fade it in over 1 second
 				g_string_append_printf(string_to_write,
-					"<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />",
+					"<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />",
 					time_start + (layer_data->start_frame / frames_per_second));
 
 				// Animate the text SVG properties so it keeps visible after faded in
 				g_string_append_printf(string_to_write,
-					"<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0\" begin=\"%.4fs\" dur=\"%.4fs\" />",
+					"<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0\" begin=\"playbackPlay.click + %.4fs\" dur=\"%.4fs\" />",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					tmp_gfloat);
 
 				// Animate the text SVG properties so they fade out over 1 second
 				g_string_append_printf(string_to_write,
-					"<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />",
+					"<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />",
 					time_start + (layer_data->finish_frame / frames_per_second) - 1);
 
 				// Animate the SVG properties to move it to it's destination location
 				g_string_append_printf(string_to_write,
-					"<animate attributeName=\"x\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />",
+					"<animate attributeName=\"x\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_finish);
 				g_string_append_printf(string_to_write,
-					"<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" /></text>\n",
+					"<animate attributeName=\"y\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" /></text>\n",
 					time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					(y_scale * (((layer_text *) layer_data->object_data)->y_offset_start)),  // Y start
@@ -2267,6 +2267,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.47  2006/06/12 11:03:16  vapour
+ * Added code to the svg output so things will start when the play button is clicked.
+ *
  * Revision 1.46  2006/06/12 04:11:31  vapour
  * Another tweak to ensure gnome isn't called on Windows.
  *
