@@ -2655,6 +2655,8 @@ void menu_export_svg_animation(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;			// Filter for *.*
+	gfloat				control_bar_x;			// Upper left X coordinate for the playback control bar
+	gfloat				control_bar_y;			// Upper left Y coordinate for the playback control bar
 	GError				*error = NULL;			// Pointer to error return structure
 	GtkWidget 			*export_dialog;			// Dialog widget
 	gchar				*filename;				// Pointer to the chosen file name
@@ -2805,6 +2807,10 @@ void menu_export_svg_animation(void)
 	x_scale = (gfloat) output_width / project_width;
 	y_scale = (gfloat) output_height / project_height;
 
+	// Where should the control bar be located?
+	control_bar_x = output_width / 2 - (x_scale * 120);
+	control_bar_y = output_height - (y_scale * 150);
+
 	// Write element definitions to the output file
 	g_string_assign(tmp_gstring, "<defs>\n"
 		"\t<style type=\"text/css\"><![CDATA[\n"
@@ -2876,40 +2882,84 @@ void menu_export_svg_animation(void)
 		" stroke-dasharray=\"none\" stroke-opacity=\"1\" />\n"
 
 		"<!-- Restart button -->\n"
-		"<path id=\"playbackRestart\" d=\"M 591.94939 397.78333 A 62.124382 64.649765 0 1 1 467.70063,397.78333 A 62.124382 64.649765 0 1 1 591.94939 397.78333 z\""
-		" transform=\"matrix(0,-0.439779,0.439779,0,42.36767,570.3813)\""
+		"<path id=\"playbackRestart\" d=\"M %.4f %.4f A %.4f %.4f 0 1 1 %.4f,%.4f A %.4f %.4f 0 1 1 %.4f %.4f z\""
+		" transform=\"matrix(0,-0.4398,0.4398,0,%.4f,%.4f)\""
 		" fill=\"none\" fill-opacity=\"1\" stroke=\"#656565\""
-		" stroke-width=\"16.1140\" stroke-linecap=\"square\""
+		" stroke-width=\"%.4f\" stroke-linecap=\"square\""
 		" stroke-linejoin=\"miter\" marker-start=\"none\""
 		" marker-mid=\"none\" marker-end=\"url(#restartArrow)\""
 		" stroke-miterlimit=\"4\" stroke-dasharray=\"none\""
 		" stroke-opacity=\"1\" />\n"
 
 		"<!-- Play button -->\n"
-		"<path id=\"playbackPlay\" d=\"M 121.68119,420.51104 L 199.22505,125.15765 L 416.23665,339.9893 L 121.68119,420.51104 z \""
-		" transform=\"matrix(0.195026,-6.213531e-2,5.178456e-2,0.234009,225.2333,278.7242)\""
+		"<path id=\"playbackPlay\" d=\"M %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f z \""
+		" transform=\"matrix(0.2,-0.06,0.05,0.2,%.4f,%.4f)\""
 		" fill=\"#656565\" fill-opacity=\"1\" stroke=\"none\""
-		" stroke-width=\"3.43300009\" stroke-linecap=\"round\""
+		" stroke-width=\"%.4f\" stroke-linecap=\"round\""
 		" stroke-linejoin=\"round\" stroke-miterlimit=\"4\""
 		" stroke-dasharray=\"none\" stroke-opacity=\"0\" />\n"
 
 		"<!-- Stop button -->\n"
-		"<rect id=\"playbackStop\" width=\"57.578697\""
-		" height=\"62.629456\" x=\"339.41122\" y=\"301.81885\""
+		"<rect id=\"playbackStop\" width=\"%.4f\""
+		" height=\"%.4f\" x=\"%.4f\" y=\"%.4f\""
 		" fill=\"#656565\" fill-opacity=\"1\" stroke=\"none\""
-		" stroke-width=\"3.43300009\" stroke-linecap=\"round\""
+		" stroke-width=\"%.4f\" stroke-linecap=\"round\""
 		" stroke-linejoin=\"round\" stroke-miterlimit=\"4\""
 		" stroke-dasharray=\"none\" stroke-opacity=\"0\" />\n",
 
-		// Playback background values
-		x_scale * 234.2857,  // Width
-		y_scale * 90.4549,  // Height
-		x_scale * 177.1429,  // X Offset
-		y_scale * 287.6380,  // Y Offset
-		x_scale * 3.4147  // Stroke Width
-		
+		// * Playback bar background values *
+		x_scale * 234,  // Width
+		y_scale * 90,  // Height
+		control_bar_x,  // X Offset
+		control_bar_y,  // Y Offset
+		x_scale * 3.4,  // Stroke Width
 
-);
+		// * Restart button values *
+		x_scale * 600,  // d start
+		y_scale * 400,
+
+		x_scale * 60,
+		y_scale * 60,
+
+		x_scale * 450,
+		y_scale * 400,
+
+		x_scale * 60,
+		y_scale * 60,
+
+		x_scale * 600,
+		y_scale * 400,
+
+		control_bar_x + (x_scale * -120),  // X Offset
+		control_bar_y + (y_scale * 292),  // Y Offset
+
+		x_scale * 16,  // Stroke Width
+
+		// * Play button values *
+		x_scale * 122,
+		y_scale * 421,
+
+		x_scale * 199,
+		y_scale * 125,
+
+		x_scale * 416,
+		y_scale * 340,
+
+		x_scale * 122,
+		y_scale * 421,
+
+		control_bar_x + (x_scale * 48),  // X Offset
+		control_bar_y,  // Y Offset
+
+		x_scale * 3.4,  // Stroke Width
+
+		// * Stop button values *
+		x_scale * 58,  // Width
+		y_scale * 63,  // Height
+		control_bar_x + (x_scale * 156),  // X Offset
+		control_bar_y + (y_scale * 14),  // Y Offset
+		x_scale * 3.4);  // Stroke Width
+
 	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
@@ -4445,6 +4495,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.34  2006/06/12 14:13:39  vapour
+ * Playback control bar and buttons are now scaled and positioned reasonably well.
+ *
  * Revision 1.33  2006/06/12 11:04:22  vapour
  * Started adding a playback control bar to the SVG output.
  *
