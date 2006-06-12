@@ -331,7 +331,7 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			break;		
 
 		default:
-			g_printerr("ED33: Unknown layer type\n");		
+			display_warning("ED33: Unknown layer type\n");		
 	}
 }
 
@@ -1772,7 +1772,7 @@ void layer_edit(void)
 			break;
 
 		default:
-			g_printerr("ED34: Unknown layer type\n");
+			display_warning("ED34: Unknown layer type\n");
 			return;
 	}
 
@@ -2664,7 +2664,6 @@ void menu_export_svg_animation(void)
 	gboolean			unique_name;			// Switch used to mark when we have a valid filename
 	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
 
-	GtkWidget			*tmp_dialog;			// Temporary dialog box
 	gsize				tmp_gsize;				// Temporary gsize
 	GString				*tmp_gstring;			// Temporary GString
 
@@ -2759,16 +2758,7 @@ void menu_export_svg_animation(void)
 	{
 		// * An error occured when opening the file for writing, so alert the user, and return to the calling routine indicating failure *
 		g_string_printf(tmp_gstring, "Error ED08: An error '%s' occured when opening '%s' for writing", error->message, filename);
-		tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),
-											GTK_DIALOG_MODAL,
-											GTK_MESSAGE_INFO,
-											GTK_BUTTONS_OK,
-											tmp_gstring->str);
-		gtk_dialog_run(GTK_DIALOG(tmp_dialog));
-		gtk_widget_destroy(tmp_dialog);
-
-		// Send a warning to stdout as well
-		g_warning(tmp_gstring->str);
+		display_warning(tmp_gstring->str);
 
 		// Free the memory allocated in this function
 		g_string_free(tmp_gstring, TRUE);
@@ -3631,7 +3621,7 @@ void menu_screenshots_import(void)
 		}
 
 		// The screenshots folder doesn't exist.  Notify the user and direct them to change this in the preferences menu
-		g_warning("Error ED04: The screenshots folder doesn't exist.  Please update this in the project preferences and try again");
+		display_warning("Error ED04: The screenshots folder doesn't exist.  Please update this in the project preferences and try again");
 		g_error_free(error);
 		return;
 	}
@@ -4376,6 +4366,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.32  2006/06/12 03:52:28  vapour
+ * Updated many of the warning messages to go through the display_warning function.
+ *
  * Revision 1.31  2006/06/10 15:38:41  vapour
  * Committed the code for setting and unsetting slide names, which I'd somehow managed to miss committing before.
  *

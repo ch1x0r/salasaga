@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  * Flame Project: Source file for all callback functions
  * 
  * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
@@ -262,7 +262,7 @@ void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row,
 			break;
 
 		default:
-			g_printerr("ED30: Unknown layer type\n");
+			display_warning("ED30: Unknown layer type\n");
 	}
 
 	// Update the timeline widget with the new value too
@@ -314,7 +314,7 @@ void timeline_edited_y_offset_finish(GtkCellRendererText *selection, gchar *row,
 			break;
 
 		default:
-			g_printerr("ED31: Unknown layer type\n");
+			display_warning("ED31: Unknown layer type\n");
 	}
 
 	// Update the timeline widget with the new value too
@@ -366,7 +366,7 @@ void timeline_edited_x_offset_start(GtkCellRendererText *selection, gchar *row, 
 			break;
 
 		default:
-			g_printerr("ED30: Unknown layer type\n");
+			display_warning("ED30: Unknown layer type\n");
 	}
 
 	// Update the timeline widget with the new value too
@@ -418,7 +418,7 @@ void timeline_edited_y_offset_start(GtkCellRendererText *selection, gchar *row, 
 			break;
 
 		default:
-			g_printerr("ED31: Unknown layer type\n");
+			display_warning("ED31: Unknown layer type\n");
 	}
 
 	// Update the timeline widget with the new value too
@@ -701,7 +701,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 				break;
 
 			default:
-				g_printerr("ED32: Unknown layer type\n");
+				display_warning("ED32: Unknown layer type\n");
 				return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
 		}
 
@@ -850,6 +850,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2006/06/12 03:50:43  vapour
+ * Updated many of the warning messages to go through the display_warning function.
+ *
  * Revision 1.5  2006/04/22 08:36:54  vapour
  * + Replaced the text string display in the timeline (layer) widget area, with the x and y finish positions.
  * + Updated the entire project to use the word "finish" consistently, instead of "final".
