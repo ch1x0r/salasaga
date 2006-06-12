@@ -36,13 +36,11 @@
 #ifndef _WIN32
 	// Non-windows code
 	#include <gconf/gconf.h>
+	#include <libgnome/libgnome.h>
 #else
 	// Windows only code
 	#include <windows.h>
 #endif
-
-// Gnome include (for sound)
-#include <libgnome/libgnome.h>
 
 // XML includes
 #include <libxml/xmlmemory.h>
@@ -2269,6 +2267,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.46  2006/06/12 04:11:31  vapour
+ * Another tweak to ensure gnome isn't called on Windows.
+ *
  * Revision 1.45  2006/06/12 03:49:55  vapour
  * Added functions for capturing log output, and updated many of the warning messages to go through the display_warning function.
  *
