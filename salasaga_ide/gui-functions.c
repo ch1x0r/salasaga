@@ -2663,6 +2663,8 @@ void menu_export_svg_animation(void)
 	GtkFileFilter		*svg_filter;			// Filter for *.svg
 	gboolean			unique_name;			// Switch used to mark when we have a valid filename
 	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
+	gfloat				x_scale;				// Width scale factor for the scene
+	gfloat				y_scale;				// Height scale factor for the scene
 
 	gsize				tmp_gsize;				// Temporary gsize
 	GString				*tmp_gstring;			// Temporary GString
@@ -2799,9 +2801,14 @@ void menu_export_svg_animation(void)
 		return;
 	}
 
+	// Calculate scaling amounts to use
+	x_scale = (gfloat) output_width / project_width;
+	y_scale = (gfloat) output_height / project_height;
+
 	// Write element definitions to the output file
 	g_string_assign(tmp_gstring, "<defs>\n"
 		"\t<style type=\"text/css\"><![CDATA[\n"
+
 		"\t\trect.highlight {\n"
 		"\t\t\tfill: #0f0;\n"
 		"\t\t\tfill-opacity: 0.25;\n"
@@ -2810,6 +2817,7 @@ void menu_export_svg_animation(void)
 		"\t\t\tstroke-dasharray: none;\n"
 		"\t\t\tstroke-opacity=0.8\n"
 		"\t\t}\n"
+
 		"\t\trect.text {\n"
 		"\t\t\tfill: #ffc;\n"
 		"\t\t\tfill-opacity: 1.0;\n"
@@ -2818,6 +2826,7 @@ void menu_export_svg_animation(void)
 		"\t\t\tstroke-dasharray: none;\n"
 		"\t\t\tstroke-opacity: 0.8\n"
 		"\t\t}\n"
+
 		"\t\ttext.text {\n"
 		"\t\t\tfont-family: sans-serif;\n"
 		"\t\t\ttext-anchor: start;\n"
@@ -2825,7 +2834,18 @@ void menu_export_svg_animation(void)
 		"\t\t}\n"
 		"]]>\n"
 		"\t</style>\n"
-		"</defs>");
+
+		// The arrowhead on the playback control's Restart button
+		"\t<marker id=\"restartArrow\" markerWidth=\"20\""
+		" markerHeight=\"20\" viewBox=\"-20 -4 80 65\""
+		" orient=\"auto\" refX=\"-9\" refY=\"3\""
+		" markerUnits=\"strokeWidth\">\n"
+		"\t\t<polygon points=\"0,0 20,10 0,20 0,0\""
+		" fill=\"#404040\" stroke=\"none\""
+		" stroke-width=\"1px\" transform=\"rotate(90)\" />\n"
+		"\t</marker>\n"
+
+		"</defs>\n");
 	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
@@ -2844,6 +2864,65 @@ void menu_export_svg_animation(void)
 	export_time_counter = 0;
 	slide_pointer = g_list_first(slides);
 	g_list_foreach(slide_pointer, menu_export_svg_animation_slide, NULL);
+
+	// Add the playback control bar.  We do it last, so it's over the top of everything else
+	g_string_printf(tmp_gstring,
+		"<!-- Playback background -->\n"
+		"<rect id=\"playbackBackground\" width=\"%.4f\""
+		" height=\"%.4f\" x=\"%.4f\" y=\"%.4f\""
+		" fill=\"#e8e8e8\" fill-opacity=\"1\" stroke=\"#878787\""
+		" stroke-width=\"%.4f\" stroke-linecap=\"round\""
+		" stroke-linejoin=\"round\" stroke-miterlimit=\"4\""
+		" stroke-dasharray=\"none\" stroke-opacity=\"1\" />\n"
+
+		"<!-- Restart button -->\n"
+		"<path id=\"playbackRestart\" d=\"M 591.94939 397.78333 A 62.124382 64.649765 0 1 1 467.70063,397.78333 A 62.124382 64.649765 0 1 1 591.94939 397.78333 z\""
+		" transform=\"matrix(0,-0.439779,0.439779,0,42.36767,570.3813)\""
+		" fill=\"none\" fill-opacity=\"1\" stroke=\"#656565\""
+		" stroke-width=\"16.1140\" stroke-linecap=\"square\""
+		" stroke-linejoin=\"miter\" marker-start=\"none\""
+		" marker-mid=\"none\" marker-end=\"url(#restartArrow)\""
+		" stroke-miterlimit=\"4\" stroke-dasharray=\"none\""
+		" stroke-opacity=\"1\" />\n"
+
+		"<!-- Play button -->\n"
+		"<path id=\"playbackPlay\" d=\"M 121.68119,420.51104 L 199.22505,125.15765 L 416.23665,339.9893 L 121.68119,420.51104 z \""
+		" transform=\"matrix(0.195026,-6.213531e-2,5.178456e-2,0.234009,225.2333,278.7242)\""
+		" fill=\"#656565\" fill-opacity=\"1\" stroke=\"none\""
+		" stroke-width=\"3.43300009\" stroke-linecap=\"round\""
+		" stroke-linejoin=\"round\" stroke-miterlimit=\"4\""
+		" stroke-dasharray=\"none\" stroke-opacity=\"0\" />\n"
+
+		"<!-- Stop button -->\n"
+		"<rect id=\"playbackStop\" width=\"57.578697\""
+		" height=\"62.629456\" x=\"339.41122\" y=\"301.81885\""
+		" fill=\"#656565\" fill-opacity=\"1\" stroke=\"none\""
+		" stroke-width=\"3.43300009\" stroke-linecap=\"round\""
+		" stroke-linejoin=\"round\" stroke-miterlimit=\"4\""
+		" stroke-dasharray=\"none\" stroke-opacity=\"0\" />\n",
+
+		// Playback background values
+		x_scale * 234.2857,  // Width
+		y_scale * 90.4549,  // Height
+		x_scale * 177.1429,  // X Offset
+		y_scale * 287.6380,  // Y Offset
+		x_scale * 3.4147  // Stroke Width
+		
+
+);
+	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
+	if (G_IO_STATUS_ERROR == return_value)
+	{
+		// * An error occured when writing the SVG playback bar to the output file, so alert the user, and return to the calling routine indicating failure *
+		g_string_printf(tmp_gstring, "Error ED58: An error '%s' occured when adding the playback controls to the output file '%s'", error->message, filename);
+		display_warning(tmp_gstring->str);
+
+		// Free the memory allocated in this function
+		g_string_free(tmp_gstring, TRUE);
+		g_error_free(error);
+
+		return;
+	}
 
 	// Write the closing SVG structure to the output file
 	g_string_assign(tmp_gstring, "</svg>\n");
@@ -4366,6 +4445,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.33  2006/06/12 11:04:22  vapour
+ * Started adding a playback control bar to the SVG output.
+ *
  * Revision 1.32  2006/06/12 03:52:28  vapour
  * Updated many of the warning messages to go through the display_warning function.
  *
