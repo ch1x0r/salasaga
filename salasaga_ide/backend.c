@@ -269,7 +269,7 @@ void calculate_object_boundaries(void)
 				break;
 
 			default:
-				g_printerr("ED27: Unknown layer type\n");
+				display_warning("ED27: Unknown layer type\n");
 		}
 
 		// * Store the calculated boundary *
@@ -350,7 +350,7 @@ void destroy_slide(gpointer element, gpointer user_data)
 				break;
 
 			default:
-				g_printerr("ED57: Unknown layer type when destroying a slide.\n");
+				display_warning("ED57: Unknown layer type when destroying a slide.\n");
 		}
 		g_free(layer_data->object_data);
 
@@ -544,17 +544,17 @@ gboolean flame_read(gchar *filename)
 	// If any of the critically needed preferences are missing, display a warning then abort
 	if (NULL == project_name_data)
 	{
-		g_printerr("ED47: Project Name missing, aborting project open");
+		display_warning("ED47: Project Name missing, aborting project open");
 		return FALSE;
 	}
 	if (NULL == project_width_data)
 	{
-		g_printerr("ED48: Project Width missing, aborting project open");
+		display_warning("ED48: Project Width missing, aborting project open");
 		return FALSE;
 	}
 	if (NULL == project_height_data)
 	{
-		g_printerr("ED49: Project Height missing, aborting project open");
+		display_warning("ED49: Project Height missing, aborting project open");
 		return FALSE;
 	}
 
@@ -1062,6 +1062,18 @@ gboolean flame_read(gchar *filename)
 }
 
 
+void logger_simple(const gchar *str)
+{
+	// For now, do nothing with the logs
+}
+
+
+void logger_with_domain(const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)
+{
+	// For now, do nothing with the logs
+}
+
+
 // Function disable or enable a given menu
 void menu_enable(const gchar *full_path, gboolean enable)
 {
@@ -1315,7 +1327,7 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 					break;
 
 				default:
-					g_printerr("ED28: Unknown layer type\n");
+					display_warning("ED28: Unknown layer type\n");
 
 			}  // Switch statement
 
@@ -1596,7 +1608,8 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				break;
 
 			case TYPE_MOUSE_CURSOR:
-				g_printerr("Mouse cursor found in layer '%s'\n", layer_data->name->str);
+				g_string_printf(tmp_gstring, "Mouse cursor found in layer '%s'\n", layer_data->name->str);
+				display_warning(tmp_gstring->str);
 				break;
 
 			case TYPE_TEXT:
@@ -1704,7 +1717,8 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				break;
 
 			default:
-				g_printerr("ED29: Unknown object type found in layer '%s'\n", layer_data->name->str);
+				g_string_printf(tmp_gstring, "ED29: Unknown object type found in layer '%s'\n", layer_data->name->str);
+				display_warning(tmp_gstring->str);
 		}
 
 		// If there is a string to write to the output file, do so
@@ -2255,6 +2269,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.45  2006/06/12 03:49:55  vapour
+ * Added functions for capturing log output, and updated many of the warning messages to go through the display_warning function.
+ *
  * Revision 1.44  2006/06/10 16:03:50  vapour
  * Adjusted the text positioning properties when outputting svg.
  *
