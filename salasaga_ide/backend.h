@@ -35,6 +35,8 @@ void calculate_object_boundaries(void);
 void destroy_slide(gpointer element, gpointer user_data);
 GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y);
 gboolean flame_read(gchar *filename);
+void logger_simple(const gchar *str);
+void logger_with_domain(const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data);
 void menu_enable(const gchar *full_path, gboolean enable);
 void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_slide);
 void menu_export_svg_animation_slide(gpointer element, gpointer user_data);
@@ -56,6 +58,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string);
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2006/06/12 03:47:09  vapour
+ * Added functions for capturing log output.
+ *
  * Revision 1.7  2006/06/07 15:21:09  vapour
  * Created a function for freeing the resources allocated to a slide.
  *
