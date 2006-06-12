@@ -761,8 +761,22 @@ gint main(gint argc, gchar *argv[])
 	default_bg_colour.blue = 0;
 	frames_per_second = 12;  // Half of 24 fps (film)
 
-	// Start up the GUI part of things	
+	// Initialise GTK
+	gtk_set_locale();
 	gtk_init(&argc, &argv);
+
+	// Redirect log output so it doesn't pop open a console window
+	g_set_print_handler(logger_simple);
+	g_set_printerr_handler(logger_simple);
+	g_log_set_handler(NULL, G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, logger_with_domain, NULL);
+	g_log_set_handler("Gdk", G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, logger_with_domain, NULL);
+	g_log_set_handler("Gtk", G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, logger_with_domain, NULL);
+	g_log_set_handler("GLib", G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, logger_with_domain, NULL);
+	g_log_set_handler("GModule", G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, logger_with_domain, NULL);
+	g_log_set_handler("GLib-GObject", G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, logger_with_domain, NULL);
+	g_log_set_handler("GThread", G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, logger_with_domain, NULL);
+
+	// Start up the GUI part of things
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(main_window), 1024, 768);
 	gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_CENTER);
@@ -1379,6 +1393,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.17  2006/06/12 03:51:27  vapour
+ * Now redirects log output to our logging functions.
+ *
  * Revision 1.16  2006/06/10 14:48:30  vapour
  * Removed File -> Save As menu option (not needed), and added menu items for editing the name of a slide.
  *
