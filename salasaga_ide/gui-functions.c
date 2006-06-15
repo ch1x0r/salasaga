@@ -2841,15 +2841,28 @@ void menu_export_svg_animation(void)
 		"]]>\n"
 		"\t</style>\n"
 
-		// The arrowhead on the playback control's Restart button
-		"\t<marker id=\"restartArrow\" markerWidth=\"20\""
-		" markerHeight=\"20\" viewBox=\"-20 -4 80 65\""
-		" orient=\"auto\" refX=\"-9\" refY=\"3\""
-		" markerUnits=\"strokeWidth\">\n"
-		"\t\t<polygon points=\"0,0 20,10 0,20 0,0\""
-		" fill=\"#404040\" stroke=\"none\""
-		" stroke-width=\"1px\" transform=\"rotate(90)\" />\n"
-		"\t</marker>\n"
+		// Colorful playback button
+		"<linearGradient id=\"linearGradient580\">"
+		"<stop style=\"stop-color:#ffff8a;stop-opacity:0.66670001\" offset=\"0\" id=\"stop581\" />"
+		"<stop style=\"stop-color:#000000;stop-opacity:0.39610001\" offset=\"1\" id=\"stop582\" />"
+		"</linearGradient>"
+		"<linearGradient id=\"linearGradient53\">"
+		"<stop style=\"stop-color:#ffffff;stop-opacity:0.65100002\" offset=\"0\" id=\"stop54\" />"
+		"<stop style=\"stop-color:#ffffff;stop-opacity:0.3529\" offset=\"1\" id=\"stop55\" />"
+		"</linearGradient>"
+		"<linearGradient id=\"linearGradient48\">"
+		"<stop style=\"stop-color:#ffff00;stop-opacity:0.65100002\" offset=\"0\" id=\"stop49\" />"
+		"<stop style=\"stop-color:#ffffff;stop-opacity:0\" offset=\"1\" id=\"stop50\" />"
+		"</linearGradient>"
+		"<linearGradient x1=\"0.51541913\" y1=\"0.87500054\" x2=\"0.53303993\" y2=\"0.11718749\""
+		" id=\"linearGradient51\" xlink:href=\"#linearGradient48\" />"
+		"<linearGradient id=\"linearGradient52\" xlink:href=\"#linearGradient53\" />"
+		"<linearGradient x1=\"0.101911\" y1=\"0.46540901\" x2=\"0.94267499\" y2=\"0.45282999\""
+		" id=\"linearGradient32\" xlink:href=\"#linearGradient48\" />"
+		"<linearGradient x1=\"-6.8458159e-09\" y1=\"-4.1814939e-08\" x2=\"1\" y2=\"1\""
+		" id=\"linearGradient33\" xlink:href=\"#linearGradient48\" />"
+		"<radialGradient cx=\"0.48458147\" cy=\"0.3125\" r=\"0.71763498\" fx=\"0.48458147\""
+		" fy=\"0.3125\" id=\"radialGradient579\" xlink:href=\"#linearGradient53\" />"
 
 		"</defs>\n");
 	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
@@ -2873,92 +2886,75 @@ void menu_export_svg_animation(void)
 
 	// Add the playback control bar.  We do it last, so it's over the top of everything else
 	g_string_printf(tmp_gstring,
-		"<!-- Playback background -->\n"
-		"<rect id=\"playbackBackground\" width=\"%.4f\""
-		" height=\"%.4f\" x=\"%.4f\" y=\"%.4f\""
-		" fill=\"#e8e8e8\" fill-opacity=\"1\" stroke=\"#878787\""
-		" stroke-width=\"%.4f\" stroke-linecap=\"round\""
-		" stroke-linejoin=\"round\" stroke-miterlimit=\"4\""
-		" stroke-dasharray=\"none\" stroke-opacity=\"1\" />\n"
+		// Play button
+		"<g id=\"playbackPlay\">"
+		"<path d=\"M %.4f,%.4f C %.4f,%.4f %.4f,%.4f %.4f,%.4f C %.4f,%.4f %.4f,%.4f %.4f,%.4f C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f C %.4f,%.4f %.4f,%.4f %.4f,%.4f z \""
+		" font-size=\"%.4fpx\" fill=\"#ff7f00\" fill-rule=\"evenodd\" stroke=\"#ff7f00\" stroke-width=\"%.4fpx\" />"
 
-		"<!-- Restart button -->\n"
-		"<path id=\"playbackRestart\" d=\"M %.4f %.4f A %.4f %.4f 0 1 1 %.4f,%.4f A %.4f %.4f 0 1 1 %.4f %.4f z\""
-		" transform=\"matrix(0,-0.4398,0.4398,0,%.4f,%.4f)\""
-		" fill=\"none\" fill-opacity=\"1\" stroke=\"#656565\""
-		" stroke-width=\"%.4f\" stroke-linecap=\"square\""
-		" stroke-linejoin=\"miter\" marker-start=\"none\""
-		" marker-mid=\"none\" marker-end=\"url(#restartArrow)\""
-		" stroke-miterlimit=\"4\" stroke-dasharray=\"none\""
-		" stroke-opacity=\"1\" />\n"
+		"<path d=\"M 73.151121,177.25081 L 222.75472,178.09578 L 372.35831,178.94074 L 296.82475,308.07877 L 221.2912,437.2168 L 147.22116,307.23381 L 73.151121,177.25081 z \""
+		" transform=\"matrix(-5.578935e-3,-0.760536,0.788429,-5.381559e-3,-15.6819,396.776)\""
+		" style=\"font-size:12px;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#ff0000;stroke-width:7.0387001;stroke-dasharray:none\""
+		" id=\"polygon627\" />"
+		"<path d=\"M 30.18425,218.5884 C 30.22505,153.4397 44.05981,86.90534 57.2053,43.01103 C 137.2981,42.24664 256.8496,30.44602 313.7122,65.83844 C 399.126,117.0122 394.6423,166.6598 365.7555,207.2401 C 295.0901,273.6837 234.0593,213.1625 199.5625,195.0691 C 149.4912,169.8504 29.66305,289.947 30.18425,218.5884 z \""
+		" style=\"font-size:12px;fill:url(#radialGradient579);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:13.45919037;stroke-opacity:1\""
+		" id=\"path621\" />"
+		"<path d=\"M 34.16317,214.6756 C 34.20397,279.8244 48.03867,346.3588 61.18417,390.2531 C 141.277,391.0175 260.8284,402.818 317.691,367.4257 C 403.1048,316.2519 407.0616,176.5721 378.1749,135.9917 C 307.5095,69.54819 242.2584,165.2381 207.7616,183.3315 C 157.6904,208.5503 33.64197,143.3171 34.16317,214.6756 z \""
+		" style=\"font-size:12px;fill:url(#linearGradient51);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:13.45919037;stroke-opacity:1\""
+		" id=\"path622\" />"
+		"</g>",
 
-		"<!-- Play button -->\n"
-		"<path id=\"playbackPlay\" d=\"M %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f z \""
-		" transform=\"matrix(0.2,-0.06,0.05,0.2,%.4f,%.4f)\""
-		" fill=\"#656565\" fill-opacity=\"1\" stroke=\"none\""
-		" stroke-width=\"%.4f\" stroke-linecap=\"round\""
-		" stroke-linejoin=\"round\" stroke-miterlimit=\"4\""
-		" stroke-dasharray=\"none\" stroke-opacity=\"0\" />\n"
+		// * Play button background values *
+		x_scale * 14.26866,
+		y_scale * 222.5673,
 
-		"<!-- Stop button -->\n"
-		"<rect id=\"playbackStop\" width=\"%.4f\""
-		" height=\"%.4f\" x=\"%.4f\" y=\"%.4f\""
-		" fill=\"#656565\" fill-opacity=\"1\" stroke=\"none\""
-		" stroke-width=\"%.4f\" stroke-linecap=\"round\""
-		" stroke-linejoin=\"round\" stroke-miterlimit=\"4\""
-		" stroke-dasharray=\"none\" stroke-opacity=\"0\" />\n",
+		x_scale * 14.30946,
+		y_scale * 157.4186,
 
-		// * Playback bar background values *
-		x_scale * 234,  // Width
-		y_scale * 90,  // Height
-		control_bar_x,  // X Offset
-		control_bar_y,  // Y Offset
-		x_scale * 3.4,  // Stroke Width
+		x_scale * 26.15476,
+		y_scale * 61.04249,
 
-		// * Restart button values *
-		x_scale * 600,  // d start
-		y_scale * 400,
+		x_scale * 39.30026,
+		y_scale * 17.14819,
+		
+		x_scale * 119.3931,
+		y_scale * 16.38379,
+		
+		x_scale * 276.7441,
+		y_scale * 12.54099,
+		
+		x_scale * 333.6067,
+		y_scale * 47.93339,
+		
+		x_scale * 419.0205,
+		y_scale * 99.10719,
+		
+		x_scale * 478.1992,
+		y_scale * 264.1427,
+		
+		x_scale * 359.7872,
+		y_scale * 374.3539,
+		
+		x_scale * 289.1218,
+		y_scale * 440.7975,
 
-		x_scale * 60,
-		y_scale * 60,
-
-		x_scale * 450,
-		y_scale * 400,
-
-		x_scale * 60,
-		y_scale * 60,
-
-		x_scale * 600,
-		y_scale * 400,
-
-		control_bar_x + (x_scale * -120),  // X Offset
-		control_bar_y + (y_scale * 292),  // Y Offset
-
-		x_scale * 16,  // Stroke Width
-
-		// * Play button values *
-		x_scale * 122,
-		y_scale * 421,
-
-		x_scale * 199,
-		y_scale * 125,
-
-		x_scale * 416,
-		y_scale * 340,
-
-		x_scale * 122,
-		y_scale * 421,
-
-		control_bar_x + (x_scale * 48),  // X Offset
-		control_bar_y,  // Y Offset
-
-		x_scale * 3.4,  // Stroke Width
-
-		// * Stop button values *
-		x_scale * 58,  // Width
-		y_scale * 63,  // Height
-		control_bar_x + (x_scale * 156),  // X Offset
-		control_bar_y + (y_scale * 14),  // Y Offset
-		x_scale * 3.4);  // Stroke Width
+		x_scale * 72.59536,
+		y_scale * 428.309,
+		
+		x_scale * 40.40656,
+		y_scale * 427.8347,
+		
+		x_scale * 25.78416,
+		y_scale * 391.2591,
+		
+		x_scale * 13.74746,
+		y_scale * 293.926,
+		
+		x_scale * 14.26866,
+		y_scale * 222.5673,
+		
+		y_scale * 12.0,  // Font size
+		x_scale * 13.4592);
 
 	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
@@ -4495,6 +4491,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.35  2006/06/15 09:56:34  vapour
+ * Started replacing the ugly play button with a much nicer one from openclipart.org.
+ *
  * Revision 1.34  2006/06/12 14:13:39  vapour
  * Playback control bar and buttons are now scaled and positioned reasonably well.
  *
