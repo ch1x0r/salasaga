@@ -2892,16 +2892,18 @@ void menu_export_svg_animation(void)
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f C %.4f,%.4f %.4f,%.4f %.4f,%.4f z \""
 		" font-size=\"%.4fpx\" fill=\"#ff7f00\" fill-rule=\"evenodd\" stroke=\"#ff7f00\" stroke-width=\"%.4fpx\" />"
 
-		"<path d=\"M 73.151121,177.25081 L 222.75472,178.09578 L 372.35831,178.94074 L 296.82475,308.07877 L 221.2912,437.2168 L 147.22116,307.23381 L 73.151121,177.25081 z \""
-		" transform=\"matrix(-5.578935e-3,-0.760536,0.788429,-5.381559e-3,-15.6819,396.776)\""
-		" style=\"font-size:12px;fill:#ffffff;fill-opacity:1;fill-rule:evenodd;stroke:#ff0000;stroke-width:7.0387001;stroke-dasharray:none\""
-		" id=\"polygon627\" />"
+		"<path d=\"M %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f z \""
+		" transform=\"matrix(%.4f,%.4f,%.4f,%.4f,%.4f,%.4f)\""
+		" font-size=\"%.4fpx\" fill=\"#ffffff\" fill-opacity=\"1\" fill-rule=\"evenodd\""
+		" stroke=\"#ff0000\" stroke-width=\"%.4f\" stroke-dasharray=\"none\" />"
+
 		"<path d=\"M 30.18425,218.5884 C 30.22505,153.4397 44.05981,86.90534 57.2053,43.01103 C 137.2981,42.24664 256.8496,30.44602 313.7122,65.83844 C 399.126,117.0122 394.6423,166.6598 365.7555,207.2401 C 295.0901,273.6837 234.0593,213.1625 199.5625,195.0691 C 149.4912,169.8504 29.66305,289.947 30.18425,218.5884 z \""
-		" style=\"font-size:12px;fill:url(#radialGradient579);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:13.45919037;stroke-opacity:1\""
-		" id=\"path621\" />"
+		" font-size=\"12px\" fill=\"url(#radialGradient579)\" fill-opacity=\"1\" fill-rule=\"evenodd\""
+		" stroke=\"none\" stroke-width=\"13.45919037\" stroke-opacity=\"1\" />"
+
 		"<path d=\"M 34.16317,214.6756 C 34.20397,279.8244 48.03867,346.3588 61.18417,390.2531 C 141.277,391.0175 260.8284,402.818 317.691,367.4257 C 403.1048,316.2519 407.0616,176.5721 378.1749,135.9917 C 307.5095,69.54819 242.2584,165.2381 207.7616,183.3315 C 157.6904,208.5503 33.64197,143.3171 34.16317,214.6756 z \""
-		" style=\"font-size:12px;fill:url(#linearGradient51);fill-opacity:1;fill-rule:evenodd;stroke:none;stroke-width:13.45919037;stroke-opacity:1\""
-		" id=\"path622\" />"
+		" font-size=\"12px\" fill=\"url(#linearGradient51)\" fill-opacity=\"1\""
+		" fill-rule=\"evenodd\" stroke=\"none\" stroke-width=\"13.45919037\" stroke-opacity=\"1\" />"
 		"</g>",
 
 		// * Play button background values *
@@ -2916,45 +2918,81 @@ void menu_export_svg_animation(void)
 
 		x_scale * 39.30026,
 		y_scale * 17.14819,
-		
+
 		x_scale * 119.3931,
 		y_scale * 16.38379,
-		
+
 		x_scale * 276.7441,
 		y_scale * 12.54099,
-		
+
 		x_scale * 333.6067,
 		y_scale * 47.93339,
-		
+
 		x_scale * 419.0205,
 		y_scale * 99.10719,
-		
+
 		x_scale * 478.1992,
 		y_scale * 264.1427,
-		
+
 		x_scale * 359.7872,
 		y_scale * 374.3539,
-		
+
 		x_scale * 289.1218,
 		y_scale * 440.7975,
 
 		x_scale * 72.59536,
 		y_scale * 428.309,
-		
+
 		x_scale * 40.40656,
 		y_scale * 427.8347,
-		
+
 		x_scale * 25.78416,
 		y_scale * 391.2591,
-		
+
 		x_scale * 13.74746,
 		y_scale * 293.926,
-		
+
 		x_scale * 14.26866,
 		y_scale * 222.5673,
-		
+
 		y_scale * 12.0,  // Font size
-		x_scale * 13.4592);
+		x_scale * 13.4592,
+
+		y_scale * 73.151121,
+		x_scale * 177.25081,
+
+		y_scale * 222.75472,
+		x_scale * 178.09578,
+
+		y_scale * 372.35831,
+		x_scale * 178.94074,
+
+		y_scale * 296.82475,
+		x_scale * 308.07877,
+
+		y_scale * 221.2912,
+		x_scale * 437.2168,
+		
+		y_scale * 147.22116,
+		x_scale * 307.23381,
+		
+		y_scale * 73.151121,
+		x_scale * 177.25081,
+
+		-5.578935e-3,  // Matrix
+		-0.760536,
+
+		0.788429,
+		-5.381559e-3,
+
+		x_scale * -15.6819,
+		y_scale * 396.776,
+		
+		12.0,  // Font size
+		
+		x_scale * 7.0387001  // Stroke width
+
+		);
 
 	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
@@ -4491,6 +4529,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.36  2006/06/17 13:00:30  vapour
+ * Continuing with replacing the ugly playback button with a nicer one.
+ *
  * Revision 1.35  2006/06/15 09:56:34  vapour
  * Started replacing the ugly play button with a much nicer one from openclipart.org.
  *
