@@ -2655,11 +2655,11 @@ void menu_export_svg_animation(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;			// Filter for *.*
-	gfloat				control_bar_x;			// Upper left X coordinate for the playback control bar
-	gfloat				control_bar_y;			// Upper left Y coordinate for the playback control bar
 	GError				*error = NULL;			// Pointer to error return structure
 	GtkWidget 			*export_dialog;			// Dialog widget
 	gchar				*filename;				// Pointer to the chosen file name
+	gfloat				play_x_offset;			// X offset for the onscreen play button
+	gfloat				play_y_offset;			// Y offset for the onscreen play button
 	GIOStatus			return_value;			// Return value used in most GIOChannel functions
 	GList				*slide_pointer;			// Points to the presently processing slide
 	GtkFileFilter		*svg_filter;			// Filter for *.svg
@@ -2803,14 +2803,6 @@ void menu_export_svg_animation(void)
 		return;
 	}
 
-	// Calculate scaling amounts to use
-	x_scale = (gfloat) output_width / project_width;
-	y_scale = (gfloat) output_height / project_height;
-
-	// Where should the control bar be located?
-	control_bar_x = output_width / 2 - (x_scale * 120);
-	control_bar_y = output_height - (y_scale * 150);
-
 	// Write element definitions to the output file
 	g_string_assign(tmp_gstring, "<defs>\n"
 		"\t<style type=\"text/css\"><![CDATA[\n"
@@ -2841,7 +2833,7 @@ void menu_export_svg_animation(void)
 		"]]>\n"
 		"\t</style>\n"
 
-		// Colorful playback button
+		// Play button definitions
 		"<linearGradient id=\"linearGradient580\">"
 		"<stop style=\"stop-color:#ffff8a;stop-opacity:0.66670001\" offset=\"0\" id=\"stop581\" />"
 		"<stop style=\"stop-color:#000000;stop-opacity:0.39610001\" offset=\"1\" id=\"stop582\" />"
@@ -2851,7 +2843,7 @@ void menu_export_svg_animation(void)
 		"<stop style=\"stop-color:#ffffff;stop-opacity:0.3529\" offset=\"1\" id=\"stop55\" />"
 		"</linearGradient>"
 		"<linearGradient id=\"linearGradient48\">"
-		"<stop style=\"stop-color:#ffff00;stop-opacity:0.65100002\" offset=\"0\" id=\"stop49\" />"
+		"<stop style=\"stop-color:#000088;stop-opacity:0.35\" offset=\"0\" id=\"stop49\" />"
 		"<stop style=\"stop-color:#ffffff;stop-opacity:0\" offset=\"1\" id=\"stop50\" />"
 		"</linearGradient>"
 		"<linearGradient x1=\"0.51541913\" y1=\"0.87500054\" x2=\"0.53303993\" y2=\"0.11718749\""
@@ -2863,7 +2855,19 @@ void menu_export_svg_animation(void)
 		" id=\"linearGradient33\" xlink:href=\"#linearGradient48\" />"
 		"<radialGradient cx=\"0.48458147\" cy=\"0.3125\" r=\"0.71763498\" fx=\"0.48458147\""
 		" fy=\"0.3125\" id=\"radialGradient579\" xlink:href=\"#linearGradient53\" />"
-
+		"<linearGradient x1=\"193.78032\" y1=\"405.81052\" x2=\"199.37556\" y2=\"165.17747\""
+		" id=\"linearGradient1420\" xlink:href=\"#linearGradient48\" gradientUnits=\"userSpaceOnUse\""
+		" gradientTransform=\"matrix(1.509791,0,0,0.636244,-72.23366,57.35697)\" />"
+		"<radialGradient cx=\"152.06763\" cy=\"137.20049\" r=\"191.53558\" fx=\"152.06763\""
+		" fy=\"137.20049\" id=\"radialGradient1423\" xlink:href=\"#linearGradient53\""
+		" gradientUnits=\"userSpaceOnUse\""
+		" gradientTransform=\"matrix(1.767117,0,0,0.543595,-66.97297,65.88884)\" />"
+		"<linearGradient x1=\"193.78032\" y1=\"405.81052\" x2=\"199.37556\" y2=\"165.17747\""
+		" id=\"linearGradient2335\" xlink:href=\"#linearGradient48\" gradientUnits=\"userSpaceOnUse\""
+		" gradientTransform=\"matrix(0.150979,0,0,6.36244e-2,191.6512,200.8107)\" />"
+		"<radialGradient cx=\"152.06763\" cy=\"137.20049\" r=\"191.53558\" fx=\"152.06763\""
+		" fy=\"137.20049\" id=\"radialGradient2337\" xlink:href=\"#linearGradient53\""
+		" gradientUnits=\"userSpaceOnUse\" gradientTransform=\"matrix(0.176712,0,0,5.43595e-2,192.1773,201.6639)\" />"
 		"</defs>\n");
 	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
@@ -2884,116 +2888,144 @@ void menu_export_svg_animation(void)
 	slide_pointer = g_list_first(slides);
 	g_list_foreach(slide_pointer, menu_export_svg_animation_slide, NULL);
 
+	// Calculate scaling amounts to use for the play button
+	x_scale = ((gfloat) output_width / project_width) * 3;
+	y_scale = ((gfloat) output_height / project_height) * 3;
+
+	// Position the play button
+	play_x_offset = -5;
+	play_y_offset = -20;
+
 	// Add the playback control bar.  We do it last, so it's over the top of everything else
 	g_string_printf(tmp_gstring,
 		// Play button
 		"<g id=\"playbackPlay\">"
-		"<path d=\"M %.4f,%.4f C %.4f,%.4f %.4f,%.4f %.4f,%.4f C %.4f,%.4f %.4f,%.4f %.4f,%.4f C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
-		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f C %.4f,%.4f %.4f,%.4f %.4f,%.4f z \""
-		" font-size=\"%.4fpx\" fill=\"#ff7f00\" fill-rule=\"evenodd\" stroke=\"#ff7f00\" stroke-width=\"%.4fpx\" />"
+		"\t<path d=\"M %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f z \""
+		" font-size=\"%.4fpx\" fill=\"#eef\" fill-rule=\"evenodd\" stroke=\"#88c\" stroke-width=\"%.4f\" id=\"path595\">"
+		"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n"
+		"</path>\n"
 
-		"<path d=\"M %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f z \""
-		" transform=\"matrix(%.4f,%.4f,%.4f,%.4f,%.4f,%.4f)\""
-		" font-size=\"%.4fpx\" fill=\"#ffffff\" fill-opacity=\"1\" fill-rule=\"evenodd\""
-		" stroke=\"#ff0000\" stroke-width=\"%.4f\" stroke-dasharray=\"none\" />"
+		"\t<path d=\"M %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f z \""
+		" font-size=\"%.4fpx\" fill=\"url(#linearGradient2335)\" fill-opacity=\"1\" fill-rule=\"evenodd\""
+		" stroke=\"none\" stroke-width=\"%.4f\" stroke-opacity=\"1\" id=\"path622\">"
+		"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n"
+		"</path>\n"
 
-		"<path d=\"M 30.18425,218.5884 C 30.22505,153.4397 44.05981,86.90534 57.2053,43.01103 C 137.2981,42.24664 256.8496,30.44602 313.7122,65.83844 C 399.126,117.0122 394.6423,166.6598 365.7555,207.2401 C 295.0901,273.6837 234.0593,213.1625 199.5625,195.0691 C 149.4912,169.8504 29.66305,289.947 30.18425,218.5884 z \""
-		" font-size=\"12px\" fill=\"url(#radialGradient579)\" fill-opacity=\"1\" fill-rule=\"evenodd\""
-		" stroke=\"none\" stroke-width=\"13.45919037\" stroke-opacity=\"1\" />"
+		"\t<path d=\"M %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
+		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f z \""
+		" font-size=\"%.4fpx\" fill=\"url(#radialGradient2337)\" fill-opacity=\"1\" fill-rule=\"evenodd\""
+		" stroke=\"none\" stroke-width=\"%.4f\" stroke-opacity=\"1\" id=\"path621\">\n"
+		"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n"
+		"</path>\n"
 
-		"<path d=\"M 34.16317,214.6756 C 34.20397,279.8244 48.03867,346.3588 61.18417,390.2531 C 141.277,391.0175 260.8284,402.818 317.691,367.4257 C 403.1048,316.2519 407.0616,176.5721 378.1749,135.9917 C 307.5095,69.54819 242.2584,165.2381 207.7616,183.3315 C 157.6904,208.5503 33.64197,143.3171 34.16317,214.6756 z \""
-		" font-size=\"12px\" fill=\"url(#linearGradient51)\" fill-opacity=\"1\""
-		" fill-rule=\"evenodd\" stroke=\"none\" stroke-width=\"13.45919037\" stroke-opacity=\"1\" />"
-		"</g>",
+		"\t<text x=\"%.4f\" y=\"%.4f\""
+		" font-size=\"%.4fpx\" font-style=\"normal\" font-weight=\"normal\" fill=\"#ffffff\""
+		" fill-opacity=\"1\" stroke=\"#000\" stroke-width=\"%.4f\" stroke-linecap=\"butt\""
+		" stroke-linejoin=\"miter\" stroke-miterlimit=\"4\" stroke-dasharray=\"none\""
+		" stroke-opacity=\"1\" font-family=\"Bitstream Vera Sans\""
+		" id=\"text1428\" xml:space=\"preserve\"><tspan x=\"%.4f\" y=\"%.4f\" id=\"tspan1430\">Play</tspan>"
+		"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n"
+		"</text>\n"
 
-		// * Play button background values *
-		x_scale * 14.26866,
-		y_scale * 222.5673,
+		"</g>\n",
 
-		x_scale * 14.30946,
-		y_scale * 157.4186,
+		// * Play button values *
+		x_scale * (play_x_offset + 193.55), y_scale * (play_y_offset + 216.73),
 
-		x_scale * 26.15476,
-		y_scale * 61.04249,
+		x_scale * (play_x_offset + 193.55), y_scale * (play_y_offset + 212.03),
+		x_scale * (play_x_offset + 195.13), y_scale * (play_y_offset + 205.07),
+		x_scale * (play_x_offset + 196.88), y_scale * (play_y_offset + 201.90),
 
-		x_scale * 39.30026,
-		y_scale * 17.14819,
+		x_scale * (play_x_offset + 207.54), y_scale * (play_y_offset + 201.85),
+		x_scale * (play_x_offset + 228.49), y_scale * (play_y_offset + 201.57),
+		x_scale * (play_x_offset + 236.05), y_scale * (play_y_offset + 204.13),
 
-		x_scale * 119.3931,
-		y_scale * 16.38379,
+		x_scale * (play_x_offset + 247.42), y_scale * (play_y_offset + 207.82),
+		x_scale * (play_x_offset + 255.30), y_scale * (play_y_offset + 219.73),
+		x_scale * (play_x_offset + 239.54), y_scale * (play_y_offset + 227.68),
 
-		x_scale * 276.7441,
-		y_scale * 12.54099,
+		x_scale * (play_x_offset + 230.13), y_scale * (play_y_offset + 232.48),
+		x_scale * (play_x_offset + 201.32), y_scale * (play_y_offset + 231.58),
+		x_scale * (play_x_offset + 197.03), y_scale * (play_y_offset + 231.54),
 
-		x_scale * 333.6067,
-		y_scale * 47.93339,
+		x_scale * (play_x_offset + 195.08), y_scale * (play_y_offset + 228.90),
+		x_scale * (play_x_offset + 193.48), y_scale * (play_y_offset + 221.88),
+		x_scale * (play_x_offset + 193.55), y_scale * (play_y_offset + 216.73),
 
-		x_scale * 419.0205,
-		y_scale * 99.10719,
+		x_scale * 12.0,  // Font size
+		x_scale * 1.32,  // Stroke width
 
-		x_scale * 478.1992,
-		y_scale * 264.1427,
+		x_scale * (play_x_offset + 196.20), y_scale * (play_y_offset + 216.30),
 
-		x_scale * 359.7872,
-		y_scale * 374.3539,
+		x_scale * (play_x_offset + 196.20), y_scale * (play_y_offset + 221.01),
+		x_scale * (play_x_offset + 198.05), y_scale * (play_y_offset + 225.81),
+		x_scale * (play_x_offset + 199.80), y_scale * (play_y_offset + 228.98),
 
-		x_scale * 289.1218,
-		y_scale * 440.7975,
+		x_scale * (play_x_offset + 210.46), y_scale * (play_y_offset + 229.03),
+		x_scale * (play_x_offset + 226.37), y_scale * (play_y_offset + 229.88),
+		x_scale * (play_x_offset + 233.94), y_scale * (play_y_offset + 227.33),
 
-		x_scale * 72.59536,
-		y_scale * 428.309,
+		x_scale * (play_x_offset + 245.30), y_scale * (play_y_offset + 223.63),
+		x_scale * (play_x_offset + 245.83), y_scale * (play_y_offset + 213.55),
+		x_scale * (play_x_offset + 241.99), y_scale * (play_y_offset + 210.63),
 
-		x_scale * 40.40656,
-		y_scale * 427.8347,
+		x_scale * (play_x_offset + 232.58), y_scale * (play_y_offset + 205.83),
+		x_scale * (play_x_offset + 223.90), y_scale * (play_y_offset + 212.74),
+		x_scale * (play_x_offset + 219.30), y_scale * (play_y_offset + 214.04),
 
-		x_scale * 25.78416,
-		y_scale * 391.2591,
+		x_scale * (play_x_offset + 212.64), y_scale * (play_y_offset + 215.87),
+		x_scale * (play_x_offset + 196.13), y_scale * (play_y_offset + 211.15),
+		x_scale * (play_x_offset + 196.20), y_scale * (play_y_offset + 216.30),
 
-		x_scale * 13.74746,
-		y_scale * 293.926,
+		x_scale * 12.0,  // Font size
+		x_scale * 13.46,
 
-		x_scale * 14.26866,
-		y_scale * 222.5673,
+		x_scale * (play_x_offset + 196.20), y_scale * (play_y_offset + 217.44),
 
-		y_scale * 12.0,  // Font size
-		x_scale * 13.4592,
+		x_scale * (play_x_offset + 196.20), y_scale * (play_y_offset + 212.74),
+		x_scale * (play_x_offset + 198.04), y_scale * (play_y_offset + 207.94),
+		x_scale * (play_x_offset + 199.80), y_scale * (play_y_offset + 204.77),
 
-		y_scale * 73.151121,
-		x_scale * 177.25081,
+		x_scale * (play_x_offset + 210.45), y_scale * (play_y_offset + 204.71),
+		x_scale * (play_x_offset + 226.36), y_scale * (play_y_offset + 203.86),
+		x_scale * (play_x_offset + 233.93), y_scale * (play_y_offset + 206.41),
 
-		y_scale * 222.75472,
-		x_scale * 178.09578,
+		x_scale * (play_x_offset + 245.30), y_scale * (play_y_offset + 210.11),
+		x_scale * (play_x_offset + 244.70), y_scale * (play_y_offset + 213.70),
+		x_scale * (play_x_offset + 240.86), y_scale * (play_y_offset + 216.62),
 
-		y_scale * 372.35831,
-		x_scale * 178.94074,
+		x_scale * (play_x_offset + 231.45), y_scale * (play_y_offset + 221.42),
+		x_scale * (play_x_offset + 223.33), y_scale * (play_y_offset + 217.05),
+		x_scale * (play_x_offset + 218.74), y_scale * (play_y_offset + 215.74),
 
-		y_scale * 296.82475,
-		x_scale * 308.07877,
-
-		y_scale * 221.2912,
-		x_scale * 437.2168,
-		
-		y_scale * 147.22116,
-		x_scale * 307.23381,
-		
-		y_scale * 73.151121,
-		x_scale * 177.25081,
-
-		-5.578935e-3,  // Matrix
-		-0.760536,
-
-		0.788429,
-		-5.381559e-3,
-
-		x_scale * -15.6819,
-		y_scale * 396.776,
+		x_scale * (play_x_offset + 212.07), y_scale * (play_y_offset + 213.92),
+		x_scale * (play_x_offset + 196.13), y_scale * (play_y_offset + 222.59),
+		x_scale * (play_x_offset + 196.20), y_scale * (play_y_offset + 217.44),
 		
 		12.0,  // Font size
-		
-		x_scale * 7.0387001  // Stroke width
+		13.46,  // Stroke width
 
-		);
+		// Text part of play button
+		x_scale * (play_x_offset + 199.0), y_scale * (play_y_offset + 222.0),
+		x_scale * 19.20,  // Font size
+		x_scale * 0.54,  // Stroke width
+		x_scale * (play_x_offset + 199.0), y_scale * (play_y_offset + 222.0)
 
+	);
 	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
@@ -3563,6 +3595,13 @@ void menu_screenshots_capture(void)
 	gsize				tmp_gsize;				// Temporary gsize
 	gpointer			tmp_ptr;				// Temporary pointer
 	GString				*tmp_gstring;			// Temporary string
+
+
+#ifdef _WIN32
+	// If we're running on Windows, pop up a message about capturing not working yet then return
+	display_warning("Screen capturing not yet supported for Windows, please place your own screenshots in the screenshots directory");
+	return;
+#endif
 
 // fixme4: Stuff not present in the shipping version of Solaris 10 :(
 #ifndef __sun
@@ -4529,6 +4568,10 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.37  2006/06/18 13:42:29  vapour
+ * + Added a popup warning about screenshots not working on Windows.
+ * + Play button now scales and positions properly, and it also looks reasonable.
+ *
  * Revision 1.36  2006/06/17 13:00:30  vapour
  * Continuing with replacing the ugly playback button with a nicer one.
  *
