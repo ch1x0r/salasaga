@@ -1453,8 +1453,6 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					g_object_unref(tmp_pixbuf);
 					g_string_free(tmp_gstring, TRUE);
 					g_error_free(error);
-					// fixme5: Probably needs some work, as there would likely be further allocated memory by this stage
-
 					return;
 				}
 
@@ -1476,8 +1474,6 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					g_object_unref(tmp_pixbuf);
 					g_string_free(tmp_gstring, TRUE);
 					g_error_free(error);
-					// fixme5: Probably needs some work, as there would likely be further allocated memory by this stage
-
 					return;
 				}
 
@@ -1554,7 +1550,6 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				g_object_unref(tmp_pixbuf);
 				g_free(encoded_string);
 				g_free(base64_string);
-
 				break;
 
 			case TYPE_HIGHLIGHT:
@@ -1732,11 +1727,9 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				display_warning(tmp_gstring->str);
 
 				// Free the memory allocated in this function
-				g_string_free(string_to_write, TRUE);
 				g_string_free(file_name, TRUE);
 				g_string_free(tmp_gstring, TRUE);
 				g_error_free(error);
-
 				return;
 			}
 
@@ -1748,7 +1741,6 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 	// Update the time counter, so the next frame starts after the end of this one
 	export_time_counter = time_end;
-
 	return;
 }
 
@@ -1757,24 +1749,24 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 void menu_file_save_layer(gpointer element, gpointer user_data)
 {
 	// Local variables
-	layer			*layer_pointer;				// Points to the presently processing layer
+	layer				*layer_pointer;			// Points to the presently processing layer
 
-	xmlNodePtr		slide_node;					// Pointer to the slide node
-	xmlNodePtr		layer_node;					// Pointer to the new layer node
+	xmlNodePtr			slide_node;				// Pointer to the slide node
+	xmlNodePtr			layer_node;				// Pointer to the new layer node
 
-	gboolean			return_code;					// Used to get yes/no values from functions
-	guint			file_counter;				// Used if we have to work out a new image file name
-	guint			finish_frame;				// The finish frame in which the object appears
-	guint			layer_type;					// The type of layer
-	guint			start_frame;					// The first frame in which the object appears
-	GError			*error = NULL;				// Pointer to error return structure
-	GString			*filename;					// Used if we have to work out a new image file name
-	GString			*layer_name;					// Name of the layer
+	gboolean			return_code;			// Used to get yes/no values from functions
+	guint				file_counter;			// Used if we have to work out a new image file name
+	guint				finish_frame;			// The finish frame in which the object appears
+	guint				layer_type;				// The type of layer
+	guint				start_frame;			// The first frame in which the object appears
+	GError				*error = NULL;			// Pointer to error return structure
+	GString				*filename;				// Used if we have to work out a new image file name
+	GString				*layer_name;			// Name of the layer
 
-	GtkTextIter		text_start;					// The start position of the text buffer
-	GtkTextIter		text_end;					// The end position of the text buffer
+	GtkTextIter			text_start;				// The start position of the text buffer
+	GtkTextIter			text_end;				// The end position of the text buffer
 
-	GString			*tmp_gstring;				// Temporary GString
+	GString				*tmp_gstring;			// Temporary GString
 
 
 	// Initialise various things
@@ -1818,6 +1810,9 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			// An alternative could be to reference the original image, keeping a note of the area needed
 			// but that could get tricky if we ever get into more advanced image manipulation (unsure)
 			//
+			// Another alternative, and probably better longer term, is to save the image data in the
+			// project file, similar or in the same way we save image data in exported svg.  This way
+			// a project file is far more self-contained and portable.
 
 			if (TRUE == ((layer_image *) layer_pointer->object_data)->modified)
 			{
@@ -1962,7 +1957,6 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 
 
 // Function to save the application preferences prior to exiting
-// fixme3: This doesn't seem to be getting called when the user presses Alt-F4
 void save_preferences_and_exit(void)
 {
 #ifndef _WIN32
@@ -2020,16 +2014,21 @@ void save_preferences_and_exit(void)
 		tmp_gdk_window = main_window->window;
 	}
 
-	// Find out if the window is presently maximised or not
-	tmp_int = gdk_window_get_state(tmp_gdk_window);
-	if (GDK_WINDOW_STATE_MAXIMIZED == tmp_int)
+	// If the main application window still exists, save the window maximisation state, else don't bother
+	// (it doesn't exist if the application exits due to Alt-F4 or pressing the title bar close button)
+	if (NULL != tmp_gdk_window)
 	{
-		// The window is maximised, so save that info
-		gconf_engine_set_bool(gconf_engine, "/apps/flame/defaults/window_maximised", TRUE, NULL);
-	} else
-	{
-		// The window is not maximised, so save that info
-		gconf_engine_set_bool(gconf_engine, "/apps/flame/defaults/window_maximised", FALSE, NULL);
+		// Find out if the window is presently maximised or not
+		tmp_int = gdk_window_get_state(tmp_gdk_window);
+		if (GDK_WINDOW_STATE_MAXIMIZED == tmp_int)
+		{
+			// The window is maximised, so save that info
+			gconf_engine_set_bool(gconf_engine, "/apps/flame/defaults/window_maximised", TRUE, NULL);
+		} else
+		{
+			// The window is not maximised, so save that info
+			gconf_engine_set_bool(gconf_engine, "/apps/flame/defaults/window_maximised", FALSE, NULL);
+		}
 	}
 
 	// Save a configuration structure version number
@@ -2048,10 +2047,7 @@ void save_preferences_and_exit(void)
 
 #else
 
-	// * Windows-only code *
-
-
-	// * Registry related code (windows only) *
+	// * Windows-only code (registry for now) *
 
 	// Check if we have a saved configuration in the windows registry
 	HKEY		hkey;
@@ -2164,19 +2160,19 @@ void save_preferences_and_exit(void)
 			string_size = (tmp_gstring->len) + 1;
 			return_code = RegSetValueEx(hkey, "scaling_quality", 0, REG_SZ, tmp_gstring->str, string_size);
 			break;
-			
+
 		case GDK_INTERP_TILES:
 			g_string_printf(tmp_gstring, "%s", "Tiles");
 			string_size = (tmp_gstring->len) + 1;
 			return_code = RegSetValueEx(hkey, "scaling_quality", 0, REG_SZ, tmp_gstring->str, string_size);
 			break;
-		
+
 		case GDK_INTERP_BILINEAR:
 			g_string_printf(tmp_gstring, "%s", "Bilinear");
 			string_size = (tmp_gstring->len) + 1;
 			return_code = RegSetValueEx(hkey, "scaling_quality", 0, REG_SZ, tmp_gstring->str, string_size);
 			break;
-		
+
 		case GDK_INTERP_HYPER:
 			g_string_printf(tmp_gstring, "%s", "Hyper");
 			string_size = (tmp_gstring->len) + 1;
@@ -2197,7 +2193,7 @@ void save_preferences_and_exit(void)
 void sound_beep(void)
 {
 #ifndef _WIN32
-	// We'll have to think of a non-gnome-code way of playing sound for windows
+	// fixme4: We'll have to think of a non-gnome-code way of playing sound for windows
 	gnome_sound_play("../share/sounds/flame/generic.wav");
 #endif
 }
@@ -2207,11 +2203,11 @@ void sound_beep(void)
 gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
 {
 	// Local variables
-	guint		buffer_length;
-	gchar		*input_buffer;
-	gint			input_counter;				// Counter used for positioning inside the input buffer
-	gchar		*output_buffer;
-	gint			output_counter;				// Counter used for positioning inside the output buffer
+	guint				buffer_length;
+	gchar				*input_buffer;
+	gint				input_counter;			// Counter used for positioning inside the input buffer
+	gchar				*output_buffer;
+	gint				output_counter;			// Counter used for positioning inside the output buffer
 
 
 	// Initialise some things
@@ -2255,9 +2251,7 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
 
 	// Put a NULL at the end of the URI encoded string
 	output_buffer[output_counter] = '\0';
-
 	output_string[0] = output_buffer;
-
 	return TRUE;
 }
 
@@ -2267,6 +2261,10 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.49  2006/06/19 14:51:57  vapour
+ * + Small code cleanups in the svg export section, so freeing of memory is done a bit better.
+ * + Improved the code that saves the window maximisation preference.
+ *
  * Revision 1.48  2006/06/18 08:21:28  vapour
  * Updated so the exported svg animation starts playing after the play button has faded out.
  *
