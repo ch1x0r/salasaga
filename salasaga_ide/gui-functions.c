@@ -2826,12 +2826,52 @@ void menu_export_svg_animation(void)
 		"\t\t}\n"
 
 		"\t\ttext.text {\n"
-		"\t\t\tfont-family: sans-serif;\n"
+		"\t\t\tfont-family: Bitstream Vera Sans;\n"
+//		"\t\t\tfont-family: sans-serif;\n"
 		"\t\t\ttext-anchor: start;\n"
 		"\t\t\talignment-baseline: baseline\n"
 		"\t\t}\n"
 		"]]>\n"
 		"\t</style>\n"
+
+// fixme2: Need a way to read the font face from the font file and only embed the required glyphs in the output
+
+// fixme1: Not sure the below font is being used.  Should probably try one of the italic versions just
+//         to verify it's being picked up
+
+"<font horiz-adv-x=\"1038\" >"
+"<font-face font-family=\"Bitstream Vera Sans\" units-per-em=\"2048\" panose-1=\"2 11 6 3 3 8 4 2 2 4\""
+" ascent=\"1901\" descent=\"-483\" alphabetic=\"0\" />"
+"<missing-glyph horiz-adv-x=\"1229\" d=\"M102 -362V1444H1126V-362H102ZM217 -248H1012V1329H217V-248Z\" />"
+"<glyph unicode=\" \" glyph-name=\"space\" horiz-adv-x=\"651\" />"
+
+"<glyph unicode=\",\" glyph-name=\"comma\" horiz-adv-x=\"651\" d=\"M240 254H451V82L287 -238H158L240 82V254Z\" />"
+"<glyph unicode=\"-\" glyph-name=\"hyphen\" horiz-adv-x=\"739\" d=\"M100 643H639V479H100V643Z\" />"
+"<glyph unicode=\".\" glyph-name=\"period\" horiz-adv-x=\"651\" d=\"M219 254H430V0H219V254Z\" />"
+"<glyph unicode=\"/\" glyph-name=\"slash\" horiz-adv-x=\"690\" d=\"M520 1493H690L170 -190H0L520 1493Z\" />"
+"<glyph unicode=\"0\" glyph-name=\"zero\" horiz-adv-x=\"1303\" d=\"M651 1360Q495 1360 417 1207T338 745Q338 438 416 285T651 131Q808 131 886 284T965 745Q965 1053 887 1206T651 1360ZM651 1520Q902 1520 1034 1322T1167 745Q1167 368 1035 170T651 -29Q400 -29 268 169T135 745Q135 1123 267 1321T651 1520Z\" />"
+"<glyph unicode=\"1\" glyph-name=\"one\" horiz-adv-x=\"1303\" d=\"M254 170H584V1309L225 1237V1421L582 1493H784V170H1114V0H254V170Z\" />"
+"<glyph unicode=\"2\" glyph-name=\"two\" horiz-adv-x=\"1303\" d=\"M393 170H1098V0H150V170Q265 289 463 489T713 748Q810 857 848 932T887 1081Q887 1200 804 1275T586 1350Q491 1350 386 1317T160 1217V1421Q282 1470 388 1495T582 1520Q814 1520 952 1404T1090 1094Q1090 1002 1056 920T930 725Q905 696 771 558T393 170Z\" />"
+"<glyph unicode=\"3\" glyph-name=\"three\" horiz-adv-x=\"1303\" d=\"M831 805Q976 774 1057 676T1139 434Q1139 213 987 92T555 -29Q461 -29 362 -11T156 45V240Q240 191 340 166T549 141Q739 141 838 216T938 434Q938 566 846 640T588 715H414V881H596Q745 881 824 940T903 1112Q903 1227 822 1288T588 1350Q505 1350 410 1332T201 1276V1456Q316 1488 416 1504T606 1520Q836 1520 970 1416T1104 1133Q1104 1009 1033 924T831 805Z\" />"
+
+/*
+<glyph unicode="4" glyph-name="four" horiz-adv-x="1303" d="M774 1317L264 520H774V1317ZM721 1493H975V520H1188V352H975V0H774V352H100V547L721 1493Z" />
+<glyph unicode="5" glyph-name="five" horiz-adv-x="1303" d="M221 1493H1014V1323H406V957Q450 972 494 979T582 987Q832 987 978 850T1124 479Q1124 238 974 105T551 -29Q457 -29 360 -13T158 35V238Q248 189 344 165T547 141Q720 141 821 232T922 479Q922 635 821 726T547 817Q466 817 386 799T221 743V1493Z" />
+<glyph unicode="6" glyph-name="six" horiz-adv-x="1303" d="M676 827Q540 827 461 734T381 479Q381 318 460 225T676 131Q812 131 891 224T971 479Q971 641 892 734T676 827ZM1077 1460V1276Q1001 1312 924 1331T770 1350Q570 1350 465 1215T344 807Q403 894 492 940T688 987Q913 987 1043 851T1174 479Q1174 249 1038 110T676 -29Q417 -29 280 169T143 745Q143 1099 311 1309T762 1520Q838 1520 915 1505T1077 1460Z" />
+<glyph unicode="7" glyph-name="seven" horiz-adv-x="1303" d="M168 1493H1128V1407L586 0H375L885 1323H168V1493Z" />
+<glyph unicode="8" glyph-name="eight" horiz-adv-x="1303" d="M651 709Q507 709 425 632T342 420Q342 285 424 208T651 131Q795 131 878 208T961 420Q961 555 879 632T651 709ZM449 795Q319 827 247 916T174 1133Q174 1312 301 1416T651 1520Q874 1520 1001 1416T1128 1133Q1128 1005 1056 916T854 795Q1000 761 1081 662T1163 420Q1163 203 1031 87T651 -29Q404 -29 272 87T139 420Q139 563 221 662T449 795ZM375 1114Q375 998 447 933T651 868Q781 868 854 933T928 1114Q928 1230 855 1295T651 1360Q520 1360 448 1295T375 1114Z" />
+<glyph unicode="9" glyph-name="nine" horiz-adv-x="1303" d="M225 31V215Q301 179 379 160T532 141Q732 141 837 275T958 684Q900 598 811 552T614 506Q390 506 260 641T129 1012Q129 1242 265 1381T627 1520Q886 1520 1022 1322T1159 745Q1159 392 992 182T541 -29Q465 -29 387 -14T225 31ZM627 664Q763 664 842 757T922 1012Q922 1173 843 1266T627 1360Q491 1360 412 1267T332 1012Q332 850 411 757T627 664Z" />
+*/
+
+"<glyph unicode=\"N\" glyph-name=\"N\" horiz-adv-x=\"1532\" d=\"M201 1493H473L1135 244V1493H1331V0H1059L397 1249V0H201V1493Z\" />"
+
+"<glyph unicode=\"e\" glyph-name=\"e\" horiz-adv-x=\"1260\" d=\"M1151 606V516H305Q317 326 419 227T705 127Q811 127 910 153T1108 231V57Q1009 15 905 -7T694 -29Q426 -29 270 127T113 549Q113 824 261 985T662 1147Q888 1147 1019 1002T1151 606ZM967 660Q965 811 883 901T664 991Q510 991 418 904T311 659L967 660Z\" />"
+"<glyph unicode=\"w\" glyph-name=\"w\" horiz-adv-x=\"1675\" d=\"M86 1120H270L500 246L729 1120H946L1176 246L1405 1120H1589L1296 0H1079L838 918L596 0H379L86 1120Z\" />"
+
+"<glyph unicode=\"t\" glyph-name=\"t\" horiz-adv-x=\"803\" d=\"M375 1438V1120H754V977H375V369Q375 232 412 193T565 154H754V0H565Q352 0 271 79T190 369V977H55V1120H190V1438H375Z\" />"
+"<glyph unicode=\"x\" glyph-name=\"x\" horiz-adv-x=\"1212\" d=\"M1124 1120L719 575L1145 0H928L602 440L276 0H59L494 586L96 1120H313L610 721L907 1120H1124Z\" />"
+
+"</font>"
 
 		// Play button definitions
 		"<linearGradient id=\"linearGradient580\">"
@@ -4568,6 +4608,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.38  2006/06/21 14:42:03  vapour
+ * Started adding code to embed the Bitstream Vera fonts in the output svg.
+ *
  * Revision 1.37  2006/06/18 13:42:29  vapour
  * + Added a popup warning about screenshots not working on Windows.
  * + Play button now scales and positions properly, and it also looks reasonable.
