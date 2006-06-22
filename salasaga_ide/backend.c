@@ -1659,7 +1659,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Create the text tag
 				// fixme3: Probably need to embed the font (not sure)
-				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" class=\"text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-size=\"%.4fpx\" textLength=\"%.4fpx\" lengthAdjust=\"spacingAndGlyphs\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
+				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" font-family=\"Bitstream Vera Sans stuff\" class=\"text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-size=\"%.4fpx\" textLength=\"%.4fpx\" lengthAdjust=\"spacingAndGlyphs\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
 					layer_data->name->str,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
 					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,  // Y offset
@@ -2261,6 +2261,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.50  2006/06/22 14:26:08  vapour
+ * Updated to use the embedded italic Bitstream Vera font while validating the embedding of fonts.
+ *
  * Revision 1.49  2006/06/19 14:51:57  vapour
  * + Small code cleanups in the svg export section, so freeing of memory is done a bit better.
  * + Improved the code that saves the window maximisation preference.
