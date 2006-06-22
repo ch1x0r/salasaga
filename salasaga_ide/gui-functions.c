@@ -2805,39 +2805,43 @@ void menu_export_svg_animation(void)
 
 	// Write element definitions to the output file
 	g_string_assign(tmp_gstring, "<defs>\n"
-		"\t<style type=\"text/css\"><![CDATA[\n"
-
-		"\t\trect.highlight {\n"
+		"\t<style type=\"text/css\">\n"
+		"<![CDATA[ rect.highlight {\n"
 		"\t\t\tfill: #0f0;\n"
 		"\t\t\tfill-opacity: 0.25;\n"
 		"\t\t\tstroke: #0f0;\n"
 		"\t\t\tstroke-linejoin: round;\n"
 		"\t\t\tstroke-dasharray: none;\n"
-		"\t\t\tstroke-opacity=0.8\n"
-		"\t\t}\n"
+		"\t\t\tstroke-opacity: 0.8; }\n"
 
-		"\t\trect.text {\n"
-		"\t\t\tfill: #ffc;\n"
+		"\t\trect.text { fill: #ffc;\n"
 		"\t\t\tfill-opacity: 1.0;\n"
 		"\t\t\tstroke: black;\n"
 		"\t\t\tstroke-linejoin: round;\n"
 		"\t\t\tstroke-dasharray: none;\n"
-		"\t\t\tstroke-opacity: 0.8\n"
-		"\t\t}\n"
+		"\t\t\tstroke-opacity: 0.8; }\n"
 
 		"\t\ttext.text {\n"
-		"\t\t\tfont-family: Bitstream Vera Sans;\n"
-//		"\t\t\tfont-family: sans-serif;\n"
 		"\t\t\ttext-anchor: start;\n"
-		"\t\t\talignment-baseline: baseline\n"
-		"\t\t}\n"
+		"\t\t\talignment-baseline: baseline; }\n"
 		"]]>\n"
 		"\t</style>\n"
 
 // fixme2: Need a way to read the font face from the font file and only embed the required glyphs in the output
 
-// fixme1: Not sure the below font is being used.  Should probably try one of the italic versions just
-//         to verify it's being picked up
+// Italic Bitstream Vera
+"<font horiz-adv-x=\"1038\" >\n"
+"<font-face font-family=\"Bitstream Vera Sans stuff\" units-per-em=\"2048\" panose-1=\"2 11 6 3 3 3 4 11 2 4\" ascent=\"1901\" descent=\"-483\" alphabetic=\"0\" />"
+"<missing-glyph horiz-adv-x=\"1229\" d=\"M102 -362V1444H1126V-362H102ZM217 -248H1012V1329H217V-248Z\" />"
+"<glyph unicode=\" \" glyph-name=\"space\" horiz-adv-x=\"651\" />"
+"<glyph unicode=\".\" glyph-name=\"period\" horiz-adv-x=\"651\" d=\"M168 254H379L330 0H119L168 254Z\" />"
+"<glyph unicode=\"N\" glyph-name=\"N\" horiz-adv-x=\"1532\" d=\"M346 1493H618L1030 213L1280 1493H1477L1186 0H913L502 1288L252 0H55L346 1493Z\" />"
+"<glyph unicode=\"e\" glyph-name=\"e\" horiz-adv-x=\"1260\" d=\"M985 660Q988 676 989 693T991 727Q991 849 920 920T725 991Q588 991 483 905T324 659L985 660ZM1145 516H289Q283 478 281 456T279 418Q279 279 364 203T606 127Q726 127 833 154T1032 233L997 51Q898 11 793 -9T578 -29Q345 -29 220 82T94 399Q94 574 156 724T340 993Q418 1067 525 1107T754 1147Q944 1147 1056 1033T1169 727Q1169 681 1163 629T1145 516Z\" />"
+"<glyph unicode=\"w\" glyph-name=\"w\" horiz-adv-x=\"1675\" d=\"M174 1120H356L403 219L821 1120H1034L1096 219L1493 1120H1677L1165 0H950L895 928L467 0H250L174 1120Z\" />"
+"<glyph unicode=\"t\" glyph-name=\"t\" horiz-adv-x=\"803\" d=\"M866 1120L838 977H471L352 369Q346 335 343 312T340 276Q340 212 378 183T502 154H688L657 0H481Q317 0 237 64T156 258Q156 281 159 308T168 369L287 977H131L160 1120H313L375 1438H559L498 1120H866Z\" />"
+"<glyph unicode=\"x\" glyph-name=\"x\" horiz-adv-x=\"1212\" d=\"M1229 1120L715 571L1030 0H819L582 444L170 0H-53L498 590L205 1120H416L631 715L1006 1120H1229Z\" />"
+
+/* Standard Bitstream Vera
 
 "<font horiz-adv-x=\"1038\" >"
 "<font-face font-family=\"Bitstream Vera Sans\" units-per-em=\"2048\" panose-1=\"2 11 6 3 3 8 4 2 2 4\""
@@ -2853,7 +2857,7 @@ void menu_export_svg_animation(void)
 "<glyph unicode=\"1\" glyph-name=\"one\" horiz-adv-x=\"1303\" d=\"M254 170H584V1309L225 1237V1421L582 1493H784V170H1114V0H254V170Z\" />"
 "<glyph unicode=\"2\" glyph-name=\"two\" horiz-adv-x=\"1303\" d=\"M393 170H1098V0H150V170Q265 289 463 489T713 748Q810 857 848 932T887 1081Q887 1200 804 1275T586 1350Q491 1350 386 1317T160 1217V1421Q282 1470 388 1495T582 1520Q814 1520 952 1404T1090 1094Q1090 1002 1056 920T930 725Q905 696 771 558T393 170Z\" />"
 "<glyph unicode=\"3\" glyph-name=\"three\" horiz-adv-x=\"1303\" d=\"M831 805Q976 774 1057 676T1139 434Q1139 213 987 92T555 -29Q461 -29 362 -11T156 45V240Q240 191 340 166T549 141Q739 141 838 216T938 434Q938 566 846 640T588 715H414V881H596Q745 881 824 940T903 1112Q903 1227 822 1288T588 1350Q505 1350 410 1332T201 1276V1456Q316 1488 416 1504T606 1520Q836 1520 970 1416T1104 1133Q1104 1009 1033 924T831 805Z\" />"
-
+*/
 /*
 <glyph unicode="4" glyph-name="four" horiz-adv-x="1303" d="M774 1317L264 520H774V1317ZM721 1493H975V520H1188V352H975V0H774V352H100V547L721 1493Z" />
 <glyph unicode="5" glyph-name="five" horiz-adv-x="1303" d="M221 1493H1014V1323H406V957Q450 972 494 979T582 987Q832 987 978 850T1124 479Q1124 238 974 105T551 -29Q457 -29 360 -13T158 35V238Q248 189 344 165T547 141Q720 141 821 232T922 479Q922 635 821 726T547 817Q466 817 386 799T221 743V1493Z" />
@@ -2863,51 +2867,51 @@ void menu_export_svg_animation(void)
 <glyph unicode="9" glyph-name="nine" horiz-adv-x="1303" d="M225 31V215Q301 179 379 160T532 141Q732 141 837 275T958 684Q900 598 811 552T614 506Q390 506 260 641T129 1012Q129 1242 265 1381T627 1520Q886 1520 1022 1322T1159 745Q1159 392 992 182T541 -29Q465 -29 387 -14T225 31ZM627 664Q763 664 842 757T922 1012Q922 1173 843 1266T627 1360Q491 1360 412 1267T332 1012Q332 850 411 757T627 664Z" />
 */
 
+/* Standard Bitstream Vera
 "<glyph unicode=\"N\" glyph-name=\"N\" horiz-adv-x=\"1532\" d=\"M201 1493H473L1135 244V1493H1331V0H1059L397 1249V0H201V1493Z\" />"
-
 "<glyph unicode=\"e\" glyph-name=\"e\" horiz-adv-x=\"1260\" d=\"M1151 606V516H305Q317 326 419 227T705 127Q811 127 910 153T1108 231V57Q1009 15 905 -7T694 -29Q426 -29 270 127T113 549Q113 824 261 985T662 1147Q888 1147 1019 1002T1151 606ZM967 660Q965 811 883 901T664 991Q510 991 418 904T311 659L967 660Z\" />"
 "<glyph unicode=\"w\" glyph-name=\"w\" horiz-adv-x=\"1675\" d=\"M86 1120H270L500 246L729 1120H946L1176 246L1405 1120H1589L1296 0H1079L838 918L596 0H379L86 1120Z\" />"
-
 "<glyph unicode=\"t\" glyph-name=\"t\" horiz-adv-x=\"803\" d=\"M375 1438V1120H754V977H375V369Q375 232 412 193T565 154H754V0H565Q352 0 271 79T190 369V977H55V1120H190V1438H375Z\" />"
 "<glyph unicode=\"x\" glyph-name=\"x\" horiz-adv-x=\"1212\" d=\"M1124 1120L719 575L1145 0H928L602 440L276 0H59L494 586L96 1120H313L610 721L907 1120H1124Z\" />"
+*/
 
-"</font>"
+"</font>\n"
 
 		// Play button definitions
-		"<linearGradient id=\"linearGradient580\">"
-		"<stop style=\"stop-color:#ffff8a;stop-opacity:0.66670001\" offset=\"0\" id=\"stop581\" />"
-		"<stop style=\"stop-color:#000000;stop-opacity:0.39610001\" offset=\"1\" id=\"stop582\" />"
-		"</linearGradient>"
-		"<linearGradient id=\"linearGradient53\">"
-		"<stop style=\"stop-color:#ffffff;stop-opacity:0.65100002\" offset=\"0\" id=\"stop54\" />"
-		"<stop style=\"stop-color:#ffffff;stop-opacity:0.3529\" offset=\"1\" id=\"stop55\" />"
-		"</linearGradient>"
-		"<linearGradient id=\"linearGradient48\">"
-		"<stop style=\"stop-color:#000088;stop-opacity:0.35\" offset=\"0\" id=\"stop49\" />"
-		"<stop style=\"stop-color:#ffffff;stop-opacity:0\" offset=\"1\" id=\"stop50\" />"
-		"</linearGradient>"
+		"<linearGradient id=\"linearGradient580\">\n"
+		"<stop style=\"stop-color:#ffff8a;stop-opacity:0.66670001\" offset=\"0\" id=\"stop581\" />\n"
+		"<stop style=\"stop-color:#000000;stop-opacity:0.39610001\" offset=\"1\" id=\"stop582\" />\n"
+		"</linearGradient>\n"
+		"<linearGradient id=\"linearGradient53\">\n"
+		"<stop style=\"stop-color:#ffffff;stop-opacity:0.65100002\" offset=\"0\" id=\"stop54\" />\n"
+		"<stop style=\"stop-color:#ffffff;stop-opacity:0.3529\" offset=\"1\" id=\"stop55\" />\n"
+		"</linearGradient>\n"
+		"<linearGradient id=\"linearGradient48\">\n"
+		"<stop style=\"stop-color:#000088;stop-opacity:0.35\" offset=\"0\" id=\"stop49\" />\n"
+		"<stop style=\"stop-color:#ffffff;stop-opacity:0\" offset=\"1\" id=\"stop50\" />\n"
+		"</linearGradient>\n"
 		"<linearGradient x1=\"0.51541913\" y1=\"0.87500054\" x2=\"0.53303993\" y2=\"0.11718749\""
-		" id=\"linearGradient51\" xlink:href=\"#linearGradient48\" />"
-		"<linearGradient id=\"linearGradient52\" xlink:href=\"#linearGradient53\" />"
+		" id=\"linearGradient51\" xlink:href=\"#linearGradient48\" />\n"
+		"<linearGradient id=\"linearGradient52\" xlink:href=\"#linearGradient53\" />\n"
 		"<linearGradient x1=\"0.101911\" y1=\"0.46540901\" x2=\"0.94267499\" y2=\"0.45282999\""
-		" id=\"linearGradient32\" xlink:href=\"#linearGradient48\" />"
+		" id=\"linearGradient32\" xlink:href=\"#linearGradient48\" />\n"
 		"<linearGradient x1=\"-6.8458159e-09\" y1=\"-4.1814939e-08\" x2=\"1\" y2=\"1\""
-		" id=\"linearGradient33\" xlink:href=\"#linearGradient48\" />"
+		" id=\"linearGradient33\" xlink:href=\"#linearGradient48\" />\n"
 		"<radialGradient cx=\"0.48458147\" cy=\"0.3125\" r=\"0.71763498\" fx=\"0.48458147\""
-		" fy=\"0.3125\" id=\"radialGradient579\" xlink:href=\"#linearGradient53\" />"
+		" fy=\"0.3125\" id=\"radialGradient579\" xlink:href=\"#linearGradient53\" />\n"
 		"<linearGradient x1=\"193.78032\" y1=\"405.81052\" x2=\"199.37556\" y2=\"165.17747\""
 		" id=\"linearGradient1420\" xlink:href=\"#linearGradient48\" gradientUnits=\"userSpaceOnUse\""
-		" gradientTransform=\"matrix(1.509791,0,0,0.636244,-72.23366,57.35697)\" />"
+		" gradientTransform=\"matrix(1.509791,0,0,0.636244,-72.23366,57.35697)\" />\n"
 		"<radialGradient cx=\"152.06763\" cy=\"137.20049\" r=\"191.53558\" fx=\"152.06763\""
 		" fy=\"137.20049\" id=\"radialGradient1423\" xlink:href=\"#linearGradient53\""
 		" gradientUnits=\"userSpaceOnUse\""
-		" gradientTransform=\"matrix(1.767117,0,0,0.543595,-66.97297,65.88884)\" />"
+		" gradientTransform=\"matrix(1.767117,0,0,0.543595,-66.97297,65.88884)\" />\n"
 		"<linearGradient x1=\"193.78032\" y1=\"405.81052\" x2=\"199.37556\" y2=\"165.17747\""
 		" id=\"linearGradient2335\" xlink:href=\"#linearGradient48\" gradientUnits=\"userSpaceOnUse\""
-		" gradientTransform=\"matrix(0.150979,0,0,6.36244e-2,191.6512,200.8107)\" />"
+		" gradientTransform=\"matrix(0.150979,0,0,6.36244e-2,191.6512,200.8107)\" />\n"
 		"<radialGradient cx=\"152.06763\" cy=\"137.20049\" r=\"191.53558\" fx=\"152.06763\""
 		" fy=\"137.20049\" id=\"radialGradient2337\" xlink:href=\"#linearGradient53\""
-		" gradientUnits=\"userSpaceOnUse\" gradientTransform=\"matrix(0.176712,0,0,5.43595e-2,192.1773,201.6639)\" />"
+		" gradientUnits=\"userSpaceOnUse\" gradientTransform=\"matrix(0.176712,0,0,5.43595e-2,192.1773,201.6639)\" />\n"
 		"</defs>\n");
 	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
@@ -4608,6 +4612,10 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.39  2006/06/22 14:24:56  vapour
+ * + Typo fix for the svg stylesheet definition.
+ * + Embedded some characters of an italic Bitstream Vera font, to verify the font is indeed being used (successful).
+ *
  * Revision 1.38  2006/06/21 14:42:03  vapour
  * Started adding code to embed the Bitstream Vera fonts in the output svg.
  *
