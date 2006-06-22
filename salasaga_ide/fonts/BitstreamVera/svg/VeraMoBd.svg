@@ -1,5 +1,3 @@
-<?xml version="1.0" standalone="no"?> <!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd" > <svg width="100%" height="100%">
-<defs >
 <font horiz-adv-x="1233" ><font-face
     font-family="Bitstream Vera Sans Mono"
     units-per-em="2048"
@@ -138,5 +136,3 @@
 <glyph unicode="~" glyph-name="asciitilde" d="M1145 811V578Q1070 518 999 491T848 463Q758 463 645 514Q623 524 612 528Q535 562 484 574T381 586Q303 586 233 557T88 465V694Q166 755 239 782T395 809Q448 809 498 798T622 756Q633 751 655 741Q771 686 864
 686Q934 686 1003 716T1145 811Z" />
 </font>
-</defs>
-</svg>
