@@ -1658,7 +1658,6 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_finish);
 
 				// Create the text tag
-				// fixme3: Probably need to embed the font (not sure)
 				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" font-family=\"Bitstream Vera Sans svg\" class=\"text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-size=\"%.4fpx\" textLength=\"%.4fpx\" lengthAdjust=\"spacingAndGlyphs\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
 					layer_data->name->str,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
@@ -1666,7 +1665,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					(y_scale * ((layer_text *) layer_data->object_data)->rendered_height - 2),  // Font size
 					x_scale * (((layer_text *) layer_data->object_data)->rendered_width - 20),  // How wide to make the entire string
 					x_scale * 10,  // Horizontal space between text background border and text start
-					y_scale * ((((layer_text *) layer_data->object_data)->rendered_height + 34) / 2));  // Vertical space between text background border and text start
+					y_scale * ((((layer_text *) layer_data->object_data)->rendered_height + 54) / 2));  // Vertical space between text background border and text start
 
 				// Add the text to the text layer
 				gtk_text_buffer_get_bounds(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end);
@@ -2261,6 +2260,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.52  2006/06/25 13:16:18  vapour
+ * Improved the vertical centering of text in it's background box.
+ *
  * Revision 1.51  2006/06/25 12:57:25  vapour
  * Exported text layers now use the embedded Bitstream Vera font.
  *
