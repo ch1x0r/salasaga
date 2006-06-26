@@ -3897,6 +3897,9 @@ void menu_screenshots_import(void)
 							 status_bar->allocation.height};
 
 
+	// Initialise various things
+	tmp_string = g_string_new(NULL);
+
 	// * We know the path to get the screenshots from (screenshots_folder), and their prefix name (project_name),
 	//   so we make a list of them and add them to the slides linked list *
 
@@ -3909,7 +3912,6 @@ void menu_screenshots_import(void)
 			// * The error was something other than the folder not existing, which we could cope with *
 
 			// Display the warning message using our function
-			tmp_string = g_string_new(NULL);
 			g_string_printf(tmp_string, "Error ED03: Something went wrong opening the screenshots folder '%s': %s", screenshots_folder->str, error->message);
 			display_warning(tmp_string->str);
 
@@ -3946,13 +3948,13 @@ void menu_screenshots_import(void)
 	if (0 == num_screenshots)
 	{
 		// Display the warning message using our function
-		display_warning("Error ED05: No screenshots found");
+		g_string_printf(tmp_string, "Error ED05: No screenshots found in screenshot folder.\n\nThey must be named:\n\n\t%s0001.png\n\t%s0002.png\n\t<etc>\n\nIt's case sensitive too.", project_name->str, project_name->str);
+		display_warning(tmp_string->str);
 
 		return;
 	}
 
 	// Use the status bar to communicate the number of screenshots found
-	tmp_string = g_string_new(NULL);
 	g_string_printf(tmp_string, "Found %u screenshots.", num_screenshots);
 	recent_message = gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_string->str);
 	gdk_flush();
@@ -4665,6 +4667,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.41  2006/06/26 22:35:24  vapour
+ * Improved the error message when no screenshots are found, so the user will be able to check if their files are just named wrongly.
+ *
  * Revision 1.40  2006/06/25 12:55:40  vapour
  * The standard roman character set for Bitstream Vera is now embedded in exported svg files.
  *
