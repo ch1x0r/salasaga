@@ -64,6 +64,12 @@ extern guint				working_width;
 extern guint				zoom;
 extern GtkComboBox			*zoom_selector;
 
+extern GtkTooltips			*main_toolbar_tooltips;
+extern GtkWidget			*toolbar_icons[TB_COUNT];
+extern GtkWidget			*toolbar_icons_gray[TB_COUNT];
+extern GtkToolItem			*toolbar_items[TB_COUNT];
+extern gulong				toolbar_signals[TB_COUNT];
+
 extern GdkColor				default_bg_colour;
 extern GString				*default_output_folder;
 extern guint				default_output_height;
@@ -102,6 +108,9 @@ extern gint					num_res_items;
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2006/06/27 13:36:47  vapour
+ * Add externs for the re-written main toolbar functions.
+ *
  * Revision 1.7  2006/05/31 13:59:24  vapour
  * Added the capture globals.
  *
