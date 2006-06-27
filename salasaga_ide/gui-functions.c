@@ -528,6 +528,18 @@ void create_tooltips(void)
 }
 
 
+// Disables the main toolbar buttons that can only be used when a project is loaded
+void disable_main_toolbar_buttons(void)
+{
+	// Disable the Export SVG icon
+	g_object_ref(toolbar_icons[EXPORT_SVG]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(toolbar_items[EXPORT_SVG]), toolbar_icons_gray[EXPORT_SVG]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(toolbar_items[EXPORT_SVG]), main_toolbar_tooltips, "Can't export while no project loaded", "Private");
+	gtk_widget_show_all(GTK_WIDGET(toolbar_items[EXPORT_SVG]));
+	g_signal_handler_disconnect(G_OBJECT(toolbar_items[EXPORT_SVG]), toolbar_signals[EXPORT_SVG]);
+}
+
+
 // Display a warning message to the user
 gint display_warning(gchar *warning_string)
 {
@@ -1390,6 +1402,18 @@ void draw_workspace(void)
 
 	// Update the collision detection boundaries
 	calculate_object_boundaries();
+}
+
+
+// Enables the main toolbar buttons that can only be used when a project is loaded
+void enable_main_toolbar_buttons(void)
+{
+	// Enable the Export SVG icon
+	g_object_ref(toolbar_icons_gray[EXPORT_SVG]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(toolbar_items[EXPORT_SVG]), toolbar_icons[EXPORT_SVG]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(toolbar_items[EXPORT_SVG]), main_toolbar_tooltips, "Export as an SVG animation", "Private");
+	gtk_widget_show_all(GTK_WIDGET(toolbar_items[EXPORT_SVG]));
+	toolbar_signals[EXPORT_SVG] = g_signal_connect(G_OBJECT(toolbar_items[EXPORT_SVG]), "clicked", G_CALLBACK(menu_export_svg_animation), (gpointer) NULL);
 }
 
 
@@ -3324,6 +3348,9 @@ void menu_file_new(void)
 	menu_enable("/Slide", TRUE);
 	menu_enable("/Layer", TRUE);
 	menu_enable("/Export", TRUE);
+
+	// Enable the main toolbar buttons
+	enable_main_toolbar_buttons();
 }
 
 
@@ -3336,6 +3363,8 @@ void menu_file_open(void)
 	GtkFileFilter		*flame_filter;
 	GtkWidget 			*open_dialog;
 	gboolean			return_code;
+
+	GString				*tmp_gstring;			// Temporary gstring
 
 
 	// Create the dialog asking the user to select a Flame Project file
@@ -3392,7 +3421,46 @@ void menu_file_open(void)
 	file_name = g_string_new(NULL);
 	file_name = g_string_assign(file_name, filename);
 
-	// Frees the memory holding the file name
+	// Destroy the existing output resolution selector
+	g_signal_handler_disconnect(G_OBJECT(resolution_selector), resolution_callback);
+	gtk_container_remove(GTK_CONTAINER(message_bar), GTK_WIDGET(resolution_selector));
+
+	// Create a new output resolution selector, including the resolution of the loaded project
+	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(res_array, num_res_items, output_width, output_height));
+	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_selector), 8, 9, 0, 1);
+	resolution_callback = g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL);
+	gtk_widget_show_all(GTK_WIDGET(message_bar));
+
+	// Use the status bar to communicate the successful loading of the project
+	tmp_gstring = g_string_new(NULL);
+	g_string_printf(tmp_gstring, "Project '%s' successfully loaded.", filename);
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
+	gdk_flush();
+
+	// Make the current slide point to the first slide
+	current_slide = slides;
+
+	// Create the tooltips for the slides
+	create_tooltips();
+
+	// Update the film strip with the new slides
+	refresh_film_strip();
+
+	// Draw the timeline area
+	draw_timeline();
+
+	// Draw the workspace area
+	draw_workspace();
+
+	// Enable the project based menu items
+	menu_enable("/Slide", TRUE);
+	menu_enable("/Layer", TRUE);
+	menu_enable("/Export", TRUE);
+
+	// Enable the main toolbar buttons
+	enable_main_toolbar_buttons();
+
+	// Frees the memory allocated in this function
 	g_free(filename);
 }
 
@@ -4667,6 +4735,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.42  2006/06/27 13:43:37  vapour
+ * Created initial stub functions for enabling and disabling the main toolbar icons.
+ *
  * Revision 1.41  2006/06/26 22:35:24  vapour
  * Improved the error message when no screenshots are found, so the user will be able to check if their files are just named wrongly.
  *
