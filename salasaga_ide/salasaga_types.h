@@ -57,6 +57,23 @@ typedef struct {
 	guint				height;
 } ResolutionStructure;
 
+// The order of the toolbar buttons
+typedef enum
+{
+	NEW,
+	OPEN,
+	SAVE,
+	QUIT,
+	SEPARATOR_1,
+	CAPTURE,
+	IMPORT,
+	CROP_ALL,
+	SEPARATOR_2,
+	EXPORT_FLASH,
+	EXPORT_SVG,
+	TB_COUNT
+} ToolbarButtonOrder;
+
 // Fields of the timeline widget
 enum
 {
@@ -160,6 +177,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2006/06/27 13:38:12  vapour
+ * Added a new enum for the rewritten main toolbar functions.
+ *
  * Revision 1.14  2006/06/08 12:17:10  vapour
  * Replaced slide number with slide name.
  *
