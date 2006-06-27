@@ -426,7 +426,6 @@ gboolean flame_read(gchar *filename)
 	xmlChar				*tmp_char;				// Temporary string pointer
 	layer_empty			*tmp_empty_ob;			// 
 	GList				*tmp_glist;				// 
-	GString				*tmp_gstring;			// Temporary gstring
 	layer_highlight		*tmp_highlight_ob;		// Temporary highlight layer object
 	layer_image			*tmp_image_ob;			// Temporary image layer object
 	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
@@ -1020,42 +1019,6 @@ gboolean flame_read(gchar *filename)
 	// We're finished with this XML document, so release its memory
 	xmlFreeDoc(document);
 
-	// Destroy the existing output resolution selector
-	g_signal_handler_disconnect(G_OBJECT(resolution_selector), resolution_callback);
-	gtk_container_remove(GTK_CONTAINER(message_bar), GTK_WIDGET(resolution_selector));
-
-	// Create a new output resolution selector, including the resolution of the loaded project
-	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(res_array, num_res_items, output_width, output_height));
-	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_selector), 8, 9, 0, 1);
-	resolution_callback = g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL);
-	gtk_widget_show_all(GTK_WIDGET(message_bar));
-
-	// Use the status bar to communicate the successful loading of the project
-	tmp_gstring = g_string_new(NULL);
-	g_string_printf(tmp_gstring, "Project '%s' successfully loaded.", filename);
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
-	gdk_flush();
-
-	// Make the current slide point to the first slide
-	current_slide = slides;
-
-	// Create the tooltips for the slides
-	create_tooltips();
-
-	// Update the film strip with the new slides
-	refresh_film_strip();
-
-	// Draw the timeline area
-	draw_timeline();
-
-	// Draw the workspace area
-	draw_workspace();
-
-	// Enable the project based menu items
-	menu_enable("/Slide", TRUE);
-	menu_enable("/Layer", TRUE);
-	menu_enable("/Export", TRUE);
-
 	return TRUE;
 }
 
@@ -1616,7 +1579,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				g_string_append_printf(string_to_write,
 					"\t<rect id=\"%s-bg\" class=\"text\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" stroke-width=\"%.4fpx\">\n",
 					layer_data->name->str,
-					x_scale * (((layer_text *) layer_data->object_data)->rendered_width + 10),
+					(x_scale * (((layer_text *) layer_data->object_data)->rendered_width + 10)) * 1.02,  // fixme5: Seems to need to be scaled up by 1.02 to look any good
 					y_scale * (((layer_text *) layer_data->object_data)->rendered_height + 10),
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
 					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,
@@ -2260,6 +2223,10 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.53  2006/06/27 13:47:16  vapour
+ * + Moved some code from the flame_read function into the menu_file_open function, as it's more logical to have it there.
+ * + Committed the scaling up of the exported svg text width, as I forgot to do it the other day.
+ *
  * Revision 1.52  2006/06/25 13:16:18  vapour
  * Improved the vertical centering of text in it's background box.
  *
