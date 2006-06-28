@@ -2605,6 +2605,7 @@ void menu_export_flash_animation(void)
 	if (NULL == slides)
 	{
 		// No project is active, so display a message and return
+		// fixme4: This code should never be reached any more, as exporting is disabled while no project loaded
 		sound_beep();
 		display_warning("ED35: There is no project loaded\n");
 		return;
@@ -2728,6 +2729,7 @@ void menu_export_svg_animation(void)
 	if (NULL == slides)
 	{
 		// No project is active, so display a message and return
+		// fixme4: This code should never be reached any more, as exporting is disabled while no project loaded
 		sound_beep();
 		display_warning("ED15: There is no project loaded\n");
 		return;
@@ -4252,6 +4254,7 @@ void project_crop(void)
 	if (NULL == current_slide)
 	{
 		// Make a beep, then return
+		// fixme4: This code should never be reached any more, as exporting is disabled while no project loaded
 		sound_beep();
 		return;
 	}
@@ -4763,6 +4766,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.44  2006/06/28 13:52:46  vapour
+ * Marked some code that should no longer be needed.
+ *
  * Revision 1.43  2006/06/28 13:42:54  vapour
  * Added further code for working with grayed out toolbar buttons.
  *
