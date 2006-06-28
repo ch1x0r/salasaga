@@ -240,15 +240,15 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	//
 
 	// Local variables
-	gint			format_counter;				// Used to determine if SVG images can be loaded
-	GdkPixbufFormat	*format_data;				// Used to determine if SVG images can be loaded
-	GString			*icon_extension;			// Used to determine if SVG images can be loaded
-	GString			*icon_path;					// Used to determine if SVG images can be loaded
-	gint			num_formats;				// Used to determine if SVG images can be loaded
-	GSList			*supported_formats;			// Used to determine if SVG images can be loaded
+	gint				format_counter;			// Used to determine if SVG images can be loaded
+	GdkPixbufFormat		*format_data;			// Used to determine if SVG images can be loaded
+	GString				*icon_extension;		// Used to determine if SVG images can be loaded
+	GString				*icon_path;				// Used to determine if SVG images can be loaded
+	gint				num_formats;			// Used to determine if SVG images can be loaded
+	GSList				*supported_formats;		// Used to determine if SVG images can be loaded
 
-	GdkPixbuf		*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
-	GString			*tmp_gstring;				// Temporary GString
+	GdkPixbuf			*tmp_gdk_pixbuf;		// Temporary GDK Pixbuf
+	GString				*tmp_gstring;			// Temporary GString
 
 
 	// Initialise various things
@@ -379,6 +379,18 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	toolbar_signals[EXPORT_SVG] = g_signal_connect(G_OBJECT(toolbar_items[EXPORT_SVG]), "clicked", G_CALLBACK(menu_export_svg_animation), (gpointer) NULL);
 
 	// * Create the "grayed out" icons for buttons *
+
+	// Create the grayed out Crop All icon
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop_grayed", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	toolbar_icons_gray[CROP_ALL] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	g_object_unref(tmp_gdk_pixbuf);
+
+	// Create the grayed out Export Flash icon
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "export_flash_grayed", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	toolbar_icons_gray[EXPORT_FLASH] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	g_object_unref(tmp_gdk_pixbuf);
 
 	// Create the grayed out Export SVG icon
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "export_svg_grayed", icon_extension->str);
@@ -1378,6 +1390,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.19  2006/06/28 13:42:54  vapour
+ * Added further code for working with grayed out toolbar buttons.
+ *
  * Revision 1.18  2006/06/27 13:41:37  vapour
  * Rewrote the main toolbar creation function so we can enable/disable individual buttons later on during program execution as needed.
  *

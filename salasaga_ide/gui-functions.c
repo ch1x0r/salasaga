@@ -531,10 +531,24 @@ void create_tooltips(void)
 // Disables the main toolbar buttons that can only be used when a project is loaded
 void disable_main_toolbar_buttons(void)
 {
+	// Disable the Crop All icon
+	g_object_ref(toolbar_icons[CROP_ALL]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(toolbar_items[CROP_ALL]), toolbar_icons_gray[CROP_ALL]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(toolbar_items[CROP_ALL]), main_toolbar_tooltips, "Crop disabled: No project loaded", "Private");
+	gtk_widget_show_all(GTK_WIDGET(toolbar_items[CROP_ALL]));
+	g_signal_handler_disconnect(G_OBJECT(toolbar_items[CROP_ALL]), toolbar_signals[CROP_ALL]);
+
+	// Disable the Export Flash icon
+	g_object_ref(toolbar_icons[EXPORT_FLASH]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(toolbar_items[EXPORT_FLASH]), toolbar_icons_gray[EXPORT_FLASH]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(toolbar_items[EXPORT_FLASH]), main_toolbar_tooltips, "Export to Flash disabled: No project loaded", "Private");
+	gtk_widget_show_all(GTK_WIDGET(toolbar_items[EXPORT_FLASH]));
+	g_signal_handler_disconnect(G_OBJECT(toolbar_items[EXPORT_FLASH]), toolbar_signals[EXPORT_FLASH]);
+
 	// Disable the Export SVG icon
 	g_object_ref(toolbar_icons[EXPORT_SVG]);
 	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(toolbar_items[EXPORT_SVG]), toolbar_icons_gray[EXPORT_SVG]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(toolbar_items[EXPORT_SVG]), main_toolbar_tooltips, "Can't export while no project loaded", "Private");
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(toolbar_items[EXPORT_SVG]), main_toolbar_tooltips, "Export to SVG disabled: No project loaded", "Private");
 	gtk_widget_show_all(GTK_WIDGET(toolbar_items[EXPORT_SVG]));
 	g_signal_handler_disconnect(G_OBJECT(toolbar_items[EXPORT_SVG]), toolbar_signals[EXPORT_SVG]);
 }
@@ -1408,6 +1422,20 @@ void draw_workspace(void)
 // Enables the main toolbar buttons that can only be used when a project is loaded
 void enable_main_toolbar_buttons(void)
 {
+	// Enable the Crop All icon
+	g_object_ref(toolbar_icons_gray[CROP_ALL]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(toolbar_items[CROP_ALL]), toolbar_icons[CROP_ALL]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(toolbar_items[CROP_ALL]), main_toolbar_tooltips, "Crop all slides in the project", "Private");
+	gtk_widget_show_all(GTK_WIDGET(toolbar_items[CROP_ALL]));
+	toolbar_signals[CROP_ALL] = g_signal_connect(G_OBJECT(toolbar_items[CROP_ALL]), "clicked", G_CALLBACK(project_crop), (gpointer) NULL);
+
+	// Enable the Export Flash icon
+	g_object_ref(toolbar_icons_gray[EXPORT_FLASH]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(toolbar_items[EXPORT_FLASH]), toolbar_icons[EXPORT_FLASH]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(toolbar_items[EXPORT_FLASH]), main_toolbar_tooltips, "Export as a Flash animation", "Private");
+	gtk_widget_show_all(GTK_WIDGET(toolbar_items[EXPORT_FLASH]));
+	toolbar_signals[EXPORT_FLASH] = g_signal_connect(G_OBJECT(toolbar_items[EXPORT_FLASH]), "clicked", G_CALLBACK(menu_export_flash_animation), (gpointer) NULL);
+
 	// Enable the Export SVG icon
 	g_object_ref(toolbar_icons_gray[EXPORT_SVG]);
 	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(toolbar_items[EXPORT_SVG]), toolbar_icons[EXPORT_SVG]);
@@ -4735,6 +4763,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.43  2006/06/28 13:42:54  vapour
+ * Added further code for working with grayed out toolbar buttons.
+ *
  * Revision 1.42  2006/06/27 13:43:37  vapour
  * Created initial stub functions for enabling and disabling the main toolbar icons.
  *
