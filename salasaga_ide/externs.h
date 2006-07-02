@@ -65,10 +65,17 @@ extern guint				zoom;
 extern GtkComboBox			*zoom_selector;
 
 extern GtkTooltips			*main_toolbar_tooltips;
-extern GtkWidget			*toolbar_icons[TB_COUNT];
-extern GtkWidget			*toolbar_icons_gray[TB_COUNT];
-extern GtkToolItem			*toolbar_items[TB_COUNT];
-extern gulong				toolbar_signals[TB_COUNT];
+extern GtkWidget			*main_toolbar_icons[MAIN_TB_COUNT];
+extern GtkWidget			*main_toolbar_icons_gray[MAIN_TB_COUNT];
+extern GtkToolItem			*main_toolbar_items[MAIN_TB_COUNT];
+extern gulong				main_toolbar_signals[MAIN_TB_COUNT];
+
+// Layer toolbar items
+extern GtkTooltips			*layer_toolbar_tooltips;
+extern GtkWidget			*layer_toolbar_icons[MAIN_TB_COUNT];
+extern GtkWidget			*layer_toolbar_icons_gray[MAIN_TB_COUNT];
+extern GtkToolItem			*layer_toolbar_items[MAIN_TB_COUNT];
+extern gulong				layer_toolbar_signals[MAIN_TB_COUNT];
 
 extern GdkColor				default_bg_colour;
 extern GString				*default_output_folder;
@@ -108,6 +115,9 @@ extern gint					num_res_items;
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2006/07/02 09:25:18  vapour
+ * Updated for the rewritten layer toolbar icons code.
+ *
  * Revision 1.8  2006/06/27 13:36:47  vapour
  * Add externs for the re-written main toolbar functions.
  *
