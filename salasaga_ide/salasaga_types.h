@@ -43,22 +43,16 @@ extern "C" {
 // fixme4: These structures need better descriptions
 
 // The known object types
-typedef enum {
+enum {
 	TYPE_GDK_PIXBUF,
 	TYPE_MOUSE_CURSOR,
 	TYPE_EMPTY,
 	TYPE_TEXT,
 	TYPE_HIGHLIGHT
-} ObjectType;
+};
 
-// Resolution storing structure
-typedef struct {
-	guint				width;
-	guint				height;
-} ResolutionStructure;
-
-// The order of the toolbar buttons
-typedef enum
+// The order of the main toolbar buttons
+enum
 {
 	NEW,
 	OPEN,
@@ -72,7 +66,22 @@ typedef enum
 	EXPORT_FLASH,
 	EXPORT_SVG,
 	TB_COUNT
-} ToolbarButtonOrder;
+};
+
+// The order of the layer toolbar buttons
+enum
+{
+	EDIT,
+	CROP,
+	DELETE,
+	DOWN,
+	UP,
+	LAYER_SEPARATOR_1,
+	MOUSE,
+	TEXT,
+	HIGHLIGHT,
+	IMAGE
+};
 
 // Fields of the timeline widget
 enum
@@ -87,6 +96,13 @@ enum
 	TIMELINE_Y_OFF_FINISH,
 	TIMELINE_N_COLUMNS
 };
+
+// Defines the structure of a boundary box
+typedef struct
+{
+	GdkRegion			*region_ptr;
+	GList				*layer_ptr;
+} boundary_box;
 
 // Defines the object and properties making up a layer
 typedef struct
@@ -144,6 +160,12 @@ typedef struct
 	GtkTextBuffer		*text_buffer;
 } layer_text;
 
+// Resolution storing structure
+typedef struct {
+	guint				width;
+	guint				height;
+} ResolutionStructure;
+
 // Defines the collection of objects and properties making up a slide
 typedef struct
 {
@@ -157,14 +179,6 @@ typedef struct
 	GtkListStore		*layer_store;
 } slide;
 
-// Defines the structure of a boundary box
-typedef struct
-{
-	GdkRegion			*region_ptr;
-	GList				*layer_ptr;
-} boundary_box;
-
-
 #ifdef __cplusplus
 }
 #endif // __cplusplus
@@ -177,6 +191,10 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.16  2006/07/02 08:50:16  vapour
+ * + Simplified the enum definitions.
+ * + Added enum for the order of the layer toolbar icons.
+ *
  * Revision 1.15  2006/06/27 13:38:12  vapour
  * Added a new enum for the rewritten main toolbar functions.
  *
