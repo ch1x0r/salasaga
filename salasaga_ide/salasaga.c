@@ -584,7 +584,7 @@ GtkWidget *create_time_line(void)
 	layer_toolbar_items[MOUSE] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[MOUSE]), "Mouse");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[MOUSE]), layer_toolbar_tooltips, "Add a mouse pointer", "Private");
 	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[MOUSE], MOUSE);
-	layer_toolbar_signals[MOUSE] = g_signal_connect(G_OBJECT(layer_toolbar_items[MOUSE]), "clicked", G_CALLBACK(layer_new_text), (gpointer) NULL);
+	layer_toolbar_signals[MOUSE] = g_signal_connect(G_OBJECT(layer_toolbar_items[MOUSE]), "clicked", G_CALLBACK(layer_new_image), (gpointer) NULL);
 */
 
 	// Create the add text layer button
@@ -1322,7 +1322,8 @@ gint main(gint argc, gchar *argv[])
 	// Catch when the window is resized, to automatically recalculate the zoom and redraw the drawing area
 	g_signal_connect(G_OBJECT(right_side), "size-allocate", G_CALLBACK(event_size_allocate_received), (gpointer) NULL);
 
-	// Gray out the main toolbar items that can't be used without a project loaded
+	// Gray out the toolbar items that can't be used without a project loaded
+	disable_layer_toolbar_buttons();
 	disable_main_toolbar_buttons();
 
 	// Things we need:
@@ -1362,6 +1363,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.21  2006/07/02 11:08:06  vapour
+ * Now grays out the layer toolbar buttons at program startup.
+ *
  * Revision 1.20  2006/07/02 09:24:33  vapour
  * Rewrote the code that creates the layer toolbar icons, in preparation for adding functions to disable and enable the icons.
  *
