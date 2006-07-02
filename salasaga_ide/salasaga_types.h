@@ -65,7 +65,7 @@ enum
 	SEPARATOR_2,
 	EXPORT_FLASH,
 	EXPORT_SVG,
-	TB_COUNT
+	MAIN_TB_COUNT
 };
 
 // The order of the layer toolbar buttons
@@ -77,10 +77,11 @@ enum
 	DOWN,
 	UP,
 	LAYER_SEPARATOR_1,
-	MOUSE,
+//	MOUSE,
 	TEXT,
 	HIGHLIGHT,
-	IMAGE
+	IMAGE,
+	LAYER_TB_COUNT
 };
 
 // Fields of the timeline widget
@@ -191,6 +192,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.17  2006/07/02 09:26:37  vapour
+ * Commented out the add mouse pointer icon definition.
+ *
  * Revision 1.16  2006/07/02 08:50:16  vapour
  * + Simplified the enum definitions.
  * + Added enum for the order of the layer toolbar icons.
