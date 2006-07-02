@@ -53,6 +53,7 @@ void compress_layers_inner(gpointer element, gpointer user_data);
 GtkWidget *construct_timeline_widget(slide *slide_data);
 GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_resolutions, guint initial_width, guint initial_height);
 void create_tooltips(void);
+void disable_layer_toolbar_buttons(void);
 void disable_main_toolbar_buttons(void);
 gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title);
 gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean request_file);
@@ -63,6 +64,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 void draw_thumbnail(GList *which_slide);
 void draw_timeline(void);
 void draw_workspace(void);
+void enable_layer_toolbar_buttons(void);
 void enable_main_toolbar_buttons(void);
 void image_crop(void);
 void layer_delete(void);
@@ -93,6 +95,9 @@ void slide_name_set(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2006/07/02 11:06:38  vapour
+ * Added functions for disabling and enabling the layer toolbar buttons.
+ *
  * Revision 1.8  2006/06/27 13:44:45  vapour
  * Added definitions for the new main toolbar enabling and disabling functions.
  *
