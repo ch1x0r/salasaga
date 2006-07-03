@@ -407,6 +407,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	// Free memory allocated in this function
 	g_string_free(tmp_gstring, TRUE);
+	g_string_free(icon_extension, TRUE);
 	g_string_free(icon_path, TRUE);
 
 	return inner_toolbar;	
@@ -474,6 +475,10 @@ GtkWidget *create_time_line(void)
 	GString				*tmp_gstring;			// Temporary GString
 
 
+	// Initialise various things
+	icon_path = g_string_new(NULL);
+	tmp_gstring = g_string_new(NULL);
+
 	// Create the VBox the time line elements are packed into
 	time_line_vbox = gtk_vbox_new(FALSE, 0);
 
@@ -488,14 +493,18 @@ GtkWidget *create_time_line(void)
 	time_line_toolbar = gtk_toolbar_new();
 	gtk_box_pack_start(GTK_BOX(time_line_vbox), GTK_WIDGET(time_line_toolbar), FALSE, FALSE, 0);
 
+	// Create the tooltips structure
+	layer_toolbar_tooltips = gtk_tooltips_new();
+	gtk_tooltips_enable(GTK_TOOLTIPS(layer_toolbar_tooltips));
+
 	// Work out if SVG images can be loaded
 	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
 
 #ifdef _WIN32
 	// Hard code a different path for windows
-	icon_path = g_string_new("icons");
+	icon_path = g_string_assign(icon_path, "icons");
 #else
-	icon_path = g_string_new("../share/icons/flame/72x72");
+	icon_path = g_string_assign(icon_path, "../share/icons/flame/72x72");
 #endif
 
 	supported_formats = gdk_pixbuf_get_formats();
@@ -510,66 +519,65 @@ GtkWidget *create_time_line(void)
 
 #ifdef _WIN32
 			// Hard code a different path for windows
-			icon_path = g_string_new("icons");
+			icon_path = g_string_assign(icon_path, "icons");
 #else
-			icon_path = g_string_new("../share/icons/flame/scalable");
+			icon_path = g_string_assign(icon_path, "../share/icons/flame/scalable");
 #endif
 
 		}
 	}
 
 	// * Create the layer toolbar icons *
-	tmp_gstring = g_string_new(NULL);
 
 	// Create the Edit Layer button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "edit", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
-	layer_toolbar_icons[EDIT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	layer_toolbar_icons[LAYER_EDIT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
-	layer_toolbar_items[EDIT] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[EDIT]), "Edit");
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[EDIT]), layer_toolbar_tooltips, "Edit layer", "Private");
-	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[EDIT], EDIT);
-	layer_toolbar_signals[EDIT] = g_signal_connect(G_OBJECT(layer_toolbar_items[EDIT]), "clicked", G_CALLBACK(layer_edit), (gpointer) NULL);
+	layer_toolbar_items[LAYER_EDIT] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_EDIT]), "Edit");
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_tooltips, "Edit layer", "Private");
+	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[LAYER_EDIT], LAYER_EDIT);
+	layer_toolbar_signals[LAYER_EDIT] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_EDIT]), "clicked", G_CALLBACK(layer_edit), (gpointer) NULL);
 
 	// Create the Crop button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
-	layer_toolbar_icons[CROP] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	layer_toolbar_icons[LAYER_CROP] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
-	layer_toolbar_items[CROP] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[CROP]), "Crop");
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[CROP]), layer_toolbar_tooltips, "Crop image", "Private");
-	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[CROP], CROP);
-	layer_toolbar_signals[CROP] = g_signal_connect(G_OBJECT(layer_toolbar_items[CROP]), "clicked", G_CALLBACK(image_crop), (gpointer) NULL);
+	layer_toolbar_items[LAYER_CROP] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_CROP]), "Crop");
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_CROP]), layer_toolbar_tooltips, "Crop image", "Private");
+	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[LAYER_CROP], LAYER_CROP);
+	layer_toolbar_signals[LAYER_CROP] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_CROP]), "clicked", G_CALLBACK(image_crop), (gpointer) NULL);
 
 	// Create the Delete layer button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "delete", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
-	layer_toolbar_icons[DELETE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	layer_toolbar_icons[LAYER_DELETE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
-	layer_toolbar_items[DELETE] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[DELETE]), "Delete");
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[DELETE]), layer_toolbar_tooltips, "Delete selected layer", "Private");
-	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[DELETE], DELETE);
-	layer_toolbar_signals[DELETE] = g_signal_connect(G_OBJECT(layer_toolbar_items[DELETE]), "clicked", G_CALLBACK(layer_delete), (gpointer) NULL);
+	layer_toolbar_items[LAYER_DELETE] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_DELETE]), "Delete");
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_tooltips, "Delete selected layer", "Private");
+	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[LAYER_DELETE], LAYER_DELETE);
+	layer_toolbar_signals[LAYER_DELETE] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_DELETE]), "clicked", G_CALLBACK(layer_delete), (gpointer) NULL);
 
 	// Create the Move Layer Down button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "down_arrow", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
-	layer_toolbar_icons[DOWN] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	layer_toolbar_icons[LAYER_DOWN] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
-	layer_toolbar_items[DOWN] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[DOWN]), "Down");
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[DOWN]), layer_toolbar_tooltips, "Move layer down", "Private");
-	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[DOWN], DOWN);
-	layer_toolbar_signals[DOWN] = g_signal_connect(G_OBJECT(layer_toolbar_items[DOWN]), "clicked", G_CALLBACK(layer_move_down), (gpointer) NULL);
+	layer_toolbar_items[LAYER_DOWN] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_DOWN]), "Down");
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_tooltips, "Move layer down", "Private");
+	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[LAYER_DOWN], LAYER_DOWN);
+	layer_toolbar_signals[LAYER_DOWN] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_DOWN]), "clicked", G_CALLBACK(layer_move_down), (gpointer) NULL);
 
 	// Create the Move Layer Up button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "up_arrow", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
-	layer_toolbar_icons[UP] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	layer_toolbar_icons[LAYER_UP] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
-	layer_toolbar_items[UP] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[UP]), "Up");
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[UP]), layer_toolbar_tooltips, "Move layer up", "Private");
-	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[UP], UP);
-	layer_toolbar_signals[UP] = g_signal_connect(G_OBJECT(layer_toolbar_items[UP]), "clicked", G_CALLBACK(layer_move_up), (gpointer) NULL);
+	layer_toolbar_items[LAYER_UP] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_UP]), "Up");
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_UP]), layer_toolbar_tooltips, "Move layer up", "Private");
+	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[LAYER_UP], LAYER_UP);
+	layer_toolbar_signals[LAYER_UP] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_UP]), "clicked", G_CALLBACK(layer_move_up), (gpointer) NULL);
 
 	// Add a spacer to the toolbar
 	layer_toolbar_items[LAYER_SEPARATOR_1] = gtk_separator_tool_item_new();
@@ -579,46 +587,105 @@ GtkWidget *create_time_line(void)
 /*
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_mouse", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
-	layer_toolbar_icons[MOUSE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	layer_toolbar_icons[LAYER_MOUSE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
-	layer_toolbar_items[MOUSE] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[MOUSE]), "Mouse");
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[MOUSE]), layer_toolbar_tooltips, "Add a mouse pointer", "Private");
-	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[MOUSE], MOUSE);
-	layer_toolbar_signals[MOUSE] = g_signal_connect(G_OBJECT(layer_toolbar_items[MOUSE]), "clicked", G_CALLBACK(layer_new_image), (gpointer) NULL);
+	layer_toolbar_items[LAYER_MOUSE] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_MOUSE]), "Mouse");
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_tooltips, "Add a mouse pointer", "Private");
+	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[LAYER_MOUSE], LAYER_MOUSE);
+	layer_toolbar_signals[LAYER_MOUSE] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_MOUSE]), "clicked", G_CALLBACK(layer_new_image), (gpointer) NULL);
 */
 
 	// Create the add text layer button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_text", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
-	layer_toolbar_icons[TEXT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	layer_toolbar_icons[LAYER_TEXT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
-	layer_toolbar_items[TEXT] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[TEXT]), "Text");
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[TEXT]), layer_toolbar_tooltips, "Add a text layer", "Private");
-	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[TEXT], TEXT);
-	layer_toolbar_signals[TEXT] = g_signal_connect(G_OBJECT(layer_toolbar_items[TEXT]), "clicked", G_CALLBACK(layer_new_text), (gpointer) NULL);
+	layer_toolbar_items[LAYER_TEXT] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_TEXT]), "Text");
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_tooltips, "Add a text layer", "Private");
+	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[LAYER_TEXT], LAYER_TEXT);
+	layer_toolbar_signals[LAYER_TEXT] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_TEXT]), "clicked", G_CALLBACK(layer_new_text), (gpointer) NULL);
 
 	// Create the add highlight layer button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_highlight", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
-	layer_toolbar_icons[HIGHLIGHT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	layer_toolbar_icons[LAYER_HIGHLIGHT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
-	layer_toolbar_items[HIGHLIGHT] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[HIGHLIGHT]), "Highlight");
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[HIGHLIGHT]), layer_toolbar_tooltips, "Add a highlight layer", "Private");
-	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[HIGHLIGHT], HIGHLIGHT);
-	layer_toolbar_signals[HIGHLIGHT] = g_signal_connect(G_OBJECT(layer_toolbar_items[HIGHLIGHT]), "clicked", G_CALLBACK(layer_new_highlight), (gpointer) NULL);
+	layer_toolbar_items[LAYER_HIGHLIGHT] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_HIGHLIGHT]), "Highlight");
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_tooltips, "Add a highlight layer", "Private");
+	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[LAYER_HIGHLIGHT], LAYER_HIGHLIGHT);
+	layer_toolbar_signals[LAYER_HIGHLIGHT] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_HIGHLIGHT]), "clicked", G_CALLBACK(layer_new_highlight), (gpointer) NULL);
 
 	// Create the add image layer button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_image", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
-	layer_toolbar_icons[IMAGE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	layer_toolbar_icons[LAYER_IMAGE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
-	layer_toolbar_items[IMAGE] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[IMAGE]), "Image");
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[IMAGE]), layer_toolbar_tooltips, "Add an image layer", "Private");
-	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[IMAGE], IMAGE);
-	layer_toolbar_signals[IMAGE] = g_signal_connect(G_OBJECT(layer_toolbar_items[IMAGE]), "clicked", G_CALLBACK(layer_new_image), (gpointer) NULL);
+	layer_toolbar_items[LAYER_IMAGE] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_IMAGE]), "Image");
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_tooltips, "Add an image layer", "Private");
+	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[LAYER_IMAGE], LAYER_IMAGE);
+	layer_toolbar_signals[LAYER_IMAGE] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_IMAGE]), "clicked", G_CALLBACK(layer_new_image), (gpointer) NULL);
+
+	// * Create the "grayed out" icons for buttons *
+
+	// Create the grayed out Edit Layer icon
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "edit_grayed", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	layer_toolbar_icons_gray[LAYER_EDIT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	g_object_unref(tmp_gdk_pixbuf);
+
+	// Create the grayed out Crop Layer icon
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop_grayed", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	layer_toolbar_icons_gray[LAYER_CROP] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	g_object_unref(tmp_gdk_pixbuf);
+
+	// Create the grayed out Delete Layer icon
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "delete_grayed", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	layer_toolbar_icons_gray[LAYER_DELETE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	g_object_unref(tmp_gdk_pixbuf);
+
+	// Create the grayed out Move Layer Down icon
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "down_arrow_grayed", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	layer_toolbar_icons_gray[LAYER_DOWN] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	g_object_unref(tmp_gdk_pixbuf);
+
+	// Create the grayed out Move Layer Up icon
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "up_arrow_grayed", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	layer_toolbar_icons_gray[LAYER_UP] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	g_object_unref(tmp_gdk_pixbuf);
+
+/*
+	// Create the grayed out Add Mouse Pointer icon
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_mouse_grayed", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	layer_toolbar_icons_gray[LAYER_MOUSE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	g_object_unref(tmp_gdk_pixbuf);
+*/
+
+	// Create the grayed out Add Text Layer icon
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_text_grayed", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	layer_toolbar_icons_gray[LAYER_TEXT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	g_object_unref(tmp_gdk_pixbuf);
+
+	// Create the grayed out Add Highlight Layer icon
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_highlight_grayed", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	layer_toolbar_icons_gray[LAYER_HIGHLIGHT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	g_object_unref(tmp_gdk_pixbuf);
+
+	// Create the grayed out Add Image Layer icon
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_image_grayed", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	layer_toolbar_icons_gray[LAYER_IMAGE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+	g_object_unref(tmp_gdk_pixbuf);
 
 	// Free the memory allocated during this function
 	g_string_free(icon_extension, TRUE);
+	g_string_free(icon_path, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 	g_slist_free(supported_formats);
 
@@ -683,6 +750,7 @@ GtkWidget *create_working_area(GtkWidget *working_frame)
 gint main(gint argc, gchar *argv[])
 {
 	// Local variables
+	GValue						*handle_size;			// The size of the handle in the main area
 	GtkWidget					*main_area;				// Widget for the onscreen display
 	GtkWidget					*outer_box;				// Widget for the onscreen display
 	GtkLabel					*resolution_label;		// Widget for the resolution selector label
@@ -1232,7 +1300,10 @@ gint main(gint argc, gchar *argv[])
 
 	// * Create a HPaned to pack the film strip into, and a vbox for the time line plus working area *
 	main_area = gtk_hpaned_new();
-	gtk_paned_set_position(GTK_PANED(main_area), preview_width + 20); // fixme3: Should read the handle-size of the HPaned (or something) rather than assume 10
+	handle_size = g_new0(GValue, 1);
+	g_value_init(handle_size, G_TYPE_INT);
+	gtk_widget_style_get_property(GTK_WIDGET(main_area), "handle-size", handle_size);
+	gtk_paned_set_position(GTK_PANED(main_area), g_value_get_int(handle_size) + preview_width + 15);
 	gtk_box_pack_start_defaults(GTK_BOX(outer_box), GTK_WIDGET(main_area));
 
 	// * Create a table for the status bar, zoom selector, and resolution selectors to go in *
@@ -1358,11 +1429,15 @@ gint main(gint argc, gchar *argv[])
 }
 
 
-/*
+/* 
  * History
  * +++++++
  * 
  * $Log$
+ * Revision 1.22  2006/07/03 13:42:28  vapour
+ * + Updated the layer toolbar creation code to use the new reduced-namespace-conflict enum definitions.
+ * + Small code improvement, the handle size is dynamically read as the film strip is created rather than having a size hard coded in.
+ *
  * Revision 1.21  2006/07/02 11:08:06  vapour
  * Now grays out the layer toolbar buttons at program startup.
  *
