@@ -71,16 +71,16 @@ enum
 // The order of the layer toolbar buttons
 enum
 {
-	EDIT,
-	CROP,
-	DELETE,
-	DOWN,
-	UP,
+	LAYER_EDIT,
+	LAYER_CROP,
+	LAYER_DELETE,
+	LAYER_DOWN,
+	LAYER_UP,
 	LAYER_SEPARATOR_1,
-//	MOUSE,
-	TEXT,
-	HIGHLIGHT,
-	IMAGE,
+	LAYER_MOUSE,
+	LAYER_TEXT,
+	LAYER_HIGHLIGHT,
+	LAYER_IMAGE,
 	LAYER_TB_COUNT
 };
 
@@ -147,6 +147,18 @@ typedef struct
 	gboolean			modified;			// FALSE if an image hasn't been modified, TRUE if it has (i.e. cropped)
 } layer_image;
 
+// Defines the properties making up a mouse pointer layer
+typedef struct
+{
+	gint				x_offset_start;
+	gint				y_offset_start;
+	gint				x_offset_finish;
+	gint				y_offset_finish;
+	gint				width;
+	gint				height;
+	GString				*image_path;
+} layer_mouse;
+
 // Defines the properties making up a text layer
 typedef struct
 {
@@ -192,6 +204,10 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.18  2006/07/04 12:30:49  vapour
+ * + Started adding types for the mouse pointer layer.
+ * + Re-enabled the mouse pointer button on the toolbar.
+ *
  * Revision 1.17  2006/07/02 09:26:37  vapour
  * Commented out the add mouse pointer icon definition.
  *
