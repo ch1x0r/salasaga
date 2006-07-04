@@ -57,6 +57,7 @@ void disable_layer_toolbar_buttons(void);
 void disable_main_toolbar_buttons(void);
 gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title);
 gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean request_file);
+gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean request_file);
 gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title);
 gint display_warning(gchar *warning_string);
 void draw_bounding_box(GtkWidget *widget, GdkRegion *region);
@@ -73,6 +74,7 @@ void layer_move_down(void);
 void layer_move_up(void);
 void layer_new_highlight(void);
 void layer_new_image(void);
+void layer_new_mouse(void);
 void layer_new_text(void);
 void project_crop(void);
 void refresh_film_strip(void);
@@ -95,6 +97,9 @@ void slide_name_set(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2006/07/04 12:45:15  vapour
+ * + Added stub functions for creating a new mouse pointer layer.
+ *
  * Revision 1.9  2006/07/02 11:06:38  vapour
  * Added functions for disabling and enabling the layer toolbar buttons.
  *
