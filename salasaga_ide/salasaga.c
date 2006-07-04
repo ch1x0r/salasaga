@@ -584,7 +584,6 @@ GtkWidget *create_time_line(void)
 	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[LAYER_SEPARATOR_1], LAYER_SEPARATOR_1);
 
 	// Create the add mouse pointer button
-/*
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_mouse", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	layer_toolbar_icons[LAYER_MOUSE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
@@ -592,8 +591,7 @@ GtkWidget *create_time_line(void)
 	layer_toolbar_items[LAYER_MOUSE] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_MOUSE]), "Mouse");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_tooltips, "Add a mouse pointer", "Private");
 	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), layer_toolbar_items[LAYER_MOUSE], LAYER_MOUSE);
-	layer_toolbar_signals[LAYER_MOUSE] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_MOUSE]), "clicked", G_CALLBACK(layer_new_image), (gpointer) NULL);
-*/
+	layer_toolbar_signals[LAYER_MOUSE] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_MOUSE]), "clicked", G_CALLBACK(layer_new_mouse), (gpointer) NULL);
 
 	// Create the add text layer button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_text", icon_extension->str);
@@ -1434,6 +1432,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.23  2006/07/04 12:46:35  vapour
+ * Re-enabled the mouse pointer button on the layer toolbar.
+ *
  * Revision 1.22  2006/07/03 13:42:28  vapour
  * + Updated the layer toolbar creation code to use the new reduced-namespace-conflict enum definitions.
  * + Small code improvement, the handle size is dynamically read as the film strip is created rather than having a size hard coded in.
