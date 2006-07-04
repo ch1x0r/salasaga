@@ -532,69 +532,67 @@ void create_tooltips(void)
 void disable_layer_toolbar_buttons(void)
 {
 	// Disable the Edit Layer icon
-	g_object_ref(layer_toolbar_icons[EDIT]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[EDIT]), layer_toolbar_icons_gray[EDIT]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[EDIT]), layer_toolbar_tooltips, "Edit layer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[EDIT]));
-	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[EDIT]), layer_toolbar_signals[EDIT]);
+	g_object_ref(layer_toolbar_icons[LAYER_EDIT]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_icons_gray[LAYER_EDIT]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_tooltips, "Edit layer disabled: No project loaded", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_EDIT]));
+	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_signals[LAYER_EDIT]);
 
 	// Disable the Crop Layer icon
-	g_object_ref(layer_toolbar_icons[CROP]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[CROP]), layer_toolbar_icons_gray[CROP]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[CROP]), layer_toolbar_tooltips, "Crop layer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[CROP]));
-	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[CROP]), layer_toolbar_signals[CROP]);
+	g_object_ref(layer_toolbar_icons[LAYER_CROP]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_CROP]), layer_toolbar_icons_gray[LAYER_CROP]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_CROP]), layer_toolbar_tooltips, "Crop layer disabled: No project loaded", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_CROP]));
+	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[LAYER_CROP]), layer_toolbar_signals[LAYER_CROP]);
 
 	// Disable the Delete Layer icon
-	g_object_ref(layer_toolbar_icons[DELETE]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[DELETE]), layer_toolbar_icons_gray[DELETE]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[DELETE]), layer_toolbar_tooltips, "Delete layer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[DELETE]));
-	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[DELETE]), layer_toolbar_signals[DELETE]);
+	g_object_ref(layer_toolbar_icons[LAYER_DELETE]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_icons_gray[LAYER_DELETE]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_tooltips, "Delete layer disabled: No project loaded", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_DELETE]));
+	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_signals[LAYER_DELETE]);
 
 	// Disable the Move Layer Down icon
-	g_object_ref(layer_toolbar_icons[DOWN]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[DOWN]), layer_toolbar_icons_gray[DOWN]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[DOWN]), layer_toolbar_tooltips, "Move layer down disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[DOWN]));
-	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[DOWN]), layer_toolbar_signals[DOWN]);
+	g_object_ref(layer_toolbar_icons[LAYER_DOWN]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_icons_gray[LAYER_DOWN]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_tooltips, "Move layer down disabled: No project loaded", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_DOWN]));
+	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_signals[LAYER_DOWN]);
 
 	// Disable the Move Layer Up icon
-	g_object_ref(layer_toolbar_icons[UP]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[UP]), layer_toolbar_icons_gray[UP]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[UP]), layer_toolbar_tooltips, "Move layer up disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[UP]));
-	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[UP]), layer_toolbar_signals[UP]);
+	g_object_ref(layer_toolbar_icons[LAYER_UP]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_UP]), layer_toolbar_icons_gray[LAYER_UP]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_UP]), layer_toolbar_tooltips, "Move layer up disabled: No project loaded", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_UP]));
+	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[LAYER_UP]), layer_toolbar_signals[LAYER_UP]);
 
-/*
 	// Disable the Add Mouse Pointer icon
-	g_object_ref(layer_toolbar_icons[MOUSE]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[MOUSE]), layer_toolbar_icons_gray[MOUSE]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[MOUSE]), layer_toolbar_tooltips, "Add mouse pointer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[MOUSE]));
-	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[MOUSE]), layer_toolbar_signals[MOUSE]);
-*/
+	g_object_ref(layer_toolbar_icons[LAYER_MOUSE]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_icons_gray[LAYER_MOUSE]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_tooltips, "Add mouse pointer disabled: No project loaded", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_MOUSE]));
+	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_signals[LAYER_MOUSE]);
 
 	// Disable the Add Text Layer icon
-	g_object_ref(layer_toolbar_icons[TEXT]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[TEXT]), layer_toolbar_icons_gray[TEXT]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[TEXT]), layer_toolbar_tooltips, "Add text layer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[TEXT]));
-	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[TEXT]), layer_toolbar_signals[TEXT]);
+	g_object_ref(layer_toolbar_icons[LAYER_TEXT]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_icons_gray[LAYER_TEXT]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_tooltips, "Add text layer disabled: No project loaded", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_TEXT]));
+	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_signals[LAYER_TEXT]);
 
 	// Disable the Add Highlight Layer icon
-	g_object_ref(layer_toolbar_icons[HIGHLIGHT]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[HIGHLIGHT]), layer_toolbar_icons_gray[HIGHLIGHT]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[HIGHLIGHT]), layer_toolbar_tooltips, "Add highlight layer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[HIGHLIGHT]));
-	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[HIGHLIGHT]), layer_toolbar_signals[HIGHLIGHT]);
+	g_object_ref(layer_toolbar_icons[LAYER_HIGHLIGHT]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_icons_gray[LAYER_HIGHLIGHT]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_tooltips, "Add highlight layer disabled: No project loaded", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_HIGHLIGHT]));
+	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_signals[LAYER_HIGHLIGHT]);
 
 	// Disable the Add Image Layer icon
-	g_object_ref(layer_toolbar_icons[IMAGE]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[IMAGE]), layer_toolbar_icons_gray[IMAGE]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[IMAGE]), layer_toolbar_tooltips, "Add image layer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[IMAGE]));
-	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[IMAGE]), layer_toolbar_signals[IMAGE]);
+	g_object_ref(layer_toolbar_icons[LAYER_IMAGE]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_icons_gray[LAYER_IMAGE]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_tooltips, "Add image layer disabled: No project loaded", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_IMAGE]));
+	g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_signals[LAYER_IMAGE]);
 }
 
 
@@ -1006,6 +1004,21 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(image_dialog));
+
+	return TRUE;
+}
+
+
+// Display a dialog box asking for mouse pointer settings
+gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean request_file)
+{
+	// Local variables
+	GtkDialog			*mouse_dialog;			// Widget for the dialog
+	GtkWidget			*mouse_table;			// Table used for neat layout of the dialog box
+	gint				dialog_result;			// Catches the return code from the dialog box
+	guint				row_counter = 0;		// Used to count which row things are up to
+
+// fixme2: Needs to be written
 
 	return TRUE;
 }
@@ -1493,69 +1506,67 @@ void draw_workspace(void)
 void enable_layer_toolbar_buttons(void)
 {
 	// Enable the Edit Layer icon
-	g_object_ref(layer_toolbar_icons_gray[EDIT]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[EDIT]), layer_toolbar_icons[EDIT]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[EDIT]), layer_toolbar_tooltips, "Edit layer", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[EDIT]));
-	layer_toolbar_signals[EDIT] = g_signal_connect(G_OBJECT(layer_toolbar_items[EDIT]), "clicked", G_CALLBACK(layer_edit), (gpointer) NULL);
+	g_object_ref(layer_toolbar_icons_gray[LAYER_EDIT]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_icons[LAYER_EDIT]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_tooltips, "Edit layer", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_EDIT]));
+	layer_toolbar_signals[LAYER_EDIT] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_EDIT]), "clicked", G_CALLBACK(layer_edit), (gpointer) NULL);
 
 	// Enable the Crop Layer icon
-	g_object_ref(layer_toolbar_icons_gray[CROP]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[CROP]), layer_toolbar_icons[CROP]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[CROP]), layer_toolbar_tooltips, "Crop image", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[CROP]));
-	layer_toolbar_signals[CROP] = g_signal_connect(G_OBJECT(layer_toolbar_items[EDIT]), "clicked", G_CALLBACK(image_crop), (gpointer) NULL);
+	g_object_ref(layer_toolbar_icons_gray[LAYER_CROP]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_CROP]), layer_toolbar_icons[LAYER_CROP]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_CROP]), layer_toolbar_tooltips, "Crop image", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_CROP]));
+	layer_toolbar_signals[LAYER_CROP] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_CROP]), "clicked", G_CALLBACK(image_crop), (gpointer) NULL);
 
 	// Enable the Delete Layer icon
-	g_object_ref(layer_toolbar_icons_gray[DELETE]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[DELETE]), layer_toolbar_icons[DELETE]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[DELETE]), layer_toolbar_tooltips, "Delete selected layer", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[DELETE]));
-	layer_toolbar_signals[DELETE] = g_signal_connect(G_OBJECT(layer_toolbar_items[DELETE]), "clicked", G_CALLBACK(layer_delete), (gpointer) NULL);
+	g_object_ref(layer_toolbar_icons_gray[LAYER_DELETE]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_icons[LAYER_DELETE]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_tooltips, "Delete selected layer", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_DELETE]));
+	layer_toolbar_signals[LAYER_DELETE] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_DELETE]), "clicked", G_CALLBACK(layer_delete), (gpointer) NULL);
 
 	// Enable the Move Layer Down icon
-	g_object_ref(layer_toolbar_icons_gray[DOWN]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[DOWN]), layer_toolbar_icons[DOWN]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[DOWN]), layer_toolbar_tooltips, "Move layer down", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[DOWN]));
-	layer_toolbar_signals[DOWN] = g_signal_connect(G_OBJECT(layer_toolbar_items[DOWN]), "clicked", G_CALLBACK(layer_move_down), (gpointer) NULL);
+	g_object_ref(layer_toolbar_icons_gray[LAYER_DOWN]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_icons[LAYER_DOWN]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_tooltips, "Move layer down", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_DOWN]));
+	layer_toolbar_signals[LAYER_DOWN] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_DOWN]), "clicked", G_CALLBACK(layer_move_down), (gpointer) NULL);
 
 	// Enable the Move Layer Up icon
-	g_object_ref(layer_toolbar_icons_gray[UP]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[UP]), layer_toolbar_icons[UP]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[UP]), layer_toolbar_tooltips, "Move layer up", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[UP]));
-	layer_toolbar_signals[UP] = g_signal_connect(G_OBJECT(layer_toolbar_items[UP]), "clicked", G_CALLBACK(layer_move_up), (gpointer) NULL);
+	g_object_ref(layer_toolbar_icons_gray[LAYER_UP]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_UP]), layer_toolbar_icons[LAYER_UP]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_UP]), layer_toolbar_tooltips, "Move layer up", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_UP]));
+	layer_toolbar_signals[LAYER_UP] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_UP]), "clicked", G_CALLBACK(layer_move_up), (gpointer) NULL);
 
-/* fixme3: Disabled until we add the code for handling mouse pointer layers
 	// Enable the Add Mouse Pointer icon
-	g_object_ref(layer_toolbar_icons_gray[MOUSE]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[MOUSE]), layer_toolbar_icons[MOUSE]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[MOUSE]), layer_toolbar_tooltips, "Add a mouse pointer", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[MOUSE]));
-	layer_toolbar_signals[MOUSE] = g_signal_connect(G_OBJECT(layer_toolbar_items[MOUSE]), "clicked", G_CALLBACK(layer_new_image), (gpointer) NULL);
-*/
+	g_object_ref(layer_toolbar_icons_gray[LAYER_MOUSE]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_icons[LAYER_MOUSE]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_tooltips, "Add a mouse pointer", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_MOUSE]));
+	layer_toolbar_signals[LAYER_MOUSE] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_MOUSE]), "clicked", G_CALLBACK(layer_new_mouse), (gpointer) NULL);
 
 	// Enable the Add Text Layer icon
-	g_object_ref(layer_toolbar_icons_gray[TEXT]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[TEXT]), layer_toolbar_icons[TEXT]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[TEXT]), layer_toolbar_tooltips, "Add a text layer", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[TEXT]));
-	layer_toolbar_signals[TEXT] = g_signal_connect(G_OBJECT(layer_toolbar_items[TEXT]), "clicked", G_CALLBACK(layer_new_text), (gpointer) NULL);
+	g_object_ref(layer_toolbar_icons_gray[LAYER_TEXT]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_icons[LAYER_TEXT]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_tooltips, "Add a text layer", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_TEXT]));
+	layer_toolbar_signals[LAYER_TEXT] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_TEXT]), "clicked", G_CALLBACK(layer_new_text), (gpointer) NULL);
 
 	// Enable the Add Highlight Layer icon
-	g_object_ref(layer_toolbar_icons_gray[HIGHLIGHT]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[HIGHLIGHT]), layer_toolbar_icons[HIGHLIGHT]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[HIGHLIGHT]), layer_toolbar_tooltips, "Add a highlight layer", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[HIGHLIGHT]));
-	layer_toolbar_signals[HIGHLIGHT] = g_signal_connect(G_OBJECT(layer_toolbar_items[HIGHLIGHT]), "clicked", G_CALLBACK(layer_new_highlight), (gpointer) NULL);
+	g_object_ref(layer_toolbar_icons_gray[LAYER_HIGHLIGHT]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_icons[LAYER_HIGHLIGHT]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_tooltips, "Add a highlight layer", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_HIGHLIGHT]));
+	layer_toolbar_signals[LAYER_HIGHLIGHT] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_HIGHLIGHT]), "clicked", G_CALLBACK(layer_new_highlight), (gpointer) NULL);
 
 	// Enable the Add Image Layer icon
-	g_object_ref(layer_toolbar_icons_gray[IMAGE]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[IMAGE]), layer_toolbar_icons[IMAGE]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[IMAGE]), layer_toolbar_tooltips, "Add an image layer", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[IMAGE]));
-	layer_toolbar_signals[IMAGE] = g_signal_connect(G_OBJECT(layer_toolbar_items[IMAGE]), "clicked", G_CALLBACK(layer_new_image), (gpointer) NULL);
+	g_object_ref(layer_toolbar_icons_gray[LAYER_IMAGE]);
+	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_icons[LAYER_IMAGE]);
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_tooltips, "Add an image layer", "Private");
+	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_IMAGE]));
+	layer_toolbar_signals[LAYER_IMAGE] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_IMAGE]), "clicked", G_CALLBACK(layer_new_image), (gpointer) NULL);
 }
 
 
@@ -2263,6 +2274,91 @@ void layer_new_image(void)
 						TIMELINE_Y_OFF_START, tmp_image_ob->y_offset_start,
 						TIMELINE_X_OFF_FINISH, tmp_image_ob->x_offset_finish,
 						TIMELINE_Y_OFF_FINISH, tmp_image_ob->y_offset_finish,						-1);
+
+	// Redraw the workspace
+	draw_workspace();
+
+	// Redraw the film strip thumbnail
+	draw_thumbnail(current_slide);
+
+	// Select the new layer in the timeline widget
+	tmp_path = gtk_tree_path_new_first();
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
+}
+
+
+// Function called when the user clicks the Add Mouse Pointer toolbar button
+void layer_new_mouse(void)
+{
+	// Local variables
+	GList				*layer_pointer;			// Points to the layers in the selected slide
+	gboolean			return_code;			// Catches a TRUE/FALSE return value
+
+	layer_mouse			*tmp_mouse_ob;			// Temporary mouse layer object
+	GtkTreeIter			*tmp_iter;				// Temporary iter
+	layer				*tmp_layer;				// Temporary layer
+	GtkTreePath			*tmp_path;				// Temporary GtkPath
+
+
+	// If no project is loaded then don't run this function
+	if (NULL == current_slide)
+	{
+		// Make a beep, then return
+		sound_beep();
+		return;
+	}
+
+	// * Create a new mouse layer in memory using reasonable defaults *
+
+	// Create the mouse pointer layer data
+	tmp_mouse_ob = g_new(layer_mouse, 1);
+	tmp_mouse_ob->x_offset_start = 100;
+	tmp_mouse_ob->y_offset_start = 100;
+	tmp_mouse_ob->x_offset_finish = 100;
+	tmp_mouse_ob->y_offset_finish = 100;
+	tmp_mouse_ob->width = 400;
+	tmp_mouse_ob->height = 300;
+	tmp_mouse_ob->image_path = g_string_new("");
+
+	// Constuct the new mouse pointer layer
+	tmp_layer = g_new(layer, 1);
+	tmp_layer->object_type = TYPE_MOUSE_CURSOR;
+	tmp_layer->object_data = (GObject *) tmp_mouse_ob;
+	tmp_layer->start_frame = 0;
+	tmp_layer->finish_frame = slide_length;
+	tmp_layer->name = g_string_new("Mouse Pointer");
+
+	// Display a dialog box to edit these values, using our new mouse pointer layer object
+	return_code = display_dialog_mouse(tmp_layer, "Add mouse pointer", TRUE);
+	if (TRUE != return_code)
+	{
+		// The user cancelled out of the dialog box, so destroy our new layer and return
+		g_string_free(tmp_layer->name, TRUE);
+		g_free(tmp_layer);
+		g_free(tmp_mouse_ob);
+		return;
+	}
+
+	// * To get here, the user must have clicked OK in the dialog box, so we process the results *
+
+	// Add the new layer to the slide
+	layer_pointer = ((slide *) current_slide->data)->layers;
+	layer_pointer = g_list_first(layer_pointer);
+	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
+
+	// Add the new layer to slide list store
+	tmp_iter = g_new(GtkTreeIter, 1);
+	tmp_layer->row_iter = tmp_iter;
+	gtk_list_store_prepend(((slide *) current_slide->data)->layer_store, tmp_iter);
+	gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
+						TIMELINE_NAME, tmp_layer->name->str,
+						TIMELINE_VISIBILITY, TRUE,
+						TIMELINE_START, tmp_layer->start_frame,
+						TIMELINE_FINISH, tmp_layer->finish_frame,
+						TIMELINE_X_OFF_START, tmp_mouse_ob->x_offset_start,
+						TIMELINE_Y_OFF_START, tmp_mouse_ob->y_offset_start,
+						TIMELINE_X_OFF_FINISH, tmp_mouse_ob->x_offset_finish,
+						TIMELINE_Y_OFF_FINISH, tmp_mouse_ob->y_offset_finish,						-1);
 
 	// Redraw the workspace
 	draw_workspace();
@@ -4908,6 +5004,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.46  2006/07/04 12:43:31  vapour
+ * + Added a stub function for creating a new mouse pointer layer.
+ *
  * Revision 1.45  2006/07/02 11:06:02  vapour
  * Added functions for disabling and enabling the layer toolbar buttons.
  *
