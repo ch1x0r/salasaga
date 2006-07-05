@@ -84,6 +84,21 @@ enum
 	LAYER_TB_COUNT
 };
 
+// Types of mouse click
+enum
+{
+	MOUSE_NONE,
+	MOUSE_LEFT_ONE,
+	MOUSE_LEFT_DOUBLE,
+	MOUSE_LEFT_TRIPLE,
+	MOUSE_RIGHT_ONE,
+	MOUSE_RIGHT_DOUBLE,
+	MOUSE_RIGHT_TRIPLE,
+	MOUSE_MIDDLE_ONE,
+	MOUSE_MIDDLE_DOUBLE,
+	MOUSE_MIDDLE_TRIPLE
+};
+
 // Fields of the timeline widget
 enum
 {
@@ -156,6 +171,7 @@ typedef struct
 	gint				y_offset_finish;
 	gint				width;
 	gint				height;
+	gint				click;
 	GString				*image_path;
 } layer_mouse;
 
@@ -204,6 +220,10 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.19  2006/07/05 12:17:42  vapour
+ * + Added mouse click types enum.
+ * + Added mouse click field to mouse layer.
+ *
  * Revision 1.18  2006/07/04 12:30:49  vapour
  * + Started adding types for the mouse pointer layer.
  * + Re-enabled the mouse pointer button on the toolbar.
