@@ -258,6 +258,14 @@ void calculate_object_boundaries(void)
 				tmp_rectangle.height = (((layer_highlight *) ((layer *) layer_pointer->data)->object_data)->height * zoom) / 97;
 				break;
 
+			case TYPE_MOUSE_CURSOR:
+				// Translate the area covered by the layer object, with the zoom factor
+				tmp_rectangle.x = (((layer_mouse *) ((layer *) layer_pointer->data)->object_data)->x_offset_start * zoom) / 100;
+				tmp_rectangle.width = (((layer_mouse *) ((layer *) layer_pointer->data)->object_data)->width * zoom) / 100;
+				tmp_rectangle.y = (((layer_mouse *) ((layer *) layer_pointer->data)->object_data)->y_offset_start * zoom) / 98;
+				tmp_rectangle.height = (((layer_mouse *) ((layer *) layer_pointer->data)->object_data)->height * zoom) / 97;
+				break;
+
 			case TYPE_TEXT:
 				// Translate the area covered by the layer object, with the zoom factor
 				tmp_rectangle.x = (((layer_text *) ((layer *) layer_pointer->data)->object_data)->x_offset_start * zoom) / 102;
@@ -2223,6 +2231,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.54  2006/07/06 14:56:01  vapour
+ * Added code to calculate onscreen boundaries of mouse cursor.
+ *
  * Revision 1.53  2006/06/27 13:47:16  vapour
  * + Moved some code from the flame_read function into the menu_file_open function, as it's more logical to have it there.
  * + Committed the scaling up of the exported svg text width, as I forgot to do it the other day.
