@@ -2450,8 +2450,8 @@ void layer_new_mouse(void)
 	tmp_mouse_ob->y_offset_start = 100;
 	tmp_mouse_ob->x_offset_finish = 100;
 	tmp_mouse_ob->y_offset_finish = 100;
-	tmp_mouse_ob->width = 400;
-	tmp_mouse_ob->height = 300;
+	tmp_mouse_ob->width = 22;
+	tmp_mouse_ob->height = 32;
 	tmp_mouse_ob->click = MOUSE_NONE;
 	tmp_mouse_ob->image_path = g_string_new("");
 
@@ -5143,6 +5143,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.48  2006/07/06 14:55:06  vapour
+ * Updated initial width and height attributes of mouse cursor image.
+ *
  * Revision 1.47  2006/07/05 12:19:34  vapour
  * Fleshed out initial mouse pointer creation dialog box.
  *
