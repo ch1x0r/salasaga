@@ -436,8 +436,10 @@ gboolean flame_read(gchar *filename)
 	GList				*tmp_glist;				// 
 	layer_highlight		*tmp_highlight_ob;		// Temporary highlight layer object
 	layer_image			*tmp_image_ob;			// Temporary image layer object
+	gint				tmp_int;				// Temporary integer
 	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
 	layer				*tmp_layer;				// Temporary layer
+	layer_mouse			*tmp_mouse_ob;			// Temporary mouse layer object
 	GdkPixbuf			*tmp_pixbuf;			//
 	slide				*tmp_slide;				// Temporary slide
 	layer_text			*tmp_text_ob;			// Temporary text layer object
@@ -881,6 +883,98 @@ gboolean flame_read(gchar *filename)
 										-1);
 
 								// Add this (now completed) highlight layer to the slide
+								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+							}
+
+							// Test if this layer is a mouse pointer layer
+							if (!xmlStrcmp(tmp_char, (const xmlChar *) "mouse"))
+							{
+								// Construct a new mouse pointer layer
+								tmp_mouse_ob = g_new(layer_mouse, 1);
+								tmp_layer = g_new(layer, 1);	
+								tmp_layer->object_type = TYPE_MOUSE_CURSOR;
+								tmp_layer->object_data = (GObject *) tmp_mouse_ob;
+
+								// Load the highlight layer values
+								this_node = this_layer->xmlChildrenNode;
+								while (NULL != this_node)
+								{
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
+									{
+										// Get the starting x offset
+										tmp_mouse_ob->x_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
+									{
+										// Get the starting y offset
+										tmp_mouse_ob->y_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
+									{
+										// Get the finishing x offset
+										tmp_mouse_ob->x_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
+									{
+										// Get the finishing y offset
+										tmp_mouse_ob->y_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "width")))
+									{
+										// Get the width
+										tmp_mouse_ob->width = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "height")))
+									{
+										// Get the height
+										tmp_mouse_ob->height = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "click")))
+									{
+										// Get the mouse click type
+										tmp_int = g_ascii_strncasecmp(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1), "none", 4);
+										if (0 == tmp_int)
+										{
+											tmp_mouse_ob->click = MOUSE_NONE;
+										} else
+										{
+											tmp_mouse_ob->click = MOUSE_LEFT_ONE;
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
+									{
+										// Get the start frame
+										tmp_layer->start_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+									{
+										// Get the finish frame
+										tmp_layer->finish_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
+									{
+										// Get the name of the layer
+										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									this_node = this_node->next;	
+								}
+
+								// Add the layer to the slide list store
+								tmp_iter = g_new(GtkTreeIter, 1);
+								tmp_layer->row_iter = tmp_iter;
+								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
+								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
+										TIMELINE_NAME, tmp_layer->name->str,
+										TIMELINE_VISIBILITY, TRUE,
+										TIMELINE_START, tmp_layer->start_frame,
+										TIMELINE_FINISH, tmp_layer->finish_frame,
+										TIMELINE_X_OFF_START, tmp_mouse_ob->x_offset_start,
+										TIMELINE_Y_OFF_START, tmp_mouse_ob->y_offset_start,
+										TIMELINE_X_OFF_FINISH, tmp_mouse_ob->x_offset_finish,
+										TIMELINE_Y_OFF_FINISH, tmp_mouse_ob->y_offset_finish,
+										-1);
+
+								// Add this (now completed) mouse pointer layer to the slide
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
 							}
 
@@ -1845,6 +1939,29 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, "blue", tmp_gstring->str);
 			break;
 
+		case TYPE_MOUSE_CURSOR:
+			xmlNewChild(layer_node, NULL, "type", "mouse");
+			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->x_offset_start);
+			xmlNewChild(layer_node, NULL, "x_offset_start", tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->y_offset_start);
+			xmlNewChild(layer_node, NULL, "y_offset_start", tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->x_offset_finish);
+			xmlNewChild(layer_node, NULL, "x_offset_finish", tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->y_offset_finish);
+			xmlNewChild(layer_node, NULL, "y_offset_finish", tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->width);
+			xmlNewChild(layer_node, NULL, "width", tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->height);
+			xmlNewChild(layer_node, NULL, "height", tmp_gstring->str);
+			if (MOUSE_NONE == ((layer_mouse *) layer_pointer->object_data)->click)
+			{
+				xmlNewChild(layer_node, NULL, "click", "none");
+			} else
+			{
+				xmlNewChild(layer_node, NULL, "click", "left_one");
+			}
+			break;
+
 		case TYPE_TEXT:
 			xmlNewChild(layer_node, NULL, "type", "text");
 			gtk_text_buffer_get_bounds(((layer_text *) layer_pointer->object_data)->text_buffer, &text_start, &text_end);
@@ -2231,6 +2348,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.55  2006/07/09 08:45:52  vapour
+ * Added code to save mouse pointer data into project files, and read it back out again properly when loading them.
+ *
  * Revision 1.54  2006/07/06 14:56:01  vapour
  * Added code to calculate onscreen boundaries of mouse cursor.
  *
