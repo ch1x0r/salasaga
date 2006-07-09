@@ -69,11 +69,14 @@ GString				*file_name = NULL;		// Holds the file name the project is saved as
 GtkWidget			*film_strip;			// The film strip area
 GtkScrolledWindow	*film_strip_container;	// Container for the film strip
 guint				frames_per_second;		// Number of frames per second
+GString				*icon_extension;		// Used to determine if SVG images can be loaded
+GString				*icon_path;				// Used to determine if SVG images can be loaded
 GtkWidget			*main_drawing_area;		// Widget for the drawing area
 GtkWidget			*main_window;			// Widget for the main window
 GtkItemFactory		*menu_bar = NULL;		// Widget for the menu bar
 GtkTable			*message_bar;			// Widget for message bar
 gboolean			mouse_dragging = FALSE;	// Is the mouse being dragged?
+GdkPixbuf			*mouse_ptr_pixbuf;		// Temporary GDK Pixbuf
 GIOChannel			*output_file;			// The output file handle
 gulong				resolution_callback;	// Holds the id of the resolution selector callback
 GtkComboBox			*resolution_selector;	// Widget for the resolution selector
@@ -140,7 +143,7 @@ ResolutionStructure	res_array[] =
 	{ 320, 240 },
 	{ 160, 120 }
 };
-gint				num_res_items = sizeof(res_array) / sizeof(res_array[0]);	// The number of resolution items
+gint					num_res_items = sizeof(res_array) / sizeof(res_array[0]);	// The number of resolution items
 
 
 // Callback to exit the application
@@ -166,7 +169,7 @@ void create_menu_bar()
 	//
 
 	// Local variables
-	GtkAccelGroup				*accel_group;		// Holds the accelerator (shortcut) keys
+	GtkAccelGroup		*accel_group;		// Holds the accelerator (shortcut) keys
 	static GtkItemFactoryEntry	menu_items[] =
 	{
 		{"/_File",					NULL,					NULL,							0,	"<Branch>"},
@@ -247,19 +250,11 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	//
 
 	// Local variables
-	gint				format_counter;			// Used to determine if SVG images can be loaded
-	GdkPixbufFormat		*format_data;			// Used to determine if SVG images can be loaded
-	GString				*icon_extension;		// Used to determine if SVG images can be loaded
-	GString				*icon_path;				// Used to determine if SVG images can be loaded
-	gint				num_formats;			// Used to determine if SVG images can be loaded
-	GSList				*supported_formats;		// Used to determine if SVG images can be loaded
-
 	GdkPixbuf			*tmp_gdk_pixbuf;		// Temporary GDK Pixbuf
 	GString				*tmp_gstring;			// Temporary GString
 
 
 	// Initialise various things
-	icon_path = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 
 	// Create the toolbar widget
@@ -268,36 +263,6 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	// Create the tooltips structure
 	main_toolbar_tooltips = gtk_tooltips_new();
 	gtk_tooltips_enable(GTK_TOOLTIPS(main_toolbar_tooltips));
-
-	// Work out if SVG images can be loaded
-	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
-
-#ifdef _WIN32
-	// Hard code a different path for windows
-	icon_path = g_string_assign(icon_path, "icons");
-#else
-	icon_path = g_string_assign(icon_path, "../share/icons/flame/72x72");
-#endif
-
-	supported_formats = gdk_pixbuf_get_formats();
-	num_formats = g_slist_length(supported_formats);
-	for (format_counter = 0; format_counter < num_formats; format_counter++)
-	{
-		format_data = g_slist_nth_data(supported_formats, format_counter);
-		if (0 == g_ascii_strncasecmp(gdk_pixbuf_format_get_name(format_data), "svg", 3))
-		{
-			// SVG is supported
-			icon_extension = g_string_assign(icon_extension, "svg");
-
-#ifdef _WIN32
-			// Hard code a different path for windows
-			icon_path = g_string_assign(icon_path, "icons");
-#else
-			icon_path = g_string_assign(icon_path, "../share/icons/flame/scalable");
-#endif
-
-		}
-	}
 
 	// Create the New button
 	main_toolbar_icons[NEW] = gtk_image_new_from_stock(GTK_STOCK_NEW, icon_height);
@@ -407,8 +372,6 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	// Free memory allocated in this function
 	g_string_free(tmp_gstring, TRUE);
-	g_string_free(icon_extension, TRUE);
-	g_string_free(icon_path, TRUE);
 
 	return inner_toolbar;	
 }
@@ -462,12 +425,6 @@ GtkWidget *create_time_line(void)
 	//
 
 	// Local variables
-	gint				format_counter;			// Used to determine if SVG images can be loaded
-	GdkPixbufFormat		*format_data;			// Used to determine if SVG images can be loaded
-	GString				*icon_extension;		// Used to determine if SVG images can be loaded
-	GString				*icon_path;				// Used to determine if SVG images can be loaded
-	gint				num_formats;			// Used to determine if SVG images can be loaded
-	GSList				*supported_formats;		// Used to determine if SVG images can be loaded
 	GtkWidget			*time_line_toolbar;		// Widget for holding the time line toolbar
 	GtkWidget			*time_line_scrolled_window;				// Widget for holding the scrolled window
 
@@ -476,7 +433,6 @@ GtkWidget *create_time_line(void)
 
 
 	// Initialise various things
-	icon_path = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 
 	// Create the VBox the time line elements are packed into
@@ -496,36 +452,6 @@ GtkWidget *create_time_line(void)
 	// Create the tooltips structure
 	layer_toolbar_tooltips = gtk_tooltips_new();
 	gtk_tooltips_enable(GTK_TOOLTIPS(layer_toolbar_tooltips));
-
-	// Work out if SVG images can be loaded
-	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
-
-#ifdef _WIN32
-	// Hard code a different path for windows
-	icon_path = g_string_assign(icon_path, "icons");
-#else
-	icon_path = g_string_assign(icon_path, "../share/icons/flame/72x72");
-#endif
-
-	supported_formats = gdk_pixbuf_get_formats();
-	num_formats = g_slist_length(supported_formats);
-	for (format_counter = 0; format_counter < num_formats; format_counter++)
-	{
-		format_data = g_slist_nth_data(supported_formats, format_counter);
-		if (0 == g_ascii_strncasecmp(gdk_pixbuf_format_get_name(format_data), "svg", 3))
-		{
-			// SVG is supported
-			icon_extension = g_string_assign(icon_extension, "svg");
-
-#ifdef _WIN32
-			// Hard code a different path for windows
-			icon_path = g_string_assign(icon_path, "icons");
-#else
-			icon_path = g_string_assign(icon_path, "../share/icons/flame/scalable");
-#endif
-
-		}
-	}
 
 	// * Create the layer toolbar icons *
 
@@ -655,13 +581,11 @@ GtkWidget *create_time_line(void)
 	layer_toolbar_icons_gray[LAYER_UP] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
 
-/*
 	// Create the grayed out Add Mouse Pointer icon
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_mouse_grayed", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	layer_toolbar_icons_gray[LAYER_MOUSE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
-*/
 
 	// Create the grayed out Add Text Layer icon
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_text_grayed", icon_extension->str);
@@ -682,10 +606,7 @@ GtkWidget *create_time_line(void)
 	g_object_unref(tmp_gdk_pixbuf);
 
 	// Free the memory allocated during this function
-	g_string_free(icon_extension, TRUE);
-	g_string_free(icon_path, TRUE);
 	g_string_free(tmp_gstring, TRUE);
-	g_slist_free(supported_formats);
 
 	// Return the handle of the time line container
 	return time_line_vbox;
@@ -748,18 +669,22 @@ GtkWidget *create_working_area(GtkWidget *working_frame)
 gint main(gint argc, gchar *argv[])
 {
 	// Local variables
-	GValue						*handle_size;			// The size of the handle in the main area
-	GtkWidget					*main_area;				// Widget for the onscreen display
-	GtkWidget					*outer_box;				// Widget for the onscreen display
-	GtkLabel					*resolution_label;		// Widget for the resolution selector label
-	gboolean					should_maximise = FALSE;// Briefly keeps track of whether the window should be maximised
-	GtkWidget					*toolbar = NULL;		// Widget for the toolbar
-	GdkScreen					*which_screen;			// Gets given the screen the monitor is on
-	gchar						wintitle[40];			// Stores the window title
-	GtkLabel					*zoom_label;			// Widget for the zoom selector label
+	gint				format_counter;			// Used to determine if SVG images can be loaded
+	GdkPixbufFormat		*format_data;			// Used to determine if SVG images can be loaded
+	GValue				*handle_size;			// The size of the handle in the main area
+	GtkWidget			*main_area;				// Widget for the onscreen display
+	gint				num_formats;			// Used to determine if SVG images can be loaded
+	GtkWidget			*outer_box;				// Widget for the onscreen display
+	GtkLabel			*resolution_label;		// Widget for the resolution selector label
+	gboolean			should_maximise = FALSE;// Briefly keeps track of whether the window should be maximised
+	GSList				*supported_formats;		// Used to determine if SVG images can be loaded
+	GtkWidget			*toolbar = NULL;		// Widget for the toolbar
+	GdkScreen			*which_screen;			// Gets given the screen the monitor is on
+	gchar				wintitle[40];			// Stores the window title
+	GtkLabel			*zoom_label;			// Widget for the zoom selector label
 
-	GString						*tmp_gstring;			// Temporary GString
-	GtkWidget					*tmp_widget = NULL;		// Temporary widget
+	GString				*tmp_gstring;			// Temporary GString
+	GtkWidget			*tmp_widget = NULL;		// Temporary widget
 
 #ifndef _WIN32
 	// GConf related variables (not for windows)
@@ -769,14 +694,10 @@ gint main(gint argc, gchar *argv[])
 	GConfEngine			*gconf_engine;			// GConf engine
 	gchar				*gconf_value;			//
 	guint				unused_num = 0;			// Used to work out which metacity run command is unassigned
-	gboolean			tmp_boolean;				// Temporary boolean
+	gboolean			tmp_boolean;			// Temporary boolean
 
 	guint				tmp_guint;				// Temporary guint
-	guint				tmp_int;					// Temporary guint
-#else
-	// Registry related variables (windows only)
-	
-
+	guint				tmp_int;				// Temporary guint
 #endif
 
 
@@ -792,6 +713,8 @@ gint main(gint argc, gchar *argv[])
 	default_bg_colour.green = 0;
 	default_bg_colour.blue = 0;
 	frames_per_second = 12;  // Half of 24 fps (film)
+	icon_path = g_string_new(NULL);
+	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
 
 	// Initialise GTK
 	gtk_set_locale();
@@ -807,6 +730,38 @@ gint main(gint argc, gchar *argv[])
 	g_log_set_handler("GModule", G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, logger_with_domain, NULL);
 	g_log_set_handler("GLib-GObject", G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, logger_with_domain, NULL);
 	g_log_set_handler("GThread", G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, logger_with_domain, NULL);
+
+	// * Work out if SVG images can be loaded *
+#ifdef _WIN32
+	// Hard code a different path for windows
+	icon_path = g_string_assign(icon_path, "icons");
+#else
+	icon_path = g_string_assign(icon_path, "../share/icons/flame/72x72");
+#endif
+
+	supported_formats = gdk_pixbuf_get_formats();
+	num_formats = g_slist_length(supported_formats);
+	for (format_counter = 0; format_counter < num_formats; format_counter++)
+	{
+		format_data = g_slist_nth_data(supported_formats, format_counter);
+		if (0 == g_ascii_strncasecmp(gdk_pixbuf_format_get_name(format_data), "svg", 3))
+		{
+			// SVG is supported
+			icon_extension = g_string_assign(icon_extension, "svg");
+
+#ifdef _WIN32
+			// Hard code a different path for windows
+			icon_path = g_string_assign(icon_path, "icons");
+#else
+			icon_path = g_string_assign(icon_path, "../share/icons/flame/scalable");
+#endif
+
+		}
+	}
+
+	// Load initial mouse pointer graphic
+	g_string_printf(tmp_gstring, "%s%c%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", icon_extension->str);
+	mouse_ptr_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 
 	// Start up the GUI part of things
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -874,12 +829,12 @@ gint main(gint argc, gchar *argv[])
 	// * Registry related code (windows only) *
 
 	// Check if we have a saved configuration in the windows registry
-	HKEY		hkey;
-	guchar		buffer_data[1000];
-	LPSTR		buffer_ptr = &buffer_data[0];
-	glong		buffer_size;
-	gboolean	missing_keys = FALSE;
-	glong		return_code;
+	HKEY				hkey;
+	guchar				buffer_data[1000];
+	LPSTR				buffer_ptr = &buffer_data[0];
+	glong				buffer_size;
+	gboolean			missing_keys = FALSE;
+	glong				return_code;
 
 
 	// Check if the Flame Project registry keys exist
@@ -1203,7 +1158,9 @@ gint main(gint argc, gchar *argv[])
 // fixme4: Workaround for now as GConf on windows doesn't seem optimal
 //         May be better to abstract this stuff into a function that switches backend transparently (GConf/Windows-registry)
 #ifndef _WIN32  // Non-windows check
+
 	// * Setup the Control-Printscreen key to capture screenshots *
+
 	// Search for the first unused run command
 	command_key = g_string_new(NULL);
 	for (tmp_guint = 10; tmp_guint >= 1; tmp_guint--)
@@ -1420,7 +1377,13 @@ gint main(gint argc, gchar *argv[])
 	// Display the main window
 	gtk_widget_show_all(main_window);
 
+	// Start the main event loop
 	gtk_main();
+
+	// Free the memory use in this function
+	g_string_free(icon_extension, TRUE);
+	g_string_free(icon_path, TRUE);
+	g_slist_free(supported_formats);
 
 	// Exit
 	exit(0);
@@ -1432,6 +1395,10 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.24  2006/07/09 08:05:09  vapour
+ * + Centralised the test for svg image loading support.
+ * + Added code to load the initial mouse pointer image at program start.
+ *
  * Revision 1.23  2006/07/04 12:46:35  vapour
  * Re-enabled the mouse pointer button on the layer toolbar.
  *
