@@ -142,7 +142,7 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 
 	// Initialise various pointers
 	layer_pointer = element;
-	tmp_pixbuf = user_data;
+	tmp_pixbuf = user_data;  // The backing pixbuf
 
 	// Determine the type of layer we're dealing with (we ignore background layers)
 	switch (layer_pointer->object_type)
@@ -194,8 +194,38 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			return;
 
 		case TYPE_MOUSE_CURSOR:
-			// fixme4: Needs to be coded
-			break;
+			// * Composite the mouse pointer image onto the backing pixmap *
+
+			// Calculate how much of the source image will fit onto the backing pixmap
+			pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
+			pixbuf_height = gdk_pixbuf_get_height(tmp_pixbuf);
+			x_offset = ((layer_mouse *) layer_pointer->object_data)->x_offset_start;
+			y_offset = ((layer_mouse *) layer_pointer->object_data)->y_offset_start;
+			width = ((layer_mouse *) layer_pointer->object_data)->width;
+			height = ((layer_mouse *) layer_pointer->object_data)->height;
+			if ((x_offset + width) > pixbuf_width)
+			{
+				width = pixbuf_width - x_offset;
+			}
+			if ((y_offset + height) > pixbuf_height)
+			{
+				height = pixbuf_height - y_offset;
+			}
+
+			// Draw the mouse pointer onto the backing pixbuf
+			gdk_pixbuf_composite(mouse_ptr_pixbuf,	// Source pixbuf
+			tmp_pixbuf,				// Destination pixbuf
+			x_offset,				// X offset
+			y_offset,				// Y offset
+			width,					// Width
+			height,					// Height
+			x_offset,				// Source offsets
+			y_offset,				// Source offsets
+			1, 1,					// Scale factor (1 == no scale)
+			GDK_INTERP_NEAREST,		// Scaling type
+			255);					// Alpha
+			user_data = (GdkPixbuf *) tmp_pixbuf;
+			return;
 
 		case TYPE_EMPTY:
 			// Empty layer, just return
@@ -3717,6 +3747,10 @@ void menu_file_new(void)
 		current_slide = NULL;
 	}
 
+	// Gray out the toolbar items that can't be used without a project loaded
+	disable_layer_toolbar_buttons();
+	disable_main_toolbar_buttons();
+
 	// Set the project name
 	g_string_printf(project_name, "%s", gtk_entry_get_text(GTK_ENTRY(name_entry)));
 
@@ -3813,6 +3847,10 @@ void menu_file_open(void)
 	}
 
 	// * We only get to here if a file was chosen *
+
+	// Gray out the toolbar items that can't be used without a project loaded
+	disable_layer_toolbar_buttons();
+	disable_main_toolbar_buttons();
 
 	// Get the filename from the dialog box
 	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(open_dialog));
@@ -5143,6 +5181,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.49  2006/07/09 08:06:46  vapour
+ * Added the code to display the mouse pointer graphic in the working area.
+ *
  * Revision 1.48  2006/07/06 14:55:06  vapour
  * Updated initial width and height attributes of mouse cursor image.
  *
