@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  * Flame Project: Header file for all call back functions
  * 
  * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
@@ -33,12 +33,12 @@ extern "C" {
 gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer data);
 gint film_strip_slide_clicked(GtkWidget *widget, GdkEvent *event, slide *clicked_slide);
 gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data);
+void timeline_edited_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
 void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
 void timeline_edited_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
-void timeline_edited_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
 void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
-void timeline_edited_y_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
 void timeline_edited_x_offset_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
+void timeline_edited_y_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
 void timeline_edited_y_offset_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
 gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
 gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
@@ -58,6 +58,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data);
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2006/07/09 11:44:02  vapour
+ * Reordered the functions alphabetically.
+ *
  * Revision 1.4  2006/04/22 08:36:54  vapour
  * + Replaced the text string display in the timeline (layer) widget area, with the x and y finish positions.
  * + Updated the entire project to use the word "finish" consistently, instead of "final".
