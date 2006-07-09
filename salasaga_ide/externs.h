@@ -38,6 +38,8 @@ extern guint				capture_x;
 extern guint				capture_y;
 extern GList				*current_slide;
 extern gfloat				export_time_counter;
+extern GString				*icon_extension;
+extern GString				*icon_path;
 extern GString				*file_name;
 extern GtkWidget			*film_strip;
 extern GtkScrolledWindow	*film_strip_container;
@@ -47,6 +49,7 @@ extern GtkWidget			*main_window;
 extern GtkItemFactory		*menu_bar;
 extern GtkTable				*message_bar;
 extern gboolean				mouse_dragging;
+extern GdkPixbuf			*mouse_ptr_pixbuf;
 extern GIOChannel			*output_file;
 extern gulong				resolution_callback;
 extern GtkComboBox			*resolution_selector;
@@ -115,6 +118,9 @@ extern gint					num_res_items;
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2006/07/09 08:05:44  vapour
+ * Added global externs to support the svg image loading test and mouse pointer graphic.
+ *
  * Revision 1.9  2006/07/02 09:25:18  vapour
  * Updated for the rewritten layer toolbar icons code.
  *
