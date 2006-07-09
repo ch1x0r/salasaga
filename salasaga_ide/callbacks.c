@@ -142,6 +142,32 @@ gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer da
 }
 
 
+// Function called when the finish field in the timeline widget is edited
+void timeline_edited_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
+{
+	// Local variables
+	GList				*layer_pointer;
+	layer				*layer_data;
+
+
+	// Set up some pointers to make things easier
+	layer_pointer = ((slide *) current_slide->data)->layers;
+
+	// Work out which layer had its value changed
+	layer_pointer = g_list_first(layer_pointer);
+	layer_pointer = g_list_nth(layer_pointer, atoi(row));
+	layer_data = layer_pointer->data;
+
+	// Update the layer with the new value
+	layer_data->finish_frame = atoi(new_value);
+
+	// Update the timeline widget with the new value too
+	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
+						TIMELINE_FINISH, atoi(new_value),
+						-1);
+}
+
+
 // Function called when the name field in the timeline widget is edited
 void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
 {
@@ -200,32 +226,6 @@ void timeline_edited_start(GtkCellRendererText *selection, gchar *row, gchar *ne
 }
 
 
-// Function called when the finish field in the timeline widget is edited
-void timeline_edited_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
-{
-	// Local variables
-	GList				*layer_pointer;
-	layer				*layer_data;
-
-
-	// Set up some pointers to make things easier
-	layer_pointer = ((slide *) current_slide->data)->layers;
-
-	// Work out which layer had its value changed
-	layer_pointer = g_list_first(layer_pointer);
-	layer_pointer = g_list_nth(layer_pointer, atoi(row));
-	layer_data = layer_pointer->data;
-
-	// Update the layer with the new value
-	layer_data->finish_frame = atoi(new_value);
-
-	// Update the timeline widget with the new value too
-	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-						TIMELINE_FINISH, atoi(new_value),
-						-1);
-}
-
-
 // Function called when the x offset finish field in the timeline widget is edited
 void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
 {
@@ -257,6 +257,10 @@ void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row,
 			((layer_highlight *) layer_data->object_data)->x_offset_finish = atoi(new_value);
 			break;
 
+		case TYPE_MOUSE_CURSOR:
+			((layer_mouse *) layer_data->object_data)->x_offset_finish = atoi(new_value);
+			break;
+
 		case TYPE_TEXT:
 			((layer_text *) layer_data->object_data)->x_offset_finish = atoi(new_value);
 			break;
@@ -268,58 +272,6 @@ void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row,
 	// Update the timeline widget with the new value too
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
 						TIMELINE_X_OFF_FINISH, atoi(new_value),
-						-1);
-
-	// Redraw the workspace
-	draw_workspace();
-
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
-}
-
-
-// Function called when the y offset finish field in the timeline widget is edited
-void timeline_edited_y_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
-{
-	// Local variables
-	GList				*layer_pointer;
-	layer				*layer_data;
-
-
-	// Set up some pointers to make things easier
-	layer_pointer = ((slide *) current_slide->data)->layers;
-
-	// Work out which layer had its value changed
-	layer_pointer = g_list_first(layer_pointer);
-	layer_pointer = g_list_nth(layer_pointer, atoi(row));
-	layer_data = layer_pointer->data;
-
-	// Update the layer with the new value
-	switch (layer_data->object_type)
-	{
-		case TYPE_EMPTY:
-			// Nothing to do here
-			break;
-
-		case TYPE_GDK_PIXBUF:
-			((layer_image *) layer_data->object_data)->y_offset_finish = atoi(new_value);
-			break;
-
-		case TYPE_HIGHLIGHT:
-			((layer_highlight *) layer_data->object_data)->y_offset_finish = atoi(new_value);
-			break;
-
-		case TYPE_TEXT:
-			((layer_text *) layer_data->object_data)->y_offset_finish = atoi(new_value);
-			break;
-
-		default:
-			display_warning("ED31: Unknown layer type\n");
-	}
-
-	// Update the timeline widget with the new value too
-	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-						TIMELINE_Y_OFF_FINISH, atoi(new_value),
 						-1);
 
 	// Redraw the workspace
@@ -361,17 +313,77 @@ void timeline_edited_x_offset_start(GtkCellRendererText *selection, gchar *row, 
 			((layer_highlight *) layer_data->object_data)->x_offset_start = atoi(new_value);
 			break;
 
+		case TYPE_MOUSE_CURSOR:
+			((layer_mouse *) layer_data->object_data)->x_offset_start = atoi(new_value);
+			break;
+
 		case TYPE_TEXT:
 			((layer_text *) layer_data->object_data)->x_offset_start = atoi(new_value);
 			break;
 
 		default:
-			display_warning("ED30: Unknown layer type\n");
+			display_warning("ED59: Unknown layer type\n");
 	}
 
 	// Update the timeline widget with the new value too
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
 						TIMELINE_X_OFF_START, atoi(new_value),
+						-1);
+
+	// Redraw the workspace
+	draw_workspace();
+
+	// Redraw the film strip thumbnail
+	draw_thumbnail(current_slide);
+}
+
+
+// Function called when the y offset finish field in the timeline widget is edited
+void timeline_edited_y_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
+{
+	// Local variables
+	GList				*layer_pointer;
+	layer				*layer_data;
+
+
+	// Set up some pointers to make things easier
+	layer_pointer = ((slide *) current_slide->data)->layers;
+
+	// Work out which layer had its value changed
+	layer_pointer = g_list_first(layer_pointer);
+	layer_pointer = g_list_nth(layer_pointer, atoi(row));
+	layer_data = layer_pointer->data;
+
+	// Update the layer with the new value
+	switch (layer_data->object_type)
+	{
+		case TYPE_EMPTY:
+			// Nothing to do here
+			break;
+
+		case TYPE_GDK_PIXBUF:
+			((layer_image *) layer_data->object_data)->y_offset_finish = atoi(new_value);
+			break;
+
+		case TYPE_HIGHLIGHT:
+			((layer_highlight *) layer_data->object_data)->y_offset_finish = atoi(new_value);
+			break;
+
+		case TYPE_MOUSE_CURSOR:
+			((layer_mouse *) layer_data->object_data)->y_offset_finish = atoi(new_value);
+			break;
+
+		case TYPE_TEXT:
+			((layer_text *) layer_data->object_data)->y_offset_finish = atoi(new_value);
+			break;
+
+		default:
+			display_warning("ED31: Unknown layer type\n");
+	}
+
+	// Update the timeline widget with the new value too
+	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
+						TIMELINE_Y_OFF_FINISH, atoi(new_value),
 						-1);
 
 	// Redraw the workspace
@@ -413,12 +425,16 @@ void timeline_edited_y_offset_start(GtkCellRendererText *selection, gchar *row, 
 			((layer_highlight *) layer_data->object_data)->y_offset_start = atoi(new_value);
 			break;
 
+		case TYPE_MOUSE_CURSOR:
+			((layer_mouse *) layer_data->object_data)->y_offset_start = atoi(new_value);
+			break;
+
 		case TYPE_TEXT:
 			((layer_text *) layer_data->object_data)->y_offset_start = atoi(new_value);
 			break;
 
 		default:
-			display_warning("ED31: Unknown layer type\n");
+			display_warning("ED60: Unknown layer type\n");
 	}
 
 	// Update the timeline widget with the new value too
@@ -442,16 +458,16 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	guint				count_int;
 
 	GList				*collision_list = NULL;
-	slide				*current_slide_data;			// Alias to make things easier
-	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
+	slide				*current_slide_data;	// Alias to make things easier
+	GtkWidget			*list_widget;			// Alias to the timeline widget to make things easier
 	guint				num_collisions;
-	gboolean				selection_hit;				// Status toggle
-	guint				selected_row;				// Holds the number of the row that is selected
+	gboolean			selection_hit;			// Status toggle
+	guint				selected_row;			// Holds the number of the row that is selected
 
-	guint				tmp_int;						// Temporary integer
-	GtkTreeViewColumn	*tmp_column;					// Temporary column
-	GString				*tmp_gstring;				// Temporary GString
-	GtkTreePath			*tmp_path;					// Temporary path
+	guint				tmp_int;				// Temporary integer
+	GtkTreeViewColumn	*tmp_column;			// Temporary column
+	GString				*tmp_gstring;			// Temporary GString
+	GtkTreePath			*tmp_path;				// Temporary path
 
 
 	// Only do this function if we have a backing store available
@@ -850,6 +866,10 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2006/07/09 11:43:48  vapour
+ * + Editing mouse pointer values in the timeline view now works.
+ * + Reordered the functions alphabetically.
+ *
  * Revision 1.6  2006/06/12 03:50:43  vapour
  * Updated many of the warning messages to go through the display_warning function.
  *
