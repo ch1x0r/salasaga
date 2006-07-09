@@ -1621,7 +1621,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				// We're processing a highlight layer
 				string_to_write = g_string_new(NULL);
 
-				// Add the SVG tag, but ensure the highligh box starts out invisible
+				// Add the SVG tag, but ensure the highlight box starts out invisible
 				g_string_printf(string_to_write,
 					"<rect id=\"%s-highlight\" class=\"highlight\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" stroke-width=\"%.4fpx\">\n",
 					layer_data->name->str,
@@ -1666,8 +1666,66 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				break;
 
 			case TYPE_MOUSE_CURSOR:
-				g_string_printf(tmp_gstring, "Mouse cursor found in layer '%s'\n", layer_data->name->str);
-				display_warning(tmp_gstring->str);
+				// We're processing a mouse pointer layer
+				string_to_write = g_string_new(NULL);
+
+				// Add the SVG tag, but ensure the mouse pointer starts out invisible
+				g_string_printf(string_to_write,
+					"<path d=\"M %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f z\""
+					" fill=\"#ffffff\" opacity=\"0.0\" fill-rule=\"evenodd\" stroke=\"#000000\""
+					" stroke-width=\"%.4f\" stroke-linecap=\"square\" stroke-miterlimit=\"4\""
+					" stroke-dasharray=\"none\" stroke-dashoffset=\"0\">\n",
+					x_scale * (((layer_highlight *) layer_data->object_data)->x_offset_start + 20.875),
+					y_scale * (((layer_highlight *) layer_data->object_data)->y_offset_start + 19.1705),
+
+					x_scale * (((layer_highlight *) layer_data->object_data)->x_offset_start + 0.25),
+					y_scale * (((layer_highlight *) layer_data->object_data)->y_offset_start + 0.5623),
+
+					x_scale * (((layer_highlight *) layer_data->object_data)->x_offset_start + 0.25),
+					y_scale * (((layer_highlight *) layer_data->object_data)->y_offset_start + 26.2681),
+
+					x_scale * (((layer_highlight *) layer_data->object_data)->x_offset_start + 6.2604),
+					y_scale * (((layer_highlight *) layer_data->object_data)->y_offset_start + 20.2253),
+
+					x_scale * (((layer_highlight *) layer_data->object_data)->x_offset_start + 12.7899),
+					y_scale * (((layer_highlight *) layer_data->object_data)->y_offset_start + 32.8861),
+
+					x_scale * (((layer_highlight *) layer_data->object_data)->x_offset_start + 18.3869),
+					y_scale * (((layer_highlight *) layer_data->object_data)->y_offset_start + 32.8861),
+
+					x_scale * (((layer_highlight *) layer_data->object_data)->x_offset_start + 11.2354),
+					y_scale * (((layer_highlight *) layer_data->object_data)->y_offset_start + 19.1705),
+
+					y_scale * 1.1776);  // Stroke width
+
+				// Animate the mouse pointer SVG properties to fade it in over 1 second
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"1s\" fill=\"freeze\" from=\"0.0\" to=\"1.0\" />\n",
+					1 + time_start + (layer_data->start_frame / frames_per_second));
+
+				// Animate the mouse pointer SVG properties so it keeps visible after faded in
+				tmp_gfloat = (((gfloat) layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2;
+				if (0 > tmp_gfloat)
+					tmp_gfloat = 0;
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" values=\"1.0\" keyTimes=\"0\" begin=\"playbackPlay.click + %.4fs\" dur=\"%.4fs\" />\n",
+					1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
+					tmp_gfloat);
+
+				// Animate the mouse pointer SVG properties so they fade out over 1 second
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n",
+					1 + time_start + (layer_data->finish_frame / frames_per_second) - 1);
+
+				// Animate the SVG properties to move it to it's destination location
+				g_string_append_printf(string_to_write,
+					"\t<animateMotion attributeType=\"XML\" begin=\"playbackPlay.click + %.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx,%.4fpx\" to=\"%.4fpx,%.4fpx\" />\n</path>\n",
+					1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
+					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
+					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_start,  // Start X position
+					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_start,  // Start Y position
+					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_finish,  // Finish X position
+					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_finish);  // Finish Y position
 				break;
 
 			case TYPE_TEXT:
@@ -2348,6 +2406,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.56  2006/07/09 11:16:37  vapour
+ * Export to SVG now includes mouse pointers.
+ *
  * Revision 1.55  2006/07/09 08:45:52  vapour
  * Added code to save mouse pointer data into project files, and read it back out again properly when loading them.
  *
