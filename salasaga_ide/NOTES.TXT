@@ -1,5 +1,20 @@
 ***********
 
+Antoine Quint (graouts) has suggested a possible way to make play/pause/unpause work:
+
+<graouts>	you can play/pause the complete SVG document with the DOM functions on SVGSVGElement: pauseAnimations()/unpauseAnimations()
+<JustinClift>	Hey, WAY cool. I'm going to write that down.
+<JustinClift>	That means I should be able to create a pause button that has a function attached to it for triggering that...
+<JustinClift>	Hmmm, if the svg document is Paused, and a user clicks on the Play button, doesn't that mean the function won't fire to Unpause it?
+<graouts>	yes, absolutely
+<JustinClift>	... that sounds non-optimal... doh!
+<JustinClift>	Back to the event controller. ;)
+<graouts>	there is a boolean field to let you know if the animations are paused or not
+
+Working example: http://pilat.free.fr/tutorial2/example/pauseAnimations.svg
+
+***********
+
 Information that may be useful when figuring out how to create onscreen playback controls for SVG
 http://olaf.kilu.de/opera/
 
