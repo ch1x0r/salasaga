@@ -1149,7 +1149,13 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 
 	// Create the button asking if there should be a mouse click sound
 	click_button = gtk_check_button_new_with_label("Include mouse click?");
-	gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(click_button), FALSE);
+	if (MOUSE_NONE == tmp_mouse_ob->click)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(click_button), FALSE);
+	} else
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(click_button), TRUE);
+	}
 	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(click_button), 0, 2, row_counter, row_counter + 1);
 	row_counter = row_counter + 1;
 
@@ -1179,6 +1185,9 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(click_button)))
 	{
 		tmp_mouse_ob->click = MOUSE_LEFT_ONE;
+	} else
+	{
+		tmp_mouse_ob->click = MOUSE_NONE;
 	}
 
 	// Destroy the dialog box
@@ -2038,6 +2047,7 @@ void layer_edit(void)
 	layer_image			*tmp_image_ob;			// Temporary image layer object
 	GtkTreeIter			*tmp_iter;				// Temporary iter
 	layer				*tmp_layer;				// Temporary layer
+	layer_mouse			*tmp_mouse_ob;			// Temporary mouse layer object
 	layer_text			*tmp_text_ob;			// Temporary text layer object
 	GtkTreePath			*tmp_path;				// Temporary path
 
@@ -2094,6 +2104,25 @@ void layer_edit(void)
 							TIMELINE_Y_OFF_START, tmp_image_ob->y_offset_start,
 							TIMELINE_X_OFF_FINISH, tmp_image_ob->x_offset_finish,
 							TIMELINE_Y_OFF_FINISH, tmp_image_ob->y_offset_finish,
+							-1);
+			}
+			break;
+
+		case TYPE_MOUSE_CURSOR:
+			// Open a dialog box for the user to edit the mouse pointer values
+			return_code = display_dialog_mouse(tmp_layer, "Edit mouse pointer", FALSE);
+			if (TRUE == return_code)
+			{
+				// * The dialog box returned successfully, so update the slide list store with the new values *
+				tmp_mouse_ob = (layer_mouse *) tmp_layer->object_data;
+				tmp_iter = tmp_layer->row_iter;
+				gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
+							TIMELINE_START, tmp_layer->start_frame,
+							TIMELINE_FINISH, tmp_layer->finish_frame,
+							TIMELINE_X_OFF_START, tmp_mouse_ob->x_offset_start,
+							TIMELINE_Y_OFF_START, tmp_mouse_ob->y_offset_start,
+							TIMELINE_X_OFF_FINISH, tmp_mouse_ob->x_offset_finish,
+							TIMELINE_Y_OFF_FINISH, tmp_mouse_ob->y_offset_finish,
 							-1);
 			}
 			break;
@@ -3420,7 +3449,17 @@ void menu_export_svg_animation(void)
 		"<radialGradient cx=\"152.06763\" cy=\"137.20049\" r=\"191.53558\" fx=\"152.06763\""
 		" fy=\"137.20049\" id=\"radialGradient2337\" xlink:href=\"#linearGradient53\""
 		" gradientUnits=\"userSpaceOnUse\" gradientTransform=\"matrix(0.176712,0,0,5.43595e-2,192.1773,201.6639)\" />\n"
-		"</defs>\n");
+		"</defs>\n"
+		"<script><![CDATA[\n"
+		"function control_pause(evt)\n"
+		"{\n"
+		"\tevt.target.ownerDocument.rootElement.pauseAnimations()\n"
+		"}\n"
+		"function control_unpause(evt)\n"
+		"{\n"
+		"\tevt.target.ownerDocument.rootElement.unpauseAnimations()\n"
+		"}\n"
+		"]]></script>\n");
 	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
@@ -3451,16 +3490,15 @@ void menu_export_svg_animation(void)
 	// Add the playback control bar.  We do it last, so it's over the top of everything else
 	g_string_printf(tmp_gstring,
 		// Play button
-		"<g id=\"playbackPlay\">"
+		"<g id=\"playbackPlay\" onclick=\"control_pause(evt)\">\n"
 		"\t<path d=\"M %.4f,%.4f"
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f z \""
-		" font-size=\"%.4fpx\" fill=\"#eef\" fill-rule=\"evenodd\" stroke=\"#88c\" stroke-width=\"%.4f\" id=\"path595\">"
-		"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n"
-		"</path>\n"
+		" font-size=\"%.4fpx\" fill=\"#eef\" fill-rule=\"evenodd\" stroke=\"#88c\" stroke-width=\"%.4f\" id=\"path595\">\n"
+		"\t</path>\n"
 
 		"\t<path d=\"M %.4f,%.4f"
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
@@ -3469,9 +3507,8 @@ void menu_export_svg_animation(void)
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f z \""
 		" font-size=\"%.4fpx\" fill=\"url(#linearGradient2335)\" fill-opacity=\"1\" fill-rule=\"evenodd\""
-		" stroke=\"none\" stroke-width=\"%.4f\" stroke-opacity=\"1\" id=\"path622\">"
-		"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n"
-		"</path>\n"
+		" stroke=\"none\" stroke-width=\"%.4f\" stroke-opacity=\"1\" id=\"path622\">\n"
+		"\t</path>\n"
 
 		"\t<path d=\"M %.4f,%.4f"
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
@@ -3481,17 +3518,15 @@ void menu_export_svg_animation(void)
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f z \""
 		" font-size=\"%.4fpx\" fill=\"url(#radialGradient2337)\" fill-opacity=\"1\" fill-rule=\"evenodd\""
 		" stroke=\"none\" stroke-width=\"%.4f\" stroke-opacity=\"1\" id=\"path621\">\n"
-		"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n"
-		"</path>\n"
+		"\t</path>\n"
 
 		"\t<text x=\"%.4f\" y=\"%.4f\""
 		" font-size=\"%.4fpx\" font-style=\"normal\" font-weight=\"normal\" fill=\"#ffffff\""
 		" fill-opacity=\"1\" stroke=\"#000\" stroke-width=\"%.4f\" stroke-linecap=\"butt\""
 		" stroke-linejoin=\"miter\" stroke-miterlimit=\"4\" stroke-dasharray=\"none\""
 		" stroke-opacity=\"1\" font-family=\"Bitstream Vera Sans\""
-		" id=\"text1428\" xml:space=\"preserve\"><tspan x=\"%.4f\" y=\"%.4f\" id=\"tspan1430\">Play</tspan>"
-		"\t\t<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"playbackPlay.click\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />\n"
-		"</text>\n"
+		" id=\"text1428\" xml:space=\"preserve\"><tspan x=\"%.4f\" y=\"%.4f\" id=\"tspan1430\">Play</tspan>\n"
+		"\t</text>\n"
 
 		"</g>\n",
 
@@ -5181,6 +5216,12 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.50  2006/07/13 13:52:08  vapour
+ * + More code to display the mouse pointer in the working area.
+ * + Added functions to pauseAnimations and unpauseAnimations.
+ * + Visually cleaned up the SVG exported for the play button in the control bar.
+ * + Started adjusting the control bar to use the new pause functions.
+ *
  * Revision 1.49  2006/07/09 08:06:46  vapour
  * Added the code to display the mouse pointer graphic in the working area.
  *
