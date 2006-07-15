@@ -13,6 +13,18 @@ Antoine Quint (graouts) has suggested a possible way to make play/pause/unpause 
 
 Working example: http://pilat.free.fr/tutorial2/example/pauseAnimations.svg
 
+Looking at the SVG DOM draft spec:
+
+  http://www.w3.org/TR/2004/WD-SVG12-20041027/svgudom.html
+
+There are more functions that may be very useful:
+
+  float		getCurrentTime();
+  void		setCurrentTime( in float seconds );
+
+These might be able to be worked such that they're able to return an animation to the very start,
+forward/reverse between slides, go to the end, etc.
+
 ***********
 
 Information that may be useful when figuring out how to create onscreen playback controls for SVG
