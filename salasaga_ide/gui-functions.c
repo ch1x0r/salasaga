@@ -3487,14 +3487,14 @@ void menu_export_svg_animation(void)
 
 		// Play button
 		"<path id=\"controls_play\""
-		" d=\"M 4.6873499 30.212826 C 4.7397333 44.317606 16.239717 55.701347 30.344494 55.648962"
-		" C 44.449275 55.596577 55.833133 44.127847 55.780747 30.023066"
-		" C 55.728362 15.918286 44.259515 4.5031785 30.154735 4.5555647"
-		" C 16.049955 4.6079497 4.6349645 16.108047 4.6873499 30.212826 z"
-		" M 25.162631 48.761909 L 25.111912 35.105754 L 25.19571 24.011616"
-		" L 25.147545 11.042955 L 44.029667 29.754207 L 25.162631 48.761909 z\""
+		" d=\"M %.4fpx %.4fpx C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx z"
+		" M %.4fpx %.4fpx L %.4fpx %.4fpx L %.4fpx %.4fpx"
+		" L %.4fpx %.4fpx L %.4fpx %.4fpx L %.4fpx %.4fpx z\""
 		" font-size=\"12\" fill=\"#b3b3b3\" fill-opacity=\"1\" fill-rule=\"evenodd\""
-		" stroke=\"#333333\" stroke-width=\"3.125\" stroke-linecap=\"round\""
+		" stroke=\"#333333\" stroke-width=\"%.4fpx\" stroke-linecap=\"round\""
 		" stroke-linejoin=\"round\" stroke-dasharray=\"none\" />\n"
 
 		// Pause button
@@ -3519,6 +3519,7 @@ void menu_export_svg_animation(void)
 
 		"</defs>\n",
 
+		// Rewind button
 		x_scale * (control_bar_x_offset + 30.281246), y_scale * (control_bar_y_offset + 4.6562500),
 
 		x_scale * (control_bar_x_offset + 44.328640), y_scale * (control_bar_y_offset + 4.6562500),
@@ -3563,6 +3564,35 @@ void menu_export_svg_animation(void)
 		x_scale * (control_bar_x_offset + 26.374996), y_scale * (control_bar_y_offset + 13.021648),
 		x_scale * (control_bar_x_offset + 26.165846), y_scale * (control_bar_y_offset + 12.812500),
 		x_scale * (control_bar_x_offset + 25.906246), y_scale * (control_bar_y_offset + 12.812500),
+
+		x_scale * 3.125,
+
+		// Play button
+		x_scale * (control_bar_x_offset + 4.6873499), y_scale * (control_bar_y_offset + 30.212826),
+
+		x_scale * (control_bar_x_offset + 4.7397333), y_scale * (control_bar_y_offset + 44.317606),
+		x_scale * (control_bar_x_offset + 16.239717), y_scale * (control_bar_y_offset + 55.701347),
+		x_scale * (control_bar_x_offset + 30.344494), y_scale * (control_bar_y_offset + 55.648962),
+
+		x_scale * (control_bar_x_offset + 44.449275), y_scale * (control_bar_y_offset + 55.596577),
+		x_scale * (control_bar_x_offset + 55.833133), y_scale * (control_bar_y_offset + 44.127847),
+		x_scale * (control_bar_x_offset + 55.780747), y_scale * (control_bar_y_offset + 30.023066),
+
+		x_scale * (control_bar_x_offset + 55.728362), y_scale * (control_bar_y_offset + 15.918286),
+		x_scale * (control_bar_x_offset + 44.259515), y_scale * (control_bar_y_offset + 4.5031785),
+		x_scale * (control_bar_x_offset + 30.154735), y_scale * (control_bar_y_offset + 4.5555647),
+
+		x_scale * (control_bar_x_offset + 16.049955), y_scale * (control_bar_y_offset + 4.6079497),
+		x_scale * (control_bar_x_offset + 4.6349645), y_scale * (control_bar_y_offset + 16.108047),
+		x_scale * (control_bar_x_offset + 4.6873499), y_scale * (control_bar_y_offset + 30.212826),
+
+		x_scale * (control_bar_x_offset + 25.162631), y_scale * (control_bar_y_offset + 48.761909),
+		x_scale * (control_bar_x_offset + 25.111912), y_scale * (control_bar_y_offset + 35.105754),
+		x_scale * (control_bar_x_offset + 25.19571), y_scale * (control_bar_y_offset + 24.011616),
+
+		x_scale * (control_bar_x_offset + 25.147545), y_scale * (control_bar_y_offset + 11.042955),
+		x_scale * (control_bar_x_offset + 44.029667), y_scale * (control_bar_y_offset + 29.754207),
+		x_scale * (control_bar_x_offset + 25.162631), y_scale * (control_bar_y_offset + 48.761909),
 
 		x_scale * 3.125
 
@@ -5194,6 +5224,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.52  2006/07/24 12:00:45  vapour
+ * The play button in the new exported svg control bar should now scale too.
+ *
  * Revision 1.51  2006/07/23 12:37:15  vapour
  * + Added code to pause exported svg movies at the beginning.
  * + Started scaling the new exported svg playback controls.
