@@ -3499,22 +3499,22 @@ void menu_export_svg_animation(void)
 
 		// Pause button
 		"<path id=\"controls_pause\""
-		" d=\"M 30.281250 4.6562500 C 16.233856 4.6562500 4.8437500 16.046356 4.8437500 30.093750"
-		" C 4.8437500 44.141144 16.233856 55.531251 30.281250 55.531250"
-		" C 44.328644 55.531250 55.718751 44.141145 55.718750 30.093750"
-		" C 55.718750 16.046356 44.328645 4.6562500 30.281250 4.6562500 z"
-		" M 19.750000 12.812500 L 26.031250 12.812500"
-		" C 26.290852 12.812500 26.500000 13.021648 26.500000 13.281250 L 26.500000 47.031250"
-		" C 26.500000 47.290852 26.290852 47.500001 26.031250 47.500000 L 19.750000 47.500000"
-		" C 19.490398 47.500000 19.281251 47.290851 19.281250 47.031250 L 19.281250 13.281250"
-		" C 19.281250 13.021648 19.490399 12.812500 19.750000 12.812500 z"
-		" M 34.656250 12.812500 L 40.937500 12.812500"
-		" C 41.197102 12.812500 41.406248 13.021648 41.406250 13.281250 L 41.406250 47.031250"
-		" C 41.406250 47.290852 41.197102 47.500001 40.937500 47.500000 L 34.656250 47.500000"
-		" C 34.396648 47.500000 34.187499 47.290851 34.187500 47.031250 L 34.187500 13.281250"
-		" C 34.187500 13.021648 34.396649 12.812500 34.656250 12.812500 z\""
+		" d=\"M %.4fpx %.4fpx C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx z"
+		" M %.4fpx %.4fpx L %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx L %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx L %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx L %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx z"
+		" M %.4fpx %.4fpx L %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx L %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx L %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx L %.4fpx %.4fpx"
+		" C %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx %.4fpx z\""
 		" font-size=\"12\" fill=\"#b3b3b3\" fill-opacity=\"1\" fill-rule=\"evenodd\""
-		" stroke=\"#333333\" stroke-width=\"3.125\" stroke-dasharray=\"none\""
+		" stroke=\"#333333\" stroke-width=\"%.4fpx\" stroke-dasharray=\"none\""
 		" stroke-opacity=\"1\" stroke-linejoin=\"round\" stroke-linecap=\"round\" />\n"
 
 		"</defs>\n",
@@ -3593,6 +3593,71 @@ void menu_export_svg_animation(void)
 		x_scale * (control_bar_x_offset + 25.147545), y_scale * (control_bar_y_offset + 11.042955),
 		x_scale * (control_bar_x_offset + 44.029667), y_scale * (control_bar_y_offset + 29.754207),
 		x_scale * (control_bar_x_offset + 25.162631), y_scale * (control_bar_y_offset + 48.761909),
+
+		x_scale * 3.125,
+
+		// Pause button
+		x_scale * (control_bar_x_offset + 30.281250), y_scale * (control_bar_y_offset + 4.6562500),
+
+		x_scale * (control_bar_x_offset + 16.233856), y_scale * (control_bar_y_offset + 4.6562500),
+		x_scale * (control_bar_x_offset + 4.8437500), y_scale * (control_bar_y_offset + 16.046356),
+		x_scale * (control_bar_x_offset + 4.8437500), y_scale * (control_bar_y_offset + 30.093750),
+
+		x_scale * (control_bar_x_offset + 4.8437500), y_scale * (control_bar_y_offset + 44.141144),
+		x_scale * (control_bar_x_offset + 16.233856), y_scale * (control_bar_y_offset + 55.531251),
+		x_scale * (control_bar_x_offset + 30.281250), y_scale * (control_bar_y_offset + 55.531250),
+
+		x_scale * (control_bar_x_offset + 44.328644), y_scale * (control_bar_y_offset + 55.531250),
+		x_scale * (control_bar_x_offset + 55.718751), y_scale * (control_bar_y_offset + 44.141145),
+		x_scale * (control_bar_x_offset + 55.718750), y_scale * (control_bar_y_offset + 30.093750),
+
+		x_scale * (control_bar_x_offset + 55.718750), y_scale * (control_bar_y_offset + 16.046356),
+		x_scale * (control_bar_x_offset + 44.328645), y_scale * (control_bar_y_offset + 4.6562500),
+		x_scale * (control_bar_x_offset + 30.281250), y_scale * (control_bar_y_offset + 4.6562500),
+
+		x_scale * (control_bar_x_offset + 19.750000), y_scale * (control_bar_y_offset + 12.812500),
+		x_scale * (control_bar_x_offset + 26.031250), y_scale * (control_bar_y_offset + 12.812500),
+
+		x_scale * (control_bar_x_offset + 26.290852), y_scale * (control_bar_y_offset + 12.812500),
+		x_scale * (control_bar_x_offset + 26.500000), y_scale * (control_bar_y_offset + 13.021648),
+		x_scale * (control_bar_x_offset + 26.500000), y_scale * (control_bar_y_offset + 13.281250),
+		x_scale * (control_bar_x_offset + 26.500000), y_scale * (control_bar_y_offset + 47.031250),
+
+		x_scale * (control_bar_x_offset + 26.500000), y_scale * (control_bar_y_offset + 47.290852),
+		x_scale * (control_bar_x_offset + 26.290852), y_scale * (control_bar_y_offset + 47.500001),
+		x_scale * (control_bar_x_offset + 26.031250), y_scale * (control_bar_y_offset + 47.500000),
+		x_scale * (control_bar_x_offset + 19.750000), y_scale * (control_bar_y_offset + 47.500000),
+
+		x_scale * (control_bar_x_offset + 19.490398), y_scale * (control_bar_y_offset + 47.500000),
+		x_scale * (control_bar_x_offset + 19.281251), y_scale * (control_bar_y_offset + 47.290851),
+		x_scale * (control_bar_x_offset + 19.281250), y_scale * (control_bar_y_offset + 47.031250),
+		x_scale * (control_bar_x_offset + 19.281250), y_scale * (control_bar_y_offset + 13.281250),
+
+		x_scale * (control_bar_x_offset + 19.281250), y_scale * (control_bar_y_offset + 13.021648),
+		x_scale * (control_bar_x_offset + 19.490399), y_scale * (control_bar_y_offset + 12.812500),
+		x_scale * (control_bar_x_offset + 19.750000), y_scale * (control_bar_y_offset + 12.812500),
+
+		x_scale * (control_bar_x_offset + 34.656250), y_scale * (control_bar_y_offset + 12.812500),
+		x_scale * (control_bar_x_offset + 40.937500), y_scale * (control_bar_y_offset + 12.812500),
+
+		x_scale * (control_bar_x_offset + 41.197102), y_scale * (control_bar_y_offset + 12.812500),
+		x_scale * (control_bar_x_offset + 41.406248), y_scale * (control_bar_y_offset + 13.021648),
+		x_scale * (control_bar_x_offset + 41.406250), y_scale * (control_bar_y_offset + 13.281250),
+		x_scale * (control_bar_x_offset + 41.406250), y_scale * (control_bar_y_offset + 47.031250),
+
+		x_scale * (control_bar_x_offset + 41.406250), y_scale * (control_bar_y_offset + 47.290852),
+		x_scale * (control_bar_x_offset + 41.197102), y_scale * (control_bar_y_offset + 47.500001),
+		x_scale * (control_bar_x_offset + 40.937500), y_scale * (control_bar_y_offset + 47.500000),
+		x_scale * (control_bar_x_offset + 34.656250), y_scale * (control_bar_y_offset + 47.500000),
+
+		x_scale * (control_bar_x_offset + 34.396648), y_scale * (control_bar_y_offset + 47.500000),
+		x_scale * (control_bar_x_offset + 34.187499), y_scale * (control_bar_y_offset + 47.290851),
+		x_scale * (control_bar_x_offset + 34.187500), y_scale * (control_bar_y_offset + 47.031250),
+		x_scale * (control_bar_x_offset + 34.187500), y_scale * (control_bar_y_offset + 13.281250),
+
+		x_scale * (control_bar_x_offset + 34.187500), y_scale * (control_bar_y_offset + 13.021648),
+		x_scale * (control_bar_x_offset + 34.396649), y_scale * (control_bar_y_offset + 12.812500),
+		x_scale * (control_bar_x_offset + 34.656250), y_scale * (control_bar_y_offset + 12.812500),
 
 		x_scale * 3.125
 
@@ -5224,6 +5289,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.53  2006/07/29 14:21:42  vapour
+ * The pause button in the new exported svg control bar now scales.
+ *
  * Revision 1.52  2006/07/24 12:00:45  vapour
  * The play button in the new exported svg control bar should now scale too.
  *
