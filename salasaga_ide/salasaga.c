@@ -140,8 +140,11 @@ ResolutionStructure	res_array[] =
 	{ 1024, 768 },
 	{ 800, 600 },
 	{ 640, 480 },
+	{ 352, 288 },
 	{ 320, 240 },
-	{ 160, 120 }
+	{ 176, 144 },
+	{ 160, 120 },
+	{ 128, 96 }
 };
 gint					num_res_items = sizeof(res_array) / sizeof(res_array[0]);	// The number of resolution items
 
@@ -1395,6 +1398,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.25  2006/07/30 02:30:13  vapour
+ * Added several new output resolutions, specifically for mobile phones.  352 x 288, 176 x 144, 160 x 120, 128 x 96.
+ *
  * Revision 1.24  2006/07/09 08:05:09  vapour
  * + Centralised the test for svg image loading support.
  * + Added code to load the initial mouse pointer image at program start.
