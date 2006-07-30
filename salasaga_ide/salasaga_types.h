@@ -32,7 +32,7 @@ extern "C" {
 
 // Set some application constants
 #define APP_NAME "Flame Project Editing GUI"
-#define	APP_VERSION "0.7.5"
+#define	APP_VERSION "0.7.6"
 
 // Define a run time check that hasn't been added to GTK
 #define GTK_TYPE_TREE_ITER				(gtk_tree_iter_get_type ())
@@ -220,6 +220,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.20  2006/07/30 05:23:11  vapour
+ * Bumped version number up to 0.7.6, to mark that svg exporting is now Ok. :)
+ *
  * Revision 1.19  2006/07/05 12:17:42  vapour
  * + Added mouse click types enum.
  * + Added mouse click field to mouse layer.
