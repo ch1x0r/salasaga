@@ -3294,27 +3294,38 @@ void menu_export_svg_animation(void)
 		"\tvar SVGRoot = null;\n"
 		"\tvar svgns = 'http://www.w3.org/2000/svg';\n"
 		"\tvar xlinkns = 'http://www.w3.org/1999/xlink';\n"
+		"\tvar controls_button_pause = null;\n"
+		"\tvar controls_button_play = null;\n"
 		"\n"
 		"\tfunction init(evt)\n"
 		"\t{\n"
 		"\t\tSVGDocument = evt.target.ownerDocument;\n"
 		"\t\tSVGRoot = SVGDocument.documentElement;\n"
+		"\t\tcontrols_button_pause = SVGDocument.getElementById('controls_pause');\n"
+		"\t\tcontrols_button_play = SVGDocument.getElementById('controls_play');\n"
+		"\t\tcontrol_pause();\n"
 		"\t};\n"
 		"\n"
 		"\tfunction control_pause()\n"
 		"\t{\n"
 		"\t\tSVGRoot.pauseAnimations();\n"
+		"\t\tcontrols_button_pause.setAttributeNS(null, 'display', 'none');\n"
+		"\t\tcontrols_button_play.setAttributeNS(null, 'display', 'inline');\n"
 		"\t};\n"
 		"\n"
 		"\tfunction control_rewind()\n"
 		"\t{\n"
 		"\t\tSVGRoot.setCurrentTime(0.0);\n"
 		"\t\tSVGRoot.pauseAnimations();\n"
+		"\t\tcontrols_button_pause.setAttributeNS(null, 'display', 'none');\n"
+		"\t\tcontrols_button_play.setAttributeNS(null, 'display', 'inline');\n"
 		"\t};\n"
 		"\n"
 		"\tfunction control_unpause()\n"
 		"\t{\n"
 		"\t\tSVGRoot.unpauseAnimations();\n"
+		"\t\tcontrols_button_play.setAttributeNS(null, 'display', 'none');\n"
+		"\t\tcontrols_button_pause.setAttributeNS(null, 'display', 'inline');\n"
 		"\t};\n"
 		"\n"
 		"]]></script>\n"
@@ -3338,7 +3349,7 @@ void menu_export_svg_animation(void)
 	y_scale = ((gfloat) output_height / project_height);
 
 	// Position the play button
-	control_bar_x_offset = (output_width / 2) - (x_scale * 70);
+	control_bar_x_offset = (output_width / 2) - (x_scale * 45);
 	control_bar_y_offset = output_height - (y_scale * 70);
 
 	// Write element definitions to the output file
@@ -3471,7 +3482,11 @@ void menu_export_svg_animation(void)
 		// * Control bar button definitions *
 
 		// Rewind button
-		" <path id=\"controls_rewind\""
+		"<g id=\"controls_rewind\">\n"
+		"\t<circle cx=\"%.4fpx\" cy=\"%.4fpx\" r=\"%.4fpx\""
+		" stroke-width=\"%.4fpx\" stroke-opacity=\"0.0\""
+		" fill=\"#555\" fill-opacity=\"1.0\"/>"
+		"\t<path"
 		" d=\"M %.4f,%.4f C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
@@ -3483,11 +3498,16 @@ void menu_export_svg_animation(void)
 		" L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f"
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f z\""
 		" font-size=\"12\" fill=\"#b3b3b3\" fill-opacity=\"1\" fill-rule=\"evenodd\""
-		" stroke=\"#333333\" stroke-width=\"%.4fpx\" stroke-dasharray=\"none\""
+		" stroke=\"#222\" stroke-width=\"%.4fpx\" stroke-dasharray=\"none\""
 		" stroke-opacity=\"1\" stroke-linejoin=\"round\" stroke-linecap=\"round\" />\n"
+		"</g>\n"
 
 		// Play button
-		"<path id=\"controls_play\""
+		"<g id=\"controls_play\">\n"
+		"\t<circle cx=\"%.4fpx\" cy=\"%.4fpx\" r=\"%.4fpx\""
+		" stroke-width=\"%.4fpx\" stroke-opacity=\"0.0\""
+		" fill=\"#555\" fill-opacity=\"1.0\"/>"
+		"\t<path"
 		" d=\"M %.4f %.4f C %.4f %.4f %.4f %.4f %.4f %.4f"
 		" C %.4f %.4f %.4f %.4f %.4f %.4f"
 		" C %.4f %.4f %.4f %.4f %.4f %.4f"
@@ -3495,11 +3515,16 @@ void menu_export_svg_animation(void)
 		" M %.4f %.4f L %.4f %.4f L %.4f %.4f"
 		" L %.4f %.4f L %.4f %.4f L %.4f %.4f z\""
 		" font-size=\"12\" fill=\"#b3b3b3\" fill-opacity=\"1\" fill-rule=\"evenodd\""
-		" stroke=\"#333333\" stroke-width=\"%.4fpx\" stroke-linecap=\"round\""
+		" stroke=\"#222\" stroke-width=\"%.4fpx\" stroke-linecap=\"round\""
 		" stroke-linejoin=\"round\" stroke-dasharray=\"none\" />\n"
+		"</g>\n"
 
 		// Pause button
-		"<path id=\"controls_pause\""
+		"<g id=\"controls_pause\">\n"
+		"\t<circle cx=\"%.4fpx\" cy=\"%.4fpx\" r=\"%.4fpx\""
+		" stroke-width=\"%.4fpx\" stroke-opacity=\"0.0\""
+		" fill=\"#555\" fill-opacity=\"1.0\"/>"
+		"\t<path"
 		" d=\"M %.4f,%.4f C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
 		" C %.4f,%.4f %.4f,%.4f %.4f,%.4f"
@@ -3515,12 +3540,19 @@ void menu_export_svg_animation(void)
 		" C %.4f %.4f %.4f %.4f %.4f %.4f L %.4f %.4f"
 		" C %.4f %.4f %.4f %.4f %.4f %.4f z\"\n"
 		" font-size=\"12\" fill=\"#b3b3b3\" fill-opacity=\"1\" fill-rule=\"evenodd\"\n"
-		" stroke=\"#333333\" stroke-width=\"%.4fpx\" stroke-dasharray=\"none\"\n"
+		" stroke=\"#222\" stroke-width=\"%.4fpx\" stroke-dasharray=\"none\"\n"
 		" stroke-opacity=\"1\" stroke-linejoin=\"round\" stroke-linecap=\"round\" />\n"
+		"</g>\n"
 
 		"</defs>\n",
 
-		// Rewind button
+		// Rewind button (circle backdrop)
+		x_scale * 30.281246,  // cx
+		y_scale * 30.281246,  // cy
+		x_scale * 25.0,  // r
+		x_scale * 1.5,  // stroke-width
+
+		// Rewind button (symbol)
 		x_scale * 30.281246, y_scale * 4.6562500,
 
 		x_scale * 44.328640, y_scale * 4.6562500,
@@ -3566,9 +3598,15 @@ void menu_export_svg_animation(void)
 		x_scale * 26.165846, y_scale * 12.812500,
 		x_scale * 25.906246, y_scale * 12.812500,
 
-		x_scale * 3.125,
+		x_scale * 1.5,
 
-		// Play button
+		// Play button (circle backdrop)
+		x_scale * 30.281246,  // cx
+		y_scale * 30.281246,  // cy
+		x_scale * 25.0,  // r
+		x_scale * 1.5,  // stroke-width
+
+		// Play button (symbol)
 		x_scale * 4.6873499, y_scale * 30.212826,
 
 		x_scale * 4.7397333, y_scale * 44.317606,
@@ -3595,9 +3633,15 @@ void menu_export_svg_animation(void)
 		x_scale * 44.029667, y_scale * 29.754207,
 		x_scale * 25.162631, y_scale * 48.761909,
 
-		x_scale * 3.125,
+		x_scale * 1.5,
 
-		// Pause button
+		// Pause button (circle backdrop)
+		x_scale * 30.281246,  // cx
+		y_scale * 30.281246,  // cy
+		x_scale * 25.0,  // r
+		x_scale * 1.5,  // stroke-width
+
+		// Pause button (symbol)
 		x_scale * 30.281250, y_scale * 4.6562500,
 
 		x_scale * 16.233856, y_scale * 4.6562500,
@@ -3660,7 +3704,7 @@ void menu_export_svg_animation(void)
 		x_scale * 34.396649, y_scale * 12.812500,
 		x_scale * 34.656250, y_scale * 12.812500,
 
-		x_scale * 3.125
+		x_scale * 1.5
 
 		);
 	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
@@ -3690,17 +3734,17 @@ void menu_export_svg_animation(void)
 		" stroke-opacity=\"1.0\" rx=\"%.4fpx\" ry=\"%.4fpx\" />\n"
 
 		"<use xlink:href=\"#controls_rewind\" x=\"%.4fpx\" y=\"%.4fpx\" onclick=\"control_rewind()\"/>\n"
-		"<use xlink:href=\"#controls_play\" x=\"%.4fpx\" y=\"%.4fpx\" onclick=\"control_unpause()\"/>\n"
-		"<use xlink:href=\"#controls_pause\" x=\"%.4fpx\" y=\"%.4fpx\" onclick=\"control_pause()\"/>\n",
+		"<use xlink:href=\"#controls_pause\" x=\"%.4fpx\" y=\"%.4fpx\" onclick=\"control_pause()\"/>\n"
+		"<use xlink:href=\"#controls_play\" x=\"%.4fpx\" y=\"%.4fpx\" onclick=\"control_unpause()\"/>\n",
 
-		x_scale * 173.0, y_scale * 60.0,  // width, height
+		x_scale * 117.0, y_scale * 60.0,  // width, height
 		control_bar_x_offset, control_bar_y_offset,
 		x_scale * 1.1719,  // Stroke width
 		x_scale * 5.8594, y_scale * 5.8594,  // rx, ry
 
 		control_bar_x_offset, control_bar_y_offset,
 		control_bar_x_offset + (x_scale * 56.0), control_bar_y_offset,
-		control_bar_x_offset + (x_scale * 112.0), control_bar_y_offset);
+		control_bar_x_offset + (x_scale * 56.0), control_bar_y_offset);
 	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
@@ -5304,6 +5348,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.55  2006/07/30 02:21:13  vapour
+ * The control bar in exported svg now positions, scales, displays correctly, and controls things like it should.  i.e. it's usable now. :)
+ *
  * Revision 1.54  2006/07/29 16:03:39  vapour
  * Control bar in exported svg now positions and scales correctly.
  *
