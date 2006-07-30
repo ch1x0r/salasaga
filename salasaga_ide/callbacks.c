@@ -39,9 +39,6 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
-// Ming includes
-#include <ming.h>
-
 // Flame Edit includes
 #include "flame-types.h"
 #include "backend.h"
@@ -866,6 +863,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2006/07/30 04:58:50  vapour
+ * Removed the ming includes, commented out the code needing ming, and added a notice to the user if they try and export flash that it's not  going to work as the code is being rewritten.
+ *
  * Revision 1.7  2006/07/09 11:43:48  vapour
  * + Editing mouse pointer values in the timeline view now works.
  * + Reordered the functions alphabetically.

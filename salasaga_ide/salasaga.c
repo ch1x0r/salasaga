@@ -46,9 +46,6 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
-// Ming includes
-#include <ming.h>
-
 // Flame Edit includes
 #include "flame-types.h"
 #include "backend.h"
@@ -1398,6 +1395,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.26  2006/07/30 04:58:50  vapour
+ * Removed the ming includes, commented out the code needing ming, and added a notice to the user if they try and export flash that it's not  going to work as the code is being rewritten.
+ *
  * Revision 1.25  2006/07/30 02:30:13  vapour
  * Added several new output resolutions, specifically for mobile phones.  352 x 288, 176 x 144, 160 x 120, 128 x 96.
  *

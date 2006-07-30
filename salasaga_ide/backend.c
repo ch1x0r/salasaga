@@ -27,9 +27,6 @@
 #include <unistd.h>
 #include <string.h>
 
-// Ming includes
-#include <ming.h>
-
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -1174,7 +1171,7 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 	guint				start_y_offset;
 	guint				width;
 	gfloat				x_step, y_step;
-
+/*
 	SWFBitmap			bitmap;
 	SWFDisplayItem		display_item;
 	SWFInput				input;
@@ -1411,6 +1408,8 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 
 	// Free the memory allocated in this function
 	g_string_free(tmp_gstring, TRUE);
+
+*/
 }
 
 
@@ -2404,6 +2403,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.58  2006/07/30 04:58:50  vapour
+ * Removed the ming includes, commented out the code needing ming, and added a notice to the user if they try and export flash that it's not  going to work as the code is being rewritten.
+ *
  * Revision 1.57  2006/07/13 13:48:39  vapour
  * + Updated the individual svg elements to not wait for the .click event from the play button.
  * + Updated the mouse pointers to use the relative distance moved.

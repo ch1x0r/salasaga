@@ -40,9 +40,6 @@
 #include <libxml/xmlsave.h>
 //#include <libxml/parser.h>
 
-// Ming includes
-#include <ming.h>
-
 // Flame Edit includes
 #include "flame-types.h"
 #include "backend.h"
@@ -3041,6 +3038,11 @@ void menu_export_flash_animation(void)
 		return;
 	}
 
+	// Notify the user that flash output has been disabled for now
+	sound_beep();
+	display_warning("Flash output disabled in this program release, as the code for it is being rewritten.");
+	return;
+
 	// * Pop open a dialog asking the user for their desired filename *
 
 	// Create the dialog asking the user for the name to save as
@@ -5348,6 +5350,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.56  2006/07/30 04:58:50  vapour
+ * Removed the ming includes, commented out the code needing ming, and added a notice to the user if they try and export flash that it's not  going to work as the code is being rewritten.
+ *
  * Revision 1.55  2006/07/30 02:21:13  vapour
  * The control bar in exported svg now positions, scales, displays correctly, and controls things like it should.  i.e. it's usable now. :)
  *
