@@ -4219,7 +4219,7 @@ void menu_file_save(void)
 	}
 
 	// Add the save format version number to the XML document
-	xmlNewChild(meta_pointer, NULL, "save_format", "1.0");
+	xmlNewChild(meta_pointer, NULL, "save_format", "2.0");
 
     // Create the preferences container
 	pref_pointer = xmlNewChild(root_node, NULL, "preferences", NULL);
@@ -5350,6 +5350,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.57  2006/08/01 14:59:45  vapour
+ * Updated the project file format number to 2.0.
+ *
  * Revision 1.56  2006/07/30 04:58:50  vapour
  * Removed the ming includes, commented out the code needing ming, and added a notice to the user if they try and export flash that it's not  going to work as the code is being rewritten.
  *
