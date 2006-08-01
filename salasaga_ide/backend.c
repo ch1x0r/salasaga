@@ -1951,6 +1951,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			// Add the layer data to the output project file
 			xmlNewChild(layer_node, NULL, "type", "image");
 			xmlNewChild(layer_node, NULL, "data", tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->x_offset_start);
 			xmlNewChild(layer_node, NULL, "x_offset_start", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->y_offset_start);
 			xmlNewChild(layer_node, NULL, "y_offset_start", tmp_gstring->str);
@@ -2390,6 +2391,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.60  2006/08/01 15:12:20  vapour
+ * Fixed a small bug, where the x_offset_start for an image wasn't being saved into the project file correctly.
+ *
  * Revision 1.59  2006/08/01 14:58:29  vapour
  * Added code to save image data in the project file, making it self contained and easier to work with.
  *
