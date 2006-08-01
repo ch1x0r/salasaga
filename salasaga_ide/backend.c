@@ -1417,35 +1417,35 @@ void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_s
 void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 {
 	// Local variables
-	gchar			*base64_string;				// Pointer to an Base64 string
-	gchar			*encoded_string;			// Pointer to an URI encoded Base64 string
-	GError			*error = NULL;				// Pointer to error return structure
-	GString			*file_name = NULL;			// Used to construct the file name of the output file
-	guint			finish_frame;				// The finish frame in which the object appears
-	gint			layer_counter;				// Simple counter
-	layer			*layer_data;				// Points to the presently processing layer
-	GList			*layer_pointer;				// Points to the layer structure in the slide
-	gint			num_layers;					// Number of layers in the slide
-	guint			object_type;				// The type of object in each layer
-	gchar			*pixbuf_buffer;				// Gets given a pointer to a compressed jpeg image
-	gsize			pixbuf_size;				// Gets given the size of a compressed jpeg image
-	GIOStatus		return_value;				// Return value used in most GIOChannel functions
-	slide			*slide_pointer;				// Points to the present slide
-	guint			start_frame;				// The first frame in which the object appears
-	GString			*string_to_write = NULL;	// Holds SVG data to be written out
-	GtkTextIter		text_end;					// The end position of the text buffer
-	GtkTextIter		text_start;					// The start position of the text buffer
-	gfloat			time_end;					// The second (or part of) in the animation, in which this slide disappears
-	gfloat			time_start;					// The second (or part of) in the animation, in which this slide appears
-	gfloat			x_scale;					// Width scale factor for the scene
-	gfloat			y_scale;					// Height scale factor for the scene
+	gchar				*base64_string;			// Pointer to an Base64 string
+	gchar				*encoded_string;		// Pointer to an URI encoded Base64 string
+	GError				*error = NULL;			// Pointer to error return structure
+	GString				*file_name = NULL;		// Used to construct the file name of the output file
+	guint				finish_frame;			// The finish frame in which the object appears
+	gint				layer_counter;			// Simple counter
+	layer				*layer_data;			// Points to the presently processing layer
+	GList				*layer_pointer;			// Points to the layer structure in the slide
+	gint				num_layers;				// Number of layers in the slide
+	guint				object_type;			// The type of object in each layer
+	gchar				*pixbuf_buffer;			// Gets given a pointer to a compressed jpeg image
+	gsize				pixbuf_size;			// Gets given the size of a compressed jpeg image
+	GIOStatus			return_value;			// Return value used in most GIOChannel functions
+	slide				*slide_pointer;			// Points to the present slide
+	guint				start_frame;			// The first frame in which the object appears
+	GString				*string_to_write = NULL;// Holds SVG data to be written out
+	GtkTextIter			text_end;				// The end position of the text buffer
+	GtkTextIter			text_start;				// The start position of the text buffer
+	gfloat				time_end;				// The second (or part of) in the animation, in which this slide disappears
+	gfloat				time_start;				// The second (or part of) in the animation, in which this slide appears
+	gfloat				x_scale;				// Width scale factor for the scene
+	gfloat				y_scale;				// Height scale factor for the scene
 
-	gboolean		tmp_bool;					// Temporary boolean value
-	gfloat			tmp_gfloat;					// Temporary gfloat
-	gsize			tmp_gsize;					// Temporary gsize
-	GString			*tmp_gstring;				// Temporary GString
-	gint			tmp_int;					// Temporary integer
-	GdkPixbuf		*tmp_pixbuf;				// Temporary GDK pixbuf
+	gboolean			tmp_bool;				// Temporary boolean value
+	gfloat				tmp_gfloat;				// Temporary gfloat
+	gsize				tmp_gsize;				// Temporary gsize
+	GString				*tmp_gstring;			// Temporary GString
+	gint				tmp_int;				// Temporary integer
+	GdkPixbuf			*tmp_pixbuf;			// Temporary GDK pixbuf
 
 
 	// Initialise some things
@@ -1868,23 +1868,22 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 void menu_file_save_layer(gpointer element, gpointer user_data)
 {
 	// Local variables
-	layer				*layer_pointer;			// Points to the presently processing layer
-
-	xmlNodePtr			slide_node;				// Pointer to the slide node
-	xmlNodePtr			layer_node;				// Pointer to the new layer node
-
-	gboolean			return_code;			// Used to get yes/no values from functions
-	guint				file_counter;			// Used if we have to work out a new image file name
-	guint				finish_frame;			// The finish frame in which the object appears
-	guint				layer_type;				// The type of layer
-	guint				start_frame;			// The first frame in which the object appears
+	gchar				*base64_string;			// Pointer to an Base64 string
+	gchar				*encoded_string;		// Pointer to an URI encoded Base64 string
 	GError				*error = NULL;			// Pointer to error return structure
-	GString				*filename;				// Used if we have to work out a new image file name
+	guint				finish_frame;			// The finish frame in which the object appears
 	GString				*layer_name;			// Name of the layer
-
-	GtkTextIter			text_start;				// The start position of the text buffer
+	xmlNodePtr			layer_node;				// Pointer to the new layer node
+	layer				*layer_pointer;			// Points to the presently processing layer
+	guint				layer_type;				// The type of layer
+	gchar				*pixbuf_buffer;			// Gets given a pointer to a compressed jpeg image
+	gsize				pixbuf_size;			// Gets given the size of a compressed jpeg image
+	xmlNodePtr			slide_node;				// Pointer to the slide node
+	guint				start_frame;			// The first frame in which the object appears
 	GtkTextIter			text_end;				// The end position of the text buffer
+	GtkTextIter			text_start;				// The start position of the text buffer
 
+	gboolean			tmp_bool;				// Temporary boolean value
 	GString				*tmp_gstring;			// Temporary GString
 
 
@@ -1896,10 +1895,10 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	// Create some useful pointers
 	start_frame = layer_pointer->start_frame;
 	finish_frame = layer_pointer->finish_frame;
-	layer_type = layer_pointer->object_type;
 	layer_name	= layer_pointer->name;
+	layer_type = layer_pointer->object_type;
 
-    // Create the layer container
+	// Create the layer container
 	layer_node = xmlNewChild(slide_node, NULL, "layer", NULL);
 	if (NULL == layer_node)
 	{
@@ -1917,60 +1916,41 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	{
 		case TYPE_GDK_PIXBUF:
 
-			// Image layers are a bit special, because they can be modified (i.e. cropped)
-			// At least for now, as it _seems_ like a decent way forward:
-			//  If an image is modified at the time of project save, then we save the modified image
-			//  to it's own unique file, and reference that (instead of the original) in the save file.
-			//
-			//  Pros: Even if an image is modified fifty times, we only save the version that's needed
-			//
-			//  Cons: <suspect there's better ways of doing this>  ;)
-			//
-			// An alternative could be to reference the original image, keeping a note of the area needed
-			// but that could get tricky if we ever get into more advanced image manipulation (unsure)
-			//
-			// Another alternative, and probably better longer term, is to save the image data in the
-			// project file, similar or in the same way we save image data in exported svg.  This way
-			// a project file is far more self-contained and portable.
+			// * We save the image data in the project file, in the same way we save image     *
+			// * data in exported svg.  This way a project file is self-contained and portable *
 
-			if (TRUE == ((layer_image *) layer_pointer->object_data)->modified)
+			// Convert the compressed image into jpeg data
+			tmp_bool = gdk_pixbuf_save_to_buffer(GDK_PIXBUF(((layer_image *) layer_pointer->object_data)->image_data),
+						&pixbuf_buffer,  // Will come back filled out with location of jpeg data
+						&pixbuf_size,  // Will come back filled out with size of jpeg data
+						"jpeg",
+						&error,
+						"quality",
+						"100",
+						NULL);
+			if (FALSE == tmp_bool)
 			{
-				// * This image layer has been modified, so we save it into the projects folder *
-				// * and update the image path info to point to it                              *
+				// Something went wrong when encoding the image to jpeg format
+				display_warning("ED62: Something went wrong when encoding a slide to jpeg format");
 
-				// Generate new, unique file name
-				filename = g_string_new(NULL);
-				file_counter = 0;
-				g_string_printf(filename, "%s%c%s%04u.png", project_folder->str, G_DIR_SEPARATOR, project_name->str, file_counter);
-				while (TRUE == g_file_test(filename->str, G_FILE_TEST_EXISTS))
-				{
-					// The filename already exists, so increment the numerical part and try again
-					file_counter++;
-					g_string_printf(filename, "%s%c%s%04u.png", project_folder->str, G_DIR_SEPARATOR, project_name->str, file_counter);
-				}
-
-				// Save the image file
-				return_code = gdk_pixbuf_save(((layer_image *) layer_pointer->object_data)->image_data,
-									filename->str,  // Filename to save as
-									"png",  // File type to save as
-									&error,
-									"compression", "9",  // Set compression to 9 (no loss)
-									NULL);
-				if (FALSE == return_code)
-				{
-					// Some kind of error occured when saving the image file
-					g_string_printf(tmp_gstring, "ED42: Some kind of error occured when saving '%s'", filename->str);
-					display_warning(tmp_gstring->str);
-					break;  // Continue on with other layers
-				}
-
-				// Update the in memory image info with the new filename
-				g_string_assign(((layer_image *) layer_pointer->object_data)->image_path, filename->str);
+				// Free the memory allocated in this function
+				g_string_free(tmp_gstring, TRUE);
+				g_error_free(error);
+				return;
 			}
 
+			// Base64 encode the image data
+			base64_encode(pixbuf_buffer, pixbuf_size, &base64_string);
+
+			// URI encode the Base64 data
+			uri_encode_base64(base64_string, strlen(base64_string), &encoded_string);
+
+			// Create a string to write to the output file
+			g_string_printf(tmp_gstring, "%s", encoded_string);
+
+			// Add the layer data to the output project file
 			xmlNewChild(layer_node, NULL, "type", "image");
-			xmlNewChild(layer_node, NULL, "path", ((layer_image *) layer_pointer->object_data)->image_path->str);
-			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->x_offset_start);
+			xmlNewChild(layer_node, NULL, "data", tmp_gstring->str);
 			xmlNewChild(layer_node, NULL, "x_offset_start", tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->y_offset_start);
 			xmlNewChild(layer_node, NULL, "y_offset_start", tmp_gstring->str);
@@ -1985,6 +1965,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			break;
 
 		case TYPE_EMPTY:
+			// Add the layer data to the output project file
 			xmlNewChild(layer_node, NULL, "type", "empty");
 			g_string_printf(tmp_gstring, "%u", ((layer_empty *) layer_pointer->object_data)->bg_color.red);
 			xmlNewChild(layer_node, NULL, "red", tmp_gstring->str);
@@ -1995,6 +1976,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			break;
 
 		case TYPE_MOUSE_CURSOR:
+			// Add the layer data to the output project file
 			xmlNewChild(layer_node, NULL, "type", "mouse");
 			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->x_offset_start);
 			xmlNewChild(layer_node, NULL, "x_offset_start", tmp_gstring->str);
@@ -2018,6 +2000,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			break;
 
 		case TYPE_TEXT:
+			// Add the layer data to the output project file
 			xmlNewChild(layer_node, NULL, "type", "text");
 			gtk_text_buffer_get_bounds(((layer_text *) layer_pointer->object_data)->text_buffer, &text_start, &text_end);
 			xmlNewChild(layer_node, NULL, "text_value", gtk_text_buffer_get_text(((layer_text *) layer_pointer->object_data)->text_buffer, &text_start, &text_end, FALSE));
@@ -2040,6 +2023,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			break;
 
 		case TYPE_HIGHLIGHT:
+			// Add the layer data to the output project file
 			xmlNewChild(layer_node, NULL, "type", "highlight");
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->x_offset_start);
 			xmlNewChild(layer_node, NULL, "x_offset_start", tmp_gstring->str);
@@ -2055,6 +2039,9 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, "height", tmp_gstring->str);
 			break;
 	}
+
+	// Free the memory used in this function
+	g_string_free(tmp_gstring, TRUE);
 
 	return;
 }
@@ -2403,6 +2390,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.59  2006/08/01 14:58:29  vapour
+ * Added code to save image data in the project file, making it self contained and easier to work with.
+ *
  * Revision 1.58  2006/07/30 04:58:50  vapour
  * Removed the ming includes, commented out the code needing ming, and added a notice to the user if they try and export flash that it's not  going to work as the code is being rewritten.
  *
