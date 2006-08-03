@@ -411,8 +411,10 @@ GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y
 gboolean flame_read(gchar *filename)
 {
 	// Local variables
+	gfloat				save_version;			// The project file save version
 	xmlDocPtr			document;				// Holds a pointer to the XML document
 	xmlNodePtr			layer_ptr;				// Temporary pointer
+	xmlNodePtr			meta_data_node = NULL;	// Points to the meta-data structure
 	xmlNodePtr			preferences_node = NULL;// Points to the preferences structure
 	xmlNodePtr			slides_node = NULL;		// Points to the slides structure
 	xmlNodePtr			this_layer;				// Temporary pointer
@@ -426,11 +428,13 @@ gboolean flame_read(gchar *filename)
 	xmlChar				*output_quality_data = NULL;
 	xmlChar				*project_width_data = NULL;
 	xmlChar				*project_height_data = NULL;
+	xmlChar				*save_format_data = NULL;
 	xmlChar				*slide_length_data = NULL;
 
 	xmlChar				*tmp_char;				// Temporary string pointer
-	layer_empty			*tmp_empty_ob;			// 
-	GList				*tmp_glist;				// 
+	layer_empty			*tmp_empty_ob;			//
+	GList				*tmp_glist;				//
+	GString				*tmp_gstring;			// Temporary GString
 	layer_highlight		*tmp_highlight_ob;		// Temporary highlight layer object
 	layer_image			*tmp_image_ob;			// Temporary image layer object
 	gint				tmp_int;				// Temporary integer
@@ -441,6 +445,9 @@ gboolean flame_read(gchar *filename)
 	slide				*tmp_slide;				// Temporary slide
 	layer_text			*tmp_text_ob;			// Temporary text layer object
 
+
+	// Initialise various things
+	tmp_gstring = g_string_new(NULL);
 
 	// Begin reading the file
 	document = xmlParseFile(filename);
@@ -459,7 +466,20 @@ gboolean flame_read(gchar *filename)
 		return FALSE;
 	}
 
+	// Scan for the "meta-data" node
+	this_node = this_node->xmlChildrenNode;
+	while (NULL != this_node)
+	{
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "meta-data")))
+		{
+			// Meta-data node found
+			meta_data_node = this_node;
+		}
+		this_node = this_node->next;
+	}
+
 	// Scan for the "preferences" node
+	this_node = xmlDocGetRootElement(document);
 	this_node = this_node->xmlChildrenNode;
 	while (NULL != this_node)
 	{
@@ -484,6 +504,13 @@ gboolean flame_read(gchar *filename)
 		this_node = this_node->next;
 	}
 
+	// Was there a meta-data structure in the save file?
+	if (NULL == meta_data_node)
+	{
+		display_warning("ED63: Project meta-data missing, aborting load");
+		return FALSE;
+	}
+
 	// Was there a preferences structure in the save file?
 	if (NULL == preferences_node)
 	{
@@ -496,6 +523,18 @@ gboolean flame_read(gchar *filename)
 	{
 		display_warning("ED46: No slides in project, aborting load");
 		return FALSE;
+	}
+
+	// Read in the project meta data
+	this_node = meta_data_node->xmlChildrenNode;
+	while (NULL != this_node)
+	{
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "save_format")))
+		{
+			// Save format version found.  Extract and store it
+			save_format_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+		this_node = this_node->next;
 	}
 
 	// Read in the project preferences
@@ -562,7 +601,7 @@ gboolean flame_read(gchar *filename)
 		return FALSE;
 	}
 
-	// * All of the required preferences are present, so we proceed *
+	// * All of the required meta-data and preferences are present, so we proceed *
 
 	// If there's a project presently loaded in memory, we unload it
 	if (NULL != slides)
@@ -574,6 +613,10 @@ gboolean flame_read(gchar *filename)
 		slides = NULL;
 		current_slide = NULL;
 	}
+
+	// Load project file format version
+	save_version = atoi(save_format_data);
+	xmlFree(save_format_data);
 
 	// Load project name
 	if (NULL == project_name)
@@ -755,11 +798,6 @@ gboolean flame_read(gchar *filename)
 										// Get the height
 										tmp_image_ob->height = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
-									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "path")))
-									{
-										// Get the path to the image data
-										tmp_image_ob->image_path = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
-									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 									{
 										// Get the start frame
@@ -775,11 +813,32 @@ gboolean flame_read(gchar *filename)
 										// Get the name of the layer
 										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
+
+									// If version 1.0 of file format, load the image path, otherwise load the embedded image data
+									if (1.0 == save_version)
+									{
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "path")))
+										{
+											// Get the path to the image data
+											tmp_image_ob->image_path = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+
+											// Load the image data
+											tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_image_ob->image_path->str, NULL);
+										}
+									} else
+									{
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "data")))
+										{
+											// Get the image data
+											g_string_assign(tmp_gstring, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+
+											// Decode the image data
+											// fixme2: Needs to be written
+										}
+									}
+
 									this_node = this_node->next;	
 								}
-
-								// Load the image data
-								tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_image_ob->image_path->str, NULL);  // Load the image again
 
 								// Set the modified flag for this image to false
 								tmp_image_ob->modified = FALSE;
@@ -2391,6 +2450,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.61  2006/08/03 13:45:00  vapour
+ * Started adding code to the project loading function so it loads embedded image data.
+ *
  * Revision 1.60  2006/08/01 15:12:20  vapour
  * Fixed a small bug, where the x_offset_start for an image wasn't being saved into the project file correctly.
  *
