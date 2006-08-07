@@ -50,26 +50,132 @@
 #include "gui-functions.h"
 #include "externs.h"
 
+// Function to decode a Base64 encoded string
+GString *base64_decode(GString *input_string, GString *output_string)
+{
+	// Local variables
+	GString				*copied_string;			// A copy of the input string
+	guint				counter;				// Counter of how many characters have been converted
+	guchar				holding_byte;			// Holds the byte being worked on
+	guchar				out_byte0;				// Used to hold the bytes being translated
+	guchar				out_byte1;				// Used to hold the bytes being translated
+	guchar				out_byte2;				// Used to hold the bytes being translated
+
+
+	// Initialise various things
+	g_string_assign(output_string, "");
+
+	// Make a copy of the input string so we can work on it in place
+	copied_string = g_string_new(NULL);
+
+	// Lookup each byte of the input string for it's numeric value
+	for (counter = 0; counter < input_string->len - 1; counter++)
+	{
+
+// Notes:
+//
+//	base64_dictionary_offsets = "0 ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+// 								"26 abcdefghijklmnopqrstuvwxyz"
+//								"52 0123456789"
+//								"62 +"
+//								"63 /"
+//
+// ASCII values
+// + = 43
+// / = 47
+// 0 = 48
+// 9 = 57
+// A = 65
+// Z = 90
+// a = 97
+// z = 122
+
+		holding_byte = input_string->str[counter];
+
+		if (48 <= holding_byte)
+		{
+			// * To get here, it must be in the ranges of 0-9, A-Z, or a-z *
+
+			if (65 <= holding_byte)
+			{
+				// * To get here, it must be in the ranges of A-Z or a-z *
+
+				if (97 <= holding_byte)
+				{
+					// * To get here, it must be in the range of a-z *
+					copied_string = g_string_append_c(copied_string, (guchar) holding_byte - 71);  // a = ASCII 97.  97 - 71 = 26.  So a = 26, b = 27, etc
+				} else
+				{
+					// * To get here, it must be in the range of A-Z *
+					copied_string = g_string_append_c(copied_string, (guchar) holding_byte - 65);  // 65 Makes A = 0, B = 1, etc
+				}
+			} else
+			{
+				// * To get here it must be in the range 0 - 9 *
+				copied_string = g_string_append_c(copied_string, (guchar) holding_byte + 4);  // 0 = ASCII 48.  48 + 4 = 52.  So 0 = 52, 1 = 53, etc
+			}
+		} else
+		{
+			// Must be either + or /
+			switch (input_string->str[counter])
+			{
+				case '+':
+					copied_string = g_string_append_c(copied_string, (guchar) 62);
+					break;
+
+				case '/':
+					copied_string = g_string_append_c(copied_string, (guchar) 63);
+					break;
+
+				default:
+					// Should never get here
+					display_warning("ED64: Error in the Base64 decoding function, unrecognised input.");
+			}
+		}
+	}
+
+	// * To get here, the copied string should have been converted to it's offset values
+
+	for (counter = 0; counter <= copied_string->len - 4; counter = counter + 4)
+	{
+		out_byte0 = (guchar) (copied_string->str[counter] << 2) | (copied_string->str[counter + 1] >> 4);
+		out_byte1 = (guchar) (copied_string->str[counter + 1] << 4) | (copied_string->str[counter + 2] >> 2);
+		out_byte2 = (guchar) (copied_string->str[counter + 2] << 6) | (copied_string->str[counter + 3]);
+
+		output_string = g_string_append_c(output_string, out_byte0);
+		output_string = g_string_append_c(output_string, out_byte1);
+		output_string = g_string_append_c(output_string, out_byte2);
+	}
+
+	// Process the last 4 bytes of the image data string
+	// fixme5: Needs to be written
+
+	// Free the memory allocated in this function
+	g_string_free(copied_string, TRUE);
+
+	return output_string;
+}
+
 
 // Function to create a Base64 encoded string from a block of data in memory
 gboolean base64_encode(gpointer data, guint length, gchar **output_string)
 {
 	// Local variables
-	gchar		*base64_dictionary = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
-	guint		buffer_length;
-	guint		characters_out;				// Counter of how many characters have been output
-	gchar		*input_buffer;
-	gint			input_counter;				// Counter used for positioning inside the input buffer
-	guint		offset;						// Either 0, 1, or 2.  Used to calculate the end few output bytes
-	gchar		*output_buffer;
-	gint			output_counter;				// Counter used for positioning inside the output buffer
+	gchar				*base64_dictionary = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
+	guint				buffer_length;
+	guint				characters_out;			// Counter of how many characters have been output
+	gchar				*input_buffer;
+	gint				input_counter;			// Counter used for positioning inside the input buffer
+	guint				offset;					// Either 0, 1, or 2.  Used to calculate the end few output bytes
+	gchar				*output_buffer;
+	gint				output_counter;			// Counter used for positioning inside the output buffer
 
-	guchar		first_byte;
-	guchar		fourth_byte;
-	guchar		second_byte;
-	guchar		third_byte;
+	guchar				first_byte;
+	guchar				fourth_byte;
+	guchar				second_byte;
+	guchar				third_byte;
 
-	guchar		tmp_byte;
+	guchar				tmp_byte;
 
 
 	// Initialise some things
@@ -189,13 +295,13 @@ void calculate_object_boundaries(void)
 {
 	// Local variables
 	GList				*layer_pointer;
-	guint				num_layers;					// The number of layers in the slide
-	guint				count_int;					// Counter
+	guint				num_layers;				// The number of layers in the slide
+	guint				count_int;				// Counter
 
-	boundary_box			*boundary;					// Boundary information
+	boundary_box		*boundary;				// Boundary information
 
-	guint				tmp_int;						//
-	GdkRectangle			tmp_rectangle;				//
+	guint				tmp_int;				//
+	GdkRectangle		tmp_rectangle;			//
 
 
 	// Only continue in this function if we have a slide structure available
@@ -411,6 +517,9 @@ GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y
 gboolean flame_read(gchar *filename)
 {
 	// Local variables
+	GError				*error = NULL;			// Pointer to error return structure
+	GdkPixbufLoader		*image_loader;			// Used for loading images embedded in project files
+	gboolean			return_code;			// Boolean return code
 	gfloat				save_version;			// The project file save version
 	xmlDocPtr			document;				// Holds a pointer to the XML document
 	xmlNodePtr			layer_ptr;				// Temporary pointer
@@ -435,6 +544,7 @@ gboolean flame_read(gchar *filename)
 	layer_empty			*tmp_empty_ob;			//
 	GList				*tmp_glist;				//
 	GString				*tmp_gstring;			// Temporary GString
+	GString				*tmp_gstring2;			// Temporary GString
 	layer_highlight		*tmp_highlight_ob;		// Temporary highlight layer object
 	layer_image			*tmp_image_ob;			// Temporary image layer object
 	gint				tmp_int;				// Temporary integer
@@ -831,13 +941,48 @@ gboolean flame_read(gchar *filename)
 										{
 											// Get the image data
 											g_string_assign(tmp_gstring, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
-
-											// Decode the image data
-											// fixme2: Needs to be written
 										}
 									}
 
 									this_node = this_node->next;	
+								}
+
+								// Version 1.0 of the file format doesn't have embedded image data
+								if (1.0 != save_version)
+								{
+									// We should have all of the image details by this stage, so can process the image data
+
+									// Un-URI encode the image data
+									tmp_gstring2 = g_string_new(NULL);
+									tmp_gstring2 = uri_decode(tmp_gstring, tmp_gstring2);
+
+									// Un-Base64 encode the image data
+									tmp_gstring = base64_decode(tmp_gstring2, tmp_gstring);
+
+									// * At this point the image data should be back in jpeg format *
+
+									// Convert the jpeg data info a GdxPixbuf we can use
+									image_loader = gdk_pixbuf_loader_new();
+									return_code = gdk_pixbuf_loader_write(image_loader, tmp_gstring->str, tmp_gstring->len, &error);
+									if (TRUE != return_code)
+									{
+										g_string_printf(tmp_gstring2, "ED66: Image data loading failed: '%s'", error->message);
+										display_warning(tmp_gstring2->str);
+									}
+									return_code = gdk_pixbuf_loader_close(image_loader, &error);
+									if (TRUE != return_code)
+									{
+										g_string_printf(tmp_gstring2, "ED67: Image data loading failed: '%s'", error->message);
+										display_warning(tmp_gstring2->str);
+									}
+									tmp_image_ob->image_data = gdk_pixbuf_loader_get_pixbuf(image_loader);
+									if (NULL == tmp_image_ob->image_data)
+									{
+										display_warning("ED65: Error when loading image data");
+									}
+
+									// Free the memory used in this function
+									g_string_free(tmp_gstring2, TRUE);
 								}
 
 								// Set the modified flag for this image to false
@@ -2388,6 +2533,60 @@ void sound_beep(void)
 }
 
 
+// Function to decode a URI encoded string
+GString *uri_decode(GString *input_string, GString *output_string)
+{
+	// Local variables
+	guint				input_counter;			// Counter for how many bytes have been decoded
+
+
+	// Walk the input string looking for specific character strings, replacing them as needed
+	for (input_counter = 0; input_counter <= input_string->len; input_counter++)
+	{
+		switch (input_string->str[input_counter])
+		{
+			case '%':
+				// The input character is potentially the first of the "%2B" or "%2F" series
+				// that we're watching for
+				if ('2' == input_string->str[input_counter + 1])
+				{
+					switch (input_string->str[input_counter + 2])
+					{
+						case 'B':
+							output_string = g_string_append_c(output_string, '+');
+							input_counter = input_counter + 2;
+							break;
+
+						case 'F':
+							output_string = g_string_append_c(output_string, '/');
+							input_counter = input_counter + 2;
+							break;
+
+						default:
+							// Turns out it's not one of the one's we're watching for,
+							// so just copy it to the output string
+							output_string = g_string_append_c(output_string, input_string->str[input_counter]);
+							break;
+					}					
+				} else
+				{
+					// Turns out it's not one of the one's we're watching for,
+					// so just copy it to the output string
+					output_string = g_string_append_c(output_string, input_string->str[input_counter]);
+				}
+				break;
+				
+			default:
+				// The input character isn't one of the one's we're watching for,
+				// so just copy it to the output string
+				output_string = g_string_append_c(output_string, input_string->str[input_counter]);
+		}
+	}
+
+	return output_string;
+}
+
+
 // Function to create a URI encoded string from a Base64 encoded string
 gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
 {
@@ -2450,6 +2649,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.62  2006/08/07 16:40:38  vapour
+ * Added initial working functions to load embedded image data from project files.
+ *
  * Revision 1.61  2006/08/03 13:45:00  vapour
  * Started adding code to the project loading function so it loads embedded image data.
  *

@@ -30,6 +30,7 @@ extern "C" {
 #endif // __cplusplus
 
 // Functions included in this file and its corresponding source file
+GString *base64_decode(GString *input_string, GString *output_string);
 gboolean base64_encode(gpointer data, guint length, gchar ** output_string);
 void calculate_object_boundaries(void);
 void destroy_slide(gpointer element, gpointer user_data);
@@ -44,6 +45,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data);
 void menu_file_save_slide(gpointer element, gpointer user_data);
 void save_preferences_and_exit(void);
 void sound_beep(void);
+GString *uri_decode(GString *input_string, GString *output_string);
 gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string);
 
 #ifdef __cplusplus
@@ -58,6 +60,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string);
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2006/08/07 16:40:38  vapour
+ * Added initial working functions to load embedded image data from project files.
+ *
  * Revision 1.8  2006/06/12 03:47:09  vapour
  * Added functions for capturing log output.
  *
