@@ -808,6 +808,7 @@ gboolean flame_read(gchar *filename)
 								tmp_layer = g_new(layer, 1);	
 								tmp_layer->object_type = TYPE_EMPTY;
 								tmp_layer->object_data = (GObject *) tmp_empty_ob;
+								tmp_layer->external_link = g_string_new(NULL);
 
 								// Load the empty layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -873,6 +874,7 @@ gboolean flame_read(gchar *filename)
 								tmp_layer = g_new(layer, 1);	
 								tmp_layer->object_type = TYPE_GDK_PIXBUF;
 								tmp_layer->object_data = (GObject *) tmp_image_ob;
+								tmp_layer->external_link = g_string_new(NULL);
 
 								// Load the image layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -1015,6 +1017,7 @@ gboolean flame_read(gchar *filename)
 								tmp_layer = g_new(layer, 1);	
 								tmp_layer->object_type = TYPE_HIGHLIGHT;
 								tmp_layer->object_data = (GObject *) tmp_highlight_ob;
+								tmp_layer->external_link = g_string_new(NULL);
 
 								// Load the highlight layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -1095,6 +1098,7 @@ gboolean flame_read(gchar *filename)
 								tmp_layer = g_new(layer, 1);	
 								tmp_layer->object_type = TYPE_MOUSE_CURSOR;
 								tmp_layer->object_data = (GObject *) tmp_mouse_ob;
+								tmp_layer->external_link = g_string_new(NULL);
 
 								// Load the highlight layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -1187,6 +1191,7 @@ gboolean flame_read(gchar *filename)
 								tmp_layer = g_new(layer, 1);	
 								tmp_layer->object_type = TYPE_TEXT;
 								tmp_layer->object_data = (GObject *) tmp_text_ob;
+								tmp_layer->external_link = g_string_new(NULL);
 
 								// Load the text layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -1751,15 +1756,23 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				// URI encode the Base64 data
 				uri_encode_base64(base64_string, strlen(base64_string), &encoded_string);
 
-				// We handle background images differently to other image types
+				// Create the temporary string to put everything into
 				string_to_write = g_string_new(NULL);
+
+				// If the layer has an external link, then create <a> tag around it
+				if (0 != layer_data->external_link->len)
+				{
+					g_string_append_printf(string_to_write, "<a xlink:href=\"%s\" xlink:show=\"new\">\n", layer_data->external_link->str);
+				}
+
+				// We handle background images differently to other image types
 				tmp_int = g_ascii_strncasecmp(layer_data->name->str, "Background", 10);
 				if (0 == tmp_int)
 				{
 					// * We're processing a background layer *
 
 					// Create a string to write to the output svg file
-					g_string_printf(string_to_write, "<image id=\"%s-background\" width=\"%upx\" height=\"%upx\" opacity=\"0.0\" xlink:href=\"data:image/jpeg;base64,%s\">\n",
+					g_string_append_printf(string_to_write, "<image id=\"%s-background\" width=\"%upx\" height=\"%upx\" opacity=\"0.0\" xlink:href=\"data:image/jpeg;base64,%s\">\n",
 						layer_data->name->str,
 						output_width,
 						output_height,
@@ -1775,7 +1788,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					// * We're not processing a background layer *
 
 					// Create a string to write to the output svg file
-					g_string_printf(string_to_write, "<image id=\"%s-standard_image\" width=\"%.4fpx\" height=\"%.4fpx\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" xlink:href=\"data:image/jpeg;base64,%s\">\n",
+					g_string_append_printf(string_to_write, "<image id=\"%s-standard_image\" width=\"%.4fpx\" height=\"%.4fpx\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" xlink:href=\"data:image/jpeg;base64,%s\">\n",
 						layer_data->name->str,
 						x_scale * ((layer_image *) layer_data->object_data)->width,
 						y_scale * ((layer_image *) layer_data->object_data)->height,
@@ -1807,11 +1820,25 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 						x_scale * ((layer_image *) layer_data->object_data)->x_offset_start,
 						x_scale * ((layer_image *) layer_data->object_data)->x_offset_finish);
 					g_string_append_printf(string_to_write,
-						"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n</image>\n",
+						"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n",
 						1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
 						time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 						y_scale * ((layer_image *) layer_data->object_data)->y_offset_start,
 						y_scale * ((layer_image *) layer_data->object_data)->y_offset_finish);
+
+					// Animate the SVG properties to move it offscreen after it's no longer needed
+					// (due to a bug in Opera 9.0 not passing mouse clicks through 100% transparent elements)
+					g_string_append_printf(string_to_write,
+						"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"0.01s\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n</image>\n",
+						1 + time_start + 1 + (layer_data->finish_frame / frames_per_second),
+						y_scale * ((layer_image *) layer_data->object_data)->y_offset_finish,
+						(y_scale * output_height * 10));
+				}
+
+				// If the layer has an external link, then close the <a> tag
+				if (0 != layer_data->external_link->len)
+				{
+					g_string_append_printf(string_to_write, "</a>\n");
 				}
 
 				// Free the allocated memory
@@ -1824,8 +1851,14 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				// We're processing a highlight layer
 				string_to_write = g_string_new(NULL);
 
+				// If the layer has an external link, then create <a> tag around it
+				if (0 != layer_data->external_link->len)
+				{
+					g_string_append_printf(string_to_write, "<a xlink:href=\"%s\" xlink:show=\"new\">\n", layer_data->external_link->str);
+				}
+
 				// Add the SVG tag, but ensure the highlight box starts out invisible
-				g_string_printf(string_to_write,
+				g_string_append_printf(string_to_write,
 					"<rect id=\"%s-highlight\" class=\"highlight\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" stroke-width=\"%.4fpx\">\n",
 					layer_data->name->str,
 					x_scale * ((layer_highlight *) layer_data->object_data)->width,
@@ -1861,11 +1894,26 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_start,
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_finish);
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n</rect>\n",
+					"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n\n",
 					1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_start,
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_finish);
+
+				// Animate the SVG properties to move it offscreen after it's no longer needed
+				// (due to a bug in Opera 9.0 not passing mouse clicks through 100% transparent elements)
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"0.01s\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n</rect>\n",
+					1 + time_start + 1 + (layer_data->finish_frame / frames_per_second),
+					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_finish,
+					(y_scale * output_height * 10));
+
+				// If the layer has an external link, then close the <a> tag
+				if (0 != layer_data->external_link->len)
+				{
+					g_string_append_printf(string_to_write, "</a>\n");
+				}
+
 				break;
 
 			case TYPE_MOUSE_CURSOR:
@@ -1873,7 +1921,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				string_to_write = g_string_new(NULL);
 
 				// Add the SVG tag, but ensure the mouse pointer starts out invisible
-				g_string_printf(string_to_write,
+				g_string_append_printf(string_to_write,
 					"<path d=\"M %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f L %.4f,%.4f z\""
 					" fill=\"#ffffff\" opacity=\"0.0\" fill-rule=\"evenodd\" stroke=\"#000000\""
 					" stroke-width=\"%.4f\" stroke-linecap=\"square\" stroke-miterlimit=\"4\""
@@ -1934,7 +1982,13 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				string_to_write = g_string_new(NULL);
 
 				// Start the group enclosing the text layer elements
-				g_string_printf(string_to_write, "<g id=\"%s\">\n", layer_data->name->str);
+				g_string_append_printf(string_to_write, "<g id=\"%s\">\n", layer_data->name->str);
+
+				// If the layer has an external link, then create <a> tag around it
+				if (0 != layer_data->external_link->len)
+				{
+					g_string_append_printf(string_to_write, "<a xlink:href=\"%s\" xlink:show=\"new\">\n", layer_data->external_link->str);
+				}
 
 				// Create the SVG tag for the background box the text goes onto
 				g_string_append_printf(string_to_write,
@@ -1975,11 +2029,19 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_start,
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_finish);
 				g_string_append_printf(string_to_write,
-					"\t\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n\t</rect>\n",
+					"\t\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n",
 					1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_start,
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_finish);
+
+				// Animate the SVG properties to move it offscreen after it's no longer needed
+				// (due to a bug in Opera 9.0 not passing mouse clicks through 100% transparent elements)
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"0.01s\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n\t</rect>\n",
+					1 + time_start + 1 + (layer_data->finish_frame / frames_per_second),
+					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_finish,
+					(y_scale * output_height * 10));
 
 				// Create the text tag
 				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" font-family=\"Bitstream Vera Sans svg\" class=\"text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-size=\"%.4fpx\" textLength=\"%.4fpx\" lengthAdjust=\"spacingAndGlyphs\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
@@ -2021,11 +2083,25 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_finish);
 				g_string_append_printf(string_to_write,
-					"<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" /></text>\n",
+					"<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />",
 					1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					(y_scale * (((layer_text *) layer_data->object_data)->y_offset_start)),  // Y start
 					(y_scale * ((layer_text *) layer_data->object_data)->y_offset_finish));  // Y finish
+
+				// Animate the SVG properties to move it offscreen after it's no longer needed
+				// (due to a bug in Opera 9.0 not passing mouse clicks through 100% transparent elements)
+				g_string_append_printf(string_to_write,
+					"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"0.01s\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" /></text>\n",
+					1 + time_start + 1 + (layer_data->finish_frame / frames_per_second),
+					y_scale * ((layer_text *) layer_data->object_data)->y_offset_finish,
+					(y_scale * output_height * 10));
+
+				// If the layer has an external link, then close the <a> tag
+				if (0 != layer_data->external_link->len)
+				{
+					g_string_append_printf(string_to_write, "</a>\n");
+				}
 
 				// Close the group
 				g_string_append_printf(string_to_write, "</g>\n");
@@ -2649,6 +2725,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.63  2006/08/09 06:10:46  vapour
+ * Added initial working code to make exported svg elements clickable if they have an associated URL.  Even works around bug #224129 in Opera 9.
+ *
  * Revision 1.62  2006/08/07 16:40:38  vapour
  * Added initial working functions to load embedded image data from project files.
  *
