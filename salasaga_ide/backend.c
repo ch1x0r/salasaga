@@ -844,6 +844,11 @@ gboolean flame_read(gchar *filename)
 										// Get the name of the layer
 										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
+									{
+										// Get the URL associated with the layer
+										tmp_layer->external_link = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
 									this_node = this_node->next;	
 								}
 
@@ -924,6 +929,11 @@ gboolean flame_read(gchar *filename)
 									{
 										// Get the name of the layer
 										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
+									{
+										// Get the URL associated with the layer
+										tmp_layer->external_link = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 
 									// If version 1.0 of file format, load the image path, otherwise load the embedded image data
@@ -1068,6 +1078,11 @@ gboolean flame_read(gchar *filename)
 										// Get the name of the layer
 										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
+									{
+										// Get the URL associated with the layer
+										tmp_layer->external_link = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
 									this_node = this_node->next;	
 								}
 
@@ -1160,6 +1175,11 @@ gboolean flame_read(gchar *filename)
 									{
 										// Get the name of the layer
 										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
+									{
+										// Get the URL associated with the layer
+										tmp_layer->external_link = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									this_node = this_node->next;	
 								}
@@ -1257,6 +1277,11 @@ gboolean flame_read(gchar *filename)
 									{
 										// Get the name of the layer
 										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
+									{
+										// Get the URL associated with the layer
+										tmp_layer->external_link = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									this_node = this_node->next;	
 								}
@@ -2192,6 +2217,10 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	xmlNewChild(layer_node, NULL, "start_frame", tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", finish_frame);
 	xmlNewChild(layer_node, NULL, "finish_frame", tmp_gstring->str);
+	if (0 != layer_pointer->external_link->len)
+	{
+		xmlNewChild(layer_node, NULL, "external_link", layer_pointer->external_link->str);
+	}
 	switch (layer_type)
 	{
 		case TYPE_GDK_PIXBUF:
@@ -2725,6 +2754,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.64  2006/08/09 06:48:27  vapour
+ * Added working code to save and read the external URLs associated with layers, for project files.
+ *
  * Revision 1.63  2006/08/09 06:10:46  vapour
  * Added initial working code to make exported svg elements clickable if they have an associated URL.  Even works around bug #224129 in Opera 9.
  *
