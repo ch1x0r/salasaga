@@ -129,6 +129,7 @@ typedef struct
 	guint				finish_frame;
 	GString				*name;
 	GtkTreeIter			*row_iter;
+	GString				*external_link;
 } layer;
 
 // Defines the properties making up an empty layer
@@ -220,6 +221,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.21  2006/08/09 06:08:35  vapour
+ * Added an external link attribute to layers.
+ *
  * Revision 1.20  2006/07/30 05:23:11  vapour
  * Bumped version number up to 0.7.6, to mark that svg exporting is now Ok. :)
  *
