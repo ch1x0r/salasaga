@@ -700,6 +700,9 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*finish_label;			// Label widget
 	GtkWidget			*finish_button;			//
 
+	GtkWidget			*external_link_label;	// Label widget
+	GtkWidget			*external_link_entry;	// Widget for accepting an external link for clicking on
+
 	layer_highlight		*tmp_highlight_ob;		// Temporary highlight layer object
 
 
@@ -801,6 +804,18 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach_defaults(GTK_TABLE(highlight_table), GTK_WIDGET(finish_button), 1, 2, row_counter, row_counter + 1);
 	row_counter = row_counter + 1;
 
+	// Create the label asking for an external link
+	external_link_label = gtk_label_new("External link: ");
+	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(highlight_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1);
+
+	// Create the entry that accepts an external link
+	external_link_entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), 50);
+	gtk_entry_set_text(GTK_ENTRY(external_link_entry), tmp_layer->external_link->str);
+	gtk_table_attach_defaults(GTK_TABLE(highlight_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1);
+	row_counter = row_counter + 1;
+
 	// Run the dialog
 	gtk_widget_show_all(GTK_WIDGET(highlight_dialog));
 	dialog_result = gtk_dialog_run(GTK_DIALOG(highlight_dialog));
@@ -824,6 +839,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	tmp_highlight_ob->height = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(height_button));
 	tmp_layer->start_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(start_button));
 	tmp_layer->finish_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(finish_button));
+	g_string_printf(tmp_layer->external_link, "%s", gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(highlight_dialog));
@@ -864,6 +880,9 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 
 	GtkWidget			*finish_label;			// Label widget
 	GtkWidget			*finish_button;			//
+
+	GtkWidget			*external_link_label;	// Label widget
+	GtkWidget			*external_link_entry;	// Widget for accepting an external link for clicking on
 
 	layer_image			*tmp_image_ob;			// Temporary layer object
 
@@ -993,6 +1012,18 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	gtk_table_attach_defaults(GTK_TABLE(image_table), GTK_WIDGET(finish_button), 1, 2, row_counter, row_counter + 1);
 	row_counter = row_counter + 1;
 
+	// Create the label asking for an external link
+	external_link_label = gtk_label_new("External link: ");
+	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(image_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1);
+
+	// Create the entry that accepts an external link
+	external_link_entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), 50);
+	gtk_entry_set_text(GTK_ENTRY(external_link_entry), tmp_layer->external_link->str);
+	gtk_table_attach_defaults(GTK_TABLE(image_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1);
+	row_counter = row_counter + 1;
+
 	// Run the dialog
 	gtk_widget_show_all(GTK_WIDGET(image_dialog));
 	dialog_result = gtk_dialog_run(GTK_DIALOG(image_dialog));
@@ -1017,6 +1048,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	tmp_layer->start_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(start_button));
 	tmp_layer->finish_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(finish_button));
 	g_string_printf(path_gstring, "%s", gtk_entry_get_text(GTK_ENTRY(image_entry)));
+	g_string_printf(tmp_layer->external_link, "%s", gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
 	tmp_image_ob->image_path = path_gstring;
 
 	// If we already have image data loaded, get rid of it
@@ -1233,6 +1265,9 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*finish_label;			// Label widget
 	GtkWidget			*finish_button;			//
 
+	GtkWidget			*external_link_label;	// Label widget
+	GtkWidget			*external_link_entry;	// Widget for accepting an external link for clicking on
+
 	layer_text			*tmp_text_ob;			// Temporary text layer object
 
 
@@ -1356,6 +1391,18 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach_defaults(GTK_TABLE(text_table), GTK_WIDGET(finish_button), 1, 2, row_counter, row_counter + 1);
 	row_counter = row_counter + 1;
 
+	// Create the label asking for an external link
+	external_link_label = gtk_label_new("External link: ");
+	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(text_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1);
+
+	// Create the entry that accepts an external link
+	external_link_entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), 50);
+	gtk_entry_set_text(GTK_ENTRY(external_link_entry), tmp_layer->external_link->str);
+	gtk_table_attach_defaults(GTK_TABLE(text_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1);
+	row_counter = row_counter + 1;
+
 	// Run the dialog
 	gtk_widget_show_all(GTK_WIDGET(text_dialog));
 	dialog_result = gtk_dialog_run(GTK_DIALOG(text_dialog));
@@ -1381,6 +1428,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	tmp_layer->start_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(start_button));
 	tmp_layer->finish_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(finish_button));
 	g_string_printf(tmp_layer->name, "%s", gtk_entry_get_text(GTK_ENTRY(name_entry)));
+	g_string_printf(tmp_layer->external_link, "%s", gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(color_button), &(tmp_text_ob->text_color));
 
 	// Destroy the dialog box
@@ -2346,6 +2394,7 @@ void layer_new_highlight(void)
 	tmp_layer->start_frame = 0;
 	tmp_layer->finish_frame = slide_length;
 	tmp_layer->name = g_string_new("Highlight");
+	tmp_layer->external_link = g_string_new(NULL);
 
 	// Display a dialog box to edit these values, using our new highlight layer object
 	return_code = display_dialog_highlight(tmp_layer, "Add new highlight layer");
@@ -2432,6 +2481,7 @@ void layer_new_image(void)
 	tmp_layer->start_frame = 0;
 	tmp_layer->finish_frame = slide_length;
 	tmp_layer->name = g_string_new("Image");
+	tmp_layer->external_link = g_string_new(NULL);
 
 	// Display a dialog box to edit these values, using our new image layer object
 	return_code = display_dialog_image(tmp_layer, "Add new image layer", TRUE);
@@ -2518,6 +2568,7 @@ void layer_new_mouse(void)
 	tmp_layer->start_frame = 0;
 	tmp_layer->finish_frame = slide_length;
 	tmp_layer->name = g_string_new("Mouse Pointer");
+	tmp_layer->external_link = g_string_new(NULL);
 
 	// Display a dialog box to edit these values, using our new mouse pointer layer object
 	return_code = display_dialog_mouse(tmp_layer, "Add mouse pointer", TRUE);
@@ -2609,6 +2660,7 @@ void layer_new_text(void)
 	tmp_layer->start_frame = 0;
 	tmp_layer->finish_frame = slide_length;
 	tmp_layer->name = g_string_new("Text layer");
+	tmp_layer->external_link = g_string_new(NULL);
 
 	// Display a dialog box to edit these values, using our new text layer object
 	return_code = display_dialog_text(tmp_layer, "Add new text layer");
@@ -4708,6 +4760,7 @@ void menu_screenshots_import(void)
 		tmp_layer->start_frame = 0;
 		tmp_layer->finish_frame = slide_length;
 		tmp_layer->name = g_string_new("Background");
+		tmp_layer->external_link = g_string_new(NULL);
 
 		// Add the background layer to the new slide being created
 		tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
@@ -5108,6 +5161,7 @@ void slide_insert(void)
 	tmp_layer->start_frame = 0;
 	tmp_layer->finish_frame = slide_length;
 	tmp_layer->name = g_string_new("Empty");
+	tmp_layer->external_link = g_string_new(NULL);
 	tmp_layer->object_data = (GObject *) g_new(layer_empty, 1);
 	((layer_empty *) tmp_layer->object_data)->bg_color.red = default_bg_colour.red;
 	((layer_empty *) tmp_layer->object_data)->bg_color.green = default_bg_colour.green;
@@ -5350,6 +5404,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.58  2006/08/09 06:09:47  vapour
+ * Expanded dialog boxes to have a field for an external link.
+ *
  * Revision 1.57  2006/08/01 14:59:45  vapour
  * Updated the project file format number to 2.0.
  *
