@@ -61,9 +61,12 @@ GString *base64_decode(GString *input_string, GString *output_string)
 	guchar				out_byte1;				// Used to hold the bytes being translated
 	guchar				out_byte2;				// Used to hold the bytes being translated
 
+	GString				*tmp_gstring;			// Temporary GString
+
 
 	// Initialise various things
 	g_string_assign(output_string, "");
+	tmp_gstring = g_string_new(NULL);
 
 	// Make a copy of the input string so we can work on it in place
 	copied_string = g_string_new(NULL);
@@ -85,6 +88,7 @@ GString *base64_decode(GString *input_string, GString *output_string)
 // / = 47
 // 0 = 48
 // 9 = 57
+// = = 61
 // A = 65
 // Z = 90
 // a = 97
@@ -111,8 +115,14 @@ GString *base64_decode(GString *input_string, GString *output_string)
 				}
 			} else
 			{
-				// * To get here it must be in the range 0 - 9 *
-				copied_string = g_string_append_c(copied_string, (guchar) holding_byte + 4);  // 0 = ASCII 48.  48 + 4 = 52.  So 0 = 52, 1 = 53, etc
+				if (61 == holding_byte)
+				{
+					// * To get here it must be in the character '=', which means "no value" *
+				} else
+				{
+					// * To get here it must be in the range 0-9 *
+					copied_string = g_string_append_c(copied_string, (guchar) holding_byte + 4);  // 0 = ASCII 48.  48 + 4 = 52.  So 0 = 52, 1 = 53, etc
+				}
 			}
 		} else
 		{
@@ -129,14 +139,15 @@ GString *base64_decode(GString *input_string, GString *output_string)
 
 				default:
 					// Should never get here
-					display_warning("ED64: Error in the Base64 decoding function, unrecognised input.");
+					g_string_printf(tmp_gstring, "ED64: Error in the Base64 decoding function, unrecognised input '%c'.", holding_byte);
+					display_warning(tmp_gstring->str);
 			}
 		}
 	}
 
 	// * To get here, the copied string should have been converted to it's offset values
 
-	for (counter = 0; counter <= copied_string->len - 4; counter = counter + 4)
+	for (counter = 0; counter < copied_string->len - 4; counter = counter + 4)
 	{
 		out_byte0 = (guchar) (copied_string->str[counter] << 2) | (copied_string->str[counter + 1] >> 4);
 		out_byte1 = (guchar) (copied_string->str[counter + 1] << 4) | (copied_string->str[counter + 2] >> 2);
@@ -148,9 +159,35 @@ GString *base64_decode(GString *input_string, GString *output_string)
 	}
 
 	// Process the last 4 bytes of the image data string
-	// fixme5: Needs to be written
+	if (61 == copied_string->str[copied_string->len - 2])  // Check if the 2nd last character of the string is the '=' character
+	{
+		// If it's the '=' character, then we know we only have to process the first two bytes of the quad, to make 1 char
+		out_byte0 = (guchar) (copied_string->str[copied_string->len - 4] << 2) | (copied_string->str[copied_string->len - 3] >> 4);
+		output_string = g_string_append_c(output_string, out_byte0);
+	} else
+	{
+		if (61 == copied_string->str[copied_string->len - 1])  // Check if only the nd last character of the string is the '=' character
+		{
+			// If it's the '=' character, then we only have to process the first three bytes of the quad, to make 2 chars
+			out_byte0 = (guchar) (copied_string->str[copied_string->len - 4] << 2) | (copied_string->str[copied_string->len - 3] >> 4);
+			out_byte1 = (guchar) (copied_string->str[copied_string->len - 3] << 4) | (copied_string->str[copied_string->len - 2] >> 2);
+			output_string = g_string_append_c(output_string, out_byte0);
+			output_string = g_string_append_c(output_string, out_byte1);
+		} else
+		{
+			// None of the last 4 bytes are the '=' character, so we process them all
+			out_byte0 = (guchar) (copied_string->str[copied_string->len - 4] << 2) | (copied_string->str[copied_string->len - 3] >> 4);
+			out_byte1 = (guchar) (copied_string->str[copied_string->len - 3] << 4) | (copied_string->str[copied_string->len - 2] >> 2);
+			out_byte2 = (guchar) (copied_string->str[copied_string->len - 2] << 6) | (copied_string->str[copied_string->len - 1]);
+
+			output_string = g_string_append_c(output_string, out_byte0);
+			output_string = g_string_append_c(output_string, out_byte1);
+			output_string = g_string_append_c(output_string, out_byte2);
+		}
+	}
 
 	// Free the memory allocated in this function
+	g_string_free(tmp_gstring, TRUE);
 	g_string_free(copied_string, TRUE);
 
 	return output_string;
@@ -2754,6 +2791,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.65  2006/08/21 12:51:03  vapour
+ * Writing further code to round out the base64 decode routine.  Still needs more work, as multiple saves then loads ends up with invalid image data. Doh!
+ *
  * Revision 1.64  2006/08/09 06:48:27  vapour
  * Added working code to save and read the external URLs associated with layers, for project files.
  *
