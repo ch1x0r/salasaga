@@ -126,7 +126,7 @@ GString *base64_decode(GString *input_string, GString *output_string)
 			}
 		} else
 		{
-			// Must be either + or /
+			// Must be either +, /, or \n
 			switch (input_string->str[counter])
 			{
 				case '+':
@@ -135,6 +135,9 @@ GString *base64_decode(GString *input_string, GString *output_string)
 
 				case '/':
 					copied_string = g_string_append_c(copied_string, (guchar) 63);
+					break;
+
+				case '\n':
 					break;
 
 				default:
@@ -592,6 +595,8 @@ gboolean flame_read(gchar *filename)
 	slide				*tmp_slide;				// Temporary slide
 	layer_text			*tmp_text_ob;			// Temporary text layer object
 
+	gint				data_length;			// Number of image data bytes a layer says it stores
+
 
 	// Initialise various things
 	tmp_gstring = g_string_new(NULL);
@@ -989,7 +994,13 @@ gboolean flame_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "data")))
 										{
 											// Get the image data
-											g_string_assign(tmp_gstring, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											tmp_gstring2 = g_string_new(NULL);
+											g_string_assign(tmp_gstring2, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										}
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "data_length")))
+										{
+											// Get the number of bytes the image should hold
+											data_length = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										}
 									}
 
@@ -1001,12 +1012,17 @@ gboolean flame_read(gchar *filename)
 								{
 									// We should have all of the image details by this stage, so can process the image data
 
+//g_string_printf(tmp_gstring, "Number of bytes that are supposed to be in this image layer: '%d'", data_length);
+//display_warning(tmp_gstring->str);
 									// Un-URI encode the image data
-									tmp_gstring2 = g_string_new(NULL);
-									tmp_gstring2 = uri_decode(tmp_gstring, tmp_gstring2);
+//									tmp_gstring2 = uri_decode(tmp_gstring, tmp_gstring2);
 
-									// Un-Base64 encode the image data
+									// Base64 decode the image data
 									tmp_gstring = base64_decode(tmp_gstring2, tmp_gstring);
+
+//g_string_printf(tmp_gstring2, "Number of bytes actually found in this image layer: '%d'", data_length);
+//display_warning(tmp_gstring2->str);
+
 
 									// * At this point the image data should be back in jpeg format *
 
@@ -2227,10 +2243,12 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 
 	gboolean			tmp_bool;				// Temporary boolean value
 	GString				*tmp_gstring;			// Temporary GString
+	GString				*tmp_gstring2;			// Temporary GString
 
 
 	// Initialise various things
 	tmp_gstring = g_string_new(NULL);
+	tmp_gstring2 = g_string_new(NULL);
 	layer_pointer = element;
 	slide_node = user_data;
 
@@ -2285,14 +2303,19 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 				return;
 			}
 
+			// Store the count of image data bytes in the file for read back verification
+			g_string_printf(tmp_gstring2, "%d", pixbuf_size);
+			xmlNewChild(layer_node, NULL, "data_length", tmp_gstring2->str);
+
 			// Base64 encode the image data
 			base64_encode(pixbuf_buffer, pixbuf_size, &base64_string);
 
 			// URI encode the Base64 data
-			uri_encode_base64(base64_string, strlen(base64_string), &encoded_string);
+//			uri_encode_base64(base64_string, strlen(base64_string), &encoded_string);
 
 			// Create a string to write to the output file
-			g_string_printf(tmp_gstring, "%s", encoded_string);
+			g_string_printf(tmp_gstring, "%s", base64_string);
+//			g_string_printf(tmp_gstring, "%s", encoded_string);
 
 			// Add the layer data to the output project file
 			xmlNewChild(layer_node, NULL, "type", "image");
@@ -2389,6 +2412,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 
 	// Free the memory used in this function
 	g_string_free(tmp_gstring, TRUE);
+	g_string_free(tmp_gstring2, TRUE);
 
 	return;
 }
@@ -2791,6 +2815,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.66  2006/08/22 14:33:00  vapour
+ * Adding initial code to verify image data being loaded is ok.  Needs more work.
+ *
  * Revision 1.65  2006/08/21 12:51:03  vapour
  * Writing further code to round out the base64 decode routine.  Still needs more work, as multiple saves then loads ends up with invalid image data. Doh!
  *
