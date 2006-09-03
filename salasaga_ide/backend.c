@@ -57,9 +57,12 @@ GString *base64_decode(GString *input_string, GString *output_string)
 	GString				*copied_string;			// A copy of the input string
 	guint				counter;				// Counter of how many characters have been converted
 	guchar				holding_byte;			// Holds the byte being worked on
+	gdouble				max_loop;				// The maximum number of interations to run
+
 	guchar				out_byte0;				// Used to hold the bytes being translated
 	guchar				out_byte1;				// Used to hold the bytes being translated
 	guchar				out_byte2;				// Used to hold the bytes being translated
+	gint				string_offset;			// Used as an offset pointer while parsing
 
 	GString				*tmp_gstring;			// Temporary GString
 
@@ -117,7 +120,7 @@ GString *base64_decode(GString *input_string, GString *output_string)
 			{
 				if (61 == holding_byte)
 				{
-					// * To get here it must be in the character '=', which means "no value" *
+					// * To get here it must be the character '=', which means "no value", so don't add to the output string *
 				} else
 				{
 					// * To get here it must be in the range 0-9 *
@@ -149,44 +152,47 @@ GString *base64_decode(GString *input_string, GString *output_string)
 	}
 
 	// * To get here, the copied string should have been converted to it's offset values
-
-	for (counter = 0; counter < copied_string->len - 4; counter = counter + 4)
+	counter = 0;
+	max_loop = (copied_string->len / 4);
+	while (counter != max_loop)
 	{
-		out_byte0 = (guchar) (copied_string->str[counter] << 2) | (copied_string->str[counter + 1] >> 4);
-		out_byte1 = (guchar) (copied_string->str[counter + 1] << 4) | (copied_string->str[counter + 2] >> 2);
-		out_byte2 = (guchar) (copied_string->str[counter + 2] << 6) | (copied_string->str[counter + 3]);
+		string_offset = counter * 4;
+
+		out_byte0 = (guchar) (copied_string->str[string_offset] << 2) | (copied_string->str[string_offset + 1] >> 4);
+		out_byte1 = (guchar) (copied_string->str[string_offset + 1] << 4) | (copied_string->str[string_offset + 2] >> 2);
+		out_byte2 = (guchar) (copied_string->str[string_offset + 2] << 6) | (copied_string->str[string_offset + 3]);
 
 		output_string = g_string_append_c(output_string, out_byte0);
 		output_string = g_string_append_c(output_string, out_byte1);
 		output_string = g_string_append_c(output_string, out_byte2);
+
+		counter++;
 	}
 
-	// Process the last 4 bytes of the image data string
-	if (61 == copied_string->str[copied_string->len - 2])  // Check if the 2nd last character of the string is the '=' character
+	switch ((gint) copied_string->len % 4)
 	{
-		// If it's the '=' character, then we know we only have to process the first two bytes of the quad, to make 1 char
-		out_byte0 = (guchar) (copied_string->str[copied_string->len - 4] << 2) | (copied_string->str[copied_string->len - 3] >> 4);
-		output_string = g_string_append_c(output_string, out_byte0);
-	} else
-	{
-		if (61 == copied_string->str[copied_string->len - 1])  // Check if only the nd last character of the string is the '=' character
-		{
-			// If it's the '=' character, then we only have to process the first three bytes of the quad, to make 2 chars
-			out_byte0 = (guchar) (copied_string->str[copied_string->len - 4] << 2) | (copied_string->str[copied_string->len - 3] >> 4);
-			out_byte1 = (guchar) (copied_string->str[copied_string->len - 3] << 4) | (copied_string->str[copied_string->len - 2] >> 2);
-			output_string = g_string_append_c(output_string, out_byte0);
-			output_string = g_string_append_c(output_string, out_byte1);
-		} else
-		{
-			// None of the last 4 bytes are the '=' character, so we process them all
-			out_byte0 = (guchar) (copied_string->str[copied_string->len - 4] << 2) | (copied_string->str[copied_string->len - 3] >> 4);
-			out_byte1 = (guchar) (copied_string->str[copied_string->len - 3] << 4) | (copied_string->str[copied_string->len - 2] >> 2);
-			out_byte2 = (guchar) (copied_string->str[copied_string->len - 2] << 6) | (copied_string->str[copied_string->len - 1]);
+		case 2:
+			// We only need to process two bytes, producing one char
+			out_byte0 = copied_string->str[copied_string->len - 3];
+			out_byte0 = out_byte0 << 2;
 
+			out_byte1 = copied_string->str[copied_string->len - 2];
+			out_byte1 = out_byte1 >> 4;
+
+			out_byte2 = out_byte0 | out_byte1;
+			output_string = g_string_append_c(output_string, out_byte2);
+			break;
+
+		case 3:
+			// We only need to process three bytes, producing two chars
+			out_byte0 = (guchar) (copied_string->str[copied_string->len - 3] << 2) | (copied_string->str[copied_string->len - 2] >> 4);
+			out_byte1 = (guchar) (copied_string->str[copied_string->len - 2] << 4) | (copied_string->str[copied_string->len - 1] >> 2);
 			output_string = g_string_append_c(output_string, out_byte0);
 			output_string = g_string_append_c(output_string, out_byte1);
-			output_string = g_string_append_c(output_string, out_byte2);
-		}
+			break;
+
+		default:
+			display_warning("ED73: Unknown Base64 decoding remainder (shouldn't happen)\n");
 	}
 
 	// Free the memory allocated in this function
@@ -204,11 +210,13 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
 	gchar				*base64_dictionary = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
 	guint				buffer_length;
 	guint				characters_out;			// Counter of how many characters have been output
+	guint				counter;				// Counter of how many characters have been converted
 	gchar				*input_buffer;
-	gint				input_counter;			// Counter used for positioning inside the input buffer
+	gdouble				max_loop;				// The maximum number of interations to run
 	guint				offset;					// Either 0, 1, or 2.  Used to calculate the end few output bytes
 	gchar				*output_buffer;
 	gint				output_counter;			// Counter used for positioning inside the output buffer
+	gint				string_offset;			// Used as an offset pointer while parsing
 
 	guchar				first_byte;
 	guchar				fourth_byte;
@@ -233,35 +241,37 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
 	offset = length % 3;
 
 	// Convert the data into Base64
-	for (input_counter = 0; input_counter < (length - offset); input_counter++)
+	counter = 0;
+	max_loop = length / 3;
+	while (counter != max_loop)
 	{
-		first_byte = input_buffer[input_counter];
+		string_offset = counter * 3;
+
+		first_byte = input_buffer[string_offset];
 		first_byte = first_byte >> 1;
 		first_byte = first_byte >> 1;
 		output_buffer[output_counter] = base64_dictionary[first_byte];
 		output_counter++;
 
-		second_byte = input_buffer[input_counter];
+		second_byte = input_buffer[string_offset];
 		second_byte = second_byte << 6;
 		second_byte = second_byte >> 2;
-		input_counter++;
-		tmp_byte = input_buffer[input_counter];
+		tmp_byte = input_buffer[string_offset + 1];
 		tmp_byte = tmp_byte >> 4;
-		second_byte = second_byte + tmp_byte;
+		second_byte = second_byte | tmp_byte;
 		output_buffer[output_counter] = base64_dictionary[second_byte];
 		output_counter++;
 
-		third_byte = input_buffer[input_counter];
+		third_byte = input_buffer[string_offset + 1];
 		third_byte = third_byte << 4;
 		third_byte = third_byte >> 2;
-		input_counter++;
-		tmp_byte = input_buffer[input_counter];
+		tmp_byte = input_buffer[string_offset + 2];
 		tmp_byte = tmp_byte >> 6;
-		third_byte = third_byte + tmp_byte;
+		third_byte = third_byte | tmp_byte;
 		output_buffer[output_counter] = base64_dictionary[third_byte];
 		output_counter++;
 
-		fourth_byte = input_buffer[input_counter];
+		fourth_byte = input_buffer[string_offset + 2];
 		fourth_byte = fourth_byte << 2;
 		fourth_byte = fourth_byte >> 2;
 		output_buffer[output_counter] = base64_dictionary[fourth_byte];
@@ -275,18 +285,21 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
 			output_buffer[output_counter] = '\n';
 			output_counter++;
 		}
+
+		counter++;
 	}
 
 	// Process the last one or two bytes on the end of the input data (as per Base64 requirement)
-	switch (offset)
+	switch ((gint) length % 3)
 	{
 		case 1:
-			first_byte = input_buffer[input_counter];
+			// We only need to process one byte, to make two characters
+			first_byte = input_buffer[length - 1];
 			first_byte = first_byte >> 2;
 			output_buffer[output_counter] = base64_dictionary[first_byte];
 			output_counter++;
 
-			second_byte = input_buffer[input_counter];
+			second_byte = input_buffer[length - 1];
 			second_byte = second_byte << 6;
 			second_byte = second_byte >> 2;
 			output_buffer[output_counter] = base64_dictionary[second_byte];
@@ -294,25 +307,26 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
 			output_buffer[output_counter] = '=';
 			output_counter++;
 			output_buffer[output_counter] = '=';
+			output_counter++;
 			break;
 
 		case 2:
-			first_byte = input_buffer[input_counter];
+			// We only need to process two bytes, to make three characters
+			first_byte = input_buffer[length - 2];
 			first_byte = first_byte >> 2;
 			output_buffer[output_counter] = base64_dictionary[first_byte];
 			output_counter++;
 
-			second_byte = input_buffer[input_counter];
+			second_byte = input_buffer[length - 2];
 			second_byte = second_byte << 6;
 			second_byte = second_byte >> 2;
-			input_counter++;
-			tmp_byte = input_buffer[input_counter];
+			tmp_byte = input_buffer[length - 1];
 			tmp_byte = tmp_byte >> 4;
-			second_byte = second_byte + tmp_byte;
+			second_byte = second_byte | tmp_byte;
 			output_buffer[output_counter] = base64_dictionary[second_byte];
 			output_counter++;
 
-			third_byte = input_buffer[input_counter];
+			third_byte = input_buffer[length - 1];
 			third_byte = third_byte << 4;
 			third_byte = third_byte >> 2;
 			output_buffer[output_counter] = base64_dictionary[third_byte];
@@ -320,6 +334,9 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
 			output_buffer[output_counter] = '=';
 			output_counter++;
 			break;
+
+		default:
+			display_warning("ED79: Unknown remainder amount when Base64 encoding (shouldn't happen)\n");
 	}
 
 	// Put a NULL at the end of the Base64 encoded string
@@ -558,6 +575,7 @@ gboolean flame_read(gchar *filename)
 {
 	// Local variables
 	GError				*error = NULL;			// Pointer to error return structure
+	GString				*error_string;			// Used to create error strings
 	GdkPixbufLoader		*image_loader;			// Used for loading images embedded in project files
 	gboolean			return_code;			// Boolean return code
 	gfloat				save_version;			// The project file save version
@@ -600,7 +618,9 @@ gboolean flame_read(gchar *filename)
 
 	// Initialise various things
 	tmp_gstring = g_string_new(NULL);
-
+	tmp_gstring2 = g_string_new(NULL);
+	error_string = g_string_new(NULL);
+	
 	// Begin reading the file
 	document = xmlParseFile(filename);
 	if (NULL == document)
@@ -994,7 +1014,6 @@ gboolean flame_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "data")))
 										{
 											// Get the image data
-											tmp_gstring2 = g_string_new(NULL);
 											g_string_assign(tmp_gstring2, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										}
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "data_length")))
@@ -1010,44 +1029,32 @@ gboolean flame_read(gchar *filename)
 								// Version 1.0 of the file format doesn't have embedded image data
 								if (1.0 != save_version)
 								{
-									// We should have all of the image details by this stage, so can process the image data
+									// * We should have all of the image details by this stage, so can process the image data *
 
-//g_string_printf(tmp_gstring, "Number of bytes that are supposed to be in this image layer: '%d'", data_length);
-//display_warning(tmp_gstring->str);
-									// Un-URI encode the image data
-//									tmp_gstring2 = uri_decode(tmp_gstring, tmp_gstring2);
-
-									// Base64 decode the image data
+									// Base64 decode the image data back into png format
 									tmp_gstring = base64_decode(tmp_gstring2, tmp_gstring);
 
-//g_string_printf(tmp_gstring2, "Number of bytes actually found in this image layer: '%d'", data_length);
-//display_warning(tmp_gstring2->str);
-
-
-									// * At this point the image data should be back in jpeg format *
-
-									// Convert the jpeg data info a GdxPixbuf we can use
+									// Convert the png data into a GdxPixbuf we can use
 									image_loader = gdk_pixbuf_loader_new();
 									return_code = gdk_pixbuf_loader_write(image_loader, tmp_gstring->str, tmp_gstring->len, &error);
 									if (TRUE != return_code)
 									{
-										g_string_printf(tmp_gstring2, "ED66: Image data loading failed: '%s'", error->message);
-										display_warning(tmp_gstring2->str);
+										g_string_printf(error_string, "ED66: Image data loading failed: '%s'", error->message);
+										display_warning(error_string->str);
+										g_string_free(error_string, TRUE);
 									}
 									return_code = gdk_pixbuf_loader_close(image_loader, &error);
 									if (TRUE != return_code)
 									{
-										g_string_printf(tmp_gstring2, "ED67: Image data loading failed: '%s'", error->message);
-										display_warning(tmp_gstring2->str);
+										g_string_printf(error_string, "ED67: Image data loading failed: '%s'", error->message);
+										display_warning(error_string->str);
+										g_string_free(error_string, TRUE);
 									}
 									tmp_image_ob->image_data = gdk_pixbuf_loader_get_pixbuf(image_loader);
 									if (NULL == tmp_image_ob->image_data)
 									{
 										display_warning("ED65: Error when loading image data");
 									}
-
-									// Free the memory used in this function
-									g_string_free(tmp_gstring2, TRUE);
 								}
 
 								// Set the modified flag for this image to false
@@ -1404,6 +1411,9 @@ gboolean flame_read(gchar *filename)
 
 	// We're finished with this XML document, so release its memory
 	xmlFreeDoc(document);
+
+	// Free the memory allocated in this function
+	g_string_free(tmp_gstring2, TRUE);
 
 	return TRUE;
 }
@@ -2283,19 +2293,17 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			// * We save the image data in the project file, in the same way we save image     *
 			// * data in exported svg.  This way a project file is self-contained and portable *
 
-			// Convert the compressed image into jpeg data
+			// Convert the compressed image into png data
 			tmp_bool = gdk_pixbuf_save_to_buffer(GDK_PIXBUF(((layer_image *) layer_pointer->object_data)->image_data),
-						&pixbuf_buffer,  // Will come back filled out with location of jpeg data
-						&pixbuf_size,  // Will come back filled out with size of jpeg data
-						"jpeg",
+						&pixbuf_buffer,  // Will come back filled out with location of png data
+						&pixbuf_size,  // Will come back filled out with size of png data
+						"png",
 						&error,
-						"quality",
-						"100",
 						NULL);
 			if (FALSE == tmp_bool)
 			{
 				// Something went wrong when encoding the image to jpeg format
-				display_warning("ED62: Something went wrong when encoding a slide to jpeg format");
+				display_warning("ED62: Something went wrong when encoding a slide to png format");
 
 				// Free the memory allocated in this function
 				g_string_free(tmp_gstring, TRUE);
@@ -2815,6 +2823,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.67  2006/09/03 10:19:42  vapour
+ * Mostly re-wrote the Base64 encoding and decoding functions, and some of the flame_read function too.  Base64 decoding now works properly, and image data is stored in project files in png format rather than jpeg).
+ *
  * Revision 1.66  2006/08/22 14:33:00  vapour
  * Adding initial code to verify image data being loaded is ok.  Needs more work.
  *
