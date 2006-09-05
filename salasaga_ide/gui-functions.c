@@ -3070,12 +3070,15 @@ void menu_export_flash_animation(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;			// Filter for *.*
+	GError				*error = NULL;			// Pointer to error return structure
 	GtkWidget 			*export_dialog;			// Dialog widget
 	gchar				*filename;				// Pointer to the chosen file name
 	GtkFileFilter		*flash_filter;			// Filter for *.swf
+	GIOStatus			return_value;			// Return value used in most GIOChannel functions
 	gboolean			unique_name;			// Switch used to mark when we have a valid filename
 	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
 
+	gsize				tmp_gsize;				// Temporary gsize
 	GString				*tmp_gstring;			// Temporary GString
 	gint				tmp_int;				// Temporary integer
 
@@ -3089,11 +3092,6 @@ void menu_export_flash_animation(void)
 		display_warning("ED35: There is no project loaded\n");
 		return;
 	}
-
-	// Notify the user that flash output has been disabled for now
-	sound_beep();
-	display_warning("Flash output disabled in this program release, as the code for it is being rewritten.");
-	return;
 
 	// * Pop open a dialog asking the user for their desired filename *
 
@@ -3170,12 +3168,64 @@ void menu_export_flash_animation(void)
 	// Destroy the dialog box, as it's not needed any more
 	gtk_widget_destroy(export_dialog);
 
+	// Open output file for writing
+	output_file = g_io_channel_new_file(filename, "w", &error);
+	if (NULL == output_file)
+	{
+		// * An error occured when opening the file for writing, so alert the user, and return to the calling routine indicating failure *
+		g_string_printf(tmp_gstring, "Error ED80: An error '%s' occured when opening '%s' for writing", error->message, filename);
+		display_warning(tmp_gstring->str);
+
+		// Free the memory allocated in this function
+		g_string_free(tmp_gstring, TRUE);
+		g_error_free(error);
+
+		return;
+	}
+
+	// Write the header to the output file
+	g_string_assign(tmp_gstring, "FWS");
+	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
+	if (G_IO_STATUS_ERROR == return_value)
+	{
+		// * An error occured when writing the header to the output file, so alert the user, and return to the calling routine indicating failure *
+		g_string_printf(tmp_gstring, "Error ED81: An error '%s' occured when writing the header to the output file '%s'", error->message, filename);
+		display_warning(tmp_gstring->str);
+
+		// Free the memory allocated in this function
+		g_string_free(tmp_gstring, TRUE);
+		g_error_free(error);
+
+		return;
+	}
+
 	// Work out how many slides there are in the whole project
 	slides = g_list_first(slides);
 	tmp_int = g_list_length(slides);
 
 	// Export all slides to the flash file, with the requested file name
 	menu_export_flash_inner(filename, 0, tmp_int - 1);
+
+	// Close the output file
+	return_value = g_io_channel_shutdown(output_file, TRUE, &error);
+	if (G_IO_STATUS_ERROR == return_value)
+	{
+		// * An error occured when closing the output file, so alert the user, and return to the calling routine indicating failure *
+		g_string_printf(tmp_gstring, "Error ED82: An error '%s' occured when closing the output file '%s'", error->message, filename);
+
+		// Display the warning message using our function
+		display_warning(tmp_gstring->str);
+
+		// Free the memory allocated in this function
+		g_string_free(tmp_gstring, TRUE);
+		g_error_free(error);
+		return;
+	}
+
+	// Small update to the status bar, to show progress to the user
+	g_string_printf(tmp_gstring, "Wrote Flash file '%s'.", filename);
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
+	gdk_flush();
 
 	// * Function clean up area *
 
@@ -5404,6 +5454,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.59  2006/09/05 13:11:00  vapour
+ * Added initial code to write the FWS header string for flash files.
+ *
  * Revision 1.58  2006/08/09 06:09:47  vapour
  * Expanded dialog boxes to have a field for an external link.
  *
