@@ -209,6 +209,34 @@ typedef struct
 	GtkListStore		*layer_store;
 } slide;
 
+// Tag types present in swf files
+#define PLACE_OBJECT_2			26
+#define REMOVE_OBJECT_2			28
+#define SHOW_FRAME				1
+
+#define SET_BACKGROUND_COLOUR	9
+#define FRAME_LABEL				43
+#define PROTECT					24
+#define END						0
+#define EXPORT_ASSETS			56
+#define IMPORT_ASSETS			57
+#define ENABLE_DEBUGGER_2		64
+#define SCRIPT_LIMITS			65
+#define SET_TAB_INDEX			66
+#define DO_ACTION				12
+
+// Action types present in swf files
+#define ACTION_GOTO_FRAME		0x81
+#define ACTION_NEXT_FRAME		0x04
+#define ACTION_PREVIOUS_FRAME	0x05
+#define ACTION_PLAY				0x06
+#define ACTION_STOP				0x07
+#define ACTION_TOGGLE_QUALITY	0x08
+#define ACTION_STOP_SOUNDS		0x09
+#define ACTION_WAIT_FOR_FRAME	0x8A
+#define ACTION_SET_TARGET		0x8B
+#define ACTION_GO_TO_LABEL		0x8C
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus
@@ -221,6 +249,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.22  2006/09/10 09:24:27  vapour
+ * Started adding defines for the tag and action types in swf.
+ *
  * Revision 1.21  2006/08/09 06:08:35  vapour
  * Added an external link attribute to layers.
  *
