@@ -171,6 +171,10 @@ GString *base64_decode(GString *input_string, GString *output_string)
 
 	switch ((gint) copied_string->len % 4)
 	{
+		case 0:
+			// No remainder, nothing to do
+			break;
+
 		case 2:
 			// We only need to process two bytes, producing one char
 			out_byte0 = copied_string->str[copied_string->len - 3];
@@ -292,6 +296,10 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
 	// Process the last one or two bytes on the end of the input data (as per Base64 requirement)
 	switch ((gint) length % 3)
 	{
+		case 0:
+			// No remainder, nothing to do
+			break;
+
 		case 1:
 			// We only need to process one byte, to make two characters
 			first_byte = input_buffer[length - 1];
@@ -2823,6 +2831,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.68  2006/09/11 13:57:22  vapour
+ * Small bug fixes to the Base64 encoding and decoding functions, rounding out the support for edge cases not initially tested.
+ *
  * Revision 1.67  2006/09/03 10:19:42  vapour
  * Mostly re-wrote the Base64 encoding and decoding functions, and some of the flame_read function too.  Base64 decoding now works properly, and image data is stored in project files in png format rather than jpeg).
  *
