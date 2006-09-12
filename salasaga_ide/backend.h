@@ -39,7 +39,7 @@ gboolean flame_read(gchar *filename);
 void logger_simple(const gchar *str);
 void logger_with_domain(const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data);
 void menu_enable(const gchar *full_path, gboolean enable);
-void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_slide);
+GByteArray *menu_export_flash_inner(GByteArray *swf_buffer);
 void menu_export_svg_animation_slide(gpointer element, gpointer user_data);
 void menu_file_save_layer(gpointer element, gpointer user_data);
 void menu_file_save_slide(gpointer element, gpointer user_data);
@@ -60,6 +60,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string);
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2006/09/12 12:13:28  vapour
+ * Replaced old ming code with initial thoughts, in comments, for how to process slides.  Started adding stub GByteArray code too.
+ *
  * Revision 1.9  2006/08/07 16:40:38  vapour
  * Added initial working functions to load embedded image data from project files.
  *

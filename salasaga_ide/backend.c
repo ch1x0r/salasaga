@@ -1443,7 +1443,7 @@ void logger_with_domain(const gchar *log_domain, GLogLevelFlags log_level, const
 void menu_enable(const gchar *full_path, gboolean enable)
 {
 	// Local variables
-	GtkWidget				*menu_item;
+	GtkWidget			*menu_item;
 
 	menu_item = gtk_item_factory_get_item(GTK_ITEM_FACTORY(menu_bar), full_path);
 	gtk_widget_set_sensitive(menu_item, enable);
@@ -1451,270 +1451,30 @@ void menu_enable(const gchar *full_path, gboolean enable)
 
 
 // Function to convert a slide structure into a Flash output file
-void menu_export_flash_inner(gchar *file_name, guint start_slide, guint finish_slide)
+GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
+//GByteArray *menu_export_flash_inner(GByteArray *swf_buffer, guint start_slide, guint finish_slide)
 {
 	// Local variables
-	FILE					*file;
-	slide				*processing_slide;
-	layer				*processing_layer;
 
-	GtkTextIter			text_end;				// The end position of the text buffer
-	GtkTextIter			text_start;				// The start position of the text buffer
-
-	guint				finish_x_offset;
-	guint				finish_y_offset;
-	gint					frame_counter;
-	gint					height;
-	guint				finish_frame;
-	gfloat				font_size;
-	gint					layer_counter;
-	guint				num_layers;
-	gint					num_steps;
-	gint					slide_counter;
-	guint				start_frame;
-	guint				start_x_offset;
-	guint				start_y_offset;
-	guint				width;
-	gfloat				x_step, y_step;
-/*
-	SWFBitmap			bitmap;
-	SWFDisplayItem		display_item;
-	SWFInput				input;
-	SWFFill				fill;
-	SWFMovie				flash_movie;
-	SWFFont				font;
-	SWFMovieClip			movie_clip;
-	SWFShape				shape;
-	SWFText				text;
-	SWFDisplayItem		text_item;
-	SWFMovieClip			text_movie_clip;
-
-	GString				*tmp_gstring;
+	
+	// For each slide, work out how many layers there are and how many frames the entire slide lasts for
 
 
-	// Initialise various things
-	tmp_gstring = g_string_new(NULL);
+	// Create an array that's layers x slide number of frames
 
-	// fixme4: At the time of coding, the only scale factor that works properly with all shape types in Ming is 1.0. :(
-	//         That might have improved
-	// Create the movie structure
-	Ming_setScale(1.0);
-	flash_movie = newSWFMovie();
 
-	// Process the requested range of slides
-	for (slide_counter = start_slide; slide_counter <= finish_slide; slide_counter++)
-	{
-		// Jump to the required slide
-		slides = g_list_first(slides);
-		processing_slide = g_list_nth_data(slides, slide_counter);
+	// Process each layer in turn, for every frame that it's in putting in the array the info of whether
+	// the object in the layer is visible, and it's position and transparency
 
-		// Process each layer in turn, in reverse order (so things are output visually correctly)
-		processing_slide->layers = g_list_first(processing_slide->layers);
-		num_layers = g_list_length(processing_slide->layers);
-		for (layer_counter = num_layers - 1; 0 <= layer_counter; layer_counter--)
-		{
-			processing_layer = g_list_nth_data(processing_slide->layers, layer_counter);
-			switch (processing_layer->object_type)
-			{
-				case TYPE_GDK_PIXBUF:
-					start_x_offset = ((layer_image *) processing_layer->object_data)->x_offset_start;
-					start_y_offset = ((layer_image *) processing_layer->object_data)->y_offset_start;
-					finish_x_offset = ((layer_image *) processing_layer->object_data)->x_offset_finish;
-					finish_y_offset = ((layer_image *) processing_layer->object_data)->y_offset_finish;
-					width = (gint) ((layer_image *) processing_layer->object_data)->width;
-					height = (gint) ((layer_image *) processing_layer->object_data)->height;
-					start_frame = processing_layer->start_frame;
-					finish_frame = processing_layer->finish_frame;
 
-					// Read the image file in again (forced to by Ming :-< )
-					file = fopen(((layer_image *) processing_layer->object_data)->image_path->str, "r");
-					input = newSWFInput_file(file);
-					bitmap = newSWFBitmap_fromInput(input);
-					fclose(file);
+	// After all of the layers have been processed, there remains the array with the per frame info of
+	// what should be where
 
-					// * Create the image layer *
-					shape = newSWFShapeFromBitmap((SWFCharacter) bitmap, SWFFILL_TILED_BITMAP);
 
-					// Create an instance of it
-					movie_clip = newSWFMovieClip();
-					display_item = SWFMovieClip_add(movie_clip, (SWFBlock) shape);
-					SWFDisplayItem_setName(display_item, processing_layer->name->str);
+	// Process this array, first creating the dictionary of shapes
 
-					// Ensure things last for the required number of frames
-					num_steps = finish_frame - start_frame;
-					if (0 == num_steps) num_steps = 1;
-					x_step = (finish_x_offset - start_x_offset) / num_steps;
-					y_step = (finish_y_offset - start_y_offset) / num_steps;
 
-					// Make the shape move to its finish position over time
-					SWFDisplayItem_moveTo(display_item, start_x_offset, start_y_offset);
-					for (frame_counter = start_frame; frame_counter <= finish_frame; frame_counter++)
-					{
-						SWFDisplayItem_move(display_item, (int) x_step, (int) y_step);
-						SWFMovieClip_nextFrame(movie_clip);
-					}
-
-					// Attach the movie clip to the movie
-					SWFMovie_add(flash_movie, (SWFBlock) movie_clip);
-					break;
-
-				case TYPE_TEXT:
-					// Get the information for the layer
-					start_x_offset = ((layer_text *) processing_layer->object_data)->x_offset_start;
-					start_y_offset = ((layer_text *) processing_layer->object_data)->y_offset_start;
-					finish_x_offset = ((layer_text *) processing_layer->object_data)->x_offset_finish;
-					finish_y_offset = ((layer_text *) processing_layer->object_data)->y_offset_finish;
-					width = (gint) ((layer_text *) processing_layer->object_data)->rendered_width;
-					height = (gint) ((layer_text *) processing_layer->object_data)->rendered_height;
-					font_size = ((layer_text *) processing_layer->object_data)->font_size;
-					start_frame = processing_layer->start_frame;
-					finish_frame = processing_layer->finish_frame;
-
-					// Create the background for the text to go on
-					shape = newSWFShape();
-					fill = SWFShape_addSolidFill(shape, 0xff, 0xff, 0xcc, 0xff); // 0xFFFFCCFF
-					SWFShape_setLine(shape, 1, 0x0, 0, 0, 0xff);
-					SWFShape_setRightFill(shape, fill);
-					SWFShape_movePenTo(shape, 0, -height + 20);
-					SWFShape_drawLineTo(shape, width, -height + 20);
-					SWFShape_drawLineTo(shape, width, 0 + 20);
-					SWFShape_drawLineTo(shape, 0, 0 + 20);
-					SWFShape_drawLineTo(shape, 0, -height + 20);
-
-					// * Create the text *
-
-					// Read the font file
-					file = fopen("/home/jc/workspace3/flame-edit/fonts/BitstreamVera/fdb/Bitstream Vera Sans.fdb", "r");
-					if (NULL == file)
-					{
-						display_warning("ED22: Something went wrong opening the Bitstream Vera Sans font file\n");
-						return;
-					}
-					font = loadSWFFontFromFile(file);
-					fclose(file);
-
-					// Create the text object
-					text = newSWFText2();
-					SWFText_setFont(text, font);
-					SWFText_setColor(text,
-						((layer_text *) processing_layer->object_data)->text_color.red >> 8,  // Red
-						((layer_text *) processing_layer->object_data)->text_color.green >> 8,  // Green
-						((layer_text *) processing_layer->object_data)->text_color.blue >> 8,  // Blue
-						0xff);  // Alpha
-					SWFText_setHeight(text, font_size);
-					SWFText_setSpacing(text, 1.0);
-					gtk_text_buffer_get_bounds(((layer_text *) processing_layer->object_data)->text_buffer, &text_start, &text_end);
-					g_string_assign(tmp_gstring, gtk_text_buffer_get_text(((layer_text *) processing_layer->object_data)->text_buffer, &text_start, &text_end, FALSE));
-					SWFText_addString(text, tmp_gstring->str, NULL);
-
-					// Attach the background and text to sprites/movie-clips
-					movie_clip = newSWFMovieClip();
-					display_item = SWFMovieClip_add(movie_clip, (SWFBlock) shape);
-					SWFDisplayItem_setName(display_item, processing_layer->name->str);
-
-					text_movie_clip = newSWFMovieClip();
-					text_item = SWFMovieClip_add(text_movie_clip, (SWFBlock) text);
-					SWFDisplayItem_setName(text_item, processing_layer->name->str);
-
-					// Ensure things last for the required number of frames
-					num_steps = finish_frame - start_frame;
-					if (0 == num_steps) num_steps = 1;
-					x_step = (finish_x_offset - start_x_offset) / num_steps;
-					y_step = (finish_y_offset - start_y_offset) / num_steps;
-
-					// Make the shape move to its finish position over time
-					SWFDisplayItem_moveTo(display_item, start_x_offset, start_y_offset);
-					SWFDisplayItem_moveTo(text_item, start_x_offset + 10, start_y_offset);
-					for (frame_counter = start_frame; frame_counter <= finish_frame; frame_counter++)
-					{
-						SWFDisplayItem_move(display_item, (int) x_step, (int) y_step);
-						SWFDisplayItem_move(text_item, (int) x_step, (int) y_step);
-						SWFMovieClip_nextFrame(movie_clip);
-						SWFMovieClip_nextFrame(text_movie_clip);
-					}
-					SWFDisplayItem_moveTo(display_item, finish_x_offset, finish_y_offset);
-					SWFDisplayItem_moveTo(text_item, finish_x_offset + 10, finish_y_offset);
-					SWFMovieClip_nextFrame(movie_clip);
-					SWFMovieClip_nextFrame(text_movie_clip);
-
-					// Attach the movie clips to the movie
-					SWFMovie_add(flash_movie, (SWFBlock) movie_clip);
-					SWFMovie_add(flash_movie, (SWFBlock) text_movie_clip);
-					break;
-
-				case TYPE_HIGHLIGHT:
-					// Get the information for the layer
-					start_x_offset = ((layer_highlight *) processing_layer->object_data)->x_offset_start;
-					start_y_offset = ((layer_highlight *) processing_layer->object_data)->y_offset_start;
-					finish_x_offset = ((layer_highlight *) processing_layer->object_data)->x_offset_finish;
-					finish_y_offset = ((layer_highlight *) processing_layer->object_data)->y_offset_finish;
-					width = (gint) ((layer_highlight *) processing_layer->object_data)->width;
-					height = (gint) ((layer_highlight *) processing_layer->object_data)->height;
-					start_frame = processing_layer->start_frame;
-					finish_frame = processing_layer->finish_frame;
-
-					// Create the highlight layer
-					shape = newSWFShape();
-					fill = SWFShape_addSolidFill(shape, 0x00, 0xFF, 0x00, 0x40); // 0x00FF0040 : Good fill color
-					SWFShape_setLine(shape, 1, 0x00, 0xFF, 0x00, 0xCC);  // 0x00FF00CC : Good border color
-					SWFShape_setRightFill(shape, fill);
-					SWFShape_movePenTo(shape, 0, 0);
-					SWFShape_drawLineTo(shape, width, 0);
-					SWFShape_drawLineTo(shape, width, height);
-					SWFShape_drawLineTo(shape, 0, height);
-					SWFShape_drawLineTo(shape, 0, 0);
-
-					// Create an instance of it
-					movie_clip = newSWFMovieClip();
-					display_item = SWFMovieClip_add(movie_clip, (SWFBlock) shape);
-					SWFDisplayItem_setName(display_item, processing_layer->name->str);
-
-					// Ensure things last for the required number of frames
-					num_steps = finish_frame - start_frame;
-					if (0 == num_steps) num_steps = 1;
-					x_step = (finish_x_offset - start_x_offset) / num_steps;
-					y_step = (finish_y_offset - start_y_offset) / num_steps;
-
-					// Make the shape move to its finish position over time
-					SWFDisplayItem_moveTo(display_item, start_x_offset, start_y_offset);
-					for (frame_counter = start_frame; frame_counter <= finish_frame; frame_counter++)
-					{
-						SWFDisplayItem_move(display_item, (int) x_step, (int) y_step);
-						SWFMovieClip_nextFrame(movie_clip);
-					}
-
-					// Attach the movie clip to the movie
-					SWFMovie_add(flash_movie, (SWFBlock) movie_clip);
-					break;
-
-				case TYPE_EMPTY:
-					// Empty layer, skip it
-					break;
-
-				default:
-					display_warning("ED28: Unknown layer type\n");
-
-			}  // Switch statement
-
-		}  // Layer counter
-
-	}  // Slide counter
-
-	// Save the flash file
-	SWFMovie_setDimension(flash_movie, project_width, project_height);
-	SWFMovie_setBackground(flash_movie, 0x0, 0x0, 0x0);  // Background color
-	SWFMovie_setRate(flash_movie, frames_per_second);
-	SWFMovie_save(flash_movie, file_name);
-
-	// Add a message to the status bar about the successful flash export
-	g_string_printf(tmp_gstring, "Flash '%s' exported successfully.", file_name);
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
-	gdk_flush();
-
-	// Free the memory allocated in this function
-	g_string_free(tmp_gstring, TRUE);
-
-*/
+	return swf_buffer;
 }
 
 
@@ -2245,7 +2005,6 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 {
 	// Local variables
 	gchar				*base64_string;			// Pointer to an Base64 string
-	gchar				*encoded_string;		// Pointer to an URI encoded Base64 string
 	GError				*error = NULL;			// Pointer to error return structure
 	guint				finish_frame;			// The finish frame in which the object appears
 	GString				*layer_name;			// Name of the layer
@@ -2326,12 +2085,8 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			// Base64 encode the image data
 			base64_encode(pixbuf_buffer, pixbuf_size, &base64_string);
 
-			// URI encode the Base64 data
-//			uri_encode_base64(base64_string, strlen(base64_string), &encoded_string);
-
 			// Create a string to write to the output file
 			g_string_printf(tmp_gstring, "%s", base64_string);
-//			g_string_printf(tmp_gstring, "%s", encoded_string);
 
 			// Add the layer data to the output project file
 			xmlNewChild(layer_node, NULL, "type", "image");
@@ -2831,6 +2586,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.69  2006/09/12 12:13:28  vapour
+ * Replaced old ming code with initial thoughts, in comments, for how to process slides.  Started adding stub GByteArray code too.
+ *
  * Revision 1.68  2006/09/11 13:57:22  vapour
  * Small bug fixes to the Base64 encoding and decoding functions, rounding out the support for edge cases not initially tested.
  *
