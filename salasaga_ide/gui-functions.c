@@ -3075,6 +3075,7 @@ void menu_export_flash_animation(void)
 	gchar				*filename;				// Pointer to the chosen file name
 	GtkFileFilter		*flash_filter;			// Filter for *.swf
 	GIOStatus			return_value;			// Return value used in most GIOChannel functions
+	GByteArray			*swf_buffer;			// Buffer for the swf output
 	gboolean			unique_name;			// Switch used to mark when we have a valid filename
 	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
 
@@ -3183,13 +3184,31 @@ void menu_export_flash_animation(void)
 		return;
 	}
 
-	// Write the header to the output file
-	g_string_assign(tmp_gstring, "FWS");
-	return_value = g_io_channel_write_chars(output_file, tmp_gstring->str, tmp_gstring->len, &tmp_gsize, &error);
+	// Work out how many slides there are in the whole project
+	slides = g_list_first(slides);
+	tmp_int = g_list_length(slides);
+
+	// Export all slides to the swf buffer
+	swf_buffer = g_byte_array_new();
+	swf_buffer = menu_export_flash_inner(swf_buffer);
+//	swf_buffer = menu_export_flash_inner(swf_buffer, 0, tmp_int - 1);
+
+	// Add the end tag to the swf buffer
+	// fixme3: For some unknown reason having \0 crashes out, whereas every other character works
+	//         It's a pity the \0 is actually needed, so we'll need to add this later somehow
+//	swf_buffer = g_byte_array_append(swf_buffer, "\0", 1);
+
+	// Add the header to the swf buffer
+	// fixme3: Need to expand this next bit to also include the frame size, frame rate, and frame count
+	g_string_printf(tmp_gstring, "FWS%c%u", 0x06, (guint32) swf_buffer->len);  // 0x06 = swf version 6
+	swf_buffer = g_byte_array_prepend(swf_buffer, tmp_gstring->str, tmp_gstring->len);
+
+	// Write the swf data to the output file
+	return_value = g_io_channel_write_chars(output_file, swf_buffer->data, swf_buffer->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
-		// * An error occured when writing the header to the output file, so alert the user, and return to the calling routine indicating failure *
-		g_string_printf(tmp_gstring, "Error ED81: An error '%s' occured when writing the header to the output file '%s'", error->message, filename);
+		// * An error occured when writing the swf data to the output file, so alert the user, and return to the calling routine indicating failure *
+		g_string_printf(tmp_gstring, "Error ED81: An error '%s' occured when writing the swf data to the output file '%s'", error->message, filename);
 		display_warning(tmp_gstring->str);
 
 		// Free the memory allocated in this function
@@ -3198,13 +3217,6 @@ void menu_export_flash_animation(void)
 
 		return;
 	}
-
-	// Work out how many slides there are in the whole project
-	slides = g_list_first(slides);
-	tmp_int = g_list_length(slides);
-
-	// Export all slides to the flash file, with the requested file name
-	menu_export_flash_inner(filename, 0, tmp_int - 1);
 
 	// Close the output file
 	return_value = g_io_channel_shutdown(output_file, TRUE, &error);
@@ -3228,6 +3240,9 @@ void menu_export_flash_animation(void)
 	gdk_flush();
 
 	// * Function clean up area *
+
+	// Free the swf buffer array
+	g_byte_array_free(swf_buffer, TRUE);
 
 	// Frees the memory holding the file name
 	g_free(filename);
@@ -5454,6 +5469,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.60  2006/09/12 12:12:09  vapour
+ * Started adding code to work out values for the swf header and write them to the output file.
+ *
  * Revision 1.59  2006/09/05 13:11:00  vapour
  * Added initial code to write the FWS header string for flash files.
  *
