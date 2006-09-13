@@ -209,6 +209,17 @@ typedef struct
 	GtkListStore		*layer_store;
 } slide;
 
+// Defines the information needed for each element of the swf timing array
+typedef struct
+{
+	gboolean			action_this;  // Process this element?
+	gboolean			add;  // Add to the display list in this frame?
+	gboolean			remove;  // Remove from the display list in this frame?
+	gint				opacity;  // Opacity level (0-65535)
+	gint				x_position;  // In twips
+	gint				y_position;  // In twips
+} swf_frame_element;
+
 // Tag types present in swf files
 #define PLACE_OBJECT_2			26
 #define REMOVE_OBJECT_2			28
@@ -249,6 +260,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.23  2006/09/13 11:45:41  vapour
+ * Added an initial stub type to assist with coordinating the info needed in a frame.
+ *
  * Revision 1.22  2006/09/10 09:24:27  vapour
  * Started adding defines for the tag and action types in swf.
  *
