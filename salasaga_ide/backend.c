@@ -1455,16 +1455,83 @@ GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
 //GByteArray *menu_export_flash_inner(GByteArray *swf_buffer, guint start_slide, guint finish_slide)
 {
 	// Local variables
+	guint				layer_counter;			// Holds the number of layers
+	guint				max_frames;				// The highest frame number in the slide
+	guint				num_layers;				// The number of layers in the slide
+	guint				num_slides;				// The number of slides in the movie
+	guint				slide_counter;			// Holds the number of slides
+	swf_frame_element	*swf_timing_array;		// Used to coordinate the actions in each frame
+	layer				*this_layer_data;		// Points to the data in the present layer
+	slide				*this_slide_data;		// Points to the data in the present slide
+	guint				total_frames;			// The total number of frames in the animation
 
-	
+
+	// Initialise some things
+	total_frames = 0;
+
 	// For each slide, work out how many layers there are and how many frames the entire slide lasts for
+	slides = g_list_first(slides);
+	num_slides = g_list_length(slides);
+//printf("Number of slides: %u\n", num_slides);
+	for (slide_counter = 0; slide_counter <  num_slides; slide_counter++)
+	{
+		// Initialise things for this slide
+		this_slide_data = g_list_nth_data(slides, slide_counter);
+		max_frames = 0;
 
+		// Work out how many layers there are in this slide
+		this_slide_data->layers = g_list_first(this_slide_data->layers);
+		num_layers = g_list_length(this_slide_data->layers);
+		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
+		{
+			// Work out the maximum frame number for the slide
+			this_layer_data = g_list_nth_data(this_slide_data->layers, layer_counter);
+			if (this_layer_data->finish_frame > max_frames)
+			{
+				max_frames = this_layer_data->finish_frame;
+			}
+		}
 
-	// Create an array that's layers x slide number of frames
+		// * At this stage we should know both the maximum frame number and number of layers in the slide *
+printf("Number of layers in slide %u is %u\n", slide_counter, num_layers);
+printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 
+		// Add the frames for this slide to the total count of frames for the animation
+		total_frames += max_frames;
+
+		// Create an array that's layers x max number of frames
+		swf_timing_array = g_new(swf_frame_element, num_layers * max_frames);
+
+		// Point to the first layer again
+		this_slide_data = g_list_nth_data(slides, slide_counter);
 
 	// Process each layer in turn, for every frame that it's in putting in the array the info of whether
 	// the object in the layer is visible, and it's position and transparency
+		this_slide_data->layers = g_list_first(this_slide_data->layers);
+		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
+		{
+			this_layer_data = g_list_nth_data(this_slide_data->layers, layer_counter);
+
+			// Mark that the element needs to be shown on this frame
+			swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].add = TRUE;
+
+			// Mark that the element needs to be removed on this frame
+			swf_timing_array[(layer_counter * max_frames) + this_layer_data->finish_frame].remove = TRUE;
+
+			guint			element_counter;
+			guint			element_max;
+			element_max = this_layer_data->finish_frame;
+			for (element_counter = this_layer_data->start_frame; element_counter <= element_max; element_counter++)
+			{
+				// Mark that the element should be processed on this frame
+				swf_timing_array[(layer_counter * max_frames) + element_counter].action_this = TRUE;
+
+				// fixme2: Also needs to calculate x,y position and opacity
+
+			}
+		}
+	}
+printf("The animation is %u frames long\n", total_frames);
 
 
 	// After all of the layers have been processed, there remains the array with the per frame info of
@@ -2586,6 +2653,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.70  2006/09/13 11:46:48  vapour
+ * Adding initial code to work out what needs to be displayed in swf for each slide.
+ *
  * Revision 1.69  2006/09/12 12:13:28  vapour
  * Replaced old ming code with initial thoughts, in comments, for how to process slides.  Started adding stub GByteArray code too.
  *
