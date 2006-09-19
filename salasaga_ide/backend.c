@@ -1520,14 +1520,66 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 
 			guint			element_counter;
 			guint			element_max;
+
+			gint			element_x_position_increment = 0;
+			gint			element_x_position_start = 0;
+			gint			element_y_position_increment = 0;
+			gint			element_y_position_start = 0;
+
+			// Calculate the starting positions and increments for each frame of the layer
+			switch (this_layer_data->object_type)
+			{
+				case TYPE_GDK_PIXBUF:
+					// We're processing a image layer
+					element_x_position_start = ((layer_image *) this_layer_data->object_data)->x_offset_start;
+					element_y_position_start = ((layer_image *) this_layer_data->object_data)->y_offset_start;
+					element_x_position_increment = (((layer_image *) this_layer_data->object_data)->x_offset_finish - ((layer_image *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
+					element_y_position_increment = (((layer_image *) this_layer_data->object_data)->y_offset_finish - ((layer_image *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
+					break;
+
+				case TYPE_HIGHLIGHT:
+					// We're processing a highlight layer
+					element_x_position_start = ((layer_highlight *) this_layer_data->object_data)->x_offset_start;
+					element_y_position_start = ((layer_highlight *) this_layer_data->object_data)->y_offset_start;
+					element_x_position_increment = (((layer_highlight *) this_layer_data->object_data)->x_offset_finish - ((layer_highlight *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
+					element_y_position_increment = (((layer_highlight *) this_layer_data->object_data)->y_offset_finish - ((layer_highlight *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
+					break;
+
+				case TYPE_MOUSE_CURSOR:
+					// We're processing a mouse layer
+					element_x_position_start = ((layer_mouse *) this_layer_data->object_data)->x_offset_start;
+					element_y_position_start = ((layer_mouse *) this_layer_data->object_data)->y_offset_start;
+					element_x_position_increment = (((layer_mouse *) this_layer_data->object_data)->x_offset_finish - ((layer_mouse *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
+					element_y_position_increment = (((layer_mouse *) this_layer_data->object_data)->y_offset_finish - ((layer_mouse *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
+					break;
+
+				case TYPE_TEXT:
+					// We're processing a text layer
+					element_x_position_start = ((layer_text *) this_layer_data->object_data)->x_offset_start;
+					element_y_position_start = ((layer_text *) this_layer_data->object_data)->y_offset_start;
+					element_x_position_increment = (((layer_text *) this_layer_data->object_data)->x_offset_finish - ((layer_text *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
+					element_y_position_increment = (((layer_text *) this_layer_data->object_data)->y_offset_finish - ((layer_text *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
+					break;
+
+				default:
+					// Unknown type
+					display_warning("ED83: Unknown layer type in swf output");
+					break;
+			}
+			
 			element_max = this_layer_data->finish_frame;
 			for (element_counter = this_layer_data->start_frame; element_counter <= element_max; element_counter++)
 			{
 				// Mark that the element should be processed on this frame
 				swf_timing_array[(layer_counter * max_frames) + element_counter].action_this = TRUE;
 
-				// fixme2: Also needs to calculate x,y position and opacity
+				// Store the x and y positions for each frame
+				swf_timing_array[(layer_counter * max_frames) + element_counter].x_position = element_x_position_start + (element_counter * element_x_position_increment);
+				swf_timing_array[(layer_counter * max_frames) + element_counter].y_position = element_y_position_start + (element_counter * element_y_position_increment);
 
+				// Store the opacity setting for each frame
+				// fixme2: Still need to calculate properly rather than hard code to 100% for the moment
+				swf_timing_array[(layer_counter * max_frames) + element_counter].opacity = 65535;
 			}
 		}
 	}
@@ -2653,6 +2705,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.71  2006/09/19 13:25:12  vapour
+ * Still adding initial code that works out what to display for each frame of the swf export.
+ *
  * Revision 1.70  2006/09/13 11:46:48  vapour
  * Adding initial code to work out what needs to be displayed in swf for each slide.
  *
