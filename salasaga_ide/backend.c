@@ -1456,14 +1456,24 @@ GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
 {
 	// Local variables
 	guint				layer_counter;			// Holds the number of layers
-	guint				max_frames;				// The highest frame number in the slide
-	guint				num_layers;				// The number of layers in the slide
+	guint				max_frames = 0;			// The highest frame number in the slide
+	guint				num_layers = 0;			// The number of layers in the slide
 	guint				num_slides;				// The number of slides in the movie
 	guint				slide_counter;			// Holds the number of slides
-	swf_frame_element	*swf_timing_array;		// Used to coordinate the actions in each frame
+	swf_frame_element	*swf_timing_array = NULL;  // Used to coordinate the actions in each frame
 	layer				*this_layer_data;		// Points to the data in the present layer
 	slide				*this_slide_data;		// Points to the data in the present slide
 	guint				total_frames;			// The total number of frames in the animation
+
+	guint				element_counter;
+	guint				element_max;
+
+	gint				element_x_position_increment = 0;
+	gint				element_x_position_start = 0;
+	gint				element_y_position_increment = 0;
+	gint				element_y_position_start = 0;
+
+	guint				tmp_integer;			// Temporary integer
 
 
 	// Initialise some things
@@ -1505,8 +1515,8 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 		// Point to the first layer again
 		this_slide_data = g_list_nth_data(slides, slide_counter);
 
-	// Process each layer in turn, for every frame that it's in putting in the array the info of whether
-	// the object in the layer is visible, and it's position and transparency
+		// Process each layer in turn.  For every frame the layer is in, store in the array
+		// whether the object in the layer is visible, it's position, transparency, and other details
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 		{
@@ -1518,19 +1528,13 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 			// Mark that the element needs to be removed on this frame
 			swf_timing_array[(layer_counter * max_frames) + this_layer_data->finish_frame].remove = TRUE;
 
-			guint			element_counter;
-			guint			element_max;
-
-			gint			element_x_position_increment = 0;
-			gint			element_x_position_start = 0;
-			gint			element_y_position_increment = 0;
-			gint			element_y_position_start = 0;
-
-			// Calculate the starting positions and increments for each frame of the layer
+			// Calculate the starting positions, increments and other info for each frame of the layer
 			switch (this_layer_data->object_type)
 			{
 				case TYPE_GDK_PIXBUF:
 					// We're processing a image layer
+					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_type = TYPE_GDK_PIXBUF;
+					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_data = this_layer_data->object_data;
 					element_x_position_start = ((layer_image *) this_layer_data->object_data)->x_offset_start;
 					element_y_position_start = ((layer_image *) this_layer_data->object_data)->y_offset_start;
 					element_x_position_increment = (((layer_image *) this_layer_data->object_data)->x_offset_finish - ((layer_image *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
@@ -1539,6 +1543,8 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 
 				case TYPE_HIGHLIGHT:
 					// We're processing a highlight layer
+					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_type = TYPE_HIGHLIGHT;
+					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_data = this_layer_data->object_data;
 					element_x_position_start = ((layer_highlight *) this_layer_data->object_data)->x_offset_start;
 					element_y_position_start = ((layer_highlight *) this_layer_data->object_data)->y_offset_start;
 					element_x_position_increment = (((layer_highlight *) this_layer_data->object_data)->x_offset_finish - ((layer_highlight *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
@@ -1547,6 +1553,8 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 
 				case TYPE_MOUSE_CURSOR:
 					// We're processing a mouse layer
+					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_type = TYPE_MOUSE_CURSOR;
+					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_data = this_layer_data->object_data;
 					element_x_position_start = ((layer_mouse *) this_layer_data->object_data)->x_offset_start;
 					element_y_position_start = ((layer_mouse *) this_layer_data->object_data)->y_offset_start;
 					element_x_position_increment = (((layer_mouse *) this_layer_data->object_data)->x_offset_finish - ((layer_mouse *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
@@ -1555,6 +1563,8 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 
 				case TYPE_TEXT:
 					// We're processing a text layer
+					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_type = TYPE_TEXT;
+					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_data = this_layer_data->object_data;
 					element_x_position_start = ((layer_text *) this_layer_data->object_data)->x_offset_start;
 					element_y_position_start = ((layer_text *) this_layer_data->object_data)->y_offset_start;
 					element_x_position_increment = (((layer_text *) this_layer_data->object_data)->x_offset_finish - ((layer_text *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
@@ -1586,9 +1596,61 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 printf("The animation is %u frames long\n", total_frames);
 
 
-	// After all of the layers have been processed, there remains the array with the per frame info of
-	// what should be where
+	// * After all of the layers have been pre-processed, there remains an array *
+	// * with the per frame info of what should be where in the output swf       *
 
+	// Process the swf timing array, creating the swf
+	for (tmp_integer = 0; tmp_integer < max_frames; tmp_integer++)  // This loops _frame_ number of times
+	{
+		for (element_counter = 0; element_counter < num_layers; element_counter++)  // This loops _num_layers_ of times
+		{
+			// For each frame, access all of the layers then move to the next frame
+			if (TRUE == swf_timing_array[(tmp_integer * max_frames) + element_counter].action_this)
+			{
+				// * There is something to be done in this frame for this layer *
+
+				if (TRUE == swf_timing_array[(tmp_integer * max_frames) + element_counter].add)
+				{
+					// We need to create the item in the swf dictionary, then add it to the swf display list
+					switch (swf_timing_array[(tmp_integer * max_frames) + element_counter].layer_type)
+					{
+						case TYPE_GDK_PIXBUF:
+							// We're processing a image layer
+
+							// fixme3: Needs to be written
+
+							break;
+
+						case TYPE_HIGHLIGHT:
+							// We're processing a highlight layer
+
+							// fixme3: Needs to be written
+
+							break;
+
+						case TYPE_MOUSE_CURSOR:
+							// We're processing a mouse layer
+
+							// fixme3: Needs to be written
+
+							break;
+
+						case TYPE_TEXT:
+							// We're processing a text layer
+
+							// fixme3: Needs to be written
+
+							break;
+
+						default:
+							// Unknown type
+							display_warning("ED84: Unknown layer type in swf output");
+							break;
+					}
+				}
+			}
+		}		
+	}
 
 	// Process this array, first creating the dictionary of shapes
 
@@ -2705,6 +2767,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.72  2006/09/20 12:36:36  vapour
+ * Adding code to the swf output function, getting it ready to create elements in the swf dictionary.
+ *
  * Revision 1.71  2006/09/19 13:25:12  vapour
  * Still adding initial code that works out what to display for each frame of the swf export.
  *
