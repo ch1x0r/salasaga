@@ -213,6 +213,8 @@ typedef struct
 typedef struct
 {
 	gboolean			action_this;  // Process this element?
+	guint				layer_type;  // The type of element being displayed
+	GObject				*layer_data;  // Pointer to the layer data
 	gboolean			add;  // Add to the display list in this frame?
 	gboolean			remove;  // Remove from the display list in this frame?
 	gint				opacity;  // Opacity level (0-65535)
@@ -260,6 +262,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.24  2006/09/20 12:35:03  vapour
+ * Expanding the swf_frame_element definition, so the swf output function can access the raw data.
+ *
  * Revision 1.23  2006/09/13 11:45:41  vapour
  * Added an initial stub type to assist with coordinating the info needed in a frame.
  *
