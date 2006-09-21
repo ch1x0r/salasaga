@@ -215,6 +215,7 @@ typedef struct
 	gboolean			action_this;  // Process this element?
 	guint				layer_type;  // The type of element being displayed
 	GObject				*layer_data;  // Pointer to the layer data
+	guint				char_id;  // Unique id of the character
 	gboolean			add;  // Add to the display list in this frame?
 	gboolean			remove;  // Remove from the display list in this frame?
 	gint				opacity;  // Opacity level (0-65535)
@@ -223,6 +224,8 @@ typedef struct
 } swf_frame_element;
 
 // Tag types present in swf files
+#define DEFINE_SHAPE_3			32
+
 #define PLACE_OBJECT_2			26
 #define REMOVE_OBJECT_2			28
 #define SHOW_FRAME				1
@@ -262,6 +265,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.25  2006/09/21 13:21:30  vapour
+ * Added the DEFINE_SHAPE_3 swf tag and further expanded the swf_frame_element structure.
+ *
  * Revision 1.24  2006/09/20 12:35:03  vapour
  * Expanding the swf_frame_element definition, so the swf output function can access the raw data.
  *
