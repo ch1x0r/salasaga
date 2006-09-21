@@ -1455,6 +1455,7 @@ GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
 //GByteArray *menu_export_flash_inner(GByteArray *swf_buffer, guint start_slide, guint finish_slide)
 {
 	// Local variables
+	guint				char_counter;			// Counter of the number of characters in the animation
 	guint				layer_counter;			// Holds the number of layers
 	guint				max_frames = 0;			// The highest frame number in the slide
 	guint				num_layers = 0;			// The number of layers in the slide
@@ -1477,6 +1478,7 @@ GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
 
 
 	// Initialise some things
+	char_counter = 0;
 	total_frames = 0;
 
 	// For each slide, work out how many layers there are and how many frames the entire slide lasts for
@@ -1583,6 +1585,9 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 				// Mark that the element should be processed on this frame
 				swf_timing_array[(layer_counter * max_frames) + element_counter].action_this = TRUE;
 
+				// Give the object a unique character ID
+				swf_timing_array[(layer_counter * max_frames) + element_counter].char_id = char_counter;
+
 				// Store the x and y positions for each frame
 				swf_timing_array[(layer_counter * max_frames) + element_counter].x_position = element_x_position_start + (element_counter * element_x_position_increment);
 				swf_timing_array[(layer_counter * max_frames) + element_counter].y_position = element_y_position_start + (element_counter * element_y_position_increment);
@@ -1591,6 +1596,9 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 				// fixme2: Still need to calculate properly rather than hard code to 100% for the moment
 				swf_timing_array[(layer_counter * max_frames) + element_counter].opacity = 65535;
 			}
+
+			// Increment the character counter
+			char_counter++;
 		}
 	}
 printf("The animation is %u frames long\n", total_frames);
@@ -1617,7 +1625,9 @@ printf("The animation is %u frames long\n", total_frames);
 						case TYPE_GDK_PIXBUF:
 							// We're processing a image layer
 
+							// Create the swf with DefineShape
 							// fixme3: Needs to be written
+							swf_buffer = g_byte_array_append(swf_buffer, "bits go here", 12);
 
 							break;
 
@@ -2767,6 +2777,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.73  2006/09/21 13:23:23  vapour
+ * Started working on the code to generate actual swf bytecode.  I need to better understand the bit coding of record headers before much will happen though.
+ *
  * Revision 1.72  2006/09/20 12:36:36  vapour
  * Adding code to the swf output function, getting it ready to create elements in the swf dictionary.
  *
