@@ -1,6 +1,6 @@
 /*
  * $Id$
- * 
+ *
  * Flame Project: Background capture process
  * 
  * Copyright (C) 2005-2006 Justin Clift <justin@postgresql.org>
@@ -101,17 +101,8 @@ gint main(gint argc, gchar *argv[])
 	lock_file = g_key_file_new();  // Create a file object in memory
 	if (!g_key_file_load_from_file(lock_file, full_file_name, G_KEY_FILE_NONE, NULL))
 	{
-		// * If no ~/.flame-lock file is found, run the standard gnome-screenshot program instead *
-
-		// Local variables
-		gchar	*argv = "/usr/bin/gnome-screenshot.old";  // fixme4: Hard coded path name, definitely non-optimal
-		gint	return_code;
-
+		// * If no ~/.flame-lock file is found then exit *
 		g_free(full_file_name);
-		return_code = execl(argv, argv, (char *) NULL);  // fixme5: Should probably use this return_code in the error message below
-
-		// This will only get here if running the old gnome-screenshot program failed
-		g_error("Error 04: Unable to run standard gnome-screenshot program.");
 		exit(1);
 	}
 
@@ -245,6 +236,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2006/12/26 09:26:23  vapour
+ * Updated to no longer run the hard coded old gnome screenshot application if there are no default settings specified.
+ *
  * Revision 1.3  2006/04/21 17:53:51  vapour
  * Fixed the copyright notice, to include 2005, and remove the comments added through my local CVS repository.
  *
