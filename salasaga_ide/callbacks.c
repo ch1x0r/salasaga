@@ -35,10 +35,6 @@
 	#include <gconf/gconf.h>
 #endif
 
-// XML includes
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
 // Flame Edit includes
 #include "flame-types.h"
 #include "backend.h"
@@ -863,6 +859,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2006/12/26 03:56:14  vapour
+ * Removing unnecessary xml includes.
+ *
  * Revision 1.8  2006/07/30 04:58:50  vapour
  * Removed the ming includes, commented out the code needing ming, and added a notice to the user if they try and export flash that it's not  going to work as the code is being rewritten.
  *
