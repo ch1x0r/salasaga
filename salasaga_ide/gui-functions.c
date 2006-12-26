@@ -3201,10 +3201,10 @@ void menu_export_flash_animation(void)
 	// Add the header to the swf buffer
 	// fixme3: Need to expand this next bit to also include the frame size, frame rate, and frame count
 	g_string_printf(tmp_gstring, "FWS%c%u", 0x06, (guint32) swf_buffer->len);  // 0x06 = swf version 6
-	swf_buffer = g_byte_array_prepend(swf_buffer, tmp_gstring->str, tmp_gstring->len);
+	swf_buffer = g_byte_array_prepend(swf_buffer, (const guint8 *) tmp_gstring->str, tmp_gstring->len);
 
 	// Write the swf data to the output file
-	return_value = g_io_channel_write_chars(output_file, swf_buffer->data, swf_buffer->len, &tmp_gsize, &error);
+	return_value = g_io_channel_write_chars(output_file, (const gchar *) swf_buffer->data, swf_buffer->len, &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
 		// * An error occured when writing the swf data to the output file, so alert the user, and return to the calling routine indicating failure *
@@ -4309,7 +4309,7 @@ void menu_file_save(void)
 	gtk_widget_destroy(save_dialog);
 
 	// Create an empty document pointer
-	document_pointer = xmlNewDoc("1.0");
+	document_pointer = xmlNewDoc((const xmlChar *) "1.0");
 	if (NULL == document_pointer)
 	{
 		display_warning("ED19: Error creating the XML save document\n");
@@ -4317,7 +4317,7 @@ void menu_file_save(void)
 	}
 
     // Create the root node
-	root_node = xmlNewDocRawNode(document_pointer, NULL, BAD_CAST "flame_project", NULL);
+	root_node = xmlNewDocRawNode(document_pointer, NULL, (const xmlChar *) "flame_project", NULL);
 	if (NULL == root_node)
 	{
 		display_warning("ED21: Error creating the root node\n");
@@ -4328,7 +4328,7 @@ void menu_file_save(void)
 	xmlDocSetRootElement(document_pointer, root_node);
 
     // Create the meta information container
-	meta_pointer = xmlNewChild(root_node, NULL, "meta-data", NULL);
+	meta_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "meta-data", NULL);
 	if (NULL == meta_pointer)
 	{
 		display_warning("ED25: Error creating the meta-data container\n");
@@ -4336,10 +4336,10 @@ void menu_file_save(void)
 	}
 
 	// Add the save format version number to the XML document
-	xmlNewChild(meta_pointer, NULL, "save_format", "2.0");
+	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.0");
 
     // Create the preferences container
-	pref_pointer = xmlNewChild(root_node, NULL, "preferences", NULL);
+	pref_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "preferences", NULL);
 	if (NULL == pref_pointer)
 	{
 		display_warning("ED20: Error creating the preferences container\n");
@@ -4347,23 +4347,23 @@ void menu_file_save(void)
 	}
 
 	// Add the preferences to the XML document
-	xmlNewChild(pref_pointer, NULL, "project_name", project_name->str);
-	xmlNewChild(pref_pointer, NULL, "output_folder", output_folder->str);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_name", (const xmlChar *) project_name->str);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "output_folder", (const xmlChar *) output_folder->str);
 	g_string_printf(tmp_gstring, "%u", output_width);
-	xmlNewChild(pref_pointer, NULL, "output_width", tmp_gstring->str);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "output_width", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", output_height);
-	xmlNewChild(pref_pointer, NULL, "output_height", tmp_gstring->str);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "output_height", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", output_quality);
-	xmlNewChild(pref_pointer, NULL, "output_quality", tmp_gstring->str);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "output_quality", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", project_width);
-	xmlNewChild(pref_pointer, NULL, "project_width", tmp_gstring->str);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_width", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", project_height);
-	xmlNewChild(pref_pointer, NULL, "project_height", tmp_gstring->str);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_height", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", slide_length);
-	xmlNewChild(pref_pointer, NULL, "slide_length", tmp_gstring->str);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "slide_length", (const xmlChar *) tmp_gstring->str);
 
     // Create a container for the slides
-	slide_root = xmlNewChild(root_node, NULL, "slides", NULL);
+	slide_root = xmlNewChild(root_node, NULL, (const xmlChar *) "slides", NULL);
 	if (NULL == slide_root)
 	{
 		display_warning("ED22: Error creating the slides container\n");
@@ -5469,6 +5469,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.61  2006/12/26 03:57:09  vapour
+ * Added initial fixes for the gcc 4 warnings about pointer targets differing in signedness.  Main application still untested, needs to be verified as still fully functional.
+ *
  * Revision 1.60  2006/09/12 12:12:09  vapour
  * Started adding code to work out values for the swf header and write them to the output file.
  *

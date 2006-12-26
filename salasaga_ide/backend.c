@@ -795,43 +795,43 @@ gboolean flame_read(gchar *filename)
 	}
 
 	// Load project file format version
-	save_version = atoi(save_format_data);
+	save_version = atoi((const char *) save_format_data);
 	xmlFree(save_format_data);
 
 	// Load project name
 	if (NULL == project_name)
 		project_name = g_string_new(NULL);
-	g_string_assign(project_name, project_name_data);
+	g_string_assign(project_name, (const gchar *) project_name_data);
 	xmlFree(project_name_data);
 
 	// Load output folder
 	if (NULL == output_folder)
 		output_folder = g_string_new(NULL);
-	g_string_assign(output_folder, output_folder_data);
+	g_string_assign(output_folder, (const gchar *) output_folder_data);
 	xmlFree(output_folder_data);
 
 	// Load output width
-	output_width = atoi(output_width_data);
+	output_width = atoi((const char *) output_width_data);
 	xmlFree(output_width_data);
 
 	// Load output height
-	output_height = atoi(output_height_data);
+	output_height = atoi((const char *) output_height_data);
 	xmlFree(output_height_data);
 
 	// Load output quality
-	output_quality = atoi(output_quality_data);
+	output_quality = atoi((const char *) output_quality_data);
 	xmlFree(output_quality_data);
 
 	// Load project_width
-	project_width = atoi(project_width_data);
+	project_width = atoi((const char *) project_width_data);
 	xmlFree(project_width_data);
 
 	// Load project height
-	project_height = atoi(project_height_data);
+	project_height = atoi((const char *) project_height_data);
 	xmlFree(project_height_data);
 
 	// Load slide length
-	slide_length = atoi(slide_length_data);
+	slide_length = atoi((const char *) slide_length_data);
 	xmlFree(slide_length_data);
 
 	// * Preferences are loaded, so now load the slides *
@@ -887,37 +887,37 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "red")))
 									{
 										// Get the red value
-										tmp_empty_ob->bg_color.red = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_empty_ob->bg_color.red = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "green")))
 									{
 										// Get the green value
-										tmp_empty_ob->bg_color.green = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_empty_ob->bg_color.green = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "blue")))
 									{
 										// Get the blue value
-										tmp_empty_ob->bg_color.blue = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_empty_ob->bg_color.blue = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 									{
 										// Get the start frame
-										tmp_layer->start_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->start_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
 									{
 										// Get the finish frame
-										tmp_layer->finish_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->finish_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
 										// Get the name of the layer
-										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->name = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
 									{
 										// Get the URL associated with the layer
-										tmp_layer->external_link = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->external_link = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									this_node = this_node->next;	
 								}
@@ -958,52 +958,52 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										tmp_image_ob->x_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_image_ob->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										tmp_image_ob->y_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_image_ob->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										tmp_image_ob->x_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_image_ob->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										tmp_image_ob->y_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_image_ob->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "width")))
 									{
 										// Get the width
-										tmp_image_ob->width = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_image_ob->width = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "height")))
 									{
 										// Get the height
-										tmp_image_ob->height = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_image_ob->height = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 									{
 										// Get the start frame
-										tmp_layer->start_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->start_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
 									{
 										// Get the finish frame
-										tmp_layer->finish_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->finish_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
 										// Get the name of the layer
-										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->name = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
 									{
 										// Get the URL associated with the layer
-										tmp_layer->external_link = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->external_link = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 
 									// If version 1.0 of file format, load the image path, otherwise load the embedded image data
@@ -1012,7 +1012,7 @@ gboolean flame_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "path")))
 										{
 											// Get the path to the image data
-											tmp_image_ob->image_path = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											tmp_image_ob->image_path = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 
 											// Load the image data
 											tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_image_ob->image_path->str, NULL);
@@ -1022,12 +1022,12 @@ gboolean flame_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "data")))
 										{
 											// Get the image data
-											g_string_assign(tmp_gstring2, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											g_string_assign(tmp_gstring2, (const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										}
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "data_length")))
 										{
 											// Get the number of bytes the image should hold
-											data_length = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											data_length = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										}
 									}
 
@@ -1044,7 +1044,7 @@ gboolean flame_read(gchar *filename)
 
 									// Convert the png data into a GdxPixbuf we can use
 									image_loader = gdk_pixbuf_loader_new();
-									return_code = gdk_pixbuf_loader_write(image_loader, tmp_gstring->str, tmp_gstring->len, &error);
+									return_code = gdk_pixbuf_loader_write(image_loader, (const guchar *) tmp_gstring->str, tmp_gstring->len, &error);
 									if (TRUE != return_code)
 									{
 										g_string_printf(error_string, "ED66: Image data loading failed: '%s'", error->message);
@@ -1104,52 +1104,52 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										tmp_highlight_ob->x_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_highlight_ob->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										tmp_highlight_ob->y_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_highlight_ob->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										tmp_highlight_ob->x_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_highlight_ob->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										tmp_highlight_ob->y_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_highlight_ob->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "width")))
 									{
 										// Get the width
-										tmp_highlight_ob->width = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_highlight_ob->width = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "height")))
 									{
 										// Get the height
-										tmp_highlight_ob->height = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_highlight_ob->height = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 									{
 										// Get the start frame
-										tmp_layer->start_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->start_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
 									{
 										// Get the finish frame
-										tmp_layer->finish_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->finish_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
 										// Get the name of the layer
-										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->name = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
 									{
 										// Get the URL associated with the layer
-										tmp_layer->external_link = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->external_link = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									this_node = this_node->next;	
 								}
@@ -1190,37 +1190,37 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										tmp_mouse_ob->x_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_mouse_ob->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										tmp_mouse_ob->y_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_mouse_ob->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										tmp_mouse_ob->x_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_mouse_ob->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										tmp_mouse_ob->y_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_mouse_ob->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "width")))
 									{
 										// Get the width
-										tmp_mouse_ob->width = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_mouse_ob->width = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "height")))
 									{
 										// Get the height
-										tmp_mouse_ob->height = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_mouse_ob->height = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "click")))
 									{
 										// Get the mouse click type
-										tmp_int = g_ascii_strncasecmp(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1), "none", 4);
+										tmp_int = g_ascii_strncasecmp((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1), "none", 4);
 										if (0 == tmp_int)
 										{
 											tmp_mouse_ob->click = MOUSE_NONE;
@@ -1232,22 +1232,22 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 									{
 										// Get the start frame
-										tmp_layer->start_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->start_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
 									{
 										// Get the finish frame
-										tmp_layer->finish_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->finish_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
 										// Get the name of the layer
-										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->name = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
 									{
 										// Get the URL associated with the layer
-										tmp_layer->external_link = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->external_link = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									this_node = this_node->next;	
 								}
@@ -1288,70 +1288,70 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										tmp_text_ob->x_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_text_ob->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										tmp_text_ob->y_offset_start = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_text_ob->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										tmp_text_ob->x_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_text_ob->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										tmp_text_ob->y_offset_finish = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_text_ob->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "red")))
 									{
 										// Get the red value
-										tmp_text_ob->text_color.red = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_text_ob->text_color.red = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "green")))
 									{
 										// Get the green value
-										tmp_text_ob->text_color.green = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_text_ob->text_color.green = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "blue")))
 									{
 										// Get the blue value
-										tmp_text_ob->text_color.blue = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_text_ob->text_color.blue = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "font_size")))
 									{
 										// Get the font size
-										tmp_text_ob->font_size = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_text_ob->font_size = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "text_value")))
 									{
 										// Get the text
 										tmp_text_ob->text_buffer = gtk_text_buffer_new(NULL);
-										gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), xmlNodeListGetString(document, this_node->xmlChildrenNode, 1), -1);
+										gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), (const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1), -1);
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 									{
 										// Get the start frame
-										tmp_layer->start_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->start_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
 									{
 										// Get the finish frame
-										tmp_layer->finish_frame = atoi(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->finish_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
 										// Get the name of the layer
-										tmp_layer->name = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->name = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
 									{
 										// Get the URL associated with the layer
-										tmp_layer->external_link = g_string_new(xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->external_link = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
-									this_node = this_node->next;	
+									this_node = this_node->next;
 								}
 
 								// Add the layer to the slide list store
@@ -1381,11 +1381,11 @@ gboolean flame_read(gchar *filename)
 
 			// Read the slide name from the save file
 			tmp_slide->name = NULL;
-			tmp_char = xmlGetProp(this_slide, "name");
+			tmp_char = xmlGetProp(this_slide, (const xmlChar *) "name");
 			if (NULL != tmp_char)
 			{
 				// A name for the slide is in the project file, so use that
-				tmp_slide->name = g_string_new(tmp_char);
+				tmp_slide->name = g_string_new((const gchar *) tmp_char);
 			}
 
 			// Create the thumbnail for the slide
@@ -1625,9 +1625,14 @@ printf("The animation is %u frames long\n", total_frames);
 						case TYPE_GDK_PIXBUF:
 							// We're processing a image layer
 
-							// Create the swf with DefineShape
+							// Create the swf with DefineShape3
 							// fixme3: Needs to be written
-							swf_buffer = g_byte_array_append(swf_buffer, "bits go here", 12);
+							swf_buffer = g_byte_array_append(swf_buffer, (const guint8 *) "bits go here", 12);
+
+// Header RECORDHEADER Tag type = 32
+// ShapeId UI16 ID for this character
+// ShapeBounds RECT Bounds of the shape
+// Shapes SHAPEWITHSTYLE Shape information
 
 							break;
 
@@ -2227,7 +2232,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	layer_type = layer_pointer->object_type;
 
 	// Create the layer container
-	layer_node = xmlNewChild(slide_node, NULL, "layer", NULL);
+	layer_node = xmlNewChild(slide_node, NULL, (const xmlChar *) "layer", NULL);
 	if (NULL == layer_node)
 	{
 		display_warning("ED24: Error creating the layer elements\n");
@@ -2235,14 +2240,14 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	}
 
 	// Add the layer data to the layer container
-	xmlNewChild(layer_node, NULL, "name", layer_name->str);
+	xmlNewChild(layer_node, NULL, (const xmlChar *) "name", (const xmlChar *) layer_name->str);
 	g_string_printf(tmp_gstring, "%u", start_frame);
-	xmlNewChild(layer_node, NULL, "start_frame", tmp_gstring->str);
+	xmlNewChild(layer_node, NULL, (const xmlChar *) "start_frame", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", finish_frame);
-	xmlNewChild(layer_node, NULL, "finish_frame", tmp_gstring->str);
+	xmlNewChild(layer_node, NULL, (const xmlChar *) "finish_frame", (const xmlChar *) tmp_gstring->str);
 	if (0 != layer_pointer->external_link->len)
 	{
-		xmlNewChild(layer_node, NULL, "external_link", layer_pointer->external_link->str);
+		xmlNewChild(layer_node, NULL, (const xmlChar *) "external_link", (const xmlChar *) layer_pointer->external_link->str);
 	}
 	switch (layer_type)
 	{
@@ -2271,7 +2276,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 
 			// Store the count of image data bytes in the file for read back verification
 			g_string_printf(tmp_gstring2, "%d", pixbuf_size);
-			xmlNewChild(layer_node, NULL, "data_length", tmp_gstring2->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "data_length", (const xmlChar *) tmp_gstring2->str);
 
 			// Base64 encode the image data
 			base64_encode(pixbuf_buffer, pixbuf_size, &base64_string);
@@ -2280,95 +2285,95 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			g_string_printf(tmp_gstring, "%s", base64_string);
 
 			// Add the layer data to the output project file
-			xmlNewChild(layer_node, NULL, "type", "image");
-			xmlNewChild(layer_node, NULL, "data", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "type", (const xmlChar *) "image");
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "data", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->x_offset_start);
-			xmlNewChild(layer_node, NULL, "x_offset_start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_start", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->y_offset_start);
-			xmlNewChild(layer_node, NULL, "y_offset_start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_start", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->x_offset_finish);
-			xmlNewChild(layer_node, NULL, "x_offset_finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_finish", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->y_offset_finish);
-			xmlNewChild(layer_node, NULL, "y_offset_finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_finish", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->width);
-			xmlNewChild(layer_node, NULL, "width", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "width", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->height);
-			xmlNewChild(layer_node, NULL, "height", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "height", (const xmlChar *) tmp_gstring->str);
 			break;
 
 		case TYPE_EMPTY:
 			// Add the layer data to the output project file
-			xmlNewChild(layer_node, NULL, "type", "empty");
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "type", (const xmlChar *) "empty");
 			g_string_printf(tmp_gstring, "%u", ((layer_empty *) layer_pointer->object_data)->bg_color.red);
-			xmlNewChild(layer_node, NULL, "red", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "red", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_empty *) layer_pointer->object_data)->bg_color.green);
-			xmlNewChild(layer_node, NULL, "green", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "green", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_empty *) layer_pointer->object_data)->bg_color.blue);
-			xmlNewChild(layer_node, NULL, "blue", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "blue", (const xmlChar *) tmp_gstring->str);
 			break;
 
 		case TYPE_MOUSE_CURSOR:
 			// Add the layer data to the output project file
-			xmlNewChild(layer_node, NULL, "type", "mouse");
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "type", (const xmlChar *) "mouse");
 			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->x_offset_start);
-			xmlNewChild(layer_node, NULL, "x_offset_start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_start", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->y_offset_start);
-			xmlNewChild(layer_node, NULL, "y_offset_start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_start", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->x_offset_finish);
-			xmlNewChild(layer_node, NULL, "x_offset_finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_finish", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->y_offset_finish);
-			xmlNewChild(layer_node, NULL, "y_offset_finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_finish", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->width);
-			xmlNewChild(layer_node, NULL, "width", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "width", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->height);
-			xmlNewChild(layer_node, NULL, "height", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "height", (const xmlChar *) tmp_gstring->str);
 			if (MOUSE_NONE == ((layer_mouse *) layer_pointer->object_data)->click)
 			{
-				xmlNewChild(layer_node, NULL, "click", "none");
+				xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "none");
 			} else
 			{
-				xmlNewChild(layer_node, NULL, "click", "left_one");
+				xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "left_one");
 			}
 			break;
 
 		case TYPE_TEXT:
 			// Add the layer data to the output project file
-			xmlNewChild(layer_node, NULL, "type", "text");
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "type", (const xmlChar *) "text");
 			gtk_text_buffer_get_bounds(((layer_text *) layer_pointer->object_data)->text_buffer, &text_start, &text_end);
-			xmlNewChild(layer_node, NULL, "text_value", gtk_text_buffer_get_text(((layer_text *) layer_pointer->object_data)->text_buffer, &text_start, &text_end, FALSE));
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "text_value", (const xmlChar *) gtk_text_buffer_get_text(((layer_text *) layer_pointer->object_data)->text_buffer, &text_start, &text_end, FALSE));
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->x_offset_start);
-			xmlNewChild(layer_node, NULL, "x_offset_start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_start", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->y_offset_start);
-			xmlNewChild(layer_node, NULL, "y_offset_start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_start", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->x_offset_finish);
-			xmlNewChild(layer_node, NULL, "x_offset_finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_finish", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->y_offset_finish);
-			xmlNewChild(layer_node, NULL, "y_offset_finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_finish", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.red);
-			xmlNewChild(layer_node, NULL, "red", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "red", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.green);
-			xmlNewChild(layer_node, NULL, "green", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "green", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.blue);
-			xmlNewChild(layer_node, NULL, "blue", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "blue", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%f", ((layer_text *) layer_pointer->object_data)->font_size);
-			xmlNewChild(layer_node, NULL, "font_size", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "font_size", (const xmlChar *) tmp_gstring->str);
 			break;
 
 		case TYPE_HIGHLIGHT:
 			// Add the layer data to the output project file
-			xmlNewChild(layer_node, NULL, "type", "highlight");
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "type", (const xmlChar *) "highlight");
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->x_offset_start);
-			xmlNewChild(layer_node, NULL, "x_offset_start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_start", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->y_offset_start);
-			xmlNewChild(layer_node, NULL, "y_offset_start", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_start", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->x_offset_finish);
-			xmlNewChild(layer_node, NULL, "x_offset_finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_finish", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->y_offset_finish);
-			xmlNewChild(layer_node, NULL, "y_offset_finish", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_finish", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->width);
-			xmlNewChild(layer_node, NULL, "width", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "width", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->height);
-			xmlNewChild(layer_node, NULL, "height", tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "height", (const xmlChar *) tmp_gstring->str);
 			break;
 	}
 
@@ -2397,7 +2402,7 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 	layer_pointer = slide_pointer->layers;
 
     // Create the slide container
-	slide_node = xmlNewChild(slide_root, NULL, "slide", NULL);
+	slide_node = xmlNewChild(slide_root, NULL, (const xmlChar *) "slide", NULL);
 	if (NULL == slide_node)
 	{
 		display_warning("ED23: Error creating the slide node\n");
@@ -2407,7 +2412,7 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 	// Add the slide name to the slide container attributes
 	if (NULL != slide_pointer->name)
 	{
-		xmlNewProp(slide_node, "name", slide_pointer->name->str);
+		xmlNewProp(slide_node, (const xmlChar *) "name", (const xmlChar *) slide_pointer->name->str);
 	}
 
 	// Add the layer data to the slide container
@@ -2777,6 +2782,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.74  2006/12/26 03:57:09  vapour
+ * Added initial fixes for the gcc 4 warnings about pointer targets differing in signedness.  Main application still untested, needs to be verified as still fully functional.
+ *
  * Revision 1.73  2006/09/21 13:23:23  vapour
  * Started working on the code to generate actual swf bytecode.  I need to better understand the bit coding of record headers before much will happen though.
  *
