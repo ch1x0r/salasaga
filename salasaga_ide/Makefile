@@ -71,7 +71,7 @@ clean:
 	rm -f flame-edit flame-edit.exe
 
 distclean: clean
-	rm -Rf Rules.make config.make Makefile.config autom4te.cache config.log config.status
+	rm -Rf Rules.make config.make Makefile.config autom4te.cache config.log config.status configure
 
 maintainer-clean: distclean
 	rm -f configure
