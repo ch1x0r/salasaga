@@ -1,4 +1,4 @@
-AC_INIT(flame-edit, [0.7.6], [flameproject-devel@lists.sourceforge.net])
+AC_INIT(flame-capture, [0.7.6], [flameproject-devel@lists.sourceforge.net])
 
 MAJOR_VERSION=0
 MINOR_VERSION=7
