@@ -9,35 +9,66 @@ OFILES = \
 SOUNDS = \
 	generic.wav
 
+ICON_MAIN = \
+	flame_logo.ico
+
 ICONS_SIXTY = \
 	add_highlight.png \
+	add_highlight_grayed.png \
 	add_image.png \
+	add_image_grayed.png \
 	add_mouse.png \
+	add_mouse_grayed.png \
 	add_text.png \
+	add_text_grayed.png \
 	capture.png \
+	capture_grayed.png \
 	crop.png \
+	crop_grayed.png \
 	delete.png \
+	delete_grayed.png \
 	down_arrow.png \
+	down_arrow_grayed.png \
 	edit.png \
+	edit_grayed.png \
 	export_flash.png \
+	export_flash_grayed.png \
 	export_svg.png \
+	export_svg_grayed.png \
+	flame_logo.png \
 	import.png \
+	import_grayed.png \
 	up_arrow.png \
+	up_arrow_grayed.png
 
 ICONS_SCALABLE = \
 	add_highlight.svg \
+	add_highlight_grayed.svg \
 	add_image.svg \
+	add_image_grayed.svg \
 	add_mouse.svg \
+	add_mouse_grayed.svg \
 	add_text.svg \
+	add_text_grayed.svg \
 	capture.svg \
+	capture_grayed.svg \
 	crop.svg \
+	crop_grayed.svg \
 	delete.svg \
+	delete_grayed.svg \
 	down_arrow.svg \
+	down_arrow_grayed.svg \
 	edit.svg \
+	edit_grayed.svg \
 	export_flash.svg \
+	export_flash_grayed.svg \
 	export_svg.svg \
+	export_svg_grayed.svg \
+	flame_logo.svg \
 	import.svg \
+	import_grayed.svg \
 	up_arrow.svg \
+	up_arrow_grayed.svg
 
 all: flame-edit
 
@@ -59,6 +90,8 @@ flame-edit: $(OFILES)
 install:
 	$(INSTALL) -d $(bindir)
 	$(INSTALL_PROGRAM) -m 0755 flame-edit $(bindir)
+	$(INSTALL) -d $(datadir)/flame/icons/
+	cd images; $(INSTALL_DATA) $(ICON_MAIN) $(datadir)/flame/icons/
 	$(INSTALL) -d $(datadir)/flame/icons/scalable/
 	cd images; $(INSTALL_DATA) $(ICONS_SCALABLE) $(datadir)/flame/icons/scalable/
 	$(INSTALL) -d $(datadir)/flame/icons/72x72/
@@ -87,6 +120,10 @@ uninstall:
 		cd $(datadir)/flame/sounds/; \
 		rm -f $(SOUNDS); \
 		rmdir $(datadir)/flame/sounds; \
+	fi
+
+	if [ -f "$(datadir)/flame/icons/$(ICON_MAIN)" ]; then \
+		rm -f $(datadir)/flame/icons/$(ICON_MAIN); \
 	fi
 
 	if [ -d "$(datadir)/flame/icons" ]; then \
