@@ -86,6 +86,7 @@ guint				working_width;			// Width of the display portion of the working area in
 guint				working_height;			// Height of the display portion of the working area in pixels
 guint				zoom;					// Percentage zoom to use in the drawing area
 GtkComboBox			*zoom_selector;			// Widget for the zoom selector
+const gchar* const*	shared_dir_array;		// Base directory for shared files on this system
 
 // Main toolbar items
 GtkTooltips			*main_toolbar_tooltips;	// Tooltips structure
@@ -716,6 +717,9 @@ gint main(gint argc, gchar *argv[])
 	gtk_set_locale();
 	gtk_init(&argc, &argv);
 
+	// Determine the base directory for shared files on this system
+	shared_dir_array = g_get_system_data_dirs();
+
 	// Redirect log output so it doesn't pop open a console window
 	g_set_print_handler(logger_simple);
 	g_set_printerr_handler(logger_simple);
@@ -732,7 +736,7 @@ gint main(gint argc, gchar *argv[])
 	// Hard code a different path for windows
 	icon_path = g_string_assign(icon_path, "icons");
 #else
-	icon_path = g_string_assign(icon_path, "../share/icons/flame/72x72");
+	g_string_printf(icon_path, "%s%s", shared_dir_array[0], "flame/icons/72x72");
 #endif
 
 	supported_formats = gdk_pixbuf_get_formats();
@@ -749,7 +753,7 @@ gint main(gint argc, gchar *argv[])
 			// Hard code a different path for windows
 			icon_path = g_string_assign(icon_path, "icons");
 #else
-			icon_path = g_string_assign(icon_path, "../share/icons/flame/scalable");
+			g_string_printf(icon_path, "%s%s", shared_dir_array[0], "flame/icons/scalable");
 #endif
 
 		}
@@ -1391,6 +1395,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.28  2006/12/30 12:59:58  vapour
+ * Updated with new path info for the shared files, which should make packaging easier.
+ *
  * Revision 1.27  2006/12/26 03:56:14  vapour
  * Removing unnecessary xml includes.
  *

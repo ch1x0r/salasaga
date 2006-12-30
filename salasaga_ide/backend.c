@@ -2660,8 +2660,16 @@ void save_preferences_and_exit(void)
 void sound_beep(void)
 {
 #ifndef _WIN32
-	// fixme4: We'll have to think of a non-gnome-code way of playing sound for windows
-	gnome_sound_play("../share/sounds/flame/generic.wav");
+	// Local variables
+	GString				*tmp_gstring;			// Temporary GString
+	
+	// fixme4: Need a non-gnome way of playing sound too, for windows
+	tmp_gstring = g_string_new(NULL);
+	g_string_printf(tmp_gstring, "%s%s", shared_dir_array[0], "flame/sounds/generic.wav");
+	gnome_sound_play(tmp_gstring->str);
+
+	// Free local variables
+	g_string_free(tmp_gstring, TRUE);
 #endif
 }
 
@@ -2782,6 +2790,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.75  2006/12/30 12:59:58  vapour
+ * Updated with new path info for the shared files, which should make packaging easier.
+ *
  * Revision 1.74  2006/12/26 03:57:09  vapour
  * Added initial fixes for the gcc 4 warnings about pointer targets differing in signedness.  Main application still untested, needs to be verified as still fully functional.
  *
