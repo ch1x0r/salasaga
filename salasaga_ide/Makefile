@@ -7,37 +7,37 @@ OFILES = \
 	gui-functions.o
 
 SOUNDS = \
-	sounds/generic.wav
+	generic.wav
 
 ICONS_SIXTY = \
-	images/add_highlight.png \
-	images/add_image.png \
-	images/add_mouse.png \
-	images/add_text.png \
-	images/capture.png \
-	images/crop.png \
-	images/delete.png \
-	images/down_arrow.png \
-	images/edit.png \
-	images/export_flash.png \
-	images/export_svg.png \
-	images/import.png \
-	images/up_arrow.png \
+	add_highlight.png \
+	add_image.png \
+	add_mouse.png \
+	add_text.png \
+	capture.png \
+	crop.png \
+	delete.png \
+	down_arrow.png \
+	edit.png \
+	export_flash.png \
+	export_svg.png \
+	import.png \
+	up_arrow.png \
 
 ICONS_SCALABLE = \
-	images/add_highlight.svg \
-	images/add_image.svg \
-	images/add_mouse.svg \
-	images/add_text.svg \
-	images/capture.svg \
-	images/crop.svg \
-	images/delete.svg \
-	images/down_arrow.svg \
-	images/edit.svg \
-	images/export_flash.svg \
-	images/export_svg.svg \
-	images/import.svg \
-	images/up_arrow.svg \
+	add_highlight.svg \
+	add_image.svg \
+	add_mouse.svg \
+	add_text.svg \
+	capture.svg \
+	crop.svg \
+	delete.svg \
+	down_arrow.svg \
+	edit.svg \
+	export_flash.svg \
+	export_svg.svg \
+	import.svg \
+	up_arrow.svg \
 
 all: flame-edit
 
@@ -60,11 +60,50 @@ install:
 	$(INSTALL) -d $(bindir)
 	$(INSTALL_PROGRAM) -m 0755 flame-edit $(bindir)
 	$(INSTALL) -d $(datadir)/flame/icons/scalable/
-	$(INSTALL_DATA) $(ICONS_SCALABLE) $(datadir)/flame/icons/scalable/
+	cd images; $(INSTALL_DATA) $(ICONS_SCALABLE) $(datadir)/flame/icons/scalable/
 	$(INSTALL) -d $(datadir)/flame/icons/72x72/
-	$(INSTALL_DATA) $(ICONS_SIXTY) $(datadir)/flame/icons/72x72/
+	cd images; $(INSTALL_DATA) $(ICONS_SIXTY) $(datadir)/flame/icons/72x72/
 	$(INSTALL) -d $(datadir)/flame/sounds/
-	$(INSTALL_DATA) $(SOUNDS) $(datadir)/flame/sounds/
+	cd sounds; $(INSTALL_DATA) $(SOUNDS) $(datadir)/flame/sounds/
+
+uninstall:
+	if [ -f "$(bindir)/flame-edit" ]; then \
+		rm -f $(bindir)/flame-edit; \
+	fi
+
+	if [ -d "$(datadir)/flame/icons/scalable" ]; then \
+		cd $(datadir)/flame/icons/scalable/; \
+		rm -f $(ICONS_SCALABLE); \
+		rmdir $(datadir)/flame/icons/scalable; \
+	fi
+
+	if [ -d "$(datadir)/flame/icons/72x72" ]; then \
+		cd $(datadir)/flame/icons/72x72/; \
+		rm -f $(ICONS_SIXTY); \
+		rmdir $(datadir)/flame/icons/72x72; \
+	fi
+
+	if [ -d "$(datadir)/flame/sounds" ]; then \
+		cd $(datadir)/flame/sounds/; \
+		rm -f $(SOUNDS); \
+		rmdir $(datadir)/flame/sounds; \
+	fi
+
+	if [ -d "$(datadir)/flame/icons" ]; then \
+		rmdir $(datadir)/flame/icons; \
+	fi
+
+	if [ -d "$(datadir)/flame" ]; then \
+		rmdir $(datadir)/flame; \
+	fi
+
+	if [ -d "$(bindir)" ]; then \
+		rmdir --ignore-fail-on-non-empty $(bindir); \
+	fi
+
+	if [ -d "$(datadir)" ]; then \
+		rmdir --ignore-fail-on-non-empty $(datadir); \
+	fi
 
 clean:
 	rm -f $(OFILES)
