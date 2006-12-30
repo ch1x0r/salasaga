@@ -59,12 +59,12 @@ flame-edit: $(OFILES)
 install:
 	$(INSTALL) -d $(bindir)
 	$(INSTALL_PROGRAM) -m 0755 flame-edit $(bindir)
-	$(INSTALL) -d $(datadir)/icons/flame/scalable/
-	$(INSTALL_DATA) $(ICONS_SCALABLE) $(datadir)/icons/flame/scalable/
-	$(INSTALL) -d $(datadir)/icons/flame/72x72/
-	$(INSTALL_DATA) $(ICONS_SIXTY) $(datadir)/icons/flame/72x72/
-	$(INSTALL) -d $(datadir)/sounds/flame/
-	$(INSTALL_DATA) $(SOUNDS) $(datadir)/sounds/flame
+	$(INSTALL) -d $(datadir)/flame/icons/scalable/
+	$(INSTALL_DATA) $(ICONS_SCALABLE) $(datadir)/flame/icons/scalable/
+	$(INSTALL) -d $(datadir)/flame/icons/72x72/
+	$(INSTALL_DATA) $(ICONS_SIXTY) $(datadir)/flame/icons/72x72/
+	$(INSTALL) -d $(datadir)/flame/sounds/
+	$(INSTALL_DATA) $(SOUNDS) $(datadir)/flame/sounds/
 
 clean:
 	rm -f $(OFILES)
