@@ -1,8 +1,8 @@
-AC_INIT(flame-edit, [0.7.6], [flameproject-devel@lists.sourceforge.net])
+AC_INIT(flame-edit, [0.7.7-dev], [flameproject-devel@lists.sourceforge.net])
 
 MAJOR_VERSION=0
 MINOR_VERSION=7
-MICRO_VERSION=6
+MICRO_VERSION=7-dev
 
 FLAME_VERSION=[${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}]
 

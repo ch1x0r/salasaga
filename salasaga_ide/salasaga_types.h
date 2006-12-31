@@ -32,7 +32,7 @@ extern "C" {
 
 // Set some application constants
 #define APP_NAME "Flame Project Editing GUI"
-#define	APP_VERSION "0.7.6"
+#define	APP_VERSION "0.7.7-dev"
 
 // Define a run time check that hasn't been added to GTK
 #define GTK_TYPE_TREE_ITER				(gtk_tree_iter_get_type ())
@@ -265,6 +265,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.26  2006/12/31 00:19:47  vapour
+ * Updated internal version number to 0.7.7-dev.
+ *
  * Revision 1.25  2006/09/21 13:21:30  vapour
  * Added the DEFINE_SHAPE_3 swf tag and further expanded the swf_frame_element structure.
  *
