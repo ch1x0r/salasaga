@@ -66,7 +66,6 @@ extern guint				working_height;
 extern guint				working_width;
 extern guint				zoom;
 extern GtkComboBox			*zoom_selector;
-extern const gchar* const*	shared_dir_array;
 
 extern GtkTooltips			*main_toolbar_tooltips;
 extern GtkWidget			*main_toolbar_icons[MAIN_TB_COUNT];
@@ -119,6 +118,9 @@ extern gint					num_res_items;
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2007/01/05 06:46:47  vapour
+ * Hard coded to expect icons and similar in /usr/share/.
+ *
  * Revision 1.11  2006/12/30 12:59:58  vapour
  * Updated with new path info for the shared files, which should make packaging easier.
  *

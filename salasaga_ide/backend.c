@@ -2665,7 +2665,7 @@ void sound_beep(void)
 	
 	// fixme4: Need a non-gnome way of playing sound too, for windows
 	tmp_gstring = g_string_new(NULL);
-	g_string_printf(tmp_gstring, "%s%s", shared_dir_array[0], "flame/sounds/generic.wav");
+	g_string_printf(tmp_gstring, "%s%s", "/usr/share/", "flame/sounds/generic.wav");
 	gnome_sound_play(tmp_gstring->str);
 
 	// Free local variables
@@ -2790,6 +2790,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.76  2007/01/05 06:46:47  vapour
+ * Hard coded to expect icons and similar in /usr/share/.
+ *
  * Revision 1.75  2006/12/30 12:59:58  vapour
  * Updated with new path info for the shared files, which should make packaging easier.
  *
