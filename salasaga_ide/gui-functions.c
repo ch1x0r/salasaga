@@ -4747,7 +4747,7 @@ void menu_screenshots_import(void)
 	if (0 == num_screenshots)
 	{
 		// Display the warning message using our function
-		g_string_printf(tmp_string, "Error ED05: No screenshots found in screenshot folder.\n\nThey must be named:\n\n\t%s0001.png\n\t%s0002.png\n\t<etc>\n\nIt's case sensitive too.", project_name->str, project_name->str);
+		g_string_printf(tmp_string, "Error ED05: No screenshots found in screenshot folder:\n\n  %s\n\nThey must be named:\n\n  <ProjectName><Sequential Number>.<File Extension>\n\ni.e.:\n\n\t%s0001.png\n\t%s0002.png\n\t<etc>\n\nThey are case sensitive as well.", screenshots_folder->str, project_name->str, project_name->str);
 		display_warning(tmp_string->str);
 
 		return;
@@ -5469,6 +5469,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.62  2007/01/05 07:15:05  vapour
+ * Clarified the error message when no screenshots are in the screenshots folder.
+ *
  * Revision 1.61  2006/12/26 03:57:09  vapour
  * Added initial fixes for the gcc 4 warnings about pointer targets differing in signedness.  Main application still untested, needs to be verified as still fully functional.
  *
