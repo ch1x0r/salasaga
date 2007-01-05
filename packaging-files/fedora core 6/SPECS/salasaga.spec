@@ -28,7 +28,7 @@ Exec=flame-edit
 Type=Application
 Terminal=false
 StartupNotify=true
-Categories=GNOME;Application;
+Categories=Graphics;2DGraphics;RasterGraphics;GTK;
 Encoding=UTF-8
 EOF
 
@@ -42,7 +42,7 @@ make
 	%{__install} -D -m0644 smart-gui.desktop %{buildroot}%{_datadir}/gnome/apps/Graphics/flameproject.desktop
 %else
 	%{__install} -d -m0755 %{buildroot}%{_datadir}/applications/
-	desktop-file-install --vendor "Justin Clift"    \
+	desktop-file-install --vendor "" \
 		--dir %{buildroot}%{_datadir}/applications \
 		--add-category X-Red-Hat-Extra \
 		flameproject.desktop
