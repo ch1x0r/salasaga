@@ -4483,6 +4483,8 @@ void menu_screenshots_capture(void)
 	GtkWidget			*y_length_label;		// Label widget
 	GtkWidget			*y_length_button;		// Widget for accepting the new Y Length data
 
+	GtkWidget			*key_combo_label;		// Label widget
+
 	gint				dialog_result;			// Catches the return code from the dialog box
 
 	GdkScreen			*which_screen;			// Gets given the screen the monitor is on
@@ -4556,6 +4558,11 @@ void menu_screenshots_capture(void)
 	y_length_button = gtk_spin_button_new_with_range(0, gdk_screen_get_height(which_screen), 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_length_button), capture_height);
 	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(y_length_button), 1, 2, 3, 4);
+
+	// Create the label that tells the user about Control-Printscreen
+	key_combo_label = gtk_label_new("Hint: Use the Control-Printscreen key\ncombination to capture screenshots,\nthen the Import button to import them.");
+	gtk_misc_set_alignment(GTK_MISC(key_combo_label), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(key_combo_label), 0, 2, 4, 5);
 
 	// Run the dialog
 	gtk_widget_show_all(GTK_WIDGET(capture_dialog));
@@ -4911,6 +4918,10 @@ void menu_screenshots_import(void)
 	menu_enable("/Slide", TRUE);
 	menu_enable("/Layer", TRUE);
 	menu_enable("/Export", TRUE);
+
+	// Enable the toolbar buttons
+	enable_layer_toolbar_buttons();
+	enable_main_toolbar_buttons();
 }
 
 
@@ -5469,6 +5480,10 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.63  2007/01/05 08:31:14  vapour
+ * + Added hint to Capture dialog, about using Control-Printscreen then the Import function.
+ * + Fixed bug in Import function that wasn't enabling the greyed out toolbars afterward.
+ *
  * Revision 1.62  2007/01/05 07:15:05  vapour
  * Clarified the error message when no screenshots are in the screenshots folder.
  *
