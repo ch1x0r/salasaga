@@ -30,6 +30,9 @@
 #include <dirent.h>
 #include <unistd.h>
 
+// GLib includes
+#include <glib/gstdio.h>
+
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -1130,13 +1133,23 @@ gint main(gint argc, gchar *argv[])
 	{
 #endif  // Non-windows check
 
+		// Looks like Flame hasn't been run before, so create it's home directory structure
+		g_string_printf(tmp_gstring, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame");
+		g_mkdir(tmp_gstring->str, 0750);
+		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "projects");
+		g_mkdir(tmp_gstring->str, 0750);
+		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "screenshots");
+		g_mkdir(tmp_gstring->str, 0750);
+		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "output");
+		g_mkdir(tmp_gstring->str, 0750);
+
 		// Which monitor are we displaying on?
 		which_screen = gtk_window_get_screen(GTK_WINDOW(main_window));
 
 		// Initialise the application variables to sensible defaults
-		g_string_printf(default_project_folder, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "projects");
-		g_string_printf(screenshots_folder, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "screenshots");
-		g_string_printf(default_output_folder, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "output");
+		g_string_printf(default_project_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "projects");
+		g_string_printf(screenshots_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "screenshots");
+		g_string_printf(default_output_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "output");
 		g_string_printf(project_name, "%s", "New Project");
 		project_width = gdk_screen_get_width(which_screen);
 		project_height = gdk_screen_get_height(which_screen);
@@ -1391,6 +1404,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.30  2007/01/05 08:31:36  vapour
+ * Added code to create flame home directory structure the first time it's run.
+ *
  * Revision 1.29  2007/01/05 06:46:47  vapour
  * Hard coded to expect icons and similar in /usr/share/.
  *
