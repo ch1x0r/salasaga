@@ -1878,13 +1878,10 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 						y_scale * ((layer_image *) layer_data->object_data)->y_offset_start,
 						y_scale * ((layer_image *) layer_data->object_data)->y_offset_finish);
 
-					// Animate the SVG properties to move it offscreen after it's no longer needed
-					// (due to a bug in Opera 9.0 not passing mouse clicks through 100% transparent elements)
+					// Remove the image from display after it's no longer needed
 					g_string_append_printf(string_to_write,
-						"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"0.01s\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n</image>\n",
-						1 + time_start + 1 + (layer_data->finish_frame / frames_per_second),
-						y_scale * ((layer_image *) layer_data->object_data)->y_offset_finish,
-						(y_scale * output_height * 10));
+						"\t<set attributeName=\"display\" attributeType=\"XML\" to=\"none\" begin=\"%.4fs\" />\n</image>\n",
+						1 + time_start + (layer_data->finish_frame / frames_per_second));
 				}
 
 				// If the layer has an external link, then close the <a> tag
@@ -1946,19 +1943,16 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_start,
 					x_scale * ((layer_highlight *) layer_data->object_data)->x_offset_finish);
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n\n",
+					"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n",
 					1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_start,
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_finish);
 
-				// Animate the SVG properties to move it offscreen after it's no longer needed
-				// (due to a bug in Opera 9.0 not passing mouse clicks through 100% transparent elements)
+				// Remove the rectangle from display after it's no longer needed
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"0.01s\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n</rect>\n",
-					1 + time_start + 1 + (layer_data->finish_frame / frames_per_second),
-					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_finish,
-					(y_scale * output_height * 10));
+					"\t<set attributeName=\"display\" attributeType=\"XML\" to=\"none\" begin=\"%.4fs\" />\n</rect>\n",
+					1 + time_start + (layer_data->finish_frame / frames_per_second));
 
 				// If the layer has an external link, then close the <a> tag
 				if (0 != layer_data->external_link->len)
@@ -2022,11 +2016,17 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Animate the SVG properties to move it to it's destination location
 				g_string_append_printf(string_to_write,
-					"\t<animateMotion attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"0px,0px\" to=\"%.4fpx,%.4fpx\" />\n</path>\n",
+					"\t<animateMotion attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"0px,0px\" to=\"%.4fpx,%.4fpx\" />\n",
 					1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
 					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
 					x_scale * (((layer_highlight *) layer_data->object_data)->x_offset_finish - ((layer_highlight *) layer_data->object_data)->x_offset_start),  // X distance to travel
 					y_scale * (((layer_highlight *) layer_data->object_data)->y_offset_finish - ((layer_highlight *) layer_data->object_data)->y_offset_start));  // Y distance to travel
+
+				// Remove the mouse pointer from display after it's no longer needed
+				g_string_append_printf(string_to_write,
+					"\t<set attributeName=\"display\" attributeType=\"XML\" to=\"none\" begin=\"%.4fs\" />\n</path>\n",
+					1 + time_start + (layer_data->finish_frame / frames_per_second));
+
 				break;
 
 			case TYPE_TEXT:
@@ -2087,13 +2087,10 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_start,
 					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_finish);
 
-				// Animate the SVG properties to move it offscreen after it's no longer needed
-				// (due to a bug in Opera 9.0 not passing mouse clicks through 100% transparent elements)
+				// Remove the text background from display after it's no longer needed
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"0.01s\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />\n\t</rect>\n",
-					1 + time_start + 1 + (layer_data->finish_frame / frames_per_second),
-					y_scale * ((layer_highlight *) layer_data->object_data)->y_offset_finish,
-					(y_scale * output_height * 10));
+					"\t<set attributeName=\"display\" attributeType=\"XML\" to=\"none\" begin=\"%.4fs\" />\n\t</rect>\n",
+					1 + time_start + (layer_data->finish_frame / frames_per_second));
 
 				// Create the text tag
 				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" font-family=\"Bitstream Vera Sans svg\" class=\"text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-size=\"%.4fpx\" textLength=\"%.4fpx\" lengthAdjust=\"spacingAndGlyphs\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
@@ -2141,13 +2138,10 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					(y_scale * (((layer_text *) layer_data->object_data)->y_offset_start)),  // Y start
 					(y_scale * ((layer_text *) layer_data->object_data)->y_offset_finish));  // Y finish
 
-				// Animate the SVG properties to move it offscreen after it's no longer needed
-				// (due to a bug in Opera 9.0 not passing mouse clicks through 100% transparent elements)
+				// Remove the text itself from display after it's no longer needed
 				g_string_append_printf(string_to_write,
-					"\t<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"0.01s\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" /></text>\n",
-					1 + time_start + 1 + (layer_data->finish_frame / frames_per_second),
-					y_scale * ((layer_text *) layer_data->object_data)->y_offset_finish,
-					(y_scale * output_height * 10));
+					"<set attributeName=\"display\" attributeType=\"XML\" to=\"none\" begin=\"%.4fs\" />\n</text>\n",
+					1 + time_start + (layer_data->finish_frame / frames_per_second));
 
 				// If the layer has an external link, then close the <a> tag
 				if (0 != layer_data->external_link->len)
@@ -2790,6 +2784,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.77  2007/02/25 11:24:58  vapour
+ * Updated the SVG output, so elements are removed by setting their display attribute rather than moving them to a large y offset.
+ *
  * Revision 1.76  2007/01/05 06:46:47  vapour
  * Hard coded to expect icons and similar in /usr/share/.
  *
