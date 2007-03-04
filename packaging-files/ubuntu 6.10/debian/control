@@ -1,0 +1,12 @@
+Source: flame_project
+Section: devel
+Priority: optional
+Maintainer: Justin Clift <justin@postgresql.org>
+Standards-Version: 3.7.2.1
+Build-Depends: xorg-dev
+
+Package: flame_project
+Architecture: i386
+Depends: ${shlibs:Depends}
+Description: An Integrated Development Environment for producing
+ Animated SVG files.
