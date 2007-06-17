@@ -1,4 +1,4 @@
-flame_project (0.7.7-0ubuntu2) unstable; urgency=low
+flameproject (0.7.7.dev-0ubuntu2) unstable; urgency=low
 
   * Next version of the package, with slightly improved SVG output
 
