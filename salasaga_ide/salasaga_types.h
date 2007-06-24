@@ -35,8 +35,8 @@ extern "C" {
 #define	APP_VERSION "0.7.7-dev"
 
 // Define a run time check that hasn't been added to GTK
-#define GTK_TYPE_TREE_ITER				(gtk_tree_iter_get_type ())
-#define GTK_TREE_ITER(obj)				(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_ITER, GtkTreeIter))
+#define GTK_TYPE_TREE_ITER		(gtk_tree_iter_get_type ())
+#define GTK_TREE_ITER(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_ITER, GtkTreeIter))
 
 
 // * Define the structures used in the application *
@@ -160,7 +160,7 @@ typedef struct
 	gint				height;
 	GString				*image_path;
 	GdkPixbuf			*image_data;
-	gboolean			modified;			// FALSE if an image hasn't been modified, TRUE if it has (i.e. cropped)
+	gboolean			modified;				// FALSE if an image hasn't been modified, TRUE if it has (i.e. cropped)
 } layer_image;
 
 // Defines the properties making up a mouse pointer layer
@@ -187,7 +187,7 @@ typedef struct
 	guint				rendered_height;
 	GdkColor			text_color;
 	gfloat				font_size;
-	GtkTextBuffer		*text_buffer;
+	GtkTextBuffer			*text_buffer;
 } layer_text;
 
 // Resolution storing structure
@@ -206,21 +206,21 @@ typedef struct
 	GtkTooltips			*tooltip;
 	GString				*name;
 	GtkWidget			*timeline_widget;
-	GtkListStore		*layer_store;
+	GtkListStore			*layer_store;
 } slide;
 
 // Defines the information needed for each element of the swf timing array
 typedef struct
 {
-	gboolean			action_this;  // Process this element?
-	guint				layer_type;  // The type of element being displayed
-	GObject				*layer_data;  // Pointer to the layer data
-	guint				char_id;  // Unique id of the character
-	gboolean			add;  // Add to the display list in this frame?
-	gboolean			remove;  // Remove from the display list in this frame?
-	gint				opacity;  // Opacity level (0-65535)
-	gint				x_position;  // In twips
-	gint				y_position;  // In twips
+	gboolean			action_this;				// Process this element?
+	guint				layer_type;				// The type of element being displayed
+	GObject				*layer_data;				// Pointer to the layer data
+	guint				char_id;				// Unique id of the character
+	gboolean			add;					// Add to the display list in this frame?
+	gboolean			remove;					// Remove from the display list in this frame?
+	gint				opacity;				// Opacity level (0-65535)
+	gint				x_position;				// In twips
+	gint				y_position;				// In twips
 } swf_frame_element;
 
 // Tag types present in swf files
@@ -228,28 +228,28 @@ typedef struct
 
 #define PLACE_OBJECT_2			26
 #define REMOVE_OBJECT_2			28
-#define SHOW_FRAME				1
+#define SHOW_FRAME			1
 
-#define SET_BACKGROUND_COLOUR	9
-#define FRAME_LABEL				43
-#define PROTECT					24
-#define END						0
+#define SET_BACKGROUND_COLOUR		9
+#define FRAME_LABEL			43
+#define PROTECT				24
+#define END				0
 #define EXPORT_ASSETS			56
 #define IMPORT_ASSETS			57
 #define ENABLE_DEBUGGER_2		64
 #define SCRIPT_LIMITS			65
 #define SET_TAB_INDEX			66
-#define DO_ACTION				12
+#define DO_ACTION			12
 
 // Action types present in swf files
 #define ACTION_GOTO_FRAME		0x81
 #define ACTION_NEXT_FRAME		0x04
-#define ACTION_PREVIOUS_FRAME	0x05
-#define ACTION_PLAY				0x06
-#define ACTION_STOP				0x07
-#define ACTION_TOGGLE_QUALITY	0x08
+#define ACTION_PREVIOUS_FRAME		0x05
+#define ACTION_PLAY			0x06
+#define ACTION_STOP			0x07
+#define ACTION_TOGGLE_QUALITY		0x08
 #define ACTION_STOP_SOUNDS		0x09
-#define ACTION_WAIT_FOR_FRAME	0x8A
+#define ACTION_WAIT_FOR_FRAME		0x8A
 #define ACTION_SET_TARGET		0x8B
 #define ACTION_GO_TO_LABEL		0x8C
 
@@ -265,6 +265,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.27  2007/06/24 13:21:47  vapour
+ * Neatened up, prior to work on it.
+ *
  * Revision 1.26  2006/12/31 00:19:47  vapour
  * Updated internal version number to 0.7.7-dev.
  *
