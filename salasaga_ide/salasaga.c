@@ -1287,11 +1287,7 @@ gint main(gint argc, gchar *argv[])
 
 	// Create the zoom selector
 	zoom_selector = GTK_COMBO_BOX(gtk_combo_box_new_text());
-
-// fixme4: gtk_combo_box_set_focus_on_click function isn't present in GTK 2.4.x (shipped with Solaris 10)
-#ifndef __sun
 	gtk_combo_box_set_focus_on_click(GTK_COMBO_BOX(zoom_selector), FALSE);
-#endif
 
 	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "1600%");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "800%");
@@ -1404,6 +1400,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.31  2007/06/24 11:33:48  vapour
+ * Removed the __sun workarounds for Solaris 10, as Solaris 11 should have the missing bits.
+ *
  * Revision 1.30  2007/01/05 08:31:36  vapour
  * Added code to create flame home directory structure the first time it's run.
  *
