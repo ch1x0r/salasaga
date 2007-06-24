@@ -4858,20 +4858,20 @@ void menu_screenshots_import(void)
 	project_height = largest_height;
 	project_width = largest_width;
 
-	// Update the film strip with the new slides
-	refresh_film_strip();
-
 	// If not presently set, make the first slide the present slide
 	if (NULL == current_slide)
 	{
 		current_slide = g_list_first(slides);
 	}
 
+	// Draw the workspace area
+	draw_workspace();
+
 	// Draw the timeline area
 	draw_timeline();
 
-	// Draw the workspace area
-	draw_workspace();
+	// Update the film strip with the new slides
+	refresh_film_strip();
 
 	// Enable the project based menu items
 	menu_enable("/Slide", TRUE);
@@ -5081,36 +5081,39 @@ void project_crop(void)
 void refresh_film_strip(void)
 {
 	// Local variables
-	gint				num_slides;
-	guint				slide_counter;
+	gint				num_event_boxes, num_slides;
+	guint				event_box_counter, slide_counter;
 
 	GList				*tmp_glist;
 	slide				*tmp_slide;
+	GtkWidget			*tmp_event_box;
 
 
 	// * Clear the film strip area of existing content *
 	tmp_glist = gtk_container_get_children(GTK_CONTAINER(film_strip));
 	if (NULL != tmp_glist)
 	{
-		// For each slide shown in the film strip, remove its event box
+		// For each slide shown in the film strip, remove its event box and associated thumbnail
 		tmp_glist = g_list_first(tmp_glist);
-		num_slides = g_list_length(tmp_glist) - 1;
-		for (slide_counter = 0; slide_counter <= num_slides; slide_counter++)
+		num_event_boxes = g_list_length(tmp_glist);
+		for (event_box_counter = 0; event_box_counter <= num_event_boxes - 1; event_box_counter++)
 		{
 			// Remove the slide from the film strip area
-			tmp_slide = g_list_nth_data(tmp_glist, slide_counter);
-			gtk_container_remove(GTK_CONTAINER(film_strip), GTK_WIDGET(tmp_slide));
+			tmp_event_box = g_list_nth_data(tmp_glist, event_box_counter);
+			tmp_event_box = g_object_ref(tmp_event_box);  // Needed so the gtk_container_remove() doesn't unref the thumbnail
+			gtk_container_remove(GTK_CONTAINER(film_strip), GTK_WIDGET(tmp_event_box));
 		}
 		g_list_free(tmp_glist);
 	}
 
 	// * For each slide in the slides array, add its event box (with contained thumbnail) to the film strip area *
 	slides = g_list_first(slides);
-	num_slides = g_list_length(slides) - 1;
-	for (slide_counter = 0; slide_counter <= num_slides; slide_counter++)
+	num_slides = g_list_length(slides);
+	for (slide_counter = 0; slide_counter <= num_slides - 1; slide_counter++)
 	{
 		// Add the event box to the film strip area
 		tmp_slide = g_list_nth_data(slides, slide_counter);
+
 		gtk_box_pack_start(GTK_BOX(film_strip), GTK_WIDGET(tmp_slide->event_box), FALSE, FALSE, 0);
 
 		// Add a separator between the thumbnails, to make things that little bit clearer
@@ -5439,6 +5442,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.66  2007/06/24 13:38:29  vapour
+ * Fixed the bug whereby thumbnails weren't being added to the film strip properly.
+ *
  * Revision 1.65  2007/06/24 03:56:56  vapour
  * Aligned all of the comments for Sun Studio 12's display, to make things neat before going forwards.
  *
