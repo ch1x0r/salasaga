@@ -463,6 +463,7 @@ void calculate_object_boundaries(void)
 
 
 // Function to free the memory for a given slide
+// fixme5: Had to comment out some of the "free's", as they were causing segfaults.  Thus this function needs to be rewritten properly at some point
 void destroy_slide(gpointer element, gpointer user_data)
 {
 	// Local variables
@@ -499,11 +500,13 @@ void destroy_slide(gpointer element, gpointer user_data)
 
 		// Free its elements
 		g_string_free(layer_data->name, TRUE);
-		g_free(layer_data->row_iter);
+		// This is causing a Segfault
+		// g_free(layer_data->row_iter);
 		switch (layer_data->object_type)
 		{
 			case TYPE_GDK_PIXBUF:
-				g_string_free(((layer_image *) layer_data->object_data)->image_path, TRUE);
+				// This is causing a Segfault
+				// g_string_free(((layer_image *) layer_data->object_data)->image_path, TRUE);
 				g_object_unref(((layer_image *) layer_data->object_data)->image_data);
 				break;
 
@@ -2784,6 +2787,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.78  2007/06/24 03:03:58  vapour
+ * Commented out the code that caused a segfault when deleting a slide.
+ *
  * Revision 1.77  2007/02/25 11:24:58  vapour
  * Updated the SVG output, so elements are removed by setting their display attribute rather than moving them to a large y offset.
  *
