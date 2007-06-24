@@ -50,10 +50,10 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
 {
 	// Local variables
 	GdkPixbuf			*bg_pixbuf;				// Points to the background layer
-	GdkPixbuf			*backing_pixbuf;		// Pixbuf buffer things draw onto
-	layer				*layer_data;			// Pointer to the layer data
-	GList				*layer_pointer;			// Pointer to the layer GList
-	GdkPixbuf			*scaled_pixbuf;			// Smaller pixbuf
+	GdkPixbuf			*backing_pixbuf;			// Pixbuf buffer things draw onto
+	layer				*layer_data;				// Pointer to the layer data
+	GList				*layer_pointer;				// Pointer to the layer GList
+	GdkPixbuf			*scaled_pixbuf;				// Smaller pixbuf
 	slide				*slide_ref;				// Pointer to the slide data
 
 
@@ -169,16 +169,16 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 
 			// Draw the image onto the backing pixbuf
 			gdk_pixbuf_composite(((layer_image *) layer_pointer->object_data)->image_data,	// Source pixbuf
-			tmp_pixbuf,				// Destination pixbuf
-			x_offset,				// X offset
-			y_offset,				// Y offset
-			width,					// Width
-			height,					// Height
-			x_offset,				// Source offsets
-			y_offset,				// Source offsets
-			1, 1,					// Scale factor (1 == no scale)
-			GDK_INTERP_NEAREST,		// Scaling type
-			255);					// Alpha
+			tmp_pixbuf,						// Destination pixbuf
+			x_offset,						// X offset
+			y_offset,						// Y offset
+			width,							// Width
+			height,							// Height
+			x_offset,						// Source offsets
+			y_offset,						// Source offsets
+			1, 1,							// Scale factor (1 == no scale)
+			GDK_INTERP_NEAREST,					// Scaling type
+			255);							// Alpha
 			user_data = (GdkPixbuf *) tmp_pixbuf;
 
 			// All done
@@ -204,17 +204,17 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			}
 
 			// Draw the mouse pointer onto the backing pixbuf
-			gdk_pixbuf_composite(mouse_ptr_pixbuf,	// Source pixbuf
-			tmp_pixbuf,				// Destination pixbuf
-			x_offset,				// X offset
-			y_offset,				// Y offset
-			width,					// Width
-			height,					// Height
-			x_offset,				// Source offsets
-			y_offset,				// Source offsets
-			1, 1,					// Scale factor (1 == no scale)
-			GDK_INTERP_NEAREST,		// Scaling type
-			255);					// Alpha
+			gdk_pixbuf_composite(mouse_ptr_pixbuf,			// Source pixbuf
+			tmp_pixbuf,						// Destination pixbuf
+			x_offset,						// X offset
+			y_offset,						// Y offset
+			width,							// Width
+			height,							// Height
+			x_offset,						// Source offsets
+			y_offset,						// Source offsets
+			1, 1,							// Scale factor (1 == no scale)
+			GDK_INTERP_NEAREST,					// Scaling type
+			255);							// Alpha
 			user_data = (GdkPixbuf *) tmp_pixbuf;
 			return;
 
@@ -276,8 +276,8 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 
 			// Draw the highlight box (or as much as will fit)
 			draw_highlight_box(tmp_pixbuf, x_offset, y_offset, width, height,
-			0xFFFFCCFF,							// Fill color - light yellow
-			0x000000FF);							// Border color - black
+			0xFFFFCCFF,						// Fill color - light yellow
+			0x000000FF);						// Border color - black
 
 			// Turn the pixbuf into a pixmap
 			tmp_colormap = gdk_colormap_get_system();
@@ -342,8 +342,8 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 
 			// Draw the highlight box (or as much as will fit)
 			draw_highlight_box(tmp_pixbuf, x_offset, y_offset, width, height,
-			0x00FF0040,		// Fill color
-			0x00FF00CC);		// Border color
+			0x00FF0040,						// Fill color
+			0x00FF00CC);						// Border color
 
 			break;		
 
@@ -357,24 +357,24 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 GtkWidget *construct_timeline_widget(slide *slide_data)
 {
 	// Local variables
-	GtkCellRenderer		*timeline_renderer_text_name;
-	GtkCellRenderer		*timeline_renderer_toggle;
-	GtkCellRenderer		*timeline_renderer_text_start;
-	GtkCellRenderer		*timeline_renderer_text_finish;
-	GtkCellRenderer		*timeline_renderer_text_x_offset_start;
-	GtkCellRenderer		*timeline_renderer_text_y_offset_start;
-	GtkCellRenderer		*timeline_renderer_text_x_offset_finish;
-	GtkCellRenderer		*timeline_renderer_text_y_offset_finish;
-	GtkTreeViewColumn	*timeline_column_name;
-	GtkTreeViewColumn	*timeline_column_visibility;
-	GtkTreeViewColumn	*timeline_column_start;
-	GtkTreeViewColumn	*timeline_column_finish;
-	GtkTreeViewColumn	*timeline_column_x_off_start;
-	GtkTreeViewColumn	*timeline_column_y_off_start;
-	GtkTreeViewColumn	*timeline_column_x_off_finish;
-	GtkTreeViewColumn	*timeline_column_y_off_finish;
+	GtkCellRenderer			*timeline_renderer_text_name;
+	GtkCellRenderer			*timeline_renderer_toggle;
+	GtkCellRenderer			*timeline_renderer_text_start;
+	GtkCellRenderer			*timeline_renderer_text_finish;
+	GtkCellRenderer			*timeline_renderer_text_x_offset_start;
+	GtkCellRenderer			*timeline_renderer_text_y_offset_start;
+	GtkCellRenderer			*timeline_renderer_text_x_offset_finish;
+	GtkCellRenderer			*timeline_renderer_text_y_offset_finish;
+	GtkTreeViewColumn		*timeline_column_name;
+	GtkTreeViewColumn		*timeline_column_visibility;
+	GtkTreeViewColumn		*timeline_column_start;
+	GtkTreeViewColumn		*timeline_column_finish;
+	GtkTreeViewColumn		*timeline_column_x_off_start;
+	GtkTreeViewColumn		*timeline_column_y_off_start;
+	GtkTreeViewColumn		*timeline_column_x_off_finish;
+	GtkTreeViewColumn		*timeline_column_y_off_finish;
 
-	GtkTreePath			*tmp_path;					// Temporary GtkPath
+	GtkTreePath			*tmp_path;				// Temporary GtkPath
 
 
 	// * This function assumes the existing timeline widget has not been created, or has been destroyed *
@@ -458,11 +458,11 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
 GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_resolutions, guint initial_width, guint initial_height)
 {
 	// Local variables
-	gboolean			match_found;			// Simple toggle used to indiate the requested resolution has been found
+	gboolean			match_found;				// Simple toggle used to indiate the requested resolution has been found
 	gint				match_at;				// If a resolution match was found, this contains where
-	guint				res_counter;			// Used as a simple counter
-	GString				*res_string;			// Used for constructing resolution strings
-	GtkWidget			*res_widget;			// ComboBox widget that gets returned
+	guint				res_counter;				// Used as a simple counter
+	GString				*res_string;				// Used for constructing resolution strings
+	GtkWidget			*res_widget;				// ComboBox widget that gets returned
 
 
 	// Initialise various things
@@ -516,9 +516,9 @@ void create_tooltips(void)
 {
 	// Local variables
 	guint				counter;				// Used as a standard counter
-	GString				*name_string;			// Used for generating a name string
+	GString				*name_string;				// Used for generating a name string
 	guint				num_slides;				// Number of slides in the whole slide list
-	slide				*slide_data;			// Points to the actual data in the given slide
+	slide				*slide_data;				// Points to the actual data in the given slide
 
 
 	// Initialise some things
@@ -643,7 +643,7 @@ void disable_main_toolbar_buttons(void)
 gint display_warning(gchar *warning_string)
 {
 	// Local variables
-	GtkWidget			*tmp_dialog;			// Temporary dialog box
+	GtkWidget			*tmp_dialog;				// Temporary dialog box
 
 	// Display the warning dialog
 	tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, warning_string);
@@ -661,39 +661,39 @@ gint display_warning(gchar *warning_string)
 gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 {
 	// Local variables
-	GtkDialog			*highlight_dialog;		// Widget for the dialog
-	GtkWidget			*highlight_table;		// Table used for neat layout of the dialog box
-	gint				dialog_result;			// Catches the return code from the dialog box
-	guint				row_counter = 0;		// Used to count which row things are up to
+	GtkDialog			*highlight_dialog;			// Widget for the dialog
+	GtkWidget			*highlight_table;			// Table used for neat layout of the dialog box
+	gint				dialog_result;				// Catches the return code from the dialog box
+	guint				row_counter = 0;			// Used to count which row things are up to
 
-	GtkWidget			*x_off_label_start;		// Label widget
-	GtkWidget			*x_off_button_start;	//
+	GtkWidget			*x_off_label_start;			// Label widget
+	GtkWidget			*x_off_button_start;			//
 
-	GtkWidget			*y_off_label_start;		// Label widget
-	GtkWidget			*y_off_button_start;	//
+	GtkWidget			*y_off_label_start;			// Label widget
+	GtkWidget			*y_off_button_start;			//
 
-	GtkWidget			*x_off_label_finish;	// Label widget
-	GtkWidget			*x_off_button_finish;	//
+	GtkWidget			*x_off_label_finish;			// Label widget
+	GtkWidget			*x_off_button_finish;			//
 
-	GtkWidget			*y_off_label_finish;	// Label widget
-	GtkWidget			*y_off_button_finish;	//
+	GtkWidget			*y_off_label_finish;			// Label widget
+	GtkWidget			*y_off_button_finish;			//
 
-	GtkWidget			*width_label;			// Label widget
-	GtkWidget			*width_button;			//
+	GtkWidget			*width_label;				// Label widget
+	GtkWidget			*width_button;				//
 
-	GtkWidget			*height_label;			// Label widget
-	GtkWidget			*height_button;			//
+	GtkWidget			*height_label;				// Label widget
+	GtkWidget			*height_button;				//
 
-	GtkWidget			*start_label;			// Label widget
-	GtkWidget			*start_button;			//
+	GtkWidget			*start_label;				// Label widget
+	GtkWidget			*start_button;				//
 
-	GtkWidget			*finish_label;			// Label widget
-	GtkWidget			*finish_button;			//
+	GtkWidget			*finish_label;				// Label widget
+	GtkWidget			*finish_button;				//
 
-	GtkWidget			*external_link_label;	// Label widget
-	GtkWidget			*external_link_entry;	// Widget for accepting an external link for clicking on
+	GtkWidget			*external_link_label;			// Label widget
+	GtkWidget			*external_link_entry;			// Widget for accepting an external link for clicking on
 
-	layer_highlight		*tmp_highlight_ob;		// Temporary highlight layer object
+	layer_highlight			*tmp_highlight_ob;			// Temporary highlight layer object
 
 
 	// Initialise some things
@@ -842,39 +842,39 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean request_file)
 {
 	// Local variables
-	GtkDialog			*image_dialog;			// Widget for the dialog
-	GtkWidget			*image_table;			// Table used for neat layout of the dialog box
-	gint				dialog_result;			// Catches the return code from the dialog box
-	guint				row_counter = 0;		// Used to count which row things are up to
+	GtkDialog			*image_dialog;				// Widget for the dialog
+	GtkWidget			*image_table;				// Table used for neat layout of the dialog box
+	gint				dialog_result;				// Catches the return code from the dialog box
+	guint				row_counter = 0;			// Used to count which row things are up to
 
-	GtkWidget			*path_widget;			// File selection widget
-	GString				*path_gstring;			// Holds the file selection path
+	GtkWidget			*path_widget;				// File selection widget
+	GString				*path_gstring;				// Holds the file selection path
 
-	GtkWidget			*image_label;			// Label widget
-	GtkWidget			*image_entry;			//
+	GtkWidget			*image_label;				// Label widget
+	GtkWidget			*image_entry;				//
 
-	GtkWidget			*x_off_label_start;		// Label widget
-	GtkWidget			*x_off_button_start;	//
+	GtkWidget			*x_off_label_start;			// Label widget
+	GtkWidget			*x_off_button_start;			//
 
-	GtkWidget			*y_off_label_start;		// Label widget
-	GtkWidget			*y_off_button_start;	//
+	GtkWidget			*y_off_label_start;			// Label widget
+	GtkWidget			*y_off_button_start;			//
 
-	GtkWidget			*x_off_label_finish;	// Label widget
-	GtkWidget			*x_off_button_finish;	//
+	GtkWidget			*x_off_label_finish;			// Label widget
+	GtkWidget			*x_off_button_finish;			//
 
-	GtkWidget			*y_off_label_finish;	// Label widget
-	GtkWidget			*y_off_button_finish;	//
+	GtkWidget			*y_off_label_finish;			// Label widget
+	GtkWidget			*y_off_button_finish;			//
 
-	GtkWidget			*start_label;			// Label widget
-	GtkWidget			*start_button;			//
+	GtkWidget			*start_label;				// Label widget
+	GtkWidget			*start_button;				//
 
-	GtkWidget			*finish_label;			// Label widget
-	GtkWidget			*finish_button;			//
+	GtkWidget			*finish_label;				// Label widget
+	GtkWidget			*finish_button;				//
 
-	GtkWidget			*external_link_label;	// Label widget
-	GtkWidget			*external_link_entry;	// Widget for accepting an external link for clicking on
+	GtkWidget			*external_link_label;			// Label widget
+	GtkWidget			*external_link_entry;			// Widget for accepting an external link for clicking on
 
-	layer_image			*tmp_image_ob;			// Temporary layer object
+	layer_image			*tmp_image_ob;				// Temporary layer object
 
 
 	// Initialise some things
@@ -1062,32 +1062,32 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean request_file)
 {
 	// Local variables
-	GtkDialog			*mouse_dialog;			// Widget for the dialog
-	GtkWidget			*mouse_table;			// Table used for neat layout of the dialog box
-	gint				dialog_result;			// Catches the return code from the dialog box
-	guint				row_counter = 0;		// Used to count which row things are up to
+	GtkDialog			*mouse_dialog;				// Widget for the dialog
+	GtkWidget			*mouse_table;				// Table used for neat layout of the dialog box
+	gint				dialog_result;				// Catches the return code from the dialog box
+	guint				row_counter = 0;			// Used to count which row things are up to
 
-	GtkWidget			*x_off_label_start;		// Label widget
-	GtkWidget			*x_off_button_start;	//
+	GtkWidget			*x_off_label_start;			// Label widget
+	GtkWidget			*x_off_button_start;			//
 
-	GtkWidget			*y_off_label_start;		// Label widget
-	GtkWidget			*y_off_button_start;	//
+	GtkWidget			*y_off_label_start;			// Label widget
+	GtkWidget			*y_off_button_start;			//
 
-	GtkWidget			*x_off_label_finish;	// Label widget
-	GtkWidget			*x_off_button_finish;	//
+	GtkWidget			*x_off_label_finish;			// Label widget
+	GtkWidget			*x_off_button_finish;			//
 
-	GtkWidget			*y_off_label_finish;	// Label widget
-	GtkWidget			*y_off_button_finish;	//
+	GtkWidget			*y_off_label_finish;			// Label widget
+	GtkWidget			*y_off_button_finish;			//
 
-	GtkWidget			*start_label;			// Label widget
-	GtkWidget			*start_button;			//
+	GtkWidget			*start_label;				// Label widget
+	GtkWidget			*start_button;				//
 
-	GtkWidget			*finish_label;			// Label widget
-	GtkWidget			*finish_button;			//
+	GtkWidget			*finish_label;				// Label widget
+	GtkWidget			*finish_button;				//
 
-	GtkWidget			*click_button;			// Label widget
+	GtkWidget			*click_button;				// Label widget
 
-	layer_mouse			*tmp_mouse_ob;			// Temporary layer object
+	layer_mouse			*tmp_mouse_ob;				// Temporary layer object
 
 
 	// Initialise some things
@@ -1220,45 +1220,45 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 {
 	// Local variables
-	GtkDialog			*text_dialog;			// Widget for the text dialog
-	GtkWidget			*text_table;			// Table used for neat layout of the dialog box
-	gint				dialog_result;			// Catches the return code from the dialog box
-	guint				row_counter = 0;		// Used to count which row things are up to
+	GtkDialog			*text_dialog;				// Widget for the text dialog
+	GtkWidget			*text_table;				// Table used for neat layout of the dialog box
+	gint				dialog_result;				// Catches the return code from the dialog box
+	guint				row_counter = 0;			// Used to count which row things are up to
 
-	GtkWidget			*text_frame;			// Frame to go around the text widget
+	GtkWidget			*text_frame;				// Frame to go around the text widget
 	GtkWidget			*text_view;				// Widget for accepting the new text data
 
-	GtkWidget			*name_label;			// Label widget
-	GtkWidget			*name_entry;			// Widget for accepting the name of the new layer
+	GtkWidget			*name_label;				// Label widget
+	GtkWidget			*name_entry;				// Widget for accepting the name of the new layer
 
-	GtkWidget			*color_label;			// Label widget
-	GtkWidget			*color_button;			// Color selection button
+	GtkWidget			*color_label;				// Label widget
+	GtkWidget			*color_button;				// Color selection button
 
-	GtkWidget			*x_off_label_start;		// Label widget
-	GtkWidget			*x_off_button_start;	//
+	GtkWidget			*x_off_label_start;			// Label widget
+	GtkWidget			*x_off_button_start;			//
 
-	GtkWidget			*y_off_label_start;		// Label widget
-	GtkWidget			*y_off_button_start;	//
+	GtkWidget			*y_off_label_start;			// Label widget
+	GtkWidget			*y_off_button_start;			//
 
-	GtkWidget			*x_off_label_finish;	// Label widget
-	GtkWidget			*x_off_button_finish;	//
+	GtkWidget			*x_off_label_finish;			// Label widget
+	GtkWidget			*x_off_button_finish;			//
 
-	GtkWidget			*y_off_label_finish;	// Label widget
-	GtkWidget			*y_off_button_finish;	//
+	GtkWidget			*y_off_label_finish;			// Label widget
+	GtkWidget			*y_off_button_finish;			//
 
-	GtkWidget			*font_label;			// Label widget
-	GtkWidget			*font_button;			//
+	GtkWidget			*font_label;				// Label widget
+	GtkWidget			*font_button;				//
 
-	GtkWidget			*start_label;			// Label widget
-	GtkWidget			*start_button;			//
+	GtkWidget			*start_label;				// Label widget
+	GtkWidget			*start_button;				//
 
-	GtkWidget			*finish_label;			// Label widget
-	GtkWidget			*finish_button;			//
+	GtkWidget			*finish_label;				// Label widget
+	GtkWidget			*finish_button;				//
 
-	GtkWidget			*external_link_label;	// Label widget
-	GtkWidget			*external_link_entry;	// Widget for accepting an external link for clicking on
+	GtkWidget			*external_link_label;			// Label widget
+	GtkWidget			*external_link_entry;			// Widget for accepting an external link for clicking on
 
-	layer_text			*tmp_text_ob;			// Temporary text layer object
+	layer_text			*tmp_text_ob;				// Temporary text layer object
 
 
 	// Initialise some things
@@ -1433,10 +1433,10 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 void draw_bounding_box(GtkWidget *widget, GdkRegion *region)
 {
 	// Local variables
-	GdkPoint				point_array[5];				// Holds the boundary points of the lines to draw
+	GdkPoint			point_array[5];				// Holds the boundary points of the lines to draw
 
 	GdkRectangle			*tmp_rectangle_array[1];
-	gint					tmp_gint;
+	gint				tmp_gint;
 	
 
 	gdk_region_offset(region, 1, 2);
@@ -1481,7 +1481,7 @@ void draw_bounding_box(GtkWidget *widget, GdkRegion *region)
 void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gint width, gint height, guint32 fill_color, guint32 border_color)
 {
 	// Local variables
-	GdkPixbuf				*highlight_pixbuf;	// GDK Pixbuf used for highlighting
+	GdkPixbuf			*highlight_pixbuf;			// GDK Pixbuf used for highlighting
 
 
 	// Create a horizontal line
@@ -1494,28 +1494,28 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 	gdk_pixbuf_fill(highlight_pixbuf, border_color);
 
 	// Composite the line onto the backing store - top line
-	gdk_pixbuf_composite(highlight_pixbuf,		// Source pixbuf
-		tmp_pixbuf,								// Destination pixbuf
-		x_offset,								// X offset
-		y_offset,								// Y offset
-		width,									// Width
-		2,										// Height
-		0, 0,									// Source offsets
-		1, 1,									// Scale factor (1 == no scale)
+	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
+		tmp_pixbuf,							// Destination pixbuf
+		x_offset,							// X offset
+		y_offset,							// Y offset
+		width,								// Width
+		2,								// Height
+		0, 0,								// Source offsets
+		1, 1,								// Scale factor (1 == no scale)
 		GDK_INTERP_NEAREST,						// Scaling type
-		255);									// Alpha
+		255);								// Alpha
 
 	// Composite the line onto the backing store - bottom line
-	gdk_pixbuf_composite(highlight_pixbuf,		// Source pixbuf
-		tmp_pixbuf,								// Destination pixbuf
-		x_offset,								// X offset
-		y_offset + height - 1,					// Y offset
-		width,									// Width
-		2,										// Height
-		0, 0,									// Source offsets
-		1, 1,									// Scale factor (1 == no scale)
+	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
+		tmp_pixbuf,							// Destination pixbuf
+		x_offset,							// X offset
+		y_offset + height - 1,						// Y offset
+		width,								// Width
+		2,								// Height
+		0, 0,								// Source offsets
+		1, 1,								// Scale factor (1 == no scale)
 		GDK_INTERP_NEAREST,						// Scaling type
-		255);									// Alpha
+		255);								// Alpha
 
 	// Free the temporary pixbuf
 	g_object_unref(highlight_pixbuf);
@@ -1530,28 +1530,28 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 	gdk_pixbuf_fill(highlight_pixbuf, border_color);
 
 	// Composite the line onto the backing store - left side
-	gdk_pixbuf_composite(highlight_pixbuf,		// Source pixbuf
-		tmp_pixbuf,								// Destination pixbuf
-		x_offset,								// X offset
-		y_offset,								// Y offset
-		2,										// Width
-		height,									// Height
-		0, 0,									// Source offsets
-		1, 1,									// Scale factor (1 == no scale)
+	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
+		tmp_pixbuf,							// Destination pixbuf
+		x_offset,							// X offset
+		y_offset,							// Y offset
+		2,								// Width
+		height,								// Height
+		0, 0,								// Source offsets
+		1, 1,								// Scale factor (1 == no scale)
 		GDK_INTERP_NEAREST,						// Scaling type
-		255);									// Alpha
+		255);								// Alpha
 
 	// Composite the line onto the backing store - right side
-	gdk_pixbuf_composite(highlight_pixbuf,		// Source pixbuf
-		tmp_pixbuf,								// Destination pixbuf
-		x_offset + width - 1,					// X offset
-		y_offset,								// Y offset
-		2,										// Width
-		height,									// Height
-		0, 0,									// Source offsets
-		1, 1,									// Scale factor (1 == no scale)
+	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
+		tmp_pixbuf,							// Destination pixbuf
+		x_offset + width - 1,						// X offset
+		y_offset,							// Y offset
+		2,								// Width
+		height,								// Height
+		0, 0,								// Source offsets
+		1, 1,								// Scale factor (1 == no scale)
 		GDK_INTERP_NEAREST,						// Scaling type
-		255);									// Alpha
+		255);								// Alpha
 
 	// Free the temporary pixbuf
 	g_object_unref(highlight_pixbuf);
@@ -1561,16 +1561,16 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 	gdk_pixbuf_fill(highlight_pixbuf, fill_color);
 
 	// Composite the inner highlight box onto the backing store
-	gdk_pixbuf_composite(highlight_pixbuf,		// Source pixbuf
-		tmp_pixbuf,								// Destination pixbuf
-		x_offset + 1,							// X offset
-		y_offset + 1,							// Y offset
-		width - 2,								// Width
-		height - 2,								// Height
-		0, 0,									// Source offsets
-		1, 1,									// Scale factor (1 == no scale)
-		GDK_INTERP_NEAREST,						// Scaling type
-		255);									// Alpha
+	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
+			     tmp_pixbuf,					// Destination pixbuf
+			     x_offset + 1,					// X offset
+			     y_offset + 1,					// Y offset
+			     width - 2,						// Width
+			     height - 2,					// Height
+			     0, 0,						// Source offsets
+			     1, 1,						// Scale factor (1 == no scale)
+			     GDK_INTERP_NEAREST,				// Scaling type
+			     255);						// Alpha
 
 	// Free the temporary pixbuf
 	g_object_unref(highlight_pixbuf);
@@ -1582,11 +1582,11 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 void draw_thumbnail(GList *which_slide)
 {
 	// Local variables
-	gint				current_height;			// The height of the current thumbnail
+	gint				current_height;				// The height of the current thumbnail
 
 	GList				*tmp_glist;				// Temporary GList
 	GtkImage			*tmp_image;				//
-	GdkPixbuf			*tmp_pixbuf;			//
+	GdkPixbuf			*tmp_pixbuf;				//
 
 
 	// If the current slide hasn't been initialised, don't run this function
@@ -1622,7 +1622,7 @@ void draw_thumbnail(GList *which_slide)
 void draw_timeline(void)
 {
 	// Local variables
-	slide				*slide_pointer;			// Points to the presently processing slide
+	slide				*slide_pointer;				// Points to the presently processing slide
 
 	GList				*tmp_glist;				// Temporary GList
 
@@ -1658,12 +1658,12 @@ void draw_timeline(void)
 void draw_workspace(void)
 {
 	// Local variables
-	GdkPixbuf				*bordered_pixbuf;	// Final pixbuf
+	GdkPixbuf				*bordered_pixbuf;		// Final pixbuf
 
-	GdkColormap				*tmp_colormap;		// Temporary colormap
-	GdkPixbuf				*tmp_pixbuf;		//
-	GdkPixmap				*tmp_pixmap;		//
-	GdkRectangle			tmp_rectangle;		//
+	GdkColormap				*tmp_colormap;			// Temporary colormap
+	GdkPixbuf				*tmp_pixbuf;			//
+	GdkPixmap				*tmp_pixmap;			//
+	GdkRectangle				tmp_rectangle;			//
 
 
 	// If the current slide hasn't been initialised, don't run this function
@@ -1808,35 +1808,35 @@ void enable_main_toolbar_buttons(void)
 void image_crop(void)
 {
 	// Local variables
-	GtkDialog			*crop_dialog;			// Widget for the dialog
-	GtkWidget			*crop_table;			// Table used for neat layout of the dialog box
-	guint				row_counter = 0;		// Used to count which row things are up to
-	gint				dialog_result;			// Catches the return code from the dialog box
+	GtkDialog			*crop_dialog;				// Widget for the dialog
+	GtkWidget			*crop_table;				// Table used for neat layout of the dialog box
+	guint				row_counter = 0;			// Used to count which row things are up to
+	gint				dialog_result;				// Catches the return code from the dialog box
 
-	GList				*layer_pointer;			// Points to the layers in the selected slide
-	GtkWidget			*list_widget;			// Points to the timeline widget
+	GList				*layer_pointer;				// Points to the layers in the selected slide
+	GtkWidget			*list_widget;				// Points to the timeline widget
 	gint				new_height;				// Hold the height of the cropped area
-	GdkPixbuf			*new_pixbuf;			// Holds the cropped image data
+	GdkPixbuf			*new_pixbuf;				// Holds the cropped image data
 	gint				new_width;				// Hold the width of the cropped area
-	guint				selected_row;			// Holds the number of the row that is selected
-	layer				*this_layer;			// Temporary layer
+	guint				selected_row;				// Holds the number of the row that is selected
+	layer				*this_layer;				// Temporary layer
 
-	GtkWidget			*left_label;			// Label widget
-	GtkWidget			*left_button;			//
+	GtkWidget			*left_label;				// Label widget
+	GtkWidget			*left_button;				//
 
-	GtkWidget			*right_label;			// Label widget
-	GtkWidget			*right_button;			//
+	GtkWidget			*right_label;				// Label widget
+	GtkWidget			*right_button;				//
 
 	GtkWidget			*top_label;				// Label widget
-	GtkWidget			*top_button;			//
+	GtkWidget			*top_button;				//
 
-	GtkWidget			*bottom_label;			// Label widget
-	GtkWidget			*bottom_button;			//
+	GtkWidget			*bottom_label;				// Label widget
+	GtkWidget			*bottom_button;				//
 
-	GtkTreeViewColumn	*tmp_column;			// Temporary column
+	GtkTreeViewColumn		*tmp_column;				// Temporary column
 	gint				tmp_int;				// Temporary int
 	GtkTreePath			*tmp_path;				// Temporary path
-	GdkPixbuf			*tmp_pixbuf;			// Temporary pixbuf
+	GdkPixbuf			*tmp_pixbuf;				// Temporary pixbuf
 
 
 	// If no project is loaded then don't run this function
@@ -1990,14 +1990,14 @@ void image_crop(void)
 void layer_delete(void)
 {
 	// Local variables
-	GList				*layer_pointer;			// Points to the layers in the selected slide
-	GtkListStore		*list_pointer;			//
-	GtkWidget			*list_widget;			// Points to the timeline widget
+	GList				*layer_pointer;				// Points to the layers in the selected slide
+	GtkListStore			*list_pointer;				//
+	GtkWidget			*list_widget;				// Points to the timeline widget
 	guint				num_layers;				// Number of layers
-	guint				selected_row;			// Holds the number of the row that is selected
+	guint				selected_row;				// Holds the number of the row that is selected
 
 	gboolean			tmp_bool;				// Temporary boolean
-	GtkTreeViewColumn	*tmp_column;			// Temporary column
+	GtkTreeViewColumn		*tmp_column;				// Temporary column
 	GtkTreePath			*tmp_path;				// Temporary path
 	layer				*tmp_layer;				// Temporary layer
 
@@ -2067,23 +2067,23 @@ void layer_delete(void)
 void layer_edit(void)
 {
 	// Local variables
-	GList				*layer_pointer;			// Points to the layers in the selected slide
-	GtkListStore		*list_pointer;			//
-	GtkWidget			*list_widget;			// Points to the timeline widget
+	GList				*layer_pointer;				// Points to the layers in the selected slide
+	GtkListStore			*list_pointer;				//
+	GtkWidget			*list_widget;				// Points to the timeline widget
 	guint				num_layers;				// Number of layers
-	guint				selected_row;			// Holds the row that is selected
-	gboolean			return_code;			// Did the edit dialog return ok?
+	guint				selected_row;				// Holds the row that is selected
+	gboolean			return_code;				// Did the edit dialog return ok?
 
 	GtkTextIter			text_start;				// The start position of the text buffer
 	GtkTextIter			text_end;				// The end position of the text buffer
 
-	GtkTreeViewColumn	*tmp_column;			// Temporary column
-	layer_highlight		*tmp_highlight_ob;		// Temporary highlight layer object
-	layer_image			*tmp_image_ob;			// Temporary image layer object
+	GtkTreeViewColumn		*tmp_column;				// Temporary column
+	layer_highlight			*tmp_highlight_ob;			// Temporary highlight layer object
+	layer_image			*tmp_image_ob;				// Temporary image layer object
 	GtkTreeIter			*tmp_iter;				// Temporary iter
 	layer				*tmp_layer;				// Temporary layer
-	layer_mouse			*tmp_mouse_ob;			// Temporary mouse layer object
-	layer_text			*tmp_text_ob;			// Temporary text layer object
+	layer_mouse			*tmp_mouse_ob;				// Temporary mouse layer object
+	layer_text			*tmp_text_ob;				// Temporary text layer object
 	GtkTreePath			*tmp_path;				// Temporary path
 
 
@@ -2219,13 +2219,13 @@ void layer_edit(void)
 void layer_move_down(void)
 {
 	// Local variables
-	GList				*below_layer;			// The layer below the selected one
-	GList				*layer_pointer;			// Points to the layers in the selected slide
+	GList				*below_layer;				// The layer below the selected one
+	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				num_layers;				// The number of layers in the select slide
 	GList				*our_layer;				// The selected layer
-	gint				selected_row;			// Holds the row that is selected
+	gint				selected_row;				// Holds the row that is selected
 
-	GtkTreeViewColumn	*tmp_column;			// Temporary column
+	GtkTreeViewColumn		*tmp_column;				// Temporary column
 	GList				*tmp_glist;				// Temporary GList
 	GtkTreePath			*tmp_path;				// Temporary path
 
@@ -2280,12 +2280,12 @@ void layer_move_down(void)
 void layer_move_up(void)
 {
 	// Local variables
-	GList				*above_layer;			// The layer above the selected one
-	GList				*layer_pointer;			// Points to the layers in the selected slide
+	GList				*above_layer;				// The layer above the selected one
+	GList				*layer_pointer;				// Points to the layers in the selected slide
 	GList				*our_layer;				// The selected layer
-	guint				selected_row;			// Holds the row that is selected
+	guint				selected_row;				// Holds the row that is selected
 
-	GtkTreeViewColumn	*tmp_column;			// Temporary column
+	GtkTreeViewColumn		*tmp_column;				// Temporary column
 	GList				*tmp_glist;				// Temporary GList
 	gint				tmp_int;				// Temporary int
 	GtkTreePath			*tmp_path;				// Temporary path
@@ -2349,10 +2349,10 @@ void layer_move_up(void)
 void layer_new_highlight(void)
 {
 	// Local variables
-	GList				*layer_pointer;			// Points to the layers in the selected slide
-	gboolean			return_code;			// Catches a TRUE/FALSE return value
+	GList				*layer_pointer;				// Points to the layers in the selected slide
+	gboolean			return_code;				// Catches a TRUE/FALSE return value
 
-	layer_highlight		*tmp_highlight_ob;		// Temporary highlight layer object
+	layer_highlight			*tmp_highlight_ob;			// Temporary highlight layer object
 	GtkTreeIter			*tmp_iter;				// Temporary iter
 	layer				*tmp_layer;				// Temporary layer
 	GtkTreePath			*tmp_path;				// Temporary GtkPath
@@ -2435,10 +2435,10 @@ void layer_new_highlight(void)
 void layer_new_image(void)
 {
 	// Local variables
-	GList				*layer_pointer;			// Points to the layers in the selected slide
-	gboolean			return_code;			// Catches a TRUE/FALSE return value
+	GList				*layer_pointer;				// Points to the layers in the selected slide
+	gboolean			return_code;				// Catches a TRUE/FALSE return value
 
-	layer_image			*tmp_image_ob;			// Temporary image layer object
+	layer_image			*tmp_image_ob;				// Temporary image layer object
 	GtkTreeIter			*tmp_iter;				// Temporary iter
 	layer				*tmp_layer;				// Temporary layer
 	GtkTreePath			*tmp_path;				// Temporary GtkPath
@@ -2521,10 +2521,10 @@ void layer_new_image(void)
 void layer_new_mouse(void)
 {
 	// Local variables
-	GList				*layer_pointer;			// Points to the layers in the selected slide
-	gboolean			return_code;			// Catches a TRUE/FALSE return value
+	GList				*layer_pointer;				// Points to the layers in the selected slide
+	gboolean			return_code;				// Catches a TRUE/FALSE return value
 
-	layer_mouse			*tmp_mouse_ob;			// Temporary mouse layer object
+	layer_mouse			*tmp_mouse_ob;				// Temporary mouse layer object
 	GtkTreeIter			*tmp_iter;				// Temporary iter
 	layer				*tmp_layer;				// Temporary layer
 	GtkTreePath			*tmp_path;				// Temporary GtkPath
@@ -2608,8 +2608,8 @@ void layer_new_mouse(void)
 void layer_new_text(void)
 {
 	// Local variables
-	GList				*layer_pointer;			// Points to the layers in the selected slide
-	gboolean			return_code;			// Catches a TRUE/FALSE return value
+	GList				*layer_pointer;				// Points to the layers in the selected slide
+	gboolean			return_code;				// Catches a TRUE/FALSE return value
 
 	GtkTextIter			text_start;				// The start position of the text buffer
 	GtkTextIter			text_end;				// The end position of the text buffer
@@ -2617,7 +2617,7 @@ void layer_new_text(void)
 	GtkTreeIter			*tmp_iter;				// Temporary iter
 	layer				*tmp_layer;				// Temporary layer
 	GtkTreePath			*tmp_path;				// Temporary GtkPath
-	layer_text			*tmp_text_ob;			// Temporary text layer object
+	layer_text			*tmp_text_ob;				// Temporary text layer object
 
 
 	// If no project is loaded then don't run this function
@@ -2718,8 +2718,8 @@ void menu_edit_preferences(void)
 	GtkWidget			*label_default_project_folder;		// Default Project Folder
 	GtkWidget			*button_default_project_folder;		//
 
-	GtkWidget			*label_screenshot_folder;			// Screenshot Folder
-	GtkWidget			*button_screenshot_folder;			//
+	GtkWidget			*label_screenshot_folder;		// Screenshot Folder
+	GtkWidget			*button_screenshot_folder;		//
 
 	GtkWidget			*label_default_output_folder;		// Default Output path
 	GtkWidget			*button_default_output_folder;		//
@@ -2736,40 +2736,40 @@ void menu_edit_preferences(void)
 	GtkWidget			*label_default_slide_length;		// Default Slide Length
 	GtkWidget			*button_default_slide_length;		//
 
-	GtkWidget			*label_preview_width;				// Preview Width
-	GtkWidget			*button_preview_width;				//
+	GtkWidget			*label_preview_width;			// Preview Width
+	GtkWidget			*button_preview_width;			//
 
-	GtkWidget			*label_icon_height;					// Icon Height
-	GtkWidget			*button_icon_height;				//
+	GtkWidget			*label_icon_height;			// Icon Height
+	GtkWidget			*button_icon_height;			//
 
-	GtkWidget			*label_default_zoom_level;			// Default Zoom Level
-	GtkWidget			*entry_default_zoom_level;			//
+	GtkWidget			*label_default_zoom_level;		// Default Zoom Level
+	GtkWidget			*entry_default_zoom_level;		//
 
-	GtkWidget			*label_default_bg_colour;			// Default background colour
-	GtkWidget			*button_default_bg_colour;			// Color button
+	GtkWidget			*label_default_bg_colour;		// Default background colour
+	GtkWidget			*button_default_bg_colour;		// Color button
 
-	GtkWidget			*label_scaling_quality;				// Scaling quality
-	GtkWidget			*button_scaling_quality;			//
+	GtkWidget			*label_scaling_quality;			// Scaling quality
+	GtkWidget			*button_scaling_quality;		//
 
 	// * Project variables *
 
-	GtkWidget			*label_project_name;				// Project Name
-	GtkWidget			*entry_project_name;				//
+	GtkWidget			*label_project_name;			// Project Name
+	GtkWidget			*entry_project_name;			//
 
-	GtkWidget			*label_project_folder;				// Project Folder
-	GtkWidget			*button_project_folder;				//
+	GtkWidget			*label_project_folder;			// Project Folder
+	GtkWidget			*button_project_folder;			//
 
-	GtkWidget			*label_output_folder;				// Output Folder
-	GtkWidget			*button_output_folder;				//
+	GtkWidget			*label_output_folder;			// Output Folder
+	GtkWidget			*button_output_folder;			//
 
-	GtkWidget			*label_output_quality;				// Output Quality
-	GtkWidget			*button_output_quality;				//
+	GtkWidget			*label_output_quality;			// Output Quality
+	GtkWidget			*button_output_quality;			//
 
-	GtkWidget			*label_slide_length;				// Slide Length
-	GtkWidget			*button_slide_length;				//
+	GtkWidget			*label_slide_length;			// Slide Length
+	GtkWidget			*button_slide_length;			//
 
-	GtkWidget			*label_frames_per_second;			// Slide Length
-	GtkWidget			*button_frames_per_second;			//
+	GtkWidget			*label_frames_per_second;		// Slide Length
+	GtkWidget			*button_frames_per_second;		//
 
 
 	// Initialise various things
@@ -3044,18 +3044,18 @@ void menu_edit_preferences(void)
 void menu_export_flash_animation(void)
 {
 	// Local variables
-	GtkFileFilter		*all_filter;			// Filter for *.*
-	GError				*error = NULL;			// Pointer to error return structure
-	GtkWidget 			*export_dialog;			// Dialog widget
+	GtkFileFilter			*all_filter;				// Filter for *.*
+	GError				*error = NULL;				// Pointer to error return structure
+	GtkWidget 			*export_dialog;				// Dialog widget
 	gchar				*filename;				// Pointer to the chosen file name
-	GtkFileFilter		*flash_filter;			// Filter for *.swf
-	GIOStatus			return_value;			// Return value used in most GIOChannel functions
-	GByteArray			*swf_buffer;			// Buffer for the swf output
-	gboolean			unique_name;			// Switch used to mark when we have a valid filename
-	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
+	GtkFileFilter			*flash_filter;				// Filter for *.swf
+	GIOStatus			return_value;				// Return value used in most GIOChannel functions
+	GByteArray			*swf_buffer;				// Buffer for the swf output
+	gboolean			unique_name;				// Switch used to mark when we have a valid filename
+	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
 
 	gsize				tmp_gsize;				// Temporary gsize
-	GString				*tmp_gstring;			// Temporary GString
+	GString				*tmp_gstring;				// Temporary GString
 	gint				tmp_int;				// Temporary integer
 
 
@@ -3231,22 +3231,22 @@ void menu_export_flash_animation(void)
 void menu_export_svg_animation(void)
 {
 	// Local variables
-	GtkFileFilter		*all_filter;			// Filter for *.*
-	GError				*error = NULL;			// Pointer to error return structure
-	GtkWidget 			*export_dialog;			// Dialog widget
+	GtkFileFilter			*all_filter;				// Filter for *.*
+	GError				*error = NULL;				// Pointer to error return structure
+	GtkWidget 			*export_dialog;				// Dialog widget
 	gchar				*filename;				// Pointer to the chosen file name
-	gfloat				control_bar_x_offset;	// X offset for the onscreen play button
-	gfloat				control_bar_y_offset;	// Y offset for the onscreen play button
-	GIOStatus			return_value;			// Return value used in most GIOChannel functions
-	GList				*slide_pointer;			// Points to the presently processing slide
-	GtkFileFilter		*svg_filter;			// Filter for *.svg
-	gboolean			unique_name;			// Switch used to mark when we have a valid filename
-	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
+	gfloat				control_bar_x_offset;		   	// X offset for the onscreen play button
+	gfloat				control_bar_y_offset;		   	// Y offset for the onscreen play button
+	GIOStatus			return_value;				// Return value used in most GIOChannel functions
+	GList				*slide_pointer;				// Points to the presently processing slide
+	GtkFileFilter			*svg_filter;				// Filter for *.svg
+	gboolean			unique_name;				// Switch used to mark when we have a valid filename
+	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
 	gfloat				x_scale;				// Width scale factor for the scene
 	gfloat				y_scale;				// Height scale factor for the scene
 
 	gsize				tmp_gsize;				// Temporary gsize
-	GString				*tmp_gstring;			// Temporary GString
+	GString				*tmp_gstring;				// Temporary GString
 
 
 	// Check if there is an active project
@@ -4175,23 +4175,23 @@ void menu_file_open(void)
 void menu_file_save(void)
 {
 	// Local variables
-	GtkFileFilter		*all_filter;			// Filter for *.*
-	gchar				*dir_name_part;			// Briefly used for holding a directory name
+	GtkFileFilter			*all_filter;				// Filter for *.*
+	gchar				*dir_name_part;				// Briefly used for holding a directory name
 	gchar				*filename;				// Pointer to the chosen file name
-	gchar				*file_name_part;		// Briefly used for holding a file name
-	GtkFileFilter		*flame_filter;			// Filter for *.flame
-	GtkWidget 			*save_dialog;			// Dialog widget
-	gboolean			unique_name;			// Switch used to mark when we have a valid filename
-	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
+	gchar				*file_name_part;			// Briefly used for holding a file name
+	GtkFileFilter			*flame_filter;				// Filter for *.flame
+	GtkWidget 			*save_dialog;				// Dialog widget
+	gboolean			unique_name;				// Switch used to mark when we have a valid filename
+	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
 
-	xmlDocPtr			document_pointer;		// Points to the XML document structure in memory
+	xmlDocPtr			document_pointer;			// Points to the XML document structure in memory
 	xmlNodePtr			slide_root;				// Points to the root of the slide data
-	xmlNodePtr			meta_pointer;			// Points to the meta-data node
-	xmlNodePtr			pref_pointer;			// Points to the preferences node
+	xmlNodePtr			meta_pointer;				// Points to the meta-data node
+	xmlNodePtr			pref_pointer;				// Points to the preferences node
 	xmlNodePtr			root_node;				// Points to the root node
-	xmlSaveCtxt			*save_context;			// Points to the save context
+	xmlSaveCtxt			*save_context;				// Points to the save context
 
-	GString				*tmp_gstring;			// Temporary GString
+	GString				*tmp_gstring;				// Temporary GString
 	gint				tmp_int;				// Temporary integer
 	glong				tmp_long;				// Temporary long integer
 
@@ -4434,29 +4434,29 @@ void menu_help_website(void)
 void menu_screenshots_capture(void)
 {
 	// Local variables
-	GError				*error = NULL;			// Pointer to error return structure
-	gchar				*full_file_name;		// Holds the fully worked out file name to save as
-	GIOChannel			*output_file;			// The output file handle
-	GIOStatus			return_value;			// Return value used in most GIOChannel functions
+	GError				*error = NULL;				// Pointer to error return structure
+	gchar				*full_file_name;			// Holds the fully worked out file name to save as
+	GIOChannel			*output_file;				// The output file handle
+	GIOStatus			return_value;				// Return value used in most GIOChannel functions
 
-	GtkDialog			*capture_dialog;		// Widget for the dialog
-	GtkWidget			*capture_table;			// Table used for neat layout of the dialog box
+	GtkDialog			*capture_dialog;			// Widget for the dialog
+	GtkWidget			*capture_table;				// Table used for neat layout of the dialog box
 
-	GtkWidget			*x_offset_label;		// Label widget
-	GtkWidget			*x_offset_button;		// Widget for accepting the new X Offset data
+	GtkWidget			*x_offset_label;			// Label widget
+	GtkWidget			*x_offset_button;			// Widget for accepting the new X Offset data
 
-	GtkWidget			*y_offset_label;		// Label widget
-	GtkWidget			*y_offset_button;		// Widget for accepting the new Y Offset data
+	GtkWidget			*y_offset_label;			// Label widget
+	GtkWidget			*y_offset_button;			// Widget for accepting the new Y Offset data
 
-	GtkWidget			*x_length_label;		// Label widget
-	GtkWidget			*x_length_button;		// Widget for accepting the new X Length data
+	GtkWidget			*x_length_label;			// Label widget
+	GtkWidget			*x_length_button;			// Widget for accepting the new X Length data
 
-	GtkWidget			*y_length_label;		// Label widget
-	GtkWidget			*y_length_button;		// Widget for accepting the new Y Length data
+	GtkWidget			*y_length_label;			// Label widget
+	GtkWidget			*y_length_button;			// Widget for accepting the new Y Length data
 
-	GtkWidget			*key_combo_label;		// Label widget
+	GtkWidget			*key_combo_label;			// Label widget
 
-	gint				dialog_result;			// Catches the return code from the dialog box
+	gint				dialog_result;				// Catches the return code from the dialog box
 
 	GdkScreen			*which_screen;				// Gets given the screen the monitor is on
 
@@ -4639,28 +4639,27 @@ void menu_screenshots_import(void)
 	GDir				*dir_ptr;				// Pointer to the directory entry structure
 	const gchar			*dir_entry;				// Holds a file name
 
-	GSList				*entries = NULL;		// Holds a list of screen shot file names
-	guint				largest_height = 0;		// Holds the height of the largest screenshot thus far
-	guint				largest_width = 0;		// Holds the width of the largest screenshot thus far
+	GSList				*entries = NULL;			// Holds a list of screen shot file names
+	guint				largest_height = 0;			// Holds the height of the largest screenshot thus far
+	guint				largest_width = 0;			// Holds the width of the largest screenshot thus far
 
-	gint				num_screenshots = 0;	// Switch to track if other screenshots already exist
+	gint				num_screenshots = 0;			// Switch to track if other screenshots already exist
 
-	GError				*error = NULL;			// Pointer to error return structure
+	GError				*error = NULL;				// Pointer to error return structure
 
-	guint				recent_message;			// Message identifier, for newest status bar message
+	guint				recent_message;				// Message identifier, for newest status bar message
 
 	slide				*tmp_slide;				// Temporary slide
 	layer				*tmp_layer;				// Temporary layer
-	layer_image			*tmp_image_ob;			// Temporary image layer
+	layer_image			*tmp_image_ob;				// Temporary image layer
 	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
-	GdkPixbuf			*tmp_gdk_pixbuf;		// Temporary GDK Pixbuf
-	GString				*tmp_string;			// Temporary string
-	gint				tmp_int = 0;			// Temporary integer
-	GdkRectangle		tmp_rect =				// Temporary rectangle covering the area of the status bar
-							{0,
-							 0,
-							 status_bar->allocation.width,
-							 status_bar->allocation.height};
+	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
+	GString				*tmp_string;				// Temporary string
+	gint				tmp_int = 0;				// Temporary integer
+	GdkRectangle			tmp_rect = {0,				// Temporary rectangle covering the area of the status bar
+						    0,
+						    status_bar->allocation.width,
+						    status_bar->allocation.height};
 
 
 	// Initialise various things
@@ -4889,17 +4888,17 @@ void menu_screenshots_import(void)
 void project_crop(void)
 {
 	// Local variables
-	GtkDialog			*crop_dialog;			// Widget for the dialog
-	GtkWidget			*crop_table;			// Table used for neat layout of the dialog box
-	guint				row_counter = 0;		// Used to count which row things are up to
-	gint				dialog_result;			// Catches the return code from the dialog box
+	GtkDialog			*crop_dialog;			        // Widget for the dialog
+	GtkWidget			*crop_table;			   	// Table used for neat layout of the dialog box
+	guint				row_counter = 0;			// Used to count which row things are up to
+	gint				dialog_result;				// Catches the return code from the dialog box
 
 	gint				bottom_value;
-	layer				*last_layer;			// Temporary layer
-	GList				*layer_pointer;			// Points to the layers in the selected slide
+	layer				*last_layer;				// Temporary layer
+	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				left_value;
 	gint				new_height;				// Hold the height of the cropped area
-	GdkPixbuf			*new_pixbuf;			// Holds the cropped image data
+	GdkPixbuf			*new_pixbuf;				// Holds the cropped image data
 	gint				new_width;				// Hold the width of the cropped area
 	gint				num_slides;				// Total number of layers
 	gint				right_value;
@@ -4907,20 +4906,20 @@ void project_crop(void)
 	slide				*slide_data;
 	gint				top_value;
 
-	GtkWidget			*left_label;			// Label widget
-	GtkWidget			*left_button;			//
+	GtkWidget			*left_label;				// Label widget
+	GtkWidget			*left_button;				//
 
-	GtkWidget			*right_label;			// Label widget
-	GtkWidget			*right_button;			//
+	GtkWidget			*right_label;				// Label widget
+	GtkWidget			*right_button;				//
 
 	GtkWidget			*top_label;				// Label widget
-	GtkWidget			*top_button;			//
+	GtkWidget			*top_button;				//
 
-	GtkWidget			*bottom_label;			// Label widget
-	GtkWidget			*bottom_button;			//
+	GtkWidget			*bottom_label;				// Label widget
+	GtkWidget			*bottom_button;				//
 
 	gint				tmp_int;				// Temporary int
-	GdkPixbuf			*tmp_pixbuf;			// Temporary pixbuf
+	GdkPixbuf			*tmp_pixbuf;				// Temporary pixbuf
 
 
 	// If no project is loaded then don't run this function
@@ -5128,7 +5127,7 @@ void slide_delete(void)
 {
 	// Local variables
 	gint				num_slides;				// Number of slides in the whole slide list
-	gint				slide_position;			// Which slide in the slide list we are deleting
+	gint				slide_position;				// Which slide in the slide list we are deleting
 
 	GList				*tmp_glist;				// Temporary GList
 
@@ -5178,9 +5177,9 @@ void slide_delete(void)
 void slide_insert(void)
 {
 	// Local variables
-	gint				slide_position;			// Which slide in the slide list we have selected
+	gint				slide_position;				// Which slide in the slide list we have selected
 
-	GdkPixbuf			*tmp_gdk_pixbuf;		// Temporary GDK Pixbuf
+	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
 	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
 	layer				*tmp_layer;				// Temporary layer
 	slide				*tmp_slide;				// Temporary slide
@@ -5282,10 +5281,10 @@ void slide_insert(void)
 void slide_move_down(void)
 {
 	// Local variables
-	GList				*next_slide;			// Pointer to the slide below
+	GList				*next_slide;				// Pointer to the slide below
 	gint				num_slides;				// The total number of slides
-	gint				slide_position;			// Which slide in the slide list we are moving
-	gpointer			this_slide_data;		// Pointer to the data for this slide
+	gint				slide_position;				// Which slide in the slide list we are moving
+	gpointer			this_slide_data;			// Pointer to the data for this slide
 
 
 	// Safety check
@@ -5317,9 +5316,9 @@ void slide_move_down(void)
 void slide_move_up(void)
 {
 	// Local variables
-	GList				*previous_slide;		// Pointer to the slide above
-	gint				slide_position;			// Which slide in the slide list we are moving
-	gpointer			this_slide_data;		// Pointer to the data for this slide
+	GList				*previous_slide;			// Pointer to the slide above
+	gint				slide_position;				// Which slide in the slide list we are moving
+	gpointer			this_slide_data;			// Pointer to the data for this slide
 
 
 	// Safety check
@@ -5362,14 +5361,14 @@ void slide_name_reset(void)
 void slide_name_set(void)
 {
 	// Local variables
-	GtkDialog			*slide_dialog;			// Widget for the dialog
-	GtkWidget			*dialog_table;			// Table used for neat layout of the dialog box
-	gint				dialog_result;			// Catches the return code from the dialog box
+	GtkDialog			*slide_dialog;				// Widget for the dialog
+	GtkWidget			*dialog_table;				// Table used for neat layout of the dialog box
+	gint				dialog_result;				// Catches the return code from the dialog box
 
-	GtkWidget			*name_label;			// Label widget
-	GtkWidget			*name_entry;			// Widget for accepting the name of the new layer
+	GtkWidget			*name_label;				// Label widget
+	GtkWidget			*name_entry;				// Widget for accepting the name of the new layer
 
-	GString				*tmp_gstring;			// Temporary GString
+	GString				*tmp_gstring;				// Temporary GString
 
 
 	// Initialise various things
@@ -5440,6 +5439,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.65  2007/06/24 03:56:56  vapour
+ * Aligned all of the comments for Sun Studio 12's display, to make things neat before going forwards.
+ *
  * Revision 1.64  2007/06/24 01:06:49  vapour
  * Removed the __sun workarounds for Solaris 10, as Solaris 11 should have the missing bits.
  *
