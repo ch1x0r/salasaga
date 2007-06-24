@@ -35,10 +35,7 @@
 #include <libgnome/gnome-url.h>
 
 // XML includes
-//#include <libxml/encoding.h>
-//#include <libxml/xmlmemory.h>
 #include <libxml/xmlsave.h>
-//#include <libxml/parser.h>
 
 // Flame Edit includes
 #include "flame-types.h"
@@ -105,36 +102,33 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
 void compress_layers_inner(gpointer element, gpointer user_data)
 {
 	// Local variables
-	GdkGC				*graphics_context;		// GDK graphics context
-	GdkScreen			*output_screen;			//
-	layer				*layer_pointer;			// Points to the data for this layer
+	GdkGC				*graphics_context;                      // GDK graphics context
+	GdkScreen			*output_screen;                         //
+	layer				*layer_pointer;                         // Points to the data for this layer
 
-	PangoContext		*pango_context;			// Pango context used for text rendering
-	PangoFontDescription	*font_description;	// Pango font description used for text rendering
-	PangoLayout			*pango_layout;			// Pango layout used for text rendering
-	gint				pango_height;			// Height of the Pango layout
-	gint				pango_width;			// Width of the Pango layout
+	PangoContext            	*pango_context;                         // Pango context used for text rendering
+	PangoFontDescription            *font_description;                      // Pango font description used for text rendering
+	PangoLayout			*pango_layout;                          // Pango layout used for text rendering
+	gint				pango_height;                           // Height of the Pango layout
+	gint				pango_width;                            // Width of the Pango layout
 
 	GtkTextIter			text_start;				// The start position of the text buffer
 	GtkTextIter			text_end;				// The end position of the text buffer
 
-	gint				pixbuf_width;			// Width of the backing pixbuf
-	gint				pixbuf_height;			// Height of the backing pixbuf
+	gint				pixbuf_width;                           // Width of the backing pixbuf
+	gint				pixbuf_height;                          // Height of the backing pixbuf
 	gint				x_offset;				//
 	gint				y_offset;				//
 	gint				width;					//
 	gint				height;					//
 
-	GdkColormap			*tmp_colormap;			// Temporary colormap
+	GdkColormap			*tmp_colormap;                          // Temporary colormap
 	gint				tmp_int;				// Temporary integer
-	GdkPixbuf			*tmp_pixbuf;			// GDK Pixbuf
-	GdkPixmap			*tmp_pixmap;			// GDK Pixmap
+	GdkPixbuf			*tmp_pixbuf;                            // GDK Pixbuf
+	GdkPixmap			*tmp_pixmap;                            // GDK Pixmap
 
-// fixme4:  Stuff not present out-of-the-box for Solaris
-#ifndef __sun
-	PangoMatrix			pango_matrix = PANGO_MATRIX_INIT;  // Required for positioning the pango layout
-	PangoRenderer		*pango_renderer;		// Pango renderer
-#endif
+	PangoMatrix                     pango_matrix = PANGO_MATRIX_INIT;       // Required for positioning the pango layout
+	PangoRenderer                   *pango_renderer;                        // Pango renderer
 
 
 	// Initialise various pointers
@@ -292,8 +286,6 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			gdk_draw_pixbuf(GDK_PIXMAP(tmp_pixmap), NULL, GDK_PIXBUF(tmp_pixbuf), 0, 0, 0, 0, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);
 			graphics_context = gdk_gc_new(GDK_PIXMAP(tmp_pixmap));
 
-// fixme4: Solaris 10 doesn't have many Pango functions.  Will need to re-code this stuff
-#ifndef __sun
 			// Set the color of the text
 			output_screen = gdk_drawable_get_screen(GDK_DRAWABLE(tmp_pixmap));
 			pango_renderer = gdk_pango_renderer_get_default(GDK_SCREEN(output_screen));
@@ -314,8 +306,6 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			gdk_pango_renderer_set_override_color(GDK_PANGO_RENDERER(pango_renderer), PANGO_RENDER_PART_FOREGROUND, NULL);
 			gdk_pango_renderer_set_drawable(GDK_PANGO_RENDERER(pango_renderer), NULL);
 			gdk_pango_renderer_set_gc(GDK_PANGO_RENDERER(pango_renderer), NULL);
-
-#endif
 
 			// Copy the pixmap back onto the backing pixbuf
 			gdk_pixbuf_get_from_drawable(GDK_PIXBUF(tmp_pixbuf), GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);	
@@ -2801,9 +2791,6 @@ void menu_edit_preferences(void)
 
 	// * Create Application preferences tab *
 
-// fixme4: gtk_file_chooser_button functions aren't present in GTK 2.4.x (shipped with Solaris 10)
-#ifndef __sun
-
 	// Default Project Folder
 	label_default_project_folder = gtk_label_new("Default Project Folder: ");
 	gtk_misc_set_alignment(GTK_MISC(label_default_project_folder), 0, 0.5);
@@ -2830,8 +2817,6 @@ void menu_edit_preferences(void)
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_output_folder), default_output_folder->str);
 	gtk_table_attach_defaults(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_output_folder), 2, 3, app_row_counter, app_row_counter + 1);
 	app_row_counter = app_row_counter + 1;
-
-#endif
 
 	// Default Output Width
 	label_default_output_width = gtk_label_new("Default Output Width: ");
@@ -2887,9 +2872,6 @@ void menu_edit_preferences(void)
 	gtk_table_attach_defaults(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_icon_height), 2, 3, app_row_counter, app_row_counter + 1);
 	app_row_counter = app_row_counter + 1;
 
-// fixme4: gtk_combo_box_get_active_text function isn't present in GTK 2.4.x (shipped with Solaris 10)
-#ifndef __sun
-
 	// Default Zoom level
 	label_default_zoom_level = gtk_label_new("Default Zoom Level: ");
 	gtk_misc_set_alignment(GTK_MISC(label_default_zoom_level), 0, 0.5);
@@ -2901,14 +2883,12 @@ void menu_edit_preferences(void)
 	gtk_table_attach_defaults(GTK_TABLE(app_dialog_table), GTK_WIDGET(entry_default_zoom_level), 2, 3, app_row_counter, app_row_counter + 1);
 	app_row_counter = app_row_counter + 1;
 
-#endif
-
 	// Default Background Colour
 	label_default_bg_colour = gtk_label_new("Default Background Colour: ");
 	gtk_misc_set_alignment(GTK_MISC(label_default_bg_colour), 0, 0.5);
 	gtk_table_attach_defaults(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_bg_colour), 0, 1, app_row_counter, app_row_counter + 1);
-    button_default_bg_colour = gtk_color_button_new_with_color(&default_bg_colour);
-    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(button_default_bg_colour), TRUE);
+	button_default_bg_colour = gtk_color_button_new_with_color(&default_bg_colour);
+	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(button_default_bg_colour), TRUE);
 	gtk_table_attach_defaults(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_bg_colour), 2, 3, app_row_counter, app_row_counter + 1);
 	app_row_counter = app_row_counter + 1;
 
@@ -2933,9 +2913,6 @@ void menu_edit_preferences(void)
 	gtk_table_attach_defaults(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_name), 2, 3, proj_row_counter, proj_row_counter + 1);
 	proj_row_counter = proj_row_counter + 1;
 
-// fixme4: gtk_file_chooser_button functions aren't present in GTK 2.4.x (shipped with Solaris 10)
-#ifndef __sun
-
 	// Project Folder
 	label_project_folder = gtk_label_new("Project Folder: ");
 	gtk_misc_set_alignment(GTK_MISC(label_project_folder), 0, 0.5);
@@ -2953,8 +2930,6 @@ void menu_edit_preferences(void)
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_output_folder), output_folder->str);
 	gtk_table_attach_defaults(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_output_folder), 2, 3, proj_row_counter, proj_row_counter + 1);
 	proj_row_counter = proj_row_counter + 1;
-
-#endif
 
 	// Output Quality
 	label_output_quality = gtk_label_new("Output Quality: ");
@@ -4405,9 +4380,6 @@ void menu_file_save(void)
 // Function called when the user selects Help -> About from the top menu
 void menu_help_about(void)
 {
-// fixme4: GtkAboutDialog wasn't present in the default Solaris 10 install. :(
-#ifndef __sun
-
 	// Local variables
 	GtkAboutDialog		*about_dialog;
 	const gchar			*authors[] = {"Justin Clift", NULL};
@@ -4425,7 +4397,6 @@ void menu_help_about(void)
 	// Display the dialog box
 	tmp_int = gtk_dialog_run(GTK_DIALOG(about_dialog));
 	gtk_widget_destroy(GTK_WIDGET(about_dialog));
-#endif
 }
 
 
@@ -4487,12 +4458,12 @@ void menu_screenshots_capture(void)
 
 	gint				dialog_result;			// Catches the return code from the dialog box
 
-	GdkScreen			*which_screen;			// Gets given the screen the monitor is on
+	GdkScreen			*which_screen;				// Gets given the screen the monitor is on
 
 	gchar				*tmp_gchar;				// Temporary gchar
 	gsize				tmp_gsize;				// Temporary gsize
 	gpointer			tmp_ptr;				// Temporary pointer
-	GString				*tmp_gstring;			// Temporary string
+	GString				*tmp_gstring;				// Temporary string
 
 
 #ifdef _WIN32
@@ -4501,10 +4472,8 @@ void menu_screenshots_capture(void)
 	return;
 #endif
 
-// fixme4: Stuff not present in the shipping version of Solaris 10 :(
-#ifndef __sun
 	GKeyFile			*lock_file;				// Pointer to the lock file structure
-#endif
+
 
 	// Initialise various things
 	tmp_gstring = g_string_new(NULL);
@@ -4586,8 +4555,6 @@ void menu_screenshots_capture(void)
 	capture_width = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_length_button));
 	capture_height = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_length_button));
 
-// fixme4: Key file functions aren't present in the shipping version of Solaris 10 :(
-#ifndef __sun
 	// Create the contents of the ~/.flame-lock file in memory
 	lock_file = g_key_file_new();
 	g_key_file_set_string(lock_file, "Project", "Name", project_name->str);  // Name of project
@@ -4596,7 +4563,6 @@ void menu_screenshots_capture(void)
 	g_key_file_set_integer(lock_file, "Project", "X_Length", capture_width);  // Width of screen area to grab
 	g_key_file_set_integer(lock_file, "Project", "Y_Offset", capture_y);  // Top left Y coordinate of screen area
 	g_key_file_set_integer(lock_file, "Project", "Y_Length", capture_height);  // Height of screen area to grab
-#endif
 
 	// Create IO channel for writing to
 	output_file = g_io_channel_new_file(full_file_name, "w", &error);
@@ -4616,10 +4582,7 @@ void menu_screenshots_capture(void)
 	}
 
 	// Write the ~/.flame-lock file to disk
-// fixme4: Key file functions aren't present in the shipping version of Solaris 10 :(
-#ifndef __sun
 	tmp_gchar = g_key_file_to_data(lock_file, NULL, NULL);
-#endif
 	return_value = g_io_channel_write_chars(output_file, tmp_gchar, strlen(tmp_gchar), &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
@@ -4658,11 +4621,8 @@ void menu_screenshots_capture(void)
 
 	// * Function clean up area *
 
-// fixme4: Key file functions aren't present in the shipping version of Solaris 10 :(
-#ifndef __sun
 	// Close the lock file
 	g_key_file_free(lock_file);
-#endif
 
 	// Free the temporary GString
 	g_string_free(tmp_gstring, TRUE);
@@ -5480,6 +5440,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.64  2007/06/24 01:06:49  vapour
+ * Removed the __sun workarounds for Solaris 10, as Solaris 11 should have the missing bits.
+ *
  * Revision 1.63  2007/01/05 08:31:14  vapour
  * + Added hint to Capture dialog, about using Control-Printscreen then the Import function.
  * + Fixed bug in Import function that wasn't enabling the greyed out toolbars afterward.

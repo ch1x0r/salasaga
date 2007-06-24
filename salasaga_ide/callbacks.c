@@ -112,11 +112,7 @@ gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer da
 
 	// Get the new output resolution
 	tmp_string = g_string_new(NULL);
-
-// fixme4: gtk_combo_box_get_active_text function isn't present in GTK 2.4.x (shipped with Solaris 10)
-#ifndef __sun
 	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(resolution_selector)));
-#endif
 
 	// Parse and store the new project output size
 	tmp_string = g_string_truncate(tmp_string, tmp_string->len - 1);
@@ -819,11 +815,7 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 
 	// Get the new zoom level
 	tmp_string = g_string_new(NULL);
-
-// fixme4: gtk_combo_box_get_active_text function isn't present in GTK 2.4.x (shipped with Solaris 10)
-#ifndef __sun
 	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(zoom_selector)));
-#endif
 
 	// Parse and store the new zoom level
 	tmp_int = g_ascii_strncasecmp(tmp_string->str, "F", 1);
@@ -859,6 +851,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2007/06/24 01:06:49  vapour
+ * Removed the __sun workarounds for Solaris 10, as Solaris 11 should have the missing bits.
+ *
  * Revision 1.9  2006/12/26 03:56:14  vapour
  * Removing unnecessary xml includes.
  *
