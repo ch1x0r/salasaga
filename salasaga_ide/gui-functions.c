@@ -29,6 +29,7 @@
 #include <math.h>
 
 // GTK includes
+#include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
 // Gnome includes
@@ -4670,7 +4671,7 @@ void menu_screenshots_import(void)
 	guint				largest_width = 0;			// Holds the width of the largest screenshot thus far
 
 	gint				num_screenshots = 0;			// Switch to track if other screenshots already exist
-
+	gint				return_code = 0;
 	GError				*error = NULL;				// Pointer to error return structure
 
 	guint				recent_message;				// Message identifier, for newest status bar message
@@ -4867,6 +4868,17 @@ void menu_screenshots_import(void)
 
 		// Add the temporary slide to the slides GList
 		slides = g_list_append(slides, tmp_slide);
+
+		// Delete the screenshot file just loaded
+		return_code = g_remove(tmp_string->str);
+		if (-1 == return_code)
+		{
+			// * Something went wrong when deleting the screenshot *
+
+			// Display a warning message using our function
+			g_string_printf(tmp_string, "Error ED85: Something went wrong when deleting the screenshot file '%s'", tmp_string->str);
+			display_warning(tmp_string->str);
+		}
 
 		// Update the status bar with a progress counter
 		g_string_printf(tmp_string, "Loaded image %u of %u.", tmp_int, num_screenshots);
@@ -5468,6 +5480,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.69  2007/06/25 09:44:50  vapour
+ * Screenshot files are now deleted after import.
+ *
  * Revision 1.68  2007/06/25 08:50:07  vapour
  * Updated pointer types of new code to not give errors with gcc.
  *
