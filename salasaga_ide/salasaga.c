@@ -715,6 +715,15 @@ gint main(gint argc, gchar *argv[])
 	icon_path = g_string_new(NULL);
 	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
 
+	// Initialise the button event handlers on the toolbars to NULL
+	main_toolbar_signals[CROP_ALL] = NULL;
+	main_toolbar_signals[EXPORT_FLASH] = NULL;
+	main_toolbar_signals[EXPORT_SVG] = NULL;
+	for (tmp_int = 0; tmp_int < LAYER_TB_COUNT; tmp_int++)
+	{
+	    layer_toolbar_signals[tmp_int] = NULL;
+	}
+
 	// Initialise GTK
 	gtk_set_locale();
 	gtk_init(&argc, &argv);
@@ -1400,6 +1409,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.33  2007/06/25 05:49:01  vapour
+ * Fixed the bug whereby toolbar dialogs would be called multiple times after the importing of slides.
+ *
  * Revision 1.32  2007/06/25 04:55:55  vapour
  * Neatened up the columns in the main function, prior to fixing the bug with layer dialogs being called multiple times.
  *
