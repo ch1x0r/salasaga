@@ -383,7 +383,7 @@ void calculate_object_boundaries(void)
 	if (NULL != boundary_list)
 	{
 		boundary_list = g_list_first(boundary_list);
-		g_list_foreach(boundary_list, (gpointer) g_free, NULL);  // I *think* this will free the memory allocated for the GdkRegions.
+		g_list_foreach(boundary_list, (GFunc) g_free, NULL);  // I *think* this will free the memory allocated for the GdkRegions.
 		g_list_free(boundary_list);
 		boundary_list = NULL;
 	}
@@ -2787,6 +2787,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.79  2007/06/25 05:46:29  vapour
+ * Changed an argument cast type to stop a compilation warning from occuring with the Sun compilers.
+ *
  * Revision 1.78  2007/06/24 03:03:58  vapour
  * Commented out the code that caused a segfault when deleting a slide.
  *
