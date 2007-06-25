@@ -603,7 +603,7 @@ void disable_layer_toolbar_buttons(void)
 	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_IMAGE]));
 
 	// Disconnect the layer toolbar signal handlers
-	if (NULL != layer_toolbar_signals[LAYER_EDIT])
+	if (0 != layer_toolbar_signals[LAYER_EDIT])
 	{
 		g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_signals[LAYER_EDIT]);
 		g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[LAYER_CROP]), layer_toolbar_signals[LAYER_CROP]);
@@ -616,7 +616,7 @@ void disable_layer_toolbar_buttons(void)
 		g_signal_handler_disconnect(G_OBJECT(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_signals[LAYER_IMAGE]);
 
 		// Flag the signal handlers as unused (used by enable_layer_toolbar_buttons())
-		layer_toolbar_signals[LAYER_EDIT] = NULL;
+		layer_toolbar_signals[LAYER_EDIT] = 0;
 	}
 }
 
@@ -643,14 +643,14 @@ void disable_main_toolbar_buttons(void)
 	gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[EXPORT_SVG]));
 
 	// Disconnect the main toolbar signal handlers
-	if (NULL != main_toolbar_signals[CROP_ALL])
+	if (0 != main_toolbar_signals[CROP_ALL])
 	{
 		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[CROP_ALL]), main_toolbar_signals[CROP_ALL]);
 		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[EXPORT_FLASH]), main_toolbar_signals[EXPORT_FLASH]);
 		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[EXPORT_SVG]), main_toolbar_signals[EXPORT_SVG]);
 
 		// Flag the signal handlers as unused (used by enable_layer_toolbar_buttons())
-		main_toolbar_signals[CROP_ALL] = NULL;
+		main_toolbar_signals[CROP_ALL] = 0;
 	}
 }
 
@@ -1784,7 +1784,7 @@ void enable_layer_toolbar_buttons(void)
 	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_IMAGE]));
 
 	// Set the event handlers for the layer toolbar buttons
-	if (NULL == layer_toolbar_signals[LAYER_EDIT])
+	if (0 == layer_toolbar_signals[LAYER_EDIT])
 	{
 		layer_toolbar_signals[LAYER_EDIT] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_EDIT]), "clicked", G_CALLBACK(layer_edit), (gpointer) NULL);
 		layer_toolbar_signals[LAYER_CROP] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_CROP]), "clicked", G_CALLBACK(image_crop), (gpointer) NULL);
@@ -1821,7 +1821,7 @@ void enable_main_toolbar_buttons(void)
 	gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[EXPORT_SVG]));
 
 	// Set the event handlers for the main toolbar buttons
-	if (NULL == main_toolbar_signals[CROP_ALL])
+	if (0 == main_toolbar_signals[CROP_ALL])
 	{
 		main_toolbar_signals[CROP_ALL] = g_signal_connect(G_OBJECT(main_toolbar_items[CROP_ALL]), "clicked", G_CALLBACK(project_crop), (gpointer) NULL);
 		main_toolbar_signals[EXPORT_FLASH] = g_signal_connect(G_OBJECT(main_toolbar_items[EXPORT_FLASH]), "clicked", G_CALLBACK(menu_export_flash_animation), (gpointer) NULL);
@@ -5468,6 +5468,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.68  2007/06/25 08:50:07  vapour
+ * Updated pointer types of new code to not give errors with gcc.
+ *
  * Revision 1.67  2007/06/25 05:49:01  vapour
  * Fixed the bug whereby toolbar dialogs would be called multiple times after the importing of slides.
  *

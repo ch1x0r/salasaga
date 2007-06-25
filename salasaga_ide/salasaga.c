@@ -716,12 +716,12 @@ gint main(gint argc, gchar *argv[])
 	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
 
 	// Initialise the button event handlers on the toolbars to NULL
-	main_toolbar_signals[CROP_ALL] = NULL;
-	main_toolbar_signals[EXPORT_FLASH] = NULL;
-	main_toolbar_signals[EXPORT_SVG] = NULL;
+	main_toolbar_signals[CROP_ALL] = 0;
+	main_toolbar_signals[EXPORT_FLASH] = 0;
+	main_toolbar_signals[EXPORT_SVG] = 0;
 	for (tmp_int = 0; tmp_int < LAYER_TB_COUNT; tmp_int++)
 	{
-	    layer_toolbar_signals[tmp_int] = NULL;
+	    layer_toolbar_signals[tmp_int] = 0;
 	}
 
 	// Initialise GTK
@@ -1409,6 +1409,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.34  2007/06/25 08:50:07  vapour
+ * Updated pointer types of new code to not give errors with gcc.
+ *
  * Revision 1.33  2007/06/25 05:49:01  vapour
  * Fixed the bug whereby toolbar dialogs would be called multiple times after the importing of slides.
  *
