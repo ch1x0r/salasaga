@@ -1,7 +1,7 @@
 Name: flame_project
 Summary: GUI eLearning creation tool for applications, with output in animated SVG.
 Version: 0.7.7.dev
-Release: 1
+Release: 4
 License: LGPL
 Group: Applications/Multimedia
 URL: http://www.flameproject.org/
@@ -61,5 +61,12 @@ make
 %{_datadir}/* 
 
 %changelog
+* Wed Jun 27 2007 Justin Clift <justin@postgresql.org> 0.7.7-dev-4
+- Bug fix version, removing known crashes.
+- Screenshot slides now deleted after import.
+
+* Fri Jan 05 2007 Justin Clift <justin@postgresql.org> 0.7.7-dev-2
+- Next version of the package, with slightly improved SVG output.
+
 * Fri Jan 05 2007 Justin Clift <justin@postgresql.org> 0.7.7-dev-1
 - Initial package.
