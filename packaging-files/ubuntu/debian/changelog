@@ -1,3 +1,15 @@
+flameproject (0.7.7.dev-0ubuntu4) unstable; urgency=low
+
+  * Screenshot slides now deleted after import
+
+ -- Justin Clift <justin@postgresql.org>  Tue, 26 Jun 2007 22:01:00 +1100
+
+flameproject (0.7.7.dev-0ubuntu3) unstable; urgency=low
+
+  * Bug fix version, removing known crashes
+
+ -- Justin Clift <justin@postgresql.org>  Tue, 26 Jun 2007 20:35:00 +1100
+
 flameproject (0.7.7.dev-0ubuntu2) unstable; urgency=low
 
   * Next version of the package, with slightly improved SVG output
