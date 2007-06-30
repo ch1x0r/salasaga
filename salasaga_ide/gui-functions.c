@@ -5161,6 +5161,8 @@ void slide_delete(void)
 	// Local variables
 	gint				num_slides;				// Number of slides in the whole slide list
 	gint				slide_position;				// Which slide in the slide list we are deleting
+	GtkTreeSelection		*film_strip_selector;
+	GtkTreeIter			selection_iter;
 
 	GList				*tmp_glist;				// Temporary GList
 
@@ -5179,6 +5181,11 @@ void slide_delete(void)
 	slide_position = g_list_position(slides, current_slide);
 	tmp_glist = current_slide;
 	slides = g_list_remove_link(slides, current_slide);
+
+	// Remove the current slide from the film strip
+	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
+	gtk_tree_selection_get_selected(film_strip_selector, NULL, &selection_iter);
+	gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &selection_iter);
 
 	// * Update the currently selected slide to point to the next slide *
 	if (num_slides == (slide_position + 1))
@@ -5468,6 +5475,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.71  2007/06/30 07:02:07  vapour
+ * Deleting the selected slide works with the new film strip implementation.
+ *
  * Revision 1.70  2007/06/30 03:18:18  vapour
  * Began re-writing the film strip area to use a GtkListView widget instead of the hodge podge of event boxes, signal handlers, and other bits.
  *
