@@ -536,11 +536,11 @@ void create_tooltips(void)
 		{
 			// The user hasn't given a name to the slide, so use a default
 			g_string_printf(name_string, "Slide %u", counter + 1);
-			gtk_tooltips_set_tip(slide_data->tooltip, GTK_WIDGET(slide_data->event_box), name_string->str, NULL);
+			gtk_tooltips_set_tip(slide_data->tooltip, GTK_WIDGET(slide_data->thumbnail), name_string->str, NULL);
 		} else
 		{
 			// The user has named the slide, so use the name
-			gtk_tooltips_set_tip(slide_data->tooltip, GTK_WIDGET(slide_data->event_box), slide_data->name->str, NULL);
+			gtk_tooltips_set_tip(slide_data->tooltip, GTK_WIDGET(slide_data->thumbnail), slide_data->name->str, NULL);
 		}
 	}
 }
@@ -1620,18 +1620,6 @@ void draw_thumbnail(GList *which_slide)
 	tmp_pixbuf = compress_layers(which_slide, preview_width, current_height);
 	tmp_image = ((slide *) which_slide->data)->thumbnail;
 	((slide *) which_slide->data)->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(tmp_pixbuf)));
-
-	// Remove the present thumbnail from the film strip slides' event box
-	tmp_glist = gtk_container_get_children(GTK_CONTAINER(((slide *) which_slide->data)->event_box));
-	if (NULL != tmp_glist)
-	{
-		// Remove the thumbnail from the container (this also frees up the thumbnail memory)
-		gtk_container_remove(GTK_CONTAINER(((slide *) which_slide->data)->event_box), GTK_WIDGET(tmp_glist->data));
-	}
-
-	// Add the new thumbnail to the film strip slides' event box
-	gtk_container_add(GTK_CONTAINER(((slide *) which_slide->data)->event_box), GTK_WIDGET(((slide *) which_slide->data)->thumbnail));
-	gtk_widget_show_all(GTK_WIDGET(((slide *) which_slide->data)->thumbnail));
 }
 
 
@@ -4667,6 +4655,7 @@ void menu_screenshots_import(void)
 	const gchar			*dir_entry;				// Holds a file name
 
 	GSList				*entries = NULL;			// Holds a list of screen shot file names
+	GtkTreeIter			film_strip_iter;
 	guint				largest_height = 0;			// Holds the height of the largest screenshot thus far
 	guint				largest_width = 0;			// Holds the width of the largest screenshot thus far
 
@@ -4850,9 +4839,6 @@ void menu_screenshots_import(void)
 		// Add the thumbnail to the new slide structure
 		tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(tmp_gdk_pixbuf));
 
-		// Create an event box for adding the thumbnail image to, so it can receive events and display tool tips
-		tmp_slide->event_box = gtk_event_box_new();
-
 		// Mark the name for the slide as unset
 		tmp_slide->name = NULL;
 		tmp_slide->tooltip = NULL;
@@ -4860,11 +4846,9 @@ void menu_screenshots_import(void)
 		// Set the timeline widget for the slide to NULL, so we know to create it later on
 		tmp_slide->timeline_widget = NULL;
 
-		// Add the thumbnail to the event box
-		gtk_container_add(GTK_CONTAINER(tmp_slide->event_box), GTK_WIDGET(tmp_slide->thumbnail));
-
-		// Add a mouse click handler to the event box
-		tmp_slide->click_handler = g_signal_connect(G_OBJECT(tmp_slide->event_box), "button_release_event", G_CALLBACK(film_strip_slide_clicked), tmp_slide);
+		// Add the thumbnail to the GtkListView based film strip
+		gtk_list_store_append (film_strip_store, &film_strip_iter);  // Acquire an iterator
+		gtk_list_store_set (film_strip_store, &film_strip_iter, 0, gtk_image_get_pixbuf(tmp_slide->thumbnail), -1);
 
 		// Add the temporary slide to the slides GList
 		slides = g_list_append(slides, tmp_slide);
@@ -4901,6 +4885,9 @@ void menu_screenshots_import(void)
 	{
 		current_slide = g_list_first(slides);
 	}
+
+	// Recreate the slide tooltips
+	create_tooltips();
 
 	// Draw the workspace area
 	draw_workspace();
@@ -5126,7 +5113,10 @@ void refresh_film_strip(void)
 	slide				*tmp_slide;
 	GtkWidget			*tmp_event_box;
 
-
+/*
+ * This function will need to be re-written to work with the new GtkListView way of doing things
+ *
+ 
 	// * Clear the film strip area of existing content *
 	tmp_glist = gtk_container_get_children(GTK_CONTAINER(film_strip));
 	if (NULL != tmp_glist)
@@ -5138,7 +5128,7 @@ void refresh_film_strip(void)
 		{
 			// Remove the slide from the film strip area
 			tmp_event_box = g_list_nth_data(tmp_glist, event_box_counter);
-			tmp_event_box = g_object_ref(tmp_event_box);  // Needed so the gtk_container_remove() doesn't unref the thumbnail
+			tmp_event_box = g_object_ref(tmp_event_box);  // Increase the ref count, so the gtk_container_remove() doesn't unref the thumbnail
 			gtk_container_remove(GTK_CONTAINER(film_strip), GTK_WIDGET(tmp_event_box));
 		}
 		g_list_free(tmp_glist);
@@ -5152,11 +5142,13 @@ void refresh_film_strip(void)
 		// Add the event box to the film strip area
 		tmp_slide = g_list_nth_data(slides, slide_counter);
 
-		gtk_box_pack_start(GTK_BOX(film_strip), GTK_WIDGET(tmp_slide->event_box), FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(film_strip), GTK_WIDGET(tmp_slide->event_box), FALSE, FALSE, 10);
 
 		// Add a separator between the thumbnails, to make things that little bit clearer
-		gtk_box_pack_start(GTK_BOX(film_strip), gtk_hseparator_new(), FALSE, FALSE, 0);
+		gtk_box_pack_start(GTK_BOX(film_strip), gtk_hseparator_new(), FALSE, FALSE, 10);
 	}
+
+ */
 
 	// Display all of the images
 	gtk_widget_show_all(GTK_WIDGET(film_strip));
@@ -5218,6 +5210,7 @@ void slide_delete(void)
 void slide_insert(void)
 {
 	// Local variables
+	GtkTreeIter			film_strip_iter;
 	gint				slide_position;				// Which slide in the slide list we have selected
 
 	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
@@ -5279,20 +5272,15 @@ void slide_insert(void)
 	// Add the thumbnail to the new slide structure
 	tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(tmp_gdk_pixbuf));
 
-	// Create an event box for adding the thumbnail image to, so it can receive events and display tool tips
-	tmp_slide->event_box = gtk_event_box_new();
+	// Add the thumbnail to the GtkListView based film strip
+	gtk_list_store_append (film_strip_store, &film_strip_iter);  // Acquire an iterator
+	gtk_list_store_set (film_strip_store, &film_strip_iter, 0, gtk_image_get_pixbuf(tmp_slide->thumbnail), -1);
 
 	// Mark the tooltip for the slide as not-yet-created
 	tmp_slide->tooltip = NULL;
 
 	// Set the timeline widget for the slide to NULL, so we know to create it later on
 	tmp_slide->timeline_widget = NULL;
-
-	// Add the thumbnail to the event box
-	gtk_container_add(GTK_CONTAINER(tmp_slide->event_box), GTK_WIDGET(tmp_slide->thumbnail));
-
-	// Add a mouse click handler to the event box
-	tmp_slide->click_handler = g_signal_connect(G_OBJECT(tmp_slide->event_box), "button_release_event", G_CALLBACK(film_strip_slide_clicked), tmp_slide);
 
 	// If the current slide hasn't been initialised (this is the first slide), then we initialise it
 	if (NULL == current_slide)
@@ -5480,6 +5468,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.70  2007/06/30 03:18:18  vapour
+ * Began re-writing the film strip area to use a GtkListView widget instead of the hodge podge of event boxes, signal handlers, and other bits.
+ *
  * Revision 1.69  2007/06/25 09:44:50  vapour
  * Screenshot files are now deleted after import.
  *

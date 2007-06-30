@@ -68,6 +68,7 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
 
 
 // Callback function that updates the workspace when a new slide in the film strip is clicked
+// fixme3: This function will likely need to be adapted to become the callback for the new film strip selection bits
 gint film_strip_slide_clicked(GtkWidget *widget, GdkEvent *event, slide *clicked_slide)
 {
 	// Local variables
@@ -851,6 +852,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2007/06/30 03:18:18  vapour
+ * Began re-writing the film strip area to use a GtkListView widget instead of the hodge podge of event boxes, signal handlers, and other bits.
+ *
  * Revision 1.10  2007/06/24 01:06:49  vapour
  * Removed the __sun workarounds for Solaris 10, as Solaris 11 should have the missing bits.
  *

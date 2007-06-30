@@ -477,9 +477,6 @@ void destroy_slide(gpointer element, gpointer user_data)
 	// Initialise some things
 	slide_data = element;
 
-	// Remove the mouse click handler from the event box of the deleted slide
-	g_signal_handler_disconnect(G_OBJECT(slide_data->event_box), slide_data->click_handler);
-
 	// Free the memory allocated to the deleted slide
 	if (NULL != slide_data->name)
 	{
@@ -614,7 +611,7 @@ gboolean flame_read(gchar *filename)
 	GList				*tmp_glist;				//
 	GString				*tmp_gstring;			// Temporary GString
 	GString				*tmp_gstring2;			// Temporary GString
-	layer_highlight		*tmp_highlight_ob;		// Temporary highlight layer object
+	layer_highlight			*tmp_highlight_ob;		// Temporary highlight layer object
 	layer_image			*tmp_image_ob;			// Temporary image layer object
 	gint				tmp_int;				// Temporary integer
 	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
@@ -626,6 +623,7 @@ gboolean flame_read(gchar *filename)
 
 	gint				data_length;			// Number of image data bytes a layer says it stores
 
+	GtkTreeIter			film_strip_iter;
 
 	// Initialise various things
 	tmp_gstring = g_string_new(NULL);
@@ -1397,20 +1395,15 @@ gboolean flame_read(gchar *filename)
 			tmp_pixbuf = compress_layers(tmp_glist, preview_width, 233);
 			tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(tmp_pixbuf)));
 
-			// Create the event box for the slide
-			tmp_slide->event_box = gtk_event_box_new();
-
-			// Mark the tooltip as uncreated
+			// Mark the tooltip as uncreated, so we know to create it later on
 			tmp_slide->tooltip = NULL;
 
 			// Set the timeline widget for the slide to NULL, so we know to create it later on
 			tmp_slide->timeline_widget = NULL;
 
-			// Add the thumbnail to the event box
-			gtk_container_add(GTK_CONTAINER(tmp_slide->event_box), GTK_WIDGET(tmp_slide->thumbnail));
-
-			// Add a mouse click handler to the event box
-			tmp_slide->click_handler = g_signal_connect(G_OBJECT(tmp_slide->event_box), "button_release_event", G_CALLBACK(film_strip_slide_clicked), tmp_slide);
+			// Add the thumbnail to the new film strip GtkListView
+			gtk_list_store_append(film_strip_store, &film_strip_iter);
+			gtk_list_store_set(film_strip_store, &film_strip_iter, 0, gtk_image_get_pixbuf(tmp_slide->thumbnail), -1);
 
 			// To get here, we must have finished loading the present slide, so we add it to the working project
 			slides = g_list_append(slides, tmp_slide);
@@ -2787,6 +2780,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.80  2007/06/30 03:18:18  vapour
+ * Began re-writing the film strip area to use a GtkListView widget instead of the hodge podge of event boxes, signal handlers, and other bits.
+ *
  * Revision 1.79  2007/06/25 05:46:29  vapour
  * Changed an argument cast type to stop a compilation warning from occuring with the Sun compilers.
  *

@@ -64,6 +64,7 @@ gfloat					export_time_counter;			// Used when exporting, holds the number of se
 GString					*file_name = NULL;			// Holds the file name the project is saved as
 GtkWidget				*film_strip;				// The film strip area
 GtkScrolledWindow			*film_strip_container;			// Container for the film strip
+GtkListStore				*film_strip_store;			// Film strip list store
 guint					frames_per_second;			// Number of frames per second
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
 GString					*icon_path;				// Used to determine if SVG images can be loaded
@@ -386,16 +387,22 @@ void create_film_strip()
 	// Returns: None
 	//
 	// Important variables:
-	//							film_strip
-	//							film_strip_container
+	//				film_strip
+	//				film_strip_container
 	//
 	// Example:
 	//
-	//		GtkWidget 			*film_strip;
-	//		GtkScrolledWindow	*film_strip_container;
+	//	GtkWidget 		*film_strip;
+	//	GtkScrolledWindow	*film_strip_container;
 	//
-	//		create_film_strip();
+	//	create_film_strip();
 	//
+
+	// Local variables
+	GtkTreeIter			iter;
+	GtkWidget			*film_strip_list;
+	GtkCellRenderer			*renderer;
+	GtkTreeViewColumn		*column;
 
 	// Create the film strip top widget
 	film_strip_container = GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL));
@@ -403,9 +410,21 @@ void create_film_strip()
 	// Set the scroll bar settings
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(film_strip_container), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
 
-	// * Create a VBox for storing the film strip thumbnails *
+	// Create a VBox for storing the film strip thumbnails
 	film_strip = gtk_vbox_new(FALSE, 2);
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(film_strip_container), film_strip);
+
+	// Create a GtkListStore, to have the screenshot data in
+	film_strip_store = gtk_list_store_new(1, GDK_TYPE_PIXBUF);
+
+	// Create the view of the list store
+	film_strip_list = gtk_tree_view_new_with_model(GTK_TREE_MODEL(film_strip_store));
+	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(film_strip_list), FALSE);
+	renderer = gtk_cell_renderer_pixbuf_new();
+	column = gtk_tree_view_column_new_with_attributes("Slide", renderer, "pixbuf", 0, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(film_strip_list), column);
+
+	// Add the list view to the film strip
+	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(film_strip_container), film_strip_list);
 }
 
 
@@ -1409,6 +1428,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.35  2007/06/30 03:18:18  vapour
+ * Began re-writing the film strip area to use a GtkListView widget instead of the hodge podge of event boxes, signal handlers, and other bits.
+ *
  * Revision 1.34  2007/06/25 08:50:07  vapour
  * Updated pointer types of new code to not give errors with gcc.
  *

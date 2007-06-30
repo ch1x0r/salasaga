@@ -42,11 +42,12 @@ extern GString				*icon_extension;
 extern GString				*icon_path;
 extern GString				*file_name;
 extern GtkWidget			*film_strip;
-extern GtkScrolledWindow	*film_strip_container;
+extern GtkScrolledWindow		*film_strip_container;
+extern GtkListStore			*film_strip_store;
 extern guint				frames_per_second;
 extern GtkWidget			*main_drawing_area;
 extern GtkWidget			*main_window;
-extern GtkItemFactory		*menu_bar;
+extern GtkItemFactory			*menu_bar;
 extern GtkTable				*message_bar;
 extern gboolean				mouse_dragging;
 extern GdkPixbuf			*mouse_ptr_pixbuf;
@@ -57,8 +58,8 @@ extern GtkWidget			*right_side;
 extern GList				*slides;
 extern GtkWidget			*status_bar;
 extern guint				statusbar_context;
-extern gint					stored_x;
-extern gint					stored_y;
+extern gint				stored_x;
+extern gint				stored_y;
 extern GtkWidget			*time_line_container;
 extern GtkWidget			*time_line_vbox;
 extern GtkWidget			*working;
@@ -102,8 +103,8 @@ extern GString				*project_name;
 extern guint				project_width;
 extern guint				slide_length;
 
-extern ResolutionStructure	res_array[];
-extern gint					num_res_items;
+extern ResolutionStructure		res_array[];
+extern gint				num_res_items;
 
 
 #ifdef __cplusplus
@@ -118,6 +119,9 @@ extern gint					num_res_items;
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2007/06/30 03:18:18  vapour
+ * Began re-writing the film strip area to use a GtkListView widget instead of the hodge podge of event boxes, signal handlers, and other bits.
+ *
  * Revision 1.12  2007/01/05 06:46:47  vapour
  * Hard coded to expect icons and similar in /usr/share/.
  *

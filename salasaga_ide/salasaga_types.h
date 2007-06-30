@@ -199,9 +199,8 @@ typedef struct {
 // Defines the collection of objects and properties making up a slide
 typedef struct
 {
-	GtkWidget			*event_box;
+//	GtkWidget			*event_box;
 	GtkImage			*thumbnail;
-	gulong				click_handler;
 	GList				*layers;
 	GtkTooltips			*tooltip;
 	GString				*name;
@@ -265,6 +264,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.28  2007/06/30 03:18:18  vapour
+ * Began re-writing the film strip area to use a GtkListView widget instead of the hodge podge of event boxes, signal handlers, and other bits.
+ *
  * Revision 1.27  2007/06/24 13:21:47  vapour
  * Neatened up, prior to work on it.
  *
