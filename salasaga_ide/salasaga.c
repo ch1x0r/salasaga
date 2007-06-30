@@ -192,6 +192,8 @@ void create_menu_bar()
 		{"/Slide/_Delete",		NULL,			slide_delete,			0,	"<Item>"},
 		{"/Slide/Move _up",		NULL,			slide_move_up,			0,	"<Item>"},
 		{"/Slide/Move dow_n",		NULL,			slide_move_down,		0,	"<Item>"},
+		{"/Slide/Move to _top",		NULL,			slide_move_top,			0,	"<Item>"},
+		{"/Slide/Move to _bottom",	NULL,			slide_move_bottom,		0,	"<Item>"},
 		{"/Slide/_Edit slide name",	NULL,			slide_name_set,			0,	"<Item>"},
 		{"/Slide/_Reset slide name",	NULL,			slide_name_reset,		0,	"<Item>"},
 
@@ -1438,6 +1440,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.38  2007/06/30 10:03:35  vapour
+ * Began writing code to move the thumbnails around in the film strip.
+ *
  * Revision 1.37  2007/06/30 07:58:10  vapour
  * Lined up the menu bar definition columns prior to making changes.
  *
