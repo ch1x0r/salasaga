@@ -44,6 +44,7 @@ extern GString				*file_name;
 extern GtkWidget			*film_strip;
 extern GtkScrolledWindow		*film_strip_container;
 extern GtkListStore			*film_strip_store;
+extern GtkWidget			*film_strip_view;
 extern guint				frames_per_second;
 extern GtkWidget			*main_drawing_area;
 extern GtkWidget			*main_window;
@@ -119,6 +120,9 @@ extern gint				num_res_items;
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2007/06/30 06:04:19  vapour
+ * The timeline and workspace area are now updated when a slide is selected in the film strip.  All done with the GtkTreeView approach now.
+ *
  * Revision 1.13  2007/06/30 03:18:18  vapour
  * Began re-writing the film strip area to use a GtkListView widget instead of the hodge podge of event boxes, signal handlers, and other bits.
  *

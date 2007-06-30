@@ -67,40 +67,38 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
 }
 
 
-// Callback function that updates the workspace when a new slide in the film strip is clicked
-// fixme3: This function will likely need to be adapted to become the callback for the new film strip selection bits
-gint film_strip_slide_clicked(GtkWidget *widget, GdkEvent *event, slide *clicked_slide)
+// Callback function that updates the workspace and timeline when a new slide in the film strip is selected
+void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 {
 	// Local variables
-	gint 		slide_pos;
-	guint		which_button;
+	GtkTreePath			*path;
+	GList				*selected_row;
+	gchar				*selection_path;
 
 
-	// Determine which mouse button was clicked
-	which_button = event->button.button;
+	// Determine if a row has been selected
+	if (gtk_tree_selection_get_selected(selection, NULL, NULL))
+        {
+		// * Update current_slide to be the clicked on slide's GList entry, then redraw the timeline and workspace *
 
-	// We're only interested in left mouse clicks at the moment
-	switch (which_button)
-	{
-		case 1:
-			// * Yes, it's a left click.  Update the current_slide to the clicked on slide's GList container, then redraw the timeline and workspace *
+		// Determine which slide is now selected
+		gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &path, NULL);
+		selection_path = gtk_tree_path_to_string(path);
 
-			// Get a pointer to the clicked on slide's GList
-			slide_pos = g_list_index(slides, clicked_slide);
-			current_slide = g_list_nth(slides, slide_pos);
+		// Get a pointer to the clicked on slide's GList
+		slides = g_list_first(slides);
+		current_slide = g_list_nth(slides, atoi(selection_path));
 
-			// Redraw the timeline
-			draw_timeline();
+		// Redraw the timeline
+		draw_timeline();
 
-			// Redraw the workspace
-			draw_workspace();
-			break;
+		// Redraw the workspace
+		draw_workspace();
 
-		default:
-			break;
+		// Free the memory used to deterine the newly selected slide
+		g_free(selection_path);
+		gtk_tree_path_free(path);
 	}
-
-	return TRUE;
 }
 
 
@@ -852,6 +850,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2007/06/30 06:04:19  vapour
+ * The timeline and workspace area are now updated when a slide is selected in the film strip.  All done with the GtkTreeView approach now.
+ *
  * Revision 1.11  2007/06/30 03:18:18  vapour
  * Began re-writing the film strip area to use a GtkListView widget instead of the hodge podge of event boxes, signal handlers, and other bits.
  *

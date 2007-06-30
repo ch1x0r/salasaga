@@ -65,6 +65,7 @@ GString					*file_name = NULL;			// Holds the file name the project is saved as
 GtkWidget				*film_strip;				// The film strip area
 GtkScrolledWindow			*film_strip_container;			// Container for the film strip
 GtkListStore				*film_strip_store;			// Film strip list store
+GtkWidget				*film_strip_view;			// The view of the film strip list store
 guint					frames_per_second;			// Number of frames per second
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
 GString					*icon_path;				// Used to determine if SVG images can be loaded
@@ -387,8 +388,10 @@ void create_film_strip()
 	// Returns: None
 	//
 	// Important variables:
-	//				film_strip
-	//				film_strip_container
+	//				film_strip (global)
+	//				film_strip_store (global)
+	//				film_strip_view (global)
+	//				film_strip_container (global)
 	//
 	// Example:
 	//
@@ -399,11 +402,12 @@ void create_film_strip()
 	//
 
 	// Local variables
-	GtkTreeIter			iter;
-	GtkWidget			*film_strip_list;
-	GtkCellRenderer			*renderer;
 	GtkTreeViewColumn		*column;
+	GtkTreeIter			iter;
+	GtkCellRenderer			*renderer;
+	GtkTreeSelection		*selector;
 
+	
 	// Create the film strip top widget
 	film_strip_container = GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL));
 
@@ -417,14 +421,19 @@ void create_film_strip()
 	film_strip_store = gtk_list_store_new(1, GDK_TYPE_PIXBUF);
 
 	// Create the view of the list store
-	film_strip_list = gtk_tree_view_new_with_model(GTK_TREE_MODEL(film_strip_store));
-	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(film_strip_list), FALSE);
+	film_strip_view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(film_strip_store));
+	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(film_strip_view), FALSE);
 	renderer = gtk_cell_renderer_pixbuf_new();
 	column = gtk_tree_view_column_new_with_attributes("Slide", renderer, "pixbuf", 0, NULL);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(film_strip_list), column);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(film_strip_view), column);
 
 	// Add the list view to the film strip
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(film_strip_container), film_strip_list);
+	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(film_strip_container), film_strip_view);
+
+	// Connect a signal handler to the film strip, which gets called whenever a selection is made
+	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
+	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);  // fixme4: Should investigate multiple selection at some point
+	g_signal_connect(G_OBJECT(selector), "changed", G_CALLBACK(film_strip_slide_clicked), NULL);
 }
 
 
@@ -748,6 +757,7 @@ gint main(gint argc, gchar *argv[])
 	gtk_init(&argc, &argv);
 
 	// Redirect log output so it doesn't pop open a console window
+	// fixme4: Should likely add a command line switch to disable this
 	g_set_print_handler(logger_simple);
 	g_set_printerr_handler(logger_simple);
 	g_log_set_handler(NULL, G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, logger_with_domain, NULL);
@@ -1428,6 +1438,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.36  2007/06/30 06:04:19  vapour
+ * The timeline and workspace area are now updated when a slide is selected in the film strip.  All done with the GtkTreeView approach now.
+ *
  * Revision 1.35  2007/06/30 03:18:18  vapour
  * Began re-writing the film strip area to use a GtkListView widget instead of the hodge podge of event boxes, signal handlers, and other bits.
  *
