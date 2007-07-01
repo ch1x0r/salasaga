@@ -77,10 +77,11 @@ void layer_new_image(void);
 void layer_new_mouse(void);
 void layer_new_text(void);
 void project_crop(void);
-void refresh_film_strip(void);
 void slide_delete(void);
 void slide_insert(void);
+void slide_move_bottom(void);
 void slide_move_down(void);
+void slide_move_top(void);
 void slide_move_up(void);
 void slide_name_reset(void);
 void slide_name_set(void);
@@ -97,6 +98,9 @@ void slide_name_set(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2007/07/01 12:50:27  vapour
+ * Removed prototype of refresh_film_strip function, and added prototypes of functions for moving a slide to the top and bottom of the slide list.
+ *
  * Revision 1.10  2006/07/04 12:45:15  vapour
  * + Added stub functions for creating a new mouse pointer layer.
  *
