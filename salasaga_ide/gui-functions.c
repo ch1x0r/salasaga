@@ -4163,9 +4163,6 @@ void menu_file_open(void)
 	// Create the tooltips for the slides
 	create_tooltips();
 
-	// Update the film strip with the new slides
-	refresh_film_strip();
-
 	// Draw the timeline area
 	draw_timeline();
 
@@ -4895,9 +4892,6 @@ void menu_screenshots_import(void)
 	// Draw the timeline area
 	draw_timeline();
 
-	// Update the film strip with the new slides
-	refresh_film_strip();
-
 	// Enable the project based menu items
 	menu_enable("/Slide", TRUE);
 	menu_enable("/Layer", TRUE);
@@ -5091,67 +5085,11 @@ void project_crop(void)
 	project_height = project_height - top_value - bottom_value;
 	project_width = project_width - left_value - right_value;
 
-	// Redraw the film strip area
-	refresh_film_strip();
-
 	// Redraw the timeline
 	draw_timeline();
 
 	// Redraw the workspace
 	draw_workspace();
-}
-
-
-// Clears out the film strip, then re-creates it according to the full slide set
-void refresh_film_strip(void)
-{
-	// Local variables
-	gint				num_event_boxes, num_slides;
-	guint				event_box_counter, slide_counter;
-
-	GList				*tmp_glist;
-	slide				*tmp_slide;
-	GtkWidget			*tmp_event_box;
-
-/*
- * This function will need to be re-written to work with the new GtkListView way of doing things
- *
- 
-	// * Clear the film strip area of existing content *
-	tmp_glist = gtk_container_get_children(GTK_CONTAINER(film_strip));
-	if (NULL != tmp_glist)
-	{
-		// For each slide shown in the film strip, remove its event box and associated thumbnail
-		tmp_glist = g_list_first(tmp_glist);
-		num_event_boxes = g_list_length(tmp_glist);
-		for (event_box_counter = 0; event_box_counter <= num_event_boxes - 1; event_box_counter++)
-		{
-			// Remove the slide from the film strip area
-			tmp_event_box = g_list_nth_data(tmp_glist, event_box_counter);
-			tmp_event_box = g_object_ref(tmp_event_box);  // Increase the ref count, so the gtk_container_remove() doesn't unref the thumbnail
-			gtk_container_remove(GTK_CONTAINER(film_strip), GTK_WIDGET(tmp_event_box));
-		}
-		g_list_free(tmp_glist);
-	}
-
-	// * For each slide in the slides array, add its event box (with contained thumbnail) to the film strip area *
-	slides = g_list_first(slides);
-	num_slides = g_list_length(slides);
-	for (slide_counter = 0; slide_counter <= num_slides - 1; slide_counter++)
-	{
-		// Add the event box to the film strip area
-		tmp_slide = g_list_nth_data(slides, slide_counter);
-
-		gtk_box_pack_start(GTK_BOX(film_strip), GTK_WIDGET(tmp_slide->event_box), FALSE, FALSE, 10);
-
-		// Add a separator between the thumbnails, to make things that little bit clearer
-		gtk_box_pack_start(GTK_BOX(film_strip), gtk_hseparator_new(), FALSE, FALSE, 10);
-	}
-
- */
-
-	// Display all of the images
-	gtk_widget_show_all(GTK_WIDGET(film_strip));
 }
 
 
@@ -5203,9 +5141,6 @@ void slide_delete(void)
 
 	// Redraw the workspace
 	draw_workspace();
-
-	// Refresh the film strip area
-	refresh_film_strip();
 
 	// Free the resources allocated to the deleted slide
 	destroy_slide(tmp_glist->data, NULL);
@@ -5304,9 +5239,6 @@ void slide_insert(void)
 	// Recreate the slide tooltips
 	create_tooltips();
 
-	// Update the film strip area
-	refresh_film_strip();
-
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, "Added new slide.");
 	gdk_flush();
@@ -5317,13 +5249,13 @@ void slide_insert(void)
 void slide_move_bottom(void)
 {
 	// Local variables
+	GtkTreeSelection		*film_strip_selector;
+	GtkTreePath			*new_path;				// Temporary path
 	GList				*next_slide;				// Pointer to the slide below
 	gint				num_slides;				// The total number of slides
+	GtkTreeIter			selection_iter;
 	gint				slide_position;				// Which slide in the slide list we are moving
 	slide				*this_slide_data;			// Pointer to the data for this slide
-	GtkTreeSelection		*film_strip_selector;
-	GtkTreeIter			selection_iter;
-	GtkTreePath			*path;
 
 
 	// Safety check
@@ -5352,15 +5284,12 @@ void slide_move_bottom(void)
 	gtk_list_store_set(GTK_LIST_STORE(film_strip_store), &selection_iter, 0, gtk_image_get_pixbuf(this_slide_data->thumbnail), -1);
 
 	// Scroll the film strip to show the new slide position
-	// fixme2: Doesn't seem to be working... no scrolling happening.
-//	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &path, NULL);
-//	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), path, NULL, TRUE, 0.5, 0.5);
+	// fixme3: Doesn't appear to be scrolling the window. :(
+	new_path = gtk_tree_path_new_from_indices(num_slides - 1, -1);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.5);
 
 	// Recreate the slide tooltips
 	create_tooltips();
-
-	// Refresh the film strip area
-//	refresh_film_strip();
 }
 
 
@@ -5393,9 +5322,6 @@ void slide_move_down(void)
 
 	// Recreate the slide tooltips
 	create_tooltips();
-
-	// Refresh the film strip area
-	refresh_film_strip();
 }
 
 
@@ -5426,9 +5352,6 @@ void slide_move_top(void)
 
 	// Recreate the slide tooltips
 	create_tooltips();
-
-	// Refresh the film strip area
-	refresh_film_strip();
 }
 
 
@@ -5459,9 +5382,6 @@ void slide_move_up(void)
 
 	// Recreate the slide tooltips
 	create_tooltips();
-
-	// Refresh the film strip area
-	refresh_film_strip();
 }
 
 
@@ -5559,6 +5479,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.73  2007/07/01 12:49:40  vapour
+ * Removed the refresh_film_strip function, as its no longer needed.  Also continued to try and get the new film strip window to scroll to new positions but without luck.
+ *
  * Revision 1.72  2007/06/30 10:03:35  vapour
  * Began writing code to move the thumbnails around in the film strip.
  *
