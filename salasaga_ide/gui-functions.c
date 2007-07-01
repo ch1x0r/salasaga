@@ -5287,6 +5287,7 @@ void slide_move_bottom(void)
 	// fixme3: Doesn't appear to be scrolling the window. :(
 	new_path = gtk_tree_path_new_from_indices(num_slides - 1, -1);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.5);
+	gtk_tree_path_free(new_path);
 
 	// Recreate the slide tooltips
 	create_tooltips();
@@ -5479,6 +5480,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.74  2007/07/01 13:17:13  vapour
+ * Fixed a very small memory leak.
+ *
  * Revision 1.73  2007/07/01 12:49:40  vapour
  * Removed the refresh_film_strip function, as its no longer needed.  Also continued to try and get the new film strip window to scroll to new positions but without luck.
  *
