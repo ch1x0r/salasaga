@@ -62,7 +62,6 @@ guint					capture_y;				// Y offset for screen captures
 GList					*current_slide = NULL;			// Pointer to the presently selected slide
 gfloat					export_time_counter;			// Used when exporting, holds the number of seconds thus far
 GString					*file_name = NULL;			// Holds the file name the project is saved as
-GtkWidget				*film_strip;				// The film strip area
 GtkScrolledWindow			*film_strip_container;			// Container for the film strip
 GtkListStore				*film_strip_store;			// Film strip list store
 GtkWidget				*film_strip_view;			// The view of the film strip list store
@@ -390,14 +389,12 @@ void create_film_strip()
 	// Returns: None
 	//
 	// Important variables:
-	//				film_strip (global)
 	//				film_strip_store (global)
 	//				film_strip_view (global)
 	//				film_strip_container (global)
 	//
 	// Example:
 	//
-	//	GtkWidget 		*film_strip;
 	//	GtkScrolledWindow	*film_strip_container;
 	//
 	//	create_film_strip();
@@ -416,10 +413,7 @@ void create_film_strip()
 	// Set the scroll bar settings
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(film_strip_container), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
 
-	// Create a VBox for storing the film strip thumbnails
-	film_strip = gtk_vbox_new(FALSE, 2);
-
-	// Create a GtkListStore, to have the screenshot data in
+	// Create a GtkListStore, to have the thumbnail data in
 	film_strip_store = gtk_list_store_new(1, GDK_TYPE_PIXBUF);
 
 	// Create the view of the list store
@@ -1440,6 +1434,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.39  2007/07/01 12:46:50  vapour
+ * Removed the film_strip global variable, and removed an uneeded VBox out of the film strip structure.
+ *
  * Revision 1.38  2007/06/30 10:03:35  vapour
  * Began writing code to move the thumbnails around in the film strip.
  *

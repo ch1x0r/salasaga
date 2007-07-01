@@ -41,7 +41,6 @@ extern gfloat				export_time_counter;
 extern GString				*icon_extension;
 extern GString				*icon_path;
 extern GString				*file_name;
-extern GtkWidget			*film_strip;
 extern GtkScrolledWindow		*film_strip_container;
 extern GtkListStore			*film_strip_store;
 extern GtkWidget			*film_strip_view;
@@ -120,6 +119,9 @@ extern gint				num_res_items;
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2007/07/01 12:47:10  vapour
+ * Removed the film_strip global variable, and removed an uneeded VBox out of the film strip structure.
+ *
  * Revision 1.14  2007/06/30 06:04:19  vapour
  * The timeline and workspace area are now updated when a slide is selected in the film strip.  All done with the GtkTreeView approach now.
  *
