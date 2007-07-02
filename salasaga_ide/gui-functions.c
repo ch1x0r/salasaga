@@ -5330,9 +5330,12 @@ void slide_move_down(void)
 void slide_move_top(void)
 {
 	// Local variables
+	GtkTreeSelection		*film_strip_selector;
+	GtkTreePath			*new_path;				// Temporary path
 	GList				*previous_slide;			// Pointer to the slide above
+	GtkTreeIter			selection_iter;
 	gint				slide_position;				// Which slide in the slide list we are moving
-	gpointer			this_slide_data;			// Pointer to the data for this slide
+	slide				*this_slide_data;			// Pointer to the data for this slide
 
 
 	// Safety check
@@ -5344,12 +5347,25 @@ void slide_move_top(void)
 		return;
 	}
 
-	// Swap the slides around
+	// Remove this slide from the slides list, then re-attach it at the start
 	this_slide_data = current_slide->data;
-	previous_slide = g_list_nth(slides, slide_position - 1);
-	current_slide->data = previous_slide->data;
-	previous_slide->data = this_slide_data;
-	current_slide = previous_slide;
+	slides = g_list_remove(slides, this_slide_data);
+	slides = g_list_prepend(slides, this_slide_data);
+	current_slide = g_list_first(slides);
+
+	// Remove the filmstrip thumbnail and re-attach it at the start of the slides list
+	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
+	gtk_tree_selection_get_selected(GTK_TREE_SELECTION(film_strip_selector), NULL, &selection_iter);
+	gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &selection_iter);
+	this_slide_data = current_slide->data;
+	gtk_list_store_prepend(GTK_LIST_STORE(film_strip_store), &selection_iter);  // Acquire an iterator
+	gtk_list_store_set(GTK_LIST_STORE(film_strip_store), &selection_iter, 0, gtk_image_get_pixbuf(this_slide_data->thumbnail), -1);
+
+	// Scroll the film strip to show the new slide position
+	// fixme3: Doesn't appear to be scrolling the window. :(
+	new_path = gtk_tree_path_new_from_indices(0, -1);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.5);
+	gtk_tree_path_free(new_path);
 
 	// Recreate the slide tooltips
 	create_tooltips();
@@ -5480,6 +5496,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.75  2007/07/02 09:07:36  vapour
+ * Updated slide_move_top to work correctly with new film strip widgets.
+ *
  * Revision 1.74  2007/07/01 13:17:13  vapour
  * Fixed a very small memory leak.
  *
