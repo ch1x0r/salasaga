@@ -5298,10 +5298,13 @@ void slide_move_bottom(void)
 void slide_move_down(void)
 {
 	// Local variables
+	GtkTreeSelection		*film_strip_selector;
 	GList				*next_slide;				// Pointer to the slide below
+	GtkTreePath			*new_path;				// Temporary path
 	gint				num_slides;				// The total number of slides
+	GtkTreeIter			selection_iter;
 	gint				slide_position;				// Which slide in the slide list we are moving
-	gpointer			this_slide_data;			// Pointer to the data for this slide
+	slide				*this_slide_data;			// Pointer to the data for this slide
 
 
 	// Safety check
@@ -5320,6 +5323,14 @@ void slide_move_down(void)
 	current_slide->data = next_slide->data;
 	next_slide->data = this_slide_data;
 	current_slide = next_slide;
+
+	// Remove the film strip thumbnail then insert it at its new position
+	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
+	gtk_tree_selection_get_selected(GTK_TREE_SELECTION(film_strip_selector), NULL, &selection_iter);
+	gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &selection_iter);
+	this_slide_data = current_slide->data;
+	gtk_list_store_insert(GTK_LIST_STORE(film_strip_store), &selection_iter, slide_position + 1);
+	gtk_list_store_set(GTK_LIST_STORE(film_strip_store), &selection_iter, 0, gtk_image_get_pixbuf(this_slide_data->thumbnail), -1);
 
 	// Recreate the slide tooltips
 	create_tooltips();
@@ -5376,9 +5387,12 @@ void slide_move_top(void)
 void slide_move_up(void)
 {
 	// Local variables
+	GtkTreeSelection		*film_strip_selector;
+	GtkTreePath			*new_path;				// Temporary path
 	GList				*previous_slide;			// Pointer to the slide above
+	GtkTreeIter			selection_iter;
 	gint				slide_position;				// Which slide in the slide list we are moving
-	gpointer			this_slide_data;			// Pointer to the data for this slide
+	slide				*this_slide_data;			// Pointer to the data for this slide
 
 
 	// Safety check
@@ -5396,6 +5410,14 @@ void slide_move_up(void)
 	current_slide->data = previous_slide->data;
 	previous_slide->data = this_slide_data;
 	current_slide = previous_slide;
+
+	// Remove the film strip thumbnail then insert it at its new position
+	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
+	gtk_tree_selection_get_selected(GTK_TREE_SELECTION(film_strip_selector), NULL, &selection_iter);
+	gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &selection_iter);
+	this_slide_data = current_slide->data;
+	gtk_list_store_insert(GTK_LIST_STORE(film_strip_store), &selection_iter, slide_position - 1);
+	gtk_list_store_set(GTK_LIST_STORE(film_strip_store), &selection_iter, 0, gtk_image_get_pixbuf(this_slide_data->thumbnail), -1);
 
 	// Recreate the slide tooltips
 	create_tooltips();
@@ -5496,6 +5518,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.76  2007/07/02 10:19:11  vapour
+ * Updated slide_move_up and slide_move_down to work correctly with new film strip widgets.  Needs testing though.
+ *
  * Revision 1.75  2007/07/02 09:07:36  vapour
  * Updated slide_move_top to work correctly with new film strip widgets.
  *
