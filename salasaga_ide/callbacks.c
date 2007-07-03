@@ -71,24 +71,43 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
 void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 {
 	// Local variables
-	GtkTreePath			*path;
+	GtkTreePath			*selected_path;
+	GtkTreeIter			selected_iter;
 	GList				*selected_row;
-	gchar				*selection_path;
+	gchar				*selection_string;
+	GString				*tmp_gstring;
 
 
 	// Determine if a row has been selected
-	if (gtk_tree_selection_get_selected(selection, NULL, NULL))
+	if (TRUE == gtk_tree_selection_get_selected(selection, NULL, NULL))
         {
 		// * Update current_slide to be the clicked on slide's GList entry, then redraw the timeline and workspace *
 
 		// Determine which slide is now selected
-		gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &path, NULL);
-		selection_path = gtk_tree_path_to_string(path);
+		tmp_gstring = g_string_new("0");
+		if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &selected_iter, tmp_gstring->str))
+		{
+			if (debug_level) printf("film_strip_slide_clicked: Iter is valid\n");
+		} else
+		{
+			if (debug_level) printf("film_strip_slide_clicked: Iter is not valid\n");
+		}
+		g_string_free(tmp_gstring, TRUE);
+
+		gtk_tree_selection_get_selected(selection, NULL, &selected_iter);
+		if ((debug_level) && (!gtk_list_store_iter_is_valid(GTK_LIST_STORE(film_strip_store), &selected_iter)))
+		{
+			printf("Invalid iter!\n");
+		}
+
+		selected_path = gtk_tree_model_get_path(GTK_TREE_MODEL(film_strip_store), &selected_iter);
+		selection_string = gtk_tree_path_to_string(selected_path);
+		if (debug_level) printf("film_strip_slide_clicked: Slide selected: %s\n", selection_string);
 
 		// Get a pointer to the clicked on slide's GList
 		slides = g_list_first(slides);
-		current_slide = g_list_nth(slides, atoi(selection_path));
-
+		current_slide = g_list_nth(slides, atoi(selection_string));
+		
 		// Redraw the timeline
 		draw_timeline();
 
@@ -96,8 +115,8 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		draw_workspace();
 
 		// Free the memory used to deterine the newly selected slide
-		g_free(selection_path);
-		gtk_tree_path_free(path);
+//		g_free(selection_path);
+//		gtk_tree_path_free(path);
 	}
 }
 
@@ -850,6 +869,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2007/07/03 14:15:59  vapour
+ * Re-wrote the film_strip_slide_clicked function to be more resilient, and use the new debug_level variable to control output.
+ *
  * Revision 1.12  2007/06/30 06:04:19  vapour
  * The timeline and workspace area are now updated when a slide is selected in the film strip.  All done with the GtkTreeView approach now.
  *
