@@ -4074,22 +4074,23 @@ void menu_file_new(void)
 void menu_file_open(void)
 {
 	// Local variables
-	GtkFileFilter		*all_filter;
+	GtkFileFilter			*all_filter;
 	gchar				*filename;				// Pointer to the chosen file name
-	GtkFileFilter		*flame_filter;
+	GtkFileFilter			*flame_filter;
+	GtkTreePath			*new_path;				// Temporary path
 	GtkWidget 			*open_dialog;
 	gboolean			return_code;
 
-	GString				*tmp_gstring;			// Temporary gstring
+	GString				*tmp_gstring;				// Temporary gstring
 
 
 	// Create the dialog asking the user to select a Flame Project file
 	open_dialog = gtk_file_chooser_dialog_new("Open a Flame Project",
-											  GTK_WINDOW(main_window),
-											  GTK_FILE_CHOOSER_ACTION_OPEN,
-											  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-											  GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
-											  NULL);
+						  GTK_WINDOW(main_window),
+						  GTK_FILE_CHOOSER_ACTION_OPEN,
+						  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+						  GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+						  NULL);
 
 	// Create the filter so only *.flame files are displayed
 	flame_filter = gtk_file_filter_new();
@@ -4168,6 +4169,12 @@ void menu_file_open(void)
 
 	// Draw the workspace area
 	draw_workspace();
+
+	// Scroll the film strip to show the new thumbnail position
+	new_path = gtk_tree_path_new_first();
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.0);
+//	gtk_tree_path_free(new_path);
 
 	// Enable the project based menu items
 	menu_enable("/Slide", TRUE);
@@ -5292,15 +5299,14 @@ void slide_move_bottom(void)
 	}
 	g_string_free(tmp_gstring, TRUE);
 
-	// Scroll the film strip to show the new slide position
-	// fixme3: Doesn't appear to be scrolling the window. :(
-//	new_path = gtk_tree_path_new_from_indices(num_slides - 1, -1);
-//	gtk_tree_selection_select_path(GTK_TREE_SELECTION(film_strip_selector), new_path);
-//	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.5);
-//	gtk_tree_path_free(new_path);
-
 	// Recreate the slide tooltips
 	create_tooltips();
+
+	// Scroll the film strip to show the new thumbnail position
+	new_path = gtk_tree_path_new_from_indices(num_slides - 1, -1);
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 1.0, 0.0);
+//	gtk_tree_path_free(new_path);
 }
 
 
@@ -5309,6 +5315,7 @@ void slide_move_down(void)
 {
 	// Local variables
 	GtkTreeIter			from_iter, to_iter;
+	GtkTreePath			*new_path;				// Temporary path
 	GList				*next_slide;				// Pointer to the slide below
 	gint				num_slides;				// The total number of slides
 	gint				slide_position;				// Which slide in the slide list we are moving
@@ -5355,6 +5362,12 @@ void slide_move_down(void)
 
 	// Recreate the slide tooltips
 	create_tooltips();
+
+	// Scroll the film strip to show the new thumbnail position
+	new_path = gtk_tree_path_new_from_indices(slide_position + 1, -1);
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
+//	gtk_tree_path_free(new_path);
 }
 
 
@@ -5402,10 +5415,10 @@ void slide_move_top(void)
 	}
 	g_string_free(tmp_gstring, TRUE);
 
-	// Scroll the film strip to show the new slide position
-	// fixme3: Doesn't appear to be scrolling the window. :(
-//	new_path = gtk_tree_path_new_from_indices(0, -1);
-//	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.5);
+	// Scroll the film strip to show the new thumbnail position
+	new_path = gtk_tree_path_new_first();
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.0);
 //	gtk_tree_path_free(new_path);
 
 	// Recreate the slide tooltips
@@ -5463,6 +5476,12 @@ void slide_move_up(void)
 
 	// Recreate the slide tooltips
 	create_tooltips();
+
+	// Scroll the film strip to show the new thumbnail position
+	new_path = gtk_tree_path_new_from_indices(slide_position - 1, -1);
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
+//	gtk_tree_path_free(new_path);
 }
 
 
@@ -5560,6 +5579,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.78  2007/07/03 15:02:05  vapour
+ * Added code to scroll the film strip whenever a slide is moved, so the thumbnail is always properly visible.
+ *
  * Revision 1.77  2007/07/03 14:26:16  vapour
  * Re-wrote the film stip thumbnail movement code to be more resilient, and use the new debug_level variable to control stdout output.
  *
