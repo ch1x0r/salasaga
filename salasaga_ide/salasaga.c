@@ -426,7 +426,7 @@ void create_film_strip()
 	gtk_tree_view_append_column(GTK_TREE_VIEW(film_strip_view), column);
 
 	// Add the list view to the film strip
-	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(film_strip_container), film_strip_view);
+	gtk_container_add(GTK_CONTAINER(film_strip_container), GTK_WIDGET(film_strip_view));
 
 	// Set the selection mode of the film strip to single
 	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
@@ -1447,6 +1447,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.42  2007/07/03 14:48:55  vapour
+ * Updated the film strip widget to no longer be inside a viewport, as it was doing bad things to the scrolling.
+ *
  * Revision 1.41  2007/07/03 14:27:38  vapour
  * Explicitly set the film strip area selection policy to single selection only.
  * Also introduced a new debug_level global variable.
