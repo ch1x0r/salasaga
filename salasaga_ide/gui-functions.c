@@ -2049,7 +2049,7 @@ void layer_delete(void)
 		return;
 	}
 
-	// Remove the layer from the TreeView widget
+	// Remove the layer from the Timeline widget
 	tmp_layer = g_list_nth_data(layer_pointer, selected_row);
 	tmp_bool = gtk_list_store_remove(list_pointer, tmp_layer->row_iter);
 
@@ -2057,7 +2057,7 @@ void layer_delete(void)
 	layer_pointer = g_list_remove(layer_pointer, tmp_layer);
 	((slide *) current_slide->data)->layers = layer_pointer;
 
-	// Make the row above in the timeline widget selected
+	// Make the row above in the Timeline widget selected
 	if (0 != selected_row)
 	{
 		selected_row = selected_row - 1;
@@ -5250,17 +5250,22 @@ void slide_move_bottom(void)
 {
 	// Local variables
 	GtkTreeSelection		*film_strip_selector;
+	GtkTreeIter			new_iter;
 	GtkTreePath			*new_path;				// Temporary path
 	GList				*next_slide;				// Pointer to the slide below
 	gint				num_slides;				// The total number of slides
-	GtkTreeIter			selection_iter;
 	gint				slide_position;				// Which slide in the slide list we are moving
 	slide				*this_slide_data;			// Pointer to the data for this slide
+	GString				*tmp_gstring;
 
+
+	// Initialise some things
+	tmp_gstring = g_string_new(NULL);	
 
 	// Safety check
 	slides = g_list_first(slides);
 	slide_position = g_list_position(slides, current_slide);
+	if (debug_level) printf("slide_move_bottom: slide position: %u\n", slide_position);
 	num_slides = g_list_length(slides);
 	if (num_slides == (slide_position + 1))
 	{
@@ -5275,19 +5280,24 @@ void slide_move_bottom(void)
 	slides = g_list_append(slides, this_slide_data);
 	current_slide = g_list_last(slides);
 
-	// Remove the film strip thumbnail and re-attach it on the end of the slides list
-	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
-	gtk_tree_selection_get_selected(GTK_TREE_SELECTION(film_strip_selector), NULL, &selection_iter);
-	gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &selection_iter);
-	this_slide_data = current_slide->data;
-	gtk_list_store_append(GTK_LIST_STORE(film_strip_store), &selection_iter);  // Acquire an iterator
-	gtk_list_store_set(GTK_LIST_STORE(film_strip_store), &selection_iter, 0, gtk_image_get_pixbuf(this_slide_data->thumbnail), -1);
+	// Move the thumbnail to the end of the slides list
+	g_string_printf(tmp_gstring, "%u", slide_position);
+	if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &new_iter, tmp_gstring->str))
+	{
+		if (debug_level) printf("slide_move_bottom: Iter is valid\n");
+		gtk_list_store_move_before(GTK_LIST_STORE(film_strip_store), &new_iter, NULL);
+	} else
+	{
+		if (debug_level) printf("slide_move_bottom: Iter is not valid\n");
+	}
+	g_string_free(tmp_gstring, TRUE);
 
 	// Scroll the film strip to show the new slide position
 	// fixme3: Doesn't appear to be scrolling the window. :(
-	new_path = gtk_tree_path_new_from_indices(num_slides - 1, -1);
-	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.5);
-	gtk_tree_path_free(new_path);
+//	new_path = gtk_tree_path_new_from_indices(num_slides - 1, -1);
+//	gtk_tree_selection_select_path(GTK_TREE_SELECTION(film_strip_selector), new_path);
+//	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.5);
+//	gtk_tree_path_free(new_path);
 
 	// Recreate the slide tooltips
 	create_tooltips();
@@ -5298,14 +5308,16 @@ void slide_move_bottom(void)
 void slide_move_down(void)
 {
 	// Local variables
-	GtkTreeSelection		*film_strip_selector;
+	GtkTreeIter			from_iter, to_iter;
 	GList				*next_slide;				// Pointer to the slide below
-	GtkTreePath			*new_path;				// Temporary path
 	gint				num_slides;				// The total number of slides
-	GtkTreeIter			selection_iter;
 	gint				slide_position;				// Which slide in the slide list we are moving
 	slide				*this_slide_data;			// Pointer to the data for this slide
+	GString				*tmp_gstring;
 
+
+	// Initialise some things
+	tmp_gstring = g_string_new(NULL);
 
 	// Safety check
 	slides = g_list_first(slides);
@@ -5324,13 +5336,22 @@ void slide_move_down(void)
 	next_slide->data = this_slide_data;
 	current_slide = next_slide;
 
-	// Remove the film strip thumbnail then insert it at its new position
-	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
-	gtk_tree_selection_get_selected(GTK_TREE_SELECTION(film_strip_selector), NULL, &selection_iter);
-	gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &selection_iter);
-	this_slide_data = current_slide->data;
-	gtk_list_store_insert(GTK_LIST_STORE(film_strip_store), &selection_iter, slide_position + 1);
-	gtk_list_store_set(GTK_LIST_STORE(film_strip_store), &selection_iter, 0, gtk_image_get_pixbuf(this_slide_data->thumbnail), -1);
+	// Move the thumbnail down one position in the film strip list
+	g_string_printf(tmp_gstring, "%u", slide_position);
+	if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &from_iter, tmp_gstring->str))
+	{
+		if (debug_level) printf("slide_move_top: 'From' iter is valid\n");
+		g_string_printf(tmp_gstring, "%u", slide_position + 1);
+		if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &to_iter, tmp_gstring->str))
+		{
+			if (debug_level) printf("slide_move_top: 'To' iter is valid\n");
+			gtk_list_store_move_after(GTK_LIST_STORE(film_strip_store), &from_iter, &to_iter);
+		}
+	} else
+	{
+		if (debug_level) printf("slide_move_top: 'From' iter is not valid\n");
+	}
+	g_string_free(tmp_gstring, TRUE);
 
 	// Recreate the slide tooltips
 	create_tooltips();
@@ -5342,16 +5363,21 @@ void slide_move_top(void)
 {
 	// Local variables
 	GtkTreeSelection		*film_strip_selector;
+	GtkTreeIter			new_iter;
 	GtkTreePath			*new_path;				// Temporary path
 	GList				*previous_slide;			// Pointer to the slide above
-	GtkTreeIter			selection_iter;
 	gint				slide_position;				// Which slide in the slide list we are moving
 	slide				*this_slide_data;			// Pointer to the data for this slide
+	GString				*tmp_gstring;
 
+
+	// Initialise some things
+	tmp_gstring = g_string_new(NULL);	
 
 	// Safety check
 	slides = g_list_first(slides);
 	slide_position = g_list_position(slides, current_slide);
+	if (debug_level) printf("slide_move_top: slide position: %u\n", slide_position);
 	if (0 == slide_position)
 	{
 		// We can't move the upper most slide any further up, so just return
@@ -5364,19 +5390,23 @@ void slide_move_top(void)
 	slides = g_list_prepend(slides, this_slide_data);
 	current_slide = g_list_first(slides);
 
-	// Remove the filmstrip thumbnail and re-attach it at the start of the slides list
-	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
-	gtk_tree_selection_get_selected(GTK_TREE_SELECTION(film_strip_selector), NULL, &selection_iter);
-	gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &selection_iter);
-	this_slide_data = current_slide->data;
-	gtk_list_store_prepend(GTK_LIST_STORE(film_strip_store), &selection_iter);  // Acquire an iterator
-	gtk_list_store_set(GTK_LIST_STORE(film_strip_store), &selection_iter, 0, gtk_image_get_pixbuf(this_slide_data->thumbnail), -1);
+	// Move the thumbnail to the start of the slides list
+	g_string_printf(tmp_gstring, "%u", slide_position);
+	if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &new_iter, tmp_gstring->str))
+	{
+		if (debug_level) printf("slide_move_top: Iter is valid\n");
+		gtk_list_store_move_after(GTK_LIST_STORE(film_strip_store), &new_iter, NULL);
+	} else
+	{
+		if (debug_level) printf("slide_move_top: Iter is not valid\n");
+	}
+	g_string_free(tmp_gstring, TRUE);
 
 	// Scroll the film strip to show the new slide position
 	// fixme3: Doesn't appear to be scrolling the window. :(
-	new_path = gtk_tree_path_new_from_indices(0, -1);
-	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.5);
-	gtk_tree_path_free(new_path);
+//	new_path = gtk_tree_path_new_from_indices(0, -1);
+//	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.5);
+//	gtk_tree_path_free(new_path);
 
 	// Recreate the slide tooltips
 	create_tooltips();
@@ -5387,13 +5417,16 @@ void slide_move_top(void)
 void slide_move_up(void)
 {
 	// Local variables
-	GtkTreeSelection		*film_strip_selector;
+	GtkTreeIter			from_iter, to_iter;
 	GtkTreePath			*new_path;				// Temporary path
 	GList				*previous_slide;			// Pointer to the slide above
-	GtkTreeIter			selection_iter;
 	gint				slide_position;				// Which slide in the slide list we are moving
 	slide				*this_slide_data;			// Pointer to the data for this slide
+	GString				*tmp_gstring;
 
+
+	// Initialise some things
+	tmp_gstring = g_string_new(NULL);
 
 	// Safety check
 	slides = g_list_first(slides);
@@ -5411,13 +5444,22 @@ void slide_move_up(void)
 	previous_slide->data = this_slide_data;
 	current_slide = previous_slide;
 
-	// Remove the film strip thumbnail then insert it at its new position
-	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
-	gtk_tree_selection_get_selected(GTK_TREE_SELECTION(film_strip_selector), NULL, &selection_iter);
-	gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &selection_iter);
-	this_slide_data = current_slide->data;
-	gtk_list_store_insert(GTK_LIST_STORE(film_strip_store), &selection_iter, slide_position - 1);
-	gtk_list_store_set(GTK_LIST_STORE(film_strip_store), &selection_iter, 0, gtk_image_get_pixbuf(this_slide_data->thumbnail), -1);
+	// Move the thumbnail up one position in the film strip list
+	g_string_printf(tmp_gstring, "%u", slide_position);
+	if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &from_iter, tmp_gstring->str))
+	{
+		if (debug_level) printf("slide_move_top: 'From' iter is valid\n");
+		g_string_printf(tmp_gstring, "%u", slide_position - 1);
+		if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &to_iter, tmp_gstring->str))
+		{
+			if (debug_level) printf("slide_move_top: 'To' iter is valid\n");
+			gtk_list_store_move_before(GTK_LIST_STORE(film_strip_store), &from_iter, &to_iter);
+		}
+	} else
+	{
+		if (debug_level) printf("slide_move_top: 'From' iter is not valid\n");
+	}
+	g_string_free(tmp_gstring, TRUE);
 
 	// Recreate the slide tooltips
 	create_tooltips();
@@ -5518,6 +5560,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.77  2007/07/03 14:26:16  vapour
+ * Re-wrote the film stip thumbnail movement code to be more resilient, and use the new debug_level variable to control stdout output.
+ *
  * Revision 1.76  2007/07/02 10:19:11  vapour
  * Updated slide_move_up and slide_move_down to work correctly with new film strip widgets.  Needs testing though.
  *
