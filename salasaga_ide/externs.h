@@ -37,6 +37,7 @@ extern guint				capture_width;
 extern guint				capture_x;
 extern guint				capture_y;
 extern GList				*current_slide;
+extern guint				debug_level;
 extern gfloat				export_time_counter;
 extern GString				*icon_extension;
 extern GString				*icon_path;
@@ -119,6 +120,9 @@ extern gint				num_res_items;
  * +++++++
  * 
  * $Log$
+ * Revision 1.16  2007/07/03 14:28:30  vapour
+ * Made the new debug_level global variable visible to the other files.
+ *
  * Revision 1.15  2007/07/01 12:47:10  vapour
  * Removed the film_strip global variable, and removed an uneeded VBox out of the film strip structure.
  *
