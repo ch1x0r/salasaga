@@ -60,6 +60,7 @@ guint					capture_width;				// Width for screen captures
 guint					capture_x;				// X offset for screen captures
 guint					capture_y;				// Y offset for screen captures
 GList					*current_slide = NULL;			// Pointer to the presently selected slide
+guint					debug_level = 0;			// Used to indicate debugging level
 gfloat					export_time_counter;			// Used when exporting, holds the number of seconds thus far
 GString					*file_name = NULL;			// Holds the file name the project is saved as
 GtkScrolledWindow			*film_strip_container;			// Container for the film strip
@@ -402,6 +403,7 @@ void create_film_strip()
 
 	// Local variables
 	GtkTreeViewColumn		*column;
+	GtkTreeSelection		*film_strip_selector;
 	GtkTreeIter			iter;
 	GtkCellRenderer			*renderer;
 	GtkTreeSelection		*selector;
@@ -425,6 +427,10 @@ void create_film_strip()
 
 	// Add the list view to the film strip
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(film_strip_container), film_strip_view);
+
+	// Set the selection mode of the film strip to single
+	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
+	gtk_tree_selection_set_mode(GTK_TREE_SELECTION(film_strip_selector), GTK_SELECTION_SINGLE);
 
 	// Connect a signal handler to the film strip, which gets called whenever a selection is made
 	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
@@ -756,6 +762,7 @@ gint main(gint argc, gchar *argv[])
 	if ((2 == argc) && (0 == g_ascii_strncasecmp("-d", argv[1], 2)))
 	{
 		// Disable logging
+		debug_level = 1;
 		printf("Debugging mode, errors will be shown on stdout.\n");
 	} else
 	{
@@ -1440,6 +1447,10 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.41  2007/07/03 14:27:38  vapour
+ * Explicitly set the film strip area selection policy to single selection only.
+ * Also introduced a new debug_level global variable.
+ *
  * Revision 1.40  2007/07/02 10:40:36  vapour
  * Added a -d switch to the command line options, which enables errors to be shown on the command line.  Useful for debugging.
  *
