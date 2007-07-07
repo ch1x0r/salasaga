@@ -4148,7 +4148,7 @@ void menu_file_open(void)
 
 	// Create a new output resolution selector, including the resolution of the loaded project
 	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(res_array, num_res_items, output_width, output_height));
-	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_selector), 8, 9, 0, 1);
+	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_selector), 5, 6, 0, 1);
 	resolution_callback = g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL);
 	gtk_widget_show_all(GTK_WIDGET(message_bar));
 
@@ -5579,6 +5579,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.79  2007/07/07 12:48:19  vapour
+ * No longer expands the GUI window too much horizontally when opening a project file.
+ *
  * Revision 1.78  2007/07/03 15:02:05  vapour
  * Added code to scroll the film strip whenever a slide is moved, so the thumbnail is always properly visible.
  *
