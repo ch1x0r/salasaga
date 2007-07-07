@@ -811,7 +811,7 @@ gint main(gint argc, gchar *argv[])
 
 	// Start up the GUI part of things
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_default_size(GTK_WINDOW(main_window), 1024, 768);
+	gtk_window_set_default_size(GTK_WINDOW(main_window), 800, 600);
 	gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_CENTER);
 
 #ifndef _WIN32  // Non-windows check
@@ -1319,18 +1319,18 @@ gint main(gint argc, gchar *argv[])
 
 	// * Create a table for the status bar, zoom selector, and resolution selectors to go in *
 	// fixme4: Might be better going back to a HBox, and using filling (on for the status bar, off for the others), to achieve a better result
-	message_bar = GTK_TABLE(gtk_table_new(1, 9, TRUE));
+	message_bar = GTK_TABLE(gtk_table_new(1, 6, TRUE));
 	gtk_box_pack_start(GTK_BOX(outer_box), GTK_WIDGET(message_bar), FALSE, FALSE, 0);
 
 	// Create the status bar
 	status_bar = gtk_statusbar_new();
 	gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(status_bar), FALSE);
-	gtk_table_attach_defaults(message_bar, GTK_WIDGET(status_bar), 0, 5, 0, 1);
+	gtk_table_attach_defaults(message_bar, GTK_WIDGET(status_bar), 0, 2, 0, 1);
 
 	// Create the zoom selector label
 	zoom_label = GTK_LABEL(gtk_label_new("Zoom: "));
 	gtk_misc_set_alignment(GTK_MISC(zoom_label), 1, 0.5);
-	gtk_table_attach_defaults(message_bar, GTK_WIDGET(zoom_label), 5, 6, 0, 1);
+	gtk_table_attach_defaults(message_bar, GTK_WIDGET(zoom_label), 2, 3, 0, 1);
 
 	// Create the zoom selector
 	zoom_selector = GTK_COMBO_BOX(gtk_combo_box_new_text());
@@ -1349,7 +1349,7 @@ gint main(gint argc, gchar *argv[])
 	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "10%");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "Fit to width");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(zoom_selector), 11);
-	gtk_table_attach_defaults(message_bar, GTK_WIDGET(zoom_selector), 6, 7, 0, 1);
+	gtk_table_attach_defaults(message_bar, GTK_WIDGET(zoom_selector), 3, 4, 0, 1);
 
 	// Link the zoom selector to the function that recalculates the zoom and redraws the working area
 	g_signal_connect(G_OBJECT(zoom_selector), "changed", G_CALLBACK(zoom_selector_changed), (gpointer) NULL);
@@ -1357,12 +1357,12 @@ gint main(gint argc, gchar *argv[])
 	// Create the resolution selector label
 	resolution_label = GTK_LABEL(gtk_label_new("Output: "));
 	gtk_misc_set_alignment(GTK_MISC(resolution_label), 1, 0.5);
-	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_label), 7, 8, 0, 1);
+	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_label), 4, 5, 0, 1);
 
 	// Create the resolution selector, setting 640x480 as the default
 	// fixme3: The setting of default doesn't work yet.  Needs to be changed directly in the function for now
 	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(res_array, num_res_items, 640, 480));
-	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_selector), 8, 9, 0, 1);
+	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_selector), 5, 6, 0, 1);
 
 	// Link the resolution selector to the function that stores the new values in global variables
 	resolution_callback = g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL);
@@ -1447,6 +1447,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.43  2007/07/07 12:43:43  vapour
+ * GUI window now starts up at 800x600 size by default, and doesn't expand too far to the right at initial GUI creation.
+ *
  * Revision 1.42  2007/07/03 14:48:55  vapour
  * Updated the film strip widget to no longer be inside a viewport, as it was doing bad things to the scrolling.
  *
