@@ -67,6 +67,24 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
 }
 
 
+// Function called when the user chooses moves the film strip handle
+void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data)
+{
+	// Temporary variables
+	gint				new_position;
+
+	// Get the new position of the film strip seperator
+	new_position = gtk_paned_get_position(GTK_PANED(paned));
+
+	// If the handle has moved, calculate the new thumbnail width then regenerate all the thumbnails
+	if (new_position != preview_width)
+	{
+		if (debug_level) printf("Handle position changed to: %u\n", gtk_paned_get_position(GTK_PANED(paned)));
+		preview_width = new_position;
+	}
+}
+
+
 // Callback function that updates the workspace and timeline when a new slide in the film strip is selected
 void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 {
@@ -869,6 +887,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2007/07/08 14:06:35  vapour
+ * Added the definition for the new film_strip_handle_changed function.
+ *
  * Revision 1.13  2007/07/03 14:15:59  vapour
  * Re-wrote the film_strip_slide_clicked function to be more resilient, and use the new debug_level variable to control output.
  *
