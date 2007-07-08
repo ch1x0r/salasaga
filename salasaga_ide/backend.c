@@ -2539,6 +2539,7 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/output_height", default_output_height, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/slide_length", default_slide_length, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/output_quality", default_output_quality, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", preview_width, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/frames_per_second", frames_per_second, NULL);
 	switch (scaling_quality)
 	{
@@ -2697,6 +2698,11 @@ void save_preferences_and_exit(void)
 	g_string_printf(tmp_gstring, "%d", output_quality);
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "output_quality", 0, REG_SZ, tmp_gstring->str, string_size);
+
+	// Set the value for the thumbnail width
+	g_string_printf(tmp_gstring, "%d", preview_width);
+	string_size = (tmp_gstring->len) + 1;
+	return_code = RegSetValueEx(hkey, "thumbnail_width", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the frames per second
 	g_string_printf(tmp_gstring, "%d", frames_per_second);
@@ -2880,6 +2886,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.87  2007/07/08 13:20:27  vapour
+ * Thumbnail width is now kept between sessions.
+ *
  * Revision 1.86  2007/07/08 12:56:53  vapour
  * Thumbnail height is now calculated dynamically instead of stuck at 233 pixels.
  *

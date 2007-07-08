@@ -115,7 +115,7 @@ guint					default_output_width;			// Application default for how wide to create 
 GString					*default_project_folder;		// Application default save path for project folders
 guint					default_slide_length;			// Default length of all new slides, in frames
 guint					icon_height = 30;			// Height in pixels for the toolbar icons (they're scalable SVG's)
-guint					preview_width = 300;			// Width in pixel for the film strip preview (might turn into a structure later)
+guint					preview_width;				// Width in pixel for the film strip preview (might turn into a structure later)
 guint					scaling_quality;			// Default image scaling quality used
 GString					*screenshots_folder;			// Application default for where to store screenshots
 
@@ -741,6 +741,7 @@ gint main(gint argc, gchar *argv[])
 	default_bg_colour.red = 0;
 	default_bg_colour.green = 0;
 	default_bg_colour.blue = 0;
+	preview_width = 300;
 	frames_per_second = 12;  // Half of 24 fps (film)
 	icon_path = g_string_new(NULL);
 	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
@@ -839,6 +840,7 @@ gint main(gint argc, gchar *argv[])
 		default_output_height = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_height", NULL);
 		default_slide_length = slide_length = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/slide_length", NULL);
 		default_output_quality = output_quality = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_quality", NULL);
+		preview_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", NULL);
 		frames_per_second = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/frames_per_second", NULL);
 
 		// Determine the stored scaling quality preference
@@ -1065,6 +1067,26 @@ gint main(gint argc, gchar *argv[])
 			if (ERROR_SUCCESS == return_code)
 			{
 				default_slide_length = slide_length = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the default thumbnail width
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			preview_width = 300;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "thumbnail_width", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				preview_width = atoi(buffer_ptr);
 			}
 
 			// Close the registry key
@@ -1447,6 +1469,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.44  2007/07/08 13:19:53  vapour
+ * Thumbnail width is now kept between sessions.
+ *
  * Revision 1.43  2007/07/07 12:43:43  vapour
  * GUI window now starts up at 800x600 size by default, and doesn't expand too far to the right at initial GUI creation.
  *
