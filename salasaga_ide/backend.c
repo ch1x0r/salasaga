@@ -795,6 +795,9 @@ gboolean flame_read(gchar *filename)
 		current_slide = NULL;
 	}
 
+	// If there's an existing film strip, we unload it
+	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
+
 	// Load project file format version
 	save_version = atoi((const char *) save_format_data);
 	xmlFree(save_format_data);
@@ -1401,7 +1404,7 @@ gboolean flame_read(gchar *filename)
 			// Set the timeline widget for the slide to NULL, so we know to create it later on
 			tmp_slide->timeline_widget = NULL;
 
-			// Add the thumbnail to the new film strip GtkListView
+			// Add the thumbnail to the film strip
 			gtk_list_store_append(film_strip_store, &film_strip_iter);
 			gtk_list_store_set(film_strip_store, &film_strip_iter, 0, gtk_image_get_pixbuf(tmp_slide->thumbnail), -1);
 
@@ -2859,6 +2862,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.83  2007/07/08 11:04:57  vapour
+ * Fixed a bug.  When loading a project over an existing project, the film strip is now cleared first.
+ *
  * Revision 1.82  2007/07/08 10:59:15  vapour
  * Added support for outputing multi-line text strings to svg, with correctly calculated text length.
  *
