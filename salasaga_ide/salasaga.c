@@ -1339,6 +1339,9 @@ gint main(gint argc, gchar *argv[])
 	gtk_paned_set_position(GTK_PANED(main_area), g_value_get_int(handle_size) + preview_width + 15);
 	gtk_box_pack_start_defaults(GTK_BOX(outer_box), GTK_WIDGET(main_area));
 
+	// Attach a signal handler to the movable handle between film strip and right hand side
+	g_signal_connect(G_OBJECT(main_area), "notify::position", G_CALLBACK(film_strip_handle_changed), (gpointer) NULL);
+
 	// * Create a table for the status bar, zoom selector, and resolution selectors to go in *
 	// fixme4: Might be better going back to a HBox, and using filling (on for the status bar, off for the others), to achieve a better result
 	message_bar = GTK_TABLE(gtk_table_new(1, 6, TRUE));
@@ -1469,6 +1472,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.45  2007/07/08 14:07:17  vapour
+ * Hooked up a signal handler for the new film_strip_handle_changed function.
+ *
  * Revision 1.44  2007/07/08 13:19:53  vapour
  * Thumbnail width is now kept between sessions.
  *
