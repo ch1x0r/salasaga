@@ -1683,6 +1683,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	layer				*layer_data;			// Points to the presently processing layer
 	GList				*layer_pointer;			// Points to the layer structure in the slide
 	gint				num_layers;				// Number of layers in the slide
+	gint				num_text_lines;				// Number of text lines in a layer
 	guint				object_type;			// The type of object in each layer
 	gchar				*pixbuf_buffer;			// Gets given a pointer to a compressed jpeg image
 	gsize				pixbuf_size;			// Gets given the size of a compressed jpeg image
@@ -1691,6 +1692,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	guint				start_frame;			// The first frame in which the object appears
 	GString				*string_to_write = NULL;// Holds SVG data to be written out
 	GtkTextIter			text_end;				// The end position of the text buffer
+	gint				text_lines_counter;			// Counter used when processing text
 	GtkTextIter			text_start;				// The start position of the text buffer
 	gfloat				time_end;				// The second (or part of) in the animation, in which this slide disappears
 	gfloat				time_start;				// The second (or part of) in the animation, in which this slide appears
@@ -2089,20 +2091,37 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					1 + time_start + (layer_data->finish_frame / frames_per_second));
 
 				// Create the text tag
+				num_text_lines = gtk_text_buffer_get_line_count(((layer_text *) layer_data->object_data)->text_buffer);
 				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" font-family=\"Bitstream Vera Sans svg\" class=\"text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-size=\"%.4fpx\" textLength=\"%.4fpx\" lengthAdjust=\"spacingAndGlyphs\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
 					layer_data->name->str,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
 					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,  // Y offset
-					(y_scale * ((layer_text *) layer_data->object_data)->rendered_height - 2),  // Font size
+					(y_scale * ((layer_text *) layer_data->object_data)->rendered_height - 2) / num_text_lines,  // Font size
 					x_scale * (((layer_text *) layer_data->object_data)->rendered_width - 20),  // How wide to make the entire string
 					x_scale * 10,  // Horizontal space between text background border and text start
 					y_scale * ((((layer_text *) layer_data->object_data)->rendered_height + 54) / 2));  // Vertical space between text background border and text start
 
-				// Add the text to the text layer
-				gtk_text_buffer_get_bounds(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end);
-				g_string_append_printf(string_to_write,
-					"%s",
+				// Does the text we're displaying have multiple lines?
+				if (1 < num_text_lines)
+				{
+					for (text_lines_counter = 0; text_lines_counter < num_text_lines; text_lines_counter++)
+					{
+						// Add each line of text to the output, wrapped with a tspan
+						gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(((layer_text *) layer_data->object_data)->text_buffer), &text_start, text_lines_counter);
+						text_end = text_start;
+						gtk_text_iter_forward_to_line_end(&text_end);
+						g_string_append_printf(string_to_write, "<tspan x=\"%.4fpx\" dx=\"%.4fpx\" dy=\"1em\">%s</tspan>\n",
+							x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
+							x_scale * 10,  // Horizontal space between text background border and text start
+							gtk_text_iter_get_visible_text(&text_start, &text_end));  // Text to be rendered
+					}
+				} else
+				{
+					// Just one line of text, so no need to use tspan's
+					gtk_text_buffer_get_bounds(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end);
+					g_string_append_printf(string_to_write, "%s",
 					gtk_text_buffer_get_text(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end, FALSE));  // Text to be rendered
+				}
 
 				// Animate the text SVG properties to fade it in over 1 second
 				g_string_append_printf(string_to_write,
@@ -2780,6 +2799,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.81  2007/07/08 06:51:13  vapour
+ * Added initial code to support multi-line text in the exported SVG.  It's not calculating pixel width correctly yet though.
+ *
  * Revision 1.80  2007/06/30 03:18:18  vapour
  * Began re-writing the film strip area to use a GtkListView widget instead of the hodge podge of event boxes, signal handlers, and other bits.
  *
