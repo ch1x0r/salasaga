@@ -2517,11 +2517,16 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 void regenerate_film_strip_thumbnails(void)
 {
 	// Local variables
-	gint				num_slides, slide_counter;
-	gint				slide_position;
+	GdkDevice			*core_pointer;
+	GdkModifierType			core_pointer_modifier_mask;
+	gint				num_slides;
+	gint				slide_counter, slide_position;
 	GtkTreeIter			film_strip_iter;
 	GdkPixbuf			*new_thumbnail;
 	GList				*this_slide;
+
+	GtkWindow			*tmp_gtk_window;			// Temporary GtkWindow
+	GdkWindow			*tmp_gdk_window;			// Temporary GdkWindow
 
 
 	// Safety check
@@ -2534,11 +2539,30 @@ void regenerate_film_strip_thumbnails(void)
 		return;
 	}
 
-	// Check if the mouse button is presently up or down.  If it's still down we just ignore this signal
-	if ()
+/* Commented out this code because it doesn't work very well.
+ * It should probably be re-written to set a callback for when the
+ * mouse button is released, then have the callback do the thumbnail generation
+ *
+	// Get a pointer to the underlying GDK window
+	tmp_gtk_window = GTK_WINDOW(main_window);
+	if (NULL != tmp_gtk_window->frame)
 	{
+		tmp_gdk_window = tmp_gtk_window->frame;
+	}
+	else
+	{
+		tmp_gdk_window = main_window->window;
+	}
+
+	// Check if the mouse button is presently up or down.  If it's still down we just ignore this signal
+	core_pointer = gdk_device_get_core_pointer();
+	gdk_device_get_state(core_pointer, GDK_WINDOW(tmp_gdk_window), NULL, &core_pointer_modifier_mask);
+	if (core_pointer_modifier_mask & GDK_BUTTON1_MASK)
+	{
+		if (debug_level) printf("Mouse key still down\n");
 		return;
 	}
+ */
 
 	// Remove the existing film strip thumbnails
 	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
@@ -2549,7 +2573,6 @@ void regenerate_film_strip_thumbnails(void)
 		// Create the thumbnail for the slide
 		this_slide = g_list_nth(slides, slide_counter);
 		new_thumbnail = compress_layers(this_slide, preview_width, (guint) preview_width * 0.75);
-
 		((slide *) this_slide->data)->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(new_thumbnail)));
 
 		// Add the thumbnail to the film strip
@@ -2932,6 +2955,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.89  2007/07/08 15:09:55  vapour
+ * Commented out the code that checks for the mouse button state.
+ *
  * Revision 1.88  2007/07/08 14:38:53  vapour
  * Added a function to regenerate the film strip thumbnails when the film strip seperator handle is moved.
  *
