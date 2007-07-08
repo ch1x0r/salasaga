@@ -1699,6 +1699,17 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	gfloat				x_scale;				// Width scale factor for the scene
 	gfloat				y_scale;				// Height scale factor for the scene
 
+	// Pango and related variables used while processing text layers
+	PangoContext            	*pango_context;                         // Pango context used for text rendering
+	PangoFontDescription            *font_description;                      // Pango font description used for text rendering
+	PangoLayout			*pango_layout;                          // Pango layout used for text rendering
+	gint				pango_height;                           // Height of the Pango layout
+	gint				pango_width;                            // Width of the Pango layout
+	GtkTextBuffer			*pango_text_slice_buffer;
+	GString				*text_slice_buffer;
+	GString				*text_output_buffer;
+//	gint				txt_length;
+
 	gboolean			tmp_bool;				// Temporary boolean value
 	gfloat				tmp_gfloat;				// Temporary gfloat
 	gsize				tmp_gsize;				// Temporary gsize
@@ -2092,31 +2103,80 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Create the text tag
 				num_text_lines = gtk_text_buffer_get_line_count(((layer_text *) layer_data->object_data)->text_buffer);
-				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" font-family=\"Bitstream Vera Sans svg\" class=\"text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-size=\"%.4fpx\" textLength=\"%.4fpx\" lengthAdjust=\"spacingAndGlyphs\" dx=\"%.4fpx\" dy=\"%.4fpx\">",
+				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" font-family=\"Bitstream Vera Sans svg\" class=\"text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-size=\"%.4fpx\" lengthAdjust=\"spacingAndGlyphs\" dx=\"%.4fpx\" dy=\"%.4fpx\" ",
 					layer_data->name->str,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
 					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,  // Y offset
 					(y_scale * ((layer_text *) layer_data->object_data)->rendered_height - 2) / num_text_lines,  // Font size
-					x_scale * (((layer_text *) layer_data->object_data)->rendered_width - 20),  // How wide to make the entire string
 					x_scale * 10,  // Horizontal space between text background border and text start
 					y_scale * ((((layer_text *) layer_data->object_data)->rendered_height + 54) / 2));  // Vertical space between text background border and text start
 
 				// Does the text we're displaying have multiple lines?
 				if (1 < num_text_lines)
 				{
+					// * Yes, so calculate the true total length of the text, and wrap the lines of lines in tspan's *
+
+					// Initialise some buffer strings we need for the calculation
+					text_slice_buffer = g_string_new(NULL);
+					text_output_buffer = g_string_new(NULL);
+					pango_text_slice_buffer = gtk_text_buffer_new(NULL);
+
+					// Initialise a bunch of pango objects we'll need
+					pango_context = gdk_pango_context_get();
+					pango_layout = pango_layout_new(pango_context);
+					font_description = pango_context_get_font_description(pango_context);
+					pango_font_description_set_size(font_description, PANGO_SCALE * ((layer_text *) layer_data->object_data)->font_size);
+					pango_font_description_set_family(font_description, "Bitstream Vera Sans");  // "Sans", "Serif", "Monospace"
+					pango_font_description_set_style(font_description, PANGO_STYLE_NORMAL);
+					pango_font_description_set_variant(font_description, PANGO_VARIANT_NORMAL);
+					pango_font_description_set_weight(font_description, PANGO_WEIGHT_NORMAL);
+					pango_font_description_set_stretch(font_description, PANGO_STRETCH_NORMAL);
+
 					for (text_lines_counter = 0; text_lines_counter < num_text_lines; text_lines_counter++)
 					{
 						// Add each line of text to the output, wrapped with a tspan
 						gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(((layer_text *) layer_data->object_data)->text_buffer), &text_start, text_lines_counter);
 						text_end = text_start;
 						gtk_text_iter_forward_to_line_end(&text_end);
-						g_string_append_printf(string_to_write, "<tspan x=\"%.4fpx\" dx=\"%.4fpx\" dy=\"1em\">%s</tspan>\n",
+						g_string_append_printf(text_output_buffer, "<tspan x=\"%.4fpx\" dx=\"%.4fpx\" dy=\"1em\">%s</tspan>\n",
 							x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
 							x_scale * 10,  // Horizontal space between text background border and text start
 							gtk_text_iter_get_visible_text(&text_start, &text_end));  // Text to be rendered
+
+						// Add the text slice to the text slice buffer we'll use for calculating the total length
+						g_string_append_printf(text_slice_buffer, "%s", gtk_text_iter_get_visible_text(&text_start, &text_end));
 					}
+
+					// Work out the width of the rendered text
+					gtk_text_buffer_set_text(GTK_TEXT_BUFFER(pango_text_slice_buffer), text_slice_buffer->str, -1);
+					gtk_text_buffer_get_bounds(pango_text_slice_buffer, &text_start, &text_end);
+					pango_layout_set_markup(pango_layout, gtk_text_buffer_get_text(pango_text_slice_buffer, &text_start, &text_end, FALSE), -1);  // Auto calculate string length
+					pango_layout_get_size(pango_layout, &pango_width, &pango_height);
+
+					if (debug_level)
+					{
+						printf("Complete text output: '%s'\n", text_output_buffer->str);
+						printf("Complete width: %d\n", pango_width);
+						printf("Tweaked PANGO_SCALEd width: %.4fpx\n", (gfloat) (pango_width / PANGO_SCALE) + 20);
+						printf("Tweaked xscaled width: %.4fpx\n", (gfloat) ((pango_width / PANGO_SCALE) + 20) * x_scale);
+					}
+
+					// Add the text length and text string to the output
+					g_string_append_printf(string_to_write, "textLength=\"%.4fpx\">%s", 
+						(gfloat) ((pango_width / PANGO_SCALE) * x_scale),
+						text_output_buffer->str);
+
+					// Free the buffers created for this calculation
+					g_string_free(text_slice_buffer, TRUE);
+					g_string_free(text_output_buffer, TRUE);
+					g_object_unref(pango_text_slice_buffer);
+
 				} else
 				{
+					// Specify the total length of the text
+					g_string_append_printf(string_to_write, "textLength=\"%.4fpx\">",
+						x_scale * (((layer_text *) layer_data->object_data)->rendered_width - 40));  // How wide to make the entire string
+
 					// Just one line of text, so no need to use tspan's
 					gtk_text_buffer_get_bounds(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end);
 					g_string_append_printf(string_to_write, "%s",
@@ -2799,6 +2859,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.82  2007/07/08 10:59:15  vapour
+ * Added support for outputing multi-line text strings to svg, with correctly calculated text length.
+ *
  * Revision 1.81  2007/07/08 06:51:13  vapour
  * Added initial code to support multi-line text in the exported SVG.  It's not calculating pixel width correctly yet though.
  *
