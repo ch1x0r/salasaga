@@ -2513,6 +2513,52 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 }
 
 
+// Function to regenerate the film strip thumbnails
+void regenerate_film_strip_thumbnails(void)
+{
+	// Local variables
+	gint				num_slides, slide_counter;
+	gint				slide_position;
+	GtkTreeIter			film_strip_iter;
+	GdkPixbuf			*new_thumbnail;
+	GList				*this_slide;
+
+
+	// Safety check
+	slides = g_list_first(slides);
+	slide_position = g_list_position(slides, current_slide);
+	num_slides = g_list_length(slides);
+	if (0 == num_slides)
+	{
+		// There aren't any slides in this project yet, so just return
+		return;
+	}
+
+	// Check if the mouse button is presently up or down.  If it's still down we just ignore this signal
+	if ()
+	{
+		return;
+	}
+
+	// Remove the existing film strip thumbnails
+	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
+
+	// Generate new thumbnails
+	for (slide_counter = 0; slide_counter < num_slides; slide_counter++)
+	{
+		// Create the thumbnail for the slide
+		this_slide = g_list_nth(slides, slide_counter);
+		new_thumbnail = compress_layers(this_slide, preview_width, (guint) preview_width * 0.75);
+
+		((slide *) this_slide->data)->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(new_thumbnail)));
+
+		// Add the thumbnail to the film strip
+		gtk_list_store_append(film_strip_store, &film_strip_iter);
+		gtk_list_store_set(film_strip_store, &film_strip_iter, 0, gtk_image_get_pixbuf(((slide *) this_slide->data)->thumbnail), -1);
+	}
+}
+
+
 // Function to save the application preferences prior to exiting
 void save_preferences_and_exit(void)
 {
@@ -2886,6 +2932,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.88  2007/07/08 14:38:53  vapour
+ * Added a function to regenerate the film strip thumbnails when the film strip seperator handle is moved.
+ *
  * Revision 1.87  2007/07/08 13:20:27  vapour
  * Thumbnail width is now kept between sessions.
  *

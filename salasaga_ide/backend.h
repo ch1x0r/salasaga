@@ -43,6 +43,7 @@ GByteArray *menu_export_flash_inner(GByteArray *swf_buffer);
 void menu_export_svg_animation_slide(gpointer element, gpointer user_data);
 void menu_file_save_layer(gpointer element, gpointer user_data);
 void menu_file_save_slide(gpointer element, gpointer user_data);
+void regenerate_film_strip_thumbnails(void);
 void save_preferences_and_exit(void);
 void sound_beep(void);
 GString *uri_decode(GString *input_string, GString *output_string);
@@ -60,6 +61,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string);
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2007/07/08 14:38:21  vapour
+ * Added a function to regenerate the film strip thumbnails when the film strip seperator handle is moved.
+ *
  * Revision 1.10  2006/09/12 12:13:28  vapour
  * Replaced old ming code with initial thoughts, in comments, for how to process slides.  Started adding stub GByteArray code too.
  *
