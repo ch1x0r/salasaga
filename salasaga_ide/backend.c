@@ -582,16 +582,16 @@ GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y
 gboolean flame_read(gchar *filename)
 {
 	// Local variables
-	GError				*error = NULL;			// Pointer to error return structure
-	GString				*error_string;			// Used to create error strings
-	GdkPixbufLoader		*image_loader;			// Used for loading images embedded in project files
-	gboolean			return_code;			// Boolean return code
-	gfloat				save_version;			// The project file save version
+	GError				*error = NULL;				// Pointer to error return structure
+	GString				*error_string;				// Used to create error strings
+	GdkPixbufLoader			*image_loader;				// Used for loading images embedded in project files
+	gboolean			return_code;				// Boolean return code
+	gfloat				save_version;				// The project file save version
 	xmlDocPtr			document;				// Holds a pointer to the XML document
 	xmlNodePtr			layer_ptr;				// Temporary pointer
-	xmlNodePtr			meta_data_node = NULL;	// Points to the meta-data structure
-	xmlNodePtr			preferences_node = NULL;// Points to the preferences structure
-	xmlNodePtr			slides_node = NULL;		// Points to the slides structure
+	xmlNodePtr			meta_data_node = NULL;			// Points to the meta-data structure
+	xmlNodePtr			preferences_node = NULL;		// Points to the preferences structure
+	xmlNodePtr			slides_node = NULL;			// Points to the slides structure
 	xmlNodePtr			this_layer;				// Temporary pointer
 	xmlNodePtr			this_node;				// Temporary pointer
 	xmlNodePtr			this_slide;				// Temporary pointer
@@ -607,21 +607,21 @@ gboolean flame_read(gchar *filename)
 	xmlChar				*slide_length_data = NULL;
 
 	xmlChar				*tmp_char;				// Temporary string pointer
-	layer_empty			*tmp_empty_ob;			//
+	layer_empty			*tmp_empty_ob;				//
 	GList				*tmp_glist;				//
-	GString				*tmp_gstring;			// Temporary GString
-	GString				*tmp_gstring2;			// Temporary GString
-	layer_highlight			*tmp_highlight_ob;		// Temporary highlight layer object
-	layer_image			*tmp_image_ob;			// Temporary image layer object
+	GString				*tmp_gstring;				// Temporary GString
+	GString				*tmp_gstring2;				// Temporary GString
+	layer_highlight			*tmp_highlight_ob;			// Temporary highlight layer object
+	layer_image			*tmp_image_ob;				// Temporary image layer object
 	gint				tmp_int;				// Temporary integer
 	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
 	layer				*tmp_layer;				// Temporary layer
-	layer_mouse			*tmp_mouse_ob;			// Temporary mouse layer object
-	GdkPixbuf			*tmp_pixbuf;			//
+	layer_mouse			*tmp_mouse_ob;				// Temporary mouse layer object
+	GdkPixbuf			*tmp_pixbuf;				//
 	slide				*tmp_slide;				// Temporary slide
-	layer_text			*tmp_text_ob;			// Temporary text layer object
+	layer_text			*tmp_text_ob;				// Temporary text layer object
 
-	gint				data_length;			// Number of image data bytes a layer says it stores
+	gint				data_length;				// Number of image data bytes a layer says it stores
 
 	GtkTreeIter			film_strip_iter;
 
@@ -1395,7 +1395,7 @@ gboolean flame_read(gchar *filename)
 			// Create the thumbnail for the slide
 			tmp_glist = NULL;
 			tmp_glist = g_list_append(tmp_glist, tmp_slide);
-			tmp_pixbuf = compress_layers(tmp_glist, preview_width, 233);
+			tmp_pixbuf = compress_layers(tmp_glist, preview_width, (guint) preview_width * 0.75);
 			tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(tmp_pixbuf)));
 
 			// Mark the tooltip as uncreated, so we know to create it later on
@@ -2880,6 +2880,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.86  2007/07/08 12:56:53  vapour
+ * Thumbnail height is now calculated dynamically instead of stuck at 233 pixels.
+ *
  * Revision 1.85  2007/07/08 12:27:01  vapour
  * Slightly tweaked the sizing of the text background boxes when exported to svg.
  *
