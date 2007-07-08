@@ -1705,13 +1705,13 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 	// Pango and related variables used while processing text layers
 	PangoContext            	*pango_context;                         // Pango context used for text rendering
 	PangoFontDescription            *font_description;                      // Pango font description used for text rendering
+	gfloat				font_size;				// Size of the text font when rendered
 	PangoLayout			*pango_layout;                          // Pango layout used for text rendering
 	gint				pango_height;                           // Height of the Pango layout
 	gint				pango_width;                            // Width of the Pango layout
 	GtkTextBuffer			*pango_text_slice_buffer;
 	GString				*text_slice_buffer;
 	GString				*text_output_buffer;
-//	gint				txt_length;
 
 	gboolean			tmp_bool;				// Temporary boolean value
 	gfloat				tmp_gfloat;				// Temporary gfloat
@@ -2106,11 +2106,12 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 				// Create the text tag
 				num_text_lines = gtk_text_buffer_get_line_count(((layer_text *) layer_data->object_data)->text_buffer);
+				font_size = (y_scale * ((layer_text *) layer_data->object_data)->rendered_height - 2) / num_text_lines;
 				g_string_append_printf(string_to_write, "\t<text id=\"%s-text\" font-family=\"Bitstream Vera Sans svg\" class=\"text\" x=\"%.4fpx\" y=\"%.4fpx\" opacity=\"0.0\" font-size=\"%.4fpx\" lengthAdjust=\"spacingAndGlyphs\" dx=\"%.4fpx\" dy=\"%.4fpx\" ",
 					layer_data->name->str,
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
 					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,  // Y offset
-					(y_scale * ((layer_text *) layer_data->object_data)->rendered_height - 2) / num_text_lines,  // Font size
+					font_size,  // Font size
 					x_scale * 10,  // Horizontal space between text background border and text start
 					y_scale * ((((layer_text *) layer_data->object_data)->rendered_height + 54) / 2));  // Vertical space between text background border and text start
 
@@ -2135,17 +2136,34 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					pango_font_description_set_weight(font_description, PANGO_WEIGHT_NORMAL);
 					pango_font_description_set_stretch(font_description, PANGO_STRETCH_NORMAL);
 
+					// Add each line of text to the output, wrapped with a tspan
 					for (text_lines_counter = 0; text_lines_counter < num_text_lines; text_lines_counter++)
 					{
-						// Add each line of text to the output, wrapped with a tspan
 						gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(((layer_text *) layer_data->object_data)->text_buffer), &text_start, text_lines_counter);
 						text_end = text_start;
 						gtk_text_iter_forward_to_line_end(&text_end);
-						g_string_append_printf(text_output_buffer, "<tspan x=\"%.4fpx\" dx=\"%.4fpx\" dy=\"1em\">%s</tspan>\n",
+						g_string_append_printf(text_output_buffer, "<tspan x=\"%.4fpx\" dx=\"%.4fpx\" dy=\"1em\">%s\n",
 							x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,  // X offset
 							x_scale * 10,  // Horizontal space between text background border and text start
 							gtk_text_iter_get_visible_text(&text_start, &text_end));  // Text to be rendered
 
+						// Animate the SVG properties to move it to it's destination location
+						g_string_append_printf(text_output_buffer,
+							"<animate attributeName=\"x\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />",
+							1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
+							time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
+							x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
+							x_scale * ((layer_text *) layer_data->object_data)->x_offset_finish);
+						g_string_append_printf(text_output_buffer,
+							"<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />",
+							1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
+							time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
+							(gfloat) (y_scale * ((layer_text *) layer_data->object_data)->y_offset_start) + (font_size * text_lines_counter),
+							(gfloat) (y_scale * ((layer_text *) layer_data->object_data)->y_offset_finish) + (font_size * text_lines_counter));  // Y finish
+
+						// Close the tspan
+						g_string_append_printf(text_output_buffer, "</tspan>\n");
+						
 						// Add the text slice to the text slice buffer we'll use for calculating the total length
 						g_string_append_printf(text_slice_buffer, "%s", gtk_text_iter_get_visible_text(&text_start, &text_end));
 					}
@@ -2158,7 +2176,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 
 					if (debug_level)
 					{
-						printf("Complete text output: '%s'\n", text_output_buffer->str);
+//						printf("Complete text output: '%s'\n", text_output_buffer->str);
 						printf("Complete width: %d\n", pango_width);
 						printf("Tweaked PANGO_SCALEd width: %.4fpx\n", (gfloat) (pango_width / PANGO_SCALE) + 20);
 						printf("Tweaked xscaled width: %.4fpx\n", (gfloat) ((pango_width / PANGO_SCALE) + 20) * x_scale);
@@ -2184,6 +2202,20 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					gtk_text_buffer_get_bounds(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end);
 					g_string_append_printf(string_to_write, "%s",
 					gtk_text_buffer_get_text(((layer_text *) layer_data->object_data)->text_buffer, &text_start, &text_end, FALSE));  // Text to be rendered
+
+					// Animate the SVG properties to move it to it's destination location
+					g_string_append_printf(string_to_write,
+						"<animate attributeName=\"x\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />",
+						1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
+						time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
+						x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
+						x_scale * ((layer_text *) layer_data->object_data)->x_offset_finish);
+					g_string_append_printf(string_to_write,
+						"<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />",
+						1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
+						time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
+						(y_scale * (((layer_text *) layer_data->object_data)->y_offset_start)),  // Y start
+						(y_scale * ((layer_text *) layer_data->object_data)->y_offset_finish));  // Y finish
 				}
 
 				// Animate the text SVG properties to fade it in over 1 second
@@ -2201,20 +2233,6 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				g_string_append_printf(string_to_write,
 					"<animate attributeName=\"opacity\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"1s\" fill=\"freeze\" from=\"1.0\" to=\"0.0\" />",
 					1 + time_start + (layer_data->finish_frame / frames_per_second) - 1);
-
-				// Animate the SVG properties to move it to it's destination location
-				g_string_append_printf(string_to_write,
-					"<animate attributeName=\"x\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />",
-					1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
-					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
-					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
-					x_scale * ((layer_text *) layer_data->object_data)->x_offset_finish);
-				g_string_append_printf(string_to_write,
-					"<animate attributeName=\"y\" attributeType=\"XML\" begin=\"%.4fs\" dur=\"%0.4fs\" fill=\"freeze\" from=\"%.4fpx\" to=\"%.4fpx\" />",
-					1 + time_start + 1 + (layer_data->start_frame / frames_per_second),
-					time_start + ((layer_data->finish_frame - layer_data->start_frame) / frames_per_second) - 2,
-					(y_scale * (((layer_text *) layer_data->object_data)->y_offset_start)),  // Y start
-					(y_scale * ((layer_text *) layer_data->object_data)->y_offset_finish));  // Y finish
 
 				// Remove the text itself from display after it's no longer needed
 				g_string_append_printf(string_to_write,
@@ -2862,6 +2880,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.84  2007/07/08 12:06:07  vapour
+ * Fixed a bug.  Multi-line text tspans have to be animated seperately, which is now done.
+ *
  * Revision 1.83  2007/07/08 11:04:57  vapour
  * Fixed a bug.  When loading a project over an existing project, the film strip is now cleared first.
  *
