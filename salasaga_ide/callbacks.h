@@ -31,6 +31,7 @@ extern "C" {
 
 // Callback functions defined in the corresponding source file
 gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer data);
+void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data);
 void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data);
 gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data);
 void timeline_edited_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
@@ -58,6 +59,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data);
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2007/07/08 14:05:46  vapour
+ * Added the declaration for the new film_strip_handle_changed function.
+ *
  * Revision 1.6  2007/06/30 06:04:19  vapour
  * The timeline and workspace area are now updated when a slide is selected in the film strip.  All done with the GtkTreeView approach now.
  *
