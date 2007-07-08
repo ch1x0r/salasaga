@@ -2058,7 +2058,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				g_string_append_printf(string_to_write,
 					"\t<rect id=\"%s-bg\" class=\"text\" width=\"%.4fpx\" height=\"%.4fpx\" opacity=\"0.0\" x=\"%.4fpx\" y=\"%.4fpx\" rx=\"%.4fpx\" ry=\"%.4fpx\" stroke-width=\"%.4fpx\">\n",
 					layer_data->name->str,
-					(x_scale * (((layer_text *) layer_data->object_data)->rendered_width + 10)) * 1.02,  // fixme5: Seems to need to be scaled up by 1.02 to look any good
+					(x_scale * ((layer_text *) layer_data->object_data)->rendered_width) + 8,
 					y_scale * (((layer_text *) layer_data->object_data)->rendered_height + 10),
 					x_scale * ((layer_text *) layer_data->object_data)->x_offset_start,
 					y_scale * ((layer_text *) layer_data->object_data)->y_offset_start,
@@ -2880,6 +2880,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.85  2007/07/08 12:27:01  vapour
+ * Slightly tweaked the sizing of the text background boxes when exported to svg.
+ *
  * Revision 1.84  2007/07/08 12:06:07  vapour
  * Fixed a bug.  Multi-line text tspans have to be animated seperately, which is now done.
  *
