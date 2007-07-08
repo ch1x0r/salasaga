@@ -5104,6 +5104,7 @@ void project_crop(void)
 void slide_delete(void)
 {
 	// Local variables
+	GtkTreePath			*new_path;				// Temporary path
 	gint				num_slides;				// Number of slides in the whole slide list
 	gint				slide_position;				// Which slide in the slide list we are deleting
 	GtkTreeSelection		*film_strip_selector;
@@ -5139,6 +5140,11 @@ void slide_delete(void)
 		slide_position--;
 	}
 	current_slide = g_list_nth(slides, slide_position);
+
+	// Select the next thumbnail in the film strip and scroll to display it
+	new_path = gtk_tree_path_new_from_indices(slide_position, -1);
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
 
 	// Recreate the slide tooltips
 	create_tooltips();
@@ -5579,6 +5585,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.80  2007/07/08 08:50:39  vapour
+ * Fixed a bug whereby the next film strip thumbnail wasn't selected after deleting a slide.
+ *
  * Revision 1.79  2007/07/07 12:48:19  vapour
  * No longer expands the GUI window too much horizontally when opening a project file.
  *
