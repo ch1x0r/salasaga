@@ -81,6 +81,9 @@ void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data)
 	{
 		if (debug_level) printf("Handle position changed to: %u\n", gtk_paned_get_position(GTK_PANED(paned)));
 		preview_width = new_position;
+
+		// Regenerate the film strip thumbnails at the new size
+		regenerate_film_strip_thumbnails();
 	}
 }
 
@@ -887,6 +890,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2007/07/08 14:37:45  vapour
+ * Updated to regenerate the film strip after the seperator handle has been moved.
+ *
  * Revision 1.14  2007/07/08 14:06:35  vapour
  * Added the definition for the new film_strip_handle_changed function.
  *
