@@ -76,15 +76,31 @@ void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data)
 	// Get the new position of the film strip seperator
 	new_position = gtk_paned_get_position(GTK_PANED(paned));
 
-	// If the handle has moved, calculate the new thumbnail width then regenerate all the thumbnails
+	// If the handle has moved, set the new thumbnail width in the application preferences
 	if (new_position != preview_width)
 	{
-		if (debug_level) printf("Handle position changed to: %u\n", gtk_paned_get_position(GTK_PANED(paned)));
+		// Set a toggle to indicate the film strip width is being changed
+		film_strip_being_resized = TRUE;
 		preview_width = new_position;
+	}
+}
 
+
+// Callback function called when the resizing of the film strip is completed
+gint film_strip_handle_released(GObject *paned, GParamSpec *pspec, gpointer data)
+{
+	// Check if we're in the middle of resizing the film strip
+	if (TRUE == film_strip_being_resized)
+	{
 		// Regenerate the film strip thumbnails at the new size
 		regenerate_film_strip_thumbnails();
+
+		// Set a toggle to indicate the film strip width changing has completed
+		film_strip_being_resized = FALSE;
 	}
+
+	// Indicate to the calling routine that this function finished fine
+	return FALSE;
 }
 
 
@@ -889,6 +905,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.17  2007/07/09 12:23:01  vapour
+ * Added a new film_strip_handle_released function to regenerate the film strip thumbnails when the mouse button is released.
+ *
  * Revision 1.16  2007/07/09 09:57:24  vapour
  * Removed unused variables.
  *
