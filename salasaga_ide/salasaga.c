@@ -853,6 +853,7 @@ gint main(gint argc, gchar *argv[])
 		default_slide_length = slide_length = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/slide_length", NULL);
 		default_output_quality = output_quality = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_quality", NULL);
 		preview_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", NULL);
+		if (0 == preview_width) preview_width = 300;
 		frames_per_second = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/frames_per_second", NULL);
 
 		// Determine the stored scaling quality preference
@@ -1486,6 +1487,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.51  2007/07/09 13:18:43  vapour
+ * Added a default of 300 pixels for the thumbnail width in those cases where people have run an older version of flame-edit before.
+ *
  * Revision 1.50  2007/07/09 12:42:53  vapour
  * Updated the film strip column resizing to work nicer.
  *
