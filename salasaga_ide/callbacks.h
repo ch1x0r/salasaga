@@ -32,6 +32,7 @@ extern "C" {
 // Callback functions defined in the corresponding source file
 gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer data);
 void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data);
+gint film_strip_handle_released(GObject *paned, GParamSpec *pspec, gpointer data);
 void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data);
 gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data);
 void timeline_edited_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
@@ -59,6 +60,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data);
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2007/07/09 12:23:35  vapour
+ * Added the declaration for the new film_strip_handle_released function.
+ *
  * Revision 1.7  2007/07/08 14:05:46  vapour
  * Added the declaration for the new film_strip_handle_changed function.
  *
