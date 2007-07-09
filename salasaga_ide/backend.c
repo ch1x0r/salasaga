@@ -2517,16 +2517,16 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 void regenerate_film_strip_thumbnails(void)
 {
 	// Local variables
-	GdkDevice			*core_pointer;
-	GdkModifierType			core_pointer_modifier_mask;
+//	GdkDevice			*core_pointer;
+//	GdkModifierType			core_pointer_modifier_mask;
 	gint				num_slides;
 	gint				slide_counter, slide_position;
 	GtkTreeIter			film_strip_iter;
 	GdkPixbuf			*new_thumbnail;
 	GList				*this_slide;
 
-	GtkWindow			*tmp_gtk_window;			// Temporary GtkWindow
-	GdkWindow			*tmp_gdk_window;			// Temporary GdkWindow
+//	GtkWindow			*tmp_gtk_window;			// Temporary GtkWindow
+//	GdkWindow			*tmp_gdk_window;			// Temporary GdkWindow
 
 
 	// Safety check
@@ -2955,6 +2955,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.90  2007/07/09 10:33:28  vapour
+ * Commented out unused variables.
+ *
  * Revision 1.89  2007/07/08 15:09:55  vapour
  * Commented out the code that checks for the mouse button state.
  *
