@@ -1,3 +1,18 @@
+flameproject (0.7.7.dev-0ubuntu5) unstable; urgency=low
+
+  * No longer requires 1280x1024 resolution or higher.  Even 800x600 works.
+  * Refactored the film strip code to use a GtkListStore
+     * Selected slide is now obvious
+     * Added "move to top" and "move to bottom" options
+     * Remapped the "Delete Slide" key to use Alt-i-d, easier to remember
+     * Changing width of film strip is fairly smooth and resizes thumbnails
+     * Changed film strip width is saved between sessions
+     * Changed film strip width also gets updated into the Preferences
+  * Path to icon and sound file(s) are now calculated dynamically
+  * Bug fixes with exported SVG code.  Multi-line text works ok now.
+
+ -- Justin Clift <justin@postgresql.org>  Tue, 09 Jul 2007 23:55:00 +1100
+
 flameproject (0.7.7.dev-0ubuntu4) unstable; urgency=low
 
   * Screenshot slides now deleted after import
