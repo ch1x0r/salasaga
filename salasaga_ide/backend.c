@@ -2800,7 +2800,8 @@ void sound_beep(void)
 	
 	// fixme4: Need a non-gnome way of playing sound too, for windows
 	tmp_gstring = g_string_new(NULL);
-	g_string_printf(tmp_gstring, "%s%s", "/usr/share/", "flame/sounds/generic.wav");
+	g_string_assign(tmp_gstring, icon_path->str);
+	g_string_printf(tmp_gstring, g_build_path("/", tmp_gstring->str, "..", "..", "sounds", "generic.wav", NULL));  // Gee this is an ugly approach 
 	gnome_sound_play(tmp_gstring->str);
 
 	// Free local variables
@@ -2925,6 +2926,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.92  2007/07/09 13:48:07  vapour
+ * The path to the sound file is now calculated dynamically as well.
+ *
  * Revision 1.91  2007/07/09 12:20:30  vapour
  * Removed some of the recently commented out code related to resizing the film strip area, as its no longer needed.
  *
