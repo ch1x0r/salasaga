@@ -2514,19 +2514,14 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 
 
 // Function to regenerate the film strip thumbnails
-void regenerate_film_strip_thumbnails(void)
+void regenerate_film_strip_thumbnails()
 {
 	// Local variables
-//	GdkDevice			*core_pointer;
-//	GdkModifierType			core_pointer_modifier_mask;
 	gint				num_slides;
 	gint				slide_counter, slide_position;
 	GtkTreeIter			film_strip_iter;
 	GdkPixbuf			*new_thumbnail;
 	GList				*this_slide;
-
-//	GtkWindow			*tmp_gtk_window;			// Temporary GtkWindow
-//	GdkWindow			*tmp_gdk_window;			// Temporary GdkWindow
 
 
 	// Safety check
@@ -2538,31 +2533,6 @@ void regenerate_film_strip_thumbnails(void)
 		// There aren't any slides in this project yet, so just return
 		return;
 	}
-
-/* Commented out this code because it doesn't work very well.
- * It should probably be re-written to set a callback for when the
- * mouse button is released, then have the callback do the thumbnail generation
- *
-	// Get a pointer to the underlying GDK window
-	tmp_gtk_window = GTK_WINDOW(main_window);
-	if (NULL != tmp_gtk_window->frame)
-	{
-		tmp_gdk_window = tmp_gtk_window->frame;
-	}
-	else
-	{
-		tmp_gdk_window = main_window->window;
-	}
-
-	// Check if the mouse button is presently up or down.  If it's still down we just ignore this signal
-	core_pointer = gdk_device_get_core_pointer();
-	gdk_device_get_state(core_pointer, GDK_WINDOW(tmp_gdk_window), NULL, &core_pointer_modifier_mask);
-	if (core_pointer_modifier_mask & GDK_BUTTON1_MASK)
-	{
-		if (debug_level) printf("Mouse key still down\n");
-		return;
-	}
- */
 
 	// Remove the existing film strip thumbnails
 	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
@@ -2955,6 +2925,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.91  2007/07/09 12:20:30  vapour
+ * Removed some of the recently commented out code related to resizing the film strip area, as its no longer needed.
+ *
  * Revision 1.90  2007/07/09 10:33:28  vapour
  * Commented out unused variables.
  *
