@@ -422,6 +422,7 @@ void create_film_strip()
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(film_strip_view), FALSE);
 	renderer = gtk_cell_renderer_pixbuf_new();
 	column = gtk_tree_view_column_new_with_attributes("Slide", renderer, "pixbuf", 0, NULL);
+	gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(film_strip_view), column);
 
 	// Add the list view to the film strip
@@ -1482,6 +1483,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.48  2007/07/09 11:17:52  vapour
+ * Film strip column will look ok when resizing now.
+ *
  * Revision 1.47  2007/07/09 10:35:52  vapour
  * Icon path is now calculated dynamically.
  *
