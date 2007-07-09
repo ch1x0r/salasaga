@@ -1601,7 +1601,6 @@ void draw_thumbnail(GList *which_slide)
 	// Local variables
 	gint				current_height;				// The height of the current thumbnail
 
-	GList				*tmp_glist;				// Temporary GList
 	GtkImage			*tmp_image;				//
 	GdkPixbuf			*tmp_pixbuf;				//
 
@@ -5262,10 +5261,8 @@ void slide_insert(void)
 void slide_move_bottom(void)
 {
 	// Local variables
-	GtkTreeSelection		*film_strip_selector;
 	GtkTreeIter			new_iter;
 	GtkTreePath			*new_path;				// Temporary path
-	GList				*next_slide;				// Pointer to the slide below
 	gint				num_slides;				// The total number of slides
 	gint				slide_position;				// Which slide in the slide list we are moving
 	slide				*this_slide_data;			// Pointer to the data for this slide
@@ -5381,10 +5378,8 @@ void slide_move_down(void)
 void slide_move_top(void)
 {
 	// Local variables
-	GtkTreeSelection		*film_strip_selector;
 	GtkTreeIter			new_iter;
 	GtkTreePath			*new_path;				// Temporary path
-	GList				*previous_slide;			// Pointer to the slide above
 	gint				slide_position;				// Which slide in the slide list we are moving
 	slide				*this_slide_data;			// Pointer to the data for this slide
 	GString				*tmp_gstring;
@@ -5585,6 +5580,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.81  2007/07/09 09:56:32  vapour
+ * Removed unused variables.
+ *
  * Revision 1.80  2007/07/08 08:50:39  vapour
  * Fixed a bug whereby the next film strip thumbnail wasn't selected after deleting a slide.
  *

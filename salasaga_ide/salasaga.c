@@ -404,7 +404,6 @@ void create_film_strip()
 	// Local variables
 	GtkTreeViewColumn		*column;
 	GtkTreeSelection		*film_strip_selector;
-	GtkTreeIter			iter;
 	GtkCellRenderer			*renderer;
 	GtkTreeSelection		*selector;
 
@@ -1472,6 +1471,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.46  2007/07/09 09:58:22  vapour
+ * Removed unused variables.
+ *
  * Revision 1.45  2007/07/08 14:07:17  vapour
  * Hooked up a signal handler for the new film_strip_handle_changed function.
  *

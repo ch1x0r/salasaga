@@ -94,7 +94,6 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 	// Local variables
 	GtkTreePath			*selected_path;
 	GtkTreeIter			selected_iter;
-	GList				*selected_row;
 	gchar				*selection_string;
 	GString				*tmp_gstring;
 
@@ -890,6 +889,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.16  2007/07/09 09:57:24  vapour
+ * Removed unused variables.
+ *
  * Revision 1.15  2007/07/08 14:37:45  vapour
  * Updated to regenerate the film strip after the seperator handle has been moved.
  *
