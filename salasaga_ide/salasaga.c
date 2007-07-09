@@ -777,12 +777,22 @@ gint main(gint argc, gchar *argv[])
 		g_log_set_handler("GThread", G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, logger_with_domain, NULL);
 	}
 
+	if (debug_level)
+	{
+		printf("Program path: '%s'\n", argv[0]);
+		printf("Directory base: '%s'\n", g_path_get_dirname(argv[0]));
+		g_string_printf(icon_path, g_path_get_dirname(argv[0]));
+		g_string_printf(icon_path, g_build_path("/", icon_path->str, "..", "share", NULL));
+		printf("Location for icons: '%s'\n", icon_path->str);
+	}
+
 	// * Work out if SVG images can be loaded *
-#ifdef _WIN32
+	#ifdef _WIN32
 	// Hard code a different path for windows
 	icon_path = g_string_assign(icon_path, "icons");
 #else
-	g_string_printf(icon_path, "%s%s", "/usr/share/", "flame/icons/72x72");
+	g_string_assign(icon_path, g_path_get_dirname(argv[0]));
+	g_string_printf(icon_path, g_build_path("/", icon_path->str, "..", "share", "flame", "icons", "72x72", NULL));
 #endif
 
 	supported_formats = gdk_pixbuf_get_formats();
@@ -799,7 +809,8 @@ gint main(gint argc, gchar *argv[])
 			// Hard code a different path for windows
 			icon_path = g_string_assign(icon_path, "icons");
 #else
-			g_string_printf(icon_path, "%s%s", "/usr/share/", "flame/icons/scalable");
+			g_string_assign(icon_path, g_path_get_dirname(argv[0]));
+			g_string_printf(icon_path, g_build_path("/", icon_path->str, "..", "share", "flame", "icons", "scalable", NULL));
 #endif
 
 		}
@@ -1471,6 +1482,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.47  2007/07/09 10:35:52  vapour
+ * Icon path is now calculated dynamically.
+ *
  * Revision 1.46  2007/07/09 09:58:22  vapour
  * Removed unused variables.
  *
