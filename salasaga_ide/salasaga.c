@@ -63,6 +63,7 @@ GList					*current_slide = NULL;			// Pointer to the presently selected slide
 guint					debug_level = 0;			// Used to indicate debugging level
 gfloat					export_time_counter;			// Used when exporting, holds the number of seconds thus far
 GString					*file_name = NULL;			// Holds the file name the project is saved as
+gboolean				film_strip_being_resized;		// Toggle to indicate if the film strip is being resized
 GtkScrolledWindow			*film_strip_container;			// Container for the film strip
 GtkListStore				*film_strip_store;			// Film strip list store
 GtkWidget				*film_strip_view;			// The view of the film strip list store
@@ -1350,8 +1351,10 @@ gint main(gint argc, gchar *argv[])
 	gtk_paned_set_position(GTK_PANED(main_area), g_value_get_int(handle_size) + preview_width + 15);
 	gtk_box_pack_start_defaults(GTK_BOX(outer_box), GTK_WIDGET(main_area));
 
-	// Attach a signal handler to the movable handle between film strip and right hand side
+	// Attach signal handlers to the movable handle between film strip and right hand side
+	film_strip_being_resized = FALSE;
 	g_signal_connect(G_OBJECT(main_area), "notify::position", G_CALLBACK(film_strip_handle_changed), (gpointer) NULL);
+	g_signal_connect(G_OBJECT(main_area), "button_release_event", G_CALLBACK(film_strip_handle_released), (gpointer) NULL);
 
 	// * Create a table for the status bar, zoom selector, and resolution selectors to go in *
 	// fixme4: Might be better going back to a HBox, and using filling (on for the status bar, off for the others), to achieve a better result
@@ -1483,6 +1486,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.49  2007/07/09 12:24:52  vapour
+ * Added a signal handler and supporting global variable for the new film strip resizing functions.
+ *
  * Revision 1.48  2007/07/09 11:17:52  vapour
  * Film strip column will look ok when resizing now.
  *
