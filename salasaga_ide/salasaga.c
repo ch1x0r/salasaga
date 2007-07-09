@@ -64,6 +64,7 @@ guint					debug_level = 0;			// Used to indicate debugging level
 gfloat					export_time_counter;			// Used when exporting, holds the number of seconds thus far
 GString					*file_name = NULL;			// Holds the file name the project is saved as
 gboolean				film_strip_being_resized;		// Toggle to indicate if the film strip is being resized
+GtkTreeViewColumn			*film_strip_column;			// Pointer to the film strip column
 GtkScrolledWindow			*film_strip_container;			// Container for the film strip
 GtkListStore				*film_strip_store;			// Film strip list store
 GtkWidget				*film_strip_view;			// The view of the film strip list store
@@ -403,7 +404,6 @@ void create_film_strip()
 	//
 
 	// Local variables
-	GtkTreeViewColumn		*column;
 	GtkTreeSelection		*film_strip_selector;
 	GtkCellRenderer			*renderer;
 	GtkTreeSelection		*selector;
@@ -422,9 +422,9 @@ void create_film_strip()
 	film_strip_view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(film_strip_store));
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(film_strip_view), FALSE);
 	renderer = gtk_cell_renderer_pixbuf_new();
-	column = gtk_tree_view_column_new_with_attributes("Slide", renderer, "pixbuf", 0, NULL);
-	gtk_tree_view_column_set_sizing(column, GTK_TREE_VIEW_COLUMN_AUTOSIZE);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(film_strip_view), column);
+	film_strip_column = gtk_tree_view_column_new_with_attributes("Slide", renderer, "pixbuf", 0, NULL);
+	gtk_tree_view_column_set_sizing(film_strip_column, GTK_TREE_VIEW_COLUMN_FIXED);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(film_strip_view), film_strip_column);
 
 	// Add the list view to the film strip
 	gtk_container_add(GTK_CONTAINER(film_strip_container), GTK_WIDGET(film_strip_view));
@@ -1486,6 +1486,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.50  2007/07/09 12:42:53  vapour
+ * Updated the film strip column resizing to work nicer.
+ *
  * Revision 1.49  2007/07/09 12:24:52  vapour
  * Added a signal handler and supporting global variable for the new film strip resizing functions.
  *

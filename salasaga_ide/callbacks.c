@@ -92,6 +92,9 @@ gint film_strip_handle_released(GObject *paned, GParamSpec *pspec, gpointer data
 	// Check if we're in the middle of resizing the film strip
 	if (TRUE == film_strip_being_resized)
 	{
+		// Set the new width of the film strip widget
+		gtk_tree_view_column_set_fixed_width(GTK_TREE_VIEW_COLUMN(film_strip_column), preview_width);
+		
 		// Regenerate the film strip thumbnails at the new size
 		regenerate_film_strip_thumbnails();
 
@@ -905,6 +908,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.18  2007/07/09 12:42:53  vapour
+ * Updated the film strip column resizing to work nicer.
+ *
  * Revision 1.17  2007/07/09 12:23:01  vapour
  * Added a new film_strip_handle_released function to regenerate the film strip thumbnails when the mouse button is released.
  *

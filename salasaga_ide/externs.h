@@ -43,6 +43,7 @@ extern GString				*icon_extension;
 extern GString				*icon_path;
 extern GString				*file_name;
 extern gboolean				film_strip_being_resized;
+extern GtkTreeViewColumn		*film_strip_column;
 extern GtkScrolledWindow		*film_strip_container;
 extern GtkListStore			*film_strip_store;
 extern GtkWidget			*film_strip_view;
@@ -121,6 +122,9 @@ extern gint				num_res_items;
  * +++++++
  * 
  * $Log$
+ * Revision 1.18  2007/07/09 12:42:53  vapour
+ * Updated the film strip column resizing to work nicer.
+ *
  * Revision 1.17  2007/07/09 12:25:18  vapour
  * Added a supporting global variable for the new film strip resizing functions.
  *
