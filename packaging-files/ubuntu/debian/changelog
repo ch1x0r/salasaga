@@ -1,3 +1,9 @@
+flameproject (0.7.7.dev-0ubuntu6) unstable; urgency=low
+
+  * Added initial Flame icon suitable for gnome menu bar
+
+ -- Justin Clift <justin@postgresql.org>  Tue, 10 Jul 2007 19:25:00 +1100
+ 
 flameproject (0.7.7.dev-0ubuntu5) unstable; urgency=low
 
   * No longer requires 1280x1024 resolution or higher.  Even 800x600 works.
