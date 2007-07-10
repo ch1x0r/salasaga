@@ -1,0 +1,14 @@
+[Desktop Entry]
+Version=1.0
+Encoding=UTF-8
+Type=Application
+_Name=Flame Project
+_GenericName=Tutorial Creator
+_Comment=Create tutorials of desktop applications
+Exec=gimp-remote-@GIMP_APP_VERSION@ %U
+TryExec=gimp-@GIMP_APP_VERSION@
+Icon=@gimpdatadir@/images/@GIMP_DESKTOP_ICON@
+Terminal=false
+Categories=Graphics;2DGraphics;VectorGraphics;GTK;
+StartupNotify=true
+MimeType=image/flame
