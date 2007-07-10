@@ -1,5 +1,5 @@
 Source: flameproject
-Section: devel
+Section: graphics
 Priority: optional
 Maintainer: Justin Clift <justin@postgresql.org>
 Standards-Version: 3.7.2.1
