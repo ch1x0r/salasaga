@@ -12,6 +12,9 @@ SOUNDS = \
 ICON_MAIN = \
 	flame_logo.ico
 
+ICON_PNG = \
+	flame-icon.png
+
 ICONS_SIXTY = \
 	add_highlight.png \
 	add_highlight_grayed.png \
@@ -92,6 +95,7 @@ install:
 	$(INSTALL_PROGRAM) -m 0755 flame-edit $(bindir)
 	$(INSTALL) -d $(datadir)/flame/icons/
 	cd images; $(INSTALL_DATA) $(ICON_MAIN) $(datadir)/flame/icons/
+	cd images; $(INSTALL_DATA) $(ICON_PNG) $(datadir)/pixmaps/
 	$(INSTALL) -d $(datadir)/flame/icons/scalable/
 	cd images; $(INSTALL_DATA) $(ICONS_SCALABLE) $(datadir)/flame/icons/scalable/
 	$(INSTALL) -d $(datadir)/flame/icons/72x72/
@@ -124,6 +128,10 @@ uninstall:
 
 	if [ -f "$(datadir)/flame/icons/$(ICON_MAIN)" ]; then \
 		rm -f $(datadir)/flame/icons/$(ICON_MAIN); \
+	fi
+
+	if [ -f "$(datadir)/pixmaps/$(ICON_PNG)" ]; then \
+		rm -f $(datadir)/pixmaps/$(ICON_PNG); \
 	fi
 
 	if [ -d "$(datadir)/flame/icons" ]; then \
