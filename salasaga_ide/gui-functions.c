@@ -4407,7 +4407,7 @@ void menu_help_about(void)
 	about_dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 	gtk_about_dialog_set_name(about_dialog, APP_NAME);
 	gtk_about_dialog_set_version(about_dialog, APP_VERSION);
-	gtk_about_dialog_set_copyright(about_dialog, "(C) 2005-2006 Justin Clift <justin@postgresql.org>");
+	gtk_about_dialog_set_copyright(about_dialog, "(C) 2005-2007 Justin Clift <justin@postgresql.org>");
 	gtk_about_dialog_set_license(about_dialog, "LGPL");
 	gtk_about_dialog_set_license(about_dialog, NULL);
 	gtk_about_dialog_set_authors(about_dialog, authors);
@@ -5580,6 +5580,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.82  2007/07/15 07:31:41  vapour
+ * Updated copyright notice to include 2007.
+ *
  * Revision 1.81  2007/07/09 09:56:32  vapour
  * Removed unused variables.
  *
