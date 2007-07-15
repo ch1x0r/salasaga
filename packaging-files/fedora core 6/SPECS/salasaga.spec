@@ -1,7 +1,7 @@
 Name: flame_project
-Summary: GUI eLearning creation tool for applications, with output in animated SVG.
+Summary: An Integrated Development Environment for producing Animated SVG files.
 Version: 0.7.7.dev
-Release: 4
+Release: 6
 License: LGPL
 Group: Applications/Multimedia
 URL: http://www.flameproject.org/
@@ -13,40 +13,17 @@ Requires: glib2, gtk2, libgnome, libxml2
 BuildRequires: autoconf, rpm-devel >= 4.2.1, make, gcc, glib2-devel, gtk2-devel, libgnome-devel, libxml2-devel
 
 %description
-GUI eLearning creation tool for applications, with output in animated SVG.
+An Integrated Development Environment for producing Animated SVG files.
 
 %prep
 %setup
 autoconf
-
-%{__cat} <<EOF >flameproject.desktop
-[Desktop Entry]
-Name=The Flame Project
-Comment=GUI eLearning creation tool for applications, with output in animated SVG.
-Icon=flame_icon.ico
-Exec=flame-edit
-Type=Application
-Terminal=false
-StartupNotify=true
-Categories=Graphics;2DGraphics;RasterGraphics;GTK;
-Encoding=UTF-8
-EOF
 
 %build
 %configure
 make
 
 %install
-
-%if %{?_without_freedesktop:1}0
-	%{__install} -D -m0644 smart-gui.desktop %{buildroot}%{_datadir}/gnome/apps/Graphics/flameproject.desktop
-%else
-	%{__install} -d -m0755 %{buildroot}%{_datadir}/applications/
-	desktop-file-install --vendor "" \
-		--dir %{buildroot}%{_datadir}/applications \
-		--add-category X-Red-Hat-Extra \
-		flameproject.desktop
-%endif
 
 #rm -fr %{buildroot}
 
@@ -61,6 +38,22 @@ make
 %{_datadir}/* 
 
 %changelog
+* Sun Jul 15 2007 Justin Clift <justin@postgresql.org> 0.7.7-dev-6
+- Added initial Flame icon suitable for gnome menu bar
+- Shortcut now added to gnome menu
+
+* Tue Jul 09 2007 Justin Clift <justin@postgresql.org> 0.7.7-dev-5
+- No longer requires 1280x1024 resolution or higher.  Even 800x600 works.
+- Refactored the film strip code to use a GtkListStore
+  - Selected slide is now obvious
+  - Added "move to top" and "move to bottom" options
+  - Remapped the "Delete Slide" key to use Alt-i-d, easier to remember
+  - Changing width of film strip is fairly smooth and resizes thumbnails
+  - Changed film strip width is saved between sessions
+  - Changed film strip width also gets updated into the Preferences
+- Path to icon and sound file(s) are now calculated dynamically
+- Bug fixes with exported SVG code.  Multi-line text works ok now.
+
 * Wed Jun 27 2007 Justin Clift <justin@postgresql.org> 0.7.7-dev-4
 - Bug fix version, removing known crashes.
 - Screenshot slides now deleted after import.
