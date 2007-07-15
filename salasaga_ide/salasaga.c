@@ -303,6 +303,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	// Create the Capture button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "capture", icon_extension->str);
+	if (debug_level) printf("Capture icon: '%s'\n", tmp_gstring->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	main_toolbar_icons[CAPTURE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 	g_object_unref(tmp_gdk_pixbuf);
@@ -699,6 +700,7 @@ GtkWidget *create_working_area(GtkWidget *working_frame)
 gint main(gint argc, gchar *argv[])
 {
 	// Local variables
+	GString				*dot_string;
 	gint				format_counter;				// Used to determine if SVG images can be loaded
 	GdkPixbufFormat			*format_data;				// Used to determine if SVG images can be loaded
 	GValue				*handle_size;				// The size of the handle in the main area
@@ -746,6 +748,7 @@ gint main(gint argc, gchar *argv[])
 	frames_per_second = 12;  // Half of 24 fps (film)
 	icon_path = g_string_new(NULL);
 	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
+	dot_string = g_string_new(".");
 
 	// Initialise the button event handlers on the toolbars to NULL
 	main_toolbar_signals[CROP_ALL] = 0;
@@ -794,6 +797,8 @@ gint main(gint argc, gchar *argv[])
 	icon_path = g_string_assign(icon_path, "icons");
 #else
 	g_string_assign(icon_path, g_path_get_dirname(argv[0]));
+	if (g_string_equal(icon_path, dot_string)) g_string_assign(icon_path, "/usr/bin");
+	g_string_free(dot_string, TRUE);
 	g_string_printf(icon_path, g_build_path("/", icon_path->str, "..", "share", "flame", "icons", "72x72", NULL));
 #endif
 
@@ -812,6 +817,8 @@ gint main(gint argc, gchar *argv[])
 			icon_path = g_string_assign(icon_path, "icons");
 #else
 			g_string_assign(icon_path, g_path_get_dirname(argv[0]));
+			if (g_string_equal(icon_path, dot_string)) g_string_assign(icon_path, "/usr/bin");
+			g_string_free(dot_string, TRUE);
 			g_string_printf(icon_path, g_build_path("/", icon_path->str, "..", "share", "flame", "icons", "scalable", NULL));
 #endif
 
@@ -1487,6 +1494,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.52  2007/07/15 06:36:06  vapour
+ * If the absolute path to flame-edit can't be worked out, now defaults to /usr/bin.
+ *
  * Revision 1.51  2007/07/09 13:18:43  vapour
  * Added a default of 300 pixels for the thumbnail width in those cases where people have run an older version of flame-edit before.
  *
