@@ -1,8 +1,9 @@
 flameproject (0.7.7.dev-0ubuntu6) unstable; urgency=low
 
   * Added initial Flame icon suitable for gnome menu bar
+  * Shortcut now added to gnome menu
 
- -- Justin Clift <justin@postgresql.org>  Tue, 10 Jul 2007 19:25:00 +1100
+ -- Justin Clift <justin@postgresql.org>  Sun, 15 Jul 2007 14:44:00 +1100
  
 flameproject (0.7.7.dev-0ubuntu5) unstable; urgency=low
 
