@@ -798,7 +798,6 @@ gint main(gint argc, gchar *argv[])
 #else
 	g_string_assign(icon_path, g_path_get_dirname(argv[0]));
 	if (g_string_equal(icon_path, dot_string)) g_string_assign(icon_path, "/usr/bin");
-	g_string_free(dot_string, TRUE);
 	g_string_printf(icon_path, g_build_path("/", icon_path->str, "..", "share", "flame", "icons", "72x72", NULL));
 #endif
 
@@ -818,12 +817,12 @@ gint main(gint argc, gchar *argv[])
 #else
 			g_string_assign(icon_path, g_path_get_dirname(argv[0]));
 			if (g_string_equal(icon_path, dot_string)) g_string_assign(icon_path, "/usr/bin");
-			g_string_free(dot_string, TRUE);
 			g_string_printf(icon_path, g_build_path("/", icon_path->str, "..", "share", "flame", "icons", "scalable", NULL));
 #endif
 
 		}
 	}
+	g_string_free(dot_string, TRUE);
 
 	// Load initial mouse pointer graphic
 	g_string_printf(tmp_gstring, "%s%c%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", icon_extension->str);
@@ -1494,6 +1493,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.53  2007/07/15 06:45:42  vapour
+ * Oops, previous commit introduced a bug, now fixed.
+ *
  * Revision 1.52  2007/07/15 06:36:06  vapour
  * If the absolute path to flame-edit can't be worked out, now defaults to /usr/bin.
  *
