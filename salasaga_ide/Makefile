@@ -93,7 +93,10 @@ flame-edit: $(OFILES)
 install:
 	$(INSTALL) -d $(bindir)
 	$(INSTALL_PROGRAM) -m 0755 flame-edit $(bindir)
+	$(INSTALL) -d $(datadir)/applications/
+	$(INSTALL_DATA) flameproject.desktop $(datadir)/applications/
 	$(INSTALL) -d $(datadir)/flame/icons/
+	$(INSTALL) -d $(datadir)/pixmaps/
 	cd images; $(INSTALL_DATA) $(ICON_MAIN) $(datadir)/flame/icons/
 	cd images; $(INSTALL_DATA) $(ICON_PNG) $(datadir)/pixmaps/
 	$(INSTALL) -d $(datadir)/flame/icons/scalable/
