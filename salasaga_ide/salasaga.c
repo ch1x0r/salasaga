@@ -29,6 +29,7 @@
 #include <errno.h>
 #include <dirent.h>
 #include <unistd.h>
+#include <locale.h>
 
 // GLib includes
 #include <glib/gstdio.h>
@@ -757,6 +758,12 @@ gint main(gint argc, gchar *argv[])
 	for (tmp_int = 0; tmp_int < LAYER_TB_COUNT; tmp_int++)
 	{
 	    layer_toolbar_signals[tmp_int] = 0;
+	}
+
+	// Set the locale to C for now, so the output of numbers is correct
+	if (NULL == setlocale(LC_NUMERIC, "C"))
+	{
+		printf("Locale was unable to be set.  Exported SVG may not be correct.\n");
 	}
 
 	// Initialise GTK
@@ -1493,6 +1500,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.54  2007/07/18 13:31:59  vapour
+ * Initial code to explicitly set the locale for numbers at program start time.
+ *
  * Revision 1.53  2007/07/15 06:45:42  vapour
  * Oops, previous commit introduced a bug, now fixed.
  *
