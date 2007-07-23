@@ -761,13 +761,13 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// Set the locale to C for now, so the output of numbers is correct
-	if (NULL == setlocale(LC_NUMERIC, "C"))
+	if ((NULL == setlocale(LC_ALL, "")) | (NULL == setlocale(LC_NUMERIC, "C")))
 	{
 		printf("Locale was unable to be set.  Exported SVG may not be correct.\n");
 	}
 
 	// Initialise GTK
-	gtk_set_locale();
+	gtk_disable_setlocale();
 	gtk_init(&argc, &argv);
 
 	// Redirect log output so it doesn't pop open a console window
@@ -1500,6 +1500,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.55  2007/07/23 14:23:28  vapour
+ * Added SVG decimal separator fix that has been verified to work.
+ *
  * Revision 1.54  2007/07/18 13:31:59  vapour
  * Initial code to explicitly set the locale for numbers at program start time.
  *

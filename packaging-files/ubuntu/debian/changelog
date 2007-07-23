@@ -1,3 +1,17 @@
+flameproject (0.7.7.dev-0ubuntu8) unstable; urgency=low
+
+  * The fix in the previous release didnt work after all.  This one has
+    been verified as working properly, thus the exported SVG is correct.
+
+ -- Justin Clift <justin@postgresql.org>  Tue, 24 Jul 2007 00:25:00 +1100
+
+flameproject (0.7.7.dev-0ubuntu7) unstable; urgency=low
+
+  * Fixed a bug whereby exported SVG experienced incorrect numbering
+    with some locales
+
+ -- Justin Clift <justin@postgresql.org>  Wed, 18 Jul 2007 23:37:00 +1100
+
 flameproject (0.7.7.dev-0ubuntu6) unstable; urgency=low
 
   * Added initial Flame icon suitable for gnome menu bar
