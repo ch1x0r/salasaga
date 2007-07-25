@@ -73,6 +73,12 @@ ICONS_SCALABLE = \
 	up_arrow.svg \
 	up_arrow_grayed.svg
 
+MOUSE_SCALABLE = \
+	standard.svg
+
+MOUSE_PNG = \
+	standard.png
+
 all: flame-edit
 
 backend.o:
@@ -101,8 +107,12 @@ install:
 	cd images; $(INSTALL_DATA) $(ICON_PNG) $(datadir)/pixmaps/
 	$(INSTALL) -d $(datadir)/flame/icons/scalable/
 	cd images; $(INSTALL_DATA) $(ICONS_SCALABLE) $(datadir)/flame/icons/scalable/
+	$(INSTALL) -d $(datadir)/flame/icons/scalable/pointers/
+	cd images/pointers; $(INSTALL_DATA) $(MOUSE_SCALABLE) $(datadir)/flame/icons/scalable/pointers/
 	$(INSTALL) -d $(datadir)/flame/icons/72x72/
 	cd images; $(INSTALL_DATA) $(ICONS_SIXTY) $(datadir)/flame/icons/72x72/
+	$(INSTALL) -d $(datadir)/flame/icons/72x72/pointers/
+	cd images/pointers; $(INSTALL_DATA) $(MOUSE_PNG) $(datadir)/flame/icons/72x72/pointers/
 	$(INSTALL) -d $(datadir)/flame/sounds/
 	cd sounds; $(INSTALL_DATA) $(SOUNDS) $(datadir)/flame/sounds/
 
@@ -112,12 +122,18 @@ uninstall:
 	fi
 
 	if [ -d "$(datadir)/flame/icons/scalable" ]; then \
+		cd $(datadir)/flame/icons/scalable/pointers/; \
+		rm -f $(MOUSE_SCALABLE); \
+		rmdir $(datadir)/flame/icons/scalable/pointers; \
 		cd $(datadir)/flame/icons/scalable/; \
 		rm -f $(ICONS_SCALABLE); \
 		rmdir $(datadir)/flame/icons/scalable; \
 	fi
 
 	if [ -d "$(datadir)/flame/icons/72x72" ]; then \
+		cd $(datadir)/flame/icons/72x72/pointers/; \
+		rm -f $(MOUSE_PNG); \
+		rmdir $(datadir)/flame/icons/72x72/pointers; \
 		cd $(datadir)/flame/icons/72x72/; \
 		rm -f $(ICONS_SIXTY); \
 		rmdir $(datadir)/flame/icons/72x72; \
