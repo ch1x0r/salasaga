@@ -1,3 +1,11 @@
+flameproject (0.7.7.dev-0ubuntu9) unstable; urgency=low
+
+  * The mouse pointers (previously missing from the packages) are now
+    included.
+  * Updated the display area drag code to handle mouse layers.
+
+ -- Justin Clift <justin@postgresql.org>  Wed, 25 Jul 2007 23:15:00 +1100
+
 flameproject (0.7.7.dev-0ubuntu8) unstable; urgency=low
 
   * The fix in the previous release didnt work after all.  This one has
