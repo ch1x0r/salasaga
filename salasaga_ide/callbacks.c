@@ -755,6 +755,15 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 				height = ((layer_image *) layer_data->object_data)->height;
 				break;
 
+			case TYPE_MOUSE_CURSOR:
+
+				// No it's not, so process it
+				present_x = ((layer_mouse *) layer_data->object_data)->x_offset_start;
+				present_y = ((layer_mouse *) layer_data->object_data)->y_offset_start;
+				width = ((layer_mouse *) layer_data->object_data)->width;
+				height = ((layer_mouse *) layer_data->object_data)->height;
+				break;
+
 			case TYPE_TEXT:
 				present_x = ((layer_text *) layer_data->object_data)->x_offset_start;
 				present_y = ((layer_text *) layer_data->object_data)->y_offset_start;
@@ -908,6 +917,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.19  2007/07/25 13:12:58  vapour
+ * Updated drag code to handle mouse layers.
+ *
  * Revision 1.18  2007/07/09 12:42:53  vapour
  * Updated the film strip column resizing to work nicer.
  *
