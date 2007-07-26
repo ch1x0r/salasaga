@@ -5246,9 +5246,8 @@ void slide_insert(void)
 		current_slide = slides;
 	} else
 	{
-		// Add the temporary slide after the presently selected slide
-		slide_position = g_list_position(slides, current_slide);
-		slides = g_list_insert(slides, tmp_slide, slide_position + 1);
+		// Add the newly created slide to the end of the slides
+		slides = g_list_append(slides, tmp_slide);
 	}
 
 	// Recreate the slide tooltips
@@ -5583,6 +5582,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.85  2007/07/26 13:35:18  vapour
+ * New slides are now correctly added to the end of the existing list.
+ *
  * Revision 1.84  2007/07/26 13:28:01  vapour
  * Newly inserted slides now have the correct thumbnail height.
  *
