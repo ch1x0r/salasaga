@@ -3994,8 +3994,8 @@ void menu_file_new(void)
 	gtk_table_attach_defaults(GTK_TABLE(project_table), GTK_WIDGET(bg_color_label), 0, 1, row_counter, row_counter + 1);
 
 	// Create the background color selection button
-    bg_color_button = gtk_color_button_new_with_color(&default_bg_colour);
-    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(bg_color_button), TRUE);
+	bg_color_button = gtk_color_button_new_with_color(&default_bg_colour);
+	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(bg_color_button), TRUE);
 	gtk_table_attach_defaults(GTK_TABLE(project_table), GTK_WIDGET(bg_color_button), 1, 2, row_counter, row_counter + 1);
 	row_counter = row_counter + 1;
 
@@ -4025,6 +4025,9 @@ void menu_file_new(void)
 	// Gray out the toolbar items that can't be used without a project loaded
 	disable_layer_toolbar_buttons();
 	disable_main_toolbar_buttons();
+
+	// If there's an existing film strip, we unload it
+	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));	
 
 	// Set the project name
 	g_string_printf(project_name, "%s", gtk_entry_get_text(GTK_ENTRY(name_entry)));
@@ -5580,6 +5583,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.83  2007/07/26 12:49:54  vapour
+ * Fixed a bug where the film strip area wasn't being cleared first when creating a new project.
+ *
  * Revision 1.82  2007/07/15 07:31:41  vapour
  * Updated copyright notice to include 2007.
  *
