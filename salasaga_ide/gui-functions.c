@@ -5194,7 +5194,7 @@ void slide_insert(void)
 	((layer_empty *) tmp_layer->object_data)->bg_color.blue = default_bg_colour.blue;
 
 	// Create a blank thumbnail using the default background color
-	tmp_gdk_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, 233);
+	tmp_gdk_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, (guint) preview_width * 0.75);
 	gdk_pixbuf_fill(tmp_gdk_pixbuf, ((default_bg_colour.red / 255) << 24)
 		+ ((default_bg_colour.green / 255) << 16)
 		+ ((default_bg_colour.blue / 255) << 8) + 0xff);
@@ -5583,6 +5583,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.84  2007/07/26 13:28:01  vapour
+ * Newly inserted slides now have the correct thumbnail height.
+ *
  * Revision 1.83  2007/07/26 12:49:54  vapour
  * Fixed a bug where the film strip area wasn't being cleared first when creating a new project.
  *
