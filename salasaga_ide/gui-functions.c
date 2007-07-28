@@ -550,58 +550,85 @@ void create_tooltips(void)
 void disable_layer_toolbar_buttons(void)
 {
 	// Disable the Edit Layer icon
-	g_object_ref(layer_toolbar_icons[LAYER_EDIT]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_icons_gray[LAYER_EDIT]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_tooltips, "Edit layer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_EDIT]));
+	if (NULL != layer_toolbar_icons[LAYER_EDIT])
+	{
+		g_object_ref(layer_toolbar_icons[LAYER_EDIT]);
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_icons_gray[LAYER_EDIT]);
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_tooltips, "Edit layer disabled: No project loaded", "Private");
+		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_EDIT]));
+	}
 
 	// Disable the Crop Layer icon
-	g_object_ref(layer_toolbar_icons[LAYER_CROP]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_CROP]), layer_toolbar_icons_gray[LAYER_CROP]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_CROP]), layer_toolbar_tooltips, "Crop layer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_CROP]));
+	if (NULL != layer_toolbar_icons[LAYER_CROP])
+	{
+		g_object_ref(layer_toolbar_icons[LAYER_CROP]);
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_CROP]), layer_toolbar_icons_gray[LAYER_CROP]);
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_CROP]), layer_toolbar_tooltips, "Crop layer disabled: No project loaded", "Private");
+		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_CROP]));
+	}
 
 	// Disable the Delete Layer icon
-	g_object_ref(layer_toolbar_icons[LAYER_DELETE]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_icons_gray[LAYER_DELETE]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_tooltips, "Delete layer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_DELETE]));
+	if (NULL != layer_toolbar_icons[LAYER_DELETE])
+	{
+		g_object_ref(layer_toolbar_icons[LAYER_DELETE]);
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_icons_gray[LAYER_DELETE]);
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_tooltips, "Delete layer disabled: No project loaded", "Private");
+		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_DELETE]));
+	}
 
 	// Disable the Move Layer Down icon
-	g_object_ref(layer_toolbar_icons[LAYER_DOWN]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_icons_gray[LAYER_DOWN]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_tooltips, "Move layer down disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_DOWN]));
+	if (NULL != layer_toolbar_icons[LAYER_DOWN])
+	{
+		g_object_ref(layer_toolbar_icons[LAYER_DOWN]);
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_icons_gray[LAYER_DOWN]);
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_tooltips, "Move layer down disabled: No project loaded", "Private");
+		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_DOWN]));
+	}
 
 	// Disable the Move Layer Up icon
-	g_object_ref(layer_toolbar_icons[LAYER_UP]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_UP]), layer_toolbar_icons_gray[LAYER_UP]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_UP]), layer_toolbar_tooltips, "Move layer up disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_UP]));
+	if (NULL != layer_toolbar_icons[LAYER_UP])
+	{
+		g_object_ref(layer_toolbar_icons[LAYER_UP]);
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_UP]), layer_toolbar_icons_gray[LAYER_UP]);
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_UP]), layer_toolbar_tooltips, "Move layer up disabled: No project loaded", "Private");
+		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_UP]));
+	}
 
 	// Disable the Add Mouse Pointer icon
-	g_object_ref(layer_toolbar_icons[LAYER_MOUSE]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_icons_gray[LAYER_MOUSE]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_tooltips, "Add mouse pointer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_MOUSE]));
+	if (NULL != layer_toolbar_icons[LAYER_MOUSE])
+	{
+		g_object_ref(layer_toolbar_icons[LAYER_MOUSE]);
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_icons_gray[LAYER_MOUSE]);
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_tooltips, "Add mouse pointer disabled: No project loaded", "Private");
+		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_MOUSE]));
+	}
 
 	// Disable the Add Text Layer icon
-	g_object_ref(layer_toolbar_icons[LAYER_TEXT]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_icons_gray[LAYER_TEXT]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_tooltips, "Add text layer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_TEXT]));
+	if (NULL != layer_toolbar_icons[LAYER_TEXT])
+	{
+		g_object_ref(layer_toolbar_icons[LAYER_TEXT]);
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_icons_gray[LAYER_TEXT]);
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_tooltips, "Add text layer disabled: No project loaded", "Private");
+		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_TEXT]));
+	}
 
 	// Disable the Add Highlight Layer icon
-	g_object_ref(layer_toolbar_icons[LAYER_HIGHLIGHT]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_icons_gray[LAYER_HIGHLIGHT]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_tooltips, "Add highlight layer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_HIGHLIGHT]));
+	if (NULL != layer_toolbar_icons[LAYER_HIGHLIGHT])
+	{
+		g_object_ref(layer_toolbar_icons[LAYER_HIGHLIGHT]);
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_icons_gray[LAYER_HIGHLIGHT]);
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_tooltips, "Add highlight layer disabled: No project loaded", "Private");
+		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_HIGHLIGHT]));
+	}
 
 	// Disable the Add Image Layer icon
-	g_object_ref(layer_toolbar_icons[LAYER_IMAGE]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_icons_gray[LAYER_IMAGE]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_tooltips, "Add image layer disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_IMAGE]));
+	if (NULL != layer_toolbar_icons[LAYER_IMAGE])
+	{
+		g_object_ref(layer_toolbar_icons[LAYER_IMAGE]);
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_icons_gray[LAYER_IMAGE]);
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_tooltips, "Add image layer disabled: No project loaded", "Private");
+		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_IMAGE]));
+	}
 
 	// Disconnect the layer toolbar signal handlers
 	if (0 != layer_toolbar_signals[LAYER_EDIT])
@@ -626,22 +653,31 @@ void disable_layer_toolbar_buttons(void)
 void disable_main_toolbar_buttons(void)
 {
 	// Disable the Crop All icon
-	g_object_ref(main_toolbar_icons[CROP_ALL]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[CROP_ALL]), main_toolbar_icons_gray[CROP_ALL]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CROP_ALL]), main_toolbar_tooltips, "Crop disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[CROP_ALL]));
+	if (NULL != main_toolbar_icons[CROP_ALL])
+	{
+		g_object_ref(main_toolbar_icons[CROP_ALL]);
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[CROP_ALL]), main_toolbar_icons_gray[CROP_ALL]);
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CROP_ALL]), main_toolbar_tooltips, "Crop disabled: No project loaded", "Private");
+		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[CROP_ALL]));
+	}
 
 	// Disable the Export Flash icon
-	g_object_ref(main_toolbar_icons[EXPORT_FLASH]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[EXPORT_FLASH]), main_toolbar_icons_gray[EXPORT_FLASH]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[EXPORT_FLASH]), main_toolbar_tooltips, "Export to Flash disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[EXPORT_FLASH]));
+	if (NULL != main_toolbar_icons[EXPORT_FLASH])
+	{
+		g_object_ref(main_toolbar_icons[EXPORT_FLASH]);
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[EXPORT_FLASH]), main_toolbar_icons_gray[EXPORT_FLASH]);
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[EXPORT_FLASH]), main_toolbar_tooltips, "Export to Flash disabled: No project loaded", "Private");
+		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[EXPORT_FLASH]));
+	}
 
 	// Disable the Export SVG icon
-	g_object_ref(main_toolbar_icons[EXPORT_SVG]);
-	gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[EXPORT_SVG]), main_toolbar_icons_gray[EXPORT_SVG]);
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[EXPORT_SVG]), main_toolbar_tooltips, "Export to SVG disabled: No project loaded", "Private");
-	gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[EXPORT_SVG]));
+	if (NULL != main_toolbar_icons[EXPORT_SVG])
+	{
+		g_object_ref(main_toolbar_icons[EXPORT_SVG]);
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[EXPORT_SVG]), main_toolbar_icons_gray[EXPORT_SVG]);
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[EXPORT_SVG]), main_toolbar_tooltips, "Export to SVG disabled: No project loaded", "Private");
+		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[EXPORT_SVG]));
+	}
 
 	// Disconnect the main toolbar signal handlers
 	if (0 != main_toolbar_signals[CROP_ALL])
@@ -5582,6 +5618,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.86  2007/07/28 15:06:50  vapour
+ * Added code to check for successful creation of icon images, to stop a bunch of warning messages that occur when debugging.
+ *
  * Revision 1.85  2007/07/26 13:35:18  vapour
  * New slides are now correctly added to the end of the existing list.
  *
