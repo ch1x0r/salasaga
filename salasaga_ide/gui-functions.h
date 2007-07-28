@@ -63,7 +63,6 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title);
 gint display_warning(gchar *warning_string);
 void draw_bounding_box(GtkWidget *widget, GdkRegion *region);
 void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gint width, gint height, guint32 fill_color, guint32 border_color);
-void draw_thumbnail(GList *which_slide);
 void draw_timeline(void);
 void draw_workspace(void);
 void enable_layer_toolbar_buttons(void);
@@ -99,6 +98,9 @@ void slide_name_set(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2007/07/28 16:05:04  vapour
+ * Fixed a bug whereby the film strip thumbnails weren't being updated when adjusting layers.
+ *
  * Revision 1.12  2007/07/28 15:48:08  vapour
  * Added code to enable changing the background color of a slide.  Works ok in limited testing.
  *

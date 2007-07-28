@@ -1689,33 +1689,6 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 }
 
 
-// Function that redraws a film strip thumbnail
-void draw_thumbnail(GList *which_slide)
-{
-	// Local variables
-	gint				current_height;				// The height of the current thumbnail
-
-	GtkImage			*tmp_image;				//
-	GdkPixbuf			*tmp_pixbuf;				//
-
-
-	// If the current slide hasn't been initialised, don't run this function
-	if (NULL == current_slide)
-	{
-		return;
-	}
-
-	// Get the dimensions of the existing thumbnail
-	tmp_pixbuf = gtk_image_get_pixbuf(((slide *) which_slide->data)->thumbnail);
-	current_height = gdk_pixbuf_get_height(tmp_pixbuf);
-
-	// Create the new thumbnail and add it to the slide
-	tmp_pixbuf = compress_layers(which_slide, preview_width, current_height);
-	tmp_image = ((slide *) which_slide->data)->thumbnail;
-	((slide *) which_slide->data)->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(tmp_pixbuf)));
-}
-
-
 // Function that redraws the timeline
 void draw_timeline(void)
 {
@@ -2119,14 +2092,14 @@ void image_crop(void)
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(crop_dialog));
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
-
 	// Redraw the timeline
 	draw_timeline();
 
 	// Redraw the workspace
 	draw_workspace();
+
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 }
 
 
@@ -2197,8 +2170,8 @@ void layer_delete(void)
 	// Redraw the workspace area
 	draw_workspace();
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 
 	// Free the storage allocated by this function
 	gtk_tree_path_free(tmp_path);
@@ -2366,7 +2339,7 @@ void layer_edit(void)
 	// Redraw the workspace
 	draw_workspace();
 
-	// Redraw the film strip thumbnails
+	// Recreate the film strip thumbnails
 	regenerate_film_strip_thumbnails();
 }
 
@@ -2427,8 +2400,8 @@ void layer_move_down(void)
 	// Redraw the workspace
 	draw_workspace();
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 }
 
 
@@ -2496,8 +2469,8 @@ void layer_move_up(void)
 	// Redraw the workspace
 	draw_workspace();
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 }
 
 
@@ -2578,8 +2551,8 @@ void layer_new_highlight(void)
 	// Redraw the workspace
 	draw_workspace();
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 
 	// Select the new layer in the timeline widget
 	tmp_path = gtk_tree_path_new_first();
@@ -2664,8 +2637,8 @@ void layer_new_image(void)
 	// Redraw the workspace
 	draw_workspace();
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 
 	// Select the new layer in the timeline widget
 	tmp_path = gtk_tree_path_new_first();
@@ -2751,8 +2724,8 @@ void layer_new_mouse(void)
 	// Redraw the workspace
 	draw_workspace();
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 
 	// Select the new layer in the timeline widget
 	tmp_path = gtk_tree_path_new_first();
@@ -2846,8 +2819,8 @@ void layer_new_text(void)
 	// Redraw the workspace
 	draw_workspace();
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 
 	// Select the new layer in the timeline widget
 	tmp_path = gtk_tree_path_new_first();
@@ -5227,9 +5200,6 @@ void project_crop(void)
 
 		// Free the memory used by the old pixbuf
 		g_object_unref(tmp_pixbuf);
-
-		// Redraw the film strip thumbnail
-		draw_thumbnail(g_list_nth(slides, slide_counter));
 	}
 
 	// Update project width and height global variables
@@ -5241,6 +5211,9 @@ void project_crop(void)
 
 	// Redraw the workspace
 	draw_workspace();
+
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 }
 
 
@@ -5724,6 +5697,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.89  2007/07/28 16:05:04  vapour
+ * Fixed a bug whereby the film strip thumbnails weren't being updated when adjusting layers.
+ *
  * Revision 1.88  2007/07/28 15:56:23  vapour
  * Added further success checks to the icon creation code, to remove another set of warnings on stderr when debugging.
  *

@@ -267,8 +267,8 @@ void timeline_edited_start(GtkCellRendererText *selection, gchar *row, gchar *ne
 	// Redraw the workspace
 	draw_workspace();
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 }
 
 
@@ -323,8 +323,8 @@ void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row,
 	// Redraw the workspace
 	draw_workspace();
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 }
 
 
@@ -379,8 +379,8 @@ void timeline_edited_x_offset_start(GtkCellRendererText *selection, gchar *row, 
 	// Redraw the workspace
 	draw_workspace();
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 }
 
 
@@ -435,8 +435,8 @@ void timeline_edited_y_offset_finish(GtkCellRendererText *selection, gchar *row,
 	// Redraw the workspace
 	draw_workspace();
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 }
 
 
@@ -491,8 +491,8 @@ void timeline_edited_y_offset_start(GtkCellRendererText *selection, gchar *row, 
 	// Redraw the workspace
 	draw_workspace();
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 }
 
 
@@ -917,6 +917,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.20  2007/07/28 16:05:04  vapour
+ * Fixed a bug whereby the film strip thumbnails weren't being updated when adjusting layers.
+ *
  * Revision 1.19  2007/07/25 13:12:58  vapour
  * Updated drag code to handle mouse layers.
  *
