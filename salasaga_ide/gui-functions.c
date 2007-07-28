@@ -89,7 +89,7 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
 	scaled_pixbuf = gdk_pixbuf_scale_simple(backing_pixbuf, width, height, scaling_quality);
 
 	// Free the various pixbufs, pixmaps, etc
-	g_object_unref(backing_pixbuf);
+	if (NULL != backing_pixbuf) g_object_unref(backing_pixbuf);
 	if (TYPE_EMPTY == layer_data->object_type)
 	{
 		g_object_unref(bg_pixbuf);
@@ -187,6 +187,12 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 
 		case TYPE_MOUSE_CURSOR:
 			// * Composite the mouse pointer image onto the backing pixmap *
+
+			// If the mouse pointer image wasn't able to be loaded then we skip this layer, as the compositing wont work with it
+			if (NULL == mouse_ptr_pixbuf)
+			{
+				return;
+			}
 
 			// Calculate how much of the source image will fit onto the backing pixmap
 			pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
@@ -315,7 +321,7 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			// Free the memory allocated but no longer needed
 			g_object_unref(pango_layout);
 			g_object_unref(graphics_context);
-			g_object_unref(tmp_pixmap);
+			if (NULL != tmp_pixmap) g_object_unref(tmp_pixmap);
 
 			break;
 
@@ -1770,7 +1776,7 @@ void draw_workspace(void)
 	gtk_widget_queue_draw(GTK_WIDGET(main_drawing_area));
 
 	// Free allocated memory
-	g_object_unref(tmp_pixbuf);
+	if (NULL != tmp_pixbuf) g_object_unref(tmp_pixbuf);
 	if (NULL != tmp_pixmap)
 	{
 		g_object_unref(tmp_pixmap);
@@ -5697,6 +5703,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.90  2007/07/28 16:28:24  vapour
+ * Added a few more checks to the code.
+ *
  * Revision 1.89  2007/07/28 16:05:04  vapour
  * Fixed a bug whereby the film strip thumbnails weren't being updated when adjusting layers.
  *
