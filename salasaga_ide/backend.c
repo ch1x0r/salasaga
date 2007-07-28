@@ -1787,7 +1787,6 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					display_warning(tmp_gstring->str);
 
 					// Free the memory allocated in this function
-					g_object_unref(tmp_pixbuf);
 					g_string_free(tmp_gstring, TRUE);
 					g_error_free(error);
 					return;
@@ -2926,6 +2925,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.93  2007/07/28 16:26:46  vapour
+ * Removed a potential bug that could occur upon a strange error condition being triggered.
+ *
  * Revision 1.92  2007/07/09 13:48:07  vapour
  * The path to the sound file is now calculated dynamically as well.
  *
