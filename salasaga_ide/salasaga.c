@@ -380,7 +380,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons_gray[CROP_ALL] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(G_OBJECT(tmp_gdk_pixbuf));
+		g_object_unref(tmp_gdk_pixbuf);
 	}
 
 	// Create the grayed out Export Flash icon
@@ -1578,6 +1578,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.57  2007/07/28 16:25:44  vapour
+ * Small code cleanup.
+ *
  * Revision 1.56  2007/07/28 15:06:50  vapour
  * Added code to check for successful creation of icon images, to stop a bunch of warning messages that occur when debugging.
  *
