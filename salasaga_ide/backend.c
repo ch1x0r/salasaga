@@ -483,8 +483,8 @@ void destroy_slide(gpointer element, gpointer user_data)
 		g_string_free(slide_data->name, TRUE);
 	}
 	gtk_object_destroy(GTK_OBJECT(slide_data->tooltip));
-	g_object_unref(slide_data->layer_store);
-	g_object_unref(slide_data->timeline_widget);
+	if (NULL != slide_data->layer_store) g_object_unref(slide_data->layer_store);
+	if (NULL != slide_data->timeline_widget) g_object_unref(slide_data->timeline_widget);
 
 	// Free the memory allocated to the deleted slides' layers
 	slide_data->layers = g_list_first(slide_data->layers);
@@ -504,7 +504,7 @@ void destroy_slide(gpointer element, gpointer user_data)
 			case TYPE_GDK_PIXBUF:
 				// This is causing a Segfault
 				// g_string_free(((layer_image *) layer_data->object_data)->image_path, TRUE);
-				g_object_unref(((layer_image *) layer_data->object_data)->image_data);
+				if (NULL != ((layer_image *) layer_data->object_data)->image_data) g_object_unref(((layer_image *) layer_data->object_data)->image_data);
 				break;
 
 			case TYPE_MOUSE_CURSOR:
@@ -516,7 +516,7 @@ void destroy_slide(gpointer element, gpointer user_data)
 				break;
 
 			case TYPE_TEXT:
-				g_object_unref(((layer_text *) layer_data->object_data)->text_buffer);
+				if (NULL != ((layer_text *) layer_data->object_data)->text_buffer) g_object_unref(((layer_text *) layer_data->object_data)->text_buffer);
 				break;
 
 			case TYPE_HIGHLIGHT:
@@ -1807,7 +1807,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					display_warning("ED51: Something went wrong when encoding a slide to jpeg format");
 
 					// Free the memory allocated in this function
-					g_object_unref(tmp_pixbuf);
+					if (NULL != tmp_pixbuf) g_object_unref(tmp_pixbuf);
 					g_string_free(tmp_gstring, TRUE);
 					g_error_free(error);
 					return;
@@ -1902,7 +1902,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				}
 
 				// Free the allocated memory
-				g_object_unref(tmp_pixbuf);
+				if (NULL != tmp_pixbuf) g_object_unref(tmp_pixbuf);
 				g_free(encoded_string);
 				g_free(base64_string);
 				break;
@@ -2189,7 +2189,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 					// Free the buffers created for this calculation
 					g_string_free(text_slice_buffer, TRUE);
 					g_string_free(text_output_buffer, TRUE);
-					g_object_unref(pango_text_slice_buffer);
+					if (NULL != pango_text_slice_buffer) g_object_unref(pango_text_slice_buffer);
 
 				} else
 				{
@@ -2925,6 +2925,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.94  2007/07/28 16:34:00  vapour
+ * Added a few more checks to the code.
+ *
  * Revision 1.93  2007/07/28 16:26:46  vapour
  * Removed a potential bug that could occur upon a strange error condition being triggered.
  *
