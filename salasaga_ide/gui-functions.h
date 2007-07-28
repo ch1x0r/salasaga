@@ -55,6 +55,7 @@ GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_
 void create_tooltips(void);
 void disable_layer_toolbar_buttons(void);
 void disable_main_toolbar_buttons(void);
+gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title);
 gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title);
 gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean request_file);
 gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean request_file);
@@ -98,6 +99,9 @@ void slide_name_set(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2007/07/28 15:48:08  vapour
+ * Added code to enable changing the background color of a slide.  Works ok in limited testing.
+ *
  * Revision 1.11  2007/07/01 12:50:27  vapour
  * Removed prototype of refresh_film_strip function, and added prototypes of functions for moving a slide to the top and bottom of the slide list.
  *

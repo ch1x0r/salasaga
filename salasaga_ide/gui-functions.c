@@ -710,6 +710,64 @@ gint display_warning(gchar *warning_string)
 }
 
 
+// Display a dialog box asking for empty layer settings
+gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
+{
+	// Local variables
+	GtkDialog			*empty_dialog;				// Widget for the dialog
+	GtkWidget			*empty_table;				// Table used for neat layout of the dialog box
+	gint				dialog_result;				// Catches the return code from the dialog box
+	guint				row_counter = 0;			// Used to count which row things are up to
+
+	GtkWidget			*label_bg_colour;			// Background colour
+	GtkWidget			*button_bg_colour;			// Color button
+
+	layer_empty			*tmp_empty_ob;				// Temporary empty layer object
+
+
+	// Initialise some things
+	tmp_empty_ob = (layer_empty *) tmp_layer->object_data;
+
+	// * Pop open a dialog box asking the user for the details of the layer *
+
+	// Create the dialog window, and table to hold its children
+	empty_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(dialog_title, GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	empty_table = gtk_table_new(3, 3, FALSE);
+	gtk_box_pack_start(GTK_BOX(empty_dialog->vbox), GTK_WIDGET(empty_table), FALSE, FALSE, 10);
+
+	// Background Colour
+	label_bg_colour = gtk_label_new("Background Colour: ");
+	gtk_misc_set_alignment(GTK_MISC(label_bg_colour), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(empty_table), GTK_WIDGET(label_bg_colour), 0, 1, row_counter, row_counter + 1);
+	button_bg_colour = gtk_color_button_new_with_color(&tmp_empty_ob->bg_color);
+	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(button_bg_colour), TRUE);
+	gtk_table_attach_defaults(GTK_TABLE(empty_table), GTK_WIDGET(button_bg_colour), 2, 3, row_counter, row_counter + 1);
+	row_counter = row_counter + 1;
+
+	// Run the dialog
+	gtk_widget_show_all(GTK_WIDGET(empty_dialog));
+	dialog_result = gtk_dialog_run(GTK_DIALOG(empty_dialog));
+
+	// Was the OK button pressed?
+	if (GTK_RESPONSE_ACCEPT != dialog_result)
+	{
+		// * The user cancelled the dialog *
+
+		// Destroy the dialog box and return
+		gtk_widget_destroy(GTK_WIDGET(empty_dialog));
+		return FALSE;	
+	}
+
+	// Get the new background Colour
+	gtk_color_button_get_color(GTK_COLOR_BUTTON(button_bg_colour), &tmp_empty_ob->bg_color);
+
+	// Destroy the dialog box
+	gtk_widget_destroy(GTK_WIDGET(empty_dialog));
+
+	return TRUE;
+}
+
+
 // Display a dialog box asking for highlight layer settings
 gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 {
@@ -752,7 +810,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	// Initialise some things
 	tmp_highlight_ob = (layer_highlight *) tmp_layer->object_data;
 
-	// * Pop open a dialog box asking the user for the details of the new layer *
+	// * Pop open a dialog box asking the user for the details of the layer *
 
 	// Create the dialog window, and table to hold its children
 	highlight_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(dialog_title, GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
@@ -970,7 +1028,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 		path_gstring = tmp_image_ob->image_path;
 	}
 
-	// * Pop open a dialog box asking the user for the details of the new layer *
+	// * Pop open a dialog box asking the user for the details of the layer *
 
 	// Create the dialog window, and table to hold its children
 	image_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(dialog_title, GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
@@ -1146,7 +1204,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// Initialise some things
 	tmp_mouse_ob = (layer_mouse *) tmp_layer->object_data;
 
-	// * Pop open a dialog box asking the user for the details of the new layer *
+	// * Pop open a dialog box asking the user for the details of the layer *
 
 	// Create the dialog window, and table to hold its children
 	mouse_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(dialog_title, GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
@@ -2128,6 +2186,7 @@ void layer_edit(void)
 	GtkTextIter			text_end;				// The end position of the text buffer
 
 	GtkTreeViewColumn		*tmp_column;				// Temporary column
+	layer_empty			*tmp_empty_ob;				// Temporary empty layer object
 	layer_highlight			*tmp_highlight_ob;			// Temporary highlight layer object
 	layer_image			*tmp_image_ob;				// Temporary image layer object
 	GtkTreeIter			*tmp_iter;				// Temporary iter
@@ -2162,11 +2221,11 @@ void layer_edit(void)
 	tmp_layer = g_list_nth_data(layer_pointer, selected_row);
 
 	// If the background layer is selected, don't edit it
-	if (1 == (num_layers - selected_row))
+	if (1 == (num_layers - selected_row) && (TYPE_GDK_PIXBUF == tmp_layer->object_type))
 	{
 		// Give the user a warning, then return
 		sound_beep();
-		display_warning("ED39: Background layers can not be edited\n");
+		display_warning("ED39: Background image layers can not be edited\n");
 		return;
 	}
 
@@ -2174,6 +2233,17 @@ void layer_edit(void)
 
 	switch (tmp_layer->object_type)
 	{
+		case TYPE_EMPTY:
+			// Open a dialog box for the user to edit the background layer values
+			return_code = display_dialog_empty(tmp_layer, "Edit background color");
+			if (TRUE == return_code)
+			{
+				// * The dialog box returned successfully, so update the slide list store with the new values *
+				tmp_empty_ob = (layer_empty *) tmp_layer->object_data;
+				tmp_iter = tmp_layer->row_iter;
+			}
+			break;
+
 		case TYPE_GDK_PIXBUF:
 			// Open a dialog box for the user to edit the image layer values
 			return_code = display_dialog_image(tmp_layer, "Edit image layer", FALSE);
@@ -2260,8 +2330,8 @@ void layer_edit(void)
 	// Redraw the workspace
 	draw_workspace();
 
-	// Redraw the film strip thumbnail
-	draw_thumbnail(current_slide);
+	// Redraw the film strip thumbnails
+	regenerate_film_strip_thumbnails();
 }
 
 
@@ -5618,6 +5688,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.87  2007/07/28 15:48:09  vapour
+ * Added code to enable changing the background color of a slide.  Works ok in limited testing.
+ *
  * Revision 1.86  2007/07/28 15:06:50  vapour
  * Added code to check for successful creation of icon images, to stop a bunch of warning messages that occur when debugging.
  *
