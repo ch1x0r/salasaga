@@ -2325,7 +2325,9 @@ void layer_edit(void)
 				if (tmp_layer->finish_frame > slide_data->duration)
 				{
 					slide_data->duration = tmp_layer->finish_frame;
-					// fixme3: We need to regenerate the duration images for the other layers as well!
+
+					// Regenerate the duration images for the other layers as well!
+					regenerate_timeline_duration_images(slide_data);
 				}
 
 				// Work out the start and ending frames for this layer
@@ -2362,7 +2364,13 @@ void layer_edit(void)
 				// * The dialog box returned successfully *
 
 				// If the new layer finish_frame is longer than the slide duration, then extend the slide duration
-				if (tmp_layer->finish_frame > slide_data->duration) slide_data->duration = tmp_layer->finish_frame;
+				if (tmp_layer->finish_frame > slide_data->duration)
+				{
+					slide_data->duration = tmp_layer->finish_frame;
+
+					// Regenerate the duration images for the other layers as well!
+					regenerate_timeline_duration_images(slide_data);
+				}
 
 				// Work out the start and ending frames for this layer
 				start_frame = tmp_layer->start_frame;
@@ -2398,7 +2406,13 @@ void layer_edit(void)
 				// * The dialog box returned successfully *
 
 				// If the new layer finish_frame is longer than the slide duration, then extend the slide duration
-				if (tmp_layer->finish_frame > slide_data->duration) slide_data->duration = tmp_layer->finish_frame;
+				if (tmp_layer->finish_frame > slide_data->duration)
+				{
+					slide_data->duration = tmp_layer->finish_frame;
+
+					// Regenerate the duration images for the other layers as well!
+					regenerate_timeline_duration_images(slide_data);
+				}
 
 				// Work out the start and ending frames for this layer
 				start_frame = tmp_layer->start_frame;
@@ -2436,7 +2450,13 @@ void layer_edit(void)
 				// * The dialog box returned successfully *
 
 				// If the new layer finish_frame is longer than the slide duration, then extend the slide duration
-				if (tmp_layer->finish_frame > slide_data->duration) slide_data->duration = tmp_layer->finish_frame;
+				if (tmp_layer->finish_frame > slide_data->duration)
+				{
+					slide_data->duration = tmp_layer->finish_frame;
+
+					// Regenerate the duration images for the other layers as well!
+					regenerate_timeline_duration_images(slide_data);
+				}
 
 				// Work out the start and ending frames for this layer
 				start_frame = tmp_layer->start_frame;
@@ -2651,7 +2671,7 @@ void layer_new_highlight(void)
 	tmp_layer->object_type = TYPE_HIGHLIGHT;
 	tmp_layer->object_data = (GObject *) tmp_highlight_ob;
 	tmp_layer->start_frame = 0;
-	tmp_layer->finish_frame = slide_length;
+	tmp_layer->finish_frame = ((slide *) current_slide->data)->duration;
 	tmp_layer->name = g_string_new("Highlight");
 	tmp_layer->external_link = g_string_new(NULL);
 
@@ -2758,7 +2778,7 @@ void layer_new_image(void)
 	tmp_layer->object_type = TYPE_GDK_PIXBUF;
 	tmp_layer->object_data = (GObject *) tmp_image_ob;
 	tmp_layer->start_frame = 0;
-	tmp_layer->finish_frame = slide_length;
+	tmp_layer->finish_frame = ((slide *) current_slide->data)->duration;
 	tmp_layer->name = g_string_new("Image");
 	tmp_layer->external_link = g_string_new(NULL);
 
@@ -2866,7 +2886,7 @@ void layer_new_mouse(void)
 	tmp_layer->object_type = TYPE_MOUSE_CURSOR;
 	tmp_layer->object_data = (GObject *) tmp_mouse_ob;
 	tmp_layer->start_frame = 0;
-	tmp_layer->finish_frame = slide_length;
+	tmp_layer->finish_frame = ((slide *) current_slide->data)->duration;
 	tmp_layer->name = g_string_new("Mouse Pointer");
 	tmp_layer->external_link = g_string_new(NULL);
 
@@ -2979,7 +2999,7 @@ void layer_new_text(void)
 	tmp_layer->object_type = TYPE_TEXT;
 	tmp_layer->object_data = (GObject *) tmp_text_ob;
 	tmp_layer->start_frame = 0;
-	tmp_layer->finish_frame = slide_length;
+	tmp_layer->finish_frame = ((slide *) current_slide->data)->duration;
 	tmp_layer->name = g_string_new("Text layer");
 	tmp_layer->external_link = g_string_new(NULL);
 
@@ -5914,6 +5934,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.95  2007/07/29 12:31:51  vapour
+ * When a slide has its duration extended, all of the duration thumbnails are now extended too.
+ *
  * Revision 1.94  2007/07/29 12:04:42  vapour
  * Adding new layers now has duration images created for them in the timeline as well.
  *
