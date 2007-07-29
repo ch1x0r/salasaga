@@ -2321,6 +2321,13 @@ void layer_edit(void)
 			{
 				// * The dialog box returned successfully *
 
+				// If the new layer finish_frame is longer than the slide duration, then extend the slide duration
+				if (tmp_layer->finish_frame > slide_data->duration)
+				{
+					slide_data->duration = tmp_layer->finish_frame;
+					// fixme3: We need to regenerate the duration images for the other layers as well!
+				}
+
 				// Work out the start and ending frames for this layer
 				start_frame = tmp_layer->start_frame;
 				finish_frame = tmp_layer->finish_frame;
@@ -2354,6 +2361,9 @@ void layer_edit(void)
 			{
 				// * The dialog box returned successfully *
 
+				// If the new layer finish_frame is longer than the slide duration, then extend the slide duration
+				if (tmp_layer->finish_frame > slide_data->duration) slide_data->duration = tmp_layer->finish_frame;
+
 				// Work out the start and ending frames for this layer
 				start_frame = tmp_layer->start_frame;
 				finish_frame = tmp_layer->finish_frame;
@@ -2386,6 +2396,9 @@ void layer_edit(void)
 			if (TRUE == return_code)
 			{
 				// * The dialog box returned successfully *
+
+				// If the new layer finish_frame is longer than the slide duration, then extend the slide duration
+				if (tmp_layer->finish_frame > slide_data->duration) slide_data->duration = tmp_layer->finish_frame;
 
 				// Work out the start and ending frames for this layer
 				start_frame = tmp_layer->start_frame;
@@ -2421,6 +2434,9 @@ void layer_edit(void)
 			if (TRUE == return_code)
 			{
 				// * The dialog box returned successfully *
+
+				// If the new layer finish_frame is longer than the slide duration, then extend the slide duration
+				if (tmp_layer->finish_frame > slide_data->duration) slide_data->duration = tmp_layer->finish_frame;
 
 				// Work out the start and ending frames for this layer
 				start_frame = tmp_layer->start_frame;
@@ -2595,8 +2611,15 @@ void layer_move_up(void)
 void layer_new_highlight(void)
 {
 	// Local variables
+	guint				finish_frame;				// Used when working out a layer's finish frame
+	gfloat				finish_pixel;				// Ending slider pixel to fill in
+	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	gfloat				pixel_width;				// Width of pixels to fill
 	gboolean			return_code;				// Catches a TRUE/FALSE return value
+	slide				*slide_data;				// Pointer to the data for the current slide
+	guint				start_frame;				// Used when working out a layer's start frame
+	gfloat				start_pixel;				// Starting slider pixel to fill in
 
 	layer_highlight			*tmp_highlight_ob;			// Temporary highlight layer object
 	GtkTreeIter			*tmp_iter;				// Temporary iter
@@ -2646,9 +2669,23 @@ void layer_new_highlight(void)
 	// * To get here, the user must have clicked OK in the create highlight layer dialog box, so we process the results *
 
 	// Add the new layer to the slide
-	layer_pointer = ((slide *) current_slide->data)->layers;
+	slide_data = current_slide->data;
+	layer_pointer = slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
+
+	// Work out the start and ending frames for this layer
+	start_frame = tmp_layer->start_frame;
+	finish_frame = tmp_layer->finish_frame;
+
+	// Calculate the duration of the layer for drawing inside the slider
+	start_pixel = 180 * ((gfloat) start_frame / (gfloat) slide_data->duration);
+	finish_pixel = 180 * ((gfloat) finish_frame / (gfloat) slide_data->duration);
+	pixel_width = finish_pixel - start_pixel;
+
+	// Create duration image
+	layer_pixbuf = NULL;
+	layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, start_pixel, pixel_width);
 
 	// Add the new layer to slide list store
 	tmp_iter = g_new(GtkTreeIter, 1);
@@ -2657,7 +2694,7 @@ void layer_new_highlight(void)
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
 						TIMELINE_VISIBILITY, TRUE,
-						TIMELINE_DURATION, NULL,
+						TIMELINE_DURATION, layer_pixbuf,
 						TIMELINE_X_OFF_START, tmp_highlight_ob->x_offset_start,
 						TIMELINE_Y_OFF_START, tmp_highlight_ob->y_offset_start,
 						TIMELINE_X_OFF_FINISH, tmp_highlight_ob->x_offset_finish,
@@ -2680,8 +2717,15 @@ void layer_new_highlight(void)
 void layer_new_image(void)
 {
 	// Local variables
+	guint				finish_frame;				// Used when working out a layer's finish frame
+	gfloat				finish_pixel;				// Ending slider pixel to fill in
+	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	gfloat				pixel_width;				// Width of pixels to fill
 	gboolean			return_code;				// Catches a TRUE/FALSE return value
+	slide				*slide_data;				// Pointer to the data for the current slide
+	guint				start_frame;				// Used when working out a layer's start frame
+	gfloat				start_pixel;				// Starting slider pixel to fill in
 
 	layer_image			*tmp_image_ob;				// Temporary image layer object
 	GtkTreeIter			*tmp_iter;				// Temporary iter
@@ -2732,9 +2776,23 @@ void layer_new_image(void)
 	// * To get here, the user must have clicked OK in the dialog box, so we process the results *
 
 	// Add the new layer to the slide
-	layer_pointer = ((slide *) current_slide->data)->layers;
+	slide_data = current_slide->data;
+	layer_pointer = slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
+
+	// Work out the start and ending frames for this layer
+	start_frame = tmp_layer->start_frame;
+	finish_frame = tmp_layer->finish_frame;
+
+	// Calculate the duration of the layer for drawing inside the slider
+	start_pixel = 180 * ((gfloat) start_frame / (gfloat) slide_data->duration);
+	finish_pixel = 180 * ((gfloat) finish_frame / (gfloat) slide_data->duration);
+	pixel_width = finish_pixel - start_pixel;
+
+	// Create duration image
+	layer_pixbuf = NULL;
+	layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, start_pixel, pixel_width);
 
 	// Add the new layer to slide list store
 	tmp_iter = g_new(GtkTreeIter, 1);
@@ -2743,7 +2801,7 @@ void layer_new_image(void)
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
 						TIMELINE_VISIBILITY, TRUE,
-						TIMELINE_DURATION, NULL,
+						TIMELINE_DURATION, layer_pixbuf,
 						TIMELINE_X_OFF_START, tmp_image_ob->x_offset_start,
 						TIMELINE_Y_OFF_START, tmp_image_ob->y_offset_start,
 						TIMELINE_X_OFF_FINISH, tmp_image_ob->x_offset_finish,
@@ -2766,8 +2824,15 @@ void layer_new_image(void)
 void layer_new_mouse(void)
 {
 	// Local variables
+	guint				finish_frame;				// Used when working out a layer's finish frame
+	gfloat				finish_pixel;				// Ending slider pixel to fill in
+	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	gfloat				pixel_width;				// Width of pixels to fill
 	gboolean			return_code;				// Catches a TRUE/FALSE return value
+	slide				*slide_data;				// Pointer to the data for the current slide
+	guint				start_frame;				// Used when working out a layer's start frame
+	gfloat				start_pixel;				// Starting slider pixel to fill in
 
 	layer_mouse			*tmp_mouse_ob;				// Temporary mouse layer object
 	GtkTreeIter			*tmp_iter;				// Temporary iter
@@ -2819,9 +2884,23 @@ void layer_new_mouse(void)
 	// * To get here, the user must have clicked OK in the dialog box, so we process the results *
 
 	// Add the new layer to the slide
-	layer_pointer = ((slide *) current_slide->data)->layers;
+	slide_data = current_slide->data;
+	layer_pointer = slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
+
+	// Work out the start and ending frames for this layer
+	start_frame = tmp_layer->start_frame;
+	finish_frame = tmp_layer->finish_frame;
+
+	// Calculate the duration of the layer for drawing inside the slider
+	start_pixel = 180 * ((gfloat) start_frame / (gfloat) slide_data->duration);
+	finish_pixel = 180 * ((gfloat) finish_frame / (gfloat) slide_data->duration);
+	pixel_width = finish_pixel - start_pixel;
+
+	// Create duration image
+	layer_pixbuf = NULL;
+	layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, start_pixel, pixel_width);
 
 	// Add the new layer to slide list store
 	tmp_iter = g_new(GtkTreeIter, 1);
@@ -2830,7 +2909,7 @@ void layer_new_mouse(void)
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
 						TIMELINE_VISIBILITY, TRUE,
-						TIMELINE_DURATION, NULL,
+						TIMELINE_DURATION, layer_pixbuf,
 						TIMELINE_X_OFF_START, tmp_mouse_ob->x_offset_start,
 						TIMELINE_Y_OFF_START, tmp_mouse_ob->y_offset_start,
 						TIMELINE_X_OFF_FINISH, tmp_mouse_ob->x_offset_finish,
@@ -2853,8 +2932,15 @@ void layer_new_mouse(void)
 void layer_new_text(void)
 {
 	// Local variables
+	guint				finish_frame;				// Used when working out a layer's finish frame
+	gfloat				finish_pixel;				// Ending slider pixel to fill in
+	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	gfloat				pixel_width;				// Width of pixels to fill
 	gboolean			return_code;				// Catches a TRUE/FALSE return value
+	slide				*slide_data;				// Pointer to the data for the current slide
+	guint				start_frame;				// Used when working out a layer's start frame
+	gfloat				start_pixel;				// Starting slider pixel to fill in
 
 	GtkTextIter			text_start;				// The start position of the text buffer
 	GtkTextIter			text_end;				// The end position of the text buffer
@@ -2912,9 +2998,23 @@ void layer_new_text(void)
 	// * To get here, the user must have clicked OK in the create text layer dialog box, so we process the results *
 
 	// Add the new text layer to the slide
-	layer_pointer = ((slide *) current_slide->data)->layers;
+	slide_data = current_slide->data;
+	layer_pointer = slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
+
+	// Work out the start and ending frames for this layer
+	start_frame = tmp_layer->start_frame;
+	finish_frame = tmp_layer->finish_frame;
+
+	// Calculate the duration of the layer for drawing inside the slider
+	start_pixel = 180 * ((gfloat) start_frame / (gfloat) slide_data->duration);
+	finish_pixel = 180 * ((gfloat) finish_frame / (gfloat) slide_data->duration);
+	pixel_width = finish_pixel - start_pixel;
+
+	// Create duration image
+	layer_pixbuf = NULL;
+	layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, start_pixel, pixel_width);
 
 	// Add the new text layer to slide list store
 	tmp_iter = g_new(GtkTreeIter, 1);
@@ -2924,7 +3024,7 @@ void layer_new_text(void)
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
 						TIMELINE_VISIBILITY, TRUE,
-						TIMELINE_DURATION, NULL,
+						TIMELINE_DURATION, layer_pixbuf,
 						TIMELINE_X_OFF_START, tmp_text_ob->x_offset_start,
 						TIMELINE_Y_OFF_START, tmp_text_ob->y_offset_start,
 						TIMELINE_X_OFF_FINISH, tmp_text_ob->x_offset_finish,
@@ -4277,7 +4377,7 @@ void menu_file_new(void)
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(project_dialog));
 
-	// Create a blank frame to start things from
+	// Create a blank slide to start things from
 	slide_insert();
 	current_slide = slides;
 
@@ -5396,6 +5496,7 @@ void slide_insert(void)
 {
 	// Local variables
 	GtkTreeIter			film_strip_iter;
+	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
 	gint				slide_position;				// Which slide in the slide list we have selected
 
 	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
@@ -5408,6 +5509,7 @@ void slide_insert(void)
 	tmp_slide = g_new(slide, 1);
 	tmp_slide->layers = NULL;
 	tmp_slide->name = NULL;
+	tmp_slide->duration = default_slide_length;
 
 	// Allocate a new layer structure for use in the slide
 	tmp_layer = g_new(layer, 1);
@@ -5430,6 +5532,10 @@ void slide_insert(void)
 	// Add the empty layer to the new slide being created
 	tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
 
+	// Create duration image
+	layer_pixbuf = NULL;
+	layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, 0, 180);
+
 	// Create the List store the slide layer data is kept in
 	tmp_iter = g_new(GtkTreeIter, 1);
 	tmp_layer->row_iter = tmp_iter;
@@ -5445,7 +5551,7 @@ void slide_insert(void)
 	gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 					TIMELINE_NAME, tmp_layer->name->str,
 					TIMELINE_VISIBILITY, TRUE,
-					TIMELINE_DURATION, NULL,
+					TIMELINE_DURATION, layer_pixbuf,
 					TIMELINE_X_OFF_START, 0,
 					TIMELINE_Y_OFF_START, 0,
 					TIMELINE_X_OFF_FINISH, 0,
@@ -5808,6 +5914,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.94  2007/07/29 12:04:42  vapour
+ * Adding new layers now has duration images created for them in the timeline as well.
+ *
  * Revision 1.93  2007/07/29 11:33:06  vapour
  * The timeline area now has the duration column updated when layers are updated.
  *
