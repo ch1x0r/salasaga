@@ -187,32 +187,6 @@ gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer da
 	return TRUE;
 }
 
-/*
-// Function called when the finish field in the timeline widget is edited
-void timeline_edited_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
-{
-	// Local variables
-	GList				*layer_pointer;
-	layer				*layer_data;
-
-
-	// Set up some pointers to make things easier
-	layer_pointer = ((slide *) current_slide->data)->layers;
-
-	// Work out which layer had its value changed
-	layer_pointer = g_list_first(layer_pointer);
-	layer_pointer = g_list_nth(layer_pointer, atoi(row));
-	layer_data = layer_pointer->data;
-
-	// Update the layer with the new value
-	layer_data->finish_frame = atoi(new_value);
-
-	// Update the timeline widget with the new value too
-	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-						TIMELINE_FINISH, atoi(new_value),
-						-1);
-}
-*/
 
 // Function called when the name field in the timeline widget is edited
 void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
@@ -239,38 +213,6 @@ void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new
 						-1);
 }
 
-/*
-// Function called when the start field in the timeline widget is edited
-void timeline_edited_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
-{
-	// Local variables
-	GList				*layer_pointer;
-	layer				*layer_data;
-
-
-	// Set up some pointers to make things easier
-	layer_pointer = ((slide *) current_slide->data)->layers;
-
-	// Work out which layer had its value changed
-	layer_pointer = g_list_first(layer_pointer);
-	layer_pointer = g_list_nth(layer_pointer, atoi(row));
-	layer_data = layer_pointer->data;
-
-	// Update the layer with the new value
-	layer_data->start_frame = atoi(new_value);
-
-	// Update the timeline widget with the new value too
-	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-						TIMELINE_START, atoi(new_value),
-						-1);
-
-	// Redraw the workspace
-	draw_workspace();
-
-	// Recreate the film strip thumbnails
-	regenerate_film_strip_thumbnails();
-}
-*/
 
 // Function called when the x offset finish field in the timeline widget is edited
 void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
@@ -917,6 +859,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.22  2007/07/29 11:30:08  vapour
+ * Removed commented out timeline edited functions that are no longer needed.
+ *
  * Revision 1.21  2007/07/29 05:22:20  vapour
  * Began modifying timeline widget to use a pixbuf for display of time duration.
  *
