@@ -52,6 +52,7 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height);
 void compress_layers_inner(gpointer element, gpointer user_data);
 GtkWidget *construct_timeline_widget(slide *slide_data);
 GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_resolutions, guint initial_width, guint initial_height);
+GdkPixbuf *create_timeline_slider(GdkPixbuf *output_pixbuf, gint total_width, gint total_height, gint duration_start, gint duration_width);
 void create_tooltips(void);
 void disable_layer_toolbar_buttons(void);
 void disable_main_toolbar_buttons(void);
@@ -98,6 +99,9 @@ void slide_name_set(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2007/07/29 11:01:02  vapour
+ * Moved duration slider creation code to its own function.
+ *
  * Revision 1.13  2007/07/28 16:05:04  vapour
  * Fixed a bug whereby the film strip thumbnails weren't being updated when adjusting layers.
  *
