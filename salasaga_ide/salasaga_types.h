@@ -198,13 +198,13 @@ typedef struct {
 // Defines the collection of objects and properties making up a slide
 typedef struct
 {
-//	GtkWidget			*event_box;
 	GtkImage			*thumbnail;
 	GList				*layers;
 	GtkTooltips			*tooltip;
 	GString				*name;
 	GtkWidget			*timeline_widget;
 	GtkListStore			*layer_store;
+	guint				duration;
 } slide;
 
 // Defines the information needed for each element of the swf timing array
@@ -263,6 +263,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.30  2007/07/29 06:11:02  vapour
+ * Began modifying timeline widget to use a pixbuf for display of time duration.
+ *
  * Revision 1.29  2007/07/29 05:22:20  vapour
  * Began modifying timeline widget to use a pixbuf for display of time duration.
  *
