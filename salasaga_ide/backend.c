@@ -26,6 +26,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
+#include <math.h>
 
 // GTK includes
 #include <gtk/gtk.h>
@@ -629,6 +630,14 @@ gboolean flame_read(gchar *filename)
 	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
 	guint				start_frame;				// Used when working out a layer's start frame
 	guint				finish_frame;				// Used when working out a layer's finish frame
+	GdkDrawable			*layer_drawable;			// Points to slider images as they're created
+	GdkColormap			*drawable_colormap;			// Used for adjusting the system colormap
+	GdkGC				*layer_graphics_context;		// Used for working with graphics contexts
+	GdkColor			slider_bg;				// Backgroud color of sliders
+	GdkColor			slider_fg;				// Foreground color of sliders
+	gfloat				start_pixel;				// Starting slider pixel to fill in
+	gfloat				finish_pixel;				// Ending slider pixel to fill in
+	gfloat				pixel_width;				// Width of pixels to fill
 
 	GtkTreeIter			film_strip_iter;
 
@@ -1409,24 +1418,26 @@ gboolean flame_read(gchar *filename)
 				tmp_slide->name = g_string_new((const gchar *) tmp_char);
 			}
 
-			// Create the duration slider images for the timeline area
-			GdkDrawable *layer_drawable;
-			GdkColormap *drawable_colormap;
-			GdkGC *layer_graphics_context;
-			GdkColor foreground_color;
-			GdkColor background_color;
-
+			// Set up the colors used for drawing the slider
 			drawable_colormap = gdk_colormap_get_system();
+			slider_bg.pixel = NULL;
+			slider_bg.red = 32000;
+			slider_bg.green = 32000;
+			slider_bg.blue = 32000;
+			if (TRUE != gdk_colormap_alloc_color(GDK_COLORMAP(drawable_colormap), &slider_bg, FALSE, TRUE))
+			{
+				printf("Error ED88: Unable to slider background color\n");
+			}
+			slider_fg.pixel = NULL;
+			slider_fg.red = 48000;
+			slider_fg.green = 48000;
+			slider_fg.blue = 48000;
+			if (TRUE != gdk_colormap_alloc_color(GDK_COLORMAP(drawable_colormap), &slider_fg, FALSE, TRUE))
+			{
+				printf("Error ED89: Unable to set slider internal color\n");
+			}
 
-			foreground_color.pixel = NULL;
-			foreground_color.red = 0xff;
-			foreground_color.green = 0x00;
-			foreground_color.blue = 0xff;
-			background_color.pixel = NULL;
-			background_color.red = 0xaa;
-			background_color.green = 0xaa;
-			background_color.blue = 0xaa;
-
+			// Create the duration slider images for the timeline area
 			num_layers = g_list_length(tmp_slide->layers);
 			for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 			{
@@ -1435,27 +1446,26 @@ gboolean flame_read(gchar *filename)
 				start_frame = layer_data->start_frame;
 				finish_frame = layer_data->finish_frame;
 
-				// Create a GdkDrawable displaying the duration of the layer in the slide
+				// * Create a GdkDrawable displaying the duration of the layer in the slide *
 				layer_drawable = gdk_pixmap_new(NULL, 120, 20, 24);
 				if (NULL == drawable_colormap) display_warning("Error ED87: No colormap exists in system\n");
 				gdk_drawable_set_colormap(GDK_DRAWABLE(layer_drawable), GDK_COLORMAP(drawable_colormap));
 				layer_graphics_context = gdk_gc_new(GDK_DRAWABLE(layer_drawable));
-				if (TRUE != gdk_color_white(GDK_COLORMAP(drawable_colormap), &foreground_color))
-				{
-					printf("Unable to set white color\n");
-				}
-				
-				gdk_gc_set_rgb_fg_color(layer_graphics_context, &foreground_color);
-				gdk_gc_set_rgb_bg_color(layer_graphics_context, &background_color);
 				gdk_gc_set_fill(layer_graphics_context, GDK_SOLID);
 				gdk_gc_set_line_attributes(layer_graphics_context, 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+
+				// Draw the background of the slider as grey
+				gdk_gc_set_rgb_fg_color(layer_graphics_context, &slider_bg);
 				gdk_draw_rectangle(GDK_DRAWABLE(layer_drawable), layer_graphics_context, TRUE, 0, 0, 120, 20);
 
-				foreground_color.red = 0xbb;
-				foreground_color.green = 0x00;
-				foreground_color.blue = 0x00;
+				// Calculate the duration of the layer for drawing inside the slider
+				start_pixel = 120 * ((gfloat) start_frame / (gfloat) tmp_slide->duration);
+				finish_pixel = 120 * ((gfloat) finish_frame / (gfloat) tmp_slide->duration);
+				pixel_width = finish_pixel - start_pixel;
 
-				gdk_draw_rectangle(GDK_DRAWABLE(layer_drawable), layer_graphics_context, TRUE, 0, 0, 60, 20);
+				// Set the contract color for the duration slider
+				gdk_gc_set_rgb_fg_color(layer_graphics_context, &slider_fg);
+				gdk_draw_rectangle(GDK_DRAWABLE(layer_drawable), layer_graphics_context, TRUE, (gint) start_pixel, 2, (gint) pixel_width, 16);
 
 				// Convert drawable to GdkPixbuf
 				layer_pixbuf = gdk_pixbuf_get_from_drawable(NULL, layer_drawable, NULL, 0, 0, 0, 0, -1, -1);
@@ -3000,6 +3010,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.98  2007/07/29 08:53:38  vapour
+ * Added initial working concept code to display the duration of layers in the slide visually.
+ *
  * Revision 1.97  2007/07/29 07:37:50  vapour
  * Trying to correctly create the visual representation of layer duration.  Still in progress.
  *
