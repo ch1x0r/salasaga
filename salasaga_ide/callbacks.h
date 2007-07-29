@@ -35,9 +35,9 @@ void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data)
 gint film_strip_handle_released(GObject *paned, GParamSpec *pspec, gpointer data);
 void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data);
 gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data);
-void timeline_edited_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
+//void timeline_edited_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
 void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
-void timeline_edited_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
+//void timeline_edited_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
 void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
 void timeline_edited_x_offset_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
 void timeline_edited_y_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
@@ -60,6 +60,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data);
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2007/07/29 05:22:20  vapour
+ * Began modifying timeline widget to use a pixbuf for display of time duration.
+ *
  * Revision 1.8  2007/07/09 12:23:35  vapour
  * Added the declaration for the new film_strip_handle_released function.
  *

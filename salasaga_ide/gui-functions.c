@@ -366,16 +366,14 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
 	// Local variables
 	GtkCellRenderer			*timeline_renderer_text_name;
 	GtkCellRenderer			*timeline_renderer_toggle;
-	GtkCellRenderer			*timeline_renderer_text_start;
-	GtkCellRenderer			*timeline_renderer_text_finish;
+	GtkCellRenderer			*timeline_renderer_pixbuf_duration;
 	GtkCellRenderer			*timeline_renderer_text_x_offset_start;
 	GtkCellRenderer			*timeline_renderer_text_y_offset_start;
 	GtkCellRenderer			*timeline_renderer_text_x_offset_finish;
 	GtkCellRenderer			*timeline_renderer_text_y_offset_finish;
 	GtkTreeViewColumn		*timeline_column_name;
 	GtkTreeViewColumn		*timeline_column_visibility;
-	GtkTreeViewColumn		*timeline_column_start;
-	GtkTreeViewColumn		*timeline_column_finish;
+	GtkTreeViewColumn		*timeline_column_duration;
 	GtkTreeViewColumn		*timeline_column_x_off_start;
 	GtkTreeViewColumn		*timeline_column_y_off_start;
 	GtkTreeViewColumn		*timeline_column_x_off_finish;
@@ -391,8 +389,7 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
 
 	// Create cell renderers
 	timeline_renderer_text_name = gtk_cell_renderer_text_new();
-	timeline_renderer_text_start = gtk_cell_renderer_text_new();
-	timeline_renderer_text_finish = gtk_cell_renderer_text_new();
+	timeline_renderer_pixbuf_duration = gtk_cell_renderer_pixbuf_new();
 	timeline_renderer_text_x_offset_start = gtk_cell_renderer_text_new();
 	timeline_renderer_text_y_offset_start = gtk_cell_renderer_text_new();
 	timeline_renderer_text_x_offset_finish = gtk_cell_renderer_text_new();
@@ -404,10 +401,10 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
 	g_signal_connect(G_OBJECT(timeline_renderer_text_name), "edited", G_CALLBACK(timeline_edited_name), NULL);
 
 	// Hook a signal handler to the start column renderer
-	g_signal_connect(G_OBJECT(timeline_renderer_text_start), "edited", G_CALLBACK(timeline_edited_start), NULL);
+//	g_signal_connect(G_OBJECT(timeline_renderer_text_start), "edited", G_CALLBACK(timeline_edited_start), NULL);
 
 	// Hook a signal handler to the finish column renderer
-	g_signal_connect(G_OBJECT(timeline_renderer_text_finish), "edited", G_CALLBACK(timeline_edited_finish), NULL);
+//	g_signal_connect(G_OBJECT(timeline_renderer_text_finish), "edited", G_CALLBACK(timeline_edited_finish), NULL);
 
 	// Hook a signal handler to the x offset start column renderer
 	g_signal_connect(G_OBJECT(timeline_renderer_text_x_offset_start), "edited", G_CALLBACK(timeline_edited_x_offset_start), NULL);
@@ -429,13 +426,9 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
 	timeline_column_visibility = gtk_tree_view_column_new_with_attributes("Visible", timeline_renderer_toggle, "active", TIMELINE_VISIBILITY, NULL);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(slide_data->timeline_widget), timeline_column_visibility);
 
-	// Create start column
-	timeline_column_start = gtk_tree_view_column_new_with_attributes("Start", timeline_renderer_text_start, "text", TIMELINE_START, "editable", TRUE, NULL);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(slide_data->timeline_widget), timeline_column_start);
-
-	// Create finish column
-	timeline_column_finish = gtk_tree_view_column_new_with_attributes("Finish", timeline_renderer_text_finish, "text", TIMELINE_FINISH, "editable", TRUE, NULL);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(slide_data->timeline_widget), timeline_column_finish);
+	// Create duration column
+	timeline_column_duration = gtk_tree_view_column_new_with_attributes("Duration", timeline_renderer_pixbuf_duration, "pixbuf", TIMELINE_DURATION, NULL);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(slide_data->timeline_widget), timeline_column_duration);
 
 	// Create X offset start column
 	timeline_column_x_off_start = gtk_tree_view_column_new_with_attributes("Start X", timeline_renderer_text_x_offset_start, "text", TIMELINE_X_OFF_START, "editable", TRUE, NULL);
@@ -2268,8 +2261,7 @@ void layer_edit(void)
 				tmp_image_ob = (layer_image *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
 				gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
-							TIMELINE_START, tmp_layer->start_frame,
-							TIMELINE_FINISH, tmp_layer->finish_frame,
+							TIMELINE_DURATION, NULL,
 							TIMELINE_X_OFF_START, tmp_image_ob->x_offset_start,
 							TIMELINE_Y_OFF_START, tmp_image_ob->y_offset_start,
 							TIMELINE_X_OFF_FINISH, tmp_image_ob->x_offset_finish,
@@ -2287,8 +2279,7 @@ void layer_edit(void)
 				tmp_mouse_ob = (layer_mouse *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
 				gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
-							TIMELINE_START, tmp_layer->start_frame,
-							TIMELINE_FINISH, tmp_layer->finish_frame,
+							TIMELINE_DURATION, NULL,
 							TIMELINE_X_OFF_START, tmp_mouse_ob->x_offset_start,
 							TIMELINE_Y_OFF_START, tmp_mouse_ob->y_offset_start,
 							TIMELINE_X_OFF_FINISH, tmp_mouse_ob->x_offset_finish,
@@ -2308,8 +2299,7 @@ void layer_edit(void)
 				gtk_text_buffer_get_bounds(((layer_text *) tmp_layer->object_data)->text_buffer, &text_start, &text_end);
 				gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
 							TIMELINE_NAME, tmp_layer->name->str,
-							TIMELINE_START, tmp_layer->start_frame,
-							TIMELINE_FINISH, tmp_layer->finish_frame,
+							TIMELINE_DURATION, NULL,
 							TIMELINE_X_OFF_START, tmp_text_ob->x_offset_start,
 							TIMELINE_Y_OFF_START, tmp_text_ob->y_offset_start,
 							TIMELINE_X_OFF_FINISH, tmp_text_ob->x_offset_finish,
@@ -2327,8 +2317,7 @@ void layer_edit(void)
 				tmp_highlight_ob = (layer_highlight *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
 				gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
-							TIMELINE_START, tmp_layer->start_frame,
-							TIMELINE_FINISH, tmp_layer->finish_frame,
+							TIMELINE_DURATION, NULL,
 							TIMELINE_X_OFF_START, tmp_highlight_ob->x_offset_start,
 							TIMELINE_Y_OFF_START, tmp_highlight_ob->y_offset_start,
 							TIMELINE_X_OFF_FINISH, tmp_highlight_ob->x_offset_finish,
@@ -2546,8 +2535,7 @@ void layer_new_highlight(void)
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
 						TIMELINE_VISIBILITY, TRUE,
-						TIMELINE_START, tmp_layer->start_frame,
-						TIMELINE_FINISH, tmp_layer->finish_frame,
+						TIMELINE_DURATION, NULL,
 						TIMELINE_X_OFF_START, tmp_highlight_ob->x_offset_start,
 						TIMELINE_Y_OFF_START, tmp_highlight_ob->y_offset_start,
 						TIMELINE_X_OFF_FINISH, tmp_highlight_ob->x_offset_finish,
@@ -2633,12 +2621,12 @@ void layer_new_image(void)
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
 						TIMELINE_VISIBILITY, TRUE,
-						TIMELINE_START, tmp_layer->start_frame,
-						TIMELINE_FINISH, tmp_layer->finish_frame,
+						TIMELINE_DURATION, NULL,
 						TIMELINE_X_OFF_START, tmp_image_ob->x_offset_start,
 						TIMELINE_Y_OFF_START, tmp_image_ob->y_offset_start,
 						TIMELINE_X_OFF_FINISH, tmp_image_ob->x_offset_finish,
-						TIMELINE_Y_OFF_FINISH, tmp_image_ob->y_offset_finish,						-1);
+						TIMELINE_Y_OFF_FINISH, tmp_image_ob->y_offset_finish,
+						-1);
 
 	// Redraw the workspace
 	draw_workspace();
@@ -2720,12 +2708,12 @@ void layer_new_mouse(void)
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
 						TIMELINE_VISIBILITY, TRUE,
-						TIMELINE_START, tmp_layer->start_frame,
-						TIMELINE_FINISH, tmp_layer->finish_frame,
+						TIMELINE_DURATION, NULL,
 						TIMELINE_X_OFF_START, tmp_mouse_ob->x_offset_start,
 						TIMELINE_Y_OFF_START, tmp_mouse_ob->y_offset_start,
 						TIMELINE_X_OFF_FINISH, tmp_mouse_ob->x_offset_finish,
-						TIMELINE_Y_OFF_FINISH, tmp_mouse_ob->y_offset_finish,						-1);
+						TIMELINE_Y_OFF_FINISH, tmp_mouse_ob->y_offset_finish,
+						-1);
 
 	// Redraw the workspace
 	draw_workspace();
@@ -2814,8 +2802,7 @@ void layer_new_text(void)
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
 						TIMELINE_VISIBILITY, TRUE,
-						TIMELINE_START, tmp_layer->start_frame,
-						TIMELINE_FINISH, tmp_layer->finish_frame,
+						TIMELINE_DURATION, NULL,
 						TIMELINE_X_OFF_START, tmp_text_ob->x_offset_start,
 						TIMELINE_Y_OFF_START, tmp_text_ob->y_offset_start,
 						TIMELINE_X_OFF_FINISH, tmp_text_ob->x_offset_finish,
@@ -4945,8 +4932,7 @@ void menu_screenshots_import(void)
 		tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
 									G_TYPE_STRING,  // TIMELINE_NAME
 									G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
-									G_TYPE_UINT,  // TIMELINE_START
-									G_TYPE_UINT,  // TIMELINE_FINISH
+									GDK_TYPE_PIXBUF,  // TIMELINE_DURATION
 									G_TYPE_UINT,  // TIMELINE_X_OFF_START
 									G_TYPE_UINT,  // TIMELINE_Y_OFF_START
 									G_TYPE_UINT,  // TIMELINE_X_OFF_FINISH
@@ -4955,8 +4941,7 @@ void menu_screenshots_import(void)
 		gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
 						TIMELINE_VISIBILITY, TRUE,
-						TIMELINE_START, 0,
-						TIMELINE_FINISH, slide_length,
+						TIMELINE_DURATION, NULL,
 						TIMELINE_X_OFF_START, 0,
 						TIMELINE_Y_OFF_START, 0,
 						TIMELINE_X_OFF_FINISH, 0,
@@ -5329,8 +5314,7 @@ void slide_insert(void)
 	tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
 									G_TYPE_STRING,  // TIMELINE_NAME
 									G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
-									G_TYPE_UINT,  // TIMELINE_START
-									G_TYPE_UINT,  // TIMELINE_FINISH
+									GDK_TYPE_PIXBUF,  // TIMELINE_DURATION
 									G_TYPE_UINT,  // TIMELINE_X_OFF_START
 									G_TYPE_UINT,  // TIMELINE_Y_OFF_START
 									G_TYPE_UINT,  // TIMELINE_X_OFF_FINISH
@@ -5339,8 +5323,7 @@ void slide_insert(void)
 	gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 					TIMELINE_NAME, tmp_layer->name->str,
 					TIMELINE_VISIBILITY, TRUE,
-					TIMELINE_START, 0,
-					TIMELINE_FINISH, slide_length,
+					TIMELINE_DURATION, NULL,
 					TIMELINE_X_OFF_START, 0,
 					TIMELINE_Y_OFF_START, 0,
 					TIMELINE_X_OFF_FINISH, 0,
@@ -5703,6 +5686,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.91  2007/07/29 05:22:20  vapour
+ * Began modifying timeline widget to use a pixbuf for display of time duration.
+ *
  * Revision 1.90  2007/07/28 16:28:24  vapour
  * Added a few more checks to the code.
  *

@@ -104,8 +104,7 @@ enum
 {
 	TIMELINE_NAME,
 	TIMELINE_VISIBILITY,
-	TIMELINE_START,
-	TIMELINE_FINISH,
+	TIMELINE_DURATION,
 	TIMELINE_X_OFF_START,
 	TIMELINE_Y_OFF_START,
 	TIMELINE_X_OFF_FINISH,
@@ -264,6 +263,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.29  2007/07/29 05:22:20  vapour
+ * Began modifying timeline widget to use a pixbuf for display of time duration.
+ *
  * Revision 1.28  2007/06/30 03:18:18  vapour
  * Began re-writing the film strip area to use a GtkListView widget instead of the hodge podge of event boxes, signal handlers, and other bits.
  *

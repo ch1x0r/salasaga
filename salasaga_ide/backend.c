@@ -852,8 +852,7 @@ gboolean flame_read(gchar *filename)
 			tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
 										G_TYPE_STRING,  // TIMELINE_NAME
 										G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
-										G_TYPE_UINT,  // TIMELINE_START
-										G_TYPE_UINT,  // TIMELINE_FINISH
+										GDK_TYPE_PIXBUF,  // TIMELINE_DURATION
 										G_TYPE_UINT,  // TIMELINE_X_OFF_START
 										G_TYPE_UINT,  // TIMELINE_Y_OFF_START
 										G_TYPE_UINT,  // TIMELINE_X_OFF_FINISH
@@ -933,8 +932,7 @@ gboolean flame_read(gchar *filename)
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 										TIMELINE_NAME, tmp_layer->name->str,
 										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_START, NULL,
-										TIMELINE_FINISH, NULL,
+										TIMELINE_DURATION, NULL,
 										TIMELINE_X_OFF_START, NULL,
 										TIMELINE_Y_OFF_START, NULL,
 										TIMELINE_X_OFF_FINISH, NULL,
@@ -1079,8 +1077,7 @@ gboolean flame_read(gchar *filename)
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 										TIMELINE_NAME, tmp_layer->name->str,
 										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_START, tmp_layer->start_frame,
-										TIMELINE_FINISH, tmp_layer->finish_frame,
+										TIMELINE_DURATION, NULL,
 										TIMELINE_X_OFF_START, tmp_image_ob->x_offset_start,
 										TIMELINE_Y_OFF_START, tmp_image_ob->y_offset_start,
 										TIMELINE_X_OFF_FINISH, tmp_image_ob->x_offset_finish,
@@ -1165,8 +1162,7 @@ gboolean flame_read(gchar *filename)
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 										TIMELINE_NAME, tmp_layer->name->str,
 										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_START, tmp_layer->start_frame,
-										TIMELINE_FINISH, tmp_layer->finish_frame,
+										TIMELINE_DURATION, NULL,
 										TIMELINE_X_OFF_START, tmp_highlight_ob->x_offset_start,
 										TIMELINE_Y_OFF_START, tmp_highlight_ob->y_offset_start,
 										TIMELINE_X_OFF_FINISH, tmp_highlight_ob->x_offset_finish,
@@ -1263,8 +1259,7 @@ gboolean flame_read(gchar *filename)
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 										TIMELINE_NAME, tmp_layer->name->str,
 										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_START, tmp_layer->start_frame,
-										TIMELINE_FINISH, tmp_layer->finish_frame,
+										TIMELINE_DURATION, NULL,
 										TIMELINE_X_OFF_START, tmp_mouse_ob->x_offset_start,
 										TIMELINE_Y_OFF_START, tmp_mouse_ob->y_offset_start,
 										TIMELINE_X_OFF_FINISH, tmp_mouse_ob->x_offset_finish,
@@ -1365,8 +1360,7 @@ gboolean flame_read(gchar *filename)
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
 										TIMELINE_NAME, tmp_layer->name->str,
 										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_START, tmp_layer->start_frame,
-										TIMELINE_FINISH, tmp_layer->finish_frame,
+										TIMELINE_DURATION, NULL,
 										TIMELINE_X_OFF_START, tmp_text_ob->x_offset_start,
 										TIMELINE_Y_OFF_START, tmp_text_ob->y_offset_start,
 										TIMELINE_X_OFF_FINISH, tmp_text_ob->x_offset_finish,
@@ -2925,6 +2919,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.95  2007/07/29 05:22:20  vapour
+ * Began modifying timeline widget to use a pixbuf for display of time duration.
+ *
  * Revision 1.94  2007/07/28 16:34:00  vapour
  * Added a few more checks to the code.
  *

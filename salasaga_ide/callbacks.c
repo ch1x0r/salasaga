@@ -187,7 +187,7 @@ gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer da
 	return TRUE;
 }
 
-
+/*
 // Function called when the finish field in the timeline widget is edited
 void timeline_edited_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
 {
@@ -212,7 +212,7 @@ void timeline_edited_finish(GtkCellRendererText *selection, gchar *row, gchar *n
 						TIMELINE_FINISH, atoi(new_value),
 						-1);
 }
-
+*/
 
 // Function called when the name field in the timeline widget is edited
 void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
@@ -239,7 +239,7 @@ void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new
 						-1);
 }
 
-
+/*
 // Function called when the start field in the timeline widget is edited
 void timeline_edited_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
 {
@@ -270,7 +270,7 @@ void timeline_edited_start(GtkCellRendererText *selection, gchar *row, gchar *ne
 	// Recreate the film strip thumbnails
 	regenerate_film_strip_thumbnails();
 }
-
+*/
 
 // Function called when the x offset finish field in the timeline widget is edited
 void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
@@ -917,6 +917,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.21  2007/07/29 05:22:20  vapour
+ * Began modifying timeline widget to use a pixbuf for display of time duration.
+ *
  * Revision 1.20  2007/07/28 16:05:04  vapour
  * Fixed a bug whereby the film strip thumbnails weren't being updated when adjusting layers.
  *
