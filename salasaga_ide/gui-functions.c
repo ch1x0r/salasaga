@@ -2236,12 +2236,20 @@ void layer_delete(void)
 void layer_edit(void)
 {
 	// Local variables
+	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	GtkListStore			*list_pointer;				//
 	GtkWidget			*list_widget;				// Points to the timeline widget
 	guint				num_layers;				// Number of layers
 	guint				selected_row;				// Holds the row that is selected
+	slide				*slide_data;				// Pointer to current slide data
 	gboolean			return_code;				// Did the edit dialog return ok?
+
+	guint				start_frame;				// Used when working out a layer's start frame
+	guint				finish_frame;				// Used when working out a layer's finish frame
+	gfloat				start_pixel;				// Starting slider pixel to fill in
+	gfloat				finish_pixel;				// Ending slider pixel to fill in
+	gfloat				pixel_width;				// Width of pixels to fill
 
 	GtkTextIter			text_start;				// The start position of the text buffer
 	GtkTextIter			text_end;				// The end position of the text buffer
@@ -2266,9 +2274,10 @@ void layer_edit(void)
 	}
 
 	// Initialise some variables
-	layer_pointer = ((slide *) current_slide->data)->layers;
-	list_pointer = ((slide *) current_slide->data)->layer_store;
-	list_widget = ((slide *) current_slide->data)->timeline_widget;
+	slide_data = ((slide *) current_slide->data);
+	layer_pointer = slide_data->layers;
+	list_pointer = slide_data->layer_store;
+	list_widget = slide_data->timeline_widget;
 
 	// Determine the number of layers present in this slide
 	layer_pointer = g_list_first(layer_pointer);
@@ -2281,10 +2290,10 @@ void layer_edit(void)
 	selected_row = atoi(gtk_tree_path_to_string(tmp_path));
 	tmp_layer = g_list_nth_data(layer_pointer, selected_row);
 
-	// If the background layer is selected, don't edit it
+	// If the background layer is an image and it's selected, don't edit it
 	if (1 == (num_layers - selected_row) && (TYPE_GDK_PIXBUF == tmp_layer->object_type))
 	{
-		// Give the user a warning, then return
+		// Warn the user then return
 		sound_beep();
 		display_warning("ED39: Background image layers can not be edited\n");
 		return;
@@ -2310,11 +2319,26 @@ void layer_edit(void)
 			return_code = display_dialog_image(tmp_layer, "Edit image layer", FALSE);
 			if (TRUE == return_code)
 			{
-				// * The dialog box returned successfully, so update the slide list store with the new values *
+				// * The dialog box returned successfully *
+
+				// Work out the start and ending frames for this layer
+				start_frame = tmp_layer->start_frame;
+				finish_frame = tmp_layer->finish_frame;
+
+				// Calculate the duration of the layer for drawing inside the slider
+				start_pixel = 180 * ((gfloat) start_frame / (gfloat) slide_data->duration);
+				finish_pixel = 180 * ((gfloat) finish_frame / (gfloat) slide_data->duration);
+				pixel_width = finish_pixel - start_pixel;
+
+				// Create duration image
+				layer_pixbuf = NULL;
+				layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, start_pixel, pixel_width);
+				
+				// Update the slide list store with the new values
 				tmp_image_ob = (layer_image *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
-				gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
-							TIMELINE_DURATION, NULL,
+				gtk_list_store_set(list_pointer, tmp_iter,
+							TIMELINE_DURATION, layer_pixbuf,
 							TIMELINE_X_OFF_START, tmp_image_ob->x_offset_start,
 							TIMELINE_Y_OFF_START, tmp_image_ob->y_offset_start,
 							TIMELINE_X_OFF_FINISH, tmp_image_ob->x_offset_finish,
@@ -2328,11 +2352,26 @@ void layer_edit(void)
 			return_code = display_dialog_mouse(tmp_layer, "Edit mouse pointer", FALSE);
 			if (TRUE == return_code)
 			{
-				// * The dialog box returned successfully, so update the slide list store with the new values *
+				// * The dialog box returned successfully *
+
+				// Work out the start and ending frames for this layer
+				start_frame = tmp_layer->start_frame;
+				finish_frame = tmp_layer->finish_frame;
+
+				// Calculate the duration of the layer for drawing inside the slider
+				start_pixel = 180 * ((gfloat) start_frame / (gfloat) slide_data->duration);
+				finish_pixel = 180 * ((gfloat) finish_frame / (gfloat) slide_data->duration);
+				pixel_width = finish_pixel - start_pixel;
+
+				// Create duration image
+				layer_pixbuf = NULL;
+				layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, start_pixel, pixel_width);
+				
+				// Update the slide list store with the new values
 				tmp_mouse_ob = (layer_mouse *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
-				gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
-							TIMELINE_DURATION, NULL,
+				gtk_list_store_set(list_pointer, tmp_iter,
+							TIMELINE_DURATION, layer_pixbuf,
 							TIMELINE_X_OFF_START, tmp_mouse_ob->x_offset_start,
 							TIMELINE_Y_OFF_START, tmp_mouse_ob->y_offset_start,
 							TIMELINE_X_OFF_FINISH, tmp_mouse_ob->x_offset_finish,
@@ -2346,13 +2385,28 @@ void layer_edit(void)
 			return_code = display_dialog_text(tmp_layer, "Edit text layer");
 			if (TRUE == return_code)
 			{
-				// * The dialog box returned successfully, so update the slide list store with the new values *
+				// * The dialog box returned successfully *
+
+				// Work out the start and ending frames for this layer
+				start_frame = tmp_layer->start_frame;
+				finish_frame = tmp_layer->finish_frame;
+
+				// Calculate the duration of the layer for drawing inside the slider
+				start_pixel = 180 * ((gfloat) start_frame / (gfloat) slide_data->duration);
+				finish_pixel = 180 * ((gfloat) finish_frame / (gfloat) slide_data->duration);
+				pixel_width = finish_pixel - start_pixel;
+
+				// Create duration image
+				layer_pixbuf = NULL;
+				layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, start_pixel, pixel_width);
+				
+				// Update the slide list store with the new values
 				tmp_text_ob = (layer_text *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
 				gtk_text_buffer_get_bounds(((layer_text *) tmp_layer->object_data)->text_buffer, &text_start, &text_end);
-				gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
+				gtk_list_store_set(list_pointer, tmp_iter,
 							TIMELINE_NAME, tmp_layer->name->str,
-							TIMELINE_DURATION, NULL,
+							TIMELINE_DURATION, layer_pixbuf,
 							TIMELINE_X_OFF_START, tmp_text_ob->x_offset_start,
 							TIMELINE_Y_OFF_START, tmp_text_ob->y_offset_start,
 							TIMELINE_X_OFF_FINISH, tmp_text_ob->x_offset_finish,
@@ -2366,11 +2420,26 @@ void layer_edit(void)
 			return_code = display_dialog_highlight(tmp_layer, "Edit highlight layer");
 			if (TRUE == return_code)
 			{
-				// * The dialog box returned successfully, so update the slide list store with the new values *
+				// * The dialog box returned successfully *
+
+				// Work out the start and ending frames for this layer
+				start_frame = tmp_layer->start_frame;
+				finish_frame = tmp_layer->finish_frame;
+
+				// Calculate the duration of the layer for drawing inside the slider
+				start_pixel = 180 * ((gfloat) start_frame / (gfloat) slide_data->duration);
+				finish_pixel = 180 * ((gfloat) finish_frame / (gfloat) slide_data->duration);
+				pixel_width = finish_pixel - start_pixel;
+
+				// Create duration image
+				layer_pixbuf = NULL;
+				layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, start_pixel, pixel_width);
+				
+				// Update the slide list store with the new values
 				tmp_highlight_ob = (layer_highlight *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
-				gtk_list_store_set(((slide *) current_slide->data)->layer_store, tmp_iter,
-							TIMELINE_DURATION, NULL,
+				gtk_list_store_set(list_pointer, tmp_iter,
+							TIMELINE_DURATION, layer_pixbuf,
 							TIMELINE_X_OFF_START, tmp_highlight_ob->x_offset_start,
 							TIMELINE_Y_OFF_START, tmp_highlight_ob->y_offset_start,
 							TIMELINE_X_OFF_FINISH, tmp_highlight_ob->x_offset_finish,
@@ -5739,6 +5808,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.93  2007/07/29 11:33:06  vapour
+ * The timeline area now has the duration column updated when layers are updated.
+ *
  * Revision 1.92  2007/07/29 11:01:02  vapour
  * Moved duration slider creation code to its own function.
  *
