@@ -1410,6 +1410,23 @@ gboolean flame_read(gchar *filename)
 			}
 
 			// Create the duration slider images for the timeline area
+			GdkDrawable *layer_drawable;
+			GdkColormap *drawable_colormap;
+			GdkGC *layer_graphics_context;
+			GdkColor foreground_color;
+			GdkColor background_color;
+
+			drawable_colormap = gdk_colormap_get_system();
+
+			foreground_color.pixel = NULL;
+			foreground_color.red = 0xff;
+			foreground_color.green = 0x00;
+			foreground_color.blue = 0xff;
+			background_color.pixel = NULL;
+			background_color.red = 0xaa;
+			background_color.green = 0xaa;
+			background_color.blue = 0xaa;
+
 			num_layers = g_list_length(tmp_slide->layers);
 			for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 			{
@@ -1418,12 +1435,32 @@ gboolean flame_read(gchar *filename)
 				start_frame = layer_data->start_frame;
 				finish_frame = layer_data->finish_frame;
 
-				// Create a GdkPixBuf displaying the duration of the layer in the slide
-				// fixme4: Should likely change the fixed width to a variable, so it can be changed
-				layer_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 120, 20);
-				if (NULL == layer_pixbuf) display_warning("Error ED86: Could not allocate GdkPixbuf\n");
-				gdk_pixbuf_fill(layer_pixbuf, 0xcc00bb00);  // Just a test to see if this is working
+				// Create a GdkDrawable displaying the duration of the layer in the slide
+				layer_drawable = gdk_pixmap_new(NULL, 120, 20, 24);
+				if (NULL == drawable_colormap) display_warning("Error ED87: No colormap exists in system\n");
+				gdk_drawable_set_colormap(GDK_DRAWABLE(layer_drawable), GDK_COLORMAP(drawable_colormap));
+				layer_graphics_context = gdk_gc_new(GDK_DRAWABLE(layer_drawable));
+				if (TRUE != gdk_color_white(GDK_COLORMAP(drawable_colormap), &foreground_color))
+				{
+					printf("Unable to set white color\n");
+				}
+				
+				gdk_gc_set_rgb_fg_color(layer_graphics_context, &foreground_color);
+				gdk_gc_set_rgb_bg_color(layer_graphics_context, &background_color);
+				gdk_gc_set_fill(layer_graphics_context, GDK_SOLID);
+				gdk_gc_set_line_attributes(layer_graphics_context, 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+				gdk_draw_rectangle(GDK_DRAWABLE(layer_drawable), layer_graphics_context, TRUE, 0, 0, 120, 20);
 
+				foreground_color.red = 0xbb;
+				foreground_color.green = 0x00;
+				foreground_color.blue = 0x00;
+
+				gdk_draw_rectangle(GDK_DRAWABLE(layer_drawable), layer_graphics_context, TRUE, 0, 0, 60, 20);
+
+				// Convert drawable to GdkPixbuf
+				layer_pixbuf = gdk_pixbuf_get_from_drawable(NULL, layer_drawable, NULL, 0, 0, 0, 0, -1, -1);
+				if (NULL == layer_pixbuf) display_warning("Error ED86: Could not allocate GdkPixbuf\n");
+				
 				// Set the GdkPixBuf in the list store
 				gtk_list_store_set(tmp_slide->layer_store, layer_data->row_iter,
 							TIMELINE_DURATION, layer_pixbuf,
@@ -2963,6 +3000,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.97  2007/07/29 07:37:50  vapour
+ * Trying to correctly create the visual representation of layer duration.  Still in progress.
+ *
  * Revision 1.96  2007/07/29 06:13:11  vapour
  * Started creating code for displaying duration.  Only in the flame_read function at present.
  *
