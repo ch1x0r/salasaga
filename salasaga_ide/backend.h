@@ -44,6 +44,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data);
 void menu_file_save_layer(gpointer element, gpointer user_data);
 void menu_file_save_slide(gpointer element, gpointer user_data);
 void regenerate_film_strip_thumbnails(void);
+void regenerate_timeline_duration_images(slide *target_slide);
 void save_preferences_and_exit(void);
 void sound_beep(void);
 GString *uri_decode(GString *input_string, GString *output_string);
@@ -61,6 +62,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string);
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2007/07/29 12:27:02  vapour
+ * Added a function to regenerate all of the duration timeline images for a slide.
+ *
  * Revision 1.11  2007/07/08 14:38:21  vapour
  * Added a function to regenerate the film strip thumbnails when the film strip seperator handle is moved.
  *

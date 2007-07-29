@@ -626,7 +626,7 @@ gboolean flame_read(gchar *filename)
 
 	guint				num_layers;				// Number of layers in a slide (used for a loop)
 	guint				layer_counter;				// Counter used when processing layers
-	layer				*layer_data;				// Pointers to the layer data we're working on
+	layer				*layer_data;				// Pointer to the layer data we're working on
 	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
 	guint				start_frame;				// Used when working out a layer's start frame
 	guint				finish_frame;				// Used when working out a layer's finish frame
@@ -2596,6 +2596,50 @@ void regenerate_film_strip_thumbnails()
 }
 
 
+// Function to regenerate the timeline duration images for an individual slide
+void regenerate_timeline_duration_images(slide *target_slide)
+{
+	// Local variables
+	guint				finish_frame;				// Used when working out a layer's finish frame
+	gfloat				finish_pixel;				// Ending slider pixel to fill in
+	guint				layer_counter;				// Counter used when processing layers
+	layer				*layer_data;				// Pointer to the layer data we're working on
+	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
+	GList				*layer_pointer;				// Points to the layers in the selected slide
+	guint				num_layers;				// Number of layers in a slide (used for a loop)
+	gfloat				pixel_width;				// Width of pixels to fill
+	gboolean			return_code;				// Catches a TRUE/FALSE return value
+	slide				*slide_data;				// Pointer to the data for the current slide
+	guint				start_frame;				// Used when working out a layer's start frame
+	gfloat				start_pixel;				// Starting slider pixel to fill in
+
+
+	// Create the duration slider images for the timeline area
+	num_layers = g_list_length(target_slide->layers);
+	for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
+	{
+		// Work out the start and ending frames for this layer
+		layer_data = g_list_nth_data(target_slide->layers, layer_counter);
+		start_frame = layer_data->start_frame;
+		finish_frame = layer_data->finish_frame;
+
+		// Calculate the duration of the layer for drawing inside the slider
+		start_pixel = 180 * ((gfloat) start_frame / (gfloat) target_slide->duration);
+		finish_pixel = 180 * ((gfloat) finish_frame / (gfloat) target_slide->duration);
+		pixel_width = finish_pixel - start_pixel;
+
+		// Create duration image
+		layer_pixbuf = NULL;
+		layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, start_pixel, pixel_width);
+
+		// Update the timeline with the duration image
+		gtk_list_store_set(target_slide->layer_store, layer_data->row_iter,
+					TIMELINE_DURATION, layer_pixbuf,
+					-1);
+	}
+}
+
+
 // Function to save the application preferences prior to exiting
 void save_preferences_and_exit(void)
 {
@@ -2970,6 +3014,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.100  2007/07/29 12:27:02  vapour
+ * Added a function to regenerate all of the duration timeline images for a slide.
+ *
  * Revision 1.99  2007/07/29 11:01:02  vapour
  * Moved duration slider creation code to its own function.
  *
