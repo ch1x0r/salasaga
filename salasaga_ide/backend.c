@@ -623,6 +623,13 @@ gboolean flame_read(gchar *filename)
 
 	gint				data_length;				// Number of image data bytes a layer says it stores
 
+	guint				num_layers;				// Number of layers in a slide (used for a loop)
+	guint				layer_counter;				// Counter used when processing layers
+	layer				*layer_data;				// Pointers to the layer data we're working on
+	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
+	guint				start_frame;				// Used when working out a layer's start frame
+	guint				finish_frame;				// Used when working out a layer's finish frame
+
 	GtkTreeIter			film_strip_iter;
 
 	// Initialise various things
@@ -849,6 +856,7 @@ gboolean flame_read(gchar *filename)
 			// Create a new slide in memory
 			tmp_slide = g_new(slide, 1);
 			tmp_slide->layers = NULL;
+			tmp_slide->duration = slide_length;
 			tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
 										G_TYPE_STRING,  // TIMELINE_NAME
 										G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
@@ -924,6 +932,9 @@ gboolean flame_read(gchar *filename)
 									}
 									this_node = this_node->next;	
 								}
+
+								// If the finish_frame is longer than the slide duration, we increase the slide duration
+								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
 
 								// Add the layer to the slide list store
 								tmp_iter = g_new(GtkTreeIter, 1);
@@ -1070,6 +1081,9 @@ gboolean flame_read(gchar *filename)
 								// Set the modified flag for this image to false
 								tmp_image_ob->modified = FALSE;
 
+								// If the finish_frame is longer than the slide duration, we increase the slide duration
+								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
+
 								// Add the layer to the slide list store
 								tmp_iter = g_new(GtkTreeIter, 1);
 								tmp_layer->row_iter = tmp_iter;
@@ -1154,6 +1168,9 @@ gboolean flame_read(gchar *filename)
 									}
 									this_node = this_node->next;	
 								}
+
+								// If the finish_frame is longer than the slide duration, we increase the slide duration
+								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
 
 								// Add the layer to the slide list store
 								tmp_iter = g_new(GtkTreeIter, 1);
@@ -1251,6 +1268,9 @@ gboolean flame_read(gchar *filename)
 									}
 									this_node = this_node->next;	
 								}
+
+								// If the finish_frame is longer than the slide duration, we increase the slide duration
+								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
 
 								// Add the layer to the slide list store
 								tmp_iter = g_new(GtkTreeIter, 1);
@@ -1353,6 +1373,9 @@ gboolean flame_read(gchar *filename)
 									this_node = this_node->next;
 								}
 
+								// If the finish_frame is longer than the slide duration, we increase the slide duration
+								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
+
 								// Add the layer to the slide list store
 								tmp_iter = g_new(GtkTreeIter, 1);
 								tmp_layer->row_iter = tmp_iter;
@@ -1384,6 +1407,27 @@ gboolean flame_read(gchar *filename)
 			{
 				// A name for the slide is in the project file, so use that
 				tmp_slide->name = g_string_new((const gchar *) tmp_char);
+			}
+
+			// Create the duration slider images for the timeline area
+			num_layers = g_list_length(tmp_slide->layers);
+			for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
+			{
+				// Work out the start and ending frames for this layer
+				layer_data = g_list_nth_data(tmp_slide->layers, layer_counter);
+				start_frame = layer_data->start_frame;
+				finish_frame = layer_data->finish_frame;
+
+				// Create a GdkPixBuf displaying the duration of the layer in the slide
+				// fixme4: Should likely change the fixed width to a variable, so it can be changed
+				layer_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, FALSE, 8, 120, 20);
+				if (NULL == layer_pixbuf) display_warning("Error ED86: Could not allocate GdkPixbuf\n");
+				gdk_pixbuf_fill(layer_pixbuf, 0xcc00bb00);  // Just a test to see if this is working
+
+				// Set the GdkPixBuf in the list store
+				gtk_list_store_set(tmp_slide->layer_store, layer_data->row_iter,
+							TIMELINE_DURATION, layer_pixbuf,
+							-1);
 			}
 
 			// Create the thumbnail for the slide
@@ -2919,6 +2963,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.96  2007/07/29 06:13:11  vapour
+ * Started creating code for displaying duration.  Only in the flame_read function at present.
+ *
  * Revision 1.95  2007/07/29 05:22:20  vapour
  * Began modifying timeline widget to use a pixbuf for display of time duration.
  *
