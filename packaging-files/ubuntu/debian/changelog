@@ -1,3 +1,10 @@
+flameproject (0.7.7.dev-0ubuntu10) unstable; urgency=low
+
+  * Layer duration now displays graphically in time line area.
+  * Minor bug fixes.
+
+ -- Justin Clift <justin@postgresql.org>  Sun, 29 Jul 2007 22:46:00 +1100
+
 flameproject (0.7.7.dev-0ubuntu9) unstable; urgency=low
 
   * The mouse pointers (previously missing from the packages) are now
