@@ -2605,11 +2605,8 @@ void regenerate_timeline_duration_images(slide *target_slide)
 	guint				layer_counter;				// Counter used when processing layers
 	layer				*layer_data;				// Pointer to the layer data we're working on
 	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
-	GList				*layer_pointer;				// Points to the layers in the selected slide
 	guint				num_layers;				// Number of layers in a slide (used for a loop)
 	gfloat				pixel_width;				// Width of pixels to fill
-	gboolean			return_code;				// Catches a TRUE/FALSE return value
-	slide				*slide_data;				// Pointer to the data for the current slide
 	guint				start_frame;				// Used when working out a layer's start frame
 	gfloat				start_pixel;				// Starting slider pixel to fill in
 
@@ -3014,6 +3011,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.101  2007/08/03 10:02:09  vapour
+ * Small tweaks to fix some gcc warnings.
+ *
  * Revision 1.100  2007/07/29 12:27:02  vapour
  * Added a function to regenerate all of the duration timeline images for a slide.
  *

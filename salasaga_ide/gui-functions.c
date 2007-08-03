@@ -524,7 +524,7 @@ GdkPixbuf *create_timeline_slider(GdkPixbuf *output_pixbuf, gint total_width, gi
 	// Set up the colors used for drawing the slider
 	drawable_colormap = gdk_colormap_get_system();
 	if (NULL == drawable_colormap) display_warning("Error ED87: No colormap exists in system\n");
-	slider_bg.pixel = NULL;
+	slider_bg.pixel = 0;
 	slider_bg.red = 32000;
 	slider_bg.green = 32000;
 	slider_bg.blue = 32000;
@@ -532,7 +532,7 @@ GdkPixbuf *create_timeline_slider(GdkPixbuf *output_pixbuf, gint total_width, gi
 	{
 		printf("Error ED88: Unable to slider background color\n");
 	}
-	slider_fg.pixel = NULL;
+	slider_fg.pixel = 0;
 	slider_fg.red = 48000;
 	slider_fg.green = 48000;
 	slider_fg.blue = 48000;
@@ -5517,7 +5517,6 @@ void slide_insert(void)
 	// Local variables
 	GtkTreeIter			film_strip_iter;
 	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
-	gint				slide_position;				// Which slide in the slide list we have selected
 
 	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
 	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
@@ -5934,6 +5933,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.96  2007/08/03 10:02:09  vapour
+ * Small tweaks to fix some gcc warnings.
+ *
  * Revision 1.95  2007/07/29 12:31:51  vapour
  * When a slide has its duration extended, all of the duration thumbnails are now extended too.
  *
