@@ -32,15 +32,29 @@
 // GLib string functions
 #include <glib/gprintf.h>
 
-// GDK functions
-#include <gdk/gdkx.h>
-
+#ifndef _WIN32
+	// Non-windows code (GDK X functions)
+	#include <gdk/gdkx.h>
+#else
+	// Windows only code
+	#include <windows.h>
+#endif
 
 // Application constants
-#define	APP_VERSION 0.50
+#define	APP_VERSION 0.51
 
 
-GdkPixbuf *take_screenshot(Window win, gint x_off, gint x_len, gint y_off, gint y_len)
+#ifdef _WIN32
+	// Windows global variables
+	HDC			desktop_device_context;
+	HDC			our_device_context;
+	HBITMAP		our_bitmap;
+#endif
+
+
+#ifndef _WIN32
+// Non-windows screenshot function
+GdkPixbuf *non_win_take_screenshot(Window win, gint x_off, gint x_len, gint y_off, gint y_len)
 {
 	GdkWindow	*window;
 	GdkPixbuf	*screenshot;
@@ -63,15 +77,26 @@ GdkPixbuf *take_screenshot(Window win, gint x_off, gint x_len, gint y_off, gint 
 
 	return screenshot;
 }
+#else
+// Windows screenshot function
+HBITMAP win_take_screenshot(HWND desktop_window_handle, gint x_off, gint x_len, gint y_off, gint y_len)
+{
+	// Create bitmap of requested desktop area
+	desktop_device_context = GetDC(desktop_window_handle);
+	our_device_context = CreateCompatibleDC(desktop_device_context);
+	our_bitmap = CreateCompatibleBitmap(desktop_device_context, x_len, y_len);
+	SelectObject(our_device_context, our_bitmap);
+	BitBlt(our_device_context, 0, 0, x_off, y_len, desktop_device_context, x_off, y_off, SRCCOPY);
+	
+	return	our_bitmap;
+}
+#endif
 
 
 // The main program loop
 gint main(gint argc, gchar *argv[])
 {
 	// Local variables
-	Window				win;				// Holds the Window ID we're screenshot-ing
-	static GdkPixbuf	*screenshot = NULL;	// Holds the screen shot image
-
 	GKeyFile			*lock_file;			// Pointer to the lock file structure
 	gchar				*name, *directory;	// Strings from the lock file
 	gint				x_offset, x_length;	// Values from the lock file
@@ -88,6 +113,16 @@ gint main(gint argc, gchar *argv[])
 
 	gchar				tmp_string[1024];	// fixme4: Potential buffer overflow hazard?
 	gpointer			tmp_ptr;			// Temporary pointer
+
+#ifndef _WIN32
+	// Non-windows only variables
+	Window				win;				// Holds the Window ID we're screenshot-ing
+	static GdkPixbuf	*screenshot = NULL;	// Holds the screen shot image
+#else
+	// Windows only variables
+	HWND				windows_win;		// Holds the Window ID we're screenshot-ing
+	HBITMAP				screenshot;			// Holds the screen shot image
+#endif
 
 
 	// Initialise GTK
@@ -127,8 +162,15 @@ gint main(gint argc, gchar *argv[])
 	g_key_file_free(lock_file);
 
 	// Take screenshot
+#ifdef _WIN32
+	// Windows only code
+	windows_win = GetDesktopWindow();
+	screenshot = win_take_screenshot(windows_win, x_offset, x_length, y_offset, y_length);
+#else
+	// Non-windows code
 	win = GDK_ROOT_WINDOW();
-	screenshot = take_screenshot(win, x_offset, x_length, y_offset, y_length);
+	screenshot = non_win_take_screenshot(win, x_offset, x_length, y_offset, y_length);
+#endif
 	if (NULL == screenshot)
 	{
 		// Something went wrong getting the screenshot, so give an error and exit
@@ -221,7 +263,38 @@ gint main(gint argc, gchar *argv[])
 	// Using PNG storage for now, as it seems much more efficient.
 	// Because it has no option to adjust the quality of the save, I'm hoping it's set to
 	// something lossless (equivalent of quality=100 for jpeg)
-	gdk_pixbuf_save (screenshot, full_file_name, "png", NULL, NULL);
+#ifndef _WIN32
+	// Non-windows code
+	gdk_pixbuf_save(screenshot, full_file_name, "png", error, NULL);
+#else
+	// Windows code
+
+	// Turn the windows bitmap into a gdk_pixbuf
+	static GdkPixbuf	*converted_screenshot = NULL;
+	converted_screenshot = gdk_pixbuf_new_from_data((gpointer) screenshot,
+								GDK_COLORSPACE_RGB,		// Colorspace
+								FALSE,	// Has alpha
+								8,		// Bits per sample
+								x_length,
+								y_length,
+								0,		// Rowstride
+								NULL, NULL);
+	if (NULL == converted_screenshot)
+	{
+		// Something went wrong when converting the bitmap to a GDK pixbuf
+		g_warning("Error 07: Something went wrong converting the captured bitmap to a GDK pixbuf");
+		g_error_free(error);
+		exit(5);
+	}
+
+	// Save the pixbuf
+	gdk_pixbuf_save((gpointer) screenshot, full_file_name, "png", NULL, NULL);
+
+	// Free memory
+	ReleaseDC(windows_win, desktop_device_context);
+	DeleteDC(our_device_context);
+	DeleteObject(our_bitmap);
+#endif
 
 	// g_build_filename() requires the returned string to be g_free'd
 	g_free(full_file_name);
@@ -236,6 +309,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2007/09/11 13:18:42  vapour
+ * Started adding code to do screenshots in windows.  Not yet functional.
+ *
  * Revision 1.4  2006/12/26 09:26:23  vapour
  * Updated to no longer run the hard coded old gnome screenshot application if there are no default settings specified.
  *
