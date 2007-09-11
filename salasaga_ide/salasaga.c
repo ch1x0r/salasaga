@@ -797,6 +797,7 @@ gint main(gint argc, gchar *argv[])
 	GtkLabel			*zoom_label;				// Widget for the zoom selector label
 
 	GString				*tmp_gstring;				// Temporary GString
+	guint				tmp_int;				// Temporary guint
 	GtkWidget			*tmp_widget = NULL;			// Temporary widget
 
 #ifndef _WIN32
@@ -810,7 +811,6 @@ gint main(gint argc, gchar *argv[])
 	gboolean			tmp_boolean;				// Temporary boolean
 
 	guint				tmp_guint;				// Temporary guint
-	guint				tmp_int;				// Temporary guint
 #endif
 
 
@@ -1578,6 +1578,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.58  2007/09/11 13:03:55  vapour
+ * Moved declaration of tmp_int variable, so compilation works properly on windows.
+ *
  * Revision 1.57  2007/07/28 16:25:44  vapour
  * Small code cleanup.
  *
