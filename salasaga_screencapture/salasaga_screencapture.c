@@ -3,7 +3,7 @@
  *
  * Flame Project: Background capture process
  * 
- * Copyright (C) 2005-2006 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2005-2007 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -250,12 +250,20 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// Free the memory used by the GSList
-	g_slist_free(entries);
+	// (commented out because it seemed to be causing a segfault on windows)
+	// g_slist_free(entries);
 
 	// Construct the screen shot file name
 	tmp_ptr = g_stpcpy(tmp_string, name);
 	tmp_ptr = g_stpcpy(tmp_ptr, suffix);
+	
+	// Windows only seems to support jpg
+#ifndef _WIN32
 	tmp_ptr = g_stpcpy(tmp_ptr, ".png");
+#else
+	tmp_ptr = g_stpcpy(tmp_ptr, ".jpg");
+#endif
+
 	full_file_name = g_build_filename(directory, tmp_string, NULL);
 
 	// Save the screenshot
@@ -265,7 +273,7 @@ gint main(gint argc, gchar *argv[])
 	// something lossless (equivalent of quality=100 for jpeg)
 #ifndef _WIN32
 	// Non-windows code
-	gdk_pixbuf_save(screenshot, full_file_name, "png", error, NULL);
+	gdk_pixbuf_save(screenshot, full_file_name, "png", NULL, NULL);
 #else
 	// Windows code
 
@@ -288,7 +296,13 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// Save the pixbuf
-	gdk_pixbuf_save((gpointer) screenshot, full_file_name, "png", NULL, NULL);
+	if (FALSE == gdk_pixbuf_save(converted_screenshot, full_file_name, "jpeg", &error, NULL))
+	{
+		// Something went wrong when saving the image
+		g_warning("Error 08: Something went wrong when saving the image: '%s'", error->message);
+		g_error_free(error);
+		exit(6);
+	}
 
 	// Free memory
 	ReleaseDC(windows_win, desktop_device_context);
@@ -309,6 +323,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2007/09/11 13:51:24  vapour
+ * Adjusted to save as jpeg files on windows.  Doesn't seem to be converting the bitmap to a gdk pixbuf properly though.
+ *
  * Revision 1.5  2007/09/11 13:18:42  vapour
  * Started adding code to do screenshots in windows.  Not yet functional.
  *
