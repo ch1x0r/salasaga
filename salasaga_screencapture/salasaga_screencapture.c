@@ -90,8 +90,8 @@ HBITMAP win_take_screenshot(HWND desktop_window_handle, gint x_off, gint x_len, 
 	our_bitmap = CreateCompatibleBitmap(desktop_device_context, x_len, y_len);
 	SelectObject(our_device_context, our_bitmap);
 	BitBlt(our_device_context, 0, 0, x_off, y_len, desktop_device_context, x_off, y_off, SRCCOPY);
-	
-	return	our_bitmap;
+
+	return our_bitmap;
 }
 #endif
 
@@ -129,7 +129,9 @@ gint main(gint argc, gchar *argv[])
 	png_structp			png_pointer;
 	gchar				png_text_homepage[] = "The Flame Project: http://www.flameproject.org\0";
 	gchar				png_text_key[] = "Software\0";
+	gint				return_code_int;	// Holds integer return codes
 	HBITMAP				screenshot;			// Holds the screen shot image
+	BITMAP				screenshot_data;	// Metadata about the screenshot (width, height, etc)
 	HWND				windows_win;		// Holds the Window ID we're screenshot-ing
 #endif
 
@@ -324,17 +326,59 @@ gint main(gint argc, gchar *argv[])
 						PNG_COMPRESSION_TYPE_DEFAULT,  // Compression type
 						PNG_FILTER_TYPE_DEFAULT);  // Filter method
 
-	// Create an in-memory row structure of the screenshot
-// fixme1: Needs to be written
-
-	// Point the information structure to the in-memory bitmap data
-// fixme1: Needs to be written
-
 	// Embed a text comment with Flame's home page
-	png_set_text(png_pointer, png_info_pointer, &flame_text, 1);
+//	png_set_text(png_pointer, png_info_pointer, &flame_text, 1);
+
+	gint				num_bytes;
+	png_byte			*debugging_pointers[768];
+//	gpointer			debugging_pointers[768];
+	gint				row_counter;
+	gpointer			*row_pointers;
+	gpointer			screenshot_copy;
+
+	// Get metadata about the screenshot
+	return_code_int = GetObject(screenshot, sizeof(BITMAP), &screenshot_data);
+	if (0 == return_code_int)
+	{
+		// Something went wrong when retrieving the screenshot metadata
+		g_warning("Error 12: Something went wrong when retrieving the screenshot metadata");
+		exit(10);
+	}
+
+	// Copy the bitmap so we can use it
+	num_bytes = screenshot_data.bmHeight * screenshot_data.bmWidthBytes;
+	screenshot_copy = g_new(unsigned char, num_bytes);
+	return_code_int = GetBitmapBits(screenshot, num_bytes, screenshot_copy);
+	if (0 == return_code_int)
+	{
+		// Something went wrong when copying the screenshot data
+		g_warning("Error 13: Something went wrong when copying the screenshot data");
+		exit(11);
+	}
+
+	// Create an in-memory row structure of the screenshot
+//	debugging_pointers = png_malloc(png_pointer, y_length * sizeof(png_bytep));
+//	row_pointers = png_malloc(png_pointer, y_length * sizeof(png_bytep));
+	for (row_counter = 0; row_counter < screenshot_data.bmHeight; row_counter++)
+	{
+		debugging_pointers[row_counter] = screenshot_copy + (screenshot_data.bmWidthBytes * row_counter);
+//		row_pointers[row_counter] = screenshot_copy + (screenshot_data.bmWidthBytes * row_counter);
+	}
+	png_set_rows(png_pointer, png_info_pointer, debugging_pointers);
+//	png_set_rows(png_pointer, png_info_pointer, row_pointers[0]);
+
 
 	// Write the PNG data to the output file
-	png_write_png(png_pointer, png_info_pointer, PNG_TRANSFORM_IDENTITY, NULL);
+	png_write_info(png_pointer, png_info_pointer);
+	png_set_packing(png_pointer);
+
+	png_write_image(png_pointer, debugging_pointers);
+	png_write_end(png_pointer, NULL);
+
+	// Free memory used
+	png_destroy_write_struct(&png_pointer, &png_info_pointer);
+
+//	png_write_png(png_pointer, png_info_pointer, PNG_TRANSFORM_IDENTITY, NULL);
 
 	// Free memory
 	ReleaseDC(windows_win, desktop_device_context);
@@ -355,6 +399,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2007/09/16 13:00:35  vapour
+ * Still having extreme trouble with this.  At least it doesn't segfault now, but theres debugging code all over the place.
+ *
  * Revision 1.7  2007/09/16 10:15:41  vapour
  * Re-writing the windows file saving code to use libpng.
  *
