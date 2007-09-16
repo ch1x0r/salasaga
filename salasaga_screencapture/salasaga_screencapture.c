@@ -40,6 +40,9 @@
 	#include <windows.h>
 #endif
 
+// PNG include
+#include <png.h>
+
 // Application constants
 #define	APP_VERSION 0.51
 
@@ -116,12 +119,18 @@ gint main(gint argc, gchar *argv[])
 
 #ifndef _WIN32
 	// Non-windows only variables
-	Window				win;				// Holds the Window ID we're screenshot-ing
 	static GdkPixbuf	*screenshot = NULL;	// Holds the screen shot image
+	Window				win;				// Holds the Window ID we're screenshot-ing
 #else
 	// Windows only variables
-	HWND				windows_win;		// Holds the Window ID we're screenshot-ing
+	png_text			flame_text;			// Pointer to structure holding Flame homepage URL
+	FILE				*output_file_pointer;
+	png_infop			png_info_pointer;
+	png_structp			png_pointer;
+	gchar				png_text_homepage[] = "The Flame Project: http://www.flameproject.org\0";
+	gchar				png_text_key[] = "Software\0";
 	HBITMAP				screenshot;			// Holds the screen shot image
+	HWND				windows_win;		// Holds the Window ID we're screenshot-ing
 #endif
 
 
@@ -250,59 +259,82 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// Free the memory used by the GSList
-	// (commented out because it seemed to be causing a segfault on windows)
+	// fixme5: (commented out because it seemed to be causing a segfault on windows)
 	// g_slist_free(entries);
 
 	// Construct the screen shot file name
 	tmp_ptr = g_stpcpy(tmp_string, name);
 	tmp_ptr = g_stpcpy(tmp_ptr, suffix);
-	
-	// Windows only seems to support jpg
-#ifndef _WIN32
 	tmp_ptr = g_stpcpy(tmp_ptr, ".png");
-#else
-	tmp_ptr = g_stpcpy(tmp_ptr, ".jpg");
-#endif
 
 	full_file_name = g_build_filename(directory, tmp_string, NULL);
 
-	// Save the screenshot
-	// file:///usr/share/gtk-doc/html/gdk-pixbuf/gdk-pixbuf-file-saving.html
-	// Using PNG storage for now, as it seems much more efficient.
-	// Because it has no option to adjust the quality of the save, I'm hoping it's set to
-	// something lossless (equivalent of quality=100 for jpeg)
 #ifndef _WIN32
-	// Non-windows code
+	// Non-windows code to save the screenshot
 	gdk_pixbuf_save(screenshot, full_file_name, "png", NULL, NULL);
 #else
-	// Windows code
+	// * Windows code to save the screenshot bitmap as a PNG file *
 
-	// Turn the windows bitmap into a gdk_pixbuf
-	static GdkPixbuf	*converted_screenshot = NULL;
-	converted_screenshot = gdk_pixbuf_new_from_data((gpointer) screenshot,
-								GDK_COLORSPACE_RGB,		// Colorspace
-								FALSE,	// Has alpha
-								8,		// Bits per sample
-								x_length,
-								y_length,
-								0,		// Rowstride
-								NULL, NULL);
-	if (NULL == converted_screenshot)
+	// Initialise variables
+	flame_text.compression = PNG_TEXT_COMPRESSION_NONE;
+	flame_text.key = png_text_key;
+	flame_text.text = png_text_homepage;
+	flame_text.text_length = strlen(png_text_homepage);
+
+	// Open screenshot output file for writing
+	output_file_pointer = fopen(full_file_name, "wb");
+	if (FALSE == output_file_pointer)
 	{
-		// Something went wrong when converting the bitmap to a GDK pixbuf
-		g_warning("Error 07: Something went wrong converting the captured bitmap to a GDK pixbuf");
-		g_error_free(error);
-		exit(5);
+		// Something went wrong when opening the output file
+		g_warning("Error 09: Something went wrong when opening the output screenhot file for writing");
+		exit(7);
 	}
 
-	// Save the pixbuf
-	if (FALSE == gdk_pixbuf_save(converted_screenshot, full_file_name, "jpeg", &error, NULL))
+	png_pointer = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+	if (NULL == png_pointer)
 	{
-		// Something went wrong when saving the image
-		g_warning("Error 08: Something went wrong when saving the image: '%s'", error->message);
-		g_error_free(error);
-		exit(6);
+		// Something went wrong when creating the png write structure
+		g_warning("Error 10: Something went wrong when creating the png write structure");
+		exit(8);
 	}
+
+	png_info_pointer = png_create_info_struct(png_pointer);
+	if (NULL == png_info_pointer)
+	{
+		// Something went wrong when creating the png info structure
+
+		// Clean up
+		png_destroy_write_struct(&png_pointer, (png_infopp) NULL);
+
+		// Generate a warning then exit
+		g_warning("Error 11: Something went wrong when creating the png info structure");
+		exit(9);
+	}
+
+	// Initialise the PNG output code
+	png_init_io(png_pointer, output_file_pointer);
+
+	// Fill in the PNG information structure
+	png_set_IHDR(png_pointer, png_info_pointer,
+						x_length,  // Width
+						y_length,  // Height
+						8,  // Bit depth
+						PNG_COLOR_TYPE_RGB,  // Color type
+						PNG_INTERLACE_NONE,  // Interlace type
+						PNG_COMPRESSION_TYPE_DEFAULT,  // Compression type
+						PNG_FILTER_TYPE_DEFAULT);  // Filter method
+
+	// Create an in-memory row structure of the screenshot
+// fixme1: Needs to be written
+
+	// Point the information structure to the in-memory bitmap data
+// fixme1: Needs to be written
+
+	// Embed a text comment with Flame's home page
+	png_set_text(png_pointer, png_info_pointer, &flame_text, 1);
+
+	// Write the PNG data to the output file
+	png_write_png(png_pointer, png_info_pointer, PNG_TRANSFORM_IDENTITY, NULL);
 
 	// Free memory
 	ReleaseDC(windows_win, desktop_device_context);
@@ -323,6 +355,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2007/09/16 10:15:41  vapour
+ * Re-writing the windows file saving code to use libpng.
+ *
  * Revision 1.6  2007/09/11 13:51:24  vapour
  * Adjusted to save as jpeg files on windows.  Doesn't seem to be converting the bitmap to a gdk pixbuf properly though.
  *
