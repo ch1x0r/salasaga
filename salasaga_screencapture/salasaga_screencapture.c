@@ -50,8 +50,8 @@
 #ifdef _WIN32
 	// Windows global variables
 	HDC			desktop_device_context;
-	HDC			our_device_context;
 	HBITMAP		our_bitmap;
+	HDC			our_device_context;
 #endif
 
 
@@ -84,12 +84,53 @@ GdkPixbuf *non_win_take_screenshot(Window win, gint x_off, gint x_len, gint y_of
 // Windows screenshot function
 HBITMAP win_take_screenshot(HWND desktop_window_handle, gint x_off, gint x_len, gint y_off, gint y_len)
 {
+	// Local variables for error handling
+	BOOL				return_code_bool;
+	HGDIOBJ				return_code_hgdiobj;
+
+
 	// Create bitmap of requested desktop area
 	desktop_device_context = GetDC(desktop_window_handle);
+	if (NULL == desktop_device_context)
+	{
+		// GetDC failed
+		g_error("Error 21: Screenshot GetDC failed");
+		exit(19);
+	}
 	our_device_context = CreateCompatibleDC(desktop_device_context);
+	if (NULL == our_device_context)
+	{
+		// CreateCompatibleDC failed
+		g_error("Error 20: Screenshot CreateCompatibleDC failed");
+		exit(18);
+	}
 	our_bitmap = CreateCompatibleBitmap(desktop_device_context, x_len, y_len);
-	SelectObject(our_device_context, our_bitmap);
-	BitBlt(our_device_context, 0, 0, x_off, y_len, desktop_device_context, x_off, y_off, SRCCOPY);
+	if (NULL == our_bitmap)
+	{
+		// CreateCompatibleBitmap failed
+		g_error("Error 19: Screenshot CreateCompatibleBitmap failed");
+		exit(17);
+	}
+	return_code_hgdiobj = SelectObject(our_device_context, our_bitmap);
+	if (NULL == return_code_hgdiobj)
+	{
+		// Selected object is not a region
+		g_error("Error 17: Screenshot SelectObject failed: selected object is not a region");
+		exit(15);
+	}
+	if (HGDI_ERROR == return_code_hgdiobj)
+	{
+		// SelectObject failed
+		g_error("Error 18: Screenshot SelectObject failed: unknown error");
+		exit(16);
+	}
+	return_code_bool = BitBlt(our_device_context, 0, 0, x_len, y_len, desktop_device_context, x_off, y_off, SRCCOPY);
+	if (FALSE == return_code_bool)
+	{
+		// BitBlt failed
+		g_error("Error 14: Screenshot BitBlt failed");
+		exit(12);		
+	}
 
 	return our_bitmap;
 }
@@ -124,13 +165,17 @@ gint main(gint argc, gchar *argv[])
 #else
 	// Windows only variables
 	png_text			flame_text;			// Pointer to structure holding Flame homepage URL
+	gint				num_bytes;
 	FILE				*output_file_pointer;
 	png_infop			png_info_pointer;
 	png_structp			png_pointer;
 	gchar				png_text_homepage[] = "The Flame Project: http://www.flameproject.org\0";
 	gchar				png_text_key[] = "Software\0";
 	gint				return_code_int;	// Holds integer return codes
+	gint				row_counter;
+	png_byte			**row_pointers;		// Points to an array of pointers for screenshot byte rows
 	HBITMAP				screenshot;			// Holds the screen shot image
+	gpointer			screenshot_copy;	// Holds a copy of the screen shot image
 	BITMAP				screenshot_data;	// Metadata about the screenshot (width, height, etc)
 	HWND				windows_win;		// Holds the Window ID we're screenshot-ing
 #endif
@@ -203,7 +248,7 @@ gint main(gint argc, gchar *argv[])
 
 		// The directory doesn't exist
 		// fixme3: Add code to create the directory
-		g_warning("Error 06: The target directory doesn't exist");
+		g_error("Error 06: The target directory doesn't exist");
 		g_error_free(error);
 		exit(4);
 	}
@@ -268,7 +313,6 @@ gint main(gint argc, gchar *argv[])
 	tmp_ptr = g_stpcpy(tmp_string, name);
 	tmp_ptr = g_stpcpy(tmp_ptr, suffix);
 	tmp_ptr = g_stpcpy(tmp_ptr, ".png");
-
 	full_file_name = g_build_filename(directory, tmp_string, NULL);
 
 #ifndef _WIN32
@@ -288,7 +332,7 @@ gint main(gint argc, gchar *argv[])
 	if (FALSE == output_file_pointer)
 	{
 		// Something went wrong when opening the output file
-		g_warning("Error 09: Something went wrong when opening the output screenhot file for writing");
+		g_error("Error 09: Something went wrong when opening the output screenhot file for writing");
 		exit(7);
 	}
 
@@ -296,7 +340,7 @@ gint main(gint argc, gchar *argv[])
 	if (NULL == png_pointer)
 	{
 		// Something went wrong when creating the png write structure
-		g_warning("Error 10: Something went wrong when creating the png write structure");
+		g_error("Error 10: Something went wrong when creating the png write structure");
 		exit(8);
 	}
 
@@ -309,7 +353,7 @@ gint main(gint argc, gchar *argv[])
 		png_destroy_write_struct(&png_pointer, (png_infopp) NULL);
 
 		// Generate a warning then exit
-		g_warning("Error 11: Something went wrong when creating the png info structure");
+		g_error("Error 11: Something went wrong when creating the png info structure");
 		exit(9);
 	}
 
@@ -326,22 +370,22 @@ gint main(gint argc, gchar *argv[])
 						PNG_COMPRESSION_TYPE_DEFAULT,  // Compression type
 						PNG_FILTER_TYPE_DEFAULT);  // Filter method
 
-	// Embed a text comment with Flame's home page
-//	png_set_text(png_pointer, png_info_pointer, &flame_text, 1);
+	// Set the correct pixel ordering
+	png_set_bgr(png_pointer);
 
-	gint				num_bytes;
-	png_byte			*debugging_pointers[768];
-//	gpointer			debugging_pointers[768];
-	gint				row_counter;
-	gpointer			*row_pointers;
-	gpointer			screenshot_copy;
+	// Embed a text comment with Flame's home page
+	png_set_text(png_pointer, png_info_pointer, &flame_text, 1);
 
 	// Get metadata about the screenshot
 	return_code_int = GetObject(screenshot, sizeof(BITMAP), &screenshot_data);
 	if (0 == return_code_int)
 	{
 		// Something went wrong when retrieving the screenshot metadata
-		g_warning("Error 12: Something went wrong when retrieving the screenshot metadata");
+
+		// Clean up
+		png_destroy_write_struct(&png_pointer, &png_info_pointer);
+
+		g_error("Error 12: Something went wrong when retrieving the screenshot metadata");
 		exit(10);
 	}
 
@@ -352,35 +396,33 @@ gint main(gint argc, gchar *argv[])
 	if (0 == return_code_int)
 	{
 		// Something went wrong when copying the screenshot data
-		g_warning("Error 13: Something went wrong when copying the screenshot data");
+
+		// Clean up
+		png_destroy_write_struct(&png_pointer, &png_info_pointer);
+
+		g_error("Error 13: Something went wrong when copying the screenshot data");
 		exit(11);
 	}
 
 	// Create an in-memory row structure of the screenshot
-//	debugging_pointers = png_malloc(png_pointer, y_length * sizeof(png_bytep));
-//	row_pointers = png_malloc(png_pointer, y_length * sizeof(png_bytep));
+	row_pointers = png_malloc(png_pointer, y_length * sizeof(png_bytep *));
 	for (row_counter = 0; row_counter < screenshot_data.bmHeight; row_counter++)
 	{
-		debugging_pointers[row_counter] = screenshot_copy + (screenshot_data.bmWidthBytes * row_counter);
-//		row_pointers[row_counter] = screenshot_copy + (screenshot_data.bmWidthBytes * row_counter);
+		row_pointers[row_counter] = screenshot_copy + (screenshot_data.bmWidthBytes * row_counter);
 	}
-	png_set_rows(png_pointer, png_info_pointer, debugging_pointers);
-//	png_set_rows(png_pointer, png_info_pointer, row_pointers[0]);
-
+	png_set_rows(png_pointer, png_info_pointer, row_pointers);
 
 	// Write the PNG data to the output file
 	png_write_info(png_pointer, png_info_pointer);
+	png_set_filler(png_pointer, 0, PNG_FILLER_AFTER);
 	png_set_packing(png_pointer);
-
-	png_write_image(png_pointer, debugging_pointers);
+	png_write_image(png_pointer, row_pointers);
 	png_write_end(png_pointer, NULL);
 
-	// Free memory used
+	// Free memory used in PNG code
 	png_destroy_write_struct(&png_pointer, &png_info_pointer);
 
-//	png_write_png(png_pointer, png_info_pointer, PNG_TRANSFORM_IDENTITY, NULL);
-
-	// Free memory
+	// Free memory used in screen capturing code
 	ReleaseDC(windows_win, desktop_device_context);
 	DeleteDC(our_device_context);
 	DeleteObject(our_bitmap);
@@ -399,6 +441,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2007/09/17 13:41:39  vapour
+ * Writing PNG files now works (on my pc at least).
+ *
  * Revision 1.8  2007/09/16 13:00:35  vapour
  * Still having extreme trouble with this.  At least it doesn't segfault now, but theres debugging code all over the place.
  *
