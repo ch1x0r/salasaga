@@ -3,7 +3,7 @@
  *
  * Flame Project: Source file for all callback functions
  * 
- * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -859,6 +859,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.23  2007/09/18 02:53:42  vapour
+ * Updated copyright year to 2007.
+ *
  * Revision 1.22  2007/07/29 11:30:08  vapour
  * Removed commented out timeline edited functions that are no longer needed.
  *

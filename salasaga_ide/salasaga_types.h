@@ -3,7 +3,7 @@
  *
  * Flame Project: Include file for structures and similar used throughout the code
  * 
- * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -263,6 +263,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.31  2007/09/18 02:53:42  vapour
+ * Updated copyright year to 2007.
+ *
  * Revision 1.30  2007/07/29 06:11:02  vapour
  * Began modifying timeline widget to use a pixbuf for display of time duration.
  *

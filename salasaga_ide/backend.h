@@ -3,7 +3,7 @@
  *
  * Flame Project: Header file for all general backend functions
  * 
- * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -62,6 +62,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string);
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2007/09/18 02:53:42  vapour
+ * Updated copyright year to 2007.
+ *
  * Revision 1.12  2007/07/29 12:27:02  vapour
  * Added a function to regenerate all of the duration timeline images for a slide.
  *

@@ -3,7 +3,7 @@
  *
  * Flame Project: Header file for all non specific GUI related funtions
  * 
- * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -99,6 +99,9 @@ void slide_name_set(void);
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2007/09/18 02:53:42  vapour
+ * Updated copyright year to 2007.
+ *
  * Revision 1.14  2007/07/29 11:01:02  vapour
  * Moved duration slider creation code to its own function.
  *

@@ -3,7 +3,7 @@
  *
  * Flame Project: Include file for global variables
  * 
- * Copyright (C) 2006 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -122,6 +122,9 @@ extern gint				num_res_items;
  * +++++++
  * 
  * $Log$
+ * Revision 1.19  2007/09/18 02:53:42  vapour
+ * Updated copyright year to 2007.
+ *
  * Revision 1.18  2007/07/09 12:42:53  vapour
  * Updated the film strip column resizing to work nicer.
  *
