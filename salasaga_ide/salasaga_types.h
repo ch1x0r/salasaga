@@ -32,7 +32,7 @@ extern "C" {
 
 // Set some application constants
 #define APP_NAME "Flame Project Editing GUI"
-#define	APP_VERSION "0.7.7-dev"
+#define	APP_VERSION "0.7.7-dev Built: " __DATE__
 
 // Define a run time check that hasn't been added to GTK
 #define GTK_TYPE_TREE_ITER		(gtk_tree_iter_get_type ())
@@ -263,6 +263,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.32  2007/09/19 13:27:31  vapour
+ * Added a build date stamp to the Help -> About box.
+ *
  * Revision 1.31  2007/09/18 02:53:42  vapour
  * Updated copyright year to 2007.
  *
