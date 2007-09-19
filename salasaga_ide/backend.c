@@ -2869,6 +2869,12 @@ void save_preferences_and_exit(void)
 	// All values saved in the windows registry
 	RegCloseKey(hkey);
 
+	// Unhook the Control-PrintScreen key hook (if it's set)
+	if (NULL != win32_keyboard_hook_handle)
+	{
+		UnhookWindowsHookEx(win32_keyboard_hook_handle);
+	}
+
 #endif
 
 	// Exit the application
@@ -3011,6 +3017,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.103  2007/09/19 13:31:49  vapour
+ * Adding initial working code to set a keyboard hook for the Control Printscreen key through the flame-keycapture dll.
+ *
  * Revision 1.102  2007/09/18 02:53:42  vapour
  * Updated copyright year to 2007.
  *

@@ -33,6 +33,9 @@
 // GConf include (not for windows)
 #ifndef _WIN32
 	#include <gconf/gconf.h>
+#else
+	// Windows only code
+	#include <windows.h>
 #endif
 
 // Flame Edit includes
@@ -859,6 +862,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.24  2007/09/19 13:31:48  vapour
+ * Adding initial working code to set a keyboard hook for the Control Printscreen key through the flame-keycapture dll.
+ *
  * Revision 1.23  2007/09/18 02:53:42  vapour
  * Updated copyright year to 2007.
  *

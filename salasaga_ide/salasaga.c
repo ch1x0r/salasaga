@@ -149,6 +149,10 @@ ResolutionStructure	res_array[] =
 };
 gint					num_res_items = sizeof(res_array) / sizeof(res_array[0]);	// The number of resolution items
 
+#ifdef _WIN32
+// Windows only variables
+HHOOK					win32_keyboard_hook_handle = NULL;		// Handle used to keep track of the Win32 keyboard hook
+#endif
 
 // Callback to exit the application
 gint quit_event(GtkWidget *widget, GdkEvent *event, gpointer data)
@@ -1306,7 +1310,7 @@ gint main(gint argc, gchar *argv[])
 
 	} else
 	{
-#endif  // Non-windows check
+#endif  // End of windows code
 
 		// Looks like Flame hasn't been run before, so create it's home directory structure
 		g_string_printf(tmp_gstring, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame");
@@ -1339,11 +1343,9 @@ gint main(gint argc, gchar *argv[])
 	g_string_printf(project_folder, "%s", default_project_folder->str);
 	g_string_printf(output_folder, "%s", default_output_folder->str);
 
-// fixme4: Workaround for now as GConf on windows doesn't seem optimal
-//         May be better to abstract this stuff into a function that switches backend transparently (GConf/Windows-registry)
-#ifndef _WIN32  // Non-windows check
-
-	// * Setup the Control-Printscreen key to capture screenshots *
+	// * Setup the Control-Printscreen key combination to capture screenshots *
+#ifndef _WIN32
+	// Non-windows code
 
 	// Search for the first unused run command
 	command_key = g_string_new(NULL);
@@ -1388,7 +1390,12 @@ gint main(gint argc, gchar *argv[])
 	// Free our GConf engine
 	gconf_engine_unref(gconf_engine);
 
-#endif  // Non-windows check
+#else
+	// Windows code
+	
+
+
+#endif // End of windows code
 
 	// Maximise the window if our saved configuration says to
 	if (TRUE == should_maximise)
@@ -1578,6 +1585,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.60  2007/09/19 13:31:49  vapour
+ * Adding initial working code to set a keyboard hook for the Control Printscreen key through the flame-keycapture dll.
+ *
  * Revision 1.59  2007/09/18 02:53:42  vapour
  * Updated copyright year to 2007.
  *

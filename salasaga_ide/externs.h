@@ -110,6 +110,11 @@ extern ResolutionStructure		res_array[];
 extern gint				num_res_items;
 
 
+#ifdef _WIN32
+// Windows only variables
+extern HHOOK					win32_keyboard_hook_handle;
+#endif
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus
@@ -122,6 +127,9 @@ extern gint				num_res_items;
  * +++++++
  * 
  * $Log$
+ * Revision 1.20  2007/09/19 13:31:49  vapour
+ * Adding initial working code to set a keyboard hook for the Control Printscreen key through the flame-keycapture dll.
+ *
  * Revision 1.19  2007/09/18 02:53:42  vapour
  * Updated copyright year to 2007.
  *

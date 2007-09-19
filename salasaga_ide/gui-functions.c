@@ -38,13 +38,18 @@
 // XML includes
 #include <libxml/xmlsave.h>
 
+#ifdef _WIN32
+	// Windows only code
+	#include <windows.h>
+#endif
+
 // Flame Edit includes
+#include "flame-keycapture.h"
 #include "flame-types.h"
 #include "backend.h"
 #include "callbacks.h"
 #include "gui-functions.h"
 #include "externs.h"
-
 
 // Function that gets all of the layers for a slide, then creates a pixel buffer from them
 GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
@@ -4837,12 +4842,6 @@ void menu_screenshots_capture(void)
 	GString				*tmp_gstring;				// Temporary string
 
 
-#ifdef _WIN32
-	// If we're running on Windows, pop up a message about capturing not working yet then return
-	display_warning("Screen capturing not yet supported for Windows, please place your own screenshots in the screenshots directory");
-	return;
-#endif
-
 	GKeyFile			*lock_file;				// Pointer to the lock file structure
 
 
@@ -4985,10 +4984,67 @@ void menu_screenshots_capture(void)
 		return;
 	}
 
+#ifdef _WIN32
+	// If not already set, install keyboard hook for Control-Printscreen combination
+
+	// Local variables
+	HINSTANCE			dll_handle;
+	HOOKPROC			hook_address; 
+
+	// Variables for the error handler
+	DWORD				last_error;
+	LPVOID				message_buffer_pointer;
+	TCHAR				text_buffer[120];
+
+	// Does the keyboard hook need to be installed?
+	if (NULL == win32_keyboard_hook_handle)
+	{
+		dll_handle = LoadLibrary((LPCTSTR) "C:\\eclipse\\workspace\\flame-keycapture\\Debug\\libflame-keycapture.dll"); 
+		if (NULL == dll_handle)
+		{
+			last_error = GetLastError();
+			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, last_error,
+					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &message_buffer_pointer, 0, NULL);
+			wsprintf(text_buffer, "Keyboard hook LoadLibrary failed with error %d: %s", last_error, message_buffer_pointer); 
+			MessageBox(NULL, text_buffer, "Error", MB_OK);
+			LocalFree(message_buffer_pointer);
+			exit(98);
+		}
+		hook_address = (HOOKPROC) GetProcAddress(dll_handle, "win32_keyboard_press_hook");
+		if (NULL == hook_address)
+		{
+			last_error = GetLastError();
+			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, last_error,
+					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &message_buffer_pointer, 0, NULL);
+			wsprintf(text_buffer, "Keyboard hook GetProcAddress failed with error %d: %s", last_error, message_buffer_pointer); 
+			MessageBox(NULL, text_buffer, "Error", MB_OK);
+			LocalFree(message_buffer_pointer);
+			exit(97);
+		}
+
+		win32_keyboard_hook_handle = SetWindowsHookEx(WH_KEYBOARD_LL, hook_address, dll_handle, 0);
+		if (NULL == win32_keyboard_hook_handle)
+		{
+			last_error = GetLastError();
+			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, last_error,
+					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &message_buffer_pointer, 0, NULL);
+			wsprintf(text_buffer, "Keyboard hooking failed with error %d: %s", last_error, message_buffer_pointer); 
+			MessageBox(NULL, text_buffer, "Error", MB_OK);
+			LocalFree(message_buffer_pointer);
+			exit(99);	    
+		}
+
+		// Add a message to the status bar so the user gets visual feedback
+		g_string_printf(tmp_gstring, "Wrote capture lock file '%s' and installed Control-Printscreen keyboard hook.", full_file_name);
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
+		gdk_flush();
+	}
+#else
 	// Add a message to the status bar so the user gets visual feedback
 	g_string_printf(tmp_gstring, "Wrote capture lock file '%s'.", full_file_name);
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 	gdk_flush();
+#endif
 
 	// * Function clean up area *
 
@@ -5933,6 +5989,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.98  2007/09/19 13:31:49  vapour
+ * Adding initial working code to set a keyboard hook for the Control Printscreen key through the flame-keycapture dll.
+ *
  * Revision 1.97  2007/09/18 02:53:42  vapour
  * Updated copyright year to 2007.
  *
