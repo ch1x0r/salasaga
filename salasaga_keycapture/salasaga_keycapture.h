@@ -21,6 +21,8 @@
  * 
  */
 
+#ifdef _WIN32
+
 #ifdef BUILD_DLL
 // the dll exports
 #define EXPORT __declspec(dllexport)
@@ -29,7 +31,7 @@
 #define EXPORT __declspec(dllimport)
 #endif
 
-#ifdef _WIN32
+
 // Windows-only function to be imported/exported
 EXPORT LRESULT win32_keyboard_press_hook(int hook_code, WPARAM message_id, LPARAM message_data_ptr);
 #endif
@@ -40,6 +42,9 @@ EXPORT LRESULT win32_keyboard_press_hook(int hook_code, WPARAM message_id, LPARA
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/09/19 13:14:30  vapour
+ * Updated windows ifdef statement to a better place.
+ *
  * Revision 1.1  2007/09/19 13:11:47  vapour
  * Initial version.  Detection of Control Printscreen works, but it still needs to launch flame-capture.
  *
