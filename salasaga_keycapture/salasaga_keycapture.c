@@ -21,11 +21,11 @@
  * 
  */
 
+#ifdef _WIN32
+
 #include <stdio.h>
 #include <windows.h>
 #include "flame-keycapture.h"
-
-#ifdef _WIN32
 
 // Function to trigger flame-capture whenever the Control-Printscreen key combination is pressed
 EXPORT LRESULT win32_keyboard_press_hook(int hook_code, WPARAM message_id, LPARAM message_data_ptr)
@@ -81,6 +81,9 @@ EXPORT LRESULT win32_keyboard_press_hook(int hook_code, WPARAM message_id, LPARA
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/09/19 13:13:19  vapour
+ * Fixed the inclusion of the windows.h file in the wrong place.
+ *
  * Revision 1.1  2007/09/19 13:11:47  vapour
  * Initial version.  Detection of Control Printscreen works, but it still needs to launch flame-capture.
  *
