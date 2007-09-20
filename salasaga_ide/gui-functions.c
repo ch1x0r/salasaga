@@ -4999,7 +4999,7 @@ void menu_screenshots_capture(void)
 	// Does the keyboard hook need to be installed?
 	if (NULL == win32_keyboard_hook_handle)
 	{
-		dll_handle = LoadLibrary((LPCTSTR) "C:\\eclipse\\workspace\\flame-keycapture\\Debug\\libflame-keycapture.dll"); 
+		dll_handle = LoadLibrary((LPCTSTR) "libflame-keycapture.dll");
 		if (NULL == dll_handle)
 		{
 			last_error = GetLastError();
@@ -5989,6 +5989,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.99  2007/09/20 12:07:18  vapour
+ * Path to the dll works if not fully qualified. :)
+ *
  * Revision 1.98  2007/09/19 13:31:49  vapour
  * Adding initial working code to set a keyboard hook for the Control Printscreen key through the flame-keycapture dll.
  *
