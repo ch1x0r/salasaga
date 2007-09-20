@@ -32,7 +32,13 @@ EXPORT LRESULT win32_keyboard_press_hook(int hook_code, WPARAM message_id, LPARA
 {
 	// Local variables
 	SHORT				key_state = 0;
+	DWORD				last_error;
+	LPVOID				message_buffer_pointer;
 	KBDLLHOOKSTRUCT		*message_data_pointer;
+	PROCESS_INFORMATION	process_info;
+	BOOL				return_code_bool;
+	STARTUPINFO			startup_info;
+	TCHAR				text_buffer[120];
 
 
 	// Simplify pointer name and type
@@ -55,10 +61,31 @@ EXPORT LRESULT win32_keyboard_press_hook(int hook_code, WPARAM message_id, LPARA
 				key_state = GetAsyncKeyState(VK_CONTROL);
 				if (0x8000 & key_state)
 				{
-					// * Yes, they've been pressed together *
-
-					// Launch flame-capture in the background
-					// Fixme1: Needs to be written
+					// * Yes, they've been pressed together, so launch flame-capture in the background
+					ZeroMemory(&process_info, sizeof(process_info));					
+					ZeroMemory(&startup_info, sizeof(startup_info));
+					startup_info.cb = sizeof(startup_info);
+					return_code_bool = CreateProcess(
+											TEXT("flame-capture.exe"),  // Application name
+											NULL,  // Command line
+											NULL,  // Process Attributes
+											NULL,  // Thread attributes
+											FALSE,  // Inherit handles?
+											0,  // Process creation flags
+											NULL,  // Environment
+											NULL,  // Working directory
+											&startup_info,  // Startup info
+											&process_info);  // Process information
+					if (0 == return_code_bool)
+					{
+						// Launch of flame-capture failed
+						last_error = GetLastError();
+						FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, last_error,
+								MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &message_buffer_pointer, 0, NULL);
+						wsprintf(text_buffer, "Launch of flame-capture failed with error %d: %s", last_error, message_buffer_pointer); 
+						MessageBox(NULL, text_buffer, "Error", MB_OK);
+						LocalFree(message_buffer_pointer);
+					}
 				}
 			}
 		}
@@ -81,6 +108,9 @@ EXPORT LRESULT win32_keyboard_press_hook(int hook_code, WPARAM message_id, LPARA
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/09/20 12:09:38  vapour
+ * Added working code to launch the screen capture process in the background.
+ *
  * Revision 1.2  2007/09/19 13:13:19  vapour
  * Fixed the inclusion of the windows.h file in the wrong place.
  *
