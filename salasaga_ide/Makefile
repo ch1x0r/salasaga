@@ -79,6 +79,9 @@ MOUSE_SCALABLE = \
 MOUSE_PNG = \
 	standard.png
 
+DESKTOP_FILE = \
+	flameproject.desktop
+
 all: flame-edit
 
 backend.o:
@@ -100,7 +103,7 @@ install:
 	$(INSTALL) -d $(bindir)
 	$(INSTALL_PROGRAM) -m 0755 flame-edit $(bindir)
 	$(INSTALL) -d $(datadir)/applications/
-	$(INSTALL_DATA) flameproject.desktop $(datadir)/applications/
+	$(INSTALL_DATA) $(DESKTOP_FILE) $(datadir)/applications/
 	$(INSTALL) -d $(datadir)/flame/icons/
 	$(INSTALL) -d $(datadir)/pixmaps/
 	cd images; $(INSTALL_DATA) $(ICON_MAIN) $(datadir)/flame/icons/
@@ -151,6 +154,12 @@ uninstall:
 
 	if [ -f "$(datadir)/pixmaps/$(ICON_PNG)" ]; then \
 		rm -f $(datadir)/pixmaps/$(ICON_PNG); \
+		rmdir $(datadir)/pixmaps; \
+	fi
+
+	if [ -f "$(datadir)/applications/$(DESKTOP_FILE)" ]; then \
+		rm -f $(datadir)/applications/$(DESKTOP_FILE); \
+		rmdir $(datadir)/applications; \
 	fi
 
 	if [ -d "$(datadir)/flame/icons" ]; then \
