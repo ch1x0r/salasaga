@@ -41,10 +41,10 @@
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
+	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
-#include "flame-keycapture.h"
 #include "flame-types.h"
 #include "backend.h"
 #include "callbacks.h"
@@ -5989,6 +5989,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.100  2007/09/24 12:25:16  vapour
+ * Fix include ordering to compile on non-windows as well.
+ *
  * Revision 1.99  2007/09/20 12:07:18  vapour
  * Path to the dll works if not fully qualified. :)
  *
