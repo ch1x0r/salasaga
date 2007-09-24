@@ -10,7 +10,7 @@ SOUNDS = \
 	generic.wav
 
 ICON_MAIN = \
-	flame_logo.ico
+	flame-icon.ico
 
 ICON_PNG = \
 	flame-icon.png
