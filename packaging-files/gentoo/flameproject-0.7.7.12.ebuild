@@ -7,7 +7,7 @@ inherit autotools eutils flag-o-matic multilib
 DESCRIPTION="An Integrated Development Environment for producing Animated SVG
 files"
 HOMEPAGE="http://www.flameproject.org/"
-SRC_URI="http://downloads.sourceforge.net/flameproject/flameproject-0.7.7.dev-200709032220.tar.bz2"
+SRC_URI="http://downloads.sourceforge.net/flameproject/flameproject-0.7.7.dev-200709242316.tar.bz2"
 
 LICENSE="LGPL-2"
 SLOT="0"
