@@ -115,6 +115,30 @@ extern gint				num_res_items;
 extern HHOOK					win32_keyboard_hook_handle;
 #endif
 
+
+// External includes
+#include "functions/base64_decode.h"
+#include "functions/base64_encode.h"
+#include "functions/calculate_object_boundaries.h"
+#include "functions/destroy_slide.h"
+#include "functions/destroy_slide.h"
+#include "functions/detect_collisions.h"
+#include "functions/flame_read.h"
+#include "functions/logger_simple.h"
+#include "functions/logger_with_domain.h"
+#include "functions/menu_enable.h"
+#include "functions/menu_export_flash_inner.h"
+#include "functions/menu_export_svg_animation_slide.h"
+#include "functions/menu_file_save_layer.h"
+#include "functions/menu_file_save_slide.h"
+#include "functions/regenerate_film_strip_thumbnails.h"
+#include "functions/regenerate_timeline_duration_images.h"
+#include "functions/save_preferences_and_exit.h"
+#include "functions/sound_beep.h"
+#include "functions/uri_decode.h"
+#include "functions/uri_encode_base64.h"
+
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus
@@ -127,6 +151,9 @@ extern HHOOK					win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.21  2007/09/27 10:41:05  vapour
+ * Broke backend.c and backend.h into its component functions.
+ *
  * Revision 1.20  2007/09/19 13:31:49  vapour
  * Adding initial working code to set a keyboard hook for the Control Printscreen key through the flame-keycapture dll.
  *

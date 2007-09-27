@@ -46,10 +46,10 @@
 
 // Flame Edit includes
 #include "flame-types.h"
-#include "backend.h"
+#include "externs.h"
 #include "callbacks.h"
 #include "gui-functions.h"
-#include "externs.h"
+
 
 // Function that gets all of the layers for a slide, then creates a pixel buffer from them
 GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
@@ -5989,6 +5989,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.101  2007/09/27 10:40:54  vapour
+ * Broke backend.c and backend.h into its component functions.
+ *
  * Revision 1.100  2007/09/24 12:25:16  vapour
  * Fix include ordering to compile on non-windows as well.
  *

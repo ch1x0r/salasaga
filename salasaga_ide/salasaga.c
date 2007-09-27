@@ -48,7 +48,7 @@
 
 // Flame Edit includes
 #include "flame-types.h"
-#include "backend.h"
+#include "externs.h"
 #include "callbacks.h"
 #include "gui-functions.h"
 
@@ -1583,8 +1583,11 @@ gint main(gint argc, gchar *argv[])
 /* 
  * History
  * +++++++
- * 
+ *
  * $Log$
+ * Revision 1.61  2007/09/27 10:40:56  vapour
+ * Broke backend.c and backend.h into its component functions.
+ *
  * Revision 1.60  2007/09/19 13:31:49  vapour
  * Adding initial working code to set a keyboard hook for the Control Printscreen key through the flame-keycapture dll.
  *
