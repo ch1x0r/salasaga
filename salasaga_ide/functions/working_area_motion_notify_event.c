@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function disable or enable a given menu
+ * Flame Project: Detect when the user moves a pressed down mouse button on the drawing area 
  * 
  * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
  * 
@@ -27,23 +27,17 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-#include <math.h>
 
 // GTK includes
 #include <gtk/gtk.h>
 
+// GConf include (not for windows)
 #ifndef _WIN32
-	// Non-windows code
 	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
 #else
 	// Windows only code
 	#include <windows.h>
 #endif
-
-// XML includes
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 
 // Flame Edit includes
 #include "../flame-types.h"
@@ -51,13 +45,33 @@
 #include "../gui-functions.h"
 
 
-void menu_enable(const gchar *full_path, gboolean enable)
+gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
-	GtkWidget			*menu_item;
+	GdkModifierType		button_state;
+	gint					mouse_x;
+	gint					mouse_y;
 
-	menu_item = gtk_item_factory_get_item(GTK_ITEM_FACTORY(menu_bar), full_path);
-	gtk_widget_set_sensitive(menu_item, enable);
+
+	// If we're already aware of a mouse drag operation going on, then return
+	if (TRUE == mouse_dragging)
+	{
+		return TRUE;
+	}
+
+	// * To get here, this must be the first time we've heard of this particular mouse drag *
+
+	// Find out where the mouse is positioned, and which buttons and modifier keys are down (active)
+	gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);
+
+	// Check if the primary mouse button is down
+	if (GDK_BUTTON1_MASK & button_state)
+	{
+		// It is, so we take notice of the mouse drag operation and return
+		mouse_dragging = TRUE;
+	}
+
+	return TRUE;
 }
 
 
@@ -66,10 +80,7 @@ void menu_enable(const gchar *full_path, gboolean enable)
  * +++++++
  * 
  * $Log$
- * Revision 1.2  2007/09/28 12:05:08  vapour
+ * Revision 1.1  2007/09/28 12:05:06  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:40:40  vapour
- * Broke backend.c and backend.h into its component functions.
  *
  */

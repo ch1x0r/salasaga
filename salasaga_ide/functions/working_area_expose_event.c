@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function disable or enable a given menu
+ * Flame Project: Redraw the working area from the backing store 
  * 
  * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
  * 
@@ -27,23 +27,17 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-#include <math.h>
 
 // GTK includes
 #include <gtk/gtk.h>
 
+// GConf include (not for windows)
 #ifndef _WIN32
-	// Non-windows code
 	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
 #else
 	// Windows only code
 	#include <windows.h>
 #endif
-
-// XML includes
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 
 // Flame Edit includes
 #include "../flame-types.h"
@@ -51,13 +45,22 @@
 #include "../gui-functions.h"
 
 
-void menu_enable(const gchar *full_path, gboolean enable)
+gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-	// Local variables
-	GtkWidget			*menu_item;
+	// Only do this function if we have a backing store available
+	if (NULL == backing_store)
+	{
+		return FALSE;
+	}
 
-	menu_item = gtk_item_factory_get_item(GTK_ITEM_FACTORY(menu_bar), full_path);
-	gtk_widget_set_sensitive(menu_item, enable);
+	// Draw the invalidated backing store area onto the working area
+	gdk_draw_drawable(GDK_DRAWABLE(widget->window), GDK_GC(widget->style->fg_gc[GTK_WIDGET_STATE(widget)]),
+		GDK_PIXMAP(backing_store),
+		event->area.x, event->area.y,
+		event->area.x, event->area.y,
+		event->area.width, event->area.height);
+
+	return FALSE;
 }
 
 
@@ -66,10 +69,7 @@ void menu_enable(const gchar *full_path, gboolean enable)
  * +++++++
  * 
  * $Log$
- * Revision 1.2  2007/09/28 12:05:08  vapour
+ * Revision 1.1  2007/09/28 12:05:05  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:40:40  vapour
- * Broke backend.c and backend.h into its component functions.
  *
  */

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function disable or enable a given menu
+ * Flame Project: Callback function called when the resizing of the film strip is completed 
  * 
  * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
  * 
@@ -27,23 +27,17 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-#include <math.h>
 
 // GTK includes
 #include <gtk/gtk.h>
 
+// GConf include (not for windows)
 #ifndef _WIN32
-	// Non-windows code
 	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
 #else
 	// Windows only code
 	#include <windows.h>
 #endif
-
-// XML includes
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 
 // Flame Edit includes
 #include "../flame-types.h"
@@ -51,13 +45,23 @@
 #include "../gui-functions.h"
 
 
-void menu_enable(const gchar *full_path, gboolean enable)
+gint film_strip_handle_released(GObject *paned, GParamSpec *pspec, gpointer data)
 {
-	// Local variables
-	GtkWidget			*menu_item;
+	// Check if we're in the middle of resizing the film strip
+	if (TRUE == film_strip_being_resized)
+	{
+		// Set the new width of the film strip widget
+		gtk_tree_view_column_set_fixed_width(GTK_TREE_VIEW_COLUMN(film_strip_column), preview_width);
+		
+		// Regenerate the film strip thumbnails at the new size
+		regenerate_film_strip_thumbnails();
 
-	menu_item = gtk_item_factory_get_item(GTK_ITEM_FACTORY(menu_bar), full_path);
-	gtk_widget_set_sensitive(menu_item, enable);
+		// Set a toggle to indicate the film strip width changing has completed
+		film_strip_being_resized = FALSE;
+	}
+
+	// Indicate to the calling routine that this function finished fine
+	return FALSE;
 }
 
 
@@ -66,10 +70,7 @@ void menu_enable(const gchar *full_path, gboolean enable)
  * +++++++
  * 
  * $Log$
- * Revision 1.2  2007/09/28 12:05:08  vapour
+ * Revision 1.1  2007/09/28 12:05:07  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:40:40  vapour
- * Broke backend.c and backend.h into its component functions.
  *
  */

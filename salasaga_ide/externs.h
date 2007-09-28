@@ -116,7 +116,7 @@ extern HHOOK					win32_keyboard_hook_handle;
 #endif
 
 
-// External includes
+// External includes (from backend.h)
 #include "functions/base64_decode.h"
 #include "functions/base64_encode.h"
 #include "functions/calculate_object_boundaries.h"
@@ -138,6 +138,22 @@ extern HHOOK					win32_keyboard_hook_handle;
 #include "functions/uri_decode.h"
 #include "functions/uri_encode_base64.h"
 
+// External includes (from callbacks.h)
+#include "functions/event_size_allocate_received.h"
+#include "functions/film_strip_handle_changed.h"
+#include "functions/film_strip_handle_released.h"
+#include "functions/film_strip_slide_clicked.h"
+#include "functions/resolution_selector_changed.h"
+#include "functions/timeline_edited_name.h"
+#include "functions/timeline_edited_x_offset_finish.h"
+#include "functions/timeline_edited_x_offset_start.h"
+#include "functions/timeline_edited_y_offset_finish.h"
+#include "functions/timeline_edited_y_offset_start.h"
+#include "functions/working_area_button_press_event.h"
+#include "functions/working_area_button_release_event.h"
+#include "functions/working_area_expose_event.h"
+#include "functions/working_area_motion_notify_event.h"
+#include "functions/zoom_selector_changed.h"
 
 #ifdef __cplusplus
 }
@@ -151,6 +167,9 @@ extern HHOOK					win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.22  2007/09/28 12:05:08  vapour
+ * Broke callbacks.c and callbacks.h into its component functions.
+ *
  * Revision 1.21  2007/09/27 10:41:05  vapour
  * Broke backend.c and backend.h into its component functions.
  *

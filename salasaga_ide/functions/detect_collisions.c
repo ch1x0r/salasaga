@@ -48,7 +48,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "../callbacks.h"
 #include "../gui-functions.h"
 
 
@@ -99,6 +98,9 @@ GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/09/28 12:05:07  vapour
+ * Broke callbacks.c and callbacks.h into its component functions.
+ *
  * Revision 1.1  2007/09/27 10:40:11  vapour
  * Broke backend.c and backend.h into its component functions.
  *

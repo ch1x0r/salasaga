@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function disable or enable a given menu
+ * Flame Project: Function called when the drawing area is resized 
  * 
  * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
  * 
@@ -27,23 +27,17 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-#include <math.h>
 
 // GTK includes
 #include <gtk/gtk.h>
 
+// GConf include (not for windows)
 #ifndef _WIN32
-	// Non-windows code
 	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
 #else
 	// Windows only code
 	#include <windows.h>
 #endif
-
-// XML includes
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 
 // Flame Edit includes
 #include "../flame-types.h"
@@ -51,13 +45,26 @@
 #include "../gui-functions.h"
 
 
-void menu_enable(const gchar *full_path, gboolean enable)
+gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
 	// Local variables
-	GtkWidget			*menu_item;
+	static gint			old_width = 0;
 
-	menu_item = gtk_item_factory_get_item(GTK_ITEM_FACTORY(menu_bar), full_path);
-	gtk_widget_set_sensitive(menu_item, enable);
+
+	// Check if the width of the drawing area has changed
+	if (old_width != right_side->allocation.width)
+	{
+		// The width has been changed, so recalculate the zoom and redraw the drawing area
+		zoom_selector_changed(GTK_WIDGET(zoom_selector), NULL, (gpointer) NULL);
+		old_width = right_side->allocation.width;
+
+		// Resize the drawing area so it draws properly
+		gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), working_width, working_height);
+
+	}
+
+	// Return FALSE to continue event propagation
+	return FALSE;
 }
 
 
@@ -66,10 +73,7 @@ void menu_enable(const gchar *full_path, gboolean enable)
  * +++++++
  * 
  * $Log$
- * Revision 1.2  2007/09/28 12:05:08  vapour
+ * Revision 1.1  2007/09/28 12:05:08  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:40:40  vapour
- * Broke backend.c and backend.h into its component functions.
  *
  */

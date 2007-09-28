@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function disable or enable a given menu
+ * Flame Project: Function called when the name field in the timeline widget is edited 
  * 
  * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
  * 
@@ -27,23 +27,17 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-#include <math.h>
 
 // GTK includes
 #include <gtk/gtk.h>
 
+// GConf include (not for windows)
 #ifndef _WIN32
-	// Non-windows code
 	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
 #else
 	// Windows only code
 	#include <windows.h>
 #endif
-
-// XML includes
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 
 // Flame Edit includes
 #include "../flame-types.h"
@@ -51,13 +45,28 @@
 #include "../gui-functions.h"
 
 
-void menu_enable(const gchar *full_path, gboolean enable)
+void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
 {
 	// Local variables
-	GtkWidget			*menu_item;
+	GList				*layer_pointer;
+	layer				*layer_data;
 
-	menu_item = gtk_item_factory_get_item(GTK_ITEM_FACTORY(menu_bar), full_path);
-	gtk_widget_set_sensitive(menu_item, enable);
+
+	// Set up some pointers to make things easier
+	layer_pointer = ((slide *) current_slide->data)->layers;
+
+	// Work out which layer had its value changed
+	layer_pointer = g_list_first(layer_pointer);
+	layer_pointer = g_list_nth(layer_pointer, atoi(row));
+	layer_data = layer_pointer->data;
+
+	// Update the layer with the new value
+	g_string_printf(layer_data->name, "%s", new_value);
+
+	// Update the timeline widget with the new value too
+	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
+						TIMELINE_NAME, layer_data->name->str,
+						-1);
 }
 
 
@@ -66,10 +75,7 @@ void menu_enable(const gchar *full_path, gboolean enable)
  * +++++++
  * 
  * $Log$
- * Revision 1.2  2007/09/28 12:05:08  vapour
+ * Revision 1.1  2007/09/28 12:05:07  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:40:40  vapour
- * Broke backend.c and backend.h into its component functions.
  *
  */

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function disable or enable a given menu
+ * Flame Project: Function called when the user chooses a new output resolution 
  * 
  * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
  * 
@@ -27,23 +27,17 @@
 #include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-#include <math.h>
 
 // GTK includes
 #include <gtk/gtk.h>
 
+// GConf include (not for windows)
 #ifndef _WIN32
-	// Non-windows code
 	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
 #else
 	// Windows only code
 	#include <windows.h>
 #endif
-
-// XML includes
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 
 // Flame Edit includes
 #include "../flame-types.h"
@@ -51,13 +45,30 @@
 #include "../gui-functions.h"
 
 
-void menu_enable(const gchar *full_path, gboolean enable)
+gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
-	// Local variables
-	GtkWidget			*menu_item;
+	// Temporary variables
+	GString		*tmp_string;
+	gchar		**strings;
 
-	menu_item = gtk_item_factory_get_item(GTK_ITEM_FACTORY(menu_bar), full_path);
-	gtk_widget_set_sensitive(menu_item, enable);
+	// Get the new output resolution
+	tmp_string = g_string_new(NULL);
+	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(resolution_selector)));
+
+	// Parse and store the new project output size
+	tmp_string = g_string_truncate(tmp_string, tmp_string->len - 1);
+	tmp_string = g_string_truncate(tmp_string, tmp_string->len - 1);
+	tmp_string = g_string_truncate(tmp_string, tmp_string->len - 1);
+	strings = g_strsplit(tmp_string->str, "x", 2);
+	output_width = atoi(strings[0]);
+	output_height = atoi(strings[1]);
+
+	// Free the memory allocated in this function
+	g_strfreev(strings);
+	g_string_free(tmp_string, TRUE);
+
+	// Indicate to the calling routine that this function finished fine
+	return TRUE;
 }
 
 
@@ -66,10 +77,7 @@ void menu_enable(const gchar *full_path, gboolean enable)
  * +++++++
  * 
  * $Log$
- * Revision 1.2  2007/09/28 12:05:08  vapour
+ * Revision 1.1  2007/09/28 12:05:07  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:40:40  vapour
- * Broke backend.c and backend.h into its component functions.
  *
  */

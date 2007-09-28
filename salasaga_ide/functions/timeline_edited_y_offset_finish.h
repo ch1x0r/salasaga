@@ -1,8 +1,6 @@
 /*
  * $Id$
  *
- * Flame Project: Function disable or enable a given menu
- * 
  * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
@@ -21,55 +19,29 @@
  * 
  */
 
+#ifndef TIMELINE_EDITED_Y_OFFSET_FINISH_H_
+#define TIMELINE_EDITED_Y_OFFSET_FINISH_H_
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
+// To keep C++ programs that include this header happy
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
 
-// GTK includes
-#include <gtk/gtk.h>
+void timeline_edited_y_offset_finish(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data);
 
-#ifndef _WIN32
-	// Non-windows code
-	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
-#else
-	// Windows only code
-	#include <windows.h>
-#endif
-
-// XML includes
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
-
-// Flame Edit includes
-#include "../flame-types.h"
-#include "../externs.h"
-#include "../gui-functions.h"
-
-
-void menu_enable(const gchar *full_path, gboolean enable)
-{
-	// Local variables
-	GtkWidget			*menu_item;
-
-	menu_item = gtk_item_factory_get_item(GTK_ITEM_FACTORY(menu_bar), full_path);
-	gtk_widget_set_sensitive(menu_item, enable);
+#ifdef __cplusplus
 }
+#endif // __cplusplus
+
+#endif /*TIMELINE_EDITED_Y_OFFSET_FINISH_H_*/
 
 
-/*
+/* 
  * History
  * +++++++
  * 
  * $Log$
- * Revision 1.2  2007/09/28 12:05:08  vapour
+ * Revision 1.1  2007/09/28 12:05:07  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:40:40  vapour
- * Broke backend.c and backend.h into its component functions.
  *
  */
