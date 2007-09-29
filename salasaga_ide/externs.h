@@ -155,6 +155,15 @@ extern HHOOK					win32_keyboard_hook_handle;
 #include "functions/working_area_motion_notify_event.h"
 #include "functions/zoom_selector_changed.h"
 
+// External includes (from flame-edit.c)
+#include "functions/create_film_strip.h"
+#include "functions/create_menu_bar.h"
+#include "functions/create_time_line.h"
+#include "functions/create_toolbar.h"
+#include "functions/create_working_area.h"
+#include "functions/quit_event.h"
+
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus
@@ -167,6 +176,9 @@ extern HHOOK					win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.23  2007/09/29 02:42:28  vapour
+ * Broke flame-edit.c into its component functions.
+ *
  * Revision 1.22  2007/09/28 12:05:08  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
  *
