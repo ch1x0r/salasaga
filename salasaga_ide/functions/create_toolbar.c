@@ -49,7 +49,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "../gui-functions.h"
 
 
 GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
@@ -224,6 +223,9 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/09/29 04:22:15  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.1  2007/09/29 02:42:25  vapour
  * Broke flame-edit.c into its component functions.
  *

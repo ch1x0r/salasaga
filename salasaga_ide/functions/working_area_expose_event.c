@@ -42,7 +42,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "../gui-functions.h"
 
 
 gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
@@ -69,6 +68,9 @@ gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpo
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/09/29 04:22:12  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.1  2007/09/28 12:05:05  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
  *

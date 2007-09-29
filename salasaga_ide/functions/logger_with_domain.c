@@ -48,7 +48,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "../gui-functions.h"
 
 
 void logger_with_domain(const gchar *log_domain, GLogLevelFlags log_level, const gchar *message, gpointer user_data)
@@ -62,6 +61,9 @@ void logger_with_domain(const gchar *log_domain, GLogLevelFlags log_level, const
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/09/29 04:22:12  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.2  2007/09/28 12:05:05  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
  *

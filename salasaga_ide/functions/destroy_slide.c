@@ -48,7 +48,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "../gui-functions.h"
 
 
 // fixme5: Had to comment out some of the "free's", as they were causing segfaults.  Thus this function needs to be rewritten properly at some point
@@ -129,6 +128,9 @@ void destroy_slide(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/09/29 04:22:13  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.2  2007/09/28 12:05:07  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
  *

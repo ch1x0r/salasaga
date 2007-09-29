@@ -48,7 +48,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "../gui-functions.h"
 
 
 GString *base64_decode(GString *input_string, GString *output_string)
@@ -212,6 +211,9 @@ GString *base64_decode(GString *input_string, GString *output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/09/29 04:22:12  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.2  2007/09/28 12:05:06  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
  *

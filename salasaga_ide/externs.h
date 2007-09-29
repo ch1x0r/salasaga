@@ -163,6 +163,57 @@ extern HHOOK					win32_keyboard_hook_handle;
 #include "functions/create_working_area.h"
 #include "functions/quit_event.h"
 
+// External includes (from gui-functions.h)
+#include "functions/compress_layers_inner.h"
+#include "functions/compress_layers.h"
+#include "functions/construct_timeline_widget.h"
+#include "functions/create_resolution_selector.h"
+#include "functions/create_timeline_slider.h"
+#include "functions/create_tooltips.h"
+#include "functions/disable_layer_toolbar_buttons.h"
+#include "functions/disable_main_toolbar_buttons.h"
+#include "functions/display_dialog_empty.h"
+#include "functions/display_dialog_highlight.h"
+#include "functions/display_dialog_image.h"
+#include "functions/display_dialog_mouse.h"
+#include "functions/display_dialog_text.h"
+#include "functions/display_warning.h"
+#include "functions/draw_bounding_box.h"
+#include "functions/draw_highlight_box.h"
+#include "functions/draw_timeline.h"
+#include "functions/draw_workspace.h"
+#include "functions/enable_layer_toolbar_buttons.h"
+#include "functions/enable_main_toolbar_buttons.h"
+#include "functions/image_crop.h"
+#include "functions/layer_delete.h"
+#include "functions/layer_edit.h"
+#include "functions/layer_move_down.h"
+#include "functions/layer_move_up.h"
+#include "functions/layer_new_highlight.h"
+#include "functions/layer_new_image.h"
+#include "functions/layer_new_mouse.h"
+#include "functions/layer_new_text.h"
+#include "functions/menu_edit_preferences.h"
+#include "functions/menu_export_flash_animation.h"
+#include "functions/menu_export_svg_animation.h"
+#include "functions/menu_file_new.h"
+#include "functions/menu_file_open.h"
+#include "functions/menu_file_save.h"
+#include "functions/menu_help_about.h"
+#include "functions/menu_help_register.h"
+#include "functions/menu_help_survey.h"
+#include "functions/menu_help_website.h"
+#include "functions/menu_screenshots_capture.h"
+#include "functions/menu_screenshots_import.h"
+#include "functions/project_crop.h"
+#include "functions/slide_delete.h"
+#include "functions/slide_insert.h"
+#include "functions/slide_move_bottom.h"
+#include "functions/slide_move_down.h"
+#include "functions/slide_move_top.h"
+#include "functions/slide_move_up.h"
+#include "functions/slide_name_reset.h"
+#include "functions/slide_name_set.h"
 
 #ifdef __cplusplus
 }
@@ -176,6 +227,9 @@ extern HHOOK					win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.24  2007/09/29 04:22:18  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.23  2007/09/29 02:42:28  vapour
  * Broke flame-edit.c into its component functions.
  *

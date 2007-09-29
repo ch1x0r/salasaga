@@ -48,7 +48,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "../gui-functions.h"
 
 
 GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
@@ -279,6 +278,9 @@ printf("The animation is %u frames long\n", total_frames);
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/09/29 04:22:12  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.2  2007/09/28 12:05:05  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
  *

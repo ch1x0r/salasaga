@@ -1,0 +1,160 @@
+/*
+ * $Id$
+ *
+ * Flame Project: Function to draw a highlight box on a GDK pixbuf 
+ * 
+ * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ */
+
+// Standard includes
+#include <stdlib.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+#include <math.h>
+
+// GTK includes
+#include <glib/gstdio.h>
+#include <gtk/gtk.h>
+
+// Gnome includes
+#include <libgnome/gnome-url.h>
+
+// XML includes
+#include <libxml/xmlsave.h>
+
+#ifdef _WIN32
+	// Windows only code
+	#include <windows.h>
+	#include "flame-keycapture.h"
+#endif
+
+// Flame Edit includes
+#include "../flame-types.h"
+#include "../externs.h"
+
+
+void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gint width, gint height, guint32 fill_color, guint32 border_color)
+{
+	// Local variables
+	GdkPixbuf			*highlight_pixbuf;			// GDK Pixbuf used for highlighting
+
+
+	// Create a horizontal line
+	highlight_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width, 2);
+	if (NULL == highlight_pixbuf)
+	{
+		display_warning("ED52: Not enough memory for pixbuf allocation");
+		return;
+	}
+	gdk_pixbuf_fill(highlight_pixbuf, border_color);
+
+	// Composite the line onto the backing store - top line
+	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
+		tmp_pixbuf,							// Destination pixbuf
+		x_offset,							// X offset
+		y_offset,							// Y offset
+		width,								// Width
+		2,								// Height
+		0, 0,								// Source offsets
+		1, 1,								// Scale factor (1 == no scale)
+		GDK_INTERP_NEAREST,						// Scaling type
+		255);								// Alpha
+
+	// Composite the line onto the backing store - bottom line
+	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
+		tmp_pixbuf,							// Destination pixbuf
+		x_offset,							// X offset
+		y_offset + height - 1,						// Y offset
+		width,								// Width
+		2,								// Height
+		0, 0,								// Source offsets
+		1, 1,								// Scale factor (1 == no scale)
+		GDK_INTERP_NEAREST,						// Scaling type
+		255);								// Alpha
+
+	// Free the temporary pixbuf
+	g_object_unref(highlight_pixbuf);
+
+	// Create a vertical line
+	highlight_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, 2, height);
+	if (NULL == highlight_pixbuf)
+	{
+		display_warning("ED53: Not enough memory for pixbuf allocation");
+		return;
+	}
+	gdk_pixbuf_fill(highlight_pixbuf, border_color);
+
+	// Composite the line onto the backing store - left side
+	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
+		tmp_pixbuf,							// Destination pixbuf
+		x_offset,							// X offset
+		y_offset,							// Y offset
+		2,								// Width
+		height,								// Height
+		0, 0,								// Source offsets
+		1, 1,								// Scale factor (1 == no scale)
+		GDK_INTERP_NEAREST,						// Scaling type
+		255);								// Alpha
+
+	// Composite the line onto the backing store - right side
+	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
+		tmp_pixbuf,							// Destination pixbuf
+		x_offset + width - 1,						// X offset
+		y_offset,							// Y offset
+		2,								// Width
+		height,								// Height
+		0, 0,								// Source offsets
+		1, 1,								// Scale factor (1 == no scale)
+		GDK_INTERP_NEAREST,						// Scaling type
+		255);								// Alpha
+
+	// Free the temporary pixbuf
+	g_object_unref(highlight_pixbuf);
+
+	// Create the inner highlight box
+	highlight_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width - 2, height - 2);
+	gdk_pixbuf_fill(highlight_pixbuf, fill_color);
+
+	// Composite the inner highlight box onto the backing store
+	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
+			     tmp_pixbuf,					// Destination pixbuf
+			     x_offset + 1,					// X offset
+			     y_offset + 1,					// Y offset
+			     width - 2,						// Width
+			     height - 2,					// Height
+			     0, 0,						// Source offsets
+			     1, 1,						// Scale factor (1 == no scale)
+			     GDK_INTERP_NEAREST,				// Scaling type
+			     255);						// Alpha
+
+	// Free the temporary pixbuf
+	g_object_unref(highlight_pixbuf);
+	return;
+}
+
+
+/*
+ * History
+ * +++++++
+ * 
+ * $Log$
+ * Revision 1.1  2007/09/29 04:22:13  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
+ */

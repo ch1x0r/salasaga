@@ -48,7 +48,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "../gui-functions.h"
 
 
 void menu_file_save_layer(gpointer element, gpointer user_data)
@@ -244,6 +243,9 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/09/29 04:22:13  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.2  2007/09/28 12:05:07  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
  *

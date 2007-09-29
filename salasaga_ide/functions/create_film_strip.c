@@ -49,7 +49,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "../gui-functions.h"
 
 
 void create_film_strip()
@@ -114,6 +113,9 @@ void create_film_strip()
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/09/29 04:22:12  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.1  2007/09/29 02:42:26  vapour
  * Broke flame-edit.c into its component functions.
  *

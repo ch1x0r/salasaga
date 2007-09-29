@@ -48,7 +48,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "../gui-functions.h"
 
 
 gboolean base64_encode(gpointer data, guint length, gchar **output_string)
@@ -203,6 +202,9 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/09/29 04:22:14  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.2  2007/09/28 12:05:08  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
  *

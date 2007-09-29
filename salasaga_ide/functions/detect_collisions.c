@@ -48,7 +48,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "../gui-functions.h"
 
 
 // Function to detect collisions between a given coordinate and a GList of boundary boxes
@@ -98,6 +97,9 @@ GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/09/29 04:22:13  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.2  2007/09/28 12:05:07  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
  *

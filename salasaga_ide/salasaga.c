@@ -49,7 +49,6 @@
 // Flame Edit includes
 #include "flame-types.h"
 #include "externs.h"
-#include "gui-functions.h"
 
 
 // Global variables
@@ -958,6 +957,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.64  2007/09/29 04:22:18  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.63  2007/09/29 02:42:28  vapour
  * Broke flame-edit.c into its component functions.
  *

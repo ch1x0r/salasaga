@@ -49,7 +49,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "../gui-functions.h"
 
 
 void create_menu_bar()
@@ -139,6 +138,9 @@ void create_menu_bar()
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/09/29 04:22:16  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.1  2007/09/29 02:42:25  vapour
  * Broke flame-edit.c into its component functions.
  *

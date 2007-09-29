@@ -42,7 +42,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "../gui-functions.h"
 
 
 void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
@@ -102,6 +101,9 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/09/29 04:22:16  vapour
+ * Broke gui-functions.c and gui-functions.h into its component functions.
+ *
  * Revision 1.1  2007/09/28 12:05:07  vapour
  * Broke callbacks.c and callbacks.h into its component functions.
  *
