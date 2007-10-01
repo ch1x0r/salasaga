@@ -39,8 +39,32 @@
 
 GByteArray *flash_create_tag_bitmap(layer *layer_data)
 {
-	// Stub function for now
-	return NULL;
+	// Local variables
+	GByteArray			*output_array;
+	guint16				record_header;
+	guint16				tag_code;
+	guint16				tag_header;
+	guint16				tag_length;
+
+
+	// Initialise variables
+	output_array = g_byte_array_new();
+	record_header = 0;
+
+	// Not sure if we should use SWF_TAG_DEFINE_BITS_JPEG2 or SWF_TAG_DEFINE_BITS_LOSSLESS
+	// Might start with SWF_TAG_DEFINE_BITS_JPEG2, as I think we already have jpeg encoding functions
+	tag_code = SWF_TAG_DEFINE_BITS_JPEG2 << 6;
+
+	// Fixme2: Needs to be written
+
+	tag_length = 0;  // Fixme3: Needs to be figured out
+	tag_header = tag_code | tag_length;
+
+	// Prepend the tag type and length
+	g_byte_array_prepend(output_array, (guint8 *) &tag_header, 2);
+
+	// Return the fully formed dictionary shape
+	return output_array;
 }
 
 
@@ -49,6 +73,9 @@ GByteArray *flash_create_tag_bitmap(layer *layer_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/01 13:18:54  vapour
+ * Started giving thought to the initial stub swf bitmap definition function.
+ *
  * Revision 1.1  2007/10/01 12:14:17  vapour
  * Added initial stub function to create a bitmap layer in flash.
  *
