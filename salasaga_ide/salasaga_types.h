@@ -223,34 +223,40 @@ typedef struct
 } swf_frame_element;
 
 // Tag types present in swf files
-#define DEFINE_SHAPE_3			32
+#define SWF_TAG_DEFINE_SHAPE_3				32
 
-#define PLACE_OBJECT_2			26
-#define REMOVE_OBJECT_2			28
-#define SHOW_FRAME				1
+#define SWF_TAG_PLACE_OBJECT_2				26
+#define SWF_TAG_REMOVE_OBJECT_2				28
+#define SWF_TAG_SHOW_FRAME					1
 
-#define SET_BACKGROUND_COLOUR	9
-#define FRAME_LABEL				43
-#define PROTECT					24
-#define END						0
-#define EXPORT_ASSETS			56
-#define IMPORT_ASSETS			57
-#define ENABLE_DEBUGGER_2		64
-#define SCRIPT_LIMITS			65
-#define SET_TAB_INDEX			66
-#define DO_ACTION				12
+#define SWF_TAG_SET_BACKGROUND_COLOUR		9
+#define SWF_TAG_FRAME_LABEL					43
+#define SWF_TAG_PROTECT						24
+#define SWF_TAG_END							0
+#define SWF_TAG_EXPORT_ASSETS				56
+#define SWF_TAG_IMPORT_ASSETS				57
+#define SWF_TAG_ENABLE_DEBUGGER_2			64
+#define SWF_TAG_SCRIPT_LIMITS				65
+#define SWF_TAG_SET_TAB_INDEX				66
+#define SWF_TAG_DO_ACTION					12
 
 // Action types present in swf files
-#define ACTION_GOTO_FRAME		0x81
-#define ACTION_NEXT_FRAME		0x04
-#define ACTION_PREVIOUS_FRAME	0x05
-#define ACTION_PLAY				0x06
-#define ACTION_STOP				0x07
-#define ACTION_TOGGLE_QUALITY	0x08
-#define ACTION_STOP_SOUNDS		0x09
-#define ACTION_WAIT_FOR_FRAME	0x8A
-#define ACTION_SET_TARGET		0x8B
-#define ACTION_GO_TO_LABEL		0x8C
+#define SWF_ACTION_GOTO_FRAME				0x81
+#define SWF_ACTION_NEXT_FRAME				0x04
+#define SWF_ACTION_PREVIOUS_FRAME			0x05
+#define SWF_ACTION_PLAY						0x06
+#define SWF_ACTION_STOP						0x07
+#define SWF_ACTION_TOGGLE_QUALITY			0x08
+#define SWF_ACTION_STOP_SOUNDS				0x09
+#define SWF_ACTION_WAIT_FOR_FRAME			0x8A
+#define SWF_ACTION_SET_TARGET				0x8B
+#define SWF_ACTION_GO_TO_LABEL				0x8C
+
+// Swf bitmap tags
+#define SWF_TAG_DEFINE_BITS_JPEG2			21
+#define SWF_TAG_DEFINE_BITS_JPEG3			35
+#define SWF_TAG_DEFINE_BITS_LOSSLESS		20
+#define SWF_TAG_DEFINE_BITS_LOSSLESS2		36
 
 #ifdef __cplusplus
 }
@@ -264,6 +270,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.36  2007/10/01 13:16:35  vapour
+ * Added some initial swf tags useful for defining bitmaps.
+ *
  * Revision 1.35  2007/10/01 12:17:52  vapour
  * Added comment about not having visibiliy toggle any more and perhaps needing it.
  *
