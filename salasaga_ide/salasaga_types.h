@@ -129,6 +129,7 @@ typedef struct
 	GString				*name;
 	GtkTreeIter			*row_iter;
 	GString				*external_link;
+	// fixme5: Noticing that we don't seem to have a visibility on/off toggle.  Will likely need to add that back in
 } layer;
 
 // Defines the properties making up an empty layer
@@ -263,6 +264,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.35  2007/10/01 12:17:52  vapour
+ * Added comment about not having visibiliy toggle any more and perhaps needing it.
+ *
  * Revision 1.34  2007/10/01 11:06:50  vapour
  * Updated version number to 0.7.8-pre.
  *
