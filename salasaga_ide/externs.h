@@ -43,14 +43,14 @@ extern GString				*icon_extension;
 extern GString				*icon_path;
 extern GString				*file_name;
 extern gboolean				film_strip_being_resized;
-extern GtkTreeViewColumn		*film_strip_column;
-extern GtkScrolledWindow		*film_strip_container;
+extern GtkTreeViewColumn	*film_strip_column;
+extern GtkScrolledWindow	*film_strip_container;
 extern GtkListStore			*film_strip_store;
 extern GtkWidget			*film_strip_view;
 extern guint				frames_per_second;
 extern GtkWidget			*main_drawing_area;
 extern GtkWidget			*main_window;
-extern GtkItemFactory			*menu_bar;
+extern GtkItemFactory		*menu_bar;
 extern GtkTable				*message_bar;
 extern gboolean				mouse_dragging;
 extern GdkPixbuf			*mouse_ptr_pixbuf;
@@ -61,8 +61,8 @@ extern GtkWidget			*right_side;
 extern GList				*slides;
 extern GtkWidget			*status_bar;
 extern guint				statusbar_context;
-extern gint				stored_x;
-extern gint				stored_y;
+extern gint					stored_x;
+extern gint					stored_y;
 extern GtkWidget			*time_line_container;
 extern GtkWidget			*time_line_vbox;
 extern GtkWidget			*working;
@@ -106,13 +106,13 @@ extern GString				*project_name;
 extern guint				project_width;
 extern guint				slide_length;
 
-extern ResolutionStructure		res_array[];
-extern gint				num_res_items;
+extern ResolutionStructure	res_array[];
+extern gint					num_res_items;
 
 
 #ifdef _WIN32
 // Windows only variables
-extern HHOOK					win32_keyboard_hook_handle;
+extern HHOOK				win32_keyboard_hook_handle;
 #endif
 
 
@@ -215,6 +215,9 @@ extern HHOOK					win32_keyboard_hook_handle;
 #include "functions/slide_name_reset.h"
 #include "functions/slide_name_set.h"
 
+// Functions related to exporting Flash
+#include "functions/flash_create_tag_bitmap.h"
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus
@@ -227,6 +230,9 @@ extern HHOOK					win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.25  2007/10/01 12:16:10  vapour
+ * Added extern for the declaration of flash_create_tag_bitmap().
+ *
  * Revision 1.24  2007/09/29 04:22:18  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *
