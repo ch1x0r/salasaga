@@ -32,7 +32,7 @@ extern "C" {
 
 // Set some application constants
 #define APP_NAME "Flame Project Editing GUI"
-#define	APP_VERSION "0.7.7.12 Built: " __DATE__
+#define	APP_VERSION "0.7.8-pre"
 
 // Define a run time check that hasn't been added to GTK
 #define GTK_TYPE_TREE_ITER		(gtk_tree_iter_get_type ())
@@ -186,7 +186,7 @@ typedef struct
 	guint				rendered_height;
 	GdkColor			text_color;
 	gfloat				font_size;
-	GtkTextBuffer			*text_buffer;
+	GtkTextBuffer		*text_buffer;
 } layer_text;
 
 // Resolution storing structure
@@ -203,16 +203,16 @@ typedef struct
 	GtkTooltips			*tooltip;
 	GString				*name;
 	GtkWidget			*timeline_widget;
-	GtkListStore			*layer_store;
+	GtkListStore		*layer_store;
 	guint				duration;
 } slide;
 
 // Defines the information needed for each element of the swf timing array
 typedef struct
 {
-	gboolean			action_this;				// Process this element?
+	gboolean			action_this;			// Process this element?
 	guint				layer_type;				// The type of element being displayed
-	GObject				*layer_data;				// Pointer to the layer data
+	GObject				*layer_data;			// Pointer to the layer data
 	guint				char_id;				// Unique id of the character
 	gboolean			add;					// Add to the display list in this frame?
 	gboolean			remove;					// Remove from the display list in this frame?
@@ -226,28 +226,28 @@ typedef struct
 
 #define PLACE_OBJECT_2			26
 #define REMOVE_OBJECT_2			28
-#define SHOW_FRAME			1
+#define SHOW_FRAME				1
 
-#define SET_BACKGROUND_COLOUR		9
-#define FRAME_LABEL			43
-#define PROTECT				24
-#define END				0
+#define SET_BACKGROUND_COLOUR	9
+#define FRAME_LABEL				43
+#define PROTECT					24
+#define END						0
 #define EXPORT_ASSETS			56
 #define IMPORT_ASSETS			57
 #define ENABLE_DEBUGGER_2		64
 #define SCRIPT_LIMITS			65
 #define SET_TAB_INDEX			66
-#define DO_ACTION			12
+#define DO_ACTION				12
 
 // Action types present in swf files
 #define ACTION_GOTO_FRAME		0x81
 #define ACTION_NEXT_FRAME		0x04
-#define ACTION_PREVIOUS_FRAME		0x05
-#define ACTION_PLAY			0x06
-#define ACTION_STOP			0x07
-#define ACTION_TOGGLE_QUALITY		0x08
+#define ACTION_PREVIOUS_FRAME	0x05
+#define ACTION_PLAY				0x06
+#define ACTION_STOP				0x07
+#define ACTION_TOGGLE_QUALITY	0x08
 #define ACTION_STOP_SOUNDS		0x09
-#define ACTION_WAIT_FOR_FRAME		0x8A
+#define ACTION_WAIT_FOR_FRAME	0x8A
 #define ACTION_SET_TARGET		0x8B
 #define ACTION_GO_TO_LABEL		0x8C
 
@@ -263,6 +263,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.34  2007/10/01 11:06:50  vapour
+ * Updated version number to 0.7.8-pre.
+ *
  * Revision 1.33  2007/09/24 12:28:40  vapour
  * Updated version number to 0.7.7.12, to match the windows release.
  *
