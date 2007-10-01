@@ -78,7 +78,7 @@ GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
 
 
 	// Initialise variables
-	char_counter = 0;
+	char_counter = 1;  // Character 0 is reserved in Flash, so we avoid it
 	total_frames = 0;
 
 // For now, I'm using a two pass per slide approach
@@ -289,6 +289,9 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2007/10/01 13:17:46  vapour
+ * Updated swf character numbering to start with 1.
+ *
  * Revision 1.4  2007/10/01 12:19:06  vapour
  * Updated to call stub function flash_create_tag_bitmap().
  *
