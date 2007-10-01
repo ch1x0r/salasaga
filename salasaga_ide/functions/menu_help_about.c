@@ -54,12 +54,17 @@ void menu_help_about(void)
 	// Local variables
 	GtkAboutDialog		*about_dialog;
 	const gchar			*authors[] = {"Justin Clift", NULL};
+	GString				*tmp_gstring;
 	gint				tmp_int;
+
+	// Add the build date
+	tmp_gstring = g_string_new(NULL);
+	g_string_printf(tmp_gstring, "%s. Built on: %s", APP_VERSION, __DATE__);
 
 	// Create an About dialog
 	about_dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 	gtk_about_dialog_set_name(about_dialog, APP_NAME);
-	gtk_about_dialog_set_version(about_dialog, APP_VERSION);
+	gtk_about_dialog_set_version(about_dialog, tmp_gstring->str);
 	gtk_about_dialog_set_copyright(about_dialog, "(C) 2005-2007 Justin Clift <justin@postgresql.org>");
 	gtk_about_dialog_set_license(about_dialog, "LGPL");
 	gtk_about_dialog_set_license(about_dialog, NULL);
@@ -68,6 +73,9 @@ void menu_help_about(void)
 	// Display the dialog box
 	tmp_int = gtk_dialog_run(GTK_DIALOG(about_dialog));
 	gtk_widget_destroy(GTK_WIDGET(about_dialog));
+
+	// Free the resources allocated in this function
+	g_string_free(tmp_gstring, TRUE);
 }
 
 
@@ -76,6 +84,9 @@ void menu_help_about(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/01 11:07:33  vapour
+ * Updated to show the build date here only.
+ *
  * Revision 1.1  2007/09/29 04:22:14  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *
