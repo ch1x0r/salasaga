@@ -73,12 +73,21 @@ GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
 	gint				element_y_position_increment = 0;
 	gint				element_y_position_start = 0;
 
+	GByteArray			*tmp_byte_array;		// Temporary byte array
 	guint				tmp_integer;			// Temporary integer
 
 
-	// Initialise some things
+	// Initialise variables
 	char_counter = 0;
 	total_frames = 0;
+
+// For now, I'm using a two pass per slide approach
+//	1st pass gathers timing info, and creates an array of timing information for each slide
+//		The array has one element for each frame times each layer of the slide (i.e. num elements = num frames x num layers)
+//		Also creates the dictionary of shapes, and adds them to an output buffer
+//	2nd pass writes out the actions to happen for the slide, relying on the dictionary images created in the first pass
+// (sounds like a reasonable approach (theory) for a first go, lets see it works in reality though)
+
 
 	// For each slide, work out how many layers there are and how many frames the entire slide lasts for
 	slides = g_list_first(slides);
@@ -117,7 +126,7 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 		this_slide_data = g_list_nth_data(slides, slide_counter);
 
 		// Process each layer in turn.  For every frame the layer is in, store in the array
-		// whether the object in the layer is visible, it's position, transparency, and other details
+		// whether the object in the layer is visible, it's position, transparency, etc
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 		{
@@ -133,13 +142,20 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 			switch (this_layer_data->object_type)
 			{
 				case TYPE_GDK_PIXBUF:
-					// We're processing a image layer
+					// We're processing an image layer
 					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_type = TYPE_GDK_PIXBUF;
 					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_data = this_layer_data->object_data;
 					element_x_position_start = ((layer_image *) this_layer_data->object_data)->x_offset_start;
 					element_y_position_start = ((layer_image *) this_layer_data->object_data)->y_offset_start;
 					element_x_position_increment = (((layer_image *) this_layer_data->object_data)->x_offset_finish - ((layer_image *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 					element_y_position_increment = (((layer_image *) this_layer_data->object_data)->y_offset_finish - ((layer_image *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
+
+					// Create the dictionary shape for this layer
+					tmp_byte_array = flash_create_tag_bitmap(this_layer_data);
+
+					// Add the dictionary stream to the output buffer
+					swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
+
 					break;
 
 				case TYPE_HIGHLIGHT:
@@ -188,6 +204,8 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 				swf_timing_array[(layer_counter * max_frames) + element_counter].char_id = char_counter;
 
 				// Store the x and y positions for each frame
+				// HMMMM, I think using element_counter in "element_counter * element_x_position_increment" here is wrong.
+				// It should like be a separate counter that starts with 0
 				swf_timing_array[(layer_counter * max_frames) + element_counter].x_position = element_x_position_start + (element_counter * element_x_position_increment);
 				swf_timing_array[(layer_counter * max_frames) + element_counter].y_position = element_y_position_start + (element_counter * element_y_position_increment);
 
@@ -199,75 +217,68 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 			// Increment the character counter
 			char_counter++;
 		}
-	}
-printf("The animation is %u frames long\n", total_frames);
 
-
-	// * After all of the layers have been pre-processed, there remains an array *
-	// * with the per frame info of what should be where in the output swf       *
-
-	// Process the swf timing array, creating the swf
-	for (tmp_integer = 0; tmp_integer < max_frames; tmp_integer++)  // This loops _frame_ number of times
-	{
-		for (element_counter = 0; element_counter < num_layers; element_counter++)  // This loops _num_layers_ of times
+		// * After all of the layers have been pre-processed, there remains an array *
+		// * with the per frame info of what should be where in the output swf       *
+		for (tmp_integer = 0; tmp_integer < max_frames; tmp_integer++)  // This loops _frame_ number of times
 		{
-			// For each frame, access all of the layers then move to the next frame
-			if (TRUE == swf_timing_array[(tmp_integer * max_frames) + element_counter].action_this)
+			for (element_counter = 0; element_counter < num_layers; element_counter++)  // This loops _num_layers_ of times
 			{
-				// * There is something to be done in this frame for this layer *
-
-				if (TRUE == swf_timing_array[(tmp_integer * max_frames) + element_counter].add)
+				// For each frame, access all of the layers then move to the next frame
+				if (TRUE == swf_timing_array[(tmp_integer * max_frames) + element_counter].action_this)
 				{
-					// We need to create the item in the swf dictionary, then add it to the swf display list
-					switch (swf_timing_array[(tmp_integer * max_frames) + element_counter].layer_type)
-					{
-						case TYPE_GDK_PIXBUF:
-							// We're processing a image layer
+					// * There is something to be done in this frame for this layer *
 
-							// Create the swf with DefineShape3
-							// fixme3: Needs to be written
-							swf_buffer = g_byte_array_append(swf_buffer, (const guint8 *) "bits go here", 12);
+					if (TRUE == swf_timing_array[(tmp_integer * max_frames) + element_counter].add)
+					{
+						// Add the character to the swf display list
+						switch (swf_timing_array[(tmp_integer * max_frames) + element_counter].layer_type)
+						{
+							case TYPE_GDK_PIXBUF:
+								// We're processing a image layer
+
+								// fixme3: Needs to be written
 
 // Header RECORDHEADER Tag type = 32
 // ShapeId UI16 ID for this character
 // ShapeBounds RECT Bounds of the shape
 // Shapes SHAPEWITHSTYLE Shape information
 
-							break;
+								break;
 
-						case TYPE_HIGHLIGHT:
-							// We're processing a highlight layer
+							case TYPE_HIGHLIGHT:
+								// We're processing a highlight layer
 
-							// fixme3: Needs to be written
+								// fixme3: Needs to be written
 
-							break;
+								break;
 
-						case TYPE_MOUSE_CURSOR:
-							// We're processing a mouse layer
+							case TYPE_MOUSE_CURSOR:
+								// We're processing a mouse layer
 
-							// fixme3: Needs to be written
+								// fixme3: Needs to be written
 
-							break;
+								break;
 
-						case TYPE_TEXT:
-							// We're processing a text layer
+							case TYPE_TEXT:
+								// We're processing a text layer
 
-							// fixme3: Needs to be written
+								// fixme3: Needs to be written
 
-							break;
+								break;
 
-						default:
-							// Unknown type
-							display_warning("ED84: Unknown layer type in swf output");
-							break;
+							default:
+								// Unknown type
+								display_warning("ED84: Unknown layer type in swf output");
+								break;
+						}
 					}
 				}
-			}
-		}		
+			}		
+		}
 	}
 
-	// Process this array, first creating the dictionary of shapes
-
+	printf("The animation is %u frames long\n", total_frames);
 
 	return swf_buffer;
 }
@@ -278,6 +289,9 @@ printf("The animation is %u frames long\n", total_frames);
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2007/10/01 12:19:06  vapour
+ * Updated to call stub function flash_create_tag_bitmap().
+ *
  * Revision 1.3  2007/09/29 04:22:12  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *
