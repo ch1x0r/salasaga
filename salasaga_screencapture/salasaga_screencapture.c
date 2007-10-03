@@ -317,7 +317,7 @@ gint main(gint argc, gchar *argv[])
 
 #ifndef _WIN32
 	// Non-windows code to save the screenshot
-	gdk_pixbuf_save(screenshot, full_file_name, "png", NULL, NULL);
+	gdk_pixbuf_save(screenshot, full_file_name, "png", NULL, "tEXt::Software", "The Flame Project: http://www.flameproject.org", NULL);
 #else
 	// * Windows code to save the screenshot bitmap as a PNG file *
 
@@ -441,6 +441,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2007/10/03 13:03:08  vapour
+ * Updated PNG creation code for non windows to save the URL for Flame in the Software text string.
+ *
  * Revision 1.9  2007/09/17 13:41:39  vapour
  * Writing PNG files now works (on my pc at least).
  *
