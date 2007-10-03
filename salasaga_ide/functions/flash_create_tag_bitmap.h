@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-GByteArray *flash_create_tag_bitmap(layer *layer_data);
+GByteArray *flash_create_tag_bitmap(layer_image *layer_data);
 
 #ifdef __cplusplus
 }
@@ -41,6 +41,9 @@ GByteArray *flash_create_tag_bitmap(layer *layer_data);
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/03 13:40:42  vapour
+ * Tweaked function definition.
+ *
  * Revision 1.1  2007/10/01 12:14:17  vapour
  * Added initial stub function to create a bitmap layer in flash.
  *
