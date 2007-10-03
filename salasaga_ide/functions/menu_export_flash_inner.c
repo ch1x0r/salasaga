@@ -151,7 +151,7 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 					element_y_position_increment = (((layer_image *) this_layer_data->object_data)->y_offset_finish - ((layer_image *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 
 					// Create the dictionary shape for this layer
-					tmp_byte_array = flash_create_tag_bitmap(this_layer_data);
+					tmp_byte_array = flash_create_tag_bitmap((layer_image *) this_layer_data->object_data);
 
 					// Add the dictionary stream to the output buffer
 					swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
@@ -289,6 +289,9 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2007/10/03 13:40:04  vapour
+ * Updated parameter in call to flash bitmap function.
+ *
  * Revision 1.5  2007/10/01 13:17:46  vapour
  * Updated swf character numbering to start with 1.
  *
