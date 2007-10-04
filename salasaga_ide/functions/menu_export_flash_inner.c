@@ -166,6 +166,13 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 					element_y_position_start = ((layer_highlight *) this_layer_data->object_data)->y_offset_start;
 					element_x_position_increment = (((layer_highlight *) this_layer_data->object_data)->x_offset_finish - ((layer_highlight *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 					element_y_position_increment = (((layer_highlight *) this_layer_data->object_data)->y_offset_finish - ((layer_highlight *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
+
+					// Create the dictionary shape for this layer
+					tmp_byte_array = flash_create_tag_highlight((layer_highlight *) this_layer_data->object_data);
+
+					// Add the dictionary stream to the output buffer
+					swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
+
 					break;
 
 				case TYPE_MOUSE_CURSOR:
@@ -176,6 +183,13 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 					element_y_position_start = ((layer_mouse *) this_layer_data->object_data)->y_offset_start;
 					element_x_position_increment = (((layer_mouse *) this_layer_data->object_data)->x_offset_finish - ((layer_mouse *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 					element_y_position_increment = (((layer_mouse *) this_layer_data->object_data)->y_offset_finish - ((layer_mouse *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
+
+					// Create the dictionary shape for this layer
+					tmp_byte_array = flash_create_tag_mouse((layer_mouse *) this_layer_data->object_data);
+
+					// Add the dictionary stream to the output buffer
+					swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
+
 					break;
 
 				case TYPE_TEXT:
@@ -186,6 +200,13 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 					element_y_position_start = ((layer_text *) this_layer_data->object_data)->y_offset_start;
 					element_x_position_increment = (((layer_text *) this_layer_data->object_data)->x_offset_finish - ((layer_text *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 					element_y_position_increment = (((layer_text *) this_layer_data->object_data)->y_offset_finish - ((layer_text *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
+
+					// Create the dictionary shape for this layer
+					tmp_byte_array = flash_create_tag_text((layer_text *) this_layer_data->object_data);
+
+					// Add the dictionary stream to the output buffer
+					swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
+
 					break;
 
 				default:
@@ -289,6 +310,9 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2007/10/04 11:50:27  vapour
+ * Added initial (non working) stub functions for the creation of swf byte code for hightlight, mouse cursor, and text layers.
+ *
  * Revision 1.6  2007/10/03 13:40:04  vapour
  * Updated parameter in call to flash bitmap function.
  *

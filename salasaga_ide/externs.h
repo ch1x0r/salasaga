@@ -217,6 +217,9 @@ extern HHOOK				win32_keyboard_hook_handle;
 
 // Functions related to exporting Flash
 #include "functions/flash_create_tag_bitmap.h"
+#include "functions/flash_create_tag_highlight.h"
+#include "functions/flash_create_tag_mouse.h"
+#include "functions/flash_create_tag_text.h"
 
 #ifdef __cplusplus
 }
@@ -230,6 +233,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.26  2007/10/04 11:50:30  vapour
+ * Added initial (non working) stub functions for the creation of swf byte code for hightlight, mouse cursor, and text layers.
+ *
  * Revision 1.25  2007/10/01 12:16:10  vapour
  * Added extern for the declaration of flash_create_tag_bitmap().
  *
