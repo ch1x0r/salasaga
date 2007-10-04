@@ -47,6 +47,8 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "calculate_object_boundaries.h"
+#include "compress_layers.h"
 
 
 void draw_workspace(void)
@@ -109,6 +111,9 @@ void draw_workspace(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/04 19:51:11  vapour
+ * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
+ *
  * Revision 1.1  2007/09/29 04:22:16  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

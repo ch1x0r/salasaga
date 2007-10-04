@@ -49,6 +49,32 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "layer_edit.h"
+#include "layer_new_highlight.h"
+#include "layer_new_image.h"
+#include "layer_new_text.h"
+#include "menu_edit_preferences.h"
+#include "menu_enable.h"
+#include "menu_export_flash_animation.h"
+#include "menu_export_svg_animation.h"
+#include "menu_file_new.h"
+#include "menu_file_open.h"
+#include "menu_file_save.h"
+#include "menu_help_about.h"
+#include "menu_help_register.h"
+#include "menu_help_survey.h"
+#include "menu_help_website.h"
+#include "menu_screenshots_capture.h"
+#include "menu_screenshots_import.h"
+#include "save_preferences_and_exit.h"
+#include "slide_insert.h"
+#include "slide_delete.h"
+#include "slide_move_bottom.h"
+#include "slide_move_down.h"
+#include "slide_move_top.h"
+#include "slide_move_up.h"
+#include "slide_name_reset.h"
+#include "slide_name_set.h"
 
 
 void create_menu_bar()
@@ -138,6 +164,9 @@ void create_menu_bar()
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/04 19:51:09  vapour
+ * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
+ *
  * Revision 1.2  2007/09/29 04:22:16  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

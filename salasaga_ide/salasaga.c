@@ -49,6 +49,22 @@
 // Flame Edit includes
 #include "flame-types.h"
 #include "externs.h"
+#include "functions/create_film_strip.h"
+#include "functions/create_menu_bar.h"
+#include "functions/create_resolution_selector.h"
+#include "functions/create_time_line.h"
+#include "functions/create_toolbar.h"
+#include "functions/create_working_area.h"
+#include "functions/disable_layer_toolbar_buttons.h"
+#include "functions/disable_main_toolbar_buttons.h"
+#include "functions/event_size_allocate_received.h"
+#include "functions/film_strip_handle_changed.h"
+#include "functions/film_strip_handle_released.h"
+#include "functions/logger_simple.h"
+#include "functions/logger_with_domain.h"
+#include "functions/quit_event.h"
+#include "functions/resolution_selector_changed.h"
+#include "functions/zoom_selector_changed.h"
 
 
 // Global variables
@@ -957,6 +973,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.65  2007/10/04 19:51:12  vapour
+ * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
+ *
  * Revision 1.64  2007/09/29 04:22:18  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

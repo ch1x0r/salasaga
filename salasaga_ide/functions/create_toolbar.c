@@ -49,6 +49,15 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "menu_export_flash_animation.h"
+#include "menu_export_svg_animation.h"
+#include "menu_file_new.h"
+#include "menu_file_open.h"
+#include "menu_file_save.h"
+#include "menu_screenshots_capture.h"
+#include "menu_screenshots_import.h"
+#include "project_crop.h"
+#include "quit_event.h"
 
 
 GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
@@ -223,6 +232,9 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/04 19:51:09  vapour
+ * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
+ *
  * Revision 1.2  2007/09/29 04:22:15  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

@@ -49,6 +49,10 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "working_area_button_press_event.h"
+#include "working_area_button_release_event.h"
+#include "working_area_expose_event.h"
+#include "working_area_motion_notify_event.h"
 
 
 GtkWidget *create_working_area(GtkWidget *working_frame)
@@ -107,6 +111,9 @@ GtkWidget *create_working_area(GtkWidget *working_frame)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/04 19:51:10  vapour
+ * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
+ *
  * Revision 1.2  2007/09/29 04:22:12  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

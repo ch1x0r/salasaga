@@ -48,6 +48,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
 
 
 // fixme5: Had to comment out some of the "free's", as they were causing segfaults.  Thus this function needs to be rewritten properly at some point
@@ -128,6 +129,9 @@ void destroy_slide(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2007/10/04 19:51:09  vapour
+ * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
+ *
  * Revision 1.3  2007/09/29 04:22:13  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

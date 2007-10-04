@@ -47,6 +47,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
 
 
 void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gint width, gint height, guint32 fill_color, guint32 border_color)
@@ -154,6 +155,9 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/04 19:51:10  vapour
+ * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
+ *
  * Revision 1.1  2007/09/29 04:22:13  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

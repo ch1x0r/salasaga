@@ -49,6 +49,15 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "image_crop.h"
+#include "layer_delete.h"
+#include "layer_edit.h"
+#include "layer_move_down.h"
+#include "layer_move_up.h"
+#include "layer_new_highlight.h"
+#include "layer_new_image.h"
+#include "layer_new_mouse.h"
+#include "layer_new_text.h"
 
 
 GtkWidget *create_time_line(void)
@@ -314,6 +323,9 @@ GtkWidget *create_time_line(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/04 19:51:10  vapour
+ * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
+ *
  * Revision 1.2  2007/09/29 04:22:16  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

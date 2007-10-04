@@ -47,6 +47,11 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "timeline_edited_name.h"
+#include "timeline_edited_x_offset_finish.h"
+#include "timeline_edited_x_offset_start.h"
+#include "timeline_edited_y_offset_finish.h"
+#include "timeline_edited_y_offset_start.h"
 
 
 GtkWidget *construct_timeline_widget(slide *slide_data)
@@ -147,6 +152,9 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/04 19:51:10  vapour
+ * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
+ *
  * Revision 1.1  2007/09/29 04:22:15  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

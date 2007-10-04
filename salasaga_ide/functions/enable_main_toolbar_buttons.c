@@ -47,6 +47,9 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "menu_export_flash_animation.h"
+#include "menu_export_svg_animation.h"
+#include "project_crop.h"
 
 
 void enable_main_toolbar_buttons(void)
@@ -93,6 +96,9 @@ void enable_main_toolbar_buttons(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/04 19:51:10  vapour
+ * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
+ *
  * Revision 1.1  2007/09/29 04:22:11  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

@@ -42,6 +42,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "zoom_selector_changed.h"
 
 
 gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer data)
@@ -72,6 +73,9 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/04 19:51:10  vapour
+ * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
+ *
  * Revision 1.2  2007/09/29 04:22:15  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

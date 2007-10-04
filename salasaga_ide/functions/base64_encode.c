@@ -48,6 +48,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
 
 
 gboolean base64_encode(gpointer data, guint length, gchar **output_string)
@@ -202,6 +203,9 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2007/10/04 19:51:11  vapour
+ * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
+ *
  * Revision 1.3  2007/09/29 04:22:14  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *
