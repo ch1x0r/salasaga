@@ -36,6 +36,10 @@ OFILES = \
 	functions/film_strip_handle_released.o \
 	functions/film_strip_slide_clicked.o \
 	functions/flame_read.o \
+	functions/flash_create_tag_bitmap.o \
+	functions/flash_create_tag_mouse.o \
+	functions/flash_create_tag_text.o \
+	functions/flash_create_tag_highlight.o \
 	functions/image_crop.o \
 	functions/layer_delete.o \
 	functions/layer_edit.o \
@@ -275,6 +279,18 @@ film_strip_slide_clicked.o:
 
 flame_read.o:
 	$(CC) $(CFLAGS) -c flame_read.c -o flame_read.o
+
+flash_create_tag_bitmap.o:
+	$(CC) $(CFLAGS) -c .sh_create_tag_bitmapc -o flash_create_tag_bitmap.o
+
+flash_create_tag_mouse.o:
+	$(CC) $(CFLAGS) -c flash_create_tag_mouse.c -o flash_create_tag_mouse.o
+
+flash_create_tag_text.o:
+	$(CC) $(CFLAGS) -c flash_create_tag_text.c -o flash_create_tag_text.o
+
+flash_create_tag_highlight.o:
+	$(CC) $(CFLAGS) -c flash_create_tag_highlight.c -o flash_create_tag_highlight.o
 
 image_crop.o:
 	$(CC) $(CFLAGS) -c image_crop.c -o image_crop.o
