@@ -22,13 +22,6 @@
  */
 
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
-
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -47,18 +40,12 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
 	GByteArray			*output_buffer;
 	guint16				record_header;
 	guint16				tag_code;
-	guint16				tag_header;
-	guint16				tag_length;
 	gboolean			return_code_bool;
 
 
 	// Initialise variables
 	output_buffer = g_byte_array_new();
 	record_header = 0;
-
-	// Not sure if we should use SWF_TAG_DEFINE_BITS_JPEG2 or SWF_TAG_DEFINE_BITS_LOSSLESS
-	// Might start with SWF_TAG_DEFINE_BITS_JPEG2, as I think we already have jpeg encoding functions
-	tag_code = SWF_TAG_DEFINE_BITS_JPEG2 << 6;
 
 	// Jpeg encode the image data
 	return_code_bool = gdk_pixbuf_save_to_buffer(layer_data->image_data,	// Pointer to GDK-pixbuf data
@@ -84,12 +71,12 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
 	// Add the image data to the output buffer
 	output_buffer = g_byte_array_append(output_buffer, (guint8 *) jpeg_buffer, buffer_size);
 
-	// Embed the length of the output buffer in the tag header
-	tag_length = output_buffer->len;
-	tag_header = tag_code | tag_length;
+	// Embed the length of the output buffer in the record header
+	tag_code = SWF_TAG_DEFINE_BITS_JPEG2 << 6;
+	record_header = tag_code | output_buffer->len;
 
 	// Prepend the tag type and length
-	g_byte_array_prepend(output_buffer, (guint8 *) &tag_header, 2);
+	g_byte_array_prepend(output_buffer, (guint8 *) &record_header, 2);
 
 	// Return the fully formed dictionary shape
 	return output_buffer;
@@ -101,6 +88,9 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2007/10/06 14:52:37  vapour
+ * Simplified the code a bit.  Code still untested.
+ *
  * Revision 1.4  2007/10/06 11:39:27  vapour
  * Continued adjusting function include definitions.
  *
