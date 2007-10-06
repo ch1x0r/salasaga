@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-GByteArray *flash_create_tag_highlight(layer_image *layer_data);
+GByteArray *flash_create_tag_highlight(layer_highlight *layer_data);
 
 #ifdef __cplusplus
 }
@@ -41,6 +41,9 @@ GByteArray *flash_create_tag_highlight(layer_image *layer_data);
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/06 11:15:49  vapour
+ * Fixed the variable type declaration.
+ *
  * Revision 1.1  2007/10/04 11:50:27  vapour
  * Added initial (non working) stub functions for the creation of swf byte code for hightlight, mouse cursor, and text layers.
  *
