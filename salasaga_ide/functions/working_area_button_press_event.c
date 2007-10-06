@@ -42,6 +42,8 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "detect_collisions.h"
+#include "layer_edit.h"
 
 
 gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
@@ -217,6 +219,9 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/06 11:36:39  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.2  2007/09/29 04:22:15  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

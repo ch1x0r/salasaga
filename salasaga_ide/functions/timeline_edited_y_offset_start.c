@@ -42,6 +42,9 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
+#include "draw_workspace.h"
+#include "regenerate_film_strip_thumbnails.h"
 
 
 void timeline_edited_y_offset_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
@@ -104,6 +107,9 @@ void timeline_edited_y_offset_start(GtkCellRendererText *selection, gchar *row, 
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/06 11:37:24  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.2  2007/09/29 04:22:12  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

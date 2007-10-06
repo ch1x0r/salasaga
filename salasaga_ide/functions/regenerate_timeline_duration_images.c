@@ -48,6 +48,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "create_timeline_slider.h"
 
 
 void regenerate_timeline_duration_images(slide *target_slide)
@@ -95,6 +96,9 @@ void regenerate_timeline_duration_images(slide *target_slide)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2007/10/06 11:38:28  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.3  2007/09/29 04:22:12  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

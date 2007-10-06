@@ -47,6 +47,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "create_tooltips.h"
 
 
 void slide_move_top(void)
@@ -106,6 +107,9 @@ void slide_move_top(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/06 11:37:24  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.1  2007/09/29 04:22:13  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

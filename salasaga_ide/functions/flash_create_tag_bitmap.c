@@ -35,6 +35,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
 
 
 GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
@@ -100,6 +101,9 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2007/10/06 11:39:27  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.3  2007/10/03 13:41:23  vapour
  * Added initial untested code for converting slide layers to flash bitmap (jpeg2) data.
  *

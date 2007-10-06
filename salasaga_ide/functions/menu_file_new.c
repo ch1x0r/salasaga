@@ -47,6 +47,15 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "destroy_slide.h"
+#include "disable_layer_toolbar_buttons.h"
+#include "disable_main_toolbar_buttons.h"
+#include "draw_timeline.h"
+#include "draw_workspace.h"
+#include "enable_layer_toolbar_buttons.h"
+#include "enable_main_toolbar_buttons.h"
+#include "menu_enable.h"
+#include "slide_insert.h"
 
 
 void menu_file_new(void)
@@ -214,6 +223,9 @@ void menu_file_new(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/06 11:38:28  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.1  2007/09/29 04:22:12  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

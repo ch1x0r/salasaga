@@ -48,6 +48,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
 
 
 void calculate_object_boundaries(void)
@@ -161,6 +162,9 @@ void calculate_object_boundaries(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2007/10/06 11:40:34  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.3  2007/09/29 04:22:16  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

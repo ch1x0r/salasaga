@@ -47,6 +47,9 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
+#include "menu_export_svg_animation_slide.h"
+#include "sound_beep.h"
 
 
 void menu_export_svg_animation(void)
@@ -723,6 +726,9 @@ void menu_export_svg_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/06 11:38:28  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.1  2007/09/29 04:22:12  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

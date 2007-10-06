@@ -42,6 +42,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "draw_workspace.h"
 
 
 gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
@@ -88,6 +89,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/06 11:36:39  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.2  2007/09/29 04:22:12  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

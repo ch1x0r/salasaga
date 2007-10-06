@@ -49,6 +49,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "save_preferences_and_exit.h"
 
 
 gint quit_event(GtkWidget *widget, GdkEvent *event, gpointer data)
@@ -63,6 +64,9 @@ gint quit_event(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/06 11:38:28  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.2  2007/09/29 04:22:17  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

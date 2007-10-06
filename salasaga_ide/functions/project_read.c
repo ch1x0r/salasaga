@@ -48,6 +48,11 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "base64_decode.h"
+#include "compress_layers.h"
+#include "create_timeline_slider.h"
+#include "destroy_slide.h"
+#include "display_warning.h"
 
 
 gboolean flame_read(gchar *filename)
@@ -946,6 +951,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2007/10/06 11:39:27  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.3  2007/09/29 04:22:11  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

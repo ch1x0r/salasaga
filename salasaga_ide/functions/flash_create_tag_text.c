@@ -37,17 +37,17 @@
 #include "../externs.h"
 
 
-GByteArray *flash_create_tag_text(layer_image *layer_data)
+GByteArray *flash_create_tag_text(layer_text *layer_data)
 {
 	// Local variables
-	gsize				buffer_size;
-	GError				*error = NULL;
+//	gsize				buffer_size;
+//	GError				*error = NULL;
 	GByteArray			*output_buffer;
 	guint16				record_header;
 	guint16				tag_code;
 	guint16				tag_header;
 	guint16				tag_length;
-	gboolean			return_code_bool;
+//	gboolean			return_code_bool;
 
 
 	// Initialise variables
@@ -76,6 +76,9 @@ GByteArray *flash_create_tag_text(layer_image *layer_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/06 11:39:27  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.1  2007/10/04 11:50:27  vapour
  * Added initial (non working) stub functions for the creation of swf byte code for hightlight, mouse cursor, and text layers.
  *

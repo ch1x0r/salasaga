@@ -42,6 +42,8 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "draw_timeline.h"
+#include "draw_workspace.h"
 
 
 void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
@@ -101,6 +103,9 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/06 11:39:27  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.2  2007/09/29 04:22:16  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

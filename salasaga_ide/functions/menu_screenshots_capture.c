@@ -47,6 +47,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
 
 
 void menu_screenshots_capture(void)
@@ -306,6 +307,9 @@ void menu_screenshots_capture(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/06 11:38:28  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.1  2007/09/29 04:22:15  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

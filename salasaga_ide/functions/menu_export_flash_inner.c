@@ -48,6 +48,11 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
+#include "flash_create_tag_bitmap.h"
+#include "flash_create_tag_highlight.h"
+#include "flash_create_tag_mouse.h"
+#include "flash_create_tag_text.h"
 
 
 GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
@@ -310,6 +315,9 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2007/10/06 11:38:28  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.7  2007/10/04 11:50:27  vapour
  * Added initial (non working) stub functions for the creation of swf byte code for hightlight, mouse cursor, and text layers.
  *

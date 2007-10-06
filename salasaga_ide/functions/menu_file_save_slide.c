@@ -48,6 +48,8 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
+#include "menu_file_save_layer.h"
 
 
 void menu_file_save_slide(gpointer element, gpointer user_data)
@@ -92,6 +94,9 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2007/10/06 11:38:28  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.3  2007/09/29 04:22:12  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

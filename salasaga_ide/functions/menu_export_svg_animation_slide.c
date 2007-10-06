@@ -48,6 +48,9 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "base64_encode.h"
+#include "display_warning.h"
+#include "uri_encode_base64.h"
 
 
 void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
@@ -666,6 +669,9 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2007/10/06 11:38:28  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.3  2007/09/29 04:22:11  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

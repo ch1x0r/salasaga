@@ -116,111 +116,6 @@ extern HHOOK				win32_keyboard_hook_handle;
 #endif
 
 
-// External includes (from backend.h)
-#include "functions/base64_decode.h"
-#include "functions/base64_encode.h"
-#include "functions/calculate_object_boundaries.h"
-#include "functions/destroy_slide.h"
-#include "functions/destroy_slide.h"
-#include "functions/detect_collisions.h"
-#include "functions/flame_read.h"
-#include "functions/logger_simple.h"
-#include "functions/logger_with_domain.h"
-#include "functions/menu_enable.h"
-#include "functions/menu_export_flash_inner.h"
-#include "functions/menu_export_svg_animation_slide.h"
-#include "functions/menu_file_save_layer.h"
-#include "functions/menu_file_save_slide.h"
-#include "functions/regenerate_film_strip_thumbnails.h"
-#include "functions/regenerate_timeline_duration_images.h"
-#include "functions/save_preferences_and_exit.h"
-#include "functions/sound_beep.h"
-#include "functions/uri_decode.h"
-#include "functions/uri_encode_base64.h"
-
-// External includes (from callbacks.h)
-#include "functions/event_size_allocate_received.h"
-#include "functions/film_strip_handle_changed.h"
-#include "functions/film_strip_handle_released.h"
-#include "functions/film_strip_slide_clicked.h"
-#include "functions/resolution_selector_changed.h"
-#include "functions/timeline_edited_name.h"
-#include "functions/timeline_edited_x_offset_finish.h"
-#include "functions/timeline_edited_x_offset_start.h"
-#include "functions/timeline_edited_y_offset_finish.h"
-#include "functions/timeline_edited_y_offset_start.h"
-#include "functions/working_area_button_press_event.h"
-#include "functions/working_area_button_release_event.h"
-#include "functions/working_area_expose_event.h"
-#include "functions/working_area_motion_notify_event.h"
-#include "functions/zoom_selector_changed.h"
-
-// External includes (from flame-edit.c)
-#include "functions/create_film_strip.h"
-#include "functions/create_menu_bar.h"
-#include "functions/create_time_line.h"
-#include "functions/create_toolbar.h"
-#include "functions/create_working_area.h"
-#include "functions/quit_event.h"
-
-// External includes (from gui-functions.h)
-#include "functions/compress_layers_inner.h"
-#include "functions/compress_layers.h"
-#include "functions/construct_timeline_widget.h"
-#include "functions/create_resolution_selector.h"
-#include "functions/create_timeline_slider.h"
-#include "functions/create_tooltips.h"
-#include "functions/disable_layer_toolbar_buttons.h"
-#include "functions/disable_main_toolbar_buttons.h"
-#include "functions/display_dialog_empty.h"
-#include "functions/display_dialog_highlight.h"
-#include "functions/display_dialog_image.h"
-#include "functions/display_dialog_mouse.h"
-#include "functions/display_dialog_text.h"
-#include "functions/display_warning.h"
-#include "functions/draw_bounding_box.h"
-#include "functions/draw_highlight_box.h"
-#include "functions/draw_timeline.h"
-#include "functions/draw_workspace.h"
-#include "functions/enable_layer_toolbar_buttons.h"
-#include "functions/enable_main_toolbar_buttons.h"
-#include "functions/image_crop.h"
-#include "functions/layer_delete.h"
-#include "functions/layer_edit.h"
-#include "functions/layer_move_down.h"
-#include "functions/layer_move_up.h"
-#include "functions/layer_new_highlight.h"
-#include "functions/layer_new_image.h"
-#include "functions/layer_new_mouse.h"
-#include "functions/layer_new_text.h"
-#include "functions/menu_edit_preferences.h"
-#include "functions/menu_export_flash_animation.h"
-#include "functions/menu_export_svg_animation.h"
-#include "functions/menu_file_new.h"
-#include "functions/menu_file_open.h"
-#include "functions/menu_file_save.h"
-#include "functions/menu_help_about.h"
-#include "functions/menu_help_register.h"
-#include "functions/menu_help_survey.h"
-#include "functions/menu_help_website.h"
-#include "functions/menu_screenshots_capture.h"
-#include "functions/menu_screenshots_import.h"
-#include "functions/project_crop.h"
-#include "functions/slide_delete.h"
-#include "functions/slide_insert.h"
-#include "functions/slide_move_bottom.h"
-#include "functions/slide_move_down.h"
-#include "functions/slide_move_top.h"
-#include "functions/slide_move_up.h"
-#include "functions/slide_name_reset.h"
-#include "functions/slide_name_set.h"
-
-// Functions related to exporting Flash
-#include "functions/flash_create_tag_bitmap.h"
-#include "functions/flash_create_tag_highlight.h"
-#include "functions/flash_create_tag_mouse.h"
-#include "functions/flash_create_tag_text.h"
-
 #ifdef __cplusplus
 }
 #endif // __cplusplus
@@ -233,6 +128,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.27  2007/10/06 11:36:39  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.26  2007/10/04 11:50:30  vapour
  * Added initial (non working) stub functions for the creation of swf byte code for hightlight, mouse cursor, and text layers.
  *

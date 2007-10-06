@@ -42,6 +42,9 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
+#include "timeline_edited_x_offset_start.h"
+#include "timeline_edited_y_offset_start.h"
 
 
 gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
@@ -204,6 +207,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/06 11:36:39  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.2  2007/09/29 04:22:12  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

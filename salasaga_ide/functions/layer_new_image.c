@@ -47,6 +47,11 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "create_timeline_slider.h"
+#include "display_dialog_image.h"
+#include "draw_workspace.h"
+#include "regenerate_film_strip_thumbnails.h"
+#include "sound_beep.h"
 
 
 void layer_new_image(void)
@@ -160,6 +165,9 @@ void layer_new_image(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/06 11:39:27  vapour
+ * Continued adjusting function include definitions.
+ *
  * Revision 1.1  2007/09/29 04:22:16  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *
