@@ -40,23 +40,21 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
 	GByteArray			*output_buffer;
 	guint16				record_header;
 	guint16				tag_code;
-	gboolean			return_code_bool;
 
 
 	// Initialise variables
-	output_buffer = g_byte_array_new();
 	record_header = 0;
 
 	// Jpeg encode the image data
-	return_code_bool = gdk_pixbuf_save_to_buffer(layer_data->image_data,	// Pointer to GDK-pixbuf data
-												 &jpeg_buffer,				// Output buffer
-												 &buffer_size,				// Size of output buffer
-												 "jpeg",					// Format to save data in
-												 &error,					// Error indicator
-												 "quality",					// Key string
-												 "100",						// Value string
-												 NULL);						// NULL terminated list of options
-	if (TRUE == return_code_bool)
+	gdk_pixbuf_save_to_buffer(layer_data->image_data,	// Pointer to GDK-pixbuf data
+								&jpeg_buffer,			// Output buffer
+								&buffer_size,			// Size of output buffer
+								"jpeg",					// Format to save data in
+								&error,					// Error indicator
+								"quality",				// Key string
+								"100",					// Value string
+								NULL);					// NULL terminated list of options
+	if (error)
 	{
 		// Something went wrong when creating the jpeg data, so display a warning
 		display_warning(error->message);
@@ -69,6 +67,7 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
 	}
 
 	// Add the image data to the output buffer
+	output_buffer = g_byte_array_new();
 	output_buffer = g_byte_array_append(output_buffer, (guint8 *) jpeg_buffer, buffer_size);
 
 	// Embed the length of the output buffer in the record header
@@ -76,7 +75,7 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
 	record_header = tag_code | output_buffer->len;
 
 	// Prepend the tag type and length
-	output_buffer = g_byte_array_prepend(output_buffer, (guint8 *) &record_header, 2);
+	output_buffer = g_byte_array_prepend(output_buffer, (guint8 *) &record_header, sizeof(record_header));
 
 	// Return the fully formed dictionary shape
 	return output_buffer;
@@ -88,6 +87,9 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2007/10/07 14:21:12  vapour
+ * Fixed the checking of whether an error occured during the jpeg conversion.
+ *
  * Revision 1.6  2007/10/07 06:26:23  vapour
  * Fixed a small bug.
  *
