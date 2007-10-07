@@ -22,13 +22,6 @@
  */
 
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
-
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -56,7 +49,9 @@ GByteArray *flash_create_tag_mouse(layer_mouse *layer_data)
 
 
 	// Fixme2: Needs to be written
-
+	// Would be best to have cursors in svg (scalable), but if that's
+	// a bit difficult initially, then we can go with something bitmap based,
+	// that also has an alpha channel
 
 
 	// Embed the length of the output buffer in the tag header
@@ -64,7 +59,7 @@ GByteArray *flash_create_tag_mouse(layer_mouse *layer_data)
 	tag_header = tag_code | tag_length;
 
 	// Prepend the tag type and length
-	g_byte_array_prepend(output_buffer, (guint8 *) &tag_header, 2);
+	output_buffer = g_byte_array_prepend(output_buffer, (guint8 *) &tag_header, 2);
 
 	// Return the fully formed dictionary shape
 	return output_buffer;
@@ -76,6 +71,9 @@ GByteArray *flash_create_tag_mouse(layer_mouse *layer_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/07 06:28:13  vapour
+ * Fixed a small bug.  Added a possibly useful thought in the comments.
+ *
  * Revision 1.2  2007/10/06 11:39:27  vapour
  * Continued adjusting function include definitions.
  *
