@@ -62,25 +62,25 @@ void menu_screenshots_import(void)
 	GDir				*dir_ptr;				// Pointer to the directory entry structure
 	const gchar			*dir_entry;				// Holds a file name
 
-	GSList				*entries = NULL;			// Holds a list of screen shot file names
+	GSList				*entries = NULL;		// Holds a list of screen shot file names
 	GtkTreeIter			film_strip_iter;
-	guint				largest_height = 0;			// Holds the height of the largest screenshot thus far
-	guint				largest_width = 0;			// Holds the width of the largest screenshot thus far
+	guint				largest_height = 0;		// Holds the height of the largest screenshot thus far
+	guint				largest_width = 0;		// Holds the width of the largest screenshot thus far
 
-	gint				num_screenshots = 0;			// Switch to track if other screenshots already exist
+	gint				num_screenshots = 0;	// Switch to track if other screenshots already exist
 	gint				return_code = 0;
-	GError				*error = NULL;				// Pointer to error return structure
+	GError				*error = NULL;			// Pointer to error return structure
 
-	guint				recent_message;				// Message identifier, for newest status bar message
+	guint				recent_message;			// Message identifier, for newest status bar message
 
 	slide				*tmp_slide;				// Temporary slide
 	layer				*tmp_layer;				// Temporary layer
-	layer_image			*tmp_image_ob;				// Temporary image layer
+	layer_image			*tmp_image_ob;			// Temporary image layer
 	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
-	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
-	GString				*tmp_string;				// Temporary string
-	gint				tmp_int = 0;				// Temporary integer
-	GdkRectangle			tmp_rect = {0,				// Temporary rectangle covering the area of the status bar
+	GdkPixbuf			*tmp_gdk_pixbuf;		// Temporary GDK Pixbuf
+	GString				*tmp_string;			// Temporary string
+	gint				tmp_int = 0;			// Temporary integer
+	GdkRectangle		tmp_rect = {0,			// Temporary rectangle covering the area of the status bar
 						    0,
 						    status_bar->allocation.width,
 						    status_bar->allocation.height};
@@ -317,6 +317,9 @@ void menu_screenshots_import(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/07 14:23:46  vapour
+ * Aligned the whitespace comment padding for eclipse.
+ *
  * Revision 1.2  2007/10/06 11:38:28  vapour
  * Continued adjusting function include definitions.
  *
