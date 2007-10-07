@@ -21,28 +21,10 @@
  * 
  */
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
-
-#ifdef _WIN32
-	// Windows only code
-	#include <windows.h>
-	#include "flame-keycapture.h"
-#endif
 
 // Flame Edit includes
 #include "../flame-types.h"
@@ -55,18 +37,18 @@
 void menu_export_flash_animation(void)
 {
 	// Local variables
-	GtkFileFilter			*all_filter;				// Filter for *.*
-	GError				*error = NULL;				// Pointer to error return structure
-	GtkWidget 			*export_dialog;				// Dialog widget
+	GtkFileFilter		*all_filter;			// Filter for *.*
+	GError				*error = NULL;			// Pointer to error return structure
+	GtkWidget 			*export_dialog;			// Dialog widget
 	gchar				*filename;				// Pointer to the chosen file name
-	GtkFileFilter			*flash_filter;				// Filter for *.swf
-	GIOStatus			return_value;				// Return value used in most GIOChannel functions
-	GByteArray			*swf_buffer;				// Buffer for the swf output
-	gboolean			unique_name;				// Switch used to mark when we have a valid filename
-	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
+	GtkFileFilter		*flash_filter;			// Filter for *.swf
+	GIOStatus			return_value;			// Return value used in most GIOChannel functions
+	GByteArray			*swf_buffer;			// Buffer for the swf output
+	gboolean			unique_name;			// Switch used to mark when we have a valid filename
+	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
 
 	gsize				tmp_gsize;				// Temporary gsize
-	GString				*tmp_gstring;				// Temporary GString
+	GString				*tmp_gstring;			// Temporary GString
 	gint				tmp_int;				// Temporary integer
 
 
@@ -175,19 +157,14 @@ void menu_export_flash_animation(void)
 	tmp_int = g_list_length(slides);
 
 	// Export all slides to the swf buffer
-	swf_buffer = g_byte_array_new();
 	swf_buffer = menu_export_flash_inner(swf_buffer);
-//	swf_buffer = menu_export_flash_inner(swf_buffer, 0, tmp_int - 1);
+	if (NULL == swf_buffer)
+	{
+		// Something went wrong when creating the swf output stream
+		display_warning("Error ED91: Something went wrong when creating the swf output stream.");
 
-	// Add the end tag to the swf buffer
-	// fixme3: For some unknown reason having \0 crashes out, whereas every other character works
-	//         It's a pity the \0 is actually needed, so we'll need to add this later somehow
-//	swf_buffer = g_byte_array_append(swf_buffer, "\0", 1);
-
-	// Add the header to the swf buffer
-	// fixme3: Need to expand this next bit to also include the frame size, frame rate, and frame count
-	g_string_printf(tmp_gstring, "FWS%c%u", 0x06, (guint32) swf_buffer->len);  // 0x06 = swf version 6
-	swf_buffer = g_byte_array_prepend(swf_buffer, (const guint8 *) tmp_gstring->str, tmp_gstring->len);
+		return;
+	}
 
 	// Write the swf data to the output file
 	return_value = g_io_channel_write_chars(output_file, (const gchar *) swf_buffer->data, swf_buffer->len, &tmp_gsize, &error);
@@ -243,6 +220,9 @@ void menu_export_flash_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/07 08:44:38  vapour
+ * Added initial (untested) code for creating the swf header.
+ *
  * Revision 1.2  2007/10/06 11:38:28  vapour
  * Continued adjusting function include definitions.
  *

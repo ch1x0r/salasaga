@@ -49,6 +49,7 @@ GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
 	guint				num_layers = 0;			// The number of layers in the slide
 	guint				num_slides;				// The number of slides in the movie
 	guint				slide_counter;			// Holds the number of slides
+	GByteArray			*swf_header;			// Pointer to the swf header construct
 	swf_frame_element	*swf_timing_array = NULL;  // Used to coordinate the actions in each frame
 	layer				*this_layer_data;		// Points to the data in the present layer
 	slide				*this_slide_data;		// Points to the data in the present slide
@@ -69,6 +70,7 @@ GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
 	// Initialise variables
 	char_counter = 1;  // Character 0 is reserved in Flash, so we avoid it
 	total_frames = 0;
+
 
 // For now, I'm using a two pass per slide approach
 //	1st pass gathers timing info, and creates an array of timing information for each slide
@@ -138,7 +140,7 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 					if (NULL == tmp_byte_array)
 					{
 						// Something went wrong when creating the dictionary shape for this layer
-						display_warning("Error ED85: Something went wrong when creating the dictionary shape for this image layer");
+						display_warning("Error ED90: Something went wrong when creating the dictionary shape for this image layer");
 
 						// * We don't want to process this layer any further, so we skip adding it to the dictionary
 
@@ -312,6 +314,80 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 
 	printf("The animation is %u frames long\n", total_frames);
 
+
+	// Create the swf header
+	// fixme3: Need to expand this next bit to also include the frame size, frame rate, and frame count
+
+	swf_header = g_byte_array_new();
+
+	guint16				swf_frame_rate;
+	guint32				swf_length;
+	guint8				swf_rect_nbits = 0xF0;  // Hard code number of bits to 16 (trying to be lazy)
+	guchar				swf_tag[] = "FWS";
+	guint16				swf_total_frames;
+	guint8				swf_version = 1;
+	guint8				working_byte;
+	guint16				working_word;
+	guint16				x_max;
+	guint16				y_max;
+
+
+	// Add the FWS string to the swf headertag, flash version number, and length of the file
+	swf_header = g_byte_array_append(swf_header, swf_tag, sizeof(guchar) * 3);
+
+	// Add the flash version number to the swf header
+	swf_header = g_byte_array_append(swf_header, &swf_version, sizeof(guint8));
+
+	// Add the file length to the swf header
+	swf_length = swf_buffer->len;
+	swf_header = g_byte_array_append(swf_header, (guint8 *) &swf_length, sizeof(guint32));
+
+	// * Add the swf dimensions to the swf header *
+	x_max = output_width * 20;
+	y_max = output_height * 20;
+
+	// Add the number of bits (16) for the rectangle structure values
+	swf_header = g_byte_array_append(swf_header, (guint8 *) &swf_rect_nbits, sizeof(guint8));
+
+	// Add the X minimum value
+	working_byte = 0;
+	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
+
+	// Add the X maximum value (first few bits - always 0 I think - are in the previous byte just added)
+	working_byte = (guint8) x_max >> 13;
+	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
+	working_word = x_max << 3;
+	working_byte = working_word >> 8;
+	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
+	working_word = x_max << 11;
+	working_byte = working_word >> 8;
+	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
+
+	// Add the Y minimum value (first few bits - always 0 I think - are in the previous byte just added)
+	working_byte = 0;
+	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
+
+	// Add the Y maximum value
+	working_byte = (guint8) y_max >> 13;
+	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
+	working_word = y_max << 3;
+	working_byte = working_word >> 8;
+	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
+	working_word = y_max << 11;
+	working_byte = working_word >> 8;
+	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
+
+	// Add the frame rate to the swf header
+	swf_frame_rate = frames_per_second;
+	swf_header = g_byte_array_append(swf_header, (guint8 *) &swf_frame_rate, sizeof(guint8));
+
+	// Add the total frame count to the swf header
+	swf_total_frames = total_frames;
+	swf_header = g_byte_array_append(swf_header, (guint8 *) &swf_total_frames, sizeof(guint16));
+
+	// Add the header to the swf buffer
+	swf_buffer = g_byte_array_prepend(swf_buffer, swf_header->data, swf_header->len);
+	
 	return swf_buffer;
 }
 
@@ -321,6 +397,9 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2007/10/07 08:44:37  vapour
+ * Added initial (untested) code for creating the swf header.
+ *
  * Revision 1.9  2007/10/07 06:31:41  vapour
  * Lots of initial (untested) code added for generating swf, mostly for bitmaps at the moment, just to see how things are hanging together.
  *
