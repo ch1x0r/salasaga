@@ -37,9 +37,13 @@ OFILES = \
 	functions/film_strip_slide_clicked.o \
 	functions/flame_read.o \
 	functions/flash_create_tag_bitmap.o \
-	functions/flash_create_tag_mouse.o \
-	functions/flash_create_tag_text.o \
 	functions/flash_create_tag_highlight.o \
+	functions/flash_create_tag_mouse.o \
+	functions/flash_create_tag_show_frame.o \
+	functions/flash_create_tag_text.o \
+	functions/flash_layer_display_list_add.o \
+	functions/flash_layer_display_list_remove.o \
+	functions/flash_movie_end.o \
 	functions/image_crop.o \
 	functions/layer_delete.o \
 	functions/layer_edit.o \
@@ -283,14 +287,26 @@ flame_read.o:
 flash_create_tag_bitmap.o:
 	$(CC) $(CFLAGS) -c .sh_create_tag_bitmapc -o flash_create_tag_bitmap.o
 
+flash_create_tag_highlight.o:
+	$(CC) $(CFLAGS) -c flash_create_tag_highlight.c -o flash_create_tag_highlight.o
+
 flash_create_tag_mouse.o:
 	$(CC) $(CFLAGS) -c flash_create_tag_mouse.c -o flash_create_tag_mouse.o
+
+flash_create_tag_show_frame.o:
+	$(CC) $(CFLAGS) -c flash_create_tag_show_frame.c -o flash_create_tag_show_frame.o
 
 flash_create_tag_text.o:
 	$(CC) $(CFLAGS) -c flash_create_tag_text.c -o flash_create_tag_text.o
 
-flash_create_tag_highlight.o:
-	$(CC) $(CFLAGS) -c flash_create_tag_highlight.c -o flash_create_tag_highlight.o
+flash_layer_display_list_add.o:
+	$(CC) $(CFLAGS) -c flash_layer_display_list_add.c -o flash_layer_display_list_add.o
+
+flash_layer_display_list_remove.o:
+	$(CC) $(CFLAGS) -c flash_layer_display_list_remove.c -o flash_layer_display_list_remove.o
+
+flash_movie_end.o:
+	$(CC) $(CFLAGS) -c flash_movie_end.c -o flash_movie_end.o
 
 image_crop.o:
 	$(CC) $(CFLAGS) -c image_crop.c -o image_crop.o
