@@ -43,7 +43,7 @@ void menu_export_flash_animation(void)
 	gchar				*filename;				// Pointer to the chosen file name
 	GtkFileFilter		*flash_filter;			// Filter for *.swf
 	GIOStatus			return_value;			// Return value used in most GIOChannel functions
-	GByteArray			*swf_buffer;			// Buffer for the swf output
+	GByteArray			*swf_buffer = NULL;		// Buffer for the swf output
 	gboolean			unique_name;			// Switch used to mark when we have a valid filename
 	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
 
@@ -157,7 +157,7 @@ void menu_export_flash_animation(void)
 	tmp_int = g_list_length(slides);
 
 	// Export all slides to the swf buffer
-	swf_buffer = menu_export_flash_inner(swf_buffer);
+	swf_buffer = menu_export_flash_inner();
 	if (NULL == swf_buffer)
 	{
 		// Something went wrong when creating the swf output stream
@@ -220,6 +220,9 @@ void menu_export_flash_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2007/10/07 14:22:16  vapour
+ * Moved initial allocation of swf buffer into the inner function.
+ *
  * Revision 1.3  2007/10/07 08:44:38  vapour
  * Added initial (untested) code for creating the swf header.
  *
