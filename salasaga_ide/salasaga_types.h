@@ -220,6 +220,7 @@ typedef struct
 	gint				opacity;				// Opacity level (0-65535)
 	gint				x_position;				// In twips
 	gint				y_position;				// In twips
+	gint				depth;					// Depth in the display list (lowest is 1)
 } swf_frame_element;
 
 // Tag types present in swf files
@@ -232,7 +233,7 @@ typedef struct
 #define SWF_TAG_SET_BACKGROUND_COLOUR		9
 #define SWF_TAG_FRAME_LABEL					43
 #define SWF_TAG_PROTECT						24
-#define SWF_TAG_END							0
+#define SWF_TAG_MOVIE_END					0
 #define SWF_TAG_EXPORT_ASSETS				56
 #define SWF_TAG_IMPORT_ASSETS				57
 #define SWF_TAG_ENABLE_DEBUGGER_2			64
@@ -258,6 +259,17 @@ typedef struct
 #define SWF_TAG_DEFINE_BITS_LOSSLESS		20
 #define SWF_TAG_DEFINE_BITS_LOSSLESS2		36
 
+// Swf PLACE OBJECT 2 bit values
+#define SWF_BIT_VALUE_PLACE_HAS_CLP_ACT		128
+#define SWF_BIT_VALUE_PLACE_HAS_CLP_DEP		64
+#define SWF_BIT_VALUE_PLACE_HAS_NAME		32
+#define SWF_BIT_VALUE_PLACE_HAS_RATIO		16
+#define SWF_BIT_VALUE_PLACE_HAS_COLOR		8
+#define SWF_BIT_VALUE_PLACE_HAS_MATRIX		4
+#define SWF_BIT_VALUE_PLACE_HAS_CHAR		2
+#define SWF_BIT_VALUE_PLACE_MOVE			1
+
+
 #ifdef __cplusplus
 }
 #endif // __cplusplus
@@ -270,6 +282,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.37  2007/10/07 06:43:21  vapour
+ * Added a depth field to the swf element array, and improved one of the swf tag name defines.
+ *
  * Revision 1.36  2007/10/01 13:16:35  vapour
  * Added some initial swf tags useful for defining bitmaps.
  *
