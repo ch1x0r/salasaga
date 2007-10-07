@@ -22,13 +22,6 @@
  */
 
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
-
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -64,7 +57,7 @@ GByteArray *flash_create_tag_text(layer_text *layer_data)
 	tag_header = tag_code | tag_length;
 
 	// Prepend the tag type and length
-	g_byte_array_prepend(output_buffer, (guint8 *) &tag_header, 2);
+	output_buffer = g_byte_array_prepend(output_buffer, (guint8 *) &tag_header, 2);
 
 	// Return the fully formed dictionary shape
 	return output_buffer;
@@ -76,6 +69,9 @@ GByteArray *flash_create_tag_text(layer_text *layer_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/07 06:29:00  vapour
+ * Fixed a small bug.
+ *
  * Revision 1.2  2007/10/06 11:39:27  vapour
  * Continued adjusting function include definitions.
  *

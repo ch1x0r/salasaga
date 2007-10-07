@@ -76,7 +76,7 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
 	record_header = tag_code | output_buffer->len;
 
 	// Prepend the tag type and length
-	g_byte_array_prepend(output_buffer, (guint8 *) &record_header, 2);
+	output_buffer = g_byte_array_prepend(output_buffer, (guint8 *) &record_header, 2);
 
 	// Return the fully formed dictionary shape
 	return output_buffer;
@@ -88,6 +88,9 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2007/10/07 06:26:23  vapour
+ * Fixed a small bug.
+ *
  * Revision 1.5  2007/10/06 14:52:37  vapour
  * Simplified the code a bit.  Code still untested.
  *
