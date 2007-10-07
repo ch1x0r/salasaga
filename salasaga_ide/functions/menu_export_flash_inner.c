@@ -40,8 +40,7 @@
 #include "flash_movie_end.h"
 
 
-GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
-//GByteArray *menu_export_flash_inner(GByteArray *swf_buffer, guint start_slide, guint finish_slide)
+GByteArray *menu_export_flash_inner()
 {
 	// Local variables
 	guint				char_counter;			// Counter of the number of characters in the animation
@@ -50,6 +49,7 @@ GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
 	guint				num_layers = 0;			// The number of layers in the slide
 	guint				num_slides;				// The number of slides in the movie
 	guint				slide_counter;			// Holds the number of slides
+	GByteArray 			*swf_buffer;			// Holds the swf buffer as we create it
 	swf_frame_element	*swf_timing_array = NULL;  // Used to coordinate the actions in each frame
 	layer				*this_layer_data;		// Points to the data in the present layer
 	slide				*this_slide_data;		// Points to the data in the present slide
@@ -69,6 +69,7 @@ GByteArray *menu_export_flash_inner(GByteArray *swf_buffer)
 
 	// Initialise variables
 	char_counter = 1;  // Character 0 is reserved in Flash, so we avoid it
+	swf_buffer = g_byte_array_new();
 	total_frames = 0;
 
 
@@ -111,7 +112,7 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 		total_frames += max_frames;
 
 		// Create an array that's layers x max number of frames
-		swf_timing_array = g_new(swf_frame_element, num_layers * max_frames);
+		swf_timing_array = g_new0(swf_frame_element, num_layers * max_frames);
 
 		// Point to the first layer again
 		this_slide_data = g_list_nth_data(slides, slide_counter);
@@ -161,6 +162,8 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 					break;
 
 				case TYPE_HIGHLIGHT:
+					tmp_byte_array = NULL;  // The code for this layer type hasn't been written
+					break;
 					// We're processing a highlight layer
 					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_type = TYPE_HIGHLIGHT;
 					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_data = this_layer_data->object_data;
@@ -178,6 +181,8 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 					break;
 
 				case TYPE_MOUSE_CURSOR:
+					tmp_byte_array = NULL;  // The code for this layer type hasn't been written
+					break;
 					// We're processing a mouse layer
 					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_type = TYPE_MOUSE_CURSOR;
 					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_data = this_layer_data->object_data;
@@ -195,6 +200,8 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 					break;
 
 				case TYPE_TEXT:
+					tmp_byte_array = NULL;  // The code for this layer type hasn't been written
+					break;
 					// We're processing a text layer
 					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_type = TYPE_TEXT;
 					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_data = this_layer_data->object_data;
@@ -332,6 +339,9 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2007/10/07 14:15:23  vapour
+ * Moved initial allocation of swf buffer into the inner function.
+ *
  * Revision 1.11  2007/10/07 09:00:46  vapour
  * Moved the code for creating the swf header bytes into its own function.
  *

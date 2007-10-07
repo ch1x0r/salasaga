@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-GByteArray *menu_export_flash_inner(GByteArray *swf_buffer);
+GByteArray *menu_export_flash_inner();
 
 #ifdef __cplusplus
 }
@@ -41,6 +41,9 @@ GByteArray *menu_export_flash_inner(GByteArray *swf_buffer);
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/07 14:15:23  vapour
+ * Moved initial allocation of swf buffer into the inner function.
+ *
  * Revision 1.1  2007/09/27 10:40:43  vapour
  * Broke backend.c and backend.h into its component functions.
  *
