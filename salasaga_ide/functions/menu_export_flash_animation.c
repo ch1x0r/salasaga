@@ -152,6 +152,21 @@ void menu_export_flash_animation(void)
 		return;
 	}
 
+	// Set up output file for writing binary data
+	return_value = g_io_channel_set_encoding(output_file, NULL, &error);
+	if (G_IO_STATUS_NORMAL != return_value)
+	{
+		// * An error occured when writing the swf data to the output file, so alert the user, and return to the calling routine indicating failure *
+		g_string_printf(tmp_gstring, "Error ED92: An error '%s' occured when creating the swf output file '%s'", error->message, filename);
+		display_warning(tmp_gstring->str);
+
+		// Free the memory allocated in this function
+		g_string_free(tmp_gstring, TRUE);
+		g_error_free(error);
+
+		return;
+	}
+
 	// Work out how many slides there are in the whole project
 	slides = g_list_first(slides);
 	tmp_int = g_list_length(slides);
@@ -162,6 +177,9 @@ void menu_export_flash_animation(void)
 	{
 		// Something went wrong when creating the swf output stream
 		display_warning("Error ED91: Something went wrong when creating the swf output stream.");
+
+		// Free the memory allocated in this function
+		g_string_free(tmp_gstring, TRUE);
 
 		return;
 	}
@@ -220,6 +238,9 @@ void menu_export_flash_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2007/10/10 15:01:17  vapour
+ * Had to set the gio stream to NULL encoding, so it is safe with binary data.
+ *
  * Revision 1.4  2007/10/07 14:22:16  vapour
  * Moved initial allocation of swf buffer into the inner function.
  *
