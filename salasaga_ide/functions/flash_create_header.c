@@ -38,7 +38,7 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
 	guint8				swf_rect_nbits = 0xF0;  // Hard code number of bits to 16 (trying to be lazy)
 	guchar				swf_tag[] = "FWS";
 	guint16				swf_total_frames;
-	guint8				swf_version = 1;
+	guint8				swf_version = 7;
 	guint8				working_byte;
 	guint16				working_word;
 	guint16				x_max;
@@ -51,6 +51,13 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
 	swf_length = length_of_movie;
 	swf_total_frames = number_of_frames;
 
+	// Output debugging info if requested
+	if (debug_level)
+	{
+		printf("Length of movie is %u bytes\n", swf_length);
+		printf("Total number of frames in movie is %u\n", swf_total_frames);
+	}
+
 	// Add the FWS string to the swf headertag, flash version number, and length of the file
 	swf_header = g_byte_array_append(swf_header, swf_tag, sizeof(guchar) * 3);
 
@@ -58,7 +65,16 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
 	swf_header = g_byte_array_append(swf_header, &swf_version, sizeof(guint8));
 
 	// Add the file length to the swf header
-	swf_header = g_byte_array_append(swf_header, (guint8 *) &swf_length, sizeof(guint32));
+	working_byte = (guint8) (swf_length << 24);
+	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
+	working_word = (guint8) (swf_length << 16);
+	working_byte = (guint8) (working_word << 8);
+	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
+	working_word = (guint8) (swf_length >> 16);
+	working_byte = (guint8) (working_word >> 8);
+	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
+	working_byte = (guint8) (working_word << 8);
+	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
 
 	// * Add the swf dimensions to the swf header *
 	x_max = output_width * 20;
@@ -110,6 +126,10 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/10 14:58:41  vapour
+ * Adjusted swf version in header tag to be version 7.
+ * Started trying to get the byte ordering in the header correct.  Needs lots more work.
+ *
  * Revision 1.1  2007/10/07 09:00:46  vapour
  * Moved the code for creating the swf header bytes into its own function.
  *
