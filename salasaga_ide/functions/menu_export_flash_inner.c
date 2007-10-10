@@ -84,7 +84,13 @@ GByteArray *menu_export_flash_inner()
 	// For each slide, work out how many layers there are and how many frames the entire slide lasts for
 	slides = g_list_first(slides);
 	num_slides = g_list_length(slides);
-//printf("Number of slides: %u\n", num_slides);
+
+	// Output some debugging info if requested
+	if (debug_level)
+	{
+		printf("Number of slides: %u\n", num_slides);
+	}
+
 	for (slide_counter = 0; slide_counter <  num_slides; slide_counter++)
 	{
 		// Initialise things for this slide
@@ -105,8 +111,13 @@ GByteArray *menu_export_flash_inner()
 		}
 
 		// * At this stage we should know both the maximum frame number and number of layers in the slide *
-printf("Number of layers in slide %u is %u\n", slide_counter, num_layers);
-printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
+
+		// Output some debugging info if requested
+		if (debug_level)
+		{
+			printf("Number of layers in slide %u is %u\n", slide_counter, num_layers);
+			printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
+		}
 
 		// Add the frames for this slide to the total count of frames for the animation
 		total_frames += max_frames;
@@ -266,18 +277,18 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 			for (element_counter = 0; element_counter < num_layers; element_counter++)  // This loops _num_layers_ of times
 			{
 				// For each frame, access all of the layers then move to the next frame
-				if (TRUE == swf_timing_array[(tmp_integer * max_frames) + element_counter].action_this)
+				if (TRUE == swf_timing_array[(tmp_integer * num_layers) + element_counter].action_this)
 				{
 					// * There is something to be done in this frame for this layer *
 
-					if (TRUE == swf_timing_array[(tmp_integer * max_frames) + element_counter].add)
+					if (TRUE == swf_timing_array[(tmp_integer * num_layers) + element_counter].add)
 					{
 						// * Add the character to the swf display list *
 
 						// Create the swf tag for adding this layer to the display list
 						tmp_byte_array = flash_layer_display_list_add(
-								swf_timing_array[(tmp_integer * max_frames) + element_counter].char_id,  // Character id
-								swf_timing_array[(tmp_integer * max_frames) + element_counter].depth);  // Depth
+								swf_timing_array[(tmp_integer * num_layers) + element_counter].char_id,  // Character id
+								swf_timing_array[(tmp_integer * num_layers) + element_counter].depth);  // Depth
 
 						// Add this swf tag to the output stream
 						swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
@@ -286,13 +297,13 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 						g_byte_array_free(tmp_byte_array, TRUE);
 					}
 
-					if (TRUE == swf_timing_array[(tmp_integer * max_frames) + element_counter].remove)
+					if (TRUE == swf_timing_array[(tmp_integer * num_layers) + element_counter].remove)
 					{
 						// * Remove the character to the swf display list *
 
 						// Create the swf tag for removing this layer from the display list
 						tmp_byte_array = flash_layer_display_list_remove(
-								swf_timing_array[(tmp_integer * max_frames) + element_counter].depth);  // Depth
+								swf_timing_array[(tmp_integer * num_layers) + element_counter].depth);  // Depth
 
 						// Add this swf tag to the output stream
 						swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
@@ -319,7 +330,11 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
 	// Free the temporary swf array
 	g_byte_array_free(tmp_byte_array, TRUE);
 
-//	printf("The animation is %u frames long\n", total_frames);
+	// Output some debugging info if requested
+	if (debug_level)
+	{
+		printf("The animation is %u frames long\n", total_frames);
+	}
 
 	// Create the swf header
 	tmp_byte_array = flash_create_header(swf_buffer->len, total_frames, frames_per_second);
@@ -339,6 +354,10 @@ printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2007/10/10 13:58:18  vapour
+ * Fixed a crashing bug with swf export due to use of wrong variable.
+ * Improved some of the swf debugging code.
+ *
  * Revision 1.12  2007/10/07 14:15:23  vapour
  * Moved initial allocation of swf buffer into the inner function.
  *
