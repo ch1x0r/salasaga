@@ -69,10 +69,10 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
 	// Output debugging info if requested
 	if (debug_level)
 	{
-		printf("Length of file, first byte: %#010x\n", byte_pointer[0]);
-		printf("Length of file, second byte: %#010x\n", byte_pointer[1]);
-		printf("Length of file, third byte: %#010x\n", byte_pointer[2]);
-		printf("Length of file, fourth byte: %#010x\n", byte_pointer[3]);
+		printf("Length of file, first byte: %#04x\n", byte_pointer[0]);
+		printf("Length of file, second byte: %#04x\n", byte_pointer[1]);
+		printf("Length of file, third byte: %#04x\n", byte_pointer[2]);
+		printf("Length of file, fourth byte: %#04x\n", byte_pointer[3]);
 	}
 
 	// * Add the swf dimensions to the swf header *
@@ -112,14 +112,16 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
 
 	// Add the frame rate to the swf header
 	byte_pointer = (guint8 *) &frame_rate;
-	swf_header = g_byte_array_append(swf_header, &byte_pointer[0], sizeof(guint8));
 	swf_header = g_byte_array_append(swf_header, &byte_pointer[1], sizeof(guint8));
+	swf_header = g_byte_array_append(swf_header, &byte_pointer[0], sizeof(guint8));
 
 	// Output debugging info if requested
 	if (debug_level)
 	{
-		printf("Frame rate, first byte: %#06x\n", byte_pointer[0]);
-		printf("Frame rate, second byte: %#06x\n", byte_pointer[1]);
+		printf("Frame rate, decimal: %u\n", frame_rate);
+		printf("Frame rate, hex: %#06x\n", frame_rate);
+		printf("Frame rate, first byte: %#04x\n", byte_pointer[0]);
+		printf("Frame rate, second byte: %#04x\n", byte_pointer[1]);
 	}
 
 	// Add the total frame count to the swf header
@@ -130,8 +132,8 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
 	// Output debugging info if requested
 	if (debug_level)
 	{
-		printf("Number of frames, first byte: %#06x\n", byte_pointer[0]);
-		printf("Number of frames, second byte: %#06x\n", byte_pointer[1]);
+		printf("Number of frames, first byte: %#04x\n", byte_pointer[0]);
+		printf("Number of frames, second byte: %#04x\n", byte_pointer[1]);
 	}
 
 	return swf_header;
@@ -143,6 +145,9 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2007/10/11 10:56:44  vapour
+ * Frame rate is now written to the swf header correctly.
+ *
  * Revision 1.5  2007/10/11 10:37:13  vapour
  * Number of frames is now calculated correctly.
  * Frame rate still needs work.
