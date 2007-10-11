@@ -35,7 +35,7 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
 	guint8				*byte_pointer;			// Used to point at specific bytes we want to grab
 	guint16				swf_frame_rate;
 	GByteArray			*swf_header;			// Pointer to the swf header construct
-	guint8				swf_rect_nbits = 0xF0;  // Hard code number of bits to 16 (trying to be lazy)
+	guint8				swf_rect_nbits = 0x80;  // Hard code number of bits to 16 (trying to be lazy)
 	guchar				swf_tag[] = "FWS";
 	guint16				swf_total_frames;
 	guint8				swf_version = 7;
@@ -129,6 +129,9 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2007/10/11 10:15:46  vapour
+ * Correctly hard coded the number of dimension bits in the swf header to 16 bits.
+ *
  * Revision 1.3  2007/10/11 10:06:14  vapour
  * Figured out how to point directly to the byte we want to write out, so the byte ordering of the length of file field in the swf header should be correct now.
  *
