@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-GByteArray *flash_create_tag_bitmap(layer_image *layer_data);
+GByteArray *flash_create_tag_bitmap(layer_image *layer_data, guint16 character_id);
 
 #ifdef __cplusplus
 }
@@ -41,6 +41,9 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data);
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/11 13:46:04  vapour
+ * Updated to pass character id to tag creation function.
+ *
  * Revision 1.2  2007/10/03 13:40:42  vapour
  * Tweaked function definition.
  *
