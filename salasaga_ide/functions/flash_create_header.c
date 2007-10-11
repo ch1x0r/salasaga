@@ -32,9 +32,9 @@
 GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frames, guint16 frame_rate)
 {
 	// Local variables
+	guint8				*byte_pointer;			// Used to point at specific bytes we want to grab
 	guint16				swf_frame_rate;
 	GByteArray			*swf_header;			// Pointer to the swf header construct
-	guint32				swf_length;
 	guint8				swf_rect_nbits = 0xF0;  // Hard code number of bits to 16 (trying to be lazy)
 	guchar				swf_tag[] = "FWS";
 	guint16				swf_total_frames;
@@ -48,13 +48,13 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
 	// Initialise local variables
 	swf_frame_rate = frame_rate;
 	swf_header = g_byte_array_new();
-	swf_length = length_of_movie;
+	byte_pointer = (guint8 *) &length_of_movie;
 	swf_total_frames = number_of_frames;
 
 	// Output debugging info if requested
 	if (debug_level)
 	{
-		printf("Length of movie is %u bytes\n", swf_length);
+		printf("Length of movie is %#010x bytes\n", length_of_movie);
 		printf("Total number of frames in movie is %u\n", swf_total_frames);
 	}
 
@@ -65,16 +65,19 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
 	swf_header = g_byte_array_append(swf_header, &swf_version, sizeof(guint8));
 
 	// Add the file length to the swf header
-	working_byte = (guint8) (swf_length << 24);
-	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
-	working_word = (guint8) (swf_length << 16);
-	working_byte = (guint8) (working_word << 8);
-	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
-	working_word = (guint8) (swf_length >> 16);
-	working_byte = (guint8) (working_word >> 8);
-	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
-	working_byte = (guint8) (working_word << 8);
-	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
+	swf_header = g_byte_array_append(swf_header, &byte_pointer[0], sizeof(guint8));
+	swf_header = g_byte_array_append(swf_header, &byte_pointer[1], sizeof(guint8));
+	swf_header = g_byte_array_append(swf_header, &byte_pointer[2], sizeof(guint8));
+	swf_header = g_byte_array_append(swf_header, &byte_pointer[3], sizeof(guint8));
+
+	// Output debugging info if requested
+	if (debug_level)
+	{
+		printf("Length of file, first byte: %#010x\n", byte_pointer[0]);
+		printf("Length of file, second byte: %#010x\n", byte_pointer[1]);
+		printf("Length of file, third byte: %#010x\n", byte_pointer[2]);
+		printf("Length of file, fourth byte: %#010x\n", byte_pointer[3]);
+	}
 
 	// * Add the swf dimensions to the swf header *
 	x_max = output_width * 20;
@@ -126,6 +129,9 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2007/10/11 10:06:14  vapour
+ * Figured out how to point directly to the byte we want to write out, so the byte ordering of the length of file field in the swf header should be correct now.
+ *
  * Revision 1.2  2007/10/10 14:58:41  vapour
  * Adjusted swf version in header tag to be version 7.
  * Started trying to get the byte ordering in the header correct.  Needs lots more work.
