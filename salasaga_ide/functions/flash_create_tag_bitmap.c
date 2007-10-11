@@ -31,19 +31,17 @@
 #include "display_warning.h"
 
 
-GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
+GByteArray *flash_create_tag_bitmap(layer_image *layer_data, guint16 character_id)
 {
 	// Local variables
 	gsize				buffer_size;
+	guint8				*byte_pointer;			// Used to point at specific bytes we want to grab
 	GError				*error = NULL;
 	gchar				*jpeg_buffer;
 	GByteArray			*output_buffer;
 	guint16				record_header;
 	guint16				tag_code;
 
-
-	// Initialise variables
-	record_header = 0;
 
 	// Jpeg encode the image data
 	gdk_pixbuf_save_to_buffer(layer_data->image_data,	// Pointer to GDK-pixbuf data
@@ -66,16 +64,25 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
 		return NULL;
 	}
 
-	// Add the image data to the output buffer
+	// Initialise the output buffer
 	output_buffer = g_byte_array_new();
+
+	// Add the character id to the output buffer
+	byte_pointer = (guint8 *) &character_id;
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[0], sizeof(guint8));
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[1], sizeof(guint8));
+
+	// Add the image data to the output buffer
 	output_buffer = g_byte_array_append(output_buffer, (guint8 *) jpeg_buffer, buffer_size);
 
-	// Embed the length of the output buffer in the record header
+	// Embed the length of the output buffer plus character id in the record header
 	tag_code = SWF_TAG_DEFINE_BITS_JPEG2 << 6;
-	record_header = tag_code | output_buffer->len;
+	record_header = tag_code | (output_buffer->len + 2);
 
 	// Prepend the tag type and length
-	output_buffer = g_byte_array_prepend(output_buffer, (guint8 *) &record_header, sizeof(record_header));
+	byte_pointer = (guint8 *) &record_header;
+	output_buffer = g_byte_array_prepend(output_buffer, &byte_pointer[1], sizeof(guint8));
+	output_buffer = g_byte_array_prepend(output_buffer, &byte_pointer[0], sizeof(guint8));
 
 	// Return the fully formed dictionary shape
 	return output_buffer;
@@ -87,6 +94,9 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2007/10/11 13:47:40  vapour
+ * Updated to pass character id to tag creation function.  Still needs work.
+ *
  * Revision 1.7  2007/10/07 14:21:12  vapour
  * Fixed the checking of whether an error occured during the jpeg conversion.
  *
