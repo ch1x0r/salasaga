@@ -33,6 +33,7 @@
 #include "flash_create_tag_bitmap.h"
 #include "flash_create_tag_highlight.h"
 #include "flash_create_tag_mouse.h"
+#include "flash_create_tag_set_bg_colour.h"
 #include "flash_create_tag_show_frame.h"
 #include "flash_create_tag_text.h"
 #include "flash_layer_display_list_add.h"
@@ -80,6 +81,10 @@ GByteArray *menu_export_flash_inner()
 //	2nd pass writes out the actions to happen for the slide, relying on the dictionary images created in the first pass
 // (sounds like a reasonable approach (theory) for a first go, lets see it works in reality though)
 
+
+	// Set the background color for the animation 
+	tmp_byte_array = flash_create_tag_set_bg_colour(0x00, 0x00, 0x00);  // RGB value
+	swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
 
 	// For each slide, work out how many layers there are and how many frames the entire slide lasts for
 	slides = g_list_first(slides);
@@ -146,6 +151,8 @@ GByteArray *menu_export_flash_inner()
 			{
 				case TYPE_GDK_PIXBUF:
 					// * We're processing an image layer *
+
+					// fixme2: Probably need to resize the image layer before passing it to flash_create_tag_bitmap()
 
 					// Create the dictionary shape for this layer
 					tmp_byte_array = flash_create_tag_bitmap((layer_image *) this_layer_data->object_data, char_counter);
@@ -354,6 +361,9 @@ GByteArray *menu_export_flash_inner()
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2007/10/15 08:49:28  vapour
+ * Updated to set the background color of the movie.
+ *
  * Revision 1.14  2007/10/15 06:59:45  vapour
  * Passes character id to the swf bitmap definition function.
  *
