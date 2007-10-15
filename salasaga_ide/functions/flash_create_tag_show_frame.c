@@ -33,6 +33,7 @@
 GByteArray *flash_create_tag_show_frame()
 {
 	// Local variables
+	guint8				*byte_pointer;			// Used to point at specific bytes we want to grab
 	GByteArray			*output_buffer;
 	guint16				record_header;
 
@@ -41,8 +42,10 @@ GByteArray *flash_create_tag_show_frame()
 	output_buffer = g_byte_array_new();
 
 	// Create the tag (it has no data, so length automatically equals zero)
-	record_header = SWF_TAG_REMOVE_OBJECT_2 << 6;
-	output_buffer = g_byte_array_append(output_buffer, (guint8 *) &record_header, sizeof(guint16));  // Might need to byte swap this
+	record_header = SWF_TAG_SHOW_FRAME << 6;
+	byte_pointer = (guint8 *) &record_header;
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[0], sizeof(guint8));
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[1], sizeof(guint8));
 
 	// Return the fully formed dictionary shape
 	return output_buffer;
@@ -54,6 +57,10 @@ GByteArray *flash_create_tag_show_frame()
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/15 06:29:35  vapour
+ * Fixed a bug where it wasn't giving the correct tag type.
+ * Updated to swap bytes properly.
+ *
  * Revision 1.1  2007/10/07 06:37:06  vapour
  * Added further functions for swf code generation.
  *
