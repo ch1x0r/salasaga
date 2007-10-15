@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-GByteArray *flash_layer_display_list_add(gint char_id, gint depth);
+GByteArray *flash_layer_display_list_add(guint16 char_id, guint16 depth);
 
 #ifdef __cplusplus
 }
@@ -41,6 +41,9 @@ GByteArray *flash_layer_display_list_add(gint char_id, gint depth);
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/15 06:39:51  vapour
+ * Improve variable types in the declaration of the function.
+ *
  * Revision 1.1  2007/10/07 06:37:06  vapour
  * Added further functions for swf code generation.
  *
