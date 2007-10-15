@@ -41,8 +41,8 @@ GByteArray *flash_movie_end()
 	output_buffer = g_byte_array_new();
 
 	// Create the tag (it has no data, so length automatically equals zero)
-	record_header = SWF_TAG_MOVIE_END << 6;
-	output_buffer = g_byte_array_append(output_buffer, (guint8 *) &record_header, sizeof(guint16));  // Might need to byte swap this
+	record_header = SWF_TAG_MOVIE_END << 6;  // Doing the bitwise shift for consistency only
+	output_buffer = g_byte_array_append(output_buffer, (guint8 *) &record_header, sizeof(guint16));  // Doesn't need to be byte swapped, as both bytes are 0 anyway
 
 	// Return the fully formed dictionary shape
 	return output_buffer;
@@ -54,6 +54,9 @@ GByteArray *flash_movie_end()
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/15 07:02:08  vapour
+ * Added useful comments to explain some stuff.
+ *
  * Revision 1.1  2007/10/07 06:37:06  vapour
  * Added further functions for swf code generation.
  *
