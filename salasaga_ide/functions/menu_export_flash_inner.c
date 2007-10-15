@@ -43,7 +43,7 @@
 GByteArray *menu_export_flash_inner()
 {
 	// Local variables
-	guint				char_counter;			// Counter of the number of characters in the animation
+	guint16				char_counter;			// Counter of the number of characters in the animation
 	guint				layer_counter;			// Holds the number of layers
 	guint				max_frames = 0;			// The highest frame number in the slide
 	guint				num_layers = 0;			// The number of layers in the slide
@@ -148,7 +148,7 @@ GByteArray *menu_export_flash_inner()
 					// * We're processing an image layer *
 
 					// Create the dictionary shape for this layer
-					tmp_byte_array = flash_create_tag_bitmap((layer_image *) this_layer_data->object_data);
+					tmp_byte_array = flash_create_tag_bitmap((layer_image *) this_layer_data->object_data, char_counter);
 					if (NULL == tmp_byte_array)
 					{
 						// Something went wrong when creating the dictionary shape for this layer
@@ -354,6 +354,9 @@ GByteArray *menu_export_flash_inner()
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2007/10/15 06:59:45  vapour
+ * Passes character id to the swf bitmap definition function.
+ *
  * Revision 1.13  2007/10/10 13:58:18  vapour
  * Fixed a crashing bug with swf export due to use of wrong variable.
  * Improved some of the swf debugging code.
