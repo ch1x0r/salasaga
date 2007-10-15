@@ -87,7 +87,7 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
 	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
 
 	// Add the X maximum value (first few bits - always 0 I think - are in the previous byte just added)
-	working_byte = (guint8) x_max >> 13;
+	working_byte = x_max >> 13;
 	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
 	working_word = x_max << 3;
 	working_byte = working_word >> 8;
@@ -101,7 +101,7 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
 	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
 
 	// Add the Y maximum value
-	working_byte = (guint8) y_max >> 13;
+	working_byte = y_max >> 13;
 	swf_header = g_byte_array_append(swf_header, &working_byte, sizeof(guint8));
 	working_word = y_max << 3;
 	working_byte = working_word >> 8;
@@ -145,6 +145,9 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2007/10/15 03:27:45  vapour
+ * Fixed a bug stopping the dimensions of the movie being calculated correctly.
+ *
  * Revision 1.6  2007/10/11 10:56:44  vapour
  * Frame rate is now written to the swf header correctly.
  *
