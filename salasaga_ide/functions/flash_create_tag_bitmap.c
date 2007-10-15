@@ -39,7 +39,7 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data, guint16 character_i
 	GError				*error = NULL;
 	gchar				*jpeg_buffer;
 	GByteArray			*output_buffer;
-	guint16				record_header;
+	guint32				record_header;
 	guint16				tag_code;
 
 
@@ -67,6 +67,20 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data, guint16 character_i
 	// Initialise the output buffer
 	output_buffer = g_byte_array_new();
 
+	// Set the tag type and fill the lower six bits with 1, indicating the next dword has the length
+	tag_code = (SWF_TAG_DEFINE_BITS_JPEG2 << 6) | 0x3f;
+	byte_pointer = (guint8 *) &tag_code;
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[0], sizeof(guint8));
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[1], sizeof(guint8));
+
+	// Add the size of the image data
+	record_header = buffer_size + 2;
+	byte_pointer = (guint8 *) &record_header;
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[0], sizeof(guint8));
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[1], sizeof(guint8));
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[2], sizeof(guint8));
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[3], sizeof(guint8));
+
 	// Add the character id to the output buffer
 	byte_pointer = (guint8 *) &character_id;
 	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[0], sizeof(guint8));
@@ -74,15 +88,6 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data, guint16 character_i
 
 	// Add the image data to the output buffer
 	output_buffer = g_byte_array_append(output_buffer, (guint8 *) jpeg_buffer, buffer_size);
-
-	// Embed the length of the output buffer plus character id in the record header
-	tag_code = SWF_TAG_DEFINE_BITS_JPEG2 << 6;
-	record_header = tag_code | (output_buffer->len + 2);
-
-	// Prepend the tag type and length
-	byte_pointer = (guint8 *) &record_header;
-	output_buffer = g_byte_array_prepend(output_buffer, &byte_pointer[1], sizeof(guint8));
-	output_buffer = g_byte_array_prepend(output_buffer, &byte_pointer[0], sizeof(guint8));
 
 	// Return the fully formed dictionary shape
 	return output_buffer;
@@ -94,6 +99,9 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data, guint16 character_i
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2007/10/15 06:50:13  vapour
+ * Updated to use the longer record header type with the separately stored data length.
+ *
  * Revision 1.8  2007/10/11 13:47:40  vapour
  * Updated to pass character id to tag creation function.  Still needs work.
  *
