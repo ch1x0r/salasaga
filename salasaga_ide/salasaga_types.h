@@ -224,6 +224,7 @@ typedef struct
 } swf_frame_element;
 
 // Tag types present in swf files
+#define SWF_TAG_DEFINE_SHAPE				2
 #define SWF_TAG_DEFINE_SHAPE_3				32
 
 #define SWF_TAG_PLACE_OBJECT_2				26
@@ -282,6 +283,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.38  2007/10/15 10:01:44  vapour
+ * Added the value for DEFINE SHAPE to the swf tag types.
+ *
  * Revision 1.37  2007/10/07 06:43:21  vapour
  * Added a depth field to the swf element array, and improved one of the swf tag name defines.
  *
