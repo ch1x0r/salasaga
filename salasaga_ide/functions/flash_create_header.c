@@ -45,7 +45,6 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
 
 	// Initialise local variables
 	swf_header = g_byte_array_new();
-	byte_pointer = (guint8 *) &length_of_movie;
 
 	// Output debugging info if requested
 	if (debug_level)
@@ -54,13 +53,14 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
 		printf("Total number of frames in movie is %u\n", number_of_frames);
 	}
 
-	// Add the FWS string to the swf headertag, flash version number, and length of the file
+	// Add the FWS string to the swf header
 	swf_header = g_byte_array_append(swf_header, swf_tag, sizeof(guchar) * 3);
 
 	// Add the flash version number to the swf header
 	swf_header = g_byte_array_append(swf_header, &swf_version, sizeof(guint8));
 
 	// Add the file length to the swf header
+	byte_pointer = (guint8 *) &length_of_movie;
 	swf_header = g_byte_array_append(swf_header, &byte_pointer[0], sizeof(guint8));
 	swf_header = g_byte_array_append(swf_header, &byte_pointer[1], sizeof(guint8));
 	swf_header = g_byte_array_append(swf_header, &byte_pointer[2], sizeof(guint8));
@@ -145,6 +145,9 @@ GByteArray *flash_create_header(guint32 length_of_movie, guint16 number_of_frame
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2007/10/15 08:14:46  vapour
+ * Small tweak for comment and code clarity.
+ *
  * Revision 1.7  2007/10/15 03:27:45  vapour
  * Fixed a bug stopping the dimensions of the movie being calculated correctly.
  *
