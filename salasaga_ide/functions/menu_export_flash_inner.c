@@ -31,6 +31,7 @@
 #include "display_warning.h"
 #include "flash_create_header.h"
 #include "flash_create_tag_bitmap.h"
+#include "flash_create_tag_define_shape_bg_image.h"
 #include "flash_create_tag_highlight.h"
 #include "flash_create_tag_mouse.h"
 #include "flash_create_tag_set_bg_colour.h"
@@ -175,6 +176,11 @@ GByteArray *menu_export_flash_inner()
 
 						// Add the dictionary stream to the output buffer
 						swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
+
+						// Create a shape for the image to be displayed on
+						char_counter++;
+						tmp_byte_array = flash_create_tag_define_shape_bg_image(char_counter);
+
 					}
 
 					break;
@@ -361,6 +367,9 @@ GByteArray *menu_export_flash_inner()
  * +++++++
  * 
  * $Log$
+ * Revision 1.16  2007/10/17 11:04:07  vapour
+ * Adding initial code to define shapes to place the background images on.  Still needs work.
+ *
  * Revision 1.15  2007/10/15 08:49:28  vapour
  * Updated to set the background color of the movie.
  *
