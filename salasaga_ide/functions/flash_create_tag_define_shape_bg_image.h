@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-GByteArray *flash_create_tag_define_shape_bg_image(guint16 character_id);
+GByteArray *flash_create_tag_define_shape_bg_image(guint16 bitmap_id, guint16 character_id);
 
 #ifdef __cplusplus
 }
@@ -41,6 +41,12 @@ GByteArray *flash_create_tag_define_shape_bg_image(guint16 character_id);
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/18 11:28:52  vapour
+ * Updated variable definition and declaration for the flash_create_tag_define_shape_bg_image function.
+ * Updated code calling it to also pass the bitmap id.
+ * Added initial untested code to include fill style information.
+ * Still needs work and testing.
+ *
  * Revision 1.1  2007/10/17 11:04:07  vapour
  * Adding initial code to define shapes to place the background images on.  Still needs work.
  *

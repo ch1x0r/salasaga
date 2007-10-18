@@ -179,7 +179,7 @@ GByteArray *menu_export_flash_inner()
 
 						// Create a shape for the image to be displayed on
 						char_counter++;
-						tmp_byte_array = flash_create_tag_define_shape_bg_image(char_counter);
+						tmp_byte_array = flash_create_tag_define_shape_bg_image(char_counter - 1, char_counter);
 
 					}
 
@@ -367,6 +367,12 @@ GByteArray *menu_export_flash_inner()
  * +++++++
  * 
  * $Log$
+ * Revision 1.17  2007/10/18 11:28:53  vapour
+ * Updated variable definition and declaration for the flash_create_tag_define_shape_bg_image function.
+ * Updated code calling it to also pass the bitmap id.
+ * Added initial untested code to include fill style information.
+ * Still needs work and testing.
+ *
  * Revision 1.16  2007/10/17 11:04:07  vapour
  * Adding initial code to define shapes to place the background images on.  Still needs work.
  *
