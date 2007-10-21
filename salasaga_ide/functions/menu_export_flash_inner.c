@@ -174,13 +174,15 @@ GByteArray *menu_export_flash_inner()
 						element_x_position_increment = (((layer_image *) this_layer_data->object_data)->x_offset_finish - ((layer_image *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 						element_y_position_increment = (((layer_image *) this_layer_data->object_data)->y_offset_finish - ((layer_image *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 
-						// Add the dictionary stream to the output buffer
+						// Add the dictionary shape to the output buffer
 						swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
 
 						// Create a shape for the image to be displayed on
 						char_counter++;
 						tmp_byte_array = flash_create_tag_define_shape_bg_image(char_counter - 1, char_counter);
 
+						// Add the shape to the output buffer
+						swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
 					}
 
 					break;
@@ -199,7 +201,7 @@ GByteArray *menu_export_flash_inner()
 					// Create the dictionary shape for this layer
 					tmp_byte_array = flash_create_tag_highlight((layer_highlight *) this_layer_data->object_data);
 
-					// Add the dictionary stream to the output buffer
+					// Add the dictionary shape to the output buffer
 					swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
 
 					break;
@@ -218,7 +220,7 @@ GByteArray *menu_export_flash_inner()
 					// Create the dictionary shape for this layer
 					tmp_byte_array = flash_create_tag_mouse((layer_mouse *) this_layer_data->object_data);
 
-					// Add the dictionary stream to the output buffer
+					// Add the dictionary shape to the output buffer
 					swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
 
 					break;
@@ -237,7 +239,7 @@ GByteArray *menu_export_flash_inner()
 					// Create the dictionary shape for this layer
 					tmp_byte_array = flash_create_tag_text((layer_text *) this_layer_data->object_data);
 
-					// Add the dictionary stream to the output buffer
+					// Add the dictionary shape to the output buffer
 					swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
 
 					break;
@@ -367,6 +369,9 @@ GByteArray *menu_export_flash_inner()
  * +++++++
  * 
  * $Log$
+ * Revision 1.18  2007/10/21 12:21:29  vapour
+ * Added code to add the new shape to the swf output stream.
+ *
  * Revision 1.17  2007/10/18 11:28:53  vapour
  * Updated variable definition and declaration for the flash_create_tag_define_shape_bg_image function.
  * Updated code calling it to also pass the bitmap id.
