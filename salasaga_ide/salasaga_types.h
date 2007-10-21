@@ -270,6 +270,12 @@ typedef struct
 #define SWF_BIT_VALUE_PLACE_HAS_CHAR		2
 #define SWF_BIT_VALUE_PLACE_MOVE			1
 
+// Swf shape values
+#define SWF_SHAPE_END_RECORD				0x00
+#define SWF_SHAPE_STRAIGHT_EDGE				0x40
+#define SWF_SHAPE_GENERAL_LINE				0x02
+#define SWF_SHAPE_VERTICAL_LINE				0x01
+#define SWF_SHAPE_HORIZONTAL_LINE			0x00
 
 #ifdef __cplusplus
 }
@@ -283,6 +289,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.39  2007/10/21 12:18:42  vapour
+ * Added some defines to support the creation of swf shapes.
+ *
  * Revision 1.38  2007/10/15 10:01:44  vapour
  * Added the value for DEFINE SHAPE to the swf tag types.
  *
