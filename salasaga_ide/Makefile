@@ -38,8 +38,10 @@ OFILES = \
 	functions/flame_read.o \
 	functions/flash_create_header.o \
 	functions/flash_create_tag_bitmap.o \
+	functions/flash_create_tag_define_shape_bg_image.o \
 	functions/flash_create_tag_highlight.o \
 	functions/flash_create_tag_mouse.o \
+	functions/flash_create_tag_set_bg_colour.o \
 	functions/flash_create_tag_show_frame.o \
 	functions/flash_create_tag_text.o \
 	functions/flash_layer_display_list_add.o \
@@ -291,11 +293,17 @@ flash_create_header.o:
 flash_create_tag_bitmap.o:
 	$(CC) $(CFLAGS) -c flash_create_tag_bitmap.c -o flash_create_tag_bitmap.o
 
+flash_create_tag_define_shape_bg_image.o:
+	$(CC) $(CFLAGS) -c flash_create_tag_define_shape_bg_image.c -o flash_create_tag_define_shape_bg_image.o
+
 flash_create_tag_highlight.o:
 	$(CC) $(CFLAGS) -c flash_create_tag_highlight.c -o flash_create_tag_highlight.o
 
 flash_create_tag_mouse.o:
 	$(CC) $(CFLAGS) -c flash_create_tag_mouse.c -o flash_create_tag_mouse.o
+
+flash_create_tag_set_bg_colour.o:
+	$(CC) $(CFLAGS) -c flash_create_tag_set_bg_colour.c -o flash_create_tag_set_bg_colour.o
 
 flash_create_tag_show_frame.o:
 	$(CC) $(CFLAGS) -c flash_create_tag_show_frame.c -o flash_create_tag_show_frame.o
