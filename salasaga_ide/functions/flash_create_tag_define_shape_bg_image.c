@@ -104,6 +104,33 @@ GByteArray *flash_create_tag_define_shape_bg_image(guint16 bitmap_id, guint16 ch
 	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[1], sizeof(guint8));
 
 	// Matrix for the bitmap fill
+	working_byte = 0x80;  // Has scale values
+	working_byte = working_byte | 0x68;  // Fixed bit width of 26 bits. 10 bits left side of 0, 16 bits right side of 0
+	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
+	working_byte = 20;  // Integer part of X scale
+	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
+	working_byte = 0;  // Floating point part of X scale
+	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));  // 8 bits worth of 0
+	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));  // 16 bits worth of 0
+	working_byte = 20 >> 2;  // Integer part of Y scale
+	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
+	working_byte = 0;  // Last part of Y scale integer, and first part of Y scale floating point
+	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));  // 8 bits worth of 0
+	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));  // 16 bits worth of 0
+	working_byte = 0;  // No rotate nor skew nor translation
+	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
+
+	// Matrix fill should end up looking like
+	// 1 = Has Scale; 11010 = 5 Scale bits; 00 = First 2 bits of X scale integer 
+	// 0001 0100 = Last 8 bits of X scale integer
+	// 0000 0000 = First 8 bits of X scale floating point
+	// 0000 0000 = Last 8 bits of X scale floating point
+	// 0000 0101 = First 8 bits of Y scale integer
+	// 00 = Last 2 bits of Y scale integer; 0000 00 = First 6 bits of Y scale floating point
+	// 0000 0000 = Next 8 bits of Y scale floating point
+	// 00 = Last 2 bits of Y scale floating point; 0 = No rotate and skew bits; 00000 = Number of Translate bits
+
+/*
 	working_byte = 0x20 | 0x05;  // Has scale = 0x20, number of bits = 5
 	working_byte = working_byte << 2;  // Move them up two bits
 	working_byte = working_byte | 2;  // Set 2nd lowest bit, the first part of the X scale amount
@@ -114,7 +141,7 @@ GByteArray *flash_create_tag_define_shape_bg_image(guint16 bitmap_id, guint16 ch
 	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
 	working_byte = 0;  //  No rotate nor translation bits
 	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
-	
+*/
 	// Fill in the number of line styles (0)
 	working_byte = 0;
 	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
@@ -212,6 +239,9 @@ GByteArray *flash_create_tag_define_shape_bg_image(guint16 bitmap_id, guint16 ch
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2007/10/27 13:29:40  vapour
+ * Maxtrix bitfield code is improving, though may still need work.
+ *
  * Revision 1.4  2007/10/27 11:33:23  vapour
  * Fixed a bug whereby the fill type was being declared as decimal 41 instead of hexadecimal 41.  Looks like the fill matrix still needs work too.
  *
