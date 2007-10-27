@@ -94,7 +94,8 @@ GByteArray *flash_create_tag_define_shape_bg_image(guint16 bitmap_id, guint16 ch
 	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
 
 	// Clipped fill style
-	working_byte = 41;
+	// "Non smoothed" type (0x43) might be better.  Unsure at present
+	working_byte = 0x41;
 	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
 
 	// Character ID of bitmap fill
@@ -211,6 +212,9 @@ GByteArray *flash_create_tag_define_shape_bg_image(guint16 bitmap_id, guint16 ch
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2007/10/27 11:33:23  vapour
+ * Fixed a bug whereby the fill type was being declared as decimal 41 instead of hexadecimal 41.  Looks like the fill matrix still needs work too.
+ *
  * Revision 1.3  2007/10/21 12:20:12  vapour
  * Added first cut of shape edge definition records.  Untested.
  *
