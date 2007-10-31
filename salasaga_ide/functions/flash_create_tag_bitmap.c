@@ -25,6 +25,12 @@
 // GTK includes
 #include <gtk/gtk.h>
 
+// Debugging includes
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
@@ -64,6 +70,23 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data, guint16 character_i
 		return NULL;
 	}
 
+	// If we're debugging, write the jpeg image to a file as well
+	if (2 = debug_level)
+	{
+		gint f;
+		ssize_t num_bytes;
+
+		f = open("/tmp/image.jpg", O_WRONLY | O_CREAT | O_TRUNC);
+		num_bytes = write(f, jpeg_buffer, buffer_size);
+		printf("The number of bytes written was: %i\n", num_bytes);
+
+		// If an error occurred when writing, we better not try and close the file
+		if (-1 != num_bytes)
+		{
+			close(f);
+		}
+	}
+
 	// Initialise the output buffer
 	output_buffer = g_byte_array_new();
 
@@ -99,6 +122,9 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data, guint16 character_i
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2007/10/31 11:42:42  vapour
+ * Added a small amount of debugging code, to assist with debugging the swf output.
+ *
  * Revision 1.9  2007/10/15 06:50:13  vapour
  * Updated to use the longer record header type with the separately stored data length.
  *
