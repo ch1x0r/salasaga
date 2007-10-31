@@ -26,8 +26,8 @@
 #include <gtk/gtk.h>
 
 // Flame Edit includes
-#include "../flame-types.h"
-#include "../externs.h"
+#include "../../../flame-types.h"
+#include "../../../externs.h"
 
 
 GByteArray *flash_write_bits(GByteArray *swf_output, GByteArray *swf_input, guint num_bits)
@@ -43,6 +43,9 @@ GByteArray *flash_write_bits(GByteArray *swf_output, GByteArray *swf_input, guin
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2007/10/31 11:43:32  vapour
+ * Fixed a bug in the paths to the include files.  Stub function now compiles.
+ *
  * Revision 1.1  2007/10/30 09:53:10  vapour
  * Added an initial stub function for writing a given number of bits to a swf output stream.
  *
