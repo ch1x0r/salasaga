@@ -71,7 +71,7 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data, guint16 character_i
 	}
 
 	// If we're debugging, write the jpeg image to a file as well
-	if (2 = debug_level)
+	if (2 == debug_level)
 	{
 		gint f;
 		ssize_t num_bytes;
@@ -122,6 +122,9 @@ GByteArray *flash_create_tag_bitmap(layer_image *layer_data, guint16 character_i
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2007/10/31 11:45:19  vapour
+ * Oops, fixed an obvious typo.
+ *
  * Revision 1.10  2007/10/31 11:42:42  vapour
  * Added a small amount of debugging code, to assist with debugging the swf output.
  *
