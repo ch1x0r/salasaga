@@ -116,7 +116,7 @@ GByteArray *menu_export_flash_inner()
 			}
 		}
 
-		// * At this stage we should know both the maximum frame number and number of layers in the slide *
+		// * At this stage we should know both the maximum frame number (max_frames) and number of layers (num_layers) in the slide *
 
 		// Output some debugging info if requested
 		if (debug_level)
@@ -285,8 +285,8 @@ GByteArray *menu_export_flash_inner()
 			}
 		}
 
-		// * After all of the layers have been pre-processed we have an array  *
-		// * with the per frame info of what should be where in the output swf *
+		// * After all of the layers have been pre-processed we have an array with the per frame info of what should be *
+		// * where in the output swf, plus we also have the swf dictionary created and ready to use                     *
 		for (tmp_integer = 0; tmp_integer < max_frames; tmp_integer++)  // This loops _frame_ number of times
 		{
 			for (element_counter = 0; element_counter < num_layers; element_counter++)  // This loops _num_layers_ of times
@@ -369,6 +369,9 @@ GByteArray *menu_export_flash_inner()
  * +++++++
  * 
  * $Log$
+ * Revision 1.19  2008/01/08 02:43:25  vapour
+ * Improved the clarity and verbosity of some of the comments.
+ *
  * Revision 1.18  2007/10/21 12:21:29  vapour
  * Added code to add the new shape to the swf output stream.
  *
