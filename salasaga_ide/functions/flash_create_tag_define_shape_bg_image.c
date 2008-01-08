@@ -38,6 +38,7 @@ GByteArray *flash_create_tag_define_shape_bg_image(guint16 bitmap_id, guint16 ch
 	guint8				swf_rect_nbits = 0x80;  // Hard code number of bits to 16 (trying to be lazy)
 	guint16				tag_code;
 	guint8				working_byte;
+	guint8				working_byte2;
 	guint16				working_word;
 	guint16				working_word2;
 	guint16				x_max;
@@ -152,50 +153,79 @@ GByteArray *flash_create_tag_define_shape_bg_image(guint16 bitmap_id, guint16 ch
 
 	// * Create the straight edge shape components *
 
-	// Start point is the centre, so move to the top left
-	working_byte = 0x0C;  // Non-edge record, Move To, Fill Style 0
-	working_byte = working_byte | 0x20;  // Number of move bits is 16;
+	// First shape record, a non-edge record to move from the start point (in the centre) to the top left
+	working_byte = 0x14;  // Non-edge record, Move To, Fill Style 1
+	working_byte = working_byte | 0x02;  // Number of move bits is 16. 0b1000, top two bits of this are in this byte
 	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
-	working_word = (x_max * -0.5);  // Half of maximum width, in negative
-	working_word = working_word >> 3;
+
+	working_word = (x_max * -0.5);  // Half of maximum width, in negative.  For delta x
+	working_word = working_word >> 3;  // Move down 3 bits, to leave room for the last three bits (all 0) of the previous value (number of move bits)
 	byte_pointer = (guint8 *) &working_word;
 	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[0], sizeof(guint8));
 	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[1], sizeof(guint8));
-	working_word = (x_max * -0.5);  // Isolate the bottom 3 bits, into the top of a word
+
+	working_word = (x_max * -0.5);  // Isolate the bottom 3 bits of delta x, into the top of a word
 	working_word = working_word << 13;
-	working_word2 = (y_max * -0.5);  // Half of maximum height, in negative
+	working_word2 = (y_max * -0.5);  // Half of maximum height, in negative. For delta y
 	working_word2 = working_word2 >> 3;
-	working_word = working_word | working_word2;  // Merge the two results then output
+	working_word = working_word | working_word2;  // Merge the two results (last 3 bits of delta x, first 13 bits of delta y) then output
 	byte_pointer = (guint8 *) &working_word;
 	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[0], sizeof(guint8));
 	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[1], sizeof(guint8));
-	working_word = (y_max * -0.5);  // Isolate the bottom 3 bits
+
+	working_word = (y_max * -0.5);  // Isolate the bottom 3 bits of delta y
 	working_word = working_word << 13;
 	working_byte = working_word >> 8;
-	working_byte = working_byte | 0x10;  // Fill style 0 is first fill style defined
-	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
+	working_byte = working_byte | 0x10;  // Add the fill style for Fill Style 1
 
-	// Move horizontally to top right
-	working_byte = 0x80;  // This is an edge record
-	working_byte = working_byte | SWF_SHAPE_STRAIGHT_EDGE;  // This is a straight edge
-	working_byte = working_byte | (14 << 2);  // Number of bits is 16
-	working_byte = working_byte | SWF_SHAPE_HORIZONTAL_LINE;  // Horizontal line
-	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
-	working_word = x_max;  // Maximum width
+	// Second shape record, a horizontal edge record moving to the top right
+	working_byte2 = 0x80;  // This is an edge record
+	working_byte2 = working_byte2 | SWF_SHAPE_STRAIGHT_EDGE;  // This is a straight edge
+	working_byte2 = working_byte2 | (14 << 2);  // Number of bits is 16 (n - 2 = 14)
+	working_byte2 = working_byte2 >> 4;  // We're only interested in the top 4 bits, and we move them down into the bottom 4 bits
+	working_byte = working_byte | working_byte2;
+	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));  // Output the bottom 4 bits of the previous shape record, and the top 4 bits of this edge record
+
+	working_word = (14 << 12);  // Keep the bottom 2 bits of the NumBits value.  The next 2 bits we want in this byte (general or vert/horz line, horiz line) are kept as 0
+	working_word2 = x_max >> 4;  // Keeps the top 12 bits of delta x
+	working_word = working_word | working_word2;
 	byte_pointer = (guint8 *) &working_word;
 	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[0], sizeof(guint8));
 	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[1], sizeof(guint8));
+
+	// Third shape record, a vertical edge record moving to the bottom right
+	working_word = x_max << 12;  // Keep the bottom 4 bits of delta x
+	working_word = working_word | 0x0F90;  // Straight edge, 16 NumBits, vert/horz line, vertical line
+	working_word2 = y_max >> 12;  // Get the top 4 bits of delta y
+	working_word = working_word | working_word2;  // Merge the two results (last 4 bits of previous shape record, first 12 bits of this shape record)
+	byte_pointer = (guint8 *) &working_word;
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[0], sizeof(guint8));
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[1], sizeof(guint8));
+
+	working_word = y_max << 4;  // Keep the bottom 12 bits of delta y
+	byte_pointer = (guint8 *) &working_word;
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[0], sizeof(guint8));
+	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[1], sizeof(guint8));
+
+
+//	working_byte2 = working_byte2 | SWF_SHAPE_HORIZONTAL_LINE;  // Horizontal line
+//
+//	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
+//	working_word = x_max;  // Maximum width
+//	byte_pointer = (guint8 *) &working_word;
+//	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[0], sizeof(guint8));
+//	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[1], sizeof(guint8));
 
 	// Move vertically down to bottom right
-	working_byte = 0x80;  // This is an edge record
-	working_byte = working_byte | SWF_SHAPE_STRAIGHT_EDGE;  // This is a straight edge
-	working_byte = working_byte | (14 << 2);  // Number of bits is 16
-	working_byte = working_byte | SWF_SHAPE_VERTICAL_LINE;  // Horizontal line
-	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
-	working_word = y_max;  // Maximum height
-	byte_pointer = (guint8 *) &working_word;
-	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[0], sizeof(guint8));
-	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[1], sizeof(guint8));
+//	working_byte = 0x80;  // This is an edge record
+//	working_byte = working_byte | SWF_SHAPE_STRAIGHT_EDGE;  // This is a straight edge
+//	working_byte = working_byte | (14 << 2);  // Number of bits is 16
+//	working_byte = working_byte | SWF_SHAPE_VERTICAL_LINE;  // Horizontal line
+//	output_buffer = g_byte_array_append(output_buffer, &working_byte, sizeof(guint8));
+//	working_word = y_max;  // Maximum height
+//	byte_pointer = (guint8 *) &working_word;
+//	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[0], sizeof(guint8));
+//	output_buffer = g_byte_array_append(output_buffer, &byte_pointer[1], sizeof(guint8));
 
 	// Move horizontally to bottom left
 	working_byte = 0x80;  // This is an edge record
@@ -239,6 +269,9 @@ GByteArray *flash_create_tag_define_shape_bg_image(guint16 bitmap_id, guint16 ch
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/01/08 02:50:54  vapour
+ * Further tweaks.  swf output still not working properly though.
+ *
  * Revision 1.5  2007/10/27 13:29:40  vapour
  * Maxtrix bitfield code is improving, though may still need work.
  *
