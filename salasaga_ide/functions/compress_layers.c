@@ -41,7 +41,6 @@
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -53,12 +52,12 @@
 GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
 {
 	// Local variables
-	GdkPixbuf			*bg_pixbuf;				// Points to the background layer
+	GdkPixbuf			*bg_pixbuf;					// Points to the background layer
 	GdkPixbuf			*backing_pixbuf;			// Pixbuf buffer things draw onto
 	layer				*layer_data;				// Pointer to the layer data
 	GList				*layer_pointer;				// Pointer to the layer GList
 	GdkPixbuf			*scaled_pixbuf;				// Smaller pixbuf
-	slide				*slide_ref;				// Pointer to the slide data
+	slide				*slide_ref;					// Pointer to the slide data
 
 
 	// Simplify various pointers
@@ -107,6 +106,9 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/01/13 10:31:21  vapour
+ * Removed unneeded include and realigned tabs to suit my monitor.
+ *
  * Revision 1.2  2007/10/04 19:51:10  vapour
  * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
  *
