@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-GByteArray *menu_export_flash_inner();
+SWFMovie menu_export_flash_inner(SWFMovie this_movie);
 
 #ifdef __cplusplus
 }
@@ -41,6 +41,9 @@ GByteArray *menu_export_flash_inner();
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/01/13 10:26:58  vapour
+ * Updated to use Ming (0.4.0 beta 5).
+ *
  * Revision 1.2  2007/10/07 14:15:23  vapour
  * Moved initial allocation of swf buffer into the inner function.
  *
