@@ -129,6 +129,8 @@ typedef struct
 	GString				*name;
 	GtkTreeIter			*row_iter;
 	GString				*external_link;
+	void				*dictionary_shape;			// SWF dictionary shape
+	void				*display_list_item;			// SWF display list item
 	// fixme5: Noticing that we don't seem to have a visibility on/off toggle.  Will likely need to add that back in
 } layer;
 
@@ -160,7 +162,7 @@ typedef struct
 	gint				height;
 	GString				*image_path;
 	GdkPixbuf			*image_data;
-	gboolean			modified;				// FALSE if an image hasn't been modified, TRUE if it has (i.e. cropped)
+	gboolean			modified;					// FALSE if an image hasn't been modified, TRUE if it has (i.e. cropped)
 } layer_image;
 
 // Defines the properties making up a mouse pointer layer
@@ -211,71 +213,17 @@ typedef struct
 // Defines the information needed for each element of the swf timing array
 typedef struct
 {
-	gboolean			action_this;			// Process this element?
-	guint				layer_type;				// The type of element being displayed
-	GObject				*layer_data;			// Pointer to the layer data
-	guint				char_id;				// Unique id of the character
-	gboolean			add;					// Add to the display list in this frame?
-	gboolean			remove;					// Remove from the display list in this frame?
-	gint				opacity;				// Opacity level (0-65535)
-	gint				x_position;				// In twips
-	gint				y_position;				// In twips
-	gint				depth;					// Depth in the display list (lowest is 1)
+	gboolean			action_this;				// Process this element?
+	guint				layer_type;					// The type of element being displayed
+	layer				*layer_info;				// Pointer to the layer info
+	gboolean			add;						// Add to the display list in this frame?
+	gboolean			remove;						// Remove from the display list in this frame?
+	gint				opacity;					// Opacity level (0-65535)
+	gboolean			is_moving;					// Should the position of this element be adjusted in this frame?
+	gint				x_position;					// In twips
+	gint				y_position;					// In twips
 } swf_frame_element;
 
-// Tag types present in swf files
-#define SWF_TAG_DEFINE_SHAPE				2
-#define SWF_TAG_DEFINE_SHAPE_3				32
-
-#define SWF_TAG_PLACE_OBJECT_2				26
-#define SWF_TAG_REMOVE_OBJECT_2				28
-#define SWF_TAG_SHOW_FRAME					1
-
-#define SWF_TAG_SET_BACKGROUND_COLOUR		9
-#define SWF_TAG_FRAME_LABEL					43
-#define SWF_TAG_PROTECT						24
-#define SWF_TAG_MOVIE_END					0
-#define SWF_TAG_EXPORT_ASSETS				56
-#define SWF_TAG_IMPORT_ASSETS				57
-#define SWF_TAG_ENABLE_DEBUGGER_2			64
-#define SWF_TAG_SCRIPT_LIMITS				65
-#define SWF_TAG_SET_TAB_INDEX				66
-#define SWF_TAG_DO_ACTION					12
-
-// Action types present in swf files
-#define SWF_ACTION_GOTO_FRAME				0x81
-#define SWF_ACTION_NEXT_FRAME				0x04
-#define SWF_ACTION_PREVIOUS_FRAME			0x05
-#define SWF_ACTION_PLAY						0x06
-#define SWF_ACTION_STOP						0x07
-#define SWF_ACTION_TOGGLE_QUALITY			0x08
-#define SWF_ACTION_STOP_SOUNDS				0x09
-#define SWF_ACTION_WAIT_FOR_FRAME			0x8A
-#define SWF_ACTION_SET_TARGET				0x8B
-#define SWF_ACTION_GO_TO_LABEL				0x8C
-
-// Swf bitmap tags
-#define SWF_TAG_DEFINE_BITS_JPEG2			21
-#define SWF_TAG_DEFINE_BITS_JPEG3			35
-#define SWF_TAG_DEFINE_BITS_LOSSLESS		20
-#define SWF_TAG_DEFINE_BITS_LOSSLESS2		36
-
-// Swf PLACE OBJECT 2 bit values
-#define SWF_BIT_VALUE_PLACE_HAS_CLP_ACT		128
-#define SWF_BIT_VALUE_PLACE_HAS_CLP_DEP		64
-#define SWF_BIT_VALUE_PLACE_HAS_NAME		32
-#define SWF_BIT_VALUE_PLACE_HAS_RATIO		16
-#define SWF_BIT_VALUE_PLACE_HAS_COLOR		8
-#define SWF_BIT_VALUE_PLACE_HAS_MATRIX		4
-#define SWF_BIT_VALUE_PLACE_HAS_CHAR		2
-#define SWF_BIT_VALUE_PLACE_MOVE			1
-
-// Swf shape values
-#define SWF_SHAPE_END_RECORD				0x00
-#define SWF_SHAPE_STRAIGHT_EDGE				0x40
-#define SWF_SHAPE_GENERAL_LINE				0x02
-#define SWF_SHAPE_VERTICAL_LINE				0x01
-#define SWF_SHAPE_HORIZONTAL_LINE			0x00
 
 #ifdef __cplusplus
 }
@@ -289,6 +237,11 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.40  2008/01/13 10:52:59  vapour
+ * Added swf output supporting fields to the layer structure.
+ * Removed some fields not needed now that ming is being used.
+ * Removed swf values as they're no longer needed.
+ *
  * Revision 1.39  2007/10/21 12:18:42  vapour
  * Added some defines to support the creation of swf shapes.
  *
