@@ -39,6 +39,8 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 	// Local variables
 	guint16				char_counter;				// Counter of the number of characters in the animation
 	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
+	gint				highlight_box_width;		// Used while generating swf output for highlight boxes
+	gint				highlight_box_height;		// Used while generating swf output for highlight boxes
 	guint				layer_counter;				// Holds the number of layers
 	guint				max_frames = 0;				// The highest frame number in the slide
 	guint				num_layers = 0;				// The number of layers in the slide
@@ -186,8 +188,8 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_info = this_layer_data;
 					element_x_position_start = ((layer_highlight *) this_layer_data->object_data)->x_offset_start;
 					element_y_position_start = ((layer_highlight *) this_layer_data->object_data)->y_offset_start;
-					element_x_position_increment = (((layer_highlight *) this_layer_data->object_data)->x_offset_finish - ((layer_highlight *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
-					element_y_position_increment = (((layer_highlight *) this_layer_data->object_data)->y_offset_finish - ((layer_highlight *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
+					element_x_position_increment = (((layer_highlight *) this_layer_data->object_data)->x_offset_finish - ((layer_highlight *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);  // fixme3: This MAY need to be scaled
+					element_y_position_increment = (((layer_highlight *) this_layer_data->object_data)->y_offset_finish - ((layer_highlight *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);  // fixme3: This MAY need to be scaled
 
 					// * Create the dictionary shape for this layer *
 
@@ -198,10 +200,12 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 					SWFShape_setLine(highlight_box, 2, 0x00, 0xff, 0x00, 0xcc);  // Width = 2 seems to work ok
 
 					// Create the highlight box
-					SWFShape_drawLine(highlight_box, 100.0, 0.0);
-					SWFShape_drawLine(highlight_box, 0.0, 100.0);
-					SWFShape_drawLine(highlight_box, -100.0, 0.0);
-					SWFShape_drawLine(highlight_box, 0.0, -100.0);
+					highlight_box_width = ((layer_highlight *) this_layer_data->object_data)->width;  // fixme3: This needs to be scaled
+					highlight_box_height = ((layer_highlight *) this_layer_data->object_data)->height;  // fixme3: This needs to be scaled
+					SWFShape_drawLine(highlight_box, highlight_box_width, 0.0);
+					SWFShape_drawLine(highlight_box, 0.0, highlight_box_height);
+					SWFShape_drawLine(highlight_box, -(highlight_box_width), 0.0);
+					SWFShape_drawLine(highlight_box, 0.0, -(highlight_box_height));
 
 					// Store the dictionary shape for future reference
 					this_layer_data->dictionary_shape = (SWFBlock) highlight_box;
@@ -349,6 +353,9 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
  * +++++++
  * 
  * $Log$
+ * Revision 1.21  2008/01/13 12:24:31  vapour
+ * Adjusted the size of the highlight box to be closer to the real desired size.  Still needs to be scaled though.
+ *
  * Revision 1.20  2008/01/13 10:43:54  vapour
  * Updated to use Ming (0.4.0 beta 5).
  *
