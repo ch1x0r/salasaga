@@ -102,28 +102,28 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 	gdk_pixbuf_fill(highlight_pixbuf, border_color);
 
 	// Composite the line onto the backing store - left side
-	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
-		tmp_pixbuf,							// Destination pixbuf
-		x_offset,							// X offset
-		y_offset,							// Y offset
-		2,								// Width
-		height,								// Height
-		0, 0,								// Source offsets
-		1, 1,								// Scale factor (1 == no scale)
-		GDK_INTERP_NEAREST,						// Scaling type
-		255);								// Alpha
+	gdk_pixbuf_composite(highlight_pixbuf,			// Source pixbuf
+		tmp_pixbuf,									// Destination pixbuf
+		x_offset,									// X offset
+		y_offset,									// Y offset
+		2,											// Width
+		height,										// Height
+		0, 0,										// Source offsets
+		1, 1,										// Scale factor (1 == no scale)
+		GDK_INTERP_NEAREST,							// Scaling type
+		255);										// Alpha
 
 	// Composite the line onto the backing store - right side
-	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
-		tmp_pixbuf,							// Destination pixbuf
+	gdk_pixbuf_composite(highlight_pixbuf,			// Source pixbuf
+		tmp_pixbuf,									// Destination pixbuf
 		x_offset + width - 1,						// X offset
-		y_offset,							// Y offset
-		2,								// Width
-		height,								// Height
-		0, 0,								// Source offsets
-		1, 1,								// Scale factor (1 == no scale)
-		GDK_INTERP_NEAREST,						// Scaling type
-		255);								// Alpha
+		y_offset,									// Y offset
+		2,											// Width
+		height,										// Height
+		0, 0,										// Source offsets
+		1, 1,										// Scale factor (1 == no scale)
+		GDK_INTERP_NEAREST,							// Scaling type
+		255);										// Alpha
 
 	// Free the temporary pixbuf
 	g_object_unref(highlight_pixbuf);
@@ -133,16 +133,16 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 	gdk_pixbuf_fill(highlight_pixbuf, fill_color);
 
 	// Composite the inner highlight box onto the backing store
-	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
-			     tmp_pixbuf,					// Destination pixbuf
-			     x_offset + 1,					// X offset
-			     y_offset + 1,					// Y offset
-			     width - 2,						// Width
-			     height - 2,					// Height
-			     0, 0,						// Source offsets
-			     1, 1,						// Scale factor (1 == no scale)
+	gdk_pixbuf_composite(highlight_pixbuf,			// Source pixbuf
+			     tmp_pixbuf,						// Destination pixbuf
+			     x_offset + 1,						// X offset
+			     y_offset + 1,						// Y offset
+			     width - 2,							// Width
+			     height - 2,						// Height
+			     0, 0,								// Source offsets
+			     1, 1,								// Scale factor (1 == no scale)
 			     GDK_INTERP_NEAREST,				// Scaling type
-			     255);						// Alpha
+			     255);								// Alpha
 
 	// Free the temporary pixbuf
 	g_object_unref(highlight_pixbuf);
@@ -155,6 +155,9 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/01/13 10:33:10  vapour
+ * Realigned tabs to suit my monitor.
+ *
  * Revision 1.2  2007/10/04 19:51:10  vapour
  * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
  *
