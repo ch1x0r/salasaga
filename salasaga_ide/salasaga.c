@@ -69,55 +69,55 @@
 
 // Global variables
 GdkPixmap				*backing_store;				// Pixel buffer most drawing operations are done on
-GList					*boundary_list = NULL;			// Stores a linked list of layer object boundaries
+GList					*boundary_list = NULL;		// Stores a linked list of layer object boundaries
 guint					capture_height;				// Height for screen captures
 guint					capture_width;				// Width for screen captures
-guint					capture_x;				// X offset for screen captures
-guint					capture_y;				// Y offset for screen captures
-GList					*current_slide = NULL;			// Pointer to the presently selected slide
+guint					capture_x;					// X offset for screen captures
+guint					capture_y;					// Y offset for screen captures
+GList					*current_slide = NULL;		// Pointer to the presently selected slide
 guint					debug_level = 0;			// Used to indicate debugging level
-gfloat					export_time_counter;			// Used when exporting, holds the number of seconds thus far
+gfloat					export_time_counter;		// Used when exporting, holds the number of seconds thus far
 GString					*file_name = NULL;			// Holds the file name the project is saved as
-gboolean				film_strip_being_resized;		// Toggle to indicate if the film strip is being resized
-GtkTreeViewColumn			*film_strip_column;			// Pointer to the film strip column
-GtkScrolledWindow			*film_strip_container;			// Container for the film strip
-GtkListStore				*film_strip_store;			// Film strip list store
+gboolean				film_strip_being_resized;	// Toggle to indicate if the film strip is being resized
+GtkTreeViewColumn		*film_strip_column;			// Pointer to the film strip column
+GtkScrolledWindow		*film_strip_container;		// Container for the film strip
+GtkListStore			*film_strip_store;			// Film strip list store
 GtkWidget				*film_strip_view;			// The view of the film strip list store
 guint					frames_per_second;			// Number of frames per second
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
-GString					*icon_path;				// Used to determine if SVG images can be loaded
+GString					*icon_path;					// Used to determine if SVG images can be loaded
 GtkWidget				*main_drawing_area;			// Widget for the drawing area
 GtkWidget				*main_window;				// Widget for the main window
-GtkItemFactory				*menu_bar = NULL;			// Widget for the menu bar
+GtkItemFactory			*menu_bar = NULL;			// Widget for the menu bar
 GtkTable				*message_bar;				// Widget for message bar
-gboolean				mouse_dragging = FALSE;			// Is the mouse being dragged?
+gboolean				mouse_dragging = FALSE;		// Is the mouse being dragged?
 GdkPixbuf				*mouse_ptr_pixbuf;			// Temporary GDK Pixbuf
 GIOChannel				*output_file;				// The output file handle
-gulong					resolution_callback;			// Holds the id of the resolution selector callback
-GtkComboBox				*resolution_selector;			// Widget for the resolution selector
+gulong					resolution_callback;		// Holds the id of the resolution selector callback
+GtkComboBox				*resolution_selector;		// Widget for the resolution selector
 GtkWidget				*right_side;				// Widget for the right side area
 GList					*slides = NULL;				// Linked list holding the slide info
 GtkWidget				*status_bar;				// Widget for the status bar
 guint					statusbar_context;			// Context id for the status bar messages
-gint					stored_x;				// X co-ordinate of the mouse last click
-gint					stored_y;				// Y co-ordinate of the mouse last click
-GtkWidget				*time_line_container;			// Scrolled window widget, to add scroll bars to the time line widget
+gint					stored_x;					// X co-ordinate of the mouse last click
+gint					stored_y;					// Y co-ordinate of the mouse last click
+GtkWidget				*time_line_container;		// Scrolled window widget, to add scroll bars to the time line widget
 GtkWidget				*time_line_vbox;			// VBox widget holding all of the time line elements
-GtkWidget				*working;				// Widget for the working area
+GtkWidget				*working;					// Widget for the working area
 guint					working_width;				// Width of the display portion of the working area in pixels
 guint					working_height;				// Height of the display portion of the working area in pixels
-guint					zoom;					// Percentage zoom to use in the drawing area
+guint					zoom;						// Percentage zoom to use in the drawing area
 GtkComboBox				*zoom_selector;				// Widget for the zoom selector
 
 // Main toolbar items
-GtkTooltips				*main_toolbar_tooltips;			// Tooltips structure
+GtkTooltips				*main_toolbar_tooltips;		// Tooltips structure
 GtkWidget				*main_toolbar_icons[MAIN_TB_COUNT];	// Array of toolbar icons
 GtkWidget				*main_toolbar_icons_gray[MAIN_TB_COUNT];  // Array of toolbar icons (the grayed out ones)
 GtkToolItem				*main_toolbar_items[MAIN_TB_COUNT];	// Array of toolbar items
 gulong					main_toolbar_signals[MAIN_TB_COUNT];	// Array of toolbar signals
 
 // Layer toolbar items
-GtkTooltips				*layer_toolbar_tooltips;		// Tooltips structure
+GtkTooltips				*layer_toolbar_tooltips;	// Tooltips structure
 GtkWidget				*layer_toolbar_icons[MAIN_TB_COUNT];	// Array of toolbar icons
 GtkWidget				*layer_toolbar_icons_gray[MAIN_TB_COUNT];   // Array of toolbar icons (the grayed out ones)
 GtkToolItem				*layer_toolbar_items[MAIN_TB_COUNT];	// Array of toolbar items
@@ -125,16 +125,16 @@ gulong					layer_toolbar_signals[MAIN_TB_COUNT];	// Array of toolbar signals
 
 // Application default preferences
 GdkColor				default_bg_colour;			// Default background color for slides
-GString					*default_output_folder;			// Application default save path for exporting animations
-guint					default_output_height;			// Application default for how high to create project output
-guint					default_output_quality;			// Application default quality level [0-9] to save output png files with
-guint					default_output_width;			// Application default for how wide to create project output
-GString					*default_project_folder;		// Application default save path for project folders
-guint					default_slide_length;			// Default length of all new slides, in frames
+GString					*default_output_folder;		// Application default save path for exporting animations
+guint					default_output_height;		// Application default for how high to create project output
+guint					default_output_quality;		// Application default quality level [0-9] to save output png files with
+guint					default_output_width;		// Application default for how wide to create project output
+GString					*default_project_folder;	// Application default save path for project folders
+guint					default_slide_length;		// Default length of all new slides, in frames
 guint					icon_height = 30;			// Height in pixels for the toolbar icons (they're scalable SVG's)
 guint					preview_width;				// Width in pixel for the film strip preview (might turn into a structure later)
 guint					scaling_quality;			// Default image scaling quality used
-GString					*screenshots_folder;			// Application default for where to store screenshots
+GString					*screenshots_folder;		// Application default for where to store screenshots
 
 // Project preferences
 GString					*output_folder;				// Where to export animated SVG files too
@@ -175,13 +175,13 @@ gint main(gint argc, gchar *argv[])
 	// Local variables
 	GString				*dot_string;
 	gint				format_counter;				// Used to determine if SVG images can be loaded
-	GdkPixbufFormat			*format_data;				// Used to determine if SVG images can be loaded
+	GdkPixbufFormat		*format_data;				// Used to determine if SVG images can be loaded
 	GValue				*handle_size;				// The size of the handle in the main area
-	GtkWidget			*main_area;				// Widget for the onscreen display
+	GtkWidget			*main_area;					// Widget for the onscreen display
 	gint				num_formats;				// Used to determine if SVG images can be loaded
-	GtkWidget			*outer_box;				// Widget for the onscreen display
+	GtkWidget			*outer_box;					// Widget for the onscreen display
 	GtkLabel			*resolution_label;			// Widget for the resolution selector label
-	gboolean			should_maximise = FALSE;		// Briefly keeps track of whether the window should be maximised
+	gboolean			should_maximise = FALSE;	// Briefly keeps track of whether the window should be maximised
 	GSList				*supported_formats;			// Used to determine if SVG images can be loaded
 	GtkWidget			*toolbar = NULL;			// Widget for the toolbar
 	GdkScreen			*which_screen;				// Gets given the screen the monitor is on
@@ -189,7 +189,7 @@ gint main(gint argc, gchar *argv[])
 	GtkLabel			*zoom_label;				// Widget for the zoom selector label
 
 	GString				*tmp_gstring;				// Temporary GString
-	guint				tmp_int;				// Temporary guint
+	guint				tmp_int;					// Temporary guint
 	GtkWidget			*tmp_widget = NULL;			// Temporary widget
 
 #ifndef _WIN32
@@ -202,7 +202,7 @@ gint main(gint argc, gchar *argv[])
 	guint				unused_num = 0;				// Used to work out which metacity run command is unassigned
 	gboolean			tmp_boolean;				// Temporary boolean
 
-	guint				tmp_guint;				// Temporary guint
+	guint				tmp_guint;					// Temporary guint
 #endif
 
 
@@ -973,6 +973,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.66  2008/01/13 06:45:01  vapour
+ * Realigned tabs to line up on my display again.  This is annoying.
+ *
  * Revision 1.65  2007/10/04 19:51:12  vapour
  * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
  *
