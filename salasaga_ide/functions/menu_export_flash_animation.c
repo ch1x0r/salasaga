@@ -26,6 +26,9 @@
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
+// Ming include
+#include <ming.h>
+
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
@@ -38,16 +41,14 @@ void menu_export_flash_animation(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;			// Filter for *.*
-	GError				*error = NULL;			// Pointer to error return structure
 	GtkWidget 			*export_dialog;			// Dialog widget
 	gchar				*filename;				// Pointer to the chosen file name
 	GtkFileFilter		*flash_filter;			// Filter for *.swf
-	GIOStatus			return_value;			// Return value used in most GIOChannel functions
-	GByteArray			*swf_buffer = NULL;		// Buffer for the swf output
 	gboolean			unique_name;			// Switch used to mark when we have a valid filename
 	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
 
-	gsize				tmp_gsize;				// Temporary gsize
+	SWFMovie			swf_movie;				// Swf movie object
+
 	GString				*tmp_gstring;			// Temporary GString
 	gint				tmp_int;				// Temporary integer
 
@@ -137,46 +138,21 @@ void menu_export_flash_animation(void)
 	// Destroy the dialog box, as it's not needed any more
 	gtk_widget_destroy(export_dialog);
 
-	// Open output file for writing
-	output_file = g_io_channel_new_file(filename, "w", &error);
-	if (NULL == output_file)
-	{
-		// * An error occured when opening the file for writing, so alert the user, and return to the calling routine indicating failure *
-		g_string_printf(tmp_gstring, "Error ED80: An error '%s' occured when opening '%s' for writing", error->message, filename);
-		display_warning(tmp_gstring->str);
-
-		// Free the memory allocated in this function
-		g_string_free(tmp_gstring, TRUE);
-		g_error_free(error);
-
-		return;
-	}
-
-	// Set up output file for writing binary data
-	return_value = g_io_channel_set_encoding(output_file, NULL, &error);
-	if (G_IO_STATUS_NORMAL != return_value)
-	{
-		// * An error occured when writing the swf data to the output file, so alert the user, and return to the calling routine indicating failure *
-		g_string_printf(tmp_gstring, "Error ED92: An error '%s' occured when creating the swf output file '%s'", error->message, filename);
-		display_warning(tmp_gstring->str);
-
-		// Free the memory allocated in this function
-		g_string_free(tmp_gstring, TRUE);
-		g_error_free(error);
-
-		return;
-	}
+	// Initialise Ming and create an empty swf movie object
+	Ming_init();
+	swf_movie = newSWFMovieWithVersion(7);
+	Ming_setSWFCompression(9);
 
 	// Work out how many slides there are in the whole project
 	slides = g_list_first(slides);
 	tmp_int = g_list_length(slides);
 
 	// Export all slides to the swf buffer
-	swf_buffer = menu_export_flash_inner();
-	if (NULL == swf_buffer)
+	swf_movie = menu_export_flash_inner();
+	if (NULL == swf_movie)
 	{
 		// Something went wrong when creating the swf output stream
-		display_warning("Error ED91: Something went wrong when creating the swf output stream.");
+		display_warning("Error ED91: Something went wrong when creating the swf movie.");
 
 		// Free the memory allocated in this function
 		g_string_free(tmp_gstring, TRUE);
@@ -184,46 +160,18 @@ void menu_export_flash_animation(void)
 		return;
 	}
 
-	// Write the swf data to the output file
-	return_value = g_io_channel_write_chars(output_file, (const gchar *) swf_buffer->data, swf_buffer->len, &tmp_gsize, &error);
-	if (G_IO_STATUS_ERROR == return_value)
-	{
-		// * An error occured when writing the swf data to the output file, so alert the user, and return to the calling routine indicating failure *
-		g_string_printf(tmp_gstring, "Error ED81: An error '%s' occured when writing the swf data to the output file '%s'", error->message, filename);
-		display_warning(tmp_gstring->str);
+	// Save the swf movie file to disk
+	SWFMovie_save(swf_movie, filename);
 
-		// Free the memory allocated in this function
-		g_string_free(tmp_gstring, TRUE);
-		g_error_free(error);
-
-		return;
-	}
-
-	// Close the output file
-	return_value = g_io_channel_shutdown(output_file, TRUE, &error);
-	if (G_IO_STATUS_ERROR == return_value)
-	{
-		// * An error occured when closing the output file, so alert the user, and return to the calling routine indicating failure *
-		g_string_printf(tmp_gstring, "Error ED82: An error '%s' occured when closing the output file '%s'", error->message, filename);
-
-		// Display the warning message using our function
-		display_warning(tmp_gstring->str);
-
-		// Free the memory allocated in this function
-		g_string_free(tmp_gstring, TRUE);
-		g_error_free(error);
-		return;
-	}
-
-	// Small update to the status bar, to show progress to the user
+	// Update the status bar, to show progress to the user
 	g_string_printf(tmp_gstring, "Wrote Flash file '%s'.", filename);
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 	gdk_flush();
 
 	// * Function clean up area *
 
-	// Free the swf buffer array
-	g_byte_array_free(swf_buffer, TRUE);
+	// Free the swf movie buffer
+	destroySWFMovie(swf_movie);
 
 	// Frees the memory holding the file name
 	g_free(filename);
@@ -238,6 +186,9 @@ void menu_export_flash_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/01/13 05:37:40  vapour
+ * Started conveting the existing swf output code to use Ming.
+ *
  * Revision 1.5  2007/10/10 15:01:17  vapour
  * Had to set the gio stream to NULL encoding, so it is safe with binary data.
  *
