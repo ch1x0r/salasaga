@@ -143,12 +143,21 @@ void menu_export_flash_animation(void)
 	swf_movie = newSWFMovieWithVersion(7);
 	Ming_setSWFCompression(9);
 
+	// Set the output size of the swf movie 
+	SWFMovie_setDimension(swf_movie, output_width, output_height);
+
+	// Set the frame rate for the movie
+	SWFMovie_setRate(swf_movie, frames_per_second);
+
+	// Set the background color for the animation
+	SWFMovie_setBackground(swf_movie, 0x00, 0x00, 0x00);  // RGB value - black
+
 	// Work out how many slides there are in the whole project
 	slides = g_list_first(slides);
 	tmp_int = g_list_length(slides);
 
 	// Export all slides to the swf buffer
-	swf_movie = menu_export_flash_inner();
+	swf_movie = menu_export_flash_inner(swf_movie);
 	if (NULL == swf_movie)
 	{
 		// Something went wrong when creating the swf output stream
@@ -186,6 +195,10 @@ void menu_export_flash_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/01/13 10:40:33  vapour
+ * Updated to set the dimensions, frame rate, and background colour of the swf output here.
+ * Also updated to use the new definition for the inner swf generation function.
+ *
  * Revision 1.6  2008/01/13 05:37:40  vapour
  * Started conveting the existing swf output code to use Ming.
  *
