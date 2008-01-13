@@ -25,37 +25,35 @@
 // GTK includes
 #include <gtk/gtk.h>
 
+// Ming include
+#include <ming.h>
+
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
 #include "display_warning.h"
-#include "flash_create_header.h"
-#include "flash_create_tag_bitmap.h"
-#include "flash_create_tag_define_shape_bg_image.h"
-#include "flash_create_tag_highlight.h"
-#include "flash_create_tag_mouse.h"
-#include "flash_create_tag_set_bg_colour.h"
-#include "flash_create_tag_show_frame.h"
-#include "flash_create_tag_text.h"
-#include "flash_layer_display_list_add.h"
-#include "flash_layer_display_list_remove.h"
-#include "flash_movie_end.h"
 
 
-GByteArray *menu_export_flash_inner()
+SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 {
 	// Local variables
-	guint16				char_counter;			// Counter of the number of characters in the animation
-	guint				layer_counter;			// Holds the number of layers
-	guint				max_frames = 0;			// The highest frame number in the slide
-	guint				num_layers = 0;			// The number of layers in the slide
-	guint				num_slides;				// The number of slides in the movie
-	guint				slide_counter;			// Holds the number of slides
-	GByteArray 			*swf_buffer;			// Holds the swf buffer as we create it
-	swf_frame_element	*swf_timing_array = NULL;  // Used to coordinate the actions in each frame
-	layer				*this_layer_data;		// Points to the data in the present layer
-	slide				*this_slide_data;		// Points to the data in the present slide
-	guint				total_frames;			// The total number of frames in the animation
+	guint16				char_counter;				// Counter of the number of characters in the animation
+	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
+	guint				layer_counter;				// Holds the number of layers
+	guint				max_frames = 0;				// The highest frame number in the slide
+	guint				num_layers = 0;				// The number of layers in the slide
+	guint				num_slides;					// The number of slides in the movie
+	guint				position_counter;			// Temporary counter integer
+	GdkPixbuf			*resized_pixbuf;			// Temporary pixbuf used while scaling images
+	guint				slide_counter;				// Holds the number of slides
+	swf_frame_element	*swf_timing_array = NULL;	// Used to coordinate the actions in each frame
+	layer				*this_layer_data;			// Points to the data in the present layer
+	slide				*this_slide_data;			// Points to the data in the present slide
+	guint				total_frames;				// The total number of frames in the animation
+
+	SWFDisplayItem		display_list_object;		// Temporary display list object
+	SWFShape			highlight_box;				// Temporary swf shape used when constructing highlight boxes
+	SWFFillStyle		highlight_fill_style;		// Fill style used when constructing highlight boxes
 
 	guint				element_counter;
 	guint				element_max;
@@ -65,27 +63,23 @@ GByteArray *menu_export_flash_inner()
 	gint				element_y_position_increment = 0;
 	gint				element_y_position_start = 0;
 
-	GByteArray			*tmp_byte_array;		// Temporary byte array
-	guint				tmp_integer;			// Temporary integer
+	guint				tmp_integer;				// Temporary integer
 
 
 	// Initialise variables
 	char_counter = 1;  // Character 0 is reserved in Flash, so we avoid it
-	swf_buffer = g_byte_array_new();
 	total_frames = 0;
 
+	// Create the fill style used in highlight boxes
+	highlight_fill_style = newSWFSolidFillStyle(0x00, 0xff, 0x00, 0x40);
 
-// For now, I'm using a two pass per slide approach
+
+// For now, this uses a two pass per slide approach
 //	1st pass gathers timing info, and creates an array of timing information for each slide
 //		The array has one element for each frame times each layer of the slide (i.e. num elements = num frames x num layers)
 //		Also creates the dictionary of shapes, and adds them to an output buffer
 //	2nd pass writes out the actions to happen for the slide, relying on the dictionary images created in the first pass
 // (sounds like a reasonable approach (theory) for a first go, lets see it works in reality though)
-
-
-	// Set the background color for the animation 
-	tmp_byte_array = flash_create_tag_set_bg_colour(0x00, 0x00, 0x00);  // RGB value
-	swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
 
 	// For each slide, work out how many layers there are and how many frames the entire slide lasts for
 	slides = g_list_first(slides);
@@ -147,17 +141,19 @@ GByteArray *menu_export_flash_inner()
 			// Mark that the element needs to be removed on this frame
 			swf_timing_array[(layer_counter * max_frames) + this_layer_data->finish_frame].remove = TRUE;
 
+			// Mark this element as not having a dictionary shape created yet
+			dictionary_shape_ok = FALSE;
+
 			// Calculate the starting positions, increments and other info for each frame of the layer
 			switch (this_layer_data->object_type)
 			{
 				case TYPE_GDK_PIXBUF:
 					// * We're processing an image layer *
 
-					// fixme2: Probably need to resize the image layer before passing it to flash_create_tag_bitmap()
-
-					// Create the dictionary shape for this layer
-					tmp_byte_array = flash_create_tag_bitmap((layer_image *) this_layer_data->object_data, char_counter);
-					if (NULL == tmp_byte_array)
+					// Scale the image to the correct dimensions
+					// fixme2: This simple code that uses output_width and output_height will only work for background images!
+					resized_pixbuf = gdk_pixbuf_scale_simple(((layer_image *) this_layer_data->object_data)->image_data, output_width, output_height, scaling_quality);
+					if (NULL == resized_pixbuf)
 					{
 						// Something went wrong when creating the dictionary shape for this layer
 						display_warning("Error ED90: Something went wrong when creating the dictionary shape for this image layer");
@@ -168,79 +164,88 @@ GByteArray *menu_export_flash_inner()
 					{
 						// Creation of shape went ok, so continue
 						swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_type = TYPE_GDK_PIXBUF;
-						swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_data = this_layer_data->object_data;
+						swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_info = this_layer_data;
 						element_x_position_start = ((layer_image *) this_layer_data->object_data)->x_offset_start;
 						element_y_position_start = ((layer_image *) this_layer_data->object_data)->y_offset_start;
 						element_x_position_increment = (((layer_image *) this_layer_data->object_data)->x_offset_finish - ((layer_image *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 						element_y_position_increment = (((layer_image *) this_layer_data->object_data)->y_offset_finish - ((layer_image *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 
-						// Add the dictionary shape to the output buffer
-						swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
-
-						// Create a shape for the image to be displayed on
-						char_counter++;
-						tmp_byte_array = flash_create_tag_define_shape_bg_image(char_counter - 1, char_counter);
-
-						// Add the shape to the output buffer
-						swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
+						// fixme2: Create the dictionary shape for this layer
+					
+						// fixme2: Add it to the display list
 					}
 
 					break;
 
 				case TYPE_HIGHLIGHT:
-					tmp_byte_array = NULL;  // The code for this layer type hasn't been written
-					break;
-					// We're processing a highlight layer
+
+					// * We're processing a highlight layer *
+
+					// Set up the required information in the layer element array
 					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_type = TYPE_HIGHLIGHT;
-					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_data = this_layer_data->object_data;
+					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_info = this_layer_data;
 					element_x_position_start = ((layer_highlight *) this_layer_data->object_data)->x_offset_start;
 					element_y_position_start = ((layer_highlight *) this_layer_data->object_data)->y_offset_start;
 					element_x_position_increment = (((layer_highlight *) this_layer_data->object_data)->x_offset_finish - ((layer_highlight *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 					element_y_position_increment = (((layer_highlight *) this_layer_data->object_data)->y_offset_finish - ((layer_highlight *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 
-					// Create the dictionary shape for this layer
-					tmp_byte_array = flash_create_tag_highlight((layer_highlight *) this_layer_data->object_data);
+					// * Create the dictionary shape for this layer *
 
-					// Add the dictionary shape to the output buffer
-					swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
+					// Set the semi-transparent green fill for the highlight box
+					SWFShape_setRightFillStyle(highlight_box, highlight_fill_style);
+
+					// Set the line style
+					SWFShape_setLine(highlight_box, 2, 0x00, 0xff, 0x00, 0xcc);  // Width = 2 seems to work ok
+
+					// Create the highlight box
+					SWFShape_drawLine(highlight_box, 100.0, 0.0);
+					SWFShape_drawLine(highlight_box, 0.0, 100.0);
+					SWFShape_drawLine(highlight_box, -100.0, 0.0);
+					SWFShape_drawLine(highlight_box, 0.0, -100.0);
+
+					// Store the dictionary shape for future reference
+					this_layer_data->dictionary_shape = (SWFBlock) highlight_box;
+
+					// Indicate that the dictionary shape for this layer was created ok
+					dictionary_shape_ok = TRUE;
 
 					break;
 
 				case TYPE_MOUSE_CURSOR:
-					tmp_byte_array = NULL;  // The code for this layer type hasn't been written
-					break;
+
 					// We're processing a mouse layer
+
+					break;  // The code for this layer type hasn't been written yet
+
 					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_type = TYPE_MOUSE_CURSOR;
-					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_data = this_layer_data->object_data;
+					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_info = this_layer_data;
 					element_x_position_start = ((layer_mouse *) this_layer_data->object_data)->x_offset_start;
 					element_y_position_start = ((layer_mouse *) this_layer_data->object_data)->y_offset_start;
 					element_x_position_increment = (((layer_mouse *) this_layer_data->object_data)->x_offset_finish - ((layer_mouse *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 					element_y_position_increment = (((layer_mouse *) this_layer_data->object_data)->y_offset_finish - ((layer_mouse *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 
-					// Create the dictionary shape for this layer
-					tmp_byte_array = flash_create_tag_mouse((layer_mouse *) this_layer_data->object_data);
-
-					// Add the dictionary shape to the output buffer
-					swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
+					// fixme2: Create the dictionary shape for this layer
+					
+					// fixme2: Add it to the display list
 
 					break;
 
 				case TYPE_TEXT:
-					tmp_byte_array = NULL;  // The code for this layer type hasn't been written
-					break;
+
 					// We're processing a text layer
+
+					break;  // The code for this layer type hasn't been written yet
+
 					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_type = TYPE_TEXT;
-					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_data = this_layer_data->object_data;
+					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].layer_info = this_layer_data;
 					element_x_position_start = ((layer_text *) this_layer_data->object_data)->x_offset_start;
 					element_y_position_start = ((layer_text *) this_layer_data->object_data)->y_offset_start;
 					element_x_position_increment = (((layer_text *) this_layer_data->object_data)->x_offset_finish - ((layer_text *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 					element_y_position_increment = (((layer_text *) this_layer_data->object_data)->y_offset_finish - ((layer_text *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);
 
-					// Create the dictionary shape for this layer
-					tmp_byte_array = flash_create_tag_text((layer_text *) this_layer_data->object_data);
-
-					// Add the dictionary shape to the output buffer
-					swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
+					// fixme2: Create the dictionary shape for this layer
+					
+					// fixme2: Add it to the display list
 
 					break;
 
@@ -251,37 +256,29 @@ GByteArray *menu_export_flash_inner()
 			}
 
 			// If the creation of the dictionary shape didn't work, we shouldn't add this layer to the list for processing
-			if (NULL != tmp_byte_array)
+			if (TRUE != dictionary_shape_ok)
 			{
-				// Free the temporary dictionary shape buffer
-				g_byte_array_free(tmp_byte_array, TRUE);
-
-				// Process through the element array, setting flags and info as required for this layer
+				// Process the element array, setting flags and info as required for this layer
 				element_max = this_layer_data->finish_frame;
+
+				// Re-initialise the position counter for each shape
+				position_counter = 0;
 				for (element_counter = this_layer_data->start_frame; element_counter <= element_max; element_counter++)
 				{
 					// Mark that the element should be processed on this frame
 					swf_timing_array[(layer_counter * max_frames) + element_counter].action_this = TRUE;
 
-					// Give the object a unique character ID
-					swf_timing_array[(layer_counter * max_frames) + element_counter].char_id = char_counter;
-
 					// Store the x and y positions for each frame
-					// fixme2: I think using element_counter in "element_counter * element_x_position_increment" here is wrong,
-					// and that it should be a separate counter that starts with 0
-					swf_timing_array[(layer_counter * max_frames) + element_counter].x_position = element_x_position_start + (element_counter * element_x_position_increment);
-					swf_timing_array[(layer_counter * max_frames) + element_counter].y_position = element_y_position_start + (element_counter * element_y_position_increment);
+					swf_timing_array[(layer_counter * max_frames) + element_counter].x_position = element_x_position_start + (position_counter * element_x_position_increment);
+					swf_timing_array[(layer_counter * max_frames) + element_counter].y_position = element_y_position_start + (position_counter * element_y_position_increment);
+					swf_timing_array[(layer_counter * max_frames) + element_counter].is_moving = TRUE;
+					position_counter++;
 
 					// Store the opacity setting for each frame
 					// fixme2: Still need to calculate properly rather than hard code to 100% for the moment
 					swf_timing_array[(layer_counter * max_frames) + element_counter].opacity = 65535;
-
-					// Store the layer depth
-					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].depth = layer_counter + 1;
 				}
 
-				// Increment the character counter
-				char_counter++;
 			}
 		}
 
@@ -299,51 +296,42 @@ GByteArray *menu_export_flash_inner()
 					if (TRUE == swf_timing_array[(tmp_integer * num_layers) + element_counter].add)
 					{
 						// * Add the character to the swf display list *
+						display_list_object = SWFMovie_add(this_movie, (SWFBlock) swf_timing_array[(tmp_integer * num_layers) + element_counter].layer_info->dictionary_shape);
 
-						// Create the swf tag for adding this layer to the display list
-						tmp_byte_array = flash_layer_display_list_add(
-								swf_timing_array[(tmp_integer * num_layers) + element_counter].char_id,  // Character id
-								swf_timing_array[(tmp_integer * num_layers) + element_counter].depth);  // Depth
-
-						// Add this swf tag to the output stream
-						swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
-
-						// Free the temporary swf tag
-						g_byte_array_free(tmp_byte_array, TRUE);
+						// Store the display list object for future reference
+						swf_timing_array[(tmp_integer * num_layers) + element_counter].layer_info->display_list_item = display_list_object;
 					}
 
 					if (TRUE == swf_timing_array[(tmp_integer * num_layers) + element_counter].remove)
 					{
-						// * Remove the character to the swf display list *
+						// * Remove the character from the swf display list *
 
-						// Create the swf tag for removing this layer from the display list
-						tmp_byte_array = flash_layer_display_list_remove(
-								swf_timing_array[(tmp_integer * num_layers) + element_counter].depth);  // Depth
+						// Get the appropriate display list object
+						guint start_frame = swf_timing_array[(tmp_integer * num_layers) + element_counter].layer_info->start_frame;
+						display_list_object = swf_timing_array[(tmp_integer * num_layers) + start_frame].layer_info->display_list_item;
 
-						// Add this swf tag to the output stream
-						swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
+						// Remove the character from the display list
+						SWFDisplayItem_remove(display_list_object);
+					}
 
-						// Free the temporary swf tag
-						g_byte_array_free(tmp_byte_array, TRUE);
+					if (TRUE == swf_timing_array[(tmp_integer * num_layers) + element_counter].is_moving)
+					{
+						// * Adjust the x and y position of the character on the display list *
+
+						// Get the appropriate display list object
+						guint start_frame = swf_timing_array[(tmp_integer * num_layers) + element_counter].layer_info->start_frame;
+						display_list_object = swf_timing_array[(tmp_integer * num_layers) + start_frame].layer_info->display_list_item;
+
+						// (Re-)position the object
+						SWFDisplayItem_moveTo(display_list_object, swf_timing_array[(tmp_integer * num_layers) + element_counter].x_position, swf_timing_array[(tmp_integer * num_layers) + element_counter].y_position);
 					}
 				}
+			}
 
-				// Add the swf tag to show the frame
-				tmp_byte_array = flash_create_tag_show_frame();
-				swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
-
-				// Free the temporary swf tag
-				g_byte_array_free(tmp_byte_array, TRUE);
-			}		
+			// Advance to the next frame
+			SWFMovie_nextFrame(this_movie);
 		}
 	}
-
-	// Add the swf tag that signifies the end of the movie
-	tmp_byte_array = flash_movie_end();
-	swf_buffer = g_byte_array_append(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
-
-	// Free the temporary swf array
-	g_byte_array_free(tmp_byte_array, TRUE);
 
 	// Output some debugging info if requested
 	if (debug_level)
@@ -351,16 +339,8 @@ GByteArray *menu_export_flash_inner()
 		printf("The animation is %u frames long\n", total_frames);
 	}
 
-	// Create the swf header
-	tmp_byte_array = flash_create_header(swf_buffer->len, total_frames, frames_per_second);
-
-	// Add the header to the swf buffer
-	swf_buffer = g_byte_array_prepend(swf_buffer, tmp_byte_array->data, tmp_byte_array->len);
-
-	// Free the temporary swf array
-	g_byte_array_free(tmp_byte_array, TRUE);
-
-	return swf_buffer;
+	// Return the swf movie
+	return this_movie;
 }
 
 
@@ -369,6 +349,9 @@ GByteArray *menu_export_flash_inner()
  * +++++++
  * 
  * $Log$
+ * Revision 1.20  2008/01/13 10:43:54  vapour
+ * Updated to use Ming (0.4.0 beta 5).
+ *
  * Revision 1.19  2008/01/08 02:43:25  vapour
  * Improved the clarity and verbosity of some of the comments.
  *
