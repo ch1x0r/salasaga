@@ -3,7 +3,7 @@
  *
  * Flame Project: Include file for structures and similar used throughout the code
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -237,6 +237,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.41  2008/01/15 16:20:32  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.40  2008/01/13 10:52:59  vapour
  * Added swf output supporting fields to the layer structure.
  * Removed some fields not needed now that ming is being used.

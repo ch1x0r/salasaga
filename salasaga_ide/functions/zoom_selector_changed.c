@@ -3,7 +3,7 @@
  *
  * Flame Project: Function called when the user chooses a new zoom level 
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -89,6 +89,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/15 16:18:59  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.3  2007/10/06 11:36:39  vapour
  * Continued adjusting function include definitions.
  *

@@ -3,7 +3,7 @@
  *
  * Flame Project: Function to create the top menu bar 
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -164,6 +164,9 @@ void create_menu_bar()
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/15 16:19:04  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.3  2007/10/04 19:51:09  vapour
  * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
  *

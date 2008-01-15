@@ -3,7 +3,7 @@
  *
  * Flame Project: Function to draw a highlight box on a GDK pixbuf 
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -155,6 +155,9 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/15 16:19:00  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.3  2008/01/13 10:33:10  vapour
  * Realigned tabs to suit my monitor.
  *

@@ -3,7 +3,7 @@
  *
  * Flame Project: Function to decode a Base64 encoded string
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -212,6 +212,9 @@ GString *base64_decode(GString *input_string, GString *output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/01/15 16:18:59  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.4  2007/10/04 19:51:10  vapour
  * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
  *

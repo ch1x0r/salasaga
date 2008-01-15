@@ -3,7 +3,7 @@
  *
  * Flame Project: Disables the main toolbar buttons that can only be used when a project is loaded 
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -96,6 +96,9 @@ void disable_main_toolbar_buttons(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/01/15 16:19:00  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.1  2007/09/29 04:22:14  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

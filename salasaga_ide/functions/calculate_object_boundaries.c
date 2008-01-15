@@ -3,7 +3,7 @@
  *
  * Flame Project: Function to calculate collision detection boundaries
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -162,6 +162,9 @@ void calculate_object_boundaries(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/01/15 16:19:04  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.4  2007/10/06 11:40:34  vapour
  * Continued adjusting function include definitions.
  *

@@ -3,7 +3,7 @@
  *
  * Flame Project: Function to parse the contents of a .flame file
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -951,6 +951,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/01/15 16:18:58  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.4  2007/10/06 11:39:27  vapour
  * Continued adjusting function include definitions.
  *

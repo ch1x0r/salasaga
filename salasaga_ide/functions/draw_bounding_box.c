@@ -3,7 +3,7 @@
  *
  * Flame Project: Function to draw a bounding box in the drawing area, via the backing store 
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -101,6 +101,9 @@ void draw_bounding_box(GtkWidget *widget, GdkRegion *region)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/01/15 16:19:04  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.1  2007/09/29 04:22:16  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

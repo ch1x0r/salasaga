@@ -3,7 +3,7 @@
  *
  * Flame Project: Function that gets all of the layers for a slide, then creates a pixel buffer from them 
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -106,6 +106,9 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/15 16:19:07  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.3  2008/01/13 10:31:21  vapour
  * Removed unneeded include and realigned tabs to suit my monitor.
  *

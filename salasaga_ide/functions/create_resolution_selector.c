@@ -3,7 +3,7 @@
  *
  * Flame Project: Function to create the output resolution selector 
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -110,6 +110,9 @@ GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/01/15 16:19:07  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.1  2007/09/29 04:22:17  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

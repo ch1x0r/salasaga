@@ -3,7 +3,7 @@
  *
  * Flame Project: Function called when the user selects Slide -> Move to bottom from the top menu 
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -110,6 +110,9 @@ void slide_move_bottom(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/01/15 16:18:58  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.2  2007/10/06 11:37:24  vapour
  * Continued adjusting function include definitions.
  *

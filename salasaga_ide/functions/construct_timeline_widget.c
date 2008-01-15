@@ -3,7 +3,7 @@
  *
  * Flame Project: Construct the widget used to display the slide in the timeline 
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -152,6 +152,9 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/01/15 16:19:02  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.2  2007/10/04 19:51:10  vapour
  * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
  *

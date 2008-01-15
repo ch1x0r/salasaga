@@ -3,7 +3,7 @@
  *
  * Flame Project: Function to save the application preferences and go required cleanup, prior to exiting
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -299,6 +299,9 @@ void save_preferences_and_exit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/15 16:18:59  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.3  2007/09/29 04:22:12  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

@@ -3,7 +3,7 @@
  *
  * Flame Project: Function to convert a slide structure into a Flash output file
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -422,6 +422,9 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
  * +++++++
  * 
  * $Log$
+ * Revision 1.24  2008/01/15 16:18:58  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.23  2008/01/15 13:23:42  vapour
  * Fixed an incorrect use of pointers, so now the main loop kind of works.
  *

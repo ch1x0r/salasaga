@@ -3,7 +3,7 @@
  *
  * Flame Project: Function called when the user chooses a new output resolution 
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -76,6 +76,9 @@ gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer da
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/01/15 16:19:05  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.2  2007/09/29 04:22:16  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *

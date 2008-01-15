@@ -3,7 +3,7 @@
  *
  * Flame Project: Function to create a URI encoded string from a Base64 encoded string
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -111,6 +111,9 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/15 16:19:00  vapour
+ * Updated copyright notice to include 2008.
+ *
  * Revision 1.3  2007/09/29 04:22:13  vapour
  * Broke gui-functions.c and gui-functions.h into its component functions.
  *
