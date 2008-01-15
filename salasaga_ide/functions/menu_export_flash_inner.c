@@ -49,7 +49,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 	GdkPixbuf			*resized_pixbuf;			// Temporary pixbuf used while scaling images
 	guint				slide_counter;				// Holds the number of slides
 	swf_frame_element	*swf_timing_array = NULL;	// Used to coordinate the actions in each frame
-	swf_frame_element 	this_frame;					// Points to frame information when looping
+	swf_frame_element 	*this_frame_ptr;			// Points to frame information when looping
 	layer				*this_layer_data;			// Points to the data in the present layer
 	layer				*this_layer_info;			// Used to point to layer data when looping
 	slide				*this_slide_data;			// Points to the data in the present slide
@@ -131,7 +131,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 		total_frames += max_frames;
 
 		// Create an array that's layers x max number of frames
-		swf_timing_array = g_new0(swf_frame_element, num_layers * max_frames);
+		swf_timing_array = g_new0(swf_frame_element, num_layers * (max_frames + 1));  // +1 because if (ie.) we say slide 5, then we really mean the 6th slide (we start from 0) 
 
 		// Point to the first layer again
 		this_slide_data = g_list_nth_data(slides, slide_counter);
@@ -267,7 +267,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 				for (frame_number = this_layer_data->start_frame; frame_number <= this_layer_data->finish_frame; frame_number++)
 				{
 					element_number = (layer_counter * max_frames) + frame_number;
-					this_frame = swf_timing_array[element_number];
+					this_frame_ptr = &swf_timing_array[element_number];
 
 					// Display debugging info if requested
 					if (debug_level)
@@ -276,23 +276,23 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 					}
 
 					// Indicate the element should be processed on this frame
-					this_frame.action_this = TRUE;
+					this_frame_ptr->action_this = TRUE;
 
 					// Ensure the appropriate layer data can be found by later code 
-					this_frame.layer_info = this_layer_data;
+					this_frame_ptr->layer_info = this_layer_data;
 
 					// If the layer moves, store the x and y positions for each frame
 					if (TRUE == swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].is_moving)
 					{
-						this_frame.is_moving = TRUE;
-						this_frame.x_position = element_x_position_start + (position_counter * element_x_position_increment);
-						this_frame.y_position = element_y_position_start + (position_counter * element_y_position_increment);
+						this_frame_ptr->is_moving = TRUE;
+						this_frame_ptr->x_position = element_x_position_start + (position_counter * element_x_position_increment);
+						this_frame_ptr->y_position = element_y_position_start + (position_counter * element_y_position_increment);
 						position_counter++;
 					}
 
 					// Store the opacity setting for each frame
 					// fixme2: Still need to calculate properly rather than hard code to 100% for the moment
-					this_frame.opacity = 65535;
+					this_frame_ptr->opacity = 65535;
 				}
 
 			}
@@ -301,41 +301,41 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 		// Debugging output, displaying what we have in the pre-processing element array thus far
 		if (debug_level)
 		{
-			for (frame_counter = 0; frame_counter < max_frames; frame_counter++)  // This loops _frame_ number of times
+			for (frame_counter = 0; frame_counter <= max_frames; frame_counter++)  // This loops _frame + 1_ number of times
 			{
 				for (layer_counter = 0; layer_counter < num_layers; layer_counter++)  // This loops _num_layers_ of times
 				{
 					frame_number = (frame_counter * num_layers) + layer_counter;
-					this_frame = swf_timing_array[frame_number];
+					this_frame_ptr = &swf_timing_array[frame_number];
 
 					printf("Frame number %u:\n", frame_number);
 
-					if (TRUE == this_frame.action_this)
-						printf("Action frame: ON\t");
+					if (TRUE == this_frame_ptr->action_this)
+						printf("Action frame:\tON\t");
 					else
-						printf("Action frame: OFF\t");
+						printf("Action frame:\tOFF\t");
 
-					if (NULL != this_frame.layer_info)
-						printf("Layer info: SET\t");
+					if (NULL != this_frame_ptr->layer_info)
+						printf("Layer info:\tSET\t");
 					else
-						printf("Layer info: NULL\t");
+						printf("Layer info:\tNULL\t");
 
-					if (TRUE == this_frame.add)
-						printf("Add frame: ON\t");
+					if (TRUE == this_frame_ptr->add)
+						printf("Add frame:\tON\t");
 					else
-						printf("Add frame: OFF\t");
+						printf("Add frame:\tOFF\t");
 
-					if (TRUE == this_frame.remove)
-						printf("Remove frame: ON\t");
+					if (TRUE == this_frame_ptr->remove)
+						printf("Remove frame:\tON\t");
 					else
-						printf("Remove frame: OFF\t");
+						printf("Remove frame:\tOFF\t");
 
-					if (TRUE == this_frame.is_moving)
+					if (TRUE == this_frame_ptr->is_moving)
 					{
-						printf("Move frame: ON\tX position: %u\tY position %u\t", this_frame.x_position, this_frame.y_position);
+						printf("Move frame:\tON\tX position:\t%u\tY position\t%u\t", this_frame_ptr->x_position, this_frame_ptr->y_position);
 					}
 					else
-						printf("Move frame: OFF\t");
+						printf("Move frame:\tOFF\t");
 
 					printf("\n\n");
 				}
@@ -344,13 +344,13 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 
 		// * After all of the layers have been pre-processed we have an array with the per frame info of what should be *
 		// * where in the output swf, plus we also have the swf dictionary created and ready to use                     *
-		for (frame_counter = 0; frame_counter < max_frames; frame_counter++)  // This loops _frame_ number of times
+		for (frame_counter = 0; frame_counter < max_frames + 1; frame_counter++)  // This loops _frames + 1_ number of times
 		{
 			for (layer_counter = 0; layer_counter < num_layers; layer_counter++)  // This loops _num_layers_ of times
 			{
 				// For each frame, access all of the layers then move to the next frame
 				frame_number = (frame_counter * num_layers) + layer_counter;
-				this_frame = swf_timing_array[frame_number];
+				this_frame_ptr = &swf_timing_array[frame_number];
 
 				// Display debugging info if requested
 				if (debug_level)
@@ -359,14 +359,14 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 				}
 
 				// Is this a frame in which some action needs to take place?
-				if (TRUE == this_frame.action_this)
+				if (TRUE == this_frame_ptr->action_this)
 				{
 					// * There is something to be done in this frame for this layer *
 
-					this_layer_info = this_frame.layer_info;
+					this_layer_info = this_frame_ptr->layer_info;
 
 					// Is this the frame in which the layer is added to the display?
-					if (TRUE == this_frame.add)
+					if (TRUE == this_frame_ptr->add)
 					{
 						// * Add the character to the swf display list *
 						display_list_object = SWFMovie_add(this_movie, (SWFBlock) this_layer_info->dictionary_shape);
@@ -376,7 +376,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 					}
 
 					// Is this the frame in which the layer is removed from the display?
-					if (TRUE == this_frame.remove)
+					if (TRUE == this_frame_ptr->remove)
 					{
 						// * Remove the character from the swf display list *
 
@@ -388,7 +388,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 					}
 
 					// Does the layer need to be moved/positioned in this frame?
-					if (TRUE == this_frame.is_moving)
+					if (TRUE == this_frame_ptr->is_moving)
 					{
 						// * Adjust the x and y position of the character on the display list *
 
@@ -396,7 +396,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 						display_list_object = this_layer_info->display_list_item;
 
 						// (Re-)position the object
-						SWFDisplayItem_moveTo(display_list_object, this_frame.x_position, this_frame.y_position);
+						SWFDisplayItem_moveTo(display_list_object, this_frame_ptr->x_position, this_frame_ptr->y_position);
 					}
 				}
 			}
@@ -422,6 +422,9 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
  * +++++++
  * 
  * $Log$
+ * Revision 1.23  2008/01/15 13:23:42  vapour
+ * Fixed an incorrect use of pointers, so now the main loop kind of works.
+ *
  * Revision 1.22  2008/01/15 12:01:55  vapour
  * Significantly reworked much of the swf generation pre-processing loops and array processing code.  Added a lot of comments and debugging output as well.
  *
