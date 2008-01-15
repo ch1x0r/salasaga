@@ -50,7 +50,6 @@ void menu_export_flash_animation(void)
 	SWFMovie			swf_movie;				// Swf movie object
 
 	GString				*tmp_gstring;			// Temporary GString
-	gint				tmp_int;				// Temporary integer
 
 
 	// Check if there is an active project
@@ -152,10 +151,6 @@ void menu_export_flash_animation(void)
 	// Set the background color for the animation
 	SWFMovie_setBackground(swf_movie, 0x00, 0x00, 0x00);  // RGB value - black
 
-	// Work out how many slides there are in the whole project
-	slides = g_list_first(slides);
-	tmp_int = g_list_length(slides);
-
 	// Export all slides to the swf buffer
 	swf_movie = menu_export_flash_inner(swf_movie);
 	if (NULL == swf_movie)
@@ -195,6 +190,9 @@ void menu_export_flash_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/01/15 06:17:19  vapour
+ * Removed old variables and code no longer used.
+ *
  * Revision 1.7  2008/01/13 10:40:33  vapour
  * Updated to set the dimensions, frame rate, and background colour of the swf output here.
  * Also updated to use the new definition for the inner swf generation function.
