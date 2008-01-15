@@ -158,6 +158,12 @@ void menu_export_flash_animation(void)
 		// Something went wrong when creating the swf output stream
 		display_warning("Error ED91: Something went wrong when creating the swf movie.");
 
+		// Free the swf movie buffer
+		destroySWFMovie(swf_movie);
+
+		// Frees the memory holding the file name
+		g_free(filename);
+
 		// Free the memory allocated in this function
 		g_string_free(tmp_gstring, TRUE);
 
@@ -190,6 +196,9 @@ void menu_export_flash_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/01/15 11:57:59  vapour
+ * Added code to free memory better if an error occurs.
+ *
  * Revision 1.8  2008/01/15 06:17:19  vapour
  * Removed old variables and code no longer used.
  *
