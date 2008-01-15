@@ -130,8 +130,9 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 		// Add the frames for this slide to the total count of frames for the animation
 		total_frames += max_frames;
 
-		// Create an array that's layers x max number of frames
-		swf_timing_array = g_new0(swf_frame_element, num_layers * (max_frames + 1));  // +1 because if (ie.) we say slide 5, then we really mean the 6th slide (we start from 0) 
+		// Create an array that's layers x "number of frames in the slide"
+		frame_number = num_layers * (max_frames + 1);  // +1 because if (ie.) we say slide 5, then we really mean the 6th slide (we start from 0)
+		swf_timing_array = g_new0(swf_frame_element, frame_number); 
 
 		// Point to the first layer again
 		this_slide_data = g_list_nth_data(slides, slide_counter);
@@ -344,12 +345,12 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 
 		// * After all of the layers have been pre-processed we have an array with the per frame info of what should be *
 		// * where in the output swf, plus we also have the swf dictionary created and ready to use                     *
-		for (frame_counter = 0; frame_counter < max_frames + 1; frame_counter++)  // This loops _frames + 1_ number of times
+		for (frame_counter = 0; frame_counter <= max_frames; frame_counter++)  // This loops _frames + 1_ number of times
 		{
 			for (layer_counter = 0; layer_counter < num_layers; layer_counter++)  // This loops _num_layers_ of times
 			{
 				// For each frame, access all of the layers then move to the next frame
-				frame_number = (frame_counter * num_layers) + layer_counter;
+				frame_number = (layer_counter * (max_frames + 1)) + frame_counter;
 				this_frame_ptr = &swf_timing_array[frame_number];
 
 				// Display debugging info if requested
@@ -422,6 +423,9 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
  * +++++++
  * 
  * $Log$
+ * Revision 1.25  2008/01/15 20:13:19  vapour
+ * Adjusted the order swf frames are processed in.  Now much better.
+ *
  * Revision 1.24  2008/01/15 16:18:58  vapour
  * Updated copyright notice to include 2008.
  *
