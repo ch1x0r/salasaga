@@ -38,6 +38,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 {
 	// Local variables
 	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
+	GError				*error = NULL;				// Pointer to error return structure
 	guint				frame_counter;				// Holds the number of frames
 	gint				highlight_box_width;		// Used while generating swf output for highlight boxes
 	gint				highlight_box_height;		// Used while generating swf output for highlight boxes
@@ -45,8 +46,11 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 	guint				max_frames = 0;				// The highest frame number in the slide
 	guint				num_layers = 0;				// The number of layers in the slide
 	guint				num_slides;					// The number of slides in the movie
+	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed jpeg image
+	gsize				pixbuf_size;				// Is given the size of a compressed jpeg image
 	guint				position_counter;			// Temporary counter integer
 	GdkPixbuf			*resized_pixbuf;			// Temporary pixbuf used while scaling images
+	gboolean			return_code_bool;			// Receives boolean return values
 	guint				slide_counter;				// Holds the number of slides
 	swf_frame_element	*swf_timing_array = NULL;	// Used to coordinate the actions in each frame
 	swf_frame_element 	*this_frame_ptr;			// Points to frame information when looping
@@ -166,7 +170,37 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 
 					}
 
-					// fixme2: Create the dictionary shape for this layer
+					// Convert the compressed image into jpeg data
+					return_code_bool = gdk_pixbuf_save_to_buffer(GDK_PIXBUF(resized_pixbuf),
+									&pixbuf_buffer,  // Will come back filled out with location of jpeg data
+									&pixbuf_size,  // Will come back filled out with size of jpeg data
+									"jpeg",
+									&error,
+									"quality",
+									"100",
+									NULL);
+					if (FALSE == return_code_bool)
+					{
+						// Something went wrong when encoding the image to jpeg format
+						display_warning("ED51: Something went wrong when encoding a slide to jpeg format");
+
+						// Free the memory allocated in this function
+						g_error_free(error);
+						if (NULL != resized_pixbuf)
+							g_object_unref(resized_pixbuf);
+
+						break;
+					}
+
+					// Create the dictionary shape for this layer
+					SWFInput image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
+					SWFJpegBitmap image_bitmap = newSWFJpegBitmap_fromInput(image_input);
+
+					// Store the dictionary shape for future reference
+					this_layer_data->dictionary_shape = (SWFBlock) image_bitmap;
+
+					// Indicate that the dictionary shape for this layer was created ok
+					dictionary_shape_ok = TRUE;
 
 					break;
 
@@ -188,9 +222,11 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 					// Set the line style
 					SWFShape_setLine(highlight_box, 2, 0x00, 0xff, 0x00, 0xcc);  // Width = 2 seems to work ok
 
-					// Create the highlight box
+					// Work out the scaled dimensions of the highlight box
 					highlight_box_width = ((layer_highlight *) this_layer_data->object_data)->width;  // fixme3: This needs to be scaled
 					highlight_box_height = ((layer_highlight *) this_layer_data->object_data)->height;  // fixme3: This needs to be scaled
+
+					// Create the highlight box
 					SWFShape_drawLine(highlight_box, highlight_box_width, 0.0);
 					SWFShape_drawLine(highlight_box, 0.0, highlight_box_height);
 					SWFShape_drawLine(highlight_box, -(highlight_box_width), 0.0);
@@ -423,6 +459,9 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
  * +++++++
  * 
  * $Log$
+ * Revision 1.26  2008/01/16 05:51:11  vapour
+ * Added initial code for creating swf dictionary shapes for background images.  Needs testing.
+ *
  * Revision 1.25  2008/01/15 20:13:19  vapour
  * Adjusted the order swf frames are processed in.  Now much better.
  *
