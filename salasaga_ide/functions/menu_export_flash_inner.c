@@ -22,6 +22,12 @@
  */
 
 
+// Turn on C99 math compatibility
+#define _ISOC99_SOURCE
+
+// Math include
+#include <math.h>
+
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -40,10 +46,11 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
 	GError				*error = NULL;				// Pointer to error return structure
 	guint				frame_counter;				// Holds the number of frames
-	gint				highlight_box_width;		// Used while generating swf output for highlight boxes
 	gint				highlight_box_height;		// Used while generating swf output for highlight boxes
+	gint				highlight_box_width;		// Used while generating swf output for highlight boxes
+	gint				image_height;				// Temporarily used to store the height of an image
+	gint				image_width;				// Temporarily used to store the width of an image
 	guint				layer_counter;				// Holds the number of layers
-	guint				max_frames = 0;				// The highest frame number in the slide
 	guint				num_layers = 0;				// The number of layers in the slide
 	guint				num_slides;					// The number of slides in the movie
 	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed jpeg image
@@ -51,7 +58,12 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 	guint				position_counter;			// Temporary counter integer
 	GdkPixbuf			*resized_pixbuf;			// Temporary pixbuf used while scaling images
 	gboolean			return_code_bool;			// Receives boolean return values
+	gint				scaled_height;				// Used to calculate the final size an object should be scaled to
+	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to 
+	gint				scaled_width;				// Used to calculate the final size an object should be scaled to
+	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
 	guint				slide_counter;				// Holds the number of slides
+	guint				slide_duration;				// Holds the total number of frames in this slide
 	swf_frame_element	*swf_timing_array = NULL;	// Used to coordinate the actions in each frame
 	swf_frame_element 	*this_frame_ptr;			// Points to frame information when looping
 	layer				*this_layer_data;			// Points to the data in the present layer
@@ -66,12 +78,12 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 	guint				element_number;
 	guint				frame_number;
 
-	gint				element_x_position_finish = 0;
-	gint				element_x_position_increment = 0;
-	gint				element_x_position_start = 0;
-	gint				element_y_position_finish = 0;
-	gint				element_y_position_increment = 0;
-	gint				element_y_position_start = 0;
+	gfloat				element_x_position_finish = 0;
+	gfloat				element_x_position_increment = 0;
+	gfloat				element_x_position_start = 0;
+	gfloat				element_y_position_finish = 0;
+	gfloat				element_y_position_increment = 0;
+	gfloat				element_y_position_start = 0;
 
 
 	// Initialise variables
@@ -85,6 +97,16 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 		return NULL;
 	}
 
+	// Calculate the height and width scaling values needed for this swf output
+	scaled_height_ratio = (gfloat) output_height / (gfloat) project_height;
+	scaled_width_ratio = (gfloat) output_width / (gfloat) project_width;
+
+	// Displaying debugging info if requested
+	if (debug_level)
+	{
+		printf("Scaled height ratio: %.2f\n", scaled_height_ratio);
+		printf("Scaled width ratio: %.2f\n", scaled_width_ratio);
+	}
 
 // For now, this uses a two pass per slide approach
 //	1st pass gathers timing info, and creates an array of timing information for each slide
@@ -107,35 +129,26 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 	{
 		// Initialise things for this slide
 		this_slide_data = g_list_nth_data(slides, slide_counter);
-		max_frames = 0;
+		slide_duration = this_slide_data->duration;
 
 		// Work out how many layers there are in this slide
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		num_layers = g_list_length(this_slide_data->layers);
-		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
-		{
-			// Work out the maximum frame number for the slide
-			this_layer_data = g_list_nth_data(this_slide_data->layers, layer_counter);
-			if (this_layer_data->finish_frame > max_frames)
-			{
-				max_frames = this_layer_data->finish_frame;
-			}
-		}
 
-		// * At this stage we should know both the maximum frame number (max_frames) and number of layers (num_layers) in the slide *
+		// * At this stage we should know both the number of frames (slide_duration) and number of layers (num_layers) in the slide *
 
 		// Output some debugging info if requested
 		if (debug_level)
 		{
 			printf("Number of layers in slide %u is %u\n", slide_counter, num_layers);
-			printf("Maximum frame number in slide %u is %u\n", slide_counter, max_frames);
+			printf("Maximum frame number in slide %u is %u\n", slide_counter, slide_duration);
 		}
 
 		// Add the frames for this slide to the total count of frames for the animation
-		total_frames += max_frames;
+		total_frames += slide_duration;
 
 		// Create an array that's layers x "number of frames in the slide"
-		frame_number = num_layers * (max_frames + 1);  // +1 because if (ie.) we say slide 5, then we really mean the 6th slide (we start from 0)
+		frame_number = num_layers * (slide_duration + 1);  // +1 because if (ie.) we say slide 5, then we really mean the 6th slide (we start from 0)
 		swf_timing_array = g_new0(swf_frame_element, frame_number); 
 
 		// Point to the first layer again
@@ -157,9 +170,23 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 				case TYPE_GDK_PIXBUF:
 					// * We're processing an image layer *
 
+					// Work out the correct dimensions for this image in the output
+					image_height = ((layer_image *) this_layer_data->object_data)->height;
+					scaled_height = roundf(scaled_height_ratio * (gfloat) image_height);
+					image_width = ((layer_image *) this_layer_data->object_data)->width;
+					scaled_width = roundf(scaled_width_ratio * (gfloat) image_width);
+
+					// Displaying debugging info if requested
+					if (debug_level)
+					{
+						printf("Image height: %d\n", image_height);
+						printf("Scaled height: %d\n", scaled_height);
+						printf("Image width: %d\n", image_width);
+						printf("Scaled width: %d\n", scaled_width);
+					}
+
 					// Scale the image to the correct dimensions
-					// fixme2: This simple code that uses output_width and output_height will only work for background images!
-					resized_pixbuf = gdk_pixbuf_scale_simple(((layer_image *) this_layer_data->object_data)->image_data, output_width, output_height, scaling_quality);
+					resized_pixbuf = gdk_pixbuf_scale_simple(((layer_image *) this_layer_data->object_data)->image_data, scaled_width, scaled_height, GDK_INTERP_HYPER);  // Do the scaling at best possible quality
 					if (NULL == resized_pixbuf)
 					{
 						// Something went wrong when creating the dictionary shape for this layer
@@ -192,7 +219,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 						break;
 					}
 
-					// Create the dictionary shape for this layer
+					// Create the dictionary shape from the jpeg data
 					SWFInput image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
 					SWFJpegBitmap image_bitmap = newSWFJpegBitmap_fromInput(image_input);
 
@@ -223,8 +250,8 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 					SWFShape_setLine(highlight_box, 2, 0x00, 0xff, 0x00, 0xcc);  // Width = 2 seems to work ok
 
 					// Work out the scaled dimensions of the highlight box
-					highlight_box_width = ((layer_highlight *) this_layer_data->object_data)->width;  // fixme3: This needs to be scaled
-					highlight_box_height = ((layer_highlight *) this_layer_data->object_data)->height;  // fixme3: This needs to be scaled
+					highlight_box_width = roundf(scaled_width_ratio * (gfloat) ((layer_highlight *) this_layer_data->object_data)->width);
+					highlight_box_height = roundf(scaled_height_ratio * (gfloat) ((layer_highlight *) this_layer_data->object_data)->height);
 
 					// Create the highlight box
 					SWFShape_drawLine(highlight_box, highlight_box_width, 0.0);
@@ -265,22 +292,24 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 			// If the creation of the dictionary shape worked, we add this layer to the list for processing
 			if (TRUE == dictionary_shape_ok)
 			{
-				// Process the element array, setting flags and info as required for this layer
-				element_x_position_start = ((layer_highlight *) this_layer_data->object_data)->x_offset_start;
-				element_x_position_finish = ((layer_highlight *) this_layer_data->object_data)->x_offset_finish;
-				element_y_position_start = ((layer_highlight *) this_layer_data->object_data)->y_offset_start;
-				element_y_position_finish = ((layer_highlight *) this_layer_data->object_data)->y_offset_finish;
+				// * Process the element array, setting flags and info as required for this layer *
+
+				// Calculate the scaled start and finish positions for each element
+				element_x_position_start = roundf(scaled_width_ratio * (gfloat) ((layer_highlight *) this_layer_data->object_data)->x_offset_start);
+				element_x_position_finish = roundf(scaled_width_ratio * (gfloat) ((layer_highlight *) this_layer_data->object_data)->x_offset_finish);
+				element_y_position_start = roundf(scaled_height_ratio * (gfloat) ((layer_highlight *) this_layer_data->object_data)->y_offset_start);
+				element_y_position_finish = roundf(scaled_height_ratio * (gfloat) ((layer_highlight *) this_layer_data->object_data)->y_offset_finish);
 
 				// If the layer moves, flag this and calculate the increment in each direction
 				if ((element_x_position_start != element_x_position_finish) || (element_y_position_start != element_y_position_finish))
 				{
-					swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].is_moving = TRUE;
-					element_x_position_increment = (((layer_highlight *) this_layer_data->object_data)->x_offset_finish - ((layer_highlight *) this_layer_data->object_data)->x_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);  // fixme3: This MAY need to be scaled
-					element_y_position_increment = (((layer_highlight *) this_layer_data->object_data)->y_offset_finish - ((layer_highlight *) this_layer_data->object_data)->y_offset_start) / (this_layer_data->finish_frame - this_layer_data->start_frame);  // fixme3: This MAY need to be scaled
+					swf_timing_array[(layer_counter * (slide_duration + 1)) + this_layer_data->start_frame].is_moving = TRUE;
+					element_x_position_increment = (((layer_highlight *) this_layer_data->object_data)->x_offset_finish - ((layer_highlight *) this_layer_data->object_data)->x_offset_start) / (gfloat) (this_layer_data->finish_frame - this_layer_data->start_frame);
+					element_y_position_increment = (((layer_highlight *) this_layer_data->object_data)->y_offset_finish - ((layer_highlight *) this_layer_data->object_data)->y_offset_start) / (gfloat) (this_layer_data->finish_frame - this_layer_data->start_frame);
 				}
 
 				// Indicate on which frame the element should be displayed
-				frame_number = (layer_counter * max_frames) + this_layer_data->start_frame;
+				frame_number = (layer_counter * (slide_duration + 1)) + this_layer_data->start_frame;
 				swf_timing_array[frame_number].add = TRUE;
 
 				// Displaying debugging info if requested
@@ -290,7 +319,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 				}
 
 				// Indicate on which frame the element should be removed from display
-				frame_number = (layer_counter * max_frames) + this_layer_data->finish_frame;
+				frame_number = (layer_counter * (slide_duration + 1)) + this_layer_data->finish_frame;
 				swf_timing_array[frame_number].remove = TRUE;
 
 				// Displaying debugging info if requested
@@ -303,7 +332,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 				position_counter = 0;
 				for (frame_number = this_layer_data->start_frame; frame_number <= this_layer_data->finish_frame; frame_number++)
 				{
-					element_number = (layer_counter * max_frames) + frame_number;
+					element_number = (layer_counter * (slide_duration + 1)) + frame_number;
 					this_frame_ptr = &swf_timing_array[element_number];
 
 					// Display debugging info if requested
@@ -319,11 +348,11 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 					this_frame_ptr->layer_info = this_layer_data;
 
 					// If the layer moves, store the x and y positions for each frame
-					if (TRUE == swf_timing_array[(layer_counter * max_frames) + this_layer_data->start_frame].is_moving)
+					if (TRUE == swf_timing_array[(layer_counter * (slide_duration + 1)) + this_layer_data->start_frame].is_moving)
 					{
 						this_frame_ptr->is_moving = TRUE;
-						this_frame_ptr->x_position = element_x_position_start + (position_counter * element_x_position_increment);
-						this_frame_ptr->y_position = element_y_position_start + (position_counter * element_y_position_increment);
+						this_frame_ptr->x_position = roundf(element_x_position_start + (position_counter * element_x_position_increment));
+						this_frame_ptr->y_position = roundf(element_y_position_start + (position_counter * element_y_position_increment));
 						position_counter++;
 					}
 
@@ -338,7 +367,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 		// Debugging output, displaying what we have in the pre-processing element array thus far
 		if (debug_level)
 		{
-			for (frame_counter = 0; frame_counter <= max_frames; frame_counter++)  // This loops _frame + 1_ number of times
+			for (frame_counter = 0; frame_counter <= slide_duration; frame_counter++)  // This loops _frame + 1_ number of times
 			{
 				for (layer_counter = 0; layer_counter < num_layers; layer_counter++)  // This loops _num_layers_ of times
 				{
@@ -381,12 +410,12 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 
 		// * After all of the layers have been pre-processed we have an array with the per frame info of what should be *
 		// * where in the output swf, plus we also have the swf dictionary created and ready to use                     *
-		for (frame_counter = 0; frame_counter <= max_frames; frame_counter++)  // This loops _frames + 1_ number of times
+		for (frame_counter = 0; frame_counter <= slide_duration; frame_counter++)  // This loops _frames + 1_ number of times
 		{
 			for (layer_counter = 0; layer_counter < num_layers; layer_counter++)  // This loops _num_layers_ of times
 			{
 				// For each frame, access all of the layers then move to the next frame
-				frame_number = (layer_counter * (max_frames + 1)) + frame_counter;
+				frame_number = (layer_counter * (slide_duration + 1)) + frame_counter;
 				this_frame_ptr = &swf_timing_array[frame_number];
 
 				// Display debugging info if requested
@@ -459,6 +488,11 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
  * +++++++
  * 
  * $Log$
+ * Revision 1.27  2008/01/16 12:49:11  vapour
+ * + Images now have swf code created for them (scaled and all).
+ * + Highlight boxes are now scaled.
+ * + Slide duration is taken from the slide properties, rather than manually calculated.
+ *
  * Revision 1.26  2008/01/16 05:51:11  vapour
  * Added initial code for creating swf dictionary shapes for background images.  Needs testing.
  *
