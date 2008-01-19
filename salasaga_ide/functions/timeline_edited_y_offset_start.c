@@ -86,7 +86,7 @@ void timeline_edited_y_offset_start(GtkCellRendererText *selection, gchar *row, 
 			break;
 
 		default:
-			display_warning("ED60: Unknown layer type\n");
+			display_warning("Error ED60: Unknown layer type\n");
 	}
 
 	// Update the timeline widget with the new value too
@@ -107,6 +107,9 @@ void timeline_edited_y_offset_start(GtkCellRendererText *selection, gchar *row, 
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/01/19 07:09:20  vapour
+ * Tweaked an error message for clarity.
+ *
  * Revision 1.4  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *

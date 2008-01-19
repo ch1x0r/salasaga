@@ -153,7 +153,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 				break;
 
 			default:
-				display_warning("ED32: Unknown layer type\n");
+				display_warning("Error ED32: Unknown layer type\n");
 				return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
 		}
 
@@ -207,6 +207,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/01/19 07:10:09  vapour
+ * Tweaked an error message for clarity.
+ *
  * Revision 1.4  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *
