@@ -183,7 +183,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				if (FALSE == tmp_bool)
 				{
 					// Something went wrong when encoding the image to jpeg format
-					display_warning("ED51: Something went wrong when encoding a slide to jpeg format");
+					display_warning("Error ED51: Something went wrong when encoding a slide to jpeg format");
 
 					// Free the memory allocated in this function
 					if (NULL != tmp_pixbuf) g_object_unref(tmp_pixbuf);
@@ -629,7 +629,7 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
 				break;
 
 			default:
-				g_string_printf(tmp_gstring, "ED29: Unknown object type found in layer '%s'\n", layer_data->name->str);
+				g_string_printf(tmp_gstring, "Error ED29: Unknown object type found in layer '%s'\n", layer_data->name->str);
 				display_warning(tmp_gstring->str);
 		}
 
@@ -669,6 +669,9 @@ void menu_export_svg_animation_slide(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/01/19 06:53:49  vapour
+ * Tweaked some error messages for clarity.
+ *
  * Revision 1.5  2008/01/15 16:18:58  vapour
  * Updated copyright notice to include 2008.
  *

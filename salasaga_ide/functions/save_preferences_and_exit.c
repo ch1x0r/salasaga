@@ -164,7 +164,7 @@ void save_preferences_and_exit(void)
 		if (ERROR_SUCCESS != return_code)
 		{
 			// Creating the base registry key failed, so display a warning then exit
-			display_warning("ED54: Saving preferences in the registry failed\n");
+			display_warning("Error ED54: Saving preferences in the registry failed\n");
 			gtk_main_quit();
 		}
 	} else
@@ -182,7 +182,7 @@ void save_preferences_and_exit(void)
 		if (ERROR_SUCCESS != return_code)
 		{
 			// Creating the defaults registry key failed, so display a warning then exit
-			display_warning("ED55: Saving preferences in the registry failed\n");
+			display_warning("Error ED55: Saving preferences in the registry failed\n");
 			gtk_main_quit();
 		}
 	}
@@ -299,6 +299,9 @@ void save_preferences_and_exit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/01/19 06:59:05  vapour
+ * Tweaked some error messages for clarity.
+ *
  * Revision 1.4  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *

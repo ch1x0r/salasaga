@@ -90,7 +90,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	layer_node = xmlNewChild(slide_node, NULL, (const xmlChar *) "layer", NULL);
 	if (NULL == layer_node)
 	{
-		display_warning("ED24: Error creating the layer elements\n");
+		display_warning("Error ED24: Error creating the layer elements\n");
 		return;
 	}
 
@@ -121,7 +121,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			if (FALSE == tmp_bool)
 			{
 				// Something went wrong when encoding the image to jpeg format
-				display_warning("ED62: Something went wrong when encoding a slide to png format");
+				display_warning("Error ED62: Something went wrong when encoding a slide to png format");
 
 				// Free the memory allocated in this function
 				g_string_free(tmp_gstring, TRUE);
@@ -245,6 +245,9 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/01/19 06:56:45  vapour
+ * Tweaked some error messages for clarity.
+ *
  * Revision 1.5  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *

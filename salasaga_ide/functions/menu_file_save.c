@@ -166,7 +166,7 @@ void menu_file_save(void)
 	document_pointer = xmlNewDoc((const xmlChar *) "1.0");
 	if (NULL == document_pointer)
 	{
-		display_warning("ED19: Error creating the XML save document\n");
+		display_warning("Error ED19: Error creating the XML save document\n");
 		return;
 	}
 
@@ -174,7 +174,7 @@ void menu_file_save(void)
 	root_node = xmlNewDocRawNode(document_pointer, NULL, (const xmlChar *) "flame_project", NULL);
 	if (NULL == root_node)
 	{
-		display_warning("ED21: Error creating the root node\n");
+		display_warning("Error ED21: Error creating the root node\n");
 		return;
 	}
 
@@ -185,7 +185,7 @@ void menu_file_save(void)
 	meta_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "meta-data", NULL);
 	if (NULL == meta_pointer)
 	{
-		display_warning("ED25: Error creating the meta-data container\n");
+		display_warning("Error ED25: Error creating the meta-data container\n");
 		return;
 	}
 
@@ -196,7 +196,7 @@ void menu_file_save(void)
 	pref_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "preferences", NULL);
 	if (NULL == pref_pointer)
 	{
-		display_warning("ED20: Error creating the preferences container\n");
+		display_warning("Error ED20: Error creating the preferences container\n");
 		return;
 	}
 
@@ -220,7 +220,7 @@ void menu_file_save(void)
 	slide_root = xmlNewChild(root_node, NULL, (const xmlChar *) "slides", NULL);
 	if (NULL == slide_root)
 	{
-		display_warning("ED22: Error creating the slides container\n");
+		display_warning("Error ED22: Error creating the slides container\n");
 		return;
 	}
 
@@ -261,6 +261,9 @@ void menu_file_save(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/19 06:58:21  vapour
+ * Tweaked some error messages for clarity.
+ *
  * Revision 1.3  2008/01/15 16:19:03  vapour
  * Updated copyright notice to include 2008.
  *
