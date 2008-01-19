@@ -84,6 +84,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gint				text_bg_box_height;			// Used while generating swf output for text boxes
 	gint				text_bg_box_width;			// Used while generating swf output for text boxes
 	SWFFillStyle		text_bg_fill_style;			// Fill style used when constructing text background shape
+	SWFMovieClip		text_movie_clip;			// The movie clip that contains the text background and text
 	SWFText				text_object;				// The text object we're working on goes in this
 
 	guint				element_number;
@@ -409,6 +410,27 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 					// We're processing a text layer
 
+					// * Create the text object *
+
+					// Create the text object we'll be using
+					text_object = newSWFText();
+
+					// Assign a font to the text object
+					SWFText_setFont(text_object, font_object);
+
+					// Set the height we want for the text
+					gfloat scaled_font_size = scaled_height_ratio * ((layer_text *) this_layer_data->object_data)->font_size;
+					SWFText_setHeight(text_object, scaled_font_size);
+
+					// Set the foreground color for the text
+					guint16 red_component = ((layer_text *) this_layer_data->object_data)->text_color.red;
+					guint16 green_component = ((layer_text *) this_layer_data->object_data)->text_color.green;
+					guint16 blue_component = ((layer_text *) this_layer_data->object_data)->text_color.blue;
+					SWFText_setColor(text_object, roundf(red_component / 255), roundf(green_component / 255), roundf(blue_component / 255), 0xff);
+
+					// Add the required text to the text object
+					SWFText_addString(text_object, "some text", NULL);
+
 					// * Create the background for the text object *
 					text_bg = newSWFShape();
 					if (NULL == text_bg)
@@ -424,11 +446,14 @@ gint menu_export_flash_inner(gchar *output_filename)
 					SWFShape_setRightFillStyle(text_bg, text_bg_fill_style);
 
 					// Set the line style
-					SWFShape_setLine(text_bg, 2, 0x00, 0xff, 0x00, 0xcc);  // Width = 2 seems to work ok
+					SWFShape_setLine(text_bg, 2, 0x00, 0x00, 0x00, 0xff);  // Width = 2 seems to work ok
 
 					// Work out the scaled dimensions of the text background box
-					text_bg_box_height = roundf(scaled_height_ratio * (gfloat) ((layer_text *) this_layer_data->object_data)->rendered_height);
-					text_bg_box_width = roundf(scaled_width_ratio * (gfloat) ((layer_text *) this_layer_data->object_data)->rendered_width);
+					text_bg_box_height = roundf(scaled_height_ratio * scaled_font_size);
+					text_bg_box_width = roundf(scaled_width_ratio * ((gfloat) SWFText_getStringWidth(text_object, "some text") + 10));
+
+					// Move the start position of the text box vertically downwards
+					SWFShape_movePenTo(text_bg, -(5 * scaled_height_ratio), (5 * scaled_height_ratio) - text_bg_box_height);
 
 					// Create the text background box
 					SWFShape_drawLine(text_bg, text_bg_box_width, 0.0);
@@ -436,31 +461,20 @@ gint menu_export_flash_inner(gchar *output_filename)
 					SWFShape_drawLine(text_bg, -(text_bg_box_width), 0.0);
 					SWFShape_drawLine(text_bg, 0.0, -(text_bg_box_height));
 
-					// fixme2: Still need to add the text background box and the text itself to the one swf element
+					// * Create the swf movie clip object that holds the text background and text *
+					text_movie_clip = newSWFMovieClip();
 
+					// Add the text background to the movie clip
+					SWFMovieClip_add(text_movie_clip, (SWFBlock) text_bg);
 
-					// * Create the text itself *
+					// Add the text object to the movie clip
+					SWFMovieClip_add(text_movie_clip, (SWFBlock) text_object);
 
-					// Create the text object we'll be using
-					text_object = newSWFText();
-
-					// Assign a font to the text object
-					SWFText_setFont(text_object, font_object);
-
-					// Set the height we want for the text
-					SWFText_setHeight(text_object, ((layer_text *) this_layer_data->object_data)->font_size);
-
-					// Set the foreground color for the text
-					guint16 red_component = ((layer_text *) this_layer_data->object_data)->text_color.red;
-					guint16 green_component = ((layer_text *) this_layer_data->object_data)->text_color.green;
-					guint16 blue_component = ((layer_text *) this_layer_data->object_data)->text_color.blue;
-					SWFText_setColor(text_object, roundf(red_component / 255), roundf(green_component / 255), roundf(blue_component / 255), 0xff);
-
-					// Add the required text to the text object
-					SWFText_addString(text_object, "some text", NULL);
+					// Advance the movie clip one frame, else it won't be displayed
+					SWFMovieClip_nextFrame(text_movie_clip);
 
 					// Store the dictionary shape for future reference
-					this_layer_data->dictionary_shape = (SWFBlock) text_object;
+					this_layer_data->dictionary_shape = (SWFBlock) text_movie_clip;
 
 					// Indicate that the dictionary shape for this layer was created ok
 					dictionary_shape_ok = TRUE;
@@ -693,6 +707,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.29  2008/01/19 22:56:54  vapour
+ * Text and it's background are now added to a movie clip for swf output.  Scaling not working very well yet though.
+ *
  * Revision 1.28  2008/01/19 06:52:19  vapour
  *  + Moved initial swf movie creation and saving code in here.
  *  + Initial working swf text generation code in place.  Still needs more work though.
