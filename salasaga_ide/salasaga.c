@@ -83,9 +83,10 @@ GtkTreeViewColumn		*film_strip_column;			// Pointer to the film strip column
 GtkScrolledWindow		*film_strip_container;		// Container for the film strip
 GtkListStore			*film_strip_store;			// Film strip list store
 GtkWidget				*film_strip_view;			// The view of the film strip list store
+gchar					*font_path;					// Points to the base location for Flames font files
 guint					frames_per_second;			// Number of frames per second
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
-GString					*icon_path;					// Used to determine if SVG images can be loaded
+GString					*icon_path;					// Points to the base location for Flames icon files
 GtkWidget				*main_drawing_area;			// Widget for the drawing area
 GtkWidget				*main_window;				// Widget for the main window
 GtkItemFactory			*menu_bar = NULL;			// Widget for the menu bar
@@ -266,18 +267,18 @@ gint main(gint argc, gchar *argv[])
 		printf("Program path: '%s'\n", argv[0]);
 		printf("Directory base: '%s'\n", g_path_get_dirname(argv[0]));
 		g_string_printf(icon_path, g_path_get_dirname(argv[0]));
-		g_string_printf(icon_path, g_build_path("/", icon_path->str, "..", "share", NULL));
+		g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", NULL));
 		printf("Location for icons: '%s'\n", icon_path->str);
 	}
 
 	// * Work out if SVG images can be loaded *
-	#ifdef _WIN32
+#ifdef _WIN32
 	// Hard code a different path for windows
 	icon_path = g_string_assign(icon_path, "icons");
 #else
 	g_string_assign(icon_path, g_path_get_dirname(argv[0]));
 	if (g_string_equal(icon_path, dot_string)) g_string_assign(icon_path, "/usr/bin");
-	g_string_printf(icon_path, g_build_path("/", icon_path->str, "..", "share", "flame", "icons", "72x72", NULL));
+	g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", "flame", "icons", "72x72", NULL));
 #endif
 
 	supported_formats = gdk_pixbuf_get_formats();
@@ -296,7 +297,7 @@ gint main(gint argc, gchar *argv[])
 #else
 			g_string_assign(icon_path, g_path_get_dirname(argv[0]));
 			if (g_string_equal(icon_path, dot_string)) g_string_assign(icon_path, "/usr/bin");
-			g_string_printf(icon_path, g_build_path("/", icon_path->str, "..", "share", "flame", "icons", "scalable", NULL));
+			g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", "flame", "icons", "scalable", NULL));
 #endif
 
 		}
@@ -306,6 +307,14 @@ gint main(gint argc, gchar *argv[])
 	// Load initial mouse pointer graphic
 	g_string_printf(tmp_gstring, "%s%c%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", icon_extension->str);
 	mouse_ptr_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+
+	// Create the path to the font files
+#ifdef _WIN32
+	// Hard code a different path for windows
+	font_path = g_build_path(G_DIR_SEPARATOR_S, "fonts", "BitstreamVera", NULL);
+#else
+	font_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "..", "fonts", "BitstreamVera", NULL);
+#endif
 
 	// Start up the GUI part of things
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -973,6 +982,10 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.68  2008/01/19 07:13:38  vapour
+ *  + Improved the directory separator used in strings, for better cross platform functionality.
+ *  + Added the font_path variable and code to set it at program start up.
+ *
  * Revision 1.67  2008/01/15 16:20:32  vapour
  * Updated copyright notice to include 2008.
  *
