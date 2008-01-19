@@ -44,10 +44,9 @@ void menu_export_flash_animation(void)
 	GtkWidget 			*export_dialog;			// Dialog widget
 	gchar				*filename;				// Pointer to the chosen file name
 	GtkFileFilter		*flash_filter;			// Filter for *.swf
+	gint				return_code_gint;		// Catches the return code from the inner swf export function
 	gboolean			unique_name;			// Switch used to mark when we have a valid filename
 	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
-
-	SWFMovie			swf_movie;				// Swf movie object
 
 	GString				*tmp_gstring;			// Temporary GString
 
@@ -58,7 +57,7 @@ void menu_export_flash_animation(void)
 		// No project is active, so display a message and return
 		// fixme4: This code should never be reached any more, as exporting is disabled while no project loaded
 		sound_beep();
-		display_warning("ED35: There is no project loaded\n");
+		display_warning("Error ED35: There is no project loaded\n");
 		return;
 	}
 
@@ -137,51 +136,21 @@ void menu_export_flash_animation(void)
 	// Destroy the dialog box, as it's not needed any more
 	gtk_widget_destroy(export_dialog);
 
-	// Initialise Ming and create an empty swf movie object
-	Ming_init();
-	swf_movie = newSWFMovieWithVersion(7);
-	Ming_setSWFCompression(9);
-
-	// Set the output size of the swf movie 
-	SWFMovie_setDimension(swf_movie, output_width, output_height);
-
-	// Set the frame rate for the movie
-	SWFMovie_setRate(swf_movie, frames_per_second);
-
-	// Set the background color for the animation
-	SWFMovie_setBackground(swf_movie, 0x00, 0x00, 0x00);  // RGB value - black
-
-	// Export all slides to the swf buffer
-	swf_movie = menu_export_flash_inner(swf_movie);
-	if (NULL == swf_movie)
+	// Export the swf
+	return_code_gint = menu_export_flash_inner(filename);
+	if (FALSE == return_code_gint)
 	{
 		// Something went wrong when creating the swf output stream
 		display_warning("Error ED91: Something went wrong when creating the swf movie.");
-
-		// Free the swf movie buffer
-		destroySWFMovie(swf_movie);
-
-		// Frees the memory holding the file name
-		g_free(filename);
-
-		// Free the memory allocated in this function
-		g_string_free(tmp_gstring, TRUE);
-
-		return;
+	} else
+	{
+		// Movie created successfully, so update the status bar to let the user know
+		g_string_printf(tmp_gstring, "Wrote Flash file '%s'.", filename);
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
+		gdk_flush();
 	}
 
-	// Save the swf movie file to disk
-	SWFMovie_save(swf_movie, filename);
-
-	// Update the status bar, to show progress to the user
-	g_string_printf(tmp_gstring, "Wrote Flash file '%s'.", filename);
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
-	gdk_flush();
-
 	// * Function clean up area *
-
-	// Free the swf movie buffer
-	destroySWFMovie(swf_movie);
 
 	// Frees the memory holding the file name
 	g_free(filename);
@@ -196,6 +165,9 @@ void menu_export_flash_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2008/01/19 06:44:24  vapour
+ * Moved the initial swf movie creation code into the inner function.
+ *
  * Revision 1.10  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *
