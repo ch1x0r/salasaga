@@ -59,7 +59,7 @@ void sound_beep(void)
 	// fixme4: Need a non-gnome way of playing sound too, for windows
 	tmp_gstring = g_string_new(NULL);
 	g_string_assign(tmp_gstring, icon_path->str);
-	g_string_printf(tmp_gstring, g_build_path("/", tmp_gstring->str, "..", "..", "sounds", "generic.wav", NULL));  // Gee this is an ugly approach 
+	g_string_printf(tmp_gstring, g_build_path(G_DIR_SEPARATOR_S, tmp_gstring->str, "..", "..", "sounds", "generic.wav", NULL));  // Gee this is an ugly approach 
 	gnome_sound_play(tmp_gstring->str);
 
 	// Free local variables
@@ -73,6 +73,9 @@ void sound_beep(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/01/19 07:03:12  vapour
+ * Updated to use better directory separator.
+ *
  * Revision 1.4  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *
