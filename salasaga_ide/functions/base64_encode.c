@@ -187,7 +187,7 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
 			break;
 
 		default:
-			display_warning("ED79: Unknown remainder amount when Base64 encoding (shouldn't happen)\n");
+			display_warning("Error ED79: Unknown remainder amount when Base64 encoding (shouldn't happen)\n");
 	}
 
 	// Put a NULL at the end of the Base64 encoded string
@@ -203,6 +203,9 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/01/19 06:32:40  vapour
+ * Tweaked an error message for clarity.
+ *
  * Revision 1.5  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *

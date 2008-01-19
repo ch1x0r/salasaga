@@ -112,7 +112,7 @@ void destroy_slide(gpointer element, gpointer user_data)
 				break;
 
 			default:
-				display_warning("ED57: Unknown layer type when destroying a slide.\n");
+				display_warning("Error ED57: Unknown layer type when destroying a slide.\n");
 		}
 		g_free(layer_data->object_data);
 
@@ -129,6 +129,9 @@ void destroy_slide(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/01/19 06:34:59  vapour
+ * Tweaked an error message for clarity.
+ *
  * Revision 1.5  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *

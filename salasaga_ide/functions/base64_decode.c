@@ -196,7 +196,7 @@ GString *base64_decode(GString *input_string, GString *output_string)
 			break;
 
 		default:
-			display_warning("ED73: Unknown Base64 decoding remainder (shouldn't happen)\n");
+			display_warning("Error ED73: Unknown Base64 decoding remainder (shouldn't happen)\n");
 	}
 
 	// Free the memory allocated in this function
@@ -212,6 +212,9 @@ GString *base64_decode(GString *input_string, GString *output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/01/19 06:31:53  vapour
+ * Tweaked an error message for clarity.
+ *
  * Revision 1.5  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *

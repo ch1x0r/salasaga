@@ -88,7 +88,7 @@ void layer_move_up(void)
 	{
 		// We're already at the top of the list, so return
 		sound_beep();
-		display_warning("ED41: This layer is already at the top\n");
+		display_warning("Error ED41: This layer is already at the top\n");
 		return;
 	}
 
@@ -126,6 +126,9 @@ void layer_move_up(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/19 06:41:54  vapour
+ * Tweaked an error message for clarity.
+ *
  * Revision 1.3  2008/01/15 16:18:58  vapour
  * Updated copyright notice to include 2008.
  *

@@ -96,7 +96,7 @@ void layer_delete(void)
 	{
 		// Give the user a warning, then return
 		sound_beep();
-		display_warning("ED38: Background layers can not be deleted\n");
+		display_warning("Error ED38: Background layers can not be deleted\n");
 		return;
 	}
 
@@ -134,6 +134,9 @@ void layer_delete(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/19 06:39:41  vapour
+ * Tweaked an error message for clarity.
+ *
  * Revision 1.3  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *

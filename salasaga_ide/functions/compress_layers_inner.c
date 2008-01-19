@@ -306,7 +306,7 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			break;		
 
 		default:
-			display_warning("ED33: Unknown layer type\n");		
+			display_warning("Error ED33: Unknown layer type\n");		
 	}
 }
 
@@ -316,6 +316,9 @@ void compress_layers_inner(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/19 06:34:12  vapour
+ * Tweaked an error message for clarity.
+ *
  * Revision 1.3  2008/01/15 16:19:02  vapour
  * Updated copyright notice to include 2008.
  *

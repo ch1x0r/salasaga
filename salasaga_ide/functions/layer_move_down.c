@@ -89,7 +89,7 @@ void layer_move_down(void)
 	{
 		// We're already at the bottom of the list or the background layer is selected, so return
 		sound_beep();
-		display_warning("ED40: This layer is already at the bottom\n");
+		display_warning("Error ED40: This layer is already at the bottom\n");
 		return;
 	}
 
@@ -118,6 +118,9 @@ void layer_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/19 06:41:09  vapour
+ * Tweaked an error message for clarity.
+ *
  * Revision 1.3  2008/01/15 16:18:58  vapour
  * Updated copyright notice to include 2008.
  *

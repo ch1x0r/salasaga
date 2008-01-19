@@ -138,7 +138,7 @@ void calculate_object_boundaries(void)
 				break;
 
 			default:
-				display_warning("ED27: Unknown layer type\n");
+				display_warning("Error ED27: Unknown layer type\n");
 		}
 
 		// * Store the calculated boundary *
@@ -162,6 +162,9 @@ void calculate_object_boundaries(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/01/19 06:33:25  vapour
+ * Tweaked an error message for clarity.
+ *
  * Revision 1.5  2008/01/15 16:19:04  vapour
  * Updated copyright notice to include 2008.
  *
