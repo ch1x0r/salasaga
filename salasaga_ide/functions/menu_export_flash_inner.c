@@ -22,7 +22,7 @@
  */
 
 
-// Turn on C99 math compatibility
+// Turn on C99 compatibility - needed for roundf() to work
 #define _ISOC99_SOURCE
 
 // Math include
@@ -40,12 +40,14 @@
 #include "display_warning.h"
 
 
-SWFMovie menu_export_flash_inner(SWFMovie this_movie)
+gint menu_export_flash_inner(gchar *output_filename)
 {
 	// Local variables
 	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
 	GError				*error = NULL;				// Pointer to error return structure
+	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
 	guint				frame_counter;				// Holds the number of frames
+	gint				num_bytes_written;			// Receives the number of bytes written to disk for the swf output
 	gint				highlight_box_height;		// Used while generating swf output for highlight boxes
 	gint				highlight_box_width;		// Used while generating swf output for highlight boxes
 	gint				image_height;				// Temporarily used to store the height of an image
@@ -72,8 +74,17 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 	guint				total_frames;				// The total number of frames in the animation
 
 	SWFDisplayItem		display_list_object;		// Temporary display list object
+	SWFFont				font_object;				// The font we use gets loaded into this
 	SWFShape			highlight_box;				// Temporary swf shape used when constructing highlight boxes
 	SWFFillStyle		highlight_fill_style;		// Fill style used when constructing highlight boxes
+	SWFJpegBitmap		image_bitmap;				// Used to hold a scaled bitmap object
+	SWFInput			image_input;				// Used to hold a swf input object
+	SWFMovie			swf_movie;					// Swf movie object
+	SWFShape			text_bg;					// The text background shape goes in this
+	gint				text_bg_box_height;			// Used while generating swf output for text boxes
+	gint				text_bg_box_width;			// Used while generating swf output for text boxes
+	SWFFillStyle		text_bg_fill_style;			// Fill style used when constructing text background shape
+	SWFText				text_object;				// The text object we're working on goes in this
 
 	guint				element_number;
 	guint				frame_number;
@@ -89,12 +100,62 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 	// Initialise variables
 	total_frames = 0;
 
+	// Initialise Ming and create an empty swf movie object
+	Ming_init();
+	swf_movie = newSWFMovieWithVersion(7);
+	Ming_setSWFCompression(9);
+
+	// Set the output size of the swf movie 
+	SWFMovie_setDimension(swf_movie, output_width, output_height);
+
+	// Set the frame rate for the movie
+	SWFMovie_setRate(swf_movie, frames_per_second);
+
+	// Set the background color for the animation
+	SWFMovie_setBackground(swf_movie, 0x00, 0x00, 0x00);  // RGB value - black
+
 	// Create the fill style used in highlight boxes
 	highlight_fill_style = newSWFSolidFillStyle(0x00, 0xff, 0x00, 0x40);
 	if (NULL == highlight_fill_style)
 	{
 		// Something went wrong creating the fill style, so we don't proceed with creating the swf
-		return NULL;
+		display_warning("Error ED97: Something went wrong when creating the highlight fill style for the swf");
+
+		// Free the memory allocated in this function
+		destroySWFMovie(swf_movie);
+
+		return FALSE;
+	}
+
+	// Create the fill style used in text background shapes
+	text_bg_fill_style = newSWFSolidFillStyle(0xff, 0xff, 0xcc, 0xff);
+	if (NULL == text_bg_fill_style)
+	{
+		// Something went wrong creating the fill style, so we don't proceed with creating the swf
+		display_warning("Error ED102: Something went wrong when creating the text background fill style for the swf");
+
+		// Free the memory allocated in this function
+		destroySWFMovie(swf_movie);
+		destroySWFFillStyle(highlight_fill_style);
+
+		return FALSE;
+	}
+
+	// Create the (one and only for now) font style used in text boxes
+	font_pathname = g_build_path(G_DIR_SEPARATOR_S, font_path, "fdb", "Bitstream Vera Sans.fdb", NULL);
+	font_object = newSWFFont_fromFile(font_pathname);
+	if (NULL == font_object)
+	{
+		// Something went wrong when loading the font file, so return
+		display_warning("Error ED96: Something went wrong when loading the font file");
+
+		// Free the memory allocated in this function
+		destroySWFMovie(swf_movie);
+		destroySWFFillStyle(highlight_fill_style);
+		destroySWFFillStyle(text_bg_fill_style);
+		g_free(font_pathname);
+
+		return FALSE;
 	}
 
 	// Calculate the height and width scaling values needed for this swf output
@@ -190,11 +251,10 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 					if (NULL == resized_pixbuf)
 					{
 						// Something went wrong when creating the dictionary shape for this layer
-						display_warning("Error ED90: Something went wrong when creating the dictionary shape for this image layer");
+						display_warning("Error ED90: Something went wrong when creating the dictionary shape for an image layer");
 
 						// * We don't want to process this layer any further, so we skip adding it to the dictionary
 						break;
-
 					}
 
 					// Convert the compressed image into jpeg data
@@ -209,7 +269,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 					if (FALSE == return_code_bool)
 					{
 						// Something went wrong when encoding the image to jpeg format
-						display_warning("ED51: Something went wrong when encoding a slide to jpeg format");
+						display_warning("Error ED92: Something went wrong when encoding an image to jpeg format");
 
 						// Free the memory allocated in this function
 						g_error_free(error);
@@ -220,8 +280,8 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 					}
 
 					// Create the dictionary shape from the jpeg data
-					SWFInput image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
-					SWFJpegBitmap image_bitmap = newSWFJpegBitmap_fromInput(image_input);
+					image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
+					image_bitmap = newSWFJpegBitmap_fromInput(image_input);
 
 					// Store the dictionary shape for future reference
 					this_layer_data->dictionary_shape = (SWFBlock) image_bitmap;
@@ -240,6 +300,9 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 					if (NULL == highlight_box)
 					{
 						// Something went wrong when creating the empty shape, so we skip this layer
+						display_warning("Error ED98: Something went wrong when creating a highlight layer for swf output");
+
+						// * We don't want to process this layer any further, so we skip adding it to the dictionary
 						break;
 					}
 
@@ -269,23 +332,144 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 
 				case TYPE_MOUSE_CURSOR:
 
-					// We're processing a mouse layer
+					// * We're processing a mouse layer *
 
-					// fixme2: Create the dictionary shape for this layer
-					
+					// If we weren't able to load the mouse cursor graphic, we aren't going to be able to export it
+					if (NULL == mouse_ptr_pixbuf)
+					{
+						// Something went wrong when creating the empty shape, so we skip this layer
+						display_warning("Error ED99: Couldn't load the mouse pointer image, for adding to the swf output");
+
+						break;
+					}
+
+					// Work out the correct dimensions for the mouse cursor in the output
+					image_height = ((layer_mouse *) this_layer_data->object_data)->height;
+					scaled_height = roundf(scaled_height_ratio * (gfloat) image_height);
+					image_width = ((layer_mouse *) this_layer_data->object_data)->width;
+					scaled_width = roundf(scaled_width_ratio * (gfloat) image_width);
+
+					// Displaying debugging info if requested
+					if (debug_level)
+					{
+						printf("Mouse cursor height: %d\n", image_height);
+						printf("Scaled height: %d\n", scaled_height);
+						printf("Mouse cursor: %d\n", image_width);
+						printf("Scaled width: %d\n", scaled_width);
+					}
+
+					// Scale the mouse cursor to the correct dimensions
+					resized_pixbuf = gdk_pixbuf_scale_simple(mouse_ptr_pixbuf, scaled_width, scaled_height, GDK_INTERP_HYPER);  // Do the scaling at best possible quality
+					if (NULL == resized_pixbuf)
+					{
+						// Something went wrong when creating the dictionary shape for this layer
+						display_warning("Error ED93: Something went wrong when creating the dictionary shape for the mouse cursor");
+
+						// * We don't want to process this layer any further, so we skip adding it to the dictionary
+						break;
+
+					}
+
+					// Convert the scaled mouse cursor into jpeg data
+					return_code_bool = gdk_pixbuf_save_to_buffer(GDK_PIXBUF(resized_pixbuf),
+									&pixbuf_buffer,  // Will come back filled out with location of jpeg data
+									&pixbuf_size,  // Will come back filled out with size of jpeg data
+									"jpeg",
+									&error,
+									"quality",
+									"100",
+									NULL);
+					if (FALSE == return_code_bool)
+					{
+						// Something went wrong when encoding the mouse cursor to jpeg format
+						display_warning("Error ED94: Something went wrong when encoding a mouse cursor to jpeg format");
+
+						// Free the memory allocated in this function
+						g_error_free(error);
+						if (NULL != resized_pixbuf)
+							g_object_unref(resized_pixbuf);
+
+						// * We don't want to process this layer any further, so we skip adding it to the dictionary
+						break;
+					}
+
+					// Create the dictionary shape from the jpeg data
+					image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
+					image_bitmap = newSWFJpegBitmap_fromInput(image_input);
+
+					// Store the dictionary shape for future reference
+					this_layer_data->dictionary_shape = (SWFBlock) image_bitmap;
+
+					// Indicate that the dictionary shape for this layer was created ok
+					dictionary_shape_ok = TRUE;
+
 					break;
 
 				case TYPE_TEXT:
 
 					// We're processing a text layer
 
-					// fixme2: Create the dictionary shape for this layer
+					// * Create the background for the text object *
+					text_bg = newSWFShape();
+					if (NULL == text_bg)
+					{
+						// Something went wrong when creating the empty shape, so we skip this layer
+						display_warning("Error ED101: Something went wrong when creating a text layer background for swf output");
+
+						// * We don't want to process this layer any further, so we skip adding it to the dictionary
+						break;
+					}
+
+					// Set the solid fill for the text background box
+					SWFShape_setRightFillStyle(text_bg, text_bg_fill_style);
+
+					// Set the line style
+					SWFShape_setLine(text_bg, 2, 0x00, 0xff, 0x00, 0xcc);  // Width = 2 seems to work ok
+
+					// Work out the scaled dimensions of the text background box
+					text_bg_box_height = roundf(scaled_height_ratio * (gfloat) ((layer_text *) this_layer_data->object_data)->rendered_height);
+					text_bg_box_width = roundf(scaled_width_ratio * (gfloat) ((layer_text *) this_layer_data->object_data)->rendered_width);
+
+					// Create the text background box
+					SWFShape_drawLine(text_bg, text_bg_box_width, 0.0);
+					SWFShape_drawLine(text_bg, 0.0, text_bg_box_height);
+					SWFShape_drawLine(text_bg, -(text_bg_box_width), 0.0);
+					SWFShape_drawLine(text_bg, 0.0, -(text_bg_box_height));
+
+					// fixme2: Still need to add the text background box and the text itself to the one swf element
+
+
+					// * Create the text itself *
+
+					// Create the text object we'll be using
+					text_object = newSWFText();
+
+					// Assign a font to the text object
+					SWFText_setFont(text_object, font_object);
+
+					// Set the height we want for the text
+					SWFText_setHeight(text_object, ((layer_text *) this_layer_data->object_data)->font_size);
+
+					// Set the foreground color for the text
+					guint16 red_component = ((layer_text *) this_layer_data->object_data)->text_color.red;
+					guint16 green_component = ((layer_text *) this_layer_data->object_data)->text_color.green;
+					guint16 blue_component = ((layer_text *) this_layer_data->object_data)->text_color.blue;
+					SWFText_setColor(text_object, roundf(red_component / 255), roundf(green_component / 255), roundf(blue_component / 255), 0xff);
+
+					// Add the required text to the text object
+					SWFText_addString(text_object, "some text", NULL);
+
+					// Store the dictionary shape for future reference
+					this_layer_data->dictionary_shape = (SWFBlock) text_object;
+
+					// Indicate that the dictionary shape for this layer was created ok
+					dictionary_shape_ok = TRUE;
 
 					break;
 
 				default:
 					// Unknown type
-					display_warning("ED83: Unknown layer type in swf output");
+					display_warning("Error ED83: Unknown layer type in swf output");
 					break;
 			}
 
@@ -435,7 +619,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 					if (TRUE == this_frame_ptr->add)
 					{
 						// * Add the character to the swf display list *
-						display_list_object = SWFMovie_add(this_movie, (SWFBlock) this_layer_info->dictionary_shape);
+						display_list_object = SWFMovie_add(swf_movie, (SWFBlock) this_layer_info->dictionary_shape);
 
 						// Store the display list object for future reference
 						this_layer_info->display_list_item = display_list_object;
@@ -468,7 +652,7 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 			}
 
 			// Advance to the next frame
-			SWFMovie_nextFrame(this_movie);
+			SWFMovie_nextFrame(swf_movie);
 		}
 	}
 
@@ -478,8 +662,29 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
 		printf("The animation is %u frames long\n", total_frames);
 	}
 
-	// Return the swf movie
-	return this_movie;
+	// Save the swf movie file to disk
+	num_bytes_written = SWFMovie_save(swf_movie, output_filename);
+	if (-1 == num_bytes_written)  // -1 is returned if an error occurred during the save
+	{
+		// Something went wrong when saving the swf
+		display_warning("Error ED100: Something went wrong when saving the swf file to disk");
+
+		// Free the memory allocated in this function
+		destroySWFMovie(swf_movie);
+		g_free(font_pathname);
+
+		// Indicate something went wrong when saving the swf
+		return FALSE;
+	}
+
+	// Free the memory allocated in this function
+	destroySWFMovie(swf_movie);
+	destroySWFFillStyle(highlight_fill_style);
+	destroySWFFillStyle(text_bg_fill_style);
+	g_free(font_pathname);
+
+	// Indicate that the swf was created successfully
+	return TRUE;
 }
 
 
@@ -488,6 +693,11 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie)
  * +++++++
  * 
  * $Log$
+ * Revision 1.28  2008/01/19 06:52:19  vapour
+ *  + Moved initial swf movie creation and saving code in here.
+ *  + Initial working swf text generation code in place.  Still needs more work though.
+ *  + Many tweaks to existing code.
+ *
  * Revision 1.27  2008/01/16 12:49:11  vapour
  * + Images now have swf code created for them (scaled and all).
  * + Highlight boxes are now scaled.
