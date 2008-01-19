@@ -115,7 +115,7 @@ void image_crop(void)
 	{
 		// Give the user feedback
 		sound_beep();
-		display_warning("ED36: Only Image layers can be cropped");
+		display_warning("Error ED36: Only Image layers can be cropped");
 		return;
 	}
 
@@ -125,7 +125,7 @@ void image_crop(void)
 	{
 		// Give the user feedback
 		sound_beep();
-		display_warning("ED37: Background layers can not be cropped");
+		display_warning("Error ED37: Background layers can not be cropped");
 		return;
 	}
 
@@ -240,6 +240,9 @@ void image_crop(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/19 06:38:42  vapour
+ * Tweaked some error messages for clarity.
+ *
  * Revision 1.3  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *

@@ -60,7 +60,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 	highlight_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width, 2);
 	if (NULL == highlight_pixbuf)
 	{
-		display_warning("ED52: Not enough memory for pixbuf allocation");
+		display_warning("Error ED52: Not enough memory for pixbuf allocation");
 		return;
 	}
 	gdk_pixbuf_fill(highlight_pixbuf, border_color);
@@ -96,7 +96,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 	highlight_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, 2, height);
 	if (NULL == highlight_pixbuf)
 	{
-		display_warning("ED53: Not enough memory for pixbuf allocation");
+		display_warning("Error ED53: Not enough memory for pixbuf allocation");
 		return;
 	}
 	gdk_pixbuf_fill(highlight_pixbuf, border_color);
@@ -155,6 +155,9 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/01/19 06:35:58  vapour
+ * Tweaked some error messages for clarity.
+ *
  * Revision 1.4  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *

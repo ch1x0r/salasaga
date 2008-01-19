@@ -121,14 +121,14 @@ gboolean flame_read(gchar *filename)
 	if (NULL == document)
 	{
 		// The Flame file was unable to be parsed
-		display_warning("ED43: Project file was unable to be loaded\n");
+		display_warning("Error ED43: Project file was unable to be loaded\n");
 		return FALSE;
 	}
 
 	this_node = xmlDocGetRootElement(document);
 	if (NULL == this_node)
 	{
-		display_warning("ED44: Project file is empty");
+		display_warning("Error ED44: Project file is empty");
 		xmlFreeDoc(document);
 		return FALSE;
 	}
@@ -174,21 +174,21 @@ gboolean flame_read(gchar *filename)
 	// Was there a meta-data structure in the save file?
 	if (NULL == meta_data_node)
 	{
-		display_warning("ED63: Project meta-data missing, aborting load");
+		display_warning("Error ED63: Project meta-data missing, aborting load");
 		return FALSE;
 	}
 
 	// Was there a preferences structure in the save file?
 	if (NULL == preferences_node)
 	{
-		display_warning("ED45: Project preferences missing, aborting load");
+		display_warning("Error ED45: Project preferences missing, aborting load");
 		return FALSE;
 	}
 
 	// Was there a slides structure in the save file?
 	if (NULL == slides_node)
 	{
-		display_warning("ED46: No slides in project, aborting load");
+		display_warning("Error ED46: No slides in project, aborting load");
 		return FALSE;
 	}
 
@@ -254,17 +254,17 @@ gboolean flame_read(gchar *filename)
 	// If any of the critically needed preferences are missing, display a warning then abort
 	if (NULL == project_name_data)
 	{
-		display_warning("ED47: Project Name missing, aborting project open");
+		display_warning("Error ED47: Project Name missing, aborting project open");
 		return FALSE;
 	}
 	if (NULL == project_width_data)
 	{
-		display_warning("ED48: Project Width missing, aborting project open");
+		display_warning("Error ED48: Project Width missing, aborting project open");
 		return FALSE;
 	}
 	if (NULL == project_height_data)
 	{
-		display_warning("ED49: Project Height missing, aborting project open");
+		display_warning("Error ED49: Project Height missing, aborting project open");
 		return FALSE;
 	}
 
@@ -539,21 +539,21 @@ gboolean flame_read(gchar *filename)
 									return_code = gdk_pixbuf_loader_write(image_loader, (const guchar *) tmp_gstring->str, tmp_gstring->len, &error);
 									if (TRUE != return_code)
 									{
-										g_string_printf(error_string, "ED66: Image data loading failed: '%s'", error->message);
+										g_string_printf(error_string, "Error ED66: Image data loading failed: '%s'", error->message);
 										display_warning(error_string->str);
 										g_string_free(error_string, TRUE);
 									}
 									return_code = gdk_pixbuf_loader_close(image_loader, &error);
 									if (TRUE != return_code)
 									{
-										g_string_printf(error_string, "ED67: Image data loading failed: '%s'", error->message);
+										g_string_printf(error_string, "Error ED67: Image data loading failed: '%s'", error->message);
 										display_warning(error_string->str);
 										g_string_free(error_string, TRUE);
 									}
 									tmp_image_ob->image_data = gdk_pixbuf_loader_get_pixbuf(image_loader);
 									if (NULL == tmp_image_ob->image_data)
 									{
-										display_warning("ED65: Error when loading image data");
+										display_warning("Error ED65: Error when loading image data");
 									}
 								}
 
@@ -951,6 +951,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/01/19 06:37:32  vapour
+ * Tweaked some error messages for clarity.
+ *
  * Revision 1.5  2008/01/15 16:18:58  vapour
  * Updated copyright notice to include 2008.
  *

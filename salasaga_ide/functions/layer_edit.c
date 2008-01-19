@@ -122,7 +122,7 @@ void layer_edit(void)
 	{
 		// Warn the user then return
 		sound_beep();
-		display_warning("ED39: Background image layers can not be edited\n");
+		display_warning("Error ED39: Background image layers can not be edited\n");
 		return;
 	}
 
@@ -312,7 +312,7 @@ void layer_edit(void)
 			break;
 
 		default:
-			display_warning("ED34: Unknown layer type\n");
+			display_warning("Error ED34: Unknown layer type\n");
 			return;
 	}
 
@@ -329,6 +329,9 @@ void layer_edit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/19 06:40:29  vapour
+ * Tweaked some error messages for clarity.
+ *
  * Revision 1.3  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *
