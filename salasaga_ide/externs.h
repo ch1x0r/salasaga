@@ -47,6 +47,7 @@ extern GtkTreeViewColumn	*film_strip_column;
 extern GtkScrolledWindow	*film_strip_container;
 extern GtkListStore			*film_strip_store;
 extern GtkWidget			*film_strip_view;
+extern gchar				*font_path;
 extern guint				frames_per_second;
 extern GtkWidget			*main_drawing_area;
 extern GtkWidget			*main_window;
@@ -128,6 +129,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.29  2008/01/19 07:11:10  vapour
+ * Added font_path variable.
+ *
  * Revision 1.28  2008/01/15 16:20:33  vapour
  * Updated copyright notice to include 2008.
  *
