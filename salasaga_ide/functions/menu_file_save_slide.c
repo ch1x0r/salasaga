@@ -71,7 +71,7 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 	slide_node = xmlNewChild(slide_root, NULL, (const xmlChar *) "slide", NULL);
 	if (NULL == slide_node)
 	{
-		display_warning("ED23: Error creating the slide node\n");
+		display_warning("Error ED23: Error creating the slide node\n");
 		return;
 	}
 
@@ -94,6 +94,9 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/01/19 06:57:34  vapour
+ * Tweaked an error message for clarity.
+ *
  * Revision 1.5  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *

@@ -79,7 +79,7 @@ void menu_export_svg_animation(void)
 		// No project is active, so display a message and return
 		// fixme4: This code should never be reached any more, as exporting is disabled while no project loaded
 		sound_beep();
-		display_warning("ED15: There is no project loaded\n");
+		display_warning("Error ED15: There is no project loaded\n");
 		return;
 	}
 
@@ -726,6 +726,9 @@ void menu_export_svg_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/19 06:54:34  vapour
+ * Tweaked an error message for clarity.
+ *
  * Revision 1.3  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *
