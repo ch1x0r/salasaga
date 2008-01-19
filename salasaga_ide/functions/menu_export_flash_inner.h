@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-SWFMovie menu_export_flash_inner(SWFMovie this_movie);
+gint menu_export_flash_inner(gchar *output_filename);
 
 #ifdef __cplusplus
 }
@@ -41,6 +41,9 @@ SWFMovie menu_export_flash_inner(SWFMovie this_movie);
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/01/19 06:49:38  vapour
+ * Updated function definition with new input parameter and return type.
+ *
  * Revision 1.4  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *
