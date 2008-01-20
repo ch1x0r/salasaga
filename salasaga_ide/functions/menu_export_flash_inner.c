@@ -80,12 +80,25 @@ gint menu_export_flash_inner(gchar *output_filename)
 	SWFJpegBitmap		image_bitmap;				// Used to hold a scaled bitmap object
 	SWFInput			image_input;				// Used to hold a swf input object
 	SWFMovie			swf_movie;					// Swf movie object
+
 	SWFShape			text_bg;					// The text background shape goes in this
 	gint				text_bg_box_height;			// Used while generating swf output for text boxes
 	gint				text_bg_box_width;			// Used while generating swf output for text boxes
 	SWFFillStyle		text_bg_fill_style;			// Fill style used when constructing text background shape
 	SWFMovieClip		text_movie_clip;			// The movie clip that contains the text background and text
 	SWFText				text_object;				// The text object we're working on goes in this
+
+	guint16				blue_component;				// Used when retrieving the foreground color of text
+	gfloat				current_ming_scale;			// Used when creating text swf output
+	guint16				green_component;			// Used when retrieving the foreground color of text
+	gint				num_text_lines;				// Number of text lines in a particular text layer
+	guint16				red_component;				// Used when retrieving the foreground color of text
+	gfloat				scaled_font_size;			// Display height of a font in swf, when scaled to the desired output size
+	GtkTextIter			text_end;					// End position of text buffer
+	gint				text_lines_counter;			// Counter used when processing text
+	GtkTextIter			text_start;					// Start position of text buffer
+	gfloat				this_text_string_width;		// Used when calculating how wide to draw the text background box
+	gfloat				widest_text_string_width;	// Used when calculating how wide to draw the text background box
 
 	guint				element_number;
 	guint				frame_number;
@@ -419,17 +432,60 @@ gint menu_export_flash_inner(gchar *output_filename)
 					SWFText_setFont(text_object, font_object);
 
 					// Set the height we want for the text
-					gfloat scaled_font_size = scaled_height_ratio * ((layer_text *) this_layer_data->object_data)->font_size;
+					scaled_font_size = scaled_height_ratio * ((layer_text *) this_layer_data->object_data)->font_size;
 					SWFText_setHeight(text_object, scaled_font_size);
 
 					// Set the foreground color for the text
-					guint16 red_component = ((layer_text *) this_layer_data->object_data)->text_color.red;
-					guint16 green_component = ((layer_text *) this_layer_data->object_data)->text_color.green;
-					guint16 blue_component = ((layer_text *) this_layer_data->object_data)->text_color.blue;
+					red_component = ((layer_text *) this_layer_data->object_data)->text_color.red;
+					green_component = ((layer_text *) this_layer_data->object_data)->text_color.green;
+					blue_component = ((layer_text *) this_layer_data->object_data)->text_color.blue;
 					SWFText_setColor(text_object, roundf(red_component / 255), roundf(green_component / 255), roundf(blue_component / 255), 0xff);
 
-					// Add the required text to the text object
-					SWFText_addString(text_object, "some text", NULL);
+					// Work out how many lines of text we're dealing with
+					num_text_lines = gtk_text_buffer_get_line_count(((layer_text *) this_layer_data->object_data)->text_buffer);
+					// Displaying debugging info if requested
+					if (debug_level)
+					{
+						printf("Number of lines of text: %d\n", num_text_lines);
+					}
+
+					// Add each line of text to the output, wrapped with a tspan
+					widest_text_string_width = 0;
+					for (text_lines_counter = 0; text_lines_counter < num_text_lines; text_lines_counter++)
+					{
+						gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(((layer_text *) this_layer_data->object_data)->text_buffer), &text_start, text_lines_counter);
+						text_end = text_start;
+						gtk_text_iter_forward_to_line_end(&text_end);
+
+						// Add the required text to the text object
+						SWFText_addString(text_object, gtk_text_iter_get_visible_text(&text_start, &text_end), NULL);
+
+						// * We need to know which of the strings is widest, so we can calculate the width of the text background box *
+						
+						// If this is the widest string, we keep the value of this one
+						this_text_string_width = SWFText_getStringWidth(text_object, gtk_text_iter_get_visible_text(&text_start, &text_end));
+						if (this_text_string_width > widest_text_string_width)
+							widest_text_string_width = this_text_string_width;
+
+						// * Move the pen down to the start of the next line *
+
+						// Move to the appropriate Y position
+						SWFText_moveTo(text_object, 0, (text_lines_counter + 1) * scaled_font_size);
+
+						// Try and move X as close as possible to 0.  We can't use 0 in SWFText_moveTo() due to a bug in Ming
+						current_ming_scale = Ming_getScale();
+						Ming_setScale(1);
+						SWFText_moveTo(text_object, 1, 0);
+						Ming_setScale(current_ming_scale);
+
+						// Displaying debugging info if requested
+						if (debug_level)
+						{
+							printf("Line %d of %d: %s\n", text_lines_counter, num_text_lines, gtk_text_iter_get_visible_text(&text_start, &text_end));
+							printf("Width of this string: %.2f\n", this_text_string_width);
+							printf("Width of widest string thus far: %.2f\n", widest_text_string_width);
+						}
+					}
 
 					// * Create the background for the text object *
 					text_bg = newSWFShape();
@@ -449,11 +505,11 @@ gint menu_export_flash_inner(gchar *output_filename)
 					SWFShape_setLine(text_bg, 2, 0x00, 0x00, 0x00, 0xff);  // Width = 2 seems to work ok
 
 					// Work out the scaled dimensions of the text background box
-					text_bg_box_height = roundf(scaled_font_size);
-					text_bg_box_width = roundf(scaled_width_ratio * 10) + (gfloat) SWFText_getStringWidth(text_object, "some text");
+					text_bg_box_height = roundf(scaled_font_size) * num_text_lines;
+					text_bg_box_width = roundf(scaled_width_ratio * 10) + widest_text_string_width;
 
 					// Move the start position of the text box vertically downwards
-					SWFShape_movePenTo(text_bg, -(5 * scaled_height_ratio), (5 * scaled_height_ratio) - text_bg_box_height);
+					SWFShape_movePenTo(text_bg, -(5 * scaled_height_ratio), (5 * scaled_height_ratio) - scaled_font_size);
 
 					// Create the text background box
 					SWFShape_drawLine(text_bg, text_bg_box_width, 0.0);
@@ -707,6 +763,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.31  2008/01/20 06:51:38  vapour
+ * Text layer output to swf now works properly, including multi-line text.  Scales ok too.
+ *
  * Revision 1.30  2008/01/20 04:46:07  vapour
  * Scaling now works properly for text layers.
  *
