@@ -449,8 +449,8 @@ gint menu_export_flash_inner(gchar *output_filename)
 					SWFShape_setLine(text_bg, 2, 0x00, 0x00, 0x00, 0xff);  // Width = 2 seems to work ok
 
 					// Work out the scaled dimensions of the text background box
-					text_bg_box_height = roundf(scaled_height_ratio * scaled_font_size);
-					text_bg_box_width = roundf(scaled_width_ratio * ((gfloat) SWFText_getStringWidth(text_object, "some text") + 10));
+					text_bg_box_height = roundf(scaled_font_size);
+					text_bg_box_width = roundf(scaled_width_ratio * 10) + (gfloat) SWFText_getStringWidth(text_object, "some text");
 
 					// Move the start position of the text box vertically downwards
 					SWFShape_movePenTo(text_bg, -(5 * scaled_height_ratio), (5 * scaled_height_ratio) - text_bg_box_height);
@@ -707,6 +707,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.30  2008/01/20 04:46:07  vapour
+ * Scaling now works properly for text layers.
+ *
  * Revision 1.29  2008/01/19 22:56:54  vapour
  * Text and it's background are now added to a movie clip for swf output.  Scaling not working very well yet though.
  *
