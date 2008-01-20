@@ -77,7 +77,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	SWFFont				font_object;				// The font we use gets loaded into this
 	SWFShape			highlight_box;				// Temporary swf shape used when constructing highlight boxes
 	SWFFillStyle		highlight_fill_style;		// Fill style used when constructing highlight boxes
-	SWFJpegBitmap		image_bitmap;				// Used to hold a scaled bitmap object
+	SWFBitmap			image_bitmap;				// Used to hold a scaled bitmap object
 	SWFInput			image_input;				// Used to hold a swf input object
 	SWFMovie			swf_movie;					// Swf movie object
 
@@ -254,10 +254,10 @@ gint menu_export_flash_inner(gchar *output_filename)
 					// Displaying debugging info if requested
 					if (debug_level)
 					{
-						printf("Image height: %d\n", image_height);
-						printf("Scaled height: %d\n", scaled_height);
 						printf("Image width: %d\n", image_width);
 						printf("Scaled width: %d\n", scaled_width);
+						printf("Image height: %d\n", image_height);
+						printf("Scaled height: %d\n", scaled_height);
 					}
 
 					// Scale the image to the correct dimensions
@@ -295,7 +295,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 					// Create the dictionary shape from the jpeg data
 					image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
-					image_bitmap = newSWFJpegBitmap_fromInput(image_input);
+					image_bitmap = newSWFBitmap_fromInput(image_input);
 
 					// Store the dictionary shape for future reference
 					this_layer_data->dictionary_shape = (SWFBlock) image_bitmap;
@@ -409,7 +409,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 					// Create the dictionary shape from the jpeg data
 					image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
-					image_bitmap = newSWFJpegBitmap_fromInput(image_input);
+					image_bitmap = newSWFBitmap_fromInput(image_input);
 
 					// Store the dictionary shape for future reference
 					this_layer_data->dictionary_shape = (SWFBlock) image_bitmap;
@@ -549,21 +549,41 @@ gint menu_export_flash_inner(gchar *output_filename)
 				// * Process the element array, setting flags and info as required for this layer *
 
 				// Calculate the scaled start and finish positions for each element
-				element_x_position_start = roundf(scaled_width_ratio * (gfloat) ((layer_highlight *) this_layer_data->object_data)->x_offset_start);
-				element_x_position_finish = roundf(scaled_width_ratio * (gfloat) ((layer_highlight *) this_layer_data->object_data)->x_offset_finish);
-				element_y_position_start = roundf(scaled_height_ratio * (gfloat) ((layer_highlight *) this_layer_data->object_data)->y_offset_start);
-				element_y_position_finish = roundf(scaled_height_ratio * (gfloat) ((layer_highlight *) this_layer_data->object_data)->y_offset_finish);
+				guint start_frame = this_layer_data->start_frame;
+				guint finish_frame = this_layer_data->finish_frame;
+				guint num_displayed_frames = (finish_frame - start_frame) + 1;
+				gfloat start_x_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->x_offset_start;
+				gfloat start_y_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->y_offset_start;
+				gfloat finish_x_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->x_offset_finish;
+				gfloat finish_y_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->y_offset_finish;
+				element_x_position_start = roundf(scaled_width_ratio * (gfloat) start_x_position_unscaled);
+				element_x_position_finish = roundf(scaled_width_ratio * (gfloat) finish_x_position_unscaled);
+				element_y_position_start = roundf(scaled_height_ratio * (gfloat) start_y_position_unscaled);
+				element_y_position_finish = roundf(scaled_height_ratio * (gfloat) finish_y_position_unscaled);
+
+				// Displaying debugging info if requested
+				if (debug_level)
+				{
+					printf("Dict. shape OK. Start frame: %u\tFinish frame: %u\t # of displayed frames: %u\n", start_frame, finish_frame, num_displayed_frames);
+					printf("Start X pos (unscaled): %.2f\tStart Y pos (unscaled): %.2f\tFinish X pos (unscaled): %.2f\tFinish Y pos (unscaled): %.2f\n", start_x_position_unscaled, start_y_position_unscaled, finish_x_position_unscaled, finish_y_position_unscaled);
+				}
 
 				// If the layer moves, flag this and calculate the increment in each direction
 				if ((element_x_position_start != element_x_position_finish) || (element_y_position_start != element_y_position_finish))
 				{
-					swf_timing_array[(layer_counter * (slide_duration + 1)) + this_layer_data->start_frame].is_moving = TRUE;
-					element_x_position_increment = (((layer_highlight *) this_layer_data->object_data)->x_offset_finish - ((layer_highlight *) this_layer_data->object_data)->x_offset_start) / (gfloat) (this_layer_data->finish_frame - this_layer_data->start_frame);
-					element_y_position_increment = (((layer_highlight *) this_layer_data->object_data)->y_offset_finish - ((layer_highlight *) this_layer_data->object_data)->y_offset_start) / (gfloat) (this_layer_data->finish_frame - this_layer_data->start_frame);
+					swf_timing_array[(layer_counter * (slide_duration + 1)) + start_frame].is_moving = TRUE;
+					element_x_position_increment = (element_x_position_finish - element_x_position_start) / (num_displayed_frames - 1);
+					element_y_position_increment = (element_y_position_finish - element_y_position_start) / (num_displayed_frames - 1);
+
+					// Displaying debugging info if requested
+					if (debug_level)
+					{
+						printf("This shape moves! X increment: %.2f\tY increment: %.2f\n", element_x_position_increment, element_y_position_increment);
+					}
 				}
 
 				// Indicate on which frame the element should be displayed
-				frame_number = (layer_counter * (slide_duration + 1)) + this_layer_data->start_frame;
+				frame_number = (layer_counter * (slide_duration + 1)) + start_frame;
 				swf_timing_array[frame_number].add = TRUE;
 
 				// Displaying debugging info if requested
@@ -573,7 +593,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 				}
 
 				// Indicate on which frame the element should be removed from display
-				frame_number = (layer_counter * (slide_duration + 1)) + this_layer_data->finish_frame;
+				frame_number = (layer_counter * (slide_duration + 1)) + finish_frame;
 				swf_timing_array[frame_number].remove = TRUE;
 
 				// Displaying debugging info if requested
@@ -584,7 +604,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 				// Re-initialise the position counter for each shape
 				position_counter = 0;
-				for (frame_number = this_layer_data->start_frame; frame_number <= this_layer_data->finish_frame; frame_number++)
+				for (frame_number = start_frame; frame_number <= finish_frame; frame_number++)
 				{
 					element_number = (layer_counter * (slide_duration + 1)) + frame_number;
 					this_frame_ptr = &swf_timing_array[element_number];
@@ -602,12 +622,18 @@ gint menu_export_flash_inner(gchar *output_filename)
 					this_frame_ptr->layer_info = this_layer_data;
 
 					// If the layer moves, store the x and y positions for each frame
-					if (TRUE == swf_timing_array[(layer_counter * (slide_duration + 1)) + this_layer_data->start_frame].is_moving)
+					if (TRUE == swf_timing_array[(layer_counter * (slide_duration + 1)) + start_frame].is_moving)
 					{
 						this_frame_ptr->is_moving = TRUE;
-						this_frame_ptr->x_position = roundf(element_x_position_start + (position_counter * element_x_position_increment));
-						this_frame_ptr->y_position = roundf(element_y_position_start + (position_counter * element_y_position_increment));
+						this_frame_ptr->x_position = roundf(element_x_position_start + ((gfloat) position_counter * element_x_position_increment));
+						this_frame_ptr->y_position = roundf(element_y_position_start + ((gfloat) position_counter * element_y_position_increment));
 						position_counter++;
+
+						// Display debugging info if requested
+						if (debug_level)
+						{
+							printf("X position: %u\t Y position: %u\n", this_frame_ptr->x_position, this_frame_ptr->y_position);
+						}
 					}
 
 					// Store the opacity setting for each frame
@@ -763,6 +789,11 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.32  2008/01/20 13:21:15  vapour
+ *  + Moved many references to local variables.
+ *  + Fixed timing loop so objects positions are now correct.
+ *  + Updated to load the jpeg image with newSWFBitmap_fromInput() instead, in case we change to using png format internally or something in future.
+ *
  * Revision 1.31  2008/01/20 06:51:38  vapour
  * Text layer output to swf now works properly, including multi-line text.  Scales ok too.
  *
