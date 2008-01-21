@@ -110,15 +110,6 @@ void layer_edit(void)
 	selected_row = atoi(gtk_tree_path_to_string(tmp_path));
 	tmp_layer = g_list_nth_data(layer_pointer, selected_row);
 
-	// If the background layer is an image and it's selected, don't edit it
-	if (1 == (num_layers - selected_row) && (TYPE_GDK_PIXBUF == tmp_layer->object_type))
-	{
-		// Warn the user then return
-		sound_beep();
-		display_warning("Error ED39: Background image layers can not be edited\n");
-		return;
-	}
-
 	// * Open a dialog box showing the existing values, asking for the new ones *
 
 	switch (tmp_layer->object_type)
@@ -259,6 +250,9 @@ void layer_edit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/01/21 11:49:53  vapour
+ * Removed the check that stopped background image layers from being edited, as thats a limitation that really gets in the way.
+ *
  * Revision 1.5  2008/01/21 10:50:37  vapour
  * Simplified things, and delegated creation of new timeline duration images to the main timeline duration image regen function.
  *
