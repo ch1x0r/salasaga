@@ -61,11 +61,14 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 	xmlNodePtr		slide_root;					// Points to the root of the slide data
 	xmlNodePtr		slide_node;					// Pointer to the new slide node
 
+	GString			*tmp_gstring;				// Temporary GString
+
 
 	// Initialise various things
 	slide_pointer = element;
 	slide_root = user_data;
 	layer_pointer = slide_pointer->layers;
+	tmp_gstring = g_string_new(NULL);
 
     // Create the slide container
 	slide_node = xmlNewChild(slide_root, NULL, (const xmlChar *) "slide", NULL);
@@ -81,9 +84,16 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 		xmlNewProp(slide_node, (const xmlChar *) "name", (const xmlChar *) slide_pointer->name->str);
 	}
 
+	// Add the slide duration to the slide container attributes
+	g_string_printf(tmp_gstring, "%u", slide_pointer->duration);
+	xmlNewProp(slide_node, (const xmlChar *) "duration", (const xmlChar *) tmp_gstring->str);
+
 	// Add the layer data to the slide container
 	layer_pointer = g_list_first(layer_pointer);
 	g_list_foreach(layer_pointer, menu_file_save_layer, slide_node);
+
+	// Free the memory allocated in this function
+	g_string_free(tmp_gstring, TRUE);
 
 	return;
 }
@@ -94,6 +104,9 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/01/21 20:28:09  vapour
+ * Slide duration is now saved as a property of the slide info.
+ *
  * Revision 1.6  2008/01/19 06:57:34  vapour
  * Tweaked an error message for clarity.
  *
