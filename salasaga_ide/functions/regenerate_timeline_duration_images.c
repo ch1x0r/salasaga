@@ -59,18 +59,20 @@ void regenerate_timeline_duration_images(slide *target_slide)
 	guint				layer_counter;				// Counter used when processing layers
 	layer				*layer_data;				// Pointer to the layer data we're working on
 	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
-	guint				num_layers;				// Number of layers in a slide (used for a loop)
+	GList				*layer_ptr;					// Pointer to the layer Glist entry
+	guint				num_layers;					// Number of layers in a slide (used for a loop)
 	gfloat				pixel_width;				// Width of pixels to fill
 	guint				start_frame;				// Used when working out a layer's start frame
 	gfloat				start_pixel;				// Starting slider pixel to fill in
 
 
 	// Create the duration slider images for the timeline area
-	num_layers = g_list_length(target_slide->layers);
+	layer_ptr = g_list_first(target_slide->layers);
+	num_layers = g_list_length(layer_ptr);
 	for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 	{
 		// Work out the start and ending frames for this layer
-		layer_data = g_list_nth_data(target_slide->layers, layer_counter);
+		layer_data = g_list_nth_data(layer_ptr, layer_counter);
 		start_frame = layer_data->start_frame;
 		finish_frame = layer_data->finish_frame;
 
@@ -82,6 +84,8 @@ void regenerate_timeline_duration_images(slide *target_slide)
 		// Create duration image
 		layer_pixbuf = NULL;
 		layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, start_pixel, pixel_width);
+
+		// fixme4: We should probably free the memory of the old timeline duration image here
 
 		// Update the timeline with the duration image
 		gtk_list_store_set(target_slide->layer_store, layer_data->row_iter,
@@ -96,6 +100,9 @@ void regenerate_timeline_duration_images(slide *target_slide)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/01/21 10:02:46  vapour
+ * Updated to regenerate images for all layers in a slide, rather than from whichever one the layer pointer just happened to be pointing.
+ *
  * Revision 1.5  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *
