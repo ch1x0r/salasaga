@@ -53,6 +53,7 @@
 #include "create_timeline_slider.h"
 #include "destroy_slide.h"
 #include "display_warning.h"
+#include "regenerate_timeline_duration_images.h"
 
 
 gboolean flame_read(gchar *filename)
@@ -60,17 +61,17 @@ gboolean flame_read(gchar *filename)
 	// Local variables
 	GError				*error = NULL;				// Pointer to error return structure
 	GString				*error_string;				// Used to create error strings
-	GdkPixbufLoader			*image_loader;				// Used for loading images embedded in project files
+	GdkPixbufLoader		*image_loader;				// Used for loading images embedded in project files
 	gboolean			return_code;				// Boolean return code
 	gfloat				save_version;				// The project file save version
-	xmlDocPtr			document;				// Holds a pointer to the XML document
-	xmlNodePtr			layer_ptr;				// Temporary pointer
-	xmlNodePtr			meta_data_node = NULL;			// Points to the meta-data structure
-	xmlNodePtr			preferences_node = NULL;		// Points to the preferences structure
+	xmlDocPtr			document;					// Holds a pointer to the XML document
+	xmlNodePtr			layer_ptr;					// Temporary pointer
+	xmlNodePtr			meta_data_node = NULL;		// Points to the meta-data structure
+	xmlNodePtr			preferences_node = NULL;	// Points to the preferences structure
 	xmlNodePtr			slides_node = NULL;			// Points to the slides structure
-	xmlNodePtr			this_layer;				// Temporary pointer
-	xmlNodePtr			this_node;				// Temporary pointer
-	xmlNodePtr			this_slide;				// Temporary pointer
+	xmlNodePtr			this_layer;					// Temporary pointer
+	xmlNodePtr			this_node;					// Temporary pointer
+	xmlNodePtr			this_slide;					// Temporary pointer
 
 	xmlChar				*project_name_data = NULL;
 	xmlChar				*output_folder_data = NULL;
@@ -82,34 +83,25 @@ gboolean flame_read(gchar *filename)
 	xmlChar				*save_format_data = NULL;
 	xmlChar				*slide_length_data = NULL;
 
-	xmlChar				*tmp_char;				// Temporary string pointer
+	xmlChar				*tmp_char;					// Temporary string pointer
 	layer_empty			*tmp_empty_ob;				//
-	GList				*tmp_glist;				//
+	GList				*tmp_glist;					//
 	GString				*tmp_gstring;				// Temporary GString
 	GString				*tmp_gstring2;				// Temporary GString
-	layer_highlight			*tmp_highlight_ob;			// Temporary highlight layer object
+	layer_highlight		*tmp_highlight_ob;			// Temporary highlight layer object
 	layer_image			*tmp_image_ob;				// Temporary image layer object
-	gint				tmp_int;				// Temporary integer
-	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
-	layer				*tmp_layer;				// Temporary layer
+	gint				tmp_int;					// Temporary integer
+	GtkTreeIter			*tmp_iter;					// Temporary GtkTreeIter
+	layer				*tmp_layer;					// Temporary layer
 	layer_mouse			*tmp_mouse_ob;				// Temporary mouse layer object
 	GdkPixbuf			*tmp_pixbuf;				//
-	slide				*tmp_slide;				// Temporary slide
+	slide				*tmp_slide;					// Temporary slide
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 
 	gint				data_length;				// Number of image data bytes a layer says it stores
 
-	guint				num_layers;				// Number of layers in a slide (used for a loop)
-	guint				layer_counter;				// Counter used when processing layers
-	layer				*layer_data;				// Pointer to the layer data we're working on
-	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
-	guint				start_frame;				// Used when working out a layer's start frame
-	guint				finish_frame;				// Used when working out a layer's finish frame
-	gfloat				start_pixel;				// Starting slider pixel to fill in
-	gfloat				finish_pixel;				// Ending slider pixel to fill in
-	gfloat				pixel_width;				// Width of pixels to fill
-
 	GtkTreeIter			film_strip_iter;
+
 
 	// Initialise various things
 	tmp_gstring = g_string_new(NULL);
@@ -887,45 +879,33 @@ gboolean flame_read(gchar *filename)
 			tmp_char = xmlGetProp(this_slide, (const xmlChar *) "name");
 			if (NULL != tmp_char)
 			{
-				// A name for the slide is in the project file, so use that
+				// A name for the slide is in the project file, so we use it
 				tmp_slide->name = g_string_new((const gchar *) tmp_char);
 			}
 
-			// Create the duration slider images for the timeline area
-			num_layers = g_list_length(tmp_slide->layers);
-			for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
+			// Read the slide duration from the save file
+			tmp_slide->duration = default_slide_length;
+			tmp_char = xmlGetProp(this_slide, (const xmlChar *) "duration");
+			if (NULL != tmp_char)
 			{
-				// Work out the start and ending frames for this layer
-				layer_data = g_list_nth_data(tmp_slide->layers, layer_counter);
-				start_frame = layer_data->start_frame;
-				finish_frame = layer_data->finish_frame;
-
-				// Calculate the duration of the layer for drawing inside the slider
-				start_pixel = 180 * ((gfloat) start_frame / (gfloat) tmp_slide->duration);
-				finish_pixel = 180 * ((gfloat) finish_frame / (gfloat) tmp_slide->duration);
-				pixel_width = finish_pixel - start_pixel;
-
-				// Create duration image
-				layer_pixbuf = NULL;
-				layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, start_pixel, pixel_width);
-
-				// Update the timeline with the duration image
-				gtk_list_store_set(tmp_slide->layer_store, layer_data->row_iter,
-							TIMELINE_DURATION, layer_pixbuf,
-							-1);
+				// A duration for the slide is in the project file, so we use it
+				tmp_slide->duration = atoi((const gchar *) tmp_char);
 			}
 
-			// Create the thumbnail for the slide
-			tmp_glist = NULL;
-			tmp_glist = g_list_append(tmp_glist, tmp_slide);
-			tmp_pixbuf = compress_layers(tmp_glist, preview_width, (guint) preview_width * 0.75);
-			tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(tmp_pixbuf)));
+			// Regenerate the timeline duration images for all layers in this slide
+			regenerate_timeline_duration_images(tmp_slide);
 
 			// Mark the tooltip as uncreated, so we know to create it later on
 			tmp_slide->tooltip = NULL;
 
 			// Set the timeline widget for the slide to NULL, so we know to create it later on
 			tmp_slide->timeline_widget = NULL;
+
+			// Create the thumbnail for the slide
+			tmp_glist = NULL;
+			tmp_glist = g_list_append(tmp_glist, tmp_slide);
+			tmp_pixbuf = compress_layers(tmp_glist, preview_width, (guint) preview_width * 0.75);
+			tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(tmp_pixbuf)));
 
 			// Add the thumbnail to the film strip
 			gtk_list_store_append(film_strip_store, &film_strip_iter);
@@ -954,6 +934,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/01/21 20:34:52  vapour
+ * Slide durations are now read from the project file and used.
+ *
  * Revision 1.7  2008/01/21 11:47:49  vapour
  *  + Changed all g_new calls to g_new0.
  *  + Updated the image layer reading code to assign an empty string path variable, so other code that relies on it won't segfault.
