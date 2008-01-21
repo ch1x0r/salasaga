@@ -333,7 +333,7 @@ gboolean flame_read(gchar *filename)
 			// * We're in a slide *
 
 			// Create a new slide in memory
-			tmp_slide = g_new(slide, 1);
+			tmp_slide = g_new0(slide, 1);
 			tmp_slide->layers = NULL;
 			tmp_slide->duration = slide_length;
 			tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
@@ -363,9 +363,9 @@ gboolean flame_read(gchar *filename)
 							// Test if this layer is an empty layer
 							if (!xmlStrcmp(tmp_char, (const xmlChar *) "empty"))
 							{
-								// Construct a new image layer
-								tmp_empty_ob = g_new(layer_empty, 1);
-								tmp_layer = g_new(layer, 1);	
+								// Construct a new empty layer
+								tmp_empty_ob = g_new0(layer_empty, 1);
+								tmp_layer = g_new0(layer, 1);	
 								tmp_layer->object_type = TYPE_EMPTY;
 								tmp_layer->object_data = (GObject *) tmp_empty_ob;
 								tmp_layer->external_link = g_string_new(NULL);
@@ -416,7 +416,7 @@ gboolean flame_read(gchar *filename)
 								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
 
 								// Add the layer to the slide list store
-								tmp_iter = g_new(GtkTreeIter, 1);
+								tmp_iter = g_new0(GtkTreeIter, 1);
 								tmp_layer->row_iter = tmp_iter;
 								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
@@ -437,8 +437,8 @@ gboolean flame_read(gchar *filename)
 							if (!xmlStrcmp(tmp_char, (const xmlChar *) "image"))
 							{
 								// Construct a new image layer
-								tmp_image_ob = g_new(layer_image, 1);
-								tmp_layer = g_new(layer, 1);	
+								tmp_image_ob = g_new0(layer_image, 1);
+								tmp_layer = g_new0(layer, 1);	
 								tmp_layer->object_type = TYPE_GDK_PIXBUF;
 								tmp_layer->object_data = (GObject *) tmp_image_ob;
 								tmp_layer->external_link = g_string_new(NULL);
@@ -521,6 +521,9 @@ gboolean flame_read(gchar *filename)
 											// Get the number of bytes the image should hold
 											data_length = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										}
+
+										// Create an empty image path string
+										tmp_image_ob->image_path = g_string_new(NULL);
 									}
 
 									this_node = this_node->next;	
@@ -564,7 +567,7 @@ gboolean flame_read(gchar *filename)
 								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
 
 								// Add the layer to the slide list store
-								tmp_iter = g_new(GtkTreeIter, 1);
+								tmp_iter = g_new0(GtkTreeIter, 1);
 								tmp_layer->row_iter = tmp_iter;
 								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
@@ -585,8 +588,8 @@ gboolean flame_read(gchar *filename)
 							if (!xmlStrcmp(tmp_char, (const xmlChar *) "highlight"))
 							{
 								// Construct a new highlight layer
-								tmp_highlight_ob = g_new(layer_highlight, 1);
-								tmp_layer = g_new(layer, 1);	
+								tmp_highlight_ob = g_new0(layer_highlight, 1);
+								tmp_layer = g_new0(layer, 1);	
 								tmp_layer->object_type = TYPE_HIGHLIGHT;
 								tmp_layer->object_data = (GObject *) tmp_highlight_ob;
 								tmp_layer->external_link = g_string_new(NULL);
@@ -652,7 +655,7 @@ gboolean flame_read(gchar *filename)
 								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
 
 								// Add the layer to the slide list store
-								tmp_iter = g_new(GtkTreeIter, 1);
+								tmp_iter = g_new0(GtkTreeIter, 1);
 								tmp_layer->row_iter = tmp_iter;
 								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
@@ -673,8 +676,8 @@ gboolean flame_read(gchar *filename)
 							if (!xmlStrcmp(tmp_char, (const xmlChar *) "mouse"))
 							{
 								// Construct a new mouse pointer layer
-								tmp_mouse_ob = g_new(layer_mouse, 1);
-								tmp_layer = g_new(layer, 1);	
+								tmp_mouse_ob = g_new0(layer_mouse, 1);
+								tmp_layer = g_new0(layer, 1);	
 								tmp_layer->object_type = TYPE_MOUSE_CURSOR;
 								tmp_layer->object_data = (GObject *) tmp_mouse_ob;
 								tmp_layer->external_link = g_string_new(NULL);
@@ -752,7 +755,7 @@ gboolean flame_read(gchar *filename)
 								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
 
 								// Add the layer to the slide list store
-								tmp_iter = g_new(GtkTreeIter, 1);
+								tmp_iter = g_new0(GtkTreeIter, 1);
 								tmp_layer->row_iter = tmp_iter;
 								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
@@ -773,8 +776,8 @@ gboolean flame_read(gchar *filename)
 							if (!xmlStrcmp(tmp_char, (const xmlChar *) "text"))
 							{
 								// Construct a new text layer
-								tmp_text_ob = g_new(layer_text, 1);
-								tmp_layer = g_new(layer, 1);	
+								tmp_text_ob = g_new0(layer_text, 1);
+								tmp_layer = g_new0(layer, 1);	
 								tmp_layer->object_type = TYPE_TEXT;
 								tmp_layer->object_data = (GObject *) tmp_text_ob;
 								tmp_layer->external_link = g_string_new(NULL);
@@ -856,7 +859,7 @@ gboolean flame_read(gchar *filename)
 								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
 
 								// Add the layer to the slide list store
-								tmp_iter = g_new(GtkTreeIter, 1);
+								tmp_iter = g_new0(GtkTreeIter, 1);
 								tmp_layer->row_iter = tmp_iter;
 								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
 								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
@@ -951,6 +954,10 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/01/21 11:47:49  vapour
+ *  + Changed all g_new calls to g_new0.
+ *  + Updated the image layer reading code to assign an empty string path variable, so other code that relies on it won't segfault.
+ *
  * Revision 1.6  2008/01/19 06:37:32  vapour
  * Tweaked some error messages for clarity.
  *
