@@ -64,16 +64,16 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	GtkWidget			*image_entry;				//
 
 	GtkWidget			*x_off_label_start;			// Label widget
-	GtkWidget			*x_off_button_start;			//
+	GtkWidget			*x_off_button_start;		//
 
 	GtkWidget			*y_off_label_start;			// Label widget
-	GtkWidget			*y_off_button_start;			//
+	GtkWidget			*y_off_button_start;		//
 
-	GtkWidget			*x_off_label_finish;			// Label widget
-	GtkWidget			*x_off_button_finish;			//
+	GtkWidget			*x_off_label_finish;		// Label widget
+	GtkWidget			*x_off_button_finish;		//
 
-	GtkWidget			*y_off_label_finish;			// Label widget
-	GtkWidget			*y_off_button_finish;			//
+	GtkWidget			*y_off_label_finish;		// Label widget
+	GtkWidget			*y_off_button_finish;		//
 
 	GtkWidget			*start_label;				// Label widget
 	GtkWidget			*start_button;				//
@@ -81,8 +81,8 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	GtkWidget			*finish_label;				// Label widget
 	GtkWidget			*finish_button;				//
 
-	GtkWidget			*external_link_label;			// Label widget
-	GtkWidget			*external_link_entry;			// Widget for accepting an external link for clicking on
+	GtkWidget			*external_link_label;		// Label widget
+	GtkWidget			*external_link_entry;		// Widget for accepting an external link for clicking on
 
 	layer_image			*tmp_image_ob;				// Temporary layer object
 
@@ -134,17 +134,23 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	image_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(image_dialog->vbox), GTK_WIDGET(image_table), FALSE, FALSE, 10);
 
-	// Create the label confirming the path to the image
-	image_label = gtk_label_new("Image file:");
-	gtk_misc_set_alignment(GTK_MISC(image_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(image_table), GTK_WIDGET(image_label), 0, 1, row_counter, row_counter + 1);
+	// Imported images don't have a filesystem path, so check for this
+	if (0 < path_gstring->len)
+	{
+		// * We have a path, it's a regular image *
 
-	// Create the entry confirming the path to the image
-	image_entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(image_entry), 199);
-	gtk_entry_set_text(GTK_ENTRY(image_entry), path_gstring->str);
-	gtk_table_attach_defaults(GTK_TABLE(image_table), GTK_WIDGET(image_entry), 1, 2, row_counter, row_counter + 1);
-	row_counter = row_counter + 1;
+		// Create the label for the path to the image
+		image_label = gtk_label_new("Image file:");
+		gtk_misc_set_alignment(GTK_MISC(image_label), 0, 0.5);
+		gtk_table_attach_defaults(GTK_TABLE(image_table), GTK_WIDGET(image_label), 0, 1, row_counter, row_counter + 1);
+
+		// Create the entry confirming the path to the image
+		image_entry = gtk_entry_new();
+		gtk_entry_set_max_length(GTK_ENTRY(image_entry), 199);
+		gtk_entry_set_text(GTK_ENTRY(image_entry), path_gstring->str);
+		gtk_table_attach_defaults(GTK_TABLE(image_table), GTK_WIDGET(image_entry), 1, 2, row_counter, row_counter + 1);
+		row_counter = row_counter + 1;
+	}
 
 	// Create the label asking for the starting X Offset
 	x_off_label_start = gtk_label_new("Start X Offset: ");
@@ -247,19 +253,26 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	tmp_image_ob->y_offset_finish = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_off_button_finish));
 	tmp_layer->start_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(start_button));
 	tmp_layer->finish_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(finish_button));
-	g_string_printf(path_gstring, "%s", gtk_entry_get_text(GTK_ENTRY(image_entry)));
 	g_string_printf(tmp_layer->external_link, "%s", gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
-	tmp_image_ob->image_path = path_gstring;
 
-	// If we already have image data loaded, get rid of it
-	if (TRUE != request_file)
+	// Imported images don't have a filesystem path, so check for this
+	if (0 < path_gstring->len)
 	{
-		g_object_unref(GDK_PIXBUF(tmp_image_ob->image_data));
-	}
+		// * Not an imported image, so get the path information from the widget *
+		g_string_printf(path_gstring, "%s", gtk_entry_get_text(GTK_ENTRY(image_entry)));
+		tmp_image_ob->image_path = path_gstring;
 
-	tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_image_ob->image_path->str, NULL);  // Load the image
-	tmp_image_ob->width = gdk_pixbuf_get_width(tmp_image_ob->image_data);
-	tmp_image_ob->height = gdk_pixbuf_get_height(tmp_image_ob->image_data);
+		// If we already have image data loaded, get rid of it
+		if (TRUE != request_file)
+		{
+			g_object_unref(GDK_PIXBUF(tmp_image_ob->image_data));
+		}
+
+		// Load the new image and get its dimensions
+		tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_image_ob->image_path->str, NULL);
+		tmp_image_ob->width = gdk_pixbuf_get_width(tmp_image_ob->image_data);
+		tmp_image_ob->height = gdk_pixbuf_get_height(tmp_image_ob->image_data);
+	}
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(image_dialog));
@@ -273,6 +286,9 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/01/21 11:52:14  vapour
+ * Updated to handle images without a path set, like new imported images, or images that were included in a .flame file.
+ *
  * Revision 1.2  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *
