@@ -49,38 +49,36 @@
 #include "../externs.h"
 #include "create_tooltips.h"
 #include "display_warning.h"
-#include "draw_workspace.h"
 #include "draw_timeline.h"
+#include "draw_workspace.h"
 #include "enable_layer_toolbar_buttons.h"
 #include "enable_main_toolbar_buttons.h"
 #include "menu_enable.h"
+#include "regenerate_timeline_duration_images.h"
 
 
 void menu_screenshots_import(void)
 {
 	// Local variables
-	GDir				*dir_ptr;				// Pointer to the directory entry structure
-	const gchar			*dir_entry;				// Holds a file name
-
-	GSList				*entries = NULL;		// Holds a list of screen shot file names
+	GDir				*dir_ptr;					// Pointer to the directory entry structure
+	const gchar			*dir_entry;					// Holds a file name
+	GSList				*entries = NULL;			// Holds a list of screen shot file names
+	GError				*error = NULL;				// Pointer to error return structure
 	GtkTreeIter			film_strip_iter;
-	guint				largest_height = 0;		// Holds the height of the largest screenshot thus far
-	guint				largest_width = 0;		// Holds the width of the largest screenshot thus far
+	guint				largest_height = 0;			// Holds the height of the largest screenshot thus far
+	guint				largest_width = 0;			// Holds the width of the largest screenshot thus far
+	gint				num_screenshots = 0;		// Switch to track if other screenshots already exist
+	gint				return_code = 0;			// Receives return code
+	guint				recent_message;				// Message identifier, for newest status bar message
 
-	gint				num_screenshots = 0;	// Switch to track if other screenshots already exist
-	gint				return_code = 0;
-	GError				*error = NULL;			// Pointer to error return structure
-
-	guint				recent_message;			// Message identifier, for newest status bar message
-
-	slide				*tmp_slide;				// Temporary slide
-	layer				*tmp_layer;				// Temporary layer
-	layer_image			*tmp_image_ob;			// Temporary image layer
-	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
-	GdkPixbuf			*tmp_gdk_pixbuf;		// Temporary GDK Pixbuf
-	GString				*tmp_string;			// Temporary string
-	gint				tmp_int = 0;			// Temporary integer
-	GdkRectangle		tmp_rect = {0,			// Temporary rectangle covering the area of the status bar
+	slide				*tmp_slide;					// Temporary slide
+	layer				*tmp_layer;					// Temporary layer
+	layer_image			*tmp_image_ob;				// Temporary image layer
+	GtkTreeIter			*tmp_iter;					// Temporary GtkTreeIter
+	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
+	GString				*tmp_string;				// Temporary string
+	gint				tmp_int = 0;				// Temporary integer
+	GdkRectangle		tmp_rect = {0,				// Temporary rectangle covering the area of the status bar
 						    0,
 						    status_bar->allocation.width,
 						    status_bar->allocation.height};
@@ -152,7 +150,6 @@ void menu_screenshots_import(void)
 	gtk_widget_draw(status_bar, &tmp_rect);
 
 	// * Load the screenshots *
-	// fixme5: Would it be better to just do the first few, and background the rest for later?
 	for (tmp_int = 1; tmp_int <= num_screenshots; tmp_int++)
 	{
 		// Remove the previous status bar message
@@ -163,6 +160,7 @@ void menu_screenshots_import(void)
 		// Allocate a new slide structure for use
 		tmp_slide = g_new(slide, 1);
 		tmp_slide->layers = NULL;
+		tmp_slide->duration = slide_length;
 
 		// Allocate a new layer structure for use in the slide
 		tmp_layer = g_new(layer, 1);
@@ -193,7 +191,7 @@ void menu_screenshots_import(void)
 		tmp_image_ob->y_offset_start = 0;
 		tmp_image_ob->x_offset_finish = 0;
 		tmp_image_ob->y_offset_finish = 0;
-		tmp_image_ob->image_path = g_string_new(tmp_string->str);
+		tmp_image_ob->image_path = g_string_new(NULL);  // Images don't have a path after they've been imported, as we delete them!
 		tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_string->str, NULL);  // Load the image again, at full size.  It's the background layer
 		tmp_image_ob->width = gdk_pixbuf_get_width(tmp_image_ob->image_data);
 		tmp_image_ob->height = gdk_pixbuf_get_height(tmp_image_ob->image_data);
@@ -292,7 +290,10 @@ void menu_screenshots_import(void)
 		current_slide = g_list_first(slides);
 	}
 
-	// Recreate the slide tooltips
+	// Generate the timeline duration image(s)
+	regenerate_timeline_duration_images(tmp_slide);
+
+	// Create the slide tooltip(s)
 	create_tooltips();
 
 	// Draw the workspace area
@@ -317,6 +318,10 @@ void menu_screenshots_import(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/01/21 11:25:34  vapour
+ *  + Fixed a bug, in that slide duration wasn't being properly set.
+ *  + A timeline duration image is now created for the new background layer.
+ *
  * Revision 1.4  2008/01/15 16:19:03  vapour
  * Updated copyright notice to include 2008.
  *
