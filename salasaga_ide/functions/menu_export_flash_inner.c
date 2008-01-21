@@ -44,6 +44,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 {
 	// Local variables
 	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
+	gint				display_depth;				// The depth at which an item is displayed in the swf output
 	GError				*error = NULL;				// Pointer to error return structure
 	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
 	guint				frame_counter;				// Holds the number of frames
@@ -203,6 +204,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	for (slide_counter = 0; slide_counter <  num_slides; slide_counter++)
 	{
 		// Initialise things for this slide
+		slides = g_list_first(slides);
 		this_slide_data = g_list_nth_data(slides, slide_counter);
 		slide_duration = this_slide_data->duration;
 
@@ -224,10 +226,13 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 		// Create an array that's layers x "number of frames in the slide"
 		frame_number = num_layers * (slide_duration + 1);  // +1 because if (ie.) we say slide 5, then we really mean the 6th slide (we start from 0)
-		swf_timing_array = g_new0(swf_frame_element, frame_number); 
+		swf_timing_array = g_try_new0(swf_frame_element, frame_number); 
 
 		// Point to the first layer again
 		this_slide_data = g_list_nth_data(slides, slide_counter);
+
+		// (Re-)Initialise the depth at which the next layer will be displayed
+		display_depth = num_layers;
 
 		// Process each layer in turn.  For every frame the layer is in, store in the array
 		// whether the object in the layer is visible, it's position, transparency, etc
@@ -502,7 +507,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 					SWFShape_setRightFillStyle(text_bg, text_bg_fill_style);
 
 					// Set the line style
-					SWFShape_setLine(text_bg, 2, 0x00, 0x00, 0x00, 0xff);  // Width = 2 seems to work ok
+					SWFShape_setLine(text_bg, 1, 0x00, 0x00, 0x00, 0xff);  // Width = 1 seems to work ok
 
 					// Work out the scaled dimensions of the text background box
 					text_bg_box_height = roundf(scaled_font_size) * num_text_lines;
@@ -582,14 +587,17 @@ gint menu_export_flash_inner(gchar *output_filename)
 					}
 				}
 
-				// Indicate on which frame the element should be displayed
+				// Indicate on which frame the element should be displayed, at what display depth, and its co-ordinates
 				frame_number = (layer_counter * (slide_duration + 1)) + start_frame;
 				swf_timing_array[frame_number].add = TRUE;
+				swf_timing_array[frame_number].depth = display_depth;
+				swf_timing_array[frame_number].x_position = element_x_position_start;
+				swf_timing_array[frame_number].y_position = element_y_position_start;
 
 				// Displaying debugging info if requested
 				if (debug_level)
 				{
-					printf("Setting ADD value for layer %u in swf element %u\n", layer_counter, frame_number);
+					printf("Setting ADD value for layer %u in swf element %u, with display depth of %u\n", layer_counter, frame_number, display_depth);
 				}
 
 				// Indicate on which frame the element should be removed from display
@@ -632,7 +640,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 						// Display debugging info if requested
 						if (debug_level)
 						{
-							printf("X position: %u\t Y position: %u\n", this_frame_ptr->x_position, this_frame_ptr->y_position);
+							printf("Scaled X position: %u\tScaled Y position: %u\n", this_frame_ptr->x_position, this_frame_ptr->y_position);
 						}
 					}
 
@@ -640,8 +648,10 @@ gint menu_export_flash_inner(gchar *output_filename)
 					// fixme2: Still need to calculate properly rather than hard code to 100% for the moment
 					this_frame_ptr->opacity = 65535;
 				}
-
 			}
+
+			// Decrement the depth at which this element will be displayed
+			display_depth--;
 		}
 
 		// Debugging output, displaying what we have in the pre-processing element array thus far
@@ -719,6 +729,12 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 						// Store the display list object for future reference
 						this_layer_info->display_list_item = display_list_object;
+
+						// Ensure the object is at the correct display depth
+						SWFDisplayItem_setDepth(display_list_object, this_frame_ptr->depth);
+
+						// Position the object
+						SWFDisplayItem_moveTo(display_list_object, this_frame_ptr->x_position, this_frame_ptr->y_position);
 					}
 
 					// Is this the frame in which the layer is removed from the display?
@@ -750,6 +766,9 @@ gint menu_export_flash_inner(gchar *output_filename)
 			// Advance to the next frame
 			SWFMovie_nextFrame(swf_movie);
 		}
+		
+		// Free the memory allocated to the swf timing array, now that this slide is over
+		g_free(swf_timing_array);
 	}
 
 	// Output some debugging info if requested
@@ -777,6 +796,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	destroySWFMovie(swf_movie);
 	destroySWFFillStyle(highlight_fill_style);
 	destroySWFFillStyle(text_bg_fill_style);
+	destroySWFFont(font_object);
 	g_free(font_pathname);
 
 	// Indicate that the swf was created successfully
@@ -789,6 +809,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.33  2008/01/21 19:19:45  vapour
+ * Display depths for swf objects are now explicitly set, which seems to help a lot.
+ *
  * Revision 1.32  2008/01/20 13:21:15  vapour
  *  + Moved many references to local variables.
  *  + Fixed timing loop so objects positions are now correct.
