@@ -222,6 +222,7 @@ typedef struct
 	gboolean			is_moving;					// Should the position of this element be adjusted in this frame?
 	gint				x_position;					// In twips
 	gint				y_position;					// In twips
+	gint				depth;						// The layer depth of this item when displayed
 } swf_frame_element;
 
 
@@ -237,6 +238,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.42  2008/01/21 19:17:03  vapour
+ * Added a depth field to the swf element array.
+ *
  * Revision 1.41  2008/01/15 16:20:32  vapour
  * Updated copyright notice to include 2008.
  *
