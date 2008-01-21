@@ -54,25 +54,25 @@
 void menu_file_save(void)
 {
 	// Local variables
-	GtkFileFilter			*all_filter;				// Filter for *.*
+	GtkFileFilter		*all_filter;				// Filter for *.*
 	gchar				*dir_name_part;				// Briefly used for holding a directory name
-	gchar				*filename;				// Pointer to the chosen file name
+	gchar				*filename;					// Pointer to the chosen file name
 	gchar				*file_name_part;			// Briefly used for holding a file name
-	GtkFileFilter			*flame_filter;				// Filter for *.flame
+	GtkFileFilter		*flame_filter;				// Filter for *.flame
 	GtkWidget 			*save_dialog;				// Dialog widget
 	gboolean			unique_name;				// Switch used to mark when we have a valid filename
 	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
 
 	xmlDocPtr			document_pointer;			// Points to the XML document structure in memory
-	xmlNodePtr			slide_root;				// Points to the root of the slide data
+	xmlNodePtr			slide_root;					// Points to the root of the slide data
 	xmlNodePtr			meta_pointer;				// Points to the meta-data node
 	xmlNodePtr			pref_pointer;				// Points to the preferences node
-	xmlNodePtr			root_node;				// Points to the root node
+	xmlNodePtr			root_node;					// Points to the root node
 	xmlSaveCtxt			*save_context;				// Points to the save context
 
 	GString				*tmp_gstring;				// Temporary GString
-	gint				tmp_int;				// Temporary integer
-	glong				tmp_long;				// Temporary long integer
+	gint				tmp_int;					// Temporary integer
+	glong				tmp_long;					// Temporary long integer
 
 
 	// Initialise some things
@@ -190,7 +190,7 @@ void menu_file_save(void)
 	}
 
 	// Add the save format version number to the XML document
-	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.0");
+	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.1");
 
     // Create the preferences container
 	pref_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "preferences", NULL);
@@ -261,6 +261,9 @@ void menu_file_save(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/01/21 20:29:46  vapour
+ * File format version has been incremented to 2.1.
+ *
  * Revision 1.4  2008/01/19 06:58:21  vapour
  * Tweaked some error messages for clarity.
  *
