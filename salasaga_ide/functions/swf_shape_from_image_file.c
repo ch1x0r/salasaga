@@ -41,8 +41,8 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 	SWFBitmap			image_bitmap;				// Used to hold a scaled bitmap object
 	SWFInput			image_input;				// Used to hold a swf input object
 	GdkPixbuf			*image_pixbuf;				// Temporary GDK Pixbuf
-	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed jpeg image
-	gsize				pixbuf_size;				// Is given the size of a compressed jpeg image
+	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
+	gsize				pixbuf_size;				// Is given the size of a compressed png image
 	gboolean			return_code_bool;			// Receives boolean return codes
 	SWFShape			swf_shape;					// Holds the newly created swf shape
 
@@ -135,6 +135,9 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/01/23 17:28:18  vapour
+ * Typo fix.
+ *
  * Revision 1.1  2008/01/23 17:20:34  vapour
  * Added a new function, for loading a SWF Shape bitmap directly from a given filename.
  *
