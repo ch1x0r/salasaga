@@ -80,6 +80,7 @@ OFILES = \
 	functions/slide_name_reset.o \
 	functions/slide_name_set.o \
 	functions/sound_beep.o \
+	functions/swf_shape_from_image_file.o \
 	functions/timeline_edited_name.o \
 	functions/timeline_edited_x_offset_finish.o \
 	functions/timeline_edited_x_offset_start.o \
@@ -408,6 +409,9 @@ slide_name_set.o:
 
 sound_beep.o:
 	$(CC) $(CFLAGS) -c sound_beep.c -o sound_beep.o
+
+swf_shape_from_image_file.o:
+	$(CC) $(CFLAGS) -c swf_shape_from_image_file.c -o swf_shape_from_image_file.o
 
 timeline_edited_name.o:
 	$(CC) $(CFLAGS) -c timeline_edited_name.c -o timeline_edited_name.o
