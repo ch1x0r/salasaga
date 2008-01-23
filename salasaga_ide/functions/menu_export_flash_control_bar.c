@@ -49,9 +49,16 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	gfloat				scaled_button_width;
 	SWFAction			main_movie_action;
 
+	// Variables used in working out control bar dimensions
+	gfloat				scaled_control_bar_height;
+	gfloat				scaled_control_bar_width;
+	gfloat				control_bar_x;
+	gfloat				control_bar_y;
+
 	// Fill styles we create
 	SWFFillStyle		dark_blue_fill;
 	SWFFillStyle		light_blue_fill;
+	SWFFillStyle		light_yellow_fill;
 	SWFFillStyle		green_fill;
 
 	// Variables used for the play button
@@ -78,12 +85,12 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	// Initialise various things
 	scaled_button_height = UNSCALED_BUTTON_HEIGHT * height_scale_factor;
 	scaled_button_width = UNSCALED_BUTTON_WIDTH * width_scale_factor;
-//	gfloat		scaled_control_bar_height = UNSCALED_CONTROL_BAR_HEIGHT * height_scale_factor;
-//	gfloat		scaled_control_bar_width = UNSCALED_CONTROL_BAR_WIDTH * width_scale_factor;
+	scaled_control_bar_height = UNSCALED_CONTROL_BAR_HEIGHT * height_scale_factor;
+	scaled_control_bar_width = UNSCALED_CONTROL_BAR_WIDTH * width_scale_factor;
 
 	// For now, position the control bar in the middle of the screen, 90% of the way to the bottom
-	gfloat		control_bar_x = ((project_width - UNSCALED_CONTROL_BAR_WIDTH) / 2) * width_scale_factor;
-	gfloat		control_bar_y = ((project_height * 0.90) - UNSCALED_CONTROL_BAR_HEIGHT) * height_scale_factor;
+	control_bar_x = ((project_width - UNSCALED_CONTROL_BAR_WIDTH) / 2) * width_scale_factor;
+	control_bar_y = ((project_height * 0.90) - UNSCALED_CONTROL_BAR_HEIGHT) * height_scale_factor;
 
 	// Ensure the swf output starts out in the "stopped" state when played
 	main_movie_action = newSWFAction("_root.stop();");
@@ -91,12 +98,20 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Create the fill styles we'll be using
 	light_blue_fill = newSWFSolidFillStyle(0x00, 0x00, 0xf0, 0xff);
+	light_yellow_fill = newSWFSolidFillStyle(0xff, 0xff, 0xf5, 0xff);
 	dark_blue_fill = newSWFSolidFillStyle(0x00, 0x00, 0x90, 0xff);
 	green_fill = newSWFSolidFillStyle(0x00, 0xcc, 0x00, 0xff);
 
 	// *** Create a background for the control bar buttons to go on ***
 
-	// fixme2: Still needs to be done
+	SWFShape cb_background = newSWFShape();
+	SWFShape_setRightFillStyle(cb_background, light_yellow_fill);
+	SWFShape_setLine(cb_background, 1, 0x00, 0x00, 0x00, 0xff);
+	SWFShape_movePenTo(cb_background, control_bar_x, control_bar_y);
+	SWFShape_drawLine(cb_background, scaled_control_bar_width, 0);
+	SWFShape_drawLine(cb_background, 0, scaled_control_bar_height);
+	SWFShape_drawLine(cb_background, -(scaled_control_bar_width), 0);
+	SWFShape_drawLine(cb_background, 0, -(scaled_control_bar_height));
 
 	// *** Create the Rewind button ***
 
@@ -111,7 +126,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	stop_shape_up = newSWFShape();
 	SWFShape_setRightFillStyle(stop_shape_up, dark_blue_fill);  // Use the dark blue fill
 	SWFShape_setLine(stop_shape_up, 1, 0x00, 0x00, 0x00, 0xff);
-	SWFShape_movePenTo(stop_shape_up, control_bar_x, control_bar_y);
+	SWFShape_movePenTo(stop_shape_up, control_bar_x + (scaled_button_width * 0.1), control_bar_y + (scaled_button_height * 0.1));
 	SWFShape_drawLine(stop_shape_up, scaled_button_width, 0);
 	SWFShape_drawLine(stop_shape_up, 0, scaled_button_height);
 	SWFShape_drawLine(stop_shape_up, -(scaled_button_width), 0);
@@ -121,7 +136,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	stop_shape_over = newSWFShape();
 	SWFShape_setRightFillStyle(stop_shape_over, light_blue_fill);  // Use the light blue fill
 	SWFShape_setLine(stop_shape_over, 1, 0x00, 0x00, 0x00, 0xff);
-	SWFShape_movePenTo(stop_shape_over, control_bar_x, control_bar_y);
+	SWFShape_movePenTo(stop_shape_over, control_bar_x + (scaled_button_width * 0.1), control_bar_y + (scaled_button_height * 0.1));
 	SWFShape_drawLine(stop_shape_over, scaled_button_width, 0);
 	SWFShape_drawLine(stop_shape_over, 0, scaled_button_height);
 	SWFShape_drawLine(stop_shape_over, -(scaled_button_width), 0);
@@ -131,7 +146,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	stop_shape_down = newSWFShape();
 	SWFShape_setRightFillStyle(stop_shape_down, green_fill);  // Use the green fill
 	SWFShape_setLine(stop_shape_down, 1, 0x00, 0x00, 0x00, 0xff);
-	SWFShape_movePenTo(stop_shape_down, control_bar_x, control_bar_y);
+	SWFShape_movePenTo(stop_shape_down, control_bar_x + (scaled_button_width * 0.1), control_bar_y + (scaled_button_height * 0.1));
 	SWFShape_drawLine(stop_shape_down, scaled_button_width, 0);
 	SWFShape_drawLine(stop_shape_down, 0, scaled_button_height);
 	SWFShape_drawLine(stop_shape_down, -(scaled_button_width), 0);
@@ -155,7 +170,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	play_shape_up = newSWFShape();
 	SWFShape_setRightFillStyle(play_shape_up, dark_blue_fill);  // Use the dark blue fill
 	SWFShape_setLine(play_shape_up, 1, 0x00, 0x00, 0x00, 0xff);
-	SWFShape_movePenTo(play_shape_up, control_bar_x + (scaled_button_width * 1.25), control_bar_y);
+	SWFShape_movePenTo(play_shape_up, control_bar_x + (scaled_button_width * 1.2), control_bar_y + (scaled_button_height * 0.1));
 	SWFShape_drawLine(play_shape_up, (scaled_button_width * 0.5), (scaled_button_height * 0.5));
 	SWFShape_drawLine(play_shape_up, -(scaled_button_width * 0.5), (scaled_button_height * 0.5));
 	SWFShape_drawLine(play_shape_up, 0, -(scaled_button_height));
@@ -164,7 +179,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	play_shape_over = newSWFShape();
 	SWFShape_setRightFillStyle(play_shape_over, light_blue_fill);  // Use the light blue fill
 	SWFShape_setLine(play_shape_over, 1, 0x00, 0x00, 0x00, 0xff);
-	SWFShape_movePenTo(play_shape_over, control_bar_x + (scaled_button_width * 1.25), control_bar_y);
+	SWFShape_movePenTo(play_shape_over, control_bar_x + (scaled_button_width * 1.2), control_bar_y + (scaled_button_height * 0.1));
 	SWFShape_drawLine(play_shape_over, (scaled_button_width * 0.5), (scaled_button_height * 0.5));
 	SWFShape_drawLine(play_shape_over, -(scaled_button_width * 0.5), (scaled_button_height * 0.5));
 	SWFShape_drawLine(play_shape_over, 0, -(scaled_button_height));
@@ -173,7 +188,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	play_shape_down = newSWFShape();
 	SWFShape_setRightFillStyle(play_shape_down, green_fill);  // Use the green fill
 	SWFShape_setLine(play_shape_down, 1, 0x00, 0x00, 0x00, 0xff);
-	SWFShape_movePenTo(play_shape_down, control_bar_x + (scaled_button_width * 1.25), control_bar_y);
+	SWFShape_movePenTo(play_shape_down, control_bar_x + (scaled_button_width * 1.2), control_bar_y + (scaled_button_height * 0.1));
 	SWFShape_drawLine(play_shape_down, (scaled_button_width * 0.5), (scaled_button_height * 0.5));
 	SWFShape_drawLine(play_shape_down, -(scaled_button_width * 0.5), (scaled_button_height * 0.5));
 	SWFShape_drawLine(play_shape_down, 0, -(scaled_button_height));
@@ -201,8 +216,12 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Embed the buttons in a movie clip
 	movie_clip = newSWFMovieClip();
-	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) play_button);
+	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) cb_background);
+	SWFDisplayItem_setDepth(mc_display_item, 1);
 	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) stop_button);
+	SWFDisplayItem_setDepth(mc_display_item, 2);
+	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) play_button);
+	SWFDisplayItem_setDepth(mc_display_item, 3);
 
 	// Advance the movie clip one frame, else it won't be displayed
 	SWFMovieClip_nextFrame(movie_clip);
@@ -222,6 +241,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/01/23 03:06:13  vapour
+ * Added a background layer to the swf output control bar, for better visual contrast.
+ *
  * Revision 1.1  2008/01/23 02:09:09  vapour
  * Added new function with initial working code to output a swf control bar.  Only has Stop and Play buttons at the moment (and they work), but it's a start.
  *
