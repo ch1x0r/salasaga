@@ -24,6 +24,7 @@
 
 #define UNSCALED_BUTTON_HEIGHT 50
 #define UNSCALED_BUTTON_WIDTH 50
+#define UNSCALED_BUTTON_SPACING 5
 #define UNSCALED_CONTROL_BAR_HEIGHT 60
 #define UNSCALED_CONTROL_BAR_WIDTH 200
 
@@ -37,12 +38,16 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
+#include "swf_shape_from_image_file.h"
 
 
 int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_factor, gfloat width_scale_factor)
 {
 	// Create local variables
+	guint				button_num;
 	SWFDisplayItem		buttons_display_item;
+	gchar				*image_path;
 	SWFDisplayItem		mc_display_item;
 	SWFMovieClip		movie_clip;
 	gfloat				scaled_button_height;
@@ -61,6 +66,16 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFFillStyle		light_yellow_fill;
 	SWFFillStyle		green_fill;
 
+	// Variables used for the pause button
+	SWFAction			pause_action;
+	SWFButton			pause_button;
+	SWFButtonRecord		pause_record_down;
+	SWFButtonRecord		pause_record_over;
+	SWFButtonRecord		pause_record_up;
+	SWFShape			pause_shape_down;
+	SWFShape			pause_shape_over;
+	SWFShape			pause_shape_up;
+
 	// Variables used for the play button
 	SWFAction			play_action;
 	SWFButton			play_button;
@@ -71,18 +86,29 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFShape			play_shape_over;
 	SWFShape			play_shape_up;
 
-	// Variables used for the stop button
-	SWFAction			stop_action;
-	SWFButton			stop_button;
-	SWFButtonRecord		stop_record_down;
-	SWFButtonRecord		stop_record_over;
-	SWFButtonRecord		stop_record_up;
-	SWFShape			stop_shape_down;
-	SWFShape			stop_shape_over;
-	SWFShape			stop_shape_up;
+	// Variables used for the restart button
+	SWFAction			restart_action;
+	SWFButton			restart_button;
+	SWFButtonRecord		restart_record_down;
+	SWFButtonRecord		restart_record_over;
+	SWFButtonRecord		restart_record_up;
+	SWFShape			restart_shape_down;
+	SWFShape			restart_shape_over;
+	SWFShape			restart_shape_up;
+
+	// Variables used for the rewind button
+	SWFAction			rewind_action;
+	SWFButton			rewind_button;
+	SWFButtonRecord		rewind_record_down;
+	SWFButtonRecord		rewind_record_over;
+	SWFButtonRecord		rewind_record_up;
+	SWFShape			rewind_shape_down;
+	SWFShape			rewind_shape_over;
+	SWFShape			rewind_shape_up;
 
 
 	// Initialise various things
+	button_num = 0;
 	scaled_button_height = UNSCALED_BUTTON_HEIGHT * height_scale_factor;
 	scaled_button_width = UNSCALED_BUTTON_WIDTH * width_scale_factor;
 	scaled_control_bar_height = UNSCALED_CONTROL_BAR_HEIGHT * height_scale_factor;
@@ -113,85 +139,199 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFShape_drawLine(cb_background, -(scaled_control_bar_width), 0);
 	SWFShape_drawLine(cb_background, 0, -(scaled_control_bar_height));
 
-	// *** Create the Rewind button ***
 
-	// * We'll probably need a list of slide names first, so we can use
-	// * Action Script to go back through the list
+	// *** Create the Restart button ***
 
-	// fixm2: Still needs to be done
+	button_num++;
 
-	// *** Create the Stop button ***
+	// Load restart button's UP state image
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_up.svg", NULL);
+	restart_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	if (NULL == restart_shape_up)
+	{
+		// Loading images isn't working.
+		g_free(image_path);
+		return FALSE;
+	}
 
-	// Create a shape to be used in the stop button for its "UP" state
-	stop_shape_up = newSWFShape();
-	SWFShape_setRightFillStyle(stop_shape_up, dark_blue_fill);  // Use the dark blue fill
-	SWFShape_setLine(stop_shape_up, 1, 0x00, 0x00, 0x00, 0xff);
-	SWFShape_movePenTo(stop_shape_up, control_bar_x + (scaled_button_width * 0.1), control_bar_y + (scaled_button_height * 0.1));
-	SWFShape_drawLine(stop_shape_up, scaled_button_width, 0);
-	SWFShape_drawLine(stop_shape_up, 0, scaled_button_height);
-	SWFShape_drawLine(stop_shape_up, -(scaled_button_width), 0);
-	SWFShape_drawLine(stop_shape_up, 0, -(scaled_button_height));
+	// Load restart button's OVER state image
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_over.svg", NULL);
+	restart_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	if (NULL == restart_shape_over)
+	{
+		// Loading images isn't working.
+		g_free(image_path);
+		destroySWFShape(restart_shape_up);
+		return FALSE;
+	}
 
-	// Create a shape to be used in the stop button for its "MOUSE OVER" state
-	stop_shape_over = newSWFShape();
-	SWFShape_setRightFillStyle(stop_shape_over, light_blue_fill);  // Use the light blue fill
-	SWFShape_setLine(stop_shape_over, 1, 0x00, 0x00, 0x00, 0xff);
-	SWFShape_movePenTo(stop_shape_over, control_bar_x + (scaled_button_width * 0.1), control_bar_y + (scaled_button_height * 0.1));
-	SWFShape_drawLine(stop_shape_over, scaled_button_width, 0);
-	SWFShape_drawLine(stop_shape_over, 0, scaled_button_height);
-	SWFShape_drawLine(stop_shape_over, -(scaled_button_width), 0);
-	SWFShape_drawLine(stop_shape_over, 0, -(scaled_button_height));
-
-	// Create a shape to be used in the stop button for its "DOWN" state
-	stop_shape_down = newSWFShape();
-	SWFShape_setRightFillStyle(stop_shape_down, green_fill);  // Use the green fill
-	SWFShape_setLine(stop_shape_down, 1, 0x00, 0x00, 0x00, 0xff);
-	SWFShape_movePenTo(stop_shape_down, control_bar_x + (scaled_button_width * 0.1), control_bar_y + (scaled_button_height * 0.1));
-	SWFShape_drawLine(stop_shape_down, scaled_button_width, 0);
-	SWFShape_drawLine(stop_shape_down, 0, scaled_button_height);
-	SWFShape_drawLine(stop_shape_down, -(scaled_button_width), 0);
-	SWFShape_drawLine(stop_shape_down, 0, -(scaled_button_height));
+	// Load restart button's DOWN state image
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_down.svg", NULL);
+	restart_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	if (NULL == restart_shape_down)
+	{
+		// Loading images isn't working.
+		g_free(image_path);
+		destroySWFShape(restart_shape_up);
+		destroySWFShape(restart_shape_over);
+		return FALSE;
+	}
 
 	// Create an empty button object we can use
-	stop_button = newSWFButton();
+	restart_button = newSWFButton();
 
 	// Add the shapes to the button for its various states
-	stop_record_up = SWFButton_addCharacter(stop_button, (SWFCharacter) stop_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
-	stop_record_over = SWFButton_addCharacter(stop_button, (SWFCharacter) stop_shape_over, SWFBUTTON_OVER);
-	stop_record_down = SWFButton_addCharacter(stop_button, (SWFCharacter) stop_shape_down, SWFBUTTON_DOWN);
+	restart_record_up = SWFButton_addCharacter(restart_button, (SWFCharacter) restart_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
+	restart_record_over = SWFButton_addCharacter(restart_button, (SWFCharacter) restart_shape_over, SWFBUTTON_OVER);
+	restart_record_down = SWFButton_addCharacter(restart_button, (SWFCharacter) restart_shape_down, SWFBUTTON_DOWN);
 
-	// Add the Stop action to the stop button
-	stop_action = newSWFAction("_root.stop();");
-	SWFButton_addAction(stop_button, stop_action, SWFBUTTON_MOUSEUP);
+	// Add the restart action to the restart button 
+
+	// fixme2: Still needs to be done
+	restart_action = newSWFAction("_root.play();"); // Temporary
+
+	SWFButton_addAction(restart_button, restart_action, SWFBUTTON_MOUSEUP);
+
+
+	// *** Create the Rewind button ***
+
+	button_num++;
+
+	// Load rewind button's UP state image
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_up.svg", NULL);
+	rewind_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	if (NULL == rewind_shape_up)
+	{
+		// Loading images isn't working.
+		g_free(image_path);
+		return FALSE;
+	}
+
+	// Load rewind button's OVER state image
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_over.svg", NULL);
+	rewind_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	if (NULL == rewind_shape_over)
+	{
+		// Loading images isn't working.
+		g_free(image_path);
+		destroySWFShape(rewind_shape_up);
+		return FALSE;
+	}
+
+	// Load rewind button's DOWN state image
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_down.svg", NULL);
+	rewind_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	if (NULL == rewind_shape_down)
+	{
+		// Loading images isn't working.
+		g_free(image_path);
+		destroySWFShape(rewind_shape_up);
+		destroySWFShape(rewind_shape_over);
+		return FALSE;
+	}
+
+	// Create an empty button object we can use
+	rewind_button = newSWFButton();
+
+	// Add the shapes to the button for its various states
+	rewind_record_up = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
+	rewind_record_over = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_over, SWFBUTTON_OVER);
+	rewind_record_down = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_down, SWFBUTTON_DOWN);
+
+	// Add the rewind action to the rewind button 
+
+	// * fixme2: We'll probably need a list of slide names first, so we can use
+	// * Action Script to go back through the list
+
+	// fixme2: Still needs to be done
+	rewind_action = newSWFAction("_root.play();"); // Temporary
+
+	SWFButton_addAction(rewind_button, rewind_action, SWFBUTTON_MOUSEUP);
+
+	// *** Create the Pause button ***
+
+	button_num++;
+
+	// Load pause button's UP state image
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_up.svg", NULL);
+	pause_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	if (NULL == pause_shape_up)
+	{
+		// Loading images isn't working.
+		g_free(image_path);
+		return FALSE;
+	}
+
+	// Load pause button's OVER state image
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_over.svg", NULL);
+	pause_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	if (NULL == pause_shape_over)
+	{
+		// Loading images isn't working.
+		g_free(image_path);
+		destroySWFShape(pause_shape_up);
+		return FALSE;
+	}
+
+	// Load pause button's DOWN state image
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_down.svg", NULL);
+	pause_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	if (NULL == pause_shape_down)
+	{
+		// Loading images isn't working.
+		g_free(image_path);
+		destroySWFShape(pause_shape_up);
+		destroySWFShape(pause_shape_over);
+		return FALSE;
+	}
+
+	// Create an empty button object we can use
+	pause_button = newSWFButton();
+
+	// Add the shapes to the button for its various states
+	pause_record_up = SWFButton_addCharacter(pause_button, (SWFCharacter) pause_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
+	pause_record_over = SWFButton_addCharacter(pause_button, (SWFCharacter) pause_shape_over, SWFBUTTON_OVER);
+	pause_record_down = SWFButton_addCharacter(pause_button, (SWFCharacter) pause_shape_down, SWFBUTTON_DOWN);
+
+	// Add the pause action to the pause button
+	pause_action = newSWFAction("_root.stop();");
+	SWFButton_addAction(pause_button, pause_action, SWFBUTTON_MOUSEUP);
 
 	// *** Create the Play button ***
+	button_num++;
 
-	// Create a shape to be used in the play button for its "UP" state
-	play_shape_up = newSWFShape();
-	SWFShape_setRightFillStyle(play_shape_up, dark_blue_fill);  // Use the dark blue fill
-	SWFShape_setLine(play_shape_up, 1, 0x00, 0x00, 0x00, 0xff);
-	SWFShape_movePenTo(play_shape_up, control_bar_x + (scaled_button_width * 1.2), control_bar_y + (scaled_button_height * 0.1));
-	SWFShape_drawLine(play_shape_up, (scaled_button_width * 0.5), (scaled_button_height * 0.5));
-	SWFShape_drawLine(play_shape_up, -(scaled_button_width * 0.5), (scaled_button_height * 0.5));
-	SWFShape_drawLine(play_shape_up, 0, -(scaled_button_height));
+	// Load play button's UP state image
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_up.svg", NULL);
+	play_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	if (NULL == play_shape_up)
+	{
+		// Loading images isn't working.
+		g_free(image_path);
+		return FALSE;
+	}
 
-	// Create a shape to be used in the play button for its "MOUSE OVER" state
-	play_shape_over = newSWFShape();
-	SWFShape_setRightFillStyle(play_shape_over, light_blue_fill);  // Use the light blue fill
-	SWFShape_setLine(play_shape_over, 1, 0x00, 0x00, 0x00, 0xff);
-	SWFShape_movePenTo(play_shape_over, control_bar_x + (scaled_button_width * 1.2), control_bar_y + (scaled_button_height * 0.1));
-	SWFShape_drawLine(play_shape_over, (scaled_button_width * 0.5), (scaled_button_height * 0.5));
-	SWFShape_drawLine(play_shape_over, -(scaled_button_width * 0.5), (scaled_button_height * 0.5));
-	SWFShape_drawLine(play_shape_over, 0, -(scaled_button_height));
+	// Load play button's OVER state image
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_over.svg", NULL);
+	play_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	if (NULL == play_shape_over)
+	{
+		// Loading images isn't working.
+		g_free(image_path);
+		destroySWFShape(play_shape_up);
+		return FALSE;
+	}
 
-	// Create a shape to be used in the play button for its "DOWN" state
-	play_shape_down = newSWFShape();
-	SWFShape_setRightFillStyle(play_shape_down, green_fill);  // Use the green fill
-	SWFShape_setLine(play_shape_down, 1, 0x00, 0x00, 0x00, 0xff);
-	SWFShape_movePenTo(play_shape_down, control_bar_x + (scaled_button_width * 1.2), control_bar_y + (scaled_button_height * 0.1));
-	SWFShape_drawLine(play_shape_down, (scaled_button_width * 0.5), (scaled_button_height * 0.5));
-	SWFShape_drawLine(play_shape_down, -(scaled_button_width * 0.5), (scaled_button_height * 0.5));
-	SWFShape_drawLine(play_shape_down, 0, -(scaled_button_height));
+	// Load play button's DOWN state image
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_down.svg", NULL);
+	play_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	if (NULL == play_shape_down)
+	{
+		// Loading images isn't working.
+		g_free(image_path);
+		destroySWFShape(play_shape_up);
+		destroySWFShape(play_shape_over);
+		return FALSE;
+	}
 
 	// Create an empty button object we can use
 	play_button = newSWFButton();
@@ -210,18 +350,45 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	// * We'll probably need a list of slide names first, so we can use
 	// * Action Script to go back through the list
 
-	// fixm2: Still needs to be done
+	// fixme2: Still needs to be done
 
 	// *** Add the buttons to a movie clip and attach it to the main movie ***
 
 	// Embed the buttons in a movie clip
 	movie_clip = newSWFMovieClip();
+
+	guint		button_x, button_y;
+
+	button_x = 0;
+	button_y = (height_scale_factor * 10);
+
 	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) cb_background);
 	SWFDisplayItem_setDepth(mc_display_item, 1);
-	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) stop_button);
+	SWFDisplayItem_moveTo(mc_display_item, 0, 0);
+	button_x = button_x + (UNSCALED_BUTTON_SPACING * width_scale_factor);
+
+	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) restart_button);
 	SWFDisplayItem_setDepth(mc_display_item, 2);
-	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) play_button);
+	SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
+//	SWFDisplayItem_moveTo(mc_display_item, (width_scale_factor * 10) + scaled_button_width, button_y);
+	button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
+
+	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) rewind_button);
 	SWFDisplayItem_setDepth(mc_display_item, 3);
+	SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
+//	SWFDisplayItem_moveTo(mc_display_item, (width_scale_factor * 10) + scaled_button_width, button_y);
+	button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
+
+//	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) pause_button);
+//	SWFDisplayItem_setDepth(mc_display_item, 4);
+//	SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
+////	SWFDisplayItem_moveTo(mc_display_item, (width_scale_factor * 10) + (2 * scaled_button_width), (height_scale_factor * 10));
+
+	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) play_button);
+	SWFDisplayItem_setDepth(mc_display_item, 5);
+	SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
+//	SWFDisplayItem_moveTo(mc_display_item, (width_scale_factor * 10) + (2 * scaled_button_width), button_y);
+	button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
 
 	// Advance the movie clip one frame, else it won't be displayed
 	SWFMovieClip_nextFrame(movie_clip);
@@ -232,15 +399,25 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	// Set the movie clip to be shown higher in the display stack than the main movie
 	SWFDisplayItem_setDepth(buttons_display_item, 200);
 
+	// Position the movie clip in the center, 90% of the way down the screen
+	SWFDisplayItem_moveTo(buttons_display_item, control_bar_x, control_bar_y);
+
+	// Free the memory allocated in the function thus far
+	g_free(image_path);
+
 	// Control bar was created successfully, so indicate this
 	return TRUE;
 }
+
 
 /*
  * History
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/01/23 17:24:49  vapour
+ * Mostly re-written.  Now uses the new function for directly loading a swf shape from filename, so the control bar should look graphically a lot better.  Lots of work still remaining however.
+ *
  * Revision 1.2  2008/01/23 03:06:13  vapour
  * Added a background layer to the swf output control bar, for better visual contrast.
  *
