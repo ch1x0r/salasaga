@@ -50,6 +50,7 @@ OFILES = \
 	functions/menu_edit_preferences.o \
 	functions/menu_enable.o \
 	functions/menu_export_flash_animation.o \
+	functions/menu_export_flash_control_bar.o \
 	functions/menu_export_flash_inner.o \
 	functions/menu_export_svg_animation.o \
 	functions/menu_export_svg_animation_slide.o \
@@ -317,6 +318,9 @@ menu_enable.o:
 
 menu_export_flash_animation.o:
 	$(CC) $(CFLAGS) -c menu_export_flash_animation.c -o menu_export_flash_animation.o
+
+menu_export_flash_control_bar.o:
+	$(CC) $(CFLAGS) -c menu_export_flash_control_bar.c -o menu_export_flash_control_bar.o
 
 menu_export_flash_inner.o:
 	$(CC) $(CFLAGS) -c menu_export_flash_inner.c -o menu_export_flash_inner.o
