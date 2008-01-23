@@ -38,6 +38,7 @@
 #include "../flame-types.h"
 #include "../externs.h"
 #include "display_warning.h"
+#include "menu_export_flash_control_bar.h"
 
 
 gint menu_export_flash_inner(gchar *output_filename)
@@ -60,7 +61,8 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gsize				pixbuf_size;				// Is given the size of a compressed jpeg image
 	guint				position_counter;			// Temporary counter integer
 	GdkPixbuf			*resized_pixbuf;			// Temporary pixbuf used while scaling images
-	gboolean			return_code_bool;			// Receives boolean return values
+	gboolean			return_code_bool;			// Receives boolean return codes
+	gint				return_code_gint;			// Receives integer return codes
 	gint				scaled_height;				// Used to calculate the final size an object should be scaled to
 	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to 
 	gint				scaled_width;				// Used to calculate the final size an object should be scaled to
@@ -184,9 +186,25 @@ gint menu_export_flash_inner(gchar *output_filename)
 		printf("Scaled width ratio: %.2f\n", scaled_width_ratio);
 	}
 
+	// Add the swf control bar to the movie
+	return_code_gint = menu_export_flash_control_bar(swf_movie, scaled_height_ratio, scaled_width_ratio);
+	if (TRUE != return_code_gint)
+	{
+		// Something went wrong when adding the control bar to the movie, so indicate this
+		display_warning("Error ED103: Something went wrong when adding the control bar to the swf movie");
+
+		// Free the memory allocated in this function
+		destroySWFMovie(swf_movie);
+		destroySWFFillStyle(highlight_fill_style);
+		destroySWFFillStyle(text_bg_fill_style);
+		g_free(font_pathname);
+
+		return FALSE;
+	}
+
 // For now, this uses a two pass per slide approach
 //	1st pass gathers timing info, and creates an array of timing information for each slide
-//		The array has one element for each frame times each layer of the slide (i.e. num elements = num frames x num layers)
+//		The array has one element for each frame, times each layer of the slide (i.e. num elements = num frames x num layers)
 //		Also creates the dictionary of shapes, and adds them to an output buffer
 //	2nd pass writes out the actions to happen for the slide, relying on the dictionary images created in the first pass
 // (sounds like a reasonable approach (theory) for a first go, lets see it works in reality though)
@@ -809,6 +827,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.34  2008/01/23 02:10:35  vapour
+ * Updated to call the new swf output control bar creation function.
+ *
  * Revision 1.33  2008/01/21 19:19:45  vapour
  * Display depths for swf objects are now explicitly set, which seems to help a lot.
  *
