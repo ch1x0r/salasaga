@@ -28,7 +28,7 @@
 // Math include
 #include <math.h>
 
-// GTK includes
+// GTK include
 #include <gtk/gtk.h>
 
 // Ming include
@@ -57,8 +57,8 @@ gint menu_export_flash_inner(gchar *output_filename)
 	guint				layer_counter;				// Holds the number of layers
 	guint				num_layers = 0;				// The number of layers in the slide
 	guint				num_slides;					// The number of slides in the movie
-	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed jpeg image
-	gsize				pixbuf_size;				// Is given the size of a compressed jpeg image
+	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
+	gsize				pixbuf_size;				// Is given the size of a compressed png image
 	guint				position_counter;			// Temporary counter integer
 	GdkPixbuf			*resized_pixbuf;			// Temporary pixbuf used while scaling images
 	gboolean			return_code_bool;			// Receives boolean return codes
@@ -190,8 +190,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	return_code_gint = menu_export_flash_control_bar(swf_movie, scaled_height_ratio, scaled_width_ratio);
 	if (TRUE != return_code_gint)
 	{
-		// Something went wrong when adding the control bar to the movie, so indicate this
-		display_warning("Error ED103: Something went wrong when adding the control bar to the swf movie");
+		// Something went wrong when adding the control bar to the movie
 
 		// Free the memory allocated in this function
 		destroySWFMovie(swf_movie);
@@ -294,19 +293,17 @@ gint menu_export_flash_inner(gchar *output_filename)
 						break;
 					}
 
-					// Convert the compressed image into jpeg data
+					// Convert the compressed image into image data
 					return_code_bool = gdk_pixbuf_save_to_buffer(GDK_PIXBUF(resized_pixbuf),
-									&pixbuf_buffer,  // Will come back filled out with location of jpeg data
-									&pixbuf_size,  // Will come back filled out with size of jpeg data
-									"jpeg",
+									&pixbuf_buffer,  // Will come back filled out with location of image data
+									&pixbuf_size,  // Will come back filled out with size of image data
+									"png",
 									&error,
-									"quality",
-									"100",
 									NULL);
 					if (FALSE == return_code_bool)
 					{
-						// Something went wrong when encoding the image to jpeg format
-						display_warning("Error ED92: Something went wrong when encoding an image to jpeg format");
+						// Something went wrong when encoding the image to required format
+						display_warning("Error ED92: Something went wrong when encoding an image to required format");
 
 						// Free the memory allocated in this function
 						g_error_free(error);
@@ -316,7 +313,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 						break;
 					}
 
-					// Create the dictionary shape from the jpeg data
+					// Create the dictionary shape from the image data
 					image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
 					image_bitmap = newSWFBitmap_fromInput(image_input);
 
@@ -407,19 +404,17 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 					}
 
-					// Convert the scaled mouse cursor into jpeg data
+					// Convert the scaled mouse cursor into image data
 					return_code_bool = gdk_pixbuf_save_to_buffer(GDK_PIXBUF(resized_pixbuf),
-									&pixbuf_buffer,  // Will come back filled out with location of jpeg data
-									&pixbuf_size,  // Will come back filled out with size of jpeg data
-									"jpeg",
+									&pixbuf_buffer,  // Will come back filled out with location of image data
+									&pixbuf_size,  // Will come back filled out with size of image data
+									"png",
 									&error,
-									"quality",
-									"100",
 									NULL);
 					if (FALSE == return_code_bool)
 					{
-						// Something went wrong when encoding the mouse cursor to jpeg format
-						display_warning("Error ED94: Something went wrong when encoding a mouse cursor to jpeg format");
+						// Something went wrong when encoding the mouse cursor to image format
+						display_warning("Error ED94: Something went wrong when encoding a mouse cursor to required format");
 
 						// Free the memory allocated in this function
 						g_error_free(error);
@@ -430,7 +425,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 						break;
 					}
 
-					// Create the dictionary shape from the jpeg data
+					// Create the dictionary shape from the image data
 					image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
 					image_bitmap = newSWFBitmap_fromInput(image_input);
 
@@ -827,6 +822,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.35  2008/01/23 17:34:37  vapour
+ * Adjusted internal image conversion functions to use png rather than jpeg, to be more sure that we're not losing image quality over time.
+ *
  * Revision 1.34  2008/01/23 02:10:35  vapour
  * Updated to call the new swf output control bar creation function.
  *
