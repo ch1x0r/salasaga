@@ -104,6 +104,11 @@ void slide_name_set(void)
 
 		// Destroy the dialog box then return
 		gtk_widget_destroy(GTK_WIDGET(slide_dialog));
+
+		// Free the resources allocated in this function
+		g_string_free(tmp_gstring, TRUE);
+
+		return;
 	}
 
 	// fixme4: We should validate the user input (slide name) here
@@ -131,6 +136,9 @@ void slide_name_set(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/25 14:20:30  vapour
+ * Fixed a bug where the slide name was being changed when the user escaped from the dialog.
+ *
  * Revision 1.3  2008/01/15 16:19:03  vapour
  * Updated copyright notice to include 2008.
  *
