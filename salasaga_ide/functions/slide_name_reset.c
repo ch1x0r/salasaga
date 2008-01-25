@@ -53,8 +53,11 @@
 void slide_name_reset(void)
 {
 	// Frees the string used for storing the present slide name, and sets it to NULL to mark as 'unset'
-	g_string_free(((slide *) current_slide->data)->name, TRUE);
-	((slide *) current_slide->data)->name = NULL;
+	if (NULL != ((slide *) current_slide->data)->name)
+	{
+		g_string_free(((slide *) current_slide->data)->name, TRUE);
+		((slide *) current_slide->data)->name = NULL;
+	}
 
 	// Recreate the film strip tooltips
 	create_tooltips();
@@ -66,6 +69,9 @@ void slide_name_reset(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/01/25 14:21:45  vapour
+ * Updated to not free the memory for the existing string if there isn't one.
+ *
  * Revision 1.3  2008/01/15 16:19:03  vapour
  * Updated copyright notice to include 2008.
  *
