@@ -41,7 +41,6 @@
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -87,6 +86,9 @@ void create_tooltips(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/01/25 14:18:43  vapour
+ * Removed an include that wasn't needed.
+ *
  * Revision 1.2  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *
