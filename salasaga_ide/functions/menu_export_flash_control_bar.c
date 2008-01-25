@@ -26,7 +26,9 @@
 #define UNSCALED_BUTTON_WIDTH 50
 #define UNSCALED_BUTTON_SPACING 5
 #define UNSCALED_CONTROL_BAR_HEIGHT 60
-#define UNSCALED_CONTROL_BAR_WIDTH 200
+#define UNSCALED_CONTROL_BAR_WIDTH 254
+// fixme2: Probably need to turn the control bar width into a variable, as it's
+//         not going to work very well for slides with no ff or rew buttons
 
 
 // GTK includes
@@ -49,12 +51,17 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	guint				button_y;
 	SWFDisplayItem		buttons_display_item;
 	gchar				*image_path;
+	gint				i;
 	SWFFillStyle		light_yellow_fill;
+	SWFAction			main_movie_action;
 	SWFDisplayItem		mc_display_item;
 	SWFMovieClip		movie_clip;
+	gint				num_slides;
 	gfloat				scaled_button_height;
 	gfloat				scaled_button_width;
-	SWFAction			main_movie_action;
+	slide				*slide_data;
+	GString				*slide_name_tmp;
+	GString				*slide_names_gstring;
 
 	// Variables used in working out control bar dimensions
 	gfloat				scaled_control_bar_height;
@@ -135,8 +142,52 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	control_bar_x = ((project_width - UNSCALED_CONTROL_BAR_WIDTH) / 2) * width_scale_factor;
 	control_bar_y = ((project_height * 0.90) - UNSCALED_CONTROL_BAR_HEIGHT) * height_scale_factor;
 
-	// Ensure the swf output starts out in the "stopped" state when played
-	main_movie_action = newSWFAction("_root.stop();");
+	// Create an action script list of slide names in the project
+	slides = g_list_first(slides);
+	num_slides = g_list_length(slides);
+	slide_names_gstring = g_string_new(NULL);
+	slide_name_tmp = g_string_new(NULL);
+	g_string_printf(slide_names_gstring, "var num_slides = %u; var this_slide = 0; var slide_names = [", num_slides);
+	for (i = 0; i < (num_slides - 1); i++)
+	{
+		// Add a slide name to the list
+		slide_data = g_list_nth_data(slides, i);
+		if (NULL == slide_data->name)
+		{
+			// The slide doesn't have a name, so we create a temporary one
+			g_string_printf(slide_name_tmp, "Slide%u", i);
+			g_string_append_printf(slide_names_gstring, "\"%s\", ", slide_name_tmp->str);
+		} else
+		{
+			g_string_append_printf(slide_names_gstring, "\"%s\", ", slide_data->name->str);
+		}
+	}
+	if (i == (num_slides - 1))
+	{
+		// Add the last slide name to the list
+		slide_data = g_list_nth_data(slides, i);
+		if (NULL == slide_data->name)
+		{
+			// The slide doesn't have a name, so we create a temporary one
+			g_string_printf(slide_name_tmp, "Slide%u", i);
+			g_string_append_printf(slide_names_gstring, "\"%s\"]; ", slide_name_tmp->str);  // Note the lack of comma, and the closing square bracket
+		} else
+		{
+			g_string_append_printf(slide_names_gstring, "\"%s\"]; ", slide_data->name->str);  // Note the lack of comma, and the closing square bracket
+		}
+	}
+
+	// Ensure the swf output starts out in the "stopped" state when played, and the play button is visible
+	slide_names_gstring = g_string_append(slide_names_gstring, "cb_play._visible = true; _root.stop();");
+
+	// Displaying debugging info if requested
+	if (debug_level)
+	{
+		printf("Slide name array Action Script: %s\n", slide_names_gstring->str);
+	}
+
+	// Add the initialisation action to the movie
+	main_movie_action = newSWFAction(slide_names_gstring->str);
 	SWFMovie_add(main_movie, (SWFBlock) main_movie_action);
 
 	// Create a background for the control bar buttons to go on
@@ -200,51 +251,53 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// *** Create the Rewind button ***
 
-	// Load rewind button's UP state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_up.svg", NULL);
-	rewind_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
-	if (NULL == rewind_shape_up)
+	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
 	{
-		// Loading images isn't working.
-		g_free(image_path);
-		return FALSE;
+		// Load rewind button's UP state image
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_up.svg", NULL);
+		rewind_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+		if (NULL == rewind_shape_up)
+		{
+			// Loading images isn't working.
+			g_free(image_path);
+			return FALSE;
+		}
+
+		// Load rewind button's OVER state image
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_over.svg", NULL);
+		rewind_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+		if (NULL == rewind_shape_over)
+		{
+			// Loading images isn't working.
+			g_free(image_path);
+			destroySWFShape(rewind_shape_up);
+			return FALSE;
+		}
+
+		// Load rewind button's DOWN state image
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_down.svg", NULL);
+		rewind_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+		if (NULL == rewind_shape_down)
+		{
+			// Loading images isn't working.
+			g_free(image_path);
+			destroySWFShape(rewind_shape_up);
+			destroySWFShape(rewind_shape_over);
+			return FALSE;
+		}
+
+		// Create an empty button object we can use
+		rewind_button = newSWFButton();
+
+		// Add the shapes to the button for its various states
+		rewind_record_up = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
+		rewind_record_over = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_over, SWFBUTTON_OVER);
+		rewind_record_down = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_down, SWFBUTTON_DOWN);
+
+		// Add the rewind action to the rewind button 
+		rewind_action = newSWFAction("if (0 != this_slide) { cb_play._visible = true; this_slide -= 1; _root.gotoAndPlay(slide_names[this_slide]); };");
+		SWFButton_addAction(rewind_button, rewind_action, SWFBUTTON_MOUSEUP);
 	}
-
-	// Load rewind button's OVER state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_over.svg", NULL);
-	rewind_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
-	if (NULL == rewind_shape_over)
-	{
-		// Loading images isn't working.
-		g_free(image_path);
-		destroySWFShape(rewind_shape_up);
-		return FALSE;
-	}
-
-	// Load rewind button's DOWN state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_down.svg", NULL);
-	rewind_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
-	if (NULL == rewind_shape_down)
-	{
-		// Loading images isn't working.
-		g_free(image_path);
-		destroySWFShape(rewind_shape_up);
-		destroySWFShape(rewind_shape_over);
-		return FALSE;
-	}
-
-	// Create an empty button object we can use
-	rewind_button = newSWFButton();
-
-	// Add the shapes to the button for its various states
-	rewind_record_up = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
-	rewind_record_over = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_over, SWFBUTTON_OVER);
-	rewind_record_down = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_down, SWFBUTTON_DOWN);
-
-	// Add the rewind action to the rewind button 
-	rewind_action = newSWFAction("cb_play._visible = true; _root.prevScene();");
-	SWFButton_addAction(rewind_button, rewind_action, SWFBUTTON_MOUSEUP);
-
 
 	// *** Create the Pause button ***
 
@@ -344,51 +397,53 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// *** Create the Fast Forward button ***
 
-	// Load forward button's UP state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_up.svg", NULL);
-	forward_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
-	if (NULL == forward_shape_up)
+	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
 	{
-		// Loading images isn't working.
-		g_free(image_path);
-		return FALSE;
+		// Load forward button's UP state image
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_up.svg", NULL);
+		forward_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+		if (NULL == forward_shape_up)
+		{
+			// Loading images isn't working.
+			g_free(image_path);
+			return FALSE;
+		}
+
+		// Load forward button's OVER state image
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_over.svg", NULL);
+		forward_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+		if (NULL == forward_shape_over)
+		{
+			// Loading images isn't working.
+			g_free(image_path);
+			destroySWFShape(forward_shape_up);
+			return FALSE;
+		}
+
+		// Load forward button's DOWN state image
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_down.svg", NULL);
+		forward_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+		if (NULL == forward_shape_down)
+		{
+			// Loading images isn't working.
+			g_free(image_path);
+			destroySWFShape(forward_shape_up);
+			destroySWFShape(forward_shape_over);
+			return FALSE;
+		}
+
+		// Create an empty button object we can use
+		forward_button = newSWFButton();
+
+		// Add the shapes to the button for its various states
+		forward_record_up = SWFButton_addCharacter(forward_button, (SWFCharacter) forward_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
+		forward_record_over = SWFButton_addCharacter(forward_button, (SWFCharacter) forward_shape_over, SWFBUTTON_OVER);
+		forward_record_down = SWFButton_addCharacter(forward_button, (SWFCharacter) forward_shape_down, SWFBUTTON_DOWN);
+
+		// Add the forward action to the forward button
+		forward_action = newSWFAction("if ((num_slides - 1) != this_slide) { cb_play._visible = true; this_slide += 1; _root.gotoAndPlay(slide_names[this_slide]); };");
+		SWFButton_addAction(forward_button, forward_action, SWFBUTTON_MOUSEUP);
 	}
-
-	// Load forward button's OVER state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_over.svg", NULL);
-	forward_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
-	if (NULL == forward_shape_over)
-	{
-		// Loading images isn't working.
-		g_free(image_path);
-		destroySWFShape(forward_shape_up);
-		return FALSE;
-	}
-
-	// Load forward button's DOWN state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_down.svg", NULL);
-	forward_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
-	if (NULL == forward_shape_down)
-	{
-		// Loading images isn't working.
-		g_free(image_path);
-		destroySWFShape(forward_shape_up);
-		destroySWFShape(forward_shape_over);
-		return FALSE;
-	}
-
-	// Create an empty button object we can use
-	forward_button = newSWFButton();
-
-	// Add the shapes to the button for its various states
-	forward_record_up = SWFButton_addCharacter(forward_button, (SWFCharacter) forward_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
-	forward_record_over = SWFButton_addCharacter(forward_button, (SWFCharacter) forward_shape_over, SWFBUTTON_OVER);
-	forward_record_down = SWFButton_addCharacter(forward_button, (SWFCharacter) forward_shape_down, SWFBUTTON_DOWN);
-
-	// Add the forward action to the forward button 
-	forward_action = newSWFAction("cb_play._visible = true; _root.gotoAndStop(_root._totalframes);");
-	SWFButton_addAction(forward_button, forward_action, SWFBUTTON_MOUSEUP);
-
 
 	// *** Create the Finish button ***
 
@@ -456,15 +511,16 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFDisplayItem_setName(mc_display_item, "cb_restart");
 	button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
 
-/* Need to figure out how to make this work!
- 
-	// Add the rewind button to the control bar
-	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) rewind_button);
-	SWFDisplayItem_setDepth(mc_display_item, 3);
-	SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
-	SWFDisplayItem_setName(mc_display_item, "cb_rewind");
-	button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
-*/
+	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
+	{
+		// Add the rewind button to the control bar
+		mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) rewind_button);
+		SWFDisplayItem_setDepth(mc_display_item, 3);
+		SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
+		SWFDisplayItem_setName(mc_display_item, "cb_rewind");
+		button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
+	}
+
 	// Add the pause button to the control bar
 	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) pause_button);
 	SWFDisplayItem_setDepth(mc_display_item, 4);
@@ -478,15 +534,16 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFDisplayItem_setName(mc_display_item, "cb_play");
 	button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
 
-/* Need to figure out how to make this work!
-	 
-	// Add the rewind button to the control bar
-	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) forward_button);
-	SWFDisplayItem_setDepth(mc_display_item, 6);
-	SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
-	SWFDisplayItem_setName(mc_display_item, "cb_rewind");
-	button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
-*/
+	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
+	{
+		// Add the rewind button to the control bar
+		mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) forward_button);
+		SWFDisplayItem_setDepth(mc_display_item, 6);
+		SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
+		SWFDisplayItem_setName(mc_display_item, "cb_rewind");
+		button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
+	}
+
 	// Add the finish button to the control bar
 	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) finish_button);
 	SWFDisplayItem_setDepth(mc_display_item, 7);
@@ -519,6 +576,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/01/25 16:24:14  vapour
+ * Added code to embed action script for the fast forward and rewind buttons, and also an actionscript list of slide names for jumping between.
+ *
  * Revision 1.4  2008/01/24 00:28:26  vapour
  *  + Updated all buttons to be loaded directly from file.  They now position correctly too.
  *  + Action Script is in place for the Rewind, Pause, Play, and Finish buttons.
