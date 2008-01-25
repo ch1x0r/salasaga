@@ -69,6 +69,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
 	guint				slide_counter;				// Holds the number of slides
 	guint				slide_duration;				// Holds the total number of frames in this slide
+	GString				*slide_name_tmp;			// Temporary slide names are constructed with this
 	swf_frame_element	*swf_timing_array = NULL;	// Used to coordinate the actions in each frame
 	swf_frame_element 	*this_frame_ptr;			// Points to frame information when looping
 	layer				*this_layer_data;			// Points to the data in the present layer
@@ -82,6 +83,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	SWFFillStyle		highlight_fill_style;		// Fill style used when constructing highlight boxes
 	SWFBitmap			image_bitmap;				// Used to hold a scaled bitmap object
 	SWFInput			image_input;				// Used to hold a swf input object
+	SWFAction			inc_slide_counter_action;	// Swf action object used to run some action script
 	SWFMovie			swf_movie;					// Swf movie object
 
 	SWFShape			text_bg;					// The text background shape goes in this
@@ -116,6 +118,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 	// Initialise variables
 	total_frames = 0;
+	slide_name_tmp = g_string_new(NULL);
 
 	// Initialise Ming and create an empty swf movie object
 	Ming_init();
@@ -225,6 +228,17 @@ gint menu_export_flash_inner(gchar *output_filename)
 		this_slide_data = g_list_nth_data(slides, slide_counter);
 		slide_duration = this_slide_data->duration;
 
+		// Add the slide name to the output swf
+		if (NULL == this_slide_data->name)
+		{
+			// The slide doesn't have a name, so we create a temporary one
+			g_string_printf(slide_name_tmp, "Slide%u", slide_counter);
+			SWFMovie_labelFrame(swf_movie, slide_name_tmp->str);
+		} else
+		{
+			SWFMovie_labelFrame(swf_movie, this_slide_data->name->str);
+		}
+		
 		// Work out how many layers there are in this slide
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		num_layers = g_list_length(this_slide_data->layers);
@@ -639,7 +653,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 					// Indicate the element should be processed on this frame
 					this_frame_ptr->action_this = TRUE;
 
-					// Ensure the appropriate layer data can be found by later code 
+					// Ensure the appropriate layer data can be found by later code
 					this_frame_ptr->layer_info = this_layer_data;
 
 					// If the layer moves, store the x and y positions for each frame
@@ -779,7 +793,11 @@ gint menu_export_flash_inner(gchar *output_filename)
 			// Advance to the next frame
 			SWFMovie_nextFrame(swf_movie);
 		}
-		
+
+		// Advance the slide counting variable inside the swf
+		inc_slide_counter_action = newSWFAction("this_slide += 1;");
+		SWFMovie_add(swf_movie, (SWFBlock) inc_slide_counter_action);
+
 		// Free the memory allocated to the swf timing array, now that this slide is over
 		g_free(swf_timing_array);
 	}
@@ -822,6 +840,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.36  2008/01/25 16:13:11  vapour
+ * Added code to embed frame labels in the output swf.
+ *
  * Revision 1.35  2008/01/23 17:34:37  vapour
  * Adjusted internal image conversion functions to use png rather than jpeg, to be more sure that we're not losing image quality over time.
  *
