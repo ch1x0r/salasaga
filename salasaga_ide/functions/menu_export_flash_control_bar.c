@@ -170,15 +170,15 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		{
 			// The slide doesn't have a name, so we create a temporary one
 			g_string_printf(slide_name_tmp, "Slide%u", i);
-			g_string_append_printf(slide_names_gstring, "\"%s\"]; ", slide_name_tmp->str);  // Note the lack of comma, and the closing square bracket
+			g_string_append_printf(slide_names_gstring, "\"%s\"]; ", slide_name_tmp->str);  // The lack of comma and closing square bracket are on purpose
 		} else
 		{
-			g_string_append_printf(slide_names_gstring, "\"%s\"]; ", slide_data->name->str);  // Note the lack of comma, and the closing square bracket
+			g_string_append_printf(slide_names_gstring, "\"%s\"]; ", slide_data->name->str);  // The lack of comma and closing square bracket are on purpose
 		}
 	}
 
 	// Ensure the swf output starts out in the "stopped" state when played, and the play button is visible
-	slide_names_gstring = g_string_append(slide_names_gstring, "cb_play._visible = true; _root.stop();");
+	slide_names_gstring = g_string_append(slide_names_gstring, "cb_main.cb_play._visible = true; _root.stop();");
 
 	// Displaying debugging info if requested
 	if (debug_level)
@@ -244,8 +244,11 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	restart_record_over = SWFButton_addCharacter(restart_button, (SWFCharacter) restart_shape_over, SWFBUTTON_OVER);
 	restart_record_down = SWFButton_addCharacter(restart_button, (SWFCharacter) restart_shape_down, SWFBUTTON_DOWN);
 
-	// Add the restart action to the restart button 
-	restart_action = newSWFAction("cb_play._visible = true; _root.gotoAndStop(1);");
+	// Add the restart action to the restart button
+	restart_action = newSWFAction(
+			"cb_play._visible = true;"
+			" _root.this_slide = 0;"
+			" _root.gotoAndPlay(1, _root.slide_names[_root.this_slide]);");
 	SWFButton_addAction(restart_button, restart_action, SWFBUTTON_MOUSEUP);
 
 
@@ -294,8 +297,20 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		rewind_record_over = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_over, SWFBUTTON_OVER);
 		rewind_record_down = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_down, SWFBUTTON_DOWN);
 
-		// Add the rewind action to the rewind button 
-		rewind_action = newSWFAction("if (0 != this_slide) { cb_play._visible = true; this_slide -= 1; _root.gotoAndPlay(slide_names[this_slide]); };");
+		// Add the rewind action to the rewind button
+		rewind_action = newSWFAction(
+				"if (0 == _root.this_slide)"
+				" {"  // We're in the first slide, so jump back to the start of the movie
+					" cb_play._visible = true;"
+					" _root.this_slide = 0;"
+					" _root.gotoAndPlay(1);"
+				" }"
+				" else"
+				" {"  // We're past the first slide, so jump back to the start of the previous slide
+					" cb_play._visible = true;"
+					" _root.this_slide -= 1;"
+					" _root.gotoAndPlay(1, _root.slide_names[_root.this_slide]);"
+				" };");
 		SWFButton_addAction(rewind_button, rewind_action, SWFBUTTON_MOUSEUP);
 	}
 
@@ -343,7 +358,10 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	pause_record_down = SWFButton_addCharacter(pause_button, (SWFCharacter) pause_shape_down, SWFBUTTON_DOWN);
 
 	// Add the pause action to the pause button
-	pause_action = newSWFAction("cb_play._visible = true; cb_pause._visible = false; _root.stop();");
+	pause_action = newSWFAction(
+			"cb_play._visible = true;"
+			" cb_pause._visible = false;"
+			" _root.stop();");
 	SWFButton_addAction(pause_button, pause_action, SWFBUTTON_MOUSEUP);
 
 
@@ -391,7 +409,10 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	play_record_down = SWFButton_addCharacter(play_button, (SWFCharacter) play_shape_down, SWFBUTTON_DOWN);
 
 	// Add the Play action to the play button 
-	play_action = newSWFAction("cb_pause._visible = true; cb_play._visible = false; _root.play();");
+	play_action = newSWFAction(
+			"cb_pause._visible = true;"
+			" cb_play._visible = false;"
+			" _root.play();");
 	SWFButton_addAction(play_button, play_action, SWFBUTTON_MOUSEUP);
 
 
@@ -441,7 +462,13 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		forward_record_down = SWFButton_addCharacter(forward_button, (SWFCharacter) forward_shape_down, SWFBUTTON_DOWN);
 
 		// Add the forward action to the forward button
-		forward_action = newSWFAction("if ((num_slides - 1) != this_slide) { cb_play._visible = true; this_slide += 1; _root.gotoAndPlay(slide_names[this_slide]); };");
+		forward_action = newSWFAction(
+				"if ((_root.num_slides - 1) != _root.this_slide)"
+				" {"
+					" cb_play._visible = true;"
+					" _root.this_slide += 1;"
+					" _root.gotoAndPlay(1, _root.slide_names[_root.this_slide]);"
+				" };");
 		SWFButton_addAction(forward_button, forward_action, SWFBUTTON_MOUSEUP);
 	}
 
@@ -489,7 +516,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	finish_record_down = SWFButton_addCharacter(finish_button, (SWFCharacter) finish_shape_down, SWFBUTTON_DOWN);
 
 	// Add the finish action to the finish button 
-	finish_action = newSWFAction("cb_play._visible = true; _root.gotoAndStop(_root._totalframes);");
+	finish_action = newSWFAction(
+			"cb_play._visible = true;"
+			" _root.gotoAndStop(_root._totalframes);");  // Jump to the last frame of the movie
 	SWFButton_addAction(finish_button, finish_action, SWFBUTTON_MOUSEUP);
 
 
@@ -557,6 +586,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	// Add the movie clip to the main movie
 	buttons_display_item = SWFMovie_add(main_movie, movie_clip);
 
+	// Name the movie clip
+	SWFDisplayItem_setName(buttons_display_item, "cb_main");
+
 	// Set the movie clip to be shown higher in the display stack than the main movie
 	SWFDisplayItem_setDepth(buttons_display_item, 200);
 
@@ -576,6 +608,10 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/01/27 17:42:10  vapour
+ * Gave a name to the swf control bar, so the initial action can set the play button visibility correctly.
+ * Updated the swf variable names with the _root context.
+ *
  * Revision 1.5  2008/01/25 16:24:14  vapour
  * Added code to embed action script for the fast forward and rewind buttons, and also an actionscript list of slide names for jumping between.
  *
