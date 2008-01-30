@@ -163,6 +163,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 	// Create the (one and only for now) font style used in text boxes
 	font_pathname = g_build_path(G_DIR_SEPARATOR_S, font_path, "fdb", "Bitstream Vera Sans.fdb", NULL);
+	if (debug_level) printf("Full path name to font file is: %s\n", font_pathname);
 	font_object = newSWFFont_fromFile(font_pathname);
 	if (NULL == font_object)
 	{
@@ -799,11 +800,31 @@ gint menu_export_flash_inner(gchar *output_filename)
 		{
 			// If we're debugging, then generate debugging swf's too
 			inc_slide_counter_action = newSWFAction(
-					"_root.this_slide += 1;"
-					" trace(\"Slide counter incremented, now equals: \" + _root.this_slide);");
+					"if ((_root.this_slide <= (_root.num_slides - 1)) && (false == _root.reversing))"
+					" {"
+						" _root.this_slide += 1;"
+						" trace(\"Slide counter incremented, now equals: \" + _root.this_slide + \".\");"
+						" trace(\"'reversing' variable was false, and remains so.\");"
+					" }"
+					" if (true == _root.reversing)"
+					" {"
+						" _root.reversing = false;"
+						" trace(\"Slide counter unchanged, now at: \" + _root.this_slide + \".\");"
+						" trace(\"'reversing' variable was false, has been set to true.\");"
+					" };"
+					);
 		} else
 		{
-			inc_slide_counter_action = newSWFAction("_root.this_slide += 1;");
+			inc_slide_counter_action = newSWFAction(
+					"if ((_root.this_slide <= (_root.num_slides - 1)) && (false == _root.reversing))"
+					" {"
+						" _root.this_slide += 1;"
+					" };"
+					" if (true == _root.reversing)"
+					" {"
+						" _root.reversing = false;"
+					" };"
+					);
 		}
 		SWFMovie_add(swf_movie, (SWFBlock) inc_slide_counter_action);
 
@@ -849,6 +870,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.39  2008/01/30 14:46:45  vapour
+ *  + Added a variable to track whether the user is reversing through the swf movie or not, as it needs special handling to provide a good experience.
+ *
  * Revision 1.38  2008/01/30 09:54:29  vapour
  *  + Reworked the action script embedded in swf output to include debugging statements, if the IDE was started in debugging mode. (-d)
  *
