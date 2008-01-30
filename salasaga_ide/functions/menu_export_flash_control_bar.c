@@ -245,10 +245,22 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	restart_record_down = SWFButton_addCharacter(restart_button, (SWFCharacter) restart_shape_down, SWFBUTTON_DOWN);
 
 	// Add the restart action to the restart button
-	restart_action = newSWFAction(
-			"cb_play._visible = true;"
-			" _root.this_slide = 0;"
-			" _root.gotoAndPlay(1, _root.slide_names[_root.this_slide]);");
+	if (debug_level)
+	{
+		// If we're debugging, then generate debugging swf's too
+		restart_action = newSWFAction(
+				"cb_play._visible = true;"
+				" _root.this_slide = 0;"
+				" trace(\"Restart button pressed, slide counter has been set to: \" + _root.this_slide);"
+				" trace(\"We should now jump to the slide named '\" + _root.slide_names[_root.this_slide] + \"'\");"
+				" _root.gotoAndPlay(1, _root.slide_names[_root.this_slide]);");
+	} else
+	{
+		restart_action = newSWFAction(
+				"cb_play._visible = true;"
+				" _root.this_slide = 0;"
+				" _root.gotoAndPlay(1, _root.slide_names[_root.this_slide]);");
+	}
 	SWFButton_addAction(restart_button, restart_action, SWFBUTTON_MOUSEUP);
 
 
@@ -298,19 +310,42 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		rewind_record_down = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_down, SWFBUTTON_DOWN);
 
 		// Add the rewind action to the rewind button
-		rewind_action = newSWFAction(
-				"if (0 == _root.this_slide)"
-				" {"  // We're in the first slide, so jump back to the start of the movie
-					" cb_play._visible = true;"
-					" _root.this_slide = 0;"
-					" _root.gotoAndPlay(1);"
-				" }"
-				" else"
-				" {"  // We're past the first slide, so jump back to the start of the previous slide
-					" cb_play._visible = true;"
-					" _root.this_slide -= 1;"
-					" _root.gotoAndPlay(1, _root.slide_names[_root.this_slide]);"
-				" };");
+		if (debug_level)
+		{
+			// If we're debugging, then generate debugging swf's too
+			rewind_action = newSWFAction(
+					"if (0 == _root.this_slide)"
+					" {"  // We're in the first slide, so jump back to the start of the movie
+						" cb_play._visible = true;"
+						" _root.this_slide = 0;"
+						" trace(\"Rewind button pressed while in first slide, slide counter has been set to: \" + _root.this_slide);"
+						" trace(\"We should now jump to the first frame of the movie\");"
+						" _root.gotoAndPlay(1);"
+					" }"
+					" else"
+					" {"  // We're past the first slide, so jump back to the start of the previous slide
+						" cb_play._visible = true;"
+						" _root.this_slide -= 1;"
+						" trace(\"Rewind button pressed, slide counter has been set to: \" + _root.this_slide);"
+						" trace(\"We should now jump to the slide named '\" + _root.slide_names[_root.this_slide] + \"'\");"
+						" _root.gotoAndPlay(_root.slide_names[_root.this_slide]);"
+					" };");
+		} else
+		{
+			rewind_action = newSWFAction(
+					"if (0 == _root.this_slide)"
+					" {"  // We're in the first slide, so jump back to the start of the movie
+						" cb_play._visible = true;"
+						" _root.this_slide = 0;"
+						" _root.gotoAndPlay(1);"
+					" }"
+					" else"
+					" {"  // We're past the first slide, so jump back to the start of the previous slide
+						" cb_play._visible = true;"
+						" _root.this_slide -= 1;"
+						" _root.gotoAndPlay(_root.slide_names[_root.this_slide]);"
+					" };");
+		}
 		SWFButton_addAction(rewind_button, rewind_action, SWFBUTTON_MOUSEUP);
 	}
 
@@ -358,10 +393,21 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	pause_record_down = SWFButton_addCharacter(pause_button, (SWFCharacter) pause_shape_down, SWFBUTTON_DOWN);
 
 	// Add the pause action to the pause button
-	pause_action = newSWFAction(
-			"cb_play._visible = true;"
-			" cb_pause._visible = false;"
-			" _root.stop();");
+	if (debug_level)
+	{
+		// If we're debugging, then generate debugging swf's too
+		pause_action = newSWFAction(
+				"cb_play._visible = true;"
+				" cb_pause._visible = false;"
+				" trace(\"Pause button pressed. Slide counter equals: \" + _root.this_slide);"
+				" _root.stop();");
+	} else
+	{
+		pause_action = newSWFAction(
+				"cb_play._visible = true;"
+				" cb_pause._visible = false;"
+				" _root.stop();");
+	}
 	SWFButton_addAction(pause_button, pause_action, SWFBUTTON_MOUSEUP);
 
 
@@ -409,10 +455,22 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	play_record_down = SWFButton_addCharacter(play_button, (SWFCharacter) play_shape_down, SWFBUTTON_DOWN);
 
 	// Add the Play action to the play button 
-	play_action = newSWFAction(
-			"cb_pause._visible = true;"
-			" cb_play._visible = false;"
-			" _root.play();");
+	if (debug_level)
+	{
+		// If we're debugging, then generate debugging swf's too
+		play_action = newSWFAction(
+				"cb_pause._visible = true;"
+				" cb_play._visible = false;"
+				" trace(\"Play button pressed. Slide counter equals: \" + _root.this_slide);"
+				" trace(\"Slide name array is: \" + _root.slide_names);"
+				" _root.play();");
+	} else
+	{
+		play_action = newSWFAction(
+				"cb_pause._visible = true;"
+				" cb_play._visible = false;"
+				" _root.play();");
+	}
 	SWFButton_addAction(play_button, play_action, SWFBUTTON_MOUSEUP);
 
 
@@ -462,13 +520,42 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		forward_record_down = SWFButton_addCharacter(forward_button, (SWFCharacter) forward_shape_down, SWFBUTTON_DOWN);
 
 		// Add the forward action to the forward button
-		forward_action = newSWFAction(
-				"if ((_root.num_slides - 1) != _root.this_slide)"
-				" {"
-					" cb_play._visible = true;"
-					" _root.this_slide += 1;"
-					" _root.gotoAndPlay(1, _root.slide_names[_root.this_slide]);"
-				" };");
+		if (debug_level)
+		{
+			// If we're debugging, then generate debugging swf's too
+			forward_action = newSWFAction(
+					"if (_root.this_slide >= (_root.num_slides - 1))"
+					" {"
+						// We're in the last slide, so we jump to the end of the movie
+						" cb_play._visible = true;"
+						" trace(\"Fast forward button pressed while in last slide, slide counter is: \" + _root.this_slide);"
+						" trace(\"Now jumping to the last frame of the movie.\");"
+						" _root.gotoAndStop(_root._totalframes);"  // Jump to the last frame of the movie
+					" }"
+					" else"
+					" {"
+						// We're not in the last slide yet, so jump to the start of the next slide
+						" cb_play._visible = true;"
+						" trace(\"Fast forward button pressed, slide counter is: \" + _root.this_slide);"
+						" trace(\"We should now jump to the slide named '\" + _root.slide_names[_root.this_slide + 1] + \"'\");"
+						" _root.gotoAndPlay(_root.slide_names[_root.this_slide + 1]);"
+					" };");
+		} else
+		{
+			forward_action = newSWFAction(
+					"if (_root.this_slide >= (_root.num_slides - 1))"
+					" {"
+						// We're in the last slide, so we jump to the end of the movie
+						" cb_play._visible = true;"
+						" _root.gotoAndStop(_root._totalframes);"  // Jump to the last frame of the movie
+					" }"
+					" else"
+					" {"
+						// We're not in the last slide yet, so jump to the start of the next slide
+						" cb_play._visible = true;"
+						" _root.gotoAndPlay(_root.slide_names[_root.this_slide + 1]);"
+					" };");
+		}
 		SWFButton_addAction(forward_button, forward_action, SWFBUTTON_MOUSEUP);
 	}
 
@@ -516,9 +603,19 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	finish_record_down = SWFButton_addCharacter(finish_button, (SWFCharacter) finish_shape_down, SWFBUTTON_DOWN);
 
 	// Add the finish action to the finish button 
-	finish_action = newSWFAction(
-			"cb_play._visible = true;"
-			" _root.gotoAndStop(_root._totalframes);");  // Jump to the last frame of the movie
+	if (debug_level)
+	{
+		// If we're debugging, then generate debugging swf's too
+		finish_action = newSWFAction(
+				"cb_play._visible = true;"
+				" trace(\"Finish button pressed. Now jumping to last frame of movie.\");"
+				" _root.gotoAndStop(_root._totalframes);");  // Jump to the last frame of the movie
+	} else
+	{
+		finish_action = newSWFAction(
+				"cb_play._visible = true;"
+				" _root.gotoAndStop(_root._totalframes);");  // Jump to the last frame of the movie
+	}
 	SWFButton_addAction(finish_button, finish_action, SWFBUTTON_MOUSEUP);
 
 
@@ -608,6 +705,10 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/01/30 09:52:47  vapour
+ *  + Reworked the action script embedded in swf output to include debugging statements, if the IDE was started in debugging mode. (-d)
+ *  + Reworked the rewind and fast forward action script for swf output, so it now works.
+ *
  * Revision 1.6  2008/01/27 17:42:10  vapour
  * Gave a name to the swf control bar, so the initial action can set the play button visibility correctly.
  * Updated the swf variable names with the _root context.
