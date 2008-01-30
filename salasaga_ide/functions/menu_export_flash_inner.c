@@ -794,8 +794,17 @@ gint menu_export_flash_inner(gchar *output_filename)
 			SWFMovie_nextFrame(swf_movie);
 		}
 
-		// Advance the slide counting variable inside the swf
-		inc_slide_counter_action = newSWFAction("_root.this_slide += 1;");
+		// * Advance the slide counting variable inside the swf *
+		if (debug_level)
+		{
+			// If we're debugging, then generate debugging swf's too
+			inc_slide_counter_action = newSWFAction(
+					"_root.this_slide += 1;"
+					" trace(\"Slide counter incremented, now equals: \" + _root.this_slide);");
+		} else
+		{
+			inc_slide_counter_action = newSWFAction("_root.this_slide += 1;");
+		}
 		SWFMovie_add(swf_movie, (SWFBlock) inc_slide_counter_action);
 
 		// Free the memory allocated to the swf timing array, now that this slide is over
@@ -840,6 +849,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.38  2008/01/30 09:54:29  vapour
+ *  + Reworked the action script embedded in swf output to include debugging statements, if the IDE was started in debugging mode. (-d)
+ *
  * Revision 1.37  2008/01/27 17:41:26  vapour
  * Updated to explicitly refer to the _root scope for a swf variable.
  *
