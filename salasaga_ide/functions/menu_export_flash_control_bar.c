@@ -151,6 +151,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 			"var num_slides = %u;"
 			" var this_slide = 0;"
 			" var reversing = false;"
+			" var playing = false;"
 			" var slide_names = [", num_slides);
 	for (i = 0; i < (num_slides - 1); i++)
 	{
@@ -182,7 +183,13 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	}
 
 	// Ensure the swf output starts out in the "stopped" state when played, and the play button is visible
-	slide_names_gstring = g_string_append(slide_names_gstring, "cb_main.cb_play._visible = true; _root.stop();");
+	slide_names_gstring = g_string_append(slide_names_gstring,
+			"cb_main.cb_play._visible = true;"
+			" if (false == _root.playing)"
+			" {"
+				"_root.stop();"
+			" };"
+			);
 
 	// Displaying debugging info if requested
 	if (debug_level)
@@ -323,8 +330,18 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 						" cb_play._visible = true;"
 						" _root.this_slide = 0;"
 						" trace(\"Rewind button pressed while in first slide, slide counter has been set to: \" + _root.this_slide + \".\");"
+						" trace(\"'playing' variable is unchanged, at: \" + _root.playing + \".\");"
 						" trace(\"We should now jump to the first frame of the movie.\");"
-						" _root.gotoAndStop(1);"
+						" if (true == _root.playing)"
+						" {"
+							" trace(\"Using gotoAndPlay.\");"
+							" _root.gotoAndPlay(1);"
+						" }"
+						" else"
+						" {"
+							" trace(\"Using gotoAndStop.\");"
+							" _root.gotoAndStop(1);"
+						" }"
 					" }"
 					" else"
 					" {"  // We're past the first slide, so jump back to the start of the previous slide
@@ -333,8 +350,18 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 						" _root.reversing = true;"
 						" trace(\"Rewind button pressed, slide counter has been set to: \" + _root.this_slide + \".\");"
 						" trace(\"'_root.reversing' variable has been set to true.\");"
+						" trace(\"'playing' variable is unchanged, at: \" + _root.playing + \".\");"
 						" trace(\"We should now jump to the slide named '\" + _root.slide_names[_root.this_slide] + \"'.\");"
-						" _root.gotoAndStop(_root.slide_names[_root.this_slide]);"
+						" if (true == _root.playing)"
+						" {"
+							" trace(\"Using gotoAndPlay.\");"
+							" _root.gotoAndPlay(_root.slide_names[_root.this_slide]);"
+						" }"
+						" else"
+						" {"
+							" trace(\"Using gotoAndStop.\");"
+							" _root.gotoAndStop(_root.slide_names[_root.this_slide]);"
+						" }"
 					" };");
 		} else
 		{
@@ -343,14 +370,28 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 					" {"  // We're in the first slide, so jump back to the start of the movie
 						" cb_play._visible = true;"
 						" _root.this_slide = 0;"
-						" _root.gotoAndStop(1);"
+						" if (true == _root.playing)"
+						" {"
+							" _root.gotoAndPlay(1);"
+						" }"
+						" else"
+						" {"
+							" _root.gotoAndStop(1);"
+						" }"
+
 					" }"
 					" else"
 					" {"  // We're past the first slide, so jump back to the start of the previous slide
-						" cb_play._visible = true;"
 						" _root.this_slide -= 1;"
 						" _root.reversing = true;"
-						" _root.gotoAndStop(_root.slide_names[_root.this_slide]);"
+						" if (true == _root.playing)"
+						" {"
+							" _root.gotoAndPlay(_root.slide_names[_root.this_slide]);"
+						" }"
+						" else"
+						" {"
+							" _root.gotoAndStop(_root.slide_names[_root.this_slide]);"
+						" }"
 					" };");
 		}
 		SWFButton_addAction(rewind_button, rewind_action, SWFBUTTON_MOUSEUP);
@@ -406,13 +447,16 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		pause_action = newSWFAction(
 				"cb_play._visible = true;"
 				" cb_pause._visible = false;"
+				" _root.playing = false;"
 				" trace(\"Pause button pressed. Slide counter equals: \" + _root.this_slide + \".\");"
+				" trace(\"'_root.playing' variable set to false.\");"
 				" _root.stop();");
 	} else
 	{
 		pause_action = newSWFAction(
 				"cb_play._visible = true;"
 				" cb_pause._visible = false;"
+				" _root.playing = false;"
 				" _root.stop();");
 	}
 	SWFButton_addAction(pause_button, pause_action, SWFBUTTON_MOUSEUP);
@@ -469,8 +513,10 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 				"cb_pause._visible = true;"
 				" cb_play._visible = false;"
 				" _root.reversing = false;"
+				" _root.playing = true;"
 				" trace(\"Play button pressed. Slide counter equals: \" + _root.this_slide + \".\");"
 				" trace(\"'_root.reversing' variable has been set to false.\");"
+				" trace(\"'_root.playing' variable set to true.\");"
 				" trace(\"Slide name array is: \" + _root.slide_names + \".\");"
 				" _root.play();");
 	} else
@@ -479,6 +525,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 				"cb_pause._visible = true;"
 				" cb_play._visible = false;"
 				" _root.reversing = false;"
+				" _root.playing = true;"
 				" _root.play();");
 	}
 	SWFButton_addAction(play_button, play_action, SWFBUTTON_MOUSEUP);
@@ -541,18 +588,26 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 						" _root.reversing = false;"
 						" trace(\"Fast forward button pressed while in last slide, slide counter is: \" + _root.this_slide + \".\");"
 						" trace(\"'_root.reversing' variable has been set to false.\");"
-						" trace(\"Now jumping to the last frame of the movie.\");"
+						" trace(\"Now jumping to the last frame of the movie using gotoAndStop.\");"
 						" _root.gotoAndStop(_root._totalframes);"  // Jump to the last frame of the movie
 					" }"
 					" else"
 					" {"
 						// We're not in the last slide yet, so jump to the start of the next slide
-						" cb_play._visible = true;"
 						" _root.reversing = false;"
 						" trace(\"Fast forward button pressed, slide counter is: \" + _root.this_slide);"
 						" trace(\"'_root.reversing' variable has been set to false.\");"
 						" trace(\"We should now jump to the slide named '\" + _root.slide_names[_root.this_slide + 1] + \"'.\");"
-						" _root.gotoAndStop(_root.slide_names[_root.this_slide + 1]);"
+						" if (true == _root.playing)"
+						" {"
+							" trace(\"Using gotoAndPlay.\");"
+							" _root.gotoAndPlay(_root.slide_names[_root.this_slide + 1]);"
+						" }"
+						" else"
+						" {"
+							" trace(\"Using gotoAndStop.\");"
+							" _root.gotoAndStop(_root.slide_names[_root.this_slide + 1]);"
+						" }"
 					" };");
 		} else
 		{
@@ -567,9 +622,15 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 					" else"
 					" {"
 						// We're not in the last slide yet, so jump to the start of the next slide
-						" cb_play._visible = true;"
 						" _root.reversing = false;"
-						" _root.gotoAndStop(_root.slide_names[_root.this_slide + 1]);"
+						" if (true == _root.playing)"
+						" {"
+							" _root.gotoAndPlay(_root.slide_names[_root.this_slide + 1]);"
+						" }"
+						" else"
+						" {"
+							" _root.gotoAndStop(_root.slide_names[_root.this_slide + 1]);"
+						" }"
 					" };");
 		}
 		SWFButton_addAction(forward_button, forward_action, SWFBUTTON_MOUSEUP);
@@ -727,6 +788,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/01/30 15:49:03  vapour
+ *  + Added a variable to track whether the user is playing or pausing the swf movie, as it needs special handling to provide a good experience.
+ *
  * Revision 1.8  2008/01/30 14:45:46  vapour
  *  + Adjusted the swf control buttons to use gotoAndStop rather than gotoAndPlay while things are still being debugged.
  *  + Added a variable to track whether the user is reversing through the swf movie or not, as it needs special handling to provide a good experience.

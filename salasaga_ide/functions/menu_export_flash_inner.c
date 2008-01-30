@@ -805,13 +805,20 @@ gint menu_export_flash_inner(gchar *output_filename)
 						" _root.this_slide += 1;"
 						" trace(\"Slide counter incremented, now equals: \" + _root.this_slide + \".\");"
 						" trace(\"'reversing' variable was false, and remains so.\");"
+						" trace(\"'playing' variable is unchanged, at: \" + _root.playing + \".\");"
 					" }"
 					" if (true == _root.reversing)"
 					" {"
 						" _root.reversing = false;"
 						" trace(\"Slide counter unchanged, now at: \" + _root.this_slide + \".\");"
 						" trace(\"'reversing' variable was false, has been set to true.\");"
+						" trace(\"'playing' variable is unchanged, at: \" + _root.playing + \".\");"
 					" };"
+					" if (_root.this_slide == _root.num_slides)"
+					" {"
+						" _root.playing = false;"
+						" trace(\"Last frame of movie reached, 'playing' variable has been set to: \" + _root.playing + \".\");"
+					" }"
 					);
 		} else
 		{
@@ -824,6 +831,10 @@ gint menu_export_flash_inner(gchar *output_filename)
 					" {"
 						" _root.reversing = false;"
 					" };"
+					" if (_root.this_slide == _root.num_slides)"
+					" {"
+						" _root.playing = false;"
+					" }"
 					);
 		}
 		SWFMovie_add(swf_movie, (SWFBlock) inc_slide_counter_action);
@@ -870,6 +881,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.40  2008/01/30 15:47:39  vapour
+ *  + Added a variable to track whether the user is playing or pausing the swf movie, as it needs special handling to provide a good experience.
+ *
  * Revision 1.39  2008/01/30 14:46:45  vapour
  *  + Added a variable to track whether the user is reversing through the swf movie or not, as it needs special handling to provide a good experience.
  *
