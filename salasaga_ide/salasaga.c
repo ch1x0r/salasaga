@@ -227,9 +227,9 @@ gint main(gint argc, gchar *argv[])
 	icon_path = g_string_new(NULL);
 	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
 	dot_string = g_string_new(".");
-	unscaled_button_height = 80;
-	unscaled_button_spacing = 8;
-	unscaled_button_width = 80;
+	unscaled_button_height = 50;
+	unscaled_button_spacing = 5;
+	unscaled_button_width = 50;
 
 	// Initialise the button event handlers on the toolbars to NULL
 	main_toolbar_signals[CROP_ALL] = 0;
@@ -989,6 +989,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.70  2008/01/31 07:09:52  vapour
+ * Shrunk the size of the buttons in the swf output control bar by about 40%.
+ *
  * Revision 1.69  2008/01/31 01:05:50  vapour
  * Converted the swf control bar defines into variables, so they can be adjusted by the user in future.
  *
