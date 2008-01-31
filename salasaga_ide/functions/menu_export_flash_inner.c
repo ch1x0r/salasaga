@@ -538,7 +538,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 					SWFShape_setLine(text_bg, 1, 0x00, 0x00, 0x00, 0xff);  // Width = 1 seems to work ok
 
 					// Work out the scaled dimensions of the text background box
-					text_bg_box_height = roundf(scaled_font_size) * num_text_lines;
+					text_bg_box_height = roundf((scaled_font_size * num_text_lines) + (scaled_height_ratio * 2.5));  // Add a 2.5 pixel (unscaled) height gap 
 					text_bg_box_width = roundf(scaled_width_ratio * 10) + widest_text_string_width;
 
 					// Move the start position of the text box vertically downwards
@@ -881,6 +881,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.41  2008/01/31 01:19:21  vapour
+ * Adjusted the height of swf output text box background to be slightly taller, though this will need more work to handle certain characters better.
+ *
  * Revision 1.40  2008/01/30 15:47:39  vapour
  *  + Added a variable to track whether the user is playing or pausing the swf movie, as it needs special handling to provide a good experience.
  *
