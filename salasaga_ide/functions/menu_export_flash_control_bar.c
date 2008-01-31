@@ -22,15 +22,6 @@
  */
 
 
-#define UNSCALED_BUTTON_HEIGHT 50
-#define UNSCALED_BUTTON_WIDTH 50
-#define UNSCALED_BUTTON_SPACING 5
-#define UNSCALED_CONTROL_BAR_HEIGHT 60
-#define UNSCALED_CONTROL_BAR_WIDTH 254
-// fixme2: Probably need to turn the control bar width into a variable, as it's
-//         not going to work very well for slides with no ff or rew buttons
-
-
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -64,10 +55,12 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	GString				*slide_names_gstring;
 
 	// Variables used in working out control bar dimensions
-	gfloat				scaled_control_bar_height;
-	gfloat				scaled_control_bar_width;
 	gfloat				control_bar_x;
 	gfloat				control_bar_y;
+	gfloat				scaled_control_bar_height;
+	gfloat				scaled_control_bar_width;
+	guint				unscaled_control_bar_height;
+	guint				unscaled_control_bar_width;
 
 	// Variables used for the finish button
 	SWFAction			finish_action;
@@ -133,14 +126,16 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	// Initialise various things
 	button_x = 0;
 	button_y = (height_scale_factor * 10);
-	scaled_button_height = UNSCALED_BUTTON_HEIGHT * height_scale_factor;
-	scaled_button_width = UNSCALED_BUTTON_WIDTH * width_scale_factor;
-	scaled_control_bar_height = UNSCALED_CONTROL_BAR_HEIGHT * height_scale_factor;
-	scaled_control_bar_width = UNSCALED_CONTROL_BAR_WIDTH * width_scale_factor;
+	unscaled_control_bar_height = unscaled_button_height * 1.18;
+	unscaled_control_bar_width = (unscaled_button_width + unscaled_button_spacing) * 4.66;
+	scaled_button_height = unscaled_button_height * height_scale_factor;
+	scaled_button_width = unscaled_button_width * width_scale_factor;
+	scaled_control_bar_height = unscaled_control_bar_height * height_scale_factor;
+	scaled_control_bar_width = unscaled_control_bar_width * width_scale_factor;
 
 	// For now, position the control bar in the middle of the screen, 90% of the way to the bottom
-	control_bar_x = ((project_width - UNSCALED_CONTROL_BAR_WIDTH) / 2) * width_scale_factor;
-	control_bar_y = ((project_height * 0.90) - UNSCALED_CONTROL_BAR_HEIGHT) * height_scale_factor;
+	control_bar_x = ((project_width - unscaled_control_bar_width) / 2) * width_scale_factor;
+	control_bar_y = ((project_height * 0.90) - unscaled_control_bar_height) * height_scale_factor;
 
 	// Create an action script list of slide names in the project
 	slides = g_list_first(slides);
@@ -711,14 +706,14 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) cb_background);
 	SWFDisplayItem_setDepth(mc_display_item, 1);
 	SWFDisplayItem_setName(mc_display_item, "cb_background");
-	button_x = button_x + (UNSCALED_BUTTON_SPACING * width_scale_factor);
+	button_x = button_x + (unscaled_button_spacing * width_scale_factor);
 
 	// Add the restart button to the control bar
 	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) restart_button);
 	SWFDisplayItem_setDepth(mc_display_item, 2);
 	SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 	SWFDisplayItem_setName(mc_display_item, "cb_restart");
-	button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
+	button_x = button_x + (unscaled_button_width * width_scale_factor);
 
 	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
 	{
@@ -727,7 +722,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		SWFDisplayItem_setDepth(mc_display_item, 3);
 		SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 		SWFDisplayItem_setName(mc_display_item, "cb_rewind");
-		button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
+		button_x = button_x + (unscaled_button_width * width_scale_factor);
 	}
 
 	// Add the pause button to the control bar
@@ -741,7 +736,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFDisplayItem_setDepth(mc_display_item, 5);
 	SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 	SWFDisplayItem_setName(mc_display_item, "cb_play");
-	button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
+	button_x = button_x + (unscaled_button_width * width_scale_factor);
 
 	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
 	{
@@ -750,7 +745,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		SWFDisplayItem_setDepth(mc_display_item, 6);
 		SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 		SWFDisplayItem_setName(mc_display_item, "cb_rewind");
-		button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
+		button_x = button_x + (unscaled_button_width * width_scale_factor);
 	}
 
 	// Add the finish button to the control bar
@@ -758,7 +753,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFDisplayItem_setDepth(mc_display_item, 7);
 	SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 	SWFDisplayItem_setName(mc_display_item, "cb_finish");
-	button_x = button_x + (UNSCALED_BUTTON_WIDTH * width_scale_factor);
+	button_x = button_x + (unscaled_button_width * width_scale_factor);
 
 	// Advance the movie clip one frame, else it won't be displayed
 	SWFMovieClip_nextFrame(movie_clip);
@@ -788,6 +783,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/01/31 01:05:49  vapour
+ * Converted the swf control bar defines into variables, so they can be adjusted by the user in future.
+ *
  * Revision 1.9  2008/01/30 15:49:03  vapour
  *  + Added a variable to track whether the user is playing or pausing the swf movie, as it needs special handling to provide a good experience.
  *

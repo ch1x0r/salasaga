@@ -21,6 +21,7 @@
  * 
  */
 
+
 // Standard includes
 #include <sys/types.h>
 #include <stdio.h>
@@ -104,6 +105,9 @@ gint					stored_x;					// X co-ordinate of the mouse last click
 gint					stored_y;					// Y co-ordinate of the mouse last click
 GtkWidget				*time_line_container;		// Scrolled window widget, to add scroll bars to the time line widget
 GtkWidget				*time_line_vbox;			// VBox widget holding all of the time line elements
+guint					unscaled_button_height;		// Height of buttons in swf output control bar
+guint					unscaled_button_spacing;	// Spacing between buttons of swf output control bar
+guint					unscaled_button_width;		// Width of buttons in swf output control bar
 GtkWidget				*working;					// Widget for the working area
 guint					working_width;				// Width of the display portion of the working area in pixels
 guint					working_height;				// Height of the display portion of the working area in pixels
@@ -223,6 +227,9 @@ gint main(gint argc, gchar *argv[])
 	icon_path = g_string_new(NULL);
 	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
 	dot_string = g_string_new(".");
+	unscaled_button_height = 80;
+	unscaled_button_spacing = 8;
+	unscaled_button_width = 80;
 
 	// Initialise the button event handlers on the toolbars to NULL
 	main_toolbar_signals[CROP_ALL] = 0;
@@ -982,6 +989,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.69  2008/01/31 01:05:50  vapour
+ * Converted the swf control bar defines into variables, so they can be adjusted by the user in future.
+ *
  * Revision 1.68  2008/01/19 07:13:38  vapour
  *  + Improved the directory separator used in strings, for better cross platform functionality.
  *  + Added the font_path variable and code to set it at program start up.

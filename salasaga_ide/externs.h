@@ -66,6 +66,9 @@ extern gint					stored_x;
 extern gint					stored_y;
 extern GtkWidget			*time_line_container;
 extern GtkWidget			*time_line_vbox;
+extern guint				unscaled_button_height;
+extern guint				unscaled_button_spacing;
+extern guint				unscaled_button_width;
 extern GtkWidget			*working;
 extern guint				working_height;
 extern guint				working_width;
@@ -129,6 +132,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.30  2008/01/31 01:05:50  vapour
+ * Converted the swf control bar defines into variables, so they can be adjusted by the user in future.
+ *
  * Revision 1.29  2008/01/19 07:11:10  vapour
  * Added font_path variable.
  *
