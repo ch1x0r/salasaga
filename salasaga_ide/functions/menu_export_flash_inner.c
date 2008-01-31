@@ -539,12 +539,12 @@ gint menu_export_flash_inner(gchar *output_filename)
 					SWFShape_setLine(text_bg, 1, 0x00, 0x00, 0x00, 0xff);  // Width = 1 seems to work ok
 
 					// Work out the scaled dimensions of the text background box
-					text_descent = SWFText_getDescent(text_object);
+					text_descent = SWFText_getDescent(text_object) + 2.5;
 					text_bg_box_height = roundf((scaled_font_size * num_text_lines) + (scaled_height_ratio * text_descent));  // Add a gap between the text and the background 
 					text_bg_box_width = roundf(scaled_width_ratio * 10) + widest_text_string_width;
 
 					// Move the start position of the text box vertically downwards
-					SWFShape_movePenTo(text_bg, -(text_descent * scaled_height_ratio), (text_descent * scaled_height_ratio) - scaled_font_size);
+					SWFShape_movePenTo(text_bg, -(text_descent * scaled_height_ratio), (text_descent * 0.5 * scaled_height_ratio) - scaled_font_size);
 
 					// Create the text background box
 					SWFShape_drawLine(text_bg, text_bg_box_width, 0.0);
@@ -883,6 +883,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.43  2008/01/31 01:48:36  vapour
+ * Improved gap calculation between text and its background in swf output.
+ *
  * Revision 1.42  2008/01/31 01:34:55  vapour
  * Improved the calculation of how much gap to leave between text and the edge of its background box, so letter going down low don't hit the edge of the box.
  *
