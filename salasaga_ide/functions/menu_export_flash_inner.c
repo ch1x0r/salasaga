@@ -99,6 +99,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gint				num_text_lines;				// Number of text lines in a particular text layer
 	guint16				red_component;				// Used when retrieving the foreground color of text
 	gfloat				scaled_font_size;			// Display height of a font in swf, when scaled to the desired output size
+	gfloat				text_descent;				// Used when calculating the gap to leave between text and its background
 	GtkTextIter			text_end;					// End position of text buffer
 	gint				text_lines_counter;			// Counter used when processing text
 	GtkTextIter			text_start;					// Start position of text buffer
@@ -538,11 +539,12 @@ gint menu_export_flash_inner(gchar *output_filename)
 					SWFShape_setLine(text_bg, 1, 0x00, 0x00, 0x00, 0xff);  // Width = 1 seems to work ok
 
 					// Work out the scaled dimensions of the text background box
-					text_bg_box_height = roundf((scaled_font_size * num_text_lines) + (scaled_height_ratio * 2.5));  // Add a 2.5 pixel (unscaled) height gap 
+					text_descent = SWFText_getDescent(text_object);
+					text_bg_box_height = roundf((scaled_font_size * num_text_lines) + (scaled_height_ratio * text_descent));  // Add a gap between the text and the background 
 					text_bg_box_width = roundf(scaled_width_ratio * 10) + widest_text_string_width;
 
 					// Move the start position of the text box vertically downwards
-					SWFShape_movePenTo(text_bg, -(5 * scaled_height_ratio), (5 * scaled_height_ratio) - scaled_font_size);
+					SWFShape_movePenTo(text_bg, -(text_descent * scaled_height_ratio), (text_descent * scaled_height_ratio) - scaled_font_size);
 
 					// Create the text background box
 					SWFShape_drawLine(text_bg, text_bg_box_width, 0.0);
@@ -881,6 +883,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.42  2008/01/31 01:34:55  vapour
+ * Improved the calculation of how much gap to leave between text and the edge of its background box, so letter going down low don't hit the edge of the box.
+ *
  * Revision 1.41  2008/01/31 01:19:21  vapour
  * Adjusted the height of swf output text box background to be slightly taller, though this will need more work to handle certain characters better.
  *
