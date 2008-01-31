@@ -43,7 +43,6 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFDisplayItem		buttons_display_item;
 	gchar				*image_path;
 	gint				i;
-	SWFFillStyle		light_yellow_fill;
 	SWFAction			main_movie_action;
 	SWFDisplayItem		mc_display_item;
 	SWFMovieClip		movie_clip;
@@ -53,6 +52,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	slide				*slide_data;
 	GString				*slide_name_tmp;
 	GString				*slide_names_gstring;
+
+	// Variables used creating the control bar background
+	SWFShape			cb_background;
 
 	// Variables used in working out control bar dimensions
 	gfloat				control_bar_x;
@@ -197,14 +199,14 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFMovie_add(main_movie, (SWFBlock) main_movie_action);
 
 	// Create a background for the control bar buttons to go on
-	SWFShape cb_background = newSWFShape();
-	light_yellow_fill = newSWFSolidFillStyle(0xff, 0xff, 0xf5, 0xff);
-	SWFShape_setRightFillStyle(cb_background, light_yellow_fill);
-	SWFShape_setLine(cb_background, 1, 0x00, 0x00, 0x00, 0xff);
-	SWFShape_drawLine(cb_background, scaled_control_bar_width, 0);
-	SWFShape_drawLine(cb_background, 0, scaled_control_bar_height);
-	SWFShape_drawLine(cb_background, -(scaled_control_bar_width), 0);
-	SWFShape_drawLine(cb_background, 0, -(scaled_control_bar_height));
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "background.svg", NULL);
+	cb_background = swf_shape_from_image_file(image_path, scaled_control_bar_width, scaled_control_bar_height);
+	if (NULL == cb_background)
+	{
+		// Loading images isn't working.
+		g_free(image_path);
+		return FALSE;
+	}
 
 
 	// *** Create the Restart button ***
@@ -216,6 +218,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	{
 		// Loading images isn't working.
 		g_free(image_path);
+		destroySWFShape(cb_background);
 		return FALSE;
 	}
 
@@ -226,6 +229,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	{
 		// Loading images isn't working.
 		g_free(image_path);
+		destroySWFShape(cb_background);
 		destroySWFShape(restart_shape_up);
 		return FALSE;
 	}
@@ -237,6 +241,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	{
 		// Loading images isn't working.
 		g_free(image_path);
+		destroySWFShape(cb_background);
 		destroySWFShape(restart_shape_up);
 		destroySWFShape(restart_shape_over);
 		return FALSE;
@@ -272,8 +277,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// *** Create the Rewind button ***
 
-	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
-	{
+// fixme3: Commented out until another, smaller, background image is added specific for this
+//	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
+//	{
 		// Load rewind button's UP state image
 		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_up.svg", NULL);
 		rewind_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
@@ -281,6 +287,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		{
 			// Loading images isn't working.
 			g_free(image_path);
+			destroySWFShape(cb_background);
 			return FALSE;
 		}
 
@@ -291,6 +298,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		{
 			// Loading images isn't working.
 			g_free(image_path);
+			destroySWFShape(cb_background);
 			destroySWFShape(rewind_shape_up);
 			return FALSE;
 		}
@@ -302,6 +310,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		{
 			// Loading images isn't working.
 			g_free(image_path);
+			destroySWFShape(cb_background);
 			destroySWFShape(rewind_shape_up);
 			destroySWFShape(rewind_shape_over);
 			return FALSE;
@@ -390,7 +399,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 					" };");
 		}
 		SWFButton_addAction(rewind_button, rewind_action, SWFBUTTON_MOUSEUP);
-	}
+//	}
 
 	// *** Create the Pause button ***
 
@@ -401,6 +410,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	{
 		// Loading images isn't working.
 		g_free(image_path);
+		destroySWFShape(cb_background);
 		return FALSE;
 	}
 
@@ -411,6 +421,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	{
 		// Loading images isn't working.
 		g_free(image_path);
+		destroySWFShape(cb_background);
 		destroySWFShape(pause_shape_up);
 		return FALSE;
 	}
@@ -422,6 +433,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	{
 		// Loading images isn't working.
 		g_free(image_path);
+		destroySWFShape(cb_background);
 		destroySWFShape(pause_shape_up);
 		destroySWFShape(pause_shape_over);
 		return FALSE;
@@ -466,6 +478,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	{
 		// Loading images isn't working.
 		g_free(image_path);
+		destroySWFShape(cb_background);
 		return FALSE;
 	}
 
@@ -476,6 +489,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	{
 		// Loading images isn't working.
 		g_free(image_path);
+		destroySWFShape(cb_background);
 		destroySWFShape(play_shape_up);
 		return FALSE;
 	}
@@ -487,6 +501,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	{
 		// Loading images isn't working.
 		g_free(image_path);
+		destroySWFShape(cb_background);
 		destroySWFShape(play_shape_up);
 		destroySWFShape(play_shape_over);
 		return FALSE;
@@ -528,8 +543,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// *** Create the Fast Forward button ***
 
-	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
-	{
+// fixme3: Commented out until another, smaller, background image is added specific for this
+//	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
+//	{
 		// Load forward button's UP state image
 		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_up.svg", NULL);
 		forward_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
@@ -537,6 +553,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		{
 			// Loading images isn't working.
 			g_free(image_path);
+			destroySWFShape(cb_background);
 			return FALSE;
 		}
 
@@ -547,6 +564,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		{
 			// Loading images isn't working.
 			g_free(image_path);
+			destroySWFShape(cb_background);
 			destroySWFShape(forward_shape_up);
 			return FALSE;
 		}
@@ -558,6 +576,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		{
 			// Loading images isn't working.
 			g_free(image_path);
+			destroySWFShape(cb_background);
 			destroySWFShape(forward_shape_up);
 			destroySWFShape(forward_shape_over);
 			return FALSE;
@@ -629,7 +648,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 					" };");
 		}
 		SWFButton_addAction(forward_button, forward_action, SWFBUTTON_MOUSEUP);
-	}
+//	}
 
 	// *** Create the Finish button ***
 
@@ -640,6 +659,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	{
 		// Loading images isn't working.
 		g_free(image_path);
+		destroySWFShape(cb_background);
 		return FALSE;
 	}
 
@@ -650,6 +670,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	{
 		// Loading images isn't working.
 		g_free(image_path);
+		destroySWFShape(cb_background);
 		destroySWFShape(finish_shape_up);
 		return FALSE;
 	}
@@ -661,6 +682,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	{
 		// Loading images isn't working.
 		g_free(image_path);
+		destroySWFShape(cb_background);
 		destroySWFShape(finish_shape_up);
 		destroySWFShape(finish_shape_over);
 		return FALSE;
@@ -706,6 +728,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) cb_background);
 	SWFDisplayItem_setDepth(mc_display_item, 1);
 	SWFDisplayItem_setName(mc_display_item, "cb_background");
+	SWFDisplayItem_moveTo(mc_display_item, (unscaled_button_spacing * width_scale_factor * 0.6), (unscaled_button_height * height_scale_factor * 0.09));
 	button_x = button_x + (unscaled_button_spacing * width_scale_factor);
 
 	// Add the restart button to the control bar
@@ -783,6 +806,10 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2008/01/31 07:08:53  vapour
+ *  + Adjusted the swf output control bar to use a background image.
+ *  + The forward and reverse buttons on the swf output control bar are always displayed (for now).
+ *
  * Revision 1.10  2008/01/31 01:05:49  vapour
  * Converted the swf control bar defines into variables, so they can be adjusted by the user in future.
  *
