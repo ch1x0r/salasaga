@@ -138,6 +138,10 @@ typedef struct
 // Defines the properties making up an empty layer
 typedef struct
 {
+	gint				x_offset_start;
+	gint				y_offset_start;
+	gint				x_offset_finish;
+	gint				y_offset_finish;
 	GdkColor			bg_color;
 } layer_empty;
 
@@ -239,6 +243,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.44  2008/02/01 10:54:34  vapour
+ * Added fields to the empty layer structure for storing x and y values for it.  As all layer types now have these same values, this should probably be moved into the parent layer structure.
+ *
  * Revision 1.43  2008/02/01 05:00:17  vapour
  * Added a variable to the layer structure, to store the target window for loading the external link.
  *
