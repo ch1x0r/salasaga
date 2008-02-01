@@ -44,9 +44,12 @@
 gint menu_export_flash_inner(gchar *output_filename)
 {
 	// Local variables
+	GString				*as_gstring;				// Used for constructing action script statements
 	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
 	gint				display_depth;				// The depth at which an item is displayed in the swf output
 	GError				*error = NULL;				// Pointer to error return structure
+	gfloat				finish_x_position_unscaled;
+	gfloat				finish_y_position_unscaled;
 	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
 	guint				frame_counter;				// Holds the number of frames
 	gint				num_bytes_written;			// Receives the number of bytes written to disk for the swf output
@@ -70,6 +73,8 @@ gint menu_export_flash_inner(gchar *output_filename)
 	guint				slide_counter;				// Holds the number of slides
 	guint				slide_duration;				// Holds the total number of frames in this slide
 	GString				*slide_name_tmp;			// Temporary slide names are constructed with this
+	gfloat				start_x_position_unscaled;
+	gfloat				start_y_position_unscaled;
 	swf_frame_element	*swf_timing_array = NULL;	// Used to coordinate the actions in each frame
 	swf_frame_element 	*this_frame_ptr;			// Points to frame information when looping
 	layer				*this_layer_data;			// Points to the data in the present layer
@@ -78,12 +83,18 @@ gint menu_export_flash_inner(gchar *output_filename)
 	guint				total_frames;				// The total number of frames in the animation
 
 	SWFDisplayItem		display_list_object;		// Temporary display list object
+	SWFShape			empty_layer_shape;			// Temporary swf shape used when constructing empty layers
+	SWFFillStyle		empty_layer_fill;			// Fill style used when constructing empty layer shapes
 	SWFFont				font_object;				// The font we use gets loaded into this
 	SWFShape			highlight_box;				// Temporary swf shape used when constructing highlight boxes
 	SWFFillStyle		highlight_fill_style;		// Fill style used when constructing highlight boxes
 	SWFBitmap			image_bitmap;				// Used to hold a scaled bitmap object
 	SWFInput			image_input;				// Used to hold a swf input object
+	SWFShape			image_shape;				// Used to hold a swf shape object
 	SWFAction			inc_slide_counter_action;	// Swf action object used to run some action script
+	SWFAction			swf_action;					// Used when constructing action script
+	SWFButton			swf_button;					// Holds a swf button
+	SWFButtonRecord		swf_button_record;			// Holds a swf button record
 	SWFMovie			swf_movie;					// Swf movie object
 
 	SWFShape			text_bg;					// The text background shape goes in this
@@ -116,10 +127,19 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gfloat				element_y_position_increment = 0;
 	gfloat				element_y_position_start = 0;
 
+	// (Hopefully) temporary variables put in place to get around a *bizarre*
+	// problem whereby calculating basic stuff like "0 - output_width" gives bogus results (computers are infallible eh?) :(
+	// (Suspect it's caused by some optimisation at compile time going wrong)
+	gfloat layer_right;
+	gfloat layer_down;
+	gfloat layer_left;
+	gfloat layer_up;
+
 
 	// Initialise variables
-	total_frames = 0;
+	as_gstring = g_string_new(NULL);
 	slide_name_tmp = g_string_new(NULL);
+	total_frames = 0;
 
 	// Initialise Ming and create an empty swf movie object
 	Ming_init();
@@ -329,12 +349,125 @@ gint menu_export_flash_inner(gchar *output_filename)
 						break;
 					}
 
-					// Create the dictionary shape from the image data
+					// Turn the image data into a swf bitmap
 					image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
 					image_bitmap = newSWFBitmap_fromInput(image_input);
 
-					// Store the dictionary shape for future reference
-					this_layer_data->dictionary_shape = (SWFBlock) image_bitmap;
+					// If this layer has an external link associated with it, turn it into a button
+					if (0 < this_layer_data->external_link->len)
+					{
+						// Displaying debugging info if requested
+						if (debug_level)
+						{
+							printf("This image has an external link: '%s'\n", this_layer_data->external_link->str);
+						}
+
+						// Turn the swf image into a swf shape 
+						image_shape = newSWFShapeFromBitmap(image_bitmap, SWFFILL_CLIPPED_BITMAP);
+						if (NULL == image_shape)
+						{
+							// Something went wrong when encoding the image to required format
+							display_warning("Error ED109: Something went wrong converting an image to a swf shape object");
+						
+							// Free the memory allocated in this function
+							g_error_free(error);
+							if (NULL != resized_pixbuf)
+								g_object_unref(resized_pixbuf);
+							destroySWFBitmap(image_bitmap);
+							destroySWFInput(image_input);
+						
+							break;
+						}
+
+						// Create an empty button object we can use
+						swf_button = newSWFButton();
+
+						// Add the shape to the button for all of its states
+						swf_button_record = SWFButton_addCharacter(swf_button, (SWFCharacter) image_shape, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
+
+						// Add action script to the button, jumping to the external link
+						g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
+						swf_action = newSWFAction(as_gstring->str);
+						SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
+
+						// Store the dictionary shape for future reference
+						this_layer_data->dictionary_shape = (SWFBlock) swf_button;
+					} else
+					{
+						// Store the dictionary shape for future reference
+						this_layer_data->dictionary_shape = (SWFBlock) image_bitmap;
+					}
+
+					// Indicate that the dictionary shape for this layer was created ok
+					dictionary_shape_ok = TRUE;
+
+					break;
+
+				case TYPE_EMPTY:
+
+					// * We're processing an empty layer *
+
+					// Create the initial empty shape
+					empty_layer_shape = newSWFShape();
+					if (NULL == highlight_box)
+					{
+						// Something went wrong when creating the empty shape, so we skip this layer
+						display_warning("Error ED111: Something went wrong when creating an empty layer for swf output");
+
+						// * We don't want to process this layer any further, so we skip adding it to the dictionary
+						break;
+					}
+
+					// Create the required fill color for the empty layer
+					red_component = ((layer_empty *) this_layer_data->object_data)->bg_color.red;
+					green_component = ((layer_empty *) this_layer_data->object_data)->bg_color.green;
+					blue_component = ((layer_empty *) this_layer_data->object_data)->bg_color.blue;
+					empty_layer_fill = SWFShape_addSolidFillStyle(empty_layer_shape, red_component / 255, green_component / 255, blue_component / 255, 0xff);  // Alpha value - solid fill
+					SWFShape_setRightFillStyle(empty_layer_shape, empty_layer_fill);
+
+					// Set the line style
+					SWFShape_setLine(empty_layer_shape,
+							1,  // Line width
+							red_component / 255, green_component / 255, blue_component / 255, 0xff);  // Alpha value - solid fill
+
+					// Create the empty layer object
+					layer_right = output_width;
+					layer_down = output_height;
+					layer_left = 0 - layer_right;  // This is bizarre.  Should NOT have to do this to get a correct result. :(
+					layer_up = 0 - layer_down;  // This is bizarre.  Should NOT have to do this to get a correct result. :(
+					SWFShape_movePenTo(empty_layer_shape, 0.0, 0.0);
+					SWFShape_drawLine(empty_layer_shape, layer_right, 0.0);
+					SWFShape_drawLine(empty_layer_shape, 0.0, layer_down);
+					SWFShape_drawLine(empty_layer_shape, layer_left, 0.0);
+					SWFShape_drawLine(empty_layer_shape, 0.0, layer_up);
+
+					// If this layer has an external link associated with it, turn it into a button
+					if (0 < this_layer_data->external_link->len)
+					{
+						// Displaying debugging info if requested
+						if (debug_level)
+						{
+							printf("This empty layer has an external link: '%s'\n", this_layer_data->external_link->str);
+						}
+
+						// Create an empty button object we can use
+						swf_button = newSWFButton();
+
+						// Add the shape to the button for all of its states
+						swf_button_record = SWFButton_addCharacter(swf_button, (SWFCharacter) empty_layer_shape, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
+
+						// Add action script to the button, jumping to the external link
+						g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
+						swf_action = newSWFAction(as_gstring->str);
+						SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
+
+						// Store the dictionary shape for future reference
+						this_layer_data->dictionary_shape = (SWFBlock) swf_button;
+					} else
+					{
+						// Store the dictionary shape for future reference
+						this_layer_data->dictionary_shape = (SWFBlock) empty_layer_shape;
+					}
 
 					// Indicate that the dictionary shape for this layer was created ok
 					dictionary_shape_ok = TRUE;
@@ -372,8 +505,33 @@ gint menu_export_flash_inner(gchar *output_filename)
 					SWFShape_drawLine(highlight_box, -(highlight_box_width), 0.0);
 					SWFShape_drawLine(highlight_box, 0.0, -(highlight_box_height));
 
-					// Store the dictionary shape for future reference
-					this_layer_data->dictionary_shape = (SWFBlock) highlight_box;
+					// If this layer has an external link associated with it, turn it into a button
+					if (0 < this_layer_data->external_link->len)
+					{
+						// Displaying debugging info if requested
+						if (debug_level)
+						{
+							printf("This highlight has an external link: '%s'\n", this_layer_data->external_link->str);
+						}
+
+						// Create an empty button object we can use
+						swf_button = newSWFButton();
+
+						// Add the shape to the button for all of its states
+						swf_button_record = SWFButton_addCharacter(swf_button, (SWFCharacter) highlight_box, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
+
+						// Add action script to the button, jumping to the external link
+						g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
+						swf_action = newSWFAction(as_gstring->str);
+						SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
+
+						// Store the dictionary shape for future reference
+						this_layer_data->dictionary_shape = (SWFBlock) swf_button;
+					} else
+					{
+						// Store the dictionary shape for future reference
+						this_layer_data->dictionary_shape = (SWFBlock) highlight_box;
+					}
 
 					// Indicate that the dictionary shape for this layer was created ok
 					dictionary_shape_ok = TRUE;
@@ -441,12 +599,54 @@ gint menu_export_flash_inner(gchar *output_filename)
 						break;
 					}
 
-					// Create the dictionary shape from the image data
+					// Turn the image data into a swf bitmap
 					image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
 					image_bitmap = newSWFBitmap_fromInput(image_input);
 
-					// Store the dictionary shape for future reference
-					this_layer_data->dictionary_shape = (SWFBlock) image_bitmap;
+					// If this layer has an external link associated with it, turn it into a button
+					if (0 < this_layer_data->external_link->len)
+					{
+						// Displaying debugging info if requested
+						if (debug_level)
+						{
+							printf("This mouse cursor layer has an external link: '%s'\n", this_layer_data->external_link->str);
+						}
+
+						// Turn the swf image into a swf shape 
+						image_shape = newSWFShapeFromBitmap(image_bitmap, SWFFILL_CLIPPED_BITMAP);
+						if (NULL == image_shape)
+						{
+							// Something went wrong when encoding the image to required format
+							display_warning("Error ED110: Something went wrong converting an image to a swf shape object");
+						
+							// Free the memory allocated in this function
+							g_error_free(error);
+							if (NULL != resized_pixbuf)
+								g_object_unref(resized_pixbuf);
+							destroySWFBitmap(image_bitmap);
+							destroySWFInput(image_input);
+						
+							break;
+						}
+
+						// Create an empty button object we can use
+						swf_button = newSWFButton();
+
+						// Add the shape to the button for all of its states
+						swf_button_record = SWFButton_addCharacter(swf_button, (SWFCharacter) image_shape, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
+
+						// Add action script to the button, jumping to the external link
+						g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
+						swf_action = newSWFAction(as_gstring->str);
+						SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
+
+						// Store the dictionary shape for future reference
+						this_layer_data->dictionary_shape = (SWFBlock) swf_button;
+					} else
+					{
+						// Store the dictionary shape for future reference
+						this_layer_data->dictionary_shape = (SWFBlock) image_bitmap;
+					}
 
 					// Indicate that the dictionary shape for this layer was created ok
 					dictionary_shape_ok = TRUE;
@@ -564,8 +764,36 @@ gint menu_export_flash_inner(gchar *output_filename)
 					// Advance the movie clip one frame, else it won't be displayed
 					SWFMovieClip_nextFrame(text_movie_clip);
 
-					// Store the dictionary shape for future reference
-					this_layer_data->dictionary_shape = (SWFBlock) text_movie_clip;
+					// If this layer has an external link associated with it, turn it into a button
+					if (0 < this_layer_data->external_link->len)
+					{
+						// Displaying debugging info if requested
+						if (debug_level)
+						{
+							printf("This text has an external link: '%s'\n", this_layer_data->external_link->str);
+						}
+
+						// Create an empty button object we can use
+						swf_button = newSWFButton();
+
+						// Add the shape to the button for all of its states, excluding the hit state
+						swf_button_record = SWFButton_addCharacter(swf_button, (SWFCharacter) text_movie_clip, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN);
+
+						// Use the text background area as the hit state
+						swf_button_record = SWFButton_addCharacter(swf_button, (SWFCharacter) text_bg, SWFBUTTON_HIT);
+
+						// Add action script to the button, jumping to the external link
+						g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
+						swf_action = newSWFAction(as_gstring->str);
+						SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
+
+						// Store the dictionary shape for future reference
+						this_layer_data->dictionary_shape = (SWFBlock) swf_button;
+					} else
+					{
+						// Store the dictionary shape for future reference
+						this_layer_data->dictionary_shape = (SWFBlock) text_movie_clip;
+					}
 
 					// Indicate that the dictionary shape for this layer was created ok
 					dictionary_shape_ok = TRUE;
@@ -584,13 +812,46 @@ gint menu_export_flash_inner(gchar *output_filename)
 				// * Process the element array, setting flags and info as required for this layer *
 
 				// Calculate the scaled start and finish positions for each element
+				switch (this_layer_data->object_type)
+				{
+					case TYPE_GDK_PIXBUF:
+						start_x_position_unscaled = ((layer_image *) this_layer_data->object_data)->x_offset_start;
+						start_y_position_unscaled = ((layer_image *) this_layer_data->object_data)->y_offset_start;
+						finish_x_position_unscaled = ((layer_image *) this_layer_data->object_data)->x_offset_finish;
+						finish_y_position_unscaled = ((layer_image *) this_layer_data->object_data)->y_offset_finish;
+						break;
+
+					case TYPE_EMPTY:
+						start_x_position_unscaled = ((layer_empty *) this_layer_data->object_data)->x_offset_start;
+						start_y_position_unscaled = ((layer_empty *) this_layer_data->object_data)->y_offset_start;
+						finish_x_position_unscaled = ((layer_empty *) this_layer_data->object_data)->x_offset_finish;
+						finish_y_position_unscaled = ((layer_empty *) this_layer_data->object_data)->y_offset_finish;
+						break;
+
+					case TYPE_HIGHLIGHT:
+						start_x_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->x_offset_start;
+						start_y_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->y_offset_start;
+						finish_x_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->x_offset_finish;
+						finish_y_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->y_offset_finish;
+						break;
+
+					case TYPE_MOUSE_CURSOR:
+						start_x_position_unscaled = ((layer_mouse *) this_layer_data->object_data)->x_offset_start;
+						start_y_position_unscaled = ((layer_mouse *) this_layer_data->object_data)->y_offset_start;
+						finish_x_position_unscaled = ((layer_mouse *) this_layer_data->object_data)->x_offset_finish;
+						finish_y_position_unscaled = ((layer_mouse *) this_layer_data->object_data)->y_offset_finish;
+						break;
+
+					case TYPE_TEXT:
+						start_x_position_unscaled = ((layer_text *) this_layer_data->object_data)->x_offset_start;
+						start_y_position_unscaled = ((layer_text *) this_layer_data->object_data)->y_offset_start;
+						finish_x_position_unscaled = ((layer_text *) this_layer_data->object_data)->x_offset_finish;
+						finish_y_position_unscaled = ((layer_text *) this_layer_data->object_data)->y_offset_finish;
+						break;
+				}
 				guint start_frame = this_layer_data->start_frame;
 				guint finish_frame = this_layer_data->finish_frame;
 				guint num_displayed_frames = (finish_frame - start_frame) + 1;
-				gfloat start_x_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->x_offset_start;
-				gfloat start_y_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->y_offset_start;
-				gfloat finish_x_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->x_offset_finish;
-				gfloat finish_y_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->y_offset_finish;
 				element_x_position_start = roundf(scaled_width_ratio * (gfloat) start_x_position_unscaled);
 				element_x_position_finish = roundf(scaled_width_ratio * (gfloat) finish_x_position_unscaled);
 				element_y_position_start = roundf(scaled_height_ratio * (gfloat) start_y_position_unscaled);
@@ -883,6 +1144,10 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.44  2008/02/01 10:48:42  vapour
+ *  + Added working code to handle empty layers.
+ *  + Added code to create buttons for layers with an external link.
+ *
  * Revision 1.43  2008/01/31 01:48:36  vapour
  * Improved gap calculation between text and its background in swf output.
  *
