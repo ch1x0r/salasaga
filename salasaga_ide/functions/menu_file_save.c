@@ -190,7 +190,7 @@ void menu_file_save(void)
 	}
 
 	// Add the save format version number to the XML document
-	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.1");
+	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.2");
 
     // Create the preferences container
 	pref_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "preferences", NULL);
@@ -261,6 +261,9 @@ void menu_file_save(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/01 10:50:51  vapour
+ * Bumped up the project file format version to 2.2.
+ *
  * Revision 1.5  2008/01/21 20:29:46  vapour
  * File format version has been incremented to 2.1.
  *
