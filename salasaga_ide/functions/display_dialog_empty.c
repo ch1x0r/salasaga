@@ -60,6 +60,12 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*label_bg_colour;			// Background colour
 	GtkWidget			*button_bg_colour;			// Color button
 
+	GtkWidget			*external_link_label;		// Label widget
+	GtkWidget			*external_link_entry;		// Widget for accepting an external link for clicking on
+
+	GtkWidget			*external_link_win_label;	// Label widget
+	GtkWidget			*external_link_win_entry;	//
+
 	layer_empty			*tmp_empty_ob;				// Temporary empty layer object
 
 
@@ -79,7 +85,31 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach_defaults(GTK_TABLE(empty_table), GTK_WIDGET(label_bg_colour), 0, 1, row_counter, row_counter + 1);
 	button_bg_colour = gtk_color_button_new_with_color(&tmp_empty_ob->bg_color);
 	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(button_bg_colour), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(empty_table), GTK_WIDGET(button_bg_colour), 2, 3, row_counter, row_counter + 1);
+	gtk_table_attach_defaults(GTK_TABLE(empty_table), GTK_WIDGET(button_bg_colour), 1, 2, row_counter, row_counter + 1);
+	row_counter = row_counter + 1;
+
+	// Create the label asking for an external link
+	external_link_label = gtk_label_new("External link: ");
+	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(empty_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1);
+
+	// Create the entry that accepts an external link
+	external_link_entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), 50);
+	gtk_entry_set_text(GTK_ENTRY(external_link_entry), tmp_layer->external_link->str);
+	gtk_table_attach_defaults(GTK_TABLE(empty_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1);
+	row_counter = row_counter + 1;
+
+	// Create the label asking for the window to open the external link in
+	external_link_win_label = gtk_label_new("External link window: ");
+	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(empty_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1);
+
+	// Create the entry that accepts a text string for the window to open the external link in
+	external_link_win_entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), 50);
+	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), tmp_layer->external_link_window->str);
+	gtk_table_attach_defaults(GTK_TABLE(empty_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1);
 	row_counter = row_counter + 1;
 
 	// Run the dialog
@@ -96,8 +126,10 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 		return FALSE;	
 	}
 
-	// Get the new background Colour
+	// Retrieve the updated values
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(button_bg_colour), &tmp_empty_ob->bg_color);
+	g_string_printf(tmp_layer->external_link, "%s", gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
+	g_string_printf(tmp_layer->external_link_window, "%s", gtk_entry_get_text(GTK_ENTRY(external_link_win_entry)));
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(empty_dialog));
@@ -111,6 +143,9 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/02/01 10:32:50  vapour
+ * Added code to the dialog to display and accept values for the external link and its target window.
+ *
  * Revision 1.2  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *
