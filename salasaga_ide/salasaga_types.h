@@ -129,6 +129,7 @@ typedef struct
 	GString				*name;
 	GtkTreeIter			*row_iter;
 	GString				*external_link;
+	GString				*external_link_window;		// Name of the target window to load the external link in. Defaults to _self for swf.
 	void				*dictionary_shape;			// SWF dictionary shape
 	void				*display_list_item;			// SWF display list item
 	// fixme5: Noticing that we don't seem to have a visibility on/off toggle.  Will likely need to add that back in
@@ -238,6 +239,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.43  2008/02/01 05:00:17  vapour
+ * Added a variable to the layer structure, to store the target window for loading the external link.
+ *
  * Revision 1.42  2008/01/21 19:17:03  vapour
  * Added a depth field to the swf element array.
  *
