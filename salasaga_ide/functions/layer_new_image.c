@@ -99,6 +99,7 @@ void layer_new_image(void)
 	tmp_layer->finish_frame = slide_data->duration;
 	tmp_layer->name = g_string_new("Image");
 	tmp_layer->external_link = g_string_new(NULL);
+	tmp_layer->external_link_window = g_string_new("_self");
 
 	// Display a dialog box to edit these values, using our new image layer object
 	return_code = display_dialog_image(tmp_layer, "Add new image layer", TRUE);
@@ -106,6 +107,8 @@ void layer_new_image(void)
 	{
 		// The user cancelled out of the dialog box, so destroy our new layer and return
 		g_string_free(tmp_layer->name, TRUE);
+		g_string_free(tmp_layer->external_link, TRUE);
+		g_string_free(tmp_layer->external_link_window, TRUE);
 		g_free(tmp_layer);
 		g_free(tmp_image_ob);
 		return;
@@ -162,6 +165,9 @@ void layer_new_image(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/01 10:43:18  vapour
+ * Added a new field, the target window to open the external link in, defaulting to _self.
+ *
  * Revision 1.4  2008/01/21 10:29:37  vapour
  *  + Fixed a bug, so that new layers longer than the existing slide duration will extend out the slide duration.
  *  + Delegated creation of timeline duration image to main duration image regen function.

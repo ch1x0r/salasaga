@@ -98,6 +98,7 @@ void layer_new_highlight(void)
 	tmp_layer->finish_frame = slide_data->duration;
 	tmp_layer->name = g_string_new("Highlight");
 	tmp_layer->external_link = g_string_new(NULL);
+	tmp_layer->external_link_window = g_string_new("_self");
 
 	// Display a dialog box to edit these values, using our new highlight layer object
 	return_code = display_dialog_highlight(tmp_layer, "Add new highlight layer");
@@ -105,6 +106,8 @@ void layer_new_highlight(void)
 	{
 		// The user cancelled out of the dialog box, so destroy our new layer and return
 		g_string_free(tmp_layer->name, TRUE);
+		g_string_free(tmp_layer->external_link, TRUE);
+		g_string_free(tmp_layer->external_link_window, TRUE);
 		g_free(tmp_layer);
 		g_free(tmp_highlight_ob);
 		return;
@@ -161,6 +164,9 @@ void layer_new_highlight(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/01 10:42:40  vapour
+ * Added a new field, the target window to open the external link in, defaulting to _self.
+ *
  * Revision 1.4  2008/01/21 10:27:56  vapour
  *  + Fixed a bug, so that new layers longer than the existing slide duration will extend out the slide duration.
  *  + Delegated creation of timeline duration image to main duration image regen function.

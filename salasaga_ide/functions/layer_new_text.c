@@ -105,6 +105,7 @@ void layer_new_text(void)
 	tmp_layer->finish_frame = slide_data->duration;
 	tmp_layer->name = g_string_new("Text layer");
 	tmp_layer->external_link = g_string_new(NULL);
+	tmp_layer->external_link_window = g_string_new("_self");
 
 	// Display a dialog box to edit these values, using our new text layer object
 	return_code = display_dialog_text(tmp_layer, "Add new text layer");
@@ -112,6 +113,8 @@ void layer_new_text(void)
 	{
 		// The user cancelled out of the create text layer dialog box, so destroy our new text layer and return
 		g_string_free(tmp_layer->name, TRUE);
+		g_string_free(tmp_layer->external_link, TRUE);
+		g_string_free(tmp_layer->external_link_window, TRUE);
 		g_free(tmp_layer);
 		g_object_unref(tmp_text_ob->text_buffer);
 		g_free(tmp_text_ob);
@@ -170,6 +173,9 @@ void layer_new_text(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/01 10:44:38  vapour
+ * Added a new field, the target window to open the external link in, defaulting to _self.
+ *
  * Revision 1.4  2008/01/21 10:33:36  vapour
  *  + Fixed a bug, so that new layers longer than the existing slide duration will extend out the slide duration.
  *  + Delegated creation of timeline duration image to main duration image regen function.
