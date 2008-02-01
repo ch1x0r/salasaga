@@ -738,15 +738,16 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFDisplayItem_setName(mc_display_item, "cb_restart");
 	button_x = button_x + (unscaled_button_width * width_scale_factor);
 
-	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
-	{
+// fixme3: Commented out until another, smaller, background image is added specific for this
+//	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
+//	{
 		// Add the rewind button to the control bar
 		mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) rewind_button);
 		SWFDisplayItem_setDepth(mc_display_item, 3);
 		SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 		SWFDisplayItem_setName(mc_display_item, "cb_rewind");
 		button_x = button_x + (unscaled_button_width * width_scale_factor);
-	}
+//	}
 
 	// Add the pause button to the control bar
 	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) pause_button);
@@ -761,15 +762,16 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFDisplayItem_setName(mc_display_item, "cb_play");
 	button_x = button_x + (unscaled_button_width * width_scale_factor);
 
-	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
-	{
+// fixme3: Commented out until another, smaller, background image is added specific for this
+//	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
+//	{
 		// Add the rewind button to the control bar
 		mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) forward_button);
 		SWFDisplayItem_setDepth(mc_display_item, 6);
 		SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 		SWFDisplayItem_setName(mc_display_item, "cb_rewind");
 		button_x = button_x + (unscaled_button_width * width_scale_factor);
-	}
+//	}
 
 	// Add the finish button to the control bar
 	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) finish_button);
@@ -806,6 +808,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/02/01 10:45:42  vapour
+ * Fixed a small bug.  I'd forgotten to temporarily comment out some code.
+ *
  * Revision 1.11  2008/01/31 07:08:53  vapour
  *  + Adjusted the swf output control bar to use a background image.
  *  + The forward and reverse buttons on the swf output control bar are always displayed (for now).
