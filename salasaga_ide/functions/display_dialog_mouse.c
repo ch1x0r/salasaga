@@ -58,16 +58,16 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	guint				row_counter = 0;			// Used to count which row things are up to
 
 	GtkWidget			*x_off_label_start;			// Label widget
-	GtkWidget			*x_off_button_start;			//
+	GtkWidget			*x_off_button_start;		//
 
 	GtkWidget			*y_off_label_start;			// Label widget
-	GtkWidget			*y_off_button_start;			//
+	GtkWidget			*y_off_button_start;		//
 
-	GtkWidget			*x_off_label_finish;			// Label widget
-	GtkWidget			*x_off_button_finish;			//
+	GtkWidget			*x_off_label_finish;		// Label widget
+	GtkWidget			*x_off_button_finish;		//
 
-	GtkWidget			*y_off_label_finish;			// Label widget
-	GtkWidget			*y_off_button_finish;			//
+	GtkWidget			*y_off_label_finish;		// Label widget
+	GtkWidget			*y_off_button_finish;		//
 
 	GtkWidget			*start_label;				// Label widget
 	GtkWidget			*start_button;				//
@@ -76,6 +76,12 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	GtkWidget			*finish_button;				//
 
 	GtkWidget			*click_button;				// Label widget
+
+	GtkWidget			*external_link_label;		// Label widget
+	GtkWidget			*external_link_entry;		// Widget for accepting an external link for clicking on
+
+	GtkWidget			*external_link_win_label;	// Label widget
+	GtkWidget			*external_link_win_entry;	//
 
 	layer_mouse			*tmp_mouse_ob;				// Temporary layer object
 
@@ -168,6 +174,30 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(click_button), 0, 2, row_counter, row_counter + 1);
 	row_counter = row_counter + 1;
 
+	// Create the label asking for an external link
+	external_link_label = gtk_label_new("External link: ");
+	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1);
+
+	// Create the entry that accepts an external link
+	external_link_entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), 50);
+	gtk_entry_set_text(GTK_ENTRY(external_link_entry), tmp_layer->external_link->str);
+	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1);
+	row_counter = row_counter + 1;
+
+	// Create the label asking for the window to open the external link in
+	external_link_win_label = gtk_label_new("External link window: ");
+	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1);
+
+	// Create the entry that accepts a text string for the window to open the external link in
+	external_link_win_entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), 50);
+	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), tmp_layer->external_link_window->str);
+	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1);
+	row_counter = row_counter + 1;
+
 	// Run the dialog
 	gtk_widget_show_all(GTK_WIDGET(mouse_dialog));
 	dialog_result = gtk_dialog_run(GTK_DIALOG(mouse_dialog));
@@ -198,6 +228,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	{
 		tmp_mouse_ob->click = MOUSE_NONE;
 	}
+	g_string_printf(tmp_layer->external_link, "%s", gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
+	g_string_printf(tmp_layer->external_link_window, "%s", gtk_entry_get_text(GTK_ENTRY(external_link_win_entry)));
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(mouse_dialog));
@@ -211,6 +243,9 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/02/01 10:36:15  vapour
+ * Added code to the dialog to display and accept values for the external link's target window.
+ *
  * Revision 1.2  2008/01/15 16:19:06  vapour
  * Updated copyright notice to include 2008.
  *

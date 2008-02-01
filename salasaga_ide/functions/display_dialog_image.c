@@ -84,6 +84,9 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	GtkWidget			*external_link_label;		// Label widget
 	GtkWidget			*external_link_entry;		// Widget for accepting an external link for clicking on
 
+	GtkWidget			*external_link_win_label;	// Label widget
+	GtkWidget			*external_link_win_entry;	//
+
 	layer_image			*tmp_image_ob;				// Temporary layer object
 
 
@@ -230,6 +233,18 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	gtk_table_attach_defaults(GTK_TABLE(image_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1);
 	row_counter = row_counter + 1;
 
+	// Create the label asking for the window to open the external link in
+	external_link_win_label = gtk_label_new("External link window: ");
+	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(image_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1);
+
+	// Create the entry that accepts a text string for the window to open the external link in
+	external_link_win_entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), 50);
+	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), tmp_layer->external_link_window->str);
+	gtk_table_attach_defaults(GTK_TABLE(image_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1);
+	row_counter = row_counter + 1;
+
 	// Run the dialog
 	gtk_widget_show_all(GTK_WIDGET(image_dialog));
 	dialog_result = gtk_dialog_run(GTK_DIALOG(image_dialog));
@@ -254,6 +269,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	tmp_layer->start_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(start_button));
 	tmp_layer->finish_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(finish_button));
 	g_string_printf(tmp_layer->external_link, "%s", gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
+	g_string_printf(tmp_layer->external_link_window, "%s", gtk_entry_get_text(GTK_ENTRY(external_link_win_entry)));
 
 	// Imported images don't have a filesystem path, so check for this
 	if (0 < path_gstring->len)
@@ -286,6 +302,9 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/02/01 10:35:10  vapour
+ * Added code to the dialog to display and accept values for the external link's target window.
+ *
  * Revision 1.3  2008/01/21 11:52:14  vapour
  * Updated to handle images without a path set, like new imported images, or images that were included in a .flame file.
  *

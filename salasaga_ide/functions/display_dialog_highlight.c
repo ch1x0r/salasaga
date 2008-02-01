@@ -58,16 +58,16 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	guint				row_counter = 0;			// Used to count which row things are up to
 
 	GtkWidget			*x_off_label_start;			// Label widget
-	GtkWidget			*x_off_button_start;			//
+	GtkWidget			*x_off_button_start;		//
 
 	GtkWidget			*y_off_label_start;			// Label widget
-	GtkWidget			*y_off_button_start;			//
+	GtkWidget			*y_off_button_start;		//
 
-	GtkWidget			*x_off_label_finish;			// Label widget
-	GtkWidget			*x_off_button_finish;			//
+	GtkWidget			*x_off_label_finish;		// Label widget
+	GtkWidget			*x_off_button_finish;		//
 
-	GtkWidget			*y_off_label_finish;			// Label widget
-	GtkWidget			*y_off_button_finish;			//
+	GtkWidget			*y_off_label_finish;		// Label widget
+	GtkWidget			*y_off_button_finish;		//
 
 	GtkWidget			*width_label;				// Label widget
 	GtkWidget			*width_button;				//
@@ -81,10 +81,13 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*finish_label;				// Label widget
 	GtkWidget			*finish_button;				//
 
-	GtkWidget			*external_link_label;			// Label widget
-	GtkWidget			*external_link_entry;			// Widget for accepting an external link for clicking on
+	GtkWidget			*external_link_label;		// Label widget
+	GtkWidget			*external_link_entry;		// Widget for accepting an external link for clicking on
 
-	layer_highlight			*tmp_highlight_ob;			// Temporary highlight layer object
+	GtkWidget			*external_link_win_label;	// Label widget
+	GtkWidget			*external_link_win_entry;	//
+
+	layer_highlight		*tmp_highlight_ob;			// Temporary highlight layer object
 
 
 	// Initialise some things
@@ -197,6 +200,18 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach_defaults(GTK_TABLE(highlight_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1);
 	row_counter = row_counter + 1;
 
+	// Create the label asking for the window to open the external link in
+	external_link_win_label = gtk_label_new("External link window: ");
+	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(highlight_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1);
+
+	// Create the entry that accepts a text string for the window to open the external link in
+	external_link_win_entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), 50);
+	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), tmp_layer->external_link_window->str);
+	gtk_table_attach_defaults(GTK_TABLE(highlight_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1);
+	row_counter = row_counter + 1;
+
 	// Run the dialog
 	gtk_widget_show_all(GTK_WIDGET(highlight_dialog));
 	dialog_result = gtk_dialog_run(GTK_DIALOG(highlight_dialog));
@@ -221,6 +236,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	tmp_layer->start_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(start_button));
 	tmp_layer->finish_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(finish_button));
 	g_string_printf(tmp_layer->external_link, "%s", gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
+	g_string_printf(tmp_layer->external_link_window, "%s", gtk_entry_get_text(GTK_ENTRY(external_link_win_entry)));
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(highlight_dialog));
@@ -234,6 +250,9 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/02/01 10:34:23  vapour
+ * Added code to the dialog to display and accept values for the external link's target window.
+ *
  * Revision 1.2  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *
