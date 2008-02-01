@@ -104,6 +104,10 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	{
 		xmlNewChild(layer_node, NULL, (const xmlChar *) "external_link", (const xmlChar *) layer_pointer->external_link->str);
 	}
+	if (0 != layer_pointer->external_link_window->len)
+	{
+		xmlNewChild(layer_node, NULL, (const xmlChar *) "external_link_window", (const xmlChar *) layer_pointer->external_link_window->str);
+	}
 	switch (layer_type)
 	{
 		case TYPE_GDK_PIXBUF:
@@ -245,6 +249,9 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/01 10:49:59  vapour
+ * The target window for external links for layers is now saved in the project file.
+ *
  * Revision 1.6  2008/01/19 06:56:45  vapour
  * Tweaked some error messages for clarity.
  *
