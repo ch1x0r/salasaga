@@ -58,9 +58,9 @@ void slide_insert(void)
 	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
 
 	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
-	GtkTreeIter			*tmp_iter;				// Temporary GtkTreeIter
-	layer				*tmp_layer;				// Temporary layer
-	slide				*tmp_slide;				// Temporary slide
+	GtkTreeIter			*tmp_iter;					// Temporary GtkTreeIter
+	layer				*tmp_layer;					// Temporary layer
+	slide				*tmp_slide;					// Temporary slide
 
 
 	// Create a new, empty slide
@@ -76,10 +76,15 @@ void slide_insert(void)
 	tmp_layer->finish_frame = slide_length;
 	tmp_layer->name = g_string_new("Empty");
 	tmp_layer->external_link = g_string_new(NULL);
+	tmp_layer->external_link_window = g_string_new("_self");
 	tmp_layer->object_data = (GObject *) g_new(layer_empty, 1);
 	((layer_empty *) tmp_layer->object_data)->bg_color.red = default_bg_colour.red;
 	((layer_empty *) tmp_layer->object_data)->bg_color.green = default_bg_colour.green;
 	((layer_empty *) tmp_layer->object_data)->bg_color.blue = default_bg_colour.blue;
+	((layer_empty *) tmp_layer->object_data)->x_offset_start = 0;
+	((layer_empty *) tmp_layer->object_data)->y_offset_start = 0;
+	((layer_empty *) tmp_layer->object_data)->x_offset_finish = 0;
+	((layer_empty *) tmp_layer->object_data)->y_offset_finish = 0;
 
 	// Create a blank thumbnail using the default background color
 	tmp_gdk_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, (guint) preview_width * 0.75);
@@ -154,6 +159,9 @@ void slide_insert(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/02/01 10:53:15  vapour
+ * Added code to set the external link target window to the default value of _self, plus a small bug fix.
+ *
  * Revision 1.3  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *
