@@ -361,6 +361,7 @@ gboolean flame_read(gchar *filename)
 								tmp_layer->object_type = TYPE_EMPTY;
 								tmp_layer->object_data = (GObject *) tmp_empty_ob;
 								tmp_layer->external_link = g_string_new(NULL);
+								tmp_layer->external_link_window = g_string_new("_self");
 
 								// Load the empty layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -401,6 +402,11 @@ gboolean flame_read(gchar *filename)
 										// Get the URL associated with the layer
 										tmp_layer->external_link = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link_window")))
+									{
+										// Get the window to open the URL associated with the layer
+										tmp_layer->external_link_window = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
 									this_node = this_node->next;	
 								}
 
@@ -434,6 +440,7 @@ gboolean flame_read(gchar *filename)
 								tmp_layer->object_type = TYPE_GDK_PIXBUF;
 								tmp_layer->object_data = (GObject *) tmp_image_ob;
 								tmp_layer->external_link = g_string_new(NULL);
+								tmp_layer->external_link_window = g_string_new("_self");
 
 								// Load the image layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -488,6 +495,11 @@ gboolean flame_read(gchar *filename)
 									{
 										// Get the URL associated with the layer
 										tmp_layer->external_link = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link_window")))
+									{
+										// Get the window to open the URL associated with the layer
+										tmp_layer->external_link_window = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 
 									// If version 1.0 of file format, load the image path, otherwise load the embedded image data
@@ -585,6 +597,7 @@ gboolean flame_read(gchar *filename)
 								tmp_layer->object_type = TYPE_HIGHLIGHT;
 								tmp_layer->object_data = (GObject *) tmp_highlight_ob;
 								tmp_layer->external_link = g_string_new(NULL);
+								tmp_layer->external_link_window = g_string_new("_self");
 
 								// Load the highlight layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -640,6 +653,11 @@ gboolean flame_read(gchar *filename)
 										// Get the URL associated with the layer
 										tmp_layer->external_link = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link_window")))
+									{
+										// Get the window to open the URL associated with the layer
+										tmp_layer->external_link_window = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
 									this_node = this_node->next;	
 								}
 
@@ -673,6 +691,7 @@ gboolean flame_read(gchar *filename)
 								tmp_layer->object_type = TYPE_MOUSE_CURSOR;
 								tmp_layer->object_data = (GObject *) tmp_mouse_ob;
 								tmp_layer->external_link = g_string_new(NULL);
+								tmp_layer->external_link_window = g_string_new("_self");
 
 								// Load the highlight layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -740,6 +759,11 @@ gboolean flame_read(gchar *filename)
 										// Get the URL associated with the layer
 										tmp_layer->external_link = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link_window")))
+									{
+										// Get the window to open the URL associated with the layer
+										tmp_layer->external_link_window = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
 									this_node = this_node->next;	
 								}
 
@@ -773,6 +797,7 @@ gboolean flame_read(gchar *filename)
 								tmp_layer->object_type = TYPE_TEXT;
 								tmp_layer->object_data = (GObject *) tmp_text_ob;
 								tmp_layer->external_link = g_string_new(NULL);
+								tmp_layer->external_link_window = g_string_new("_self");
 
 								// Load the text layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -843,6 +868,11 @@ gboolean flame_read(gchar *filename)
 									{
 										// Get the URL associated with the layer
 										tmp_layer->external_link = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link_window")))
+									{
+										// Get the window to open the URL associated with the layer
+										tmp_layer->external_link_window = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									this_node = this_node->next;
 								}
@@ -934,6 +964,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/02/01 10:41:04  vapour
+ * Updated to read the new external window target variable in layers.
+ *
  * Revision 1.8  2008/01/21 20:34:52  vapour
  * Slide durations are now read from the project file and used.
  *
