@@ -1,102 +1,19 @@
 include Makefile.config
 
-OFILES = \
-	functions/base64_decode.o \
-	functions/base64_encode.o \
-	functions/calculate_object_boundaries.o \
-	functions/compress_layers.o \
-	functions/compress_layers_inner.o \
-	functions/construct_timeline_widget.o \
-	functions/create_film_strip.o \
-	functions/create_menu_bar.o \
-	functions/create_resolution_selector.o \
-	functions/create_time_line.o \
-	functions/create_timeline_slider.o \
-	functions/create_toolbar.o \
-	functions/create_tooltips.o \
-	functions/create_working_area.o \
-	functions/destroy_slide.o \
-	functions/detect_collisions.o \
-	functions/disable_layer_toolbar_buttons.o \
-	functions/disable_main_toolbar_buttons.o \
-	functions/display_dialog_empty.o \
-	functions/display_dialog_highlight.o \
-	functions/display_dialog_image.o \
-	functions/display_dialog_mouse.o \
-	functions/display_dialog_text.o \
-	functions/display_warning.o \
-	functions/draw_bounding_box.o \
-	functions/draw_highlight_box.o \
-	functions/draw_timeline.o \
-	functions/draw_workspace.o \
-	functions/enable_layer_toolbar_buttons.o \
-	functions/enable_main_toolbar_buttons.o \
-	functions/event_size_allocate_received.o \
-	functions/film_strip_handle_changed.o \
-	functions/film_strip_handle_released.o \
-	functions/film_strip_slide_clicked.o \
-	functions/flame_read.o \
-	functions/image_crop.o \
-	functions/layer_delete.o \
-	functions/layer_edit.o \
-	functions/layer_move_down.o \
-	functions/layer_move_up.o \
-	functions/layer_new_highlight.o \
-	functions/layer_new_image.o \
-	functions/layer_new_mouse.o \
-	functions/layer_new_text.o \
-	functions/logger_simple.o \
-	functions/logger_with_domain.o \
-	functions/menu_edit_preferences.o \
-	functions/menu_enable.o \
-	functions/menu_export_flash_animation.o \
-	functions/menu_export_flash_control_bar.o \
-	functions/menu_export_flash_inner.o \
-	functions/menu_export_svg_animation.o \
-	functions/menu_export_svg_animation_slide.o \
-	functions/menu_file_new.o \
-	functions/menu_file_open.o \
-	functions/menu_file_save.o \
-	functions/menu_file_save_layer.o \
-	functions/menu_file_save_slide.o \
-	functions/menu_help_about.o \
-	functions/menu_help_register.o \
-	functions/menu_help_survey.o \
-	functions/menu_help_website.o \
-	functions/menu_screenshots_capture.o \
-	functions/menu_screenshots_import.o \
-	functions/project_crop.o \
-	functions/quit_event.o \
-	functions/regenerate_film_strip_thumbnails.o \
-	functions/regenerate_timeline_duration_images.o \
-	functions/resolution_selector_changed.o \
-	functions/save_preferences_and_exit.o \
-	functions/slide_delete.o \
-	functions/slide_insert.o \
-	functions/slide_move_bottom.o \
-	functions/slide_move_down.o \
-	functions/slide_move_top.o \
-	functions/slide_move_up.o \
-	functions/slide_name_reset.o \
-	functions/slide_name_set.o \
-	functions/sound_beep.o \
-	functions/swf_shape_from_image_file.o \
-	functions/timeline_edited_name.o \
-	functions/timeline_edited_x_offset_finish.o \
-	functions/timeline_edited_x_offset_start.o \
-	functions/timeline_edited_y_offset_finish.o \
-	functions/timeline_edited_y_offset_start.o \
-	functions/uri_decode.o \
-	functions/uri_encode_base64.o \
-	functions/working_area_button_press_event.o \
-	functions/working_area_button_release_event.o \
-	functions/working_area_expose_event.o \
-	functions/working_area_motion_notify_event.o \
-	functions/zoom_selector_changed.o \
-	flame-edit.o
+DESKTOP_FILE = \
+	flameproject.desktop
 
-SOUNDS = \
-	generic.wav
+FONT_BITSTREAM_VERA_FDB = \
+	"Bitstream Vera Sans Mono-B-I.fdb" \
+	"Bitstream Vera Sans Mono-B.fdb" \
+	"Bitstream Vera Sans Mono-I.fdb" \
+	"Bitstream Vera Sans Mono.fdb" \
+	"Bitstream Vera Sans-B-I.fdb" \
+	"Bitstream Vera Sans-B.fdb" \
+	"Bitstream Vera Sans-I.fdb" \
+	"Bitstream Vera Sans.fdb" \
+	"Bitstream Vera Serif-B.fdb" \
+	"Bitstream Vera Serif.fdb"
 
 ICON_MAIN = \
 	flame-icon.ico
@@ -234,8 +151,103 @@ MOUSE_SCALABLE = \
 MOUSE_PNG = \
 	standard.png
 
-DESKTOP_FILE = \
-	flameproject.desktop
+OFILES = \
+	functions/base64_decode.o \
+	functions/base64_encode.o \
+	functions/calculate_object_boundaries.o \
+	functions/compress_layers.o \
+	functions/compress_layers_inner.o \
+	functions/construct_timeline_widget.o \
+	functions/create_film_strip.o \
+	functions/create_menu_bar.o \
+	functions/create_resolution_selector.o \
+	functions/create_time_line.o \
+	functions/create_timeline_slider.o \
+	functions/create_toolbar.o \
+	functions/create_tooltips.o \
+	functions/create_working_area.o \
+	functions/destroy_slide.o \
+	functions/detect_collisions.o \
+	functions/disable_layer_toolbar_buttons.o \
+	functions/disable_main_toolbar_buttons.o \
+	functions/display_dialog_empty.o \
+	functions/display_dialog_highlight.o \
+	functions/display_dialog_image.o \
+	functions/display_dialog_mouse.o \
+	functions/display_dialog_text.o \
+	functions/display_warning.o \
+	functions/draw_bounding_box.o \
+	functions/draw_highlight_box.o \
+	functions/draw_timeline.o \
+	functions/draw_workspace.o \
+	functions/enable_layer_toolbar_buttons.o \
+	functions/enable_main_toolbar_buttons.o \
+	functions/event_size_allocate_received.o \
+	functions/film_strip_handle_changed.o \
+	functions/film_strip_handle_released.o \
+	functions/film_strip_slide_clicked.o \
+	functions/flame_read.o \
+	functions/image_crop.o \
+	functions/layer_delete.o \
+	functions/layer_edit.o \
+	functions/layer_move_down.o \
+	functions/layer_move_up.o \
+	functions/layer_new_highlight.o \
+	functions/layer_new_image.o \
+	functions/layer_new_mouse.o \
+	functions/layer_new_text.o \
+	functions/logger_simple.o \
+	functions/logger_with_domain.o \
+	functions/menu_edit_preferences.o \
+	functions/menu_enable.o \
+	functions/menu_export_flash_animation.o \
+	functions/menu_export_flash_control_bar.o \
+	functions/menu_export_flash_inner.o \
+	functions/menu_export_svg_animation.o \
+	functions/menu_export_svg_animation_slide.o \
+	functions/menu_file_new.o \
+	functions/menu_file_open.o \
+	functions/menu_file_save.o \
+	functions/menu_file_save_layer.o \
+	functions/menu_file_save_slide.o \
+	functions/menu_help_about.o \
+	functions/menu_help_register.o \
+	functions/menu_help_survey.o \
+	functions/menu_help_website.o \
+	functions/menu_screenshots_capture.o \
+	functions/menu_screenshots_import.o \
+	functions/project_crop.o \
+	functions/quit_event.o \
+	functions/regenerate_film_strip_thumbnails.o \
+	functions/regenerate_timeline_duration_images.o \
+	functions/resolution_selector_changed.o \
+	functions/save_preferences_and_exit.o \
+	functions/slide_delete.o \
+	functions/slide_insert.o \
+	functions/slide_move_bottom.o \
+	functions/slide_move_down.o \
+	functions/slide_move_top.o \
+	functions/slide_move_up.o \
+	functions/slide_name_reset.o \
+	functions/slide_name_set.o \
+	functions/sound_beep.o \
+	functions/swf_shape_from_image_file.o \
+	functions/timeline_edited_name.o \
+	functions/timeline_edited_x_offset_finish.o \
+	functions/timeline_edited_x_offset_start.o \
+	functions/timeline_edited_y_offset_finish.o \
+	functions/timeline_edited_y_offset_start.o \
+	functions/uri_decode.o \
+	functions/uri_encode_base64.o \
+	functions/working_area_button_press_event.o \
+	functions/working_area_button_release_event.o \
+	functions/working_area_expose_event.o \
+	functions/working_area_motion_notify_event.o \
+	functions/zoom_selector_changed.o \
+	flame-edit.o
+
+SOUNDS = \
+	generic.wav
 
 all: flame-edit
 
@@ -527,6 +539,9 @@ install:
 	$(INSTALL) -d $(datadir)/applications/
 	$(INSTALL_DATA) $(DESKTOP_FILE) $(datadir)/applications/
 	$(INSTALL) -d $(datadir)/flame/icons/
+	$(INSTALL) -d $(datadir)/flame/fonts/
+	$(INSTALL) -d $(datadir)/flame/fonts/BitstreamVera
+	$(INSTALL) -d $(datadir)/flame/fonts/BitstreamVera/fdb
 	$(INSTALL) -d $(datadir)/pixmaps/
 	cd images; $(INSTALL_DATA) $(ICON_MAIN) $(datadir)/flame/icons/
 	cd images; $(INSTALL_DATA) $(ICON_PNG) $(datadir)/pixmaps/
@@ -542,12 +557,27 @@ install:
 	cd images; cd control_bar; $(INSTALL_DATA) $(ICONS_CONTROL_BAR_PNG) $(datadir)/flame/icons/72x72/control_bar
 	$(INSTALL) -d $(datadir)/flame/icons/72x72/pointers/
 	cd images; cd pointers; $(INSTALL_DATA) $(MOUSE_PNG) $(datadir)/flame/icons/72x72/pointers/
+	cd fonts; cd BitstreamVera; cd fdb; $(INSTALL_DATA) $(FONT_BITSTREAM_VERA_FDB) $(datadir)/flame/fonts/BitstreamVera/fdb
 	$(INSTALL) -d $(datadir)/flame/sounds/
 	cd sounds; $(INSTALL_DATA) $(SOUNDS) $(datadir)/flame/sounds/
 
 uninstall:
 	if [ -f "$(bindir)/flame-edit" ]; then \
 		rm -f $(bindir)/flame-edit; \
+	fi
+
+	if [ -d "$(datadir)/flame/fonts/BitstreamVera/fdb" ]; then \
+		cd $(datadir)/flame/fonts/BitstreamVera/fdb/; \
+		rm -f $(FONT_BITSTREAM_VERA_FDB); \
+		rmdir $(datadir)/flame/fonts/BitstreamVera/fdb/; \
+	fi
+
+	if [ -d "$(datadir)/flame/fonts/BitstreamVera" ]; then \
+		rmdir $(datadir)/flame/fonts/BitstreamVera/; \
+	fi
+
+	if [ -d "$(datadir)/flame/fonts" ]; then \
+		rmdir $(datadir)/flame/fonts/; \
 	fi
 
 	if [ -d "$(datadir)/flame/icons/scalable" ]; then \
