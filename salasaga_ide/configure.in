@@ -29,6 +29,9 @@ AC_CHECK_LIB(ungif, PrintGifError, GIFLIB="-lungif",, [-lX11])
 dnl Check for the zlib library
 AC_CHECK_LIB(z, compress2, ZLIB="-lz")
 
+dnl Check for the ming library
+AC_CHECK_LIB(ming, Ming_init, MINGLIB="-lming")
+
 dnl Windows has the zlib library, but its named zdll instead
 dnl Note the smoke-and-mirrors setting of HAVE_LIBZ if it's found. :) (should allow MinGW to work)
 AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll")
@@ -82,6 +85,7 @@ AC_SUBST(SHCFLAGS)
 AC_SUBST(GIFLIB)
 AC_SUBST(XLIB)
 AC_SUBST(ZLIB)
+AC_SUBST(MINGLIB)
 AC_SUBST(MAJOR_VERSION)
 AC_SUBST(MINOR_VERSION)
 AC_SUBST(MICRO_VERSION)

@@ -34,6 +34,7 @@ mandir = @mandir@
 XLIB = @XLIB@
 GIFLIB = @GIFLIB@
 ZLIB = @ZLIB@
+MINGLIB = @MINGLIB@
 
-LIBS = $(ZLIB) $(XLIB) $(GIFLIB)
+LIBS = $(ZLIB) $(XLIB) $(GIFLIB) $(MINGLIB)
 EXTRA_LIBS = $(LIBS)
