@@ -104,7 +104,7 @@ ICON_MAIN = \
 ICON_PNG = \
 	flame-icon.png
 
-ICONS_SIXTY = \
+ICONS_PNG = \
 	add_highlight.png \
 	add_highlight_grayed.png \
 	add_image.png \
@@ -161,6 +161,72 @@ ICONS_SCALABLE = \
 	import_grayed.svg \
 	up_arrow.svg \
 	up_arrow_grayed.svg
+
+ICONS_CONTROL_BAR_PNG = \
+	1leftarrow_down.png \
+	1leftarrow_over.png \
+	1leftarrow_up.png \
+	1rightarrow_down.png \
+	1rightarrow_over.png \
+	1rightarrow_up.png \
+	2leftarrow_down.png \
+	2leftarrow_over.png \
+	2leftarrow_up.png \
+	2rightarrow_down.png \
+	2rightarrow_over.png \
+	2rightarrow_up.png \
+	3leftarrow_down.png \
+	3leftarrow_over.png \
+	3leftarrow_up.png \
+	3rightarrow_down.png \
+	3rightarrow_over.png \
+	3rightarrow_up.png \
+	background.png \
+	help_down.png \
+	help_over.png \
+	help_up.png \
+	info_down.png \
+	info_over.png \
+	info_up.png \
+	player_pause_down.png \
+	player_pause_over.png \
+	player_pause_up.png \
+	player_stop_down.png \
+	player_stop_over.png \
+	player_stop_up.png
+
+ICONS_CONTROL_BAR_SCALABLE = \
+	1leftarrow_down.svg \
+	1leftarrow_over.svg \
+	1leftarrow_up.svg \
+	1rightarrow_down.svg \
+	1rightarrow_over.svg \
+	1rightarrow_up.svg \
+	2leftarrow_down.svg \
+	2leftarrow_over.svg \
+	2leftarrow_up.svg \
+	2rightarrow_down.svg \
+	2rightarrow_over.svg \
+	2rightarrow_up.svg \
+	3leftarrow_down.svg \
+	3leftarrow_over.svg \
+	3leftarrow_up.svg \
+	3rightarrow_down.svg \
+	3rightarrow_over.svg \
+	3rightarrow_up.svg \
+	background.svg \
+	help_down.svg \
+	help_over.svg \
+	help_up.svg \
+	info_down.svg \
+	info_over.svg \
+	info_up.svg \
+	player_pause_down.svg \
+	player_pause_over.svg \
+	player_pause_up.svg \
+	player_stop_down.svg \
+	player_stop_over.svg \
+	player_stop_up.svg
 
 MOUSE_SCALABLE = \
 	standard.svg
@@ -466,12 +532,16 @@ install:
 	cd images; $(INSTALL_DATA) $(ICON_PNG) $(datadir)/pixmaps/
 	$(INSTALL) -d $(datadir)/flame/icons/scalable/
 	cd images; $(INSTALL_DATA) $(ICONS_SCALABLE) $(datadir)/flame/icons/scalable/
+	$(INSTALL) -d $(datadir)/flame/icons/scalable/control_bar/
+	cd images; cd control_bar; $(INSTALL_DATA) $(ICONS_CONTROL_BAR_SCALABLE) $(datadir)/flame/icons/scalable/control_bar
 	$(INSTALL) -d $(datadir)/flame/icons/scalable/pointers/
-	cd images/pointers; $(INSTALL_DATA) $(MOUSE_SCALABLE) $(datadir)/flame/icons/scalable/pointers/
+	cd images; cd pointers; $(INSTALL_DATA) $(MOUSE_SCALABLE) $(datadir)/flame/icons/scalable/pointers/
 	$(INSTALL) -d $(datadir)/flame/icons/72x72/
-	cd images; $(INSTALL_DATA) $(ICONS_SIXTY) $(datadir)/flame/icons/72x72/
+	cd images; $(INSTALL_DATA) $(ICONS_PNG) $(datadir)/flame/icons/72x72/
+	$(INSTALL) -d $(datadir)/flame/icons/72x72/control_bar/
+	cd images; cd control_bar; $(INSTALL_DATA) $(ICONS_CONTROL_BAR_PNG) $(datadir)/flame/icons/72x72/control_bar
 	$(INSTALL) -d $(datadir)/flame/icons/72x72/pointers/
-	cd images/pointers; $(INSTALL_DATA) $(MOUSE_PNG) $(datadir)/flame/icons/72x72/pointers/
+	cd images; cd pointers; $(INSTALL_DATA) $(MOUSE_PNG) $(datadir)/flame/icons/72x72/pointers/
 	$(INSTALL) -d $(datadir)/flame/sounds/
 	cd sounds; $(INSTALL_DATA) $(SOUNDS) $(datadir)/flame/sounds/
 
@@ -481,21 +551,35 @@ uninstall:
 	fi
 
 	if [ -d "$(datadir)/flame/icons/scalable" ]; then \
-		cd $(datadir)/flame/icons/scalable/pointers/; \
-		rm -f $(MOUSE_SCALABLE); \
-		rmdir $(datadir)/flame/icons/scalable/pointers; \
+		if [ -d "$(datadir)/flame/icons/scalable/control_bar" ]; then \
+			cd $(datadir)/flame/icons/scalable/control_bar/; \
+			rm -f $(ICONS_CONTROL_BAR_SCALABLE); \
+			rmdir $(datadir)/flame/icons/scalable/control_bar/; \
+		fi; \
+		if [ -d "$(datadir)/flame/icons/scalable/pointers" ]; then \
+			cd $(datadir)/flame/icons/scalable/pointers/; \
+			rm -f $(MOUSE_SCALABLE); \
+			rmdir $(datadir)/flame/icons/scalable/pointers/; \
+		fi; \
 		cd $(datadir)/flame/icons/scalable/; \
 		rm -f $(ICONS_SCALABLE); \
-		rmdir $(datadir)/flame/icons/scalable; \
+		rmdir $(datadir)/flame/icons/scalable/; \
 	fi
 
 	if [ -d "$(datadir)/flame/icons/72x72" ]; then \
-		cd $(datadir)/flame/icons/72x72/pointers/; \
-		rm -f $(MOUSE_PNG); \
-		rmdir $(datadir)/flame/icons/72x72/pointers; \
+		if [ -d "$(datadir)/flame/icons/72x72/control_bar" ]; then \
+			cd $(datadir)/flame/icons/72x72/control_bar/; \
+			rm -f $(ICONS_CONTROL_BAR_PNG); \
+			rmdir $(datadir)/flame/icons/72x72/control_bar/; \
+		fi; \
+		if [ -d "$(datadir)/flame/icons/72x72/pointers" ]; then \
+			cd $(datadir)/flame/icons/72x72/pointers/; \
+			rm -f $(MOUSE_PNG); \
+			rmdir $(datadir)/flame/icons/72x72/pointers/; \
+		fi; \
 		cd $(datadir)/flame/icons/72x72/; \
-		rm -f $(ICONS_SIXTY); \
-		rmdir $(datadir)/flame/icons/72x72; \
+		rm -f $(ICONS_PNG); \
+		rmdir $(datadir)/flame/icons/72x72/; \
 	fi
 
 	if [ -d "$(datadir)/flame/sounds" ]; then \
