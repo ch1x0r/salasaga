@@ -58,6 +58,7 @@
 #include "functions/create_working_area.h"
 #include "functions/disable_layer_toolbar_buttons.h"
 #include "functions/disable_main_toolbar_buttons.h"
+#include "functions/display_warning.h"
 #include "functions/event_size_allocate_received.h"
 #include "functions/film_strip_handle_changed.h"
 #include "functions/film_strip_handle_released.h"
@@ -284,8 +285,25 @@ gint main(gint argc, gchar *argv[])
 	icon_path = g_string_assign(icon_path, "icons");
 #else
 	g_string_assign(icon_path, g_path_get_dirname(argv[0]));
-	if (g_string_equal(icon_path, dot_string)) g_string_assign(icon_path, "/usr/bin");
 	g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", "flame", "icons", "72x72", NULL));
+
+	// Check if the above directory exists
+	if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
+	{
+		// First guess of icon directory didn't work, lets try /usr/share/flame/icons next
+		g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "share", "flame", "icons", "72x72", NULL));
+		if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
+		{
+			// Not there, try /usr/local/share/flame/icons
+			g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "local", "share", "flame", "icons", "72x72", NULL));
+			if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
+			{
+				// Unable to determine the location for icons, so generate an error then exit
+				display_warning("Error ED112: Unable to find the icons directory. Exiting.");
+				exit(1);				
+			}
+		}
+	}
 #endif
 
 	supported_formats = gdk_pixbuf_get_formats();
@@ -303,8 +321,25 @@ gint main(gint argc, gchar *argv[])
 			icon_path = g_string_assign(icon_path, "icons");
 #else
 			g_string_assign(icon_path, g_path_get_dirname(argv[0]));
-			if (g_string_equal(icon_path, dot_string)) g_string_assign(icon_path, "/usr/bin");
 			g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", "flame", "icons", "scalable", NULL));
+
+			// Check if the above directory exists
+			if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
+			{
+				// First guess of icon directory didn't work, lets try /usr/share/flame/icons next
+				g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "share", "flame", "icons", "scalable", NULL));
+				if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
+				{
+					// Not there, try /usr/local/share/flame/icons
+					g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "local", "share", "flame", "icons", "scalable", NULL));
+					if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
+					{
+						// Unable to determine the location for icons, so generate an error then exit
+						display_warning("Error ED113: Unable to find the icons directory. Exiting.");
+						exit(1);				
+					}
+				}
+			}
 #endif
 
 		}
@@ -833,7 +868,7 @@ gint main(gint argc, gchar *argv[])
 	if (FALSE == menu_bar)
 	{
 		// Something went wrong when creating the menu bar
-		g_error("Error ED01: Something went wrong when creating the menu bar");
+		display_warning("Error ED01: Something went wrong when creating the menu bar");
 		exit(1);
 	}
 	gtk_box_pack_start(GTK_BOX(outer_box), GTK_WIDGET(gtk_item_factory_get_widget(menu_bar, "<main>")), FALSE, FALSE, 0);
@@ -843,7 +878,7 @@ gint main(gint argc, gchar *argv[])
 	if (FALSE == toolbar)
 	{
 		// Something went wrong when creating the toolbar
-		g_error("Error ED07: Something went wrong when creating the toolbar");
+		display_warning("Error ED07: Something went wrong when creating the toolbar");
 		exit(1);
 	}
 	gtk_box_pack_start(GTK_BOX(outer_box), GTK_WIDGET(toolbar), FALSE, FALSE, 0);
@@ -915,7 +950,7 @@ gint main(gint argc, gchar *argv[])
 	if (FALSE == film_strip_container)
 	{
 		// Something went wrong when creating the film strip
-		g_error("Error ED02: Something went wrong when creating the film strip");
+		display_warning("Error ED02: Something went wrong when creating the film strip");
 		exit(2);
 	}
 	gtk_paned_add1(GTK_PANED(main_area), GTK_WIDGET(film_strip_container));
@@ -989,6 +1024,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.71  2008/02/02 04:06:42  vapour
+ * Updated the code that looks for the icon directory, so it now actively checks for things and then complains if nothing obvious works.
+ *
  * Revision 1.70  2008/01/31 07:09:52  vapour
  * Shrunk the size of the buttons in the swf output control bar by about 40%.
  *
