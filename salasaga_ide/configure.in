@@ -47,14 +47,14 @@ then
 	echo
 	echo "The X11 development libraries weren't found, please install them."
 	echo
-	exit -1
+	we_should_exit=1
 fi
 if test $missing_gif == 1
 then
 	echo
 	echo "The gif or ungif development libraries weren't found, please install them."
 	echo
-	exit -1
+	we_should_exit=1
 fi
 
 if test $missing_zlib == 1
@@ -62,15 +62,20 @@ then
 	echo
 	echo "The zlib development libraries weren't found, please install them."
 	echo
-	exit -1
+	we_should_exit=1
 fi
 if test $missing_ming == 1
 then
 	echo
 	echo "The Ming (www.libming.org) development libraries weren't found, please install them."
 	echo
-	exit -1
+	we_should_exit=1
 fi
+
+if test $we_should_exit == 1
+then
+	exit -1
+fi 
 
 dnl Check for the GTK, GLib, GConf, Gnome, xml, and png libraries
 AC_CHECK_PROG(PKG_CONFIG, pkg-config, [yes])
