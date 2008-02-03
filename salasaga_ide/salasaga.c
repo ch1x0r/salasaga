@@ -287,15 +287,29 @@ gint main(gint argc, gchar *argv[])
 	g_string_assign(icon_path, g_path_get_dirname(argv[0]));
 	g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", "flame", "icons", "72x72", NULL));
 
+	// Display debugging info if requested
+	if (debug_level)
+		printf("Icon path being checked: %s\n", icon_path->str);
+
 	// Check if the above directory exists
 	if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
 	{
 		// First guess of icon directory didn't work, lets try /usr/share/flame/icons next
 		g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "share", "flame", "icons", "72x72", NULL));
+
+		// Display debugging info if requested
+		if (debug_level)
+			printf("Icon path being checked: %s\n", icon_path->str);
+
 		if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
 		{
 			// Not there, try /usr/local/share/flame/icons
 			g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "local", "share", "flame", "icons", "72x72", NULL));
+
+			// Display debugging info if requested
+			if (debug_level)
+				printf("Icon path being checked: %s\n", icon_path->str);
+
 			if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
 			{
 				// Unable to determine the location for icons, so generate an error then exit
@@ -323,15 +337,29 @@ gint main(gint argc, gchar *argv[])
 			g_string_assign(icon_path, g_path_get_dirname(argv[0]));
 			g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", "flame", "icons", "scalable", NULL));
 
+			// Display debugging info if requested
+			if (debug_level)
+				printf("Icon path being checked: %s\n", icon_path->str);
+
 			// Check if the above directory exists
 			if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
 			{
 				// First guess of icon directory didn't work, lets try /usr/share/flame/icons next
 				g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "share", "flame", "icons", "scalable", NULL));
+
+				// Display debugging info if requested
+				if (debug_level)
+					printf("Icon path being checked: %s\n", icon_path->str);
+
 				if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
 				{
 					// Not there, try /usr/local/share/flame/icons
 					g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "local", "share", "flame", "icons", "scalable", NULL));
+
+					// Display debugging info if requested
+					if (debug_level)
+						printf("Icon path being checked: %s\n", icon_path->str);
+
 					if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
 					{
 						// Unable to determine the location for icons, so generate an error then exit
@@ -1024,6 +1052,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.72  2008/02/03 02:12:15  vapour
+ * Added more debugging output code.
+ *
  * Revision 1.71  2008/02/02 04:06:42  vapour
  * Updated the code that looks for the icon directory, so it now actively checks for things and then complains if nothing obvious works.
  *
