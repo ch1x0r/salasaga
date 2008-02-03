@@ -225,8 +225,8 @@ typedef struct
 	gboolean			remove;						// Remove from the display list in this frame?
 	gint				opacity;					// Opacity level (0-65535)
 	gboolean			is_moving;					// Should the position of this element be adjusted in this frame?
-	gint				x_position;					// In twips
-	gint				y_position;					// In twips
+	gfloat				x_position;					// In twips
+	gfloat				y_position;					// In twips
 	gint				depth;						// The layer depth of this item when displayed
 } swf_frame_element;
 
@@ -243,6 +243,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.45  2008/02/03 05:09:53  vapour
+ * Adjusted swf output frame elements to use floating point references instead of integer references, in order to address a stuttering-playback-of-swf-elements bug reported by Bobby Powers.
+ *
  * Revision 1.44  2008/02/01 10:54:34  vapour
  * Added fields to the empty layer structure for storing x and y values for it.  As all layer types now have these same values, this should probably be moved into the parent layer structure.
  *

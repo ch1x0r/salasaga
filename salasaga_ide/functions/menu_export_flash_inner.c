@@ -115,6 +115,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gint				text_lines_counter;			// Counter used when processing text
 	GtkTextIter			text_start;					// Start position of text buffer
 	gfloat				this_text_string_width;		// Used when calculating how wide to draw the text background box
+	gchar				*visible_string;			// Text string is retrieved into this
 	gfloat				widest_text_string_width;	// Used when calculating how wide to draw the text background box
 
 	guint				element_number;
@@ -692,12 +693,13 @@ gint menu_export_flash_inner(gchar *output_filename)
 						gtk_text_iter_forward_to_line_end(&text_end);
 
 						// Add the required text to the text object
-						SWFText_addString(text_object, gtk_text_iter_get_visible_text(&text_start, &text_end), NULL);
+						visible_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
+						SWFText_addString(text_object, visible_string, NULL);
 
 						// * We need to know which of the strings is widest, so we can calculate the width of the text background box *
 						
 						// If this is the widest string, we keep the value of this one
-						this_text_string_width = SWFText_getStringWidth(text_object, gtk_text_iter_get_visible_text(&text_start, &text_end));
+						this_text_string_width = SWFText_getStringWidth(text_object, (guchar *) visible_string);
 						if (this_text_string_width > widest_text_string_width)
 							widest_text_string_width = this_text_string_width;
 
@@ -852,10 +854,10 @@ gint menu_export_flash_inner(gchar *output_filename)
 				guint start_frame = this_layer_data->start_frame;
 				guint finish_frame = this_layer_data->finish_frame;
 				guint num_displayed_frames = (finish_frame - start_frame) + 1;
-				element_x_position_start = roundf(scaled_width_ratio * (gfloat) start_x_position_unscaled);
-				element_x_position_finish = roundf(scaled_width_ratio * (gfloat) finish_x_position_unscaled);
-				element_y_position_start = roundf(scaled_height_ratio * (gfloat) start_y_position_unscaled);
-				element_y_position_finish = roundf(scaled_height_ratio * (gfloat) finish_y_position_unscaled);
+				element_x_position_start = scaled_width_ratio * start_x_position_unscaled;
+				element_x_position_finish = scaled_width_ratio * finish_x_position_unscaled;
+				element_y_position_start = scaled_height_ratio * start_y_position_unscaled;
+				element_y_position_finish = scaled_height_ratio * finish_y_position_unscaled;
 
 				// Displaying debugging info if requested
 				if (debug_level)
@@ -924,14 +926,14 @@ gint menu_export_flash_inner(gchar *output_filename)
 					if (TRUE == swf_timing_array[(layer_counter * (slide_duration + 1)) + start_frame].is_moving)
 					{
 						this_frame_ptr->is_moving = TRUE;
-						this_frame_ptr->x_position = roundf(element_x_position_start + ((gfloat) position_counter * element_x_position_increment));
-						this_frame_ptr->y_position = roundf(element_y_position_start + ((gfloat) position_counter * element_y_position_increment));
+						this_frame_ptr->x_position = element_x_position_start + (element_x_position_increment * position_counter);
+						this_frame_ptr->y_position = element_y_position_start + (element_y_position_increment * position_counter);
 						position_counter++;
 
 						// Display debugging info if requested
 						if (debug_level)
 						{
-							printf("Scaled X position: %u\tScaled Y position: %u\n", this_frame_ptr->x_position, this_frame_ptr->y_position);
+							printf("Scaled X position: %.2f\tScaled Y position: %.2f\n", this_frame_ptr->x_position, this_frame_ptr->y_position);
 						}
 					}
 
@@ -979,7 +981,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 					if (TRUE == this_frame_ptr->is_moving)
 					{
-						printf("Move frame:\tON\tX position:\t%u\tY position\t%u\t", this_frame_ptr->x_position, this_frame_ptr->y_position);
+						printf("Move frame:\tON\tX position:\t%.2f\tY position\t%.2f\t", this_frame_ptr->x_position, this_frame_ptr->y_position);
 					}
 					else
 						printf("Move frame:\tOFF\t");
@@ -1144,6 +1146,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.45  2008/02/03 05:09:53  vapour
+ * Adjusted swf output frame elements to use floating point references instead of integer references, in order to address a stuttering-playback-of-swf-elements bug reported by Bobby Powers.
+ *
  * Revision 1.44  2008/02/01 10:48:42  vapour
  *  + Added working code to handle empty layers.
  *  + Added code to create buttons for layers with an external link.
