@@ -42,8 +42,6 @@ ICONS_PNG = \
 	edit_grayed.png \
 	export_flash.png \
 	export_flash_grayed.png \
-	export_svg.png \
-	export_svg_grayed.png \
 	flame_logo.png \
 	import.png \
 	import_grayed.png \
@@ -71,8 +69,6 @@ ICONS_SCALABLE = \
 	edit_grayed.svg \
 	export_flash.svg \
 	export_flash_grayed.svg \
-	export_svg.svg \
-	export_svg_grayed.svg \
 	flame_logo.svg \
 	import.svg \
 	import_grayed.svg \
@@ -203,8 +199,6 @@ OFILES = \
 	functions/menu_export_flash_animation.o \
 	functions/menu_export_flash_control_bar.o \
 	functions/menu_export_flash_inner.o \
-	functions/menu_export_svg_animation.o \
-	functions/menu_export_svg_animation_slide.o \
 	functions/menu_file_new.o \
 	functions/menu_file_open.o \
 	functions/menu_file_save.o \
@@ -403,12 +397,6 @@ menu_export_flash_control_bar.o:
 
 menu_export_flash_inner.o:
 	$(CC) $(CFLAGS) -c menu_export_flash_inner.c -o menu_export_flash_inner.o
-
-menu_export_svg_animation.o:
-	$(CC) $(CFLAGS) -c menu_export_svg_animation.c -o menu_export_svg_animation.o
-
-menu_export_svg_animation_slide.o:
-	$(CC) $(CFLAGS) -c menu_export_svg_animation_slide.c -o menu_export_svg_animation_slide.o
 
 menu_file_new.o:
 	$(CC) $(CFLAGS) -c menu_file_new.c -o menu_file_new.o
