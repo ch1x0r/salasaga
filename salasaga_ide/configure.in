@@ -42,6 +42,7 @@ missing_ming=1
 AC_CHECK_LIB(ming, Ming_init, MINGLIB="-lming" missing_ming=0)
 
 dnl Let the user know about missing libraries
+we_should_exit=0
 if test $missing_x == 1
 then
 	echo
@@ -56,7 +57,6 @@ then
 	echo
 	we_should_exit=1
 fi
-
 if test $missing_zlib == 1
 then
 	echo
