@@ -19,8 +19,8 @@
  * 
  */
 
-#ifndef TEMPLATE_H_
-#define TEMPLATE_H_
+#ifndef MENU_EXPORT_FLASH_CONTROL_BAR_
+#define MENU_EXPORT_FLASH_CONTROL_BAR_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
@@ -33,7 +33,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 }
 #endif // __cplusplus
 
-#endif /*TEMPLATE_H_*/
+#endif /*MENU_EXPORT_FLASH_CONTROL_BAR_*/
 
 
 /* 
@@ -41,6 +41,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/02/03 00:51:04  vapour
+ * Fixed a small bug. Updated the symbol defined by this header to match the function name, rather than still use the name from the template.
+ *
  * Revision 1.1  2008/01/23 02:09:09  vapour
  * Added new function with initial working code to output a swf control bar.  Only has Stop and Play buttons at the moment (and they work), but it's a start.
  *

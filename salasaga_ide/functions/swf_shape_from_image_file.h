@@ -19,8 +19,8 @@
  * 
  */
 
-#ifndef TEMPLATE_H_
-#define TEMPLATE_H_
+#ifndef SWF_SHAPE_FROM_IMAGE_FILE_
+#define SWF_SHAPE_FROM_IMAGE_FILE_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
@@ -33,7 +33,7 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height);
 }
 #endif // __cplusplus
 
-#endif /*TEMPLATE_H_*/
+#endif /*SWF_SHAPE_FROM_IMAGE_FILE_*/
 
 
 /* 
@@ -41,6 +41,9 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height);
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/02/03 00:51:58  vapour
+ * Fixed a small bug. Updated the symbol defined by this header to match the function name, rather than still use the name from the template.
+ *
  * Revision 1.1  2008/01/23 17:20:34  vapour
  * Added a new function, for loading a SWF Shape bitmap directly from a given filename.
  *
