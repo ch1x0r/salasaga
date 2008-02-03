@@ -74,7 +74,7 @@
 #include "slide_move_top.h"
 #include "slide_move_up.h"
 #include "slide_name_reset.h"
-#include "slide_name_set.h"
+#include "slide_properties.h"
 
 
 void create_menu_bar()
@@ -116,8 +116,8 @@ void create_menu_bar()
 		{"/Slide/Move dow_n",			NULL,					slide_move_down,				0,	"<Item>"},
 		{"/Slide/Move to _top",			NULL,					slide_move_top,					0,	"<Item>"},
 		{"/Slide/Move to _bottom",		NULL,					slide_move_bottom,				0,	"<Item>"},
-		{"/Slide/_Edit slide name",		NULL,					slide_name_set,					0,	"<Item>"},
 		{"/Slide/_Reset slide name",	NULL,					slide_name_reset,				0,	"<Item>"},
+		{"/Slide/_Properties",			NULL,					slide_properties,				0,	"<Item>"},
 
 		{"/_Layer",						NULL,					NULL,							0,	"<Branch>"},
 		{"/Layer/_Edit",				NULL,					layer_edit,						0,	"<Item>"},
@@ -164,6 +164,9 @@ void create_menu_bar()
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/03 02:11:09  vapour
+ * Replaced the slide name setting option with the slide properties option.
+ *
  * Revision 1.5  2008/02/03 00:45:54  vapour
  * Respaced columns to line up on my monitor.  (Now using a monospace font, so hoping things won't go out of line so much.)
  *
