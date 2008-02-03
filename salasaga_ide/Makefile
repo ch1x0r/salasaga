@@ -229,7 +229,7 @@ OFILES = \
 	functions/slide_move_top.o \
 	functions/slide_move_up.o \
 	functions/slide_name_reset.o \
-	functions/slide_name_set.o \
+	functions/slide_properties.o \
 	functions/sound_beep.o \
 	functions/swf_shape_from_image_file.o \
 	functions/timeline_edited_name.o \
@@ -482,8 +482,8 @@ slide_move_up.o:
 slide_name_reset.o:
 	$(CC) $(CFLAGS) -c slide_name_reset.c -o slide_name_reset.o
 
-slide_name_set.o:
-	$(CC) $(CFLAGS) -c slide_name_set.c -o slide_name_set.o
+slide_properties.o:
+	$(CC) $(CFLAGS) -c slide_properties.c -o slide_properties.o
 
 sound_beep.o:
 	$(CC) $(CFLAGS) -c sound_beep.c -o sound_beep.o
