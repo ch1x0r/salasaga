@@ -18,45 +18,6 @@ For me, this works. :)
 
 ***********
 
-Antoine Quint (graouts) has suggested a possible way to make play/pause/unpause work:
-
-<graouts>	you can play/pause the complete SVG document with the DOM functions on SVGSVGElement: pauseAnimations()/unpauseAnimations()
-<JustinClift>	Hey, WAY cool. I'm going to write that down.
-<JustinClift>	That means I should be able to create a pause button that has a function attached to it for triggering that...
-<JustinClift>	Hmmm, if the svg document is Paused, and a user clicks on the Play button, doesn't that mean the function won't fire to Unpause it?
-<graouts>	yes, absolutely
-<JustinClift>	... that sounds non-optimal... doh!
-<JustinClift>	Back to the event controller. ;)
-<graouts>	there is a boolean field to let you know if the animations are paused or not
-
-Working example: http://pilat.free.fr/tutorial2/example/pauseAnimations.svg
-
-Looking at the SVG DOM draft spec:
-
-  http://www.w3.org/TR/2004/WD-SVG12-20041027/svgudom.html
-
-There are more functions that may be very useful:
-
-  float		getCurrentTime();
-  void		setCurrentTime( in float seconds );
-
-These might be able to be worked such that they're able to return an animation to the very start,
-forward/reverse between slides, go to the end, etc.
-
-***********
-
-Information that may be useful when figuring out how to create onscreen playback controls for SVG
-http://olaf.kilu.de/opera/
-
-The line that got my attention:
-
-  2005-06-27
-  SVG-tiny allows interactivity with declarative animation.
-  For example with attributes like begin="accessKey(b)" and end="accessKey(e)"
-  it should be possible to start and stop an animation.
-
-***********
-
 Windows (MinGW) notes: After installing all of the GTK, Glib, (etc) stuff, pkg-config didn't work until I'd set the environment variable:
 PKG_CONFIG_PATH=/c/MinGW/lib/pkgconfig
 
@@ -73,38 +34,5 @@ $ pkg-config gtk+-2.0 --libs
 
  This is a local mirror (to me) of that location.
  http://mirror.internode.on.net/pub/gnome/platform/2.12/2.12.2/win32/
-
-***********
-
-Interesting way to create a pause effect:
-  http://www16.brinkster.com/gazb/ming/defaultframeset.asp?id=fontasdrawmany2
-
-if(draw){ // allows turning draw on/off onmousedown
-	var a=fontoutlinessplit[n]; // create a pointer as a shortcut
-
-	if(i>=a.length){ 
-			// if the 'letter' is drawn move to next letter
-		n=(++n%fontoutlines.length);	
-		this.clear();
-		i=0;
-		
-	}else{
-		// there are still lines to draw
-		mc.lineStyle(6,0xffaaaa,100);
-		var coords=a[i+1].split(','); // split the coordinate data
-
-		if(a[i]=='curveto'){ // curveto has 4 coordinates 
-		mc[a[i]](coords[0],coords[1],coords[2],coords[3]);
-		}else{
-		mc[a[i]](coords[0],coords[1]); // lineto/moveto have 2 coordinates
-	}
-		i+=2; // move to next command/coordinate pair
-}
-}
-};
-
-// simple playback control using mouse
-controls = {onMouseDown: function () {draw=!draw;}};
-Mouse.addListener(controls);
 
 ***********
