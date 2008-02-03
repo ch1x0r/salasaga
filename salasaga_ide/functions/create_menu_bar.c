@@ -56,7 +56,6 @@
 #include "menu_edit_preferences.h"
 #include "menu_enable.h"
 #include "menu_export_flash_animation.h"
-#include "menu_export_svg_animation.h"
 #include "menu_file_new.h"
 #include "menu_file_open.h"
 #include "menu_file_save.h"
@@ -128,7 +127,6 @@ void create_menu_bar()
 
 		{"/E_xport",					NULL,					NULL,							0,	"<Branch>"},
 		{"/Export/_Flash Animation",	"<control><shift>F",	menu_export_flash_animation,	0,	"<Item>"},
-		{"/Export/_SVG Animation",		"<control><shift>S",	menu_export_svg_animation,		0,	"<Item>"},
 
 		{"/_Help",						NULL,					NULL,							0,	"<LastBranch>"},
 		{"/_Help/_About",				NULL,					menu_help_about,				0,	"<Item>"	},
@@ -164,6 +162,9 @@ void create_menu_bar()
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/03 05:41:26  vapour
+ * Removing svg export functionality.
+ *
  * Revision 1.6  2008/02/03 02:11:09  vapour
  * Replaced the slide name setting option with the slide properties option.
  *

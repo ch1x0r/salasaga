@@ -48,7 +48,6 @@
 #include "../flame-types.h"
 #include "../externs.h"
 #include "menu_export_flash_animation.h"
-#include "menu_export_svg_animation.h"
 #include "project_crop.h"
 
 
@@ -72,21 +71,11 @@ void enable_main_toolbar_buttons(void)
 		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[EXPORT_FLASH]));
 	}
 
-	// Enable the Export SVG icon
-	if (NULL != main_toolbar_icons_gray[EXPORT_SVG])
-	{
-		g_object_ref(main_toolbar_icons_gray[EXPORT_SVG]);
-		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[EXPORT_SVG]), main_toolbar_icons[EXPORT_SVG]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[EXPORT_SVG]), main_toolbar_tooltips, "Export as an SVG animation", "Private");
-		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[EXPORT_SVG]));
-	}
-
 	// Set the event handlers for the main toolbar buttons
 	if (0 == main_toolbar_signals[CROP_ALL])
 	{
 		main_toolbar_signals[CROP_ALL] = g_signal_connect(G_OBJECT(main_toolbar_items[CROP_ALL]), "clicked", G_CALLBACK(project_crop), (gpointer) NULL);
 		main_toolbar_signals[EXPORT_FLASH] = g_signal_connect(G_OBJECT(main_toolbar_items[EXPORT_FLASH]), "clicked", G_CALLBACK(menu_export_flash_animation), (gpointer) NULL);
-		main_toolbar_signals[EXPORT_SVG] = g_signal_connect(G_OBJECT(main_toolbar_items[EXPORT_SVG]), "clicked", G_CALLBACK(menu_export_svg_animation), (gpointer) NULL);
 	}
 }
 
@@ -96,6 +85,9 @@ void enable_main_toolbar_buttons(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/02/03 05:43:52  vapour
+ * Removing svg export functionality.
+ *
  * Revision 1.3  2008/01/15 16:18:58  vapour
  * Updated copyright notice to include 2008.
  *

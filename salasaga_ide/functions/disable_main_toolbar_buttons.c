@@ -69,21 +69,11 @@ void disable_main_toolbar_buttons(void)
 		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[EXPORT_FLASH]));
 	}
 
-	// Disable the Export SVG icon
-	if (NULL != main_toolbar_icons[EXPORT_SVG])
-	{
-		g_object_ref(main_toolbar_icons[EXPORT_SVG]);
-		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[EXPORT_SVG]), main_toolbar_icons_gray[EXPORT_SVG]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[EXPORT_SVG]), main_toolbar_tooltips, "Export to SVG disabled: No project loaded", "Private");
-		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[EXPORT_SVG]));
-	}
-
 	// Disconnect the main toolbar signal handlers
 	if (0 != main_toolbar_signals[CROP_ALL])
 	{
 		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[CROP_ALL]), main_toolbar_signals[CROP_ALL]);
 		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[EXPORT_FLASH]), main_toolbar_signals[EXPORT_FLASH]);
-		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[EXPORT_SVG]), main_toolbar_signals[EXPORT_SVG]);
 
 		// Flag the signal handlers as unused (used by enable_layer_toolbar_buttons())
 		main_toolbar_signals[CROP_ALL] = 0;
@@ -96,6 +86,9 @@ void disable_main_toolbar_buttons(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/02/03 05:43:01  vapour
+ * Removing svg export functionality.
+ *
  * Revision 1.2  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *

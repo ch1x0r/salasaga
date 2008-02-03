@@ -112,8 +112,8 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	{
 		case TYPE_GDK_PIXBUF:
 
-			// * We save the image data in the project file, in the same way we save image     *
-			// * data in exported svg.  This way a project file is self-contained and portable *
+			// * We save the image data in the project file, encoded in base64 text *
+			// * format.  This way a project file is self-contained and portable    *
 
 			// Convert the compressed image into png data
 			tmp_bool = gdk_pixbuf_save_to_buffer(GDK_PIXBUF(((layer_image *) layer_pointer->object_data)->image_data),
@@ -249,6 +249,9 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/03 05:44:45  vapour
+ * Removing svg export functionality.
+ *
  * Revision 1.7  2008/02/01 10:49:59  vapour
  * The target window for external links for layers is now saved in the project file.
  *

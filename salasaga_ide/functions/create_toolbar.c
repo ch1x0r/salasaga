@@ -50,7 +50,6 @@
 #include "../flame-types.h"
 #include "../externs.h"
 #include "menu_export_flash_animation.h"
-#include "menu_export_svg_animation.h"
 #include "menu_file_new.h"
 #include "menu_file_open.h"
 #include "menu_file_save.h"
@@ -178,19 +177,6 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[EXPORT_FLASH], EXPORT_FLASH);
 	main_toolbar_signals[EXPORT_FLASH] = g_signal_connect(G_OBJECT(main_toolbar_items[EXPORT_FLASH]), "clicked", G_CALLBACK(menu_export_flash_animation), (gpointer) NULL);
 
-	// Create the Export SVG button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "export_svg", icon_extension->str);
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
-	if (NULL != tmp_gdk_pixbuf)
-	{
-		main_toolbar_icons[EXPORT_SVG] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
-	}
-	main_toolbar_items[EXPORT_SVG] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[EXPORT_SVG]), "SVG");
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[EXPORT_SVG]), main_toolbar_tooltips, "Export as an SVG animation", "Private");
-	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[EXPORT_SVG], EXPORT_SVG);
-	main_toolbar_signals[EXPORT_SVG] = g_signal_connect(G_OBJECT(main_toolbar_items[EXPORT_SVG]), "clicked", G_CALLBACK(menu_export_svg_animation), (gpointer) NULL);
-
 	// * Create the "grayed out" icons for buttons *
 
 	// Create the grayed out Crop All icon
@@ -211,15 +197,6 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 		g_object_unref(tmp_gdk_pixbuf);
 	}
 
-	// Create the grayed out Export SVG icon
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "export_svg_grayed", icon_extension->str);
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
-	if (NULL != tmp_gdk_pixbuf)
-	{
-		main_toolbar_icons_gray[EXPORT_SVG] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
-	}
-
 	// Free memory allocated in this function
 	g_string_free(tmp_gstring, TRUE);
 
@@ -232,6 +209,9 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/03 05:42:10  vapour
+ * Removing svg export functionality.
+ *
  * Revision 1.4  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *

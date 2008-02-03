@@ -64,7 +64,6 @@ enum
 	CROP_ALL,
 	SEPARATOR_2,
 	EXPORT_FLASH,
-	EXPORT_SVG,
 	MAIN_TB_COUNT
 };
 
@@ -243,6 +242,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.46  2008/02/03 05:46:46  vapour
+ * Removing svg export functionality.
+ *
  * Revision 1.45  2008/02/03 05:09:53  vapour
  * Adjusted swf output frame elements to use floating point references instead of integer references, in order to address a stuttering-playback-of-swf-elements bug reported by Bobby Powers.
  *

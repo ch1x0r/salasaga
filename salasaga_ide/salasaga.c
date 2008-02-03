@@ -143,7 +143,7 @@ guint					scaling_quality;			// Default image scaling quality used
 GString					*screenshots_folder;		// Application default for where to store screenshots
 
 // Project preferences
-GString					*output_folder;				// Where to export animated SVG files too
+GString					*output_folder;				// Where to export output files too
 guint					output_height;				// How high to create project output
 guint					output_quality;				// The quality level [0-9] to save output png files with
 guint					output_width;				// How wide to create project output
@@ -235,7 +235,6 @@ gint main(gint argc, gchar *argv[])
 	// Initialise the button event handlers on the toolbars to NULL
 	main_toolbar_signals[CROP_ALL] = 0;
 	main_toolbar_signals[EXPORT_FLASH] = 0;
-	main_toolbar_signals[EXPORT_SVG] = 0;
 	for (tmp_int = 0; tmp_int < LAYER_TB_COUNT; tmp_int++)
 	{
 	    layer_toolbar_signals[tmp_int] = 0;
@@ -244,7 +243,7 @@ gint main(gint argc, gchar *argv[])
 	// Set the locale to C for now, so the output of numbers is correct
 	if ((NULL == setlocale(LC_ALL, "")) | (NULL == setlocale(LC_NUMERIC, "C")))
 	{
-		printf("Locale was unable to be set.  Exported SVG may not be correct.\n");
+		printf("Locale was unable to be set.\n");
 	}
 
 	// Initialise GTK
@@ -1052,6 +1051,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.73  2008/02/03 05:46:11  vapour
+ * Removing svg export functionality.
+ *
  * Revision 1.72  2008/02/03 02:12:15  vapour
  * Added more debugging output code.
  *
