@@ -199,7 +199,7 @@ void menu_screenshots_capture(void)
 	return_value = g_io_channel_write_chars(output_file, tmp_gchar, strlen(tmp_gchar), &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
-		// * An error occured when writing the SVG header to the output file, so alert the user, and return to the calling routine indicating failure *
+		// * An error occured when writing to the output file, so alert the user, and return to the calling routine indicating failure *
 		g_string_printf(tmp_gstring, "Error ED17: An error '%s' occured when writing data to the '%s' file", error->message, full_file_name);
 		display_warning(tmp_gstring->str);
 
@@ -307,6 +307,9 @@ void menu_screenshots_capture(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/02/03 05:45:24  vapour
+ * Fixed a typo in a comment.
+ *
  * Revision 1.3  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *
