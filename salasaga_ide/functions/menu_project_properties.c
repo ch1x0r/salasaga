@@ -21,22 +21,9 @@
  * 
  */
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
@@ -74,9 +61,18 @@ void menu_project_properties(void)
 	GtkWidget			*label_frames_per_second;			// Slide Length
 	GtkWidget			*button_frames_per_second;			//
 
+	GtkWidget			*label_project_width;				// Project width
+	GtkWidget			*entry_project_width;				//
+
+	GtkWidget			*label_project_height;				// Project height
+	GtkWidget			*entry_project_height;				//
+
+	GString				*tmp_gstring;						// Temporary GString used for constructing text
+
 
 	// Initialise various things
 	proj_row_counter = 0;
+	tmp_gstring = g_string_new(NULL);
 
 	// Create the main dialog window
 	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Project Properties", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
@@ -138,6 +134,29 @@ void menu_project_properties(void)
 	gtk_table_attach_defaults(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_frames_per_second), 2, 3, proj_row_counter, proj_row_counter + 1);
 	proj_row_counter = proj_row_counter + 1;
 
+	// Project Width
+	label_project_width = gtk_label_new("Project Width: ");
+	gtk_misc_set_alignment(GTK_MISC(label_project_width), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_width), 0, 1, proj_row_counter, proj_row_counter + 1);
+	entry_project_width = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry_project_width), 12);
+	g_string_printf(tmp_gstring, "%d pixels", project_width);
+	gtk_entry_set_text(GTK_ENTRY(entry_project_width), tmp_gstring->str);
+	gtk_editable_set_editable(GTK_EDITABLE(entry_project_width), FALSE);
+	gtk_table_attach_defaults(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_width), 2, 3, proj_row_counter, proj_row_counter + 1);
+	proj_row_counter = proj_row_counter + 1;
+
+	// Project Height
+	label_project_height = gtk_label_new("Project Height: ");
+	gtk_misc_set_alignment(GTK_MISC(label_project_height), 0, 0.5);
+	gtk_table_attach_defaults(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_height), 0, 1, proj_row_counter, proj_row_counter + 1);
+	entry_project_height = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(entry_project_height), 12);
+	g_string_printf(tmp_gstring, "%d pixels", project_height);
+	gtk_entry_set_text(GTK_ENTRY(entry_project_height), tmp_gstring->str);
+	gtk_editable_set_editable(GTK_EDITABLE(entry_project_height), FALSE);
+	gtk_table_attach_defaults(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_height), 2, 3, proj_row_counter, proj_row_counter + 1);
+
 	// Set the dialog going
 	gtk_widget_show_all(GTK_WIDGET(main_dialog));
 	dialog_result = gtk_dialog_run(GTK_DIALOG(main_dialog));
@@ -167,8 +186,9 @@ void menu_project_properties(void)
 	}
 
 	// Free up the memory allocated in this function
-	// fixme2: Once this function works properly, I should revisit this code and ensure nothing got missed in the cleanup
+	// fixme2: Once this function works properly, I should revisit this code to ensure everything is freed properly
 	gtk_widget_destroy(GTK_WIDGET(main_dialog));
+	g_string_free(tmp_gstring, TRUE);
 }
 
 
@@ -177,6 +197,9 @@ void menu_project_properties(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/02/04 13:03:32  vapour
+ * Added (non-editable) display of the project width and height.
+ *
  * Revision 1.1  2008/02/04 10:30:35  vapour
  * Added new function for Project Properties.
  *
