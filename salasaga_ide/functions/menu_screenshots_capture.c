@@ -21,6 +21,7 @@
  * 
  */
 
+
 // Standard includes
 #include <string.h>
 
@@ -462,6 +463,9 @@ void menu_screenshots_capture(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/04 17:08:01  vapour
+ * Adjusted structural spacing, for consistency with other files.
+ *
  * Revision 1.7  2008/02/04 14:39:43  vapour
  *  + Removed unnecessary includes.
  *  + Improved spacing between table cells.
