@@ -21,6 +21,7 @@
  * 
  */
 
+
 // Standard includes
 #include <stdlib.h>
 
@@ -238,6 +239,9 @@ void layer_edit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/04 16:54:52  vapour
+ * Adjusted structural spacing, for consistency with other files.
+ *
  * Revision 1.7  2008/02/04 13:24:23  vapour
  * Removed some unused includes.
  *

@@ -21,27 +21,16 @@
  * 
  */
 
+
 // Standard includes
 #include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -118,6 +107,9 @@ void layer_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/04 16:55:37  vapour
+ * Adjusted structural spacing, for consistency with other files.
+ *
  * Revision 1.4  2008/01/19 06:41:09  vapour
  * Tweaked an error message for clarity.
  *
