@@ -22,9 +22,6 @@
  */
 
 
-// Standard includes
-#include <stdlib.h>
-
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -45,6 +42,9 @@ void sound_beep(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/04 17:16:53  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.7  2008/02/04 08:39:13  vapour
  * Updated to just call the gdk beep function.  Theres a good chance we might be able to just remove this function and replace all references to it with gdk beep directly.
  *

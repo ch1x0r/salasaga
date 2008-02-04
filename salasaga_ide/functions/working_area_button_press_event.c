@@ -24,17 +24,11 @@
 
 // Standard includes
 #include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
 
 // GTK includes
 #include <gtk/gtk.h>
 
-// GConf include (not for windows)
-#ifndef _WIN32
-	#include <gconf/gconf.h>
-#else
+#ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
 #endif
@@ -219,6 +213,9 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/04 17:21:32  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.4  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *

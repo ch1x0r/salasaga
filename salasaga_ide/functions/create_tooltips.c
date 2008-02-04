@@ -21,22 +21,9 @@
  * 
  */
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
@@ -86,6 +73,9 @@ void create_tooltips(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/02/04 16:41:19  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.3  2008/01/25 14:18:43  vapour
  * Removed an include that wasn't needed.
  *

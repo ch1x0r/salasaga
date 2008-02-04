@@ -23,7 +23,6 @@
 
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
 // Ming include
@@ -165,6 +164,9 @@ void menu_export_flash_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/02/04 17:02:04  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.11  2008/01/19 06:44:24  vapour
  * Moved the initial swf movie creation code into the inner function.
  *

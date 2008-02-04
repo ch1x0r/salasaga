@@ -21,27 +21,13 @@
  * 
  */
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -85,6 +71,9 @@ void enable_main_toolbar_buttons(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/04 16:49:21  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.4  2008/02/03 05:43:52  vapour
  * Removing svg export functionality.
  *

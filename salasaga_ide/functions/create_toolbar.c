@@ -21,27 +21,11 @@
  * 
  */
 
-// Standard includes
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <dirent.h>
-#include <unistd.h>
-#include <locale.h>
-
-// GLib includes
-#include <glib/gstdio.h>
 
 // GTK includes
 #include <gtk/gtk.h>
 
-#ifndef _WIN32
-	// Non-windows code
-	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
-#else
+#ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
 #endif
@@ -209,6 +193,9 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/04 16:39:36  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.5  2008/02/03 05:42:10  vapour
  * Removing svg export functionality.
  *

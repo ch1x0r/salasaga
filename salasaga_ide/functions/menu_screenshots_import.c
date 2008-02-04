@@ -21,27 +21,18 @@
  * 
  */
 
+
 // Standard includes
 #include <stdlib.h>
-#include <fcntl.h>
 #include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
 #include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
-
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -319,6 +310,9 @@ void menu_screenshots_import(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/04 17:08:45  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.6  2008/02/04 10:37:22  vapour
  * Updated to enable the Project top menu bar option after screenshots are imported.
  *

@@ -21,27 +21,13 @@
  * 
  */
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -159,6 +145,9 @@ void slide_insert(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/04 17:13:07  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.4  2008/02/01 10:53:15  vapour
  * Added code to set the external link target window to the default value of _self, plus a small bug fix.
  *

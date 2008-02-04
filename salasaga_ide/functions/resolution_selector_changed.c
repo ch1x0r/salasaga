@@ -24,17 +24,11 @@
 
 // Standard includes
 #include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
 
 // GTK includes
 #include <gtk/gtk.h>
 
-// GConf include (not for windows)
-#ifndef _WIN32
-	#include <gconf/gconf.h>
-#else
+#ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
 #endif
@@ -76,6 +70,9 @@ gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer da
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/02/04 17:11:15  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.3  2008/01/15 16:19:05  vapour
  * Updated copyright notice to include 2008.
  *

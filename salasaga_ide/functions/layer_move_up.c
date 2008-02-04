@@ -21,27 +21,16 @@
  * 
  */
 
+
 // Standard includes
 #include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -126,6 +115,9 @@ void layer_move_up(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/04 16:56:18  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.4  2008/01/19 06:41:54  vapour
  * Tweaked an error message for clarity.
  *

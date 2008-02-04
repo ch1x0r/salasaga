@@ -21,27 +21,13 @@
  * 
  */
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -69,6 +55,9 @@ void slide_name_reset(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/04 17:16:21  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.4  2008/01/25 14:21:45  vapour
  * Updated to not free the memory for the existing string if there isn't one.
  *

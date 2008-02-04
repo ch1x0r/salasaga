@@ -24,17 +24,11 @@
 
 // Standard includes
 #include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
 
 // GTK includes
 #include <gtk/gtk.h>
 
-// GConf include (not for windows)
-#ifndef _WIN32
-	#include <gconf/gconf.h>
-#else
+#ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
 #endif
@@ -207,6 +201,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/04 17:22:04  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.5  2008/01/19 07:10:09  vapour
  * Tweaked an error message for clarity.
  *

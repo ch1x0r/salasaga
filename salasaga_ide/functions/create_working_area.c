@@ -21,27 +21,11 @@
  * 
  */
 
-// Standard includes
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <dirent.h>
-#include <unistd.h>
-#include <locale.h>
-
-// GLib includes
-#include <glib/gstdio.h>
 
 // GTK includes
 #include <gtk/gtk.h>
 
-#ifndef _WIN32
-	// Non-windows code
-	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
-#else
+#ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
 #endif
@@ -111,6 +95,9 @@ GtkWidget *create_working_area(GtkWidget *working_frame)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/04 16:41:57  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.4  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *

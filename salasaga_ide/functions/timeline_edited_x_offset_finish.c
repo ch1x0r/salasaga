@@ -24,17 +24,11 @@
 
 // Standard includes
 #include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
 
 // GTK includes
 #include <gtk/gtk.h>
 
-// GConf include (not for windows)
-#ifndef _WIN32
-	#include <gconf/gconf.h>
-#else
+#ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
 #endif
@@ -107,6 +101,9 @@ void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row,
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/04 17:17:56  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.5  2008/01/19 07:03:58  vapour
  * Tweaked an error message for clarity.
  *

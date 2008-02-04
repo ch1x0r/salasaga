@@ -22,28 +22,13 @@
  */
 
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
-
 // GTK includes
 #include <gtk/gtk.h>
 
-#ifndef _WIN32
-	// Non-windows code
-	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
-#else
+#ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
 #endif
-
-// XML includes
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 
 // Flame Edit includes
 #include "../flame-types.h"
@@ -100,6 +85,9 @@ void regenerate_timeline_duration_images(slide *target_slide)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/04 17:10:38  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.6  2008/01/21 10:02:46  vapour
  * Updated to regenerate images for all layers in a slide, rather than from whichever one the layer pointer just happened to be pointing.
  *

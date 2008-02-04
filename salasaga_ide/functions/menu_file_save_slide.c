@@ -22,27 +22,15 @@
  */
 
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
-
 // GTK includes
 #include <gtk/gtk.h>
 
-#ifndef _WIN32
-	// Non-windows code
-	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
-#else
+#ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
 #endif
 
 // XML includes
-#include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
 // Flame Edit includes
@@ -104,6 +92,9 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/04 17:04:03  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.7  2008/01/21 20:28:09  vapour
  * Slide duration is now saved as a property of the slide info.
  *

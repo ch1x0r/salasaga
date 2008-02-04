@@ -22,13 +22,6 @@
  */
 
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
-
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -40,10 +33,6 @@
 	// Windows only code
 	#include <windows.h>
 #endif
-
-// XML includes
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 
 // Flame Edit includes
 #include "../flame-types.h"
@@ -299,6 +288,9 @@ void save_preferences_and_exit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/04 17:11:52  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.5  2008/01/19 06:59:05  vapour
  * Tweaked some error messages for clarity.
  *

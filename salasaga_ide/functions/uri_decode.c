@@ -22,28 +22,13 @@
  */
 
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
-
 // GTK includes
 #include <gtk/gtk.h>
 
-#ifndef _WIN32
-	// Non-windows code
-	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
-#else
+#ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
 #endif
-
-// XML includes
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 
 // Flame Edit includes
 #include "../flame-types.h"
@@ -108,6 +93,9 @@ GString *uri_decode(GString *input_string, GString *output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/04 17:20:18  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.4  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *

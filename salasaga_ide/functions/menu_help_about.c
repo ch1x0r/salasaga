@@ -21,27 +21,13 @@
  * 
  */
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -84,6 +70,9 @@ void menu_help_about(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/02/04 17:05:24  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.3  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *
