@@ -35,13 +35,8 @@
 
 void sound_beep(void)
 {
-	// Local variable(s)
-	GdkDisplay	*gdk_display;
-
-
-	// Get default display, then generate a beep on it
-	gdk_display = gdk_display_get_default();
-	gdk_display_beep(gdk_display);
+	// Generate a beep
+	gdk_beep();
 }
 
 
@@ -50,6 +45,9 @@ void sound_beep(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/04 08:39:13  vapour
+ * Updated to just call the gdk beep function.  Theres a good chance we might be able to just remove this function and replace all references to it with gdk beep directly.
+ *
  * Revision 1.6  2008/02/04 03:19:09  vapour
  * Updated to use the gdk sound beep function instead of using our own sound.  Will hopefully work out-of-the-box on Win32 as well.
  *
