@@ -23,23 +23,17 @@
 
 // Standard includes
 #include <stdlib.h>
-#include <fcntl.h>
 #include <unistd.h>
 #include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
 
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
-
-#ifdef _WIN32
-	// Windows only code
+#ifndef _WIN32
+	// GDK X11 (non-windows only) include
+	#include <gdk/gdkx.h>
+#else
+	// Windows only includes
 	#include <windows.h>
 	#include "flame-keycapture.h"
 #endif
@@ -58,6 +52,164 @@ void menu_screenshots_capture(void)
 	GIOChannel			*output_file;				// The output file handle
 	GIOStatus			return_value;				// Return value used in most GIOChannel functions
 
+	gchar				*tmp_gchar;					// Temporary gchar
+	gsize				tmp_gsize;					// Temporary gsize
+	gpointer			tmp_ptr;					// Temporary pointer
+	GString				*tmp_gstring;				// Temporary string
+
+	GKeyFile			*lock_file;					// Pointer to the lock file structure
+
+
+	// Initialise various things
+	tmp_gstring = g_string_new(NULL);
+
+#ifndef _WIN32
+	// Variables used by the non-windows code
+	guint				border_width;
+	Window				capture_window;				// The window the user selected
+	int					mouse_buttons_pressed;
+	XEvent				new_event;
+	gint				return_code_int;
+	Display				*x_display;
+	gint				x_offset;					// X offset to start capturing from
+	Window				x_root_window;
+	gint				x_screen_num;
+	gint				y_offset;					// Y offset to start capturing from
+	guint				win_depth;
+	guint				win_height;					// The height to capture with
+	guint				win_width;					// The width to capture with
+	Status				window_status;
+
+	GtkWidget			*message_dialog;			// Dialog box for messages to the user
+
+
+	// Initialise various things
+	capture_window = None;
+	mouse_buttons_pressed = 0;
+
+	// Display a message to the user, asking them to click on the window they want to capture
+	message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+											"Please click on the window you want to capture (after closing this dialog box).");
+	gtk_dialog_run(GTK_DIALOG(message_dialog));
+	gtk_widget_destroy(message_dialog);
+
+	// Minimise Flame so the user can choose another application
+	gtk_window_iconify(GTK_WINDOW(main_window));
+
+	// * Determine the area of screen covered by the window that the user wants to capture *
+
+	// Get the default X11 display window and screen
+	x_display = gdk_x11_get_default_xdisplay();
+	x_screen_num = DefaultScreen(x_display);
+	x_root_window = RootWindow(x_display, x_screen_num);
+
+	// Flush the X11 output buffer and process events
+	XSync(x_display, False);
+
+	// Take control of the mouse pointer
+	return_code_int = XGrabPointer(x_display,					// X11 display to grab on
+						x_root_window,							// Grab on the root window
+						False,									// Unsure exactly.  I think it means whether to filter events via the mask (?)
+						ButtonPressMask | ButtonReleaseMask,	// The events to report (the mask)
+						GrabModeSync,
+						GrabModeAsync,
+						None,
+						None,									// fixme3: It might be wise to change the mouse cursor here to indicate to the user what's going on (?)
+						CurrentTime);
+	if (GrabSuccess != return_code_int)
+	{
+		display_warning("Error ED112: Unable to grab the mouse pointer for selected display.  Please report this error!");
+		return;
+    }
+
+	// Display debugging info
+	if (debug_level)
+	{
+		printf("Mouse pointer grabbed.\n");
+	}
+
+	// Wait for the user to select a window for capture
+	while (None == capture_window || 0 != mouse_buttons_pressed)
+	{
+		// Get the next events
+		XAllowEvents(x_display, SyncPointer, CurrentTime);
+
+		// Look for the events we want
+		XWindowEvent(x_display, x_root_window, ButtonPressMask | ButtonReleaseMask, &new_event);
+
+		// Work out which of the acceptable event types we received
+		switch (new_event.type)
+		{
+			case ButtonPress:
+				// We received a button press event, so retrieve the associated window id
+				capture_window = new_event.xbutton.subwindow;
+
+				// Display debugging info
+				if (debug_level)
+				{
+					printf("Capture window set.\n");
+				}
+
+				// Increase the count of mouse buttons pressed
+				mouse_buttons_pressed++;
+
+				continue;
+
+			case ButtonRelease:
+				// We received a button release event, so decrease the count of buttons pressed
+				if (0 < mouse_buttons_pressed)
+					mouse_buttons_pressed--;
+
+				continue;
+		}
+	}
+
+	// Release control of the mouse pointer
+	XUngrabPointer(x_display, CurrentTime);
+
+	// Display debugging info
+	if (debug_level)
+	{
+		printf("Mouse pointer grab released.\n");
+	}
+
+	// Flush the X11 output buffer and process events
+	XSync(x_display, False);
+
+	// Retrieve the geometry for the window
+	window_status = XGetGeometry(x_display,
+						capture_window,
+						&x_root_window,
+						&x_offset,
+						&y_offset,
+						&win_width,
+						&win_height,
+						&border_width,
+						&win_depth);
+
+	// Display debugging info
+	if (debug_level)
+	{
+		printf("Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tWeight: %d\n", x_offset, y_offset, win_width, win_height);
+	}
+
+	// Use the returned offset and dimensions
+	capture_x = (guint) x_offset;
+	capture_y = (guint) y_offset;
+	capture_width = (guint) win_width;
+	capture_height = (guint) win_height;
+
+	// Let the user know that the window they selected has been successfully grabbed
+	message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+			"Window dimensions successfully retrieved.  Please use Control-Printscreen to take screenshots then Import when finished.");
+	gtk_dialog_run(GTK_DIALOG(message_dialog));
+	gtk_widget_destroy(message_dialog);
+
+#else
+	// * Pop open a dialog box asking the user for the offset and size of capture area *
+	// (this is the old, manual way of getting the screen area to capture)
+
+	// Variables used by the windows only code
 	GtkDialog			*capture_dialog;			// Widget for the dialog
 	GtkWidget			*capture_table;				// Table used for neat layout of the dialog box
 
@@ -79,19 +231,6 @@ void menu_screenshots_capture(void)
 
 	GdkScreen			*which_screen;				// Gets given the screen the monitor is on
 
-	gchar				*tmp_gchar;				// Temporary gchar
-	gsize				tmp_gsize;				// Temporary gsize
-	gpointer			tmp_ptr;				// Temporary pointer
-	GString				*tmp_gstring;				// Temporary string
-
-
-	GKeyFile			*lock_file;				// Pointer to the lock file structure
-
-
-	// Initialise various things
-	tmp_gstring = g_string_new(NULL);
-
-	// * Pop open a dialog box asking the user for the offset and size of capture area *
 
 	// Create the dialog window, and table to hold its children
 	capture_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Capture screenshots", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
@@ -158,15 +297,19 @@ void menu_screenshots_capture(void)
 		return;
 	}
 
-	// Construct the fullly qualified path name for ~/.flame-lock file (to hold capture settings in)
-	tmp_ptr = (gchar *) g_get_home_dir();
-	full_file_name = g_build_filename(tmp_ptr, ".flame-lock", NULL);
-
 	// Retrieve the values given by the user
 	capture_x = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_offset_button));
 	capture_y = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_offset_button));
 	capture_width = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_length_button));
 	capture_height = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_length_button));
+
+	// Destroy the dialog box widget
+	gtk_widget_destroy(GTK_WIDGET(capture_dialog));
+#endif
+
+	// Construct the fullly qualified path name for ~/.flame-lock file (to hold capture settings in)
+	tmp_ptr = (gchar *) g_get_home_dir();
+	full_file_name = g_build_filename(tmp_ptr, ".flame-lock", NULL);
 
 	// Create the contents of the ~/.flame-lock file in memory
 	lock_file = g_key_file_new();
@@ -296,9 +439,6 @@ void menu_screenshots_capture(void)
 
 	// Free the temporary GString
 	g_string_free(tmp_gstring, TRUE);
-
-	// Destroy the dialog box widget
-	gtk_widget_destroy(GTK_WIDGET(capture_dialog));
 }
 
 
@@ -307,6 +447,9 @@ void menu_screenshots_capture(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/04 06:07:06  vapour
+ * Added new code, X11 only, that allows the user to select the window they want to capture rather than typing in manual coordinates.
+ *
  * Revision 1.4  2008/02/03 05:45:24  vapour
  * Fixed a typo in a comment.
  *
