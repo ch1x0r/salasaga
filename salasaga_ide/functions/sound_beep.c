@@ -24,26 +24,9 @@
 
 // Standard includes
 #include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
 #include <gtk/gtk.h>
-
-#ifndef _WIN32
-	// Non-windows code
-	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
-#else
-	// Windows only code
-	#include <windows.h>
-#endif
-
-// XML includes
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 
 // Flame Edit includes
 #include "../flame-types.h"
@@ -52,19 +35,13 @@
 
 void sound_beep(void)
 {
-#ifndef _WIN32
-	// Local variables
-	GString				*tmp_gstring;			// Temporary GString
-	
-	// fixme4: Need a non-gnome way of playing sound too, for windows
-	tmp_gstring = g_string_new(NULL);
-	g_string_assign(tmp_gstring, icon_path->str);
-	g_string_printf(tmp_gstring, g_build_path(G_DIR_SEPARATOR_S, tmp_gstring->str, "..", "..", "sounds", "generic.wav", NULL));  // Gee this is an ugly approach 
-	gnome_sound_play(tmp_gstring->str);
+	// Local variable(s)
+	GdkDisplay	*gdk_display;
 
-	// Free local variables
-	g_string_free(tmp_gstring, TRUE);
-#endif
+
+	// Get default display, then generate a beep on it
+	gdk_display = gdk_display_get_default();
+	gdk_display_beep(gdk_display);
 }
 
 
@@ -73,6 +50,9 @@ void sound_beep(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/04 03:19:09  vapour
+ * Updated to use the gdk sound beep function instead of using our own sound.  Will hopefully work out-of-the-box on Win32 as well.
+ *
  * Revision 1.5  2008/01/19 07:03:12  vapour
  * Updated to use better directory separator.
  *
