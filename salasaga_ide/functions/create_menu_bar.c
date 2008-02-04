@@ -49,6 +49,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "layer_delete.h"
 #include "layer_edit.h"
 #include "layer_new_highlight.h"
 #include "layer_new_image.h"
@@ -63,6 +64,7 @@
 #include "menu_help_register.h"
 #include "menu_help_survey.h"
 #include "menu_help_website.h"
+#include "menu_project_properties.h"
 #include "menu_screenshots_capture.h"
 #include "menu_screenshots_import.h"
 #include "save_preferences_and_exit.h"
@@ -108,6 +110,9 @@ void create_menu_bar()
 		{"/Screenshots/_Capture",		NULL,					menu_screenshots_capture,		0,	"<Item>"},
 		{"/Screenshots/_Import",		NULL,					menu_screenshots_import,		0,	"<Item>"},
 
+		{"/_Project",					NULL,					NULL,							0,	"<Branch>"},
+		{"/Project/P_roperties",		NULL,					menu_project_properties,		0,	"<Item>"},
+
 		{"/Sl_ide",						NULL,					NULL,							0,	"<Branch>"},
 		{"/Slide/_Insert",				NULL,					slide_insert,					0,	"<Item>"},
 		{"/Slide/_Delete",				NULL,					slide_delete,					0,	"<Item>"},
@@ -120,7 +125,7 @@ void create_menu_bar()
 
 		{"/_Layer",						NULL,					NULL,							0,	"<Branch>"},
 		{"/Layer/_Edit",				NULL,					layer_edit,						0,	"<Item>"},
-		{"/Layer/_Delete",				NULL,					NULL,							0,	"<Item>"},
+		{"/Layer/_Delete",				NULL,					layer_delete,					0,	"<Item>"},
 		{"/Layer/Add _Text",			NULL,					layer_new_text,					0,	"<Item>"},
 		{"/Layer/Add _Highlight",		NULL,					layer_new_highlight,			0,	"<Item>"},
 		{"/Layer/Add _Image",			NULL,					layer_new_image,				0,	"<Item>"},
@@ -151,6 +156,7 @@ void create_menu_bar()
 	gtk_item_factory_create_items(menu_bar, num_items, menu_items, NULL);
 
 	// Grey out the project menu items
+	menu_enable("/Project", FALSE);
 	menu_enable("/Slide", FALSE);
 	menu_enable("/Layer", FALSE);
 	menu_enable("/Export", FALSE);
@@ -162,6 +168,9 @@ void create_menu_bar()
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/04 10:31:59  vapour
+ * Updated top menu bar to include the new Project Properties function.
+ *
  * Revision 1.7  2008/02/03 05:41:26  vapour
  * Removing svg export functionality.
  *
