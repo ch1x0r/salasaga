@@ -21,22 +21,9 @@
  * 
  */
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
@@ -106,6 +93,9 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/04 14:56:51  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.4  2008/01/15 16:19:07  vapour
  * Updated copyright notice to include 2008.
  *

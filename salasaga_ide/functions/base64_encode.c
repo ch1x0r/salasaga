@@ -22,28 +22,13 @@
  */
 
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
-
 // GTK includes
 #include <gtk/gtk.h>
 
-#ifndef _WIN32
-	// Non-windows code
-	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
-#else
+#ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
 #endif
-
-// XML includes
-#include <libxml/xmlmemory.h>
-#include <libxml/parser.h>
 
 // Flame Edit includes
 #include "../flame-types.h"
@@ -203,6 +188,9 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/04 14:54:55  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.6  2008/01/19 06:32:40  vapour
  * Tweaked an error message for clarity.
  *

@@ -21,27 +21,11 @@
  * 
  */
 
-// Standard includes
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <dirent.h>
-#include <unistd.h>
-#include <locale.h>
-
-// GLib includes
-#include <glib/gstdio.h>
 
 // GTK includes
 #include <gtk/gtk.h>
 
-#ifndef _WIN32
-	// Non-windows code
-	#include <gconf/gconf.h>
-	#include <libgnome/libgnome.h>
-#else
+#ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
 #endif
@@ -168,6 +152,9 @@ void create_menu_bar()
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/02/04 15:02:08  vapour
+ *  + Removed unnecessary includes.
+ *
  * Revision 1.8  2008/02/04 10:31:59  vapour
  * Updated top menu bar to include the new Project Properties function.
  *
