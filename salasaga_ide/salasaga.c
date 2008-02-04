@@ -23,12 +23,6 @@
 
 
 // Standard includes
-#include <sys/types.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <dirent.h>
 #include <unistd.h>
 #include <locale.h>
 
@@ -104,6 +98,8 @@ GtkWidget				*status_bar;				// Widget for the status bar
 guint					statusbar_context;			// Context id for the status bar messages
 gint					stored_x;					// X co-ordinate of the mouse last click
 gint					stored_y;					// Y co-ordinate of the mouse last click
+gint					table_x_padding;			// Number of pixels to pad table entries by
+gint					table_y_padding;			// Number of pixels to pad table entries by
 GtkWidget				*time_line_container;		// Scrolled window widget, to add scroll bars to the time line widget
 GtkWidget				*time_line_vbox;			// VBox widget holding all of the time line elements
 guint					unscaled_button_height;		// Height of buttons in swf output control bar
@@ -228,6 +224,8 @@ gint main(gint argc, gchar *argv[])
 	icon_path = g_string_new(NULL);
 	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
 	dot_string = g_string_new(".");
+	table_x_padding = 5;
+	table_y_padding = 5;
 	unscaled_button_height = 50;
 	unscaled_button_spacing = 5;
 	unscaled_button_width = 50;
@@ -313,7 +311,7 @@ gint main(gint argc, gchar *argv[])
 			{
 				// Unable to determine the location for icons, so generate an error then exit
 				display_warning("Error ED112: Unable to find the icons directory. Exiting.");
-				exit(1);				
+				exit(1);
 			}
 		}
 	}
@@ -902,19 +900,18 @@ gint main(gint argc, gchar *argv[])
 	g_signal_connect(G_OBJECT(main_area), "button_release_event", G_CALLBACK(film_strip_handle_released), (gpointer) NULL);
 
 	// * Create a table for the status bar, zoom selector, and resolution selectors to go in *
-	// fixme4: Might be better going back to a HBox, and using filling (on for the status bar, off for the others), to achieve a better result
-	message_bar = GTK_TABLE(gtk_table_new(1, 6, TRUE));
+	message_bar = GTK_TABLE(gtk_table_new(1, 7, TRUE));
 	gtk_box_pack_start(GTK_BOX(outer_box), GTK_WIDGET(message_bar), FALSE, FALSE, 0);
 
 	// Create the status bar
 	status_bar = gtk_statusbar_new();
 	gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(status_bar), FALSE);
-	gtk_table_attach_defaults(message_bar, GTK_WIDGET(status_bar), 0, 2, 0, 1);
+	gtk_table_attach(message_bar, GTK_WIDGET(status_bar), 0, 3, 0, 1, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
 
 	// Create the zoom selector label
 	zoom_label = GTK_LABEL(gtk_label_new("Zoom: "));
 	gtk_misc_set_alignment(GTK_MISC(zoom_label), 1, 0.5);
-	gtk_table_attach_defaults(message_bar, GTK_WIDGET(zoom_label), 2, 3, 0, 1);
+	gtk_table_attach(message_bar, GTK_WIDGET(zoom_label), 3, 4, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
 
 	// Create the zoom selector
 	zoom_selector = GTK_COMBO_BOX(gtk_combo_box_new_text());
@@ -932,7 +929,7 @@ gint main(gint argc, gchar *argv[])
 	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "10%");
 	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "Fit to width");
 	gtk_combo_box_set_active(GTK_COMBO_BOX(zoom_selector), 11);
-	gtk_table_attach_defaults(message_bar, GTK_WIDGET(zoom_selector), 3, 4, 0, 1);
+	gtk_table_attach(message_bar, GTK_WIDGET(zoom_selector), 4, 5, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
 
 	// Link the zoom selector to the function that recalculates the zoom and redraws the working area
 	g_signal_connect(G_OBJECT(zoom_selector), "changed", G_CALLBACK(zoom_selector_changed), (gpointer) NULL);
@@ -940,11 +937,11 @@ gint main(gint argc, gchar *argv[])
 	// Create the resolution selector label
 	resolution_label = GTK_LABEL(gtk_label_new("Output: "));
 	gtk_misc_set_alignment(GTK_MISC(resolution_label), 1, 0.5);
-	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_label), 4, 5, 0, 1);
+	gtk_table_attach(message_bar, GTK_WIDGET(resolution_label), 5, 6, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
 
 	// Create the resolution selector, setting 800x600 as the default
 	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(res_array, num_res_items, 800, 600));
-	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_selector), 5, 6, 0, 1);
+	gtk_table_attach(message_bar, GTK_WIDGET(resolution_selector), 6, 7, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
 
 	// Link the resolution selector to the function that stores the new values in global variables
 	resolution_callback = g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL);
@@ -1028,6 +1025,11 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.76  2008/02/04 14:26:35  vapour
+ *  + Removed unnecessary includes.
+ *  + Added global variables for table spacing.
+ *  + Improved spacing between table cells.
+ *
  * Revision 1.75  2008/02/04 10:42:40  vapour
  * The default new project name is now New Project.
  *
