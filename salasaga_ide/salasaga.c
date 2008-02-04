@@ -217,7 +217,7 @@ gint main(gint argc, gchar *argv[])
 	default_project_folder = g_string_new(NULL);
 	output_folder = g_string_new(NULL);
 	project_folder = g_string_new(NULL);
-	project_name = g_string_new(NULL);
+	project_name = g_string_new("New Project");
 	screenshots_folder = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 	default_bg_colour.red = 0;
@@ -408,7 +408,6 @@ gint main(gint argc, gchar *argv[])
 		g_string_printf(default_project_folder, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/project_folder", NULL));
 		g_string_printf(screenshots_folder, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/screenshots_folder", NULL));
 		g_string_printf(default_output_folder, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/output_folder", NULL));
-		g_string_printf(project_name, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/project_name", NULL));
 		project_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_width", NULL);
 		project_height = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_height", NULL);
 		default_output_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_width", NULL);
@@ -521,26 +520,6 @@ gint main(gint argc, gchar *argv[])
 			if (ERROR_SUCCESS == return_code)
 			{
 				g_string_printf(default_output_folder, "%s", buffer_ptr);
-			}
-
-			// Close the registry key
-			RegCloseKey(hkey);
-		}
-
-		// Retrieve the value for the project name
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
-		{
-			// Value is missing, so warn the user and set a sensible default
-			missing_keys = TRUE;
-			g_string_printf(project_name, "%s", "New Project");
-		} else
-		{
-			// Retrieve the value
-			buffer_size = sizeof(buffer_data);
-			return_code = RegQueryValueExA(hkey, "project_name", NULL, NULL, buffer_ptr, &buffer_size);
-			if (ERROR_SUCCESS == return_code)
-			{
-				g_string_printf(project_name, "%s", buffer_ptr);
 			}
 
 			// Close the registry key
@@ -795,7 +774,6 @@ gint main(gint argc, gchar *argv[])
 		g_string_printf(default_project_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "projects");
 		g_string_printf(screenshots_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "screenshots");
 		g_string_printf(default_output_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "output");
-		g_string_printf(project_name, "%s", "New Project");
 		project_width = gdk_screen_get_width(which_screen);
 		project_height = gdk_screen_get_height(which_screen);
 		default_output_width = 800;
@@ -1050,6 +1028,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.75  2008/02/04 10:42:40  vapour
+ * The default new project name is now New Project.
+ *
  * Revision 1.74  2008/02/04 06:45:13  vapour
  * Changed the default output resolution to 800x600 for now, as the swf output at that resolution seems to have it's elements positioned acceptably.
  *
