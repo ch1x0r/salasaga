@@ -303,6 +303,7 @@ void menu_screenshots_import(void)
 	draw_timeline();
 
 	// Enable the project based menu items
+	menu_enable("/Project", TRUE);
 	menu_enable("/Slide", TRUE);
 	menu_enable("/Layer", TRUE);
 	menu_enable("/Export", TRUE);
@@ -318,6 +319,9 @@ void menu_screenshots_import(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/04 10:37:22  vapour
+ * Updated to enable the Project top menu bar option after screenshots are imported.
+ *
  * Revision 1.5  2008/01/21 11:25:34  vapour
  *  + Fixed a bug, in that slide duration wasn't being properly set.
  *  + A timeline duration image is now created for the new background layer.
