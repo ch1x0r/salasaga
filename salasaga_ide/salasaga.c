@@ -594,7 +594,7 @@ gint main(gint argc, gchar *argv[])
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			default_output_width = 640;
+			default_output_width = 800;
 		} else
 		{
 			// Retrieve the value
@@ -614,7 +614,7 @@ gint main(gint argc, gchar *argv[])
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			default_output_height = 480;
+			default_output_height = 600;
 		} else
 		{
 			// Retrieve the value
@@ -798,8 +798,8 @@ gint main(gint argc, gchar *argv[])
 		g_string_printf(project_name, "%s", "New Project");
 		project_width = gdk_screen_get_width(which_screen);
 		project_height = gdk_screen_get_height(which_screen);
-		default_output_width = 640;
-		default_output_height = 480;
+		default_output_width = 800;
+		default_output_height = 600;
 		default_slide_length = slide_length = 60;  // Default number of frames to use in new slides
 		default_output_quality = output_quality = 9;  // Default quality to save png images with
 		scaling_quality =  GDK_INTERP_TILES;  // Hyper is VERY, VERY slow with large high res images [GDK_INTERP_NEAREST | GDK_INTERP_TILES | GDK_INTERP_BILINEAR | GDK_INTERP_HYPER]
@@ -964,9 +964,8 @@ gint main(gint argc, gchar *argv[])
 	gtk_misc_set_alignment(GTK_MISC(resolution_label), 1, 0.5);
 	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_label), 4, 5, 0, 1);
 
-	// Create the resolution selector, setting 640x480 as the default
-	// fixme3: The setting of default doesn't work yet.  Needs to be changed directly in the function for now
-	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(res_array, num_res_items, 640, 480));
+	// Create the resolution selector, setting 800x600 as the default
+	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(res_array, num_res_items, 800, 600));
 	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_selector), 5, 6, 0, 1);
 
 	// Link the resolution selector to the function that stores the new values in global variables
@@ -1051,6 +1050,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.74  2008/02/04 06:45:13  vapour
+ * Changed the default output resolution to 800x600 for now, as the swf output at that resolution seems to have it's elements positioned acceptably.
+ *
  * Revision 1.73  2008/02/03 05:46:11  vapour
  * Removing svg export functionality.
  *
