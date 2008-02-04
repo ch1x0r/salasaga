@@ -166,6 +166,7 @@ void menu_file_open(void)
 //	gtk_tree_path_free(new_path);
 
 	// Enable the project based menu items
+	menu_enable("/Project", TRUE);
 	menu_enable("/Slide", TRUE);
 	menu_enable("/Layer", TRUE);
 	menu_enable("/Export", TRUE);
@@ -184,6 +185,9 @@ void menu_file_open(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/02/04 10:36:30  vapour
+ * Updated to enable the Project top menu bar option when a new project is loaded.
+ *
  * Revision 1.3  2008/01/15 16:19:00  vapour
  * Updated copyright notice to include 2008.
  *
