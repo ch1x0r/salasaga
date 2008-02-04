@@ -23,25 +23,13 @@
 
 // Standard includes
 #include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -250,6 +238,9 @@ void layer_edit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/04 13:24:23  vapour
+ * Removed some unused includes.
+ *
  * Revision 1.6  2008/01/21 11:49:53  vapour
  * Removed the check that stopped background image layers from being edited, as thats a limitation that really gets in the way.
  *
