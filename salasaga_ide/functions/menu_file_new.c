@@ -21,27 +21,13 @@
  * 
  */
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -92,57 +78,57 @@ void menu_file_new(void)
 	// Create the label asking for the new project name
 	name_label = gtk_label_new("Project Name: ");
 	gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(project_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the new project name
 	name_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(name_entry), 20);
 	gtk_entry_set_text(GTK_ENTRY(name_entry), project_name->str);
-	gtk_table_attach_defaults(GTK_TABLE(project_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the project width
 	width_label = gtk_label_new("Width: ");
 	gtk_misc_set_alignment(GTK_MISC(width_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(project_table), GTK_WIDGET(width_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the project width
 	width_button = gtk_spin_button_new_with_range(0, 6000, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(width_button), 1280);
-	gtk_table_attach_defaults(GTK_TABLE(project_table), GTK_WIDGET(width_button), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the project height
 	height_label = gtk_label_new("Height: ");
 	gtk_misc_set_alignment(GTK_MISC(height_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(project_table), GTK_WIDGET(height_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the project height
 	height_button = gtk_spin_button_new_with_range(0, 6000, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(height_button), 1024);
-	gtk_table_attach_defaults(GTK_TABLE(project_table), GTK_WIDGET(height_button), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the number of frames per second
 	fps_label = gtk_label_new("Frames per second: ");
 	gtk_misc_set_alignment(GTK_MISC(fps_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(project_table), GTK_WIDGET(fps_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(fps_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the number of frames per second
 	fps_button = gtk_spin_button_new_with_range(0, 48, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(fps_button), frames_per_second);
-	gtk_table_attach_defaults(GTK_TABLE(project_table), GTK_WIDGET(fps_button), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(fps_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label next to the color swatch
 	bg_color_label = gtk_label_new("Background color: ");
 	gtk_misc_set_alignment(GTK_MISC(bg_color_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(project_table), GTK_WIDGET(bg_color_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(bg_color_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the background color selection button
 	bg_color_button = gtk_color_button_new_with_color(&default_bg_colour);
 	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(bg_color_button), TRUE);
-	gtk_table_attach_defaults(GTK_TABLE(project_table), GTK_WIDGET(bg_color_button), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(bg_color_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Run the dialog
@@ -224,6 +210,10 @@ void menu_file_new(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/04 14:35:35  vapour
+ *  + Removed unnecessary includes.
+ *  + Improved spacing between table cells.
+ *
  * Revision 1.4  2008/02/04 10:35:48  vapour
  * Updated to enable the Project top menu bar option when a new project is created.
  *

@@ -22,8 +22,6 @@
  */
 
 // Standard includes
-#include <stdlib.h>
-#include <unistd.h>
 #include <string.h>
 
 // GTK includes
@@ -221,6 +219,8 @@ void menu_screenshots_capture(void)
 	// (this is the old, manual way of getting the screen area to capture)
 
 	// Variables used by the windows only code
+	guint				row_counter = 0;			// Used to count which row things are up to
+
 	GtkDialog			*capture_dialog;			// Widget for the dialog
 	GtkWidget			*capture_table;				// Table used for neat layout of the dialog box
 
@@ -251,22 +251,24 @@ void menu_screenshots_capture(void)
 	// Create the label asking for the X Offset
 	x_offset_label = gtk_label_new("X Offset: ");
 	gtk_misc_set_alignment(GTK_MISC(x_offset_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(x_offset_label), 0, 1, 0, 1);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_offset_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the new X Offset data
 	x_offset_button = gtk_spin_button_new_with_range(0, project_width, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_offset_button), capture_x);
-	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(x_offset_button), 1, 2, 0, 1);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_offset_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
 
 	// Create the label asking for the Y Offset
 	y_offset_label = gtk_label_new("Y Offset: ");
 	gtk_misc_set_alignment(GTK_MISC(y_offset_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(y_offset_label), 0, 1, 1, 2);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_offset_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the new Y Offset data
 	y_offset_button = gtk_spin_button_new_with_range(0, project_height, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_offset_button), capture_y);
-	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(y_offset_button), 1, 2, 1, 2);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_offset_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
 
 	// Which monitor are we displaying on?
 	which_screen = gtk_window_get_screen(GTK_WINDOW(main_window));
@@ -274,27 +276,29 @@ void menu_screenshots_capture(void)
 	// Create the label asking for the X Length
 	x_length_label = gtk_label_new("Width: ");
 	gtk_misc_set_alignment(GTK_MISC(x_length_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(x_length_label), 0, 1, 2, 3);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_length_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the new X Length data
 	x_length_button = gtk_spin_button_new_with_range(0, gdk_screen_get_width(which_screen), 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_length_button), capture_width);
-	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(x_length_button), 1, 2, 2, 3);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_length_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
 
 	// Create the label asking for the Y Length
 	y_length_label = gtk_label_new("Height: ");
 	gtk_misc_set_alignment(GTK_MISC(y_length_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(y_length_label), 0, 1, 3, 4);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_length_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);;
 
 	// Create the entry that accepts the new Y Length data
 	y_length_button = gtk_spin_button_new_with_range(0, gdk_screen_get_height(which_screen), 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_length_button), capture_height);
-	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(y_length_button), 1, 2, 3, 4);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_length_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
 
 	// Create the label that tells the user about Control-Printscreen
 	key_combo_label = gtk_label_new("Hint: Use the Control-Printscreen key\ncombination to capture screenshots,\nthen the Import button to import them.");
 	gtk_misc_set_alignment(GTK_MISC(key_combo_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(capture_table), GTK_WIDGET(key_combo_label), 0, 2, 4, 5);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(key_combo_label), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Run the dialog
 	gtk_widget_show_all(GTK_WIDGET(capture_dialog));
@@ -458,6 +462,10 @@ void menu_screenshots_capture(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/04 14:39:43  vapour
+ *  + Removed unnecessary includes.
+ *  + Improved spacing between table cells.
+ *
  * Revision 1.6  2008/02/04 06:40:04  vapour
  * Mouse cursor is changed from default while selection operation is in progress, to re-inforce whats going on.
  *

@@ -21,27 +21,13 @@
  * 
  */
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -99,67 +85,67 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// Create the label asking for the starting X Offset
 	x_off_label_start = gtk_label_new("Start X Offset: ");
 	gtk_misc_set_alignment(GTK_MISC(x_off_label_start), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(x_off_label_start), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(x_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the starting X Offset input
 	x_off_button_start = gtk_spin_button_new_with_range(0, project_width, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_off_button_start), tmp_mouse_ob->x_offset_start);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(x_off_button_start), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(x_off_button_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting Y Offset
 	y_off_label_start = gtk_label_new("Start Y Offset: ");
 	gtk_misc_set_alignment(GTK_MISC(y_off_label_start), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(y_off_label_start), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(y_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the starting Y Offset input
 	y_off_button_start = gtk_spin_button_new_with_range(0, project_height, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_off_button_start), tmp_mouse_ob->y_offset_start);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(y_off_button_start), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(y_off_button_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the finishing X Offset
 	x_off_label_finish = gtk_label_new("Finish X Offset: ");
 	gtk_misc_set_alignment(GTK_MISC(x_off_label_finish), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(x_off_label_finish), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(x_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the finishing X Offset input
 	x_off_button_finish = gtk_spin_button_new_with_range(0, project_width, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_off_button_finish), tmp_mouse_ob->x_offset_finish);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(x_off_button_finish), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(x_off_button_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the finishing Y Offset
 	y_off_label_finish = gtk_label_new("Finish Y Offset: ");
 	gtk_misc_set_alignment(GTK_MISC(y_off_label_finish), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(y_off_label_finish), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(y_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the finishing Y Offset input
 	y_off_button_finish = gtk_spin_button_new_with_range(0, project_height, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_off_button_finish), tmp_mouse_ob->y_offset_finish);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(y_off_button_finish), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(y_off_button_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting frame
 	start_label = gtk_label_new("Start frame: ");
 	gtk_misc_set_alignment(GTK_MISC(start_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(start_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(start_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the starting frame input
 	start_button = gtk_spin_button_new_with_range(0, 200, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(start_button), tmp_layer->start_frame);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(start_button), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(start_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the finishing frame
 	finish_label = gtk_label_new("Finish frame: ");
 	gtk_misc_set_alignment(GTK_MISC(finish_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(finish_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(finish_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the finishing frame input
 	finish_button = gtk_spin_button_new_with_range(0, 1000, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(finish_button), tmp_layer->finish_frame);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(finish_button), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(finish_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the button asking if there should be a mouse click sound
@@ -171,31 +157,31 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(click_button), TRUE);
 	}
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(click_button), 0, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(click_button), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for an external link
 	external_link_label = gtk_label_new("External link: ");
 	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts an external link
 	external_link_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), 50);
 	gtk_entry_set_text(GTK_ENTRY(external_link_entry), tmp_layer->external_link->str);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the window to open the external link in
 	external_link_win_label = gtk_label_new("External link window: ");
 	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts a text string for the window to open the external link in
 	external_link_win_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), 50);
 	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), tmp_layer->external_link_window->str);
-	gtk_table_attach_defaults(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Run the dialog
@@ -243,6 +229,10 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/02/04 14:30:34  vapour
+ *  + Removed unnecessary includes.
+ *  + Improved spacing between table cells.
+ *
  * Revision 1.3  2008/02/01 10:36:15  vapour
  * Added code to the dialog to display and accept values for the external link's target window.
  *

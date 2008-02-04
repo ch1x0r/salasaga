@@ -21,22 +21,9 @@
  * 
  */
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
@@ -85,7 +72,7 @@ void slide_properties(void)
 	// Create the label for the slide name
 	name_label = gtk_label_new("Slide name: ");
 	gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(dialog_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(dialog_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry holding the slide name
 	name_entry = gtk_entry_new();
@@ -100,18 +87,18 @@ void slide_properties(void)
 		g_string_printf(tmp_gstring, "Slide %u", g_list_position(slides, current_slide) + 1);
 		gtk_entry_set_text(GTK_ENTRY(name_entry), tmp_gstring->str);
 	}
-	gtk_table_attach_defaults(GTK_TABLE(dialog_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(dialog_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label for the slide duration
 	duration_label = gtk_label_new("Slide duration: ");
 	gtk_misc_set_alignment(GTK_MISC(duration_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(dialog_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(dialog_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry holding the slide duration
 	duration_entry = gtk_spin_button_new_with_range(0, 1000, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(duration_entry), old_slide_duration);
-	gtk_table_attach_defaults(GTK_TABLE(dialog_table), GTK_WIDGET(duration_entry), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(dialog_table), GTK_WIDGET(duration_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Run the dialog
@@ -175,6 +162,10 @@ void slide_properties(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/02/04 14:41:46  vapour
+ *  + Removed unnecessary includes.
+ *  + Improved spacing between table cells.
+ *
  * Revision 1.1  2008/02/03 02:07:28  vapour
  * Added initial working code for a Slide Properties dialog.
  *

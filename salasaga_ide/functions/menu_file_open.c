@@ -21,27 +21,13 @@
  * 
  */
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -137,7 +123,7 @@ void menu_file_open(void)
 
 	// Create a new output resolution selector, including the resolution of the loaded project
 	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(res_array, num_res_items, output_width, output_height));
-	gtk_table_attach_defaults(message_bar, GTK_WIDGET(resolution_selector), 5, 6, 0, 1);
+	gtk_table_attach(message_bar, GTK_WIDGET(resolution_selector), 6, 7, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
 	resolution_callback = g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL);
 	gtk_widget_show_all(GTK_WIDGET(message_bar));
 
@@ -185,6 +171,10 @@ void menu_file_open(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/04 14:36:22  vapour
+ *  + Removed unnecessary includes.
+ *  + Improved spacing between table cells.
+ *
  * Revision 1.4  2008/02/04 10:36:30  vapour
  * Updated to enable the Project top menu bar option when a new project is loaded.
  *

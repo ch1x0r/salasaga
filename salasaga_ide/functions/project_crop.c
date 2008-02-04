@@ -21,27 +21,13 @@
  * 
  */
 
-// Standard includes
-#include <stdlib.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <string.h>
-#include <math.h>
 
 // GTK includes
-#include <glib/gstdio.h>
 #include <gtk/gtk.h>
-
-// Gnome includes
-#include <libgnome/gnome-url.h>
-
-// XML includes
-#include <libxml/xmlsave.h>
 
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
-	#include "flame-keycapture.h"
 #endif
 
 // Flame Edit includes
@@ -109,45 +95,45 @@ void project_crop(void)
 	// Create the label asking for the left side crop amount
 	left_label = gtk_label_new("Left crop: ");
 	gtk_misc_set_alignment(GTK_MISC(left_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(crop_table), GTK_WIDGET(left_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the left side crop amount
 	left_button = gtk_spin_button_new_with_range(0, project_width, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(left_button), 0);
-	gtk_table_attach_defaults(GTK_TABLE(crop_table), GTK_WIDGET(left_button), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the right side crop amount
 	right_label = gtk_label_new("Right crop: ");
 	gtk_misc_set_alignment(GTK_MISC(right_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(crop_table), GTK_WIDGET(right_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the right side crop amount
 	right_button = gtk_spin_button_new_with_range(0, project_width, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(right_button), 0);
-	gtk_table_attach_defaults(GTK_TABLE(crop_table), GTK_WIDGET(right_button), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the top crop amount
 	top_label = gtk_label_new("Top crop: ");
 	gtk_misc_set_alignment(GTK_MISC(top_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(crop_table), GTK_WIDGET(top_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the left side crop amount
 	top_button = gtk_spin_button_new_with_range(0, project_height, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(top_button), 0);
-	gtk_table_attach_defaults(GTK_TABLE(crop_table), GTK_WIDGET(top_button), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the right side crop amount
 	bottom_label = gtk_label_new("Bottom crop: ");
 	gtk_misc_set_alignment(GTK_MISC(bottom_label), 0, 0.5);
-	gtk_table_attach_defaults(GTK_TABLE(crop_table), GTK_WIDGET(bottom_label), 0, 1, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the right side crop amount
 	bottom_button = gtk_spin_button_new_with_range(0, project_height, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(bottom_button), 0);
-	gtk_table_attach_defaults(GTK_TABLE(crop_table), GTK_WIDGET(bottom_button), 1, 2, row_counter, row_counter + 1);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Run the dialog
@@ -247,6 +233,10 @@ void project_crop(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/02/04 14:40:52  vapour
+ *  + Removed unnecessary includes.
+ *  + Improved spacing between table cells.
+ *
  * Revision 1.3  2008/01/15 16:18:59  vapour
  * Updated copyright notice to include 2008.
  *
