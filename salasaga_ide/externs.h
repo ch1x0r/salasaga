@@ -64,6 +64,8 @@ extern GtkWidget			*status_bar;
 extern guint				statusbar_context;
 extern gint					stored_x;
 extern gint					stored_y;
+extern gint					table_x_padding;
+extern gint					table_y_padding;
 extern GtkWidget			*time_line_container;
 extern GtkWidget			*time_line_vbox;
 extern guint				unscaled_button_height;
@@ -132,6 +134,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.31  2008/02/04 14:25:20  vapour
+ * Added global variables for table spacing.
+ *
  * Revision 1.30  2008/01/31 01:05:50  vapour
  * Converted the swf control bar defines into variables, so they can be adjusted by the user in future.
  *
