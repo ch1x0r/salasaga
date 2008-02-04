@@ -208,6 +208,7 @@ OFILES = \
 	functions/menu_help_register.o \
 	functions/menu_help_survey.o \
 	functions/menu_help_website.o \
+	functions/menu_project_properties.o \
 	functions/menu_screenshots_capture.o \
 	functions/menu_screenshots_import.o \
 	functions/project_crop.o \
@@ -424,6 +425,9 @@ menu_help_survey.o:
 
 menu_help_website.o:
 	$(CC) $(CFLAGS) -c menu_help_website.c -o menu_help_website.o
+
+menu_project_properties.o:
+	$(CC) $(CFLAGS) -c menu_project_properties.c -o menu_project_properties.o
 
 menu_screenshots_capture.o:
 	$(CC) $(CFLAGS) -c menu_screenshots_capture.c -o menu_screenshots_capture.o
