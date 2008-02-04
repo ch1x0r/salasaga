@@ -68,6 +68,7 @@ void menu_screenshots_capture(void)
 	guint				border_width;
 	Window				capture_window;				// The window the user selected
 	int					mouse_buttons_pressed;
+	Cursor				new_cursor;					// The new cursor to display while the user is choosing
 	XEvent				new_event;
 	gint				return_code_int;
 	Display				*x_display;
@@ -103,6 +104,13 @@ void menu_screenshots_capture(void)
 	x_screen_num = DefaultScreen(x_display);
 	x_root_window = RootWindow(x_display, x_screen_num);
 
+	// Prepare a new mouse cursor to use
+	new_cursor = XCreateFontCursor(x_display, GDK_QUESTION_ARROW);
+	if (None == new_cursor)
+	{
+		display_warning("Error ED112: Unable to create alternative cursor.");
+	}
+
 	// Flush the X11 output buffer and process events
 	XSync(x_display, False);
 
@@ -114,7 +122,7 @@ void menu_screenshots_capture(void)
 						GrabModeSync,
 						GrabModeAsync,
 						None,
-						None,									// fixme3: It might be wise to change the mouse cursor here to indicate to the user what's going on (?)
+						new_cursor,								// We use a different mouse cursor, to re-inforce to the user that something interesting is happening
 						CurrentTime);
 	if (GrabSuccess != return_code_int)
 	{
@@ -204,6 +212,9 @@ void menu_screenshots_capture(void)
 			"Window dimensions successfully retrieved.  Please use Control-Printscreen to take screenshots then Import when finished.");
 	gtk_dialog_run(GTK_DIALOG(message_dialog));
 	gtk_widget_destroy(message_dialog);
+
+	// Free the mouse cursor object
+	XFreeCursor(x_display, new_cursor);
 
 #else
 	// * Pop open a dialog box asking the user for the offset and size of capture area *
@@ -447,6 +458,9 @@ void menu_screenshots_capture(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/04 06:40:04  vapour
+ * Mouse cursor is changed from default while selection operation is in progress, to re-inforce whats going on.
+ *
  * Revision 1.5  2008/02/04 06:07:06  vapour
  * Added new code, X11 only, that allows the user to select the window they want to capture rather than typing in manual coordinates.
  *
