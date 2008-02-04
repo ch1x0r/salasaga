@@ -3,7 +3,7 @@
  *
  * Flame Project: Background capture process
  * 
- * Copyright (C) 2005-2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2005-2008 Justin Clift <justin@postgresql.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -44,7 +44,7 @@
 #include <png.h>
 
 // Application constants
-#define	APP_VERSION 0.51
+#define	APP_VERSION 0.52
 
 
 #ifdef _WIN32
@@ -59,8 +59,10 @@
 // Non-windows screenshot function
 GdkPixbuf *non_win_take_screenshot(Window win, gint x_off, gint x_len, gint y_off, gint y_len)
 {
-	GdkWindow	*window;
+	// Local variable(s)
 	GdkPixbuf	*screenshot;
+	GdkWindow	*window;
+
 
 	window = gdk_window_foreign_new(win);
 	if (NULL == window)
@@ -77,6 +79,9 @@ GdkPixbuf *non_win_take_screenshot(Window win, gint x_off, gint x_len, gint y_of
 		g_error("Error 03: Something went wrong when getting the screenshot");
 		return NULL;
 	}
+
+	// Generate a beep
+	gdk_beep();
 
 	return screenshot;
 }
@@ -151,11 +156,11 @@ gint main(gint argc, gchar *argv[])
 	const gchar			*dir_entry;			// Holds a file name
 	GSList				*entries = NULL;	// Holds a list of screen shot file names
 	gboolean			screenshots_exist = FALSE;	// Switch to track if other screenshots already exist
-	gchar				suffix[10];			// Holds the screenshot file suffix
+	GString				*short_file_name;	// Name of the file to save as
+	GString				*suffix;			// Holds the screenshot file suffix
 
 	GError				*error = NULL;		// Pointer to error return structure
 
-	gchar				tmp_string[1024];	// fixme4: Potential buffer overflow hazard?
 	gpointer			tmp_ptr;			// Temporary pointer
 
 #ifndef _WIN32
@@ -277,7 +282,7 @@ gint main(gint argc, gchar *argv[])
 	g_dir_close(dir_ptr);
 
 	// Set the suffix to the default starting number
-	g_stpcpy(suffix, "0001");
+	suffix = g_string_new("0001");
 
 	// If screenshots were found, then sort them and extract the highest numbered suffix
 	if (TRUE == screenshots_exist)
@@ -291,14 +296,14 @@ gint main(gint argc, gchar *argv[])
 		
 		// Get the highest numbered suffix (it's the last entry after sorting)
 		highest_entry = g_slist_last(entries);
-		g_stpcpy(suffix, highest_entry->data);
+		suffix = g_string_assign(suffix, highest_entry->data);
 
 		// Extract just the required numeric part of the highest screenshot, then increment it
-		tmp_strings = g_strsplit(suffix, ".png", 2);  // tmp_strings[0] will always have the first part of the file name
+		tmp_strings = g_strsplit(suffix->str, ".png", 2);  // tmp_strings[0] will always have the first part of the file name
 		tmp_strings2 = g_strsplit(tmp_strings[0], name, 2);  // tmp_strings2[1] has the numeric string we want
 		tmp_int = atoi(tmp_strings2[1]);
 		tmp_int++;
-		g_sprintf(suffix, "%0*u", 4, tmp_int);
+		g_string_printf(suffix, "%0*u", 4, tmp_int);
 
 		// Free the NULL terminated arrays of strings		
 		g_strfreev(tmp_strings);
@@ -307,13 +312,13 @@ gint main(gint argc, gchar *argv[])
 
 	// Free the memory used by the GSList
 	// fixme5: (commented out because it seemed to be causing a segfault on windows)
+	// fixme5: (Note - This was probably resolved on 2008-02-04, but hasn't been tested on Windows yet)
 	// g_slist_free(entries);
 
-	// Construct the screen shot file name
-	tmp_ptr = g_stpcpy(tmp_string, name);
-	tmp_ptr = g_stpcpy(tmp_ptr, suffix);
-	tmp_ptr = g_stpcpy(tmp_ptr, ".png");
-	full_file_name = g_build_filename(directory, tmp_string, NULL);
+	// Construct the screenshot file name
+	short_file_name = g_string_new(NULL);
+	g_string_printf(short_file_name, "%s%s%s", name, suffix->str, ".png");
+	full_file_name = g_build_filename(directory, short_file_name->str, NULL);
 
 #ifndef _WIN32
 	// Non-windows code to save the screenshot
@@ -431,6 +436,10 @@ gint main(gint argc, gchar *argv[])
 	// g_build_filename() requires the returned string to be g_free'd
 	g_free(full_file_name);
 
+	// Free the GString's we allocated
+	g_string_free(suffix, TRUE);
+	g_string_free(short_file_name, TRUE);
+
 	// Exit
 	exit(0);
 }
@@ -441,6 +450,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2008/02/04 08:35:23  vapour
+ * Updated to use GString's rather than pre-allocated buffer, in order to fix a segfault and reduce the likelyhood of buffer overflows.
+ *
  * Revision 1.10  2007/10/03 13:03:08  vapour
  * Updated PNG creation code for non windows to save the URL for Flame in the Software text string.
  *
