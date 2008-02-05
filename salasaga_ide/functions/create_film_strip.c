@@ -57,7 +57,6 @@ void create_film_strip()
 	//
 
 	// Local variables
-	GtkTreeSelection		*film_strip_selector;
 	GtkCellRenderer			*renderer;
 	GtkTreeSelection		*selector;
 
@@ -83,11 +82,10 @@ void create_film_strip()
 	gtk_container_add(GTK_CONTAINER(film_strip_container), GTK_WIDGET(film_strip_view));
 
 	// Set the selection mode of the film strip to single
-	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
-	gtk_tree_selection_set_mode(GTK_TREE_SELECTION(film_strip_selector), GTK_SELECTION_SINGLE);
+	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
+	gtk_tree_selection_set_mode(GTK_TREE_SELECTION(selector), GTK_SELECTION_SINGLE);
 
 	// Connect a signal handler to the film strip, which gets called whenever a selection is made
-	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
 	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);  // fixme4: Should investigate multiple selection at some point
 	g_signal_connect(G_OBJECT(selector), "changed", G_CALLBACK(film_strip_slide_clicked), NULL);
 }
@@ -98,6 +96,9 @@ void create_film_strip()
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/05 09:01:09  vapour
+ * Simplified some code that was just wasting memory.
+ *
  * Revision 1.5  2008/02/04 15:01:33  vapour
  *  + Removed unnecessary includes.
  *
