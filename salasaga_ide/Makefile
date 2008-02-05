@@ -162,6 +162,7 @@ OFILES = \
 	functions/create_toolbar.o \
 	functions/create_tooltips.o \
 	functions/create_working_area.o \
+	functions/create_zoom_selector.o \
 	functions/destroy_slide.o \
 	functions/detect_collisions.o \
 	functions/disable_layer_toolbar_buttons.o \
@@ -287,6 +288,9 @@ create_tooltips.o:
 
 create_working_area.o:
 	$(CC) $(CFLAGS) -c create_working_area.c -o create_working_area.o
+
+create_zoom_selector.o:
+	$(CC) $(CFLAGS) -c create_zoom_selector.c -o create_zoom_selector.o
 
 destroy_slide.o:
 	$(CC) $(CFLAGS) -c destroy_slide.c -o destroy_slide.o
