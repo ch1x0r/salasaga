@@ -97,6 +97,7 @@ extern guint				default_output_height;
 extern guint				default_output_width;
 extern GString				*default_project_folder;
 extern guint				default_slide_length;
+extern GString				*default_zoom_level;
 extern guint				icon_height;
 extern guint				preview_width;
 extern guint				scaling_quality;
@@ -133,6 +134,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.33  2008/02/05 10:42:59  vapour
+ * Added a global variable to support the default zoom level.
+ *
  * Revision 1.32  2008/02/05 09:19:38  vapour
  *  + Removed support of output quality variable, as the concept is no longer relevant.
  *  + Made the main area variable a global, so we can resize the film strip width as needed.
