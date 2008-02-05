@@ -46,8 +46,9 @@ void menu_edit_preferences(void)
 	gint				app_row_counter;					// Used when building the application preferences dialog box
 	gint				dialog_result;						// Catches the return code from the dialog box
 	GtkDialog			*main_dialog;						// Widget for the main dialog
-	gchar				**strings;							// Output resolution gets constructed with this
-	GString				*tmp_gstring;
+	gchar				**strings;							// Text string are split apart with this
+	gint				tmp_counter;						// General counter used in looping
+	GString				*tmp_gstring;						// Text strings are constructed in this
 
 	GtkWidget			*label_default_project_folder;		// Default Project Folder
 	GtkWidget			*button_default_project_folder;		//
@@ -80,7 +81,10 @@ void menu_edit_preferences(void)
 	GtkWidget			*button_default_bg_colour;			// Color button
 
 	GtkWidget			*label_scaling_quality;				// Scaling quality
-	GtkWidget			*button_scaling_quality;			//
+	GtkWidget			*selector_scaling_quality;			//
+
+	gchar				*scale_array[] = { "0 - Nearest (low quality)", "1 - Tiles", "2 - Bilinear", "3 - Hyperbolic (Best - SLOW!)" };  // The available scaling options
+	gint				num_scale_items = sizeof(scale_array) / sizeof(scale_array[0]);
 
 
 	// Initialise various things
@@ -187,10 +191,13 @@ void menu_edit_preferences(void)
 	label_scaling_quality = gtk_label_new("Scaling Quality: ");
 	gtk_misc_set_alignment(GTK_MISC(label_scaling_quality), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_scaling_quality), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_scaling_quality = gtk_spin_button_new_with_range(0, 3, 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_scaling_quality), scaling_quality);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_scaling_quality), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	app_row_counter = app_row_counter + 1;
+	selector_scaling_quality = gtk_combo_box_new_text();
+	for (tmp_counter = 0; tmp_counter < num_scale_items; tmp_counter++)
+	{
+		gtk_combo_box_append_text(GTK_COMBO_BOX(selector_scaling_quality), scale_array[tmp_counter]);
+	}
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_scaling_quality), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_scaling_quality), scaling_quality);
 
 	// Set the dialog going
 	gtk_widget_show_all(GTK_WIDGET(main_dialog));
@@ -218,6 +225,7 @@ void menu_edit_preferences(void)
 		strings = g_strsplit(tmp_gstring->str, "x", 2);
 		default_output_width = atoi(strings[0]);
 		default_output_height = atoi(strings[1]);
+		g_strfreev(strings);
 
 		// Default Output Quality
 		default_output_quality = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_output_quality));
@@ -239,12 +247,11 @@ void menu_edit_preferences(void)
 		gtk_color_button_get_color(GTK_COLOR_BUTTON(button_default_bg_colour), &default_bg_colour);
 
 		// Scaling Quality
-		scaling_quality = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_scaling_quality));
+		g_string_printf(tmp_gstring, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_scaling_quality)));
+		scaling_quality = atoi(tmp_gstring->str);  // Directly get the first character of the string, as its the value we want
 	}
 
 	// Free up the memory allocated in this function
-	// fixme2: Once this function works properly, I should revisit this code and ensure nothing got missed in the cleanup
-	g_strfreev(strings);
 	g_string_free(tmp_gstring, TRUE);
 	gtk_widget_destroy(GTK_WIDGET(label_default_project_folder));
 	gtk_widget_destroy(GTK_WIDGET(button_default_project_folder));
@@ -259,6 +266,9 @@ void menu_edit_preferences(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/05 08:34:11  vapour
+ * Scaling quality is now a selector widget instead of a numeric button field.
+ *
  * Revision 1.5  2008/02/05 06:39:04  vapour
  * Output resolution is now a selector instead of individual text fields.
  *
