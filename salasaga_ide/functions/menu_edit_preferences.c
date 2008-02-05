@@ -37,6 +37,7 @@
 #include "../flame-types.h"
 #include "../externs.h"
 #include "create_resolution_selector.h"
+#include "regenerate_film_strip_thumbnails.h"
 
 
 void menu_edit_preferences(void)
@@ -45,6 +46,7 @@ void menu_edit_preferences(void)
 	GtkWidget			*app_dialog_table;					// Table used for neat layout of the labels and fields in application preferences
 	gint				app_row_counter;					// Used when building the application preferences dialog box
 	gint				dialog_result;						// Catches the return code from the dialog box
+	GValue				*handle_size;						// The size of the dividing handle for the film strip
 	GtkDialog			*main_dialog;						// Widget for the main dialog
 	gchar				**strings;							// Text string are split apart with this
 	gint				tmp_counter;						// General counter used in looping
@@ -61,9 +63,6 @@ void menu_edit_preferences(void)
 
 	GtkWidget			*label_default_output_res;			// Default Output Resolution
 	GtkWidget			*selector_default_output_res;		//
-
-	GtkWidget			*label_default_output_quality;		// Default Output Quality
-	GtkWidget			*button_default_output_quality;		//
 
 	GtkWidget			*label_default_slide_length;		// Default Slide Length
 	GtkWidget			*button_default_slide_length;		//
@@ -131,15 +130,6 @@ void menu_edit_preferences(void)
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_default_output_res), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
-	// Default Output Quality
-	label_default_output_quality = gtk_label_new("Default Output Quality: ");
-	gtk_misc_set_alignment(GTK_MISC(label_default_output_quality), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_quality), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_default_output_quality = gtk_spin_button_new_with_range(0, 9, 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_output_quality), default_output_quality);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_output_quality), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	app_row_counter = app_row_counter + 1;
-
 	// Default Slide Length
 	label_default_slide_length = gtk_label_new("Default Slide Length: ");
 	gtk_misc_set_alignment(GTK_MISC(label_default_slide_length), 0, 0.5);
@@ -150,7 +140,7 @@ void menu_edit_preferences(void)
 	app_row_counter = app_row_counter + 1;
 
 	// Preview width
-	label_preview_width = gtk_label_new("Preview Width: ");
+	label_preview_width = gtk_label_new("Film Strip Width: ");
 	gtk_misc_set_alignment(GTK_MISC(label_preview_width), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_preview_width), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_preview_width = gtk_spin_button_new_with_range(0, 1200, 10);
@@ -213,7 +203,7 @@ void menu_edit_preferences(void)
 		// Default Project Folder
 		default_project_folder = g_string_assign(default_project_folder, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_default_project_folder)));
 
-		// Default Project Folder
+		// Default Screenshot Folder
 		screenshots_folder = g_string_assign(screenshots_folder, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_screenshot_folder)));
 
 		// Default Output Folder
@@ -227,14 +217,25 @@ void menu_edit_preferences(void)
 		default_output_height = atoi(strings[1]);
 		g_strfreev(strings);
 
-		// Default Output Quality
-		default_output_quality = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_output_quality));
-
 		// Default Slide Length
 		default_slide_length = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_slide_length));
 
 		// Preview width
-		preview_width = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_preview_width));
+		if (preview_width != (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_preview_width)))
+		{
+			// The desired film strip width has changed
+			preview_width = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_preview_width));
+
+			// Regenerate the film strip thumbnails
+			regenerate_film_strip_thumbnails();
+
+			// Set the new width of the film strip widget
+			handle_size = g_new0(GValue, 1);
+			g_value_init(handle_size, G_TYPE_INT);
+			gtk_widget_style_get_property(GTK_WIDGET(main_area), "handle-size", handle_size);
+			gtk_paned_set_position(GTK_PANED(main_area), g_value_get_int(handle_size) + preview_width + 15);
+			g_free(handle_size);
+		}
 
 		// Icon Height
 		icon_height = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_icon_height));
@@ -266,6 +267,10 @@ void menu_edit_preferences(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/05 09:16:10  vapour
+ *  + Removed support of output quality variable, as the concept is no longer relevant.
+ *  + Changing the value of Film Strip width is now reflecting in the GUI after closing this dialog.
+ *
  * Revision 1.6  2008/02/05 08:34:11  vapour
  * Scaling quality is now a selector widget instead of a numeric button field.
  *
