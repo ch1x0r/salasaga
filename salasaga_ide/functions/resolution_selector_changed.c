@@ -49,9 +49,7 @@ gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer da
 	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(resolution_selector)));
 
 	// Parse and store the new project output size
-	tmp_string = g_string_truncate(tmp_string, tmp_string->len - 1);
-	tmp_string = g_string_truncate(tmp_string, tmp_string->len - 1);
-	tmp_string = g_string_truncate(tmp_string, tmp_string->len - 1);
+	tmp_string = g_string_truncate(tmp_string, tmp_string->len - 7);
 	strings = g_strsplit(tmp_string->str, "x", 2);
 	output_width = atoi(strings[0]);
 	output_height = atoi(strings[1]);
@@ -70,6 +68,9 @@ gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer da
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/05 06:35:29  vapour
+ * Updated to handle new wider output resolution widget text.
+ *
  * Revision 1.4  2008/02/04 17:11:15  vapour
  *  + Removed unnecessary includes.
  *
