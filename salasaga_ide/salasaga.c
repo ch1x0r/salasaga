@@ -83,6 +83,7 @@ gchar					*font_path;					// Points to the base location for Flames font files
 guint					frames_per_second;			// Number of frames per second
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
 GString					*icon_path;					// Points to the base location for Flames icon files
+GtkWidget				*main_area;					// Widget for the onscreen display
 GtkWidget				*main_drawing_area;			// Widget for the drawing area
 GtkWidget				*main_window;				// Widget for the main window
 GtkItemFactory			*menu_bar = NULL;			// Widget for the menu bar
@@ -129,7 +130,6 @@ gulong					layer_toolbar_signals[MAIN_TB_COUNT];	// Array of toolbar signals
 GdkColor				default_bg_colour;			// Default background color for slides
 GString					*default_output_folder;		// Application default save path for exporting animations
 guint					default_output_height;		// Application default for how high to create project output
-guint					default_output_quality;		// Application default quality level [0-9] to save output png files with
 guint					default_output_width;		// Application default for how wide to create project output
 GString					*default_project_folder;	// Application default save path for project folders
 guint					default_slide_length;		// Default length of all new slides, in frames
@@ -141,7 +141,6 @@ GString					*screenshots_folder;		// Application default for where to store scre
 // Project preferences
 GString					*output_folder;				// Where to export output files too
 guint					output_height;				// How high to create project output
-guint					output_quality;				// The quality level [0-9] to save output png files with
 guint					output_width;				// How wide to create project output
 GString					*project_folder;			// The path to the project folder
 guint					project_height;				// The height of the project in pixels
@@ -183,7 +182,6 @@ gint main(gint argc, gchar *argv[])
 	gint				format_counter;				// Used to determine if SVG images can be loaded
 	GdkPixbufFormat		*format_data;				// Used to determine if SVG images can be loaded
 	GValue				*handle_size;				// The size of the handle in the main area
-	GtkWidget			*main_area;					// Widget for the onscreen display
 	gint				num_formats;				// Used to determine if SVG images can be loaded
 	GtkWidget			*outer_box;					// Widget for the onscreen display
 	GtkLabel			*resolution_label;			// Widget for the resolution selector label
@@ -415,7 +413,6 @@ gint main(gint argc, gchar *argv[])
 		default_output_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_width", NULL);
 		default_output_height = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_height", NULL);
 		default_slide_length = slide_length = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/slide_length", NULL);
-		default_output_quality = output_quality = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_quality", NULL);
 		preview_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", NULL);
 		if (0 == preview_width) preview_width = 300;
 		frames_per_second = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/frames_per_second", NULL);
@@ -650,26 +647,6 @@ gint main(gint argc, gchar *argv[])
 			RegCloseKey(hkey);
 		}
 
-		// Retrieve the value for the default output quality
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
-		{
-			// Value is missing, so warn the user and set a sensible default
-			missing_keys = TRUE;
-			default_output_quality = output_quality = 9;
-		} else
-		{
-			// Retrieve the value
-			buffer_size = sizeof(buffer_data);
-			return_code = RegQueryValueExA(hkey, "output_quality", NULL, NULL, buffer_ptr, &buffer_size);
-			if (ERROR_SUCCESS == return_code)
-			{
-				default_output_quality = output_quality = atoi(buffer_ptr);
-			}
-
-			// Close the registry key
-			RegCloseKey(hkey);
-		}
-
 		// Retrieve the value for the default scaling quality
 		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
@@ -781,7 +758,6 @@ gint main(gint argc, gchar *argv[])
 		default_output_width = 800;
 		default_output_height = 600;
 		default_slide_length = slide_length = 60;  // Default number of frames to use in new slides
-		default_output_quality = output_quality = 9;  // Default quality to save png images with
 		scaling_quality =  GDK_INTERP_TILES;  // Hyper is VERY, VERY slow with large high res images [GDK_INTERP_NEAREST | GDK_INTERP_TILES | GDK_INTERP_BILINEAR | GDK_INTERP_HYPER]
 	}
 
@@ -1033,6 +1009,10 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.79  2008/02/05 09:20:40  vapour
+ *  + Removed support of output quality variable, as the concept is no longer relevant.
+ *  + Made the main area variable a global, so we can resize the film strip width as needed.
+ *
  * Revision 1.78  2008/02/05 06:54:04  vapour
  * Added further broadcast display resolutions.
  *

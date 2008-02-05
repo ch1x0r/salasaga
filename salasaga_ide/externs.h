@@ -49,6 +49,7 @@ extern GtkListStore			*film_strip_store;
 extern GtkWidget			*film_strip_view;
 extern gchar				*font_path;
 extern guint				frames_per_second;
+extern GtkWidget			*main_area;
 extern GtkWidget			*main_drawing_area;
 extern GtkWidget			*main_window;
 extern GtkItemFactory		*menu_bar;
@@ -93,7 +94,6 @@ extern gulong				layer_toolbar_signals[MAIN_TB_COUNT];
 extern GdkColor				default_bg_colour;
 extern GString				*default_output_folder;
 extern guint				default_output_height;
-extern guint				default_output_quality;
 extern guint				default_output_width;
 extern GString				*default_project_folder;
 extern guint				default_slide_length;
@@ -104,7 +104,6 @@ extern GString				*screenshots_folder;
 
 extern GString				*output_folder;
 extern guint				output_height;
-extern guint				output_quality;
 extern guint				output_width;
 extern GString				*project_folder;
 extern guint				project_height;
@@ -134,6 +133,10 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.32  2008/02/05 09:19:38  vapour
+ *  + Removed support of output quality variable, as the concept is no longer relevant.
+ *  + Made the main area variable a global, so we can resize the film strip width as needed.
+ *
  * Revision 1.31  2008/02/04 14:25:20  vapour
  * Added global variables for table spacing.
  *
