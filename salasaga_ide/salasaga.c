@@ -50,6 +50,7 @@
 #include "functions/create_time_line.h"
 #include "functions/create_toolbar.h"
 #include "functions/create_working_area.h"
+#include "functions/create_zoom_selector.h"
 #include "functions/disable_layer_toolbar_buttons.h"
 #include "functions/disable_main_toolbar_buttons.h"
 #include "functions/display_warning.h"
@@ -133,6 +134,7 @@ guint					default_output_height;		// Application default for how high to create 
 guint					default_output_width;		// Application default for how wide to create project output
 GString					*default_project_folder;	// Application default save path for project folders
 guint					default_slide_length;		// Default length of all new slides, in frames
+GString					*default_zoom_level;		// Default zoom level to use
 guint					icon_height = 30;			// Height in pixels for the toolbar icons (they're scalable SVG's)
 guint					preview_width;				// Width in pixel for the film strip preview (might turn into a structure later)
 guint					scaling_quality;			// Default image scaling quality used
@@ -213,6 +215,7 @@ gint main(gint argc, gchar *argv[])
 	// Initialise various things
 	default_output_folder = g_string_new(NULL);
 	default_project_folder = g_string_new(NULL);
+	default_zoom_level = g_string_new("Fit to width");  // Sensible default
 	output_folder = g_string_new(NULL);
 	project_folder = g_string_new(NULL);
 	project_name = g_string_new("New Project");
@@ -408,6 +411,10 @@ gint main(gint argc, gchar *argv[])
 		g_string_printf(default_project_folder, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/project_folder", NULL));
 		g_string_printf(screenshots_folder, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/screenshots_folder", NULL));
 		g_string_printf(default_output_folder, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/output_folder", NULL));
+		if (NULL != gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/zoom_level", NULL))
+		{
+			g_string_printf(default_zoom_level, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/zoom_level", NULL));
+		}
 		project_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_width", NULL);
 		project_height = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_height", NULL);
 		default_output_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_width", NULL);
@@ -519,6 +526,25 @@ gint main(gint argc, gchar *argv[])
 			if (ERROR_SUCCESS == return_code)
 			{
 				g_string_printf(default_output_folder, "%s", buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the default zoom level
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user (we've already set a default)
+			missing_keys = TRUE;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "default_zoom_level", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				g_string_printf(default_zoom_level, "%s", buffer_ptr);
 			}
 
 			// Close the registry key
@@ -898,21 +924,7 @@ gint main(gint argc, gchar *argv[])
 	gtk_table_attach(message_bar, GTK_WIDGET(zoom_label), 2, 3, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
 
 	// Create the zoom selector
-	zoom_selector = GTK_COMBO_BOX(gtk_combo_box_new_text());
-	gtk_combo_box_set_focus_on_click(GTK_COMBO_BOX(zoom_selector), FALSE);
-	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "1600%");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "800%");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "400%");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "300%");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "200%");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "150%");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "100%");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "75%");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "50%");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "25%");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "10%");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_selector), "Fit to width");
-	gtk_combo_box_set_active(GTK_COMBO_BOX(zoom_selector), 11);
+	zoom_selector = GTK_COMBO_BOX(create_zoom_selector(default_zoom_level->str));
 	gtk_table_attach(message_bar, GTK_WIDGET(zoom_selector), 3, 4, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
 
 	// Link the zoom selector to the function that recalculates the zoom and redraws the working area
@@ -1009,6 +1021,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.80  2008/02/05 10:49:14  vapour
+ * The zoom value is now taken from the stored default.
+ *
  * Revision 1.79  2008/02/05 09:20:40  vapour
  *  + Removed support of output quality variable, as the concept is no longer relevant.
  *  + Made the main area variable a global, so we can resize the film strip width as needed.
