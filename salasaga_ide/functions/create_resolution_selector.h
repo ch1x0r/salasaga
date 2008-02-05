@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_resolutions, guint initial_width, guint initial_height);
+GtkWidget *create_resolution_selector(guint initial_width, guint initial_height);
 
 #ifdef __cplusplus
 }
@@ -41,6 +41,9 @@ GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/02/05 15:27:54  vapour
+ * Moved the list of output resolutions into the create resolution selector function.
+ *
  * Revision 1.2  2008/01/15 16:19:07  vapour
  * Updated copyright notice to include 2008.
  *

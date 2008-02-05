@@ -35,11 +35,31 @@
 #include "../externs.h"
 
 
-GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_resolutions, guint initial_width, guint initial_height)
+GtkWidget *create_resolution_selector(guint initial_width, guint initial_height)
 {
+	// Default output resolutions
+	ResolutionStructure	res_array[] =
+	{
+		{ 1920, 1200 },
+		{ 1920, 1080 },
+		{ 1600, 1200 },
+		{ 1280, 1024 },
+		{ 1280, 720 },
+		{ 1024, 768 },
+		{ 800, 600 },
+		{ 720, 480 },
+		{ 640, 480 },
+		{ 352, 288 },
+		{ 320, 240 },
+		{ 176, 144 },
+		{ 160, 120 },
+		{ 128, 96 }
+	};
+
 	// Local variables
 	gboolean			match_found;				// Simple toggle used to indiate the requested resolution has been found
 	gint				match_at;					// If a resolution match was found, this contains where
+	gint				num_resolutions = sizeof(res_array) / sizeof(res_array[0]);	// The number of resolution array items
 	guint				res_counter;				// Used as a simple counter
 	GString				*res_string;				// Used for constructing resolution strings
 	GtkWidget			*res_widget;				// ComboBox widget that gets returned
@@ -96,6 +116,9 @@ GtkWidget *create_resolution_selector(ResolutionStructure *res_array, guint num_
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/05 15:29:05  vapour
+ * Moved the list of output resolutions into the create resolution selector function.
+ *
  * Revision 1.4  2008/02/05 06:22:28  vapour
  * Resolution selector widget now says pixels instead of px.
  *

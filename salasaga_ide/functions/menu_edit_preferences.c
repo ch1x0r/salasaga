@@ -127,7 +127,7 @@ void menu_edit_preferences(void)
 	label_default_output_res = gtk_label_new("Default Output Resolution: ");
 	gtk_misc_set_alignment(GTK_MISC(label_default_output_res), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_res), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	selector_default_output_res = GTK_WIDGET(create_resolution_selector(res_array, num_res_items, default_output_width, default_output_height));
+	selector_default_output_res = GTK_WIDGET(create_resolution_selector(default_output_width, default_output_height));
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_default_output_res), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
@@ -264,6 +264,9 @@ void menu_edit_preferences(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/02/05 15:29:56  vapour
+ * Moved the list of output resolutions into the create resolution selector function.
+ *
  * Revision 1.8  2008/02/05 10:47:02  vapour
  * The zoom value is now a selection widget.
  *
