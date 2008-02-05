@@ -22,6 +22,9 @@
  */
 
 
+// Standard includes
+#include <stdlib.h>
+
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -33,6 +36,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "create_resolution_selector.h"
 
 
 void menu_edit_preferences(void)
@@ -42,6 +46,8 @@ void menu_edit_preferences(void)
 	gint				app_row_counter;					// Used when building the application preferences dialog box
 	gint				dialog_result;						// Catches the return code from the dialog box
 	GtkDialog			*main_dialog;						// Widget for the main dialog
+	gchar				**strings;							// Output resolution gets constructed with this
+	GString				*tmp_gstring;
 
 	GtkWidget			*label_default_project_folder;		// Default Project Folder
 	GtkWidget			*button_default_project_folder;		//
@@ -49,14 +55,11 @@ void menu_edit_preferences(void)
 	GtkWidget			*label_screenshot_folder;			// Screenshot Folder
 	GtkWidget			*button_screenshot_folder;			//
 
-	GtkWidget			*label_default_output_folder;		// Default Output path
+	GtkWidget			*label_default_output_folder;		// Default Output Path
 	GtkWidget			*button_default_output_folder;		//
 
-	GtkWidget			*label_default_output_width;		// Default Output Width
-	GtkWidget			*button_default_output_width;		//
-
-	GtkWidget			*label_default_output_height;		// Default Output Height
-	GtkWidget			*button_default_output_height;		//
+	GtkWidget			*label_default_output_res;			// Default Output Resolution
+	GtkWidget			*selector_default_output_res;		//
 
 	GtkWidget			*label_default_output_quality;		// Default Output Quality
 	GtkWidget			*button_default_output_quality;		//
@@ -82,6 +85,7 @@ void menu_edit_preferences(void)
 
 	// Initialise various things
 	app_row_counter = 0;
+	tmp_gstring = g_string_new(NULL);
 
 	// Create the main dialog window
 	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Application Preferences", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
@@ -115,22 +119,12 @@ void menu_edit_preferences(void)
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_output_folder), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
-	// Default Output Width
-	label_default_output_width = gtk_label_new("Default Output Width: ");
-	gtk_misc_set_alignment(GTK_MISC(label_default_output_width), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_width), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_default_output_width = gtk_spin_button_new_with_range(0, 6000, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_output_width), default_output_width);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_output_width), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	app_row_counter = app_row_counter + 1;
-
-	// Default Output Height
-	label_default_output_height = gtk_label_new("Default Output Height: ");
-	gtk_misc_set_alignment(GTK_MISC(label_default_output_height), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_height), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_default_output_height = gtk_spin_button_new_with_range(0, 6000, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_output_height), default_output_height);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_output_height), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Default Output Resolution
+	label_default_output_res = gtk_label_new("Default Output Resolution: ");
+	gtk_misc_set_alignment(GTK_MISC(label_default_output_res), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_res), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	selector_default_output_res = GTK_WIDGET(create_resolution_selector(res_array, num_res_items, default_output_width, default_output_height));
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_default_output_res), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Output Quality
@@ -218,12 +212,12 @@ void menu_edit_preferences(void)
 		// Default Output Folder
 		default_output_folder = g_string_assign(default_output_folder, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_default_output_folder)));
 
-		// Default Output Width
-		// fixme2: This should be a selector, like the output selector
-		default_output_width = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_output_width));
-
-		// Default Output Height
-		default_output_height = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_output_height));
+		// Default Output Resolution
+		g_string_printf(tmp_gstring, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_default_output_res)));
+		tmp_gstring = g_string_truncate(tmp_gstring, tmp_gstring->len - 7);
+		strings = g_strsplit(tmp_gstring->str, "x", 2);
+		default_output_width = atoi(strings[0]);
+		default_output_height = atoi(strings[1]);
 
 		// Default Output Quality
 		default_output_quality = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_output_quality));
@@ -250,6 +244,8 @@ void menu_edit_preferences(void)
 
 	// Free up the memory allocated in this function
 	// fixme2: Once this function works properly, I should revisit this code and ensure nothing got missed in the cleanup
+	g_strfreev(strings);
+	g_string_free(tmp_gstring, TRUE);
 	gtk_widget_destroy(GTK_WIDGET(label_default_project_folder));
 	gtk_widget_destroy(GTK_WIDGET(button_default_project_folder));
 	gtk_widget_destroy(GTK_WIDGET(label_default_output_folder));
@@ -263,6 +259,9 @@ void menu_edit_preferences(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/05 06:39:04  vapour
+ * Output resolution is now a selector instead of individual text fields.
+ *
  * Revision 1.4  2008/02/04 14:34:33  vapour
  *  + Removed unnecessary includes.
  *  + Improved spacing between table cells.
