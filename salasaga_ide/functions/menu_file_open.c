@@ -123,7 +123,7 @@ void menu_file_open(void)
 
 	// Create a new output resolution selector, including the resolution of the loaded project
 	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(res_array, num_res_items, output_width, output_height));
-	gtk_table_attach(message_bar, GTK_WIDGET(resolution_selector), 6, 7, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
+	gtk_table_attach(message_bar, GTK_WIDGET(resolution_selector), 5, 6, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
 	resolution_callback = g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL);
 	gtk_widget_show_all(GTK_WIDGET(message_bar));
 
@@ -171,6 +171,9 @@ void menu_file_open(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/05 06:18:38  vapour
+ * Placement of output resolution widget adjusted.
+ *
  * Revision 1.5  2008/02/04 14:36:22  vapour
  *  + Removed unnecessary includes.
  *  + Improved spacing between table cells.
