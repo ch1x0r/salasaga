@@ -153,10 +153,13 @@ guint					slide_length;				// Length of all new slides, in frames
 ResolutionStructure	res_array[] =
 {
 	{ 1920, 1200 },
+	{ 1920, 1080 },
 	{ 1600, 1200 },
 	{ 1280, 1024 },
+	{ 1280, 720 },
 	{ 1024, 768 },
 	{ 800, 600 },
+	{ 720, 480 },
 	{ 640, 480 },
 	{ 352, 288 },
 	{ 320, 240 },
@@ -1030,6 +1033,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.78  2008/02/05 06:54:04  vapour
+ * Added further broadcast display resolutions.
+ *
  * Revision 1.77  2008/02/05 06:40:51  vapour
  *  + Added 1920x1200 output resolution.
  *  + Default output resolution is honoured at start up.
