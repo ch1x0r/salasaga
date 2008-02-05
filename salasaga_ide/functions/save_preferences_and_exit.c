@@ -57,7 +57,6 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/project_folder", default_project_folder->str, NULL);
 	gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/screenshots_folder", screenshots_folder->str, NULL);
 	gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/output_folder", default_output_folder->str, NULL);
-	gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/project_name", project_name->str, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/project_width", project_width, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/project_height", project_height, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/output_width", default_output_width, NULL);
@@ -288,6 +287,9 @@ void save_preferences_and_exit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/05 06:36:44  vapour
+ * No longer saves Project Name value as that's always set to New Project now.
+ *
  * Revision 1.6  2008/02/04 17:11:52  vapour
  *  + Removed unnecessary includes.
  *
