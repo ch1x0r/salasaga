@@ -37,6 +37,7 @@
 #include "../flame-types.h"
 #include "../externs.h"
 #include "create_resolution_selector.h"
+#include "create_zoom_selector.h"
 #include "regenerate_film_strip_thumbnails.h"
 
 
@@ -74,7 +75,7 @@ void menu_edit_preferences(void)
 	GtkWidget			*button_icon_height;				//
 
 	GtkWidget			*label_default_zoom_level;			// Default Zoom Level
-	GtkWidget			*entry_default_zoom_level;			//
+	GtkWidget			*selector_default_zoom_level;		//
 
 	GtkWidget			*label_default_bg_colour;			// Default background colour
 	GtkWidget			*button_default_bg_colour;			// Color button
@@ -161,11 +162,8 @@ void menu_edit_preferences(void)
 	label_default_zoom_level = gtk_label_new("Default Zoom Level: ");
 	gtk_misc_set_alignment(GTK_MISC(label_default_zoom_level), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_zoom_level), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	// fixme3: We don't have a selector for Default Zoom Level yet, so this is just stub code for now
-	entry_default_zoom_level = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry_default_zoom_level), 14);
-	gtk_entry_set_text(GTK_ENTRY(entry_default_zoom_level), gtk_combo_box_get_active_text(GTK_COMBO_BOX(zoom_selector)));
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(entry_default_zoom_level), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	selector_default_zoom_level = create_zoom_selector(default_zoom_level->str);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_default_zoom_level), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Background Colour
@@ -241,8 +239,7 @@ void menu_edit_preferences(void)
 		icon_height = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_icon_height));
 
 		// Default Zoom Level
-		// fixme3: Couldn't be bothered coding this yet
-//		default_zoom_level = g_string_assign(default_zoom_level, gtk_entry_get_text(GTK_ENTRY(entry_default_zoom_level)));
+		default_zoom_level = g_string_assign(default_zoom_level, gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_default_zoom_level)));
 
 		// Default Background Colour
 		gtk_color_button_get_color(GTK_COLOR_BUTTON(button_default_bg_colour), &default_bg_colour);
@@ -267,6 +264,9 @@ void menu_edit_preferences(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/05 10:47:02  vapour
+ * The zoom value is now a selection widget.
+ *
  * Revision 1.7  2008/02/05 09:16:10  vapour
  *  + Removed support of output quality variable, as the concept is no longer relevant.
  *  + Changing the value of Film Strip width is now reflecting in the GUI after closing this dialog.
