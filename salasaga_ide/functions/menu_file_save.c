@@ -196,8 +196,6 @@ void menu_file_save(void)
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "output_width", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", output_height);
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "output_height", (const xmlChar *) tmp_gstring->str);
-	g_string_printf(tmp_gstring, "%u", output_quality);
-	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "output_quality", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", project_width);
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_width", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", project_height);
@@ -250,6 +248,9 @@ void menu_file_save(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/05 09:16:55  vapour
+ * Removed support of output quality variable, as the concept is no longer relevant.
+ *
  * Revision 1.7  2008/02/04 17:04:41  vapour
  *  + Removed unnecessary includes.
  *

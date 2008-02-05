@@ -62,7 +62,6 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/output_width", default_output_width, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/output_height", default_output_height, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/slide_length", default_slide_length, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/output_quality", default_output_quality, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", preview_width, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/frames_per_second", frames_per_second, NULL);
 	switch (scaling_quality)
@@ -218,11 +217,6 @@ void save_preferences_and_exit(void)
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "slide_length", 0, REG_SZ, tmp_gstring->str, string_size);
 
-	// Set the value for the default output quality
-	g_string_printf(tmp_gstring, "%d", output_quality);
-	string_size = (tmp_gstring->len) + 1;
-	return_code = RegSetValueEx(hkey, "output_quality", 0, REG_SZ, tmp_gstring->str, string_size);
-
 	// Set the value for the thumbnail width
 	g_string_printf(tmp_gstring, "%d", preview_width);
 	string_size = (tmp_gstring->len) + 1;
@@ -287,6 +281,9 @@ void save_preferences_and_exit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/05 09:18:25  vapour
+ * Removed support of output quality variable, as the concept is no longer relevant.
+ *
  * Revision 1.7  2008/02/05 06:36:44  vapour
  * No longer saves Project Name value as that's always set to New Project now.
  *

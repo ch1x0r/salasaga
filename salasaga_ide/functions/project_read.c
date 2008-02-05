@@ -66,7 +66,6 @@ gboolean flame_read(gchar *filename)
 	xmlChar				*output_folder_data = NULL;
 	xmlChar				*output_width_data = NULL;
 	xmlChar				*output_height_data = NULL;
-	xmlChar				*output_quality_data = NULL;
 	xmlChar				*project_width_data = NULL;
 	xmlChar				*project_height_data = NULL;
 	xmlChar				*save_format_data = NULL;
@@ -209,11 +208,6 @@ gboolean flame_read(gchar *filename)
 			// Output Height found.  Extract and store it
 			output_height_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
 		}
-		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "output_quality")))
-		{
-			// Output Quality found.  Extract and store it
-			output_quality_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
-		}
 		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "project_width")))
 		{
 			// Project Width found.  Extract and store it
@@ -288,10 +282,6 @@ gboolean flame_read(gchar *filename)
 	// Load output height
 	output_height = atoi((const char *) output_height_data);
 	xmlFree(output_height_data);
-
-	// Load output quality
-	output_quality = atoi((const char *) output_quality_data);
-	xmlFree(output_quality_data);
 
 	// Load project_width
 	project_width = atoi((const char *) project_width_data);
@@ -953,6 +943,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2008/02/05 09:14:14  vapour
+ * Removed support of output quality variable, as the concept is no longer relevant.
+ *
  * Revision 1.10  2008/02/04 16:52:41  vapour
  *  + Removed unnecessary includes.
  *

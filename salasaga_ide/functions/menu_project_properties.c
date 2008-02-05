@@ -52,9 +52,6 @@ void menu_project_properties(void)
 	GtkWidget			*label_output_folder;		// Output Folder
 	GtkWidget			*button_output_folder;		//
 
-	GtkWidget			*label_output_quality;		// Output Quality
-	GtkWidget			*button_output_quality;		//
-
 	GtkWidget			*label_slide_length;		// Slide Length
 	GtkWidget			*button_slide_length;		//
 
@@ -105,15 +102,6 @@ void menu_project_properties(void)
 	button_output_folder = gtk_file_chooser_button_new("Select the Output Folder", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_output_folder), output_folder->str);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_output_folder), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	proj_row_counter = proj_row_counter + 1;
-
-	// Output Quality
-	label_output_quality = gtk_label_new("Output Quality: ");
-	gtk_misc_set_alignment(GTK_MISC(label_output_quality), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_output_quality), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_output_quality = gtk_spin_button_new_with_range(0, 9, 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_output_quality), output_quality);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_output_quality), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Slide Length
@@ -175,9 +163,6 @@ void menu_project_properties(void)
 		// Output Folder
 		output_folder = g_string_assign(output_folder, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_output_folder)));
 
-		// Output Quality
-		output_quality = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_output_quality));
-
 		// Slide Length
 		slide_length = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_slide_length));
 
@@ -186,7 +171,6 @@ void menu_project_properties(void)
 	}
 
 	// Free up the memory allocated in this function
-	// fixme2: Once this function works properly, I should revisit this code to ensure everything is freed properly
 	gtk_widget_destroy(GTK_WIDGET(main_dialog));
 	g_string_free(tmp_gstring, TRUE);
 }
@@ -197,6 +181,9 @@ void menu_project_properties(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/02/05 09:17:49  vapour
+ * Removed support of output quality variable, as the concept is no longer relevant.
+ *
  * Revision 1.3  2008/02/04 14:38:17  vapour
  *  + Removed unnecessary includes.
  *  + Improved spacing between table cells.
