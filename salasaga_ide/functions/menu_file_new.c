@@ -183,6 +183,9 @@ void menu_file_new(void)
 	slide_insert();
 	current_slide = slides;
 
+	// Set the global toggle that a project is now active
+	project_active = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, "New project created.");
 	gdk_flush();
@@ -210,6 +213,9 @@ void menu_file_new(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/06 09:58:30  vapour
+ * Updated to set the new project active global variable when done.
+ *
  * Revision 1.5  2008/02/04 14:35:35  vapour
  *  + Removed unnecessary includes.
  *  + Improved spacing between table cells.

@@ -127,6 +127,9 @@ void menu_file_open(void)
 	resolution_callback = g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL);
 	gtk_widget_show_all(GTK_WIDGET(message_bar));
 
+	// Set the global toggle that a project is now active
+	project_active = TRUE;
+
 	// Use the status bar to communicate the successful loading of the project
 	tmp_gstring = g_string_new(NULL);
 	g_string_printf(tmp_gstring, "Project '%s' successfully loaded.", filename);
@@ -171,6 +174,9 @@ void menu_file_open(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/06 09:58:30  vapour
+ * Updated to set the new project active global variable when done.
+ *
  * Revision 1.7  2008/02/05 15:30:37  vapour
  * Moved the list of output resolutions into the create resolution selector function.
  *
