@@ -55,28 +55,34 @@ void menu_screenshots_import(void)
 	const gchar			*dir_entry;					// Holds a file name
 	GSList				*entries = NULL;			// Holds a list of screen shot file names
 	GError				*error = NULL;				// Pointer to error return structure
+	GdkPixbufFormat		*file_format;
 	GtkTreeIter			film_strip_iter;
+	gboolean			image_differences;			// Used to indicate that screenshots have differing sizes
+	gint				image_height;
+	gint				image_width;
 	guint				largest_height = 0;			// Holds the height of the largest screenshot thus far
 	guint				largest_width = 0;			// Holds the width of the largest screenshot thus far
 	gint				num_screenshots = 0;		// Switch to track if other screenshots already exist
-	gint				return_code = 0;			// Receives return code
 	guint				recent_message;				// Message identifier, for newest status bar message
+	gint				return_code = 0;			// Receives return code
+	gint				return_code_int;
+	gboolean			using_first_screenshot;		// Used to indicate there's no project active, so we're using the dimensions of the first screenshot
 
-	slide				*tmp_slide;					// Temporary slide
-	layer				*tmp_layer;					// Temporary layer
-	layer_image			*tmp_image_ob;				// Temporary image layer
-	GtkTreeIter			*tmp_iter;					// Temporary GtkTreeIter
+	GtkWidget			*tmp_dialog;
 	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
-	GString				*tmp_string;				// Temporary string
+	layer_image			*tmp_image_ob;				// Temporary image layer
 	gint				tmp_int = 0;				// Temporary integer
-	GdkRectangle		tmp_rect = {0,				// Temporary rectangle covering the area of the status bar
-						    0,
-						    status_bar->allocation.width,
-						    status_bar->allocation.height};
+	GtkTreeIter			*tmp_iter;					// Temporary GtkTreeIter
+	layer				*tmp_layer;					// Temporary layer
+	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
+	slide				*tmp_slide;					// Temporary slide
+	GString				*tmp_string;				// Temporary string
 
 
 	// Initialise various things
 	tmp_string = g_string_new(NULL);
+	image_differences = FALSE;
+	using_first_screenshot = FALSE;
 
 	// * We know the path to get the screenshots from (screenshots_folder), and their prefix name (project_name),
 	//   so we make a list of them and add them to the slides linked list *
@@ -114,12 +120,65 @@ void menu_screenshots_import(void)
 			// The directory entry starts with the correct prefix, now let's check the file extension
 			if (g_str_has_suffix(dir_entry, ".png"))
 			{
-				// The directory entry has the correct file extension too, so it's very likely one of our screenshots
-				// We add it to the list of screenshot entries we know about
-				entries = g_slist_append(entries, g_strdup_printf("%s", dir_entry));
-				num_screenshots += 1;
+				// * The directory entry has the correct file extension too, so it's very likely one of our screenshots *
+				g_string_printf(tmp_string, g_build_path(G_DIR_SEPARATOR_S, screenshots_folder->str, dir_entry, NULL));
+				file_format = gdk_pixbuf_get_file_info(tmp_string->str, &image_width, &image_height);
+				if (NULL != file_format)
+				{
+					// * The file format was recognised *
+
+					// If a project is already active, then we have existing dimensions we need to conform to
+					if ((TRUE == project_active) || (TRUE == using_first_screenshot))
+					{
+						// Make a note if the width and height of this screenshot differs from the existing project dimensions
+						if (image_width != project_width)
+							image_differences = TRUE;
+						if (image_height != project_height)
+							image_differences = TRUE;
+					} else
+					{
+						// There isn't a project loaded yet, so we take the dimensions of the first screenshot as the new project dimensions
+						project_width = image_width;
+						project_height = image_height;
+
+						using_first_screenshot = TRUE;
+					}
+
+					// We add this screenshot to the list
+					entries = g_slist_append(entries, g_strdup_printf("%s", dir_entry));
+					num_screenshots += 1;
+				}
 			}
 		}
+	}
+
+	// If screenshots of differing dimensions were found, warn the user and let them cancel out of the import
+	if (TRUE == image_differences)
+	{
+		if (TRUE == project_active)
+		{
+			g_string_printf(tmp_string, "Not all of the screenshots are of the same size.  If you proceed, they will be scaled to the same size as the project.  Do you want to proceed?");
+		} else
+		{
+			g_string_printf(tmp_string, "Not all of the screenshots are of the same size.  If you proceed, they will all be scaled to the size of the first one.  Do you want to proceed?");
+		}
+
+		// Display the warning dialog
+		tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, tmp_string->str);
+		return_code_int = gtk_dialog_run(GTK_DIALOG(tmp_dialog));
+
+		// Was the NO button pressed?
+		if (GTK_RESPONSE_NO == return_code_int)
+		{
+			// * The user does not want to proceed *
+
+			// Destroy the dialog box and return
+			gtk_widget_destroy(tmp_dialog);
+			return;	
+		}
+
+		// The user wants to proceed
+		gtk_widget_destroy(tmp_dialog);
 	}
 
 	// If no screenshots were found, alert the user and return to the calling function
@@ -183,9 +242,22 @@ void menu_screenshots_import(void)
 		tmp_image_ob->x_offset_finish = 0;
 		tmp_image_ob->y_offset_finish = 0;
 		tmp_image_ob->image_path = g_string_new(NULL);  // Images don't have a path after they've been imported, as we delete them!
-		tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_string->str, NULL);  // Load the image again, at full size.  It's the background layer
-		tmp_image_ob->width = gdk_pixbuf_get_width(tmp_image_ob->image_data);
-		tmp_image_ob->height = gdk_pixbuf_get_height(tmp_image_ob->image_data);
+		if (FALSE == project_active)
+		{
+			// This is the first screenshot, so we make the project size the same dimensions as it
+			tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_string->str, NULL);  // Load the image again, at full size.  It's the background layer
+			project_width = gdk_pixbuf_get_width(tmp_image_ob->image_data);
+			project_height = gdk_pixbuf_get_height(tmp_image_ob->image_data);
+
+			// Set the global toggle that a project is now active
+			project_active = TRUE;
+		} else
+		{
+			// This is not the first screenshot, so it will be loaded and scaled to the size of the existing project dimensions
+			tmp_image_ob->image_data = gdk_pixbuf_new_from_file_at_size(tmp_string->str, project_width, project_height, NULL);
+		}
+		tmp_image_ob->width = project_width;
+		tmp_image_ob->height = project_height;
 		tmp_image_ob->modified = FALSE;
 
 		// If the new image is larger than the others loaded, we keep the new dimensions
@@ -310,6 +382,9 @@ void menu_screenshots_import(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/06 09:57:48  vapour
+ * All screenshots are now loaded at the same size, giving the user a warning and chance to abort first if needed.
+ *
  * Revision 1.7  2008/02/04 17:08:45  vapour
  *  + Removed unnecessary includes.
  *
