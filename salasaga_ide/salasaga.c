@@ -92,6 +92,7 @@ GtkTable				*message_bar;				// Widget for message bar
 gboolean				mouse_dragging = FALSE;		// Is the mouse being dragged?
 GdkPixbuf				*mouse_ptr_pixbuf;			// Temporary GDK Pixbuf
 GIOChannel				*output_file;				// The output file handle
+gboolean				project_active;				// Whether or not a project is active (i.e. something is loaded or has been created)
 gulong					resolution_callback;		// Holds the id of the resolution selector callback
 GtkComboBox				*resolution_selector;		// Widget for the resolution selector
 GtkWidget				*right_side;				// Widget for the right side area
@@ -150,26 +151,6 @@ GString					*project_name;				// The name of the project
 guint					project_width;				// The width of the project in pixels
 guint					slide_length;				// Length of all new slides, in frames
 
-// Default output resolutions
-ResolutionStructure	res_array[] =
-{
-	{ 1920, 1200 },
-	{ 1920, 1080 },
-	{ 1600, 1200 },
-	{ 1280, 1024 },
-	{ 1280, 720 },
-	{ 1024, 768 },
-	{ 800, 600 },
-	{ 720, 480 },
-	{ 640, 480 },
-	{ 352, 288 },
-	{ 320, 240 },
-	{ 176, 144 },
-	{ 160, 120 },
-	{ 128, 96 }
-};
-gint					num_res_items = sizeof(res_array) / sizeof(res_array[0]);	// The number of resolution items
-
 #ifdef _WIN32
 // Windows only variables
 HHOOK					win32_keyboard_hook_handle = NULL;		// Handle used to keep track of the Win32 keyboard hook
@@ -221,6 +202,7 @@ gint main(gint argc, gchar *argv[])
 	project_name = g_string_new("New Project");
 	screenshots_folder = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
+	project_active = FALSE;
 	default_bg_colour.red = 0;
 	default_bg_colour.green = 0;
 	default_bg_colour.blue = 0;
@@ -936,7 +918,7 @@ gint main(gint argc, gchar *argv[])
 	gtk_table_attach(message_bar, GTK_WIDGET(resolution_label), 4, 5, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
 
 	// Create the resolution selector
-	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(res_array, num_res_items, output_width, output_height));
+	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(output_width, output_height));
 	gtk_table_attach(message_bar, GTK_WIDGET(resolution_selector), 5, 6, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
 
 	// Link the resolution selector to the function that stores the new values in global variables
@@ -1021,6 +1003,10 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.81  2008/02/06 09:56:59  vapour
+ *  + Added global project active variable.
+ *  + Moved the ResolutionStructure into the create resolution selector function.
+ *
  * Revision 1.80  2008/02/05 10:49:14  vapour
  * The zoom value is now taken from the stored default.
  *

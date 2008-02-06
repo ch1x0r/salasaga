@@ -57,6 +57,7 @@ extern GtkTable				*message_bar;
 extern gboolean				mouse_dragging;
 extern GdkPixbuf			*mouse_ptr_pixbuf;
 extern GIOChannel			*output_file;
+extern gboolean				project_active;
 extern gulong				resolution_callback;
 extern GtkComboBox			*resolution_selector;
 extern GtkWidget			*right_side;
@@ -112,9 +113,6 @@ extern GString				*project_name;
 extern guint				project_width;
 extern guint				slide_length;
 
-extern ResolutionStructure	res_array[];
-extern gint					num_res_items;
-
 
 #ifdef _WIN32
 // Windows only variables
@@ -134,6 +132,10 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.34  2008/02/06 09:56:59  vapour
+ *  + Added global project active variable.
+ *  + Moved the ResolutionStructure into the create resolution selector function.
+ *
  * Revision 1.33  2008/02/05 10:42:59  vapour
  * Added a global variable to support the default zoom level.
  *
