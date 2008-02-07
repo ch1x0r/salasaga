@@ -773,9 +773,8 @@ gint main(gint argc, gchar *argv[])
 	g_string_printf(project_folder, "%s", default_project_folder->str);
 	g_string_printf(output_folder, "%s", default_output_folder->str);
 
-	// * Setup the Control-Printscreen key combination to capture screenshots *
 #ifndef _WIN32
-	// Non-windows code
+	// * Setup the Control-Printscreen key combination to capture screenshots - Non-windows only *
 
 	// Search for the first unused run command
 	command_key = g_string_new(NULL);
@@ -819,11 +818,6 @@ gint main(gint argc, gchar *argv[])
 
 	// Free our GConf engine
 	gconf_engine_unref(gconf_engine);
-
-#else
-	// Windows code
-	
-
 
 #endif // End of windows code
 
@@ -1003,6 +997,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.82  2008/02/07 12:41:17  vapour
+ * Small tidy up.
+ *
  * Revision 1.81  2008/02/06 09:56:59  vapour
  *  + Added global project active variable.
  *  + Moved the ResolutionStructure into the create resolution selector function.
