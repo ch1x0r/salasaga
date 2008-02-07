@@ -40,13 +40,23 @@
 void draw_workspace(void)
 {
 	// Local variables
-	GdkPixbuf				*bordered_pixbuf;		// Final pixbuf
+	static GdkColormap		*backing_colormap = NULL;  // Colormap used for the backing store
+	gint					backing_height;
+	gint					backing_width;
+	const GdkColor			line_fg_color = { 0, 0x00, 0x00, 0x00 };
+	static GdkGC			*line_gc = NULL;
+	GdkSegment				lines[] = { {0, 0, backing_width, 0},
+										{backing_width, 0, backing_width, backing_height},
+										{backing_width, backing_height, 0, backing_height},
+										{0, backing_height, 0, 0} };
 
-	GdkColormap				*tmp_colormap;			// Temporary colormap
-	GdkPixbuf				*tmp_pixbuf;			//
-	GdkPixmap				*tmp_pixmap;			//
-	GdkRectangle				tmp_rectangle;			//
+	GdkPixbuf				*tmp_pixbuf;
+	GdkRectangle			tmp_rectangle;
 
+
+	// Initialise various things
+	backing_height = working_height + 2;
+	backing_width = working_width + 2;
 
 	// If the current slide hasn't been initialised, don't run this function
 	if (NULL == current_slide)
@@ -55,37 +65,46 @@ void draw_workspace(void)
 	}
 
 	// Create a new pixbuf with all the layers of the current slide
-	tmp_pixmap = backing_store;
-	tmp_pixbuf = compress_layers(current_slide, working_width - 2, working_height - 2);
+	tmp_pixbuf = compress_layers(current_slide, working_width, working_height);
 
-	// Make a 1 pixel edge around the pixbuf, to separate it visually from its background
-	bordered_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, working_width, working_height);
-	gdk_pixbuf_fill(bordered_pixbuf, 0x000000FF); // fixme4: Drawing four lines around the edges would probably be faster than a bulk memory set
-	gdk_pixbuf_copy_area(tmp_pixbuf, 0, 0, working_width - 2, working_height - 2, bordered_pixbuf, 1, 1);
+	// Create the colormap if needed
+	if (NULL == backing_colormap)
+	{
+		backing_colormap = gdk_colormap_get_system();
+	}
 
-	// Turn the pixbuf into a pixmap, then update the backing store with it
-	tmp_colormap = gdk_colormap_get_system();
-	// fixme3: Would it be better to just go over the existing backing store memory?
-	backing_store = gdk_pixmap_new(NULL, working_width, working_height, tmp_colormap->visual->depth);
-	gdk_drawable_set_colormap(GDK_DRAWABLE(backing_store), GDK_COLORMAP(tmp_colormap));
-	gdk_draw_pixbuf(GDK_DRAWABLE(backing_store), NULL, GDK_PIXBUF(bordered_pixbuf), 0, 0, 0, 0, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);
+	// Create the backing store if needed
+	if (NULL == backing_store)
+	{
+		// We don't have a backing store yet, so we create a new one
+		backing_store = gdk_pixmap_new(NULL, backing_width, backing_height, backing_colormap->visual->depth);
+		gdk_drawable_set_colormap(GDK_DRAWABLE(backing_store), GDK_COLORMAP(backing_colormap));
+	}
+
+	// Copy the pixbuf to a pixmap
+	gdk_draw_pixbuf(GDK_DRAWABLE(backing_store), NULL, GDK_PIXBUF(tmp_pixbuf), 0, 0, 1, 1, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);
+
+	// Make a 1 pixel border around the pixbuf, to separate it visually from its background
+	if (NULL == line_gc)
+	{
+		line_gc = gdk_gc_new(GDK_DRAWABLE(backing_store));
+		gdk_gc_set_rgb_fg_color(line_gc, &line_fg_color);
+	}
+	gdk_draw_segments(GDK_DRAWABLE(backing_store), line_gc, lines, 4);
 
 	// Tell the window system to redraw the working area
 	tmp_rectangle.x = 0;
 	tmp_rectangle.y = 0;
-	tmp_rectangle.width = working_width;
-	tmp_rectangle.height = working_height;
+	tmp_rectangle.width = backing_width;
+	tmp_rectangle.height = backing_height;
 	gdk_window_invalidate_rect(main_drawing_area->window, &tmp_rectangle, TRUE);
 
 	// Update the workspace
 	gtk_widget_queue_draw(GTK_WIDGET(main_drawing_area));
 
 	// Free allocated memory
-	if (NULL != tmp_pixbuf) g_object_unref(tmp_pixbuf);
-	if (NULL != tmp_pixmap)
-	{
-		g_object_unref(tmp_pixmap);
-	}
+	if (NULL != tmp_pixbuf)
+		g_object_unref(tmp_pixbuf);
 
 	// Update the collision detection boundaries
 	calculate_object_boundaries();
@@ -97,6 +116,9 @@ void draw_workspace(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/07 12:35:27  vapour
+ * Reworked this function to be more efficient.
+ *
  * Revision 1.4  2008/02/04 16:48:01  vapour
  *  + Removed unnecessary includes.
  *
