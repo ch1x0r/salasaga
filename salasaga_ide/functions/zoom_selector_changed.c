@@ -70,6 +70,13 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 	working_width = (project_width * zoom) / 100;
 	working_height = (project_height * zoom) / 100;
 
+	// Free the existing backing store for the workspace
+	if (NULL != backing_store)
+	{
+		g_object_unref(backing_store);
+		backing_store = NULL;
+	}
+
 	// Redraw the workspace area
 	draw_workspace();
 
@@ -83,6 +90,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/07 12:40:03  vapour
+ * Updated to free the backing store when needed.
+ *
  * Revision 1.5  2008/02/04 17:23:41  vapour
  *  + Removed unnecessary includes.
  *
