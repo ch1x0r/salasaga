@@ -139,11 +139,15 @@ void create_menu_bar()
 	// Create the menu items
 	gtk_item_factory_create_items(menu_bar, num_items, menu_items, NULL);
 
-	// Grey out the project menu items
+	// Grey out the menu items
 	menu_enable("/Project", FALSE);
 	menu_enable("/Slide", FALSE);
 	menu_enable("/Layer", FALSE);
 	menu_enable("/Export", FALSE);
+
+	// If screenshots are disabled, then grey out the screenshot menu item
+	if (FALSE == screenshots_enabled)
+		menu_enable("/Screenshots/Capture", FALSE);
 }
 
 
@@ -152,6 +156,9 @@ void create_menu_bar()
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/02/11 02:14:04  vapour
+ * Screenshot menu option now disabled when flame-capture not found in search path on *nix.
+ *
  * Revision 1.9  2008/02/04 15:02:08  vapour
  *  + Removed unnecessary includes.
  *
