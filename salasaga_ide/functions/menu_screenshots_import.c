@@ -185,7 +185,7 @@ void menu_screenshots_import(void)
 	if (0 == num_screenshots)
 	{
 		// Display the warning message using our function
-		g_string_printf(tmp_string, "Error ED05: No screenshots found in screenshot folder:\n\n  %s\n\nThey must be named:\n\n  <ProjectName><Sequential Number>.<File Extension>\n\ni.e.:\n\n\t%s0001.png\n\t%s0002.png\n\t<etc>\n\nThey are case sensitive as well.", screenshots_folder->str, project_name->str, project_name->str);
+		g_string_printf(tmp_string, "Error ED05: No screenshots found in screenshot folder:\n\n  %s\n\nThey are case sensitive and must be named:\n\n  <ProjectName><Sequential Number>.png\n\ni.e.:\n\n\t%s0001.png\n\t%s0002.png", screenshots_folder->str, project_name->str, project_name->str);
 		display_warning(tmp_string->str);
 
 		return;
@@ -340,9 +340,6 @@ void menu_screenshots_import(void)
 		gtk_widget_draw(status_bar, &tmp_rect);
 	}
 
-	// Free the temporary GString
-	g_string_free(tmp_string, TRUE);
-
 	// Update the project with the new height and width
 	project_height = largest_height;
 	project_width = largest_width;
@@ -359,6 +356,34 @@ void menu_screenshots_import(void)
 	// Create the slide tooltip(s)
 	create_tooltips();
 
+	// Get the presently selected zoom level
+	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(zoom_selector)));
+
+	// Parse and store the zoom level
+	tmp_int = g_ascii_strncasecmp(tmp_string->str, "F", 1);
+	if (0 == tmp_int)
+	{
+		// "Fit to width" is selected, so work out the zoom level by figuring out how much space the widget really has
+		//  (Look at the alloation of it's parent widget)
+		//  Reduce the width calculated by 24 pixels (guessed) to give space for widget borders and such
+		zoom = (guint) (((float) (right_side->allocation.width - 24) / (float) project_width) * 100);
+	} else
+	{
+		tmp_string = g_string_truncate(tmp_string, tmp_string->len - 1);
+		zoom = atoi(tmp_string->str);
+	}
+
+	// Calculate and set the display size of the working area
+	working_width = (project_width * zoom) / 100;
+	working_height = (project_height * zoom) / 100;
+
+	// Free the existing backing store for the workspace
+	if (NULL != backing_store)
+	{
+		g_object_unref(backing_store);
+		backing_store = NULL;
+	}
+
 	// Draw the workspace area
 	draw_workspace();
 
@@ -374,6 +399,9 @@ void menu_screenshots_import(void)
 	// Enable the toolbar buttons
 	enable_layer_toolbar_buttons();
 	enable_main_toolbar_buttons();
+
+	// Free the memory allocated in this function
+	g_string_free(tmp_string, TRUE);
 }
 
 
@@ -382,6 +410,9 @@ void menu_screenshots_import(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/02/11 12:21:53  vapour
+ * Updated to calculate the size of the initial working area better.
+ *
  * Revision 1.8  2008/02/06 09:57:48  vapour
  * All screenshots are now loaded at the same size, giving the user a warning and chance to abort first if needed.
  *
