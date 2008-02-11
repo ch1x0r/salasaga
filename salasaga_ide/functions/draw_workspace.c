@@ -54,15 +54,15 @@ void draw_workspace(void)
 	GdkRectangle			tmp_rectangle;
 
 
-	// Initialise various things
-	backing_height = working_height + 2;
-	backing_width = working_width + 2;
-
 	// If the current slide hasn't been initialised, don't run this function
 	if (NULL == current_slide)
 	{
 		return;
 	}
+
+	// Initialise various things
+	backing_height = working_height + 2;
+	backing_width = working_width + 2;
 
 	// Create a new pixbuf with all the layers of the current slide
 	tmp_pixbuf = compress_layers(current_slide, working_width, working_height);
@@ -116,6 +116,9 @@ void draw_workspace(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/11 12:01:38  vapour
+ * Swapped around a few lines, to make more sense of program flow.
+ *
  * Revision 1.5  2008/02/07 12:35:27  vapour
  * Reworked this function to be more efficient.
  *
