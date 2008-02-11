@@ -41,6 +41,8 @@
 #include "menu_edit_preferences.h"
 #include "menu_enable.h"
 #include "menu_export_flash_animation.h"
+#include "menu_export_layer.h"
+#include "menu_export_slide.h"
 #include "menu_file_new.h"
 #include "menu_file_open.h"
 #include "menu_file_save.h"
@@ -116,6 +118,8 @@ void create_menu_bar()
 
 		{"/E_xport",					NULL,					NULL,							0,	"<Branch>"},
 		{"/Export/_Flash Animation",	"<control><shift>F",	menu_export_flash_animation,	0,	"<Item>"},
+		{"/Export/_Slide as Image",		NULL,					menu_export_slide,				0,	"<Item>"},
+		{"/Export/_Image Layer",		NULL,					menu_export_layer,				0,	"<Item>"},
 
 		{"/_Help",						NULL,					NULL,							0,	"<LastBranch>"},
 		{"/_Help/_About",				NULL,					menu_help_about,				0,	"<Item>"	},
@@ -156,6 +160,9 @@ void create_menu_bar()
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2008/02/11 12:02:57  vapour
+ * Added menu items to export a slide as an image file, and to also export an image layer as an image file.
+ *
  * Revision 1.10  2008/02/11 02:14:04  vapour
  * Screenshot menu option now disabled when flame-capture not found in search path on *nix.
  *
