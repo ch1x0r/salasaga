@@ -61,6 +61,7 @@ extern gboolean				project_active;
 extern gulong				resolution_callback;
 extern GtkComboBox			*resolution_selector;
 extern GtkWidget			*right_side;
+extern gboolean				screenshots_enabled;
 extern GList				*slides;
 extern GtkWidget			*status_bar;
 extern guint				statusbar_context;
@@ -132,6 +133,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.35  2008/02/11 02:17:56  vapour
+ * Added global variable to indicate whether screenshots should be enabled or not.
+ *
  * Revision 1.34  2008/02/06 09:56:59  vapour
  *  + Added global project active variable.
  *  + Moved the ResolutionStructure into the create resolution selector function.
