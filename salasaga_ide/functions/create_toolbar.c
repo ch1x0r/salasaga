@@ -163,6 +163,15 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	// * Create the "grayed out" icons for buttons *
 
+	// Create the grayed out Capture icon
+	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "capture_grayed", icon_extension->str);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	if (NULL != tmp_gdk_pixbuf)
+	{
+		main_toolbar_icons_gray[CAPTURE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+		g_object_unref(tmp_gdk_pixbuf);
+	}
+
 	// Create the grayed out Crop All icon
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop_grayed", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
@@ -193,6 +202,9 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/11 02:14:52  vapour
+ * Added greyed out version of screenshot capture icon.
+ *
  * Revision 1.6  2008/02/04 16:39:36  vapour
  *  + Removed unnecessary includes.
  *
