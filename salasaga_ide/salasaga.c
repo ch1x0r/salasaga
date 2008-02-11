@@ -96,6 +96,7 @@ gboolean				project_active;				// Whether or not a project is active (i.e. somet
 gulong					resolution_callback;		// Holds the id of the resolution selector callback
 GtkComboBox				*resolution_selector;		// Widget for the resolution selector
 GtkWidget				*right_side;				// Widget for the right side area
+gboolean				screenshots_enabled = FALSE;  // Toggle for whether to enable screenshots
 GList					*slides = NULL;				// Linked list holding the slide info
 GtkWidget				*status_bar;				// Widget for the status bar
 guint					statusbar_context;			// Context id for the status bar messages
@@ -168,6 +169,7 @@ gint main(gint argc, gchar *argv[])
 	gint				num_formats;				// Used to determine if SVG images can be loaded
 	GtkWidget			*outer_box;					// Widget for the onscreen display
 	GtkLabel			*resolution_label;			// Widget for the resolution selector label
+	gchar				*return_code_gchar;			// Catches string based return codes
 	gboolean			should_maximise = FALSE;	// Briefly keeps track of whether the window should be maximised
 	GSList				*supported_formats;			// Used to determine if SVG images can be loaded
 	GtkWidget			*toolbar = NULL;			// Widget for the toolbar
@@ -183,7 +185,7 @@ gint main(gint argc, gchar *argv[])
 	// GConf related variables (not for windows)
 	GString				*command_key;				// Used to work out paths into the GConf structure
 	GError				*error = NULL;				// Pointer to error return structure
-	gboolean			key_already_set = FALSE;		// Used to work out which metacity run command is unassigned
+	gboolean			key_already_set = FALSE;	// Used to work out which metacity run command is unassigned
 	GConfEngine			*gconf_engine;				// GConf engine
 	gchar				*gconf_value;				//
 	guint				unused_num = 0;				// Used to work out which metacity run command is unassigned
@@ -776,50 +778,60 @@ gint main(gint argc, gchar *argv[])
 #ifndef _WIN32
 	// * Setup the Control-Printscreen key combination to capture screenshots - Non-windows only *
 
-	// Search for the first unused run command
-	command_key = g_string_new(NULL);
-	for (tmp_guint = 10; tmp_guint >= 1; tmp_guint--)
+	// First we check that the "flame-capture" program is found in the OS search path
+	return_code_gchar = g_find_program_in_path("flame-capture");
+	if (NULL == return_code_gchar)
 	{
-		// Create the name of the key to check
-		g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", tmp_guint);
+		display_warning("Error ED114: 'flame-capture' not found in the search path. Screenshot capturing will be disabled.");
+	} else
+	{
+		// Enable screenshots
+		screenshots_enabled = TRUE;
 
-		// Get the value for the key
-		gconf_value = gconf_engine_get_string(gconf_engine, command_key->str, NULL);
-
-		// Check if the key is unused
-		tmp_int = g_ascii_strncasecmp(gconf_value, "", 1);
-		if (0 == tmp_int)
+		// Search for the first unused run command
+		command_key = g_string_new(NULL);
+		for (tmp_guint = 10; tmp_guint >= 1; tmp_guint--)
 		{
-			// Yes it's unused, so make a note of it
-			unused_num = tmp_guint;
-		} else
-		{
-			// This command is being used, so check if it's already assigned to flame-capture
-			tmp_int = g_ascii_strncasecmp(gconf_value, "flame-capture", 13);
+			// Create the name of the key to check
+			g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", tmp_guint);
+	
+			// Get the value for the key
+			gconf_value = gconf_engine_get_string(gconf_engine, command_key->str, NULL);
+	
+			// Check if the key is unused
+			tmp_int = g_ascii_strncasecmp(gconf_value, "", 1);
 			if (0 == tmp_int)
 			{
-				key_already_set = TRUE;
+				// Yes it's unused, so make a note of it
+				unused_num = tmp_guint;
+			} else
+			{
+				// This command is being used, so check if it's already assigned to flame-capture
+				tmp_int = g_ascii_strncasecmp(gconf_value, "flame-capture", 13);
+				if (0 == tmp_int)
+				{
+					key_already_set = TRUE;
+				}
 			}
 		}
-	}
-
-	// If an unused run command was found and we haven't already assigned a screenshot key, then assign one
-	if (FALSE == key_already_set)
-	{
-		if (0 != unused_num)
+	
+		// If an unused run command was found and we haven't already assigned a screenshot key, then assign one
+		if (FALSE == key_already_set)
 		{
-			g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", unused_num);
-			gconf_engine_set_string(gconf_engine, command_key->str, "flame-capture", NULL);
-			g_string_printf(command_key, "%s%u", "/apps/metacity/global_keybindings/run_command_", unused_num);
-			gconf_engine_set_string(gconf_engine, command_key->str, "<Control>Print", NULL);
+			if (0 != unused_num)
+			{
+				g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", unused_num);
+				gconf_engine_set_string(gconf_engine, command_key->str, "flame-capture", NULL);
+				g_string_printf(command_key, "%s%u", "/apps/metacity/global_keybindings/run_command_", unused_num);
+				gconf_engine_set_string(gconf_engine, command_key->str, "<Control>Print", NULL);
+			}
 		}
+		g_string_free(command_key, TRUE);
+
+		// Free our GConf engine
+		gconf_engine_unref(gconf_engine);
 	}
-	g_string_free(command_key, TRUE);
-
-	// Free our GConf engine
-	gconf_engine_unref(gconf_engine);
-
-#endif // End of windows code
+#endif // End of non-windows code
 
 	// Maximise the window if our saved configuration says to
 	if (TRUE == should_maximise)
@@ -954,6 +966,22 @@ gint main(gint argc, gchar *argv[])
 	disable_layer_toolbar_buttons();
 	disable_main_toolbar_buttons();
 
+	// Gray out the screenshot capture main toolbar icon if screenshots aren't enabled
+	if (FALSE == screenshots_enabled)
+	{
+		// Disable the Capture icon
+		if (NULL != main_toolbar_icons[CAPTURE])
+		{
+			g_object_ref(main_toolbar_icons[CAPTURE]);
+			gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[CAPTURE]), main_toolbar_icons_gray[CAPTURE]);
+			gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CAPTURE]), main_toolbar_tooltips, "Screenshots disabled: flame-capture not found in search path", "Private");
+			gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[CAPTURE]));
+		}
+
+		// Disconnect the Capture icon signal handler
+		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[CAPTURE]), main_toolbar_signals[CAPTURE]);
+	}
+
 	// Things we need:
 	//  + Menu bar at the top for standard items
 	//    + Have this toggleable, to enable the saving of screen real estate
@@ -997,6 +1025,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.83  2008/02/11 02:16:49  vapour
+ * Added startup check for flame-capture in search path, and code to disable the screenshot icon if its not found.
+ *
  * Revision 1.82  2008/02/07 12:41:17  vapour
  * Small tidy up.
  *
