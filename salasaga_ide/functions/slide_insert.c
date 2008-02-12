@@ -60,6 +60,8 @@ void slide_insert(void)
 	tmp_layer->object_type = TYPE_EMPTY;
 	tmp_layer->start_frame = 0;
 	tmp_layer->finish_frame = slide_length;
+	tmp_layer->visible = TRUE;
+	tmp_layer->background = TRUE;
 	tmp_layer->name = g_string_new("Empty");
 	tmp_layer->external_link = g_string_new(NULL);
 	tmp_layer->external_link_window = g_string_new("_self");
@@ -145,6 +147,9 @@ void slide_insert(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/12 14:20:20  vapour
+ * Updated to use the new visibility and background fields in the layer structure.
+ *
  * Revision 1.6  2008/02/12 05:26:59  vapour
  * Adjusted to work with the new, slightly simplified layer structure.
  *

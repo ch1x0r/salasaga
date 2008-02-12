@@ -275,6 +275,8 @@ void menu_screenshots_import(void)
 		tmp_layer->object_type = TYPE_GDK_PIXBUF;
 		tmp_layer->start_frame = 0;
 		tmp_layer->finish_frame = slide_length;
+		tmp_layer->visible = TRUE;
+		tmp_layer->background = TRUE;
 		tmp_layer->name = g_string_new("Background");
 		tmp_layer->external_link = g_string_new(NULL);
 
@@ -410,6 +412,9 @@ void menu_screenshots_import(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2008/02/12 14:18:33  vapour
+ * Updated to use the new visibility and background fields in the layer structure.
+ *
  * Revision 1.10  2008/02/12 05:26:25  vapour
  * Adjusted to work with the new, slightly simplified layer structure.
  *
