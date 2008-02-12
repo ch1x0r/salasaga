@@ -340,6 +340,8 @@ gboolean flame_read(gchar *filename)
 								tmp_layer->object_type = TYPE_EMPTY;
 								tmp_layer->object_data = (GObject *) tmp_empty_ob;
 								tmp_layer->external_link = g_string_new(NULL);
+								tmp_layer->visible = TRUE;
+								tmp_layer->background = TRUE;
 								tmp_layer->external_link_window = g_string_new("_self");
 
 								// Load the empty layer values
@@ -370,6 +372,11 @@ gboolean flame_read(gchar *filename)
 									{
 										// Get the finish frame
 										tmp_layer->finish_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
+									{
+										// Get the visibility
+										tmp_layer->visible = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
@@ -419,6 +426,8 @@ gboolean flame_read(gchar *filename)
 								tmp_layer->object_type = TYPE_GDK_PIXBUF;
 								tmp_layer->object_data = (GObject *) tmp_image_ob;
 								tmp_layer->external_link = g_string_new(NULL);
+								tmp_layer->visible = TRUE;
+								tmp_layer->background = FALSE;
 								tmp_layer->external_link_window = g_string_new("_self");
 
 								// Load the image layer values
@@ -455,6 +464,11 @@ gboolean flame_read(gchar *filename)
 										// Get the height
 										tmp_image_ob->height = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "background")))
+									{
+										// Is this the background layer?
+										tmp_layer->background = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 									{
 										// Get the start frame
@@ -464,6 +478,11 @@ gboolean flame_read(gchar *filename)
 									{
 										// Get the finish frame
 										tmp_layer->finish_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
+									{
+										// Get the visibility
+										tmp_layer->visible = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
@@ -576,6 +595,8 @@ gboolean flame_read(gchar *filename)
 								tmp_layer->object_type = TYPE_HIGHLIGHT;
 								tmp_layer->object_data = (GObject *) tmp_highlight_ob;
 								tmp_layer->external_link = g_string_new(NULL);
+								tmp_layer->visible = TRUE;
+								tmp_layer->background = FALSE;
 								tmp_layer->external_link_window = g_string_new("_self");
 
 								// Load the highlight layer values
@@ -621,6 +642,11 @@ gboolean flame_read(gchar *filename)
 									{
 										// Get the finish frame
 										tmp_layer->finish_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
+									{
+										// Get the visibility
+										tmp_layer->visible = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
@@ -670,6 +696,8 @@ gboolean flame_read(gchar *filename)
 								tmp_layer->object_type = TYPE_MOUSE_CURSOR;
 								tmp_layer->object_data = (GObject *) tmp_mouse_ob;
 								tmp_layer->external_link = g_string_new(NULL);
+								tmp_layer->visible = TRUE;
+								tmp_layer->background = FALSE;
 								tmp_layer->external_link_window = g_string_new("_self");
 
 								// Load the highlight layer values
@@ -728,6 +756,11 @@ gboolean flame_read(gchar *filename)
 										// Get the finish frame
 										tmp_layer->finish_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
+									{
+										// Get the visibility
+										tmp_layer->visible = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
 										// Get the name of the layer
@@ -776,6 +809,8 @@ gboolean flame_read(gchar *filename)
 								tmp_layer->object_type = TYPE_TEXT;
 								tmp_layer->object_data = (GObject *) tmp_text_ob;
 								tmp_layer->external_link = g_string_new(NULL);
+								tmp_layer->visible = TRUE;
+								tmp_layer->background = FALSE;
 								tmp_layer->external_link_window = g_string_new("_self");
 
 								// Load the text layer values
@@ -837,6 +872,11 @@ gboolean flame_read(gchar *filename)
 									{
 										// Get the finish frame
 										tmp_layer->finish_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
+									{
+										// Get the visibility
+										tmp_layer->visible = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
@@ -943,6 +983,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2008/02/12 14:06:44  vapour
+ * Updated to read and use the new visibility and background fields for layers.
+ *
  * Revision 1.12  2008/02/12 05:20:41  vapour
  * Adjusted to work with the new, slightly simplified layer structure.
  *
