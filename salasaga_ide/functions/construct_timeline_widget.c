@@ -34,6 +34,7 @@
 #include "../flame-types.h"
 #include "../externs.h"
 #include "timeline_edited_name.h"
+#include "timeline_edited_visibility.h"
 #include "timeline_edited_x_offset_finish.h"
 #include "timeline_edited_x_offset_start.h"
 #include "timeline_edited_y_offset_finish.h"
@@ -43,22 +44,19 @@
 GtkWidget *construct_timeline_widget(slide *slide_data)
 {
 	// Local variables
-	GtkCellRenderer			*timeline_renderer_text_name;
-	GtkCellRenderer			*timeline_renderer_toggle;
+	gint					layer_counter;
+	layer					*layer_data;
+	GList					*layer_pointer;
+	gint					num_layers;
 	GtkCellRenderer			*timeline_renderer_pixbuf_duration;
-	GtkCellRenderer			*timeline_renderer_text_x_offset_start;
-	GtkCellRenderer			*timeline_renderer_text_y_offset_start;
+	GtkCellRenderer			*timeline_renderer_text_name;
 	GtkCellRenderer			*timeline_renderer_text_x_offset_finish;
+	GtkCellRenderer			*timeline_renderer_text_x_offset_start;
 	GtkCellRenderer			*timeline_renderer_text_y_offset_finish;
-	GtkTreeViewColumn		*timeline_column_name;
-	GtkTreeViewColumn		*timeline_column_visibility;
-	GtkTreeViewColumn		*timeline_column_duration;
-	GtkTreeViewColumn		*timeline_column_x_off_start;
-	GtkTreeViewColumn		*timeline_column_y_off_start;
-	GtkTreeViewColumn		*timeline_column_x_off_finish;
-	GtkTreeViewColumn		*timeline_column_y_off_finish;
+	GtkCellRenderer			*timeline_renderer_text_y_offset_start;
+	GtkCellRenderer			*timeline_renderer_visible;
 
-	GtkTreePath			*tmp_path;				// Temporary GtkPath
+	GtkTreePath				*tmp_path;				// Temporary GtkPath
 
 
 	// * This function assumes the existing timeline widget has not been created, or has been destroyed *
@@ -73,18 +71,15 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
 	timeline_renderer_text_y_offset_start = gtk_cell_renderer_text_new();
 	timeline_renderer_text_x_offset_finish = gtk_cell_renderer_text_new();
 	timeline_renderer_text_y_offset_finish = gtk_cell_renderer_text_new();
-	timeline_renderer_toggle = gtk_cell_renderer_toggle_new();
-	gtk_cell_renderer_toggle_set_radio(GTK_CELL_RENDERER_TOGGLE(timeline_renderer_toggle), FALSE);
+	timeline_renderer_visible = gtk_cell_renderer_toggle_new();
+	gtk_cell_renderer_toggle_set_radio(GTK_CELL_RENDERER_TOGGLE(timeline_renderer_visible), FALSE);
 
 	// Hook a signal handler to the name column renderer
 	g_signal_connect(G_OBJECT(timeline_renderer_text_name), "edited", G_CALLBACK(timeline_edited_name), NULL);
 
-	// Hook a signal handler to the start column renderer
-//	g_signal_connect(G_OBJECT(timeline_renderer_text_start), "edited", G_CALLBACK(timeline_edited_start), NULL);
-
-	// Hook a signal handler to the finish column renderer
-//	g_signal_connect(G_OBJECT(timeline_renderer_text_finish), "edited", G_CALLBACK(timeline_edited_finish), NULL);
-
+	// Hook a signal handler to the visibility column renderer
+	g_signal_connect (G_OBJECT (timeline_renderer_visible), "toggled", G_CALLBACK (timeline_edited_visibility), GTK_TREE_MODEL(slide_data->layer_store));
+	
 	// Hook a signal handler to the x offset start column renderer
 	g_signal_connect(G_OBJECT(timeline_renderer_text_x_offset_start), "edited", G_CALLBACK(timeline_edited_x_offset_start), NULL);
 
@@ -98,32 +93,47 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
 	g_signal_connect(G_OBJECT(timeline_renderer_text_y_offset_finish), "edited", G_CALLBACK(timeline_edited_y_offset_finish), NULL);
 
 	// Create name column
-	timeline_column_name = gtk_tree_view_column_new_with_attributes("Name", timeline_renderer_text_name, "text", TIMELINE_NAME, "editable", TRUE, NULL);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(slide_data->timeline_widget), timeline_column_name);
+	gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(slide_data->timeline_widget), -1, "Name", timeline_renderer_text_name, "text", TIMELINE_NAME, "editable", TRUE, NULL);
 
 	// Create visibility column
-	timeline_column_visibility = gtk_tree_view_column_new_with_attributes("Visible", timeline_renderer_toggle, "active", TIMELINE_VISIBILITY, NULL);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(slide_data->timeline_widget), timeline_column_visibility);
+	gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(slide_data->timeline_widget), -1, "Visible", timeline_renderer_visible, "active", TIMELINE_VISIBILITY, NULL);
 
 	// Create duration column
-	timeline_column_duration = gtk_tree_view_column_new_with_attributes("Duration", timeline_renderer_pixbuf_duration, "pixbuf", TIMELINE_DURATION, NULL);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(slide_data->timeline_widget), timeline_column_duration);
+	gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(slide_data->timeline_widget), -1, "Duration", timeline_renderer_pixbuf_duration, "pixbuf", TIMELINE_DURATION, NULL);
 
 	// Create X offset start column
-	timeline_column_x_off_start = gtk_tree_view_column_new_with_attributes("Start X", timeline_renderer_text_x_offset_start, "text", TIMELINE_X_OFF_START, "editable", TRUE, NULL);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(slide_data->timeline_widget), timeline_column_x_off_start);
+	gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(slide_data->timeline_widget), -1, "Start X", timeline_renderer_text_x_offset_start, "text", TIMELINE_X_OFF_START, "editable", TRUE, NULL);
 
 	// Create Y offset start column
-	timeline_column_y_off_start = gtk_tree_view_column_new_with_attributes("Start Y", timeline_renderer_text_y_offset_start, "text", TIMELINE_Y_OFF_START, "editable", TRUE, NULL);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(slide_data->timeline_widget), timeline_column_y_off_start);
+	gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(slide_data->timeline_widget), -1, "Start Y", timeline_renderer_text_y_offset_start, "text", TIMELINE_Y_OFF_START, "editable", TRUE, NULL);
 
 	// Create X offset finish column
-	timeline_column_x_off_finish = gtk_tree_view_column_new_with_attributes("Finish X", timeline_renderer_text_x_offset_finish, "text", TIMELINE_X_OFF_FINISH, "editable", TRUE, NULL);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(slide_data->timeline_widget), timeline_column_x_off_finish);
+	gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(slide_data->timeline_widget), -1, "Finish X", timeline_renderer_text_x_offset_finish, "text", TIMELINE_X_OFF_FINISH, "editable", TRUE, NULL);
 
 	// Create Y offset finish column
-	timeline_column_y_off_finish = gtk_tree_view_column_new_with_attributes("Finish Y", timeline_renderer_text_y_offset_finish, "text", TIMELINE_Y_OFF_FINISH, "editable", TRUE, NULL);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(slide_data->timeline_widget), timeline_column_y_off_finish);
+	gtk_tree_view_insert_column_with_attributes(GTK_TREE_VIEW(slide_data->timeline_widget), -1, "Finish Y", timeline_renderer_text_y_offset_finish, "text", TIMELINE_Y_OFF_FINISH, "editable", TRUE, NULL);
+
+	// Set up some pointers to make things easier
+	layer_pointer = slide_data->layers;
+	layer_pointer = g_list_first(layer_pointer);
+	num_layers = g_list_length(layer_pointer);
+
+	// Loop through the layers, setting the visibility checkbox in the timeline widget correctly for each
+	for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
+	{
+		layer_pointer = g_list_first(layer_pointer);
+		layer_data = g_list_nth_data(layer_pointer, layer_counter);
+
+		if (TRUE == layer_data->visible)
+		{
+			// This layer IS visible
+			gtk_list_store_set(GTK_LIST_STORE(slide_data->layer_store), layer_data->row_iter, TIMELINE_VISIBILITY, TRUE, -1);
+		} else
+		{
+			// This layer IS NOT visible
+			gtk_list_store_set(GTK_LIST_STORE(slide_data->layer_store), layer_data->row_iter, TIMELINE_VISIBILITY, FALSE, -1);
+		}
+	}
 
 	// Select the top row in the timeline widget
 	tmp_path = gtk_tree_path_new_first();
@@ -138,6 +148,9 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/12 13:57:26  vapour
+ * Updated to honour the new visibility field in the layer structure, plus also simplified some of the column creation code.
+ *
  * Revision 1.4  2008/02/04 14:57:36  vapour
  *  + Removed unnecessary includes.
  *
