@@ -61,7 +61,6 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 	gint					height;					//
 
 	GdkColormap				*tmp_colormap;			// Temporary colormap
-	gint					tmp_int;				// Temporary integer
 	GdkPixbuf				*tmp_pixbuf;			// GDK Pixbuf
 	GdkPixmap				*tmp_pixmap;			// GDK Pixmap
 
@@ -73,20 +72,17 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 	layer_pointer = element;
 	tmp_pixbuf = user_data;  // The backing pixbuf
 
+	// Is this layer invisible, or is it a background layer?
+	if ((FALSE == layer_pointer->visible) || (TRUE == layer_pointer->background))
+	{
+		// We don't need to process this layer
+		return;
+	}
+
 	// Determine the type of layer we're dealing with (we ignore background layers)
 	switch (layer_pointer->object_type)
 	{
 		case TYPE_GDK_PIXBUF:
-			// * Image *
-
-			// Determine if we're processing the background image (which we ignore) or an image layer
-			tmp_int = g_ascii_strncasecmp(layer_pointer->name->str, "Background", 10);
-			if (0 == tmp_int)
-			{
-				// We're processing a background layer, so return
-				return;
-			}
-
 			// * We're processing an image layer *
 
 			// Calculate how much of the source image will fit onto the backing pixmap
@@ -302,6 +298,9 @@ void compress_layers_inner(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/12 13:55:49  vapour
+ * Updated to honour the new visibility and background fields in the layer structure.
+ *
  * Revision 1.7  2008/02/12 07:22:54  vapour
  * Re-aligned the tab spacing for consistency.
  *
