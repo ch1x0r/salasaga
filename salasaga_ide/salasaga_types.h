@@ -42,7 +42,7 @@ extern "C" {
 // * Define the structures used in the application *
 // fixme4: These structures need better descriptions
 
-// The known object types
+// The known layer types
 enum {
 	TYPE_GDK_PIXBUF,
 	TYPE_MOUSE_CURSOR,
@@ -130,12 +130,13 @@ typedef struct
 	gint				y_offset_start;
 	gint				x_offset_finish;
 	gint				y_offset_finish;
+	gboolean			visible;					// Is this layer visible or not?
 	GtkTreeIter			*row_iter;
 	GString				*external_link;
 	GString				*external_link_window;		// Name of the target window to load the external link in. Defaults to _self for swf.
 	void				*dictionary_shape;			// SWF dictionary shape
 	void				*display_list_item;			// SWF display list item
-	// fixme5: Noticing that we don't seem to have a visibility on/off toggle.  Will likely need to add that back in
+	gboolean			background;					// Is this the background layer?
 } layer;
 
 // Defines the properties making up an empty layer
@@ -226,6 +227,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.48  2008/02/12 13:49:36  vapour
+ * Expanded the layer structure to have fields for visibility and whether or not a layer is a background.
+ *
  * Revision 1.47  2008/02/12 05:14:38  vapour
  * Slightly simplified the layer structures, by moving the x and y offset fields from the sub structures into the main layer structure.
  *
