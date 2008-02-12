@@ -72,7 +72,6 @@ void image_crop(void)
 	GtkWidget			*bottom_button;				//
 
 	GtkTreeViewColumn	*tmp_column;				// Temporary column
-	gint				tmp_int;					// Temporary int
 	GtkTreePath			*tmp_path;					// Temporary path
 	GdkPixbuf			*tmp_pixbuf;				// Temporary pixbuf
 
@@ -109,8 +108,7 @@ void image_crop(void)
 	}
 
 	// Is this layer the background?
-	tmp_int = g_ascii_strncasecmp(this_layer->name->str, "Background", 10);
-	if (0 == tmp_int)
+	if (TRUE == this_layer->background)
 	{
 		// Give the user feedback
 		sound_beep();
@@ -229,6 +227,9 @@ void image_crop(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/12 14:07:31  vapour
+ * Updated to use the new background field in the layer structure.
+ *
  * Revision 1.5  2008/02/04 14:33:07  vapour
  *  + Removed unnecessary includes.
  *  + Improved spacing between table cells.

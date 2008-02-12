@@ -47,13 +47,12 @@ void layer_move_up(void)
 	// Local variables
 	GList				*above_layer;				// The layer above the selected one
 	GList				*layer_pointer;				// Points to the layers in the selected slide
-	GList				*our_layer;				// The selected layer
+	GList				*our_layer;					// The selected layer
 	guint				selected_row;				// Holds the row that is selected
 
-	GtkTreeViewColumn		*tmp_column;				// Temporary column
-	GList				*tmp_glist;				// Temporary GList
-	gint				tmp_int;				// Temporary int
-	GtkTreePath			*tmp_path;				// Temporary path
+	GtkTreeViewColumn	*tmp_column;				// Temporary column
+	GList				*tmp_glist;					// Temporary GList
+	GtkTreePath			*tmp_path;					// Temporary path
 
 
 	// If no project is loaded then don't run this function
@@ -86,11 +85,10 @@ void layer_move_up(void)
 	above_layer = g_list_nth(layer_pointer, selected_row - 1);
 
 	// Check if the user has selected the Background layer, if so we return (ignoring this move request)
-	// fixme3: Might be better to beep or give some kind of feedback (warning/error?) to the user
-	tmp_int = g_ascii_strncasecmp(((layer *) our_layer->data)->name->str, "Background", 10);
-	if (0 == tmp_int)
+	if (TRUE == ((layer *) our_layer->data)->background)
 	{
 		// We're processing a background layer, so return
+		gdk_beep();
 		return;
 	}
 
@@ -115,6 +113,9 @@ void layer_move_up(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/12 14:11:03  vapour
+ * Updated to use the new background field in the layer structure.
+ *
  * Revision 1.5  2008/02/04 16:56:18  vapour
  *  + Removed unnecessary includes.
  *
