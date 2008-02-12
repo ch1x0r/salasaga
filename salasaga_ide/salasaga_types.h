@@ -126,6 +126,10 @@ typedef struct
 	guint				start_frame;
 	guint				finish_frame;
 	GString				*name;
+	gint				x_offset_start;
+	gint				y_offset_start;
+	gint				x_offset_finish;
+	gint				y_offset_finish;
 	GtkTreeIter			*row_iter;
 	GString				*external_link;
 	GString				*external_link_window;		// Name of the target window to load the external link in. Defaults to _self for swf.
@@ -137,20 +141,12 @@ typedef struct
 // Defines the properties making up an empty layer
 typedef struct
 {
-	gint				x_offset_start;
-	gint				y_offset_start;
-	gint				x_offset_finish;
-	gint				y_offset_finish;
 	GdkColor			bg_color;
 } layer_empty;
 
 // Defines the properties making up a highlight layer
 typedef struct
 {
-	gint				x_offset_start;
-	gint				y_offset_start;
-	gint				x_offset_finish;
-	gint				y_offset_finish;
 	gint				width;
 	gint				height;
 } layer_highlight;
@@ -158,10 +154,6 @@ typedef struct
 // Defines the properties making up an image layer
 typedef struct
 {
-	gint				x_offset_start;
-	gint				y_offset_start;
-	gint				x_offset_finish;
-	gint				y_offset_finish;
 	gint				width;
 	gint				height;
 	GString				*image_path;
@@ -172,10 +164,6 @@ typedef struct
 // Defines the properties making up a mouse pointer layer
 typedef struct
 {
-	gint				x_offset_start;
-	gint				y_offset_start;
-	gint				x_offset_finish;
-	gint				y_offset_finish;
 	gint				width;
 	gint				height;
 	gint				click;
@@ -185,10 +173,6 @@ typedef struct
 // Defines the properties making up a text layer
 typedef struct
 {
-	gint				x_offset_start;
-	gint				y_offset_start;
-	gint				x_offset_finish;
-	gint				y_offset_finish;
 	guint				rendered_width;
 	guint				rendered_height;
 	GdkColor			text_color;
@@ -242,6 +226,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.47  2008/02/12 05:14:38  vapour
+ * Slightly simplified the layer structures, by moving the x and y offset fields from the sub structures into the main layer structure.
+ *
  * Revision 1.46  2008/02/03 05:46:46  vapour
  * Removing svg export functionality.
  *
