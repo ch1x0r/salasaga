@@ -115,7 +115,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 			case TYPE_GDK_PIXBUF:
 				// If this is the background layer, then we ignore it
-				if (0 == g_ascii_strncasecmp(layer_data->name->str, "Background", 10))
+				if (TRUE == layer_data->background)
 				{
 					mouse_dragging = FALSE;
 					stored_x = -1;
@@ -201,6 +201,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/12 14:20:55  vapour
+ * Updated to use the new background field in the layer structure.
+ *
  * Revision 1.7  2008/02/12 05:30:10  vapour
  * Adjusted to work with the new, slightly simplified layer structure.
  *

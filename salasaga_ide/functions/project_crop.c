@@ -42,8 +42,8 @@
 void project_crop(void)
 {
 	// Local variables
-	GtkDialog			*crop_dialog;			        // Widget for the dialog
-	GtkWidget			*crop_table;			   	// Table used for neat layout of the dialog box
+	GtkDialog			*crop_dialog;				// Widget for the dialog
+	GtkWidget			*crop_table;				// Table used for neat layout of the dialog box
 	guint				row_counter = 0;			// Used to count which row things are up to
 	gint				dialog_result;				// Catches the return code from the dialog box
 
@@ -51,10 +51,10 @@ void project_crop(void)
 	layer				*last_layer;				// Temporary layer
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				left_value;
-	gint				new_height;				// Hold the height of the cropped area
+	gint				new_height;					// Hold the height of the cropped area
 	GdkPixbuf			*new_pixbuf;				// Holds the cropped image data
-	gint				new_width;				// Hold the width of the cropped area
-	gint				num_slides;				// Total number of layers
+	gint				new_width;					// Hold the width of the cropped area
+	gint				num_slides;					// Total number of layers
 	gint				right_value;
 	gint				slide_counter;
 	slide				*slide_data;
@@ -66,13 +66,12 @@ void project_crop(void)
 	GtkWidget			*right_label;				// Label widget
 	GtkWidget			*right_button;				//
 
-	GtkWidget			*top_label;				// Label widget
+	GtkWidget			*top_label;					// Label widget
 	GtkWidget			*top_button;				//
 
 	GtkWidget			*bottom_label;				// Label widget
 	GtkWidget			*bottom_button;				//
 
-	gint				tmp_int;				// Temporary int
 	GdkPixbuf			*tmp_pixbuf;				// Temporary pixbuf
 
 
@@ -80,8 +79,7 @@ void project_crop(void)
 	if (NULL == current_slide)
 	{
 		// Make a beep, then return
-		// fixme4: This code should never be reached any more, as exporting is disabled while no project loaded
-		sound_beep();
+		gdk_beep();
 		return;
 	}
 
@@ -177,8 +175,7 @@ void project_crop(void)
 		}
 
 		// Is this layer the background?
-		tmp_int = g_ascii_strncasecmp(last_layer->name->str, "Background", 10);
-		if (0 != tmp_int)
+		if (TRUE != last_layer->background)
 		{
 			// No it's not, so skip this slide
 			continue;
@@ -233,6 +230,9 @@ void project_crop(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/12 14:19:39  vapour
+ * Updated to use the new background field in the layer structure.
+ *
  * Revision 1.4  2008/02/04 14:40:52  vapour
  *  + Removed unnecessary includes.
  *  + Improved spacing between table cells.
