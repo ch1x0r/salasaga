@@ -88,6 +88,8 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	xmlNewChild(layer_node, NULL, (const xmlChar *) "start_frame", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", finish_frame);
 	xmlNewChild(layer_node, NULL, (const xmlChar *) "finish_frame", (const xmlChar *) tmp_gstring->str);
+	g_string_printf(tmp_gstring, "%d", layer_pointer->visible);
+	xmlNewChild(layer_node, NULL, (const xmlChar *) "visible", (const xmlChar *) tmp_gstring->str);
 	if (0 != layer_pointer->external_link->len)
 	{
 		xmlNewChild(layer_node, NULL, (const xmlChar *) "external_link", (const xmlChar *) layer_pointer->external_link->str);
@@ -142,6 +144,8 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_finish", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", layer_pointer->y_offset_finish);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_finish", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", layer_pointer->background);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "background", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->width);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "width", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_image *) layer_pointer->object_data)->height);
@@ -157,6 +161,8 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "green", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_empty *) layer_pointer->object_data)->bg_color.blue);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "blue", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", layer_pointer->background);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "background", (const xmlChar *) tmp_gstring->str);			
 			break;
 
 		case TYPE_MOUSE_CURSOR:
@@ -237,6 +243,10 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2008/02/12 14:16:56  vapour
+ *  + Updated to use the new visibility and background fields in the layer structure.
+ *  + Incremented the file format version to reflect this.
+ *
  * Revision 1.10  2008/02/12 05:25:44  vapour
  * Adjusted to work with the new, slightly simplified layer structure.
  *
