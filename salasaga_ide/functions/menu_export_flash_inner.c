@@ -295,6 +295,10 @@ gint menu_export_flash_inner(gchar *output_filename)
 		{
 			this_layer_data = g_list_nth_data(this_slide_data->layers, layer_counter);
 
+			// If this layer is not visible, then we skip it
+			if (FALSE == this_layer_data->visible)
+				continue;
+
 			// Mark this element as not having a dictionary shape created yet
 			dictionary_shape_ok = FALSE;
 
@@ -1113,6 +1117,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.47  2008/02/12 14:15:29  vapour
+ * Updated to ignore non-visible layers.
+ *
  * Revision 1.46  2008/02/12 05:24:32  vapour
  * Adjusted to work with the new, slightly simplified layer structure.
  *
