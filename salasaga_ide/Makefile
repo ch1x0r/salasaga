@@ -231,6 +231,7 @@ OFILES = \
 	functions/sound_beep.o \
 	functions/swf_shape_from_image_file.o \
 	functions/timeline_edited_name.o \
+	functions/timeline_edited_visibility.o \
 	functions/timeline_edited_x_offset_finish.o \
 	functions/timeline_edited_x_offset_start.o \
 	functions/timeline_edited_y_offset_finish.o \
@@ -497,6 +498,9 @@ swf_shape_from_image_file.o:
 
 timeline_edited_name.o:
 	$(CC) $(CFLAGS) -c timeline_edited_name.c -o timeline_edited_name.o
+
+timeline_edited_visibility.o:
+	$(CC) $(CFLAGS) -c timeline_edited_visibility.c -o timeline_edited_visibility.o
 
 timeline_edited_x_offset_finish.o:
 	$(CC) $(CFLAGS) -c timeline_edited_x_offset_finish.c -o timeline_edited_x_offset_finish.o
