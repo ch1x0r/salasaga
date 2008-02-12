@@ -179,7 +179,7 @@ void menu_file_save(void)
 	}
 
 	// Add the save format version number to the XML document
-	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.2");
+	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.3");
 
     // Create the preferences container
 	pref_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "preferences", NULL);
@@ -248,6 +248,9 @@ void menu_file_save(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/02/12 14:17:50  vapour
+ * Incremented the file format version to 2.3.
+ *
  * Revision 1.8  2008/02/05 09:16:55  vapour
  * Removed support of output quality variable, as the concept is no longer relevant.
  *
