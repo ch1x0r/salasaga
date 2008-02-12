@@ -41,7 +41,7 @@ void draw_timeline(void)
 	// Local variables
 	slide				*slide_pointer;				// Points to the presently processing slide
 
-	GList				*tmp_glist;				// Temporary GList
+	GList				*tmp_glist;					// Temporary GList
 
 
 	// If the slide doesn't have a timeline widget constructed for it yet, then make one
@@ -76,6 +76,9 @@ void draw_timeline(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/12 13:58:26  vapour
+ * Small tweak to a tab stop.
+ *
  * Revision 1.4  2008/02/04 16:47:24  vapour
  *  + Removed unnecessary includes.
  *
