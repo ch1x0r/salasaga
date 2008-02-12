@@ -36,7 +36,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "sound_beep.h"
 #include "display_warning.h"
 #include "draw_workspace.h"
 #include "regenerate_film_strip_thumbnails.h"
@@ -61,7 +60,7 @@ void layer_delete(void)
 	if (NULL == current_slide)
 	{
 		// Make a beep, then return
-		sound_beep();
+		gdk_beep();
 		return;
 	}
 
@@ -84,8 +83,8 @@ void layer_delete(void)
 	if (1 == (num_layers - selected_row))
 	{
 		// Give the user a warning, then return
-		sound_beep();
-		display_warning("Error ED38: Background layers can not be deleted\n");
+		gdk_beep();
+		display_warning("Error ED38: The background layer can not be deleted\n");
 		return;
 	}
 
@@ -123,6 +122,9 @@ void layer_delete(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/12 14:10:19  vapour
+ * Updated to use the gdk beep function.
+ *
  * Revision 1.5  2008/02/04 16:54:06  vapour
  *  + Removed unnecessary includes.
  *
