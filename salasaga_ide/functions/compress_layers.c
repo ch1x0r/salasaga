@@ -74,17 +74,35 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
 	g_list_foreach(layer_pointer, compress_layers_inner, backing_pixbuf);
 	layer_pointer = g_list_reverse(layer_pointer);
 
-	// Scale the composited pixbuf down to the desired size
-	scaled_pixbuf = gdk_pixbuf_scale_simple(backing_pixbuf, width, height, scaling_quality);
-
-	// Free the various pixbufs, pixmaps, etc
-	if (NULL != backing_pixbuf) g_object_unref(backing_pixbuf);
-	if (TYPE_EMPTY == layer_data->object_type)
+	// Is the pixbuf at the correct dimensions already?
+	if ((width != gdk_pixbuf_get_width(backing_pixbuf)) || (height != gdk_pixbuf_get_height(backing_pixbuf)))
 	{
-		g_object_unref(bg_pixbuf);
-	}
+		// Scale the composited pixbuf to the desired size
+		scaled_pixbuf = gdk_pixbuf_scale_simple(backing_pixbuf, width, height, GDK_INTERP_TILES);
 
-	return scaled_pixbuf;
+		// Free the memory allocated in this function
+		if (NULL != backing_pixbuf) g_object_unref(backing_pixbuf);
+		if (TYPE_EMPTY == layer_data->object_type)
+		{
+			g_object_unref(bg_pixbuf);
+		}
+
+		// Return the newly scaled pixbuf
+		return scaled_pixbuf;
+
+	} else
+	{
+		// * The present size is fine *
+
+		// Free the memory allocated in this function
+		if (TYPE_EMPTY == layer_data->object_type)
+		{
+			g_object_unref(bg_pixbuf);
+		}
+
+		// Return the pixbuf
+		return backing_pixbuf;
+	}
 }
 
 
@@ -93,6 +111,9 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/12 07:24:39  vapour
+ * Fixed the image compositing to not use a blurry algorithm, and also slightly optimised it when working at 100 percent zoom.
+ *
  * Revision 1.5  2008/02/04 14:56:51  vapour
  *  + Removed unnecessary includes.
  *
