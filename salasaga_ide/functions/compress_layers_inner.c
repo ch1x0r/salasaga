@@ -40,33 +40,33 @@
 void compress_layers_inner(gpointer element, gpointer user_data)
 {
 	// Local variables
-	GdkGC				*graphics_context;                      // GDK graphics context
-	GdkScreen			*output_screen;                         //
-	layer				*layer_pointer;                         // Points to the data for this layer
+	GdkGC					*graphics_context;		// GDK graphics context
+	GdkScreen				*output_screen;			//
+	layer					*layer_pointer;			// Points to the data for this layer
 
-	PangoContext            	*pango_context;                         // Pango context used for text rendering
-	PangoFontDescription            *font_description;                      // Pango font description used for text rendering
-	PangoLayout			*pango_layout;                          // Pango layout used for text rendering
-	gint				pango_height;                           // Height of the Pango layout
-	gint				pango_width;                            // Width of the Pango layout
+	PangoContext			*pango_context;			// Pango context used for text rendering
+	PangoFontDescription	*font_description;		// Pango font description used for text rendering
+	PangoLayout				*pango_layout;			// Pango layout used for text rendering
+	gint					pango_height;			// Height of the Pango layout
+	gint					pango_width;			// Width of the Pango layout
 
-	GtkTextIter			text_start;				// The start position of the text buffer
-	GtkTextIter			text_end;				// The end position of the text buffer
+	GtkTextIter				text_start;				// The start position of the text buffer
+	GtkTextIter				text_end;				// The end position of the text buffer
 
-	gint				pixbuf_width;                           // Width of the backing pixbuf
-	gint				pixbuf_height;                          // Height of the backing pixbuf
-	gint				x_offset;				//
-	gint				y_offset;				//
-	gint				width;					//
-	gint				height;					//
+	gint					pixbuf_width;			// Width of the backing pixbuf
+	gint					pixbuf_height;			// Height of the backing pixbuf
+	gint					x_offset;				//
+	gint					y_offset;				//
+	gint					width;					//
+	gint					height;					//
 
-	GdkColormap			*tmp_colormap;                          // Temporary colormap
-	gint				tmp_int;				// Temporary integer
-	GdkPixbuf			*tmp_pixbuf;                            // GDK Pixbuf
-	GdkPixmap			*tmp_pixmap;                            // GDK Pixmap
+	GdkColormap				*tmp_colormap;			// Temporary colormap
+	gint					tmp_int;				// Temporary integer
+	GdkPixbuf				*tmp_pixbuf;			// GDK Pixbuf
+	GdkPixmap				*tmp_pixmap;			// GDK Pixmap
 
-	PangoMatrix                     pango_matrix = PANGO_MATRIX_INIT;       // Required for positioning the pango layout
-	PangoRenderer                   *pango_renderer;                        // Pango renderer
+	PangoMatrix				pango_matrix = PANGO_MATRIX_INIT;  // Required for positioning the pango layout
+	PangoRenderer			*pango_renderer;		// Pango renderer
 
 
 	// Initialise various pointers
@@ -302,6 +302,9 @@ void compress_layers_inner(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/12 07:22:54  vapour
+ * Re-aligned the tab spacing for consistency.
+ *
  * Revision 1.6  2008/02/12 05:16:50  vapour
  * Adjusted to work with the new, slightly simplified layer structure.
  *
