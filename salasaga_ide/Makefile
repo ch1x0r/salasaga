@@ -200,6 +200,8 @@ OFILES = \
 	functions/menu_export_flash_animation.o \
 	functions/menu_export_flash_control_bar.o \
 	functions/menu_export_flash_inner.o \
+	functions/menu_export_layer.o \
+	functions/menu_export_slide.o \
 	functions/menu_file_new.o \
 	functions/menu_file_open.o \
 	functions/menu_file_save.o \
@@ -402,6 +404,12 @@ menu_export_flash_control_bar.o:
 
 menu_export_flash_inner.o:
 	$(CC) $(CFLAGS) -c menu_export_flash_inner.c -o menu_export_flash_inner.o
+
+menu_export_layer.o:
+	$(CC) $(CFLAGS) -c menu_export_layer.c -o menu_export_layer.o
+
+menu_export_slide.o:
+	$(CC) $(CFLAGS) -c menu_export_slide.c -o menu_export_slide.o
 
 menu_file_new.o:
 	$(CC) $(CFLAGS) -c menu_file_new.c -o menu_file_new.o
