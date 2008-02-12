@@ -814,43 +814,10 @@ gint menu_export_flash_inner(gchar *output_filename)
 				// * Process the element array, setting flags and info as required for this layer *
 
 				// Calculate the scaled start and finish positions for each element
-				switch (this_layer_data->object_type)
-				{
-					case TYPE_GDK_PIXBUF:
-						start_x_position_unscaled = ((layer_image *) this_layer_data->object_data)->x_offset_start;
-						start_y_position_unscaled = ((layer_image *) this_layer_data->object_data)->y_offset_start;
-						finish_x_position_unscaled = ((layer_image *) this_layer_data->object_data)->x_offset_finish;
-						finish_y_position_unscaled = ((layer_image *) this_layer_data->object_data)->y_offset_finish;
-						break;
-
-					case TYPE_EMPTY:
-						start_x_position_unscaled = ((layer_empty *) this_layer_data->object_data)->x_offset_start;
-						start_y_position_unscaled = ((layer_empty *) this_layer_data->object_data)->y_offset_start;
-						finish_x_position_unscaled = ((layer_empty *) this_layer_data->object_data)->x_offset_finish;
-						finish_y_position_unscaled = ((layer_empty *) this_layer_data->object_data)->y_offset_finish;
-						break;
-
-					case TYPE_HIGHLIGHT:
-						start_x_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->x_offset_start;
-						start_y_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->y_offset_start;
-						finish_x_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->x_offset_finish;
-						finish_y_position_unscaled = ((layer_highlight *) this_layer_data->object_data)->y_offset_finish;
-						break;
-
-					case TYPE_MOUSE_CURSOR:
-						start_x_position_unscaled = ((layer_mouse *) this_layer_data->object_data)->x_offset_start;
-						start_y_position_unscaled = ((layer_mouse *) this_layer_data->object_data)->y_offset_start;
-						finish_x_position_unscaled = ((layer_mouse *) this_layer_data->object_data)->x_offset_finish;
-						finish_y_position_unscaled = ((layer_mouse *) this_layer_data->object_data)->y_offset_finish;
-						break;
-
-					case TYPE_TEXT:
-						start_x_position_unscaled = ((layer_text *) this_layer_data->object_data)->x_offset_start;
-						start_y_position_unscaled = ((layer_text *) this_layer_data->object_data)->y_offset_start;
-						finish_x_position_unscaled = ((layer_text *) this_layer_data->object_data)->x_offset_finish;
-						finish_y_position_unscaled = ((layer_text *) this_layer_data->object_data)->y_offset_finish;
-						break;
-				}
+				start_x_position_unscaled = this_layer_data->x_offset_start;
+				start_y_position_unscaled = this_layer_data->y_offset_start;
+				finish_x_position_unscaled = this_layer_data->x_offset_finish;
+				finish_y_position_unscaled = this_layer_data->y_offset_finish;
 				guint start_frame = this_layer_data->start_frame;
 				guint finish_frame = this_layer_data->finish_frame;
 				guint num_displayed_frames = (finish_frame - start_frame) + 1;
@@ -1146,6 +1113,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.46  2008/02/12 05:24:32  vapour
+ * Adjusted to work with the new, slightly simplified layer structure.
+ *
  * Revision 1.45  2008/02/03 05:09:53  vapour
  * Adjusted swf output frame elements to use floating point references instead of integer references, in order to address a stuttering-playback-of-swf-elements bug reported by Bobby Powers.
  *

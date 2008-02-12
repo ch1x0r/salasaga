@@ -428,22 +428,22 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										tmp_image_ob->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										tmp_image_ob->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										tmp_image_ob->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										tmp_image_ob->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "width")))
 									{
@@ -557,10 +557,10 @@ gboolean flame_read(gchar *filename)
 										TIMELINE_NAME, tmp_layer->name->str,
 										TIMELINE_VISIBILITY, TRUE,
 										TIMELINE_DURATION, NULL,
-										TIMELINE_X_OFF_START, tmp_image_ob->x_offset_start,
-										TIMELINE_Y_OFF_START, tmp_image_ob->y_offset_start,
-										TIMELINE_X_OFF_FINISH, tmp_image_ob->x_offset_finish,
-										TIMELINE_Y_OFF_FINISH, tmp_image_ob->y_offset_finish,
+										TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
+										TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
+										TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
+										TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
 										-1);
 
 								// Add this (now completed) image layer to the slide
@@ -585,22 +585,22 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										tmp_highlight_ob->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										tmp_highlight_ob->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										tmp_highlight_ob->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										tmp_highlight_ob->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "width")))
 									{
@@ -651,10 +651,10 @@ gboolean flame_read(gchar *filename)
 										TIMELINE_NAME, tmp_layer->name->str,
 										TIMELINE_VISIBILITY, TRUE,
 										TIMELINE_DURATION, NULL,
-										TIMELINE_X_OFF_START, tmp_highlight_ob->x_offset_start,
-										TIMELINE_Y_OFF_START, tmp_highlight_ob->y_offset_start,
-										TIMELINE_X_OFF_FINISH, tmp_highlight_ob->x_offset_finish,
-										TIMELINE_Y_OFF_FINISH, tmp_highlight_ob->y_offset_finish,
+										TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
+										TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
+										TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
+										TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
 										-1);
 
 								// Add this (now completed) highlight layer to the slide
@@ -679,22 +679,22 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										tmp_mouse_ob->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										tmp_mouse_ob->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										tmp_mouse_ob->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										tmp_mouse_ob->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "width")))
 									{
@@ -757,10 +757,10 @@ gboolean flame_read(gchar *filename)
 										TIMELINE_NAME, tmp_layer->name->str,
 										TIMELINE_VISIBILITY, TRUE,
 										TIMELINE_DURATION, NULL,
-										TIMELINE_X_OFF_START, tmp_mouse_ob->x_offset_start,
-										TIMELINE_Y_OFF_START, tmp_mouse_ob->y_offset_start,
-										TIMELINE_X_OFF_FINISH, tmp_mouse_ob->x_offset_finish,
-										TIMELINE_Y_OFF_FINISH, tmp_mouse_ob->y_offset_finish,
+										TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
+										TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
+										TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
+										TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
 										-1);
 
 								// Add this (now completed) mouse pointer layer to the slide
@@ -785,22 +785,22 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										tmp_text_ob->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										tmp_text_ob->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										tmp_text_ob->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										tmp_text_ob->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_layer->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "red")))
 									{
@@ -867,10 +867,10 @@ gboolean flame_read(gchar *filename)
 										TIMELINE_NAME, tmp_layer->name->str,
 										TIMELINE_VISIBILITY, TRUE,
 										TIMELINE_DURATION, NULL,
-										TIMELINE_X_OFF_START, tmp_text_ob->x_offset_start,
-										TIMELINE_Y_OFF_START, tmp_text_ob->y_offset_start,
-										TIMELINE_X_OFF_FINISH, tmp_text_ob->x_offset_finish,
-										TIMELINE_Y_OFF_FINISH, tmp_text_ob->y_offset_finish,
+										TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
+										TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
+										TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
+										TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
 										-1);
 
 								// Add this (now completed) text layer to the slide
@@ -943,6 +943,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/02/12 05:20:41  vapour
+ * Adjusted to work with the new, slightly simplified layer structure.
+ *
  * Revision 1.11  2008/02/05 09:14:14  vapour
  * Removed support of output quality variable, as the concept is no longer relevant.
  *

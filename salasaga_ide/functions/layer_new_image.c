@@ -69,10 +69,6 @@ void layer_new_image(void)
 
 	// Create the image layer data
 	tmp_image_ob = g_new(layer_image, 1);
-	tmp_image_ob->x_offset_start = 100;
-	tmp_image_ob->y_offset_start = 100;
-	tmp_image_ob->x_offset_finish = 100;
-	tmp_image_ob->y_offset_finish = 100;
 	tmp_image_ob->width = 400;
 	tmp_image_ob->height = 300;
 	tmp_image_ob->modified = FALSE;
@@ -83,6 +79,10 @@ void layer_new_image(void)
 	tmp_layer->object_data = (GObject *) tmp_image_ob;
 	tmp_layer->start_frame = 0;
 	tmp_layer->finish_frame = slide_data->duration;
+	tmp_layer->x_offset_start = 100;
+	tmp_layer->y_offset_start = 100;
+	tmp_layer->x_offset_finish = 100;
+	tmp_layer->y_offset_finish = 100;
 	tmp_layer->name = g_string_new("Image");
 	tmp_layer->external_link = g_string_new(NULL);
 	tmp_layer->external_link_window = g_string_new("_self");
@@ -125,10 +125,10 @@ void layer_new_image(void)
 						TIMELINE_NAME, tmp_layer->name->str,
 						TIMELINE_VISIBILITY, TRUE,
 						TIMELINE_DURATION, NULL,
-						TIMELINE_X_OFF_START, tmp_image_ob->x_offset_start,
-						TIMELINE_Y_OFF_START, tmp_image_ob->y_offset_start,
-						TIMELINE_X_OFF_FINISH, tmp_image_ob->x_offset_finish,
-						TIMELINE_Y_OFF_FINISH, tmp_image_ob->y_offset_finish,
+						TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
+						TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
+						TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
+						TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
 						-1);
 
 	// Regenerate the timeline duration images
@@ -151,6 +151,9 @@ void layer_new_image(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/12 05:22:40  vapour
+ * Adjusted to work with the new, slightly simplified layer structure.
+ *
  * Revision 1.6  2008/02/04 16:57:33  vapour
  *  + Removed unnecessary includes.
  *

@@ -92,33 +92,33 @@ void calculate_object_boundaries(void)
 				}
 
 				// Translate the area covered by the layer object, with the zoom factor
-				tmp_rectangle.x = (((layer_image *) ((layer *) layer_pointer->data)->object_data)->x_offset_start * zoom) / 100;
+				tmp_rectangle.x = (((layer *) layer_pointer->data)->x_offset_start * zoom) / 100;
 				tmp_rectangle.width = (((layer_image *) ((layer *) layer_pointer->data)->object_data)->width * zoom) / 100;
-				tmp_rectangle.y = (((layer_image *) ((layer *) layer_pointer->data)->object_data)->y_offset_start * zoom) / 98;
+				tmp_rectangle.y = (((layer *) layer_pointer->data)->y_offset_start * zoom) / 98;
 				tmp_rectangle.height = (((layer_image *) ((layer *) layer_pointer->data)->object_data)->height * zoom) / 97;
 				break;
 
 			case TYPE_HIGHLIGHT:
 				// Translate the area covered by the layer object, with the zoom factor
-				tmp_rectangle.x = (((layer_highlight *) ((layer *) layer_pointer->data)->object_data)->x_offset_start * zoom) / 100;
+				tmp_rectangle.x = (((layer *) layer_pointer->data)->x_offset_start * zoom) / 100;
 				tmp_rectangle.width = (((layer_highlight *) ((layer *) layer_pointer->data)->object_data)->width * zoom) / 100;
-				tmp_rectangle.y = (((layer_highlight *) ((layer *) layer_pointer->data)->object_data)->y_offset_start * zoom) / 98;
+				tmp_rectangle.y = (((layer *) layer_pointer->data)->y_offset_start * zoom) / 98;
 				tmp_rectangle.height = (((layer_highlight *) ((layer *) layer_pointer->data)->object_data)->height * zoom) / 97;
 				break;
 
 			case TYPE_MOUSE_CURSOR:
 				// Translate the area covered by the layer object, with the zoom factor
-				tmp_rectangle.x = (((layer_mouse *) ((layer *) layer_pointer->data)->object_data)->x_offset_start * zoom) / 100;
+				tmp_rectangle.x = (((layer *) layer_pointer->data)->x_offset_start * zoom) / 100;
 				tmp_rectangle.width = (((layer_mouse *) ((layer *) layer_pointer->data)->object_data)->width * zoom) / 100;
-				tmp_rectangle.y = (((layer_mouse *) ((layer *) layer_pointer->data)->object_data)->y_offset_start * zoom) / 98;
+				tmp_rectangle.y = (((layer *) layer_pointer->data)->y_offset_start * zoom) / 98;
 				tmp_rectangle.height = (((layer_mouse *) ((layer *) layer_pointer->data)->object_data)->height * zoom) / 97;
 				break;
 
 			case TYPE_TEXT:
 				// Translate the area covered by the layer object, with the zoom factor
-				tmp_rectangle.x = (((layer_text *) ((layer *) layer_pointer->data)->object_data)->x_offset_start * zoom) / 102;
+				tmp_rectangle.x = (((layer *) layer_pointer->data)->x_offset_start * zoom) / 102;
 				tmp_rectangle.width = (((layer_text *) ((layer *) layer_pointer->data)->object_data)->rendered_width * zoom) / 101;
-				tmp_rectangle.y = (((layer_text *) ((layer *) layer_pointer->data)->object_data)->y_offset_start * zoom) / 98;
+				tmp_rectangle.y = (((layer *) layer_pointer->data)->y_offset_start * zoom) / 98;
 				tmp_rectangle.height = (((layer_text *) ((layer *) layer_pointer->data)->object_data)->rendered_height * zoom) / 97;
 				break;
 
@@ -147,6 +147,9 @@ void calculate_object_boundaries(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/12 05:16:08  vapour
+ * Adjusted to work with the new, slightly simplified layer structure.
+ *
  * Revision 1.7  2008/02/04 14:55:33  vapour
  *  + Removed unnecessary includes.
  *

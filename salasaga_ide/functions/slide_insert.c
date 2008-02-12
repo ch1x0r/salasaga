@@ -67,10 +67,10 @@ void slide_insert(void)
 	((layer_empty *) tmp_layer->object_data)->bg_color.red = default_bg_colour.red;
 	((layer_empty *) tmp_layer->object_data)->bg_color.green = default_bg_colour.green;
 	((layer_empty *) tmp_layer->object_data)->bg_color.blue = default_bg_colour.blue;
-	((layer_empty *) tmp_layer->object_data)->x_offset_start = 0;
-	((layer_empty *) tmp_layer->object_data)->y_offset_start = 0;
-	((layer_empty *) tmp_layer->object_data)->x_offset_finish = 0;
-	((layer_empty *) tmp_layer->object_data)->y_offset_finish = 0;
+	tmp_layer->x_offset_start = 0;
+	tmp_layer->y_offset_start = 0;
+	tmp_layer->x_offset_finish = 0;
+	tmp_layer->y_offset_finish = 0;
 
 	// Create a blank thumbnail using the default background color
 	tmp_gdk_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, (guint) preview_width * 0.75);
@@ -145,6 +145,9 @@ void slide_insert(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/12 05:26:59  vapour
+ * Adjusted to work with the new, slightly simplified layer structure.
+ *
  * Revision 1.5  2008/02/04 17:13:07  vapour
  *  + Removed unnecessary includes.
  *

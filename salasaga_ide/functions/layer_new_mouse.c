@@ -69,10 +69,6 @@ void layer_new_mouse(void)
 
 	// Create the mouse pointer layer data
 	tmp_mouse_ob = g_new(layer_mouse, 1);
-	tmp_mouse_ob->x_offset_start = 100;
-	tmp_mouse_ob->y_offset_start = 100;
-	tmp_mouse_ob->x_offset_finish = 100;
-	tmp_mouse_ob->y_offset_finish = 100;
 	tmp_mouse_ob->width = 22;
 	tmp_mouse_ob->height = 32;
 	tmp_mouse_ob->click = MOUSE_NONE;
@@ -84,6 +80,10 @@ void layer_new_mouse(void)
 	tmp_layer->object_data = (GObject *) tmp_mouse_ob;
 	tmp_layer->start_frame = 0;
 	tmp_layer->finish_frame = slide_data->duration;
+	tmp_layer->x_offset_start = 100;
+	tmp_layer->y_offset_start = 100;
+	tmp_layer->x_offset_finish = 100;
+	tmp_layer->y_offset_finish = 100;
 	tmp_layer->name = g_string_new("Mouse Pointer");
 	tmp_layer->external_link = g_string_new(NULL);
 	tmp_layer->external_link_window = g_string_new("_self");
@@ -126,10 +126,10 @@ void layer_new_mouse(void)
 						TIMELINE_NAME, tmp_layer->name->str,
 						TIMELINE_VISIBILITY, TRUE,
 						TIMELINE_DURATION, NULL,
-						TIMELINE_X_OFF_START, tmp_mouse_ob->x_offset_start,
-						TIMELINE_Y_OFF_START, tmp_mouse_ob->y_offset_start,
-						TIMELINE_X_OFF_FINISH, tmp_mouse_ob->x_offset_finish,
-						TIMELINE_Y_OFF_FINISH, tmp_mouse_ob->y_offset_finish,
+						TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
+						TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
+						TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
+						TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
 						-1);
 
 	// Regenerate the timeline duration images
@@ -152,6 +152,9 @@ void layer_new_mouse(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/12 05:23:18  vapour
+ * Adjusted to work with the new, slightly simplified layer structure.
+ *
  * Revision 1.6  2008/02/04 16:58:10  vapour
  *  + Removed unnecessary includes.
  *

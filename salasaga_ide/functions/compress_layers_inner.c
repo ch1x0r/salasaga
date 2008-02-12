@@ -92,8 +92,8 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			// Calculate how much of the source image will fit onto the backing pixmap
 			pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
 			pixbuf_height = gdk_pixbuf_get_height(tmp_pixbuf);
-			x_offset = ((layer_image *) layer_pointer->object_data)->x_offset_start;
-			y_offset = ((layer_image *) layer_pointer->object_data)->y_offset_start;
+			x_offset = layer_pointer->x_offset_start;
+			y_offset = layer_pointer->y_offset_start;
 			width = ((layer_image *) layer_pointer->object_data)->width;
 			height = ((layer_image *) layer_pointer->object_data)->height;
 			if ((x_offset + width) > pixbuf_width)
@@ -134,8 +134,8 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			// Calculate how much of the source image will fit onto the backing pixmap
 			pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
 			pixbuf_height = gdk_pixbuf_get_height(tmp_pixbuf);
-			x_offset = ((layer_mouse *) layer_pointer->object_data)->x_offset_start;
-			y_offset = ((layer_mouse *) layer_pointer->object_data)->y_offset_start;
+			x_offset = layer_pointer->x_offset_start;
+			y_offset = layer_pointer->y_offset_start;
 			width = ((layer_mouse *) layer_pointer->object_data)->width;
 			height = ((layer_mouse *) layer_pointer->object_data)->height;
 			if ((x_offset + width) > pixbuf_width)
@@ -193,8 +193,8 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			// Calculate how much of the background will fit onto the backing pixmap
 			pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
 			pixbuf_height = gdk_pixbuf_get_height(tmp_pixbuf);
-			x_offset = ((layer_text *) layer_pointer->object_data)->x_offset_start - 10;
-			y_offset = ((layer_text *) layer_pointer->object_data)->y_offset_start - 2;
+			x_offset = layer_pointer->x_offset_start - 10;
+			y_offset = layer_pointer->y_offset_start - 2;
 			width = (pango_width / PANGO_SCALE) + 20;
 			height = (pango_height / PANGO_SCALE) + 4;
 			if ((x_offset + width) > pixbuf_width)
@@ -239,8 +239,8 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 
 			// Position the text
 			pango_matrix_translate(&pango_matrix,
-				((layer_text *) layer_pointer->object_data)->x_offset_start,
-				((layer_text *) layer_pointer->object_data)->y_offset_start);
+				layer_pointer->x_offset_start,
+				layer_pointer->y_offset_start);
 			pango_context_set_matrix(pango_context, &pango_matrix);
 
 			// Render the text onto the pixmap
@@ -271,8 +271,8 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			// Calculate how much of the highlight will fit onto the backing pixmap
 			pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
 			pixbuf_height = gdk_pixbuf_get_height(tmp_pixbuf);
-			x_offset = ((layer_highlight *) layer_pointer->object_data)->x_offset_start;
-			y_offset = ((layer_highlight *) layer_pointer->object_data)->y_offset_start;
+			x_offset = layer_pointer->x_offset_start;
+			y_offset = layer_pointer->y_offset_start;
 			width = ((layer_highlight *) layer_pointer->object_data)->width;
 			height = ((layer_highlight *) layer_pointer->object_data)->height;
 			if ((x_offset + width) > pixbuf_width)
@@ -302,6 +302,9 @@ void compress_layers_inner(gpointer element, gpointer user_data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/12 05:16:50  vapour
+ * Adjusted to work with the new, slightly simplified layer structure.
+ *
  * Revision 1.5  2008/02/04 14:56:12  vapour
  *  + Removed unnecessary includes.
  *

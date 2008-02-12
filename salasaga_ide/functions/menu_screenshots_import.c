@@ -214,6 +214,10 @@ void menu_screenshots_import(void)
 
 		// Allocate a new layer structure for use in the slide
 		tmp_layer = g_new(layer, 1);
+		tmp_layer->x_offset_start = 0;
+		tmp_layer->y_offset_start = 0;
+		tmp_layer->x_offset_finish = 0;
+		tmp_layer->y_offset_finish = 0;
 
 		// Work out the full path to the image file
 		g_string_printf(tmp_string, "%s%c", screenshots_folder->str, G_DIR_SEPARATOR);
@@ -237,10 +241,6 @@ void menu_screenshots_import(void)
 
 		// Construct a new image object
 		tmp_image_ob = g_new(layer_image, 1);
-		tmp_image_ob->x_offset_start = 0;
-		tmp_image_ob->y_offset_start = 0;
-		tmp_image_ob->x_offset_finish = 0;
-		tmp_image_ob->y_offset_finish = 0;
 		tmp_image_ob->image_path = g_string_new(NULL);  // Images don't have a path after they've been imported, as we delete them!
 		if (FALSE == project_active)
 		{
@@ -410,6 +410,9 @@ void menu_screenshots_import(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/02/12 05:26:25  vapour
+ * Adjusted to work with the new, slightly simplified layer structure.
+ *
  * Revision 1.9  2008/02/11 12:21:53  vapour
  * Updated to calculate the size of the initial working area better.
  *

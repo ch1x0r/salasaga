@@ -131,10 +131,10 @@ void layer_edit(void)
 				tmp_image_ob = (layer_image *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
 				gtk_list_store_set(list_pointer, tmp_iter,
-							TIMELINE_X_OFF_START, tmp_image_ob->x_offset_start,
-							TIMELINE_Y_OFF_START, tmp_image_ob->y_offset_start,
-							TIMELINE_X_OFF_FINISH, tmp_image_ob->x_offset_finish,
-							TIMELINE_Y_OFF_FINISH, tmp_image_ob->y_offset_finish,
+							TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
+							TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
+							TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
+							TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
 							-1);
 			}
 			break;
@@ -156,10 +156,10 @@ void layer_edit(void)
 				tmp_mouse_ob = (layer_mouse *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
 				gtk_list_store_set(list_pointer, tmp_iter,
-							TIMELINE_X_OFF_START, tmp_mouse_ob->x_offset_start,
-							TIMELINE_Y_OFF_START, tmp_mouse_ob->y_offset_start,
-							TIMELINE_X_OFF_FINISH, tmp_mouse_ob->x_offset_finish,
-							TIMELINE_Y_OFF_FINISH, tmp_mouse_ob->y_offset_finish,
+							TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
+							TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
+							TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
+							TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
 							-1);
 			}
 			break;
@@ -184,10 +184,10 @@ void layer_edit(void)
 				gtk_text_buffer_get_bounds(((layer_text *) tmp_layer->object_data)->text_buffer, &text_start, &text_end);
 				gtk_list_store_set(list_pointer, tmp_iter,
 							TIMELINE_NAME, tmp_layer->name->str,
-							TIMELINE_X_OFF_START, tmp_text_ob->x_offset_start,
-							TIMELINE_Y_OFF_START, tmp_text_ob->y_offset_start,
-							TIMELINE_X_OFF_FINISH, tmp_text_ob->x_offset_finish,
-							TIMELINE_Y_OFF_FINISH, tmp_text_ob->y_offset_finish,
+							TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
+							TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
+							TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
+							TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
 							-1);
 			}
 			break;
@@ -210,10 +210,10 @@ void layer_edit(void)
 				tmp_highlight_ob = (layer_highlight *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
 				gtk_list_store_set(list_pointer, tmp_iter,
-							TIMELINE_X_OFF_START, tmp_highlight_ob->x_offset_start,
-							TIMELINE_Y_OFF_START, tmp_highlight_ob->y_offset_start,
-							TIMELINE_X_OFF_FINISH, tmp_highlight_ob->x_offset_finish,
-							TIMELINE_Y_OFF_FINISH, tmp_highlight_ob->y_offset_finish,
+							TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
+							TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
+							TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
+							TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
 							-1);
 			}
 			break;
@@ -239,6 +239,9 @@ void layer_edit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/02/12 05:21:14  vapour
+ * Adjusted to work with the new, slightly simplified layer structure.
+ *
  * Revision 1.8  2008/02/04 16:54:52  vapour
  * Adjusted structural spacing, for consistency with other files.
  *

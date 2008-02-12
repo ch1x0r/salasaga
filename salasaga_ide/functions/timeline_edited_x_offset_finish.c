@@ -64,19 +64,19 @@ void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row,
 			break;
 
 		case TYPE_GDK_PIXBUF:
-			((layer_image *) layer_data->object_data)->x_offset_finish = atoi(new_value);
+			layer_data->x_offset_finish = atoi(new_value);
 			break;
 
 		case TYPE_HIGHLIGHT:
-			((layer_highlight *) layer_data->object_data)->x_offset_finish = atoi(new_value);
+			layer_data->x_offset_finish = atoi(new_value);
 			break;
 
 		case TYPE_MOUSE_CURSOR:
-			((layer_mouse *) layer_data->object_data)->x_offset_finish = atoi(new_value);
+			layer_data->x_offset_finish = atoi(new_value);
 			break;
 
 		case TYPE_TEXT:
-			((layer_text *) layer_data->object_data)->x_offset_finish = atoi(new_value);
+			layer_data->x_offset_finish = atoi(new_value);
 			break;
 
 		default:
@@ -101,6 +101,9 @@ void timeline_edited_x_offset_finish(GtkCellRendererText *selection, gchar *row,
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/12 05:27:40  vapour
+ * Adjusted to work with the new, slightly simplified layer structure.
+ *
  * Revision 1.6  2008/02/04 17:17:56  vapour
  *  + Removed unnecessary includes.
  *

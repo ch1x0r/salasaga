@@ -107,8 +107,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 				return TRUE;
 
 			case TYPE_HIGHLIGHT:
-				present_x = ((layer_highlight *) layer_data->object_data)->x_offset_start;
-				present_y = ((layer_highlight *) layer_data->object_data)->y_offset_start;
+				present_x = layer_data->x_offset_start;
+				present_y = layer_data->y_offset_start;
 				width = ((layer_highlight *) layer_data->object_data)->width;
 				height = ((layer_highlight *) layer_data->object_data)->height;
 				break;
@@ -124,8 +124,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 				}
 
 				// No it's not, so process it
-				present_x = ((layer_image *) layer_data->object_data)->x_offset_start;
-				present_y = ((layer_image *) layer_data->object_data)->y_offset_start;
+				present_x = layer_data->x_offset_start;
+				present_y = layer_data->y_offset_start;
 				width = ((layer_image *) layer_data->object_data)->width;
 				height = ((layer_image *) layer_data->object_data)->height;
 				break;
@@ -133,15 +133,15 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			case TYPE_MOUSE_CURSOR:
 
 				// No it's not, so process it
-				present_x = ((layer_mouse *) layer_data->object_data)->x_offset_start;
-				present_y = ((layer_mouse *) layer_data->object_data)->y_offset_start;
+				present_x = layer_data->x_offset_start;
+				present_y = layer_data->y_offset_start;
 				width = ((layer_mouse *) layer_data->object_data)->width;
 				height = ((layer_mouse *) layer_data->object_data)->height;
 				break;
 
 			case TYPE_TEXT:
-				present_x = ((layer_text *) layer_data->object_data)->x_offset_start;
-				present_y = ((layer_text *) layer_data->object_data)->y_offset_start;
+				present_x = layer_data->x_offset_start;
+				present_y = layer_data->y_offset_start;
 				width = ((layer_text *) layer_data->object_data)->rendered_width;
 				height = ((layer_text *) layer_data->object_data)->rendered_height;
 				break;
@@ -201,6 +201,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/12 05:30:10  vapour
+ * Adjusted to work with the new, slightly simplified layer structure.
+ *
  * Revision 1.6  2008/02/04 17:22:04  vapour
  *  + Removed unnecessary includes.
  *

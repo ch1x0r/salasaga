@@ -89,7 +89,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 
 	// Create the entry that accepts the starting X Offset input
 	x_off_button_start = gtk_spin_button_new_with_range(0, project_width, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_off_button_start), tmp_mouse_ob->x_offset_start);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_off_button_start), tmp_layer->x_offset_start);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(x_off_button_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
@@ -100,7 +100,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 
 	// Create the entry that accepts the starting Y Offset input
 	y_off_button_start = gtk_spin_button_new_with_range(0, project_height, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_off_button_start), tmp_mouse_ob->y_offset_start);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_off_button_start), tmp_layer->y_offset_start);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(y_off_button_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
@@ -111,7 +111,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 
 	// Create the entry that accepts the finishing X Offset input
 	x_off_button_finish = gtk_spin_button_new_with_range(0, project_width, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_off_button_finish), tmp_mouse_ob->x_offset_finish);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_off_button_finish), tmp_layer->x_offset_finish);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(x_off_button_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
@@ -122,7 +122,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 
 	// Create the entry that accepts the finishing Y Offset input
 	y_off_button_finish = gtk_spin_button_new_with_range(0, project_height, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_off_button_finish), tmp_mouse_ob->y_offset_finish);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_off_button_finish), tmp_layer->y_offset_finish);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(y_off_button_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
@@ -201,10 +201,10 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// fixme4: We should validate the user input here
 
 	// Fill out the temporary layer with the requested details
-	tmp_mouse_ob->x_offset_start = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_off_button_start));
-	tmp_mouse_ob->y_offset_start = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_off_button_start));
-	tmp_mouse_ob->x_offset_finish = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_off_button_finish));
-	tmp_mouse_ob->y_offset_finish = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_off_button_finish));
+	tmp_layer->x_offset_start = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_off_button_start));
+	tmp_layer->y_offset_start = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_off_button_start));
+	tmp_layer->x_offset_finish = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_off_button_finish));
+	tmp_layer->y_offset_finish = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_off_button_finish));
 	tmp_layer->start_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(start_button));
 	tmp_layer->finish_frame = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(finish_button));
 	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(click_button)))
@@ -229,6 +229,9 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/12 05:18:50  vapour
+ * Adjusted to work with the new, slightly simplified layer structure.
+ *
  * Revision 1.4  2008/02/04 14:30:34  vapour
  *  + Removed unnecessary includes.
  *  + Improved spacing between table cells.
