@@ -39,13 +39,16 @@
 void calculate_object_boundaries(void)
 {
 	// Local variables
+	boundary_box		*boundary;				// Boundary information
+	guint				count_int;				// Counter
 	GList				*layer_pointer;
 	guint				num_layers;				// The number of layers in the slide
-	guint				count_int;				// Counter
+	layer_highlight		*this_highlight;		// Pointer to the highlight layer data we're working on
+	layer_image			*this_image;			// Pointer to the image layer data we're working on
+	layer_mouse			*this_mouse;			// Pointer to the mouse layer data we're working on
+	layer_text			*this_text;				// Pointer to the text layer data we're working on
+	layer				*this_layer;			// Pointer to the layer we're working on
 
-	boundary_box		*boundary;				// Boundary information
-
-	guint				tmp_int;				//
 	GdkRectangle		tmp_rectangle;			//
 
 
@@ -73,53 +76,70 @@ void calculate_object_boundaries(void)
 		// Select the desired layer
 		layer_pointer = g_list_first(layer_pointer);
 		layer_pointer = g_list_nth(layer_pointer, count_int);
+		this_layer = (layer *) layer_pointer->data;
 
 		// Determine the layer type then calculate its boundaries accordingly
-		switch (((layer *) layer_pointer->data)->object_type)
+		switch (this_layer->object_type)
 		{
 			case TYPE_EMPTY:
+
 				// No boundaries to calculate
 				tmp_rectangle.width = 0;  // Use this as a flag to indicate we're skipping this layer
 				break;
 
 			case TYPE_GDK_PIXBUF:
+
 				// If we're processing the background layer, we skip it
-				tmp_int = g_ascii_strncasecmp(((layer *) layer_pointer->data)->name->str, "Background", 10);
-				if (0 == tmp_int)
+				if (TRUE == this_layer->background)
 				{
 					tmp_rectangle.width = 0;  // Use this as a flag to indicate we're skipping this layer
 					break;
 				}
 
+				// Simplify the pointers
+				this_image = (layer_image *) this_layer->object_data;
+
 				// Translate the area covered by the layer object, with the zoom factor
-				tmp_rectangle.x = (((layer *) layer_pointer->data)->x_offset_start * zoom) / 100;
-				tmp_rectangle.width = (((layer_image *) ((layer *) layer_pointer->data)->object_data)->width * zoom) / 100;
-				tmp_rectangle.y = (((layer *) layer_pointer->data)->y_offset_start * zoom) / 98;
-				tmp_rectangle.height = (((layer_image *) ((layer *) layer_pointer->data)->object_data)->height * zoom) / 97;
+				tmp_rectangle.x = (this_layer->x_offset_start * zoom) / 100;
+				tmp_rectangle.width = (this_image->width * zoom) / 100;
+				tmp_rectangle.y = (this_layer->y_offset_start * zoom) / 98;
+				tmp_rectangle.height = (this_image->height * zoom) / 97;
 				break;
 
 			case TYPE_HIGHLIGHT:
+
+				// Simplify the pointers
+				this_highlight = (layer_highlight *) this_layer->object_data;
+
 				// Translate the area covered by the layer object, with the zoom factor
-				tmp_rectangle.x = (((layer *) layer_pointer->data)->x_offset_start * zoom) / 100;
-				tmp_rectangle.width = (((layer_highlight *) ((layer *) layer_pointer->data)->object_data)->width * zoom) / 100;
-				tmp_rectangle.y = (((layer *) layer_pointer->data)->y_offset_start * zoom) / 98;
-				tmp_rectangle.height = (((layer_highlight *) ((layer *) layer_pointer->data)->object_data)->height * zoom) / 97;
+				tmp_rectangle.x = (this_layer->x_offset_start * zoom) / 100;
+				tmp_rectangle.width = (this_highlight->width * zoom) / 100;
+				tmp_rectangle.y = (this_layer->y_offset_start * zoom) / 98;
+				tmp_rectangle.height = (this_highlight->height * zoom) / 97;
 				break;
 
 			case TYPE_MOUSE_CURSOR:
+
+				// Simplify the pointers
+				this_mouse = (layer_mouse *) this_layer->object_data;
+
 				// Translate the area covered by the layer object, with the zoom factor
-				tmp_rectangle.x = (((layer *) layer_pointer->data)->x_offset_start * zoom) / 100;
-				tmp_rectangle.width = (((layer_mouse *) ((layer *) layer_pointer->data)->object_data)->width * zoom) / 100;
-				tmp_rectangle.y = (((layer *) layer_pointer->data)->y_offset_start * zoom) / 98;
-				tmp_rectangle.height = (((layer_mouse *) ((layer *) layer_pointer->data)->object_data)->height * zoom) / 97;
+				tmp_rectangle.x = (this_layer->x_offset_start * zoom) / 100;
+				tmp_rectangle.width = (this_mouse->width * zoom) / 100;
+				tmp_rectangle.y = (this_layer->y_offset_start * zoom) / 98;
+				tmp_rectangle.height = (this_mouse->height * zoom) / 97;
 				break;
 
 			case TYPE_TEXT:
+
+				// Simplify the pointers
+				this_text = (layer_text *) this_layer->object_data;
+
 				// Translate the area covered by the layer object, with the zoom factor
-				tmp_rectangle.x = (((layer *) layer_pointer->data)->x_offset_start * zoom) / 102;
-				tmp_rectangle.width = (((layer_text *) ((layer *) layer_pointer->data)->object_data)->rendered_width * zoom) / 101;
-				tmp_rectangle.y = (((layer *) layer_pointer->data)->y_offset_start * zoom) / 98;
-				tmp_rectangle.height = (((layer_text *) ((layer *) layer_pointer->data)->object_data)->rendered_height * zoom) / 97;
+				tmp_rectangle.x = (this_layer->x_offset_start * zoom) / 102;
+				tmp_rectangle.width = (this_text->rendered_width * zoom) / 101;
+				tmp_rectangle.y = (this_layer->y_offset_start * zoom) / 98;
+				tmp_rectangle.height = (this_text->rendered_height * zoom) / 97;
 				break;
 
 			default:
@@ -147,6 +167,9 @@ void calculate_object_boundaries(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/02/12 13:54:43  vapour
+ * Greatly simplified the pointers in this, and updated to use the new background field in the layer structure.
+ *
  * Revision 1.8  2008/02/12 05:16:08  vapour
  * Adjusted to work with the new, slightly simplified layer structure.
  *
