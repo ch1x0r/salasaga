@@ -82,6 +82,8 @@ void layer_new_highlight(void)
 	tmp_layer->y_offset_start = 100;
 	tmp_layer->x_offset_finish = 100;
 	tmp_layer->y_offset_finish = 100;
+	tmp_layer->visible = TRUE;
+	tmp_layer->background = FALSE;
 	tmp_layer->name = g_string_new("Highlight");
 	tmp_layer->external_link = g_string_new(NULL);
 	tmp_layer->external_link_window = g_string_new("_self");
@@ -150,6 +152,9 @@ void layer_new_highlight(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/12 14:11:51  vapour
+ * Updated to use the new visibility and background fields in the layer structure.
+ *
  * Revision 1.7  2008/02/12 05:21:52  vapour
  * Adjusted to work with the new, slightly simplified layer structure.
  *

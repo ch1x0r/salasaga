@@ -89,6 +89,8 @@ void layer_new_text(void)
 	tmp_layer->y_offset_start = 100;
 	tmp_layer->x_offset_finish = 100;
 	tmp_layer->y_offset_finish = 100;
+	tmp_layer->visible = TRUE;
+	tmp_layer->background = FALSE;
 	tmp_layer->name = g_string_new("Text layer");
 	tmp_layer->external_link = g_string_new(NULL);
 	tmp_layer->external_link_window = g_string_new("_self");
@@ -159,6 +161,9 @@ void layer_new_text(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/12 14:13:32  vapour
+ * Updated to use the new visibility and background fields in the layer structure.
+ *
  * Revision 1.7  2008/02/12 05:23:52  vapour
  * Adjusted to work with the new, slightly simplified layer structure.
  *
