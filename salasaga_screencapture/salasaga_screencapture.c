@@ -44,7 +44,7 @@
 #include <png.h>
 
 // Application constants
-#define	APP_VERSION 0.52
+#define	APP_VERSION 0.53
 
 
 #ifdef _WIN32
@@ -68,7 +68,7 @@ GdkPixbuf *non_win_take_screenshot(Window win, gint x_off, gint x_len, gint y_of
 	if (NULL == window)
 	{
 		// Getting a GDKWindow identifier failed
-		g_error("Error 01: Something went wrong when getting the window identifier");
+		g_error("Error CA01: Something went wrong when getting the window identifier");
 		return NULL;
 	}
 
@@ -76,7 +76,7 @@ GdkPixbuf *non_win_take_screenshot(Window win, gint x_off, gint x_len, gint y_of
 	if (NULL == screenshot)
 	{
 		// Getting the screenshot failed
-		g_error("Error 03: Something went wrong when getting the screenshot");
+		g_error("Error CA03: Something went wrong when getting the screenshot");
 		return NULL;
 	}
 
@@ -99,41 +99,41 @@ HBITMAP win_take_screenshot(HWND desktop_window_handle, gint x_off, gint x_len, 
 	if (NULL == desktop_device_context)
 	{
 		// GetDC failed
-		g_error("Error 21: Screenshot GetDC failed");
+		g_error("Error CA21: Screenshot GetDC failed");
 		exit(19);
 	}
 	our_device_context = CreateCompatibleDC(desktop_device_context);
 	if (NULL == our_device_context)
 	{
 		// CreateCompatibleDC failed
-		g_error("Error 20: Screenshot CreateCompatibleDC failed");
+		g_error("Error CA20: Screenshot CreateCompatibleDC failed");
 		exit(18);
 	}
 	our_bitmap = CreateCompatibleBitmap(desktop_device_context, x_len, y_len);
 	if (NULL == our_bitmap)
 	{
 		// CreateCompatibleBitmap failed
-		g_error("Error 19: Screenshot CreateCompatibleBitmap failed");
+		g_error("Error CA19: Screenshot CreateCompatibleBitmap failed");
 		exit(17);
 	}
 	return_code_hgdiobj = SelectObject(our_device_context, our_bitmap);
 	if (NULL == return_code_hgdiobj)
 	{
 		// Selected object is not a region
-		g_error("Error 17: Screenshot SelectObject failed: selected object is not a region");
+		g_error("Error CA17: Screenshot SelectObject failed: selected object is not a region");
 		exit(15);
 	}
 	if (HGDI_ERROR == return_code_hgdiobj)
 	{
 		// SelectObject failed
-		g_error("Error 18: Screenshot SelectObject failed: unknown error");
+		g_error("Error CA18: Screenshot SelectObject failed: unknown error");
 		exit(16);
 	}
 	return_code_bool = BitBlt(our_device_context, 0, 0, x_len, y_len, desktop_device_context, x_off, y_off, SRCCOPY);
 	if (FALSE == return_code_bool)
 	{
 		// BitBlt failed
-		g_error("Error 14: Screenshot BitBlt failed");
+		g_error("Error CA14: Screenshot BitBlt failed");
 		exit(12);		
 	}
 
@@ -235,7 +235,7 @@ gint main(gint argc, gchar *argv[])
 	if (NULL == screenshot)
 	{
 		// Something went wrong getting the screenshot, so give an error and exit
-		g_error("Error 02: Something went wrong when getting the screenshot");
+		g_error("Error CA02: Something went wrong when getting the screenshot");
 		exit(2);
 	}
 
@@ -246,14 +246,14 @@ gint main(gint argc, gchar *argv[])
 		if (G_FILE_ERROR_NOENT != error->code)
 		{
 			// The error was something other than the folder not existing (which we can cope with)
-			g_warning("Error 05: Something went wrong opening '%s': %s", directory, error->message);
+			g_warning("Error CA05: Something went wrong opening '%s': %s", directory, error->message);
 			g_error_free(error);
 			exit(3);
 		}
 
 		// The directory doesn't exist
 		// fixme3: Add code to create the directory
-		g_error("Error 06: The target directory doesn't exist");
+		g_error("Error CA06: The target directory doesn't exist");
 		g_error_free(error);
 		exit(4);
 	}
@@ -337,7 +337,7 @@ gint main(gint argc, gchar *argv[])
 	if (FALSE == output_file_pointer)
 	{
 		// Something went wrong when opening the output file
-		g_error("Error 09: Something went wrong when opening the output screenhot file for writing");
+		g_error("Error CA09: Something went wrong when opening the output screenshot file for writing");
 		exit(7);
 	}
 
@@ -345,7 +345,7 @@ gint main(gint argc, gchar *argv[])
 	if (NULL == png_pointer)
 	{
 		// Something went wrong when creating the png write structure
-		g_error("Error 10: Something went wrong when creating the png write structure");
+		g_error("Error CA10: Something went wrong when creating the png write structure");
 		exit(8);
 	}
 
@@ -358,7 +358,7 @@ gint main(gint argc, gchar *argv[])
 		png_destroy_write_struct(&png_pointer, (png_infopp) NULL);
 
 		// Generate a warning then exit
-		g_error("Error 11: Something went wrong when creating the png info structure");
+		g_error("Error CA11: Something went wrong when creating the png info structure");
 		exit(9);
 	}
 
@@ -390,7 +390,7 @@ gint main(gint argc, gchar *argv[])
 		// Clean up
 		png_destroy_write_struct(&png_pointer, &png_info_pointer);
 
-		g_error("Error 12: Something went wrong when retrieving the screenshot metadata");
+		g_error("Error CA12: Something went wrong when retrieving the screenshot metadata");
 		exit(10);
 	}
 
@@ -405,7 +405,7 @@ gint main(gint argc, gchar *argv[])
 		// Clean up
 		png_destroy_write_struct(&png_pointer, &png_info_pointer);
 
-		g_error("Error 13: Something went wrong when copying the screenshot data");
+		g_error("Error CA13: Something went wrong when copying the screenshot data");
 		exit(11);
 	}
 
@@ -450,6 +450,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/02/13 05:44:06  vapour
+ * Fixed a small typo plus added a CA prefix to all error message IDs.
+ *
  * Revision 1.11  2008/02/04 08:35:23  vapour
  * Updated to use GString's rather than pre-allocated buffer, in order to fix a segfault and reduce the likelyhood of buffer overflows.
  *
