@@ -49,11 +49,18 @@
 void menu_file_new(void)
 {
 	// Local variables
+	gboolean			all_input_valid;		// Used as a flag to indicate if all validation was successful
+	guint				guint_val;				// Used in the input validation process
 	GtkDialog			*project_dialog;		// Widget for the dialog
 	GtkWidget			*project_table;			// Table used for neat layout of the dialog box
 	guint				row_counter = 0;		// Used to count which row things are up to
 	gint				dialog_result;			// Catches the return code from the dialog box
-	GString				*validated_string;		// Receives known good strings from the validation functions
+	guint				valid_fps;				// Receives the new project fps once validated
+	guint				valid_height;			// Receives the new project height once validated
+	GString				*valid_proj_name;		// Receives the new project name once validated
+	guint				valid_width;			// Receives the new project width once validated
+	guint				*validated_guint;		// Receives known good guint values from the validation function 
+	GString				*validated_string;		// Receives known good strings from the validation function
 
 	GtkWidget			*name_label;			// Label widget
 	GtkWidget			*name_entry;			// Widget for accepting the name of the new project
@@ -85,7 +92,7 @@ void menu_file_new(void)
 
 	// Create the entry that accepts the new project name
 	name_entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(name_entry), 20);
+	gtk_entry_set_max_length(GTK_ENTRY(name_entry), valid_fields[PROJECT_NAME].max_value);
 	gtk_entry_set_text(GTK_ENTRY(name_entry), project_name->str);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
@@ -96,7 +103,7 @@ void menu_file_new(void)
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the project width
-	width_button = gtk_spin_button_new_with_range(0, 6000, 10);
+	width_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_WIDTH].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(width_button), 1280);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
@@ -107,7 +114,7 @@ void menu_file_new(void)
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the project height
-	height_button = gtk_spin_button_new_with_range(0, 6000, 10);
+	height_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_HEIGHT].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(height_button), 1024);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
@@ -118,7 +125,7 @@ void menu_file_new(void)
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(fps_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the number of frames per second
-	fps_button = gtk_spin_button_new_with_range(0, 48, 10);
+	fps_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_FPS].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(fps_button), frames_per_second);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(fps_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
@@ -146,6 +153,68 @@ void menu_file_new(void)
 		return;
 	}
 
+	// * Validate the input *
+	all_input_valid = TRUE;
+
+	// Validate the project name input
+	valid_proj_name = g_string_new(NULL);
+	validated_string = validate_value(PROJECT_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
+	if (NULL == validated_string)
+	{
+		display_warning("Error ED118: There was something wrong with the project name typed in.  Defaulting to 'New Project' instead.");
+		g_string_assign(valid_proj_name, "New Project");
+	} else
+	{
+		g_string_assign(valid_proj_name, validated_string->str);
+		g_string_free(validated_string, TRUE);
+	}
+
+	// Validate the project width
+	guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(width_button));
+	validated_guint = validate_value(PROJECT_WIDTH, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED120: There was something wrong with the project width value.  Aborting dialog.");
+		all_input_valid = FALSE;
+	} else
+	{
+		valid_width = *validated_guint;
+	}
+	g_free(validated_guint);
+
+	// Validate the project height
+	guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(height_button));
+	validated_guint = validate_value(PROJECT_HEIGHT, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED121: There was something wrong with the project height value.  Aborting dialog.");
+		all_input_valid = FALSE;
+	} else
+	{
+		valid_height = *validated_guint;
+	}
+	g_free(validated_guint);
+
+	// Validate the project fps
+	guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(fps_button));
+	validated_guint = validate_value(PROJECT_FPS, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED122: There was something wrong with the project frames per second value.  Aborting dialog.");
+		all_input_valid = FALSE;
+	} else
+	{
+		valid_fps = *validated_guint;
+	}
+	g_free(validated_guint);
+
+	// Destroy the dialog box
+	gtk_widget_destroy(GTK_WIDGET(project_dialog));
+
+	// If all of the inputs were valid, then create a new project, else abort
+	if (TRUE != all_input_valid)
+		return;
+
 	// If there's a project presently loaded in memory, we unload it
 	if (NULL != slides)
 	{
@@ -162,34 +231,23 @@ void menu_file_new(void)
 	disable_main_toolbar_buttons();
 
 	// If there's an existing film strip, we unload it
-	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));	
+	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
 
 	// Set the project name
-	validated_string = validate_value(PROJECT_NAME, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
-	if (NULL == validated_string)
-	{
-		display_warning("Error ED118: There was something wrong with the project name typed in.  Defaulting to 'New Project' instead.");
-		g_string_assign(project_name, "New Project");
-	} else
-	{
-		g_string_assign(project_name, validated_string->str);
-		g_string_free(validated_string, TRUE);
-	}
+	g_string_assign(project_name, valid_proj_name->str);
+	g_string_free(valid_proj_name, TRUE);
 
 	// Set the project width
-	project_width = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(width_button));
+	project_width = valid_width;
 
 	// Set the project height
-	project_height = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(height_button));
+	project_height = valid_height;
 
 	// Set the number of frames per second
-	frames_per_second = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(fps_button));
+	frames_per_second = valid_fps;
 
 	// Set the default background color
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(bg_color_button), &default_bg_colour);
-
-	// Destroy the dialog box
-	gtk_widget_destroy(GTK_WIDGET(project_dialog));
 
 	// Create a blank slide to start things from
 	slide_insert();
@@ -225,6 +283,9 @@ void menu_file_new(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/14 16:54:45  vapour
+ * Updated to validate the project width, height, and frames per second as well.  Also updated dialog box to use the limits defined for each field in the valid fields array.
+ *
  * Revision 1.7  2008/02/14 13:46:51  vapour
  * Updated to use the new validation function for the project name input.
  *
