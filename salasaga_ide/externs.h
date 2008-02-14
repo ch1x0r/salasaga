@@ -114,6 +114,8 @@ extern GString				*project_name;
 extern guint				project_width;
 extern guint				slide_length;
 
+// Field descriptions used for bounds and validation
+extern validatation_entry	valid_fields[];
 
 #ifdef _WIN32
 // Windows only variables
@@ -133,6 +135,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.36  2008/02/14 16:56:53  vapour
+ * Added the valid fields array.
+ *
  * Revision 1.35  2008/02/11 02:17:56  vapour
  * Added global variable to indicate whether screenshots should be enabled or not.
  *
