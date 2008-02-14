@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-void *validate_value(gint value_id, void *value);
+void *validate_value(gint value_id, gint input_type, void *value);
 
 #ifdef __cplusplus
 }
@@ -41,6 +41,9 @@ void *validate_value(gint value_id, void *value);
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/02/14 16:52:09  vapour
+ * Updated validation function with an additional parameter for the type of input.  Also added working code to validate unsigned integers.
+ *
  * Revision 1.1  2008/02/14 13:28:17  vapour
  * Added new function to validate input.  Only works on strings thus far.
  *

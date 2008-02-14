@@ -23,6 +23,7 @@
 
 
 // Standard includes
+#include <stdlib.h>
 #include <string.h>
 
 // GTK includes
@@ -35,11 +36,11 @@
 
 // Flame Edit includes
 #include "../flame-types.h"
-#include "../externs.h"
 #include "../valid_fields.h"
+#include "../externs.h"
 #include "display_warning.h"
 
-void *validate_value(gint value_id, void *value)
+void *validate_value(gint value_id, gint input_type, void *value)
 {
 	// Local variables
 	guint				capabilities;
@@ -48,15 +49,20 @@ void *validate_value(gint value_id, void *value)
 	gchar				input_char;
 	gboolean			match_found;
 	GString				*output_gstring;
+	guint				output_guint;
+	guint				*output_guint_ptr;
 	guint				string_counter;
 	gint				string_length;
 	guint				string_max;
 	guint				string_min;
+	guint				value_max;
+	guint				value_min;
 
 
 	// Initialise various things
 	base_type = valid_fields[value_id].base_type;
 	capabilities = valid_fields[value_id].capabilities;
+	output_gstring = g_string_new(NULL);
 
 	switch (base_type)
 	{
@@ -68,6 +74,12 @@ void *validate_value(gint value_id, void *value)
 
 			// * We're validating a char or string *
 
+			// We can only validate string input for this type of value
+			if (V_CHAR != input_type)
+			{
+				return NULL;
+			}
+
 			// Get the length of the input string
 			string_max = valid_fields[value_id].max_value;
 			string_min = valid_fields[value_id].min_value;
@@ -78,7 +90,6 @@ void *validate_value(gint value_id, void *value)
 				return NULL;
 
 			// Sanitise each character of the input string
-			output_gstring = g_string_new(NULL);
 			for (string_counter = 0; string_counter < string_length; string_counter++)
 			{
 				input_char = ((gchar *) value)[string_counter]; 
@@ -124,7 +135,7 @@ void *validate_value(gint value_id, void *value)
 							continue;
 						}
 					}
-					if (TRUE == (V_UNDERSCORES && capabilities))
+					if (TRUE == (V_PATH_SEP && capabilities))
 					{
 						// This field is allowed to have path seperator charachers ('/', '\') .  Is this character one of those?
 						if ((0 == g_ascii_strncasecmp("/", &input_char, 1)) || (0 == g_ascii_strncasecmp("\\", &input_char, 1)))
@@ -136,7 +147,7 @@ void *validate_value(gint value_id, void *value)
 						}
 					}
 
-					// The character we're looking at isn't in the list of valid inputs for this field
+					// The character we are checking is not in the list of valid inputs for this field
 					if (FALSE == match_found)
 					{
 						g_string_free(output_gstring, TRUE);
@@ -146,7 +157,7 @@ void *validate_value(gint value_id, void *value)
 			}
 
 			// Remove any leading and/or trailing white space
-			output_gstring->str = g_strstrip(output_gstring->str);  // This may be a dangerous way of doing this
+			output_gstring->str = g_strstrip(output_gstring->str);
 			output_gstring->len = strlen(output_gstring->str);
 
 			// Recheck the length of the output string
@@ -167,9 +178,73 @@ void *validate_value(gint value_id, void *value)
 
 		case V_INT_SIGNED:
 
+			// fixme2:
+			// Check if the first character is a hypen
+			
 			break;
 
 		case V_INT_UNSIGNED:
+
+			// * We're validating an unsigned integer *
+
+			// If we're working with string input, we need to convert it to an integer first
+			if (V_CHAR == input_type)
+			{
+				// * We're working with string input *
+
+				// Get the length of the input string
+				string_length = strlen((gchar *) value);
+	
+				// Sanitise each character of the input string
+				for (string_counter = 0; string_counter < string_length; string_counter++)
+				{
+					input_char = ((gchar *) value)[string_counter]; 
+					if (TRUE == g_ascii_isdigit(input_char))
+					{
+						output_gstring = g_string_append_c(output_gstring, input_char);
+					}
+					else
+					{
+						// This wasn't a valid character
+						g_string_free(output_gstring, TRUE);
+						return NULL;
+					}
+				}
+	
+				// Convert the string to an integer
+				output_guint = atoi(output_gstring->str);
+			}
+			else
+			{
+				// We're working with integer input, so just copy the value directly
+				output_guint = *((guint *) value);
+				//output_guint = (guint) ((guint *) value);
+			}
+
+			// Is the integer value within the defined bounds?
+			value_max = valid_fields[value_id].max_value;
+			value_min = valid_fields[value_id].min_value;
+			if ((output_guint < value_min) || (output_guint > value_max))
+			{
+				// Value is out of bounds, so fail
+				g_string_free(output_gstring, TRUE);
+				return NULL;
+			}
+
+			// The value looks ok, so we copy it to newly allocated memory, to pass it back
+			output_guint_ptr = g_try_new0(guint, 1);
+			if (NULL == output_guint_ptr)
+			{
+				// Unable to allocate memory for the new value, so fail
+				g_string_free(output_gstring, TRUE);
+				return NULL;
+			}
+			*output_guint_ptr = output_guint;
+
+			// Free the string memory allocated in this function
+			g_string_free(output_gstring, TRUE);
+
+			return output_guint_ptr;
 
 			break;
 
@@ -193,6 +268,9 @@ void *validate_value(gint value_id, void *value)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/02/14 16:52:10  vapour
+ * Updated validation function with an additional parameter for the type of input.  Also added working code to validate unsigned integers.
+ *
  * Revision 1.2  2008/02/14 13:43:45  vapour
  * Updated to reference the new valid fields header file directly.
  *
