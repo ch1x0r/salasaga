@@ -38,7 +38,7 @@
 GtkWidget *create_resolution_selector(guint initial_width, guint initial_height)
 {
 	// Default output resolutions
-	ResolutionStructure	res_array[] =
+	resolution_structure	res_array[] =
 	{
 		{ 1920, 1200 },
 		{ 1920, 1080 },
@@ -116,6 +116,9 @@ GtkWidget *create_resolution_selector(guint initial_width, guint initial_height)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/14 13:44:48  vapour
+ * Renamed the ResolutionSelector structure to resolution_structure, for consistency with all the other structure names.
+ *
  * Revision 1.5  2008/02/05 15:29:05  vapour
  * Moved the list of output resolutions into the create resolution selector function.
  *
