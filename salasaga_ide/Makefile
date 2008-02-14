@@ -238,6 +238,7 @@ OFILES = \
 	functions/timeline_edited_y_offset_start.o \
 	functions/uri_decode.o \
 	functions/uri_encode_base64.o \
+	functions/validate_value.o \
 	functions/working_area_button_press_event.o \
 	functions/working_area_button_release_event.o \
 	functions/working_area_expose_event.o \
@@ -519,6 +520,9 @@ uri_decode.o:
 
 uri_encode_base64.o:
 	$(CC) $(CFLAGS) -c uri_encode_base64.c -o uri_encode_base64.o
+
+validate_value.o:
+	$(CC) $(CFLAGS) -c validate_value.c -o validate_value.o
 
 working_area_button_press_event.o:
 	$(CC) $(CFLAGS) -c working_area_button_press_event.c -o working_area_button_press_event.o
