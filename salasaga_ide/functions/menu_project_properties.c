@@ -81,7 +81,7 @@ void menu_project_properties(void)
 	gtk_misc_set_alignment(GTK_MISC(label_project_name), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_name), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	entry_project_name = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry_project_name), 50);
+	gtk_entry_set_max_length(GTK_ENTRY(entry_project_name), valid_fields[PROJECT_NAME].max_value);
 	gtk_entry_set_text(GTK_ENTRY(entry_project_name), (gchar *) project_name->str);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_name), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
@@ -117,7 +117,7 @@ void menu_project_properties(void)
 	label_frames_per_second = gtk_label_new("Frames per second: ");
 	gtk_misc_set_alignment(GTK_MISC(label_frames_per_second), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_frames_per_second), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_frames_per_second = gtk_spin_button_new_with_range(0, 48, 1);
+	button_frames_per_second = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_FPS].max_value, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_frames_per_second), frames_per_second);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_frames_per_second), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
@@ -181,6 +181,9 @@ void menu_project_properties(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/14 16:56:01  vapour
+ * Updated dialog box to use the limits defined for each field in the valid fields array, for frames per second and project name.
+ *
  * Revision 1.4  2008/02/05 09:17:49  vapour
  * Removed support of output quality variable, as the concept is no longer relevant.
  *
