@@ -62,6 +62,7 @@ gboolean flame_read(gchar *filename)
 	xmlNodePtr			this_node;					// Temporary pointer
 	xmlNodePtr			this_slide;					// Temporary pointer
 
+	xmlChar				*fps_data = NULL;
 	xmlChar				*project_name_data = NULL;
 	xmlChar				*output_folder_data = NULL;
 	xmlChar				*output_width_data = NULL;
@@ -223,6 +224,11 @@ gboolean flame_read(gchar *filename)
 			// Slide Length found.  Extract and store it
 			slide_length_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
 		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "frames_per_second")))
+		{
+			// Frames per second found.  Extract and store it
+			fps_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
 		this_node = this_node->next;
 	}
 
@@ -294,6 +300,13 @@ gboolean flame_read(gchar *filename)
 	// Load slide length
 	slide_length = atoi((const char *) slide_length_data);
 	xmlFree(slide_length_data);
+
+	// Load frames per second
+	if (NULL != fps_data)
+	{
+		frames_per_second = atoi((const char *) fps_data);
+		xmlFree(fps_data);
+	}
 
 	// * Preferences are loaded, so now load the slides *
 	this_slide = slides_node->xmlChildrenNode;
@@ -983,6 +996,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2008/02/14 17:13:30  vapour
+ * Updated to read the frames per second value from project files.
+ *
  * Revision 1.13  2008/02/12 14:06:44  vapour
  * Updated to read and use the new visibility and background fields for layers.
  *
