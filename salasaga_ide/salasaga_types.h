@@ -30,17 +30,29 @@ extern "C" {
 #endif // __cplusplus
 
 
-// Set some application constants
-#define APP_NAME "Flame Project Editing GUI"
-#define	APP_VERSION "0.7.8-pre"
-
 // Define a run time check that hasn't been added to GTK
 #define GTK_TYPE_TREE_ITER		(gtk_tree_iter_get_type ())
 #define GTK_TREE_ITER(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_ITER, GtkTreeIter))
 
+// * Define values used in the application *
 
-// * Define the structures used in the application *
-// fixme4: These structures need better descriptions
+// Basic application constants
+#define APP_NAME "Flame Project Editing GUI"
+#define	APP_VERSION "0.7.8-pre"
+	
+// Base types for the validate_value function
+#define	V_BOOLEAN		1
+#define V_CHAR			2
+#define V_FLOAT			4
+#define V_INT_SIGNED	8
+#define V_INT_UNSIGNED	16
+
+// Capabilities for the validate_value function
+#define V_NONE			0
+#define V_HYPENS		1
+#define V_UNDERSCORES	2
+#define V_PATH_SEP		4
+#define V_SPACES		8
 
 // The known layer types
 enum {
@@ -110,6 +122,35 @@ enum
 	TIMELINE_Y_OFF_FINISH,
 	TIMELINE_N_COLUMNS
 };
+
+// Field IDs for the validate_value function
+enum
+{
+	COLOUR_COMP8,
+	COLOUR_COMP16,
+	PROJECT_FPS,
+	PROJECT_HEIGHT,
+	PROJECT_NAME,
+	PROJECT_WIDTH,
+	SCREENSHOT_FOLDER,
+	SCREENSHOT_HEIGHT,
+	SCREENSHOT_WIDTH,
+	SCREENSHOT_X_OFFSET,
+	SCREENSHOT_Y_OFFSET
+};
+
+// * Define the structures used in the application *
+
+// Defines the structure of a validation field entry
+typedef struct
+{
+	guint				value_id;
+	gchar				*name_string;
+	guint				base_type;
+	guint				capabilities;
+	guint				min_value;
+	guint				max_value;
+} validatation_entry;
 
 // Defines the structure of a boundary box
 typedef struct
@@ -185,7 +226,7 @@ typedef struct
 typedef struct {
 	guint				width;
 	guint				height;
-} ResolutionStructure;
+} resolution_structure;
 
 // Defines the collection of objects and properties making up a slide
 typedef struct
@@ -227,6 +268,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.49  2008/02/14 13:36:07  vapour
+ * Added values and structure needed to support the new validate value function.
+ *
  * Revision 1.48  2008/02/12 13:49:36  vapour
  * Expanded the layer structure to have fields for visibility and whether or not a layer is a background.
  *
