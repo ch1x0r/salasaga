@@ -36,12 +36,14 @@
 #include "destroy_slide.h"
 #include "disable_layer_toolbar_buttons.h"
 #include "disable_main_toolbar_buttons.h"
+#include "display_warning.h"
 #include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "enable_layer_toolbar_buttons.h"
 #include "enable_main_toolbar_buttons.h"
 #include "menu_enable.h"
 #include "slide_insert.h"
+#include "validate_value.h"
 
 
 void menu_file_new(void)
@@ -51,6 +53,7 @@ void menu_file_new(void)
 	GtkWidget			*project_table;			// Table used for neat layout of the dialog box
 	guint				row_counter = 0;		// Used to count which row things are up to
 	gint				dialog_result;			// Catches the return code from the dialog box
+	GString				*validated_string;		// Receives known good strings from the validation functions
 
 	GtkWidget			*name_label;			// Label widget
 	GtkWidget			*name_entry;			// Widget for accepting the name of the new project
@@ -162,7 +165,16 @@ void menu_file_new(void)
 	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));	
 
 	// Set the project name
-	g_string_printf(project_name, "%s", gtk_entry_get_text(GTK_ENTRY(name_entry)));
+	validated_string = validate_value(PROJECT_NAME, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
+	if (NULL == validated_string)
+	{
+		display_warning("Error ED118: There was something wrong with the project name typed in.  Defaulting to 'New Project' instead.");
+		g_string_assign(project_name, "New Project");
+	} else
+	{
+		g_string_assign(project_name, validated_string->str);
+		g_string_free(validated_string, TRUE);
+	}
 
 	// Set the project width
 	project_width = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(width_button));
@@ -213,6 +225,9 @@ void menu_file_new(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/14 13:46:51  vapour
+ * Updated to use the new validation function for the project name input.
+ *
  * Revision 1.6  2008/02/06 09:58:30  vapour
  * Updated to set the new project active global variable when done.
  *
