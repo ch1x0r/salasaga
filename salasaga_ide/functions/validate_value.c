@@ -36,6 +36,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "../valid_fields.h"
 #include "display_warning.h"
 
 void *validate_value(gint value_id, void *value)
@@ -60,13 +61,13 @@ void *validate_value(gint value_id, void *value)
 	switch (base_type)
 	{
 		case V_BOOLEAN:
-		
+
 			break;
 
 		case V_CHAR:
 
 			// * We're validating a char or string *
-			
+
 			// Get the length of the input string
 			string_max = valid_fields[value_id].max_value;
 			string_min = valid_fields[value_id].min_value;
@@ -159,21 +160,21 @@ void *validate_value(gint value_id, void *value)
 			return output_gstring;
 
 			break;
-		
+
 		case V_FLOAT:
-		
+
 			break;
-			
+
 		case V_INT_SIGNED:
-		
+
 			break;
-			
+
 		case V_INT_UNSIGNED:
-		
+
 			break;
 
 		default:
-			
+
 			// Unknown value type, we should never get here
 			error_string = g_string_new(NULL);
 			g_string_printf(error_string, "Error ED119: Unknown value '%s' passed to validation function!", valid_fields[value_id].name_string);
@@ -192,6 +193,9 @@ void *validate_value(gint value_id, void *value)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/02/14 13:43:45  vapour
+ * Updated to reference the new valid fields header file directly.
+ *
  * Revision 1.1  2008/02/14 13:28:17  vapour
  * Added new function to validate input.  Only works on strings thus far.
  *
