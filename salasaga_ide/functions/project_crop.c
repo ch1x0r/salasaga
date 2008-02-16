@@ -36,7 +36,6 @@
 #include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "regenerate_film_strip_thumbnails.h"
-#include "sound_beep.h"
 
 
 void project_crop(void)
@@ -230,6 +229,9 @@ void project_crop(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/16 11:17:56  vapour
+ * Removed un-needed include file.
+ *
  * Revision 1.5  2008/02/12 14:19:39  vapour
  * Updated to use the new background field in the layer structure.
  *
