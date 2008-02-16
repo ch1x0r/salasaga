@@ -39,7 +39,6 @@
 #include "display_warning.h"
 #include "draw_workspace.h"
 #include "regenerate_film_strip_thumbnails.h"
-#include "sound_beep.h"
 
 
 void layer_move_down(void)
@@ -60,7 +59,7 @@ void layer_move_down(void)
 	if (NULL == current_slide)
 	{
 		// Make a beep, then return
-		sound_beep();
+		gdk_beep();
 		return;
 	}
 
@@ -77,7 +76,7 @@ void layer_move_down(void)
 	if (num_layers - 2 <= selected_row)
 	{
 		// We're already at the bottom of the list or the background layer is selected, so return
-		sound_beep();
+		gdk_beep();
 		display_warning("Error ED40: This layer is already at the bottom\n");
 		return;
 	}
@@ -107,6 +106,9 @@ void layer_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/16 11:11:33  vapour
+ * Replaced our sound beep function with the inbuilt gdk sound beep one.
+ *
  * Revision 1.5  2008/02/04 16:55:37  vapour
  * Adjusted structural spacing, for consistency with other files.
  *

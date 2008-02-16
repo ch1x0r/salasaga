@@ -33,7 +33,6 @@
 #include "../externs.h"
 #include "display_warning.h"
 #include "menu_export_flash_inner.h"
-#include "sound_beep.h"
 
 
 void menu_export_flash_animation(void)
@@ -54,8 +53,7 @@ void menu_export_flash_animation(void)
 	if (NULL == slides)
 	{
 		// No project is active, so display a message and return
-		// fixme4: This code should never be reached any more, as exporting is disabled while no project loaded
-		sound_beep();
+		gdk_beep();
 		display_warning("Error ED35: There is no project loaded\n");
 		return;
 	}
@@ -164,6 +162,9 @@ void menu_export_flash_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2008/02/16 11:16:30  vapour
+ * Replaced our sound beep function with the inbuilt gdk sound beep one.
+ *
  * Revision 1.12  2008/02/04 17:02:04  vapour
  *  + Removed unnecessary includes.
  *

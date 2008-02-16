@@ -46,7 +46,6 @@
 #include "draw_workspace.h"
 #include "regenerate_film_strip_thumbnails.h"
 #include "regenerate_timeline_duration_images.h"
-#include "sound_beep.h"
 
 
 void layer_edit(void)
@@ -78,7 +77,7 @@ void layer_edit(void)
 	if (NULL == current_slide)
 	{
 		// Make a beep, then return
-		sound_beep();
+		gdk_beep();
 		return;
 	}
 
@@ -239,6 +238,9 @@ void layer_edit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/02/16 11:10:48  vapour
+ * Replaced our sound beep function with the inbuilt gdk sound beep one.
+ *
  * Revision 1.9  2008/02/12 05:21:14  vapour
  * Adjusted to work with the new, slightly simplified layer structure.
  *

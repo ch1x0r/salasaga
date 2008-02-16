@@ -40,7 +40,6 @@
 #include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "regenerate_film_strip_thumbnails.h"
-#include "sound_beep.h"
 
 
 void image_crop(void)
@@ -80,7 +79,7 @@ void image_crop(void)
 	if (NULL == current_slide)
 	{
 		// Make a beep, then return
-		sound_beep();
+		gdk_beep();
 		return;
 	}
 
@@ -102,7 +101,7 @@ void image_crop(void)
 	if (TYPE_GDK_PIXBUF != this_layer->object_type)
 	{
 		// Give the user feedback
-		sound_beep();
+		gdk_beep();
 		display_warning("Error ED36: Only Image layers can be cropped");
 		return;
 	}
@@ -111,7 +110,7 @@ void image_crop(void)
 	if (TRUE == this_layer->background)
 	{
 		// Give the user feedback
-		sound_beep();
+		gdk_beep();
 		display_warning("Error ED37: Background layers can not be cropped");
 		return;
 	}
@@ -227,6 +226,9 @@ void image_crop(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/16 11:09:47  vapour
+ * Replaced our sound beep function with the inbuilt gdk sound beep one.
+ *
  * Revision 1.6  2008/02/12 14:07:31  vapour
  * Updated to use the new background field in the layer structure.
  *

@@ -39,7 +39,6 @@
 #include "display_warning.h"
 #include "draw_workspace.h"
 #include "regenerate_film_strip_thumbnails.h"
-#include "sound_beep.h"
 
 
 void layer_move_up(void)
@@ -59,7 +58,7 @@ void layer_move_up(void)
 	if (NULL == current_slide)
 	{
 		// Make a beep, then return
-		sound_beep();
+		gdk_beep();
 		return;
 	}
 
@@ -75,7 +74,7 @@ void layer_move_up(void)
 	if (0 == selected_row)
 	{
 		// We're already at the top of the list, so return
-		sound_beep();
+		gdk_beep();
 		display_warning("Error ED41: This layer is already at the top\n");
 		return;
 	}
@@ -113,6 +112,9 @@ void layer_move_up(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/16 11:12:12  vapour
+ * Replaced our sound beep function with the inbuilt gdk sound beep one.
+ *
  * Revision 1.6  2008/02/12 14:11:03  vapour
  * Updated to use the new background field in the layer structure.
  *
