@@ -55,6 +55,7 @@ void menu_file_new(void)
 	GtkWidget			*project_table;			// Table used for neat layout of the dialog box
 	guint				row_counter = 0;		// Used to count which row things are up to
 	gint				dialog_result;			// Catches the return code from the dialog box
+	GdkColor			new_bg_colour;			// Received the new background color for the project
 	guint				valid_fps;				// Receives the new project fps once validated
 	guint				valid_height;			// Receives the new project height once validated
 	GString				*valid_proj_name;		// Receives the new project name once validated
@@ -208,6 +209,9 @@ void menu_file_new(void)
 	}
 	g_free(validated_guint);
 
+	// Get the new background colour
+	gtk_color_button_get_color(GTK_COLOR_BUTTON(bg_color_button), &new_bg_colour);
+
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(project_dialog));
 
@@ -247,7 +251,7 @@ void menu_file_new(void)
 	frames_per_second = valid_fps;
 
 	// Set the default background color
-	gtk_color_button_get_color(GTK_COLOR_BUTTON(bg_color_button), &default_bg_colour);
+	default_bg_colour = new_bg_colour;
 
 	// Create a blank slide to start things from
 	slide_insert();
@@ -283,6 +287,9 @@ void menu_file_new(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/02/18 04:15:12  vapour
+ * Fixed a bug stopping the chosen background color from being used.  Was destroying the dialog box before retrieving the value.  Ugh.
+ *
  * Revision 1.8  2008/02/14 16:54:45  vapour
  * Updated to validate the project width, height, and frames per second as well.  Also updated dialog box to use the limits defined for each field in the valid fields array.
  *
