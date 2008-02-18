@@ -49,10 +49,11 @@ extern "C" {
 
 // Capabilities for the validate_value function
 #define V_NONE			0
-#define V_HYPENS		1
-#define V_UNDERSCORES	2
-#define V_PATH_SEP		4
-#define V_SPACES		8
+#define V_FULL_STOP		1
+#define V_HYPENS		2
+#define V_UNDERSCORES	4
+#define V_PATH_SEP		8
+#define V_SPACES		16
 
 // The known layer types
 enum {
@@ -131,6 +132,7 @@ enum
 	PROJECT_FPS,
 	PROJECT_HEIGHT,
 	PROJECT_NAME,
+	PROJECT_PATH,
 	PROJECT_WIDTH,
 	SCREENSHOT_FOLDER,
 	SCREENSHOT_HEIGHT,
@@ -140,17 +142,6 @@ enum
 };
 
 // * Define the structures used in the application *
-
-// Defines the structure of a validation field entry
-typedef struct
-{
-	guint				value_id;
-	gchar				*name_string;
-	guint				base_type;
-	guint				capabilities;
-	guint				min_value;
-	guint				max_value;
-} validatation_entry;
 
 // Defines the structure of a boundary box
 typedef struct
@@ -255,6 +246,16 @@ typedef struct
 	gint				depth;						// The layer depth of this item when displayed
 } swf_frame_element;
 
+// Defines the structure of a validation field entry
+typedef struct
+{
+	guint				value_id;
+	gchar				*name_string;
+	guint				base_type;
+	guint				capabilities;
+	guint				min_value;
+	gint				max_value;
+} validatation_entry;
 
 #ifdef __cplusplus
 }
@@ -268,6 +269,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.50  2008/02/18 07:05:21  vapour
+ * Added project path validation entry, and changed the max_length type to gint so that it can take -1.
+ *
  * Revision 1.49  2008/02/14 13:36:07  vapour
  * Added values and structure needed to support the new validate value function.
  *
