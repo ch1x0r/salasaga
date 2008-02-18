@@ -38,6 +38,7 @@
 #include "../externs.h"
 #include "display_warning.h"
 #include "menu_file_save_slide.h"
+#include "validate_value.h"
 
 
 void menu_file_save(void)
@@ -49,7 +50,8 @@ void menu_file_save(void)
 	gchar				*file_name_part;			// Briefly used for holding a file name
 	GtkFileFilter		*flame_filter;				// Filter for *.flame
 	GtkWidget 			*save_dialog;				// Dialog widget
-	gboolean			unique_name;				// Switch used to mark when we have a valid filename
+	gboolean			useable_input;				// Used to control loop flow
+	GString				*validated_string;			// Receives known good strings from the validation function
 	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
 
 	xmlDocPtr			document_pointer;			// Points to the XML document structure in memory
@@ -111,9 +113,10 @@ void menu_file_save(void)
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(save_dialog), default_project_folder->str);
 	}
 
-	// Run the dialog and wait for user input
-	unique_name = FALSE;
-	while (TRUE != unique_name)
+	// Loop around until we have a valid filename or the user cancels out
+	useable_input = FALSE;
+	validated_string = NULL;
+	do
 	{
 		// Get a filename to save as
 		if (gtk_dialog_run(GTK_DIALOG(save_dialog)) != GTK_RESPONSE_ACCEPT)
@@ -126,27 +129,40 @@ void menu_file_save(void)
 		// Retrieve the filename from the dialog box
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(save_dialog));
 
-		// Check if there's an existing file of this name, and give an Overwrite? type prompt if there is
-		if (TRUE == g_file_test(filename, G_FILE_TEST_EXISTS))
+		// Free the validated_string variable before recreating it
+		if (NULL != validated_string)
+			g_string_free(validated_string, TRUE);
+
+		// Validate the filename input
+		validated_string = validate_value(PROJECT_PATH, V_CHAR, filename);
+		if (NULL == validated_string)
 		{
-			// Something with this name already exists
-			warn_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),
-								GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-								GTK_MESSAGE_QUESTION,
-								GTK_BUTTONS_YES_NO,
-								"Overwrite existing file?");
-			if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
-			{
-				// We've been told to overwrite the existing file
-				unique_name = TRUE;
-			}
-			gtk_widget_destroy(warn_dialog);
+			// Invalid file name
+			display_warning("Error ED125: There was something wrong with the file name given.  Please try again.");
 		} else
 		{
-			// The indicated file name is unique, we're fine to save
-			unique_name = TRUE;
+			// * Valid file name, so check if there's an existing file of this name, and give an Overwrite? type prompt if there is
+			if (TRUE == g_file_test(validated_string->str, G_FILE_TEST_EXISTS))
+			{
+				// Something with this name already exists
+				warn_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),
+									GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+									GTK_MESSAGE_QUESTION,
+									GTK_BUTTONS_YES_NO,
+									"Overwrite existing file?");
+				if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
+				{
+					// We've been told to overwrite the existing file
+					useable_input = TRUE;
+				}
+				gtk_widget_destroy(warn_dialog);
+			} else
+			{
+				// The indicated file name is unique, we're fine to save
+				useable_input = TRUE;
+			}
 		}
-	}
+	} while (FALSE == useable_input);
 
 	// Destroy the dialog box, as it's not needed any more
 	gtk_widget_destroy(save_dialog);
@@ -232,7 +248,10 @@ void menu_file_save(void)
 	gdk_flush();
 
 	// Keep the full file name around for future reference
-	file_name = g_string_new(NULL);
+	if (NULL == file_name)
+	{
+		file_name = g_string_new(NULL);
+	}
 	file_name = g_string_assign(file_name, filename);
 
 	// * Function clean up area *
@@ -250,6 +269,9 @@ void menu_file_save(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2008/02/18 13:45:25  vapour
+ * Updated to validate incoming filename to save as input.
+ *
  * Revision 1.10  2008/02/14 17:12:29  vapour
  * Added the missing frames per second value to the project file, and incremented the file save format version to 2.4.
  *
