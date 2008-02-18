@@ -102,14 +102,14 @@ gboolean flame_read(gchar *filename)
 	if (NULL == document)
 	{
 		// The Flame file was unable to be parsed
-		display_warning("Error ED43: Project file was unable to be loaded\n");
+		display_warning("Error ED43: The selected project file was not loaded successfully.  Please choose a different project file.\n");
 		return FALSE;
 	}
 
 	this_node = xmlDocGetRootElement(document);
 	if (NULL == this_node)
 	{
-		display_warning("Error ED44: Project file is empty");
+		display_warning("Error ED44: Project file is empty.  Please choose a different project file.");
 		xmlFreeDoc(document);
 		return FALSE;
 	}
@@ -155,21 +155,21 @@ gboolean flame_read(gchar *filename)
 	// Was there a meta-data structure in the save file?
 	if (NULL == meta_data_node)
 	{
-		display_warning("Error ED63: Project meta-data missing, aborting load");
+		display_warning("Error ED63: Project meta-data missing, aborting load.  Please choose a different project file.");
 		return FALSE;
 	}
 
 	// Was there a preferences structure in the save file?
 	if (NULL == preferences_node)
 	{
-		display_warning("Error ED45: Project preferences missing, aborting load");
+		display_warning("Error ED45: Project preferences missing, aborting load.  Please choose a different project file.");
 		return FALSE;
 	}
 
 	// Was there a slides structure in the save file?
 	if (NULL == slides_node)
 	{
-		display_warning("Error ED46: No slides in project, aborting load");
+		display_warning("Error ED46: No slides in project, aborting load.  Please choose a different project file.");
 		return FALSE;
 	}
 
@@ -235,17 +235,17 @@ gboolean flame_read(gchar *filename)
 	// If any of the critically needed preferences are missing, display a warning then abort
 	if (NULL == project_name_data)
 	{
-		display_warning("Error ED47: Project Name missing, aborting project open");
+		display_warning("Error ED47: Project Name missing, aborting load.  Please choose a different project file.");
 		return FALSE;
 	}
 	if (NULL == project_width_data)
 	{
-		display_warning("Error ED48: Project Width missing, aborting project open");
+		display_warning("Error ED48: Project Width missing, aborting load.  Please choose a different project file.");
 		return FALSE;
 	}
 	if (NULL == project_height_data)
 	{
-		display_warning("Error ED49: Project Height missing, aborting project open");
+		display_warning("Error ED49: Project Height missing, aborting load.  Please choose a different project file.");
 		return FALSE;
 	}
 
@@ -996,6 +996,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2008/02/18 07:01:14  vapour
+ * Improved the clarity of wording in error messages.
+ *
  * Revision 1.14  2008/02/14 17:13:30  vapour
  * Updated to read the frames per second value from project files.
  *
