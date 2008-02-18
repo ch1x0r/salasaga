@@ -53,7 +53,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 	guint				*output_guint_ptr;
 	guint				string_counter;
 	gint				string_length;
-	guint				string_max;
+	gint				string_max;
 	guint				string_min;
 	guint				value_max;
 	guint				value_min;
@@ -86,7 +86,9 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			string_length = strlen((gchar *) value);
 
 			// If the length of the string isn't in the acceptable range, return NULL
-			if ((string_length < string_min) || (string_length > string_max))
+			if (string_length < string_min)
+				return NULL;
+			if ((string_length > string_max) && (-1 != string_max))  // -1 for string_max means "no maximum limit"
 				return NULL;
 
 			// Sanitise each character of the input string
@@ -108,6 +110,17 @@ void *validate_value(gint value_id, gint input_type, void *value)
 						if (0 == g_ascii_strncasecmp(" ", &input_char, 1))
 						{
 							// Yes, this is a space character
+							output_gstring = g_string_append_c(output_gstring, input_char);
+							match_found = TRUE;
+							continue;
+						}
+					}
+					if (TRUE == (V_FULL_STOP && capabilities))
+					{
+						// This field is allowed to have full stops.  Is this character a full stop?
+						if (0 == g_ascii_strncasecmp(".", &input_char, 1))
+						{
+							// Yes, this is a full stop character
 							output_gstring = g_string_append_c(output_gstring, input_char);
 							match_found = TRUE;
 							continue;
@@ -161,7 +174,12 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			output_gstring->len = strlen(output_gstring->str);
 
 			// Recheck the length of the output string
-			if ((output_gstring->len < string_min) || (output_gstring->len > string_max))
+			if (output_gstring->len < string_min)
+			{
+				g_string_free(output_gstring, TRUE);
+				return NULL;
+			}
+			if ((output_gstring->len > string_max) && (-1 != string_max))  // -1 for string_max means "no maximum limit"
 			{
 				g_string_free(output_gstring, TRUE);
 				return NULL;
@@ -268,6 +286,9 @@ void *validate_value(gint value_id, gint input_type, void *value)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/02/18 07:03:53  vapour
+ * Added full stop characters to capabilities available.  Added unlimited length strings (-1) as well.
+ *
  * Revision 1.3  2008/02/14 16:52:10  vapour
  * Updated validation function with an additional parameter for the type of input.  Also added working code to validate unsigned integers.
  *
