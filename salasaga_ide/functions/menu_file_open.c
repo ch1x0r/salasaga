@@ -37,6 +37,7 @@
 #include "create_tooltips.h"
 #include "disable_layer_toolbar_buttons.h"
 #include "disable_main_toolbar_buttons.h"
+#include "display_warning.h"
 #include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "enable_layer_toolbar_buttons.h"
@@ -44,17 +45,20 @@
 #include "flame_read.h"
 #include "menu_enable.h"
 #include "resolution_selector_changed.h"
+#include "validate_value.h"
 
 
 void menu_file_open(void)
 {
 	// Local variables
-	GtkFileFilter			*all_filter;
-	gchar				*filename;				// Pointer to the chosen file name
-	GtkFileFilter			*flame_filter;
-	GtkTreePath			*new_path;				// Temporary path
+	GtkFileFilter		*all_filter;
+	gchar				*filename;					// Pointer to the chosen file name
+	GtkFileFilter		*flame_filter;
+	GtkTreePath			*new_path;					// Temporary path
 	GtkWidget 			*open_dialog;
 	gboolean			return_code;
+	gboolean			useable_input;				// Used to control loop flow
+	GString				*validated_string;			// Receives known good strings from the validation function
 
 	GString				*tmp_gstring;				// Temporary gstring
 
@@ -90,32 +94,59 @@ void menu_file_open(void)
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(open_dialog), default_project_folder->str);
 	}
 
-	// Run the dialog and wait for user input
-	if (gtk_dialog_run(GTK_DIALOG(open_dialog)) != GTK_RESPONSE_ACCEPT)
+	// Loop around until we have a valid filename or the user cancels out
+	useable_input = FALSE;
+	validated_string = NULL;
+	do
 	{
-		// * The user didn't choose a file, so destroy the dialog box and return *
-		gtk_widget_destroy(open_dialog);
-		return;		
-	}
+		// Run the dialog and wait for user input
+		if (gtk_dialog_run(GTK_DIALOG(open_dialog)) != GTK_RESPONSE_ACCEPT)
+		{
+			// The user didn't choose a file, so destroy the dialog box and return
+			gtk_widget_destroy(open_dialog);
+			return;		
+		}
 
-	// * We only get to here if a file was chosen *
+		// Get the filename from the dialog box
+		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(open_dialog));
+
+		// Free the validated_string variable before recreating it
+		if (NULL != validated_string)
+			g_string_free(validated_string, TRUE);
+
+		// Validate the filename input
+		validated_string = validate_value(PROJECT_PATH, V_CHAR, filename);
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED124: There was something wrong with the file name given.  Please try again.");
+		} else
+		{
+			// Open and parse the selected file
+			return_code = flame_read(validated_string->str);
+			if (TRUE == return_code)
+			{
+				// The file was read in fine, so we continue
+				useable_input = TRUE;
+			}
+		}
+	} while (FALSE == useable_input);
+
+	// * We only get to here if a valid file was chosen *
+
+	// Destroy the dialog box, as it's not needed any more
+	gtk_widget_destroy(open_dialog);
 
 	// Gray out the toolbar items that can't be used without a project loaded
 	disable_layer_toolbar_buttons();
 	disable_main_toolbar_buttons();
 
-	// Get the filename from the dialog box
-	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(open_dialog));
-
-	// Destroy the dialog box, as it's not needed any more
-	gtk_widget_destroy(open_dialog);
-
-	// Open and parse the selected file
-	return_code = flame_read(filename);
-
 	// Keep the full file name around for future reference
-	file_name = g_string_new(NULL);
-	file_name = g_string_assign(file_name, filename);
+	if (NULL == file_name)
+	{
+		// We don't have a global file_name variable yet, so we create it
+		file_name = g_string_new(NULL);
+	}
+	file_name = g_string_assign(file_name, validated_string->str);
 
 	// Destroy the existing output resolution selector
 	g_signal_handler_disconnect(G_OBJECT(resolution_selector), resolution_callback);
@@ -132,7 +163,7 @@ void menu_file_open(void)
 
 	// Use the status bar to communicate the successful loading of the project
 	tmp_gstring = g_string_new(NULL);
-	g_string_printf(tmp_gstring, "Project '%s' successfully loaded.", filename);
+	g_string_printf(tmp_gstring, "Project '%s' successfully loaded.", validated_string->str);
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 	gdk_flush();
 
@@ -149,10 +180,14 @@ void menu_file_open(void)
 	draw_workspace();
 
 	// Scroll the film strip to show the new thumbnail position
-	new_path = gtk_tree_path_new_first();
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
+	if (NULL == new_path)
+	{
+		// We couldn't get the existing path in order to reuse it, so we'll create a new one 
+		new_path = gtk_tree_path_new_first();
+	}
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.0);
-//	gtk_tree_path_free(new_path);
 
 	// Enable the project based menu items
 	menu_enable("/Project", TRUE);
@@ -164,7 +199,9 @@ void menu_file_open(void)
 	enable_layer_toolbar_buttons();
 	enable_main_toolbar_buttons();
 
-	// Frees the memory allocated in this function
+	// Free the memory allocated in this function
+	// (note that flame_filter and all_filter seem to be freed when the dialog is destroyed)
+	g_string_free(validated_string, TRUE);
 	g_free(filename);
 }
 
@@ -174,6 +211,9 @@ void menu_file_open(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/02/18 07:02:34  vapour
+ * Updated to validate incoming filename input.
+ *
  * Revision 1.8  2008/02/06 09:58:30  vapour
  * Updated to set the new project active global variable when done.
  *
