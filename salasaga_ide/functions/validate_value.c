@@ -188,8 +188,6 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			// The string seems to be valid, so return it for use
 			return output_gstring;
 
-			break;
-
 		case V_FLOAT:
 
 			break;
@@ -216,7 +214,9 @@ void *validate_value(gint value_id, gint input_type, void *value)
 				// Sanitise each character of the input string
 				for (string_counter = 0; string_counter < string_length; string_counter++)
 				{
-					input_char = ((gchar *) value)[string_counter]; 
+					input_char = ((gchar *) value)[string_counter];
+
+					// Check for decimal digits
 					if (TRUE == g_ascii_isdigit(input_char))
 					{
 						output_gstring = g_string_append_c(output_gstring, input_char);
@@ -228,7 +228,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 						return NULL;
 					}
 				}
-	
+
 				// Convert the string to an integer
 				output_guint = atoi(output_gstring->str);
 			}
@@ -236,7 +236,6 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			{
 				// We're working with integer input, so just copy the value directly
 				output_guint = *((guint *) value);
-				//output_guint = (guint) ((guint *) value);
 			}
 
 			// Is the integer value within the defined bounds?
@@ -264,7 +263,101 @@ void *validate_value(gint value_id, gint input_type, void *value)
 
 			return output_guint_ptr;
 
-			break;
+		case V_RESOLUTION:
+
+				// * We're working with a resolution (text string) input.  i.e. '1920x1200 pixels' *
+
+				// Get the length of the input string
+				string_length = strlen((gchar *) value);
+				string_max = valid_fields[value_id].max_value;
+				string_min = valid_fields[value_id].min_value;
+
+				// If the length of the string isn't in the acceptable range, return NULL
+				if ((string_length < string_min) || (string_length > string_max))
+					return NULL;
+
+				// Sanitise each character of the input string
+				for (string_counter = 0; string_counter < string_length; string_counter++)
+				{
+					input_char = ((gchar *) value)[string_counter];
+
+					// Check for decimal digits
+					if (TRUE == g_ascii_isdigit(input_char))
+					{
+						output_gstring = g_string_append_c(output_gstring, input_char);
+					}
+					else
+					{
+						match_found = FALSE;
+						// This field is allowed to have the ' ', 'p', 'i', 'x', 'e', 'l', 's' characters .  Is this character one of those?
+						if (0 == g_ascii_strncasecmp(" ", &input_char, 1))
+						{
+							// Yes, this is a space character
+							output_gstring = g_string_append_c(output_gstring, input_char);
+							match_found = TRUE;
+							continue;
+						}
+						if (0 == g_ascii_strncasecmp("p", &input_char, 1))
+						{
+							// Yes, this is a 'p' character
+							output_gstring = g_string_append_c(output_gstring, 'p');
+							match_found = TRUE;
+							continue;
+						}
+						if (0 == g_ascii_strncasecmp("i", &input_char, 1))
+						{
+							// Yes, this is a 'i' character
+							output_gstring = g_string_append_c(output_gstring, 'i');
+							match_found = TRUE;
+							continue;
+						}
+						if (0 == g_ascii_strncasecmp("x", &input_char, 1))
+						{
+							// Yes, this is a 'x' character
+							output_gstring = g_string_append_c(output_gstring, 'x');
+							match_found = TRUE;
+							continue;
+						}
+						if (0 == g_ascii_strncasecmp("e", &input_char, 1))
+						{
+							// Yes, this is a 'e' character
+							output_gstring = g_string_append_c(output_gstring, 'e');
+							match_found = TRUE;
+							continue;
+						}
+						if (0 == g_ascii_strncasecmp("l", &input_char, 1))
+						{
+							// Yes, this is a 'l' character
+							output_gstring = g_string_append_c(output_gstring, 'l');
+							match_found = TRUE;
+							continue;
+						}
+						if (0 == g_ascii_strncasecmp("s", &input_char, 1))
+						{
+							// Yes, this is a 's' character
+							output_gstring = g_string_append_c(output_gstring, 's');
+							match_found = TRUE;
+							continue;
+						}
+						if (FALSE == match_found)
+						{
+							// This wasn't a valid character
+							g_string_free(output_gstring, TRUE);
+							return NULL;
+						}
+					}
+				}
+
+				// Remove any leading and/or trailing white space
+				output_gstring->str = g_strstrip(output_gstring->str);
+				output_gstring->len = strlen(output_gstring->str);
+
+				// Recheck the length of the output string
+				if ((string_length < string_min) || (string_length > string_max))
+					return NULL;
+
+				// The string seems to be valid, so return it for use
+				return output_gstring;
 
 		default:
 
@@ -286,6 +379,9 @@ void *validate_value(gint value_id, gint input_type, void *value)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/19 06:39:42  vapour
+ * Added code to validate the new resolution base type.
+ *
  * Revision 1.4  2008/02/18 07:03:53  vapour
  * Added full stop characters to capabilities available.  Added unlimited length strings (-1) as well.
  *
