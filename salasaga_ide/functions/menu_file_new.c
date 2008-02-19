@@ -49,34 +49,34 @@
 void menu_file_new(void)
 {
 	// Local variables
-	guint				guint_val;				// Used in the input validation process
-	GdkColor			new_bg_colour;			// Received the new background color for the project
-	GtkTreePath			*new_path;				// Path used to select the new film strip thumbnail 
-	GtkDialog			*project_dialog;		// Widget for the dialog
-	GtkWidget			*project_table;			// Table used for neat layout of the dialog box
-	guint				row_counter = 0;		// Used to count which row things are up to
-	gboolean			useable_input;			// Used as a flag to indicate if all validation was successful
-	guint				valid_fps;				// Receives the new project fps once validated
-	guint				valid_height;			// Receives the new project height once validated
-	GString				*valid_proj_name;		// Receives the new project name once validated
-	guint				valid_width;			// Receives the new project width once validated
-	guint				*validated_guint;		// Receives known good guint values from the validation function 
-	GString				*validated_string;		// Receives known good strings from the validation function
+	guint				guint_val;					// Used in the input validation process
+	GdkColor			new_bg_colour;				// Received the new background color for the project
+	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail 
+	GtkDialog			*project_dialog;			// Widget for the dialog
+	GtkWidget			*project_table;				// Table used for neat layout of the dialog box
+	guint				row_counter = 0;			// Used to count which row things are up to
+	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	guint				valid_fps;					// Receives the new project fps once validated
+	guint				valid_height;				// Receives the new project height once validated
+	GString				*valid_proj_name;			// Receives the new project name once validated
+	guint				valid_width;				// Receives the new project width once validated
+	guint				*validated_guint;			// Receives known good guint values from the validation function 
+	GString				*validated_string;			// Receives known good strings from the validation function
 
-	GtkWidget			*name_label;			// Label widget
-	GtkWidget			*name_entry;			// Widget for accepting the name of the new project
+	GtkWidget			*name_label;				// Label widget
+	GtkWidget			*name_entry;				// Widget for accepting the name of the new project
 
-	GtkWidget			*width_label;			// Label widget
-	GtkWidget			*width_button;			//
+	GtkWidget			*width_label;				// Label widget
+	GtkWidget			*width_button;				//
 
-	GtkWidget			*height_label;			// Label widget
-	GtkWidget			*height_button;			//
+	GtkWidget			*height_label;				// Label widget
+	GtkWidget			*height_button;				//
 
-	GtkWidget			*fps_label;				// Label widget
-	GtkWidget			*fps_button;			//
+	GtkWidget			*fps_label;					// Label widget
+	GtkWidget			*fps_button;				//
 
-	GtkWidget			*bg_color_label;		// Label widget
-	GtkWidget			*bg_color_button;		// Background color selection button
+	GtkWidget			*bg_color_label;			// Label widget
+	GtkWidget			*bg_color_button;			// Background color selection button
 
 
 	// * Pop open a dialog box asking the user for the details of the new project *
@@ -292,6 +292,9 @@ void menu_file_new(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2008/02/19 17:36:05  vapour
+ * Re-aligned tabs to suit my display.
+ *
  * Revision 1.12  2008/02/19 17:25:20  vapour
  * Added code to select the new first slide for a project, otherwise some other functions (i.e. slide delete) which rely on it don't work properly.
  *
