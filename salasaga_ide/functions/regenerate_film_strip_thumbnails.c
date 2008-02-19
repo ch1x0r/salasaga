@@ -39,6 +39,7 @@
 void regenerate_film_strip_thumbnails()
 {
 	// Local variables
+	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
 	gint				num_slides;
 	gint				slide_counter, slide_position;
 	GtkTreeIter			film_strip_iter;
@@ -71,6 +72,11 @@ void regenerate_film_strip_thumbnails()
 		gtk_list_store_append(film_strip_store, &film_strip_iter);
 		gtk_list_store_set(film_strip_store, &film_strip_iter, 0, gtk_image_get_pixbuf(((slide *) this_slide->data)->thumbnail), -1);
 	}
+
+	// Reselect the thumbnail that was previously selected
+	new_path = gtk_tree_path_new_from_indices(slide_position, -1);
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
 }
 
 
@@ -79,6 +85,9 @@ void regenerate_film_strip_thumbnails()
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/19 18:04:03  vapour
+ * Fixed a crashing bug caused by the film strip thumbnails being deselected every time they were regenerated.  Now the previously selected film strip thumbnail is reselected after they're regenerated.
+ *
  * Revision 1.6  2008/02/04 17:09:58  vapour
  *  + Removed unnecessary includes.
  *
