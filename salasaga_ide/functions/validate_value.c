@@ -359,6 +359,55 @@ void *validate_value(gint value_id, gint input_type, void *value)
 				// The string seems to be valid, so return it for use
 				return output_gstring;
 
+		case V_ZOOM:
+
+			// * We're working with a zoom level.  i.e. "100%" or "Fit to width" *
+
+			// Get the length of the input string
+			string_length = strlen((gchar *) value);
+			string_max = valid_fields[value_id].max_value;
+			string_min = valid_fields[value_id].min_value;
+
+			// If the length of the string isn't in the acceptable range, return NULL
+			if ((string_length < string_min) || (string_length > string_max))
+				return NULL;
+
+			// If the length of the string is exactly 12, then check if the string is "Fit to width"
+			if ((12 == string_length) && (0 == g_ascii_strncasecmp("Fit to width", (gchar *) value, 12)))
+			{
+				// Yes, this is the "Fit to width" value
+				output_gstring = g_string_assign(output_gstring, value);
+				return output_gstring;
+			}
+
+			// * The incoming string isn't the "Fit to width" value, *
+			// * so should only consist of decimal characters and '%' *
+
+			// Sanitise each character of the input string
+			for (string_counter = 0; string_counter < string_length; string_counter++)
+			{
+				input_char = ((gchar *) value)[string_counter];
+
+				// Check for decimal digits
+				if (TRUE == g_ascii_isdigit(input_char))
+				{
+					output_gstring = g_string_append_c(output_gstring, input_char);
+					continue;
+				}
+				// Check for '%' character
+				if (0 == g_ascii_strncasecmp("%", &input_char, 1))
+				{
+					// Yes, this is a '%' character
+					output_gstring = g_string_append_c(output_gstring, '%');
+					continue;
+				}
+				// This wasn't a valid character
+				g_string_free(output_gstring, TRUE);
+				return NULL;
+			}
+
+			return output_gstring;
+
 		default:
 
 			// Unknown value type, we should never get here
@@ -379,6 +428,9 @@ void *validate_value(gint value_id, gint input_type, void *value)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/19 12:36:35  vapour
+ * Added code to validate the new zoom level base type.
+ *
  * Revision 1.5  2008/02/19 06:39:42  vapour
  * Added code to validate the new resolution base type.
  *
