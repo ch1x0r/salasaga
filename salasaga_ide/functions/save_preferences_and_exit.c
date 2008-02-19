@@ -45,7 +45,7 @@ void save_preferences_and_exit(void)
 	// * Non-windows code *
 
 	// Local variables
-	GConfEngine			*gconf_engine;			// GConf engine
+	GConfEngine			*gconf_engine;				// GConf engine
 
 	guint				tmp_int;					// Temporary integer
 	GtkWindow			*tmp_gtk_window;			// Temporary GtkWindow
@@ -65,6 +65,9 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/slide_length", default_slide_length, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", preview_width, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/frames_per_second", default_fps, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_red", default_bg_colour.red, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_green", default_bg_colour.green, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_blue", default_bg_colour.blue, NULL);
 
 	// * Save the present window maximised state (i.e. if we're maximised or not) *
 
@@ -215,6 +218,21 @@ void save_preferences_and_exit(void)
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "frames_per_second", 0, REG_SZ, tmp_gstring->str, string_size);
 
+	// Set the value for the red component of the default background colour
+	g_string_printf(tmp_gstring, "%d", default_bg_colour.red);
+	string_size = (tmp_gstring->len) + 1;
+	return_code = RegSetValueEx(hkey, "default_bg_colour_red", 0, REG_SZ, tmp_gstring->str, string_size);
+
+	// Set the value for the green component of the default background colour
+	g_string_printf(tmp_gstring, "%d", default_bg_colour.green);
+	string_size = (tmp_gstring->len) + 1;
+	return_code = RegSetValueEx(hkey, "default_bg_colour_green", 0, REG_SZ, tmp_gstring->str, string_size);
+
+	// Set the value for the blue component of the default background colour
+	g_string_printf(tmp_gstring, "%d", default_bg_colour.blue);
+	string_size = (tmp_gstring->len) + 1;
+	return_code = RegSetValueEx(hkey, "default_bg_colour_blue", 0, REG_SZ, tmp_gstring->str, string_size);
+
 	// Set the value for the window maximisation to TRUE (hard coded for now)
 	// fixme4: We should make this dynamic rather than hard coded on
 	g_string_printf(tmp_gstring, "%d", TRUE);
@@ -242,6 +260,9 @@ void save_preferences_and_exit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/02/19 14:13:31  vapour
+ * Updated to save the default background colour between sessions.
+ *
  * Revision 1.9  2008/02/19 13:42:44  vapour
  * Removed scaling quality variable, added default frames per second and default zoom variables.
  *
