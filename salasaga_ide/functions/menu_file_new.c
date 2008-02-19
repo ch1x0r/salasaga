@@ -49,13 +49,12 @@
 void menu_file_new(void)
 {
 	// Local variables
-	gboolean			all_input_valid;		// Used as a flag to indicate if all validation was successful
 	guint				guint_val;				// Used in the input validation process
 	GtkDialog			*project_dialog;		// Widget for the dialog
 	GtkWidget			*project_table;			// Table used for neat layout of the dialog box
 	guint				row_counter = 0;		// Used to count which row things are up to
-	gint				dialog_result;			// Catches the return code from the dialog box
 	GdkColor			new_bg_colour;			// Received the new background color for the project
+	gboolean			useable_input;			// Used as a flag to indicate if all validation was successful
 	guint				valid_fps;				// Receives the new project fps once validated
 	guint				valid_height;			// Receives the new project height once validated
 	GString				*valid_proj_name;		// Receives the new project name once validated
@@ -142,82 +141,82 @@ void menu_file_new(void)
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(bg_color_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Run the dialog
+	// Ensure everything will show
 	gtk_widget_show_all(GTK_WIDGET(project_dialog));
-	dialog_result = gtk_dialog_run(GTK_DIALOG(project_dialog));
 
-	// Was the OK button pressed?
-	if (GTK_RESPONSE_ACCEPT != dialog_result)
+	// Loop around until we have all valid values, or the user cancels out
+	useable_input = TRUE;
+	validated_string = NULL;
+	do
 	{
-		// The dialog was cancelled, so destroy the dialog box and return
-		gtk_widget_destroy(GTK_WIDGET(project_dialog));
-		return;
-	}
+		// Display the dialog
+		if (GTK_RESPONSE_ACCEPT != gtk_dialog_run(GTK_DIALOG(project_dialog)))
+		{
+			// The dialog was cancelled, so destroy it and return to the caller
+			gtk_widget_destroy(GTK_WIDGET(project_dialog));
+			return;
+		}
 
-	// * Validate the input *
-	all_input_valid = TRUE;
+		// Validate the project name input
+		valid_proj_name = g_string_new(NULL);
+		validated_string = validate_value(PROJECT_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED118: There was something wrong with the new project name.  Defaulting to 'New Project' instead.");
+			g_string_assign(valid_proj_name, "New Project");
+		} else
+		{
+			g_string_assign(valid_proj_name, validated_string->str);
+			g_string_free(validated_string, TRUE);
+		}
 
-	// Validate the project name input
-	valid_proj_name = g_string_new(NULL);
-	validated_string = validate_value(PROJECT_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
-	if (NULL == validated_string)
-	{
-		display_warning("Error ED118: There was something wrong with the project name typed in.  Defaulting to 'New Project' instead.");
-		g_string_assign(valid_proj_name, "New Project");
-	} else
-	{
-		g_string_assign(valid_proj_name, validated_string->str);
-		g_string_free(validated_string, TRUE);
-	}
+		// Validate the project width
+		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(width_button));
+		validated_guint = validate_value(PROJECT_WIDTH, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED120: There was something wrong with the project width value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_width = *validated_guint;
+		}
+		g_free(validated_guint);
 
-	// Validate the project width
-	guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(width_button));
-	validated_guint = validate_value(PROJECT_WIDTH, V_INT_UNSIGNED, &guint_val);
-	if (NULL == validated_guint)
-	{
-		display_warning("Error ED120: There was something wrong with the project width value.  Aborting dialog.");
-		all_input_valid = FALSE;
-	} else
-	{
-		valid_width = *validated_guint;
-	}
-	g_free(validated_guint);
+		// Validate the project height
+		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(height_button));
+		validated_guint = validate_value(PROJECT_HEIGHT, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED121: There was something wrong with the project height value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_height = *validated_guint;
+		}
+		g_free(validated_guint);
 
-	// Validate the project height
-	guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(height_button));
-	validated_guint = validate_value(PROJECT_HEIGHT, V_INT_UNSIGNED, &guint_val);
-	if (NULL == validated_guint)
-	{
-		display_warning("Error ED121: There was something wrong with the project height value.  Aborting dialog.");
-		all_input_valid = FALSE;
-	} else
-	{
-		valid_height = *validated_guint;
-	}
-	g_free(validated_guint);
+		// Validate the project fps
+		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(fps_button));
+		validated_guint = validate_value(PROJECT_FPS, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED122: There was something wrong with the project frames per second value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_fps = *validated_guint;
+		}
+		g_free(validated_guint);
+	} while (FALSE == useable_input);
 
-	// Validate the project fps
-	guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(fps_button));
-	validated_guint = validate_value(PROJECT_FPS, V_INT_UNSIGNED, &guint_val);
-	if (NULL == validated_guint)
-	{
-		display_warning("Error ED122: There was something wrong with the project frames per second value.  Aborting dialog.");
-		all_input_valid = FALSE;
-	} else
-	{
-		valid_fps = *validated_guint;
-	}
-	g_free(validated_guint);
+	// * We only get here after all input is considered valid *
 
 	// Get the new background colour
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(bg_color_button), &new_bg_colour);
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(project_dialog));
-
-	// If all of the inputs were valid, then create a new project, else abort
-	if (TRUE != all_input_valid)
-		return;
 
 	// If there's a project presently loaded in memory, we unload it
 	if (NULL != slides)
@@ -287,6 +286,9 @@ void menu_file_new(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2008/02/19 14:15:10  vapour
+ * Updated to try the new project dialog if invalid input is given, rather than aborting.
+ *
  * Revision 1.10  2008/02/19 13:43:39  vapour
  * Updated to use the new default frames per second variable.
  *
