@@ -58,7 +58,7 @@ void slide_delete(void)
 	if (1 == num_slides)
 	{
 		// Yes we are, so give a warning message and don't delete the slide
-		display_warning("You must have at least one slide in a project.\n");
+		display_warning("You must leave at least one slide in a project.\n");
 		return;
 	}
 
@@ -105,6 +105,9 @@ void slide_delete(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/19 17:46:27  vapour
+ * Small wording tweak in an error message.
+ *
  * Revision 1.5  2008/02/19 17:24:13  vapour
  * Re-aligned tabs to suit my display.
  *
