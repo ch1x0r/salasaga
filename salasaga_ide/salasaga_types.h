@@ -46,6 +46,7 @@ extern "C" {
 #define V_FLOAT			4
 #define V_INT_SIGNED	8
 #define V_INT_UNSIGNED	16
+#define V_RESOLUTION	32
 
 // Capabilities for the validate_value function
 #define V_NONE			0
@@ -129,12 +130,13 @@ enum
 {
 	COLOUR_COMP8,
 	COLOUR_COMP16,
+	FOLDER_PATH,
 	PROJECT_FPS,
 	PROJECT_HEIGHT,
 	PROJECT_NAME,
 	PROJECT_PATH,
 	PROJECT_WIDTH,
-	SCREENSHOT_FOLDER,
+	RESOLUTION,
 	SCREENSHOT_HEIGHT,
 	SCREENSHOT_WIDTH,
 	SCREENSHOT_X_OFFSET,
@@ -269,6 +271,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.51  2008/02/19 06:37:35  vapour
+ * Added a new resolution base type for validation, renamed the screenshot folder field to a more generic folder type of field.
+ *
  * Revision 1.50  2008/02/18 07:05:21  vapour
  * Added project path validation entry, and changed the max_length type to gint so that it can take -1.
  *
