@@ -127,7 +127,7 @@ void menu_file_new(void)
 
 	// Create the entry that accepts the number of frames per second
 	fps_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_FPS].max_value, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(fps_button), frames_per_second);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(fps_button), default_fps);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(fps_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
@@ -287,6 +287,9 @@ void menu_file_new(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/02/19 13:43:39  vapour
+ * Updated to use the new default frames per second variable.
+ *
  * Revision 1.9  2008/02/18 04:15:12  vapour
  * Fixed a bug stopping the chosen background color from being used.  Was destroying the dialog box before retrieving the value.  Ugh.
  *
