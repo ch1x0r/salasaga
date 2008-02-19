@@ -48,21 +48,25 @@ void menu_edit_preferences(void)
 	// Local variables
 	GtkWidget			*app_dialog_table;					// Table used for neat layout of the labels and fields in application preferences
 	gint				app_row_counter;					// Used when building the application preferences dialog box
+	guint				guint_val;							// Temporary guint value used for validation
 	GValue				*handle_size;						// The size of the dividing handle for the film strip
 	GtkDialog			*main_dialog;						// Widget for the main dialog
-	GdkColor			new_bg_colour;						// Received the new background color for the project
+	GdkColor			new_bg_colour;						// Receives the new background color for the project
 	gchar				**strings;							// Text string are split apart with this
 	gint				tmp_counter;						// General counter used in looping
 	GString				*tmp_gstring;						// Text strings are constructed in this
 	gboolean			useable_input;						// Used to control loop flow
 	guint				valid_fps;							// Receives the new project fps once validated
 	guint				valid_height;						// Receives the new project height once validated
+	guint				valid_icon_height;					// Receives the new icon height once validated
 	GString				*valid_output_folder;				// Receives the new output folder once validated
 	GString				*valid_output_resolution;			// Receives the new default output resolution once validated
 	GString				*valid_proj_name;					// Receives the new project name once validated
 	GString				*valid_project_folder;				// Receives the new default project folder once validated
-	GString				*valid_screenshot_folder;			// Receives the new screenshot folder once validated 
-	guint				valid_width;						// Receives the new project width once validated
+	GString				*valid_screenshot_folder;			// Receives the new screenshot folder once validated
+	guint				valid_slide_length;					// Receives the new default slide length once validated
+	guint				valid_preview_width;				// Receives the new film strip thumbnail width once validated
+	GString				*valid_zoom_level;					// Receives the new default zoom level once validated
 	guint				*validated_guint;					// Receives known good guint values from the validation function 
 	GString				*validated_string;					// Receives known good strings from the validation function
 
@@ -278,7 +282,58 @@ void menu_edit_preferences(void)
 			g_string_free(validated_string, TRUE);
 		}
 
-		
+		// Retrieve the new default slide length input
+		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_slide_length));
+		validated_guint = validate_value(SLIDE_LENGTH, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED130: There was something wrong with the default slide length value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_slide_length = *validated_guint;
+		}
+		g_free(validated_guint);
+
+		// Retrieve the new preview width input
+		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_preview_width));
+		validated_guint = validate_value(PREVIEW_WIDTH, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED131: There was something wrong with the preview width value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_preview_width = *validated_guint;
+		}
+		g_free(validated_guint);
+
+		// Retrieve the new icon height input
+		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_icon_height));
+		validated_guint = validate_value(ICON_HEIGHT, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED132: There was something wrong with the icon height value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_icon_height = *validated_guint;
+		}
+		g_free(validated_guint);
+
+		// Retrieve the new default zoom level input
+		valid_zoom_level = g_string_new(NULL);
+		validated_string = validate_value(ZOOM_LEVEL, V_ZOOM, gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_default_zoom_level)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED133: There was something wrong with the default zoom level given.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_zoom_level = g_string_assign(valid_zoom_level, validated_string->str);
+			g_string_free(validated_string, TRUE);
+		}
+
 
 	} while (FALSE == useable_input);
 
@@ -294,7 +349,7 @@ void menu_edit_preferences(void)
 
 	// Default Output Folder
 	default_output_folder = g_string_assign(default_output_folder, valid_output_folder->str);
-	g_string_free(valid_output_folder, TRUE);	
+	g_string_free(valid_output_folder, TRUE);
 
 	// Default Output Resolution
 	valid_output_resolution = g_string_truncate(valid_output_resolution, valid_output_resolution->len - 7);
@@ -304,13 +359,13 @@ void menu_edit_preferences(void)
 	g_strfreev(strings);
 
 	// Default Slide Length
-	default_slide_length = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_slide_length));
+	default_slide_length = valid_slide_length;
 
 	// Preview width
-	if (preview_width != (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_preview_width)))
+	if (preview_width != valid_preview_width)
 	{
 		// The desired film strip width has changed
-		preview_width = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_preview_width));
+		preview_width = valid_preview_width;
 
 		// Regenerate the film strip thumbnails
 		regenerate_film_strip_thumbnails();
@@ -324,10 +379,11 @@ void menu_edit_preferences(void)
 	}
 
 	// Icon Height
-	icon_height = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_icon_height));
+	icon_height = valid_icon_height;
 
 	// Default Zoom Level
-	default_zoom_level = g_string_assign(default_zoom_level, gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_default_zoom_level)));
+	default_zoom_level = g_string_assign(default_zoom_level, valid_zoom_level->str);
+	g_string_free(valid_zoom_level, TRUE);
 
 	// Default Background Colour
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(button_default_bg_colour), &default_bg_colour);
@@ -351,6 +407,9 @@ void menu_edit_preferences(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2008/02/19 12:43:36  vapour
+ * Updated to validate input for icon height, film strip width, default slide length, and default zoom level.
+ *
  * Revision 1.10  2008/02/19 06:41:36  vapour
  * Began converting this function to validate incoming user input.
  *
