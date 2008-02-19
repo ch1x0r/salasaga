@@ -57,30 +57,14 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/project_folder", default_project_folder->str, NULL);
 	gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/screenshots_folder", screenshots_folder->str, NULL);
 	gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/output_folder", default_output_folder->str, NULL);
+	gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/zoom_level", default_zoom_level->str, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/project_width", project_width, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/project_height", project_height, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/output_width", default_output_width, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/output_height", default_output_height, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/slide_length", default_slide_length, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", preview_width, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/frames_per_second", frames_per_second, NULL);
-	switch (scaling_quality)
-	{
-		case GDK_INTERP_NEAREST:
-			gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/scaling_quality", "Nearest", NULL);
-			break;
-			
-		case GDK_INTERP_TILES:
-			gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/scaling_quality", "Tiles", NULL);
-			break;
-		
-		case GDK_INTERP_BILINEAR:
-			gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/scaling_quality", "Bilinear", NULL);
-			break;
-		
-		case GDK_INTERP_HYPER:
-			gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/scaling_quality", "Hyper", NULL);
-	}
+	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/frames_per_second", default_fps, NULL);
 
 	// * Save the present window maximised state (i.e. if we're maximised or not) *
 
@@ -188,6 +172,10 @@ void save_preferences_and_exit(void)
 	string_size = (default_output_folder->len) + 1;
 	return_code = RegSetValueEx(hkey, "output_folder", 0, REG_SZ, default_output_folder->str, string_size);
 
+	// Set the value for the zoom level
+	string_size = (default_zoom_level->len) + 1;
+	return_code = RegSetValueEx(hkey, "zoom_level", 0, REG_SZ, default_zoom_level->str, string_size);
+
 	// Set the value for the project name
 	string_size = (project_name->len) + 1;
 	return_code = RegSetValueEx(hkey, "project_name", 0, REG_SZ, project_name->str, string_size);
@@ -223,7 +211,7 @@ void save_preferences_and_exit(void)
 	return_code = RegSetValueEx(hkey, "thumbnail_width", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the frames per second
-	g_string_printf(tmp_gstring, "%d", frames_per_second);
+	g_string_printf(tmp_gstring, "%d", default_fps);
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "frames_per_second", 0, REG_SZ, tmp_gstring->str, string_size);
 
@@ -232,33 +220,6 @@ void save_preferences_and_exit(void)
 	g_string_printf(tmp_gstring, "%d", TRUE);
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "window_maximised", 0, REG_SZ, tmp_gstring->str, string_size);
-
-	// Set the value for the scaling quality
-	switch (scaling_quality)
-	{
-		case GDK_INTERP_NEAREST:
-			g_string_printf(tmp_gstring, "%s", "Nearest");
-			string_size = (tmp_gstring->len) + 1;
-			return_code = RegSetValueEx(hkey, "scaling_quality", 0, REG_SZ, tmp_gstring->str, string_size);
-			break;
-
-		case GDK_INTERP_TILES:
-			g_string_printf(tmp_gstring, "%s", "Tiles");
-			string_size = (tmp_gstring->len) + 1;
-			return_code = RegSetValueEx(hkey, "scaling_quality", 0, REG_SZ, tmp_gstring->str, string_size);
-			break;
-
-		case GDK_INTERP_BILINEAR:
-			g_string_printf(tmp_gstring, "%s", "Bilinear");
-			string_size = (tmp_gstring->len) + 1;
-			return_code = RegSetValueEx(hkey, "scaling_quality", 0, REG_SZ, tmp_gstring->str, string_size);
-			break;
-
-		case GDK_INTERP_HYPER:
-			g_string_printf(tmp_gstring, "%s", "Hyper");
-			string_size = (tmp_gstring->len) + 1;
-			return_code = RegSetValueEx(hkey, "scaling_quality", 0, REG_SZ, tmp_gstring->str, string_size);
-	}
 
 	// All values saved in the windows registry
 	RegCloseKey(hkey);
@@ -281,6 +242,9 @@ void save_preferences_and_exit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/02/19 13:42:44  vapour
+ * Removed scaling quality variable, added default frames per second and default zoom variables.
+ *
  * Revision 1.8  2008/02/05 09:18:25  vapour
  * Removed support of output quality variable, as the concept is no longer relevant.
  *
