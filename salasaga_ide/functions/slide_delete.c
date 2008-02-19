@@ -43,13 +43,13 @@
 void slide_delete(void)
 {
 	// Local variables
-	GtkTreePath			*new_path;				// Temporary path
-	gint				num_slides;				// Number of slides in the whole slide list
+	GtkTreePath			*new_path;					// Temporary path
+	gint				num_slides;					// Number of slides in the whole slide list
 	gint				slide_position;				// Which slide in the slide list we are deleting
-	GtkTreeSelection		*film_strip_selector;
+	GtkTreeSelection	*film_strip_selector;
 	GtkTreeIter			selection_iter;
 
-	GList				*tmp_glist;				// Temporary GList
+	GList				*tmp_glist;					// Temporary GList
 
 
 	// Are we trying to delete the only slide in the project (not good)?
@@ -105,6 +105,9 @@ void slide_delete(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/02/19 17:24:13  vapour
+ * Re-aligned tabs to suit my display.
+ *
  * Revision 1.4  2008/02/04 17:12:30  vapour
  *  + Removed unnecessary includes.
  *
