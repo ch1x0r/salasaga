@@ -62,10 +62,13 @@ void menu_screenshots_import(void)
 	gint				image_width;
 	guint				largest_height = 0;			// Holds the height of the largest screenshot thus far
 	guint				largest_width = 0;			// Holds the width of the largest screenshot thus far
+	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
 	gint				num_screenshots = 0;		// Switch to track if other screenshots already exist
+	gint				num_slides;					// Number of slides in the whole slide list
 	guint				recent_message;				// Message identifier, for newest status bar message
 	gint				return_code = 0;			// Receives return code
 	gint				return_code_int;
+	gint				slide_position;				// Which slide in the slide list do we have selected?
 	gboolean			using_first_screenshot;		// Used to indicate there's no project active, so we're using the dimensions of the first screenshot
 
 	GtkWidget			*tmp_dialog;
@@ -346,11 +349,19 @@ void menu_screenshots_import(void)
 	project_height = largest_height;
 	project_width = largest_width;
 
-	// If not presently set, make the first slide the present slide
+	// If not presently set, make the first imported slide the present slide
 	if (NULL == current_slide)
 	{
 		current_slide = g_list_first(slides);
 	}
+
+	// Select the correct thumbnail in the film strip and scroll to display it
+	slides = g_list_first(slides);
+	num_slides = g_list_length(slides);
+	slide_position = g_list_position(slides, current_slide);
+	new_path = gtk_tree_path_new_from_indices(slide_position, -1);
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
 
 	// Generate the timeline duration image(s)
 	regenerate_timeline_duration_images(tmp_slide);
@@ -412,6 +423,9 @@ void menu_screenshots_import(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2008/02/19 17:44:29  vapour
+ * Added code to select the first new screenshot when imported into an empty project, otherwise some other functions (i.e. slide delete) which rely on it don't work properly.
+ *
  * Revision 1.12  2008/02/19 13:37:46  vapour
  * Improved the wording of the warning message about screenshot size differing.
  *
