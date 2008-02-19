@@ -50,10 +50,11 @@ void menu_file_new(void)
 {
 	// Local variables
 	guint				guint_val;				// Used in the input validation process
+	GdkColor			new_bg_colour;			// Received the new background color for the project
+	GtkTreePath			*new_path;				// Path used to select the new film strip thumbnail 
 	GtkDialog			*project_dialog;		// Widget for the dialog
 	GtkWidget			*project_table;			// Table used for neat layout of the dialog box
 	guint				row_counter = 0;		// Used to count which row things are up to
-	GdkColor			new_bg_colour;			// Received the new background color for the project
 	gboolean			useable_input;			// Used as a flag to indicate if all validation was successful
 	guint				valid_fps;				// Receives the new project fps once validated
 	guint				valid_height;			// Receives the new project height once validated
@@ -256,6 +257,11 @@ void menu_file_new(void)
 	slide_insert();
 	current_slide = slides;
 
+	// Select the thumbnail for the new slide in the film strip
+	new_path = gtk_tree_path_new_from_indices(0, -1);
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
+
 	// Set the global toggle that a project is now active
 	project_active = TRUE;
 
@@ -286,6 +292,9 @@ void menu_file_new(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/02/19 17:25:20  vapour
+ * Added code to select the new first slide for a project, otherwise some other functions (i.e. slide delete) which rely on it don't work properly.
+ *
  * Revision 1.11  2008/02/19 14:15:10  vapour
  * Updated to try the new project dialog if invalid input is given, rather than aborting.
  *
