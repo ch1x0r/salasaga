@@ -47,6 +47,7 @@ extern "C" {
 #define V_INT_SIGNED	8
 #define V_INT_UNSIGNED	16
 #define V_RESOLUTION	32
+#define V_ZOOM			64
 
 // Capabilities for the validate_value function
 #define V_NONE			0
@@ -131,6 +132,8 @@ enum
 	COLOUR_COMP8,
 	COLOUR_COMP16,
 	FOLDER_PATH,
+	ICON_HEIGHT,
+	PREVIEW_WIDTH,
 	PROJECT_FPS,
 	PROJECT_HEIGHT,
 	PROJECT_NAME,
@@ -140,7 +143,9 @@ enum
 	SCREENSHOT_HEIGHT,
 	SCREENSHOT_WIDTH,
 	SCREENSHOT_X_OFFSET,
-	SCREENSHOT_Y_OFFSET
+	SCREENSHOT_Y_OFFSET,
+	SLIDE_LENGTH,
+	ZOOM_LEVEL
 };
 
 // * Define the structures used in the application *
@@ -271,6 +276,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.52  2008/02/19 12:34:00  vapour
+ * Added validation field entries for icon height, film strip width, default slide length, and default zoom level.
+ *
  * Revision 1.51  2008/02/19 06:37:35  vapour
  * Added a new resolution base type for validation, renamed the screenshot folder field to a more generic folder type of field.
  *
