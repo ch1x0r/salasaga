@@ -404,6 +404,9 @@ gint main(gint argc, gchar *argv[])
 		default_output_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_width", NULL);
 		default_output_height = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_height", NULL);
 		default_slide_length = slide_length = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/slide_length", NULL);
+		default_bg_colour.red = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_red", NULL);
+		default_bg_colour.green = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_green", NULL);
+		default_bg_colour.blue = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_blue", NULL);
 		preview_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", NULL);
 		if (0 == preview_width) preview_width = 300;
 		default_fps = frames_per_second = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/frames_per_second", NULL);
@@ -666,6 +669,66 @@ gint main(gint argc, gchar *argv[])
 			if (ERROR_SUCCESS == return_code)
 			{
 				default_fps = frames_per_second = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the red component of the default background colour
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			default_bg_colour.red = 0;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "default_bg_colour_red", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				default_bg_colour.red = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the green component of the default background colour
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			default_bg_colour.green = 0;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "default_bg_colour_green", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				default_bg_colour.green = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the blue component of the default background colour
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			default_bg_colour.blue = 0;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "default_bg_colour_blue", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				default_bg_colour.blue = atoi(buffer_ptr);
 			}
 
 			// Close the registry key
@@ -979,6 +1042,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.85  2008/02/19 14:16:02  vapour
+ * Updated to read in the default background colour at startup.
+ *
  * Revision 1.84  2008/02/19 13:39:55  vapour
  * Removed scaling quality variable, added a default frames per second variable.
  *
