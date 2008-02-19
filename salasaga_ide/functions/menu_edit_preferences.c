@@ -38,7 +38,9 @@
 #include "../externs.h"
 #include "create_resolution_selector.h"
 #include "create_zoom_selector.h"
+#include "display_warning.h"
 #include "regenerate_film_strip_thumbnails.h"
+#include "validate_value.h"
 
 
 void menu_edit_preferences(void)
@@ -46,13 +48,25 @@ void menu_edit_preferences(void)
 	// Local variables
 	GtkWidget			*app_dialog_table;					// Table used for neat layout of the labels and fields in application preferences
 	gint				app_row_counter;					// Used when building the application preferences dialog box
-	gint				dialog_result;						// Catches the return code from the dialog box
 	GValue				*handle_size;						// The size of the dividing handle for the film strip
 	GtkDialog			*main_dialog;						// Widget for the main dialog
+	GdkColor			new_bg_colour;						// Received the new background color for the project
 	gchar				**strings;							// Text string are split apart with this
 	gint				tmp_counter;						// General counter used in looping
 	GString				*tmp_gstring;						// Text strings are constructed in this
+	gboolean			useable_input;						// Used to control loop flow
+	guint				valid_fps;							// Receives the new project fps once validated
+	guint				valid_height;						// Receives the new project height once validated
+	GString				*valid_output_folder;				// Receives the new output folder once validated
+	GString				*valid_output_resolution;			// Receives the new default output resolution once validated
+	GString				*valid_proj_name;					// Receives the new project name once validated
+	GString				*valid_project_folder;				// Receives the new default project folder once validated
+	GString				*valid_screenshot_folder;			// Receives the new screenshot folder once validated 
+	guint				valid_width;						// Receives the new project width once validated
+	guint				*validated_guint;					// Receives known good guint values from the validation function 
+	GString				*validated_string;					// Receives known good strings from the validation function
 
+	
 	GtkWidget			*label_default_project_folder;		// Default Project Folder
 	GtkWidget			*button_default_project_folder;		//
 
@@ -85,6 +99,10 @@ void menu_edit_preferences(void)
 
 	gchar				*scale_array[] = { "0 - Nearest (low quality)", "1 - Tiles", "2 - Bilinear", "3 - Hyperbolic (Best - SLOW!)" };  // The available scaling options
 	gint				num_scale_items = sizeof(scale_array) / sizeof(scale_array[0]);
+
+
+// fixme2: Should remove scaling quality, and add in default fps
+
 
 
 	// Initialise various things
@@ -187,67 +205,136 @@ void menu_edit_preferences(void)
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_scaling_quality), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_scaling_quality), scaling_quality);
 
-	// Set the dialog going
+	// Ensure everything will show
 	gtk_widget_show_all(GTK_WIDGET(main_dialog));
-	dialog_result = gtk_dialog_run(GTK_DIALOG(main_dialog));
 
-	// Was the OK button pressed?
-	if (GTK_RESPONSE_ACCEPT == dialog_result)
+	// Loop around until we have all valid values, or the user cancels out
+	useable_input = TRUE;
+	validated_string = NULL;
+	do
 	{
-		// * Yes, so update the application variables with their new values *
-
-		// fixme3: No validation is done on this input yet.  To make a secure application, it really needs to be
-
-		// Default Project Folder
-		default_project_folder = g_string_assign(default_project_folder, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_default_project_folder)));
-
-		// Default Screenshot Folder
-		screenshots_folder = g_string_assign(screenshots_folder, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_screenshot_folder)));
-
-		// Default Output Folder
-		default_output_folder = g_string_assign(default_output_folder, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_default_output_folder)));
-
-		// Default Output Resolution
-		g_string_printf(tmp_gstring, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_default_output_res)));
-		tmp_gstring = g_string_truncate(tmp_gstring, tmp_gstring->len - 7);
-		strings = g_strsplit(tmp_gstring->str, "x", 2);
-		default_output_width = atoi(strings[0]);
-		default_output_height = atoi(strings[1]);
-		g_strfreev(strings);
-
-		// Default Slide Length
-		default_slide_length = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_slide_length));
-
-		// Preview width
-		if (preview_width != (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_preview_width)))
+		// Display the application preferences dialog
+		if (gtk_dialog_run(GTK_DIALOG(main_dialog)) != GTK_RESPONSE_ACCEPT)
 		{
-			// The desired film strip width has changed
-			preview_width = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_preview_width));
-
-			// Regenerate the film strip thumbnails
-			regenerate_film_strip_thumbnails();
-
-			// Set the new width of the film strip widget
-			handle_size = g_new0(GValue, 1);
-			g_value_init(handle_size, G_TYPE_INT);
-			gtk_widget_style_get_property(GTK_WIDGET(main_area), "handle-size", handle_size);
-			gtk_paned_set_position(GTK_PANED(main_area), g_value_get_int(handle_size) + preview_width + 15);
-			g_free(handle_size);
+			// The dialog was cancelled, so destroy it, free memory, and return to the caller
+			g_string_free(tmp_gstring, TRUE);
+			gtk_widget_destroy(GTK_WIDGET(main_dialog));
+			return;
 		}
 
-		// Icon Height
-		icon_height = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_icon_height));
+		// Free the validated_string variable if needed before recreating it
+		if (NULL != validated_string)
+			g_string_free(validated_string, TRUE);
 
-		// Default Zoom Level
-		default_zoom_level = g_string_assign(default_zoom_level, gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_default_zoom_level)));
+		// Retrieve the new default project folder input
+		valid_project_folder = g_string_new(NULL);
+		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_default_project_folder)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED126: There was something wrong with the project folder given.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_project_folder = g_string_assign(valid_project_folder, validated_string->str);
+			g_string_free(validated_string, TRUE);
+		}
 
-		// Default Background Colour
-		gtk_color_button_get_color(GTK_COLOR_BUTTON(button_default_bg_colour), &default_bg_colour);
+		// Retrieve the new default screenshot folder input
+		valid_screenshot_folder = g_string_new(NULL);
+		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_screenshot_folder)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED127: There was something wrong with the screenshot folder given.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_screenshot_folder = g_string_assign(valid_screenshot_folder, validated_string->str);
+			g_string_free(validated_string, TRUE);
+		}
 
-		// Scaling Quality
-		g_string_printf(tmp_gstring, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_scaling_quality)));
-		scaling_quality = atoi(tmp_gstring->str);  // Directly get the first character of the string, as its the value we want
+		// Retrieve the new default output folder input
+		valid_output_folder = g_string_new(NULL);
+		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_default_output_folder)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED128: There was something wrong with the output folder given.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_output_folder = g_string_assign(valid_output_folder, validated_string->str);
+			g_string_free(validated_string, TRUE);
+		}
+
+		// Retrieve the new default output resolution input
+		valid_output_resolution = g_string_new(NULL);
+		validated_string = validate_value(RESOLUTION, V_INT_UNSIGNED, gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_default_output_res)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED129: There was something wrong with the default output resolution given.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_output_resolution = g_string_assign(valid_output_resolution, validated_string->str);
+			g_string_free(validated_string, TRUE);
+		}
+
+		
+
+	} while (FALSE == useable_input);
+
+	// * We only get here after all input is considered valid *
+
+	// Default Project Folder
+	default_project_folder = g_string_assign(default_project_folder, valid_project_folder->str);
+	g_string_free(valid_project_folder, TRUE);
+
+	// Default Screenshot Folder
+	screenshots_folder = g_string_assign(screenshots_folder, valid_screenshot_folder->str);
+	g_string_free(valid_screenshot_folder, TRUE);
+
+	// Default Output Folder
+	default_output_folder = g_string_assign(default_output_folder, valid_output_folder->str);
+	g_string_free(valid_output_folder, TRUE);	
+
+	// Default Output Resolution
+	valid_output_resolution = g_string_truncate(valid_output_resolution, valid_output_resolution->len - 7);
+	strings = g_strsplit(valid_output_resolution->str, "x", 2);
+	default_output_width = atoi(strings[0]);
+	default_output_height = atoi(strings[1]);
+	g_strfreev(strings);
+
+	// Default Slide Length
+	default_slide_length = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_slide_length));
+
+	// Preview width
+	if (preview_width != (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_preview_width)))
+	{
+		// The desired film strip width has changed
+		preview_width = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_preview_width));
+
+		// Regenerate the film strip thumbnails
+		regenerate_film_strip_thumbnails();
+
+		// Set the new width of the film strip widget
+		handle_size = g_new0(GValue, 1);
+		g_value_init(handle_size, G_TYPE_INT);
+		gtk_widget_style_get_property(GTK_WIDGET(main_area), "handle-size", handle_size);
+		gtk_paned_set_position(GTK_PANED(main_area), g_value_get_int(handle_size) + preview_width + 15);
+		g_free(handle_size);
 	}
+
+	// Icon Height
+	icon_height = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_icon_height));
+
+	// Default Zoom Level
+	default_zoom_level = g_string_assign(default_zoom_level, gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_default_zoom_level)));
+
+	// Default Background Colour
+	gtk_color_button_get_color(GTK_COLOR_BUTTON(button_default_bg_colour), &default_bg_colour);
+
+	// Scaling Quality
+	g_string_printf(tmp_gstring, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_scaling_quality)));
+	scaling_quality = atoi(tmp_gstring->str);  // Directly get the first character of the string, as its the value we want
 
 	// Free up the memory allocated in this function
 	g_string_free(tmp_gstring, TRUE);
@@ -264,6 +351,9 @@ void menu_edit_preferences(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/02/19 06:41:36  vapour
+ * Began converting this function to validate incoming user input.
+ *
  * Revision 1.9  2008/02/05 15:29:56  vapour
  * Moved the list of output resolutions into the create resolution selector function.
  *
