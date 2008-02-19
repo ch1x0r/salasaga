@@ -157,10 +157,10 @@ void menu_screenshots_import(void)
 	{
 		if (TRUE == project_active)
 		{
-			g_string_printf(tmp_string, "Not all of the screenshots are of the same size.  If you proceed, they will be scaled to the same size as the project.  Do you want to proceed?");
+			g_string_printf(tmp_string, "Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, they will be scaled to the same size as the project.  Do you want to proceed?");
 		} else
 		{
-			g_string_printf(tmp_string, "Not all of the screenshots are of the same size.  If you proceed, they will all be scaled to the size of the first one.  Do you want to proceed?");
+			g_string_printf(tmp_string, "Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, they will all be scaled to the size of the first one.  Do you want to proceed?");
 		}
 
 		// Display the warning dialog
@@ -412,6 +412,9 @@ void menu_screenshots_import(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/02/19 13:37:46  vapour
+ * Improved the wording of the warning message about screenshot size differing.
+ *
  * Revision 1.11  2008/02/12 14:18:33  vapour
  * Updated to use the new visibility and background fields in the layer structure.
  *
