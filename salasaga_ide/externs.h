@@ -94,6 +94,7 @@ extern GtkToolItem			*layer_toolbar_items[MAIN_TB_COUNT];
 extern gulong				layer_toolbar_signals[MAIN_TB_COUNT];
 
 extern GdkColor				default_bg_colour;
+extern guint				default_fps;
 extern GString				*default_output_folder;
 extern guint				default_output_height;
 extern guint				default_output_width;
@@ -102,7 +103,6 @@ extern guint				default_slide_length;
 extern GString				*default_zoom_level;
 extern guint				icon_height;
 extern guint				preview_width;
-extern guint				scaling_quality;
 extern GString				*screenshots_folder;
 
 extern GString				*output_folder;
@@ -135,6 +135,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.37  2008/02/19 13:41:09  vapour
+ * Removed scaling quality variable, added a default frames per second variable.
+ *
  * Revision 1.36  2008/02/14 16:56:53  vapour
  * Added the valid fields array.
  *

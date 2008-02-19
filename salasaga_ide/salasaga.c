@@ -131,6 +131,7 @@ gulong					layer_toolbar_signals[MAIN_TB_COUNT];	// Array of toolbar signals
 
 // Application default preferences
 GdkColor				default_bg_colour;			// Default background color for slides
+guint					default_fps;				// Defaut number of frames per second
 GString					*default_output_folder;		// Application default save path for exporting animations
 guint					default_output_height;		// Application default for how high to create project output
 guint					default_output_width;		// Application default for how wide to create project output
@@ -139,7 +140,6 @@ guint					default_slide_length;		// Default length of all new slides, in frames
 GString					*default_zoom_level;		// Default zoom level to use
 guint					icon_height = 30;			// Height in pixels for the toolbar icons (they're scalable SVG's)
 guint					preview_width;				// Width in pixel for the film strip preview (might turn into a structure later)
-guint					scaling_quality;			// Default image scaling quality used
 GString					*screenshots_folder;		// Application default for where to store screenshots
 
 // Project preferences
@@ -406,32 +406,7 @@ gint main(gint argc, gchar *argv[])
 		default_slide_length = slide_length = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/slide_length", NULL);
 		preview_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", NULL);
 		if (0 == preview_width) preview_width = 300;
-		frames_per_second = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/frames_per_second", NULL);
-
-		// Determine the stored scaling quality preference
-		scaling_quality = GDK_INTERP_BILINEAR;  // A backup, just in case someone sets the GConf to an invalid value
-		g_string_printf(tmp_gstring, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/scaling_quality", NULL));
-		if (0 == g_ascii_strncasecmp(tmp_gstring->str, "N", 1))
-		{
-			// Scaling quality should be GDK_INTERP_NEAREST
-			scaling_quality = GDK_INTERP_NEAREST;
-		}
-		if (0 == g_ascii_strncasecmp(tmp_gstring->str, "T", 1))
-		{
-			// Scaling quality should be GDK_INTERP_TILES
-			scaling_quality = GDK_INTERP_TILES;
-		}
-		if (0 == g_ascii_strncasecmp(tmp_gstring->str, "B", 1))
-		{
-			// Scaling quality should be GDK_INTERP_BILINEAR
-			scaling_quality = GDK_INTERP_BILINEAR;
-		}
-		if (0 == g_ascii_strncasecmp(tmp_gstring->str, "H", 1))
-		{
-			// Scaling quality should be GDK_INTERP_HYPER
-			scaling_quality = GDK_INTERP_HYPER;
-		}
-		g_string_free(tmp_gstring, TRUE);
+		default_fps = frames_per_second = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/frames_per_second", NULL);
 
 		// Check if the application should start maximised or not
 		should_maximise = gconf_engine_get_bool(gconf_engine, "/apps/flame/defaults/window_maximised", NULL);
@@ -657,46 +632,6 @@ gint main(gint argc, gchar *argv[])
 			RegCloseKey(hkey);
 		}
 
-		// Retrieve the value for the default scaling quality
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
-		{
-			// Value is missing, so warn the user and set a sensible default
-			missing_keys = TRUE;
-			scaling_quality =  GDK_INTERP_TILES;
-		} else
-		{
-			// Retrieve the value
-			buffer_size = sizeof(buffer_data);
-			return_code = RegQueryValueExA(hkey, "scaling_quality", NULL, NULL, buffer_ptr, &buffer_size);
-			if (ERROR_SUCCESS == return_code)
-			{
-				scaling_quality = GDK_INTERP_TILES;  // A backup, just in case someone sets an invalid value
-				if (0 == g_ascii_strncasecmp(buffer_ptr, "N", 1))
-				{
-					// Scaling quality should be GDK_INTERP_NEAREST
-					scaling_quality = GDK_INTERP_NEAREST;
-				}
-				if (0 == g_ascii_strncasecmp(buffer_ptr, "T", 1))
-				{
-					// Scaling quality should be GDK_INTERP_TILES
-					scaling_quality = GDK_INTERP_TILES;
-				}
-				if (0 == g_ascii_strncasecmp(buffer_ptr, "B", 1))
-				{
-					// Scaling quality should be GDK_INTERP_BILINEAR
-					scaling_quality = GDK_INTERP_BILINEAR;
-				}
-				if (0 == g_ascii_strncasecmp(buffer_ptr, "H", 1))
-				{
-					// Scaling quality should be GDK_INTERP_HYPER
-					scaling_quality = GDK_INTERP_HYPER;
-				}
-			}
-
-			// Close the registry key
-			RegCloseKey(hkey);
-		}
-
 		// Retrieve the value for the default slide length
 		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
@@ -711,6 +646,26 @@ gint main(gint argc, gchar *argv[])
 			if (ERROR_SUCCESS == return_code)
 			{
 				default_slide_length = slide_length = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the default frames per second
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			default_fps = frames_per_second = 12;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "frames_per_second", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				default_fps = frames_per_second = atoi(buffer_ptr);
 			}
 
 			// Close the registry key
@@ -768,7 +723,6 @@ gint main(gint argc, gchar *argv[])
 		default_output_width = 800;
 		default_output_height = 600;
 		default_slide_length = slide_length = 60;  // Default number of frames to use in new slides
-		scaling_quality =  GDK_INTERP_TILES;  // Hyper is VERY, VERY slow with large high res images [GDK_INTERP_NEAREST | GDK_INTERP_TILES | GDK_INTERP_BILINEAR | GDK_INTERP_HYPER]
 	}
 
 	// Set various required defaults that will be overwritten by the first project loaded
@@ -1025,6 +979,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.84  2008/02/19 13:39:55  vapour
+ * Removed scaling quality variable, added a default frames per second variable.
+ *
  * Revision 1.83  2008/02/11 02:16:49  vapour
  * Added startup check for flame-capture in search path, and code to disable the screenshot icon if its not found.
  *

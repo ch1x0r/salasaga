@@ -51,17 +51,13 @@ void menu_edit_preferences(void)
 	guint				guint_val;							// Temporary guint value used for validation
 	GValue				*handle_size;						// The size of the dividing handle for the film strip
 	GtkDialog			*main_dialog;						// Widget for the main dialog
-	GdkColor			new_bg_colour;						// Receives the new background color for the project
 	gchar				**strings;							// Text string are split apart with this
-	gint				tmp_counter;						// General counter used in looping
 	GString				*tmp_gstring;						// Text strings are constructed in this
 	gboolean			useable_input;						// Used to control loop flow
-	guint				valid_fps;							// Receives the new project fps once validated
-	guint				valid_height;						// Receives the new project height once validated
+	guint				valid_default_fps;					// Receives the new default fps once validated
 	guint				valid_icon_height;					// Receives the new icon height once validated
 	GString				*valid_output_folder;				// Receives the new output folder once validated
 	GString				*valid_output_resolution;			// Receives the new default output resolution once validated
-	GString				*valid_proj_name;					// Receives the new project name once validated
 	GString				*valid_project_folder;				// Receives the new default project folder once validated
 	GString				*valid_screenshot_folder;			// Receives the new screenshot folder once validated
 	guint				valid_slide_length;					// Receives the new default slide length once validated
@@ -86,6 +82,9 @@ void menu_edit_preferences(void)
 	GtkWidget			*label_default_slide_length;		// Default Slide Length
 	GtkWidget			*button_default_slide_length;		//
 
+	GtkWidget			*label_default_fps;					// Default Frames Per Second
+	GtkWidget			*button_default_fps;				//
+
 	GtkWidget			*label_preview_width;				// Preview Width
 	GtkWidget			*button_preview_width;				//
 
@@ -97,16 +96,6 @@ void menu_edit_preferences(void)
 
 	GtkWidget			*label_default_bg_colour;			// Default background colour
 	GtkWidget			*button_default_bg_colour;			// Color button
-
-	GtkWidget			*label_scaling_quality;				// Scaling quality
-	GtkWidget			*selector_scaling_quality;			//
-
-	gchar				*scale_array[] = { "0 - Nearest (low quality)", "1 - Tiles", "2 - Bilinear", "3 - Hyperbolic (Best - SLOW!)" };  // The available scaling options
-	gint				num_scale_items = sizeof(scale_array) / sizeof(scale_array[0]);
-
-
-// fixme2: Should remove scaling quality, and add in default fps
-
 
 
 	// Initialise various things
@@ -157,16 +146,25 @@ void menu_edit_preferences(void)
 	label_default_slide_length = gtk_label_new("Default Slide Length: ");
 	gtk_misc_set_alignment(GTK_MISC(label_default_slide_length), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_slide_length), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_default_slide_length = gtk_spin_button_new_with_range(0, 1000, 10);
+	button_default_slide_length = gtk_spin_button_new_with_range(0, valid_fields[SLIDE_LENGTH].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_slide_length), default_slide_length);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_slide_length), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	app_row_counter = app_row_counter + 1;
+
+	// Default Frames Per Second
+	label_default_fps = gtk_label_new("Default Frames Per Second: ");
+	gtk_misc_set_alignment(GTK_MISC(label_default_fps), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_fps), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	button_default_fps = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_FPS].max_value, 10);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_fps), default_fps);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_fps), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Preview width
 	label_preview_width = gtk_label_new("Film Strip Width: ");
 	gtk_misc_set_alignment(GTK_MISC(label_preview_width), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_preview_width), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_preview_width = gtk_spin_button_new_with_range(0, 1200, 10);
+	button_preview_width = gtk_spin_button_new_with_range(0, valid_fields[PREVIEW_WIDTH].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_preview_width), preview_width);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_preview_width), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
@@ -175,7 +173,7 @@ void menu_edit_preferences(void)
 	label_icon_height = gtk_label_new("Icon Height: ");
 	gtk_misc_set_alignment(GTK_MISC(label_icon_height), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_icon_height), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_icon_height = gtk_spin_button_new_with_range(0, 200, 10);
+	button_icon_height = gtk_spin_button_new_with_range(0, valid_fields[ICON_HEIGHT].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_icon_height), icon_height);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_icon_height), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
@@ -196,18 +194,6 @@ void menu_edit_preferences(void)
 	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(button_default_bg_colour), TRUE);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_bg_colour), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
-
-	// Scaling Quality
-	label_scaling_quality = gtk_label_new("Scaling Quality: ");
-	gtk_misc_set_alignment(GTK_MISC(label_scaling_quality), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_scaling_quality), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	selector_scaling_quality = gtk_combo_box_new_text();
-	for (tmp_counter = 0; tmp_counter < num_scale_items; tmp_counter++)
-	{
-		gtk_combo_box_append_text(GTK_COMBO_BOX(selector_scaling_quality), scale_array[tmp_counter]);
-	}
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_scaling_quality), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_scaling_quality), scaling_quality);
 
 	// Ensure everything will show
 	gtk_widget_show_all(GTK_WIDGET(main_dialog));
@@ -295,6 +281,19 @@ void menu_edit_preferences(void)
 		}
 		g_free(validated_guint);
 
+		// Retrieve the new default frames per second input
+		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_fps));
+		validated_guint = validate_value(PROJECT_FPS, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED134: There was something wrong with the default frames per second value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_default_fps = *validated_guint;
+		}
+		g_free(validated_guint);
+
 		// Retrieve the new preview width input
 		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_preview_width));
 		validated_guint = validate_value(PREVIEW_WIDTH, V_INT_UNSIGNED, &guint_val);
@@ -333,8 +332,6 @@ void menu_edit_preferences(void)
 			valid_zoom_level = g_string_assign(valid_zoom_level, validated_string->str);
 			g_string_free(validated_string, TRUE);
 		}
-
-
 	} while (FALSE == useable_input);
 
 	// * We only get here after all input is considered valid *
@@ -360,6 +357,9 @@ void menu_edit_preferences(void)
 
 	// Default Slide Length
 	default_slide_length = valid_slide_length;
+
+	// Default Frames Per Second
+	default_fps = valid_default_fps;
 
 	// Preview width
 	if (preview_width != valid_preview_width)
@@ -388,10 +388,6 @@ void menu_edit_preferences(void)
 	// Default Background Colour
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(button_default_bg_colour), &default_bg_colour);
 
-	// Scaling Quality
-	g_string_printf(tmp_gstring, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_scaling_quality)));
-	scaling_quality = atoi(tmp_gstring->str);  // Directly get the first character of the string, as its the value we want
-
 	// Free up the memory allocated in this function
 	g_string_free(tmp_gstring, TRUE);
 	gtk_widget_destroy(GTK_WIDGET(label_default_project_folder));
@@ -407,6 +403,9 @@ void menu_edit_preferences(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/02/19 13:45:14  vapour
+ * Removed scaling quality variable, added a default frames per second variable.
+ *
  * Revision 1.11  2008/02/19 12:43:36  vapour
  * Updated to validate input for icon height, film strip width, default slide length, and default zoom level.
  *
