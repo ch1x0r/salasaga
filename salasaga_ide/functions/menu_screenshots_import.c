@@ -282,6 +282,7 @@ void menu_screenshots_import(void)
 		tmp_layer->background = TRUE;
 		tmp_layer->name = g_string_new("Background");
 		tmp_layer->external_link = g_string_new(NULL);
+		tmp_layer->external_link_window = g_string_new("_self");
 
 		// Add the background layer to the new slide being created
 		tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
@@ -423,6 +424,9 @@ void menu_screenshots_import(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2008/02/19 17:55:46  vapour
+ * Fixed a small crashing bug.  Imported screenshots weren't having their external link window field filled out, leading to segfaults in the code that relies on it.
+ *
  * Revision 1.13  2008/02/19 17:44:29  vapour
  * Added code to select the first new screenshot when imported into an empty project, otherwise some other functions (i.e. slide delete) which rely on it don't work properly.
  *
