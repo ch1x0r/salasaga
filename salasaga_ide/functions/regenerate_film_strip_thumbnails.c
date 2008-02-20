@@ -49,13 +49,15 @@ void regenerate_film_strip_thumbnails()
 
 	// Safety check
 	slides = g_list_first(slides);
-	slide_position = g_list_position(slides, current_slide);
 	num_slides = g_list_length(slides);
 	if (0 == num_slides)
 	{
 		// There aren't any slides in this project yet, so just return
 		return;
 	}
+
+	// Get the path to the presently selected thumbnail in the film strip
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
 
 	// Remove the existing film strip thumbnails
 	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
@@ -74,7 +76,13 @@ void regenerate_film_strip_thumbnails()
 	}
 
 	// Reselect the thumbnail that was previously selected
-	new_path = gtk_tree_path_new_from_indices(slide_position, -1);
+	if (NULL == new_path)
+	{
+		// We couldn't get the existing path in order to reuse it, so we create a new one 
+		slides = g_list_first(slides);
+		slide_position = g_list_position(slides, current_slide);
+		new_path = gtk_tree_path_new_from_indices(slide_position, -1);
+	}
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
 }
@@ -85,6 +93,9 @@ void regenerate_film_strip_thumbnails()
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/20 03:56:14  vapour
+ * Updated to reuse an existing path if available, rather than recreating a new one each time.  Was a potential (small) memory leak.
+ *
  * Revision 1.7  2008/02/19 18:04:03  vapour
  * Fixed a crashing bug caused by the film strip thumbnails being deselected every time they were regenerated.  Now the previously selected film strip thumbnail is reselected after they're regenerated.
  *
