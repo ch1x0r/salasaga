@@ -1,7 +1,8 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects File -> New from the top menu 
+ * Flame Project: Opens a dialog box asking the user for the initial information for a new project. 
+ *                Called when the user selects File -> New from the top menu.
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -79,7 +80,8 @@ void menu_file_new(void)
 	GtkWidget			*bg_color_button;			// Background color selection button
 
 
-	// * Pop open a dialog box asking the user for the details of the new project *
+	// Initialise some things
+	valid_proj_name = g_string_new(NULL);
 
 	// Create the dialog window, and table to hold its children
 	project_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Create new Flame Project", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
@@ -146,7 +148,6 @@ void menu_file_new(void)
 	gtk_widget_show_all(GTK_WIDGET(project_dialog));
 
 	// Loop around until we have all valid values, or the user cancels out
-	useable_input = TRUE;
 	validated_string = NULL;
 	do
 	{
@@ -154,12 +155,15 @@ void menu_file_new(void)
 		if (GTK_RESPONSE_ACCEPT != gtk_dialog_run(GTK_DIALOG(project_dialog)))
 		{
 			// The dialog was cancelled, so destroy it and return to the caller
+			g_string_free(valid_proj_name, TRUE);
 			gtk_widget_destroy(GTK_WIDGET(project_dialog));
 			return;
 		}
 
+		// Reset the useable input flag
+		useable_input = TRUE;
+
 		// Validate the project name input
-		valid_proj_name = g_string_new(NULL);
 		validated_string = validate_value(PROJECT_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
 		if (NULL == validated_string)
 		{
@@ -169,6 +173,7 @@ void menu_file_new(void)
 		{
 			g_string_assign(valid_proj_name, validated_string->str);
 			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
 		}
 
 		// Validate the project width
@@ -181,8 +186,8 @@ void menu_file_new(void)
 		} else
 		{
 			valid_width = *validated_guint;
+			g_free(validated_guint);
 		}
-		g_free(validated_guint);
 
 		// Validate the project height
 		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(height_button));
@@ -194,8 +199,8 @@ void menu_file_new(void)
 		} else
 		{
 			valid_height = *validated_guint;
+			g_free(validated_guint);
 		}
-		g_free(validated_guint);
 
 		// Validate the project fps
 		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(fps_button));
@@ -207,8 +212,8 @@ void menu_file_new(void)
 		} else
 		{
 			valid_fps = *validated_guint;
+			g_free(validated_guint);
 		}
-		g_free(validated_guint);
 	} while (FALSE == useable_input);
 
 	// * We only get here after all input is considered valid *
@@ -297,6 +302,9 @@ void menu_file_new(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2008/02/20 05:57:48  vapour
+ * Improved memory allocation and deallocation.
+ *
  * Revision 1.14  2008/02/20 03:48:56  vapour
  * Updated to reuse an existing path if available, rather than recreating a new one each time.  Was a potential (small) memory leak.
  *

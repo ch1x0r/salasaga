@@ -110,10 +110,6 @@ void menu_file_open(void)
 		// Get the filename from the dialog box
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(open_dialog));
 
-		// Free the validated_string variable before recreating it
-		if (NULL != validated_string)
-			g_string_free(validated_string, TRUE);
-
 		// Validate the filename input
 		validated_string = validate_value(PROJECT_PATH, V_CHAR, filename);
 		if (NULL == validated_string)
@@ -127,6 +123,12 @@ void menu_file_open(void)
 			{
 				// The file was read in fine, so we continue
 				useable_input = TRUE;
+			}
+			else
+			{
+				// We need to loop around, so we free the memory allocated for the temporary validation string in this iteration
+				g_string_free(validated_string, TRUE);
+				validated_string = NULL;
 			}
 		}
 	} while (FALSE == useable_input);
@@ -211,6 +213,9 @@ void menu_file_open(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/02/20 05:58:47  vapour
+ * Improved memory allocation and deallocation.
+ *
  * Revision 1.9  2008/02/18 07:02:34  vapour
  * Updated to validate incoming filename input.
  *

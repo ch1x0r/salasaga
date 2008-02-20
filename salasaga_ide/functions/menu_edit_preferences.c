@@ -101,6 +101,11 @@ void menu_edit_preferences(void)
 	// Initialise various things
 	app_row_counter = 0;
 	tmp_gstring = g_string_new(NULL);
+	valid_project_folder = g_string_new(NULL);
+	valid_screenshot_folder = g_string_new(NULL);
+	valid_output_folder = g_string_new(NULL);
+	valid_output_resolution = g_string_new(NULL);
+	valid_zoom_level = g_string_new(NULL);
 
 	// Create the main dialog window
 	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Application Preferences", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
@@ -199,7 +204,6 @@ void menu_edit_preferences(void)
 	gtk_widget_show_all(GTK_WIDGET(main_dialog));
 
 	// Loop around until we have all valid values, or the user cancels out
-	useable_input = TRUE;
 	validated_string = NULL;
 	do
 	{
@@ -208,16 +212,19 @@ void menu_edit_preferences(void)
 		{
 			// The dialog was cancelled, so destroy it, free memory, and return to the caller
 			g_string_free(tmp_gstring, TRUE);
+			g_string_free(valid_project_folder, TRUE);
+			g_string_free(valid_screenshot_folder, TRUE);
+			g_string_free(valid_output_folder, TRUE);
+			g_string_free(valid_output_resolution, TRUE);
+			g_string_free(valid_zoom_level, TRUE);
 			gtk_widget_destroy(GTK_WIDGET(main_dialog));
 			return;
 		}
 
-		// Free the validated_string variable if needed before recreating it
-		if (NULL != validated_string)
-			g_string_free(validated_string, TRUE);
+		// Reset the useable input flag
+		useable_input = TRUE;
 
 		// Retrieve the new default project folder input
-		valid_project_folder = g_string_new(NULL);
 		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_default_project_folder)));
 		if (NULL == validated_string)
 		{
@@ -227,10 +234,10 @@ void menu_edit_preferences(void)
 		{
 			valid_project_folder = g_string_assign(valid_project_folder, validated_string->str);
 			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
 		}
 
 		// Retrieve the new default screenshot folder input
-		valid_screenshot_folder = g_string_new(NULL);
 		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_screenshot_folder)));
 		if (NULL == validated_string)
 		{
@@ -240,10 +247,10 @@ void menu_edit_preferences(void)
 		{
 			valid_screenshot_folder = g_string_assign(valid_screenshot_folder, validated_string->str);
 			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
 		}
 
 		// Retrieve the new default output folder input
-		valid_output_folder = g_string_new(NULL);
 		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_default_output_folder)));
 		if (NULL == validated_string)
 		{
@@ -253,10 +260,10 @@ void menu_edit_preferences(void)
 		{
 			valid_output_folder = g_string_assign(valid_output_folder, validated_string->str);
 			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
 		}
 
 		// Retrieve the new default output resolution input
-		valid_output_resolution = g_string_new(NULL);
 		validated_string = validate_value(RESOLUTION, V_INT_UNSIGNED, gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_default_output_res)));
 		if (NULL == validated_string)
 		{
@@ -266,6 +273,7 @@ void menu_edit_preferences(void)
 		{
 			valid_output_resolution = g_string_assign(valid_output_resolution, validated_string->str);
 			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
 		}
 
 		// Retrieve the new default slide length input
@@ -278,8 +286,8 @@ void menu_edit_preferences(void)
 		} else
 		{
 			valid_slide_length = *validated_guint;
+			g_free(validated_guint);
 		}
-		g_free(validated_guint);
 
 		// Retrieve the new default frames per second input
 		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_fps));
@@ -291,8 +299,8 @@ void menu_edit_preferences(void)
 		} else
 		{
 			valid_default_fps = *validated_guint;
+			g_free(validated_guint);
 		}
-		g_free(validated_guint);
 
 		// Retrieve the new preview width input
 		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_preview_width));
@@ -304,8 +312,8 @@ void menu_edit_preferences(void)
 		} else
 		{
 			valid_preview_width = *validated_guint;
+			g_free(validated_guint);
 		}
-		g_free(validated_guint);
 
 		// Retrieve the new icon height input
 		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_icon_height));
@@ -317,11 +325,10 @@ void menu_edit_preferences(void)
 		} else
 		{
 			valid_icon_height = *validated_guint;
+			g_free(validated_guint);
 		}
-		g_free(validated_guint);
 
 		// Retrieve the new default zoom level input
-		valid_zoom_level = g_string_new(NULL);
 		validated_string = validate_value(ZOOM_LEVEL, V_ZOOM, gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_default_zoom_level)));
 		if (NULL == validated_string)
 		{
@@ -331,6 +338,7 @@ void menu_edit_preferences(void)
 		{
 			valid_zoom_level = g_string_assign(valid_zoom_level, validated_string->str);
 			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
 		}
 	} while (FALSE == useable_input);
 
@@ -353,6 +361,7 @@ void menu_edit_preferences(void)
 	strings = g_strsplit(valid_output_resolution->str, "x", 2);
 	default_output_width = atoi(strings[0]);
 	default_output_height = atoi(strings[1]);
+	g_string_free(valid_output_resolution, TRUE);
 	g_strfreev(strings);
 
 	// Default Slide Length
@@ -403,6 +412,9 @@ void menu_edit_preferences(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2008/02/20 05:56:38  vapour
+ * Improved memory allocation and deallocation.
+ *
  * Revision 1.12  2008/02/19 13:45:14  vapour
  * Removed scaling quality variable, added a default frames per second variable.
  *
