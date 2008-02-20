@@ -121,7 +121,8 @@ void menu_file_save(void)
 		// Get a filename to save as
 		if (gtk_dialog_run(GTK_DIALOG(save_dialog)) != GTK_RESPONSE_ACCEPT)
 		{
-			// The dialog was cancelled, so destroy it and return to the caller
+			// The dialog was cancelled, so free the memory allocated in this function, destroy the dialog, and return to the caller
+			g_string_free(tmp_gstring, TRUE);
 			gtk_widget_destroy(save_dialog);
 			return;
 		}
@@ -131,7 +132,10 @@ void menu_file_save(void)
 
 		// Free the validated_string variable before recreating it
 		if (NULL != validated_string)
+		{
 			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
+		}
 
 		// Validate the filename input
 		validated_string = validate_value(PROJECT_PATH, V_CHAR, filename);
@@ -234,7 +238,7 @@ void menu_file_save(void)
 	g_list_foreach(slides, menu_file_save_slide, slide_root);
 
 	// Create a saving context
-	save_context = xmlSaveToFilename(filename, "utf8", 1);  // XML_SAVE_FORMAT == 1
+	save_context = xmlSaveToFilename(validated_string->str, "utf8", 1);  // XML_SAVE_FORMAT == 1
 
 	// Flush the saving context
 	tmp_long = xmlSaveDoc(save_context, document_pointer);
@@ -243,7 +247,7 @@ void menu_file_save(void)
 	tmp_int = xmlSaveClose(save_context);
 
 	// Add a message to the status bar so the user gets visual feedback
-	g_string_printf(tmp_gstring, "Saved project as '%s'.", filename);
+	g_string_printf(tmp_gstring, "Saved project as '%s'.", validated_string->str);
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 	gdk_flush();
 
@@ -252,14 +256,13 @@ void menu_file_save(void)
 	{
 		file_name = g_string_new(NULL);
 	}
-	file_name = g_string_assign(file_name, filename);
+	file_name = g_string_assign(file_name, validated_string->str);
 
 	// * Function clean up area *
 
-	// Frees the memory holding the file name
+	// Free the memory allocated in this function
 	g_free(filename);
-
-	// Free the temporary gstring
+	g_string_free(validated_string, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 }
 
@@ -269,6 +272,9 @@ void menu_file_save(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/02/20 05:54:41  vapour
+ * Tweaked to use the validated string whenever possible, and to also free allocated memory better.
+ *
  * Revision 1.11  2008/02/18 13:45:25  vapour
  * Updated to validate incoming filename to save as input.
  *
