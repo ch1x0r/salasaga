@@ -33,21 +33,28 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
 #include "regenerate_timeline_duration_images.h"
+#include "validate_value.h"
 
 
 void slide_properties(void)
 {
 	// Local variables
-	gint				dialog_result;				// Catches the return code from the dialog box
 	GtkWidget			*dialog_table;				// Table used for neat layout of the dialog box
+	guint				guint_val;					// Temporary guint value used for validation
 	guint				layer_counter;				// Counter used in loops
-	guint				new_slide_duration;			// Receives the new slide duration value
 	guint				num_layers;					// Receives the number of layers present in the slide
 	guint				old_slide_duration;			// Holds the old slide duration
 	guint				row_counter = 0;			// Used to count which row things are up to
 	GtkDialog			*slide_dialog;				// Widget for the dialog
 	layer				*this_layer_data;			// Pointer to individual layer data
+	slide				*this_slide;				// Points to the slide we're working with
+	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	guint				valid_slide_duration;		// Receives the new slide duration once validated
+	GString				*valid_slide_name;			// Receives the new slide name once validated
+	guint				*validated_guint;			// Receives known good guint values from the validation function
+	GString				*validated_string;			// Receives known good strings from the validation function
 
 	GtkWidget			*name_label;				// Label widget
 	GtkWidget			*name_entry;				// Widget for accepting the name of the slide
@@ -59,8 +66,10 @@ void slide_properties(void)
 
 
 	// Initialise various things
+	this_slide = current_slide->data;
 	tmp_gstring = g_string_new(NULL);
-	old_slide_duration = ((slide *) current_slide->data)->duration;
+	valid_slide_name = g_string_new(NULL);
+	old_slide_duration = this_slide->duration;
 
 	// * Display a dialog box asking for the new name of the slide *
 
@@ -76,11 +85,11 @@ void slide_properties(void)
 
 	// Create the entry holding the slide name
 	name_entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(name_entry), 50);
-	if (NULL != ((slide *) current_slide->data)->name)
+	gtk_entry_set_max_length(GTK_ENTRY(name_entry), valid_fields[SLIDE_NAME].max_value);
+	if (NULL != this_slide->name)
 	{
 		// Display the present name in the text field
-		gtk_entry_set_text(GTK_ENTRY(name_entry), ((slide *) current_slide->data)->name->str);
+		gtk_entry_set_text(GTK_ENTRY(name_entry), this_slide->name->str);
 	} else
 	{
 		// No present name, so just use the slide's position
@@ -96,63 +105,94 @@ void slide_properties(void)
 	gtk_table_attach(GTK_TABLE(dialog_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry holding the slide duration
-	duration_entry = gtk_spin_button_new_with_range(0, 1000, 10);
+	duration_entry = gtk_spin_button_new_with_range(0, valid_fields[SLIDE_LENGTH].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(duration_entry), old_slide_duration);
 	gtk_table_attach(GTK_TABLE(dialog_table), GTK_WIDGET(duration_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Run the dialog
+	// Ensure everything will show
 	gtk_widget_show_all(GTK_WIDGET(slide_dialog));
-	dialog_result = gtk_dialog_run(GTK_DIALOG(slide_dialog));
 
-	// Was the OK button pressed?
-	if (GTK_RESPONSE_ACCEPT != dialog_result)
+	// Loop around until we have all valid values, or the user cancels out
+	validated_string = NULL;
+	do
 	{
-		// * The user cancelled the dialog *
+		// Display the dialog
+		if (GTK_RESPONSE_ACCEPT != gtk_dialog_run(GTK_DIALOG(slide_dialog)))
+		{
+			// The dialog was cancelled, so destroy it and return to the caller
+			gtk_widget_destroy(GTK_WIDGET(slide_dialog));
+			g_string_free(valid_slide_name, TRUE);
+			g_string_free(tmp_gstring, TRUE);
+			return;
+		}
 
-		// Destroy the dialog box then return
-		gtk_widget_destroy(GTK_WIDGET(slide_dialog));
+		// Reset the useable input flag
+		useable_input = TRUE;
 
-		// Free the resources allocated in this function
-		g_string_free(tmp_gstring, TRUE);
+		// Validate the slide name input
+		validated_string = validate_value(SLIDE_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED140: There was something wrong with the slide name value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_slide_name = g_string_assign(valid_slide_name, validated_string->str);
+			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
+		}
 
-		return;
-	}
+		// Retrieve the new slide duration input
+		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(duration_entry));
+		validated_guint = validate_value(SLIDE_LENGTH, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED141: There was something wrong with the slide duration value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_slide_duration = *validated_guint;
+			g_free(validated_guint);
+		}
+	} while (FALSE == useable_input);
 
-	// fixme4: We should validate the user input (slide name) here
+	// * We only get here after all input is considered valid *
 
 	// Set the new slide name
-	if (NULL == ((slide *) current_slide->data)->name)
+	if (NULL == this_slide->name)
 	{
-		((slide *) current_slide->data)->name = g_string_new(NULL);
+		this_slide->name = g_string_new(NULL);
 	}
-	g_string_printf(((slide *) current_slide->data)->name, "%s", gtk_entry_get_text(GTK_ENTRY(name_entry)));
+	g_string_printf(this_slide->name, "%s", valid_slide_name->str);
 
 	// Set the new slide duration
-	((slide *) current_slide->data)->duration = new_slide_duration = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(duration_entry));
-	if (new_slide_duration < old_slide_duration)
+	this_slide->duration = valid_slide_duration;
+	if (valid_slide_duration < old_slide_duration)
 	{
-		// New slide duration is shorter than it was, so we adjust any layers that would go past the new end
-		num_layers = g_list_length(((slide *) current_slide->data)->layers);
+		// New slide duration is shorter than it was, so we adjust any layers that now go past the end
+		this_slide->layers = g_list_first(this_slide->layers);
+		num_layers = g_list_length(this_slide->layers);
 		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 		{
 			// Does this layer last too long?
-			this_layer_data = g_list_nth_data(((slide *) current_slide->data)->layers, layer_counter);
-			if (this_layer_data->finish_frame > new_slide_duration)
+			this_layer_data = g_list_nth_data(this_slide->layers, layer_counter);
+			if (this_layer_data->finish_frame > valid_slide_duration)
 			{
 				// This layer now lasts too long, so we shorten it's finish frame to match the new slide duration
-				this_layer_data->finish_frame = new_slide_duration;
+				this_layer_data->finish_frame = valid_slide_duration;
 			}
 		}
 	}
 
 	// Regenerate the timeline duration images for all layers in this slide
-	regenerate_timeline_duration_images((slide *) current_slide->data);
+	regenerate_timeline_duration_images(this_slide);
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(slide_dialog));
 
 	// Free the resources allocated in this function
+	g_string_free(valid_slide_name, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 }
 
@@ -162,6 +202,10 @@ void slide_properties(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/02/20 09:06:15  vapour
+ *  + Now validates input.
+ *  + Simplified pointers.
+ *
  * Revision 1.2  2008/02/04 14:41:46  vapour
  *  + Removed unnecessary includes.
  *  + Improved spacing between table cells.
