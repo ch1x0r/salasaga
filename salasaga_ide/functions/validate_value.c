@@ -44,6 +44,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 {
 	// Local variables
 	guint				capabilities;
+	gboolean			capability_check;
 	guint				base_type;
 	GString				*error_string;
 	gchar				input_char;
@@ -104,7 +105,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					// * The input wasn't a standard alphanumic character, so check if it *
 					// * is one of the characters in the capabilites list for this field *
 					match_found = FALSE;
-					if (TRUE == (V_SPACES && capabilities))
+					capability_check = V_SPACES & capabilities;
+					if (FALSE != capability_check)
 					{
 						// This field is allowed to have spaces.  Is this character a space?
 						if (0 == g_ascii_strncasecmp(" ", &input_char, 1))
@@ -115,7 +117,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 							continue;
 						}
 					}
-					if (TRUE == (V_FULL_STOP && capabilities))
+					capability_check = V_FULL_STOP & capabilities;
+					if (FALSE != capability_check)
 					{
 						// This field is allowed to have full stops.  Is this character a full stop?
 						if (0 == g_ascii_strncasecmp(".", &input_char, 1))
@@ -126,7 +129,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 							continue;
 						}
 					}
-					if (TRUE == (V_HYPENS && capabilities))
+					capability_check = V_HYPENS & capabilities;
+					if (FALSE != capability_check)
 					{
 						// This field is allowed to have hypens.  Is this character a hyphen?
 						if (0 == g_ascii_strncasecmp("-", &input_char, 1))
@@ -137,7 +141,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 							continue;
 						}
 					}
-					if (TRUE == (V_UNDERSCORES && capabilities))
+					capability_check = V_UNDERSCORES & capabilities;
+					if (FALSE != capability_check)
 					{
 						// This field is allowed to have underscores.  Is this character an underscore?
 						if (0 == g_ascii_strncasecmp("_", &input_char, 1))
@@ -148,7 +153,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 							continue;
 						}
 					}
-					if (TRUE == (V_PATH_SEP && capabilities))
+					capability_check = V_PATH_SEP & capabilities;
+					if (FALSE != capability_check)
 					{
 						// This field is allowed to have path seperator charachers ('/', '\') .  Is this character one of those?
 						if ((0 == g_ascii_strncasecmp("/", &input_char, 1)) || (0 == g_ascii_strncasecmp("\\", &input_char, 1)))
@@ -428,6 +434,9 @@ void *validate_value(gint value_id, gint input_type, void *value)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/20 09:00:42  vapour
+ * Updated to do proper boolean bit testing.  Verbosely done, so Eclipse can debug it properly.  Eclipse seems to have a bug here. :(
+ *
  * Revision 1.6  2008/02/19 12:36:35  vapour
  * Added code to validate the new zoom level base type.
  *
