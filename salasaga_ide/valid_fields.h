@@ -32,13 +32,18 @@ validatation_entry		valid_fields[] =
 {
 	{ COLOUR_COMP8,			"8 Bit Colour Value Component",			V_INT_UNSIGNED,		V_NONE,		0,		255 },
 	{ COLOUR_COMP16, 		"16 Bit Colour Value Component",		V_INT_UNSIGNED,		V_NONE,		0,		65535 },
+	{ EXTERNAL_LINK,		"External link",						V_CHAR,				V_HYPENS | V_PATH_SEP | V_PERCENT | V_SPACES | V_UNDERSCORES,		0,		200 },
+	{ EXTERNAL_LINK_WINDOW,	"Window target for an external link",	V_CHAR,				V_UNDERSCORES,		0,		20 },
+	{ FILE_PATH,			"Full path to a file",					V_CHAR,				V_FULL_STOP | V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
 	{ FOLDER_PATH,			"Full path to a folder",				V_CHAR,				V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
+	{ FRAME_NUMBER,			"A frame number",						V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ ICON_HEIGHT,			"Height of the tool bar icons",			V_INT_UNSIGNED,		V_NONE,		0,		80 },
+	{ LAYER_HEIGHT,			"Height of this layer",					V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ LAYER_WIDTH,			"Width of this layer",					V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ PREVIEW_WIDTH,		"Width of film strip thumbnails",		V_INT_UNSIGNED,		V_NONE,		0,		800 },
 	{ PROJECT_FPS,			"Frames per Second for this project",	V_INT_UNSIGNED,		V_NONE,		0,		120 },
 	{ PROJECT_HEIGHT,		"Height of this project",				V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ PROJECT_NAME,			"Name of this project",					V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
-	{ PROJECT_PATH,			"Full path to a project file",			V_CHAR,				V_FULL_STOP | V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
 	{ PROJECT_WIDTH,		"Width of this project",				V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ RESOLUTION,			"An X * Y resolution value",			V_RESOLUTION,		V_NONE,		0,		16 },
 	{ SCREENSHOT_HEIGHT,	"Height for next screenshot",			V_INT_UNSIGNED,		V_NONE,		0,		4096 },
@@ -47,6 +52,8 @@ validatation_entry		valid_fields[] =
 	{ SCREENSHOT_Y_OFFSET,	"Y offset for next screenshot",			V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ SLIDE_LENGTH,			"Number of frames per slide",			V_INT_UNSIGNED,		V_NONE,		0,		1200 },
 	{ SLIDE_NAME,			"Name of this slide",					V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
+	{ X_OFFSET,				"Y Offset",								V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ Y_OFFSET,				"X Offset"			,					V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ ZOOM_LEVEL,			"Magnification level of working area",	V_ZOOM,				V_NONE,		0,		12 }
 };
 
@@ -62,6 +69,9 @@ validatation_entry		valid_fields[] =
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/20 18:39:32  vapour
+ * Added validation field values for the external link, external link target window, and x and y offsets.
+ *
  * Revision 1.6  2008/02/20 09:09:18  vapour
  * Added the slide name validation field type.
  *

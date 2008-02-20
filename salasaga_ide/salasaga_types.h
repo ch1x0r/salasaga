@@ -56,6 +56,7 @@ extern "C" {
 #define V_UNDERSCORES	4
 #define V_PATH_SEP		8
 #define V_SPACES		16
+#define V_PERCENT		32
 
 // The known layer types
 enum {
@@ -131,13 +132,18 @@ enum
 {
 	COLOUR_COMP8,
 	COLOUR_COMP16,
+	EXTERNAL_LINK,
+	EXTERNAL_LINK_WINDOW,
+	FILE_PATH,
 	FOLDER_PATH,
+	FRAME_NUMBER,
 	ICON_HEIGHT,
+	LAYER_HEIGHT,
+	LAYER_WIDTH,
 	PREVIEW_WIDTH,
 	PROJECT_FPS,
 	PROJECT_HEIGHT,
 	PROJECT_NAME,
-	PROJECT_PATH,
 	PROJECT_WIDTH,
 	RESOLUTION,
 	SCREENSHOT_HEIGHT,
@@ -146,6 +152,8 @@ enum
 	SCREENSHOT_Y_OFFSET,
 	SLIDE_LENGTH,
 	SLIDE_NAME,
+	X_OFFSET,
+	Y_OFFSET,
 	ZOOM_LEVEL
 };
 
@@ -277,6 +285,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.54  2008/02/20 18:38:51  vapour
+ * Added validation field values for the external link, external link target window, and x and y offsets.
+ *
  * Revision 1.53  2008/02/20 09:08:38  vapour
  * Added the slide name validation field type.
  *
