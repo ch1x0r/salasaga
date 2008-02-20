@@ -37,6 +37,7 @@
 #include "layer_edit.h"
 #include "layer_new_highlight.h"
 #include "layer_new_image.h"
+#include "layer_new_mouse.h"
 #include "layer_new_text.h"
 #include "menu_edit_preferences.h"
 #include "menu_enable.h"
@@ -115,6 +116,7 @@ void create_menu_bar()
 		{"/Layer/Add _Text",			NULL,					layer_new_text,					0,	"<Item>"},
 		{"/Layer/Add _Highlight",		NULL,					layer_new_highlight,			0,	"<Item>"},
 		{"/Layer/Add _Image",			NULL,					layer_new_image,				0,	"<Item>"},
+		{"/Layer/Add _Mouse",			NULL,					layer_new_mouse,				0,	"<Item>"},
 
 		{"/E_xport",					NULL,					NULL,							0,	"<Branch>"},
 		{"/Export/_Flash Animation",	"<control><shift>F",	menu_export_flash_animation,	0,	"<Item>"},
@@ -160,6 +162,9 @@ void create_menu_bar()
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/02/20 22:24:35  vapour
+ * Added missing menu item for creating new mouse layers.
+ *
  * Revision 1.11  2008/02/11 12:02:57  vapour
  * Added menu items to export a slide as an image file, and to also export an image layer as an image file.
  *
