@@ -253,12 +253,17 @@ void menu_file_new(void)
 	// Set the default background color
 	default_bg_colour = new_bg_colour;
 
-	// Create a blank slide to start things from
+	// Create an initial blank slide for the project
 	slide_insert();
 	current_slide = slides;
 
 	// Select the thumbnail for the new slide in the film strip
-	new_path = gtk_tree_path_new_from_indices(0, -1);
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
+	if (NULL == new_path)
+	{
+		// We couldn't get the existing path in order to reuse it, so we'll create a new one 
+		new_path = gtk_tree_path_new_first();
+	}
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
 
@@ -292,6 +297,9 @@ void menu_file_new(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2008/02/20 03:48:56  vapour
+ * Updated to reuse an existing path if available, rather than recreating a new one each time.  Was a potential (small) memory leak.
+ *
  * Revision 1.13  2008/02/19 17:36:05  vapour
  * Re-aligned tabs to suit my display.
  *
