@@ -62,7 +62,6 @@ void layer_edit(void)
 	GtkTextIter			text_start;					// The start position of the text buffer
 	GtkTextIter			text_end;					// The end position of the text buffer
 
-	GtkTreeViewColumn	*tmp_column;				// Temporary column
 	layer_empty			*tmp_empty_ob;				// Temporary empty layer object
 	layer_highlight		*tmp_highlight_ob;			// Temporary highlight layer object
 	layer_image			*tmp_image_ob;				// Temporary image layer object
@@ -92,9 +91,7 @@ void layer_edit(void)
 	num_layers = g_list_length(layer_pointer);
 
 	// Determine which layer the user has selected in the timeline
-	tmp_path = gtk_tree_path_new();
-	tmp_column = gtk_tree_view_column_new();
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, &tmp_column);
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
 	selected_row = atoi(gtk_tree_path_to_string(tmp_path));
 	tmp_layer = g_list_nth_data(layer_pointer, selected_row);
 
@@ -238,6 +235,9 @@ void layer_edit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2008/02/20 18:45:44  vapour
+ * Fixed a small potential memory leak.
+ *
  * Revision 1.10  2008/02/16 11:10:48  vapour
  * Replaced our sound beep function with the inbuilt gdk sound beep one.
  *
