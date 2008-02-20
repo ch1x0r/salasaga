@@ -145,6 +145,7 @@ enum
 	SCREENSHOT_X_OFFSET,
 	SCREENSHOT_Y_OFFSET,
 	SLIDE_LENGTH,
+	SLIDE_NAME,
 	ZOOM_LEVEL
 };
 
@@ -276,6 +277,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.53  2008/02/20 09:08:38  vapour
+ * Added the slide name validation field type.
+ *
  * Revision 1.52  2008/02/19 12:34:00  vapour
  * Added validation field entries for icon height, film strip width, default slide length, and default zoom level.
  *
