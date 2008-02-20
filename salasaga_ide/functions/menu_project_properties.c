@@ -33,15 +33,25 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
+#include "validate_value.h"
 
 
 void menu_project_properties(void)
 {
 	// Local variables
-	gint				dialog_result;				// Catches the return code from the dialog box
+	guint				guint_val;					// Temporary guint value used for validation
 	GtkDialog			*main_dialog;				// Widget for the main dialog
 	GtkWidget			*proj_dialog_table;			// Table used for neat layout of the labels and fields in project preferences
 	gint				proj_row_counter;			// Used when building the project preferences dialog box
+	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	guint				valid_fps;					// Receives the new project fps once validated
+	GString				*valid_output_folder;		// Receives the new output folder once validated
+	GString				*valid_proj_name;			// Receives the new project name once validated
+	GString				*valid_project_folder;		// Receives the new project folder once validated
+	guint				valid_slide_length;			// Receives the new project default slide length once validated
+	guint				*validated_guint;			// Receives known good guint values from the validation function
+	GString				*validated_string;			// Receives known good strings from the validation function
 
 	GtkWidget			*label_project_name;		// Project Name
 	GtkWidget			*entry_project_name;		//
@@ -69,6 +79,9 @@ void menu_project_properties(void)
 
 	// Initialise various things
 	proj_row_counter = 0;
+	valid_output_folder = g_string_new(NULL);
+	valid_proj_name = g_string_new(NULL);
+	valid_project_folder = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 
 	// Create the main dialog window
@@ -108,7 +121,7 @@ void menu_project_properties(void)
 	label_slide_length = gtk_label_new("Default Slide Length: ");
 	gtk_misc_set_alignment(GTK_MISC(label_slide_length), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_slide_length), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_slide_length = gtk_spin_button_new_with_range(0, 1000, 10);
+	button_slide_length = gtk_spin_button_new_with_range(0, valid_fields[SLIDE_LENGTH].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_slide_length), slide_length);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_slide_length), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
@@ -145,33 +158,117 @@ void menu_project_properties(void)
 	gtk_editable_set_editable(GTK_EDITABLE(entry_project_height), FALSE);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_height), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Set the dialog going
+	// Ensure everything will show
 	gtk_widget_show_all(GTK_WIDGET(main_dialog));
-	dialog_result = gtk_dialog_run(GTK_DIALOG(main_dialog));
 
-	// Was the OK button pressed?
-	if (GTK_RESPONSE_ACCEPT == dialog_result)
+	// Loop around until we have all valid values, or the user cancels out
+	validated_string = NULL;
+	do
 	{
-		// * Yes, so update the project variables with their new values *
+		// Display the dialog
+		if (GTK_RESPONSE_ACCEPT != gtk_dialog_run(GTK_DIALOG(main_dialog)))
+		{
+			// The dialog was cancelled, so destroy it and return to the caller
+			gtk_widget_destroy(GTK_WIDGET(main_dialog));
+			g_string_free(valid_proj_name, TRUE);
+			g_string_free(valid_project_folder, TRUE);
+			g_string_free(valid_output_folder, TRUE);
+			return;
+		}
 
-		// Project Name
-		project_name = g_string_assign(project_name, gtk_entry_get_text(GTK_ENTRY(entry_project_name)));
+		// Reset the useable input flag
+		useable_input = TRUE;
 
-		// Project Folder
-		project_folder = g_string_assign(project_folder, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_project_folder)));
+		// Validate the project name input
+		validated_string = validate_value(PROJECT_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(entry_project_name)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED135: There was something wrong with the project name value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_proj_name = g_string_assign(valid_proj_name, validated_string->str);
+			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
+		}
 
-		// Output Folder
-		output_folder = g_string_assign(output_folder, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_output_folder)));
+		// Retrieve the new project folder input
+		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_project_folder)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED136: There was something wrong with the project folder given.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_project_folder = g_string_assign(valid_project_folder, validated_string->str);
+			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
+		}
 
-		// Slide Length
-		slide_length = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_slide_length));
+		// Retrieve the new output folder input
+		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_output_folder)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED137: There was something wrong with the output folder given.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_output_folder = g_string_assign(valid_output_folder, validated_string->str);
+			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
+		}
 
-		// Frames per second
-		frames_per_second = (guint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_frames_per_second));
-	}
+		// Retrieve the new project default slide length input
+		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_slide_length));
+		validated_guint = validate_value(SLIDE_LENGTH, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED138: There was something wrong with the project default slide length value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_slide_length = *validated_guint;
+			g_free(validated_guint);
+		}
 
-	// Free up the memory allocated in this function
+		// Retrieve the new frames per second input
+		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_frames_per_second));
+		validated_guint = validate_value(PROJECT_FPS, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED139: There was something wrong with the default frames per second value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_fps = *validated_guint;
+			g_free(validated_guint);
+		}
+	} while (FALSE == useable_input);
+
+	// * We only get here after all input is considered valid *
+
+	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(main_dialog));
+
+	// Project Name
+	project_name = g_string_assign(project_name, valid_proj_name->str);
+	g_string_free(valid_proj_name, TRUE);
+
+	// Project Folder
+	project_folder = g_string_assign(project_folder, valid_project_folder->str);
+	g_string_free(valid_project_folder, TRUE);
+
+	// Output Folder
+	output_folder = g_string_assign(output_folder, valid_output_folder->str);
+	g_string_free(valid_output_folder, TRUE);
+
+	// Slide Length
+	slide_length = valid_slide_length;
+
+	// Frames per second
+	frames_per_second = valid_fps;
+
+	// Free the memory allocated in this function
 	g_string_free(tmp_gstring, TRUE);
 }
 
@@ -181,6 +278,9 @@ void menu_project_properties(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/02/20 06:03:01  vapour
+ * Updated to validate all input.
+ *
  * Revision 1.5  2008/02/14 16:56:01  vapour
  * Updated dialog box to use the limits defined for each field in the valid fields array, for frames per second and project name.
  *
