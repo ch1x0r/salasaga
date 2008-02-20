@@ -136,9 +136,11 @@ enum
 	EXTERNAL_LINK_WINDOW,
 	FILE_PATH,
 	FOLDER_PATH,
+	FONT_SIZE,
 	FRAME_NUMBER,
 	ICON_HEIGHT,
 	LAYER_HEIGHT,
+	LAYER_NAME,
 	LAYER_WIDTH,
 	PREVIEW_WIDTH,
 	PROJECT_FPS,
@@ -285,6 +287,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.55  2008/02/20 21:58:36  vapour
+ * Added font size and layer name validation fields.
+ *
  * Revision 1.54  2008/02/20 18:38:51  vapour
  * Added validation field values for the external link, external link target window, and x and y offsets.
  *
