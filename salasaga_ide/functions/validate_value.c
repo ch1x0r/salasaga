@@ -67,10 +67,6 @@ void *validate_value(gint value_id, gint input_type, void *value)
 
 	switch (base_type)
 	{
-		case V_BOOLEAN:
-
-			break;
-
 		case V_CHAR:
 
 			// * We're validating a char or string *
@@ -194,15 +190,6 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			// The string seems to be valid, so return it for use
 			return output_gstring;
 
-		case V_FLOAT:
-
-			break;
-
-		case V_INT_SIGNED:
-
-			// fixme2:
-			// Check if the first character is a hypen
-			
 			break;
 
 		case V_INT_UNSIGNED:
@@ -434,6 +421,9 @@ void *validate_value(gint value_id, gint input_type, void *value)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/02/20 23:09:44  vapour
+ * Removed unused validation base types.
+ *
  * Revision 1.7  2008/02/20 09:00:42  vapour
  * Updated to do proper boolean bit testing.  Verbosely done, so Eclipse can debug it properly.  Eclipse seems to have a bug here. :(
  *

@@ -41,13 +41,10 @@ extern "C" {
 #define	APP_VERSION "0.7.8-pre"
 	
 // Base types for the validate_value function
-#define	V_BOOLEAN		1
-#define V_CHAR			2
-#define V_FLOAT			4
-#define V_INT_SIGNED	8
-#define V_INT_UNSIGNED	16
-#define V_RESOLUTION	32
-#define V_ZOOM			64
+#define V_CHAR			1
+#define V_INT_UNSIGNED	2
+#define V_RESOLUTION	4
+#define V_ZOOM			8
 
 // Capabilities for the validate_value function
 #define V_NONE			0
@@ -287,6 +284,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.56  2008/02/20 23:09:04  vapour
+ * Removed unused validation base types.
+ *
  * Revision 1.55  2008/02/20 21:58:36  vapour
  * Added font size and layer name validation fields.
  *
