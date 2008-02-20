@@ -33,20 +33,22 @@
 #include "../externs.h"
 #include "display_warning.h"
 #include "menu_export_flash_inner.h"
+#include "validate_value.h"
 
 
 void menu_export_flash_animation(void)
 {
 	// Local variables
-	GtkFileFilter		*all_filter;			// Filter for *.*
-	GtkWidget 			*export_dialog;			// Dialog widget
-	gchar				*filename;				// Pointer to the chosen file name
-	GtkFileFilter		*flash_filter;			// Filter for *.swf
-	gint				return_code_gint;		// Catches the return code from the inner swf export function
-	gboolean			unique_name;			// Switch used to mark when we have a valid filename
-	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
+	GtkFileFilter		*all_filter;				// Filter for *.*
+	GtkWidget 			*export_dialog;				// Dialog widget
+	gchar				*filename;					// Pointer to the chosen file name
+	GtkFileFilter		*flash_filter;				// Filter for *.swf
+	gint				return_code_gint;			// Catches the return code from the inner swf export function
+	gboolean			useable_input;				// Used to control loop flow
+	GString				*validated_string;			// Receives known good strings from the validation function
+	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
 
-	GString				*tmp_gstring;			// Temporary GString
+	GString				*tmp_gstring;				// Temporary GString
 
 
 	// Check if there is an active project
@@ -88,14 +90,16 @@ void menu_export_flash_animation(void)
 	// Change to the default output directory
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), output_folder->str);
 
-	// Run the dialog and wait for user input
-	unique_name = FALSE;
-	while (TRUE != unique_name)
+	// Loop around until we have a valid filename or the user cancels out
+	useable_input = FALSE;
+	validated_string = NULL;
+	do
 	{
-		// Get the filename to export to
+		// Get a filename to save as
 		if (gtk_dialog_run(GTK_DIALOG(export_dialog)) != GTK_RESPONSE_ACCEPT)
 		{
-			// The dialog was cancelled, so destroy it and return to the caller
+			// The dialog was cancelled, so free the memory allocated in this function, destroy the dialog, and return to the caller
+			g_string_free(tmp_gstring, TRUE);
 			gtk_widget_destroy(export_dialog);
 			return;
 		}
@@ -103,38 +107,51 @@ void menu_export_flash_animation(void)
 		// Retrieve the filename from the dialog box
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(export_dialog));
 
-		// Check if there's an existing file of this name, and give an Overwrite? type prompt if there is
-		if (TRUE == g_file_test(filename, G_FILE_TEST_EXISTS))
+		// Free the validated_string variable before recreating it
+		if (NULL != validated_string)
 		{
-			// Something with this name already exists
-			warn_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),
-								GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
-								GTK_MESSAGE_QUESTION,
-								GTK_BUTTONS_YES_NO,
-								"Overwrite existing file?");
-			if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
-			{
-				// We've been told to overwrite the existing file
-				unique_name = TRUE;
-			}
-			gtk_widget_destroy(warn_dialog);
+			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
+		}
+
+		// Validate the filename input
+		validated_string = validate_value(FILE_PATH, V_CHAR, filename);
+		if (NULL == validated_string)
+		{
+			// Invalid file name
+			display_warning("Error ED182: There was something wrong with the file name given.  Please try again.");
 		} else
 		{
-			// The indicated file name is unique, we're fine to save
-			unique_name = TRUE;
+			// * Valid file name, so check if there's an existing file of this name, and give an Overwrite? type prompt if there is
+			if (TRUE == g_file_test(validated_string->str, G_FILE_TEST_EXISTS))
+			{
+				// Something with this name already exists
+				warn_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),
+									GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
+									GTK_MESSAGE_QUESTION,
+									GTK_BUTTONS_YES_NO,
+									"Overwrite existing file?");
+				if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
+				{
+					// We've been told to overwrite the existing file
+					useable_input = TRUE;
+				}
+				gtk_widget_destroy(warn_dialog);
+			} else
+			{
+				// The indicated file name is unique, we're fine to save
+				useable_input = TRUE;
+			}
 		}
-	}
+	} while (FALSE == useable_input);
 
 	// * We only get to here if a file was chosen *
-
-	// Get the filename from the dialog box
-	filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(export_dialog));
 
 	// Destroy the dialog box, as it's not needed any more
 	gtk_widget_destroy(export_dialog);
 
 	// Export the swf
-	return_code_gint = menu_export_flash_inner(filename);
+	return_code_gint = menu_export_flash_inner(validated_string->str);
 	if (FALSE == return_code_gint)
 	{
 		// Something went wrong when creating the swf output stream
@@ -142,7 +159,7 @@ void menu_export_flash_animation(void)
 	} else
 	{
 		// Movie created successfully, so update the status bar to let the user know
-		g_string_printf(tmp_gstring, "Wrote Flash file '%s'.", filename);
+		g_string_printf(tmp_gstring, "Wrote Flash file '%s'.", validated_string->str);
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 		gdk_flush();
 	}
@@ -154,6 +171,7 @@ void menu_export_flash_animation(void)
 
 	// Free the temporary gstring
 	g_string_free(tmp_gstring, TRUE);
+	g_string_free(validated_string, TRUE);
 }
 
 
@@ -162,6 +180,9 @@ void menu_export_flash_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2008/02/20 22:55:53  vapour
+ * Updated to validate all incoming input.
+ *
  * Revision 1.13  2008/02/16 11:16:30  vapour
  * Replaced our sound beep function with the inbuilt gdk sound beep one.
  *
