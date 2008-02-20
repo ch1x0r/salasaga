@@ -55,7 +55,6 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	guint				valid_x_offset_start;		// Receives the new start frame x offset once validated
 	guint				valid_y_offset_finish;		// Receives the new finish frame y offset once validated
 	guint				valid_y_offset_start;		// Receives the new start frame y offset once validated
-
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
@@ -396,6 +395,9 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/20 21:01:42  vapour
+ * Fixed a minor typo.
+ *
  * Revision 1.6  2008/02/20 18:42:42  vapour
  * Updated to validate all incoming input.
  *
