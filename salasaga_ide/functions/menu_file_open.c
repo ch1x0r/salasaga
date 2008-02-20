@@ -111,7 +111,7 @@ void menu_file_open(void)
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(open_dialog));
 
 		// Validate the filename input
-		validated_string = validate_value(PROJECT_PATH, V_CHAR, filename);
+		validated_string = validate_value(FILE_PATH, V_CHAR, filename);
 		if (NULL == validated_string)
 		{
 			display_warning("Error ED124: There was something wrong with the file name given.  Please try again.");
@@ -213,6 +213,9 @@ void menu_file_open(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2008/02/20 18:46:38  vapour
+ * Updated to use a renamed validation field.
+ *
  * Revision 1.10  2008/02/20 05:58:47  vapour
  * Improved memory allocation and deallocation.
  *

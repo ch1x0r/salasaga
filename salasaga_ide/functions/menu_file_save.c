@@ -138,7 +138,7 @@ void menu_file_save(void)
 		}
 
 		// Validate the filename input
-		validated_string = validate_value(PROJECT_PATH, V_CHAR, filename);
+		validated_string = validate_value(FILE_PATH, V_CHAR, filename);
 		if (NULL == validated_string)
 		{
 			// Invalid file name
@@ -272,6 +272,9 @@ void menu_file_save(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2008/02/20 18:47:11  vapour
+ * Updated to use a renamed validation field.
+ *
  * Revision 1.12  2008/02/20 05:54:41  vapour
  * Tweaked to use the validated string whenever possible, and to also free allocated memory better.
  *
