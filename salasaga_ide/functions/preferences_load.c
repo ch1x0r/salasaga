@@ -37,6 +37,7 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
+#include "display_warning.h"
 #include "validate_value.h"
 
 gboolean preferences_load()
@@ -47,42 +48,120 @@ gboolean preferences_load()
 	GError				*error = NULL;				// Pointer to error return structure
 	GConfEngine			*gconf_engine;				// GConf engine
 	gboolean			should_maximise = FALSE;	// Briefly keeps track of whether the window should be maximised
+	gboolean			useable_input;				// Used to control loop flow
+	GString				*valid_output_folder;		// Receives the new output folder once validated
+	GString				*valid_project_folder;		// Receives the new default project folder once validated
+	GString				*valid_screenshot_folder;	// Receives the new screenshot folder once validated
+	GString				*validated_string;			// Receives known good strings from the validation function
 
+
+	// Initialise things
+	valid_output_folder = g_string_new(NULL);
+	valid_project_folder = g_string_new(NULL);
+	valid_screenshot_folder = g_string_new(NULL);
 
 	// Check if we have a saved configuration in GConf
 	gconf_engine = gconf_engine_get_default();
-	if (TRUE == gconf_engine_dir_exists(gconf_engine, "/apps/flame", &error))
+	if (FALSE == gconf_engine_dir_exists(gconf_engine, "/apps/flame", &error))
 	{
-		// Load the GConf configuration
-		g_string_printf(default_project_folder, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/project_folder", NULL));
-		g_string_printf(screenshots_folder, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/screenshots_folder", NULL));
-		g_string_printf(default_output_folder, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/output_folder", NULL));
-		if (NULL != gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/zoom_level", NULL))
-		{
-			g_string_printf(default_zoom_level, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/zoom_level", NULL));
-		}
-		project_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_width", NULL);
-		project_height = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_height", NULL);
-		default_output_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_width", NULL);
-		default_output_height = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_height", NULL);
-		default_slide_length = slide_length = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/slide_length", NULL);
-		default_bg_colour.red = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_red", NULL);
-		default_bg_colour.green = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_green", NULL);
-		default_bg_colour.blue = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_blue", NULL);
-		preview_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", NULL);
-		if (0 == preview_width) preview_width = 300;
-		default_fps = frames_per_second = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/frames_per_second", NULL);
-
-		// Check if the application should start maximised or not
-		should_maximise = gconf_engine_get_bool(gconf_engine, "/apps/flame/defaults/window_maximised", NULL);
-
-		// Free our GConf engine
-		gconf_engine_unref(gconf_engine);
-	}
-	else
-	{
+		// We don't have a set of preferences available for loading
+		g_string_free(valid_output_folder, TRUE);
+		g_string_free(valid_project_folder, TRUE);
+		g_string_free(valid_screenshot_folder, TRUE);
 		return FALSE;
 	}
+
+	// Reset the useable input flag
+	useable_input = TRUE;
+
+	// Retrieve the new default project folder input
+	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/project_folder", NULL));
+	if (NULL == validated_string)
+	{
+		display_warning("Error ED185: There was something wrong with the project folder value stored in the preferences.  Using default preferences instead.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_project_folder = g_string_assign(valid_project_folder, validated_string->str);
+		g_string_free(validated_string, TRUE);
+		validated_string = NULL;
+	}
+
+	// Retrieve the new screenshots folder input
+	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/screenshots_folder", NULL));
+	if (NULL == validated_string)
+	{
+		display_warning("Error ED186: There was something wrong with the screenshots folder value stored in the preferences.  Using default preferences instead.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_screenshot_folder = g_string_assign(valid_screenshot_folder, validated_string->str);
+		g_string_free(validated_string, TRUE);
+		validated_string = NULL;
+	}
+
+	// Retrieve the new default output folder input
+	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/output_folder", NULL));
+	if (NULL == validated_string)
+	{
+		display_warning("Error ED187: There was something wrong with the default output folder value stored in the preferences.  Using default preferences instead.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_output_folder = g_string_assign(valid_output_folder, validated_string->str);
+		g_string_free(validated_string, TRUE);
+		validated_string = NULL;
+	}
+
+	// Check if the application should start maximised or not
+	should_maximise = gconf_engine_get_bool(gconf_engine, "/apps/flame/defaults/window_maximised", NULL);
+
+	// Check if all the values were validated ok
+	if (FALSE == useable_input)
+	{
+		// Some of the saved preferences were invalid, so we won't use any of them (might be a bit overkill)
+		g_string_free(valid_output_folder, TRUE);
+		g_string_free(valid_project_folder, TRUE);
+		g_string_free(valid_screenshot_folder, TRUE);
+		return FALSE;
+	}
+
+	// * We only get here after all input is considered valid *
+
+	// Set the project folder preference
+	g_string_printf(default_project_folder, "%s", valid_project_folder->str);
+	g_string_free(valid_project_folder, TRUE);
+
+	// Set the screenshots folder preference
+	g_string_printf(screenshots_folder, "%s", valid_screenshot_folder->str);
+	g_string_free(valid_screenshot_folder, TRUE);
+
+	// Set the default output folder preference
+	g_string_printf(default_output_folder, "%s", valid_output_folder->str);
+	g_string_free(valid_output_folder, TRUE);
+
+	// Set the non-validated preferences
+	// fixme2: These all need to be validated
+	g_string_printf(default_output_folder, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/output_folder", NULL));
+	if (NULL != gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/zoom_level", NULL))
+	{
+		g_string_printf(default_zoom_level, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/zoom_level", NULL));
+	}
+	project_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_width", NULL);
+	project_height = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_height", NULL);
+	default_output_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_width", NULL);
+	default_output_height = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_height", NULL);
+	default_slide_length = slide_length = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/slide_length", NULL);
+	default_bg_colour.red = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_red", NULL);
+	default_bg_colour.green = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_green", NULL);
+	default_bg_colour.blue = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_blue", NULL);
+	preview_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", NULL);
+	if (0 == preview_width) preview_width = 300;
+	default_fps = frames_per_second = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/frames_per_second", NULL);
+
+	// Free our GConf engine
+	gconf_engine_unref(gconf_engine);
+
 #else
 
 	// * Registry related code (windows only) *
@@ -451,6 +530,9 @@ gboolean preferences_load()
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/02/22 14:36:11  vapour
+ * Starting validating incoming values.
+ *
  * Revision 1.1  2008/02/22 14:08:39  vapour
  * Moved the loading of application preferences from the main function into its own one, to ease the addition of validation code.
  *
