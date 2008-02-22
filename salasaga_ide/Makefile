@@ -214,6 +214,7 @@ OFILES = \
 	functions/menu_project_properties.o \
 	functions/menu_screenshots_capture.o \
 	functions/menu_screenshots_import.o \
+	functions/preferences_load.o \
 	functions/project_crop.o \
 	functions/quit_event.o \
 	functions/regenerate_film_strip_thumbnails.o \
@@ -447,6 +448,9 @@ menu_screenshots_capture.o:
 
 menu_screenshots_import.o:
 	$(CC) $(CFLAGS) -c menu_screenshots_import.c -o menu_screenshots_import.o
+
+preferences_load.o:
+	$(CC) $(CFLAGS) -c preferences_load.c -o preferences_load.o
 
 project_crop.o:
 	$(CC) $(CFLAGS) -c project_crop.c -o project_crop.o
