@@ -58,10 +58,10 @@ void menu_edit_preferences(void)
 	guint				valid_icon_height;					// Receives the new icon height once validated
 	GString				*valid_output_folder;				// Receives the new output folder once validated
 	GString				*valid_output_resolution;			// Receives the new default output resolution once validated
+	guint				valid_preview_width;				// Receives the new film strip thumbnail width once validated
 	GString				*valid_project_folder;				// Receives the new default project folder once validated
 	GString				*valid_screenshot_folder;			// Receives the new screenshot folder once validated
 	guint				valid_slide_length;					// Receives the new default slide length once validated
-	guint				valid_preview_width;				// Receives the new film strip thumbnail width once validated
 	GString				*valid_zoom_level;					// Receives the new default zoom level once validated
 	guint				*validated_guint;					// Receives known good guint values from the validation function 
 	GString				*validated_string;					// Receives known good strings from the validation function
@@ -412,6 +412,9 @@ void menu_edit_preferences(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2008/02/25 13:34:22  vapour
+ * Small alphabetical ordering tweak.
+ *
  * Revision 1.13  2008/02/20 05:56:38  vapour
  * Improved memory allocation and deallocation.
  *
