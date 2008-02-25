@@ -47,11 +47,23 @@ gboolean preferences_load()
 	// Local variables
 	GError				*error = NULL;				// Pointer to error return structure
 	GConfEngine			*gconf_engine;				// GConf engine
+	guint				guint_val;					// Temporary guint value used for validation
 	gboolean			should_maximise = FALSE;	// Briefly keeps track of whether the window should be maximised
 	gboolean			useable_input;				// Used to control loop flow
+	GdkColor			valid_bg_colour;			// Receives the new default background color for slides once validated
+	guint				valid_default_fps;			// Receives the new default fps once validated
+	guint				valid_icon_height;			// Receives the new icon height once validated
 	GString				*valid_output_folder;		// Receives the new output folder once validated
+	guint				valid_output_height;		// Receives the new default output height once validated
+	guint				valid_output_width;			// Receives the new default output width once validated
+	guint				valid_preview_width;		// Receives the new film strip thumbnail width once validated
+	guint				valid_project_height;		// Receives the new project height once validated
+	guint				valid_project_width;		// Receives the new project width once validated
 	GString				*valid_project_folder;		// Receives the new default project folder once validated
+	guint				valid_slide_length;			// Receives the new default slide length once validated
+	GString				*valid_zoom_level;			// Receives the new default zoom level once validated
 	GString				*valid_screenshot_folder;	// Receives the new screenshot folder once validated
+	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
 
@@ -59,6 +71,7 @@ gboolean preferences_load()
 	valid_output_folder = g_string_new(NULL);
 	valid_project_folder = g_string_new(NULL);
 	valid_screenshot_folder = g_string_new(NULL);
+	valid_zoom_level = g_string_new(NULL);
 
 	// Check if we have a saved configuration in GConf
 	gconf_engine = gconf_engine_get_default();
@@ -113,6 +126,182 @@ gboolean preferences_load()
 		validated_string = NULL;
 	}
 
+	// Retrieve the new default zoom level input
+	if (NULL != gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/zoom_level", NULL))
+	{
+		validated_string = validate_value(ZOOM_LEVEL, V_ZOOM, gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/zoom_level", NULL));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED188: There was something wrong with the default zoom level value stored in the preferences.  Using default preferences instead.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_zoom_level = g_string_assign(valid_zoom_level, validated_string->str);
+			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
+		}
+	}
+
+	// Retrieve the new default project width input
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_width", NULL);
+	validated_guint = validate_value(PROJECT_WIDTH, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED189: There was something wrong with the default project width value stored in the preferences.  Using default preferences instead.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_project_width = *validated_guint;
+		g_free(validated_guint);
+	}
+
+
+	// Retrieve the new default project height input
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_height", NULL);
+	validated_guint = validate_value(PROJECT_HEIGHT, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED190: There was something wrong with the default project width value stored in the preferences.  Using default preferences instead.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_project_height = *validated_guint;
+		g_free(validated_guint);
+	}
+
+	// Retrieve the new default output width input
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_width", NULL);
+	validated_guint = validate_value(PROJECT_WIDTH, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED191: There was something wrong with the default output width value stored in the preferences.  Using default preferences instead.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_output_width = *validated_guint;
+		g_free(validated_guint);
+	}
+
+	// Retrieve the new default output height input
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_height", NULL);
+	validated_guint = validate_value(PROJECT_HEIGHT, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED192: There was something wrong with the default output height value stored in the preferences.  Using default preferences instead.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_output_height = *validated_guint;
+		g_free(validated_guint);
+	}
+
+	// Retrieve the new default slide length input
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/slide_length", NULL);
+	validated_guint = validate_value(SLIDE_LENGTH, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED193: There was something wrong with the default slide length value stored in the preferences.  Using default preferences instead.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_slide_length = *validated_guint;
+		g_free(validated_guint);
+	}
+
+	// Retrieve the new default background colour, red component
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_red", NULL);
+	validated_guint = validate_value(COLOUR_COMP16, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED194: There was something wrong with the default background color value stored in the preferences.  Using default preferences instead.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_bg_colour.red = *validated_guint;
+		g_free(validated_guint);
+	}
+
+	// Retrieve the new default background colour, green component
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_green", NULL);
+	validated_guint = validate_value(COLOUR_COMP16, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED195: There was something wrong with the default background color value stored in the preferences.  Using default preferences instead.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_bg_colour.green = *validated_guint;
+		g_free(validated_guint);
+	}
+
+	// Retrieve the new default background colour, blue component
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_blue", NULL);
+	validated_guint = validate_value(COLOUR_COMP16, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED196: There was something wrong with the default background color value stored in the preferences.  Using default preferences instead.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_bg_colour.blue = *validated_guint;
+		g_free(validated_guint);
+	}
+
+	// Retrieve the new preview width input
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", NULL);
+	if (0 != guint_val)
+	{
+		validated_guint = validate_value(PREVIEW_WIDTH, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED197: There was something wrong with the film strip thumbnail width value stored in the preferences.  Using default preferences instead.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_preview_width = *validated_guint;
+			g_free(validated_guint);
+		}
+	}
+	else
+	{
+		// No thumbnail width stored, so we use a reasonable default
+		valid_preview_width = 300;
+	}
+
+	// Retrieve the new default frames per second input
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/frames_per_second", NULL);
+	validated_guint = validate_value(PROJECT_FPS, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED198: There was something wrong with the default frames per second value stored in the preferences.  Using default preferences instead.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_default_fps = *validated_guint;
+		g_free(validated_guint);
+	}
+
+	// Retrieve the new icon height input
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/icon_height", NULL);
+	if (0 != guint_val)
+	{
+		validated_guint = validate_value(ICON_HEIGHT, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED199: There was something wrong with the icon height value stored in the preferences.  Using default preferences instead.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_icon_height = *validated_guint;
+			g_free(validated_guint);
+		}
+	}
+	else
+	{
+		// No thumbnail width stored, so we use a reasonable default
+		valid_icon_height = 30;
+	}
+
 	// Check if the application should start maximised or not
 	should_maximise = gconf_engine_get_bool(gconf_engine, "/apps/flame/defaults/window_maximised", NULL);
 
@@ -140,24 +329,41 @@ gboolean preferences_load()
 	g_string_printf(default_output_folder, "%s", valid_output_folder->str);
 	g_string_free(valid_output_folder, TRUE);
 
-	// Set the non-validated preferences
-	// fixme2: These all need to be validated
-	g_string_printf(default_output_folder, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/output_folder", NULL));
-	if (NULL != gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/zoom_level", NULL))
+	// Set the default zoom level preference
+	if (0 != valid_zoom_level->len)
 	{
-		g_string_printf(default_zoom_level, "%s", gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/zoom_level", NULL));
+		g_string_printf(default_zoom_level, "%s", valid_zoom_level->str);
+		g_string_free(valid_zoom_level, TRUE);
 	}
-	project_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_width", NULL);
-	project_height = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_height", NULL);
-	default_output_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_width", NULL);
-	default_output_height = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_height", NULL);
-	default_slide_length = slide_length = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/slide_length", NULL);
-	default_bg_colour.red = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_red", NULL);
-	default_bg_colour.green = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_green", NULL);
-	default_bg_colour.blue = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_blue", NULL);
-	preview_width = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", NULL);
-	if (0 == preview_width) preview_width = 300;
-	default_fps = frames_per_second = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/frames_per_second", NULL);
+
+	// Set the default project width
+	project_width = valid_project_width;
+
+	// Set the default project height
+	project_height = valid_project_height;
+
+	// Set the default output width
+	default_output_width = valid_output_width;
+
+	// Set the default output height
+	default_output_height = valid_output_height;
+
+	// Set the default slide length (in frames)
+	default_slide_length = slide_length = valid_slide_length;
+
+	// Set the default background colour
+	default_bg_colour.red = valid_bg_colour.red;
+	default_bg_colour.green = valid_bg_colour.green;
+	default_bg_colour.blue = valid_bg_colour.blue;
+
+	// Set the default film strip thumbnail width
+	preview_width = valid_preview_width;
+
+	// Set the default frames per second
+	default_fps = frames_per_second = valid_default_fps;
+
+	// Set the icon height
+	icon_height = valid_icon_height;
 
 	// Free our GConf engine
 	gconf_engine_unref(gconf_engine);
@@ -530,6 +736,9 @@ gboolean preferences_load()
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/02/25 13:35:30  vapour
+ * Finished adding validation code for non-windows platforms.
+ *
  * Revision 1.2  2008/02/22 14:36:11  vapour
  * Starting validating incoming values.
  *
