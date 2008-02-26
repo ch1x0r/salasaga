@@ -47,8 +47,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFDisplayItem		mc_display_item;
 	SWFMovieClip		movie_clip;
 	gint				num_slides;
-	gfloat				scaled_button_height;
-	gfloat				scaled_button_width;
+	gfloat				button_height;
+	gfloat				button_spacing;
+	gfloat				button_width;
 	slide				*slide_data;
 	GString				*slide_name_tmp;
 	GString				*slide_names_gstring;
@@ -59,10 +60,8 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	// Variables used in working out control bar dimensions
 	gfloat				control_bar_x;
 	gfloat				control_bar_y;
-	gfloat				scaled_control_bar_height;
-	gfloat				scaled_control_bar_width;
-	guint				unscaled_control_bar_height;
-	guint				unscaled_control_bar_width;
+	gfloat				control_bar_height;
+	gfloat				control_bar_width;
 
 	// Variables used for the finish button
 	SWFAction			finish_action;
@@ -124,20 +123,53 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFShape			rewind_shape_over;
 	SWFShape			rewind_shape_up;
 
+	// Control bar size structure
+	typedef struct
+	{
+		guint				swf_width;
+		guint				swf_height;
+		guint				button_height;
+		guint				button_spacing;
+		guint				button_start_x;
+		guint				button_start_y;
+		guint				button_width;
+		guint				cb_start_x;
+		guint				cb_start_y;
+		guint				cb_height;
+		guint				cb_width;
+	} control_bar_sizing;
+
+	// Control bar and button resolutions
+	control_bar_sizing	cb_size_array[] =
+	{
+		{ 1920, 1200, 50, 5, 5, 5, 50, 800, 1000, 70, 300 },	// 1920 x 1200
+		{ 1920, 1080, 50, 5, 5, 5, 50, 800, 880, 70, 300 },		// 1920 x 1080
+		{ 800, 600,	// 800 x 600
+				30,	// button height
+				 0,	// button spacing
+				 2,	// button start x
+				 2,	// button start y
+				30,	// button width
+			   323,	// control bar start x
+			   500,	// control bar start y
+			    70,	// control bar height
+			   154 }// control bar width
+	};
+
 
 	// Initialise various things
-	button_x = 0;
-	button_y = (height_scale_factor * 10);
-	unscaled_control_bar_height = unscaled_button_height * 1.18;
-	unscaled_control_bar_width = (unscaled_button_width + unscaled_button_spacing) * 4.66;
-	scaled_button_height = unscaled_button_height * height_scale_factor;
-	scaled_button_width = unscaled_button_width * width_scale_factor;
-	scaled_control_bar_height = unscaled_control_bar_height * height_scale_factor;
-	scaled_control_bar_width = unscaled_control_bar_width * width_scale_factor;
+	// fixme2: Hard coded to use control bar sized for 800x600 output for the moment
+	button_x = cb_size_array[2].button_start_x;
+	button_y = cb_size_array[2].button_start_y;
+	button_height = cb_size_array[2].button_height;
+	button_spacing = cb_size_array[2].button_spacing;
+	button_width = cb_size_array[2].button_width;
+	control_bar_height = cb_size_array[2].cb_height;
+	control_bar_width = cb_size_array[2].cb_width;
 
 	// For now, position the control bar in the middle of the screen, 90% of the way to the bottom
-	control_bar_x = ((project_width - unscaled_control_bar_width) / 2) * width_scale_factor;
-	control_bar_y = ((project_height * 0.90) - unscaled_control_bar_height) * height_scale_factor;
+	control_bar_x = cb_size_array[2].cb_start_x;
+	control_bar_y = cb_size_array[2].cb_start_y;
 
 	// Create an action script list of slide names in the project
 	slides = g_list_first(slides);
@@ -200,7 +232,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Create a background for the control bar buttons to go on
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "background.svg", NULL);
-	cb_background = swf_shape_from_image_file(image_path, scaled_control_bar_width, scaled_control_bar_height);
+	cb_background = swf_shape_from_image_file(image_path, control_bar_width, control_bar_height);
 	if (NULL == cb_background)
 	{
 		// Loading images isn't working.
@@ -213,7 +245,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Load restart button's UP state image
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_up.svg", NULL);
-	restart_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	restart_shape_up = swf_shape_from_image_file(image_path, button_width, button_width);
 	if (NULL == restart_shape_up)
 	{
 		// Loading images isn't working.
@@ -224,7 +256,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Load restart button's OVER state image
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_over.svg", NULL);
-	restart_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	restart_shape_over = swf_shape_from_image_file(image_path, button_width, button_width);
 	if (NULL == restart_shape_over)
 	{
 		// Loading images isn't working.
@@ -236,7 +268,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Load restart button's DOWN state image
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_down.svg", NULL);
-	restart_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	restart_shape_down = swf_shape_from_image_file(image_path, button_width, button_width);
 	if (NULL == restart_shape_down)
 	{
 		// Loading images isn't working.
@@ -282,7 +314,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 //	{
 		// Load rewind button's UP state image
 		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_up.svg", NULL);
-		rewind_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+		rewind_shape_up = swf_shape_from_image_file(image_path, button_width, button_width);
 		if (NULL == rewind_shape_up)
 		{
 			// Loading images isn't working.
@@ -293,7 +325,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 		// Load rewind button's OVER state image
 		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_over.svg", NULL);
-		rewind_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+		rewind_shape_over = swf_shape_from_image_file(image_path, button_width, button_width);
 		if (NULL == rewind_shape_over)
 		{
 			// Loading images isn't working.
@@ -305,7 +337,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 		// Load rewind button's DOWN state image
 		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_down.svg", NULL);
-		rewind_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+		rewind_shape_down = swf_shape_from_image_file(image_path, button_width, button_width);
 		if (NULL == rewind_shape_down)
 		{
 			// Loading images isn't working.
@@ -405,7 +437,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Load pause button's UP state image
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_up.svg", NULL);
-	pause_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	pause_shape_up = swf_shape_from_image_file(image_path, button_width, button_width);
 	if (NULL == pause_shape_up)
 	{
 		// Loading images isn't working.
@@ -416,7 +448,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Load pause button's OVER state image
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_over.svg", NULL);
-	pause_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	pause_shape_over = swf_shape_from_image_file(image_path, button_width, button_width);
 	if (NULL == pause_shape_over)
 	{
 		// Loading images isn't working.
@@ -428,7 +460,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Load pause button's DOWN state image
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_down.svg", NULL);
-	pause_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	pause_shape_down = swf_shape_from_image_file(image_path, button_width, button_width);
 	if (NULL == pause_shape_down)
 	{
 		// Loading images isn't working.
@@ -473,7 +505,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Load play button's UP state image
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_up.svg", NULL);
-	play_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	play_shape_up = swf_shape_from_image_file(image_path, button_width, button_width);
 	if (NULL == play_shape_up)
 	{
 		// Loading images isn't working.
@@ -484,7 +516,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Load play button's OVER state image
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_over.svg", NULL);
-	play_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	play_shape_over = swf_shape_from_image_file(image_path, button_width, button_width);
 	if (NULL == play_shape_over)
 	{
 		// Loading images isn't working.
@@ -496,7 +528,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Load play button's DOWN state image
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_down.svg", NULL);
-	play_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	play_shape_down = swf_shape_from_image_file(image_path, button_width, button_width);
 	if (NULL == play_shape_down)
 	{
 		// Loading images isn't working.
@@ -548,7 +580,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 //	{
 		// Load forward button's UP state image
 		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_up.svg", NULL);
-		forward_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+		forward_shape_up = swf_shape_from_image_file(image_path, button_width, button_width);
 		if (NULL == forward_shape_up)
 		{
 			// Loading images isn't working.
@@ -559,7 +591,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 		// Load forward button's OVER state image
 		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_over.svg", NULL);
-		forward_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+		forward_shape_over = swf_shape_from_image_file(image_path, button_width, button_width);
 		if (NULL == forward_shape_over)
 		{
 			// Loading images isn't working.
@@ -571,7 +603,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 		// Load forward button's DOWN state image
 		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_down.svg", NULL);
-		forward_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+		forward_shape_down = swf_shape_from_image_file(image_path, button_width, button_width);
 		if (NULL == forward_shape_down)
 		{
 			// Loading images isn't working.
@@ -654,7 +686,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Load finish button's UP state image
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3rightarrow_up.svg", NULL);
-	finish_shape_up = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	finish_shape_up = swf_shape_from_image_file(image_path, button_width, button_width);
 	if (NULL == finish_shape_up)
 	{
 		// Loading images isn't working.
@@ -665,7 +697,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Load finish button's OVER state image
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3rightarrow_over.svg", NULL);
-	finish_shape_over = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	finish_shape_over = swf_shape_from_image_file(image_path, button_width, button_width);
 	if (NULL == finish_shape_over)
 	{
 		// Loading images isn't working.
@@ -677,7 +709,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 
 	// Load finish button's DOWN state image
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3rightarrow_down.svg", NULL);
-	finish_shape_down = swf_shape_from_image_file(image_path, scaled_button_width, scaled_button_height);
+	finish_shape_down = swf_shape_from_image_file(image_path, button_width, button_width);
 	if (NULL == finish_shape_down)
 	{
 		// Loading images isn't working.
@@ -728,15 +760,13 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) cb_background);
 	SWFDisplayItem_setDepth(mc_display_item, 1);
 	SWFDisplayItem_setName(mc_display_item, "cb_background");
-	SWFDisplayItem_moveTo(mc_display_item, (unscaled_button_spacing * width_scale_factor * 0.6), (unscaled_button_height * height_scale_factor * 0.09));
-	button_x = button_x + (unscaled_button_spacing * width_scale_factor);
 
 	// Add the restart button to the control bar
 	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) restart_button);
 	SWFDisplayItem_setDepth(mc_display_item, 2);
 	SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 	SWFDisplayItem_setName(mc_display_item, "cb_restart");
-	button_x = button_x + (unscaled_button_width * width_scale_factor);
+	button_x = button_x + button_width + button_spacing;
 
 // fixme3: Commented out until another, smaller, background image is added specific for this
 //	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
@@ -746,7 +776,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		SWFDisplayItem_setDepth(mc_display_item, 3);
 		SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 		SWFDisplayItem_setName(mc_display_item, "cb_rewind");
-		button_x = button_x + (unscaled_button_width * width_scale_factor);
+		button_x = button_x + button_width + button_spacing;
 //	}
 
 	// Add the pause button to the control bar
@@ -760,7 +790,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFDisplayItem_setDepth(mc_display_item, 5);
 	SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 	SWFDisplayItem_setName(mc_display_item, "cb_play");
-	button_x = button_x + (unscaled_button_width * width_scale_factor);
+	button_x = button_x + button_width + button_spacing;
 
 // fixme3: Commented out until another, smaller, background image is added specific for this
 //	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
@@ -770,7 +800,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 		SWFDisplayItem_setDepth(mc_display_item, 6);
 		SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 		SWFDisplayItem_setName(mc_display_item, "cb_rewind");
-		button_x = button_x + (unscaled_button_width * width_scale_factor);
+		button_x = button_x + button_width + button_spacing;
 //	}
 
 	// Add the finish button to the control bar
@@ -778,7 +808,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFDisplayItem_setDepth(mc_display_item, 7);
 	SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 	SWFDisplayItem_setName(mc_display_item, "cb_finish");
-	button_x = button_x + (unscaled_button_width * width_scale_factor);
+	button_x = button_x + button_width + button_spacing;
 
 	// Advance the movie clip one frame, else it won't be displayed
 	SWFMovieClip_nextFrame(movie_clip);
@@ -792,7 +822,7 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	// Set the movie clip to be shown higher in the display stack than the main movie
 	SWFDisplayItem_setDepth(buttons_display_item, 200);
 
-	// Position the movie clip in the center, 90% of the way down the screen
+	// Position the entire control bar object in the correct position onscreen
 	SWFDisplayItem_moveTo(buttons_display_item, control_bar_x, control_bar_y);
 
 	// Free the memory allocated in the function thus far
@@ -808,6 +838,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2008/02/26 13:11:51  vapour
+ * Updated to use hard coded control bar sizing information for each resolution.  Only 800x600 works for now, and control bar size is hard coded to that temporarily.
+ *
  * Revision 1.12  2008/02/01 10:45:42  vapour
  * Fixed a small bug.  I'd forgotten to temporarily comment out some code.
  *
