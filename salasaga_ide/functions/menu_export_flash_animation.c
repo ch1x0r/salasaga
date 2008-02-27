@@ -73,7 +73,7 @@ void menu_export_flash_animation(void)
 	// Create the filter so only *.flash files are displayed
 	flash_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(flash_filter, "*.swf");
-	gtk_file_filter_set_name(flash_filter, "Macromedia Flash (*.swf)");
+	gtk_file_filter_set_name(flash_filter, "Adobe Flash (*.swf)");
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(export_dialog), flash_filter);
 
 	// Create the filter so all files (*.*) can be displayed
@@ -180,6 +180,9 @@ void menu_export_flash_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2008/02/27 11:00:21  vapour
+ * Changed output name from Macromedia to Adobe.
+ *
  * Revision 1.14  2008/02/20 22:55:53  vapour
  * Updated to validate all incoming input.
  *
