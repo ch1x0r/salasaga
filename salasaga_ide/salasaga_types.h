@@ -165,6 +165,22 @@ typedef struct
 	GList				*layer_ptr;
 } boundary_box;
 
+// Control bar element structure
+typedef struct
+{
+	guint				swf_width;
+	guint				swf_height;
+	guint				button_height;
+	guint				button_spacing;
+	guint				button_start_x;
+	guint				button_start_y;
+	guint				button_width;
+	guint				cb_start_x;
+	guint				cb_start_y;
+	guint				cb_height;
+	guint				cb_width;
+} control_bar_elements;
+
 // Defines the object and properties making up a layer
 typedef struct
 {
@@ -284,6 +300,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.57  2008/02/27 01:45:52  vapour
+ * Added a structure type for control bar elements.
+ *
  * Revision 1.56  2008/02/20 23:09:04  vapour
  * Removed unused validation base types.
  *
