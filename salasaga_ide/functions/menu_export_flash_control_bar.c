@@ -128,8 +128,27 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 	// Control bar and button resolutions
 	control_bar_elements	cb_size_array[] =
 	{
-		{ 1920, 1200, 50, 5, 5, 5, 50, 800, 1000, 70, 300 },	// 1920 x 1200 = 0
-		{ 1920, 1080, 50, 5, 5, 5, 50, 800, 880, 70, 300 },		// 1920 x 1080 = 1
+		{ 1920, 1200,	// 1920 x 1200	=	0
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   883,		// control bar start x
+			  1152,		// control bar start y
+			    36,		// control bar height
+			   154 },	// control bar width
+
+		{ 1920, 1080,	// 1920 x 1080	=	1
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   883,		// control bar start x
+			  1032,		// control bar start y
+			    36,		// control bar height
+			   154 },	// control bar width
 
 		{ 1600, 1200,	// 1600 x 1200	=	2
 				30,		// button height
@@ -137,9 +156,9 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 				 2,		// button start x
 				 2,		// button start y
 				30,		// button width
-			   323,		// control bar start x
-			   500,		// control bar start y
-			    70,		// control bar height
+			   723,		// control bar start x
+			  1152,		// control bar start y
+			    36,		// control bar height
 			   154 },	// control bar width
 
 		{ 1280, 1024,	// 1280 x 1024	=	3
@@ -148,9 +167,9 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 				 2,		// button start x
 				 2,		// button start y
 				30,		// button width
-			   323,		// control bar start x
-			   500,		// control bar start y
-			    70,		// control bar height
+			   563,		// control bar start x
+			   976,		// control bar start y
+			    36,		// control bar height
 			   154 },	// control bar width
 
 		{ 1280, 720,	// 1280 x 720	=	4
@@ -159,9 +178,9 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 				 2,		// button start x
 				 2,		// button start y
 				30,		// button width
-			   323,		// control bar start x
-			   500,		// control bar start y
-			    70,		// control bar height
+			   563,		// control bar start x
+			   672,		// control bar start y
+			    36,		// control bar height
 			   154 },	// control bar width
 
 		{ 1024, 768,	// 1024 x 768	=	5
@@ -170,9 +189,9 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 				 2,		// button start x
 				 2,		// button start y
 				30,		// button width
-			   323,		// control bar start x
-			   500,		// control bar start y
-			    70,		// control bar height
+			   435,		// control bar start x
+			   720,		// control bar start y
+			    36,		// control bar height
 			   154 },	// control bar width
 
 		{ 800, 600,		// 800 x 600	=	6
@@ -1115,6 +1134,9 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
  * +++++++
  * 
  * $Log$
+ * Revision 1.23  2008/02/27 11:14:46  vapour
+ * Added working control bar element sizing for 1024 x 768, 1280 x 720, 1280 x 1024, 1600 x 1200, 1920 x 1080, 1920 x 1200.
+ *
  * Revision 1.22  2008/02/27 10:24:37  vapour
  * Added working control bar element sizing for 128 x 96.
  *
