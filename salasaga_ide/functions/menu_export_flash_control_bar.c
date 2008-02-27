@@ -231,15 +231,15 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 			    82 },	// control bar width
 
 		{ 176, 144,		// 176 x 144	=	11
-				30,		// button height
+				11,		// button height
 				 0,		// button spacing
-				 2,		// button start x
-				 2,		// button start y
-				30,		// button width
-			   323,		// control bar start x
-			   500,		// control bar start y
-			    70,		// control bar height
-			   154 },	// control bar width
+				 1,		// button start x
+				 1,		// button start y
+				11,		// button width
+			  59.5,		// control bar start x
+			   129,		// control bar start y
+			    14,		// control bar height
+			    57 },	// control bar width
 
 		{ 160, 120,		// 160 x 120	=	12
 				30,		// button height
@@ -1115,6 +1115,9 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
  * +++++++
  * 
  * $Log$
+ * Revision 1.20  2008/02/27 10:13:01  vapour
+ * Added working control bar element sizing for 176 x 144.
+ *
  * Revision 1.19  2008/02/27 09:53:59  vapour
  *  + Re-centred control bar for 352 x 288 output.
  *  + Added working control bar element sizing for 320 x 240.
