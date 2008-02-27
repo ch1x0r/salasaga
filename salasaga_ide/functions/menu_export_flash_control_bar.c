@@ -41,8 +41,8 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 	gfloat				button_height;
 	gfloat				button_spacing;
 	gfloat				button_width;
-	guint				button_x;
-	guint				button_y;
+	gfloat				button_x;
+	gfloat				button_y;
 	SWFDisplayItem		buttons_display_item;
 	guint				cb_index;
 	gchar				*image_path;
@@ -54,6 +54,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 	slide				*slide_data;
 	GString				*slide_name_tmp;
 	GString				*slide_names_gstring;
+	gboolean			unknown_resolution;
 
 	// Variables used creating the control bar background
 	SWFShape			cb_background;
@@ -178,11 +179,11 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 				30,		// button height
 				 0,		// button spacing
 				 2,		// button start x
-				 2,		// button start y
+			   1.6,		// button start y
 				30,		// button width
 			   323,		// control bar start x
-			   500,		// control bar start y
-			    70,		// control bar height
+			   556,		// control bar start y
+			    36,		// control bar height
 			   154 },	// control bar width
 
 		{ 720, 480,		// 720 x 480	=	7
@@ -265,56 +266,36 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 
 
 	// Determine which of the control bar resolutions to use
+	unknown_resolution = FALSE;
 	switch (output_width)
 	{
+		case 1920:
+			
+			if (1200 == output_height)
+			{
+				cb_index = 0;
+				break;
+			}
+			if (1080 == output_height)
+			{
+				cb_index = 1;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
 		case 1600:
 
-			cb_index = 2;
-			break;
+			if (1200 == output_height)
+			{
+				cb_index = 2;
+				break;
+			}
 
-		case 1024:
-
-			cb_index = 5;
-			break;
-
-		case 800:
-
-			cb_index = 6;
-			break;
-
-		case 720:
-
-			cb_index = 7;
-			break;
-
-		case 640:
-
-			cb_index = 8;
-			break;
-
-		case 352:
-
-			cb_index = 9;
-			break;
-
-		case 320:
-
-			cb_index = 10;
-			break;
-
-		case 176:
-
-			cb_index = 11;
-			break;
-
-		case 160:
-
-			cb_index = 12;
-			break;
-
-		case 128:
-
-			cb_index = 13;
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
 			break;
 
 		case 1280:
@@ -330,27 +311,130 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 				break;
 			}
 
-			// * Note that this drops through to the default on purpose if/when an unknown 1280 width resolution is selected! *
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
 
-		case 1920:
-			
-			if (1200 == output_height)
+		case 1024:
+
+			if (768 == output_height)
 			{
-				cb_index = 0;
-				break;
-			}
-			if (1080 == output_height)
-			{
-				cb_index = 1;
+				cb_index = 5;
 				break;
 			}
 
-			// * Note that this drops through to the default on purpose if/when an unknown 1920 width resolution is selected! *
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 800:
+
+			if (600 == output_height)
+			{
+				cb_index = 6;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 720:
+
+			if (480 == output_height)
+			{
+				cb_index = 7;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 640:
+
+			if (480 == output_height)
+			{
+				cb_index = 8;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 352:
+
+			if (288 == output_height)
+			{
+				cb_index = 9;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 320:
+
+			if (240 == output_height)
+			{
+				cb_index = 10;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 176:
+
+			if (144 == output_height)
+			{
+				cb_index = 11;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 160:
+
+			if (120 == output_height)
+			{
+				cb_index = 12;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 128:
+
+			if (96 == output_height)
+			{
+				cb_index = 13;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
 
 		default:
 
-			display_warning("Error ED200: Unknown swf output resolution selected in control bar function.");
-			return FALSE;
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+	}
+
+	// If an unknown output resolution is given, indicate an error and return
+	if (TRUE == unknown_resolution)
+	{
+		display_warning("Error ED200: Unknown swf output resolution selected in control bar function.");
+		return FALSE;
 	}
 
 	// Retrieve the control bar element positions
@@ -1031,6 +1115,11 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2008/02/27 02:37:25  vapour
+ *  + Updated swf control bar elements to use floating point numbers for finer grained positioning.
+ *  + Improved resolution detection code.
+ *  + Moved control bar position for 800x600 resolution down a bit.
+ *
  * Revision 1.14  2008/02/27 01:49:24  vapour
  * Added initial working code to select which control bar element sizing to use, and added some hard coded sizing elements.  800x600 is the only one with the correct sizing at the moment.
  *
