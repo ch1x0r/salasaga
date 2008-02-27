@@ -192,9 +192,9 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 				 2,		// button start x
 				 2,		// button start y
 				30,		// button width
-			   323,		// control bar start x
-			   500,		// control bar start y
-			    70,		// control bar height
+			   283,		// control bar start x
+			   430,		// control bar start y
+			    36,		// control bar height
 			   154 },	// control bar width
 
 		{ 640, 480,		// 640 x 480	=	8
@@ -1115,6 +1115,9 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
  * +++++++
  * 
  * $Log$
+ * Revision 1.16  2008/02/27 08:26:25  vapour
+ * Added working control bar element sizing for 720 x 480.
+ *
  * Revision 1.15  2008/02/27 02:37:25  vapour
  *  + Updated swf control bar elements to use floating point numbers for finer grained positioning.
  *  + Improved resolution detection code.
