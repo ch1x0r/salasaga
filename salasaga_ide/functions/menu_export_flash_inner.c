@@ -65,7 +65,6 @@ gint menu_export_flash_inner(gchar *output_filename)
 	guint				position_counter;			// Temporary counter integer
 	GdkPixbuf			*resized_pixbuf;			// Temporary pixbuf used while scaling images
 	gboolean			return_code_bool;			// Receives boolean return codes
-	gint				return_code_gint;			// Receives integer return codes
 	gint				scaled_height;				// Used to calculate the final size an object should be scaled to
 	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to 
 	gint				scaled_width;				// Used to calculate the final size an object should be scaled to
@@ -213,8 +212,8 @@ gint menu_export_flash_inner(gchar *output_filename)
 	}
 
 	// Add the swf control bar to the movie
-	return_code_gint = menu_export_flash_control_bar(swf_movie, scaled_height_ratio, scaled_width_ratio);
-	if (TRUE != return_code_gint)
+	return_code_bool = menu_export_flash_control_bar(swf_movie);
+	if (TRUE != return_code_bool)
 	{
 		// Something went wrong when adding the control bar to the movie
 
@@ -1117,6 +1116,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.48  2008/02/27 01:50:41  vapour
+ * Updated for the new definition of the menu export flash inner function.
+ *
  * Revision 1.47  2008/02/12 14:15:29  vapour
  * Updated to ignore non-visible layers.
  *
