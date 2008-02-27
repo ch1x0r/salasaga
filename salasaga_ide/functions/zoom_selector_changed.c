@@ -70,6 +70,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 	working_width = (project_width * zoom) / 100;
 	working_height = (project_height * zoom) / 100;
 
+	// Resize the drawing area so it draws properly
+	gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), working_width, working_height);
+
 	// Free the existing backing store for the workspace
 	if (NULL != backing_store)
 	{
@@ -90,6 +93,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/27 13:46:46  vapour
+ * Fixed a small bug where the drawing area wasn't always being sized correctly at startup until the window had been resized.
+ *
  * Revision 1.6  2008/02/07 12:40:03  vapour
  * Updated to free the backing store when needed.
  *
