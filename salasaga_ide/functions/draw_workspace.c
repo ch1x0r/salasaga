@@ -45,11 +45,7 @@ void draw_workspace(void)
 	gint					backing_width;
 	const GdkColor			line_fg_color = { 0, 0x00, 0x00, 0x00 };
 	static GdkGC			*line_gc = NULL;
-	GdkSegment				lines[] = { {0, 0, backing_width, 0},
-										{backing_width, 0, backing_width, backing_height},
-										{backing_width, backing_height, 0, backing_height},
-										{0, backing_height, 0, 0} };
-
+	GdkSegment				lines[4];
 	GdkPixbuf				*tmp_pixbuf;
 	GdkRectangle			tmp_rectangle;
 
@@ -60,12 +56,12 @@ void draw_workspace(void)
 		return;
 	}
 
-	// Initialise various things
-	backing_height = working_height + 2;
-	backing_width = working_width + 2;
+	// Recalculate the size of the working area plus 1 pixel border
+	backing_height = working_height;
+	backing_width = working_width;
 
 	// Create a new pixbuf with all the layers of the current slide
-	tmp_pixbuf = compress_layers(current_slide, working_width, working_height);
+	tmp_pixbuf = compress_layers(current_slide, working_width - 2, working_height - 2);
 
 	// Create the colormap if needed
 	if (NULL == backing_colormap)
@@ -90,6 +86,22 @@ void draw_workspace(void)
 		line_gc = gdk_gc_new(GDK_DRAWABLE(backing_store));
 		gdk_gc_set_rgb_fg_color(line_gc, &line_fg_color);
 	}
+	lines[0].x1 = 0;
+	lines[0].y1 = 0;
+	lines[0].x2 = backing_width - 1;
+	lines[0].y2 = 0;
+	lines[1].x1 = backing_width - 1;
+	lines[1].y1 = 0;
+	lines[1].x2 = backing_width - 1;
+	lines[1].y2 = backing_height - 1;
+	lines[2].x1 = backing_width - 1;
+	lines[2].y1 = backing_height - 1;
+	lines[2].x2 = 0;
+	lines[2].y2 = backing_height - 1;
+	lines[3].x1 = 0;
+	lines[3].y1 = backing_height - 1;
+	lines[3].x2 = 0;
+	lines[3].y2 = 0;
 	gdk_draw_segments(GDK_DRAWABLE(backing_store), line_gc, lines, 4);
 
 	// Tell the window system to redraw the working area
@@ -116,6 +128,9 @@ void draw_workspace(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/02/27 13:47:50  vapour
+ * The one pixel black border around the drawing area should now always be drawn clearly.
+ *
  * Revision 1.6  2008/02/11 12:01:38  vapour
  * Swapped around a few lines, to make more sense of program flow.
  *
