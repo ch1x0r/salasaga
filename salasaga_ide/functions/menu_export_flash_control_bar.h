@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_factor, gfloat width_scale_factor);
+gboolean menu_export_flash_control_bar(SWFMovie main_movie);
 
 #ifdef __cplusplus
 }
@@ -41,6 +41,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/02/27 01:47:35  vapour
+ * Updated declaration.
+ *
  * Revision 1.2  2008/02/03 00:51:04  vapour
  * Fixed a small bug. Updated the symbol defined by this header to match the function name, rather than still use the name from the template.
  *
