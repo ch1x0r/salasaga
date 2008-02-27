@@ -35,21 +35,22 @@
 #include "swf_shape_from_image_file.h"
 
 
-int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_factor, gfloat width_scale_factor)
+gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 {
 	// Create local variables
+	gfloat				button_height;
+	gfloat				button_spacing;
+	gfloat				button_width;
 	guint				button_x;
 	guint				button_y;
 	SWFDisplayItem		buttons_display_item;
+	guint				cb_index;
 	gchar				*image_path;
 	gint				i;
 	SWFAction			main_movie_action;
 	SWFDisplayItem		mc_display_item;
 	SWFMovieClip		movie_clip;
 	gint				num_slides;
-	gfloat				button_height;
-	gfloat				button_spacing;
-	gfloat				button_width;
 	slide				*slide_data;
 	GString				*slide_name_tmp;
 	GString				*slide_names_gstring;
@@ -123,53 +124,245 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
 	SWFShape			rewind_shape_over;
 	SWFShape			rewind_shape_up;
 
-	// Control bar size structure
-	typedef struct
-	{
-		guint				swf_width;
-		guint				swf_height;
-		guint				button_height;
-		guint				button_spacing;
-		guint				button_start_x;
-		guint				button_start_y;
-		guint				button_width;
-		guint				cb_start_x;
-		guint				cb_start_y;
-		guint				cb_height;
-		guint				cb_width;
-	} control_bar_sizing;
-
 	// Control bar and button resolutions
-	control_bar_sizing	cb_size_array[] =
+	control_bar_elements	cb_size_array[] =
 	{
-		{ 1920, 1200, 50, 5, 5, 5, 50, 800, 1000, 70, 300 },	// 1920 x 1200
-		{ 1920, 1080, 50, 5, 5, 5, 50, 800, 880, 70, 300 },		// 1920 x 1080
-		{ 800, 600,	// 800 x 600
-				30,	// button height
-				 0,	// button spacing
-				 2,	// button start x
-				 2,	// button start y
-				30,	// button width
-			   323,	// control bar start x
-			   500,	// control bar start y
-			    70,	// control bar height
-			   154 }// control bar width
+		{ 1920, 1200, 50, 5, 5, 5, 50, 800, 1000, 70, 300 },	// 1920 x 1200 = 0
+		{ 1920, 1080, 50, 5, 5, 5, 50, 800, 880, 70, 300 },		// 1920 x 1080 = 1
+
+		{ 1600, 1200,	// 1600 x 1200	=	2
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   323,		// control bar start x
+			   500,		// control bar start y
+			    70,		// control bar height
+			   154 },	// control bar width
+
+		{ 1280, 1024,	// 1280 x 1024	=	3
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   323,		// control bar start x
+			   500,		// control bar start y
+			    70,		// control bar height
+			   154 },	// control bar width
+
+		{ 1280, 720,	// 1280 x 720	=	4
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   323,		// control bar start x
+			   500,		// control bar start y
+			    70,		// control bar height
+			   154 },	// control bar width
+
+		{ 1024, 768,	// 1024 x 768	=	5
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   323,		// control bar start x
+			   500,		// control bar start y
+			    70,		// control bar height
+			   154 },	// control bar width
+
+		{ 800, 600,		// 800 x 600	=	6
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   323,		// control bar start x
+			   500,		// control bar start y
+			    70,		// control bar height
+			   154 },	// control bar width
+
+		{ 720, 480,		// 720 x 480	=	7
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   323,		// control bar start x
+			   500,		// control bar start y
+			    70,		// control bar height
+			   154 },	// control bar width
+
+		{ 640, 480,		// 640 x 480	=	8
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   323,		// control bar start x
+			   500,		// control bar start y
+			    70,		// control bar height
+			   154 },	// control bar width
+
+		{ 352, 288,		// 352 x 288	=	9
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   323,		// control bar start x
+			   500,		// control bar start y
+			    70,		// control bar height
+			   154 },	// control bar width
+
+		{ 320, 240,		// 320 x 240	=	10
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   323,		// control bar start x
+			   500,		// control bar start y
+			    70,		// control bar height
+			   154 },	// control bar width
+
+		{ 176, 144,		// 176 x 144	=	11
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   323,		// control bar start x
+			   500,		// control bar start y
+			    70,		// control bar height
+			   154 },	// control bar width
+
+		{ 160, 120,		// 160 x 120	=	12
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   323,		// control bar start x
+			   500,		// control bar start y
+			    70,		// control bar height
+			   154 },	// control bar width
+
+		{ 128, 96,		// 128 x 96		=	13
+				30,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				30,		// button width
+			   323,		// control bar start x
+			   500,		// control bar start y
+			    70,		// control bar height
+			   154 }	// control bar width
 	};
 
 
-	// Initialise various things
-	// fixme2: Hard coded to use control bar sized for 800x600 output for the moment
-	button_x = cb_size_array[2].button_start_x;
-	button_y = cb_size_array[2].button_start_y;
-	button_height = cb_size_array[2].button_height;
-	button_spacing = cb_size_array[2].button_spacing;
-	button_width = cb_size_array[2].button_width;
-	control_bar_height = cb_size_array[2].cb_height;
-	control_bar_width = cb_size_array[2].cb_width;
+	// Determine which of the control bar resolutions to use
+	switch (output_width)
+	{
+		case 1600:
 
-	// For now, position the control bar in the middle of the screen, 90% of the way to the bottom
-	control_bar_x = cb_size_array[2].cb_start_x;
-	control_bar_y = cb_size_array[2].cb_start_y;
+			cb_index = 2;
+			break;
+
+		case 1024:
+
+			cb_index = 5;
+			break;
+
+		case 800:
+
+			cb_index = 6;
+			break;
+
+		case 720:
+
+			cb_index = 7;
+			break;
+
+		case 640:
+
+			cb_index = 8;
+			break;
+
+		case 352:
+
+			cb_index = 9;
+			break;
+
+		case 320:
+
+			cb_index = 10;
+			break;
+
+		case 176:
+
+			cb_index = 11;
+			break;
+
+		case 160:
+
+			cb_index = 12;
+			break;
+
+		case 128:
+
+			cb_index = 13;
+			break;
+
+		case 1280:
+			
+			if (1024 == output_height)
+			{
+				cb_index = 3;
+				break;
+			}
+			if (720 == output_height)
+			{
+				cb_index = 4;
+				break;
+			}
+
+			// * Note that this drops through to the default on purpose if/when an unknown 1280 width resolution is selected! *
+
+		case 1920:
+			
+			if (1200 == output_height)
+			{
+				cb_index = 0;
+				break;
+			}
+			if (1080 == output_height)
+			{
+				cb_index = 1;
+				break;
+			}
+
+			// * Note that this drops through to the default on purpose if/when an unknown 1920 width resolution is selected! *
+
+		default:
+
+			display_warning("Error ED200: Unknown swf output resolution selected in control bar function.");
+			return FALSE;
+	}
+
+	// Retrieve the control bar element positions
+	button_x = cb_size_array[cb_index].button_start_x;
+	button_y = cb_size_array[cb_index].button_start_y;
+	button_height = cb_size_array[cb_index].button_height;
+	button_spacing = cb_size_array[cb_index].button_spacing;
+	button_width = cb_size_array[cb_index].button_width;
+	control_bar_height = cb_size_array[cb_index].cb_height;
+	control_bar_width = cb_size_array[cb_index].cb_width;
+	control_bar_x = cb_size_array[cb_index].cb_start_x;
+	control_bar_y = cb_size_array[cb_index].cb_start_y;
 
 	// Create an action script list of slide names in the project
 	slides = g_list_first(slides);
@@ -838,6 +1031,9 @@ int menu_export_flash_control_bar(SWFMovie main_movie, gfloat height_scale_facto
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2008/02/27 01:49:24  vapour
+ * Added initial working code to select which control bar element sizing to use, and added some hard coded sizing elements.  800x600 is the only one with the correct sizing at the moment.
+ *
  * Revision 1.13  2008/02/26 13:11:51  vapour
  * Updated to use hard coded control bar sizing information for each resolution.  Only 800x600 works for now, and control bar size is hard coded to that temporarily.
  *
