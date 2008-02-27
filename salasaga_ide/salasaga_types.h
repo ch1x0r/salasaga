@@ -170,15 +170,15 @@ typedef struct
 {
 	guint				swf_width;
 	guint				swf_height;
-	guint				button_height;
-	guint				button_spacing;
-	guint				button_start_x;
-	guint				button_start_y;
-	guint				button_width;
-	guint				cb_start_x;
-	guint				cb_start_y;
-	guint				cb_height;
-	guint				cb_width;
+	gfloat				button_height;
+	gfloat				button_spacing;
+	gfloat				button_start_x;
+	gfloat				button_start_y;
+	gfloat				button_width;
+	gfloat				cb_start_x;
+	gfloat				cb_start_y;
+	gfloat				cb_height;
+	gfloat				cb_width;
 } control_bar_elements;
 
 // Defines the object and properties making up a layer
@@ -300,6 +300,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.58  2008/02/27 02:33:50  vapour
+ * Updated swf control bar elements to use floating point numbers for finer grained positioning.
+ *
  * Revision 1.57  2008/02/27 01:45:52  vapour
  * Added a structure type for control bar elements.
  *
