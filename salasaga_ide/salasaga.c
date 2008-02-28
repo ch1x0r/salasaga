@@ -41,6 +41,9 @@
 	#include <windows.h>
 #endif
 
+// Ming include
+#include <ming.h>
+
 // Flame Edit includes
 #include "flame-types.h"
 #include "externs.h"
@@ -262,6 +265,9 @@ gint main(gint argc, gchar *argv[])
 		g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", NULL));
 		printf("Location for icons: '%s'\n", icon_path->str);
 	}
+
+	// Initialise Ming
+	Ming_init();
 
 	// * Work out if SVG images can be loaded *
 #ifdef _WIN32
@@ -655,6 +661,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.87  2008/02/28 16:53:09  vapour
+ * Ming initialisation is only done once per application start now.
+ *
  * Revision 1.86  2008/02/22 14:08:39  vapour
  * Moved the loading of application preferences from the main function into its own one, to ease the addition of validation code.
  *
