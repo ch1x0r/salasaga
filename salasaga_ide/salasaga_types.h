@@ -277,6 +277,15 @@ typedef struct
 	gint				depth;						// The layer depth of this item when displayed
 } swf_frame_element;
 
+// Text element positioning structure, for swf output
+typedef struct
+{
+	gfloat				text_border;
+	gfloat				text_start_x;
+	gfloat				text_start_y;
+	gfloat				text_vert_spacing;
+} swf_text_positions;
+
 // Defines the structure of a validation field entry
 typedef struct
 {
@@ -300,6 +309,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.59  2008/02/28 16:54:02  vapour
+ * Added an initial structure to assist with text element positioning for swf output.
+ *
  * Revision 1.58  2008/02/27 02:33:50  vapour
  * Updated swf control bar elements to use floating point numbers for finer grained positioning.
  *
