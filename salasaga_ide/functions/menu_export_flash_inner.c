@@ -129,6 +129,23 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gfloat				element_y_position_increment = 0;
 	gfloat				element_y_position_start = 0;
 
+	// Text positioning elements
+	swf_text_positions	text_elements[] =
+						{
+							{ 20, 5, 5, 0 },	// 1920 x 1200	= 0
+							{ 20, 5, 5, 0 },	// 1920 x 1080	= 1
+							{ 20, 5, 5, 0 },	// 1600 x 1200	= 2
+							{ 20, 5, 5, 0 },	// 1280 x 1024	= 3
+							{ 20, 5, 5, 0 },	// 1280 x  720	= 4
+							{ 20, 5, 5, 0 },	// 1024 x 7680	= 5
+							{ 20, 5, 5, 0 }		//  800 x  600	= 6
+							// etc...
+						};
+
+// Force 800 x 600 output resolution while we're getting text positioning to work
+output_width = 800;
+output_height = 600;
+
 	// (Hopefully) temporary variables put in place to get around a *bizarre*
 	// problem whereby calculating basic stuff like "0 - output_width" gives bogus results (computers are infallible eh?) :(
 	// (Suspect it's caused by some optimisation at compile time going wrong)
@@ -315,8 +332,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 		return FALSE;
 	}
 
-	// Initialise Ming and create an empty swf movie object
-	Ming_init();
+	// Create an empty swf movie object
 	swf_movie = newSWFMovieWithVersion(7);
 	Ming_setSWFCompression(9);
 
@@ -1290,6 +1306,10 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.50  2008/02/28 16:55:44  vapour
+ *  + Removed Ming initialisation from this function.
+ *  + Forced swf output resolution to 800 x 600 for now, while getting text element placement to work correctly.
+ *
  * Revision 1.49  2008/02/28 05:41:32  vapour
  * Moved selection of the output resolution array index up a function level for swf output.  This is so the same approach can be used for text element positioning in swf output.
  *
