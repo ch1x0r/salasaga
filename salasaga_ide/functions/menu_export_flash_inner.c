@@ -60,6 +60,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	guint				layer_counter;				// Holds the number of layers
 	guint				num_layers = 0;				// The number of layers in the slide
 	guint				num_slides;					// The number of slides in the movie
+	guint				out_res_index;				// Index into the array of output resolution entries 
 	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
 	gsize				pixbuf_size;				// Is given the size of a compressed png image
 	guint				position_counter;			// Temporary counter integer
@@ -80,6 +81,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	layer				*this_layer_info;			// Used to point to layer data when looping
 	slide				*this_slide_data;			// Points to the data in the present slide
 	guint				total_frames;				// The total number of frames in the animation
+	gboolean			unknown_resolution;
 
 	SWFDisplayItem		display_list_object;		// Temporary display list object
 	SWFShape			empty_layer_shape;			// Temporary swf shape used when constructing empty layers
@@ -130,16 +132,188 @@ gint menu_export_flash_inner(gchar *output_filename)
 	// (Hopefully) temporary variables put in place to get around a *bizarre*
 	// problem whereby calculating basic stuff like "0 - output_width" gives bogus results (computers are infallible eh?) :(
 	// (Suspect it's caused by some optimisation at compile time going wrong)
-	gfloat layer_right;
-	gfloat layer_down;
-	gfloat layer_left;
-	gfloat layer_up;
+	gfloat				layer_down;
+	gfloat				layer_left;
+	gfloat				layer_right;
+	gfloat				layer_up;
 
 
 	// Initialise variables
 	as_gstring = g_string_new(NULL);
 	slide_name_tmp = g_string_new(NULL);
 	total_frames = 0;
+
+	// Determine which of the control bar resolutions to use
+	unknown_resolution = FALSE;
+	switch (output_width)
+	{
+		case 1920:
+			
+			if (1200 == output_height)
+			{
+				out_res_index = 0;
+				break;
+			}
+			if (1080 == output_height)
+			{
+				out_res_index = 1;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 1600:
+
+			if (1200 == output_height)
+			{
+				out_res_index = 2;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 1280:
+			
+			if (1024 == output_height)
+			{
+				out_res_index = 3;
+				break;
+			}
+			if (720 == output_height)
+			{
+				out_res_index = 4;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 1024:
+
+			if (768 == output_height)
+			{
+				out_res_index = 5;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 800:
+
+			if (600 == output_height)
+			{
+				out_res_index = 6;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 720:
+
+			if (480 == output_height)
+			{
+				out_res_index = 7;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 640:
+
+			if (480 == output_height)
+			{
+				out_res_index = 8;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 352:
+
+			if (288 == output_height)
+			{
+				out_res_index = 9;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 320:
+
+			if (240 == output_height)
+			{
+				out_res_index = 10;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 176:
+
+			if (144 == output_height)
+			{
+				out_res_index = 11;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 160:
+
+			if (120 == output_height)
+			{
+				out_res_index = 12;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		case 128:
+
+			if (96 == output_height)
+			{
+				out_res_index = 13;
+				break;
+			}
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+
+		default:
+
+			// We're using an unknown output resolution
+			unknown_resolution = TRUE;
+			break;
+	}
+
+	// If an unknown output resolution is given, indicate an error and return
+	if (TRUE == unknown_resolution)
+	{
+		display_warning("Error ED201: Unknown output resolution selected for swf export.");
+		return FALSE;
+	}
 
 	// Initialise Ming and create an empty swf movie object
 	Ming_init();
@@ -212,7 +386,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	}
 
 	// Add the swf control bar to the movie
-	return_code_bool = menu_export_flash_control_bar(swf_movie);
+	return_code_bool = menu_export_flash_control_bar(swf_movie, out_res_index);
 	if (TRUE != return_code_bool)
 	{
 		// Something went wrong when adding the control bar to the movie
@@ -1116,6 +1290,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.49  2008/02/28 05:41:32  vapour
+ * Moved selection of the output resolution array index up a function level for swf output.  This is so the same approach can be used for text element positioning in swf output.
+ *
  * Revision 1.48  2008/02/27 01:50:41  vapour
  * Updated for the new definition of the menu export flash inner function.
  *

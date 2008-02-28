@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-gboolean menu_export_flash_control_bar(SWFMovie main_movie);
+gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index);
 
 #ifdef __cplusplus
 }
@@ -41,6 +41,9 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie);
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/02/28 05:41:32  vapour
+ * Moved selection of the output resolution array index up a function level for swf output.  This is so the same approach can be used for text element positioning in swf output.
+ *
  * Revision 1.3  2008/02/27 01:47:35  vapour
  * Updated declaration.
  *

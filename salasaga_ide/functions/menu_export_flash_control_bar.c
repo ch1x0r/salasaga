@@ -35,7 +35,7 @@
 #include "swf_shape_from_image_file.h"
 
 
-gboolean menu_export_flash_control_bar(SWFMovie main_movie)
+gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 {
 	// Create local variables
 	gfloat				button_height;
@@ -44,7 +44,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 	gfloat				button_x;
 	gfloat				button_y;
 	SWFDisplayItem		buttons_display_item;
-	guint				cb_index;
 	gchar				*image_path;
 	gint				i;
 	SWFAction			main_movie_action;
@@ -54,7 +53,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 	slide				*slide_data;
 	GString				*slide_name_tmp;
 	GString				*slide_names_gstring;
-	gboolean			unknown_resolution;
 
 	// Variables used creating the control bar background
 	SWFShape			cb_background;
@@ -283,178 +281,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
 			    57 }	// control bar width
 	};
 
-
-	// Determine which of the control bar resolutions to use
-	unknown_resolution = FALSE;
-	switch (output_width)
-	{
-		case 1920:
-			
-			if (1200 == output_height)
-			{
-				cb_index = 0;
-				break;
-			}
-			if (1080 == output_height)
-			{
-				cb_index = 1;
-				break;
-			}
-
-			// We're using an unknown output resolution
-			unknown_resolution = TRUE;
-			break;
-
-		case 1600:
-
-			if (1200 == output_height)
-			{
-				cb_index = 2;
-				break;
-			}
-
-			// We're using an unknown output resolution
-			unknown_resolution = TRUE;
-			break;
-
-		case 1280:
-			
-			if (1024 == output_height)
-			{
-				cb_index = 3;
-				break;
-			}
-			if (720 == output_height)
-			{
-				cb_index = 4;
-				break;
-			}
-
-			// We're using an unknown output resolution
-			unknown_resolution = TRUE;
-			break;
-
-		case 1024:
-
-			if (768 == output_height)
-			{
-				cb_index = 5;
-				break;
-			}
-
-			// We're using an unknown output resolution
-			unknown_resolution = TRUE;
-			break;
-
-		case 800:
-
-			if (600 == output_height)
-			{
-				cb_index = 6;
-				break;
-			}
-
-			// We're using an unknown output resolution
-			unknown_resolution = TRUE;
-			break;
-
-		case 720:
-
-			if (480 == output_height)
-			{
-				cb_index = 7;
-				break;
-			}
-
-			// We're using an unknown output resolution
-			unknown_resolution = TRUE;
-			break;
-
-		case 640:
-
-			if (480 == output_height)
-			{
-				cb_index = 8;
-				break;
-			}
-
-			// We're using an unknown output resolution
-			unknown_resolution = TRUE;
-			break;
-
-		case 352:
-
-			if (288 == output_height)
-			{
-				cb_index = 9;
-				break;
-			}
-
-			// We're using an unknown output resolution
-			unknown_resolution = TRUE;
-			break;
-
-		case 320:
-
-			if (240 == output_height)
-			{
-				cb_index = 10;
-				break;
-			}
-
-			// We're using an unknown output resolution
-			unknown_resolution = TRUE;
-			break;
-
-		case 176:
-
-			if (144 == output_height)
-			{
-				cb_index = 11;
-				break;
-			}
-
-			// We're using an unknown output resolution
-			unknown_resolution = TRUE;
-			break;
-
-		case 160:
-
-			if (120 == output_height)
-			{
-				cb_index = 12;
-				break;
-			}
-
-			// We're using an unknown output resolution
-			unknown_resolution = TRUE;
-			break;
-
-		case 128:
-
-			if (96 == output_height)
-			{
-				cb_index = 13;
-				break;
-			}
-
-			// We're using an unknown output resolution
-			unknown_resolution = TRUE;
-			break;
-
-		default:
-
-			// We're using an unknown output resolution
-			unknown_resolution = TRUE;
-			break;
-	}
-
-	// If an unknown output resolution is given, indicate an error and return
-	if (TRUE == unknown_resolution)
-	{
-		display_warning("Error ED200: Unknown swf output resolution selected in control bar function.");
-		return FALSE;
-	}
 
 	// Retrieve the control bar element positions
 	button_x = cb_size_array[cb_index].button_start_x;
@@ -1134,6 +960,9 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie)
  * +++++++
  * 
  * $Log$
+ * Revision 1.24  2008/02/28 05:41:32  vapour
+ * Moved selection of the output resolution array index up a function level for swf output.  This is so the same approach can be used for text element positioning in swf output.
+ *
  * Revision 1.23  2008/02/27 11:14:46  vapour
  * Added working control bar element sizing for 1024 x 768, 1280 x 720, 1280 x 1024, 1600 x 1200, 1920 x 1080, 1920 x 1200.
  *
