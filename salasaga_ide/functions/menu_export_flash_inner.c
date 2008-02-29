@@ -99,11 +99,18 @@ gint menu_export_flash_inner(gchar *output_filename)
 	SWFMovie			swf_movie;					// Swf movie object
 
 	SWFShape			text_bg;					// The text background shape goes in this
-	gint				text_bg_box_height;			// Used while generating swf output for text boxes
-	gint				text_bg_box_width;			// Used while generating swf output for text boxes
+	gfloat				text_bg_box_height;			// Used while generating swf output for text boxes
+	gfloat				text_bg_box_width;			// Used while generating swf output for text boxes
+	SWFDisplayItem		text_bg_display_item;
 	SWFFillStyle		text_bg_fill_style;			// Fill style used when constructing text background shape
+	gfloat				text_border;
+	layer_text			*text_data;					// Points to the text object data inside the layer
+	SWFDisplayItem		text_display_item;
 	SWFMovieClip		text_movie_clip;			// The movie clip that contains the text background and text
 	SWFText				text_object;				// The text object we're working on goes in this
+	gfloat				text_start_x;
+	gfloat				text_start_y;
+	gfloat				text_vert_spacing;
 
 	guint16				blue_component;				// Used when retrieving the foreground color of text
 	gfloat				current_ming_scale;			// Used when creating text swf output
@@ -111,7 +118,6 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gint				num_text_lines;				// Number of text lines in a particular text layer
 	guint16				red_component;				// Used when retrieving the foreground color of text
 	gfloat				scaled_font_size;			// Display height of a font in swf, when scaled to the desired output size
-	gfloat				text_descent;				// Used when calculating the gap to leave between text and its background
 	GtkTextIter			text_end;					// End position of text buffer
 	gint				text_lines_counter;			// Counter used when processing text
 	GtkTextIter			text_start;					// Start position of text buffer
@@ -132,17 +138,22 @@ gint menu_export_flash_inner(gchar *output_filename)
 	// Text positioning elements
 	swf_text_positions	text_elements[] =
 						{
-							{ 20, 5, 5, 0 },	// 1920 x 1200	= 0
-							{ 20, 5, 5, 0 },	// 1920 x 1080	= 1
-							{ 20, 5, 5, 0 },	// 1600 x 1200	= 2
-							{ 20, 5, 5, 0 },	// 1280 x 1024	= 3
-							{ 20, 5, 5, 0 },	// 1280 x  720	= 4
-							{ 20, 5, 5, 0 },	// 1024 x 7680	= 5
-							{ 20, 5, 5, 0 }		//  800 x  600	= 6
+							{ 5, 5, 5, 0 },	// 1920 x 1200	= 0
+							{ 5, 5, 5, 0 },	// 1920 x 1080	= 1
+							{ 5, 5, 5, 0 },	// 1600 x 1200	= 2
+							{ 5, 5, 5, 0 },	// 1280 x 1024	= 3
+							{ 5, 5, 5, 0 },	// 1280 x  720	= 4
+							{ 5, 5, 5, 0 },	// 1024 x  768	= 5
+							{		// 800 x  600	= 6
+							  5,	// border around text
+							  4,	// text start x offset
+							  4,	// text start y offset
+							  0 }	// vertical spacing between text
 							// etc...
 						};
 
 // Force 800 x 600 output resolution while we're getting text positioning to work
+// fixme1: This needs to be removed as soon as possible. :)
 output_width = 800;
 output_height = 600;
 
@@ -851,6 +862,13 @@ output_height = 600;
 
 					// We're processing a text layer
 
+					// Simplify pointers and work out element positioning info
+					text_data = (layer_text *) this_layer_data->object_data;
+					text_border = text_elements[out_res_index].text_border;
+					text_start_x = text_elements[out_res_index].text_start_x;
+					text_start_y = (0.5 * text_data->font_size) + text_elements[out_res_index].text_start_y;  // This scales the starting y position with the font size.  Seems to work decently. :)
+					text_vert_spacing = text_elements[out_res_index].text_vert_spacing;
+
 					// * Create the text object *
 
 					// Create the text object we'll be using
@@ -860,32 +878,34 @@ output_height = 600;
 					SWFText_setFont(text_object, font_object);
 
 					// Set the height we want for the text
-					scaled_font_size = scaled_height_ratio * ((layer_text *) this_layer_data->object_data)->font_size;
+					scaled_font_size = scaled_height_ratio * text_data->font_size;
 					SWFText_setHeight(text_object, scaled_font_size);
 
 					// Set the foreground color for the text
-					red_component = ((layer_text *) this_layer_data->object_data)->text_color.red;
-					green_component = ((layer_text *) this_layer_data->object_data)->text_color.green;
-					blue_component = ((layer_text *) this_layer_data->object_data)->text_color.blue;
+					red_component = text_data->text_color.red;
+					green_component = text_data->text_color.green;
+					blue_component = text_data->text_color.blue;
 					SWFText_setColor(text_object, roundf(red_component / 255), roundf(green_component / 255), roundf(blue_component / 255), 0xff);
 
 					// Work out how many lines of text we're dealing with
-					num_text_lines = gtk_text_buffer_get_line_count(((layer_text *) this_layer_data->object_data)->text_buffer);
+					num_text_lines = gtk_text_buffer_get_line_count(text_data->text_buffer);
+
 					// Displaying debugging info if requested
 					if (debug_level)
 					{
 						printf("Number of lines of text: %d\n", num_text_lines);
 					}
 
-					// Add each line of text to the output, wrapped with a tspan
+					// Add each line of text to the output
 					widest_text_string_width = 0;
 					for (text_lines_counter = 0; text_lines_counter < num_text_lines; text_lines_counter++)
 					{
-						gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(((layer_text *) this_layer_data->object_data)->text_buffer), &text_start, text_lines_counter);
+						// Select the start and end positions for the given line, in the text buffer
+						gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(text_data->text_buffer), &text_start, text_lines_counter);
 						text_end = text_start;
 						gtk_text_iter_forward_to_line_end(&text_end);
 
-						// Add the required text to the text object
+						// Retrieve the text for the given line, and add it to the text object
 						visible_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
 						SWFText_addString(text_object, visible_string, NULL);
 
@@ -899,7 +919,7 @@ output_height = 600;
 						// * Move the pen down to the start of the next line *
 
 						// Move to the appropriate Y position
-						SWFText_moveTo(text_object, 0, (text_lines_counter + 1) * scaled_font_size);
+						SWFText_moveTo(text_object, 0, (text_lines_counter + 1) * (scaled_font_size + text_vert_spacing));
 
 						// Try and move X as close as possible to 0.  We can't use 0 in SWFText_moveTo() due to a bug in Ming
 						current_ming_scale = Ming_getScale();
@@ -934,12 +954,8 @@ output_height = 600;
 					SWFShape_setLine(text_bg, 1, 0x00, 0x00, 0x00, 0xff);  // Width = 1 seems to work ok
 
 					// Work out the scaled dimensions of the text background box
-					text_descent = SWFText_getDescent(text_object) + 2.5;
-					text_bg_box_height = roundf((scaled_font_size * num_text_lines) + (scaled_height_ratio * text_descent));  // Add a gap between the text and the background 
-					text_bg_box_width = roundf(scaled_width_ratio * 10) + widest_text_string_width;
-
-					// Move the start position of the text box vertically downwards
-					SWFShape_movePenTo(text_bg, -(text_descent * scaled_height_ratio), (text_descent * 0.5 * scaled_height_ratio) - scaled_font_size);
+					text_bg_box_height = (scaled_font_size * num_text_lines) + (2 * text_border);
+					text_bg_box_width = widest_text_string_width + (2 * text_border);
 
 					// Create the text background box
 					SWFShape_drawLine(text_bg, text_bg_box_width, 0.0);
@@ -951,10 +967,14 @@ output_height = 600;
 					text_movie_clip = newSWFMovieClip();
 
 					// Add the text background to the movie clip
-					SWFMovieClip_add(text_movie_clip, (SWFBlock) text_bg);
+					text_bg_display_item = SWFMovieClip_add(text_movie_clip, (SWFBlock) text_bg);
 
 					// Add the text object to the movie clip
-					SWFMovieClip_add(text_movie_clip, (SWFBlock) text_object);
+					text_display_item = SWFMovieClip_add(text_movie_clip, (SWFBlock) text_object);
+
+					// Position the background and text elements
+					SWFDisplayItem_moveTo(text_bg_display_item, 0.0, 0.0);
+					SWFDisplayItem_moveTo(text_display_item, text_start_x, text_start_y);
 
 					// Advance the movie clip one frame, else it won't be displayed
 					SWFMovieClip_nextFrame(text_movie_clip);
@@ -1306,6 +1326,9 @@ output_height = 600;
  * +++++++
  * 
  * $Log$
+ * Revision 1.51  2008/02/29 04:08:54  vapour
+ * Updated to use the text element positioning information, and included decent positioning information for 800 x 600 swf output.
+ *
  * Revision 1.50  2008/02/28 16:55:44  vapour
  *  + Removed Ming initialisation from this function.
  *  + Forced swf output resolution to 800 x 600 for now, while getting text element placement to work correctly.
