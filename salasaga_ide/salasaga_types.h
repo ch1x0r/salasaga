@@ -281,9 +281,17 @@ typedef struct
 typedef struct
 {
 	gfloat				text_border;
-	gfloat				text_start_x;
-	gfloat				text_start_y;
-	gfloat				text_vert_spacing;
+	gfloat				text_font_threshold;
+	gfloat				text_high_start_x;
+	gfloat				text_high_start_x_mult;
+	gfloat				text_high_start_y;
+	gfloat				text_high_start_y_mult;
+	gfloat				text_high_vert_spacing;
+	gfloat				text_low_start_x;
+	gfloat				text_low_start_x_mult;
+	gfloat				text_low_start_y;
+	gfloat				text_low_start_y_mult;
+	gfloat				text_low_vert_spacing;
 } swf_text_positions;
 
 // Defines the structure of a validation field entry
@@ -309,6 +317,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.60  2008/03/01 01:45:01  vapour
+ * Expanded the amount of information available for positioning text elements.
+ *
  * Revision 1.59  2008/02/28 16:54:02  vapour
  * Added an initial structure to assist with text element positioning for swf output.
  *
