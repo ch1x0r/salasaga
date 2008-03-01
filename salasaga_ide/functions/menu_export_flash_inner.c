@@ -110,6 +110,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	SWFText				text_object;				// The text object we're working on goes in this
 	gfloat				text_start_x;
 	gfloat				text_start_y;
+	gfloat				text_start_y_mult;
 	gfloat				text_vert_spacing;
 
 	guint16				blue_component;				// Used when retrieving the foreground color of text
@@ -138,24 +139,100 @@ gint menu_export_flash_inner(gchar *output_filename)
 	// Text positioning elements
 	swf_text_positions	text_elements[] =
 						{
-							{ 5, 5, 5, 0 },	// 1920 x 1200	= 0
-							{ 5, 5, 5, 0 },	// 1920 x 1080	= 1
-							{ 5, 5, 5, 0 },	// 1600 x 1200	= 2
-							{ 5, 5, 5, 0 },	// 1280 x 1024	= 3
-							{ 5, 5, 5, 0 },	// 1280 x  720	= 4
-							{ 5, 5, 5, 0 },	// 1024 x  768	= 5
-							{		// 800 x  600	= 6
+							{		// 0 = 1920 x 1200 (not done)
 							  5,	// border around text
-							  4,	// text start x offset
-							  4,	// text start y offset
-							  0 }	// vertical spacing between text
+							 40,	// low/high font size threshold
+							  3,	// text high start x offset
+							1.0,	// font high size multiplier to arrive at x
+							  6,	// text high start y offset
+						   0.55,	// font high size multiplier to arrive at y
+							  0,	// font high vertical spacing between text
+							  3,	// text low start x offset
+							1.0,	// font low size multiplier to arrive at x
+							  6,	// text low start y offset
+						   0.55,	// font low size multiplier to arrive at y
+							  0 },	// font low vertical spacing between text
+							{		// 1 = 1920 x 1080 (not done)
+							  5,	// border around text
+							 40,	// low/high font size threshold
+							  4,	// text high start x offset
+							1.0,	// font high size multiplier to arrive at x
+							  3,	// text high start y offset
+							0.51,	// font high size multiplier to arrive at y
+							  0,	// font high vertical spacing between text
+							  4,	// text low start x offset
+							1.0,	// font low size multiplier to arrive at x
+							  3,	// text low start y offset
+							0.51,	// font low size multiplier to arrive at y
+							  0 },	// font low vertical spacing between text
+							{		// 2 = 1600 x 1200 (not done)
+							  5,	// border around text
+							 40,	// low/high font size threshold
+							  3,	// text high start x offset
+							1.0,	// font high size multiplier to arrive at x
+							  6,	// text high start y offset
+						   0.55,	// font high size multiplier to arrive at y
+							  0,	// font high vertical spacing between text
+							  3,	// text low start x offset
+							1.0,	// font low size multiplier to arrive at x
+							  6,	// text low start y offset
+						   0.55,	// font low size multiplier to arrive at y
+							  0 },	// font low vertical spacing between text
+							{		// 3 = 1280 x 1024 (not done)
+							  5,	// border around text
+							 40,	// low/high font size threshold
+							  4,	// text high start x offset
+							1.0,	// font high size multiplier to arrive at x
+							  3,	// text high start y offset
+							0.51,	// font high size multiplier to arrive at y
+							  0,	// font high vertical spacing between text
+							  4,	// text low start x offset
+							1.0,	// font low size multiplier to arrive at x
+							  3,	// text low start y offset
+							0.51,	// font low size multiplier to arrive at y
+							  0 },	// font low vertical spacing between text
+							{		// 4 = 1280 x 720 (not done)
+							  5,	// border around text
+							 40,	// low/high font size threshold
+							  3,	// text high start x offset
+							1.0,	// font high size multiplier to arrive at x
+							  6,	// text high start y offset
+						   0.55,	// font high size multiplier to arrive at y
+							  0,	// font high vertical spacing between text
+							  3,	// text low start x offset
+							1.0,	// font low size multiplier to arrive at x
+							  6,	// text low start y offset
+						   0.55,	// font low size multiplier to arrive at y
+							  0 },	// font low vertical spacing between text
+							{		// 5 = 1024 x 768 (not done)
+							  5,	// border around text
+							 40,	// low/high font size threshold
+							  3,	// text high start x offset
+							1.0,	// font high size multiplier to arrive at x
+							  6,	// text high start y offset
+						   0.55,	// font high size multiplier to arrive at y
+							  0,	// font high vertical spacing between text
+							  3,	// text low start x offset
+							1.0,	// font low size multiplier to arrive at x
+							  6,	// text low start y offset
+						   0.55,	// font low size multiplier to arrive at y
+							  0 },	// font low vertical spacing between text
+							{		// 6 = 800 x 600 (done)
+							  5,	// border around text
+							 50,	// low/high font size threshold
+							  4,	// text high start x offset
+							1.0,	// font high size multiplier to arrive at x
+							  1,	// text high start y offset
+						  0.495,	// font high size multiplier to arrive at y
+							  1,	// font high vertical spacing between text
+							  4,	// text low start x offset
+							1.0,	// font low size multiplier to arrive at x
+							  3,	// text low start y offset
+						   0.51,	// font low size multiplier to arrive at y
+							  1 }	// font low vertical spacing between text
+
 							// etc...
 						};
-
-// Force 800 x 600 output resolution while we're getting text positioning to work
-// fixme1: This needs to be removed as soon as possible. :)
-output_width = 800;
-output_height = 600;
 
 	// (Hopefully) temporary variables put in place to get around a *bizarre*
 	// problem whereby calculating basic stuff like "0 - output_width" gives bogus results (computers are infallible eh?) :(
@@ -865,9 +942,24 @@ output_height = 600;
 					// Simplify pointers and work out element positioning info
 					text_data = (layer_text *) this_layer_data->object_data;
 					text_border = text_elements[out_res_index].text_border;
-					text_start_x = text_elements[out_res_index].text_start_x;
-					text_start_y = (0.5 * text_data->font_size) + text_elements[out_res_index].text_start_y;  // This scales the starting y position with the font size.  Seems to work decently. :)
-					text_vert_spacing = text_elements[out_res_index].text_vert_spacing;
+
+					// If the font size is greater than or equal to a threshold, we use the "high" settings, else the "low" settings
+					if (text_data->font_size >= text_elements[out_res_index].text_font_threshold)
+					{
+						// Use "high" settings
+						text_start_x = text_elements[out_res_index].text_high_start_x;
+						text_start_y_mult = text_elements[out_res_index].text_high_start_y_mult;
+						text_start_y = (text_start_y_mult * text_data->font_size) + text_elements[out_res_index].text_high_start_y;  // This scales the starting y position with the font size.  Seems to work decently. :)
+						text_vert_spacing = text_elements[out_res_index].text_high_vert_spacing;
+					}
+					else
+					{
+						// Use "low" settings
+						text_start_x = text_elements[out_res_index].text_low_start_x;
+						text_start_y_mult = text_elements[out_res_index].text_low_start_y_mult;
+						text_start_y = (text_start_y_mult * text_data->font_size) + text_elements[out_res_index].text_low_start_y;  // This scales the starting y position with the font size.  Seems to work decently. :)
+						text_vert_spacing = text_elements[out_res_index].text_low_vert_spacing;
+					}
 
 					// * Create the text object *
 
@@ -1326,6 +1418,9 @@ output_height = 600;
  * +++++++
  * 
  * $Log$
+ * Revision 1.52  2008/03/01 01:59:12  vapour
+ * Updated code for better text positioning over a wider range of font sizes (10 pt to 80 pt).  800 x 600 resolution seems ok for now.
+ *
  * Revision 1.51  2008/02/29 04:08:54  vapour
  * Updated to use the text element positioning information, and included decent positioning information for 800 x 600 swf output.
  *
