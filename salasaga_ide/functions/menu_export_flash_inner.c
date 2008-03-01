@@ -139,33 +139,46 @@ gint menu_export_flash_inner(gchar *output_filename)
 	// Text positioning elements
 	swf_text_positions	text_elements[] =
 						{
-							{		// 0 = 1920 x 1200 (not done)
-							  5,	// border around text
-							 40,	// low/high font size threshold
-							  3,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  6,	// text high start y offset
-						   0.55,	// font high size multiplier to arrive at y
-							  0,	// font high vertical spacing between text
-							  3,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							  6,	// text low start y offset
-						   0.55,	// font low size multiplier to arrive at y
-							  0 },	// font low vertical spacing between text
-							{		// 1 = 1920 x 1080 (not done)
+							{		// 0 = 1920 x 1200
 							  5,	// border around text
 							 40,	// low/high font size threshold
 							  4,	// text high start x offset
 							1.0,	// font high size multiplier to arrive at x
 							  3,	// text high start y offset
-							0.51,	// font high size multiplier to arrive at y
-							  0,	// font high vertical spacing between text
+						   0.90,	// font high size multiplier to arrive at y
+							  1,	// font high vertical spacing between text
 							  4,	// text low start x offset
 							1.0,	// font low size multiplier to arrive at x
 							  3,	// text low start y offset
-							0.51,	// font low size multiplier to arrive at y
-							  0 },	// font low vertical spacing between text
-							{		// 2 = 1600 x 1200 (not done)
+						   0.88,	// font low size multiplier to arrive at y
+							  1 },	// font low vertical spacing between text
+							{		// 1 = 1920 x 1080
+							  5,	// border around text
+							 40,	// low/high font size threshold
+							  4,	// text high start x offset
+							1.0,	// font high size multiplier to arrive at x
+							  3,	// text high start y offset
+						   0.80,	// font high size multiplier to arrive at y
+							  1,	// font high vertical spacing between text
+							  4,	// text low start x offset
+							1.0,	// font low size multiplier to arrive at x
+							  3,	// text low start y offset
+						   0.78,	// font low size multiplier to arrive at y
+							  1 },	// font low vertical spacing between text
+							{		// 2 = 1600 x 1200
+							  5,	// border around text
+							 40,	// low/high font size threshold
+							  4,	// text high start x offset
+							1.0,	// font high size multiplier to arrive at x
+							  3,	// text high start y offset
+						   0.90,	// font high size multiplier to arrive at y
+							  1,	// font high vertical spacing between text
+							  4,	// text low start x offset
+							1.0,	// font low size multiplier to arrive at x
+							  3,	// text low start y offset
+						   0.88,	// font low size multiplier to arrive at y
+							  1 },	// font low vertical spacing between text
+							{		// 3 = 1280 x 1024
 							  5,	// border around text
 							 40,	// low/high font size threshold
 							  4,	// text high start x offset
@@ -178,20 +191,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 							  3,	// text low start y offset
 						   0.75,	// font low size multiplier to arrive at y
 							  1 },	// font low vertical spacing between text
-							{		// 3 = 1280 x 1024 (done)
-							  5,	// border around text
-							 40,	// low/high font size threshold
-							  4,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  3,	// text high start y offset
-						   0.80,	// font high size multiplier to arrive at y
-							  0,	// font high vertical spacing between text
-							  4,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							  3,	// text low start y offset
-						   0.75,	// font low size multiplier to arrive at y
-							  1 },	// font low vertical spacing between text
-							{		// 4 = 1280 x 720 (done)
+							{		// 4 = 1280 x 720
 							  5,	// border around text
 							 40,	// low/high font size threshold
 							  3,	// text high start x offset
@@ -204,7 +204,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 							  4,	// text low start y offset
 						   0.48,	// font low size multiplier to arrive at y
 							  1 },	// font low vertical spacing between text
-							{		// 5 = 1024 x 768 (done)
+							{		// 5 = 1024 x 768
 							  5,	// border around text
 							 40,	// low/high font size threshold
 							  3,	// text high start x offset
@@ -217,7 +217,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 							  4,	// text low start y offset
 						   0.52,	// font low size multiplier to arrive at y
 							  1 },	// font low vertical spacing between text
-							{		// 6 = 800 x 600 (done)
+							{		// 6 = 800 x 600
 							  5,	// border around text
 							 50,	// low/high font size threshold
 							  4,	// text high start x offset
@@ -230,7 +230,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 							  3,	// text low start y offset
 						   0.51,	// font low size multiplier to arrive at y
 							  1 },	// font low vertical spacing between text
-							{		// 7 = 720 x 480 (done)
+							{		// 7 = 720 x 480
 							  5,	// border around text
 							 25,	// low/high font size threshold
 							  2,	// text high start x offset
@@ -243,7 +243,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 							  1,	// text low start y offset
 						   0.45,	// font low size multiplier to arrive at y
 							  1 },	// font low vertical spacing between text
-							{		// 8 = 640 x 480 (done)
+							{		// 8 = 640 x 480
 							  5,	// border around text
 							 24,	// low/high font size threshold
 							  2,	// text high start x offset
@@ -256,7 +256,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 							  1,	// text low start y offset
 						   0.45,	// font low size multiplier to arrive at y
 							  1 },	// font low vertical spacing between text
-							{		// 9 = 352 x 288 (done)
+							{		// 9 = 352 x 288
 							  5,	// border around text
 							 31,	// low/high font size threshold
 							  2,	// text high start x offset
@@ -269,7 +269,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 							  0,	// text low start y offset
 						   0.32,	// font low size multiplier to arrive at y
 							  1 },	// font low vertical spacing between text
-							{		// 10 = 320 x 240 (done)
+							{		// 10 = 320 x 240
 							  5,	// border around text
 							 22,	// low/high font size threshold
 							  2,	// text high start x offset
@@ -282,7 +282,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 							  0,	// text low start y offset
 						   0.32,	// font low size multiplier to arrive at y
 							  1 },	// font low vertical spacing between text
-							{		// 11 = 176 x 144 (done)
+							{		// 11 = 176 x 144
 							  3,	// border around text
 							 31,	// low/high font size threshold
 							  2,	// text high start x offset
@@ -295,7 +295,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 							 -2,	// text low start y offset
 						   0.32,	// font low size multiplier to arrive at y
 							  1 },	// font low vertical spacing between text
-							{		// 12 = 160 x 120 (done)
+							{		// 12 = 160 x 120
 							  3,	// border around text
 							 31,	// low/high font size threshold
 							  2,	// text high start x offset
@@ -308,7 +308,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 							 -2,	// text low start y offset
 						   0.32,	// font low size multiplier to arrive at y
 							  0 },	// font low vertical spacing between text
-							{		// 13 = 128 x 96 (done)
+							{		// 13 = 128 x 96
 							  3,	// border around text
 							 31,	// low/high font size threshold
 							  2,	// text high start x offset
@@ -1507,6 +1507,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.61  2008/03/01 10:37:57  vapour
+ * Added reasonable text element position information for the remaining swf output resolutions.
+ *
  * Revision 1.60  2008/03/01 10:26:44  vapour
  * Added reasonable text element position information for 1280 x 720 and 1280 x 1024 swf output.
  *
