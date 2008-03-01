@@ -227,6 +227,11 @@ void layer_edit(void)
 
 	// Recreate the film strip thumbnails
 	regenerate_film_strip_thumbnails();
+
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, "Layer edit done.");
+	gdk_flush();
+
 }
 
 
@@ -235,6 +240,9 @@ void layer_edit(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/03/01 08:16:44  vapour
+ * The status bar is now updated whenever a layer edit is done.
+ *
  * Revision 1.11  2008/02/20 18:45:44  vapour
  * Fixed a small potential memory leak.
  *
