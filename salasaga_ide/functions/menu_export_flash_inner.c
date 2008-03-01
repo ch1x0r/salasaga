@@ -204,19 +204,19 @@ gint menu_export_flash_inner(gchar *output_filename)
 							  6,	// text low start y offset
 						   0.55,	// font low size multiplier to arrive at y
 							  0 },	// font low vertical spacing between text
-							{		// 5 = 1024 x 768 (not done)
+							{		// 5 = 1024 x 768 (done)
 							  5,	// border around text
 							 40,	// low/high font size threshold
 							  3,	// text high start x offset
 							1.0,	// font high size multiplier to arrive at x
 							  6,	// text high start y offset
-						   0.55,	// font high size multiplier to arrive at y
+						   0.59,	// font high size multiplier to arrive at y
 							  0,	// font high vertical spacing between text
 							  3,	// text low start x offset
 							1.0,	// font low size multiplier to arrive at x
-							  6,	// text low start y offset
-						   0.55,	// font low size multiplier to arrive at y
-							  0 },	// font low vertical spacing between text
+							  4,	// text low start y offset
+						   0.52,	// font low size multiplier to arrive at y
+							  1 },	// font low vertical spacing between text
 							{		// 6 = 800 x 600 (done)
 							  5,	// border around text
 							 50,	// low/high font size threshold
@@ -1418,6 +1418,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.53  2008/03/01 07:58:58  vapour
+ * Added reasonable working text element position information for 1024 x 768 swf output.
+ *
  * Revision 1.52  2008/03/01 01:59:12  vapour
  * Updated code for better text positioning over a wider range of font sizes (10 pt to 80 pt).  800 x 600 resolution seems ok for now.
  *
