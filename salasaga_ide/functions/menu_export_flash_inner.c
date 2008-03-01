@@ -268,6 +268,19 @@ gint menu_export_flash_inner(gchar *output_filename)
 							1.0,	// font low size multiplier to arrive at x
 							  0,	// text low start y offset
 						   0.32,	// font low size multiplier to arrive at y
+							  1 },	// font low vertical spacing between text
+							{		// 10 = 320 x 240 (done)
+							  5,	// border around text
+							 22,	// low/high font size threshold
+							  2,	// text high start x offset
+							1.0,	// font high size multiplier to arrive at x
+							  2,	// text high start y offset
+						   0.18,	// font high size multiplier to arrive at y
+							  1,	// font high vertical spacing between text
+							  2,	// text low start x offset
+							1.0,	// font low size multiplier to arrive at x
+							  0,	// text low start y offset
+						   0.32,	// font low size multiplier to arrive at y
 							  1 }	// font low vertical spacing between text
 
 							// etc...
@@ -1457,6 +1470,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.57  2008/03/01 09:19:02  vapour
+ * Added reasonable working text element position information for 320 x 240 swf output.
+ *
  * Revision 1.56  2008/03/01 09:11:36  vapour
  * Added reasonable working text element position information for 352 x 288 swf output.
  *
