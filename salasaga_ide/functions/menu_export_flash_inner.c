@@ -168,30 +168,30 @@ gint menu_export_flash_inner(gchar *output_filename)
 							{		// 2 = 1600 x 1200 (not done)
 							  5,	// border around text
 							 40,	// low/high font size threshold
-							  3,	// text high start x offset
+							  4,	// text high start x offset
 							1.0,	// font high size multiplier to arrive at x
-							  6,	// text high start y offset
-						   0.55,	// font high size multiplier to arrive at y
+							  3,	// text high start y offset
+						   0.80,	// font high size multiplier to arrive at y
 							  0,	// font high vertical spacing between text
-							  3,	// text low start x offset
+							  4,	// text low start x offset
 							1.0,	// font low size multiplier to arrive at x
-							  6,	// text low start y offset
-						   0.55,	// font low size multiplier to arrive at y
-							  0 },	// font low vertical spacing between text
-							{		// 3 = 1280 x 1024 (not done)
+							  3,	// text low start y offset
+						   0.75,	// font low size multiplier to arrive at y
+							  1 },	// font low vertical spacing between text
+							{		// 3 = 1280 x 1024 (done)
 							  5,	// border around text
 							 40,	// low/high font size threshold
 							  4,	// text high start x offset
 							1.0,	// font high size multiplier to arrive at x
 							  3,	// text high start y offset
-							0.51,	// font high size multiplier to arrive at y
+						   0.80,	// font high size multiplier to arrive at y
 							  0,	// font high vertical spacing between text
 							  4,	// text low start x offset
 							1.0,	// font low size multiplier to arrive at x
 							  3,	// text low start y offset
-							0.51,	// font low size multiplier to arrive at y
-							  0 },	// font low vertical spacing between text
-							{		// 4 = 1280 x 720 (not done)
+						   0.75,	// font low size multiplier to arrive at y
+							  1 },	// font low vertical spacing between text
+							{		// 4 = 1280 x 720 (done)
 							  5,	// border around text
 							 40,	// low/high font size threshold
 							  3,	// text high start x offset
@@ -201,9 +201,9 @@ gint menu_export_flash_inner(gchar *output_filename)
 							  0,	// font high vertical spacing between text
 							  3,	// text low start x offset
 							1.0,	// font low size multiplier to arrive at x
-							  6,	// text low start y offset
-						   0.55,	// font low size multiplier to arrive at y
-							  0 },	// font low vertical spacing between text
+							  4,	// text low start y offset
+						   0.48,	// font low size multiplier to arrive at y
+							  1 },	// font low vertical spacing between text
 							{		// 5 = 1024 x 768 (done)
 							  5,	// border around text
 							 40,	// low/high font size threshold
@@ -1507,6 +1507,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.60  2008/03/01 10:26:44  vapour
+ * Added reasonable text element position information for 1280 x 720 and 1280 x 1024 swf output.
+ *
  * Revision 1.59  2008/03/01 10:09:19  vapour
  * Added text element position information for 160 x 120 and 128 x 96 swf output.
  *
