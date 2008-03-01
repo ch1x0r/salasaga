@@ -229,6 +229,19 @@ gint menu_export_flash_inner(gchar *output_filename)
 							1.0,	// font low size multiplier to arrive at x
 							  3,	// text low start y offset
 						   0.51,	// font low size multiplier to arrive at y
+							  1 },	// font low vertical spacing between text
+							{		// 7 = 720 x 480 (done)
+							  5,	// border around text
+							 25,	// low/high font size threshold
+							  2,	// text high start x offset
+							1.0,	// font high size multiplier to arrive at x
+							  3,	// text high start y offset
+						   0.36,	// font high size multiplier to arrive at y
+							  1,	// font high vertical spacing between text
+							  2,	// text low start x offset
+							1.0,	// font low size multiplier to arrive at x
+							  1,	// text low start y offset
+						   0.45,	// font low size multiplier to arrive at y
 							  1 }	// font low vertical spacing between text
 
 							// etc...
@@ -1418,6 +1431,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.54  2008/03/01 08:17:32  vapour
+ * Added reasonable working text element position information for 720 x 480 swf output.
+ *
  * Revision 1.53  2008/03/01 07:58:58  vapour
  * Added reasonable working text element position information for 1024 x 768 swf output.
  *
