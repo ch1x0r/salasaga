@@ -294,9 +294,33 @@ gint menu_export_flash_inner(gchar *output_filename)
 							1.0,	// font low size multiplier to arrive at x
 							 -2,	// text low start y offset
 						   0.32,	// font low size multiplier to arrive at y
-							  1 }	// font low vertical spacing between text
-
-							// etc...
+							  1 },	// font low vertical spacing between text
+							{		// 12 = 160 x 120 (done)
+							  3,	// border around text
+							 31,	// low/high font size threshold
+							  2,	// text high start x offset
+							1.0,	// font high size multiplier to arrive at x
+							  4,	// text high start y offset
+						   0.08,	// font high size multiplier to arrive at y
+							  0,	// font high vertical spacing between text
+							  2,	// text low start x offset
+							1.0,	// font low size multiplier to arrive at x
+							 -2,	// text low start y offset
+						   0.32,	// font low size multiplier to arrive at y
+							  0 },	// font low vertical spacing between text
+							{		// 13 = 128 x 96 (done)
+							  3,	// border around text
+							 31,	// low/high font size threshold
+							  2,	// text high start x offset
+							1.0,	// font high size multiplier to arrive at x
+							  2,	// text high start y offset
+						   0.08,	// font high size multiplier to arrive at y
+							  0,	// font high vertical spacing between text
+							  2,	// text low start x offset
+							1.0,	// font low size multiplier to arrive at x
+							 -2,	// text low start y offset
+						   0.34,	// font low size multiplier to arrive at y
+							  0 }	// font low vertical spacing between text
 						};
 
 	// (Hopefully) temporary variables put in place to get around a *bizarre*
@@ -1483,6 +1507,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.59  2008/03/01 10:09:19  vapour
+ * Added text element position information for 160 x 120 and 128 x 96 swf output.
+ *
  * Revision 1.58  2008/03/01 09:47:43  vapour
  * Added text element position information for 176 x 144 swf output.
  *
