@@ -194,7 +194,7 @@ void menu_screenshots_import(void)
 	}
 
 	// Use the status bar to communicate the number of screenshots found
-	g_string_printf(tmp_string, "Found %u screenshots.", num_screenshots);
+	g_string_printf(tmp_string, " Found %u screenshots", num_screenshots);
 	recent_message = gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_string->str);
 	gdk_flush();
 
@@ -337,7 +337,7 @@ void menu_screenshots_import(void)
 		}
 
 		// Update the status bar with a progress counter
-		g_string_printf(tmp_string, "Loaded image %u of %u.", tmp_int, num_screenshots);
+		g_string_printf(tmp_string, " Loaded image %u of %u", tmp_int, num_screenshots);
 		recent_message = gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_string->str);
 		gdk_flush();
 
@@ -417,6 +417,11 @@ void menu_screenshots_import(void)
 	enable_layer_toolbar_buttons();
 	enable_main_toolbar_buttons();
 
+	// Update the status bar
+	g_string_printf(tmp_string, " %u screenshots imported", num_screenshots);
+	recent_message = gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_string->str);
+	gdk_flush();
+
 	// Free the memory allocated in this function
 	g_string_free(tmp_string, TRUE);
 }
@@ -427,6 +432,9 @@ void menu_screenshots_import(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.16  2008/03/03 02:59:06  vapour
+ * Updated status bar feedback messages.
+ *
  * Revision 1.15  2008/02/20 03:49:35  vapour
  * Updated to reuse an existing path if available, rather than recreating a new one each time.  Was a potential (small) memory leak.
  *

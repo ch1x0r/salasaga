@@ -437,13 +437,13 @@ void menu_screenshots_capture(void)
 		}
 
 		// Add a message to the status bar so the user gets visual feedback
-		g_string_printf(tmp_gstring, "Wrote capture lock file '%s' and installed Control-Printscreen keyboard hook.", full_file_name);
+		g_string_printf(tmp_gstring, " Wrote capture lock file - %s - and installed Control-Printscreen keyboard hook", full_file_name);
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 		gdk_flush();
 	}
 #else
 	// Add a message to the status bar so the user gets visual feedback
-	g_string_printf(tmp_gstring, "Wrote capture lock file '%s'.", full_file_name);
+	g_string_printf(tmp_gstring, " Wrote capture lock file - %s", full_file_name);
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 	gdk_flush();
 #endif
@@ -463,6 +463,9 @@ void menu_screenshots_capture(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/03/03 02:58:29  vapour
+ * Updated status bar feedback messages.
+ *
  * Revision 1.8  2008/02/04 17:08:01  vapour
  * Adjusted structural spacing, for consistency with other files.
  *
