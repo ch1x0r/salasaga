@@ -191,6 +191,10 @@ void slide_properties(void)
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(slide_dialog));
 
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide properties updated");
+	gdk_flush();
+
 	// Free the resources allocated in this function
 	g_string_free(valid_slide_name, TRUE);
 	g_string_free(tmp_gstring, TRUE);
@@ -202,6 +206,9 @@ void slide_properties(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/03/03 03:04:50  vapour
+ * Added status bar feedback message.
+ *
  * Revision 1.3  2008/02/20 09:06:15  vapour
  *  + Now validates input.
  *  + Simplified pointers.

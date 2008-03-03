@@ -143,6 +143,10 @@ void layer_new_highlight(void)
 	// Select the new layer in the timeline widget
 	tmp_path = gtk_tree_path_new_first();
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(slide_data->timeline_widget), tmp_path, NULL, FALSE);
+
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Highlight layer added");
+	gdk_flush();
 }
 
 
@@ -151,6 +155,9 @@ void layer_new_highlight(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/03/03 02:51:10  vapour
+ * Added status bar feedback message.
+ *
  * Revision 1.9  2008/02/16 11:12:53  vapour
  * Replaced our sound beep function with the inbuilt gdk sound beep one.
  *

@@ -397,6 +397,10 @@ void menu_edit_preferences(void)
 	// Default Background Colour
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(button_default_bg_colour), &default_bg_colour);
 
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Application preferences updated");
+	gdk_flush();
+
 	// Free up the memory allocated in this function
 	g_string_free(tmp_gstring, TRUE);
 	gtk_widget_destroy(GTK_WIDGET(label_default_project_folder));
@@ -412,6 +416,9 @@ void menu_edit_preferences(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2008/03/03 02:53:20  vapour
+ * Added status bar feedback message.
+ *
  * Revision 1.14  2008/02/25 13:34:22  vapour
  * Small alphabetical ordering tweak.
  *

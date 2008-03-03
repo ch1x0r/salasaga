@@ -94,6 +94,10 @@ void slide_delete(void)
 	// Redraw the workspace
 	draw_workspace();
 
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide deleted");
+	gdk_flush();
+
 	// Free the resources allocated to the deleted slide
 	destroy_slide(tmp_glist->data, NULL);
 	g_list_free(tmp_glist);
@@ -105,6 +109,9 @@ void slide_delete(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/03/03 03:00:19  vapour
+ * Added status bar feedback message.
+ *
  * Revision 1.6  2008/02/19 17:46:27  vapour
  * Small wording tweak in an error message.
  *

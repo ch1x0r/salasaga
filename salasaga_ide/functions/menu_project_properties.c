@@ -268,6 +268,10 @@ void menu_project_properties(void)
 	// Frames per second
 	frames_per_second = valid_fps;
 
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project properties updated");
+	gdk_flush();
+
 	// Free the memory allocated in this function
 	g_string_free(tmp_gstring, TRUE);
 }
@@ -278,6 +282,9 @@ void menu_project_properties(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/03/03 02:57:47  vapour
+ * Added status bar feedback message.
+ *
  * Revision 1.6  2008/02/20 06:03:01  vapour
  * Updated to validate all input.
  *

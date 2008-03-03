@@ -218,6 +218,10 @@ void image_crop(void)
 
 	// Recreate the film strip thumbnails
 	regenerate_film_strip_thumbnails();
+
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Image cropped");
+	gdk_flush();
 }
 
 
@@ -226,6 +230,9 @@ void image_crop(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/03/03 02:47:37  vapour
+ * Added status bar feedback message.
+ *
  * Revision 1.7  2008/02/16 11:09:47  vapour
  * Replaced our sound beep function with the inbuilt gdk sound beep one.
  *

@@ -221,6 +221,10 @@ void project_crop(void)
 
 	// Recreate the film strip thumbnails
 	regenerate_film_strip_thumbnails();
+
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, "Project cropped");
+	gdk_flush();
 }
 
 
@@ -229,6 +233,9 @@ void project_crop(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/03/03 02:59:38  vapour
+ * Added status bar feedback message.
+ *
  * Revision 1.6  2008/02/16 11:17:56  vapour
  * Removed un-needed include file.
  *

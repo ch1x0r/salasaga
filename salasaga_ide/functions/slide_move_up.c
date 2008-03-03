@@ -91,6 +91,10 @@ void slide_move_up(void)
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
 //	gtk_tree_path_free(new_path);
+
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide moved up");
+	gdk_flush();
 }
 
 
@@ -99,6 +103,9 @@ void slide_move_up(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/03/03 03:03:41  vapour
+ * Added status bar feedback message.
+ *
  * Revision 1.4  2008/02/04 17:15:45  vapour
  *  + Removed unnecessary includes.
  *

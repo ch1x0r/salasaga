@@ -85,6 +85,10 @@ void slide_move_top(void)
 
 	// Recreate the slide tooltips
 	create_tooltips();
+
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide moved to top");
+	gdk_flush();
 }
 
 
@@ -93,6 +97,9 @@ void slide_move_top(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/03/03 03:03:12  vapour
+ * Added status bar feedback message.
+ *
  * Revision 1.4  2008/02/04 17:15:09  vapour
  *  + Removed unnecessary includes.
  *

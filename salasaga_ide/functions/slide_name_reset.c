@@ -47,6 +47,10 @@ void slide_name_reset(void)
 
 	// Recreate the film strip tooltips
 	create_tooltips();
+
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide name reset");
+	gdk_flush();
 }
 
 
@@ -55,6 +59,9 @@ void slide_name_reset(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/03/03 03:04:16  vapour
+ * Added status bar feedback message.
+ *
  * Revision 1.5  2008/02/04 17:16:21  vapour
  *  + Removed unnecessary includes.
  *

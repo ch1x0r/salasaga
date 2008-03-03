@@ -113,6 +113,10 @@ void layer_delete(void)
 	// Free the storage allocated by this function
 	gtk_tree_path_free(tmp_path);
 
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer deleted");
+	gdk_flush();
+
 	return;
 }
 
@@ -122,6 +126,9 @@ void layer_delete(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/03/03 02:48:13  vapour
+ * Added status bar feedback message.
+ *
  * Revision 1.6  2008/02/12 14:10:19  vapour
  * Updated to use the gdk beep function.
  *

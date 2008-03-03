@@ -98,6 +98,10 @@ void layer_move_down(void)
 
 	// Recreate the film strip thumbnails
 	regenerate_film_strip_thumbnails();
+
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer moved down");
+	gdk_flush();
 }
 
 
@@ -106,6 +110,9 @@ void layer_move_down(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/03/03 02:49:56  vapour
+ * Added status bar feedback message.
+ *
  * Revision 1.6  2008/02/16 11:11:33  vapour
  * Replaced our sound beep function with the inbuilt gdk sound beep one.
  *

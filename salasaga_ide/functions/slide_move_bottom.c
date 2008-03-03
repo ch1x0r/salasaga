@@ -88,6 +88,10 @@ void slide_move_bottom(void)
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 1.0, 0.0);
 //	gtk_tree_path_free(new_path);
+
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide moved to bottom");
+	gdk_flush();
 }
 
 
@@ -96,6 +100,9 @@ void slide_move_bottom(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/03/03 03:02:05  vapour
+ * Added status bar feedback message.
+ *
  * Revision 1.4  2008/02/04 17:13:51  vapour
  *  + Removed unnecessary includes.
  *
