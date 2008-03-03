@@ -277,23 +277,6 @@ typedef struct
 	gint				depth;						// The layer depth of this item when displayed
 } swf_frame_element;
 
-// Text element positioning structure, for swf output
-typedef struct
-{
-	gfloat				text_border;
-	gfloat				text_font_threshold;
-	gfloat				text_high_start_x;
-	gfloat				text_high_start_x_mult;
-	gfloat				text_high_start_y;
-	gfloat				text_high_start_y_mult;
-	gfloat				text_high_vert_spacing;
-	gfloat				text_low_start_x;
-	gfloat				text_low_start_x_mult;
-	gfloat				text_low_start_y;
-	gfloat				text_low_start_y_mult;
-	gfloat				text_low_vert_spacing;
-} swf_text_positions;
-
 // Defines the structure of a validation field entry
 typedef struct
 {
@@ -317,6 +300,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.61  2008/03/03 08:21:06  vapour
+ * Removed the swf text element position structure, as nothing uses it any more.
+ *
  * Revision 1.60  2008/03/01 01:45:01  vapour
  * Expanded the amount of information available for positioning text elements.
  *
