@@ -247,7 +247,7 @@ void menu_file_save(void)
 	tmp_int = xmlSaveClose(save_context);
 
 	// Add a message to the status bar so the user gets visual feedback
-	g_string_printf(tmp_gstring, "Saved project as '%s'.", validated_string->str);
+	g_string_printf(tmp_gstring, " Project saved - %s", validated_string->str);
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 	gdk_flush();
 
@@ -272,6 +272,9 @@ void menu_file_save(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.14  2008/03/03 02:57:16  vapour
+ * Updated status bar feedback message.
+ *
  * Revision 1.13  2008/02/20 18:47:11  vapour
  * Updated to use a renamed validation field.
  *

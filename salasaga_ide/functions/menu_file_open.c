@@ -60,8 +60,6 @@ void menu_file_open(void)
 	gboolean			useable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
 
-	GString				*tmp_gstring;				// Temporary gstring
-
 
 	// Create the dialog asking the user to select a Flame Project file
 	open_dialog = gtk_file_chooser_dialog_new("Open a Flame Project",
@@ -164,9 +162,7 @@ void menu_file_open(void)
 	project_active = TRUE;
 
 	// Use the status bar to communicate the successful loading of the project
-	tmp_gstring = g_string_new(NULL);
-	g_string_printf(tmp_gstring, "Project '%s' successfully loaded.", validated_string->str);
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project loaded");
 	gdk_flush();
 
 	// Make the current slide point to the first slide
@@ -213,6 +209,9 @@ void menu_file_open(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/03/03 02:56:45  vapour
+ * Updated status bar feedback message.
+ *
  * Revision 1.11  2008/02/20 18:46:38  vapour
  * Updated to use a renamed validation field.
  *

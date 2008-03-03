@@ -137,7 +137,7 @@ void slide_insert(void)
 	create_tooltips();
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, "Added new slide.");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide added");
 	gdk_flush();
 }
 
@@ -147,6 +147,9 @@ void slide_insert(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/03/03 03:00:57  vapour
+ * Updated status bar feedback message.
+ *
  * Revision 1.7  2008/02/12 14:20:20  vapour
  * Updated to use the new visibility and background fields in the layer structure.
  *

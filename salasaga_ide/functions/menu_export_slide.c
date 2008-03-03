@@ -152,7 +152,7 @@ void menu_export_slide(void)
 	} else
 	{
 		// Image file was created successfully, so update the status bar to let the user know
-		g_string_printf(tmp_gstring, "Wrote image file '%s'.", validated_string->str);
+		g_string_printf(tmp_gstring, " Wrote image file - %s", validated_string->str);
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 		gdk_flush();
 	}
@@ -173,6 +173,9 @@ void menu_export_slide(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/03/03 02:55:36  vapour
+ * Updated status bar feedback message.
+ *
  * Revision 1.2  2008/02/20 22:58:12  vapour
  * Updated to validate all incoming input.
  *

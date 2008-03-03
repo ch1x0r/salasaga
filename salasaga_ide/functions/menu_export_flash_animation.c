@@ -159,7 +159,7 @@ void menu_export_flash_animation(void)
 	} else
 	{
 		// Movie created successfully, so update the status bar to let the user know
-		g_string_printf(tmp_gstring, "Wrote Flash file '%s'.", validated_string->str);
+		g_string_printf(tmp_gstring, " Exported %u x %u flash - %s", output_width, output_height, validated_string->str);
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 		gdk_flush();
 	}
@@ -180,6 +180,9 @@ void menu_export_flash_animation(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.16  2008/03/03 02:54:18  vapour
+ * Updated status bar feedback message.
+ *
  * Revision 1.15  2008/02/27 11:00:21  vapour
  * Changed output name from Macromedia to Adobe.
  *

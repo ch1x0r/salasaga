@@ -276,7 +276,7 @@ void menu_file_new(void)
 	project_active = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, "New project created.");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project initialised");
 	gdk_flush();
 
 	// Redraw the timeline
@@ -302,6 +302,9 @@ void menu_file_new(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.16  2008/03/03 02:56:11  vapour
+ * Updated status bar feedback message.
+ *
  * Revision 1.15  2008/02/20 05:57:48  vapour
  * Improved memory allocation and deallocation.
  *
