@@ -103,15 +103,12 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gfloat				text_bg_box_width;			// Used while generating swf output for text boxes
 	SWFDisplayItem		text_bg_display_item;
 	SWFFillStyle		text_bg_fill_style;			// Fill style used when constructing text background shape
-	gfloat				text_border;
 	layer_text			*text_data;					// Points to the text object data inside the layer
 	SWFDisplayItem		text_display_item;
+	gfloat				text_leading;				// Spacing to use at the edges of the font
 	SWFMovieClip		text_movie_clip;			// The movie clip that contains the text background and text
 	SWFText				text_object;				// The text object we're working on goes in this
-	gfloat				text_start_x;
-	gfloat				text_start_y;
-	gfloat				text_start_y_mult;
-	gfloat				text_vert_spacing;
+	gfloat				text_real_font_size;
 
 	guint16				blue_component;				// Used when retrieving the foreground color of text
 	gfloat				current_ming_scale;			// Used when creating text swf output
@@ -135,193 +132,6 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gfloat				element_y_position_finish = 0;
 	gfloat				element_y_position_increment = 0;
 	gfloat				element_y_position_start = 0;
-
-	// Text positioning elements
-	swf_text_positions	text_elements[] =
-						{
-							{		// 0 = 1920 x 1200
-							  5,	// border around text
-							 40,	// low/high font size threshold
-							  4,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  3,	// text high start y offset
-						   0.90,	// font high size multiplier to arrive at y
-							  1,	// font high vertical spacing between text
-							  4,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							  3,	// text low start y offset
-						   0.88,	// font low size multiplier to arrive at y
-							  1 },	// font low vertical spacing between text
-							{		// 1 = 1920 x 1080
-							  5,	// border around text
-							 40,	// low/high font size threshold
-							  4,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  3,	// text high start y offset
-						   0.80,	// font high size multiplier to arrive at y
-							  1,	// font high vertical spacing between text
-							  4,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							  3,	// text low start y offset
-						   0.78,	// font low size multiplier to arrive at y
-							  1 },	// font low vertical spacing between text
-							{		// 2 = 1600 x 1200
-							  5,	// border around text
-							 40,	// low/high font size threshold
-							  4,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  3,	// text high start y offset
-						   0.90,	// font high size multiplier to arrive at y
-							  1,	// font high vertical spacing between text
-							  4,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							  3,	// text low start y offset
-						   0.88,	// font low size multiplier to arrive at y
-							  1 },	// font low vertical spacing between text
-							{		// 3 = 1280 x 1024
-							  5,	// border around text
-							 40,	// low/high font size threshold
-							  4,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  3,	// text high start y offset
-						   0.80,	// font high size multiplier to arrive at y
-							  0,	// font high vertical spacing between text
-							  4,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							  3,	// text low start y offset
-						   0.75,	// font low size multiplier to arrive at y
-							  1 },	// font low vertical spacing between text
-							{		// 4 = 1280 x 720
-							  5,	// border around text
-							 40,	// low/high font size threshold
-							  3,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  6,	// text high start y offset
-						   0.55,	// font high size multiplier to arrive at y
-							  0,	// font high vertical spacing between text
-							  3,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							  4,	// text low start y offset
-						   0.48,	// font low size multiplier to arrive at y
-							  1 },	// font low vertical spacing between text
-							{		// 5 = 1024 x 768
-							  5,	// border around text
-							 40,	// low/high font size threshold
-							  3,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  6,	// text high start y offset
-						   0.59,	// font high size multiplier to arrive at y
-							  0,	// font high vertical spacing between text
-							  3,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							  4,	// text low start y offset
-						   0.52,	// font low size multiplier to arrive at y
-							  1 },	// font low vertical spacing between text
-							{		// 6 = 800 x 600
-							  5,	// border around text
-							 50,	// low/high font size threshold
-							  4,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  1,	// text high start y offset
-						  0.495,	// font high size multiplier to arrive at y
-							  1,	// font high vertical spacing between text
-							  4,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							  3,	// text low start y offset
-						   0.51,	// font low size multiplier to arrive at y
-							  1 },	// font low vertical spacing between text
-							{		// 7 = 720 x 480
-							  5,	// border around text
-							 25,	// low/high font size threshold
-							  2,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  3,	// text high start y offset
-						   0.36,	// font high size multiplier to arrive at y
-							  1,	// font high vertical spacing between text
-							  2,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							  1,	// text low start y offset
-						   0.45,	// font low size multiplier to arrive at y
-							  1 },	// font low vertical spacing between text
-							{		// 8 = 640 x 480
-							  5,	// border around text
-							 24,	// low/high font size threshold
-							  2,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  3,	// text high start y offset
-						   0.36,	// font high size multiplier to arrive at y
-							  1,	// font high vertical spacing between text
-							  2,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							  1,	// text low start y offset
-						   0.45,	// font low size multiplier to arrive at y
-							  1 },	// font low vertical spacing between text
-							{		// 9 = 352 x 288
-							  5,	// border around text
-							 31,	// low/high font size threshold
-							  2,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  2,	// text high start y offset
-						   0.22,	// font high size multiplier to arrive at y
-							  1,	// font high vertical spacing between text
-							  2,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							  0,	// text low start y offset
-						   0.32,	// font low size multiplier to arrive at y
-							  1 },	// font low vertical spacing between text
-							{		// 10 = 320 x 240
-							  5,	// border around text
-							 22,	// low/high font size threshold
-							  2,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  2,	// text high start y offset
-						   0.18,	// font high size multiplier to arrive at y
-							  1,	// font high vertical spacing between text
-							  2,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							  0,	// text low start y offset
-						   0.32,	// font low size multiplier to arrive at y
-							  1 },	// font low vertical spacing between text
-							{		// 11 = 176 x 144
-							  3,	// border around text
-							 31,	// low/high font size threshold
-							  2,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  6,	// text high start y offset
-						   0.04,	// font high size multiplier to arrive at y
-							  1,	// font high vertical spacing between text
-							  2,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							 -2,	// text low start y offset
-						   0.32,	// font low size multiplier to arrive at y
-							  1 },	// font low vertical spacing between text
-							{		// 12 = 160 x 120
-							  3,	// border around text
-							 31,	// low/high font size threshold
-							  2,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  4,	// text high start y offset
-						   0.08,	// font high size multiplier to arrive at y
-							  0,	// font high vertical spacing between text
-							  2,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							 -2,	// text low start y offset
-						   0.32,	// font low size multiplier to arrive at y
-							  0 },	// font low vertical spacing between text
-							{		// 13 = 128 x 96
-							  3,	// border around text
-							 31,	// low/high font size threshold
-							  2,	// text high start x offset
-							1.0,	// font high size multiplier to arrive at x
-							  2,	// text high start y offset
-						   0.08,	// font high size multiplier to arrive at y
-							  0,	// font high vertical spacing between text
-							  2,	// text low start x offset
-							1.0,	// font low size multiplier to arrive at x
-							 -2,	// text low start y offset
-						   0.34,	// font low size multiplier to arrive at y
-							  0 }	// font low vertical spacing between text
-						};
 
 	// (Hopefully) temporary variables put in place to get around a *bizarre*
 	// problem whereby calculating basic stuff like "0 - output_width" gives bogus results (computers are infallible eh?) :(
@@ -1030,25 +840,6 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 					// Simplify pointers and work out element positioning info
 					text_data = (layer_text *) this_layer_data->object_data;
-					text_border = text_elements[out_res_index].text_border;
-
-					// If the font size is greater than or equal to a threshold, we use the "high" settings, else the "low" settings
-					if (text_data->font_size >= text_elements[out_res_index].text_font_threshold)
-					{
-						// Use "high" settings
-						text_start_x = text_elements[out_res_index].text_high_start_x;
-						text_start_y_mult = text_elements[out_res_index].text_high_start_y_mult;
-						text_start_y = (text_start_y_mult * text_data->font_size) + text_elements[out_res_index].text_high_start_y;  // This scales the starting y position with the font size.  Seems to work decently. :)
-						text_vert_spacing = text_elements[out_res_index].text_high_vert_spacing;
-					}
-					else
-					{
-						// Use "low" settings
-						text_start_x = text_elements[out_res_index].text_low_start_x;
-						text_start_y_mult = text_elements[out_res_index].text_low_start_y_mult;
-						text_start_y = (text_start_y_mult * text_data->font_size) + text_elements[out_res_index].text_low_start_y;  // This scales the starting y position with the font size.  Seems to work decently. :)
-						text_vert_spacing = text_elements[out_res_index].text_low_vert_spacing;
-					}
 
 					// * Create the text object *
 
@@ -1061,6 +852,17 @@ gint menu_export_flash_inner(gchar *output_filename)
 					// Set the height we want for the text
 					scaled_font_size = scaled_height_ratio * text_data->font_size;
 					SWFText_setHeight(text_object, scaled_font_size);
+					text_real_font_size = SWFText_getAscent(text_object) + SWFText_getDescent(text_object);
+
+					// Displaying debugging info if requested
+					if (debug_level)
+					{
+						printf("Scaled font size: '%.2f'\n", scaled_font_size);
+						printf("Real font size: '%.2f'\n", text_real_font_size);
+						printf("'Leading' for this text is: %.2f\n", SWFText_getLeading(text_object));
+						printf("'Ascent' for this text is: %.2f\n", SWFText_getAscent(text_object));
+						printf("'Descent' for this text is: %.2f\n", SWFText_getDescent(text_object));
+					}
 
 					// Set the foreground color for the text
 					red_component = text_data->text_color.red;
@@ -1091,7 +893,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 						SWFText_addString(text_object, visible_string, NULL);
 
 						// * We need to know which of the strings is widest, so we can calculate the width of the text background box *
-						
+
 						// If this is the widest string, we keep the value of this one
 						this_text_string_width = SWFText_getStringWidth(text_object, (guchar *) visible_string);
 						if (this_text_string_width > widest_text_string_width)
@@ -1100,7 +902,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 						// * Move the pen down to the start of the next line *
 
 						// Move to the appropriate Y position
-						SWFText_moveTo(text_object, 0, (text_lines_counter + 1) * (scaled_font_size + text_vert_spacing));
+						SWFText_moveTo(text_object, 0, (text_lines_counter + 1) * text_real_font_size);
 
 						// Try and move X as close as possible to 0.  We can't use 0 in SWFText_moveTo() due to a bug in Ming
 						current_ming_scale = Ming_getScale();
@@ -1135,8 +937,9 @@ gint menu_export_flash_inner(gchar *output_filename)
 					SWFShape_setLine(text_bg, 1, 0x00, 0x00, 0x00, 0xff);  // Width = 1 seems to work ok
 
 					// Work out the scaled dimensions of the text background box
-					text_bg_box_height = (scaled_font_size * num_text_lines) + (2 * text_border);
-					text_bg_box_width = widest_text_string_width + (2 * text_border);
+					text_leading = SWFText_getLeading(text_object);
+					text_bg_box_height = (text_real_font_size * num_text_lines) * 1.02;
+					text_bg_box_width = widest_text_string_width + (text_leading * 2);
 
 					// Create the text background box
 					SWFShape_drawLine(text_bg, text_bg_box_width, 0.0);
@@ -1155,7 +958,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 					// Position the background and text elements
 					SWFDisplayItem_moveTo(text_bg_display_item, 0.0, 0.0);
-					SWFDisplayItem_moveTo(text_display_item, text_start_x, text_start_y);
+					SWFDisplayItem_moveTo(text_display_item, text_leading, SWFText_getAscent(text_object));
 
 					// Advance the movie clip one frame, else it won't be displayed
 					SWFMovieClip_nextFrame(text_movie_clip);
@@ -1507,6 +1310,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.62  2008/03/03 08:20:22  vapour
+ * Replaced text element positioning system with new working version.  THAT took a lot of effort. :-/
+ *
  * Revision 1.61  2008/03/01 10:37:57  vapour
  * Added reasonable text element position information for the remaining swf output resolutions.
  *
