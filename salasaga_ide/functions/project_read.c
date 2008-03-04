@@ -265,17 +265,6 @@ gboolean flame_read(gchar *filename)
 
 	// * All of the required meta-data and preferences are present, so we proceed *
 
-	// If there's a project presently loaded in memory, we unload it
-	if (NULL != slides)
-	{
-		// Free the resources presently allocated to slides
-		g_list_foreach(slides, destroy_slide, NULL);
-
-		// Re-initialise pointers
-		slides = NULL;
-		current_slide = NULL;
-	}
-
 	// Reset the useable input flag
 	useable_input = TRUE;
 
@@ -416,6 +405,19 @@ gboolean flame_read(gchar *filename)
 
 	// ** We only get here if all the input is considered valid **
 
+	// fixme2: We should move this after all of the validation has been completed
+
+	// If there's a project presently loaded in memory, we unload it
+	if (NULL != slides)
+	{
+		// Free the resources presently allocated to slides
+		g_list_foreach(slides, destroy_slide, NULL);
+
+		// Re-initialise pointers
+		slides = NULL;
+		current_slide = NULL;
+	}
+
 	// Load project file format version
 	save_version = valid_save_format;
 
@@ -454,8 +456,6 @@ gboolean flame_read(gchar *filename)
 	{
 		frames_per_second = valid_fps;
 	}
-
-//fixme2: Stuff to still update for input validation
 
 	// * Preferences are loaded, so now load the slides *
 	this_slide = slides_node->xmlChildrenNode;
@@ -513,47 +513,137 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "red")))
 									{
 										// Get the red value
-										tmp_empty_ob->bg_color.red = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED211: There was something wrong with a red component colour value in the project file.");
+											useable_input = FALSE;
+											tmp_empty_ob->bg_color.red = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_empty_ob->bg_color.red = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "green")))
 									{
 										// Get the green value
-										tmp_empty_ob->bg_color.green = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED212: There was something wrong with a green component colour value in the project file.");
+											useable_input = FALSE;
+											tmp_empty_ob->bg_color.green = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_empty_ob->bg_color.green = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "blue")))
 									{
 										// Get the blue value
-										tmp_empty_ob->bg_color.blue = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED213: There was something wrong with a blue component colour value in the project file.");
+											useable_input = FALSE;
+											tmp_empty_ob->bg_color.blue = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_empty_ob->bg_color.blue = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 									{
 										// Get the start frame
-										tmp_layer->start_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED214: There was something wrong with a start frame value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->start_frame = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->start_frame = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
 									{
 										// Get the finish frame
-										tmp_layer->finish_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED215: There was something wrong with a finish frame value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->finish_frame = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->finish_frame = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
 									{
 										// Get the visibility
-										tmp_layer->visible = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(LAYER_VISIBLE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED216: There was something wrong with a layer visibility value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->visible = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->visible = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
 										// Get the name of the layer
-										tmp_layer->name = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_string = validate_value(LAYER_NAME, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED217: There was something wrong with a layer name value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->name = g_string_new("Empty");  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->name = validated_string;  // We keep the validated string instead of copying then freeing it
+											validated_string = NULL;
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
 									{
 										// Get the URL associated with the layer
-										tmp_layer->external_link = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_string = validate_value(EXTERNAL_LINK, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED218: There was something wrong with an external link value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_layer->external_link = g_string_assign(tmp_layer->external_link, validated_string->str);
+											g_string_free(validated_string,TRUE);
+											validated_string = NULL;
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link_window")))
 									{
 										// Get the window to open the URL associated with the layer
-										tmp_layer->external_link_window = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED219: There was something wrong with an external link target window value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_layer->external_link_window = g_string_assign(tmp_layer->external_link_window, validated_string->str);
+											g_string_free(validated_string,TRUE);
+											validated_string = NULL;
+										}
 									}
 									this_node = this_node->next;	
 								}
@@ -578,6 +668,8 @@ gboolean flame_read(gchar *filename)
 								// Add this (now completed) empty layer to the slide
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
 							}
+
+//fixme2: Stuff to still update for input validation
 
 							// Test if this layer is an image layer
 							if (!xmlStrcmp(tmp_char, (const xmlChar *) "image"))
@@ -1145,6 +1237,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.18  2008/03/04 10:01:20  vapour
+ * Added validation of empty layer inputs.
+ *
  * Revision 1.17  2008/03/04 08:53:24  vapour
  * Project file format version number is now validated.
  *
