@@ -48,13 +48,17 @@ extern "C" {
 #define V_ZOOM				16
 
 // Capabilities for the validate_value function
-#define V_NONE			0
-#define V_FULL_STOP		1
-#define V_HYPENS		2
-#define V_PATH_SEP		4
-#define V_PERCENT		8
-#define V_SPACES		16
-#define V_UNDERSCORES	32
+#define V_NONE				0
+#define V_EQUALS			1
+#define V_FORWARD_SLASHES	2
+#define V_FULL_STOP			4
+#define V_HYPENS			8
+#define V_NEW_LINES			16
+#define V_PATH_SEP			32
+#define V_PERCENT			64
+#define V_PLUSES			128
+#define V_SPACES			256
+#define V_UNDERSCORES		512
 
 // The known layer types
 enum {
@@ -137,6 +141,9 @@ enum
 	FONT_SIZE,
 	FRAME_NUMBER,
 	ICON_HEIGHT,
+	IMAGE_DATA,
+	IMAGE_DATA_LENGTH,
+	LAYER_BACKGROUND,
 	LAYER_HEIGHT,
 	LAYER_NAME,
 	LAYER_VISIBLE,
@@ -303,6 +310,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.64  2008/03/04 11:05:01  vapour
+ * Added field types for image data, image data length, and the layer background toggle.
+ *
  * Revision 1.63  2008/03/04 09:53:39  vapour
  * Added layer visibility field.
  *

@@ -39,9 +39,12 @@ validatation_entry		valid_fields[] =
 	{ FONT_SIZE,			"Font size",							V_INT_UNSIGNED,		V_NONE,		0,		200 },
 	{ FRAME_NUMBER,			"A frame number",						V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ ICON_HEIGHT,			"Height of the tool bar icons",			V_INT_UNSIGNED,		V_NONE,		0,		80 },
+	{ IMAGE_DATA,			"Base64 encoded image data",			V_CHAR,				V_EQUALS | V_FORWARD_SLASHES | V_NEW_LINES | V_PLUSES,		0,		-1 },
+	{ IMAGE_DATA_LENGTH,	"Length in bytes of image data",		V_INT_UNSIGNED,		V_NONE,		0,		10485760 },
+	{ LAYER_BACKGROUND,		"Layer background switch",				V_INT_UNSIGNED,		V_NONE,		0,		1 },
 	{ LAYER_HEIGHT,			"Height of this layer",					V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ LAYER_NAME,			"Name of this layer",					V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
-	{ LAYER_VISIBLE,		"Layer visibility",						V_INT_UNSIGNED,		V_NONE,		0,		1 },
+	{ LAYER_VISIBLE,		"Layer visibility switch",				V_INT_UNSIGNED,		V_NONE,		0,		1 },
 	{ LAYER_WIDTH,			"Width of this layer",					V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ PREVIEW_WIDTH,		"Width of film strip thumbnails",		V_INT_UNSIGNED,		V_NONE,		0,		800 },
 	{ PROJECT_FPS,			"Frames per Second for this project",	V_INT_UNSIGNED,		V_NONE,		0,		120 },
@@ -73,6 +76,9 @@ validatation_entry		valid_fields[] =
  * +++++++
  * 
  * $Log$
+ * Revision 1.11  2008/03/04 11:05:45  vapour
+ * Added field types for image data, image data length, and the layer background toggle.
+ *
  * Revision 1.10  2008/03/04 09:54:14  vapour
  * Added layer visibility field.
  *
