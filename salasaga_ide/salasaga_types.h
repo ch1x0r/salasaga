@@ -139,6 +139,7 @@ enum
 	ICON_HEIGHT,
 	LAYER_HEIGHT,
 	LAYER_NAME,
+	LAYER_VISIBLE,
 	LAYER_WIDTH,
 	PREVIEW_WIDTH,
 	PROJECT_FPS,
@@ -302,6 +303,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.63  2008/03/04 09:53:39  vapour
+ * Added layer visibility field.
+ *
  * Revision 1.62  2008/03/04 08:49:20  vapour
  * Added the new project file format version validation field, and a new unsigned float validation type.
  *

@@ -41,6 +41,7 @@ validatation_entry		valid_fields[] =
 	{ ICON_HEIGHT,			"Height of the tool bar icons",			V_INT_UNSIGNED,		V_NONE,		0,		80 },
 	{ LAYER_HEIGHT,			"Height of this layer",					V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ LAYER_NAME,			"Name of this layer",					V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
+	{ LAYER_VISIBLE,		"Layer visibility",						V_INT_UNSIGNED,		V_NONE,		0,		1 },
 	{ LAYER_WIDTH,			"Width of this layer",					V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ PREVIEW_WIDTH,		"Width of film strip thumbnails",		V_INT_UNSIGNED,		V_NONE,		0,		800 },
 	{ PROJECT_FPS,			"Frames per Second for this project",	V_INT_UNSIGNED,		V_NONE,		0,		120 },
@@ -72,6 +73,9 @@ validatation_entry		valid_fields[] =
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/03/04 09:54:14  vapour
+ * Added layer visibility field.
+ *
  * Revision 1.9  2008/03/04 08:50:09  vapour
  * Added the new project file format version validation field.
  *
