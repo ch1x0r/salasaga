@@ -82,7 +82,9 @@ gboolean flame_read(gchar *filename)
 	GString				*valid_project_name;		// Receives the new project name once validated
 	guint				valid_project_height;		// Receives the new project height once validated
 	guint				valid_project_width;		// Receives the new project width once validated
+	gfloat				valid_save_format;			// Receives the project file format version once validated
 	guint				valid_slide_length;			// Receives the new slide length once validated
+	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
@@ -277,6 +279,19 @@ gboolean flame_read(gchar *filename)
 	// Reset the useable input flag
 	useable_input = TRUE;
 
+	// Retrieve the save format input
+	validated_gfloat = validate_value(PROJECT_VERSION, V_CHAR, save_format_data);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED210: There was something wrong with the file format version value in the project file.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_save_format = *validated_gfloat;
+		g_free(validated_gfloat);
+		xmlFree(save_format_data);
+	}
+
 	// Validate the project name input
 	validated_string = validate_value(PROJECT_NAME, V_CHAR, project_name_data);
 	if (NULL == validated_string)
@@ -401,6 +416,9 @@ gboolean flame_read(gchar *filename)
 
 	// ** We only get here if all the input is considered valid **
 
+	// Load project file format version
+	save_version = valid_save_format;
+
 	// If there's an existing film strip, we unload it
 	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
 
@@ -438,12 +456,6 @@ gboolean flame_read(gchar *filename)
 	}
 
 //fixme2: Stuff to still update for input validation
-
-	// fixme2: This should be the first thing validated
-	// Load project file format version
-	save_version = atoi((const char *) save_format_data);
-	xmlFree(save_format_data);
-
 
 	// * Preferences are loaded, so now load the slides *
 	this_slide = slides_node->xmlChildrenNode;
@@ -1133,6 +1145,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.17  2008/03/04 08:53:24  vapour
+ * Project file format version number is now validated.
+ *
  * Revision 1.16  2008/03/04 04:53:39  vapour
  * Began updating code to validate input.
  *
