@@ -41,19 +41,20 @@ extern "C" {
 #define	APP_VERSION "0.7.8-pre"
 	
 // Base types for the validate_value function
-#define V_CHAR			1
-#define V_INT_UNSIGNED	2
-#define V_RESOLUTION	4
-#define V_ZOOM			8
+#define V_CHAR				1
+#define V_FLOAT_UNSIGNED	2
+#define V_INT_UNSIGNED		4
+#define V_RESOLUTION		8
+#define V_ZOOM				16
 
 // Capabilities for the validate_value function
 #define V_NONE			0
 #define V_FULL_STOP		1
 #define V_HYPENS		2
-#define V_UNDERSCORES	4
-#define V_PATH_SEP		8
+#define V_PATH_SEP		4
+#define V_PERCENT		8
 #define V_SPACES		16
-#define V_PERCENT		32
+#define V_UNDERSCORES	32
 
 // The known layer types
 enum {
@@ -143,6 +144,7 @@ enum
 	PROJECT_FPS,
 	PROJECT_HEIGHT,
 	PROJECT_NAME,
+	PROJECT_VERSION,
 	PROJECT_WIDTH,
 	RESOLUTION,
 	SCREENSHOT_HEIGHT,
@@ -300,6 +302,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.62  2008/03/04 08:49:20  vapour
+ * Added the new project file format version validation field, and a new unsigned float validation type.
+ *
  * Revision 1.61  2008/03/03 08:21:06  vapour
  * Removed the swf text element position structure, as nothing uses it any more.
  *
