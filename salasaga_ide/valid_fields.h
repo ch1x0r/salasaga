@@ -46,6 +46,7 @@ validatation_entry		valid_fields[] =
 	{ LAYER_NAME,			"Name of this layer",					V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
 	{ LAYER_VISIBLE,		"Layer visibility switch",				V_INT_UNSIGNED,		V_NONE,		0,		1 },
 	{ LAYER_WIDTH,			"Width of this layer",					V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ MOUSE_CLICK,			"Mouse click",							V_INT_UNSIGNED,		V_NONE,		0,		9 },
 	{ PREVIEW_WIDTH,		"Width of film strip thumbnails",		V_INT_UNSIGNED,		V_NONE,		0,		800 },
 	{ PROJECT_FPS,			"Frames per Second for this project",	V_INT_UNSIGNED,		V_NONE,		0,		120 },
 	{ PROJECT_HEIGHT,		"Height of this project",				V_INT_UNSIGNED,		V_NONE,		0,		4096 },
@@ -76,6 +77,9 @@ validatation_entry		valid_fields[] =
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/03/04 11:35:08  vapour
+ * Added mouse click validation field value.
+ *
  * Revision 1.11  2008/03/04 11:05:45  vapour
  * Added field types for image data, image data length, and the layer background toggle.
  *

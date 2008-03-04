@@ -148,6 +148,7 @@ enum
 	LAYER_NAME,
 	LAYER_VISIBLE,
 	LAYER_WIDTH,
+	MOUSE_CLICK,
 	PREVIEW_WIDTH,
 	PROJECT_FPS,
 	PROJECT_HEIGHT,
@@ -310,6 +311,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.65  2008/03/04 11:34:30  vapour
+ * Added mouse click validation field value.
+ *
  * Revision 1.64  2008/03/04 11:05:01  vapour
  * Added field types for image data, image data length, and the layer background toggle.
  *
