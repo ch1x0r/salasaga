@@ -154,11 +154,59 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					capability_check = V_PATH_SEP & capabilities;
 					if (FALSE != capability_check)
 					{
-						// This field is allowed to have path seperator charachers ('/', '\') .  Is this character one of those?
+						// This field is allowed to have path seperator characters ('/', '\') .  Is this character one of those?
 						if ((0 == g_ascii_strncasecmp("/", &input_char, 1)) || (0 == g_ascii_strncasecmp("\\", &input_char, 1)))
 						{
-							// Yes, this is a path seperator character
+							// Yes, this is a path separator character
 							output_gstring = g_string_append_c(output_gstring, G_DIR_SEPARATOR);  // Output the OS correct version
+							match_found = TRUE;
+							continue;
+						}
+					}
+					capability_check = V_EQUALS & capabilities;
+					if (FALSE != capability_check)
+					{
+						// This field is allowed to have equals signs.  Is this character an equals sign?
+						if (0 == g_ascii_strncasecmp("=", &input_char, 1))
+						{
+							// Yes, this is an equals sign character
+							output_gstring = g_string_append_c(output_gstring, '=');
+							match_found = TRUE;
+							continue;
+						}
+					}
+					capability_check = V_FORWARD_SLASHES & capabilities;
+					if (FALSE != capability_check)
+					{
+						// This field is allowed to have forward slashes.  Is this character a forward slash?
+						if (0 == g_ascii_strncasecmp("/", &input_char, 1))
+						{
+							// Yes, this is a forward slash character
+							output_gstring = g_string_append_c(output_gstring, '/');
+							match_found = TRUE;
+							continue;
+						}
+					}
+					capability_check = V_NEW_LINES & capabilities;
+					if (FALSE != capability_check)
+					{
+						// This field is allowed to have new line characters.  Is this character a new line?
+						if (0 == g_ascii_strncasecmp("\n", &input_char, 1))
+						{
+							// Yes, this is a new line character
+							output_gstring = g_string_append_c(output_gstring, '\n');
+							match_found = TRUE;
+							continue;
+						}
+					}
+					capability_check = V_PLUSES & capabilities;
+					if (FALSE != capability_check)
+					{
+						// This field is allowed to have pluses.  Is this character a plus?
+						if (0 == g_ascii_strncasecmp("+", &input_char, 1))
+						{
+							// Yes, this is a plus character
+							output_gstring = g_string_append_c(output_gstring, '+');
 							match_found = TRUE;
 							continue;
 						}
@@ -508,6 +556,9 @@ void *validate_value(gint value_id, gint input_type, void *value)
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/03/04 11:06:45  vapour
+ * Added capabilities to support validation of base64 encoded data.
+ *
  * Revision 1.9  2008/03/04 08:51:18  vapour
  * Added initial working code to validate the new unsigned float data type.
  *
