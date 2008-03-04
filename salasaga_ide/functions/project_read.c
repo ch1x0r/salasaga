@@ -669,8 +669,6 @@ gboolean flame_read(gchar *filename)
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
 							}
 
-//fixme2: Stuff to still update for input validation
-
 							// Test if this layer is an image layer
 							if (!xmlStrcmp(tmp_char, (const xmlChar *) "image"))
 							{
@@ -691,67 +689,196 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										tmp_layer->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED220: There was something wrong with an x offset start value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->x_offset_start = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->x_offset_start = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										tmp_layer->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(SCREENSHOT_Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED221: There was something wrong with a y offset start value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->y_offset_start = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->y_offset_start = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										tmp_layer->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED222: There was something wrong with an x offset finish value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->x_offset_finish = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->x_offset_finish = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										tmp_layer->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED223: There was something wrong with a y offset finish value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->y_offset_finish = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->y_offset_finish = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "width")))
 									{
 										// Get the width
-										tmp_image_ob->width = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(LAYER_WIDTH, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED224: There was something wrong with a layer width value in the project file.");
+											useable_input = FALSE;
+											tmp_image_ob->width = 1;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_image_ob->width = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "height")))
 									{
 										// Get the height
-										tmp_image_ob->height = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(LAYER_HEIGHT, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED225: There was something wrong with a layer height value in the project file.");
+											useable_input = FALSE;
+											tmp_image_ob->height = 1;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_image_ob->height = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "background")))
 									{
 										// Is this the background layer?
-										tmp_layer->background = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(LAYER_BACKGROUND, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED226: There was something wrong with a layer background value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_layer->background = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 									{
 										// Get the start frame
-										tmp_layer->start_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED227: There was something wrong with a start frame value in the project file.");
+											tmp_layer->start_frame = 0;  // Fill in the value, just to be safe
+											useable_input = FALSE;
+										} else
+										{
+											tmp_layer->start_frame = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
 									{
 										// Get the finish frame
-										tmp_layer->finish_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED228: There was something wrong with a finish frame value in the project file.");
+											tmp_layer->finish_frame = 0;  // Fill in the value, just to be safe
+											useable_input = FALSE;
+										} else
+										{
+											tmp_layer->finish_frame = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
 									{
 										// Get the visibility
-										tmp_layer->visible = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(LAYER_VISIBLE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED229: There was something wrong with a layer visibility value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->visible = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->visible = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
 										// Get the name of the layer
-										tmp_layer->name = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_string = validate_value(LAYER_NAME, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED230: There was something wrong with a layer name value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->name = g_string_new("Empty");  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->name = validated_string;  // We keep the validated string instead of copying then freeing it
+											validated_string = NULL;
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
 									{
 										// Get the URL associated with the layer
-										tmp_layer->external_link = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_string = validate_value(EXTERNAL_LINK, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED231: There was something wrong with an external link value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_layer->external_link = g_string_assign(tmp_layer->external_link, validated_string->str);
+											g_string_free(validated_string,TRUE);
+											validated_string = NULL;
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link_window")))
 									{
 										// Get the window to open the URL associated with the layer
-										tmp_layer->external_link_window = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED232: There was something wrong with an external link target window value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_layer->external_link_window = g_string_assign(tmp_layer->external_link_window, validated_string->str);
+											g_string_free(validated_string,TRUE);
+											validated_string = NULL;
+										}
 									}
 
 									// If version 1.0 of file format, load the image path, otherwise load the embedded image data
@@ -760,22 +887,52 @@ gboolean flame_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "path")))
 										{
 											// Get the path to the image data
-											tmp_image_ob->image_path = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											validated_string = validate_value(FILE_PATH, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_string)
+											{
+												display_warning("Error ED233: There was something wrong with a file name path value in the project file.");
+												tmp_image_ob->image_path = g_string_new(NULL);  // Fill in the value, just to be safe
+												useable_input = FALSE;
+											} else
+											{
+												tmp_image_ob->image_path = validated_string;  // We keep the validated string instead of copying then freeing it
+												validated_string = NULL;
 
-											// Load the image data
-											tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_image_ob->image_path->str, NULL);
+												// Load the image data
+												tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_image_ob->image_path->str, NULL);
+											}
 										}
 									} else
 									{
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "data")))
 										{
 											// Get the image data
-											g_string_assign(tmp_gstring2, (const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											validated_string = validate_value(IMAGE_DATA, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_string)
+											{
+												display_warning("Error ED234: There was something wrong with image data in the project file.");
+												tmp_gstring2 = NULL;
+												useable_input = FALSE;
+											} else
+											{
+												tmp_gstring2 = validated_string;
+												validated_string = NULL;
+											}
 										}
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "data_length")))
 										{
 											// Get the number of bytes the image should hold
-											data_length = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											validated_guint = validate_value(IMAGE_DATA_LENGTH, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_guint)
+											{
+												display_warning("Error ED235: There was something wrong with an image data length value in the project file.");
+												data_length = 0;  // Fill in the value, just to be safe
+												useable_input = FALSE;
+											} else
+											{
+												data_length = *validated_guint;
+												g_free(validated_guint);
+											}
 										}
 
 										// Create an empty image path string
@@ -786,7 +943,7 @@ gboolean flame_read(gchar *filename)
 								}
 
 								// Version 1.0 of the file format doesn't have embedded image data
-								if (1.0 != save_version)
+								if ((1.0 != save_version) && (FALSE != useable_input))
 								{
 									// * We should have all of the image details by this stage, so can process the image data *
 
@@ -839,6 +996,8 @@ gboolean flame_read(gchar *filename)
 								// Add this (now completed) image layer to the slide
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
 							}
+
+//fixme2: Stuff to still update for input validation
 
 							// Test if this layer is a highlight layer
 							if (!xmlStrcmp(tmp_char, (const xmlChar *) "highlight"))
@@ -1237,6 +1396,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.19  2008/03/04 11:08:47  vapour
+ * Added validation of image layer inputs.
+ *
  * Revision 1.18  2008/03/04 10:01:20  vapour
  * Added validation of empty layer inputs.
  *
