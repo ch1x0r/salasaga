@@ -49,6 +49,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 	GString				*error_string;
 	gchar				input_char;
 	gboolean			match_found;
+	gfloat				output_gfloat;
+	gfloat				*output_gfloat_ptr;
 	GString				*output_gstring;
 	guint				output_guint;
 	guint				*output_guint_ptr;
@@ -191,6 +193,91 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			return output_gstring;
 
 			break;
+
+		case V_FLOAT_UNSIGNED:
+
+			// * We're validating an unsigned float *
+
+			// If we're working with string input, we need to convert it to a float first
+			if (V_CHAR == input_type)
+			{
+				// * We're working with string input *
+
+				// Get the length of the input string
+				string_length = strlen((gchar *) value);
+	
+				// Sanitise each character of the input string
+				for (string_counter = 0; string_counter < string_length; string_counter++)
+				{
+					input_char = ((gchar *) value)[string_counter];
+
+					// Check for decimal digits
+					if (TRUE == g_ascii_isdigit(input_char))
+					{
+						output_gstring = g_string_append_c(output_gstring, input_char);
+					}
+					else
+					{
+						// This field is allowed to have full stops.  Is this character a full stop?
+						if (0 == g_ascii_strncasecmp(".", &input_char, 1))
+						{
+							// Yes, this is a full stop character
+							output_gstring = g_string_append_c(output_gstring, '.');
+							match_found = TRUE;
+							continue;
+						}
+
+						// This field is allowed to have commas (equiv to full stop in some locales).  Is this character a comma?
+						if (0 == g_ascii_strncasecmp(",", &input_char, 1))
+						{
+							// Yes, this is a comma character
+							output_gstring = g_string_append_c(output_gstring, '.');
+							match_found = TRUE;
+							continue;
+						}
+
+						// The character we are checking is not in the list of valid inputs for this field
+						if (FALSE == match_found)
+						{
+							g_string_free(output_gstring, TRUE);
+							return NULL;
+						}
+					}
+				}
+
+				// Convert the string to a float
+				output_gfloat = (gfloat) atof(output_gstring->str);
+			}
+			else
+			{
+				// We're working with a float input, so just copy the value directly
+				output_gfloat = *((gfloat *) value);
+			}
+
+			// Is the float value within the defined bounds?
+			value_max = valid_fields[value_id].max_value;
+			value_min = valid_fields[value_id].min_value;
+			if ((output_gfloat < value_min) || (output_gfloat > value_max))
+			{
+				// Value is out of bounds, so fail
+				g_string_free(output_gstring, TRUE);
+				return NULL;
+			}
+
+			// The value looks ok, so we copy it to newly allocated memory, to pass it back
+			output_gfloat_ptr = g_try_new0(gfloat, 1);
+			if (NULL == output_gfloat_ptr)
+			{
+				// Unable to allocate memory for the new value, so fail
+				g_string_free(output_gstring, TRUE);
+				return NULL;
+			}
+			*output_gfloat_ptr = output_gfloat;
+
+			// Free the string memory allocated in this function
+			g_string_free(output_gstring, TRUE);
+
+			return output_gfloat_ptr;
 
 		case V_INT_UNSIGNED:
 
@@ -421,6 +508,9 @@ void *validate_value(gint value_id, gint input_type, void *value)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/03/04 08:51:18  vapour
+ * Added initial working code to validate the new unsigned float data type.
+ *
  * Revision 1.8  2008/02/20 23:09:44  vapour
  * Removed unused validation base types.
  *
