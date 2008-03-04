@@ -43,34 +43,48 @@
 #include "destroy_slide.h"
 #include "display_warning.h"
 #include "regenerate_timeline_duration_images.h"
+#include "validate_value.h"
 
 
 gboolean flame_read(gchar *filename)
 {
 	// Local variables
+	gint				data_length;				// Number of image data bytes a layer says it stores
+	xmlDocPtr			document;					// Holds a pointer to the XML document
 	GError				*error = NULL;				// Pointer to error return structure
 	GString				*error_string;				// Used to create error strings
+	GtkTreeIter			film_strip_iter;
+	xmlChar				*fps_data = NULL;
+	guint				guint_val;					// Temporary guint value used for validation
 	GdkPixbufLoader		*image_loader;				// Used for loading images embedded in project files
-	gboolean			return_code;				// Boolean return code
-	gfloat				save_version;				// The project file save version
-	xmlDocPtr			document;					// Holds a pointer to the XML document
 	xmlNodePtr			layer_ptr;					// Temporary pointer
 	xmlNodePtr			meta_data_node = NULL;		// Points to the meta-data structure
 	xmlNodePtr			preferences_node = NULL;	// Points to the preferences structure
-	xmlNodePtr			slides_node = NULL;			// Points to the slides structure
-	xmlNodePtr			this_layer;					// Temporary pointer
-	xmlNodePtr			this_node;					// Temporary pointer
-	xmlNodePtr			this_slide;					// Temporary pointer
-
-	xmlChar				*fps_data = NULL;
 	xmlChar				*project_name_data = NULL;
 	xmlChar				*output_folder_data = NULL;
 	xmlChar				*output_width_data = NULL;
 	xmlChar				*output_height_data = NULL;
 	xmlChar				*project_width_data = NULL;
 	xmlChar				*project_height_data = NULL;
+	gboolean			return_code;				// Boolean return code
 	xmlChar				*save_format_data = NULL;
+	gfloat				save_version;				// The project file save version
 	xmlChar				*slide_length_data = NULL;
+	xmlNodePtr			slides_node = NULL;			// Points to the slides structure
+	xmlNodePtr			this_layer;					// Temporary pointer
+	xmlNodePtr			this_node;					// Temporary pointer
+	xmlNodePtr			this_slide;					// Temporary pointer
+	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	guint				valid_fps;					// Receives the new fps once validated
+	guint				valid_output_height;		// Receives the new output height once validated
+	GString				*valid_output_folder;		// Receives the new output folder once validated
+	guint				valid_output_width;			// Receives the new output width once validated
+	GString				*valid_project_name;		// Receives the new project name once validated
+	guint				valid_project_height;		// Receives the new project height once validated
+	guint				valid_project_width;		// Receives the new project width once validated
+	guint				valid_slide_length;			// Receives the new slide length once validated
+	guint				*validated_guint;			// Receives known good guint values from the validation function
+	GString				*validated_string;			// Receives known good strings from the validation function
 
 	xmlChar				*tmp_char;					// Temporary string pointer
 	layer_empty			*tmp_empty_ob;				//
@@ -87,16 +101,14 @@ gboolean flame_read(gchar *filename)
 	slide				*tmp_slide;					// Temporary slide
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 
-	gint				data_length;				// Number of image data bytes a layer says it stores
-
-	GtkTreeIter			film_strip_iter;
-
 
 	// Initialise various things
 	tmp_gstring = g_string_new(NULL);
 	tmp_gstring2 = g_string_new(NULL);
 	error_string = g_string_new(NULL);
-	
+	valid_output_folder = g_string_new(NULL);
+	valid_project_name = g_string_new(NULL);
+
 	// Begin reading the file
 	document = xmlParseFile(filename);
 	if (NULL == document)
@@ -155,7 +167,7 @@ gboolean flame_read(gchar *filename)
 	// Was there a meta-data structure in the save file?
 	if (NULL == meta_data_node)
 	{
-		display_warning("Error ED63: Project meta-data missing, aborting load.  Please choose a different project file.");
+		display_warning("Error ED63: Project meta data missing, aborting load.  Please choose a different project file.");
 		return FALSE;
 	}
 
@@ -262,51 +274,176 @@ gboolean flame_read(gchar *filename)
 		current_slide = NULL;
 	}
 
+	// Reset the useable input flag
+	useable_input = TRUE;
+
+	// Validate the project name input
+	validated_string = validate_value(PROJECT_NAME, V_CHAR, project_name_data);
+	if (NULL == validated_string)
+	{
+		display_warning("Error ED202: There was something wrong with the project name value in the project file.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_project_name = g_string_assign(valid_project_name, validated_string->str);
+		g_string_free(validated_string, TRUE);
+		xmlFree(project_name_data);
+		validated_string = NULL;
+	}
+
+	// Retrieve the new output folder input
+	validated_string = validate_value(FOLDER_PATH, V_CHAR, output_folder_data);
+	if (NULL == validated_string)
+	{
+		display_warning("Error ED203: There was something wrong with the output folder value in the project file.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_output_folder = g_string_assign(valid_output_folder, validated_string->str);
+		g_string_free(validated_string, TRUE);
+		xmlFree(output_folder_data);
+		validated_string = NULL;
+	}
+
+	// Retrieve the new output width input
+	guint_val = atoi((const char *) output_width_data);
+	validated_guint = validate_value(PROJECT_WIDTH, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED204: There was something wrong with the output width value in the project file.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_output_width = *validated_guint;
+		g_free(validated_guint);
+		xmlFree(output_width_data);
+	}
+
+	// Retrieve the new output height input
+	guint_val = atoi((const char *) output_height_data);
+	validated_guint = validate_value(PROJECT_HEIGHT, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED205: There was something wrong with the output height value in the project file.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_output_height = *validated_guint;
+		g_free(validated_guint);
+		xmlFree(output_height_data);
+	}
+
+	// Retrieve the new project width input
+	guint_val = atoi((const char *) project_width_data);
+	validated_guint = validate_value(PROJECT_WIDTH, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED206: There was something wrong with the project width value in the project file.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_project_width = *validated_guint;
+		g_free(validated_guint);
+		xmlFree(project_width_data);
+	}
+
+	// Retrieve the new project height input
+	guint_val = atoi((const char *) project_height_data);
+	validated_guint = validate_value(PROJECT_HEIGHT, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED207: There was something wrong with the project width value in the project file.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_project_height = *validated_guint;
+		g_free(validated_guint);
+		xmlFree(project_height_data);
+	}
+
+	// Retrieve the new slide length input
+	guint_val = atoi((const char *) slide_length_data);
+	validated_guint = validate_value(SLIDE_LENGTH, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		display_warning("Error ED208: There was something wrong with the slide length value in the project file.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_slide_length = *validated_guint;
+		g_free(validated_guint);
+		xmlFree(slide_length_data);
+	}
+
+	// Retrieve the new frames per second input
+	if (NULL != fps_data)
+	{
+		guint_val = atoi((const char *) fps_data);
+		validated_guint = validate_value(PROJECT_FPS, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED209: There was something wrong with the frames per second value in the project file.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_fps = *validated_guint;
+			g_free(validated_guint);
+			xmlFree(fps_data);
+		}
+	}
+
+	if (TRUE != useable_input)
+	{
+		// At least one of the values in the project file is invalid, so abort the load
+		display_warning("Aborting load of project file.");  // Individual error messages will already have been displayed
+		return FALSE;
+	}
+
+	// ** We only get here if all the input is considered valid **
+
 	// If there's an existing film strip, we unload it
 	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
-
-	// Load project file format version
-	save_version = atoi((const char *) save_format_data);
-	xmlFree(save_format_data);
 
 	// Load project name
 	if (NULL == project_name)
 		project_name = g_string_new(NULL);
-	g_string_assign(project_name, (const gchar *) project_name_data);
-	xmlFree(project_name_data);
+	g_string_assign(project_name, valid_project_name->str);
+	g_string_free(valid_project_name, TRUE);
 
 	// Load output folder
 	if (NULL == output_folder)
 		output_folder = g_string_new(NULL);
-	g_string_assign(output_folder, (const gchar *) output_folder_data);
-	xmlFree(output_folder_data);
+	g_string_assign(output_folder, valid_output_folder->str);
+	g_string_free(valid_output_folder, TRUE);
 
 	// Load output width
-	output_width = atoi((const char *) output_width_data);
-	xmlFree(output_width_data);
+	output_width = valid_output_width;
 
 	// Load output height
-	output_height = atoi((const char *) output_height_data);
-	xmlFree(output_height_data);
+	output_height = valid_output_height;
 
 	// Load project_width
-	project_width = atoi((const char *) project_width_data);
-	xmlFree(project_width_data);
+	project_width = valid_project_width;
 
 	// Load project height
-	project_height = atoi((const char *) project_height_data);
-	xmlFree(project_height_data);
+	project_height = valid_project_height;
 
 	// Load slide length
-	slide_length = atoi((const char *) slide_length_data);
-	xmlFree(slide_length_data);
+	slide_length = valid_slide_length;
 
 	// Load frames per second
-	if (NULL != fps_data)
+	if (0 != valid_fps)
 	{
-		frames_per_second = atoi((const char *) fps_data);
-		xmlFree(fps_data);
+		frames_per_second = valid_fps;
 	}
+
+//fixme2: Stuff to still update for input validation
+
+	// fixme2: This should be the first thing validated
+	// Load project file format version
+	save_version = atoi((const char *) save_format_data);
+	xmlFree(save_format_data);
+
 
 	// * Preferences are loaded, so now load the slides *
 	this_slide = slides_node->xmlChildrenNode;
@@ -996,6 +1133,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.16  2008/03/04 04:53:39  vapour
+ * Began updating code to validate input.
+ *
  * Revision 1.15  2008/02/18 07:01:14  vapour
  * Improved the clarity of wording in error messages.
  *
