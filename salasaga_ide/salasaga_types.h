@@ -62,6 +62,7 @@ extern "C" {
 
 // The known layer types
 enum {
+	TYPE_NONE,
 	TYPE_GDK_PIXBUF,
 	TYPE_MOUSE_CURSOR,
 	TYPE_EMPTY,
@@ -311,6 +312,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.66  2008/03/05 09:09:24  vapour
+ * Added a None layer type as a placeholder.
+ *
  * Revision 1.65  2008/03/04 11:34:30  vapour
  * Added mouse click validation field value.
  *
