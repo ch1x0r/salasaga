@@ -190,9 +190,13 @@ OFILES = \
 	functions/layer_move_down.o \
 	functions/layer_move_up.o \
 	functions/layer_new_highlight.o \
+	functions/layer_new_highlight_inner.o \
 	functions/layer_new_image.o \
+	functions/layer_new_image_inner.o \
 	functions/layer_new_mouse.o \
+	functions/layer_new_mouse_inner.o \
 	functions/layer_new_text.o \
+	functions/layer_new_text_inner.o \
 	functions/logger_simple.o \
 	functions/logger_with_domain.o \
 	functions/menu_edit_preferences.o \
@@ -377,14 +381,26 @@ layer_move_up.o:
 layer_new_highlight.o:
 	$(CC) $(CFLAGS) -c layer_new_highlight.c -o layer_new_highlight.o
 
+layer_new_highlight_inner.o:
+	$(CC) $(CFLAGS) -c layer_new_highlight_inner.c -o layer_new_highlight_inner.o
+
 layer_new_image.o:
 	$(CC) $(CFLAGS) -c layer_new_image.c -o layer_new_image.o
+
+layer_new_image_inner.o:
+	$(CC) $(CFLAGS) -c layer_new_image_inner.c -o layer_new_image_inner.o
 
 layer_new_mouse.o:
 	$(CC) $(CFLAGS) -c layer_new_mouse.c -o layer_new_mouse.o
 
+layer_new_mouse_inner.o:
+	$(CC) $(CFLAGS) -c layer_new_mouse_inner.c -o layer_new_mouse_inner.o
+
 layer_new_text.o:
 	$(CC) $(CFLAGS) -c layer_new_text.c -o layer_new_text.o
+
+layer_new_text_inner.o:
+	$(CC) $(CFLAGS) -c layer_new_text_inner.c -o layer_new_text_inner.o
 
 logger_simple.o:
 	$(CC) $(CFLAGS) -c logger_simple.c -o logger_simple.o
