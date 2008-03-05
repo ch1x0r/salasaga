@@ -95,6 +95,7 @@ GtkItemFactory			*menu_bar = NULL;			// Widget for the menu bar
 GtkTable				*message_bar;				// Widget for message bar
 gboolean				mouse_dragging = FALSE;		// Is the mouse being dragged?
 GdkPixbuf				*mouse_ptr_pixbuf;			// Temporary GDK Pixbuf
+gboolean				new_layer_selected = TYPE_NONE;	// Is a new layer being created?
 GIOChannel				*output_file;				// The output file handle
 gboolean				project_active;				// Whether or not a project is active (i.e. something is loaded or has been created)
 gulong					resolution_callback;		// Holds the id of the resolution selector callback
@@ -661,6 +662,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.88  2008/03/05 09:10:35  vapour
+ * Added a new global variable, to assist with the visual creation of new layers.
+ *
  * Revision 1.87  2008/02/28 16:53:09  vapour
  * Ming initialisation is only done once per application start now.
  *

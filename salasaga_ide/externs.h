@@ -56,6 +56,7 @@ extern GtkItemFactory		*menu_bar;
 extern GtkTable				*message_bar;
 extern gboolean				mouse_dragging;
 extern GdkPixbuf			*mouse_ptr_pixbuf;
+extern gboolean				new_layer_selected;
 extern GIOChannel			*output_file;
 extern gboolean				project_active;
 extern gulong				resolution_callback;
@@ -135,6 +136,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.38  2008/03/05 09:10:35  vapour
+ * Added a new global variable, to assist with the visual creation of new layers.
+ *
  * Revision 1.37  2008/02/19 13:41:09  vapour
  * Removed scaling quality variable, added a default frames per second variable.
  *
