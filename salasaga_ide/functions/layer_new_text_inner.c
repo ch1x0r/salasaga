@@ -100,6 +100,14 @@ void layer_new_text_inner(guint release_x, guint release_y)
 		g_free(tmp_layer);
 		g_object_unref(tmp_text_ob->text_buffer);
 		g_free(tmp_text_ob);
+
+		// Change the cursor back to normal
+		gdk_window_set_cursor(main_drawing_area->window, NULL);
+
+		// Update the status bar
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " New layer cancelled");
+		gdk_flush();
+
 		return;
 	}
 
@@ -159,6 +167,9 @@ void layer_new_text_inner(guint release_x, guint release_y)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/03/05 11:03:24  vapour
+ * Added code to change cursor back to normal upon cancellation, and update the status bar appropriately.
+ *
  * Revision 1.1  2008/03/05 10:09:35  vapour
  * Moved the code for the highlight, mouse, and text layers into an inner version of each function.
  *
