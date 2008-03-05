@@ -105,8 +105,8 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		// Reset the invalidation area
 		invalidation_end_x = event->x;
 		invalidation_end_y = event->x;
-		invalidation_start_x = event->x;
-		invalidation_start_y = event->x;
+		invalidation_start_x = event->x - 1;
+		invalidation_start_y = event->x - 1;
 
 		return TRUE;
 	}
@@ -229,6 +229,9 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/03/05 13:47:51  vapour
+ * Tweaked the starting position for the double buffering invalidation area.
+ *
  * Revision 1.9  2008/03/05 13:23:43  vapour
  * Now resets the double buffering invalidation area.
  *
