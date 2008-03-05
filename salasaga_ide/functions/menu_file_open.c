@@ -124,9 +124,11 @@ void menu_file_open(void)
 			}
 			else
 			{
-				// We need to loop around, so we free the memory allocated for the temporary validation string in this iteration
+				// The project file wasn't valid, so we abort the dialog and return
+				gtk_widget_destroy(open_dialog);
 				g_string_free(validated_string, TRUE);
-				validated_string = NULL;
+				g_free(filename);
+				return;
 			}
 		}
 	} while (FALSE == useable_input);
@@ -209,6 +211,9 @@ void menu_file_open(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2008/03/05 02:57:06  vapour
+ * The dialog now aborts if the project file wasn't valid, rather than looping around.
+ *
  * Revision 1.12  2008/03/03 02:56:45  vapour
  * Updated status bar feedback message.
  *
