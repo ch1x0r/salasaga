@@ -102,6 +102,12 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		stored_x = event->x;
 		stored_y = event->y;
 
+		// Reset the invalidation area
+		invalidation_end_x = event->x;
+		invalidation_end_y = event->x;
+		invalidation_start_x = event->x;
+		invalidation_start_y = event->x;
+
 		return TRUE;
 	}
 
@@ -223,6 +229,9 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/03/05 13:23:43  vapour
+ * Now resets the double buffering invalidation area.
+ *
  * Revision 1.8  2008/03/05 12:49:46  vapour
  * Renamed the old backing store variable and associated comments to front store.
  *
