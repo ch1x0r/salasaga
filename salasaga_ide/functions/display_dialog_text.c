@@ -40,6 +40,7 @@
 gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 {
 	// Local variables
+	gfloat				gfloat_val;					// Temporary gfloat value used for validation	
 	guint				guint_val;					// Temporary guint value used for validation
 	guint				row_counter = 0;			// Used to count which row things are up to
 	GtkDialog			*text_dialog;				// Widget for the text dialog
@@ -49,12 +50,13 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
 	GString				*valid_layer_name;			// Receives the new layer name once validated
 	guint				valid_finish_frame;			// Receives the new finish frame once validated
-	guint				valid_font_size;			// Receives the new font size once validated
+	gfloat				valid_font_size;			// Receives the new font size once validated
 	guint				valid_start_frame;			// Receives the new start frame once validated
 	guint				valid_x_offset_finish;		// Receives the new finish frame x offset once validated
 	guint				valid_x_offset_start;		// Receives the new start frame x offset once validated
 	guint				valid_y_offset_finish;		// Receives the new finish frame y offset once validated
 	guint				valid_y_offset_start;		// Receives the new start frame y offset once validated
+	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
@@ -330,16 +332,16 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		}
 
 		// Retrieve the new font size
-		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(font_button));
-		validated_guint = validate_value(FONT_SIZE, V_INT_UNSIGNED, &guint_val);
-		if (NULL == validated_guint)
+		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(font_button));
+		validated_gfloat = validate_value(FONT_SIZE, V_FLOAT_UNSIGNED, &gfloat_val);
+		if (NULL == validated_gfloat)
 		{
 			display_warning("Error ED176: There was something wrong with the font size value.  Please try again.");
 			useable_input = FALSE;
 		} else
 		{
-			valid_font_size = *validated_guint;
-			g_free(validated_guint);
+			valid_font_size = *validated_gfloat;
+			g_free(validated_gfloat);
 		}
 
 		// Validate the layer name input
@@ -448,6 +450,9 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/03/05 02:58:12  vapour
+ * Updated to reflect font size being a float rather than an integer.
+ *
  * Revision 1.6  2008/02/20 21:57:15  vapour
  * Updated to validate all incoming input.
  *
