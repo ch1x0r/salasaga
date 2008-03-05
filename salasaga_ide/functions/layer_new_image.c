@@ -33,10 +33,6 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "display_dialog_image.h"
-#include "draw_workspace.h"
-#include "regenerate_film_strip_thumbnails.h"
-#include "regenerate_timeline_duration_images.h"
 
 
 void layer_new_image(void)
@@ -72,6 +68,9 @@ void layer_new_image(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2008/03/05 10:12:01  vapour
+ * Removed some left over include statements.
+ *
  * Revision 1.12  2008/03/05 09:26:20  vapour
  * Added instructions to the status bar.
  *
