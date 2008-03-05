@@ -36,7 +36,7 @@ validatation_entry		valid_fields[] =
 	{ EXTERNAL_LINK_WINDOW,	"Window target for an external link",	V_CHAR,				V_UNDERSCORES,		0,		20 },
 	{ FILE_PATH,			"Full path to a file",					V_CHAR,				V_FULL_STOP | V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
 	{ FOLDER_PATH,			"Full path to a folder",				V_CHAR,				V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
-	{ FONT_SIZE,			"Font size",							V_INT_UNSIGNED,		V_NONE,		0,		200 },
+	{ FONT_SIZE,			"Font size",							V_FLOAT_UNSIGNED,	V_NONE,		0,		200 },
 	{ FRAME_NUMBER,			"A frame number",						V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ ICON_HEIGHT,			"Height of the tool bar icons",			V_INT_UNSIGNED,		V_NONE,		0,		80 },
 	{ IMAGE_DATA,			"Base64 encoded image data",			V_CHAR,				V_EQUALS | V_FORWARD_SLASHES | V_NEW_LINES | V_PLUSES,		0,		-1 },
@@ -46,7 +46,7 @@ validatation_entry		valid_fields[] =
 	{ LAYER_NAME,			"Name of this layer",					V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
 	{ LAYER_VISIBLE,		"Layer visibility switch",				V_INT_UNSIGNED,		V_NONE,		0,		1 },
 	{ LAYER_WIDTH,			"Width of this layer",					V_INT_UNSIGNED,		V_NONE,		0,		4096 },
-	{ MOUSE_CLICK,			"Mouse click",							V_INT_UNSIGNED,		V_NONE,		0,		9 },
+	{ MOUSE_CLICK,			"Mouse click",							V_CHAR,				V_UNDERSCORES,		0,		8 },
 	{ PREVIEW_WIDTH,		"Width of film strip thumbnails",		V_INT_UNSIGNED,		V_NONE,		0,		800 },
 	{ PROJECT_FPS,			"Frames per Second for this project",	V_INT_UNSIGNED,		V_NONE,		0,		120 },
 	{ PROJECT_HEIGHT,		"Height of this project",				V_INT_UNSIGNED,		V_NONE,		0,		4096 },
@@ -77,6 +77,9 @@ validatation_entry		valid_fields[] =
  * +++++++
  * 
  * $Log$
+ * Revision 1.13  2008/03/05 02:55:49  vapour
+ * Updated the font size and mouse click field types.
+ *
  * Revision 1.12  2008/03/04 11:35:08  vapour
  * Added mouse click validation field value.
  *
