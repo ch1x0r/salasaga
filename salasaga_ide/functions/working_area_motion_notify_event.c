@@ -45,7 +45,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 {
 	// Local variables
 	GdkModifierType		button_state;				// Mouse button states
-	const GdkColor		line_fg_color = { 0, 0xff, 0x00, 0x00 };
 	static GdkGC		*line_gc = NULL;
 	GdkSegment			lines[4];
 	gint				mouse_x;					// Unscaled mouse x position
@@ -123,8 +122,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		{
 			line_gc = gdk_gc_new(GDK_DRAWABLE(front_store));
 		}
-		gdk_gc_set_rgb_fg_color(line_gc, &line_fg_color);
-		gdk_gc_set_rgb_bg_color(line_gc, &line_fg_color);
+		gdk_gc_set_function(line_gc, GDK_INVERT);
 		lines[0].x1 = stored_x;
 		lines[0].y1 = stored_y;
 		lines[0].x2 = mouse_x;
@@ -177,6 +175,9 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/03/05 13:57:19  vapour
+ * Bounding box is now drawn with inverted pixel colors.
+ *
  * Revision 1.7  2008/03/05 13:48:50  vapour
  * Tweaked the top and left positions for the double buffering invalidation area, to remove an occasional off by one error.
  *
