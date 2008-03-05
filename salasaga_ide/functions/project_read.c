@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to parse the contents of a .flame file
+ * Flame Project: Function to parse the contents of a project file
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -59,6 +59,8 @@ gboolean flame_read(gchar *filename)
 	GdkPixbufLoader		*image_loader;				// Used for loading images embedded in project files
 	xmlNodePtr			layer_ptr;					// Temporary pointer
 	xmlNodePtr			meta_data_node = NULL;		// Points to the meta-data structure
+	GList				*new_slides = NULL;			// Linked list holding the new slide info
+	guint				num_slides;					// Holds the number of slides we've processed
 	xmlNodePtr			preferences_node = NULL;	// Points to the preferences structure
 	xmlChar				*project_name_data = NULL;
 	xmlChar				*output_folder_data = NULL;
@@ -68,7 +70,7 @@ gboolean flame_read(gchar *filename)
 	xmlChar				*project_height_data = NULL;
 	gboolean			return_code;				// Boolean return code
 	xmlChar				*save_format_data = NULL;
-	gfloat				save_version;				// The project file save version
+	guint				slide_counter;				// Counter used for looping
 	xmlChar				*slide_length_data = NULL;
 	xmlNodePtr			slides_node = NULL;			// Points to the slides structure
 	xmlNodePtr			this_layer;					// Temporary pointer
@@ -396,68 +398,8 @@ gboolean flame_read(gchar *filename)
 		}
 	}
 
-	if (TRUE != useable_input)
-	{
-		// At least one of the values in the project file is invalid, so abort the load
-		display_warning("Aborting load of project file.");  // Individual error messages will already have been displayed
-		return FALSE;
-	}
-
-	// ** We only get here if all the input is considered valid **
-
-	// fixme2: We should move this after all of the validation has been completed
-
-	// If there's a project presently loaded in memory, we unload it
-	if (NULL != slides)
-	{
-		// Free the resources presently allocated to slides
-		g_list_foreach(slides, destroy_slide, NULL);
-
-		// Re-initialise pointers
-		slides = NULL;
-		current_slide = NULL;
-	}
-
-	// Load project file format version
-	save_version = valid_save_format;
-
-	// If there's an existing film strip, we unload it
-	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
-
-	// Load project name
-	if (NULL == project_name)
-		project_name = g_string_new(NULL);
-	g_string_assign(project_name, valid_project_name->str);
-	g_string_free(valid_project_name, TRUE);
-
-	// Load output folder
-	if (NULL == output_folder)
-		output_folder = g_string_new(NULL);
-	g_string_assign(output_folder, valid_output_folder->str);
-	g_string_free(valid_output_folder, TRUE);
-
-	// Load output width
-	output_width = valid_output_width;
-
-	// Load output height
-	output_height = valid_output_height;
-
-	// Load project_width
-	project_width = valid_project_width;
-
-	// Load project height
-	project_height = valid_project_height;
-
-	// Load slide length
-	slide_length = valid_slide_length;
-
-	// Load frames per second
-	if (0 != valid_fps)
-	{
-		frames_per_second = valid_fps;
-	}
-
 	// * Preferences are loaded, so now load the slides *
+
 	this_slide = slides_node->xmlChildrenNode;
 	while (NULL != this_slide)
 	{
@@ -882,7 +824,7 @@ gboolean flame_read(gchar *filename)
 									}
 
 									// If version 1.0 of file format, load the image path, otherwise load the embedded image data
-									if (1.0 == save_version)
+									if (1.0 == valid_save_format)
 									{
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "path")))
 										{
@@ -943,7 +885,7 @@ gboolean flame_read(gchar *filename)
 								}
 
 								// Version 1.0 of the file format doesn't have embedded image data
-								if ((1.0 != save_version) && (FALSE != useable_input))
+								if ((1.0 != valid_save_format) && (FALSE != useable_input))
 								{
 									// * We should have all of the image details by this stage, so can process the image data *
 
@@ -1328,22 +1270,24 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "click")))
 									{
 										// Get the mouse click type
-										validated_guint = validate_value(MOUSE_CLICK, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
-										if (NULL == validated_guint)
+										validated_string = validate_value(MOUSE_CLICK, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
 										{
 											display_warning("Error ED254: There was something wrong with a mouse click value in the project file.");
 											useable_input = FALSE;
-											tmp_mouse_ob->click = MOUSE_NONE;;  // Fill in the value, just to be safe
+											tmp_mouse_ob->click = MOUSE_NONE;  // Fill in the value, just to be safe
 										} else
 										{
-											if (0 == validated_guint)
-											{
-												tmp_mouse_ob->click = MOUSE_NONE;
-											} else
+											tmp_int = g_ascii_strncasecmp(validated_string->str, "left_one", 8);
+											if (0 == tmp_int)
 											{
 												tmp_mouse_ob->click = MOUSE_LEFT_ONE;
+											} else
+											{
+												tmp_mouse_ob->click = MOUSE_NONE;
 											}
-											g_free(validated_guint);
+											g_string_free(validated_string,TRUE);
+											validated_string = NULL;
 										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
@@ -1460,8 +1404,6 @@ gboolean flame_read(gchar *filename)
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
 							}
 
-//fixme2: Stuff to still update for input validation
-
 							// Test if this layer is a text layer
 							if (!xmlStrcmp(tmp_char, (const xmlChar *) "text"))
 							{
@@ -1482,78 +1424,219 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										tmp_layer->x_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED261: There was something wrong with an x offset start value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->x_offset_start = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->x_offset_start = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										tmp_layer->y_offset_start = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(SCREENSHOT_Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED262: There was something wrong with a y offset start value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->y_offset_start = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->y_offset_start = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										tmp_layer->x_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED263: There was something wrong with an x offset finish value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->x_offset_finish = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->x_offset_finish = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										tmp_layer->y_offset_finish = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED264: There was something wrong with a y offset finish value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->y_offset_finish = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->y_offset_finish = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "red")))
 									{
 										// Get the red value
-										tmp_text_ob->text_color.red = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED265: There was something wrong with a red component colour value in the project file.");
+											useable_input = FALSE;
+											tmp_text_ob->text_color.red = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_text_ob->text_color.red = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "green")))
 									{
 										// Get the green value
-										tmp_text_ob->text_color.green = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED266: There was something wrong with a green component colour value in the project file.");
+											useable_input = FALSE;
+											tmp_text_ob->text_color.green = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_text_ob->text_color.green = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "blue")))
 									{
 										// Get the blue value
-										tmp_text_ob->text_color.blue = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED267: There was something wrong with a blue component colour value in the project file.");
+											useable_input = FALSE;
+											tmp_text_ob->text_color.blue = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_text_ob->text_color.blue = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "font_size")))
 									{
 										// Get the font size
-										tmp_text_ob->font_size = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_gfloat = validate_value(FONT_SIZE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_gfloat)
+										{
+											display_warning("Error ED268: There was something wrong with a font size value in the project file.");
+											useable_input = FALSE;
+											tmp_text_ob->font_size = 1;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_text_ob->font_size = *validated_gfloat;
+											g_free(validated_gfloat);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "text_value")))
 									{
 										// Get the text
+										// fixme5: Unsure if we should validate this or not... it's supposed to be free-form. (?)
 										tmp_text_ob->text_buffer = gtk_text_buffer_new(NULL);
 										gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), (const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1), -1);
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 									{
 										// Get the start frame
-										tmp_layer->start_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED269: There was something wrong with a start frame value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->start_frame = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->start_frame = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
 									{
 										// Get the finish frame
-										tmp_layer->finish_frame = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED270: There was something wrong with a finish frame value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->finish_frame = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->finish_frame = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
 									{
 										// Get the visibility
-										tmp_layer->visible = atoi((const char *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(LAYER_VISIBLE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED271: There was something wrong with a layer visibility value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->visible = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->visible = *validated_guint;
+											g_free(validated_guint);
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
 										// Get the name of the layer
-										tmp_layer->name = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_string = validate_value(LAYER_NAME, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED272: There was something wrong with a layer name value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->name = g_string_new("Empty");  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->name = validated_string;  // We keep the validated string instead of copying then freeing it
+											validated_string = NULL;
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
 									{
 										// Get the URL associated with the layer
-										tmp_layer->external_link = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_string = validate_value(EXTERNAL_LINK, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED273: There was something wrong with an external link value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_layer->external_link = g_string_assign(tmp_layer->external_link, validated_string->str);
+											g_string_free(validated_string,TRUE);
+											validated_string = NULL;
+										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link_window")))
 									{
 										// Get the window to open the URL associated with the layer
-										tmp_layer->external_link_window = g_string_new((const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED274: There was something wrong with an external link target window value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_layer->external_link_window = g_string_assign(tmp_layer->external_link_window, validated_string->str);
+											g_string_free(validated_string,TRUE);
+											validated_string = NULL;
+										}
 									}
 									this_node = this_node->next;
 								}
@@ -1590,8 +1673,18 @@ gboolean flame_read(gchar *filename)
 			tmp_char = xmlGetProp(this_slide, (const xmlChar *) "name");
 			if (NULL != tmp_char)
 			{
-				// A name for the slide is in the project file, so we use it
-				tmp_slide->name = g_string_new((const gchar *) tmp_char);
+				// A name for the slide is in the project file, so we use it if it validates
+				validated_string = validate_value(SLIDE_NAME, V_CHAR, tmp_char);
+				if (NULL == validated_string)
+				{
+					display_warning("Error ED275: There was something wrong with a slide name value in the project file.");
+					useable_input = FALSE;
+				} else
+				{
+					tmp_slide->name = validated_string;
+					validated_string = NULL;
+					xmlFree(tmp_char);
+				}
 			}
 
 			// Read the slide duration from the save file
@@ -1599,35 +1692,116 @@ gboolean flame_read(gchar *filename)
 			tmp_char = xmlGetProp(this_slide, (const xmlChar *) "duration");
 			if (NULL != tmp_char)
 			{
-				// A duration for the slide is in the project file, so we use it
-				tmp_slide->duration = atoi((const gchar *) tmp_char);
+				// A duration for the slide is in the project file, so we use it if it validates
+				validated_guint = validate_value(SLIDE_LENGTH, V_CHAR, tmp_char);
+				if (NULL == validated_guint)
+				{
+					display_warning("Error ED276: There was something wrong with a slide duration value in the project file.");
+					useable_input = FALSE;
+				} else
+				{
+					tmp_slide->duration = *validated_guint;
+					g_free(validated_guint);
+					xmlFree(tmp_char);
+				}
 			}
 
-			// Regenerate the timeline duration images for all layers in this slide
-			regenerate_timeline_duration_images(tmp_slide);
-
-			// Mark the tooltip as uncreated, so we know to create it later on
-			tmp_slide->tooltip = NULL;
-
-			// Set the timeline widget for the slide to NULL, so we know to create it later on
-			tmp_slide->timeline_widget = NULL;
-
-			// Create the thumbnail for the slide
-			tmp_glist = NULL;
-			tmp_glist = g_list_append(tmp_glist, tmp_slide);
-			tmp_pixbuf = compress_layers(tmp_glist, preview_width, (guint) preview_width * 0.75);
-			tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(tmp_pixbuf)));
-
-			// Add the thumbnail to the film strip
-			gtk_list_store_append(film_strip_store, &film_strip_iter);
-			gtk_list_store_set(film_strip_store, &film_strip_iter, 0, gtk_image_get_pixbuf(tmp_slide->thumbnail), -1);
-
-			// To get here, we must have finished loading the present slide, so we add it to the working project
-			slides = g_list_append(slides, tmp_slide);
+			// To get here, we must have finished loading the present slide, so we add it to the new project
+			new_slides = g_list_append(new_slides, tmp_slide);
 
 		}  // End of "We're in a slide" loop
 
 		this_slide = this_slide->next;
+	}
+
+	// Abort if any of the input isn't valid
+	if (TRUE != useable_input)
+	{
+		// At least one of the values in the project file is invalid, so abort the load
+		display_warning("Aborting load of project file.");  // Individual error messages will already have been displayed
+
+		// fixme4: We should probably free the memory allocated for any slides thus far too
+		
+		return FALSE;
+	}
+
+	// ** We only get here if all the input is considered valid **
+
+	// If there's a project presently loaded in memory, we unload it
+	if (NULL != slides)
+	{
+		// Free the resources presently allocated to slides
+		g_list_foreach(slides, destroy_slide, NULL);
+		g_list_free(slides);
+
+		// Re-initialise pointers
+		slides = NULL;
+		current_slide = NULL;
+	}
+
+	// If there's an existing film strip, we unload it
+	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
+
+	// Load project name
+	if (NULL == project_name)
+		project_name = g_string_new(NULL);
+	g_string_assign(project_name, valid_project_name->str);
+	g_string_free(valid_project_name, TRUE);
+
+	// Load output folder
+	if (NULL == output_folder)
+		output_folder = g_string_new(NULL);
+	g_string_assign(output_folder, valid_output_folder->str);
+	g_string_free(valid_output_folder, TRUE);
+
+	// Load output width
+	output_width = valid_output_width;
+
+	// Load output height
+	output_height = valid_output_height;
+
+	// Load project_width
+	project_width = valid_project_width;
+
+	// Load project height
+	project_height = valid_project_height;
+
+	// Load slide length
+	slide_length = valid_slide_length;
+
+	// Load frames per second
+	if (0 != valid_fps)
+	{
+		frames_per_second = valid_fps;
+	}
+
+	// Make the new slides active, and update them to fill in their remaining pieces
+	slides = g_list_first(new_slides);
+	num_slides = g_list_length(slides);
+	for (slide_counter = 0; slide_counter < num_slides; slide_counter++)
+	{
+		// Select the desired slide
+		slides = g_list_first(slides);
+		tmp_slide = g_list_nth_data(slides, slide_counter);
+
+		// Regenerate the timeline duration images for all layers in the slide
+		regenerate_timeline_duration_images(tmp_slide);
+
+		// Mark the tooltip as uncreated, so we know to create it later on
+		tmp_slide->tooltip = NULL;
+
+		// Set the timeline widget for the slide to NULL, so we know to create it later on
+		tmp_slide->timeline_widget = NULL;
+
+		// Create the thumbnail for the slide
+		tmp_glist = NULL;
+		tmp_glist = g_list_append(tmp_glist, tmp_slide);
+		tmp_pixbuf = compress_layers(tmp_glist, preview_width, (guint) preview_width * 0.75);
+		tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(tmp_pixbuf)));
+
+		// Add the thumbnail to the film strip
+		gtk_list_store_append(film_strip_store, &film_strip_iter);
+		gtk_list_store_set(film_strip_store, &film_strip_iter, 0, gtk_image_get_pixbuf(tmp_slide->thumbnail), -1);
 	}
 
 	// We're finished with this XML document, so release its memory
@@ -1645,6 +1819,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.21  2008/03/05 03:03:55  vapour
+ * Added final remaining code to validate input from project files.
+ *
  * Revision 1.20  2008/03/04 11:36:57  vapour
  * Added validation of highlight and mouse layer inputs.
  *
