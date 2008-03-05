@@ -50,8 +50,10 @@ extern guint				frames_per_second;
 extern GdkPixmap			*front_store;
 extern GString				*icon_extension;
 extern GString				*icon_path;
-extern gint					invalidation_area_x;
-extern gint					invalidation_area_y;
+extern gint					invalidation_end_x;
+extern gint					invalidation_end_y;
+extern gint					invalidation_start_x;
+extern gint					invalidation_start_y;
 extern GtkWidget			*main_area;
 extern GtkWidget			*main_drawing_area;
 extern GtkWidget			*main_window;
@@ -139,6 +141,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.40  2008/03/05 13:22:51  vapour
+ * Expanded out the double buffering invalidation area global variables.
+ *
  * Revision 1.39  2008/03/05 12:35:12  vapour
  * Added global variables to support double buffering.
  *

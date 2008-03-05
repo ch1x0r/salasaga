@@ -89,8 +89,10 @@ guint					frames_per_second;			// Number of frames per second
 GdkPixmap				*front_store;				// Front store for double buffering the workspace area
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
 GString					*icon_path;					// Points to the base location for Flames icon files
-gint					invalidation_area_x;		// Bottom right corner of the front store area to invalidate
-gint					invalidation_area_y;		// Bottom right corner of the front store area to invalidate
+gint					invalidation_end_x;			// Right side of the front store area to invalidate
+gint					invalidation_end_y;			// Bottom of the front store area to invalidate
+gint					invalidation_start_x;		// Left side of the front store area to invalidate
+gint					invalidation_start_y;		// Top of the front store area to invalidate
 GtkWidget				*main_area;					// Widget for the onscreen display
 GtkWidget				*main_drawing_area;			// Widget for the drawing area
 GtkWidget				*main_window;				// Widget for the main window
@@ -665,6 +667,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.90  2008/03/05 13:22:51  vapour
+ * Expanded out the double buffering invalidation area global variables.
+ *
  * Revision 1.89  2008/03/05 12:35:12  vapour
  * Added global variables to support double buffering.
  *
