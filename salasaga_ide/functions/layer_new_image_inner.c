@@ -89,6 +89,10 @@ void layer_new_image_inner(guint release_x, guint release_y)
 		// Change the cursor back to normal
 		gdk_window_set_cursor(main_drawing_area->window, NULL);
 
+		// Update the status bar
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " New layer cancelled");
+		gdk_flush();
+
 		return;
 	}
 
@@ -150,6 +154,9 @@ void layer_new_image_inner(guint release_x, guint release_y)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/03/05 11:02:10  vapour
+ * Added code to update the status bar appropriately upon cancellation.
+ *
  * Revision 1.2  2008/03/05 10:15:15  vapour
  * Added a function description.
  *
