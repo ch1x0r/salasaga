@@ -51,7 +51,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 	}
 	gdk_pixbuf_fill(highlight_pixbuf, border_color);
 
-	// Composite the line onto the backing store - top line
+	// Composite the line onto the front store - top line
 	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
 		tmp_pixbuf,							// Destination pixbuf
 		x_offset,							// X offset
@@ -63,7 +63,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 		GDK_INTERP_NEAREST,						// Scaling type
 		255);								// Alpha
 
-	// Composite the line onto the backing store - bottom line
+	// Composite the line onto the front store - bottom line
 	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
 		tmp_pixbuf,							// Destination pixbuf
 		x_offset,							// X offset
@@ -87,7 +87,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 	}
 	gdk_pixbuf_fill(highlight_pixbuf, border_color);
 
-	// Composite the line onto the backing store - left side
+	// Composite the line onto the front store - left side
 	gdk_pixbuf_composite(highlight_pixbuf,			// Source pixbuf
 		tmp_pixbuf,									// Destination pixbuf
 		x_offset,									// X offset
@@ -99,7 +99,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 		GDK_INTERP_NEAREST,							// Scaling type
 		255);										// Alpha
 
-	// Composite the line onto the backing store - right side
+	// Composite the line onto the front store - right side
 	gdk_pixbuf_composite(highlight_pixbuf,			// Source pixbuf
 		tmp_pixbuf,									// Destination pixbuf
 		x_offset + width - 1,						// X offset
@@ -118,7 +118,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 	highlight_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width - 2, height - 2);
 	gdk_pixbuf_fill(highlight_pixbuf, fill_color);
 
-	// Composite the inner highlight box onto the backing store
+	// Composite the inner highlight box onto the front store
 	gdk_pixbuf_composite(highlight_pixbuf,			// Source pixbuf
 			     tmp_pixbuf,						// Destination pixbuf
 			     x_offset + 1,						// X offset
@@ -141,6 +141,9 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/03/05 12:45:37  vapour
+ * Renamed the old backing store variable and associated comments to front store.
+ *
  * Revision 1.6  2008/02/04 16:46:45  vapour
  *  + Removed unnecessary includes.
  *

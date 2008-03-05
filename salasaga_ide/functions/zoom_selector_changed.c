@@ -73,11 +73,11 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 	// Resize the drawing area so it draws properly
 	gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), working_width, working_height);
 
-	// Free the existing backing store for the workspace
-	if (NULL != backing_store)
+	// Free the existing front store for the workspace
+	if (NULL != front_store)
 	{
-		g_object_unref(backing_store);
-		backing_store = NULL;
+		g_object_unref(front_store);
+		front_store = NULL;
 	}
 
 	// Redraw the workspace area
@@ -93,6 +93,9 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/03/05 12:47:26  vapour
+ * Renamed the old backing store variable and associated comments to front store.
+ *
  * Revision 1.7  2008/02/27 13:46:46  vapour
  * Fixed a small bug where the drawing area wasn't always being sized correctly at startup until the window had been resized.
  *

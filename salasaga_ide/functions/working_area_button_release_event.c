@@ -71,8 +71,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	GtkTreePath			*tmp_path;					// Temporary path
 
 
-	// Only do this function if we have a backing store available
-	if (NULL == backing_store)
+	// Only do this function if we have a front store available
+	if (NULL == front_store)
 	{
 		return TRUE;
 	}
@@ -263,6 +263,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/03/05 12:50:24  vapour
+ * Renamed the old backing store variable and associated comments to front store.
+ *
  * Revision 1.9  2008/03/05 10:23:39  vapour
  * Added code to recognise button release events for the creation of new layers.
  *

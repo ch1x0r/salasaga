@@ -394,11 +394,11 @@ void menu_screenshots_import(void)
 	working_width = (project_width * zoom) / 100;
 	working_height = (project_height * zoom) / 100;
 
-	// Free the existing backing store for the workspace
-	if (NULL != backing_store)
+	// Free the existing front store for the workspace
+	if (NULL != front_store)
 	{
-		g_object_unref(backing_store);
-		backing_store = NULL;
+		g_object_unref(front_store);
+		front_store = NULL;
 	}
 
 	// Draw the workspace area
@@ -432,6 +432,9 @@ void menu_screenshots_import(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.17  2008/03/05 12:44:14  vapour
+ * Renamed the old backing store variable and associated comments to front store.
+ *
  * Revision 1.16  2008/03/03 02:59:06  vapour
  * Updated status bar feedback messages.
  *

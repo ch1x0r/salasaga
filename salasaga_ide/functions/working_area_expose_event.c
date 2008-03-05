@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Redraw the working area from the backing store 
+ * Flame Project: Redraw the working area from the front store 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -37,15 +37,15 @@
 
 gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-	// Only do this function if we have a backing store available
-	if (NULL == backing_store)
+	// Only do this function if we have a front store available
+	if (NULL == front_store)
 	{
 		return FALSE;
 	}
 
-	// Draw the invalidated backing store area onto the working area
+	// Draw the invalidated front store area onto the working area
 	gdk_draw_drawable(GDK_DRAWABLE(widget->window), GDK_GC(widget->style->fg_gc[GTK_WIDGET_STATE(widget)]),
-		GDK_PIXMAP(backing_store),
+		GDK_PIXMAP(front_store),
 		event->area.x, event->area.y,
 		event->area.x, event->area.y,
 		event->area.width, event->area.height);
@@ -59,6 +59,9 @@ gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpo
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/03/05 12:46:45  vapour
+ * Renamed the old backing store variable and associated comments to front store.
+ *
  * Revision 1.4  2008/02/04 17:22:38  vapour
  *  + Removed unnecessary includes.
  *

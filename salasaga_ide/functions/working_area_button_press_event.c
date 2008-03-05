@@ -59,8 +59,8 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	GtkTreePath			*tmp_path;				// Temporary path
 
 
-	// Only do this function if we have a backing store available
-	if (NULL == backing_store)
+	// Only do this function if we have a front store available
+	if (NULL == front_store)
 	{
 		return TRUE;
 	}
@@ -223,6 +223,9 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/03/05 12:49:46  vapour
+ * Renamed the old backing store variable and associated comments to front store.
+ *
  * Revision 1.7  2008/03/05 10:20:43  vapour
  * Reversed the previous commit, and included code to save the mouse coordinates when we are creating a new highlight layer.
  *
