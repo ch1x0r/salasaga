@@ -43,6 +43,8 @@
 void layer_new_highlight_inner(guint release_x, guint release_y)
 {
 	// Local variables
+	gfloat				end_x;						// Right side of the highlight layer
+	gfloat				end_y;						// Bottom side of the highlight layer
 	guint				finish_frame;				// Used when working out a layer's finish frame
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				mouse_drag_height;			// The height the mouse was dragged
@@ -53,6 +55,8 @@ void layer_new_highlight_inner(guint release_x, guint release_y)
 	gfloat				scaled_y;					// Scaled starting coordinate
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	slide				*slide_data;				// Pointer to the data for the current slide
+	gfloat				start_x;					// Left hand side of the highlight layer
+	gfloat				start_y;					// Top side of the highlight layer
 
 	layer_highlight		*tmp_highlight_ob;			// Temporary highlight layer object
 	GtkTreeIter			*tmp_iter;					// Temporary iter
@@ -72,11 +76,31 @@ void layer_new_highlight_inner(guint release_x, guint release_y)
 	scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
 	scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
 
+	// Sort out the mouse coordinates to use
+	if (release_x > stored_x)
+	{
+		start_x = stored_x;
+		end_x = release_x;
+	} else
+	{
+		start_x = release_x;
+		end_x = stored_x;
+	}
+	if (release_y > stored_y)
+	{
+		start_y = stored_y;
+		end_y = release_y;
+	} else
+	{
+		start_y = release_y;
+		end_y = stored_y;
+	}
+
 	// Work out where the mouse is positioned
-	scaled_x = stored_x * scaled_width_ratio;
-	scaled_y = stored_y * scaled_height_ratio;
-	mouse_drag_width = roundf((gfloat) (release_x - stored_x) * scaled_width_ratio);
-	mouse_drag_height = roundf((gfloat) (release_y - stored_y) * scaled_height_ratio);
+	scaled_x = start_x * scaled_width_ratio;
+	scaled_y = start_y * scaled_height_ratio;
+	mouse_drag_width = roundf((gfloat) (end_x - start_x) * scaled_width_ratio);
+	mouse_drag_height = roundf((gfloat) (end_y - start_y) * scaled_height_ratio);
 
 	// * Create a new highlight layer in memory using reasonable defaults *
 
@@ -183,6 +207,9 @@ void layer_new_highlight_inner(guint release_x, guint release_y)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/03/05 13:40:26  vapour
+ * Improved the sorting out of mouse coordinates to use.
+ *
  * Revision 1.3  2008/03/05 12:48:59  vapour
  * Updated to support double buffering.
  *
