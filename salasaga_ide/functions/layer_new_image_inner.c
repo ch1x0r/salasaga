@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: 
+ * Flame Project: Displays a dialog box asking for the values required to make a new image layer
  * 
  * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
  * 
@@ -150,6 +150,9 @@ void layer_new_image_inner(guint release_x, guint release_y)
  * +++++++
  * 
  * $Log$
+ * Revision 1.2  2008/03/05 10:15:15  vapour
+ * Added a function description.
+ *
  * Revision 1.1  2008/03/05 09:15:06  vapour
  * Moved most of the code from the layer new image function into here.
  *
