@@ -57,6 +57,10 @@ void layer_new_highlight(void)
 	// Set a toggle so the release button callback will know to do the rest
 	new_layer_selected = TYPE_HIGHLIGHT;
 
+	// Reset the invalidation area
+	invalidation_area_x = 0;
+	invalidation_area_y = 0;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Please draw the new layer");
 	gdk_flush();
@@ -68,6 +72,9 @@ void layer_new_highlight(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/03/05 12:48:23  vapour
+ * Updated to support double buffering.
+ *
  * Revision 1.11  2008/03/05 10:11:00  vapour
  * Moved the code for the highlight, mouse, and text layers into an inner version of each function.
  *

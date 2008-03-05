@@ -118,6 +118,9 @@ void layer_new_highlight_inner(guint release_x, guint release_y)
 		// Change the cursor back to normal
 		gdk_window_set_cursor(main_drawing_area->window, NULL);
 
+		// Redraw the workspace
+		draw_workspace();
+
 		// Update the status bar
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " New layer cancelled");
 		gdk_flush();
@@ -180,6 +183,9 @@ void layer_new_highlight_inner(guint release_x, guint release_y)
  * +++++++
  * 
  * $Log$
+ * Revision 1.3  2008/03/05 12:48:59  vapour
+ * Updated to support double buffering.
+ *
  * Revision 1.2  2008/03/05 11:01:13  vapour
  * Added code to change cursor back to normal upon cancellation, and update the status bar appropriately.
  *
