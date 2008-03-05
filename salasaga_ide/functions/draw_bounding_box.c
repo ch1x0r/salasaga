@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to draw a bounding box in the drawing area, via the backing store 
+ * Flame Project: Function to draw a bounding box in the drawing area, via the front store 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -72,9 +72,9 @@ void draw_bounding_box(GtkWidget *widget, GdkRegion *region)
 //draw_workspace();
 
 	// Draw the bounding line around the object
-	gdk_draw_lines(backing_store, widget->style->black_gc, &point_array[0], 5);
+	gdk_draw_lines(front_store, widget->style->black_gc, &point_array[0], 5);
 
-	// Cause an expose event to happen, writing the (updated) backing store to the screen
+	// Cause an expose event to happen, writing the (updated) front store to the screen
 	gdk_window_invalidate_rect(widget->window, tmp_rectangle_array[0], FALSE);
 
 	// Free the memory allocated in this function
@@ -87,6 +87,9 @@ void draw_bounding_box(GtkWidget *widget, GdkRegion *region)
  * +++++++
  * 
  * $Log$
+ * Revision 1.4  2008/03/05 12:36:39  vapour
+ * Renamed the old backing store variable and associated comments to front store.
+ *
  * Revision 1.3  2008/02/04 16:46:06  vapour
  *  + Removed unnecessary includes.
  *
