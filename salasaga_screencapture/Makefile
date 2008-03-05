@@ -1,12 +1,23 @@
 include Makefile.config
 
 OFILES = \
-	flame-capture.o
+	display_warning.o \
+	flame-capture.o \
+	validate_value.o
 
 all: flame-capture
 
+display_warning.o:
+	$(CC) $(CFLAGS) -c display_warning.c -o display_warning.o
+
 flame-capture.o:
 	$(CC) $(CFLAGS) -c flame-capture.c -o flame-capture.o
+
+validate_value.o:
+	$(CC) $(CFLAGS) -c validate_value.c -o validate_value.o
+
+flame-capture: $(OFILES)
+	$(CC) $(CFLAGS) $(OFILES) $(LDFLAGS) $(LIBS) -o flame-capture
 
 install:
 	$(INSTALL) -d $(bindir)
