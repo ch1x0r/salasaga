@@ -60,18 +60,63 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	if (TYPE_HIGHLIGHT == new_layer_selected)
 	{
 		// Ensure the invalidation (redraw) area is set to the maximum size that has been selected for this highlight
-		if (mouse_x > invalidation_area_x)
+		if (mouse_x < invalidation_start_x)
 		{
-			invalidation_area_x = mouse_x;
+			invalidation_start_x = mouse_x;
 		}
-		if (mouse_y > invalidation_area_y)
+		if (mouse_y < invalidation_start_y)
 		{
-			invalidation_area_y = mouse_y;
+			invalidation_start_y = mouse_y;
+		}
+		if (mouse_x > invalidation_end_x)
+		{
+			invalidation_end_x = mouse_x;
+		}
+		if (mouse_y > invalidation_end_y)
+		{
+			invalidation_end_y = mouse_y;
+		}
+
+		// Ensure the invalidation area can't go out of bounds
+		if (1 > invalidation_start_x)
+		{
+			invalidation_start_x = 1;
+		}
+		if ((main_drawing_area->allocation.width - 1) < invalidation_start_x)
+		{
+			invalidation_start_x = main_drawing_area->allocation.width - 1;
+		}
+		if (1 > invalidation_start_y)
+		{
+			invalidation_start_y = 1;
+		}
+		if ((main_drawing_area->allocation.height - 1) < invalidation_start_y)
+		{
+			invalidation_start_y = main_drawing_area->allocation.height - 1;
+		}
+		if (1 > invalidation_end_x)
+		{
+			invalidation_end_x = 1;
+		}
+		if ((main_drawing_area->allocation.width - 1) < invalidation_end_x)
+		{
+			invalidation_end_x = main_drawing_area->allocation.width - 1;
+		}
+		if (1 > invalidation_end_y)
+		{
+			invalidation_end_y = 1;
+		}
+		if ((main_drawing_area->allocation.height - 1) < invalidation_end_y)
+		{
+			invalidation_end_y = main_drawing_area->allocation.height - 1;
 		}
 
 		// Restore the front store area we're going over from the backing store
-		gdk_draw_pixbuf(GDK_DRAWABLE(front_store), NULL, GDK_PIXBUF(backing_store), stored_x - 1, stored_y - 1, stored_x, stored_y,
-				(invalidation_area_x - stored_x) + 1, (invalidation_area_y - stored_y) + 1, GDK_RGB_DITHER_NONE, 0, 0);
+		gdk_draw_pixbuf(GDK_DRAWABLE(front_store), NULL, GDK_PIXBUF(backing_store),
+				invalidation_start_x - 1, invalidation_start_y - 1,
+				invalidation_start_x, invalidation_start_y,
+				(invalidation_end_x - invalidation_start_x) + 1, (invalidation_end_y - invalidation_start_y) + 1,
+				GDK_RGB_DITHER_NONE, 0, 0);
 
 		// Draw a bounding box on the front store
 		if (NULL == line_gc)
@@ -99,10 +144,10 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		gdk_draw_segments(GDK_DRAWABLE(front_store), line_gc, lines, 4);
 
 		// Tell the window system to display the updated front store area
-		tmp_rectangle.x = stored_x;
-		tmp_rectangle.y = stored_y;
-		tmp_rectangle.width = (invalidation_area_x - stored_x) + 1;
-		tmp_rectangle.height = (invalidation_area_y - stored_y) + 1;
+		tmp_rectangle.x = invalidation_start_x;
+		tmp_rectangle.y = invalidation_start_y;
+		tmp_rectangle.width = (invalidation_end_x - invalidation_start_x) + 1;
+		tmp_rectangle.height = (invalidation_end_y - invalidation_start_y) + 1;
 		gdk_window_invalidate_rect(main_drawing_area->window, &tmp_rectangle, TRUE);
 
 		return TRUE;
@@ -132,6 +177,9 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/03/05 13:26:13  vapour
+ * Updated the double buffering invalidation area redrawing code so it handles negative offsets and also will not go out of bounds.
+ *
  * Revision 1.5  2008/03/05 12:52:50  vapour
  * Added initial working code to draw a bounding box when dragging out a new highlight layer.
  *
