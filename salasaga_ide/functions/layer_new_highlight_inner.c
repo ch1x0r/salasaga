@@ -40,7 +40,7 @@
 #include "regenerate_timeline_duration_images.h"
 
 
-void layer_new_highlight_inner(guint release_x, guint release_y)
+void layer_new_highlight_inner(gint release_x, gint release_y)
 {
 	// Local variables
 	gfloat				end_x;						// Right side of the highlight layer
@@ -72,9 +72,39 @@ void layer_new_highlight_inner(guint release_x, guint release_y)
 		return;
 	}
 
-	// Calculate the height and width scaling values for the main drawing area at its present size
-	scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
-	scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+	// Ensure the mouse coordinates can't go out of bounds
+	if (1 > stored_x)
+	{
+		stored_x = 1;
+	}
+	if ((main_drawing_area->allocation.width - 1) < stored_x)
+	{
+		stored_x = main_drawing_area->allocation.width - 1;
+	}
+	if (1 > stored_y)
+	{
+		stored_y = 1;
+	}
+	if ((main_drawing_area->allocation.height - 1) < stored_y)
+	{
+		stored_y = main_drawing_area->allocation.height - 1;
+	}
+	if (1 > release_x)
+	{
+		release_x = 1;
+	}
+	if ((main_drawing_area->allocation.width - 1) < release_x)
+	{
+		release_x = main_drawing_area->allocation.width - 1;
+	}
+	if (1 > release_y)
+	{
+		release_y = 1;
+	}
+	if ((main_drawing_area->allocation.height - 1) < release_y)
+	{
+		release_y = main_drawing_area->allocation.height - 1;
+	}
 
 	// Sort out the mouse coordinates to use
 	if (release_x > stored_x)
@@ -95,6 +125,10 @@ void layer_new_highlight_inner(guint release_x, guint release_y)
 		start_y = release_y;
 		end_y = stored_y;
 	}
+
+	// Calculate the height and width scaling values for the main drawing area at its present size
+	scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
+	scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
 
 	// Work out where the mouse is positioned
 	scaled_x = start_x * scaled_width_ratio;
@@ -207,6 +241,9 @@ void layer_new_highlight_inner(guint release_x, guint release_y)
  * +++++++
  * 
  * $Log$
+ * Revision 1.5  2008/03/05 14:38:31  vapour
+ * Updated to allow the function to receive negative values, and also added bounds checking for the mouse coordinates.
+ *
  * Revision 1.4  2008/03/05 13:40:26  vapour
  * Improved the sorting out of mouse coordinates to use.
  *
