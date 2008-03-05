@@ -36,27 +36,36 @@
 // Flame Edit includes
 #include "../flame-types.h"
 #include "../externs.h"
-#include "detect_collisions.h"
-#include "layer_edit.h"
+#include "display_warning.h"
+#include "layer_new_image_inner.h"
+#include "timeline_edited_x_offset_start.h"
+#include "timeline_edited_y_offset_start.h"
 
 
-gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
-	guint				num_layers;
-	guint				count_int;
+	GdkModifierType		button_state;
+	slide				*current_slide_data;		// Alias to make things easier
+	gint				height;
+	layer				*layer_data;
+	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
+	gint				mouse_x;
+	gint				mouse_y;
+	gint				present_x;
+	gint				present_y;
+	gint				project_x_position;			// X position in the project image
+	gint				project_y_position;			// Y position in the project image
+	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
+	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
+	gboolean			selection_hit;				// Status toggle
+	gchar				*selected_row;				// Holds the number of the row that is selected
+	gint				width;
 
-	GList				*collision_list = NULL;
-	slide				*current_slide_data;	// Alias to make things easier
-	GtkWidget			*list_widget;			// Alias to the timeline widget to make things easier
-	guint				num_collisions;
-	gboolean			selection_hit;			// Status toggle
-	guint				selected_row;			// Holds the number of the row that is selected
-
-	guint				tmp_int;				// Temporary integer
-	GtkTreeViewColumn	*tmp_column;			// Temporary column
-	GString				*tmp_gstring;			// Temporary GString
-	GtkTreePath			*tmp_path;				// Temporary path
+	gdouble				tmp_double;					// Temporary double
+	GtkTreeViewColumn	*tmp_column;				// Temporary column
+	GString				*tmp_gstring;				// Temporary GString
+	GtkTreePath			*tmp_path;					// Temporary path
 
 
 	// Only do this function if we have a backing store available
@@ -65,145 +74,146 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		return TRUE;
 	}
 
-	// Initialise some things
-	current_slide_data = current_slide->data;
-	list_widget = current_slide_data->timeline_widget;
-	selection_hit = FALSE;
+	// Find out where the mouse is positioned, and which buttons and modifier keys are down (active)
+	gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);
 
-	// Check for primary mouse button click
-	if (1 != event->button)
+	// Calculate the height and width scaling values for the main drawing area at its present size
+	scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
+	scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+
+	// Work out where the mouse is positioned
+	project_x_position = mouse_x * scaled_width_ratio;
+	project_y_position = mouse_y * scaled_height_ratio;
+
+	// Code to run if this button release is for the creation of a new image layer
+	if (TYPE_GDK_PIXBUF == new_layer_selected)
 	{
-		// Not a primary mouse click, so return
-		return TRUE;
-	}
+		// Reset the new layer toggle
+		new_layer_selected = TYPE_NONE;
 
-	// Reset the mouse drag toggle
-	mouse_dragging = FALSE;
-
-	// Check if this was a double mouse click.  If it was, open an edit dialog
-	if (GDK_2BUTTON_PRESS == event->type)
-	{
-		// Open an edit dialog
-		layer_edit();
-
-		return TRUE;
-	}
-
-	// Check if this was a triple mouse click.  If it was, ignore it
-	if (GDK_3BUTTON_PRESS == event->type)
-	{
-		return TRUE;
-	}
-
-	// * Do collision detection here to determine if the user has clicked on a layer's object *
-	tmp_gstring = g_string_new(NULL);
-	collision_list = detect_collisions(collision_list, event->x, event->y);
-	if (NULL == collision_list)
-	{
-		// If there was no collision, then select the background layer
-		current_slide_data->layers = g_list_first(current_slide_data->layers);
-		num_layers = g_list_length(current_slide_data->layers);
-		g_string_printf(tmp_gstring, "%d", num_layers - 1);
-		tmp_path = gtk_tree_path_new_from_string(tmp_gstring->str);
-		gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
-
-		// Reset the stored mouse coordinates
-		stored_x = -1;
-		stored_y = -1;
-
-		// Free the memory allocated during the collision detection
-		g_string_free(tmp_gstring, TRUE);
-		g_list_free(collision_list);
-		collision_list = NULL;
+		// Ask the user for the rest of the required details
+		layer_new_image_inner(project_x_position, project_y_position);
 
 		return TRUE;
 	}
 
-	// * To get here there must have been at least one collision *
-
-	// Save the mouse coordinates
-	stored_x = event->x;
-	stored_y = event->y;
-
-	// Determine which layer the user has selected in the timeline
-	tmp_path = gtk_tree_path_new();
-	tmp_column = gtk_tree_view_column_new();
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, &tmp_column);
-	selected_row = atoi(gtk_tree_path_to_string(tmp_path));
-
-	// Is the presently selected layer in the collision list?
-	collision_list = g_list_first(collision_list);
-	num_collisions = g_list_length(collision_list);
-	for (count_int = 0; count_int < num_collisions; count_int++)
+	// If this release matches the end of a mouse drag operation, we process it
+	if (TRUE == mouse_dragging)
 	{
-		collision_list = g_list_first(collision_list);
-		collision_list = g_list_nth(collision_list, count_int);
 
-		current_slide_data->layers = g_list_first(current_slide_data->layers);
-
-		tmp_int = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
-		if (tmp_int == selected_row)
+		// Initialise some things
+		current_slide_data = current_slide->data;
+		list_widget = current_slide_data->timeline_widget;
+		tmp_gstring = g_string_new(NULL);
+		selection_hit = FALSE;
+	
+		// Check for primary mouse button release
+		if (1 == event->button)
 		{
-			// * Yes, the presently selected row is in the collision list *
-			selection_hit = TRUE;
-
-			// If there are further collisions in the collision list, we just move the timeline row selection
-			// to the next collision row, otherwise we wrap to the collision row
-			if (count_int == num_collisions - 1)
+			// Determine which layer is selected in the timeline
+			tmp_path = gtk_tree_path_new();
+			tmp_column = gtk_tree_view_column_new();
+			gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, &tmp_column);
+			selected_row = gtk_tree_path_to_string(tmp_path);
+	
+			// Get its present X and Y offsets
+			current_slide_data->layers = g_list_first(current_slide_data->layers);
+			layer_data = g_list_nth_data(current_slide_data->layers, atoi(selected_row));
+			switch (layer_data->object_type)
 			{
-				// We're at the bottom of the collision hit list, so we wrap back to the start
-				collision_list = g_list_first(collision_list);
-				current_slide_data->layers = g_list_first(current_slide_data->layers);
-				tmp_int = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
-				g_string_printf(tmp_gstring, "%d", tmp_int);
-				tmp_path = gtk_tree_path_new_from_string(tmp_gstring->str);
-				gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
-
-				// Free the memory allocated during the collision detection
-				g_string_free(tmp_gstring, TRUE);
-				g_list_free(collision_list);
-				collision_list = NULL;
-
-				return TRUE;
-			} else
-			{
-				// There are further collision hits, so we just move the selection to the next one
-				collision_list = g_list_next(collision_list);
-				current_slide_data->layers = g_list_first(current_slide_data->layers);
-				tmp_int = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
-				g_string_printf(tmp_gstring, "%d", tmp_int);
-				tmp_path = gtk_tree_path_new_from_string(tmp_gstring->str);
-				gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
-
-				// Draw a bounding box around the selected object
-				// fixme4: Better to do this later, driven from changes in the timelines selected row
-//				draw_bounding_box(widget, ((boundary_box *) collision_list->data)->region_ptr);
-
-				// Free the memory allocated during the collision detection
-				g_string_free(tmp_gstring, TRUE);
-				g_list_free(collision_list);
-				collision_list = NULL;
-
-				return TRUE;
+				case TYPE_EMPTY:
+					// We can't drag an empty layer, so reset things and return
+					mouse_dragging = FALSE;
+					stored_x = -1;
+					stored_y = -1;
+					return TRUE;
+	
+				case TYPE_HIGHLIGHT:
+					present_x = layer_data->x_offset_start;
+					present_y = layer_data->y_offset_start;
+					width = ((layer_highlight *) layer_data->object_data)->width;
+					height = ((layer_highlight *) layer_data->object_data)->height;
+					break;
+	
+				case TYPE_GDK_PIXBUF:
+					// If this is the background layer, then we ignore it
+					if (TRUE == layer_data->background)
+					{
+						mouse_dragging = FALSE;
+						stored_x = -1;
+						stored_y = -1;
+						return TRUE;
+					}
+	
+					// No it's not, so process it
+					present_x = layer_data->x_offset_start;
+					present_y = layer_data->y_offset_start;
+					width = ((layer_image *) layer_data->object_data)->width;
+					height = ((layer_image *) layer_data->object_data)->height;
+					break;
+	
+				case TYPE_MOUSE_CURSOR:
+	
+					// No it's not, so process it
+					present_x = layer_data->x_offset_start;
+					present_y = layer_data->y_offset_start;
+					width = ((layer_mouse *) layer_data->object_data)->width;
+					height = ((layer_mouse *) layer_data->object_data)->height;
+					break;
+	
+				case TYPE_TEXT:
+					present_x = layer_data->x_offset_start;
+					present_y = layer_data->y_offset_start;
+					width = ((layer_text *) layer_data->object_data)->rendered_width;
+					height = ((layer_text *) layer_data->object_data)->rendered_height;
+					break;
+	
+				default:
+					display_warning("Error ED32: Unknown layer type\n");
+					return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
 			}
+
+			// Work out and set the new X offset for the layer object
+			// fixme3: This needs to be a lot more accurate
+			tmp_double = mouse_x - stored_x;
+			tmp_double = (tmp_double * zoom) / 100;
+			tmp_double = present_x + tmp_double;
+			if (0 >= tmp_double)
+			{
+				tmp_double = 0;
+			}
+			if (tmp_double + width >= project_width)
+			{
+				tmp_double = project_width - width;
+			}
+			g_string_printf(tmp_gstring, "%.0f", tmp_double);
+			timeline_edited_x_offset_start(NULL, selected_row, tmp_gstring->str, NULL);
+	
+			// Work out and set the new Y offset for the layer object
+			// fixme3: This needs to be a lot more accurate
+			tmp_double = mouse_y - stored_y;
+			tmp_double = (tmp_double * zoom) / 100;
+			tmp_double = present_y + tmp_double;
+			if (0 >= tmp_double)
+			{
+				tmp_double = 0;
+			}
+			if (tmp_double + height >= project_height)
+			{
+				tmp_double = project_height - height;
+			}
+			g_string_printf(tmp_gstring, "%.0f", tmp_double);
+			timeline_edited_y_offset_start(NULL, selected_row, tmp_gstring->str, NULL);
+	
+			// Reset the mouse drag switch and related info
+			mouse_dragging = FALSE;
+			stored_x = -1;
+			stored_y = -1;
+	
+			// Free the allocated memory
+			g_free(selected_row);
 		}
 	}
-
-	// * To get here, the presently selected layer wasn't in the collision list *
-
-	// The presently selected row is not in the collision list, so move the selection row to the first collision
-	collision_list = g_list_first(collision_list);
-	current_slide_data->layers = g_list_first(current_slide_data->layers);
-	tmp_int = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
-	g_string_printf(tmp_gstring, "%d", tmp_int);
-	tmp_path = gtk_tree_path_new_from_string(tmp_gstring->str);
-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
-
-	// Free the memory allocated during the collision detection
-	g_string_free(tmp_gstring, TRUE);
-	g_list_free(collision_list);
-	collision_list = NULL;
-
 	return TRUE;
 }
 
@@ -213,6 +223,9 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/03/05 09:21:20  vapour
+ * Added initial code to recognise button release events for the creation of a new image layer.
+ *
  * Revision 1.5  2008/02/04 17:21:32  vapour
  *  + Removed unnecessary includes.
  *
