@@ -60,6 +60,10 @@ void layer_new_image(void)
 
 	// Set a toggle so the release button callback will know to do the rest
 	new_layer_selected = TYPE_GDK_PIXBUF;
+
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Please click the insertion point");
+	gdk_flush();
 }
 
 
@@ -68,6 +72,9 @@ void layer_new_image(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.12  2008/03/05 09:26:20  vapour
+ * Added instructions to the status bar.
+ *
  * Revision 1.11  2008/03/05 09:22:51  vapour
  * Moved most of the code into the new inner version of this function.
  *
