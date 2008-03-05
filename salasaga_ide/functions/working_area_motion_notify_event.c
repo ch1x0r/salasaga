@@ -62,11 +62,11 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// Ensure the invalidation (redraw) area is set to the maximum size that has been selected for this highlight
 		if (mouse_x < invalidation_start_x)
 		{
-			invalidation_start_x = mouse_x;
+			invalidation_start_x = mouse_x - 1;
 		}
 		if (mouse_y < invalidation_start_y)
 		{
-			invalidation_start_y = mouse_y;
+			invalidation_start_y = mouse_y - 1;
 		}
 		if (mouse_x > invalidation_end_x)
 		{
@@ -177,6 +177,9 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/03/05 13:48:50  vapour
+ * Tweaked the top and left positions for the double buffering invalidation area, to remove an occasional off by one error.
+ *
  * Revision 1.6  2008/03/05 13:26:13  vapour
  * Updated the double buffering invalidation area redrawing code so it handles negative offsets and also will not go out of bounds.
  *
