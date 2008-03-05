@@ -30,7 +30,7 @@ extern "C" {
 #endif // __cplusplus
 
 // Variables defined elsewhere
-extern GdkPixmap			*backing_store;
+extern GdkPixbuf			*backing_store;
 extern GList				*boundary_list;
 extern guint				capture_height;
 extern guint				capture_width;
@@ -39,8 +39,6 @@ extern guint				capture_y;
 extern GList				*current_slide;
 extern guint				debug_level;
 extern gfloat				export_time_counter;
-extern GString				*icon_extension;
-extern GString				*icon_path;
 extern GString				*file_name;
 extern gboolean				film_strip_being_resized;
 extern GtkTreeViewColumn	*film_strip_column;
@@ -49,6 +47,11 @@ extern GtkListStore			*film_strip_store;
 extern GtkWidget			*film_strip_view;
 extern gchar				*font_path;
 extern guint				frames_per_second;
+extern GdkPixmap			*front_store;
+extern GString				*icon_extension;
+extern GString				*icon_path;
+extern gint					invalidation_area_x;
+extern gint					invalidation_area_y;
 extern GtkWidget			*main_area;
 extern GtkWidget			*main_drawing_area;
 extern GtkWidget			*main_window;
@@ -136,6 +139,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.39  2008/03/05 12:35:12  vapour
+ * Added global variables to support double buffering.
+ *
  * Revision 1.38  2008/03/05 09:10:35  vapour
  * Added a new global variable, to assist with the visual creation of new layers.
  *

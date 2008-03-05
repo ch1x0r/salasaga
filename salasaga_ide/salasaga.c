@@ -69,7 +69,7 @@
 
 
 // Global variables
-GdkPixmap				*backing_store;				// Pixel buffer most drawing operations are done on
+GdkPixbuf				*backing_store;				// Backing store for double buffering the workspace area			
 GList					*boundary_list = NULL;		// Stores a linked list of layer object boundaries
 guint					capture_height;				// Height for screen captures
 guint					capture_width;				// Width for screen captures
@@ -86,8 +86,11 @@ GtkListStore			*film_strip_store;			// Film strip list store
 GtkWidget				*film_strip_view;			// The view of the film strip list store
 gchar					*font_path;					// Points to the base location for Flames font files
 guint					frames_per_second;			// Number of frames per second
+GdkPixmap				*front_store;				// Front store for double buffering the workspace area
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
 GString					*icon_path;					// Points to the base location for Flames icon files
+gint					invalidation_area_x;		// Bottom right corner of the front store area to invalidate
+gint					invalidation_area_y;		// Bottom right corner of the front store area to invalidate
 GtkWidget				*main_area;					// Widget for the onscreen display
 GtkWidget				*main_drawing_area;			// Widget for the drawing area
 GtkWidget				*main_window;				// Widget for the main window
@@ -662,6 +665,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.89  2008/03/05 12:35:12  vapour
+ * Added global variables to support double buffering.
+ *
  * Revision 1.88  2008/03/05 09:10:35  vapour
  * Added a new global variable, to assist with the visual creation of new layers.
  *
