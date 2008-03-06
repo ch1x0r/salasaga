@@ -60,6 +60,13 @@ extern "C" {
 #define V_SPACES			256
 #define V_UNDERSCORES		512
 
+// The end behaviour types
+enum {
+	BEHAVIOUR_STOP,
+	BEHAVIOUR_LOOP_PLAY,
+	BEHAVIOUR_LOOP_STOP
+};
+
 // The known layer types
 enum {
 	TYPE_NONE,
@@ -135,6 +142,7 @@ enum
 {
 	COLOUR_COMP8,
 	COLOUR_COMP16,
+	END_BEHAVIOUR,
 	EXTERNAL_LINK,
 	EXTERNAL_LINK_WINDOW,
 	FILE_PATH,
@@ -312,6 +320,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.67  2008/03/06 00:13:46  vapour
+ * Added initial enum and validation field info to support the new end behaviour project preference.
+ *
  * Revision 1.66  2008/03/05 09:09:24  vapour
  * Added a None layer type as a placeholder.
  *
