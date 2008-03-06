@@ -175,7 +175,7 @@ void menu_file_save(void)
 	document_pointer = xmlNewDoc((const xmlChar *) "1.0");
 	if (NULL == document_pointer)
 	{
-		display_warning("Error ED19: Error creating the XML save document\n");
+		display_warning("Error ED19: Error creating the XML save document.");
 		return;
 	}
 
@@ -183,7 +183,7 @@ void menu_file_save(void)
 	root_node = xmlNewDocRawNode(document_pointer, NULL, (const xmlChar *) "flame_project", NULL);
 	if (NULL == root_node)
 	{
-		display_warning("Error ED21: Error creating the root node\n");
+		display_warning("Error ED21: Error creating the root node.");
 		return;
 	}
 
@@ -194,22 +194,22 @@ void menu_file_save(void)
 	meta_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "meta-data", NULL);
 	if (NULL == meta_pointer)
 	{
-		display_warning("Error ED25: Error creating the meta-data container\n");
+		display_warning("Error ED25: Error creating the meta-data container.");
 		return;
 	}
 
 	// Add the save format version number to the XML document
-	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.4");
+	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.5");
 
     // Create the preferences container
 	pref_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "preferences", NULL);
 	if (NULL == pref_pointer)
 	{
-		display_warning("Error ED20: Error creating the preferences container\n");
+		display_warning("Error ED20: Error creating the preferences container.");
 		return;
 	}
 
-	// Add the preferences to the XML document
+	// Add the project preferences to the XML document
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_name", (const xmlChar *) project_name->str);
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "output_folder", (const xmlChar *) output_folder->str);
 	g_string_printf(tmp_gstring, "%u", output_width);
@@ -224,12 +224,30 @@ void menu_file_save(void)
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "slide_length", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", frames_per_second);
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "frames_per_second", (const xmlChar *) tmp_gstring->str);
+	switch (end_behaviour)
+	{
+		case BEHAVIOUR_STOP:
+			xmlNewChild(pref_pointer, NULL, (const xmlChar *) "end_behaviour", (const xmlChar *) "stop");
+			break;
+
+		case BEHAVIOUR_LOOP_PLAY:
+			xmlNewChild(pref_pointer, NULL, (const xmlChar *) "end_behaviour", (const xmlChar *) "loop_play");
+			break;
+
+		case BEHAVIOUR_LOOP_STOP:
+			xmlNewChild(pref_pointer, NULL, (const xmlChar *) "end_behaviour", (const xmlChar *) "loop_stop");
+			break;
+
+		default:
+			display_warning("Error ED278: Error creating the end behaviour value.");
+			return;
+	}
 
     // Create a container for the slides
 	slide_root = xmlNewChild(root_node, NULL, (const xmlChar *) "slides", NULL);
 	if (NULL == slide_root)
 	{
-		display_warning("Error ED22: Error creating the slides container\n");
+		display_warning("Error ED22: Error creating the slides container.");
 		return;
 	}
 
@@ -272,6 +290,11 @@ void menu_file_save(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2008/03/06 00:17:32  vapour
+ * + Tweaked a few error messages.
+ * + Added code to save the new end behaviour project preference.
+ * + Incremented the file format version number to 2.5.
+ *
  * Revision 1.14  2008/03/03 02:57:16  vapour
  * Updated status bar feedback message.
  *
