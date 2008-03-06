@@ -38,6 +38,7 @@ extern guint				capture_x;
 extern guint				capture_y;
 extern GList				*current_slide;
 extern guint				debug_level;
+extern guint				end_behaviour;
 extern gfloat				export_time_counter;
 extern GString				*file_name;
 extern gboolean				film_strip_being_resized;
@@ -141,6 +142,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.41  2008/03/06 00:10:02  vapour
+ * Added a global variable to hold the desired end behaviour.
+ *
  * Revision 1.40  2008/03/05 13:22:51  vapour
  * Expanded out the double buffering invalidation area global variables.
  *

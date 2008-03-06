@@ -77,6 +77,7 @@ guint					capture_x;					// X offset for screen captures
 guint					capture_y;					// Y offset for screen captures
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
 guint					debug_level = 0;			// Used to indicate debugging level
+guint					end_behaviour = BEHAVIOUR_STOP;  // Holds the end behaviour for output animations 
 gfloat					export_time_counter;		// Used when exporting, holds the number of seconds thus far
 GString					*file_name = NULL;			// Holds the file name the project is saved as
 gboolean				film_strip_being_resized;	// Toggle to indicate if the film strip is being resized
@@ -667,6 +668,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.91  2008/03/06 00:10:02  vapour
+ * Added a global variable to hold the desired end behaviour.
+ *
  * Revision 1.90  2008/03/05 13:22:51  vapour
  * Expanded out the double buffering invalidation area global variables.
  *
