@@ -84,6 +84,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gboolean			unknown_resolution;
 
 	SWFDisplayItem		display_list_object;		// Temporary display list object
+	SWFAction			end_action;					// The actionscript for the end behaviour
 	SWFShape			empty_layer_shape;			// Temporary swf shape used when constructing empty layers
 	SWFFillStyle		empty_layer_fill;			// Fill style used when constructing empty layer shapes
 	SWFFont				font_object;				// The font we use gets loaded into this
@@ -1272,6 +1273,26 @@ gint menu_export_flash_inner(gchar *output_filename)
 		g_free(swf_timing_array);
 	}
 
+	// If the end behaviour is to loop, then do that
+	switch (end_behaviour)
+	{
+		case BEHAVIOUR_LOOP_PLAY:
+			end_action = newSWFAction("_root.playing = true; _root.gotoAndPlay(2);");
+			SWFMovie_add(swf_movie, (SWFBlock) end_action);
+			break;
+
+		case BEHAVIOUR_LOOP_STOP:
+			end_action = newSWFAction("_root.playing = false; _root.gotoAndPlay(1);");
+			SWFMovie_add(swf_movie, (SWFBlock) end_action);
+			break;
+
+		case BEHAVIOUR_STOP:
+		default:
+			end_action = newSWFAction("_root.playing = false; _root.stop();");
+			SWFMovie_add(swf_movie, (SWFBlock) end_action);
+			break;
+	}
+
 	// Output some debugging info if requested
 	if (debug_level)
 	{
@@ -1310,6 +1331,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.63  2008/03/06 00:18:40  vapour
+ * Added code to action the new end behaviour project preference.
+ *
  * Revision 1.62  2008/03/03 08:20:22  vapour
  * Replaced text element positioning system with new working version.  THAT took a lot of effort. :-/
  *
