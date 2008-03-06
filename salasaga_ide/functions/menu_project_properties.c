@@ -41,10 +41,12 @@ void menu_project_properties(void)
 {
 	// Local variables
 	guint				guint_val;					// Temporary guint value used for validation
+	gint				gint_val;					// Temporary guint value
 	GtkDialog			*main_dialog;				// Widget for the main dialog
 	GtkWidget			*proj_dialog_table;			// Table used for neat layout of the labels and fields in project preferences
 	gint				proj_row_counter;			// Used when building the project preferences dialog box
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	guint				valid_end_behaviour;		// Receives the new end behaviour once validated
 	guint				valid_fps;					// Receives the new project fps once validated
 	GString				*valid_output_folder;		// Receives the new output folder once validated
 	GString				*valid_proj_name;			// Receives the new project name once validated
@@ -73,6 +75,9 @@ void menu_project_properties(void)
 
 	GtkWidget			*label_project_height;		// Project height
 	GtkWidget			*entry_project_height;		//
+
+	GtkWidget			*label_end_behaviour;		// End behaviour
+	GtkWidget			*selector_end_behaviour;	//
 
 	GString				*tmp_gstring;				// Temporary GString used for constructing text
 
@@ -157,6 +162,30 @@ void menu_project_properties(void)
 	gtk_entry_set_text(GTK_ENTRY(entry_project_height), tmp_gstring->str);
 	gtk_editable_set_editable(GTK_EDITABLE(entry_project_height), FALSE);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_height), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	proj_row_counter = proj_row_counter + 1;
+
+	// End behaviour
+	label_end_behaviour = gtk_label_new("End behaviour: ");
+	gtk_misc_set_alignment(GTK_MISC(label_end_behaviour), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_end_behaviour), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	selector_end_behaviour = gtk_combo_box_new_text();
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), "Stop");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), "Loop and play");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), "Loop and stop");
+	switch (end_behaviour)
+	{
+		case BEHAVIOUR_LOOP_PLAY:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_end_behaviour), BEHAVIOUR_LOOP_PLAY);
+			break;
+
+		case BEHAVIOUR_LOOP_STOP:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_end_behaviour), BEHAVIOUR_LOOP_STOP);
+			break;
+
+		default:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_end_behaviour), BEHAVIOUR_STOP);
+	}
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(selector_end_behaviour), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Ensure everything will show
 	gtk_widget_show_all(GTK_WIDGET(main_dialog));
@@ -243,6 +272,20 @@ void menu_project_properties(void)
 			valid_fps = *validated_guint;
 			g_free(validated_guint);
 		}
+
+		// Retrieve the new end behaviour input
+		gint_val = gtk_combo_box_get_active(GTK_COMBO_BOX(selector_end_behaviour));
+		if (-1 == gint_val)
+		{
+			// A -1 return means no value was selected
+			display_warning("Error ED277: There was something wrong with the end behaviour value selected.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			// A value was selected
+			valid_end_behaviour = gint_val;
+		}
+
 	} while (FALSE == useable_input);
 
 	// * We only get here after all input is considered valid *
@@ -268,6 +311,9 @@ void menu_project_properties(void)
 	// Frames per second
 	frames_per_second = valid_fps;
 
+	// End behaviour
+	end_behaviour = valid_end_behaviour;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project properties updated");
 	gdk_flush();
@@ -282,6 +328,9 @@ void menu_project_properties(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/03/06 00:15:40  vapour
+ * Added an end behaviour project preference.
+ *
  * Revision 1.7  2008/03/03 02:57:47  vapour
  * Added status bar feedback message.
  *
