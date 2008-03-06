@@ -72,40 +72,6 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 		return;
 	}
 
-	// Ensure the mouse coordinates can't go out of bounds
-	if (1 > stored_x)
-	{
-		stored_x = 1;
-	}
-	if ((main_drawing_area->allocation.width - 1) < stored_x)
-	{
-		stored_x = main_drawing_area->allocation.width - 1;
-	}
-	if (1 > stored_y)
-	{
-		stored_y = 1;
-	}
-	if ((main_drawing_area->allocation.height - 1) < stored_y)
-	{
-		stored_y = main_drawing_area->allocation.height - 1;
-	}
-	if (1 > release_x)
-	{
-		release_x = 1;
-	}
-	if ((main_drawing_area->allocation.width - 1) < release_x)
-	{
-		release_x = main_drawing_area->allocation.width - 1;
-	}
-	if (1 > release_y)
-	{
-		release_y = 1;
-	}
-	if ((main_drawing_area->allocation.height - 1) < release_y)
-	{
-		release_y = main_drawing_area->allocation.height - 1;
-	}
-
 	// Sort out the mouse coordinates to use
 	if (release_x > stored_x)
 	{
@@ -126,6 +92,40 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 		end_y = stored_y;
 	}
 
+	// Ensure the mouse coordinates can't go out of bounds
+	if (1 > start_x)
+	{
+		start_x = 1;
+	}
+	if ((main_drawing_area->allocation.width - 5) < start_x)
+	{
+		start_x = main_drawing_area->allocation.width - 5;
+	}
+	if (1 > start_y)
+	{
+		start_y = 1;
+	}
+	if ((main_drawing_area->allocation.height - 5) < start_y)
+	{
+		start_y = main_drawing_area->allocation.height - 5;
+	}
+	if (1 > end_x)
+	{
+		end_x = 1;
+	}
+	if ((main_drawing_area->allocation.width - 1) < end_x)
+	{
+		end_x = main_drawing_area->allocation.width - 1;
+	}
+	if (1 > end_y)
+	{
+		end_y = 1;
+	}
+	if ((main_drawing_area->allocation.height - 1) < end_y)
+	{
+		end_y = main_drawing_area->allocation.height - 1;
+	}
+
 	// Calculate the height and width scaling values for the main drawing area at its present size
 	scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
 	scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
@@ -135,6 +135,14 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	scaled_y = start_y * scaled_height_ratio;
 	mouse_drag_width = roundf((gfloat) (end_x - start_x) * scaled_width_ratio);
 	mouse_drag_height = roundf((gfloat) (end_y - start_y) * scaled_height_ratio);
+	if (0 == mouse_drag_width)
+	{
+		mouse_drag_width = 5;
+	}
+	if (0 == mouse_drag_height)
+	{
+		mouse_drag_height = 5;
+	}
 
 	// * Create a new highlight layer in memory using reasonable defaults *
 
@@ -241,6 +249,9 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
  * +++++++
  * 
  * $Log$
+ * Revision 1.6  2008/03/06 00:53:14  vapour
+ * Improved the boundary detection code, and added enforcement for the minimum highlight size to be 5 x 5.
+ *
  * Revision 1.5  2008/03/05 14:38:31  vapour
  * Updated to allow the function to receive negative values, and also added bounds checking for the mouse coordinates.
  *
