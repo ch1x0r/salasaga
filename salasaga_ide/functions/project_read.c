@@ -51,6 +51,7 @@ gboolean flame_read(gchar *filename)
 	// Local variables
 	gint				data_length;				// Number of image data bytes a layer says it stores
 	xmlDocPtr			document;					// Holds a pointer to the XML document
+	xmlChar				*end_behaviour_data = NULL;
 	GError				*error = NULL;				// Pointer to error return structure
 	GString				*error_string;				// Used to create error strings
 	GtkTreeIter			film_strip_iter;
@@ -77,6 +78,7 @@ gboolean flame_read(gchar *filename)
 	xmlNodePtr			this_node;					// Temporary pointer
 	xmlNodePtr			this_slide;					// Temporary pointer
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	guint				valid_end_behaviour;		// Receives the new end behaviour once validated
 	guint				valid_fps;					// Receives the new fps once validated
 	guint				valid_output_height;		// Receives the new output height once validated
 	GString				*valid_output_folder;		// Receives the new output folder once validated
@@ -245,6 +247,11 @@ gboolean flame_read(gchar *filename)
 			// Frames per second found.  Extract and store it
 			fps_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
 		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "end_behaviour")))
+		{
+			// End behaviour found.  Extract and store it
+			end_behaviour_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
 		this_node = this_node->next;
 	}
 
@@ -396,6 +403,39 @@ gboolean flame_read(gchar *filename)
 			g_free(validated_guint);
 			xmlFree(fps_data);
 		}
+	}
+
+	// Retrieve the new end behaviour input
+	if (NULL != end_behaviour_data)
+	{
+		validated_string = validate_value(END_BEHAVIOUR, V_CHAR, end_behaviour_data);
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED279: There was something wrong with the end behaviour value in the project file.");
+			useable_input = FALSE;
+		} else
+		{
+			if (0 == g_ascii_strncasecmp(validated_string->str, "loop_play", 9))
+			{
+				valid_end_behaviour = BEHAVIOUR_LOOP_PLAY;
+			} else
+			{
+				if (0 == g_ascii_strncasecmp(validated_string->str, "loop_stop", 9))
+				{
+					valid_end_behaviour = BEHAVIOUR_LOOP_STOP;
+				} else
+				{
+					valid_end_behaviour = BEHAVIOUR_STOP;
+				}
+			}
+			g_string_free(validated_string, TRUE);
+			xmlFree(end_behaviour_data);
+			validated_string = NULL;
+		}
+	} else
+	{
+		// If no end behaviour value was present in the project file, we default to "Stop"
+		valid_end_behaviour = BEHAVIOUR_STOP;
 	}
 
 	// * Preferences are loaded, so now load the slides *
@@ -1775,6 +1815,9 @@ gboolean flame_read(gchar *filename)
 		frames_per_second = valid_fps;
 	}
 
+	// Load End behaviour
+	end_behaviour = valid_end_behaviour;
+
 	// Make the new slides active, and update them to fill in their remaining pieces
 	slides = g_list_first(new_slides);
 	num_slides = g_list_length(slides);
@@ -1819,6 +1862,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.22  2008/03/06 00:19:43  vapour
+ * Added code to read in the new end behaviour project preference.
+ *
  * Revision 1.21  2008/03/05 03:03:55  vapour
  * Added final remaining code to validate input from project files.
  *
