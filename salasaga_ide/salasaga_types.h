@@ -149,6 +149,8 @@ enum
 	FOLDER_PATH,
 	FONT_SIZE,
 	FRAME_NUMBER,
+	HIGHLIGHT_HEIGHT,
+	HIGHLIGHT_WIDTH,
 	ICON_HEIGHT,
 	IMAGE_DATA,
 	IMAGE_DATA_LENGTH,
@@ -320,6 +322,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.68  2008/03/07 07:25:14  vapour
+ * Added validation field entries for highlight width and highlight height.
+ *
  * Revision 1.67  2008/03/06 00:13:46  vapour
  * Added initial enum and validation field info to support the new end behaviour project preference.
  *

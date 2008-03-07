@@ -39,6 +39,8 @@ validatation_entry		valid_fields[] =
 	{ FOLDER_PATH,			"Full path to a folder",				V_CHAR,				V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
 	{ FONT_SIZE,			"Font size",							V_FLOAT_UNSIGNED,	V_NONE,		0,		200 },
 	{ FRAME_NUMBER,			"A frame number",						V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ HIGHLIGHT_HEIGHT,		"Height of a highlight layer",			V_INT_UNSIGNED,		V_NONE,		5,		4096 },
+	{ HIGHLIGHT_WIDTH,		"Width of a highlight layer",			V_INT_UNSIGNED,		V_NONE,		5,		4096 },
 	{ ICON_HEIGHT,			"Height of the tool bar icons",			V_INT_UNSIGNED,		V_NONE,		0,		80 },
 	{ IMAGE_DATA,			"Base64 encoded image data",			V_CHAR,				V_EQUALS | V_FORWARD_SLASHES | V_NEW_LINES | V_PLUSES,		0,		-1 },
 	{ IMAGE_DATA_LENGTH,	"Length in bytes of image data",		V_INT_UNSIGNED,		V_NONE,		0,		10485760 },
@@ -78,6 +80,9 @@ validatation_entry		valid_fields[] =
  * +++++++
  * 
  * $Log$
+ * Revision 1.15  2008/03/07 07:25:14  vapour
+ * Added validation field entries for highlight width and highlight height.
+ *
  * Revision 1.14  2008/03/06 00:14:27  vapour
  * Added validation field entry to support the new end behaviour project preference.
  *
