@@ -97,17 +97,17 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	{
 		start_x = 1;
 	}
-	if ((main_drawing_area->allocation.width - 5) < start_x)
+	if ((main_drawing_area->allocation.width - valid_fields[HIGHLIGHT_WIDTH].min_value) < start_x)
 	{
-		start_x = main_drawing_area->allocation.width - 5;
+		start_x = main_drawing_area->allocation.width - valid_fields[HIGHLIGHT_WIDTH].min_value;
 	}
 	if (1 > start_y)
 	{
 		start_y = 1;
 	}
-	if ((main_drawing_area->allocation.height - 5) < start_y)
+	if ((main_drawing_area->allocation.height - valid_fields[HIGHLIGHT_HEIGHT].min_value) < start_y)
 	{
-		start_y = main_drawing_area->allocation.height - 5;
+		start_y = main_drawing_area->allocation.height - valid_fields[HIGHLIGHT_HEIGHT].min_value;
 	}
 	if (1 > end_x)
 	{
@@ -137,11 +137,11 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	mouse_drag_height = roundf((gfloat) (end_y - start_y) * scaled_height_ratio);
 	if (0 == mouse_drag_width)
 	{
-		mouse_drag_width = 5;
+		mouse_drag_width = valid_fields[HIGHLIGHT_WIDTH].min_value;
 	}
 	if (0 == mouse_drag_height)
 	{
-		mouse_drag_height = 5;
+		mouse_drag_height = valid_fields[HIGHLIGHT_HEIGHT].min_value;
 	}
 
 	// * Create a new highlight layer in memory using reasonable defaults *
@@ -249,6 +249,9 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
  * +++++++
  * 
  * $Log$
+ * Revision 1.7  2008/03/07 07:26:26  vapour
+ * Updated to use the new validation field entries.
+ *
  * Revision 1.6  2008/03/06 00:53:14  vapour
  * Improved the boundary detection code, and added enforcement for the minimum highlight size to be 5 x 5.
  *

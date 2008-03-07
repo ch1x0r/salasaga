@@ -1059,7 +1059,7 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "width")))
 									{
 										// Get the width
-										validated_guint = validate_value(LAYER_WIDTH, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(HIGHLIGHT_WIDTH, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED240: There was something wrong with a layer width value in the project file.");
@@ -1074,7 +1074,7 @@ gboolean flame_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "height")))
 									{
 										// Get the height
-										validated_guint = validate_value(LAYER_HEIGHT, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(HIGHLIGHT_HEIGHT, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED241: There was something wrong with a layer height value in the project file.");
@@ -1862,6 +1862,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.23  2008/03/07 07:27:04  vapour
+ * Updated to use the new validation field entries.
+ *
  * Revision 1.22  2008/03/06 00:19:43  vapour
  * Added code to read in the new end behaviour project preference.
  *

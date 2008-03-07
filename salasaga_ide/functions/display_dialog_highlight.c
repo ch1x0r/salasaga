@@ -153,7 +153,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the width input
-	width_button = gtk_spin_button_new_with_range(0, project_width, 10);
+	width_button = gtk_spin_button_new_with_range(0, valid_fields[HIGHLIGHT_WIDTH].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(width_button), tmp_highlight_ob->width);
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
@@ -164,7 +164,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the height input
-	height_button = gtk_spin_button_new_with_range(0, project_height, 10);
+	height_button = gtk_spin_button_new_with_range(0, valid_fields[HIGHLIGHT_HEIGHT].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(height_button), tmp_highlight_ob->height);
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
@@ -289,7 +289,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 
 		// Retrieve the new highlight width
 		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(width_button));
-		validated_guint = validate_value(LAYER_WIDTH, V_INT_UNSIGNED, &guint_val);
+		validated_guint = validate_value(HIGHLIGHT_WIDTH, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
 			display_warning("Error ED148: There was something wrong with the highlight width value.  Please try again.");
@@ -302,7 +302,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 
 		// Retrieve the new highlight height
 		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(height_button));
-		validated_guint = validate_value(LAYER_HEIGHT, V_INT_UNSIGNED, &guint_val);
+		validated_guint = validate_value(HIGHLIGHT_HEIGHT, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
 			display_warning("Error ED149: There was something wrong with the highlight height value.  Please try again.");
@@ -395,6 +395,9 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
  * +++++++
  * 
  * $Log$
+ * Revision 1.8  2008/03/07 07:28:11  vapour
+ * Updated to use the new validation field entries.
+ *
  * Revision 1.7  2008/02/20 21:01:42  vapour
  * Fixed a minor typo.
  *
