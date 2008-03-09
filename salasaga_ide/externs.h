@@ -70,6 +70,7 @@ extern GtkComboBox			*resolution_selector;
 extern GtkWidget			*right_side;
 extern gboolean				screenshots_enabled;
 extern GList				*slides;
+extern guint				start_behaviour;
 extern GtkWidget			*status_bar;
 extern guint				statusbar_context;
 extern gint					stored_x;
@@ -142,6 +143,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.42  2008/03/09 14:49:32  vapour
+ * Added global variable to hold the project preference for start behaviour.
+ *
  * Revision 1.41  2008/03/06 00:10:02  vapour
  * Added a global variable to hold the desired end behaviour.
  *

@@ -77,7 +77,7 @@ guint					capture_x;					// X offset for screen captures
 guint					capture_y;					// Y offset for screen captures
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
 guint					debug_level = 0;			// Used to indicate debugging level
-guint					end_behaviour = BEHAVIOUR_STOP;  // Holds the end behaviour for output animations 
+guint					end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations 
 gfloat					export_time_counter;		// Used when exporting, holds the number of seconds thus far
 GString					*file_name = NULL;			// Holds the file name the project is saved as
 gboolean				film_strip_being_resized;	// Toggle to indicate if the film strip is being resized
@@ -109,6 +109,7 @@ GtkComboBox				*resolution_selector;		// Widget for the resolution selector
 GtkWidget				*right_side;				// Widget for the right side area
 gboolean				screenshots_enabled = FALSE;  // Toggle for whether to enable screenshots
 GList					*slides = NULL;				// Linked list holding the slide info
+guint					start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
 GtkWidget				*status_bar;				// Widget for the status bar
 guint					statusbar_context;			// Context id for the status bar messages
 gint					stored_x;					// X co-ordinate of the mouse last click
@@ -668,6 +669,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.92  2008/03/09 14:49:32  vapour
+ * Added global variable to hold the project preference for start behaviour.
+ *
  * Revision 1.91  2008/03/06 00:10:02  vapour
  * Added a global variable to hold the desired end behaviour.
  *
