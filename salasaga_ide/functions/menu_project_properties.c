@@ -52,6 +52,7 @@ void menu_project_properties(void)
 	GString				*valid_proj_name;			// Receives the new project name once validated
 	GString				*valid_project_folder;		// Receives the new project folder once validated
 	guint				valid_slide_length;			// Receives the new project default slide length once validated
+	guint				valid_start_behaviour;		// Receives the new start behaviour once validated
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
@@ -75,6 +76,9 @@ void menu_project_properties(void)
 
 	GtkWidget			*label_project_height;		// Project height
 	GtkWidget			*entry_project_height;		//
+
+	GtkWidget			*label_start_behaviour;		// Start behaviour
+	GtkWidget			*selector_start_behaviour;	//
 
 	GtkWidget			*label_end_behaviour;		// End behaviour
 	GtkWidget			*selector_end_behaviour;	//
@@ -164,6 +168,25 @@ void menu_project_properties(void)
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_height), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
 
+	// Start behaviour
+	label_start_behaviour = gtk_label_new("Start behaviour: ");
+	gtk_misc_set_alignment(GTK_MISC(label_start_behaviour), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_start_behaviour), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	selector_start_behaviour = gtk_combo_box_new_text();
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_start_behaviour), "Paused");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_start_behaviour), "Play");
+	switch (start_behaviour)
+	{
+		case START_BEHAVIOUR_PLAY:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_start_behaviour), START_BEHAVIOUR_PLAY);
+			break;
+
+		default:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_start_behaviour), START_BEHAVIOUR_PAUSED);
+	}
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(selector_start_behaviour), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	proj_row_counter = proj_row_counter + 1;
+
 	// End behaviour
 	label_end_behaviour = gtk_label_new("End behaviour: ");
 	gtk_misc_set_alignment(GTK_MISC(label_end_behaviour), 0, 0.5);
@@ -174,16 +197,16 @@ void menu_project_properties(void)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), "Loop and stop");
 	switch (end_behaviour)
 	{
-		case BEHAVIOUR_LOOP_PLAY:
-			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_end_behaviour), BEHAVIOUR_LOOP_PLAY);
+		case END_BEHAVIOUR_LOOP_PLAY:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_end_behaviour), END_BEHAVIOUR_LOOP_PLAY);
 			break;
 
-		case BEHAVIOUR_LOOP_STOP:
-			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_end_behaviour), BEHAVIOUR_LOOP_STOP);
+		case END_BEHAVIOUR_LOOP_STOP:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_end_behaviour), END_BEHAVIOUR_LOOP_STOP);
 			break;
 
 		default:
-			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_end_behaviour), BEHAVIOUR_STOP);
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_end_behaviour), END_BEHAVIOUR_STOP);
 	}
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(selector_end_behaviour), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -273,6 +296,19 @@ void menu_project_properties(void)
 			g_free(validated_guint);
 		}
 
+		// Retrieve the new start behaviour input
+		gint_val = gtk_combo_box_get_active(GTK_COMBO_BOX(selector_start_behaviour));
+		if (-1 == gint_val)
+		{
+			// A -1 return means no value was selected
+			display_warning("Error ED280: There was something wrong with the start behaviour value selected.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			// A value was selected
+			valid_start_behaviour = gint_val;
+		}
+
 		// Retrieve the new end behaviour input
 		gint_val = gtk_combo_box_get_active(GTK_COMBO_BOX(selector_end_behaviour));
 		if (-1 == gint_val)
@@ -311,6 +347,9 @@ void menu_project_properties(void)
 	// Frames per second
 	frames_per_second = valid_fps;
 
+	// Start behaviour
+	start_behaviour = valid_start_behaviour;
+
 	// End behaviour
 	end_behaviour = valid_end_behaviour;
 
@@ -328,6 +367,9 @@ void menu_project_properties(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.9  2008/03/09 14:57:09  vapour
+ * Renamed the enums for end behaviour, added a Start Behaviour option to the project preferences dialog.
+ *
  * Revision 1.8  2008/03/06 00:15:40  vapour
  * Added an end behaviour project preference.
  *
