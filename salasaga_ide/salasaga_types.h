@@ -62,9 +62,15 @@ extern "C" {
 
 // The end behaviour types
 enum {
-	BEHAVIOUR_STOP,
-	BEHAVIOUR_LOOP_PLAY,
-	BEHAVIOUR_LOOP_STOP
+	END_BEHAVIOUR_STOP,
+	END_BEHAVIOUR_LOOP_PLAY,
+	END_BEHAVIOUR_LOOP_STOP
+};
+
+// The start behaviour types
+enum {
+	START_BEHAVIOUR_PAUSED,
+	START_BEHAVIOUR_PLAY
 };
 
 // The known layer types
@@ -173,6 +179,7 @@ enum
 	SCREENSHOT_Y_OFFSET,
 	SLIDE_LENGTH,
 	SLIDE_NAME,
+	START_BEHAVIOUR,
 	X_OFFSET,
 	Y_OFFSET,
 	ZOOM_LEVEL
@@ -322,6 +329,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.69  2008/03/09 14:50:44  vapour
+ * Renamed the enums for end behaviour, added enums for start behaviour, added validation field entry for start behaviour.
+ *
  * Revision 1.68  2008/03/07 07:25:14  vapour
  * Added validation field entries for highlight width and highlight height.
  *
