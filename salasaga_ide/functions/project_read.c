@@ -417,15 +417,15 @@ gboolean flame_read(gchar *filename)
 		{
 			if (0 == g_ascii_strncasecmp(validated_string->str, "loop_play", 9))
 			{
-				valid_end_behaviour = BEHAVIOUR_LOOP_PLAY;
+				valid_end_behaviour = END_BEHAVIOUR_LOOP_PLAY;
 			} else
 			{
 				if (0 == g_ascii_strncasecmp(validated_string->str, "loop_stop", 9))
 				{
-					valid_end_behaviour = BEHAVIOUR_LOOP_STOP;
+					valid_end_behaviour = END_BEHAVIOUR_LOOP_STOP;
 				} else
 				{
-					valid_end_behaviour = BEHAVIOUR_STOP;
+					valid_end_behaviour = END_BEHAVIOUR_STOP;
 				}
 			}
 			g_string_free(validated_string, TRUE);
@@ -435,7 +435,7 @@ gboolean flame_read(gchar *filename)
 	} else
 	{
 		// If no end behaviour value was present in the project file, we default to "Stop"
-		valid_end_behaviour = BEHAVIOUR_STOP;
+		valid_end_behaviour = END_BEHAVIOUR_STOP;
 	}
 
 	// * Preferences are loaded, so now load the slides *
@@ -1862,6 +1862,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.24  2008/03/09 14:53:41  vapour
+ * Renamed the enums for end behaviour.
+ *
  * Revision 1.23  2008/03/07 07:27:04  vapour
  * Updated to use the new validation field entries.
  *

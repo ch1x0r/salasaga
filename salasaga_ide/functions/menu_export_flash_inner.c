@@ -1276,17 +1276,17 @@ gint menu_export_flash_inner(gchar *output_filename)
 	// If the end behaviour is to loop, then do that
 	switch (end_behaviour)
 	{
-		case BEHAVIOUR_LOOP_PLAY:
+		case END_BEHAVIOUR_LOOP_PLAY:
 			end_action = newSWFAction("_root.playing = true; _root.gotoAndPlay(2);");
 			SWFMovie_add(swf_movie, (SWFBlock) end_action);
 			break;
 
-		case BEHAVIOUR_LOOP_STOP:
+		case END_BEHAVIOUR_LOOP_STOP:
 			end_action = newSWFAction("_root.playing = false; _root.gotoAndPlay(1);");
 			SWFMovie_add(swf_movie, (SWFBlock) end_action);
 			break;
 
-		case BEHAVIOUR_STOP:
+		case END_BEHAVIOUR_STOP:
 		default:
 			end_action = newSWFAction("_root.playing = false; _root.stop();");
 			SWFMovie_add(swf_movie, (SWFBlock) end_action);
@@ -1331,6 +1331,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.64  2008/03/09 14:54:26  vapour
+ * Renamed the enums for end behaviour.
+ *
  * Revision 1.63  2008/03/06 00:18:40  vapour
  * Added code to action the new end behaviour project preference.
  *

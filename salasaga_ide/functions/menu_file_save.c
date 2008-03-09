@@ -226,15 +226,15 @@ void menu_file_save(void)
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "frames_per_second", (const xmlChar *) tmp_gstring->str);
 	switch (end_behaviour)
 	{
-		case BEHAVIOUR_STOP:
+		case END_BEHAVIOUR_STOP:
 			xmlNewChild(pref_pointer, NULL, (const xmlChar *) "end_behaviour", (const xmlChar *) "stop");
 			break;
 
-		case BEHAVIOUR_LOOP_PLAY:
+		case END_BEHAVIOUR_LOOP_PLAY:
 			xmlNewChild(pref_pointer, NULL, (const xmlChar *) "end_behaviour", (const xmlChar *) "loop_play");
 			break;
 
-		case BEHAVIOUR_LOOP_STOP:
+		case END_BEHAVIOUR_LOOP_STOP:
 			xmlNewChild(pref_pointer, NULL, (const xmlChar *) "end_behaviour", (const xmlChar *) "loop_stop");
 			break;
 
@@ -290,6 +290,9 @@ void menu_file_save(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.16  2008/03/09 14:55:10  vapour
+ * Renamed the enums for end behaviour.
+ *
  * Revision 1.15  2008/03/06 00:17:32  vapour
  * + Tweaked a few error messages.
  * + Added code to save the new end behaviour project preference.
