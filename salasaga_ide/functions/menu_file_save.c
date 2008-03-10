@@ -199,7 +199,7 @@ void menu_file_save(void)
 	}
 
 	// Add the save format version number to the XML document
-	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.5");
+	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.6");
 
     // Create the preferences container
 	pref_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "preferences", NULL);
@@ -224,6 +224,20 @@ void menu_file_save(void)
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "slide_length", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", frames_per_second);
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "frames_per_second", (const xmlChar *) tmp_gstring->str);
+	switch (start_behaviour)
+	{
+		case START_BEHAVIOUR_PAUSED:
+			xmlNewChild(pref_pointer, NULL, (const xmlChar *) "start_behaviour", (const xmlChar *) "paused");
+			break;
+
+		case START_BEHAVIOUR_PLAY:
+			xmlNewChild(pref_pointer, NULL, (const xmlChar *) "start_behaviour", (const xmlChar *) "play");
+			break;
+
+		default:
+			display_warning("Error ED281: Error creating the start behaviour value.");
+			return;
+	}
 	switch (end_behaviour)
 	{
 		case END_BEHAVIOUR_STOP:
@@ -290,6 +304,9 @@ void menu_file_save(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.17  2008/03/10 06:33:39  vapour
+ * Added code to save the swf start behaviour, and incremented the save format to 2.6.
+ *
  * Revision 1.16  2008/03/09 14:55:10  vapour
  * Renamed the enums for end behaviour.
  *
