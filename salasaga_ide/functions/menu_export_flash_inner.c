@@ -1277,18 +1277,18 @@ gint menu_export_flash_inner(gchar *output_filename)
 	switch (end_behaviour)
 	{
 		case END_BEHAVIOUR_LOOP_PLAY:
-			end_action = newSWFAction("_root.playing = true; _root.gotoAndPlay(2);");
+			end_action = newSWFAction("_root.playing = true; cb_main.cb_play._visible = false; _root.gotoAndPlay(2);");
 			SWFMovie_add(swf_movie, (SWFBlock) end_action);
 			break;
 
 		case END_BEHAVIOUR_LOOP_STOP:
-			end_action = newSWFAction("_root.playing = false; _root.gotoAndPlay(1);");
+			end_action = newSWFAction("_root.playing = false; cb_main.cb_play._visible = true; _root.gotoAndPlay(1);");
 			SWFMovie_add(swf_movie, (SWFBlock) end_action);
 			break;
 
 		case END_BEHAVIOUR_STOP:
 		default:
-			end_action = newSWFAction("_root.playing = false; _root.stop();");
+			end_action = newSWFAction("_root.playing = false; cb_main.cb_play._visible = true; _root.stop();");
 			SWFMovie_add(swf_movie, (SWFBlock) end_action);
 			break;
 	}
@@ -1331,6 +1331,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.65  2008/03/10 06:37:58  vapour
+ * Updated the actionscript to work with the new swf start behaviour project preference.
+ *
  * Revision 1.64  2008/03/09 14:54:26  vapour
  * Renamed the enums for end behaviour.
  *

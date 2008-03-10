@@ -293,16 +293,25 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	control_bar_x = cb_size_array[cb_index].cb_start_x;
 	control_bar_y = cb_size_array[cb_index].cb_start_y;
 
-	// Create an action script list of slide names in the project
 	slides = g_list_first(slides);
 	num_slides = g_list_length(slides);
 	slide_names_gstring = g_string_new(NULL);
 	slide_name_tmp = g_string_new(NULL);
-	g_string_printf(slide_names_gstring,
-			"var num_slides = %u;"
+
+	// Ensure the swf output starts out in the correct play state and the play button is correct
+	if (START_BEHAVIOUR_PLAY == start_behaviour)
+	{
+		g_string_printf(slide_names_gstring, " var playing = true; cb_main.cb_play._visible = false;");
+	} else
+	{
+		g_string_printf(slide_names_gstring, " var playing = false; cb_main.cb_play._visible = true;");
+	}
+
+	// Create an action script list of slide names in the project
+	g_string_append_printf(slide_names_gstring,
+			" var num_slides = %u;"
 			" var this_slide = 0;"
 			" var reversing = false;"
-			" var playing = false;"
 			" var slide_names = [", num_slides);
 	for (i = 0; i < (num_slides - 1); i++)
 	{
@@ -333,14 +342,8 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 		}
 	}
 
-	// Ensure the swf output starts out in the "stopped" state when played, and the play button is visible
-	slide_names_gstring = g_string_append(slide_names_gstring,
-			"cb_main.cb_play._visible = true;"
-			" if (false == _root.playing)"
-			" {"
-				"_root.stop();"
-			" };"
-			);
+	// Add the action script to keep the animation paused if that's whats requested
+	slide_names_gstring = g_string_append(slide_names_gstring, " if (false == _root.playing) { _root.stop(); };");
 
 	// Displaying debugging info if requested
 	if (debug_level)
@@ -414,17 +417,23 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	{
 		// If we're debugging, then generate debugging swf's too
 		restart_action = newSWFAction(
-				"cb_play._visible = true;"
 				" _root.this_slide = 0;"
 				" trace(\"Restart button pressed, slide counter has been set to: \" + _root.this_slide + \".\");"
 				" trace(\"We should now jump to the slide named '\" + _root.slide_names[_root.this_slide] + \"'.\");"
-				" _root.gotoAndStop(1, _root.slide_names[_root.this_slide]);");
+				" if (true == _root.playing) {"
+				" _root.gotoAndPlay(2, _root.slide_names[_root.this_slide]);"
+				" } else {"
+				" _root.gotoAndStop(2, _root.slide_names[_root.this_slide]);"
+				" };");
 	} else
 	{
 		restart_action = newSWFAction(
-				"cb_play._visible = true;"
 				" _root.this_slide = 0;"
-				" _root.gotoAndStop(1, _root.slide_names[_root.this_slide]);");
+				" if (true == _root.playing) {"
+				" _root.gotoAndPlay(2, _root.slide_names[_root.this_slide]);"
+				" } else {"
+				" _root.gotoAndStop(2, _root.slide_names[_root.this_slide]);"
+				" };");
 	}
 	SWFButton_addAction(restart_button, restart_action, SWFBUTTON_MOUSEUP);
 
@@ -485,7 +494,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 			rewind_action = newSWFAction(
 					"if (0 == _root.this_slide)"
 					" {"  // We're in the first slide, so jump back to the start of the movie
-						" cb_play._visible = true;"
 						" _root.this_slide = 0;"
 						" trace(\"Rewind button pressed while in first slide, slide counter has been set to: \" + _root.this_slide + \".\");"
 						" trace(\"'playing' variable is unchanged, at: \" + _root.playing + \".\");"
@@ -493,17 +501,16 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 						" if (true == _root.playing)"
 						" {"
 							" trace(\"Using gotoAndPlay.\");"
-							" _root.gotoAndPlay(1);"
+							" _root.gotoAndPlay(2);"
 						" }"
 						" else"
 						" {"
 							" trace(\"Using gotoAndStop.\");"
-							" _root.gotoAndStop(1);"
+							" _root.gotoAndStop(2);"
 						" }"
 					" }"
 					" else"
 					" {"  // We're past the first slide, so jump back to the start of the previous slide
-						" cb_play._visible = true;"
 						" _root.this_slide -= 1;"
 						" _root.reversing = true;"
 						" trace(\"Rewind button pressed, slide counter has been set to: \" + _root.this_slide + \".\");"
@@ -526,17 +533,15 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 			rewind_action = newSWFAction(
 					"if (0 == _root.this_slide)"
 					" {"  // We're in the first slide, so jump back to the start of the movie
-						" cb_play._visible = true;"
 						" _root.this_slide = 0;"
 						" if (true == _root.playing)"
 						" {"
-							" _root.gotoAndPlay(1);"
+							" _root.gotoAndPlay(2);"
 						" }"
 						" else"
 						" {"
-							" _root.gotoAndStop(1);"
+							" _root.gotoAndStop(2);"
 						" }"
-
 					" }"
 					" else"
 					" {"  // We're past the first slide, so jump back to the start of the previous slide
@@ -607,7 +612,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 		// If we're debugging, then generate debugging swf's too
 		pause_action = newSWFAction(
 				"cb_play._visible = true;"
-				" cb_pause._visible = false;"
 				" _root.playing = false;"
 				" trace(\"Pause button pressed. Slide counter equals: \" + _root.this_slide + \".\");"
 				" trace(\"'_root.playing' variable set to false.\");"
@@ -616,7 +620,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	{
 		pause_action = newSWFAction(
 				"cb_play._visible = true;"
-				" cb_pause._visible = false;"
 				" _root.playing = false;"
 				" _root.stop();");
 	}
@@ -674,7 +677,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	{
 		// If we're debugging, then generate debugging swf's too
 		play_action = newSWFAction(
-				"cb_pause._visible = true;"
 				" cb_play._visible = false;"
 				" _root.reversing = false;"
 				" _root.playing = true;"
@@ -686,7 +688,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	} else
 	{
 		play_action = newSWFAction(
-				"cb_pause._visible = true;"
 				" cb_play._visible = false;"
 				" _root.reversing = false;"
 				" _root.playing = true;"
@@ -752,7 +753,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 					"if (_root.this_slide >= (_root.num_slides - 1))"
 					" {"
 						// We're in the last slide, so we jump to the end of the movie
-						" cb_play._visible = true;"
 						" _root.reversing = false;"
 						" trace(\"Fast forward button pressed while in last slide, slide counter is: \" + _root.this_slide + \".\");"
 						" trace(\"'_root.reversing' variable has been set to false.\");"
@@ -960,6 +960,9 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
  * +++++++
  * 
  * $Log$
+ * Revision 1.25  2008/03/10 06:36:44  vapour
+ * Updated the actionscript to work with the new swf start behaviour project preference.
+ *
  * Revision 1.24  2008/02/28 05:41:32  vapour
  * Moved selection of the output resolution array index up a function level for swf output.  This is so the same approach can be used for text element positioning in swf output.
  *
