@@ -74,6 +74,7 @@ gboolean flame_read(gchar *filename)
 	guint				slide_counter;				// Counter used for looping
 	xmlChar				*slide_length_data = NULL;
 	xmlNodePtr			slides_node = NULL;			// Points to the slides structure
+	xmlChar				*start_behaviour_data = NULL;
 	xmlNodePtr			this_layer;					// Temporary pointer
 	xmlNodePtr			this_node;					// Temporary pointer
 	xmlNodePtr			this_slide;					// Temporary pointer
@@ -88,6 +89,7 @@ gboolean flame_read(gchar *filename)
 	guint				valid_project_width;		// Receives the new project width once validated
 	gfloat				valid_save_format;			// Receives the project file format version once validated
 	guint				valid_slide_length;			// Receives the new slide length once validated
+	guint				valid_start_behaviour;		// Receives the new start behaviour once validated
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
@@ -247,6 +249,11 @@ gboolean flame_read(gchar *filename)
 			// Frames per second found.  Extract and store it
 			fps_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
 		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_behaviour")))
+		{
+			// End behaviour found.  Extract and store it
+			start_behaviour_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
 		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "end_behaviour")))
 		{
 			// End behaviour found.  Extract and store it
@@ -403,6 +410,33 @@ gboolean flame_read(gchar *filename)
 			g_free(validated_guint);
 			xmlFree(fps_data);
 		}
+	}
+
+	// Retrieve the new start behaviour input
+	if (NULL != start_behaviour_data)
+	{
+		validated_string = validate_value(START_BEHAVIOUR, V_CHAR, start_behaviour_data);
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED282: There was something wrong with the start behaviour value in the project file.");
+			useable_input = FALSE;
+		} else
+		{
+			if (0 == g_ascii_strncasecmp(validated_string->str, "play", 4))
+			{
+				valid_start_behaviour = START_BEHAVIOUR_PLAY;
+			} else
+			{
+				valid_start_behaviour = START_BEHAVIOUR_PAUSED;
+			}
+			g_string_free(validated_string, TRUE);
+			xmlFree(start_behaviour_data);
+			validated_string = NULL;
+		}
+	} else
+	{
+		// If no start behaviour value was present in the project file, we default to "Paused"
+		valid_start_behaviour = START_BEHAVIOUR_PAUSED;
 	}
 
 	// Retrieve the new end behaviour input
@@ -1815,6 +1849,9 @@ gboolean flame_read(gchar *filename)
 		frames_per_second = valid_fps;
 	}
 
+	// Load Start behaviour
+	start_behaviour = valid_start_behaviour;
+
 	// Load End behaviour
 	end_behaviour = valid_end_behaviour;
 
@@ -1862,6 +1899,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.25  2008/03/10 06:34:46  vapour
+ * Added code to read in the swf start behaviour project preference.
+ *
  * Revision 1.24  2008/03/09 14:53:41  vapour
  * Renamed the enums for end behaviour.
  *
