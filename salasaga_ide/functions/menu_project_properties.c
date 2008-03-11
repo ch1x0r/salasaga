@@ -46,6 +46,7 @@ void menu_project_properties(void)
 	GtkWidget			*proj_dialog_table;			// Table used for neat layout of the labels and fields in project preferences
 	gint				proj_row_counter;			// Used when building the project preferences dialog box
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gboolean			valid_control_bar_behaviour;  // Receives the new control bar display behaviour
 	guint				valid_end_behaviour;		// Receives the new end behaviour once validated
 	guint				valid_fps;					// Receives the new project fps once validated
 	GString				*valid_output_folder;		// Receives the new output folder once validated
@@ -82,6 +83,9 @@ void menu_project_properties(void)
 
 	GtkWidget			*label_end_behaviour;		// End behaviour
 	GtkWidget			*selector_end_behaviour;	//
+
+	GtkWidget			*label_control_bar;			// Display Control bar
+	GtkWidget			*check_control_bar;			// 
 
 	GString				*tmp_gstring;				// Temporary GString used for constructing text
 
@@ -127,8 +131,8 @@ void menu_project_properties(void)
 	proj_row_counter = proj_row_counter + 1;
 
 	// Slide Length
-	label_slide_length = gtk_label_new("Default Slide Length: ");
-	gtk_misc_set_alignment(GTK_MISC(label_slide_length), 0, 0.5);
+	label_slide_length = gtk_label_new("Default Slide Length: \n(in frames)");
+	gtk_misc_set_alignment(GTK_MISC(label_slide_length), 0, 1);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_slide_length), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_slide_length = gtk_spin_button_new_with_range(0, valid_fields[SLIDE_LENGTH].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_slide_length), slide_length);
@@ -169,7 +173,7 @@ void menu_project_properties(void)
 	proj_row_counter = proj_row_counter + 1;
 
 	// Start behaviour
-	label_start_behaviour = gtk_label_new("Start behaviour: ");
+	label_start_behaviour = gtk_label_new("SWF start behaviour: ");
 	gtk_misc_set_alignment(GTK_MISC(label_start_behaviour), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_start_behaviour), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	selector_start_behaviour = gtk_combo_box_new_text();
@@ -188,7 +192,7 @@ void menu_project_properties(void)
 	proj_row_counter = proj_row_counter + 1;
 
 	// End behaviour
-	label_end_behaviour = gtk_label_new("End behaviour: ");
+	label_end_behaviour = gtk_label_new("SWF end behaviour: ");
 	gtk_misc_set_alignment(GTK_MISC(label_end_behaviour), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_end_behaviour), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	selector_end_behaviour = gtk_combo_box_new_text();
@@ -209,6 +213,21 @@ void menu_project_properties(void)
 			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_end_behaviour), END_BEHAVIOUR_STOP);
 	}
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(selector_end_behaviour), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	proj_row_counter = proj_row_counter + 1;
+
+	// Display control bar
+	label_control_bar = gtk_label_new("Display SWF control bar: ");
+	gtk_misc_set_alignment(GTK_MISC(label_control_bar), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_control_bar), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	check_control_bar = gtk_check_button_new();
+	if (TRUE == show_control_bar)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_control_bar), TRUE);
+	} else
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_control_bar), FALSE);
+	}
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(check_control_bar), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Ensure everything will show
 	gtk_widget_show_all(GTK_WIDGET(main_dialog));
@@ -322,6 +341,9 @@ void menu_project_properties(void)
 			valid_end_behaviour = gint_val;
 		}
 
+		// Retrieve the new control bar display behaviour
+		valid_control_bar_behaviour = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_control_bar));
+
 	} while (FALSE == useable_input);
 
 	// * We only get here after all input is considered valid *
@@ -353,6 +375,9 @@ void menu_project_properties(void)
 	// End behaviour
 	end_behaviour = valid_end_behaviour;
 
+	// Control bar display
+	show_control_bar = valid_control_bar_behaviour;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project properties updated");
 	gdk_flush();
@@ -367,6 +392,9 @@ void menu_project_properties(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.10  2008/03/11 01:37:48  vapour
+ * Now includes a control bar display checkbox.
+ *
  * Revision 1.9  2008/03/09 14:57:09  vapour
  * Renamed the enums for end behaviour, added a Start Behaviour option to the project preferences dialog.
  *
