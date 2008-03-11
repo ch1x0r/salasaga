@@ -57,6 +57,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gint				highlight_box_width;		// Used while generating swf output for highlight boxes
 	gint				image_height;				// Temporarily used to store the height of an image
 	gint				image_width;				// Temporarily used to store the width of an image
+	GString				*initial_action_gstring;	// Swf action script can be constructed with this
 	guint				layer_counter;				// Holds the number of layers
 	guint				num_layers = 0;				// The number of layers in the slide
 	guint				num_slides;					// The number of slides in the movie
@@ -94,6 +95,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	SWFInput			image_input;				// Used to hold a swf input object
 	SWFShape			image_shape;				// Used to hold a swf shape object
 	SWFAction			inc_slide_counter_action;	// Swf action object used to run some action script
+	SWFAction			initial_action;				// Swf action object used to run some action script
 	SWFAction			swf_action;					// Used when constructing action script
 	SWFButton			swf_button;					// Holds a swf button
 	SWFButtonRecord		swf_button_record;			// Holds a swf button record
@@ -147,6 +149,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	as_gstring = g_string_new(NULL);
 	slide_name_tmp = g_string_new(NULL);
 	total_frames = 0;
+	initial_action_gstring = g_string_new(NULL);
 
 	// Determine which of the control bar resolutions to use
 	unknown_resolution = FALSE;
@@ -389,19 +392,39 @@ gint menu_export_flash_inner(gchar *output_filename)
 		printf("Scaled width ratio: %.2f\n", scaled_width_ratio);
 	}
 
-	// Add the swf control bar to the movie
-	return_code_bool = menu_export_flash_control_bar(swf_movie, out_res_index);
-	if (TRUE != return_code_bool)
+	// If requested, add the swf control bar to the movie
+	if (TRUE == show_control_bar)
 	{
-		// Something went wrong when adding the control bar to the movie
+		return_code_bool = menu_export_flash_control_bar(swf_movie, out_res_index);
+		if (TRUE != return_code_bool)
+		{
+			// Something went wrong when adding the control bar to the movie
+	
+			// Free the memory allocated in this function
+			destroySWFMovie(swf_movie);
+			destroySWFFillStyle(highlight_fill_style);
+			destroySWFFillStyle(text_bg_fill_style);
+			g_free(font_pathname);
+	
+			return FALSE;
+		}
+	} else
+	{
+		// Ensure the swf output starts out in the correct play state
+		if (START_BEHAVIOUR_PLAY == start_behaviour)
+		{
+			g_string_printf(initial_action_gstring, " var playing = true;");
+		} else
+		{
+			g_string_printf(initial_action_gstring, " var playing = false;");
+		}
 
-		// Free the memory allocated in this function
-		destroySWFMovie(swf_movie);
-		destroySWFFillStyle(highlight_fill_style);
-		destroySWFFillStyle(text_bg_fill_style);
-		g_free(font_pathname);
+		// Add the action script to keep the animation paused if that's whats requested
+		initial_action_gstring = g_string_append(initial_action_gstring, " if (false == _root.playing) { _root.stop(); };");
 
-		return FALSE;
+		// Add the initialisation action to the movie
+		initial_action = newSWFAction(initial_action_gstring->str);
+		SWFMovie_add(swf_movie, (SWFBlock) initial_action);
 	}
 
 // For now, this uses a two pass per slide approach
@@ -1282,7 +1305,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 			break;
 
 		case END_BEHAVIOUR_LOOP_STOP:
-			end_action = newSWFAction("_root.playing = false; cb_main.cb_play._visible = true; _root.gotoAndPlay(1);");
+			end_action = newSWFAction("_root.playing = false; cb_main.cb_play._visible = true; _root.gotoAndStop(2);");
 			SWFMovie_add(swf_movie, (SWFBlock) end_action);
 			break;
 
@@ -1331,6 +1354,9 @@ gint menu_export_flash_inner(gchar *output_filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.66  2008/03/11 02:07:42  vapour
+ * Updated to only display the swf control bar if requested.
+ *
  * Revision 1.65  2008/03/10 06:37:58  vapour
  * Updated the actionscript to work with the new swf start behaviour project preference.
  *
