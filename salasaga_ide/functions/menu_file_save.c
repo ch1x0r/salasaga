@@ -199,7 +199,7 @@ void menu_file_save(void)
 	}
 
 	// Add the save format version number to the XML document
-	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.6");
+	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.7");
 
     // Create the preferences container
 	pref_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "preferences", NULL);
@@ -256,6 +256,13 @@ void menu_file_save(void)
 			display_warning("Error ED278: Error creating the end behaviour value.");
 			return;
 	}
+	if (TRUE == show_control_bar)
+	{
+		xmlNewChild(pref_pointer, NULL, (const xmlChar *) "show_control_bar", (const xmlChar *) "true");
+	} else
+	{
+		xmlNewChild(pref_pointer, NULL, (const xmlChar *) "show_control_bar", (const xmlChar *) "false");
+	}
 
     // Create a container for the slides
 	slide_root = xmlNewChild(root_node, NULL, (const xmlChar *) "slides", NULL);
@@ -304,6 +311,9 @@ void menu_file_save(void)
  * +++++++
  * 
  * $Log$
+ * Revision 1.18  2008/03/11 01:39:00  vapour
+ * Now saves the swf control bar display toggle value, and updated the save file format to 2.7.
+ *
  * Revision 1.17  2008/03/10 06:33:39  vapour
  * Added code to save the swf start behaviour, and incremented the save format to 2.6.
  *
