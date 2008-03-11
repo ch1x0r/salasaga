@@ -49,6 +49,7 @@
 gboolean flame_read(gchar *filename)
 {
 	// Local variables
+	xmlChar				*control_bar_data = NULL;	// Temporarily holds incoming data prior to validation
 	gint				data_length;				// Number of image data bytes a layer says it stores
 	xmlDocPtr			document;					// Holds a pointer to the XML document
 	xmlChar				*end_behaviour_data = NULL;
@@ -79,6 +80,7 @@ gboolean flame_read(gchar *filename)
 	xmlNodePtr			this_node;					// Temporary pointer
 	xmlNodePtr			this_slide;					// Temporary pointer
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gboolean			valid_control_bar_behaviour;  // Receives the new control bar display behaviour
 	guint				valid_end_behaviour;		// Receives the new end behaviour once validated
 	guint				valid_fps;					// Receives the new fps once validated
 	guint				valid_output_height;		// Receives the new output height once validated
@@ -258,6 +260,11 @@ gboolean flame_read(gchar *filename)
 		{
 			// End behaviour found.  Extract and store it
 			end_behaviour_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "show_control_bar")))
+		{
+			// Show control bar behaviour found.  Extract and store it
+			control_bar_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
 		}
 		this_node = this_node->next;
 	}
@@ -471,6 +478,34 @@ gboolean flame_read(gchar *filename)
 		// If no end behaviour value was present in the project file, we default to "Stop"
 		valid_end_behaviour = END_BEHAVIOUR_STOP;
 	}
+
+	// Retrieve the new control bar display input
+	if (NULL != control_bar_data)
+	{
+		validated_string = validate_value(SHOW_CONTROL_BAR, V_CHAR, control_bar_data);
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED283: There was something wrong with the control bar display value in the project file.");
+			useable_input = FALSE;
+		} else
+		{
+			if (0 == g_ascii_strncasecmp(validated_string->str, "true", 4))
+			{
+				valid_control_bar_behaviour = TRUE;
+			} else
+			{
+				valid_control_bar_behaviour = FALSE;
+			}
+			g_string_free(validated_string, TRUE);
+			xmlFree(control_bar_data);
+			validated_string = NULL;
+		}
+	} else
+	{
+		// If no control bar display value was present in the project file, we default to "True"
+		valid_control_bar_behaviour = TRUE;
+	}
+
 
 	// * Preferences are loaded, so now load the slides *
 
@@ -1855,6 +1890,9 @@ gboolean flame_read(gchar *filename)
 	// Load End behaviour
 	end_behaviour = valid_end_behaviour;
 
+	// Control bar display
+	show_control_bar = valid_control_bar_behaviour;
+
 	// Make the new slides active, and update them to fill in their remaining pieces
 	slides = g_list_first(new_slides);
 	num_slides = g_list_length(slides);
@@ -1899,6 +1937,9 @@ gboolean flame_read(gchar *filename)
  * +++++++
  * 
  * $Log$
+ * Revision 1.26  2008/03/11 01:39:54  vapour
+ * Now reads the swf control bar display toggle value from project files.
+ *
  * Revision 1.25  2008/03/10 06:34:46  vapour
  * Added code to read in the swf start behaviour project preference.
  *
