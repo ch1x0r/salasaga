@@ -61,6 +61,7 @@ validatation_entry		valid_fields[] =
 	{ SCREENSHOT_WIDTH,		"Width for next screenshot",			V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ SCREENSHOT_X_OFFSET,	"X offset for next screenshot",			V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ SCREENSHOT_Y_OFFSET,	"Y offset for next screenshot",			V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ SHOW_CONTROL_BAR,		"Include control bar in exported swf",	V_CHAR,				V_NONE,		0,		5 },
 	{ SLIDE_LENGTH,			"Number of frames per slide",			V_INT_UNSIGNED,		V_NONE,		0,		1200 },
 	{ SLIDE_NAME,			"Name of this slide",					V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
 	{ START_BEHAVIOUR, 		"Animation behaviour after loading",	V_CHAR,				V_UNDERSCORES,		0,		6 },
@@ -81,6 +82,9 @@ validatation_entry		valid_fields[] =
  * +++++++
  * 
  * $Log$
+ * Revision 1.17  2008/03/11 01:33:57  vapour
+ * Added validation field entry for display of the control bar in exported swf.
+ *
  * Revision 1.16  2008/03/09 14:52:24  vapour
  * Added validation field details for start behaviour.
  *

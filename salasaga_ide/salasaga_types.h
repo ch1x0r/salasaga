@@ -177,6 +177,7 @@ enum
 	SCREENSHOT_WIDTH,
 	SCREENSHOT_X_OFFSET,
 	SCREENSHOT_Y_OFFSET,
+	SHOW_CONTROL_BAR,
 	SLIDE_LENGTH,
 	SLIDE_NAME,
 	START_BEHAVIOUR,
@@ -329,6 +330,9 @@ typedef struct
  * +++++++
  * 
  * $Log$
+ * Revision 1.70  2008/03/11 01:33:57  vapour
+ * Added validation field entry for display of the control bar in exported swf.
+ *
  * Revision 1.69  2008/03/09 14:50:44  vapour
  * Renamed the enums for end behaviour, added enums for start behaviour, added validation field entry for start behaviour.
  *
