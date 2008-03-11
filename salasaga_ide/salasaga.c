@@ -108,6 +108,7 @@ gulong					resolution_callback;		// Holds the id of the resolution selector call
 GtkComboBox				*resolution_selector;		// Widget for the resolution selector
 GtkWidget				*right_side;				// Widget for the right side area
 gboolean				screenshots_enabled = FALSE;  // Toggle for whether to enable screenshots
+gboolean				show_control_bar = TRUE;	// Toggle for whether to display the control bar in swf output
 GList					*slides = NULL;				// Linked list holding the slide info
 guint					start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
 GtkWidget				*status_bar;				// Widget for the status bar
@@ -669,6 +670,9 @@ gint main(gint argc, gchar *argv[])
  * +++++++
  *
  * $Log$
+ * Revision 1.93  2008/03/11 01:32:51  vapour
+ * Added global variable for display of the control bar in exported swf.
+ *
  * Revision 1.92  2008/03/09 14:49:32  vapour
  * Added global variable to hold the project preference for start behaviour.
  *

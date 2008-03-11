@@ -69,6 +69,7 @@ extern gulong				resolution_callback;
 extern GtkComboBox			*resolution_selector;
 extern GtkWidget			*right_side;
 extern gboolean				screenshots_enabled;
+extern gboolean				show_control_bar;
 extern GList				*slides;
 extern guint				start_behaviour;
 extern GtkWidget			*status_bar;
@@ -143,6 +144,9 @@ extern HHOOK				win32_keyboard_hook_handle;
  * +++++++
  * 
  * $Log$
+ * Revision 1.43  2008/03/11 01:32:51  vapour
+ * Added global variable for display of the control bar in exported swf.
+ *
  * Revision 1.42  2008/03/09 14:49:32  vapour
  * Added global variable to hold the project preference for start behaviour.
  *
