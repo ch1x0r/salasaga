@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Editing GUI
+ * Salasaga: Main source file for the Salasaga IDE
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -44,8 +44,8 @@
 // Ming include
 #include <ming.h>
 
-// Flame Edit includes
-#include "flame-types.h"
+// Salasaga includes
+#include "salasaga_types.h"
 #include "externs.h"
 #include "functions/create_film_strip.h"
 #include "functions/create_menu_bar.h"
@@ -85,11 +85,11 @@ GtkTreeViewColumn		*film_strip_column;			// Pointer to the film strip column
 GtkScrolledWindow		*film_strip_container;		// Container for the film strip
 GtkListStore			*film_strip_store;			// Film strip list store
 GtkWidget				*film_strip_view;			// The view of the film strip list store
-gchar					*font_path;					// Points to the base location for Flames font files
+gchar					*font_path;					// Points to the base location for Salasaga font files
 guint					frames_per_second;			// Number of frames per second
 GdkPixmap				*front_store;				// Front store for double buffering the workspace area
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
-GString					*icon_path;					// Points to the base location for Flames icon files
+GString					*icon_path;					// Points to the base location for Salasaga icon files
 gint					invalidation_end_x;			// Right side of the front store area to invalidate
 gint					invalidation_end_y;			// Bottom of the front store area to invalidate
 gint					invalidation_start_x;		// Left side of the front store area to invalidate
@@ -284,7 +284,7 @@ gint main(gint argc, gchar *argv[])
 	icon_path = g_string_assign(icon_path, "icons");
 #else
 	g_string_assign(icon_path, g_path_get_dirname(argv[0]));
-	g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", "flame", "icons", "72x72", NULL));
+	g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", "salasaga", "icons", "72x72", NULL));
 
 	// Display debugging info if requested
 	if (debug_level)
@@ -293,8 +293,8 @@ gint main(gint argc, gchar *argv[])
 	// Check if the above directory exists
 	if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
 	{
-		// First guess of icon directory didn't work, lets try /usr/share/flame/icons next
-		g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "share", "flame", "icons", "72x72", NULL));
+		// First guess of icon directory didn't work, lets try /usr/share/salasaga/icons next
+		g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "share", "salasaga", "icons", "72x72", NULL));
 
 		// Display debugging info if requested
 		if (debug_level)
@@ -302,8 +302,8 @@ gint main(gint argc, gchar *argv[])
 
 		if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
 		{
-			// Not there, try /usr/local/share/flame/icons
-			g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "local", "share", "flame", "icons", "72x72", NULL));
+			// Not there, try /usr/local/share/salasaga/icons
+			g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "local", "share", "salasaga", "icons", "72x72", NULL));
 
 			// Display debugging info if requested
 			if (debug_level)
@@ -334,7 +334,7 @@ gint main(gint argc, gchar *argv[])
 			icon_path = g_string_assign(icon_path, "icons");
 #else
 			g_string_assign(icon_path, g_path_get_dirname(argv[0]));
-			g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", "flame", "icons", "scalable", NULL));
+			g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", "salasaga", "icons", "scalable", NULL));
 
 			// Display debugging info if requested
 			if (debug_level)
@@ -343,8 +343,8 @@ gint main(gint argc, gchar *argv[])
 			// Check if the above directory exists
 			if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
 			{
-				// First guess of icon directory didn't work, lets try /usr/share/flame/icons next
-				g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "share", "flame", "icons", "scalable", NULL));
+				// First guess of icon directory didn't work, lets try /usr/share/salasaga/icons next
+				g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "share", "salasaga", "icons", "scalable", NULL));
 
 				// Display debugging info if requested
 				if (debug_level)
@@ -352,8 +352,8 @@ gint main(gint argc, gchar *argv[])
 
 				if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
 				{
-					// Not there, try /usr/local/share/flame/icons
-					g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "local", "share", "flame", "icons", "scalable", NULL));
+					// Not there, try /usr/local/share/salasaga/icons
+					g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "local", "share", "salasaga", "icons", "scalable", NULL));
 
 					// Display debugging info if requested
 					if (debug_level)
@@ -398,23 +398,23 @@ gint main(gint argc, gchar *argv[])
 	// Load the saved application preferences, if available
 	if (FALSE == preferences_load())
 	{
-		// Looks like Flame hasn't been run before, so create it's home directory structure
-		g_string_printf(tmp_gstring, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame");
+		// Looks like Salasaga hasn't been run before, so create it's home directory structure
+		g_string_printf(tmp_gstring, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga");
 		g_mkdir(tmp_gstring->str, 0750);
-		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "projects");
+		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "projects");
 		g_mkdir(tmp_gstring->str, 0750);
-		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "screenshots");
+		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "screenshots");
 		g_mkdir(tmp_gstring->str, 0750);
-		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "output");
+		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "output");
 		g_mkdir(tmp_gstring->str, 0750);
 
 		// Which monitor are we displaying on?
 		which_screen = gtk_window_get_screen(GTK_WINDOW(main_window));
 
 		// Initialise the application variables to sensible defaults
-		g_string_printf(default_project_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "projects");
-		g_string_printf(screenshots_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "screenshots");
-		g_string_printf(default_output_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "flame", G_DIR_SEPARATOR, "output");
+		g_string_printf(default_project_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "projects");
+		g_string_printf(screenshots_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "screenshots");
+		g_string_printf(default_output_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "output");
 		project_width = gdk_screen_get_width(which_screen);
 		project_height = gdk_screen_get_height(which_screen);
 		default_output_width = 800;
@@ -429,11 +429,11 @@ gint main(gint argc, gchar *argv[])
 #ifndef _WIN32
 	// * Setup the Control-Printscreen key combination to capture screenshots - Non-windows only *
 
-	// First we check that the "flame-capture" program is found in the OS search path
-	return_code_gchar = g_find_program_in_path("flame-capture");
+	// First we check that the "salasaga_screencapture" program is found in the OS search path
+	return_code_gchar = g_find_program_in_path("salasaga_screencapture");
 	if (NULL == return_code_gchar)
 	{
-		display_warning("Error ED114: 'flame-capture' not found in the search path. Screenshot capturing is disabled.");
+		display_warning("Error ED114: 'salasaga_screencapture' not found in the search path. Screenshot capturing is disabled.");
 	} else
 	{
 		// Enable screenshots
@@ -458,8 +458,8 @@ gint main(gint argc, gchar *argv[])
 				unused_num = tmp_guint;
 			} else
 			{
-				// This command is being used, so check if it's already assigned to flame-capture
-				tmp_int = g_ascii_strncasecmp(gconf_value, "flame-capture", 13);
+				// This command is being used, so check if it's already assigned to salasaga_screencapture
+				tmp_int = g_ascii_strncasecmp(gconf_value, "salasaga_screencapture", 13);
 				if (0 == tmp_int)
 				{
 					key_already_set = TRUE;
@@ -473,7 +473,7 @@ gint main(gint argc, gchar *argv[])
 			if (0 != unused_num)
 			{
 				g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", unused_num);
-				gconf_engine_set_string(gconf_engine, command_key->str, "flame-capture", NULL);
+				gconf_engine_set_string(gconf_engine, command_key->str, "salasaga_screencapture", NULL);
 				g_string_printf(command_key, "%s%u", "/apps/metacity/global_keybindings/run_command_", unused_num);
 				gconf_engine_set_string(gconf_engine, command_key->str, "<Control>Print", NULL);
 			}
@@ -619,7 +619,7 @@ gint main(gint argc, gchar *argv[])
 		{
 			g_object_ref(main_toolbar_icons[CAPTURE]);
 			gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[CAPTURE]), main_toolbar_icons_gray[CAPTURE]);
-			gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CAPTURE]), main_toolbar_tooltips, "Screenshots disabled: flame-capture not found in search path", "Private");
+			gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CAPTURE]), main_toolbar_tooltips, "Screenshots disabled: salasaga_screencapture not found in search path", "Private");
 			gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[CAPTURE]));
 		}
 
