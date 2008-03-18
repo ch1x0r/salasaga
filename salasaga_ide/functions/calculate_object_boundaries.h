@@ -34,17 +34,3 @@ void calculate_object_boundaries(void);
 #endif // __cplusplus
 
 #endif /*CALCULATE_OBJECT_BOUNDARIES_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:19:04  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/27 10:40:20  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */
