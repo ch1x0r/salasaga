@@ -34,17 +34,3 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title);
 #endif // __cplusplus
 
 #endif /*DISPLAY_DIALOG_TEXT_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:19:02  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/29 04:22:15  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */
