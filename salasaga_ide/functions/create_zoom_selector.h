@@ -34,14 +34,3 @@ GtkWidget *create_zoom_selector(gchar *initial_zoom);
 #endif // __cplusplus
 
 #endif /*CREATE_ZOOM_SELECTOR_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/02/05 10:44:25  vapour
- * Added a new function to construct the zoom level widget.
- *
- */

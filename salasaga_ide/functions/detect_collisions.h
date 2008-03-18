@@ -34,17 +34,3 @@ GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y
 #endif // __cplusplus
 
 #endif /*DETECT_COLLISIONS_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/27 10:40:42  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */
