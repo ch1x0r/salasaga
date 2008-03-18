@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to validate a given value
+ * Salasaga: Function to validate a given value
  * 
  * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
  * 
@@ -34,8 +34,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "flame-types.h"
+// Salasaga includes
+#include "salasaga_types.h"
 #include "valid_fields.h"
 #include "display_warning.h"
 
@@ -549,13 +549,3 @@ void *validate_value(gint value_id, gint input_type, void *value)
 	// If we get here, then something went wrong!
 	return NULL;
 }
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/03/05 04:30:03  vapour
- * Added files required for validation of input and display of warning messages.
- *
- */

@@ -1,10 +1,10 @@
-AC_INIT(flame-capture, [0.7.7-dev], [flameproject-devel@lists.sourceforge.net])
+AC_INIT(salasaga_screencapture, [0.8.0-dev], [salasaga-devel@lists.sourceforge.net])
 
 MAJOR_VERSION=0
-MINOR_VERSION=7
-MICRO_VERSION=7-dev
+MINOR_VERSION=8
+MICRO_VERSION=0-dev
 
-FLAME_VERSION=[${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}]
+SALASAGA_VERSION=[${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}]
 
 dnl Tell configure to look in the config subdirectory
 dnl for config.guess, config.sub, etc
@@ -85,7 +85,7 @@ AC_SUBST(ZLIB)
 AC_SUBST(MAJOR_VERSION)
 AC_SUBST(MINOR_VERSION)
 AC_SUBST(MICRO_VERSION)
-AC_SUBST(FLAME_VERSION)
+AC_SUBST(SALASAGA_VERSION)
 
 AC_CONFIG_FILES(Makefile.config)
 

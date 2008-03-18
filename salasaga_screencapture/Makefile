@@ -2,30 +2,30 @@ include Makefile.config
 
 OFILES = \
 	display_warning.o \
-	flame-capture.o \
+	salasaga_screencapture.o \
 	validate_value.o
 
-all: flame-capture
+all: salasaga_screencapture
 
 display_warning.o:
 	$(CC) $(CFLAGS) -c display_warning.c -o display_warning.o
 
-flame-capture.o:
-	$(CC) $(CFLAGS) -c flame-capture.c -o flame-capture.o
+salasaga_screencapture.o:
+	$(CC) $(CFLAGS) -c salasaga_screencapture.c -o salasaga_screencapture.o
 
 validate_value.o:
 	$(CC) $(CFLAGS) -c validate_value.c -o validate_value.o
 
-flame-capture: $(OFILES)
-	$(CC) $(CFLAGS) $(OFILES) $(LDFLAGS) $(LIBS) -o flame-capture
+salasaga_screencapture: $(OFILES)
+	$(CC) $(CFLAGS) $(OFILES) $(LDFLAGS) $(LIBS) -o salasaga_screencapture
 
 install:
 	$(INSTALL) -d $(bindir)
-	$(INSTALL_PROGRAM) -m 0755 flame-capture $(bindir)
+	$(INSTALL_PROGRAM) -m 0755 salasaga_screencapture $(bindir)
 
 uninstall:
-	if [ -f "$(bindir)/flame-capture" ]; then \
-		rm -f $(bindir)/flame-capture; \
+	if [ -f "$(bindir)/salasaga_screencapture" ]; then \
+		rm -f $(bindir)/salasaga_screencapture; \
 	fi
 
 	if [ -d "$(bindir)" ]; then \
@@ -34,7 +34,7 @@ uninstall:
 
 clean:
 	rm -f $(OFILES)
-	rm -f flame-capture flame-capture.exe
+	rm -f salasaga_screencapture salasaga_screencapture.exe
 
 distclean: clean
 	rm -Rf Rules.make config.make Makefile.config autom4te.cache config.log config.status configure

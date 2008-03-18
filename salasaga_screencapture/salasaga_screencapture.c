@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Background capture process
+ * Salasaga: Background screen capture process
  * 
  * Copyright (C) 2005-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -44,12 +44,12 @@
 #include <png.h>
 
 // Add our functions
-#include "flame-types.h"
+#include "salasaga_types.h"
 #include "display_warning.h"
 #include "validate_value.h"
 
 // Application constants
-#define	APP_VERSION 0.54
+#define	APP_VERSION 0.55
 
 
 #ifdef _WIN32
@@ -181,12 +181,12 @@ gint main(gint argc, gchar *argv[])
 	Window				win;						// Holds the Window ID we're screenshot-ing
 #else
 	// Windows only variables
-	png_text			flame_text;					// Pointer to structure holding Flame homepage URL
+	png_text			salasaga_text;					// Pointer to structure holding Salasaga homepage URL
 	gint				num_bytes;
 	FILE				*output_file_pointer;
 	png_infop			png_info_pointer;
 	png_structp			png_pointer;
-	gchar				png_text_homepage[] = "The Flame Project: http://www.flameproject.org\0";
+	gchar				png_text_homepage[] = "Salasaga: http://www.salasaga.org\0";
 	gchar				png_text_key[] = "Software\0";
 	gint				return_code_int;			// Holds integer return codes
 	gint				row_counter;
@@ -203,15 +203,15 @@ gint main(gint argc, gchar *argv[])
 	valid_project_name = g_string_new(NULL);
 	valid_screenshot_folder = g_string_new(NULL);
 
-	// Construct the fullly qualified path name for ~/.flame-lock
+	// Construct the fullly qualified path name for ~/.salasaga-lock
 	tmp_ptr = (gchar *) g_get_home_dir();
-	full_file_name = g_build_filename(tmp_ptr, ".flame-lock", NULL);
+	full_file_name = g_build_filename(tmp_ptr, ".salasaga-lock", NULL);
 
-	// Look for a ~/.flame-lock file
+	// Look for a ~/.salasaga-lock file
 	lock_file = g_key_file_new();  // Create a file object in memory
 	if (!g_key_file_load_from_file(lock_file, full_file_name, G_KEY_FILE_NONE, NULL))
 	{
-		// * If no ~/.flame-lock file is found then exit *
+		// * If no ~/.salasaga-lock file is found then exit *
 		g_free(full_file_name);
 		exit(1);
 	}
@@ -425,15 +425,15 @@ gint main(gint argc, gchar *argv[])
 
 #ifndef _WIN32
 	// Non-windows code to save the screenshot
-	gdk_pixbuf_save(screenshot, full_file_name, "png", NULL, "tEXt::Software", "The Flame Project: http://www.flameproject.org", NULL);
+	gdk_pixbuf_save(screenshot, full_file_name, "png", NULL, "tEXt::Software", "Salasaga: http://www.salasaga.org", NULL);
 #else
 	// * Windows code to save the screenshot bitmap as a PNG file *
 
 	// Initialise variables
-	flame_text.compression = PNG_TEXT_COMPRESSION_NONE;
-	flame_text.key = png_text_key;
-	flame_text.text = png_text_homepage;
-	flame_text.text_length = strlen(png_text_homepage);
+	salasaga_text.compression = PNG_TEXT_COMPRESSION_NONE;
+	salasaga_text.key = png_text_key;
+	salasaga_text.text = png_text_homepage;
+	salasaga_text.text_length = strlen(png_text_homepage);
 
 	// Open screenshot output file for writing
 	output_file_pointer = fopen(full_file_name, "wb");
@@ -481,8 +481,8 @@ gint main(gint argc, gchar *argv[])
 	// Set the correct pixel ordering
 	png_set_bgr(png_pointer);
 
-	// Embed a text comment with Flame's home page
-	png_set_text(png_pointer, png_info_pointer, &flame_text, 1);
+	// Embed a text comment with Salasaga's home page
+	png_set_text(png_pointer, png_info_pointer, &salasaga_text, 1);
 
 	// Get metadata about the screenshot
 	return_code_int = GetObject(screenshot, sizeof(BITMAP), &screenshot_data);
@@ -548,51 +548,3 @@ gint main(gint argc, gchar *argv[])
 	// Exit
 	exit(0);
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.13  2008/03/05 04:30:46  vapour
- * Updated to validate all input, and also graphically display any error messages.
- *
- * Revision 1.12  2008/02/13 05:44:06  vapour
- * Fixed a small typo plus added a CA prefix to all error message IDs.
- *
- * Revision 1.11  2008/02/04 08:35:23  vapour
- * Updated to use GString's rather than pre-allocated buffer, in order to fix a segfault and reduce the likelyhood of buffer overflows.
- *
- * Revision 1.10  2007/10/03 13:03:08  vapour
- * Updated PNG creation code for non windows to save the URL for Flame in the Software text string.
- *
- * Revision 1.9  2007/09/17 13:41:39  vapour
- * Writing PNG files now works (on my pc at least).
- *
- * Revision 1.8  2007/09/16 13:00:35  vapour
- * Still having extreme trouble with this.  At least it doesn't segfault now, but theres debugging code all over the place.
- *
- * Revision 1.7  2007/09/16 10:15:41  vapour
- * Re-writing the windows file saving code to use libpng.
- *
- * Revision 1.6  2007/09/11 13:51:24  vapour
- * Adjusted to save as jpeg files on windows.  Doesn't seem to be converting the bitmap to a gdk pixbuf properly though.
- *
- * Revision 1.5  2007/09/11 13:18:42  vapour
- * Started adding code to do screenshots in windows.  Not yet functional.
- *
- * Revision 1.4  2006/12/26 09:26:23  vapour
- * Updated to no longer run the hard coded old gnome screenshot application if there are no default settings specified.
- *
- * Revision 1.3  2006/04/21 17:53:51  vapour
- * Fixed the copyright notice, to include 2005, and remove the comments added through my local CVS repository.
- *
- * Revision 1.2  2006/04/21 17:51:04  vapour
- * + Updated header with clearer copyright and license details.
- * + Moved the History section to the end of the file.
- *
- * Revision 1.1  2006/04/13 15:57:49  vapour
- * Initial version, copied from my local CVS repository.
- *
- */

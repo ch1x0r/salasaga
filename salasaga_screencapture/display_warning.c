@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Display a warning message to the user 
+ * Salasaga: Display a warning message to the user 
  * 
  * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
  * 
@@ -46,14 +46,3 @@ gint display_warning(gchar *warning_string)
 
 	return TRUE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/03/05 04:30:02  vapour
- * Added files required for validation of input and display of warning messages.
- *
- */

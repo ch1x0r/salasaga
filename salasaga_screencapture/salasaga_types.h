@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Include file for structures and similar used throughout the code
+ * Salasaga: Include file for structures and similar used throughout the code
  * 
  * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
  * 
@@ -21,8 +21,8 @@
  * 
  */
 
-#ifndef __FLAME_TYPES_H__
-#define __FLAME_TYPES_H__
+#ifndef __SALASAGA_TYPES_H__
+#define __SALASAGA_TYPES_H__
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
@@ -84,15 +84,4 @@ typedef struct
 }
 #endif // __cplusplus
 
-#endif // __FLAME_TYPES_H__
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/03/05 04:30:01  vapour
- * Added files required for validation of input and display of warning messages.
- *
-  */
+#endif // __SALASAGA_TYPES_H__
