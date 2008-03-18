@@ -35,16 +35,3 @@ GString *base64_decode(GString *input_string, GString *output_string);
 
 #endif /*BASE64_DECODE_H_*/
 
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:18:58  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/27 10:40:09  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */
