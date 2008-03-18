@@ -1,7 +1,7 @@
 include Makefile.config
 
 DESKTOP_FILE = \
-	flameproject.desktop
+	salasaga.desktop
 
 FONT_BITSTREAM_VERA_FDB = \
 	"Bitstream Vera Sans Mono-B-I.fdb" \
@@ -16,10 +16,10 @@ FONT_BITSTREAM_VERA_FDB = \
 	"Bitstream Vera Serif.fdb"
 
 ICON_MAIN = \
-	flame-icon.ico
+	salasaga-icon.ico
 
 ICON_PNG = \
-	flame-icon.png
+	salasaga-icon.png
 
 ICONS_PNG = \
 	add_highlight.png \
@@ -42,9 +42,9 @@ ICONS_PNG = \
 	edit_grayed.png \
 	export_flash.png \
 	export_flash_grayed.png \
-	flame_logo.png \
 	import.png \
 	import_grayed.png \
+	salasaga_logo.png \
 	up_arrow.png \
 	up_arrow_grayed.png
 
@@ -69,9 +69,9 @@ ICONS_SCALABLE = \
 	edit_grayed.svg \
 	export_flash.svg \
 	export_flash_grayed.svg \
-	flame_logo.svg \
 	import.svg \
 	import_grayed.svg \
+	salasaga_logo.svg \
 	up_arrow.svg \
 	up_arrow_grayed.svg
 
@@ -183,7 +183,6 @@ OFILES = \
 	functions/film_strip_handle_changed.o \
 	functions/film_strip_handle_released.o \
 	functions/film_strip_slide_clicked.o \
-	functions/flame_read.o \
 	functions/image_crop.o \
 	functions/layer_delete.o \
 	functions/layer_edit.o \
@@ -220,6 +219,7 @@ OFILES = \
 	functions/menu_screenshots_import.o \
 	functions/preferences_load.o \
 	functions/project_crop.o \
+	functions/project_read.o \
 	functions/quit_event.o \
 	functions/regenerate_film_strip_thumbnails.o \
 	functions/regenerate_timeline_duration_images.o \
@@ -248,12 +248,12 @@ OFILES = \
 	functions/working_area_expose_event.o \
 	functions/working_area_motion_notify_event.o \
 	functions/zoom_selector_changed.o \
-	flame-edit.o
+	salasaga.o
 
 SOUNDS = \
 	generic.wav
 
-all: flame-edit
+all: salasaga
 
 base64_decode.o:
 	$(CC) $(CFLAGS) -c base64_decode.c -o base64_decode.o
@@ -359,9 +359,6 @@ film_strip_handle_released.o:
 
 film_strip_slide_clicked.o:
 	$(CC) $(CFLAGS) -c film_strip_slide_clicked.c -o film_strip_slide_clicked.o
-
-flame_read.o:
-	$(CC) $(CFLAGS) -c flame_read.c -o flame_read.o
 
 image_crop.o:
 	$(CC) $(CFLAGS) -c image_crop.c -o image_crop.o
@@ -471,6 +468,9 @@ preferences_load.o:
 project_crop.o:
 	$(CC) $(CFLAGS) -c project_crop.c -o project_crop.o
 
+project_read.o:
+	$(CC) $(CFLAGS) -c project_read.c -o project_read.o
+
 quit_event.o:
 	$(CC) $(CFLAGS) -c quit_event.c -o quit_event.o
 
@@ -555,99 +555,99 @@ working_area_motion_notify_event.o:
 zoom_selector_changed.o:
 	$(CC) $(CFLAGS) -c zoom_selector_changed.c -o zoom_selector_changed.o
 
-flame-edit.o:
-	$(CC) $(CFLAGS) -c flame-edit.c -o flame-edit.o
+salasaga.o:
+	$(CC) $(CFLAGS) -c salasaga.c -o salasaga.o
 
-flame-edit: $(OFILES)
-	$(CC) $(CFLAGS) $(OFILES) $(LDFLAGS) $(LIBS) -o flame-edit
+salasaga: $(OFILES)
+	$(CC) $(CFLAGS) $(OFILES) $(LDFLAGS) $(LIBS) -o salasaga
 
 install:
 	$(INSTALL) -d $(bindir)
-	$(INSTALL_PROGRAM) -m 0755 flame-edit $(bindir)
+	$(INSTALL_PROGRAM) -m 0755 salasaga $(bindir)
 	$(INSTALL) -d $(datadir)/applications/
 	$(INSTALL_DATA) $(DESKTOP_FILE) $(datadir)/applications/
-	$(INSTALL) -d $(datadir)/flame/icons/
-	$(INSTALL) -d $(datadir)/flame/fonts/
-	$(INSTALL) -d $(datadir)/flame/fonts/BitstreamVera
-	$(INSTALL) -d $(datadir)/flame/fonts/BitstreamVera/fdb
+	$(INSTALL) -d $(datadir)/salasaga/icons/
+	$(INSTALL) -d $(datadir)/salasaga/fonts/
+	$(INSTALL) -d $(datadir)/salasaga/fonts/BitstreamVera
+	$(INSTALL) -d $(datadir)/salasaga/fonts/BitstreamVera/fdb
 	$(INSTALL) -d $(datadir)/pixmaps/
-	cd images; $(INSTALL_DATA) $(ICON_MAIN) $(datadir)/flame/icons/
+	cd images; $(INSTALL_DATA) $(ICON_MAIN) $(datadir)/salasaga/icons/
 	cd images; $(INSTALL_DATA) $(ICON_PNG) $(datadir)/pixmaps/
-	$(INSTALL) -d $(datadir)/flame/icons/scalable/
-	cd images; $(INSTALL_DATA) $(ICONS_SCALABLE) $(datadir)/flame/icons/scalable/
-	$(INSTALL) -d $(datadir)/flame/icons/scalable/control_bar/
-	cd images; cd control_bar; $(INSTALL_DATA) $(ICONS_CONTROL_BAR_SCALABLE) $(datadir)/flame/icons/scalable/control_bar
-	$(INSTALL) -d $(datadir)/flame/icons/scalable/pointers/
-	cd images; cd pointers; $(INSTALL_DATA) $(MOUSE_SCALABLE) $(datadir)/flame/icons/scalable/pointers/
-	$(INSTALL) -d $(datadir)/flame/icons/72x72/
-	cd images; $(INSTALL_DATA) $(ICONS_PNG) $(datadir)/flame/icons/72x72/
-	$(INSTALL) -d $(datadir)/flame/icons/72x72/control_bar/
-	cd images; cd control_bar; $(INSTALL_DATA) $(ICONS_CONTROL_BAR_PNG) $(datadir)/flame/icons/72x72/control_bar
-	$(INSTALL) -d $(datadir)/flame/icons/72x72/pointers/
-	cd images; cd pointers; $(INSTALL_DATA) $(MOUSE_PNG) $(datadir)/flame/icons/72x72/pointers/
-	cd fonts; cd BitstreamVera; cd fdb; $(INSTALL_DATA) $(FONT_BITSTREAM_VERA_FDB) $(datadir)/flame/fonts/BitstreamVera/fdb
-	$(INSTALL) -d $(datadir)/flame/sounds/
-	cd sounds; $(INSTALL_DATA) $(SOUNDS) $(datadir)/flame/sounds/
+	$(INSTALL) -d $(datadir)/salasaga/icons/scalable/
+	cd images; $(INSTALL_DATA) $(ICONS_SCALABLE) $(datadir)/salasaga/icons/scalable/
+	$(INSTALL) -d $(datadir)/salasaga/icons/scalable/control_bar/
+	cd images; cd control_bar; $(INSTALL_DATA) $(ICONS_CONTROL_BAR_SCALABLE) $(datadir)/salasaga/icons/scalable/control_bar
+	$(INSTALL) -d $(datadir)/salasaga/icons/scalable/pointers/
+	cd images; cd pointers; $(INSTALL_DATA) $(MOUSE_SCALABLE) $(datadir)/salasaga/icons/scalable/pointers/
+	$(INSTALL) -d $(datadir)/salasaga/icons/72x72/
+	cd images; $(INSTALL_DATA) $(ICONS_PNG) $(datadir)/salasaga/icons/72x72/
+	$(INSTALL) -d $(datadir)/salasaga/icons/72x72/control_bar/
+	cd images; cd control_bar; $(INSTALL_DATA) $(ICONS_CONTROL_BAR_PNG) $(datadir)/salasaga/icons/72x72/control_bar
+	$(INSTALL) -d $(datadir)/salasaga/icons/72x72/pointers/
+	cd images; cd pointers; $(INSTALL_DATA) $(MOUSE_PNG) $(datadir)/salasaga/icons/72x72/pointers/
+	cd fonts; cd BitstreamVera; cd fdb; $(INSTALL_DATA) $(FONT_BITSTREAM_VERA_FDB) $(datadir)/salasaga/fonts/BitstreamVera/fdb
+	$(INSTALL) -d $(datadir)/salasaga/sounds/
+	cd sounds; $(INSTALL_DATA) $(SOUNDS) $(datadir)/salasaga/sounds/
 
 uninstall:
-	if [ -f "$(bindir)/flame-edit" ]; then \
-		rm -f $(bindir)/flame-edit; \
+	if [ -f "$(bindir)/salasaga" ]; then \
+		rm -f $(bindir)/salasaga; \
 	fi
 
-	if [ -d "$(datadir)/flame/fonts/BitstreamVera/fdb" ]; then \
-		cd $(datadir)/flame/fonts/BitstreamVera/fdb/; \
+	if [ -d "$(datadir)/salasaga/fonts/BitstreamVera/fdb" ]; then \
+		cd $(datadir)/salasaga/fonts/BitstreamVera/fdb/; \
 		rm -f $(FONT_BITSTREAM_VERA_FDB); \
-		rmdir $(datadir)/flame/fonts/BitstreamVera/fdb/; \
+		rmdir $(datadir)/salasaga/fonts/BitstreamVera/fdb/; \
 	fi
 
-	if [ -d "$(datadir)/flame/fonts/BitstreamVera" ]; then \
-		rmdir $(datadir)/flame/fonts/BitstreamVera/; \
+	if [ -d "$(datadir)/salasaga/fonts/BitstreamVera" ]; then \
+		rmdir $(datadir)/salasaga/fonts/BitstreamVera/; \
 	fi
 
-	if [ -d "$(datadir)/flame/fonts" ]; then \
-		rmdir $(datadir)/flame/fonts/; \
+	if [ -d "$(datadir)/salasaga/fonts" ]; then \
+		rmdir $(datadir)/salasaga/fonts/; \
 	fi
 
-	if [ -d "$(datadir)/flame/icons/scalable" ]; then \
-		if [ -d "$(datadir)/flame/icons/scalable/control_bar" ]; then \
-			cd $(datadir)/flame/icons/scalable/control_bar/; \
+	if [ -d "$(datadir)/salasaga/icons/scalable" ]; then \
+		if [ -d "$(datadir)/salasaga/icons/scalable/control_bar" ]; then \
+			cd $(datadir)/salasaga/icons/scalable/control_bar/; \
 			rm -f $(ICONS_CONTROL_BAR_SCALABLE); \
-			rmdir $(datadir)/flame/icons/scalable/control_bar/; \
+			rmdir $(datadir)/salasaga/icons/scalable/control_bar/; \
 		fi; \
-		if [ -d "$(datadir)/flame/icons/scalable/pointers" ]; then \
-			cd $(datadir)/flame/icons/scalable/pointers/; \
+		if [ -d "$(datadir)/salasaga/icons/scalable/pointers" ]; then \
+			cd $(datadir)/salasaga/icons/scalable/pointers/; \
 			rm -f $(MOUSE_SCALABLE); \
-			rmdir $(datadir)/flame/icons/scalable/pointers/; \
+			rmdir $(datadir)/salasaga/icons/scalable/pointers/; \
 		fi; \
-		cd $(datadir)/flame/icons/scalable/; \
+		cd $(datadir)/salasaga/icons/scalable/; \
 		rm -f $(ICONS_SCALABLE); \
-		rmdir $(datadir)/flame/icons/scalable/; \
+		rmdir $(datadir)/salasaga/icons/scalable/; \
 	fi
 
-	if [ -d "$(datadir)/flame/icons/72x72" ]; then \
-		if [ -d "$(datadir)/flame/icons/72x72/control_bar" ]; then \
-			cd $(datadir)/flame/icons/72x72/control_bar/; \
+	if [ -d "$(datadir)/salasaga/icons/72x72" ]; then \
+		if [ -d "$(datadir)/salasaga/icons/72x72/control_bar" ]; then \
+			cd $(datadir)/salasaga/icons/72x72/control_bar/; \
 			rm -f $(ICONS_CONTROL_BAR_PNG); \
-			rmdir $(datadir)/flame/icons/72x72/control_bar/; \
+			rmdir $(datadir)/salasaga/icons/72x72/control_bar/; \
 		fi; \
-		if [ -d "$(datadir)/flame/icons/72x72/pointers" ]; then \
-			cd $(datadir)/flame/icons/72x72/pointers/; \
+		if [ -d "$(datadir)/salasaga/icons/72x72/pointers" ]; then \
+			cd $(datadir)/salasaga/icons/72x72/pointers/; \
 			rm -f $(MOUSE_PNG); \
-			rmdir $(datadir)/flame/icons/72x72/pointers/; \
+			rmdir $(datadir)/salasaga/icons/72x72/pointers/; \
 		fi; \
-		cd $(datadir)/flame/icons/72x72/; \
+		cd $(datadir)/salasaga/icons/72x72/; \
 		rm -f $(ICONS_PNG); \
-		rmdir $(datadir)/flame/icons/72x72/; \
+		rmdir $(datadir)/salasaga/icons/72x72/; \
 	fi
 
-	if [ -d "$(datadir)/flame/sounds" ]; then \
-		cd $(datadir)/flame/sounds/; \
+	if [ -d "$(datadir)/salasaga/sounds" ]; then \
+		cd $(datadir)/salasaga/sounds/; \
 		rm -f $(SOUNDS); \
-		rmdir $(datadir)/flame/sounds; \
+		rmdir $(datadir)/salasaga/sounds; \
 	fi
 
-	if [ -f "$(datadir)/flame/icons/$(ICON_MAIN)" ]; then \
-		rm -f $(datadir)/flame/icons/$(ICON_MAIN); \
+	if [ -f "$(datadir)/salasaga/icons/$(ICON_MAIN)" ]; then \
+		rm -f $(datadir)/salasaga/icons/$(ICON_MAIN); \
 	fi
 
 	if [ -f "$(datadir)/pixmaps/$(ICON_PNG)" ]; then \
@@ -660,12 +660,12 @@ uninstall:
 		rmdir $(datadir)/applications; \
 	fi
 
-	if [ -d "$(datadir)/flame/icons" ]; then \
-		rmdir $(datadir)/flame/icons; \
+	if [ -d "$(datadir)/salasaga/icons" ]; then \
+		rmdir $(datadir)/salasaga/icons; \
 	fi
 
-	if [ -d "$(datadir)/flame" ]; then \
-		rmdir $(datadir)/flame; \
+	if [ -d "$(datadir)/salasaga" ]; then \
+		rmdir $(datadir)/salasaga; \
 	fi
 
 	if [ -d "$(bindir)" ]; then \
@@ -678,7 +678,7 @@ uninstall:
 
 clean:
 	rm -f $(OFILES)
-	rm -f flame-edit flame-edit.exe
+	rm -f salasaga salasaga.exe
 
 distclean: clean
 	rm -Rf Rules.make config.make Makefile.config autom4te.cache config.log config.status configure
