@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Include file for global variables
+ * Salasaga: Include file for global variables
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
