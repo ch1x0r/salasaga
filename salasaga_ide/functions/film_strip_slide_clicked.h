@@ -34,17 +34,3 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data);
 #endif // __cplusplus
 
 #endif /*FILM_STRIP_SLIDE_CLICKED_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:19:04  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/28 12:05:07  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */

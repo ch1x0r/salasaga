@@ -34,17 +34,3 @@ void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data)
 #endif // __cplusplus
 
 #endif /*FILM_STRIP_HANDLE_CHANGED_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:19:07  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/28 12:05:08  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */
