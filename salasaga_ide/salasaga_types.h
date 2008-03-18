@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Include file for structures and similar used throughout the code
+ * Salasaga: Include file for structures and similar used throughout the code
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -21,8 +21,8 @@
  * 
  */
 
-#ifndef __FLAME_TYPES_H__
-#define __FLAME_TYPES_H__
+#ifndef __SALASAGA_TYPES_H__
+#define __SALASAGA_TYPES_H__
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
@@ -37,8 +37,8 @@ extern "C" {
 // * Define values used in the application *
 
 // Basic application constants
-#define APP_NAME "Flame Project Editing GUI"
-#define	APP_VERSION "0.7.8-pre"
+#define APP_NAME "Salasaga"
+#define	APP_VERSION "0.8.0-pre"
 	
 // Base types for the validate_value function
 #define V_CHAR				1
@@ -322,7 +322,7 @@ typedef struct
 }
 #endif // __cplusplus
 
-#endif // __FLAME_TYPES_H__
+#endif // __SALASAGA_TYPES_H__
 
 
 /*
