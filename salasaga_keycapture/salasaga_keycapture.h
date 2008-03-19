@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Header file for the Control-Printscreen key capturing dll
+ * Salasaga: Header file for the Control-Printscreen key capturing dll
  * 
  * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
  * 
@@ -35,17 +35,3 @@
 // Windows-only function to be imported/exported
 EXPORT LRESULT win32_keyboard_press_hook(int hook_code, WPARAM message_id, LPARAM message_data_ptr);
 #endif
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2007/09/19 13:14:30  vapour
- * Updated windows ifdef statement to a better place.
- *
- * Revision 1.1  2007/09/19 13:11:47  vapour
- * Initial version.  Detection of Control Printscreen works, but it still needs to launch flame-capture.
- *
- */
