@@ -34,17 +34,3 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height);
 #endif // __cplusplus
 
 #endif /*SWF_SHAPE_FROM_IMAGE_FILE_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/02/03 00:51:58  vapour
- * Fixed a small bug. Updated the symbol defined by this header to match the function name, rather than still use the name from the template.
- *
- * Revision 1.1  2008/01/23 17:20:34  vapour
- * Added a new function, for loading a SWF Shape bitmap directly from a given filename.
- *
- */

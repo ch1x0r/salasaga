@@ -34,17 +34,3 @@ void save_preferences_and_exit(void);
 #endif // __cplusplus
 
 #endif /*SAVE_PREFERENCES_AND_EXIT_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/27 10:40:52  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */

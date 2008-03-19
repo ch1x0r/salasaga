@@ -34,17 +34,3 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string);
 #endif // __cplusplus
 
 #endif /*URI_ENCODE_BASE64_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/27 10:39:50  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */

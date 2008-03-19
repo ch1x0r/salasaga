@@ -34,14 +34,3 @@ void slide_properties(void);
 #endif // __cplusplus
 
 #endif /*SLIDE_PROPERTIES_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/02/03 02:07:28  vapour
- * Added initial working code for a Slide Properties dialog.
- *
- */

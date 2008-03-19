@@ -34,17 +34,3 @@ gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer da
 #endif // __cplusplus
 
 #endif /*RESOLUTION_SELECTOR_CHANGED_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:19:06  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/28 12:05:08  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */

@@ -34,17 +34,3 @@ void *validate_value(gint value_id, gint input_type, void *value);
 #endif // __cplusplus
 
 #endif /*VALIDATE_VALUE_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/02/14 16:52:09  vapour
- * Updated validation function with an additional parameter for the type of input.  Also added working code to validate unsigned integers.
- *
- * Revision 1.1  2008/02/14 13:28:17  vapour
- * Added new function to validate input.  Only works on strings thus far.
- *
- */

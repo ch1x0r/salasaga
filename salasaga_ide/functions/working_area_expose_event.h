@@ -34,17 +34,3 @@ gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpo
 #endif // __cplusplus
 
 #endif /*WORKING_AREA_EXPOSE_EVENT_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/28 12:05:05  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */

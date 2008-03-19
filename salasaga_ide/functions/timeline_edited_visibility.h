@@ -34,14 +34,3 @@ void timeline_edited_visibility(GtkCellRendererToggle *selection, gchar *row, Gt
 #endif // __cplusplus
 
 #endif /*TIMELINE_EDITED_VISIBILITY_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/02/12 13:51:37  vapour
- * Added a new working function, called when the user clicks on a visibility check box in the timeline area.
- *
- */

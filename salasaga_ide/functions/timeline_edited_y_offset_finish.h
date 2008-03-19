@@ -34,17 +34,3 @@ void timeline_edited_y_offset_finish(GtkCellRendererText *selection, gchar *row,
 #endif // __cplusplus
 
 #endif /*TIMELINE_EDITED_Y_OFFSET_FINISH_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:19:05  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/28 12:05:07  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */
