@@ -34,14 +34,3 @@ void menu_project_properties(void);
 #endif // __cplusplus
 
 #endif /*MENU_PROJECT_PROPERTIES_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/02/04 10:30:36  vapour
- * Added new function for Project Properties.
- *
- */

@@ -34,17 +34,3 @@ void menu_help_website(void);
 #endif // __cplusplus
 
 #endif /*MENU_HELP_WEBSITE_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:19:01  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/29 04:22:15  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

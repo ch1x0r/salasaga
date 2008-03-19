@@ -34,14 +34,3 @@ void layer_new_mouse_inner(guint release_x, guint release_y);
 #endif // __cplusplus
 
 #endif /*LAYER_NEW_MOUSE_INNER_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/03/05 10:09:35  vapour
- * Moved the code for the highlight, mouse, and text layers into an inner version of each function.
- *
- */

@@ -34,17 +34,3 @@ void layer_new_highlight_inner(gint release_x, gint release_y);
 #endif // __cplusplus
 
 #endif /*LAYER_NEW_HIGHLIGHT_INNER_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/03/05 14:37:30  vapour
- * Updated to allow the function to receive negative values.
- *
- * Revision 1.1  2008/03/05 10:09:35  vapour
- * Moved the code for the highlight, mouse, and text layers into an inner version of each function.
- *
- */

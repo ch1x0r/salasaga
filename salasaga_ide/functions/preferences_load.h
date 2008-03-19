@@ -34,14 +34,3 @@ gboolean preferences_load();
 #endif // __cplusplus
 
 #endif /*PREFERENCES_LOAD_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/02/22 14:08:39  vapour
- * Moved the loading of application preferences from the main function into its own one, to ease the addition of validation code.
- *
- */

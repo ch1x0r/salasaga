@@ -34,14 +34,3 @@ void menu_export_slide(void);
 #endif // __cplusplus
 
 #endif /*MENU_EXPORT_SLIDE_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/02/11 06:43:20  vapour
- * Added working function to save a slide as an image file.
- *
- */

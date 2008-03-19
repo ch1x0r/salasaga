@@ -34,14 +34,3 @@ void layer_new_image_inner(guint release_x, guint release_y);
 #endif // __cplusplus
 
 #endif /*LAYER_NEW_IMAGE_INNER_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/03/05 09:15:06  vapour
- * Moved most of the code from the layer new image function into here.
- *
- */

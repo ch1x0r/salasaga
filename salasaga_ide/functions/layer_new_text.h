@@ -34,17 +34,3 @@ void layer_new_text(void);
 #endif // __cplusplus
 
 #endif /*LAYER_NEW_TEXT_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:18:58  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/29 04:22:11  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

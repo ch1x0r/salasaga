@@ -34,14 +34,3 @@ void menu_export_layer(void);
 #endif // __cplusplus
 
 #endif /*MENU_EXPORT_LAYER_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/02/11 11:59:35  vapour
- * Added working function to save an image layer to an image file.
- *
- */

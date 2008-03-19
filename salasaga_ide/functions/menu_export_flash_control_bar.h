@@ -34,23 +34,3 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index);
 #endif // __cplusplus
 
 #endif /*MENU_EXPORT_FLASH_CONTROL_BAR_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.4  2008/02/28 05:41:32  vapour
- * Moved selection of the output resolution array index up a function level for swf output.  This is so the same approach can be used for text element positioning in swf output.
- *
- * Revision 1.3  2008/02/27 01:47:35  vapour
- * Updated declaration.
- *
- * Revision 1.2  2008/02/03 00:51:04  vapour
- * Fixed a small bug. Updated the symbol defined by this header to match the function name, rather than still use the name from the template.
- *
- * Revision 1.1  2008/01/23 02:09:09  vapour
- * Added new function with initial working code to output a swf control bar.  Only has Stop and Play buttons at the moment (and they work), but it's a start.
- *
- */

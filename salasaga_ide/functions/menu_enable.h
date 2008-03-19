@@ -34,17 +34,3 @@ void menu_enable(const gchar *full_path, gboolean enable);
 #endif // __cplusplus
 
 #endif /*MENU_ENABLE_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/27 10:40:32  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */
