@@ -1,23 +1,5 @@
 ***********
 
-Specifically on X, when a person opens the drop down menu for most applications that application does a "grab"
-off all keyboard input thus stopping the screenshot key from working.
-
-The way around this, for at least the version of X I'm running (X.Org 7.1.1), is to add:
-
-	Option         "AllowDeactivateGrabs" "true"
-
-... to the "ServerFlags" section of your xorg.conf file, and restart X.
-
-Next time you want to do a screenshot and something is blocking the screenshot key, press Control-Alt-/
-first to tell X to "ungrab", then press the Screenshot combo (generally Control-Printscreen) and that will
-work.  You'll need to press Control-Alt-/ every time you want to ungrab though, not just the first time
-it happens.
-
-For me, this works. :)
-
-***********
-
 Windows (MinGW) notes: After installing all of the GTK, Glib, (etc) stuff, pkg-config didn't work until I'd set the environment variable:
 PKG_CONFIG_PATH=/c/MinGW/lib/pkgconfig
 
