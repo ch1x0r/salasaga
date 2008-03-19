@@ -19,32 +19,18 @@
  * 
  */
 
-#ifndef FLAME_READ_H_
-#define FLAME_READ_H_
+#ifndef PROJECT_READ_H_
+#define PROJECT_READ_H_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-gboolean flame_read(gchar *filename);
+gboolean project_read(gchar *filename);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /*FLAME_READ_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/27 10:40:19  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */
+#endif /*PROJECT_READ_H_*/
