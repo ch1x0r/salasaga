@@ -31,8 +31,7 @@ libdir = @libdir@
 includedir = @includedir@
 mandir = @mandir@
 
-XLIB = @XLIB@
 ZLIB = @ZLIB@
 
-LIBS = $(ZLIB) $(XLIB)
+LIBS = $(ZLIB)
 EXTRA_LIBS = $(LIBS)
