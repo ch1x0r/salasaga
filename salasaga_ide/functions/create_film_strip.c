@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to create the film strip area 
+ * Salasaga: Function to create the film strip area 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "film_strip_slide_clicked.h"
 
@@ -89,29 +89,3 @@ void create_film_strip()
 	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);  // fixme4: Should investigate multiple selection at some point
 	g_signal_connect(G_OBJECT(selector), "changed", G_CALLBACK(film_strip_slide_clicked), NULL);
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.6  2008/02/05 09:01:09  vapour
- * Simplified some code that was just wasting memory.
- *
- * Revision 1.5  2008/02/04 15:01:33  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/10/04 19:51:10  vapour
- * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
- *
- * Revision 1.2  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/29 02:42:26  vapour
- * Broke flame-edit.c into its component functions.
- *
- */

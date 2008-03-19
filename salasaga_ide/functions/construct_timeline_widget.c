@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Construct the widget used to display the slide in the timeline 
+ * Salasaga: Construct the widget used to display the slide in the timeline 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "timeline_edited_name.h"
 #include "timeline_edited_visibility.h"
@@ -141,26 +141,3 @@ GtkWidget *construct_timeline_widget(slide *slide_data)
 
 	return slide_data->timeline_widget;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.5  2008/02/12 13:57:26  vapour
- * Updated to honour the new visibility field in the layer structure, plus also simplified some of the column creation code.
- *
- * Revision 1.4  2008/02/04 14:57:36  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.3  2008/01/15 16:19:02  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/04 19:51:10  vapour
- * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
- *
- * Revision 1.1  2007/09/29 04:22:15  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

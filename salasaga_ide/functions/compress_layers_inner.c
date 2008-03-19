@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to process the data for a layer, adding it to the main image being built 
+ * Salasaga: Function to process the data for a layer, adding it to the main image being built 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 #include "draw_highlight_box.h"
@@ -291,35 +291,3 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			display_warning("Error ED33: Unknown layer type\n");		
 	}
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.8  2008/02/12 13:55:49  vapour
- * Updated to honour the new visibility and background fields in the layer structure.
- *
- * Revision 1.7  2008/02/12 07:22:54  vapour
- * Re-aligned the tab spacing for consistency.
- *
- * Revision 1.6  2008/02/12 05:16:50  vapour
- * Adjusted to work with the new, slightly simplified layer structure.
- *
- * Revision 1.5  2008/02/04 14:56:12  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/01/19 06:34:12  vapour
- * Tweaked an error message for clarity.
- *
- * Revision 1.3  2008/01/15 16:19:02  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/04 19:51:10  vapour
- * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
- *
- * Revision 1.1  2007/09/29 04:22:16  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

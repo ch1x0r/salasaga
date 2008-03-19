@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to create the output resolution selector 
+ * Salasaga: Function to create the output resolution selector 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -109,29 +109,3 @@ GtkWidget *create_resolution_selector(guint initial_width, guint initial_height)
 	// Return the resolution widget
 	return res_widget;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.6  2008/02/14 13:44:48  vapour
- * Renamed the ResolutionSelector structure to resolution_structure, for consistency with all the other structure names.
- *
- * Revision 1.5  2008/02/05 15:29:05  vapour
- * Moved the list of output resolutions into the create resolution selector function.
- *
- * Revision 1.4  2008/02/05 06:22:28  vapour
- * Resolution selector widget now says pixels instead of px.
- *
- * Revision 1.3  2008/02/04 15:02:49  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.2  2008/01/15 16:19:07  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/29 04:22:17  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

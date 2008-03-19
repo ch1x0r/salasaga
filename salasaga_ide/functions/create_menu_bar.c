@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to create the top menu bar 
+ * Salasaga: Function to create the top menu bar 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "layer_delete.h"
 #include "layer_edit.h"
@@ -155,47 +155,3 @@ void create_menu_bar()
 	if (FALSE == screenshots_enabled)
 		menu_enable("/Screenshots/Capture", FALSE);
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.12  2008/02/20 22:24:35  vapour
- * Added missing menu item for creating new mouse layers.
- *
- * Revision 1.11  2008/02/11 12:02:57  vapour
- * Added menu items to export a slide as an image file, and to also export an image layer as an image file.
- *
- * Revision 1.10  2008/02/11 02:14:04  vapour
- * Screenshot menu option now disabled when flame-capture not found in search path on *nix.
- *
- * Revision 1.9  2008/02/04 15:02:08  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.8  2008/02/04 10:31:59  vapour
- * Updated top menu bar to include the new Project Properties function.
- *
- * Revision 1.7  2008/02/03 05:41:26  vapour
- * Removing svg export functionality.
- *
- * Revision 1.6  2008/02/03 02:11:09  vapour
- * Replaced the slide name setting option with the slide properties option.
- *
- * Revision 1.5  2008/02/03 00:45:54  vapour
- * Respaced columns to line up on my monitor.  (Now using a monospace font, so hoping things won't go out of line so much.)
- *
- * Revision 1.4  2008/01/15 16:19:04  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/10/04 19:51:09  vapour
- * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
- *
- * Revision 1.2  2007/09/29 04:22:16  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/29 02:42:25  vapour
- * Broke flame-edit.c into its component functions.
- *
- */

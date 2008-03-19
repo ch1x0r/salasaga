@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function that gets all of the layers for a slide, then creates a pixel buffer from them 
+ * Salasaga: Function that gets all of the layers for a slide, then creates a pixel buffer from them 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "compress_layers_inner.h"
 
@@ -104,29 +104,3 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
 		return backing_pixbuf;
 	}
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.6  2008/02/12 07:24:39  vapour
- * Fixed the image compositing to not use a blurry algorithm, and also slightly optimised it when working at 100 percent zoom.
- *
- * Revision 1.5  2008/02/04 14:56:51  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/01/15 16:19:07  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2008/01/13 10:31:21  vapour
- * Removed unneeded include and realigned tabs to suit my monitor.
- *
- * Revision 1.2  2007/10/04 19:51:10  vapour
- * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
- *
- * Revision 1.1  2007/09/29 04:22:17  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

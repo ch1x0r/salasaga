@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to create a Base64 encoded string from a block of data in memory
+ * Salasaga: Function to create a Base64 encoded string from a block of data in memory
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 
@@ -181,32 +181,3 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
 	output_string[0] = output_buffer;
 	return TRUE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.7  2008/02/04 14:54:55  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.6  2008/01/19 06:32:40  vapour
- * Tweaked an error message for clarity.
- *
- * Revision 1.5  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.4  2007/10/04 19:51:11  vapour
- * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
- *
- * Revision 1.3  2007/09/29 04:22:14  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.2  2007/09/28 12:05:08  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:40:29  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */
