@@ -1,9 +1,9 @@
 [Desktop Entry]
-Name=Flame Project
-GenericName=Tutorial Creator
-Comment=Create tutorials of desktop applications
-Icon=/usr/share/pixmaps/flame-icon.png
-Exec=flame-edit
+Name=Salasaga
+GenericName=eLearning Creator
+Comment=Create eLearning for desktop applications
+Icon=/usr/share/pixmaps/salasaga-icon.png
+Exec=salasaga
 Type=Application
 Terminal=false
 StartupNotify=true
