@@ -3,7 +3,7 @@
  *
  * Salasaga: Function called when the user selects Help -> About from the top menu 
  * 
- * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007-2008 Justin Clift <justin@salasaga.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -51,7 +51,7 @@ void menu_help_about(void)
 	about_dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 	gtk_about_dialog_set_name(about_dialog, APP_NAME);
 	gtk_about_dialog_set_version(about_dialog, tmp_gstring->str);
-	gtk_about_dialog_set_copyright(about_dialog, "(C) 2005-2008 Justin Clift <justin@postgresql.org>");
+	gtk_about_dialog_set_copyright(about_dialog, "(C) 2005-2008 Justin Clift <justin@salasaga.org>");
 	gtk_about_dialog_set_license(about_dialog, "LGPL");
 	gtk_about_dialog_set_license(about_dialog, NULL);
 	gtk_about_dialog_set_authors(about_dialog, authors);

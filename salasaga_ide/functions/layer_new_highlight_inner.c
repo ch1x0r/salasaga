@@ -3,7 +3,7 @@
  *
  * Salasaga: Displays a dialog box asking for the values required to make a new highlight layer
  * 
- * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2008 Justin Clift <justin@salasaga.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
