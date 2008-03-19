@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects Slide -> Delete from the top menu 
+ * Salasaga: Function called when the user selects Slide -> Delete from the top menu 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "create_tooltips.h"
 #include "destroy_slide.h"
@@ -102,32 +102,3 @@ void slide_delete(void)
 	destroy_slide(tmp_glist->data, NULL);
 	g_list_free(tmp_glist);
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.7  2008/03/03 03:00:19  vapour
- * Added status bar feedback message.
- *
- * Revision 1.6  2008/02/19 17:46:27  vapour
- * Small wording tweak in an error message.
- *
- * Revision 1.5  2008/02/19 17:24:13  vapour
- * Re-aligned tabs to suit my display.
- *
- * Revision 1.4  2008/02/04 17:12:30  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.3  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/06 11:37:24  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.1  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

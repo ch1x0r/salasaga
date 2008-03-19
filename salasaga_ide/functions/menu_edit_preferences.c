@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects Edit -> Preferences from the top menu 
+ * Salasaga: Function called when the user selects Edit -> Preferences from the top menu 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -33,8 +33,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "create_resolution_selector.h"
 #include "create_zoom_selector.h"
@@ -409,58 +409,3 @@ void menu_edit_preferences(void)
 	gtk_widget_destroy(GTK_WIDGET(button_default_output_folder));
 	gtk_widget_destroy(GTK_WIDGET(main_dialog));
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.15  2008/03/03 02:53:20  vapour
- * Added status bar feedback message.
- *
- * Revision 1.14  2008/02/25 13:34:22  vapour
- * Small alphabetical ordering tweak.
- *
- * Revision 1.13  2008/02/20 05:56:38  vapour
- * Improved memory allocation and deallocation.
- *
- * Revision 1.12  2008/02/19 13:45:14  vapour
- * Removed scaling quality variable, added a default frames per second variable.
- *
- * Revision 1.11  2008/02/19 12:43:36  vapour
- * Updated to validate input for icon height, film strip width, default slide length, and default zoom level.
- *
- * Revision 1.10  2008/02/19 06:41:36  vapour
- * Began converting this function to validate incoming user input.
- *
- * Revision 1.9  2008/02/05 15:29:56  vapour
- * Moved the list of output resolutions into the create resolution selector function.
- *
- * Revision 1.8  2008/02/05 10:47:02  vapour
- * The zoom value is now a selection widget.
- *
- * Revision 1.7  2008/02/05 09:16:10  vapour
- *  + Removed support of output quality variable, as the concept is no longer relevant.
- *  + Changing the value of Film Strip width is now reflecting in the GUI after closing this dialog.
- *
- * Revision 1.6  2008/02/05 08:34:11  vapour
- * Scaling quality is now a selector widget instead of a numeric button field.
- *
- * Revision 1.5  2008/02/05 06:39:04  vapour
- * Output resolution is now a selector instead of individual text fields.
- *
- * Revision 1.4  2008/02/04 14:34:33  vapour
- *  + Removed unnecessary includes.
- *  + Improved spacing between table cells.
- *
- * Revision 1.3  2008/02/04 10:33:29  vapour
- * Removed the code that went into the new Project Properties function.
- *
- * Revision 1.2  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/29 04:22:13  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

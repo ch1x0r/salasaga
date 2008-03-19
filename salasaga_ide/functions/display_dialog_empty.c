@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Display a dialog box asking for empty layer settings 
+ * Salasaga: Display a dialog box asking for empty layer settings 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 #include "validate_value.h"
@@ -167,27 +167,3 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 	g_string_free(valid_ext_link_win, TRUE);
 	return TRUE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.5  2008/02/20 18:41:15  vapour
- * Updated to validate all incoming input.
- *
- * Revision 1.4  2008/02/04 14:24:38  vapour
- *  + Removed unnecessary includes.
- *  + Improved spacing between table cells.
- *
- * Revision 1.3  2008/02/01 10:32:50  vapour
- * Added code to the dialog to display and accept values for the external link and its target window.
- *
- * Revision 1.2  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/29 04:22:15  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

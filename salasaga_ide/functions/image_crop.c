@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user clicks the Crop Image toolbar button 
+ * Salasaga: Function called when the user clicks the Crop Image toolbar button 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -33,8 +33,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 #include "draw_timeline.h"
@@ -223,36 +223,3 @@ void image_crop(void)
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Image cropped");
 	gdk_flush();
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.8  2008/03/03 02:47:37  vapour
- * Added status bar feedback message.
- *
- * Revision 1.7  2008/02/16 11:09:47  vapour
- * Replaced our sound beep function with the inbuilt gdk sound beep one.
- *
- * Revision 1.6  2008/02/12 14:07:31  vapour
- * Updated to use the new background field in the layer structure.
- *
- * Revision 1.5  2008/02/04 14:33:07  vapour
- *  + Removed unnecessary includes.
- *  + Improved spacing between table cells.
- *
- * Revision 1.4  2008/01/19 06:38:42  vapour
- * Tweaked some error messages for clarity.
- *
- * Revision 1.3  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/06 11:39:27  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.1  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

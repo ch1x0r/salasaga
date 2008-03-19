@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user chooses a new zoom level 
+ * Salasaga: Function called when the user chooses a new zoom level 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -33,8 +33,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "draw_workspace.h"
 
@@ -86,35 +86,3 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 	// Indicate to the calling routine that this function finished fine
 	return TRUE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.8  2008/03/05 12:47:26  vapour
- * Renamed the old backing store variable and associated comments to front store.
- *
- * Revision 1.7  2008/02/27 13:46:46  vapour
- * Fixed a small bug where the drawing area wasn't always being sized correctly at startup until the window had been resized.
- *
- * Revision 1.6  2008/02/07 12:40:03  vapour
- * Updated to free the backing store when needed.
- *
- * Revision 1.5  2008/02/04 17:23:41  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/10/06 11:36:39  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.2  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/28 12:05:06  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */

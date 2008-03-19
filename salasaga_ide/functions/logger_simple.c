@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Simple log handling function
+ * Salasaga: Simple log handling function
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -39,26 +39,3 @@ void logger_simple(const gchar *str)
 {
 	// For now, do nothing with the logs
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.5  2008/02/04 16:59:24  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/09/29 04:22:15  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.2  2007/09/28 12:05:08  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:40:48  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */

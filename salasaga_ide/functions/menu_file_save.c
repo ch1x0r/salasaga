@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects File -> Save from the top menu 
+ * Salasaga: Function called when the user selects File -> Save from the top menu 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -33,8 +33,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 #include "menu_file_save_slide.h"
@@ -48,7 +48,7 @@ void menu_file_save(void)
 	gchar				*dir_name_part;				// Briefly used for holding a directory name
 	gchar				*filename;					// Pointer to the chosen file name
 	gchar				*file_name_part;			// Briefly used for holding a file name
-	GtkFileFilter		*flame_filter;				// Filter for *.flame
+	GtkFileFilter		*salasaga_filter;				// Filter for *.salasaga
 	GtkWidget 			*save_dialog;				// Dialog widget
 	gboolean			useable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
@@ -77,11 +77,11 @@ void menu_file_save(void)
 											  GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
 											  NULL);
 
-	// Create the filter so only *.flame files are displayed
-	flame_filter = gtk_file_filter_new();
-	gtk_file_filter_add_pattern(flame_filter, "*.flame");
-	gtk_file_filter_set_name(flame_filter, "Flame Project file (*.flame)");
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(save_dialog), flame_filter);
+	// Create the filter so only *.salasaga files are displayed
+	salasaga_filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(salasaga_filter, "*.salasaga");
+	gtk_file_filter_set_name(salasaga_filter, "Salasaga Project file (*.salasaga)");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(save_dialog), salasaga_filter);
 
 	// Create the filter so all files (*.*) can be displayed
 	all_filter = gtk_file_filter_new();
@@ -106,7 +106,7 @@ void menu_file_save(void)
 	} else
 	{
 		// Nothing has been established, so use project_name
-		g_string_printf(tmp_gstring, "%s.flame", project_name->str);
+		g_string_printf(tmp_gstring, "%s.salasaga", project_name->str);
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(save_dialog), tmp_gstring->str);
 
 		// Change to the default project directory
@@ -180,7 +180,7 @@ void menu_file_save(void)
 	}
 
     // Create the root node
-	root_node = xmlNewDocRawNode(document_pointer, NULL, (const xmlChar *) "flame_project", NULL);
+	root_node = xmlNewDocRawNode(document_pointer, NULL, (const xmlChar *) "salasaga_project", NULL);
 	if (NULL == root_node)
 	{
 		display_warning("Error ED21: Error creating the root node.");
@@ -199,7 +199,7 @@ void menu_file_save(void)
 	}
 
 	// Add the save format version number to the XML document
-	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "2.7");
+	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "3.0");
 
     // Create the preferences container
 	pref_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "preferences", NULL);
@@ -304,67 +304,3 @@ void menu_file_save(void)
 	g_string_free(validated_string, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.18  2008/03/11 01:39:00  vapour
- * Now saves the swf control bar display toggle value, and updated the save file format to 2.7.
- *
- * Revision 1.17  2008/03/10 06:33:39  vapour
- * Added code to save the swf start behaviour, and incremented the save format to 2.6.
- *
- * Revision 1.16  2008/03/09 14:55:10  vapour
- * Renamed the enums for end behaviour.
- *
- * Revision 1.15  2008/03/06 00:17:32  vapour
- * + Tweaked a few error messages.
- * + Added code to save the new end behaviour project preference.
- * + Incremented the file format version number to 2.5.
- *
- * Revision 1.14  2008/03/03 02:57:16  vapour
- * Updated status bar feedback message.
- *
- * Revision 1.13  2008/02/20 18:47:11  vapour
- * Updated to use a renamed validation field.
- *
- * Revision 1.12  2008/02/20 05:54:41  vapour
- * Tweaked to use the validated string whenever possible, and to also free allocated memory better.
- *
- * Revision 1.11  2008/02/18 13:45:25  vapour
- * Updated to validate incoming filename to save as input.
- *
- * Revision 1.10  2008/02/14 17:12:29  vapour
- * Added the missing frames per second value to the project file, and incremented the file save format version to 2.4.
- *
- * Revision 1.9  2008/02/12 14:17:50  vapour
- * Incremented the file format version to 2.3.
- *
- * Revision 1.8  2008/02/05 09:16:55  vapour
- * Removed support of output quality variable, as the concept is no longer relevant.
- *
- * Revision 1.7  2008/02/04 17:04:41  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.6  2008/02/01 10:50:51  vapour
- * Bumped up the project file format version to 2.2.
- *
- * Revision 1.5  2008/01/21 20:29:46  vapour
- * File format version has been incremented to 2.1.
- *
- * Revision 1.4  2008/01/19 06:58:21  vapour
- * Tweaked some error messages for clarity.
- *
- * Revision 1.3  2008/01/15 16:19:03  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/06 11:38:28  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.1  2007/09/29 04:22:16  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the visibility field in the timeline widget is edited 
+ * Salasaga: Function called when the visibility field in the timeline widget is edited 
  * 
  * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
  * 
@@ -33,8 +33,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "draw_workspace.h"
 #include "regenerate_film_strip_thumbnails.h"
@@ -89,14 +89,3 @@ void timeline_edited_visibility(GtkCellRendererToggle *selection, gchar *row, Gt
 	// Recreate the film strip thumbnails
 	regenerate_film_strip_thumbnails();
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/02/12 13:51:38  vapour
- * Added a new working function, called when the user clicks on a visibility check box in the timeline area.
- *
- */

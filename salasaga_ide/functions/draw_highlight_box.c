@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to draw a highlight box on a GDK pixbuf 
+ * Salasaga: Function to draw a highlight box on a GDK pixbuf 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 
@@ -134,32 +134,3 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 	g_object_unref(highlight_pixbuf);
 	return;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.7  2008/03/05 12:45:37  vapour
- * Renamed the old backing store variable and associated comments to front store.
- *
- * Revision 1.6  2008/02/04 16:46:45  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.5  2008/01/19 06:35:58  vapour
- * Tweaked some error messages for clarity.
- *
- * Revision 1.4  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2008/01/13 10:33:10  vapour
- * Realigned tabs to suit my monitor.
- *
- * Revision 1.2  2007/10/04 19:51:10  vapour
- * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
- *
- * Revision 1.1  2007/09/29 04:22:13  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

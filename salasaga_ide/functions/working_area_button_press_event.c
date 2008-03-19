@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Detect when the user presses the mouse button on the drawing area 
+ * Salasaga: Detect when the user presses the mouse button on the drawing area 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -33,8 +33,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "detect_collisions.h"
 #include "layer_edit.h"
@@ -222,44 +222,3 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 
 	return TRUE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.11  2008/03/06 01:09:15  vapour
- * Fixed a bug in setting the initial values for the invalidation area.
- *
- * Revision 1.10  2008/03/05 13:47:51  vapour
- * Tweaked the starting position for the double buffering invalidation area.
- *
- * Revision 1.9  2008/03/05 13:23:43  vapour
- * Now resets the double buffering invalidation area.
- *
- * Revision 1.8  2008/03/05 12:49:46  vapour
- * Renamed the old backing store variable and associated comments to front store.
- *
- * Revision 1.7  2008/03/05 10:20:43  vapour
- * Reversed the previous commit, and included code to save the mouse coordinates when we are creating a new highlight layer.
- *
- * Revision 1.6  2008/03/05 09:21:20  vapour
- * Added initial code to recognise button release events for the creation of a new image layer.
- *
- * Revision 1.5  2008/02/04 17:21:32  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/10/06 11:36:39  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.2  2007/09/29 04:22:15  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/28 12:05:05  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */

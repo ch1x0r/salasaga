@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function that redraws the workspace 
+ * Salasaga: Function that redraws the workspace 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "calculate_object_boundaries.h"
 #include "compress_layers.h"
@@ -118,35 +118,3 @@ void draw_workspace(void)
 	// Update the collision detection boundaries
 //	calculate_object_boundaries();
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.8  2008/03/05 12:43:19  vapour
- * Updated to support double buffering.
- *
- * Revision 1.7  2008/02/27 13:47:50  vapour
- * The one pixel black border around the drawing area should now always be drawn clearly.
- *
- * Revision 1.6  2008/02/11 12:01:38  vapour
- * Swapped around a few lines, to make more sense of program flow.
- *
- * Revision 1.5  2008/02/07 12:35:27  vapour
- * Reworked this function to be more efficient.
- *
- * Revision 1.4  2008/02/04 16:48:01  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.3  2008/01/15 16:19:03  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/04 19:51:11  vapour
- * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
- *
- * Revision 1.1  2007/09/29 04:22:16  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

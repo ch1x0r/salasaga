@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Redraw the working area from the front store 
+ * Salasaga: Redraw the working area from the front store 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -52,26 +52,3 @@ gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpo
 
 	return FALSE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.5  2008/03/05 12:46:45  vapour
- * Renamed the old backing store variable and associated comments to front store.
- *
- * Revision 1.4  2008/02/04 17:22:38  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.3  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/28 12:05:05  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: 
+ * Salasaga: Retrieves saved application defaults if available
  * 
  * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
  * 
@@ -34,8 +34,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 #include "validate_value.h"
@@ -75,7 +75,7 @@ gboolean preferences_load()
 
 	// Check if we have a saved configuration in GConf
 	gconf_engine = gconf_engine_get_default();
-	if (FALSE == gconf_engine_dir_exists(gconf_engine, "/apps/flame", &error))
+	if (FALSE == gconf_engine_dir_exists(gconf_engine, "/apps/salasaga", &error))
 	{
 		// We don't have a set of preferences available for loading
 		g_string_free(valid_output_folder, TRUE);
@@ -88,7 +88,7 @@ gboolean preferences_load()
 	useable_input = TRUE;
 
 	// Retrieve the new default project folder input
-	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/project_folder", NULL));
+	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/project_folder", NULL));
 	if (NULL == validated_string)
 	{
 		display_warning("Error ED185: There was something wrong with the project folder value stored in the preferences.  Using default preferences instead.");
@@ -101,7 +101,7 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new screenshots folder input
-	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/screenshots_folder", NULL));
+	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/screenshots_folder", NULL));
 	if (NULL == validated_string)
 	{
 		display_warning("Error ED186: There was something wrong with the screenshots folder value stored in the preferences.  Using default preferences instead.");
@@ -114,7 +114,7 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new default output folder input
-	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/output_folder", NULL));
+	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/output_folder", NULL));
 	if (NULL == validated_string)
 	{
 		display_warning("Error ED187: There was something wrong with the default output folder value stored in the preferences.  Using default preferences instead.");
@@ -127,9 +127,9 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new default zoom level input
-	if (NULL != gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/zoom_level", NULL))
+	if (NULL != gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/zoom_level", NULL))
 	{
-		validated_string = validate_value(ZOOM_LEVEL, V_ZOOM, gconf_engine_get_string(gconf_engine, "/apps/flame/defaults/zoom_level", NULL));
+		validated_string = validate_value(ZOOM_LEVEL, V_ZOOM, gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/zoom_level", NULL));
 		if (NULL == validated_string)
 		{
 			display_warning("Error ED188: There was something wrong with the default zoom level value stored in the preferences.  Using default preferences instead.");
@@ -143,7 +143,7 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new default project width input
-	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_width", NULL);
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/project_width", NULL);
 	validated_guint = validate_value(PROJECT_WIDTH, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
@@ -157,7 +157,7 @@ gboolean preferences_load()
 
 
 	// Retrieve the new default project height input
-	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/project_height", NULL);
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/project_height", NULL);
 	validated_guint = validate_value(PROJECT_HEIGHT, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
@@ -170,7 +170,7 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new default output width input
-	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_width", NULL);
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/output_width", NULL);
 	validated_guint = validate_value(PROJECT_WIDTH, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
@@ -183,7 +183,7 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new default output height input
-	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/output_height", NULL);
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/output_height", NULL);
 	validated_guint = validate_value(PROJECT_HEIGHT, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
@@ -196,7 +196,7 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new default slide length input
-	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/slide_length", NULL);
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/slide_length", NULL);
 	validated_guint = validate_value(SLIDE_LENGTH, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
@@ -209,7 +209,7 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new default background colour, red component
-	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_red", NULL);
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_red", NULL);
 	validated_guint = validate_value(COLOUR_COMP16, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
@@ -222,7 +222,7 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new default background colour, green component
-	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_green", NULL);
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_green", NULL);
 	validated_guint = validate_value(COLOUR_COMP16, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
@@ -235,7 +235,7 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new default background colour, blue component
-	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_blue", NULL);
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_blue", NULL);
 	validated_guint = validate_value(COLOUR_COMP16, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
@@ -248,7 +248,7 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new preview width input
-	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", NULL);
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/thumbnail_width", NULL);
 	if (0 != guint_val)
 	{
 		validated_guint = validate_value(PREVIEW_WIDTH, V_INT_UNSIGNED, &guint_val);
@@ -269,7 +269,7 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new default frames per second input
-	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/frames_per_second", NULL);
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/frames_per_second", NULL);
 	validated_guint = validate_value(PROJECT_FPS, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
@@ -282,7 +282,7 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new icon height input
-	guint_val = gconf_engine_get_int(gconf_engine, "/apps/flame/defaults/icon_height", NULL);
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/icon_height", NULL);
 	if (0 != guint_val)
 	{
 		validated_guint = validate_value(ICON_HEIGHT, V_INT_UNSIGNED, &guint_val);
@@ -303,7 +303,7 @@ gboolean preferences_load()
 	}
 
 	// Check if the application should start maximised or not
-	should_maximise = gconf_engine_get_bool(gconf_engine, "/apps/flame/defaults/window_maximised", NULL);
+	should_maximise = gconf_engine_get_bool(gconf_engine, "/apps/salasaga/defaults/window_maximised", NULL);
 
 	// Check if all the values were validated ok
 	if (FALSE == useable_input)
@@ -729,20 +729,3 @@ gboolean preferences_load()
 
 	return TRUE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.3  2008/02/25 13:35:30  vapour
- * Finished adding validation code for non-windows platforms.
- *
- * Revision 1.2  2008/02/22 14:36:11  vapour
- * Starting validating incoming values.
- *
- * Revision 1.1  2008/02/22 14:08:39  vapour
- * Moved the loading of application preferences from the main function into its own one, to ease the addition of validation code.
- *
- */

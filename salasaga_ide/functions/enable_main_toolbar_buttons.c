@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Enables the main toolbar buttons that can only be used when a project is loaded 
+ * Salasaga: Enables the main toolbar buttons that can only be used when a project is loaded 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "menu_export_flash_animation.h"
 #include "project_crop.h"
@@ -64,26 +64,3 @@ void enable_main_toolbar_buttons(void)
 		main_toolbar_signals[EXPORT_FLASH] = g_signal_connect(G_OBJECT(main_toolbar_items[EXPORT_FLASH]), "clicked", G_CALLBACK(menu_export_flash_animation), (gpointer) NULL);
 	}
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.5  2008/02/04 16:49:21  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/02/03 05:43:52  vapour
- * Removing svg export functionality.
- *
- * Revision 1.3  2008/01/15 16:18:58  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/04 19:51:10  vapour
- * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
- *
- * Revision 1.1  2007/09/29 04:22:11  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

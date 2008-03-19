@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Disables the main toolbar buttons that can only be used when a project is loaded 
+ * Salasaga: Disables the main toolbar buttons that can only be used when a project is loaded 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -65,23 +65,3 @@ void disable_main_toolbar_buttons(void)
 		main_toolbar_signals[CROP_ALL] = 0;
 	}
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.4  2008/02/04 16:44:45  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.3  2008/02/03 05:43:01  vapour
- * Removing svg export functionality.
- *
- * Revision 1.2  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/29 04:22:14  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Enables the layer toolbar buttons 
+ * Salasaga: Enables the layer toolbar buttons 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "image_crop.h"
 #include "layer_delete.h"
@@ -141,23 +141,3 @@ void enable_layer_toolbar_buttons(void)
 		layer_toolbar_signals[LAYER_IMAGE] = g_signal_connect(G_OBJECT(layer_toolbar_items[LAYER_IMAGE]), "clicked", G_CALLBACK(layer_new_image), (gpointer) NULL);	
 	}
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.4  2008/02/04 16:48:40  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.3  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/04 19:51:11  vapour
- * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
- *
- * Revision 1.1  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

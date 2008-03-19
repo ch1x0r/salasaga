@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Creates a swf control bar for the given swf movie 
+ * Salasaga: Creates a swf control bar for the given swf movie 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -28,8 +28,8 @@
 // Ming include
 #include <ming.h>
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 #include "swf_shape_from_image_file.h"
@@ -953,95 +953,3 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	// Control bar was created successfully, so indicate this
 	return TRUE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.25  2008/03/10 06:36:44  vapour
- * Updated the actionscript to work with the new swf start behaviour project preference.
- *
- * Revision 1.24  2008/02/28 05:41:32  vapour
- * Moved selection of the output resolution array index up a function level for swf output.  This is so the same approach can be used for text element positioning in swf output.
- *
- * Revision 1.23  2008/02/27 11:14:46  vapour
- * Added working control bar element sizing for 1024 x 768, 1280 x 720, 1280 x 1024, 1600 x 1200, 1920 x 1080, 1920 x 1200.
- *
- * Revision 1.22  2008/02/27 10:24:37  vapour
- * Added working control bar element sizing for 128 x 96.
- *
- * Revision 1.21  2008/02/27 10:16:31  vapour
- * Added working control bar element sizing for 160 x 120.
- *
- * Revision 1.20  2008/02/27 10:13:01  vapour
- * Added working control bar element sizing for 176 x 144.
- *
- * Revision 1.19  2008/02/27 09:53:59  vapour
- *  + Re-centred control bar for 352 x 288 output.
- *  + Added working control bar element sizing for 320 x 240.
- *
- * Revision 1.18  2008/02/27 09:06:35  vapour
- * Added working control bar element sizing for 352 x 288.
- *
- * Revision 1.17  2008/02/27 08:28:41  vapour
- * Added working control bar element sizing for 640 x 480.
- *
- * Revision 1.16  2008/02/27 08:26:25  vapour
- * Added working control bar element sizing for 720 x 480.
- *
- * Revision 1.15  2008/02/27 02:37:25  vapour
- *  + Updated swf control bar elements to use floating point numbers for finer grained positioning.
- *  + Improved resolution detection code.
- *  + Moved control bar position for 800x600 resolution down a bit.
- *
- * Revision 1.14  2008/02/27 01:49:24  vapour
- * Added initial working code to select which control bar element sizing to use, and added some hard coded sizing elements.  800x600 is the only one with the correct sizing at the moment.
- *
- * Revision 1.13  2008/02/26 13:11:51  vapour
- * Updated to use hard coded control bar sizing information for each resolution.  Only 800x600 works for now, and control bar size is hard coded to that temporarily.
- *
- * Revision 1.12  2008/02/01 10:45:42  vapour
- * Fixed a small bug.  I'd forgotten to temporarily comment out some code.
- *
- * Revision 1.11  2008/01/31 07:08:53  vapour
- *  + Adjusted the swf output control bar to use a background image.
- *  + The forward and reverse buttons on the swf output control bar are always displayed (for now).
- *
- * Revision 1.10  2008/01/31 01:05:49  vapour
- * Converted the swf control bar defines into variables, so they can be adjusted by the user in future.
- *
- * Revision 1.9  2008/01/30 15:49:03  vapour
- *  + Added a variable to track whether the user is playing or pausing the swf movie, as it needs special handling to provide a good experience.
- *
- * Revision 1.8  2008/01/30 14:45:46  vapour
- *  + Adjusted the swf control buttons to use gotoAndStop rather than gotoAndPlay while things are still being debugged.
- *  + Added a variable to track whether the user is reversing through the swf movie or not, as it needs special handling to provide a good experience.
- *
- * Revision 1.7  2008/01/30 09:52:47  vapour
- *  + Reworked the action script embedded in swf output to include debugging statements, if the IDE was started in debugging mode. (-d)
- *  + Reworked the rewind and fast forward action script for swf output, so it now works.
- *
- * Revision 1.6  2008/01/27 17:42:10  vapour
- * Gave a name to the swf control bar, so the initial action can set the play button visibility correctly.
- * Updated the swf variable names with the _root context.
- *
- * Revision 1.5  2008/01/25 16:24:14  vapour
- * Added code to embed action script for the fast forward and rewind buttons, and also an actionscript list of slide names for jumping between.
- *
- * Revision 1.4  2008/01/24 00:28:26  vapour
- *  + Updated all buttons to be loaded directly from file.  They now position correctly too.
- *  + Action Script is in place for the Rewind, Pause, Play, and Finish buttons.
- *  + Reverse and Forward buttons are commented out from display until I figure out the AS needed for them to work.
- *
- * Revision 1.3  2008/01/23 17:24:49  vapour
- * Mostly re-written.  Now uses the new function for directly loading a swf shape from filename, so the control bar should look graphically a lot better.  Lots of work still remaining however.
- *
- * Revision 1.2  2008/01/23 03:06:13  vapour
- * Added a background layer to the swf output control bar, for better visual contrast.
- *
- * Revision 1.1  2008/01/23 02:09:09  vapour
- * Added new function with initial working code to output a swf control bar.  Only has Stop and Play buttons at the moment (and they work), but it's a start.
- *
- */

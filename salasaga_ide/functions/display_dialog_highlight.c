@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Display a dialog box asking for highlight layer settings 
+ * Salasaga: Display a dialog box asking for highlight layer settings 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 #include "validate_value.h"
@@ -388,35 +388,3 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	g_string_free(valid_ext_link_win, TRUE);
 	return TRUE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.8  2008/03/07 07:28:11  vapour
- * Updated to use the new validation field entries.
- *
- * Revision 1.7  2008/02/20 21:01:42  vapour
- * Fixed a minor typo.
- *
- * Revision 1.6  2008/02/20 18:42:42  vapour
- * Updated to validate all incoming input.
- *
- * Revision 1.5  2008/02/12 05:17:29  vapour
- * Adjusted to work with the new, slightly simplified layer structure.
- *
- * Revision 1.4  2008/02/04 14:28:08  vapour
- * Improved spacing between table cells.
- *
- * Revision 1.3  2008/02/01 10:34:23  vapour
- * Added code to the dialog to display and accept values for the external link's target window.
- *
- * Revision 1.2  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/29 04:22:13  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

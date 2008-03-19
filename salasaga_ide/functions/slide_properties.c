@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects Slide -> Properties from the top menu 
+ * Salasaga: Function called when the user selects Slide -> Properties from the top menu 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 #include "regenerate_timeline_duration_images.h"
@@ -199,25 +199,3 @@ void slide_properties(void)
 	g_string_free(valid_slide_name, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.4  2008/03/03 03:04:50  vapour
- * Added status bar feedback message.
- *
- * Revision 1.3  2008/02/20 09:06:15  vapour
- *  + Now validates input.
- *  + Simplified pointers.
- *
- * Revision 1.2  2008/02/04 14:41:46  vapour
- *  + Removed unnecessary includes.
- *  + Improved spacing between table cells.
- *
- * Revision 1.1  2008/02/03 02:07:28  vapour
- * Added initial working code for a Slide Properties dialog.
- *
- */

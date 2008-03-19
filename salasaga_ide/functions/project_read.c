@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to parse the contents of a project file
+ * Salasaga: Function to parse the contents of a project file
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -34,8 +34,8 @@
 #include <libxml/xmlmemory.h>
 #include <libxml/parser.h>
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "base64_decode.h"
 #include "compress_layers.h"
@@ -46,7 +46,7 @@
 #include "validate_value.h"
 
 
-gboolean flame_read(gchar *filename)
+gboolean project_read(gchar *filename)
 {
 	// Local variables
 	xmlChar				*control_bar_data = NULL;	// Temporarily holds incoming data prior to validation
@@ -123,7 +123,7 @@ gboolean flame_read(gchar *filename)
 	document = xmlParseFile(filename);
 	if (NULL == document)
 	{
-		// The Flame file was unable to be parsed
+		// The project file was unable to be parsed
 		display_warning("Error ED43: The selected project file was not loaded successfully.  Please choose a different project file.\n");
 		return FALSE;
 	}
@@ -1930,90 +1930,3 @@ gboolean flame_read(gchar *filename)
 
 	return TRUE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.26  2008/03/11 01:39:54  vapour
- * Now reads the swf control bar display toggle value from project files.
- *
- * Revision 1.25  2008/03/10 06:34:46  vapour
- * Added code to read in the swf start behaviour project preference.
- *
- * Revision 1.24  2008/03/09 14:53:41  vapour
- * Renamed the enums for end behaviour.
- *
- * Revision 1.23  2008/03/07 07:27:04  vapour
- * Updated to use the new validation field entries.
- *
- * Revision 1.22  2008/03/06 00:19:43  vapour
- * Added code to read in the new end behaviour project preference.
- *
- * Revision 1.21  2008/03/05 03:03:55  vapour
- * Added final remaining code to validate input from project files.
- *
- * Revision 1.20  2008/03/04 11:36:57  vapour
- * Added validation of highlight and mouse layer inputs.
- *
- * Revision 1.19  2008/03/04 11:08:47  vapour
- * Added validation of image layer inputs.
- *
- * Revision 1.18  2008/03/04 10:01:20  vapour
- * Added validation of empty layer inputs.
- *
- * Revision 1.17  2008/03/04 08:53:24  vapour
- * Project file format version number is now validated.
- *
- * Revision 1.16  2008/03/04 04:53:39  vapour
- * Began updating code to validate input.
- *
- * Revision 1.15  2008/02/18 07:01:14  vapour
- * Improved the clarity of wording in error messages.
- *
- * Revision 1.14  2008/02/14 17:13:30  vapour
- * Updated to read the frames per second value from project files.
- *
- * Revision 1.13  2008/02/12 14:06:44  vapour
- * Updated to read and use the new visibility and background fields for layers.
- *
- * Revision 1.12  2008/02/12 05:20:41  vapour
- * Adjusted to work with the new, slightly simplified layer structure.
- *
- * Revision 1.11  2008/02/05 09:14:14  vapour
- * Removed support of output quality variable, as the concept is no longer relevant.
- *
- * Revision 1.10  2008/02/04 16:52:41  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.9  2008/02/01 10:41:04  vapour
- * Updated to read the new external window target variable in layers.
- *
- * Revision 1.8  2008/01/21 20:34:52  vapour
- * Slide durations are now read from the project file and used.
- *
- * Revision 1.7  2008/01/21 11:47:49  vapour
- *  + Changed all g_new calls to g_new0.
- *  + Updated the image layer reading code to assign an empty string path variable, so other code that relies on it won't segfault.
- *
- * Revision 1.6  2008/01/19 06:37:32  vapour
- * Tweaked some error messages for clarity.
- *
- * Revision 1.5  2008/01/15 16:18:58  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.4  2007/10/06 11:39:27  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.3  2007/09/29 04:22:11  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.2  2007/09/28 12:05:05  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:39:55  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */

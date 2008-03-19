@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user chooses moves the film strip handle 
+ * Salasaga: Function called when the user chooses moves the film strip handle 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -51,23 +51,3 @@ void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data)
 		preview_width = new_position;
 	}
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.4  2008/02/04 16:50:38  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.3  2008/01/15 16:19:07  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/09/29 04:22:17  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/28 12:05:08  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */

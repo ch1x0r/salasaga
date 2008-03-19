@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to create a URI encoded string from a Base64 encoded string
+ * Salasaga: Function to create a URI encoded string from a Base64 encoded string
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -89,26 +89,3 @@ gboolean uri_encode_base64(gpointer data, guint length, gchar **output_string)
 	output_string[0] = output_buffer;
 	return TRUE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.5  2008/02/04 17:20:59  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/09/29 04:22:13  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.2  2007/09/28 12:05:07  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:39:57  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */

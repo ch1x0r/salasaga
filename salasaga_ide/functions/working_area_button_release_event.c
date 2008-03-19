@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Detect when the user presses the mouse button on the drawing area 
+ * Salasaga: Detect when the user presses the mouse button on the drawing area 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -33,8 +33,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 #include "layer_new_highlight_inner.h"
@@ -256,41 +256,3 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 	return TRUE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.10  2008/03/05 12:50:24  vapour
- * Renamed the old backing store variable and associated comments to front store.
- *
- * Revision 1.9  2008/03/05 10:23:39  vapour
- * Added code to recognise button release events for the creation of new layers.
- *
- * Revision 1.8  2008/02/12 14:20:55  vapour
- * Updated to use the new background field in the layer structure.
- *
- * Revision 1.7  2008/02/12 05:30:10  vapour
- * Adjusted to work with the new, slightly simplified layer structure.
- *
- * Revision 1.6  2008/02/04 17:22:04  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.5  2008/01/19 07:10:09  vapour
- * Tweaked an error message for clarity.
- *
- * Revision 1.4  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/10/06 11:36:39  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.2  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/28 12:05:07  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */

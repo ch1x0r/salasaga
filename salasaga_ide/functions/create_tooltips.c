@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Recreate the tooltips for the slides 
+ * Salasaga: Recreate the tooltips for the slides 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -66,23 +66,3 @@ void create_tooltips(void)
 		}
 	}
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.4  2008/02/04 16:41:19  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.3  2008/01/25 14:18:43  vapour
- * Removed an include that wasn't needed.
- *
- * Revision 1.2  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to regenerate the timeline duration images for an individual slide
+ * Salasaga: Function to regenerate the timeline duration images for an individual slide
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "create_timeline_slider.h"
 
@@ -78,32 +78,3 @@ void regenerate_timeline_duration_images(slide *target_slide)
 					-1);
 	}
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.7  2008/02/04 17:10:38  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.6  2008/01/21 10:02:46  vapour
- * Updated to regenerate images for all layers in a slide, rather than from whichever one the layer pointer just happened to be pointing.
- *
- * Revision 1.5  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.4  2007/10/06 11:38:28  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.3  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.2  2007/09/28 12:05:05  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:40:35  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */

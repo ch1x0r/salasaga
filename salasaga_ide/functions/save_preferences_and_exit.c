@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to save the application preferences and go required cleanup, prior to exiting
+ * Salasaga: Function to save the application preferences and go required cleanup, prior to exiting
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -34,8 +34,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -54,21 +54,21 @@ void save_preferences_and_exit(void)
 
 	// Save the application preferences
 	gconf_engine = gconf_engine_get_default();
-	gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/project_folder", default_project_folder->str, NULL);
-	gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/screenshots_folder", screenshots_folder->str, NULL);
-	gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/output_folder", default_output_folder->str, NULL);
-	gconf_engine_set_string(gconf_engine, "/apps/flame/defaults/zoom_level", default_zoom_level->str, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/project_width", project_width, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/project_height", project_height, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/output_width", default_output_width, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/output_height", default_output_height, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/slide_length", default_slide_length, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/thumbnail_width", preview_width, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/frames_per_second", default_fps, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_red", default_bg_colour.red, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_green", default_bg_colour.green, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/default_bg_colour_blue", default_bg_colour.blue, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/flame/defaults/icon_height", icon_height, NULL);
+	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/project_folder", default_project_folder->str, NULL);
+	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/screenshots_folder", screenshots_folder->str, NULL);
+	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/output_folder", default_output_folder->str, NULL);
+	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/zoom_level", default_zoom_level->str, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/project_width", project_width, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/project_height", project_height, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_width", default_output_width, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_height", default_output_height, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/slide_length", default_slide_length, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/thumbnail_width", preview_width, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/frames_per_second", default_fps, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_red", default_bg_colour.red, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_green", default_bg_colour.green, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_blue", default_bg_colour.blue, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/icon_height", icon_height, NULL);
 
 	// * Save the present window maximised state (i.e. if we're maximised or not) *
 
@@ -92,16 +92,16 @@ void save_preferences_and_exit(void)
 		if (GDK_WINDOW_STATE_MAXIMIZED == tmp_int)
 		{
 			// The window is maximised, so save that info
-			gconf_engine_set_bool(gconf_engine, "/apps/flame/defaults/window_maximised", TRUE, NULL);
+			gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/window_maximised", TRUE, NULL);
 		} else
 		{
 			// The window is not maximised, so save that info
-			gconf_engine_set_bool(gconf_engine, "/apps/flame/defaults/window_maximised", FALSE, NULL);
+			gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/window_maximised", FALSE, NULL);
 		}
 	}
 
 	// Save a configuration structure version number
-	gconf_engine_set_float(gconf_engine, "/apps/flame/defaults/config_version", 1.0, NULL);
+	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/config_version", 1.0, NULL);
 
 	// fixme4: Should we save a list of recent projects worked on?
 
@@ -259,44 +259,3 @@ void save_preferences_and_exit(void)
 	// Exit the application
 	gtk_main_quit();
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.11  2008/02/25 13:33:31  vapour
- * Added icon height to the list of preferences to be saved between sessions.
- *
- * Revision 1.10  2008/02/19 14:13:31  vapour
- * Updated to save the default background colour between sessions.
- *
- * Revision 1.9  2008/02/19 13:42:44  vapour
- * Removed scaling quality variable, added default frames per second and default zoom variables.
- *
- * Revision 1.8  2008/02/05 09:18:25  vapour
- * Removed support of output quality variable, as the concept is no longer relevant.
- *
- * Revision 1.7  2008/02/05 06:36:44  vapour
- * No longer saves Project Name value as that's always set to New Project now.
- *
- * Revision 1.6  2008/02/04 17:11:52  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.5  2008/01/19 06:59:05  vapour
- * Tweaked some error messages for clarity.
- *
- * Revision 1.4  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.2  2007/09/28 12:05:07  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:40:50  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */

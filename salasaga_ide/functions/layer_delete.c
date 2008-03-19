@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function which deletes the layer the user presently has selected 
+ * Salasaga: Function which deletes the layer the user presently has selected 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -33,8 +33,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 #include "draw_workspace.h"
@@ -119,32 +119,3 @@ void layer_delete(void)
 
 	return;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.7  2008/03/03 02:48:13  vapour
- * Added status bar feedback message.
- *
- * Revision 1.6  2008/02/12 14:10:19  vapour
- * Updated to use the gdk beep function.
- *
- * Revision 1.5  2008/02/04 16:54:06  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/01/19 06:39:41  vapour
- * Tweaked an error message for clarity.
- *
- * Revision 1.3  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/06 11:39:27  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.1  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

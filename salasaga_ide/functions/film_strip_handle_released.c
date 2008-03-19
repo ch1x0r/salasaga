@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Callback function called when the resizing of the film strip is completed 
+ * Salasaga: Callback function called when the resizing of the film strip is completed 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "regenerate_film_strip_thumbnails.h"
 
@@ -54,26 +54,3 @@ gint film_strip_handle_released(GObject *paned, GParamSpec *pspec, gpointer data
 	// Indicate to the calling routine that this function finished fine
 	return FALSE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.5  2008/02/04 16:51:30  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/01/15 16:19:05  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/10/06 11:39:27  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.2  2007/09/29 04:22:17  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/28 12:05:07  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */

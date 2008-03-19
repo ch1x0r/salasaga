@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to create the main application toolbar 
+ * Salasaga: Function to create the main application toolbar 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "menu_export_flash_animation.h"
 #include "menu_file_new.h"
@@ -195,32 +195,3 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	return inner_toolbar;	
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.7  2008/02/11 02:14:52  vapour
- * Added greyed out version of screenshot capture icon.
- *
- * Revision 1.6  2008/02/04 16:39:36  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.5  2008/02/03 05:42:10  vapour
- * Removing svg export functionality.
- *
- * Revision 1.4  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/10/04 19:51:09  vapour
- * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
- *
- * Revision 1.2  2007/09/29 04:22:15  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/29 02:42:25  vapour
- * Broke flame-edit.c into its component functions.
- *
- */

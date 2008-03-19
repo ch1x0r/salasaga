@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Displays a dialog box asking for the values required to make a new highlight layer
+ * Salasaga: Displays a dialog box asking for the values required to make a new highlight layer
  * 
  * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
  * 
@@ -31,8 +31,8 @@
 // GTK includes
 #include <gtk/gtk.h>
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_dialog_highlight.h"
 #include "draw_workspace.h"
@@ -242,32 +242,3 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Highlight layer added");
 	gdk_flush();
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.7  2008/03/07 07:26:26  vapour
- * Updated to use the new validation field entries.
- *
- * Revision 1.6  2008/03/06 00:53:14  vapour
- * Improved the boundary detection code, and added enforcement for the minimum highlight size to be 5 x 5.
- *
- * Revision 1.5  2008/03/05 14:38:31  vapour
- * Updated to allow the function to receive negative values, and also added bounds checking for the mouse coordinates.
- *
- * Revision 1.4  2008/03/05 13:40:26  vapour
- * Improved the sorting out of mouse coordinates to use.
- *
- * Revision 1.3  2008/03/05 12:48:59  vapour
- * Updated to support double buffering.
- *
- * Revision 1.2  2008/03/05 11:01:13  vapour
- * Added code to change cursor back to normal upon cancellation, and update the status bar appropriately.
- *
- * Revision 1.1  2008/03/05 10:09:35  vapour
- * Moved the code for the highlight, mouse, and text layers into an inner version of each function.
- *
- */

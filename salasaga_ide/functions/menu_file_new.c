@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Opens a dialog box asking the user for the initial information for a new project. 
+ * Salasaga: Opens a dialog box asking the user for the initial information for a new project. 
  *                Called when the user selects File -> New from the top menu.
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
@@ -31,8 +31,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "destroy_slide.h"
 #include "disable_layer_toolbar_buttons.h"
@@ -84,7 +84,7 @@ void menu_file_new(void)
 	valid_proj_name = g_string_new(NULL);
 
 	// Create the dialog window, and table to hold its children
-	project_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Create new Flame Project", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	project_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Create new Salasaga Project", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
 	project_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(project_dialog->vbox), GTK_WIDGET(project_table), FALSE, FALSE, 10);
 
@@ -295,60 +295,3 @@ void menu_file_new(void)
 	enable_layer_toolbar_buttons();
 	enable_main_toolbar_buttons();
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.16  2008/03/03 02:56:11  vapour
- * Updated status bar feedback message.
- *
- * Revision 1.15  2008/02/20 05:57:48  vapour
- * Improved memory allocation and deallocation.
- *
- * Revision 1.14  2008/02/20 03:48:56  vapour
- * Updated to reuse an existing path if available, rather than recreating a new one each time.  Was a potential (small) memory leak.
- *
- * Revision 1.13  2008/02/19 17:36:05  vapour
- * Re-aligned tabs to suit my display.
- *
- * Revision 1.12  2008/02/19 17:25:20  vapour
- * Added code to select the new first slide for a project, otherwise some other functions (i.e. slide delete) which rely on it don't work properly.
- *
- * Revision 1.11  2008/02/19 14:15:10  vapour
- * Updated to try the new project dialog if invalid input is given, rather than aborting.
- *
- * Revision 1.10  2008/02/19 13:43:39  vapour
- * Updated to use the new default frames per second variable.
- *
- * Revision 1.9  2008/02/18 04:15:12  vapour
- * Fixed a bug stopping the chosen background color from being used.  Was destroying the dialog box before retrieving the value.  Ugh.
- *
- * Revision 1.8  2008/02/14 16:54:45  vapour
- * Updated to validate the project width, height, and frames per second as well.  Also updated dialog box to use the limits defined for each field in the valid fields array.
- *
- * Revision 1.7  2008/02/14 13:46:51  vapour
- * Updated to use the new validation function for the project name input.
- *
- * Revision 1.6  2008/02/06 09:58:30  vapour
- * Updated to set the new project active global variable when done.
- *
- * Revision 1.5  2008/02/04 14:35:35  vapour
- *  + Removed unnecessary includes.
- *  + Improved spacing between table cells.
- *
- * Revision 1.4  2008/02/04 10:35:48  vapour
- * Updated to enable the Project top menu bar option when a new project is created.
- *
- * Revision 1.3  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/06 11:38:28  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.1  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

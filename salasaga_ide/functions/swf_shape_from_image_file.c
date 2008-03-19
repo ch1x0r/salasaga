@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Loads a given image file and converts it to a SWF shape
+ * Salasaga: Loads a given image file and converts it to a SWF shape
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -28,8 +28,8 @@
 // Ming include
 #include <ming.h>
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 
@@ -129,16 +129,3 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 
 	return swf_shape;
 }
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/01/23 17:28:18  vapour
- * Typo fix.
- *
- * Revision 1.1  2008/01/23 17:20:34  vapour
- * Added a new function, for loading a SWF Shape bitmap directly from a given filename.
- *
- */

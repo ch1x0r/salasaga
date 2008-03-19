@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user clicks the Crop timeline toolbar button 
+ * Salasaga: Function called when the user clicks the Crop timeline toolbar button 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "draw_timeline.h"
 #include "draw_workspace.h"
@@ -226,33 +226,3 @@ void project_crop(void)
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, "Project cropped");
 	gdk_flush();
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.7  2008/03/03 02:59:38  vapour
- * Added status bar feedback message.
- *
- * Revision 1.6  2008/02/16 11:17:56  vapour
- * Removed un-needed include file.
- *
- * Revision 1.5  2008/02/12 14:19:39  vapour
- * Updated to use the new background field in the layer structure.
- *
- * Revision 1.4  2008/02/04 14:40:52  vapour
- *  + Removed unnecessary includes.
- *  + Improved spacing between table cells.
- *
- * Revision 1.3  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/06 11:38:28  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.1  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

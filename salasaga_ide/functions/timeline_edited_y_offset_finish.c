@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the y offset finish field in the timeline widget is edited 
+ * Salasaga: Function called when the y offset finish field in the timeline widget is edited 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -33,8 +33,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 #include "draw_workspace.h"
@@ -94,32 +94,3 @@ void timeline_edited_y_offset_finish(GtkCellRendererText *selection, gchar *row,
 	// Recreate the film strip thumbnails
 	regenerate_film_strip_thumbnails();
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.7  2008/02/12 05:28:53  vapour
- * Adjusted to work with the new, slightly simplified layer structure.
- *
- * Revision 1.6  2008/02/04 17:19:06  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.5  2008/01/19 07:08:37  vapour
- * Tweaked an error message for clarity.
- *
- * Revision 1.4  2008/01/15 16:19:05  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/10/06 11:37:24  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.2  2007/09/29 04:22:17  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/28 12:05:08  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */

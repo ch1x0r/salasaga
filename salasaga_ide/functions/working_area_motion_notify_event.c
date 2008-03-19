@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Detect when the user moves a pressed down mouse button on the drawing area 
+ * Salasaga: Detect when the user moves a pressed down mouse button on the drawing area 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -36,8 +36,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -168,35 +168,3 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 
 	return TRUE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.8  2008/03/05 13:57:19  vapour
- * Bounding box is now drawn with inverted pixel colors.
- *
- * Revision 1.7  2008/03/05 13:48:50  vapour
- * Tweaked the top and left positions for the double buffering invalidation area, to remove an occasional off by one error.
- *
- * Revision 1.6  2008/03/05 13:26:13  vapour
- * Updated the double buffering invalidation area redrawing code so it handles negative offsets and also will not go out of bounds.
- *
- * Revision 1.5  2008/03/05 12:52:50  vapour
- * Added initial working code to draw a bounding box when dragging out a new highlight layer.
- *
- * Revision 1.4  2008/02/04 17:23:09  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.3  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/28 12:05:06  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */

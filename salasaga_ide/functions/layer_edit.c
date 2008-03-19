@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user clicks the Edit Layer toolbar button 
+ * Salasaga: Function called when the user clicks the Edit Layer toolbar button 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -33,8 +33,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "create_timeline_slider.h"
 #include "display_dialog_empty.h"
@@ -233,50 +233,3 @@ void layer_edit(void)
 	gdk_flush();
 
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.13  2008/03/03 02:48:54  vapour
- * Updated status bar feedback message.
- *
- * Revision 1.12  2008/03/01 08:16:44  vapour
- * The status bar is now updated whenever a layer edit is done.
- *
- * Revision 1.11  2008/02/20 18:45:44  vapour
- * Fixed a small potential memory leak.
- *
- * Revision 1.10  2008/02/16 11:10:48  vapour
- * Replaced our sound beep function with the inbuilt gdk sound beep one.
- *
- * Revision 1.9  2008/02/12 05:21:14  vapour
- * Adjusted to work with the new, slightly simplified layer structure.
- *
- * Revision 1.8  2008/02/04 16:54:52  vapour
- * Adjusted structural spacing, for consistency with other files.
- *
- * Revision 1.7  2008/02/04 13:24:23  vapour
- * Removed some unused includes.
- *
- * Revision 1.6  2008/01/21 11:49:53  vapour
- * Removed the check that stopped background image layers from being edited, as thats a limitation that really gets in the way.
- *
- * Revision 1.5  2008/01/21 10:50:37  vapour
- * Simplified things, and delegated creation of new timeline duration images to the main timeline duration image regen function.
- *
- * Revision 1.4  2008/01/19 06:40:29  vapour
- * Tweaked some error messages for clarity.
- *
- * Revision 1.3  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/06 11:39:27  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.1  2007/09/29 04:22:14  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

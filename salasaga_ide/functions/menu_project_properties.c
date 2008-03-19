@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects Project -> Properties from the top menu 
+ * Salasaga: Function called when the user selects Project -> Properties from the top menu 
  * 
  * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 #include "validate_value.h"
@@ -385,42 +385,3 @@ void menu_project_properties(void)
 	// Free the memory allocated in this function
 	g_string_free(tmp_gstring, TRUE);
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.10  2008/03/11 01:37:48  vapour
- * Now includes a control bar display checkbox.
- *
- * Revision 1.9  2008/03/09 14:57:09  vapour
- * Renamed the enums for end behaviour, added a Start Behaviour option to the project preferences dialog.
- *
- * Revision 1.8  2008/03/06 00:15:40  vapour
- * Added an end behaviour project preference.
- *
- * Revision 1.7  2008/03/03 02:57:47  vapour
- * Added status bar feedback message.
- *
- * Revision 1.6  2008/02/20 06:03:01  vapour
- * Updated to validate all input.
- *
- * Revision 1.5  2008/02/14 16:56:01  vapour
- * Updated dialog box to use the limits defined for each field in the valid fields array, for frames per second and project name.
- *
- * Revision 1.4  2008/02/05 09:17:49  vapour
- * Removed support of output quality variable, as the concept is no longer relevant.
- *
- * Revision 1.3  2008/02/04 14:38:17  vapour
- *  + Removed unnecessary includes.
- *  + Improved spacing between table cells.
- *
- * Revision 1.2  2008/02/04 13:03:32  vapour
- * Added (non-editable) display of the project width and height.
- *
- * Revision 1.1  2008/02/04 10:30:35  vapour
- * Added new function for Project Properties.
- *
- */

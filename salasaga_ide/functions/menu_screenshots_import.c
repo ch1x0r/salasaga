@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects Screenshots -> Import from the top menu 
+ * Salasaga: Function called when the user selects Screenshots -> Import from the top menu 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -35,8 +35,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "create_tooltips.h"
 #include "display_warning.h"
@@ -425,63 +425,3 @@ void menu_screenshots_import(void)
 	// Free the memory allocated in this function
 	g_string_free(tmp_string, TRUE);
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.17  2008/03/05 12:44:14  vapour
- * Renamed the old backing store variable and associated comments to front store.
- *
- * Revision 1.16  2008/03/03 02:59:06  vapour
- * Updated status bar feedback messages.
- *
- * Revision 1.15  2008/02/20 03:49:35  vapour
- * Updated to reuse an existing path if available, rather than recreating a new one each time.  Was a potential (small) memory leak.
- *
- * Revision 1.14  2008/02/19 17:55:46  vapour
- * Fixed a small crashing bug.  Imported screenshots weren't having their external link window field filled out, leading to segfaults in the code that relies on it.
- *
- * Revision 1.13  2008/02/19 17:44:29  vapour
- * Added code to select the first new screenshot when imported into an empty project, otherwise some other functions (i.e. slide delete) which rely on it don't work properly.
- *
- * Revision 1.12  2008/02/19 13:37:46  vapour
- * Improved the wording of the warning message about screenshot size differing.
- *
- * Revision 1.11  2008/02/12 14:18:33  vapour
- * Updated to use the new visibility and background fields in the layer structure.
- *
- * Revision 1.10  2008/02/12 05:26:25  vapour
- * Adjusted to work with the new, slightly simplified layer structure.
- *
- * Revision 1.9  2008/02/11 12:21:53  vapour
- * Updated to calculate the size of the initial working area better.
- *
- * Revision 1.8  2008/02/06 09:57:48  vapour
- * All screenshots are now loaded at the same size, giving the user a warning and chance to abort first if needed.
- *
- * Revision 1.7  2008/02/04 17:08:45  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.6  2008/02/04 10:37:22  vapour
- * Updated to enable the Project top menu bar option after screenshots are imported.
- *
- * Revision 1.5  2008/01/21 11:25:34  vapour
- *  + Fixed a bug, in that slide duration wasn't being properly set.
- *  + A timeline duration image is now created for the new background layer.
- *
- * Revision 1.4  2008/01/15 16:19:03  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/10/07 14:23:46  vapour
- * Aligned the whitespace comment padding for eclipse.
- *
- * Revision 1.2  2007/10/06 11:38:28  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.1  2007/09/29 04:22:16  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

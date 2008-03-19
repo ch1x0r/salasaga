@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the drawing area is resized 
+ * Salasaga: Function called when the drawing area is resized 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "zoom_selector_changed.h"
 
@@ -72,29 +72,3 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
 	// Return FALSE to continue event propagation
 	return FALSE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.6  2008/02/07 12:37:00  vapour
- * Updated to only recalculate the zoom factor now when required.
- *
- * Revision 1.5  2008/02/04 16:50:03  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/10/04 19:51:10  vapour
- * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
- *
- * Revision 1.2  2007/09/29 04:22:15  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/28 12:05:08  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */

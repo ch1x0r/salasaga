@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Callback to exit the application 
+ * Salasaga: Callback to exit the application 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "save_preferences_and_exit.h"
 
@@ -41,26 +41,3 @@ gint quit_event(GtkWidget *widget, GdkEvent *event, gpointer data)
 	save_preferences_and_exit();
 	return FALSE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.5  2008/02/04 17:09:25  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/01/15 16:19:07  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/10/06 11:38:28  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.2  2007/09/29 04:22:17  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/29 02:42:26  vapour
- * Broke flame-edit.c into its component functions.
- *
- */

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects Export -> Slide as Image from the top menu 
+ * Salasaga: Function called when the user selects Export -> Slide as Image from the top menu 
  * 
  * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
  * 
@@ -25,8 +25,8 @@
 // GTK includes
 #include <gtk/gtk.h>
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "compress_layers.h"
 #include "display_warning.h"
@@ -144,7 +144,7 @@ void menu_export_slide(void)
 	slide_pixbuf = compress_layers(current_slide, working_width, working_height);
 
 	// Save the image as a png file
-	return_code_gbool = gdk_pixbuf_save(GDK_PIXBUF(slide_pixbuf), validated_string->str, "png", &error, "tEXt::Software", "The Flame Project: http://www.flameproject.org", NULL);
+	return_code_gbool = gdk_pixbuf_save(GDK_PIXBUF(slide_pixbuf), validated_string->str, "png", &error, "tEXt::Software", "Salasaga: http://www.salasaga.org", NULL);
 	if (FALSE == return_code_gbool)
 	{
 		// Something went wrong when saving the image file
@@ -166,20 +166,3 @@ void menu_export_slide(void)
 	g_string_free(tmp_gstring, TRUE);
 	g_string_free(validated_string, TRUE);	
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.3  2008/03/03 02:55:36  vapour
- * Updated status bar feedback message.
- *
- * Revision 1.2  2008/02/20 22:58:12  vapour
- * Updated to validate all incoming input.
- *
- * Revision 1.1  2008/02/11 06:43:20  vapour
- * Added working function to save a slide as an image file.
- *
- */

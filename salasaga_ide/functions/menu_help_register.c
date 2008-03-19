@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects Help -> Register from the top menu 
+ * Salasaga: Function called when the user selects Help -> Register from the top menu 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -33,32 +33,15 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
 void menu_help_register(void)
 {
 #ifndef _WIN32  // Non-windows check
-	// Launch a browser window of the Flame Project registration page
-	gnome_url_show ("http://www.flameproject.org/go/register", NULL);
+	// Launch a browser window of the Salasaga registration page
+	gnome_url_show ("http://www.salasaga.org/go/register", NULL);
 #endif
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.3  2008/02/04 17:06:09  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.2  2008/01/15 16:18:58  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

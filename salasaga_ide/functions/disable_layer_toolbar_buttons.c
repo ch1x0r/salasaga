@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Disables the layer toolbar buttons 
+ * Salasaga: Disables the layer toolbar buttons 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -135,20 +135,3 @@ void disable_layer_toolbar_buttons(void)
 		layer_toolbar_signals[LAYER_EDIT] = 0;
 	}
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.3  2008/02/04 16:44:07  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.2  2008/01/15 16:19:07  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/29 04:22:17  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

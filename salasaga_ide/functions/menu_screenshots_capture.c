@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects Screenshots -> Capture from the top menu
+ * Salasaga: Function called when the user selects Screenshots -> Capture from the top menu
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -34,11 +34,11 @@
 #else
 	// Windows only includes
 	#include <windows.h>
-	#include "flame-keycapture.h"
+	#include "salasaga_keycapture.h"
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 
@@ -93,7 +93,7 @@ void menu_screenshots_capture(void)
 	gtk_dialog_run(GTK_DIALOG(message_dialog));
 	gtk_widget_destroy(message_dialog);
 
-	// Minimise Flame so the user can choose another application
+	// Minimise Salasaga so the user can choose another application
 	gtk_window_iconify(GTK_WINDOW(main_window));
 
 	// * Determine the area of screen covered by the window that the user wants to capture *
@@ -323,11 +323,11 @@ void menu_screenshots_capture(void)
 	gtk_widget_destroy(GTK_WIDGET(capture_dialog));
 #endif
 
-	// Construct the fullly qualified path name for ~/.flame-lock file (to hold capture settings in)
+	// Construct the fullly qualified path name for ~/.salasaga-lock file (to hold capture settings in)
 	tmp_ptr = (gchar *) g_get_home_dir();
-	full_file_name = g_build_filename(tmp_ptr, ".flame-lock", NULL);
+	full_file_name = g_build_filename(tmp_ptr, ".salasaga-lock", NULL);
 
-	// Create the contents of the ~/.flame-lock file in memory
+	// Create the contents of the ~/.salasaga-lock file in memory
 	lock_file = g_key_file_new();
 	g_key_file_set_string(lock_file, "Project", "Name", project_name->str);  // Name of project
 	g_key_file_set_string(lock_file, "Project", "Directory", screenshots_folder->str);  // Directory to save screenshots in
@@ -353,7 +353,7 @@ void menu_screenshots_capture(void)
 		return;
 	}
 
-	// Write the ~/.flame-lock file to disk
+	// Write the ~/.salasaga-lock file to disk
 	tmp_gchar = g_key_file_to_data(lock_file, NULL, NULL);
 	return_value = g_io_channel_write_chars(output_file, tmp_gchar, strlen(tmp_gchar), &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
@@ -401,7 +401,7 @@ void menu_screenshots_capture(void)
 	// Does the keyboard hook need to be installed?
 	if (NULL == win32_keyboard_hook_handle)
 	{
-		dll_handle = LoadLibrary((LPCTSTR) "libflame-keycapture.dll");
+		dll_handle = LoadLibrary((LPCTSTR) "libsalasaga-keycapture.dll");
 		if (NULL == dll_handle)
 		{
 			last_error = GetLastError();
@@ -456,39 +456,3 @@ void menu_screenshots_capture(void)
 	// Free the temporary GString
 	g_string_free(tmp_gstring, TRUE);
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.9  2008/03/03 02:58:29  vapour
- * Updated status bar feedback messages.
- *
- * Revision 1.8  2008/02/04 17:08:01  vapour
- * Adjusted structural spacing, for consistency with other files.
- *
- * Revision 1.7  2008/02/04 14:39:43  vapour
- *  + Removed unnecessary includes.
- *  + Improved spacing between table cells.
- *
- * Revision 1.6  2008/02/04 06:40:04  vapour
- * Mouse cursor is changed from default while selection operation is in progress, to re-inforce whats going on.
- *
- * Revision 1.5  2008/02/04 06:07:06  vapour
- * Added new code, X11 only, that allows the user to select the window they want to capture rather than typing in manual coordinates.
- *
- * Revision 1.4  2008/02/03 05:45:24  vapour
- * Fixed a typo in a comment.
- *
- * Revision 1.3  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/06 11:38:28  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.1  2007/09/29 04:22:15  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

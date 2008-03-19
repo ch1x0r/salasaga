@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the name field in the timeline widget is edited 
+ * Salasaga: Function called when the name field in the timeline widget is edited 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -33,8 +33,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -61,23 +61,3 @@ void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new
 						TIMELINE_NAME, layer_data->name->str,
 						-1);
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.4  2008/02/04 17:17:25  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.3  2008/01/15 16:19:04  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/09/29 04:22:16  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/28 12:05:07  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- */

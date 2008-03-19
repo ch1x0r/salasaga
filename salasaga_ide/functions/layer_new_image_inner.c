@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Displays a dialog box asking for the values required to make a new image layer
+ * Salasaga: Displays a dialog box asking for the values required to make a new image layer
  * 
  * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
  * 
@@ -25,8 +25,8 @@
 // GTK includes
 #include <gtk/gtk.h>
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_dialog_image.h"
 #include "draw_workspace.h"
@@ -147,20 +147,3 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Image layer added");
 	gdk_flush();
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.3  2008/03/05 11:02:10  vapour
- * Added code to update the status bar appropriately upon cancellation.
- *
- * Revision 1.2  2008/03/05 10:15:15  vapour
- * Added a function description.
- *
- * Revision 1.1  2008/03/05 09:15:06  vapour
- * Moved most of the code from the layer new image function into here.
- *
- */

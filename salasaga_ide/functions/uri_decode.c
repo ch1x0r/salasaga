@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to decode a URI encoded string
+ * Salasaga: Function to decode a URI encoded string
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -86,26 +86,3 @@ GString *uri_decode(GString *input_string, GString *output_string)
 
 	return output_string;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.5  2008/02/04 17:20:18  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.2  2007/09/28 12:05:05  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:40:27  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */

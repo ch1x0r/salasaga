@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects File -> Open from the top menu 
+ * Salasaga: Function called when the user selects File -> Open from the top menu 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "create_resolution_selector.h"
 #include "create_tooltips.h"
@@ -42,8 +42,8 @@
 #include "draw_workspace.h"
 #include "enable_layer_toolbar_buttons.h"
 #include "enable_main_toolbar_buttons.h"
-#include "flame_read.h"
 #include "menu_enable.h"
+#include "project_read.h"
 #include "resolution_selector_changed.h"
 #include "validate_value.h"
 
@@ -53,7 +53,7 @@ void menu_file_open(void)
 	// Local variables
 	GtkFileFilter		*all_filter;
 	gchar				*filename;					// Pointer to the chosen file name
-	GtkFileFilter		*flame_filter;
+	GtkFileFilter		*salasaga_filter;
 	GtkTreePath			*new_path;					// Temporary path
 	GtkWidget 			*open_dialog;
 	gboolean			return_code;
@@ -61,19 +61,19 @@ void menu_file_open(void)
 	GString				*validated_string;			// Receives known good strings from the validation function
 
 
-	// Create the dialog asking the user to select a Flame Project file
-	open_dialog = gtk_file_chooser_dialog_new("Open a Flame Project",
+	// Create the dialog asking the user to select a Salasaga Project file
+	open_dialog = gtk_file_chooser_dialog_new("Open a Salasaga Project",
 						  GTK_WINDOW(main_window),
 						  GTK_FILE_CHOOSER_ACTION_OPEN,
 						  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 						  GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 						  NULL);
 
-	// Create the filter so only *.flame files are displayed
-	flame_filter = gtk_file_filter_new();
-	gtk_file_filter_add_pattern(flame_filter, "*.flame");
-	gtk_file_filter_set_name(flame_filter, "Flame Project file (*.flame)");
-	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(open_dialog), flame_filter);
+	// Create the filter so only *.salasaga files are displayed
+	salasaga_filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(salasaga_filter, "*.salasaga");
+	gtk_file_filter_set_name(salasaga_filter, "Salasaga Project file (*.salasaga)");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(open_dialog), salasaga_filter);
 
 	// Create the filter so all files (*.*) can be displayed
 	all_filter = gtk_file_filter_new();
@@ -116,7 +116,7 @@ void menu_file_open(void)
 		} else
 		{
 			// Open and parse the selected file
-			return_code = flame_read(validated_string->str);
+			return_code = project_read(validated_string->str);
 			if (TRUE == return_code)
 			{
 				// The file was read in fine, so we continue
@@ -200,55 +200,7 @@ void menu_file_open(void)
 	enable_main_toolbar_buttons();
 
 	// Free the memory allocated in this function
-	// (note that flame_filter and all_filter seem to be freed when the dialog is destroyed)
+	// (note that salasaga_filter and all_filter seem to be freed when the dialog is destroyed)
 	g_string_free(validated_string, TRUE);
 	g_free(filename);
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.13  2008/03/05 02:57:06  vapour
- * The dialog now aborts if the project file wasn't valid, rather than looping around.
- *
- * Revision 1.12  2008/03/03 02:56:45  vapour
- * Updated status bar feedback message.
- *
- * Revision 1.11  2008/02/20 18:46:38  vapour
- * Updated to use a renamed validation field.
- *
- * Revision 1.10  2008/02/20 05:58:47  vapour
- * Improved memory allocation and deallocation.
- *
- * Revision 1.9  2008/02/18 07:02:34  vapour
- * Updated to validate incoming filename input.
- *
- * Revision 1.8  2008/02/06 09:58:30  vapour
- * Updated to set the new project active global variable when done.
- *
- * Revision 1.7  2008/02/05 15:30:37  vapour
- * Moved the list of output resolutions into the create resolution selector function.
- *
- * Revision 1.6  2008/02/05 06:18:38  vapour
- * Placement of output resolution widget adjusted.
- *
- * Revision 1.5  2008/02/04 14:36:22  vapour
- *  + Removed unnecessary includes.
- *  + Improved spacing between table cells.
- *
- * Revision 1.4  2008/02/04 10:36:30  vapour
- * Updated to enable the Project top menu bar option when a new project is loaded.
- *
- * Revision 1.3  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/06 11:38:28  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.1  2007/09/29 04:22:14  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

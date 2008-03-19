@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function that takes a layer structure pointer, and adds it's data to an in-memory XML document
+ * Salasaga: Function that takes a layer structure pointer, and adds it's data to an in-memory XML document
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -33,8 +33,8 @@
 // XML includes
 #include <libxml/parser.h>
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "base64_encode.h"
 #include "display_warning.h"
@@ -236,45 +236,3 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 
 	return;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.11  2008/02/12 14:16:56  vapour
- *  + Updated to use the new visibility and background fields in the layer structure.
- *  + Incremented the file format version to reflect this.
- *
- * Revision 1.10  2008/02/12 05:25:44  vapour
- * Adjusted to work with the new, slightly simplified layer structure.
- *
- * Revision 1.9  2008/02/04 17:03:28  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.8  2008/02/03 05:44:45  vapour
- * Removing svg export functionality.
- *
- * Revision 1.7  2008/02/01 10:49:59  vapour
- * The target window for external links for layers is now saved in the project file.
- *
- * Revision 1.6  2008/01/19 06:56:45  vapour
- * Tweaked some error messages for clarity.
- *
- * Revision 1.5  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.4  2007/10/06 11:38:28  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.3  2007/09/29 04:22:13  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.2  2007/09/28 12:05:07  vapour
- * Broke callbacks.c and callbacks.h into its component functions.
- *
- * Revision 1.1  2007/09/27 10:39:52  vapour
- * Broke backend.c and backend.h into its component functions.
- *
- */

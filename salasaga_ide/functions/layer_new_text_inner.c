@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Displays a dialog box asking for the values required to make a new text layer
+ * Salasaga: Displays a dialog box asking for the values required to make a new text layer
  * 
  * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
  * 
@@ -25,8 +25,8 @@
 // GTK includes
 #include <gtk/gtk.h>
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_dialog_text.h"
 #include "draw_workspace.h"
@@ -160,17 +160,3 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Text layer added");
 	gdk_flush();
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.2  2008/03/05 11:03:24  vapour
- * Added code to change cursor back to normal upon cancellation, and update the status bar appropriately.
- *
- * Revision 1.1  2008/03/05 10:09:35  vapour
- * Moved the code for the highlight, mouse, and text layers into an inner version of each function.
- *
- */

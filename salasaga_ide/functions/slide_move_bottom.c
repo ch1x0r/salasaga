@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects Slide -> Move to bottom from the top menu 
+ * Salasaga: Function called when the user selects Slide -> Move to bottom from the top menu 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "create_tooltips.h"
 
@@ -93,26 +93,3 @@ void slide_move_bottom(void)
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide moved to bottom");
 	gdk_flush();
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.5  2008/03/03 03:02:05  vapour
- * Added status bar feedback message.
- *
- * Revision 1.4  2008/02/04 17:13:51  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.3  2008/01/15 16:18:58  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/06 11:37:24  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.1  2007/09/29 04:22:11  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

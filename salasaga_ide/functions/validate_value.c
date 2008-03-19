@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to validate a given value
+ * Salasaga: Function to validate a given value
  * 
  * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
  * 
@@ -34,8 +34,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../valid_fields.h"
 #include "../externs.h"
 #include "display_warning.h"
@@ -550,40 +550,3 @@ void *validate_value(gint value_id, gint input_type, void *value)
 	// If we get here, then something went wrong!
 	return NULL;
 }
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.10  2008/03/04 11:06:45  vapour
- * Added capabilities to support validation of base64 encoded data.
- *
- * Revision 1.9  2008/03/04 08:51:18  vapour
- * Added initial working code to validate the new unsigned float data type.
- *
- * Revision 1.8  2008/02/20 23:09:44  vapour
- * Removed unused validation base types.
- *
- * Revision 1.7  2008/02/20 09:00:42  vapour
- * Updated to do proper boolean bit testing.  Verbosely done, so Eclipse can debug it properly.  Eclipse seems to have a bug here. :(
- *
- * Revision 1.6  2008/02/19 12:36:35  vapour
- * Added code to validate the new zoom level base type.
- *
- * Revision 1.5  2008/02/19 06:39:42  vapour
- * Added code to validate the new resolution base type.
- *
- * Revision 1.4  2008/02/18 07:03:53  vapour
- * Added full stop characters to capabilities available.  Added unlimited length strings (-1) as well.
- *
- * Revision 1.3  2008/02/14 16:52:10  vapour
- * Updated validation function with an additional parameter for the type of input.  Also added working code to validate unsigned integers.
- *
- * Revision 1.2  2008/02/14 13:43:45  vapour
- * Updated to reference the new valid fields header file directly.
- *
- * Revision 1.1  2008/02/14 13:28:17  vapour
- * Added new function to validate input.  Only works on strings thus far.
- *
- */

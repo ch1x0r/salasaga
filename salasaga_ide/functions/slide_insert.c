@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects Slide -> Insert from the top menu 
+ * Salasaga: Function called when the user selects Slide -> Insert from the top menu 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "create_timeline_slider.h"
 #include "create_tooltips.h"
@@ -140,35 +140,3 @@ void slide_insert(void)
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide added");
 	gdk_flush();
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.8  2008/03/03 03:00:57  vapour
- * Updated status bar feedback message.
- *
- * Revision 1.7  2008/02/12 14:20:20  vapour
- * Updated to use the new visibility and background fields in the layer structure.
- *
- * Revision 1.6  2008/02/12 05:26:59  vapour
- * Adjusted to work with the new, slightly simplified layer structure.
- *
- * Revision 1.5  2008/02/04 17:13:07  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/02/01 10:53:15  vapour
- * Added code to set the external link target window to the default value of _self, plus a small bug fix.
- *
- * Revision 1.3  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.2  2007/10/06 11:37:24  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.1  2007/09/29 04:22:15  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function called when the user selects Export -> Flash Animation from the top menu 
+ * Salasaga: Function called when the user selects Export -> Flash Animation from the top menu 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -28,8 +28,8 @@
 // Ming include
 #include <ming.h>
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
 #include "menu_export_flash_inner.h"
@@ -173,60 +173,3 @@ void menu_export_flash_animation(void)
 	g_string_free(tmp_gstring, TRUE);
 	g_string_free(validated_string, TRUE);
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.16  2008/03/03 02:54:18  vapour
- * Updated status bar feedback message.
- *
- * Revision 1.15  2008/02/27 11:00:21  vapour
- * Changed output name from Macromedia to Adobe.
- *
- * Revision 1.14  2008/02/20 22:55:53  vapour
- * Updated to validate all incoming input.
- *
- * Revision 1.13  2008/02/16 11:16:30  vapour
- * Replaced our sound beep function with the inbuilt gdk sound beep one.
- *
- * Revision 1.12  2008/02/04 17:02:04  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.11  2008/01/19 06:44:24  vapour
- * Moved the initial swf movie creation code into the inner function.
- *
- * Revision 1.10  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.9  2008/01/15 11:57:59  vapour
- * Added code to free memory better if an error occurs.
- *
- * Revision 1.8  2008/01/15 06:17:19  vapour
- * Removed old variables and code no longer used.
- *
- * Revision 1.7  2008/01/13 10:40:33  vapour
- * Updated to set the dimensions, frame rate, and background colour of the swf output here.
- * Also updated to use the new definition for the inner swf generation function.
- *
- * Revision 1.6  2008/01/13 05:37:40  vapour
- * Started conveting the existing swf output code to use Ming.
- *
- * Revision 1.5  2007/10/10 15:01:17  vapour
- * Had to set the gio stream to NULL encoding, so it is safe with binary data.
- *
- * Revision 1.4  2007/10/07 14:22:16  vapour
- * Moved initial allocation of swf buffer into the inner function.
- *
- * Revision 1.3  2007/10/07 08:44:38  vapour
- * Added initial (untested) code for creating the swf header.
- *
- * Revision 1.2  2007/10/06 11:38:28  vapour
- * Continued adjusting function include definitions.
- *
- * Revision 1.1  2007/09/29 04:22:15  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

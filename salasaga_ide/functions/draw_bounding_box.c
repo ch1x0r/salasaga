@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to draw a bounding box in the drawing area, via the front store 
+ * Salasaga: Function to draw a bounding box in the drawing area, via the front store 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -80,23 +80,3 @@ void draw_bounding_box(GtkWidget *widget, GdkRegion *region)
 	// Free the memory allocated in this function
 	g_free(tmp_rectangle_array[0]);
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.4  2008/03/05 12:36:39  vapour
- * Renamed the old backing store variable and associated comments to front store.
- *
- * Revision 1.3  2008/02/04 16:46:06  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.2  2008/01/15 16:19:04  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/29 04:22:16  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to create the working area 
+ * Salasaga: Function to create the working area 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 #include "working_area_button_press_event.h"
 #include "working_area_button_release_event.h"
@@ -88,26 +88,3 @@ GtkWidget *create_working_area(GtkWidget *working_frame)
 
 	return working_frame;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.5  2008/02/04 16:41:57  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.4  2008/01/15 16:18:59  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.3  2007/10/04 19:51:10  vapour
- * Began adjusting the includes in each function to only call the ones it needs, in order to dramatically speed up recompilation time for developers.
- *
- * Revision 1.2  2007/09/29 04:22:12  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- * Revision 1.1  2007/09/29 02:42:27  vapour
- * Broke flame-edit.c into its component functions.
- *
- */

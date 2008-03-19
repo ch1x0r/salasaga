@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Function to create the zoom level selector 
+ * Salasaga: Function to create the zoom level selector 
  * 
  * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -80,14 +80,3 @@ GtkWidget *create_zoom_selector(gchar *initial_zoom)
 	// Return the resolution widget
 	return zoom_widget;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/02/05 10:44:25  vapour
- * Added a new function to construct the zoom level widget.
- *
- */

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Flame Project: Display a warning message to the user 
+ * Salasaga: Display a warning message to the user 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@postgresql.org>
  * 
@@ -30,8 +30,8 @@
 	#include <windows.h>
 #endif
 
-// Flame Edit includes
-#include "../flame-types.h"
+// Salasaga includes
+#include "../salasaga_types.h"
 #include "../externs.h"
 
 
@@ -50,20 +50,3 @@ gint display_warning(gchar *warning_string)
 
 	return TRUE;
 }
-
-
-/*
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.3  2008/02/04 16:45:24  vapour
- *  + Removed unnecessary includes.
- *
- * Revision 1.2  2008/01/15 16:19:00  vapour
- * Updated copyright notice to include 2008.
- *
- * Revision 1.1  2007/09/29 04:22:15  vapour
- * Broke gui-functions.c and gui-functions.h into its component functions.
- *
- */
