@@ -381,14 +381,14 @@ gboolean preferences_load()
 	glong				return_code;
 
 
-	// Check if the Flame Project registry keys exist
-	if (!RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject", 0, KEY_QUERY_VALUE, &hkey))
+	// Check if the Salasaga registry keys exist
+	if (!RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga", 0, KEY_QUERY_VALUE, &hkey))
 	{
 		// They do, so load the default values
 		RegCloseKey(hkey);
 
 		// Retrieve the value for the project folder
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -408,7 +408,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the screenshots folder
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -428,7 +428,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the default output folder
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -448,7 +448,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the default zoom level
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user (we've already set a default)
 			missing_keys = TRUE;
@@ -467,7 +467,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the project width
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -488,7 +488,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the project height
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -509,7 +509,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the output width
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -529,7 +529,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the output height
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -549,7 +549,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the default slide length
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -569,7 +569,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the default thumbnail width
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -589,7 +589,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the default slide length
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -609,7 +609,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the default frames per second
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -629,7 +629,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the red component of the default background colour
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -649,7 +649,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the green component of the default background colour
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -669,7 +669,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the blue component of the default background colour
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
@@ -689,7 +689,7 @@ gboolean preferences_load()
 		}
 
 		// Retrieve the value for the initial window maximisation
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;

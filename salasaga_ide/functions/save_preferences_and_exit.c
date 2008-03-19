@@ -130,11 +130,11 @@ void save_preferences_and_exit(void)
 	tmp_gstring = g_string_new(NULL);
 
 
-	// Check if the base Flame Project registry key exists
-	if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject", 0, KEY_QUERY_VALUE, &hkey))
+	// Check if the base Salasaga registry key exists
+	if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga", 0, KEY_QUERY_VALUE, &hkey))
 	{
 		// It doesn't, so create it
-		return_code = RegCreateKeyEx(HKEY_CURRENT_USER, "Software\\FlameProject", 0, NULL,
+		return_code = RegCreateKeyEx(HKEY_CURRENT_USER, "Software\\Salasaga", 0, NULL,
 						REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkey, NULL);
 		if (ERROR_SUCCESS != return_code)
 		{
@@ -144,15 +144,15 @@ void save_preferences_and_exit(void)
 		}
 	} else
 	{
-		// The base Flame Project registry key exists, so we don't need to create it
+		// The base Salasaga registry key exists, so we don't need to create it
 		RegCloseKey(hkey);
 	}
 
 	// Check if the defaults registry key exists
-	if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, KEY_QUERY_VALUE | KEY_SET_VALUE, &hkey))
+	if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE | KEY_SET_VALUE, &hkey))
 	{
 		// It doesn't, so create it
-		return_code = RegCreateKeyEx(HKEY_CURRENT_USER, "Software\\FlameProject\\defaults", 0, NULL,
+		return_code = RegCreateKeyEx(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, NULL,
 						REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkey, NULL);
 		if (ERROR_SUCCESS != return_code)
 		{
