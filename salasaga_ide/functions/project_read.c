@@ -1860,7 +1860,15 @@ gboolean project_read(gchar *filename)
 	// Load output folder
 	if (NULL == output_folder)
 		output_folder = g_string_new(NULL);
-	g_string_assign(output_folder, valid_output_folder->str);
+	if (TRUE == g_file_test(valid_output_folder->str, G_FILE_TEST_IS_DIR))  // Test if the directory given in the project file exists
+	{
+		// Yes, it does
+		g_string_assign(output_folder, valid_output_folder->str);
+	} else
+	{
+		// No, it doesn't, so use the default output folder
+		g_string_assign(output_folder, default_output_folder->str);
+	}
 	g_string_free(valid_output_folder, TRUE);
 
 	// Load output width
