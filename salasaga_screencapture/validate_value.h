@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2008 Justin Clift <justin@salasaga.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
@@ -34,14 +34,3 @@ void *validate_value(gint value_id, gint input_type, void *value);
 #endif // __cplusplus
 
 #endif /*VALIDATE_VALUE_H_*/
-
-
-/* 
- * History
- * +++++++
- * 
- * $Log$
- * Revision 1.1  2008/03/05 04:30:01  vapour
- * Added files required for validation of input and display of warning messages.
- *
- */
