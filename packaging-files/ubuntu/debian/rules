@@ -1,6 +1,6 @@
 #!/usr/bin/make -f
 
-package = flameproject
+package = salasaga
 docdir = debian/tmp/usr/share/doc/$(package)
 
 CC = gcc
@@ -17,8 +17,8 @@ endif
 build:
 	$(checkdir)
 	autoconf; ./configure --prefix=/usr; $(MAKE)
-	cd flame_capture; autoconf; ./configure --prefix=/usr; $(MAKE)
-	cd flame_edit; autoconf; ./configure --prefix=/usr; $(MAKE)
+	cd salasaga_screencapture; autoconf; ./configure --prefix=/usr; $(MAKE)
+	cd salasaga_ide; autoconf; ./configure --prefix=/usr; $(MAKE)
 	touch build
 
 clean:
@@ -41,14 +41,14 @@ binary-arch:	checkroot build
 		prefix=$$(pwd)/debian/tmp/usr install
 	cp -a debian/changelog $(docdir)/changelog.Debian
 	cd $(docdir) && gzip -9 changelog.Debian
-	dpkg-shlibdeps debian/tmp/usr/bin/flame-edit
+	dpkg-shlibdeps debian/tmp/usr/bin/salasaga
 	dpkg-gencontrol -isp
 	chown -R root:root debian/tmp
 	chmod -R u+w,go=rX debian/tmp
 	dpkg --build debian/tmp ..
 
 define checkdir
-	test -f flame_edit/flame-edit.c -a -f debian/rules
+	test -f salasaga_ide/salasaga.c -a -f debian/rules
 endef
 
 binary: binary-indep binary-arch

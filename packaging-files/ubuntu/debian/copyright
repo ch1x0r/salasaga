@@ -1,20 +1,19 @@
-This is the Ubuntu prepackaged version of Justin Clift's Flame
-Project application.
+This is the Ubuntu prepackaged version of Salasaga.
 
 This application is an Integrated Development Environment for producing
-Animated SVG files.
+eLearning.
 
 This package was first put together by Justin Clift and is currently
 maintained by him. The source for this release was taken from:
 
-	http://www.flameproject.org
+	http://www.salasaga.org
 
 The changes were very minimal:
 
 - Adding support for the Debian package maintenance scheme, by adding
   various debian/* files.
 
-Program Copyright (C) 2005-2007 Justin Clift <justin@postgresql.org>
+Program Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
 
 This library is free software; you can redistribute it and/or
 modify it under the terms of the GNU Lesser General Public
@@ -29,4 +28,3 @@ Lesser General Public License for more details.
 You should have received a copy of the GNU Lesser General Public
 License along with this library; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
-

@@ -1,13 +1,13 @@
 # Customised from auto-generated EclipseNSIS script
 
-Name "Flame Project"
+Name "salasaga"
 SetCompressor /SOLID lzma
 
 # Defines
 !define REGKEY "SOFTWARE\$(^Name)"
-!define VERSION 0.7.7.12
+!define VERSION 0.8.0.0
 !define COMPANY "Justin Clift"
-!define URL http://www.flameproject.org
+!define URL http://www.salasaga.org
 
 # MUI defines
 !define MUI_ICON "${NSISDIR}\Contrib\Graphics\Icons\modern-install.ico"
@@ -15,9 +15,9 @@ SetCompressor /SOLID lzma
 !define MUI_LICENSEPAGE_CHECKBOX
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT HKLM
 !define MUI_STARTMENUPAGE_NODISABLE
-!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Flame Project"
+!define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\Salasaga"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME StartMenuGroup
-!define MUI_STARTMENUPAGE_DEFAULT_FOLDER "Flame Project"
+!define MUI_STARTMENUPAGE_DEFAULT_FOLDER "Salasaga"
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 
@@ -32,7 +32,7 @@ Var StartMenuGroup
 
 # Installer pages
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE C:\eclipse\workspace\flame-edit\LICENSE.TXT
+!insertmacro MUI_PAGE_LICENSE C:\eclipse\workspace\salasaga\LICENSE.TXT
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_STARTMENU Application $StartMenuGroup
 !insertmacro MUI_PAGE_INSTFILES
@@ -44,13 +44,13 @@ Var StartMenuGroup
 !insertmacro MUI_LANGUAGE English
 
 # Installer attributes
-OutFile "flame-setup_${VERSION}_2007mmdd.exe"
-InstallDir $PROGRAMFILES\FlameProject
+OutFile "salasaga_setup_${VERSION}_2008mmdd.exe"
+InstallDir $PROGRAMFILES\Salasaga
 CRCCheck on
 XPStyle on
 ShowInstDetails show
 VIProductVersion ${VERSION}
-VIAddVersionKey ProductName "Flame Project"
+VIAddVersionKey ProductName "Salasaga"
 VIAddVersionKey ProductVersion "${VERSION}"
 VIAddVersionKey CompanyName "${COMPANY}"
 VIAddVersionKey CompanyWebsite "${URL}"
@@ -64,20 +64,20 @@ ShowUninstDetails show
 Section -Main SEC0000
     SetOutPath $INSTDIR
     SetOverwrite on
-    File C:\eclipse\workspace\flame-edit\Release\flame-edit.exe
-    File C:\eclipse\workspace\flame-capture\Release\flame-capture.exe
-    File C:\eclipse\workspace\flame-keycapture\Release\libflame-keycapture.dll
-    File C:\install\compiled\FlameProject\libungif4.dll
-    File C:\install\compiled\FlameProject\libxml2.dll
-    File C:\install\compiled\FlameProject\AUTHORS
-    File C:\install\compiled\FlameProject\LICENSE.TXT
+    File C:\eclipse\workspace\salasaga_ide\Release\salasaga.exe
+    File C:\eclipse\workspace\salasaga_screencapture\Release\salasaga_screencapture.exe
+    File C:\eclipse\workspace\salasaga_keycapture\Release\libsalasaga_keycapture.dll
+    File C:\install\compiled\Salasaga\libungif4.dll
+    File C:\install\compiled\Salasaga\libxml2.dll
+    File C:\install\compiled\Salasaga\AUTHORS
+    File C:\install\compiled\Salasaga\LICENSE.TXT
     File C:\eclipse\workspace\sf-packaging-files\windows\included_licenses\GIFLIB_license.txt
     SetOutPath $INSTDIR\fonts
-    File /r C:\install\compiled\FlameProject\fonts\*
+    File /r C:\install\compiled\Salasaga\fonts\*
     SetOutPath $INSTDIR\icons
-    File /r C:\install\compiled\FlameProject\icons\*
+    File /r C:\install\compiled\Salasaga\icons\*
     SetOutPath $INSTDIR\sounds
-    File /r C:\install\compiled\FlameProject\sounds\*
+    File /r C:\install\compiled\Salasaga\sounds\*
     WriteRegStr HKLM "${REGKEY}\Components" Main 1
 SectionEnd
 
@@ -87,7 +87,7 @@ Section -post SEC0001
     !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
     CreateDirectory "$SMPROGRAMS\$StartMenuGroup"
     SetOutPath $INSTDIR
-    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Flame Project.lnk" "$INSTDIR\flame-edit.exe" "" "$INSTDIR\icons\flame-icon.ico"
+    CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Salasaga.lnk" "$INSTDIR\salasaga.exe" "" "$INSTDIR\icons\salasaga-icon.ico"
     CreateShortcut "$SMPROGRAMS\$StartMenuGroup\Uninstall $(^Name).lnk" $INSTDIR\uninstall.exe
     !insertmacro MUI_STARTMENU_WRITE_END
     WriteRegStr HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)" DisplayName "$(^Name)"
@@ -121,9 +121,9 @@ Section /o un.Main UNSEC0000
     Delete /REBOOTOK $INSTDIR\LICENSE.TXT
     Delete /REBOOTOK $INSTDIR\GIFLIB_license.txt
     Delete /REBOOTOK $INSTDIR\AUTHORS
-    Delete /REBOOTOK $INSTDIR\flame-capture.exe
-    Delete /REBOOTOK $INSTDIR\flame-edit.exe
-    Delete /REBOOTOK $INSTDIR\libflame-keycapture.dll
+    Delete /REBOOTOK $INSTDIR\salasaga_screencapture.exe
+    Delete /REBOOTOK $INSTDIR\salasaga.exe
+    Delete /REBOOTOK $INSTDIR\libsalasaga_keycapture.dll
     Delete /REBOOTOK $INSTDIR\libungif4.dll
     Delete /REBOOTOK $INSTDIR\libxml2.dll
     DeleteRegValue HKLM "${REGKEY}\Components" Main
@@ -131,7 +131,7 @@ SectionEnd
 
 Section un.post UNSEC0001
     DeleteRegKey HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\$(^Name)"
-    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\Flame Project.lnk"
+    Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\Salasaga.lnk"
     Delete /REBOOTOK "$SMPROGRAMS\$StartMenuGroup\Uninstall $(^Name).lnk"
     Delete /REBOOTOK $INSTDIR\uninstall.exe
     DeleteRegValue HKLM "${REGKEY}" StartMenuGroup

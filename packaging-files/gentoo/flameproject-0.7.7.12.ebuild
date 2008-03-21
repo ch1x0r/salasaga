@@ -4,10 +4,9 @@
 
 inherit autotools eutils flag-o-matic multilib 
 
-DESCRIPTION="An Integrated Development Environment for producing Animated SVG
-files"
-HOMEPAGE="http://www.flameproject.org/"
-SRC_URI="http://downloads.sourceforge.net/flameproject/flameproject-0.7.7.dev-200709242316.tar.bz2"
+DESCRIPTION="An Integrated Development Environment for producing eLearning"
+HOMEPAGE="http://www.salasaga.org/"
+SRC_URI="http://downloads.sourceforge.net/salasaga/salasaga-0.8.0.dev-200800112233.tar.bz2"
 
 LICENSE="LGPL-2"
 SLOT="0"
@@ -29,7 +28,7 @@ RDEPEND="sys-devel/autoconf
 DEPEND="${RDEPEND}"
 
 src_compile() {
-	mv ${WORKDIR}/flame_project-0.7.7.dev ${WORKDIR}/${P}
+	mv ${WORKDIR}/salasaga-0.8.0.dev ${WORKDIR}/${P}
 	cd "${S}" || die "Directory not found"
 	autoconf || die "Autoconfig failed"
 	econf || die "econf failed"
@@ -39,4 +38,3 @@ src_compile() {
 src_install() {
 	einstall || die "Install failed"
 }
-

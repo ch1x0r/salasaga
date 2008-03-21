@@ -1,19 +1,19 @@
-Name: flame_project
-Summary: An Integrated Development Environment for producing Animated SVG files.
-Version: 0.7.7.dev
-Release: 6
+Name: salasaga
+Summary: An Integrated Development Environment for producing eLearning.
+Version: 0.8.0.dev
+Release: 0
 License: LGPL
 Group: Applications/Multimedia
-URL: http://www.flameproject.org/
+URL: http://www.salasaga.org/
 
-Source0: http://downloads.sourceforge.net/flameproject/flame_project-%{version}.tar.bz2
+Source0: http://downloads.sourceforge.net/salasaga/salasaga-%{version}.tar.bz2
 BuildRoot: %{_tmppath}/%{name}-root
 
 Requires: glib2, gtk2, libgnome, libxml2
 BuildRequires: autoconf, rpm-devel >= 4.2.1, make, gcc, glib2-devel, gtk2-devel, libgnome-devel, libxml2-devel
 
 %description
-An Integrated Development Environment for producing Animated SVG files.
+An Integrated Development Environment for producing eLearning.
 
 %prep
 %setup
