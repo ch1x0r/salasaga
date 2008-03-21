@@ -3,7 +3,7 @@
  *
  * Salasaga: Header file for the Control-Printscreen key capturing dll
  * 
- * Copyright (C) 2007 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2007 Justin Clift <justin@salasaga.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
