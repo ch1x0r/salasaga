@@ -3,7 +3,7 @@
  *
  * Salasaga: Display a warning message to the user 
  * 
- * Copyright (C) 2008 Justin Clift <justin@postgresql.org>
+ * Copyright (C) 2008 Justin Clift <justin@salasaga.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
