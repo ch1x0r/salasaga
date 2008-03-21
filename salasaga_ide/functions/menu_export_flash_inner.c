@@ -46,7 +46,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	// Local variables
 	GString				*as_gstring;				// Used for constructing action script statements
 	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
-	gint				display_depth;				// The depth at which an item is displayed in the swf output
+	gint				display_depth;			// The depth at which an item is displayed in the swf output
 	GError				*error = NULL;				// Pointer to error return structure
 	gfloat				finish_x_position_unscaled;
 	gfloat				finish_y_position_unscaled;
@@ -81,6 +81,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	layer				*this_layer_data;			// Points to the data in the present layer
 	layer				*this_layer_info;			// Used to point to layer data when looping
 	slide				*this_slide_data;			// Points to the data in the present slide
+	gint				this_start_depth = 2;
 	guint				total_frames;				// The total number of frames in the animation
 	gboolean			unknown_resolution;
 
@@ -485,8 +486,9 @@ gint menu_export_flash_inner(gchar *output_filename)
 		// Point to the first layer again
 		this_slide_data = g_list_nth_data(slides, slide_counter);
 
-		// (Re-)Initialise the depth at which the next layer will be displayed
-		display_depth = num_layers;
+		// Set the depth at which the layers in this slide will be displayed downwards from
+		this_start_depth = this_start_depth + num_layers;
+		display_depth = this_start_depth;
 
 		// Process each layer in turn.  For every frame the layer is in, store in the array
 		// whether the object in the layer is visible, it's position, transparency, etc
@@ -1082,8 +1084,9 @@ gint menu_export_flash_inner(gchar *output_filename)
 				}
 
 				// Indicate on which frame the element should be removed from display
-				frame_number = (layer_counter * (slide_duration + 1)) + finish_frame;
-				swf_timing_array[frame_number].remove = TRUE;
+//				frame_number = (layer_counter * (slide_duration + 1)) + finish_frame + 1;
+//				frame_number = (layer_counter * (slide_duration + 1)) + finish_frame;
+//				swf_timing_array[frame_number].remove = TRUE;
 
 				// Displaying debugging info if requested
 				if (debug_level)
