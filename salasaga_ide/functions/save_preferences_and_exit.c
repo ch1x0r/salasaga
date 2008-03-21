@@ -45,6 +45,7 @@ void save_preferences_and_exit(void)
 	// * Non-windows code *
 
 	// Local variables
+	GString				*command_key;				// Used to work out paths into the GConf structure
 	GConfEngine			*gconf_engine;				// GConf engine
 
 	guint				tmp_int;					// Temporary integer
@@ -104,6 +105,16 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/config_version", 1.0, NULL);
 
 	// fixme4: Should we save a list of recent projects worked on?
+
+	// Unbind the screenshot key if it was bound
+	if (-1 != screenshot_command_num)
+	{
+		// Create the name of the key to reset
+		command_key = g_string_new(NULL);
+		g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", screenshot_command_num);
+		gconf_engine_set_string(gconf_engine, command_key->str, "", NULL);
+		g_string_free(command_key, TRUE);
+	}
 
 	// Notify the GConf engine that now is probably a good time to sync
 	gconf_engine_suggest_sync(gconf_engine, NULL);
