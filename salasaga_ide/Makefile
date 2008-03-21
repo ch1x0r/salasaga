@@ -184,6 +184,7 @@ OFILES = \
 	functions/film_strip_handle_released.o \
 	functions/film_strip_slide_clicked.o \
 	functions/image_crop.o \
+	functions/key_bind.o \
 	functions/layer_delete.o \
 	functions/layer_edit.o \
 	functions/layer_move_down.o \
@@ -362,6 +363,9 @@ film_strip_slide_clicked.o:
 
 image_crop.o:
 	$(CC) $(CFLAGS) -c image_crop.c -o image_crop.o
+
+key_bind.o:
+	$(CC) $(CFLAGS) -c key_bind.c -o key_bind.o
 
 layer_delete.o:
 	$(CC) $(CFLAGS) -c layer_delete.c -o layer_delete.o

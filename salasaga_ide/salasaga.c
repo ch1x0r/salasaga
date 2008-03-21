@@ -60,6 +60,7 @@
 #include "functions/event_size_allocate_received.h"
 #include "functions/film_strip_handle_changed.h"
 #include "functions/film_strip_handle_released.h"
+#include "functions/key_bind.h"
 #include "functions/logger_simple.h"
 #include "functions/logger_with_domain.h"
 #include "functions/preferences_load.h"
@@ -108,6 +109,7 @@ gulong					resolution_callback;		// Holds the id of the resolution selector call
 GtkComboBox				*resolution_selector;		// Widget for the resolution selector
 GtkWidget				*right_side;				// Widget for the right side area
 gboolean				screenshots_enabled = FALSE;  // Toggle for whether to enable screenshots
+gint					screenshot_command_num = -1;  // The metacity run command number used for the screenshot key
 gboolean				show_control_bar = TRUE;	// Toggle for whether to display the control bar in swf output
 GList					*slides = NULL;				// Linked list holding the slide info
 guint					start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
@@ -182,7 +184,6 @@ gint main(gint argc, gchar *argv[])
 	gint				num_formats;				// Used to determine if SVG images can be loaded
 	GtkWidget			*outer_box;					// Widget for the onscreen display
 	GtkLabel			*resolution_label;			// Widget for the resolution selector label
-	gchar				*return_code_gchar;			// Catches string based return codes
 	GSList				*supported_formats;			// Used to determine if SVG images can be loaded
 	GtkWidget			*toolbar = NULL;			// Widget for the toolbar
 	GdkScreen			*which_screen;				// Gets given the screen the monitor is on
@@ -192,17 +193,6 @@ gint main(gint argc, gchar *argv[])
 	GString				*tmp_gstring;				// Temporary GString
 	guint				tmp_int;					// Temporary guint
 	GtkWidget			*tmp_widget = NULL;			// Temporary widget
-
-#ifndef _WIN32
-	// GConf related variables (not for windows)
-	GString				*command_key;				// Used to work out paths into the GConf structure
-	gboolean			key_already_set = FALSE;	// Used to work out which metacity run command is unassigned
-	GConfEngine			*gconf_engine;				// GConf engine
-	gchar				*gconf_value;				//
-	guint				unused_num = 0;				// Used to work out which metacity run command is unassigned
-
-	guint				tmp_guint;					// Temporary guint
-#endif
 
 
 	// Initialise various things
@@ -428,61 +418,7 @@ gint main(gint argc, gchar *argv[])
 
 #ifndef _WIN32
 	// * Setup the Control-Printscreen key combination to capture screenshots - Non-windows only *
-
-	// First we check that the "salasaga_screencapture" program is found in the OS search path
-	return_code_gchar = g_find_program_in_path("salasaga_screencapture");
-	if (NULL == return_code_gchar)
-	{
-		display_warning("Error ED114: 'salasaga_screencapture' not found in the search path. Screenshot capturing is disabled.");
-	} else
-	{
-		// Enable screenshots
-		screenshots_enabled = TRUE;
-
-		// Search for the first unused run command
-		gconf_engine = gconf_engine_get_default();
-		command_key = g_string_new(NULL);
-		for (tmp_guint = 10; tmp_guint >= 1; tmp_guint--)
-		{
-			// Create the name of the key to check
-			g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", tmp_guint);
-	
-			// Get the value for the key
-			gconf_value = gconf_engine_get_string(gconf_engine, command_key->str, NULL);
-	
-			// Check if the key is unused
-			tmp_int = g_ascii_strncasecmp(gconf_value, "", 1);
-			if (0 == tmp_int)
-			{
-				// Yes it's unused, so make a note of it
-				unused_num = tmp_guint;
-			} else
-			{
-				// This command is being used, so check if it's already assigned to salasaga_screencapture
-				tmp_int = g_ascii_strncasecmp(gconf_value, "salasaga_screencapture", 13);
-				if (0 == tmp_int)
-				{
-					key_already_set = TRUE;
-				}
-			}
-		}
-	
-		// If an unused run command was found and we haven't already assigned a screenshot key, then assign one
-		if (FALSE == key_already_set)
-		{
-			if (0 != unused_num)
-			{
-				g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", unused_num);
-				gconf_engine_set_string(gconf_engine, command_key->str, "salasaga_screencapture", NULL);
-				g_string_printf(command_key, "%s%u", "/apps/metacity/global_keybindings/run_command_", unused_num);
-				gconf_engine_set_string(gconf_engine, command_key->str, "<Control>Print", NULL);
-			}
-		}
-		g_string_free(command_key, TRUE);
-
-		// Free our GConf engine
-		gconf_engine_unref(gconf_engine);
-	}
+	screenshot_command_num = key_bind();
 #endif // End of non-windows code
 
 	// Set defaults values for the window capture code

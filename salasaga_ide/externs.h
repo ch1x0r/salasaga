@@ -69,6 +69,7 @@ extern gulong				resolution_callback;
 extern GtkComboBox			*resolution_selector;
 extern GtkWidget			*right_side;
 extern gboolean				screenshots_enabled;
+extern gint					screenshot_command_num;
 extern gboolean				show_control_bar;
 extern GList				*slides;
 extern guint				start_behaviour;
