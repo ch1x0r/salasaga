@@ -59,6 +59,9 @@ void layer_new_text_inner(guint release_x, guint release_y)
 		return;
 	}
 
+	// Change the cursor back to normal
+	gdk_window_set_cursor(main_drawing_area->window, NULL);
+
 	// * Prepare a new text layer object in memory, with reasonable defaults *
 
 	// Simplify pointing to the current slide structure in memory
@@ -100,9 +103,6 @@ void layer_new_text_inner(guint release_x, guint release_y)
 		g_free(tmp_layer);
 		g_object_unref(tmp_text_ob->text_buffer);
 		g_free(tmp_text_ob);
-
-		// Change the cursor back to normal
-		gdk_window_set_cursor(main_drawing_area->window, NULL);
 
 		// Update the status bar
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " New layer cancelled");

@@ -47,7 +47,18 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	layer				*tmp_layer;					// Temporary layer
 	GtkTreePath			*tmp_path;					// Temporary GtkPath
 
-	
+
+	// If no project is loaded then don't run this function
+	if (NULL == current_slide)
+	{
+		// Make a beep, then return
+		gdk_beep();
+		return;
+	}
+
+	// Change the cursor back to normal
+	gdk_window_set_cursor(main_drawing_area->window, NULL);
+
 	// * Create a new image layer in memory using reasonable defaults *
 	
 	// Simplify pointing to the current slide structure in memory
@@ -86,18 +97,12 @@ void layer_new_image_inner(guint release_x, guint release_y)
 		g_free(tmp_layer);
 		g_free(tmp_image_ob);
 
-		// Change the cursor back to normal
-		gdk_window_set_cursor(main_drawing_area->window, NULL);
-
 		// Update the status bar
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " New layer cancelled");
 		gdk_flush();
 
 		return;
 	}
-
-	// Change the cursor back to normal
-	gdk_window_set_cursor(main_drawing_area->window, NULL);
 
 	// * To get here, the user must have clicked OK in the dialog box, so we process the results *
 
