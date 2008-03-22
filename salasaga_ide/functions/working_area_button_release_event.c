@@ -55,6 +55,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
 	gint				mouse_x;
 	gint				mouse_y;
+	gint				new_x;						// New offset value, used in bounds checking
+	gint				new_y;						// New offset value, used in bounds checking
 	gint				present_x;
 	gint				present_y;
 	gint				project_x_position;			// X position in the project image
@@ -214,11 +216,53 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			x_diff = (mouse_x - stored_x) * scaled_width_ratio;
 			y_diff = (mouse_y - stored_y) * scaled_height_ratio;
 
-			// Update the object with the new offsets
-			layer_data->x_offset_finish += x_diff;
-			layer_data->y_offset_finish += y_diff;
-			layer_data->x_offset_start += x_diff;
-			layer_data->y_offset_start += y_diff;
+			// Bounds check the starting x offset, then update the object with the new value
+			new_x = layer_data->x_offset_start + x_diff;
+			if (0 > new_x)
+			{
+				new_x = 1;
+			}
+			if (project_width < (new_x + width + 2))
+			{
+				new_x = project_width - width - 2;
+			}
+			layer_data->x_offset_start = new_x;
+
+			// Bounds check the finishing x offset, then update the object with the new value
+			new_x = layer_data->x_offset_finish + x_diff;
+			if (0 > new_x)
+			{
+				new_x = 1;
+			}
+			if (project_width < (new_x + width + 2))
+			{
+				new_x = project_width - width - 2;
+			}
+			layer_data->x_offset_finish = new_x;
+
+			// Bounds check the starting y offset, then update the object with the new value
+			new_y = layer_data->y_offset_start + y_diff;
+			if (0 > new_y)
+			{
+				new_y = 1;
+			}
+			if (project_height < (new_y + height + 2))
+			{
+				new_y = project_height - height - 2;
+			}
+			layer_data->y_offset_start = new_y;
+
+			// Bounds check the finishing y offset, then update the object with the new value
+			new_y = layer_data->y_offset_finish + y_diff;
+			if (0 > new_y)
+			{
+				new_y = 1;
+			}
+			if (project_height < (new_y + height + 2))
+			{
+				new_y = project_height - height - 2;
+			}
+			layer_data->y_offset_finish = new_y;
 
 			// Update the timeline widget with the new offsets
 			gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
