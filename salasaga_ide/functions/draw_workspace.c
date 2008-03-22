@@ -33,7 +33,6 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "calculate_object_boundaries.h"
 #include "compress_layers.h"
 
 
@@ -114,7 +113,4 @@ void draw_workspace(void)
 
 	// Update the workspace
 	gtk_widget_queue_draw(GTK_WIDGET(main_drawing_area));
-
-	// Update the collision detection boundaries
-//	calculate_object_boundaries();
 }
