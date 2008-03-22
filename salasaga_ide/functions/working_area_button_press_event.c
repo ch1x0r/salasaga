@@ -36,6 +36,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "calculate_object_boundaries.h"
 #include "detect_collisions.h"
 #include "layer_edit.h"
 
@@ -43,20 +44,19 @@
 gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
-	guint				num_layers;
-	guint				count_int;
-
 	GList				*collision_list = NULL;
-	slide				*current_slide_data;	// Alias to make things easier
-	GtkWidget			*list_widget;			// Alias to the timeline widget to make things easier
+	guint				count_int;
+	slide				*current_slide_data;		// Alias to make things easier
+	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
 	guint				num_collisions;
-	gboolean			selection_hit;			// Status toggle
-	guint				selected_row;			// Holds the number of the row that is selected
+	guint				num_layers;
+	gboolean			selection_hit;				// Status toggle
+	guint				selected_row;				// Holds the number of the row that is selected
 
-	guint				tmp_int;				// Temporary integer
-	GtkTreeViewColumn	*tmp_column;			// Temporary column
-	GString				*tmp_gstring;			// Temporary GString
-	GtkTreePath			*tmp_path;				// Temporary path
+	guint				tmp_int;					// Temporary integer
+	GtkTreeViewColumn	*tmp_column;				// Temporary column
+	GString				*tmp_gstring;				// Temporary GString
+	GtkTreePath			*tmp_path;					// Temporary path
 
 
 	// Only do this function if we have a front store available
@@ -112,6 +112,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	}
 
 	// * Do collision detection here to determine if the user has clicked on a layer's object *
+	calculate_object_boundaries();
 	tmp_gstring = g_string_new(NULL);
 	collision_list = detect_collisions(collision_list, event->x, event->y);
 	if (NULL == collision_list)
@@ -190,10 +191,6 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 				g_string_printf(tmp_gstring, "%d", tmp_int);
 				tmp_path = gtk_tree_path_new_from_string(tmp_gstring->str);
 				gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
-
-				// Draw a bounding box around the selected object
-				// fixme4: Better to do this later, driven from changes in the timelines selected row
-//				draw_bounding_box(widget, ((boundary_box *) collision_list->data)->region_ptr);
 
 				// Free the memory allocated during the collision detection
 				g_string_free(tmp_gstring, TRUE);
