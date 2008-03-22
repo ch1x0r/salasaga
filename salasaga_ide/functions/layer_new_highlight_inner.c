@@ -93,38 +93,10 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	}
 
 	// Ensure the mouse coordinates can't go out of bounds
-	if (1 > start_x)
-	{
-		start_x = 1;
-	}
-	if ((main_drawing_area->allocation.width - valid_fields[HIGHLIGHT_WIDTH].min_value) < start_x)
-	{
-		start_x = main_drawing_area->allocation.width - valid_fields[HIGHLIGHT_WIDTH].min_value;
-	}
-	if (1 > start_y)
-	{
-		start_y = 1;
-	}
-	if ((main_drawing_area->allocation.height - valid_fields[HIGHLIGHT_HEIGHT].min_value) < start_y)
-	{
-		start_y = main_drawing_area->allocation.height - valid_fields[HIGHLIGHT_HEIGHT].min_value;
-	}
-	if (1 > end_x)
-	{
-		end_x = 1;
-	}
-	if ((main_drawing_area->allocation.width - 1) < end_x)
-	{
-		end_x = main_drawing_area->allocation.width - 1;
-	}
-	if (1 > end_y)
-	{
-		end_y = 1;
-	}
-	if ((main_drawing_area->allocation.height - 1) < end_y)
-	{
-		end_y = main_drawing_area->allocation.height - 1;
-	}
+	start_x = CLAMP(start_x, 1, main_drawing_area->allocation.width - valid_fields[HIGHLIGHT_WIDTH].min_value);
+	start_y = CLAMP(start_y, 1, main_drawing_area->allocation.height - valid_fields[HIGHLIGHT_HEIGHT].min_value);
+	end_x = CLAMP(end_x, 1, main_drawing_area->allocation.width - 1);
+	end_y = CLAMP(end_y, 1, main_drawing_area->allocation.height - 1);
 
 	// Calculate the height and width scaling values for the main drawing area at its present size
 	scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
