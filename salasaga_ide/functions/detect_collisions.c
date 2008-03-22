@@ -22,6 +22,12 @@
  */
 
 
+// Turn on C99 compatibility - needed for roundf() to work
+#define _ISOC99_SOURCE
+
+// Math include
+#include <math.h>
+
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -42,7 +48,7 @@ GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y
 	guint				count_int;
 	guint				num_boundaries;
 
-	boundary_box			*boundary;
+	boundary_box		*boundary;
 
 
 	// Only do this if we've been given a list of boundary boxes
@@ -65,7 +71,7 @@ GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y
 	{
 		boundary_list = g_list_first(boundary_list);
 		boundary = g_list_nth_data(boundary_list, count_int);
-		if (TRUE == gdk_region_point_in(boundary->region_ptr, (guint) mouse_x, (guint) mouse_y))
+		if (TRUE == gdk_region_point_in(boundary->region_ptr, roundf(mouse_x), roundf(mouse_y)))
 		{
 			// Collision detected, so add it to the collision list
 			collision_list = g_list_first(collision_list);
