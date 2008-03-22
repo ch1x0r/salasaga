@@ -46,7 +46,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	// Local variables
 	GString				*as_gstring;				// Used for constructing action script statements
 	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
-	gint				display_depth;			// The depth at which an item is displayed in the swf output
+	gint				display_depth;				// The depth at which an item is displayed in the swf output
 	GError				*error = NULL;				// Pointer to error return structure
 	gfloat				finish_x_position_unscaled;
 	gfloat				finish_y_position_unscaled;
@@ -487,7 +487,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 		this_slide_data = g_list_nth_data(slides, slide_counter);
 
 		// Set the depth at which the layers in this slide will be displayed downwards from
-		this_start_depth = this_start_depth + num_layers;
+		this_start_depth += num_layers;
 		display_depth = this_start_depth;
 
 		// Process each layer in turn.  For every frame the layer is in, store in the array
@@ -921,7 +921,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 						// * We need to know which of the strings is widest, so we can calculate the width of the text background box *
 
 						// If this is the widest string, we keep the value of this one
-						this_text_string_width = SWFText_getStringWidth(text_object, (guchar *) visible_string);
+						this_text_string_width = SWFText_getStringWidth(text_object, (gchar *) visible_string);
 						if (this_text_string_width > widest_text_string_width)
 							widest_text_string_width = this_text_string_width;
 
@@ -1195,7 +1195,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 				// Display debugging info if requested
 				if (debug_level)
 				{
-					printf("Processing swf element # %u\n", frame_number);
+					printf("Processing slide %d, swf array element # %u\n", slide_counter, frame_number);
 				}
 
 				// Is this a frame in which some action needs to take place?
