@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-void draw_bounding_box(GtkWidget *widget, GdkRegion *region);
+gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom);
 
 #ifdef __cplusplus
 }

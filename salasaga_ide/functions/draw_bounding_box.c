@@ -35,48 +35,103 @@
 #include "../externs.h"
 
 
-void draw_bounding_box(GtkWidget *widget, GdkRegion *region)
+gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 {
 	// Local variables
-	GdkPoint			point_array[5];				// Holds the boundary points of the lines to draw
+	static GdkGC		*line_gc = NULL;
+	GdkSegment			lines[4];
+	GdkRectangle		tmp_rectangle;				// Temporary rectangle used for invalidating part of the front store
 
-	GdkRectangle			*tmp_rectangle_array[1];
-	gint				tmp_gint;
-	
 
-	gdk_region_offset(region, 1, 2);
-	gdk_region_get_rectangles(region, tmp_rectangle_array, &tmp_gint);
+	// Ensure the invalidation (redraw) area is set to the maximum size that has been selected for this highlight
+	if (right < invalidation_start_x)
+	{
+		invalidation_start_x = right - 1;
+	}
+	if (bottom < invalidation_start_y)
+	{
+		invalidation_start_y = bottom - 1;
+	}
+	if (right > invalidation_end_x)
+	{
+		invalidation_end_x = right;
+	}
+	if (bottom > invalidation_end_y)
+	{
+		invalidation_end_y = bottom;
+	}
 
-//g_printerr("Number of rectangles in region: %d\n", tmp_gint);	
-//g_printerr("Rectangle X: %d\n", tmp_rectangle_array[0]->x);
-//g_printerr("Rectangle Y: %d\n", tmp_rectangle_array[0]->y);
-//g_printerr("Rectangle Width: %d\n", tmp_rectangle_array[0]->width);
-//g_printerr("Rectangle Height: %d\n", tmp_rectangle_array[0]->height);
+	// Ensure the invalidation area can't go out of bounds
+	if (1 > invalidation_start_x)
+	{
+		invalidation_start_x = 1;
+	}
+	if ((main_drawing_area->allocation.width - 1) < invalidation_start_x)
+	{
+		invalidation_start_x = main_drawing_area->allocation.width - 1;
+	}
+	if (1 > invalidation_start_y)
+	{
+		invalidation_start_y = 1;
+	}
+	if ((main_drawing_area->allocation.height - 1) < invalidation_start_y)
+	{
+		invalidation_start_y = main_drawing_area->allocation.height - 1;
+	}
+	if (1 > invalidation_end_x)
+	{
+		invalidation_end_x = 1;
+	}
+	if ((main_drawing_area->allocation.width - 1) < invalidation_end_x)
+	{
+		invalidation_end_x = main_drawing_area->allocation.width - 1;
+	}
+	if (1 > invalidation_end_y)
+	{
+		invalidation_end_y = 1;
+	}
+	if ((main_drawing_area->allocation.height - 1) < invalidation_end_y)
+	{
+		invalidation_end_y = main_drawing_area->allocation.height - 1;
+	}
 
-	// Fill in the values for the point array
-	point_array[0].x = tmp_rectangle_array[0]->x;
-	point_array[0].y = tmp_rectangle_array[0]->y;
+	// Restore the front store area we're going over from the backing store
+	gdk_draw_pixbuf(GDK_DRAWABLE(front_store), NULL, GDK_PIXBUF(backing_store),
+			invalidation_start_x - 1, invalidation_start_y - 1,
+			invalidation_start_x, invalidation_start_y,
+			(invalidation_end_x - invalidation_start_x) + 1, (invalidation_end_y - invalidation_start_y) + 1,
+			GDK_RGB_DITHER_NONE, 0, 0);
 
-	point_array[1].x = tmp_rectangle_array[0]->x + tmp_rectangle_array[0]->width - 1;
-	point_array[1].y = tmp_rectangle_array[0]->y;
+	// Draw a bounding box on the front store
+	if (NULL == line_gc)
+	{
+		line_gc = gdk_gc_new(GDK_DRAWABLE(front_store));
+	}
+	gdk_gc_set_function(line_gc, GDK_INVERT);
+	lines[0].x1 = stored_x;
+	lines[0].y1 = stored_y;
+	lines[0].x2 = right;
+	lines[0].y2 = stored_y;
+	lines[1].x1 = right;
+	lines[1].y1 = stored_y;
+	lines[1].x2 = right;
+	lines[1].y2 = bottom;
+	lines[2].x1 = right;
+	lines[2].y1 = bottom;
+	lines[2].x2 = stored_x;
+	lines[2].y2 = bottom;
+	lines[3].x1 = stored_x;
+	lines[3].y1 = bottom;
+	lines[3].x2 = stored_x;
+	lines[3].y2 = stored_y;
+	gdk_draw_segments(GDK_DRAWABLE(front_store), line_gc, lines, 4);
 
-	point_array[2].x = tmp_rectangle_array[0]->x + tmp_rectangle_array[0]->width - 1;
-	point_array[2].y = tmp_rectangle_array[0]->y + tmp_rectangle_array[0]->height - 1;
+	// Tell the window system to display the updated front store area
+	tmp_rectangle.x = invalidation_start_x;
+	tmp_rectangle.y = invalidation_start_y;
+	tmp_rectangle.width = (invalidation_end_x - invalidation_start_x) + 1;
+	tmp_rectangle.height = (invalidation_end_y - invalidation_start_y) + 1;
+	gdk_window_invalidate_rect(main_drawing_area->window, &tmp_rectangle, TRUE);
 
-	point_array[3].x = tmp_rectangle_array[0]->x;
-	point_array[3].y = tmp_rectangle_array[0]->y + tmp_rectangle_array[0]->height - 1;
-
-	point_array[4].x = tmp_rectangle_array[0]->x;
-	point_array[4].y = tmp_rectangle_array[0]->y;
-
-//draw_workspace();
-
-	// Draw the bounding line around the object
-	gdk_draw_lines(front_store, widget->style->black_gc, &point_array[0], 5);
-
-	// Cause an expose event to happen, writing the (updated) front store to the screen
-	gdk_window_invalidate_rect(widget->window, tmp_rectangle_array[0], FALSE);
-
-	// Free the memory allocated in this function
-	g_free(tmp_rectangle_array[0]);
+	return TRUE;
 }
