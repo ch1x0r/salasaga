@@ -144,6 +144,9 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 		mouse_drag_height = valid_fields[HIGHLIGHT_HEIGHT].min_value;
 	}
 
+	// Change the cursor back to normal
+	gdk_window_set_cursor(main_drawing_area->window, NULL);
+
 	// * Create a new highlight layer in memory using reasonable defaults *
 
 	// Simplify pointing to the current slide structure in memory
@@ -180,9 +183,6 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 		g_string_free(tmp_layer->external_link_window, TRUE);
 		g_free(tmp_layer);
 		g_free(tmp_highlight_ob);
-
-		// Change the cursor back to normal
-		gdk_window_set_cursor(main_drawing_area->window, NULL);
 
 		// Redraw the workspace
 		draw_workspace();
