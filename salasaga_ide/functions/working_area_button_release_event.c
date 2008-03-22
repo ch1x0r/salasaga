@@ -41,7 +41,9 @@
 #include "layer_new_image_inner.h"
 #include "layer_new_mouse_inner.h"
 #include "layer_new_text_inner.h"
+#include "timeline_edited_x_offset_finish.h"
 #include "timeline_edited_x_offset_start.h"
+#include "timeline_edited_y_offset_finish.h"
 #include "timeline_edited_y_offset_start.h"
 
 
@@ -64,8 +66,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gboolean			selection_hit;				// Status toggle
 	gchar				*selected_row;				// Holds the number of the row that is selected
 	gint				width;
+	gfloat				x_diff;						// The X distance the object was dragged, after scaling
+	gfloat				y_diff;						// The Y distance the object was dragged, after scaling 
 
-	gdouble				tmp_double;					// Temporary double
+
 	GtkTreeViewColumn	*tmp_column;				// Temporary column
 	GString				*tmp_gstring;				// Temporary GString
 	GtkTreePath			*tmp_path;					// Temporary path
@@ -139,7 +143,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	// If this release matches the end of a mouse drag operation, we process it
 	if (TRUE == mouse_dragging)
 	{
-
 		// Initialise some things
 		current_slide_data = current_slide->data;
 		list_widget = current_slide_data->timeline_widget;
@@ -212,44 +215,29 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 					return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
 			}
 
-			// Work out and set the new X offset for the layer object
-			// fixme3: This needs to be a lot more accurate
-			tmp_double = mouse_x - stored_x;
-			tmp_double = (tmp_double * zoom) / 100;
-			tmp_double = present_x + tmp_double;
-			if (0 >= tmp_double)
-			{
-				tmp_double = 0;
-			}
-			if (tmp_double + width >= project_width)
-			{
-				tmp_double = project_width - width;
-			}
-			g_string_printf(tmp_gstring, "%.0f", tmp_double);
+			// Calculate the distance the object has been dragged
+			x_diff = (mouse_x - stored_x) * scaled_width_ratio;
+			y_diff = (mouse_y - stored_y) * scaled_height_ratio;
+
+			// Set the new X offsets for the object
+			g_string_printf(tmp_gstring, "%.0f", layer_data->x_offset_start + x_diff);
 			timeline_edited_x_offset_start(NULL, selected_row, tmp_gstring->str, NULL);
-	
-			// Work out and set the new Y offset for the layer object
-			// fixme3: This needs to be a lot more accurate
-			tmp_double = mouse_y - stored_y;
-			tmp_double = (tmp_double * zoom) / 100;
-			tmp_double = present_y + tmp_double;
-			if (0 >= tmp_double)
-			{
-				tmp_double = 0;
-			}
-			if (tmp_double + height >= project_height)
-			{
-				tmp_double = project_height - height;
-			}
-			g_string_printf(tmp_gstring, "%.0f", tmp_double);
+			g_string_printf(tmp_gstring, "%.0f", layer_data->x_offset_finish + x_diff);
+			timeline_edited_x_offset_finish(NULL, selected_row, tmp_gstring->str, NULL);
+
+			// Set the new Y offsets for the object
+			g_string_printf(tmp_gstring, "%.0f", layer_data->y_offset_start + y_diff);
 			timeline_edited_y_offset_start(NULL, selected_row, tmp_gstring->str, NULL);
-	
+			g_string_printf(tmp_gstring, "%.0f", layer_data->y_offset_finish + y_diff);
+			timeline_edited_y_offset_finish(NULL, selected_row, tmp_gstring->str, NULL);
+
 			// Reset the mouse drag switch and related info
 			mouse_dragging = FALSE;
 			stored_x = -1;
 			stored_y = -1;
-	
+
 			// Free the allocated memory
+			g_string_free(tmp_gstring, TRUE);
 			g_free(selected_row);
 		}
 	}
