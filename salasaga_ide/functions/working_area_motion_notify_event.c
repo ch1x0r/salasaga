@@ -22,12 +22,6 @@
  */
 
 
-// Turn on C99 compatibility - needed for roundf() to work
-#define _ISOC99_SOURCE
-
-// Math include
-#include <math.h>
-
 // GTK includes
 #include <gtk/gtk.h>
 
