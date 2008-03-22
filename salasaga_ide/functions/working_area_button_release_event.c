@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Salasaga: Detect when the user presses the mouse button on the drawing area 
+ * Salasaga: Detect when the user releases the mouse button on the drawing area 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@salasaga.org>
  * 
@@ -37,14 +37,12 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
+#include "draw_workspace.h"
 #include "layer_new_highlight_inner.h"
 #include "layer_new_image_inner.h"
 #include "layer_new_mouse_inner.h"
 #include "layer_new_text_inner.h"
-#include "timeline_edited_x_offset_finish.h"
-#include "timeline_edited_x_offset_start.h"
-#include "timeline_edited_y_offset_finish.h"
-#include "timeline_edited_y_offset_start.h"
+#include "regenerate_film_strip_thumbnails.h"
 
 
 gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
@@ -100,7 +98,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 		// Ask the user for the rest of the required details
 		layer_new_highlight_inner(mouse_x, mouse_y);  // Note that this one gets the unscaled mouse positions
-
 		return TRUE;
 	}
 
@@ -112,7 +109,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 		// Ask the user for the rest of the required details
 		layer_new_image_inner(project_x_position, project_y_position);
-
 		return TRUE;
 	}
 
@@ -124,7 +120,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 		// Ask the user for the rest of the required details
 		layer_new_mouse_inner(project_x_position, project_y_position);
-
 		return TRUE;
 	}
 
@@ -136,7 +131,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 		// Ask the user for the rest of the required details
 		layer_new_text_inner(project_x_position, project_y_position);
-
 		return TRUE;
 	}
 
@@ -148,7 +142,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		list_widget = current_slide_data->timeline_widget;
 		tmp_gstring = g_string_new(NULL);
 		selection_hit = FALSE;
-	
+
 		// Check for primary mouse button release
 		if (1 == event->button)
 		{
@@ -157,7 +151,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			tmp_column = gtk_tree_view_column_new();
 			gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, &tmp_column);
 			selected_row = gtk_tree_path_to_string(tmp_path);
-	
+
 			// Get its present X and Y offsets
 			current_slide_data->layers = g_list_first(current_slide_data->layers);
 			layer_data = g_list_nth_data(current_slide_data->layers, atoi(selected_row));
@@ -169,14 +163,14 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 					stored_x = -1;
 					stored_y = -1;
 					return TRUE;
-	
+
 				case TYPE_HIGHLIGHT:
 					present_x = layer_data->x_offset_start;
 					present_y = layer_data->y_offset_start;
 					width = ((layer_highlight *) layer_data->object_data)->width;
 					height = ((layer_highlight *) layer_data->object_data)->height;
 					break;
-	
+
 				case TYPE_GDK_PIXBUF:
 					// If this is the background layer, then we ignore it
 					if (TRUE == layer_data->background)
@@ -186,32 +180,33 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 						stored_y = -1;
 						return TRUE;
 					}
-	
+
 					// No it's not, so process it
 					present_x = layer_data->x_offset_start;
 					present_y = layer_data->y_offset_start;
 					width = ((layer_image *) layer_data->object_data)->width;
 					height = ((layer_image *) layer_data->object_data)->height;
 					break;
-	
+
 				case TYPE_MOUSE_CURSOR:
-	
+
 					// No it's not, so process it
 					present_x = layer_data->x_offset_start;
 					present_y = layer_data->y_offset_start;
 					width = ((layer_mouse *) layer_data->object_data)->width;
 					height = ((layer_mouse *) layer_data->object_data)->height;
 					break;
-	
+
 				case TYPE_TEXT:
 					present_x = layer_data->x_offset_start;
 					present_y = layer_data->y_offset_start;
 					width = ((layer_text *) layer_data->object_data)->rendered_width;
 					height = ((layer_text *) layer_data->object_data)->rendered_height;
 					break;
-	
+
 				default:
 					display_warning("Error ED32: Unknown layer type\n");
+
 					return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
 			}
 
@@ -219,17 +214,30 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			x_diff = (mouse_x - stored_x) * scaled_width_ratio;
 			y_diff = (mouse_y - stored_y) * scaled_height_ratio;
 
-			// Set the new X offsets for the object
-			g_string_printf(tmp_gstring, "%.0f", layer_data->x_offset_start + x_diff);
-			timeline_edited_x_offset_start(NULL, selected_row, tmp_gstring->str, NULL);
-			g_string_printf(tmp_gstring, "%.0f", layer_data->x_offset_finish + x_diff);
-			timeline_edited_x_offset_finish(NULL, selected_row, tmp_gstring->str, NULL);
+			// Update the object with the new offsets
+			layer_data->x_offset_finish += x_diff;
+			layer_data->y_offset_finish += y_diff;
+			layer_data->x_offset_start += x_diff;
+			layer_data->y_offset_start += y_diff;
 
-			// Set the new Y offsets for the object
-			g_string_printf(tmp_gstring, "%.0f", layer_data->y_offset_start + y_diff);
-			timeline_edited_y_offset_start(NULL, selected_row, tmp_gstring->str, NULL);
-			g_string_printf(tmp_gstring, "%.0f", layer_data->y_offset_finish + y_diff);
-			timeline_edited_y_offset_finish(NULL, selected_row, tmp_gstring->str, NULL);
+			// Update the timeline widget with the new offsets
+			gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
+								TIMELINE_X_OFF_START, layer_data->x_offset_start, -1);
+			gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
+								TIMELINE_Y_OFF_START, layer_data->y_offset_start, -1);
+			gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
+								TIMELINE_X_OFF_FINISH, layer_data->x_offset_finish, -1);
+			gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
+								TIMELINE_Y_OFF_FINISH, layer_data->y_offset_finish, -1);
+
+			// Redraw the workspace
+			draw_workspace();
+
+			// Tell (force) the window system to redraw the working area *immediately*
+			gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+
+			// Recreate the film strip thumbnails
+			regenerate_film_strip_thumbnails();
 
 			// Reset the mouse drag switch and related info
 			mouse_dragging = FALSE;
