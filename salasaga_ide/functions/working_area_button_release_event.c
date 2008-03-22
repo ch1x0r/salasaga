@@ -63,14 +63,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gboolean			selection_hit;				// Status toggle
 	gchar				*selected_row;				// Holds the number of the row that is selected
+	GtkTreePath			*tmp_path;					// Temporary path
 	gint				width;
 	gfloat				x_diff;						// The X distance the object was dragged, after scaling
-	gfloat				y_diff;						// The Y distance the object was dragged, after scaling 
-
-
-	GtkTreeViewColumn	*tmp_column;				// Temporary column
-	GString				*tmp_gstring;				// Temporary GString
-	GtkTreePath			*tmp_path;					// Temporary path
+	gfloat				y_diff;						// The Y distance the object was dragged, after scaling
 
 
 	// Only do this function if we have a front store available
@@ -140,7 +136,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		// Initialise some things
 		current_slide_data = current_slide->data;
 		list_widget = current_slide_data->timeline_widget;
-		tmp_gstring = g_string_new(NULL);
 		selection_hit = FALSE;
 
 		// Check for primary mouse button release
@@ -148,8 +143,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		{
 			// Determine which layer is selected in the timeline
 			tmp_path = gtk_tree_path_new();
-			tmp_column = gtk_tree_view_column_new();
-			gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, &tmp_column);
+			gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
 			selected_row = gtk_tree_path_to_string(tmp_path);
 
 			// Get its present X and Y offsets
@@ -205,7 +199,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 					break;
 
 				default:
-					display_warning("Error ED32: Unknown layer type\n");
+					display_warning("Error ED32: Unknown layer type");
 
 					return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
 			}
@@ -251,7 +245,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			stored_y = -1;
 
 			// Free the allocated memory
-			g_string_free(tmp_gstring, TRUE);
 			g_free(selected_row);
 		}
 	}
