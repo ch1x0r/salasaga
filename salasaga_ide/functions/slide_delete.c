@@ -33,7 +33,6 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "create_tooltips.h"
 #include "display_warning.h"
 #include "draw_timeline.h"
 #include "draw_workspace.h"
@@ -90,9 +89,6 @@ void slide_delete(void)
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
-
-	// Recreate the slide tooltips
-	create_tooltips();
 
 	// Redraw the timeline
 	draw_timeline();

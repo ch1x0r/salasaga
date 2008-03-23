@@ -34,7 +34,6 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "create_timeline_slider.h"
-#include "create_tooltips.h"
 
 
 void slide_insert(void)
@@ -116,9 +115,6 @@ void slide_insert(void)
 	gtk_list_store_append(film_strip_store, &film_strip_iter);  // Acquire an iterator
 	gtk_list_store_set(film_strip_store, &film_strip_iter, 0, gtk_image_get_pixbuf(tmp_slide->thumbnail), -1);
 
-	// Mark the tooltip for the slide as not-yet-created
-	tmp_slide->tooltip = NULL;
-
 	// Set the timeline widget for the slide to NULL, so we know to create it later on
 	tmp_slide->timeline_widget = NULL;
 
@@ -132,9 +128,6 @@ void slide_insert(void)
 		// Add the newly created slide to the end of the slides
 		slides = g_list_append(slides, tmp_slide);
 	}
-
-	// Recreate the slide tooltips
-	create_tooltips();
 
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide added");

@@ -33,7 +33,6 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "create_tooltips.h"
 
 
 void slide_name_reset(void)
@@ -44,9 +43,6 @@ void slide_name_reset(void)
 		g_string_free(((slide *) current_slide->data)->name, TRUE);
 		((slide *) current_slide->data)->name = NULL;
 	}
-
-	// Recreate the film strip tooltips
-	create_tooltips();
 
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide name reset");

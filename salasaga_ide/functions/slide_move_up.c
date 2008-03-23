@@ -33,7 +33,6 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "create_tooltips.h"
 
 
 void slide_move_up(void)
@@ -83,9 +82,6 @@ void slide_move_up(void)
 		if (debug_level) printf("slide_move_top: 'From' iter is not valid\n");
 	}
 	g_string_free(tmp_gstring, TRUE);
-
-	// Recreate the slide tooltips
-	create_tooltips();
 
 	// Scroll the film strip to show the new thumbnail position
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);

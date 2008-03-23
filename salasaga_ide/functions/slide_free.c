@@ -53,8 +53,6 @@ void slide_free(gpointer element, gpointer user_data)
 		g_object_unref(slide_data->thumbnail);
 	if (NULL != slide_data->name)
 		g_string_free(slide_data->name, TRUE);
-	if (NULL != slide_data->tooltip)
-		g_object_unref(G_OBJECT(slide_data->tooltip));
 	if (NULL != slide_data->layer_store)
 		g_object_unref(slide_data->layer_store);
 	if (NULL != slide_data->timeline_widget)

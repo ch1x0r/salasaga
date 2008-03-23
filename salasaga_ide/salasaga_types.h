@@ -285,7 +285,6 @@ typedef struct
 {
 	GtkImage			*thumbnail;
 	GList				*layers;
-	GtkTooltips			*tooltip;
 	GString				*name;
 	GtkWidget			*timeline_widget;
 	GtkListStore		*layer_store;

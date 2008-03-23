@@ -38,7 +38,6 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "create_tooltips.h"
 #include "display_warning.h"
 #include "draw_timeline.h"
 #include "draw_workspace.h"
@@ -314,7 +313,6 @@ void menu_screenshots_import(void)
 
 		// Mark the name for the slide as unset
 		tmp_slide->name = NULL;
-		tmp_slide->tooltip = NULL;
 
 		// Set the timeline widget for the slide to NULL, so we know to create it later on
 		tmp_slide->timeline_widget = NULL;
@@ -370,9 +368,6 @@ void menu_screenshots_import(void)
 
 	// Generate the timeline duration image(s)
 	regenerate_timeline_duration_images(tmp_slide);
-
-	// Create the slide tooltip(s)
-	create_tooltips();
 
 	// Get the presently selected zoom level
 	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(zoom_selector)));

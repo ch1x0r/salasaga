@@ -160,7 +160,6 @@ OFILES = \
 	functions/create_time_line.o \
 	functions/create_timeline_slider.o \
 	functions/create_toolbar.o \
-	functions/create_tooltips.o \
 	functions/create_working_area.o \
 	functions/create_zoom_selector.o \
 	functions/detect_collisions.o \
@@ -297,9 +296,6 @@ create_timeline_slider.o:
 
 create_toolbar.o:
 	$(CC) $(CFLAGS) -c create_toolbar.c -o create_toolbar.o
-
-create_tooltips.o:
-	$(CC) $(CFLAGS) -c create_tooltips.c -o create_tooltips.o
 
 create_working_area.o:
 	$(CC) $(CFLAGS) -c create_working_area.c -o create_working_area.o

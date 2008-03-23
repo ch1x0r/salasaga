@@ -1913,9 +1913,6 @@ gboolean project_read(gchar *filename)
 		// Regenerate the timeline duration images for all layers in the slide
 		regenerate_timeline_duration_images(tmp_slide);
 
-		// Mark the tooltip as uncreated, so we know to create it later on
-		tmp_slide->tooltip = NULL;
-
 		// Set the timeline widget for the slide to NULL, so we know to create it later on
 		tmp_slide->timeline_widget = NULL;
 

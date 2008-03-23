@@ -33,7 +33,6 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "create_tooltips.h"
 
 
 void slide_move_top(void)
@@ -88,9 +87,6 @@ void slide_move_top(void)
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.0);
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
-
-	// Recreate the slide tooltips
-	create_tooltips();
 
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide moved to top");

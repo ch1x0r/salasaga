@@ -34,7 +34,6 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "create_resolution_selector.h"
-#include "create_tooltips.h"
 #include "disable_layer_toolbar_buttons.h"
 #include "disable_main_toolbar_buttons.h"
 #include "display_warning.h"
@@ -197,9 +196,6 @@ void menu_file_open(void)
 
 	// Make the current slide point to the first slide
 	current_slide = slides;
-
-	// Create the tooltips for the slides
-	create_tooltips();
 
 	// Draw the timeline area
 	draw_timeline();
