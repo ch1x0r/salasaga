@@ -129,8 +129,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				break;
 
 			case TYPE_MOUSE_CURSOR:
-
-				// No it's not, so process it
 				present_x = layer_data->x_offset_start;
 				present_y = layer_data->y_offset_start;
 				width = ((layer_mouse *) layer_data->object_data)->width;
