@@ -38,11 +38,11 @@
 #include "../externs.h"
 #include "display_warning.h"
 #include "draw_workspace.h"
+#include "film_strip_create_thumbnail.h"
 #include "layer_new_highlight_inner.h"
 #include "layer_new_image_inner.h"
 #include "layer_new_mouse_inner.h"
 #include "layer_new_text_inner.h"
-#include "regenerate_film_strip_thumbnails.h"
 
 
 gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
@@ -231,8 +231,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			// Tell (force) the window system to redraw the working area *immediately*
 			gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
 
-			// Recreate the film strip thumbnails
-			regenerate_film_strip_thumbnails();
+			// Recreate the slide thumbnail
+			film_strip_create_thumbnail((slide *) current_slide->data);
 
 			// Reset the mouse drag switch and related info
 			mouse_dragging = FALSE;
