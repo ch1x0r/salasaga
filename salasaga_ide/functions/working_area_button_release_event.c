@@ -61,7 +61,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gint				project_y_position;			// Y position in the project image
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
-	gboolean			selection_hit;				// Status toggle
 	gchar				*selected_row;				// Holds the number of the row that is selected
 	GtkTreePath			*tmp_path;					// Temporary path
 	gint				width;
@@ -136,7 +135,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		// Initialise some things
 		current_slide_data = current_slide->data;
 		list_widget = current_slide_data->timeline_widget;
-		selection_hit = FALSE;
 
 		// Check for primary mouse button release
 		if (1 == event->button)
