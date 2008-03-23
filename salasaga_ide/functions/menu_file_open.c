@@ -53,10 +53,11 @@ void menu_file_open(void)
 	// Local variables
 	GtkFileFilter		*all_filter;
 	gchar				*filename;					// Pointer to the chosen file name
-	GtkFileFilter		*salasaga_filter;
+	GtkFileFilter		*flame_filter;
 	GtkTreePath			*new_path;					// Temporary path
 	GtkWidget 			*open_dialog;
-	gboolean			return_code;
+	gboolean			return_code = FALSE;
+	GtkFileFilter		*salasaga_filter;
 	gboolean			useable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
 
@@ -69,13 +70,19 @@ void menu_file_open(void)
 						  GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
 						  NULL);
 
-	// Create the filter so only *.salasaga files are displayed
+	// Create a filter for *.salasaga files
 	salasaga_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(salasaga_filter, "*.salasaga");
 	gtk_file_filter_set_name(salasaga_filter, "Salasaga Project file (*.salasaga)");
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(open_dialog), salasaga_filter);
 
-	// Create the filter so all files (*.*) can be displayed
+	// Create a filter for *.flame files
+	flame_filter = gtk_file_filter_new();
+	gtk_file_filter_add_pattern(flame_filter, "*.flame");
+	gtk_file_filter_set_name(flame_filter, "Flame Project file (*.flame)");
+	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(open_dialog), flame_filter);
+
+	// Create a filter so all files (*.*) can be displayed
 	all_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(all_filter, "*.*");
 	gtk_file_filter_set_name(all_filter, "All files (*.*)");
@@ -85,7 +92,31 @@ void menu_file_open(void)
 	if (NULL != file_name)
 	{
 		// Select the last opened file if possible
-		gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(open_dialog), file_name->str);
+		return_code = gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(open_dialog), file_name->str);
+
+		// We couldn't successfully open the given project file
+		if (FALSE == return_code)
+		{
+			// Change to the default project directory instead
+			gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(open_dialog), default_project_folder->str);
+		} else
+		{
+			// If the selected project file has a ".flame" extension, we use the flame filter
+			return_code = g_str_has_suffix(file_name->str, ".flame");
+			if (TRUE == return_code)
+			{
+				gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(open_dialog), flame_filter);
+			} else
+			{
+				// Not a flame project file, so we need to decide whether to use the all filter (*.*) or the salasaga one
+				return_code = g_str_has_suffix(file_name->str, ".salasaga");
+				if (TRUE != return_code)
+				{
+					// Doesn't have a ".salasaga" file extension either, so we'll use the all filter
+					gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(open_dialog), all_filter);
+				}
+			}
+		}
 	} else
 	{
 		// Change to the default project directory
