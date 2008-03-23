@@ -163,7 +163,6 @@ OFILES = \
 	functions/create_tooltips.o \
 	functions/create_working_area.o \
 	functions/create_zoom_selector.o \
-	functions/destroy_slide.o \
 	functions/detect_collisions.o \
 	functions/disable_layer_toolbar_buttons.o \
 	functions/disable_main_toolbar_buttons.o \
@@ -231,6 +230,7 @@ OFILES = \
 	functions/resolution_selector_changed.o \
 	functions/save_preferences_and_exit.o \
 	functions/slide_delete.o \
+	functions/slide_free.o \
 	functions/slide_insert.o \
 	functions/slide_move_bottom.o \
 	functions/slide_move_down.o \
@@ -304,9 +304,6 @@ create_working_area.o:
 
 create_zoom_selector.o:
 	$(CC) $(CFLAGS) -c create_zoom_selector.c -o create_zoom_selector.o
-
-destroy_slide.o:
-	$(CC) $(CFLAGS) -c destroy_slide.c -o destroy_slide.o
 
 detect_collisions.o:
 	$(CC) $(CFLAGS) -c detect_collisions.c -o detect_collisions.o
@@ -508,6 +505,9 @@ save_preferences_and_exit.o:
 
 slide_delete.o:
 	$(CC) $(CFLAGS) -c slide_delete.c -o slide_delete.o
+
+slide_free.o:
+	$(CC) $(CFLAGS) -c slide_free.c -o slide_free.o
 
 slide_insert.o:
 	$(CC) $(CFLAGS) -c slide_insert.c -o slide_insert.o
