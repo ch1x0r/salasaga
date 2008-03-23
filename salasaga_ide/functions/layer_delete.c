@@ -38,6 +38,7 @@
 #include "../externs.h"
 #include "display_warning.h"
 #include "draw_workspace.h"
+#include "layer_free.h"
 #include "regenerate_film_strip_thumbnails.h"
 
 
@@ -48,6 +49,7 @@ void layer_delete(void)
 	GtkListStore		*list_pointer;				//
 	GtkWidget			*list_widget;				// Points to the timeline widget
 	guint				num_layers;					// Number of layers
+	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	guint				selected_row;				// Holds the number of the row that is selected
 
 	gboolean			tmp_bool;					// Temporary boolean
@@ -93,13 +95,21 @@ void layer_delete(void)
 	layer_pointer = g_list_remove(layer_pointer, tmp_layer);
 	((slide *) current_slide->data)->layers = layer_pointer;
 
-	// Make the row above in the Timeline widget selected
+	// Select the row above in the Timeline widget
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
+	if (NULL != tmp_path)
+		old_path = tmp_path;  // Make a backup of the old path, so we can free it
 	if (0 != selected_row)
 	{
 		selected_row = selected_row - 1;
 	}
 	tmp_path = gtk_tree_path_new_from_indices(selected_row, -1);
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(list_widget), tmp_path, NULL, FALSE);
+	if (NULL != old_path)
+		gtk_tree_path_free(old_path);  // Free the old path
+
+	// Free the memory allocated to the layer
+	layer_free(tmp_layer);
 
 	// Redraw the workspace area
 	draw_workspace();
