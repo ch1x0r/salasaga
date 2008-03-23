@@ -174,6 +174,7 @@ OFILES = \
 	functions/display_dialog_text.o \
 	functions/display_warning.o \
 	functions/draw_bounding_box.o \
+	functions/draw_handle_box.o \
 	functions/draw_highlight_box.o \
 	functions/draw_timeline.o \
 	functions/draw_workspace.o \
@@ -333,6 +334,9 @@ display_warning.o:
 
 draw_bounding_box.o:
 	$(CC) $(CFLAGS) -c draw_bounding_box.c -o draw_bounding_box.o
+
+draw_handle_box.o:
+	$(CC) $(CFLAGS) -c draw_handle_box.c -o draw_handle_box.o
 
 draw_highlight_box.o:
 	$(CC) $(CFLAGS) -c draw_highlight_box.c -o draw_highlight_box.o
