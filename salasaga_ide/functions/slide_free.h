@@ -19,18 +19,18 @@
  * 
  */
 
-#ifndef DESTROY_SLIDE_H_
-#define DESTROY_SLIDE_H_
+#ifndef SLIDE_FREE_H_
+#define SLIDE_FREE_H_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-void destroy_slide(gpointer element, gpointer user_data);
+void slide_free(gpointer element, gpointer user_data);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /*DESTROY_SLIDE_H_*/
+#endif /*SLIDE_FREE_H_*/

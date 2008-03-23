@@ -40,9 +40,9 @@
 #include "base64_decode.h"
 #include "compress_layers.h"
 #include "create_timeline_slider.h"
-#include "destroy_slide.h"
 #include "display_warning.h"
 #include "regenerate_timeline_duration_images.h"
+#include "slide_free.h"
 #include "validate_value.h"
 
 
@@ -1840,7 +1840,7 @@ gboolean project_read(gchar *filename)
 	if (NULL != slides)
 	{
 		// Free the resources presently allocated to slides
-		g_list_foreach(slides, destroy_slide, NULL);
+		g_list_foreach(slides, slide_free, NULL);
 		g_list_free(slides);
 
 		// Re-initialise pointers

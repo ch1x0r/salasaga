@@ -36,7 +36,7 @@
 #include "layer_free.h"
 
 
-void destroy_slide(gpointer element, gpointer user_data)
+void slide_free(gpointer element, gpointer user_data)
 {
 	// Local variables
 	gint				layer_counter;			// Standard counter

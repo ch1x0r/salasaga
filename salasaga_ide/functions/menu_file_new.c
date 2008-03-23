@@ -34,7 +34,6 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "destroy_slide.h"
 #include "disable_layer_toolbar_buttons.h"
 #include "disable_main_toolbar_buttons.h"
 #include "display_warning.h"
@@ -43,6 +42,7 @@
 #include "enable_layer_toolbar_buttons.h"
 #include "enable_main_toolbar_buttons.h"
 #include "menu_enable.h"
+#include "slide_free.h"
 #include "slide_insert.h"
 #include "validate_value.h"
 
@@ -229,7 +229,7 @@ void menu_file_new(void)
 	if (NULL != slides)
 	{
 		// Free the resources presently allocated to slides
-		g_list_foreach(slides, destroy_slide, NULL);
+		g_list_foreach(slides, slide_free, NULL);
 
 		// Re-initialise pointers
 		slides = NULL;

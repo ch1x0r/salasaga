@@ -34,10 +34,10 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "create_tooltips.h"
-#include "destroy_slide.h"
 #include "display_warning.h"
 #include "draw_timeline.h"
 #include "draw_workspace.h"
+#include "slide_free.h"
 
 
 void slide_delete(void)
@@ -105,6 +105,6 @@ void slide_delete(void)
 	gdk_flush();
 
 	// Free the resources allocated to the deleted slide
-	destroy_slide(tmp_glist->data, NULL);
+	slide_free(tmp_glist->data, NULL);
 	g_list_free(tmp_glist);
 }
