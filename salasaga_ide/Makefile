@@ -187,6 +187,7 @@ OFILES = \
 	functions/key_bind.o \
 	functions/layer_copy.o \
 	functions/layer_delete.o \
+	functions/layer_duplicate.o \
 	functions/layer_edit.o \
 	functions/layer_free.o \
 	functions/layer_move_down.o \
@@ -376,6 +377,9 @@ layer_copy.o:
 
 layer_delete.o:
 	$(CC) $(CFLAGS) -c layer_delete.c -o layer_delete.o
+
+layer_duplicate.o:
+	$(CC) $(CFLAGS) -c layer_duplicate.c -o layer_duplicate.o
 
 layer_edit.o:
 	$(CC) $(CFLAGS) -c layer_edit.c -o layer_edit.o
