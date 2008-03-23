@@ -51,7 +51,7 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 
 	// Determine if a row has been selected
 	if (TRUE == gtk_tree_selection_get_selected(selection, NULL, NULL))
-        {
+	{
 		// * Update current_slide to be the clicked on slide's GList entry, then redraw the timeline and workspace *
 
 		// Determine which slide is now selected
@@ -80,5 +80,9 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 
 		// Free the memory used to deterine the newly selected slide
 		g_free(selection_string);
+
+		// Update the status bar
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " ");
+		gdk_flush();
 	}
 }
