@@ -55,11 +55,10 @@ void layer_copy(void)
 	current_slide_data->layers = g_list_first(current_slide_data->layers);
 	this_layer = g_list_nth_data(current_slide_data->layers, selected_layer);
 
-	// If there's presently a layer in the copy buffer we destroy it
+	// If there is already a layer in the copy buffer, then we free it
 	if (NULL != copy_layer)
 	{
-		layer_free(this_layer);
-		copy_layer = NULL;
+		layer_free(copy_layer);
 	}
 
 	// Create a new layer
@@ -67,8 +66,13 @@ void layer_copy(void)
 	if (NULL == copy_layer)
 	{
 		// Something went wrong duplicating the existing layer.  Not much we can do
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Copy failed");
+		gdk_flush();
 		return;
 	}
 
+	// Update the status bar
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer copied to buffer");
+	gdk_flush();
 	return;
 }
