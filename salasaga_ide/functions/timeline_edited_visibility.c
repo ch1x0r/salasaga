@@ -37,7 +37,7 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "draw_workspace.h"
-#include "regenerate_film_strip_thumbnails.h"
+#include "film_strip_create_thumbnail.h"
 
 
 void timeline_edited_visibility(GtkCellRendererToggle *selection, gchar *row, GtkListStore *store)
@@ -86,6 +86,6 @@ void timeline_edited_visibility(GtkCellRendererToggle *selection, gchar *row, Gt
 	// Redraw the workspace
 	draw_workspace();
 
-	// Recreate the film strip thumbnails
-	regenerate_film_strip_thumbnails();
+	// Recreate the slide thumbnail
+	film_strip_create_thumbnail((slide *) current_slide->data);
 }

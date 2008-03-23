@@ -38,8 +38,8 @@
 #include "../externs.h"
 #include "display_warning.h"
 #include "draw_workspace.h"
+#include "film_strip_create_thumbnail.h"
 #include "layer_free.h"
-#include "regenerate_film_strip_thumbnails.h"
 
 
 void layer_delete(void)
@@ -114,8 +114,8 @@ void layer_delete(void)
 	// Redraw the workspace area
 	draw_workspace();
 
-	// Recreate the film strip thumbnails
-	regenerate_film_strip_thumbnails();
+	// Recreate the slide thumbnail
+	film_strip_create_thumbnail((slide *) current_slide->data);
 
 	// Free the storage allocated by this function
 	gtk_tree_path_free(tmp_path);

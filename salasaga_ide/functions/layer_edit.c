@@ -44,7 +44,7 @@
 #include "display_dialog_text.h"
 #include "display_warning.h"
 #include "draw_workspace.h"
-#include "regenerate_film_strip_thumbnails.h"
+#include "film_strip_create_thumbnail.h"
 #include "regenerate_timeline_duration_images.h"
 
 
@@ -208,8 +208,8 @@ void layer_edit(void)
 	// Redraw the workspace
 	draw_workspace();
 
-	// Recreate the film strip thumbnails
-	regenerate_film_strip_thumbnails();
+	// Recreate the slide thumbnail
+	film_strip_create_thumbnail(slide_data);
 
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer edited");

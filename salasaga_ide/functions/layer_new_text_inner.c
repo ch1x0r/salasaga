@@ -30,7 +30,7 @@
 #include "../externs.h"
 #include "display_dialog_text.h"
 #include "draw_workspace.h"
-#include "regenerate_film_strip_thumbnails.h"
+#include "film_strip_create_thumbnail.h"
 #include "regenerate_timeline_duration_images.h"
 
 
@@ -146,11 +146,11 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	// Redraw the workspace
 	draw_workspace();
 
-	// Recreate the film strip thumbnails
-	regenerate_film_strip_thumbnails();
+	// Recreate the slide thumbnail
+	film_strip_create_thumbnail(slide_data);
 
 	// Select the new layer in the timeline widget
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &tmp_path, NULL);
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(slide_data->timeline_widget), &tmp_path, NULL);
 	if (NULL != tmp_path)
 		old_path = tmp_path;  // Make a backup of the old path, so we can free it
 	tmp_path = gtk_tree_path_new_first();
