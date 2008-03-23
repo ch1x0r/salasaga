@@ -51,6 +51,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
 	guint				num_collisions;
 	guint				num_layers;
+	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	guint				selected_row;				// Holds the number of the row that is selected
 
 	guint				tmp_int;					// Temporary integer
@@ -119,8 +120,13 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		current_slide_data->layers = g_list_first(current_slide_data->layers);
 		num_layers = g_list_length(current_slide_data->layers);
 		g_string_printf(tmp_gstring, "%d", num_layers - 1);
+		gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &tmp_path, NULL);
+		if (NULL != tmp_path)
+			old_path = tmp_path;  // Make a backup of the old path, so we can free it
 		tmp_path = gtk_tree_path_new_from_string(tmp_gstring->str);
 		gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
+		if (NULL != old_path)
+			gtk_tree_path_free(old_path);  // Free the old path
 
 		// Clear any existing handle box
 		gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
@@ -171,8 +177,12 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	current_slide_data->layers = g_list_first(current_slide_data->layers);
 	selected_row = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
 	g_string_printf(tmp_gstring, "%d", selected_row);
+	if (NULL != tmp_path)
+		old_path = tmp_path;  // Make a backup of the old path, so we can free it
 	tmp_path = gtk_tree_path_new_from_string(tmp_gstring->str);
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
+	if (NULL != old_path)
+		gtk_tree_path_free(old_path);  // Free the old path
 
 	// Draw a handle box around the new selected object
 	draw_handle_box();
