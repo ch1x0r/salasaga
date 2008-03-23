@@ -39,12 +39,12 @@
 void regenerate_film_strip_thumbnails()
 {
 	// Local variables
+	GtkTreeIter			film_strip_iter;
 	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
+	GdkPixbuf			*new_thumbnail;
 	gint				num_slides;
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	gint				slide_counter, slide_position;
-	GtkTreeIter			film_strip_iter;
-	GdkPixbuf			*new_thumbnail;
 	GList				*this_slide;
 
 
