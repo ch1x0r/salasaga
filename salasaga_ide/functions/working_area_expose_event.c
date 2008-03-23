@@ -52,7 +52,8 @@ gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpo
 		event->area.width, event->area.height);
 
 	// Draw a handle box around the selected layer
-	draw_handle_box();
+	//fixme2: This is corrupting application memory somehow!
+//	draw_handle_box();
 
 	return FALSE;
 }
