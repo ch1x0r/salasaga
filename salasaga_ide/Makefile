@@ -180,6 +180,7 @@ OFILES = \
 	functions/enable_layer_toolbar_buttons.o \
 	functions/enable_main_toolbar_buttons.o \
 	functions/event_size_allocate_received.o \
+	functions/film_strip_create_thumbnail.o \
 	functions/film_strip_handle_changed.o \
 	functions/film_strip_handle_released.o \
 	functions/film_strip_slide_clicked.o \
@@ -356,6 +357,9 @@ enable_main_toolbar_buttons.o:
 
 event_size_allocate_received.o:
 	$(CC) $(CFLAGS) -c event_size_allocate_received.c -o event_size_allocate_received.o
+
+film_strip_create_thumbnail.o:
+	$(CC) $(CFLAGS) -c film_strip_create_thumbnail.c -o film_strip_create_thumbnail.o
 
 film_strip_handle_changed.o:
 	$(CC) $(CFLAGS) -c film_strip_handle_changed.c -o film_strip_handle_changed.o
