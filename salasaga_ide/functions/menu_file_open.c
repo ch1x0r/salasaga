@@ -195,10 +195,6 @@ void menu_file_open(void)
 	// Set the global toggle that a project is now active
 	project_active = TRUE;
 
-	// Use the status bar to communicate the successful loading of the project
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project loaded");
-	gdk_flush();
-
 	// Make the current slide point to the first slide
 	current_slide = slides;
 
@@ -231,8 +227,12 @@ void menu_file_open(void)
 	enable_layer_toolbar_buttons();
 	enable_main_toolbar_buttons();
 
+	// Use the status bar to communicate the successful loading of the project
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project loaded");
+	gdk_flush();
+
 	// Free the memory allocated in this function
-	// (note that salasaga_filter and all_filter seem to be freed when the dialog is destroyed)
+	// (note that salasaga_filter, flame_filter and the all_filter seem to be freed when the dialog is destroyed)
 	g_string_free(validated_string, TRUE);
 	g_free(filename);
 }
