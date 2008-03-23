@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Salasaga: Function to draw a bounding box in the drawing area, via the front store 
+ * Salasaga: Function to draw a bounding box directly onto the drawing area widget
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@salasaga.org>
  * 
@@ -40,7 +40,6 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 	// Local variables
 	static GdkGC		*line_gc = NULL;
 	GdkSegment			lines[4];					// Holds the lines used to draw the border
-	GdkRectangle		tmp_rectangle;				// Temporary rectangle used for invalidating part of the front store
 
 
 	// Ensure the invalidation (redraw) area is set to the maximum size that has been selected
@@ -67,19 +66,19 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 	invalidation_end_x = CLAMP(invalidation_end_x, 1, main_drawing_area->allocation.width - 1);
 	invalidation_end_y = CLAMP(invalidation_end_y, 1, main_drawing_area->allocation.height - 1);
 
-	// Restore the front store area we're going over from the backing store
-	gdk_draw_pixbuf(GDK_DRAWABLE(front_store), NULL, GDK_PIXBUF(backing_store),
-			invalidation_start_x - 1, invalidation_start_y - 1,
-			invalidation_start_x, invalidation_start_y,
-			(invalidation_end_x - invalidation_start_x) + 1, (invalidation_end_y - invalidation_start_y) + 1,
-			GDK_RGB_DITHER_NONE, 0, 0);
+	// Restore the widget area we're going over from the front store
+	gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
+		GDK_PIXMAP(front_store),
+		invalidation_start_x, invalidation_start_y,
+		invalidation_start_x, invalidation_start_y,
+		(invalidation_end_x - invalidation_start_x) + 1, (invalidation_end_y - invalidation_start_y) + 1);
 
-	// Draw a bounding box on the front store
+	// Draw a bounding box directly onto the widget
 	if (NULL == line_gc)
 	{
-		line_gc = gdk_gc_new(GDK_DRAWABLE(front_store));
+		line_gc = gdk_gc_new(GDK_DRAWABLE(main_drawing_area->window));
 	}
-	gdk_gc_set_function(line_gc, GDK_INVERT);
+	gdk_gc_set_function(GDK_GC(line_gc), GDK_INVERT);
 	lines[0].x1 = left;
 	lines[0].y1 = top;
 	lines[0].x2 = right;
@@ -96,14 +95,7 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 	lines[3].y1 = bottom;
 	lines[3].x2 = left;
 	lines[3].y2 = top;
-	gdk_draw_segments(GDK_DRAWABLE(front_store), line_gc, lines, 4);
-
-	// Tell the window system to display the updated front store area
-	tmp_rectangle.x = invalidation_start_x;
-	tmp_rectangle.y = invalidation_start_y;
-	tmp_rectangle.width = (invalidation_end_x - invalidation_start_x) + 1;
-	tmp_rectangle.height = (invalidation_end_y - invalidation_start_y) + 1;
-	gdk_window_invalidate_rect(main_drawing_area->window, &tmp_rectangle, TRUE);
+	gdk_draw_segments(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(line_gc), lines, 4);
 
 	return TRUE;
 }
