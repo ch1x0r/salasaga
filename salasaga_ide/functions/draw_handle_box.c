@@ -1,0 +1,156 @@
+/*
+ * $Id$
+ *
+ * Salasaga: Draws a handle box (outline) on the workspace, around the selected layer 
+ * 
+ * Copyright (C) 2008 Justin Clift <justin@salasaga.org>
+ * 
+ * This library is free software; you can redistribute it and/or
+ * modify it under the terms of the GNU Lesser General Public
+ * License as published by the Free Software Foundation; either
+ * version 2.1 of the License, or (at your option) any later version.
+ * 
+ * This library is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * Lesser General Public License for more details.
+ * 
+ * You should have received a copy of the GNU Lesser General Public
+ * License along with this library; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
+ * 
+ */
+
+
+// Standard includes
+#include <stdlib.h>
+
+// GTK includes
+#include <gtk/gtk.h>
+
+#ifdef _WIN32
+	// Windows only code
+	#include <windows.h>
+#endif
+
+// Salasaga includes
+#include "../salasaga_types.h"
+#include "../externs.h"
+#include "display_warning.h"
+#include "draw_bounding_box.h"
+
+
+gboolean draw_handle_box(void)
+{
+	// Local variables
+	slide				*current_slide_data;		// Alias to make things easier
+	gint				height;
+	layer				*layer_data;
+	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
+	gint				onscreen_bottom;			// Y coordinate of bounding box bottom
+	gint				onscreen_left;				// X coordinate of bounding box left
+	gint				onscreen_right;				// X coordinate of bounding box right
+	gint				onscreen_top;				// Y coordinate of bounding box top
+	gint				present_x;
+	gint				present_y;
+	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
+	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
+	guint				selected_row;				// Holds the number of the row that is selected
+	gint				width;
+
+	GtkTreeViewColumn	*tmp_column;				// Temporary column
+	GtkTreePath			*tmp_path;					// Temporary path
+
+
+	// Only do this function if we have a front store available
+	if (NULL == front_store)
+	{
+		return TRUE;
+	}
+
+	// Initialise some things
+	current_slide_data = current_slide->data;
+	list_widget = current_slide_data->timeline_widget;
+
+	// Determine which layer the user has selected in the timeline
+	tmp_path = gtk_tree_path_new();
+	tmp_column = gtk_tree_view_column_new();
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, &tmp_column);
+	selected_row = atoi(gtk_tree_path_to_string(tmp_path));
+
+	// Retrieve the dimensions of the selected object
+	current_slide_data->layers = g_list_first(current_slide_data->layers);
+	layer_data = g_list_nth_data(current_slide_data->layers, selected_row);
+	switch (layer_data->object_type)
+	{
+		case TYPE_EMPTY:
+			// This is an empty layer, so clear any existing handle box
+			gdk_draw_pixbuf(GDK_DRAWABLE(front_store), NULL, GDK_PIXBUF(backing_store), 0, 0, 1, 1, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);
+			gdk_window_invalidate_rect(main_drawing_area->window, &main_drawing_area->allocation, TRUE);
+			return TRUE;
+
+		case TYPE_HIGHLIGHT:
+			present_x = layer_data->x_offset_start;
+			present_y = layer_data->y_offset_start;
+			width = ((layer_highlight *) layer_data->object_data)->width;
+			height = ((layer_highlight *) layer_data->object_data)->height;
+			break;
+
+		case TYPE_GDK_PIXBUF:
+			// If this is the background layer, then we clear any existing handle box
+			if (TRUE == layer_data->background)
+			{
+				// Clear any existing handle box
+				gdk_draw_pixbuf(GDK_DRAWABLE(front_store), NULL, GDK_PIXBUF(backing_store), 0, 0, 1, 1, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);
+				gdk_window_invalidate_rect(main_drawing_area->window, &main_drawing_area->allocation, TRUE);
+				return TRUE;
+			}
+
+			// No it's not, so process it
+			present_x = layer_data->x_offset_start;
+			present_y = layer_data->y_offset_start;
+			width = ((layer_image *) layer_data->object_data)->width;
+			height = ((layer_image *) layer_data->object_data)->height;
+			break;
+
+		case TYPE_MOUSE_CURSOR:
+			present_x = layer_data->x_offset_start;
+			present_y = layer_data->y_offset_start;
+			width = ((layer_mouse *) layer_data->object_data)->width;
+			height = ((layer_mouse *) layer_data->object_data)->height;
+			break;
+
+		case TYPE_TEXT:
+			present_x = layer_data->x_offset_start;
+			present_y = layer_data->y_offset_start;
+			width = ((layer_text *) layer_data->object_data)->rendered_width;
+			height = ((layer_text *) layer_data->object_data)->rendered_height;
+			break;
+
+		default:
+			// Unknown layer type, so no idea how to extract the needed data for the next code
+			display_warning("Error ED285: Unknown layer type");
+			return TRUE;
+	}
+
+	// Calculate the height and width scaling values for the main drawing area at its present size
+	scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
+	scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+
+	// Work out the bounding box boundaries
+	onscreen_left = (present_x + 1) / scaled_width_ratio;
+	onscreen_top = (present_y + 1) / scaled_height_ratio;
+	onscreen_right = (present_x + width) / scaled_width_ratio;
+	onscreen_bottom = (present_y + height) / scaled_height_ratio;
+
+	// Ensure the bounding box doesn't go out of bounds
+	onscreen_left = CLAMP(onscreen_left, 2, main_drawing_area->allocation.width - (width / scaled_width_ratio) - 2);
+	onscreen_top = CLAMP(onscreen_top, 2, main_drawing_area->allocation.height - (height / scaled_height_ratio) - 2);
+	onscreen_right = CLAMP(onscreen_right, 2 + (width / scaled_width_ratio), main_drawing_area->allocation.width - 2);
+	onscreen_bottom = CLAMP(onscreen_bottom, 2 + (height / scaled_height_ratio), main_drawing_area->allocation.height - 2);
+
+	// Draw a bounding box onscreen
+	draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
+
+	return TRUE;
+}
