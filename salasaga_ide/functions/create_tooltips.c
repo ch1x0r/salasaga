@@ -53,7 +53,7 @@ void create_tooltips(void)
 	for (counter = 0; counter < num_slides; counter++)
 	{
 		slide_data = g_list_nth_data(slides, counter);
-		slide_data->tooltip = gtk_tooltips_new();
+		slide_data->tooltip = g_object_ref_sink(gtk_tooltips_new());
 		if (NULL == slide_data->name)
 		{
 			// The user hasn't given a name to the slide, so use a default
