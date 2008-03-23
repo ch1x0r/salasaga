@@ -79,7 +79,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	// If we're already aware of a mouse drag operation going on, then draw a bounding box
 	if (TRUE == mouse_dragging)
 	{
-
 		// Initialise some things
 		current_slide_data = current_slide->data;
 		list_widget = current_slide_data->timeline_widget;
@@ -184,6 +183,12 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// Store the mouse coordinates so we know where to drag from
 		stored_x = event->x;
 		stored_y = event->y;
+
+		// Reset the invalidation area
+		invalidation_end_x = event->x;
+		invalidation_end_y = event->y;
+		invalidation_start_x = event->x - 1;
+		invalidation_start_y = event->y - 1;
 	}
 
 	return TRUE;
