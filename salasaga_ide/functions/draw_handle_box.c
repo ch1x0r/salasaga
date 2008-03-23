@@ -85,8 +85,8 @@ gboolean draw_handle_box(void)
 	{
 		case TYPE_EMPTY:
 			// This is an empty layer, so clear any existing handle box
-			gdk_draw_pixbuf(GDK_DRAWABLE(front_store), NULL, GDK_PIXBUF(backing_store), 0, 0, 1, 1, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);
-			gdk_window_invalidate_rect(main_drawing_area->window, &main_drawing_area->allocation, TRUE);
+			gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
+					GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
 			return TRUE;
 
 		case TYPE_HIGHLIGHT:
@@ -101,8 +101,8 @@ gboolean draw_handle_box(void)
 			if (TRUE == layer_data->background)
 			{
 				// Clear any existing handle box
-				gdk_draw_pixbuf(GDK_DRAWABLE(front_store), NULL, GDK_PIXBUF(backing_store), 0, 0, 1, 1, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);
-				gdk_window_invalidate_rect(main_drawing_area->window, &main_drawing_area->allocation, TRUE);
+				gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
+						GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
 				return TRUE;
 			}
 
