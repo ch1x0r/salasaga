@@ -54,8 +54,6 @@ gboolean layer_free(layer *this_layer)
 			break;
 
 		case TYPE_GDK_PIXBUF:
-			// This is causing a Segfault
-			// g_string_free(((layer_image *) this_layer->object_data)->image_path, TRUE);
 			if (NULL != ((layer_image *) this_layer->object_data)->image_path)
 				g_string_free(((layer_image *) this_layer->object_data)->image_path, TRUE);
 			if (NULL != ((layer_image *) this_layer->object_data)->image_data)
