@@ -43,21 +43,21 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 
 
 	// Ensure the invalidation (redraw) area is set to the maximum size that has been selected
-	if (left < invalidation_start_x)
+	if (left - 2 < invalidation_start_x)
 	{
-		invalidation_start_x = left;
+		invalidation_start_x = left - 2;
 	}
-	if (top < invalidation_start_y)
+	if (top - 2 < invalidation_start_y)
 	{
-		invalidation_start_y = top;
+		invalidation_start_y = top - 2;
 	}
-	if (right > invalidation_end_x)
+	if (right + 2 > invalidation_end_x)
 	{
-		invalidation_end_x = right;
+		invalidation_end_x = right + 2;
 	}
-	if (bottom > invalidation_end_y)
+	if (bottom + 2 > invalidation_end_y)
 	{
-		invalidation_end_y = bottom;
+		invalidation_end_y = bottom + 2;
 	}
 
 	// Ensure the invalidation area can't go out of bounds
