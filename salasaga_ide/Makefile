@@ -186,8 +186,10 @@ OFILES = \
 	functions/film_strip_slide_clicked.o \
 	functions/image_crop.o \
 	functions/key_bind.o \
+	functions/layer_copy.o \
 	functions/layer_delete.o \
 	functions/layer_edit.o \
+	functions/layer_free.o \
 	functions/layer_move_down.o \
 	functions/layer_move_up.o \
 	functions/layer_new_highlight.o \
@@ -198,6 +200,7 @@ OFILES = \
 	functions/layer_new_mouse_inner.o \
 	functions/layer_new_text.o \
 	functions/layer_new_text_inner.o \
+	functions/layer_paste.o \
 	functions/logger_simple.o \
 	functions/logger_with_domain.o \
 	functions/menu_edit_preferences.o \
@@ -371,11 +374,17 @@ image_crop.o:
 key_bind.o:
 	$(CC) $(CFLAGS) -c key_bind.c -o key_bind.o
 
+layer_copy.o:
+	$(CC) $(CFLAGS) -c layer_copy.c -o layer_copy.o
+
 layer_delete.o:
 	$(CC) $(CFLAGS) -c layer_delete.c -o layer_delete.o
 
 layer_edit.o:
 	$(CC) $(CFLAGS) -c layer_edit.c -o layer_edit.o
+
+layer_free.o:
+	$(CC) $(CFLAGS) -c layer_free.c -o layer_free.o
 
 layer_move_down.o:
 	$(CC) $(CFLAGS) -c layer_move_down.c -o layer_move_down.o
@@ -406,6 +415,9 @@ layer_new_text.o:
 
 layer_new_text_inner.o:
 	$(CC) $(CFLAGS) -c layer_new_text_inner.c -o layer_new_text_inner.o
+
+layer_paste.o:
+	$(CC) $(CFLAGS) -c layer_paste.c -o layer_paste.o
 
 logger_simple.o:
 	$(CC) $(CFLAGS) -c logger_simple.c -o logger_simple.o
