@@ -55,7 +55,7 @@ gboolean draw_handle_box(void)
 	gint				present_y;
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
-	guint				selected_row;				// Holds the number of the row that is selected
+	guint				selected_layer;				// Holds the number of the layer that is selected
 	gint				width;
 
 	GtkTreePath			*tmp_path;					// Temporary path
@@ -73,11 +73,11 @@ gboolean draw_handle_box(void)
 
 	// Determine which layer the user has selected in the timeline
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
-	selected_row = atoi(gtk_tree_path_to_string(tmp_path));
+	selected_layer = atoi(gtk_tree_path_to_string(tmp_path));
 
 	// Retrieve the dimensions of the selected object
 	current_slide_data->layers = g_list_first(current_slide_data->layers);
-	layer_data = g_list_nth_data(current_slide_data->layers, selected_row);
+	layer_data = g_list_nth_data(current_slide_data->layers, selected_layer);
 	switch (layer_data->object_type)
 	{
 		case TYPE_EMPTY:
