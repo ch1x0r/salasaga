@@ -124,8 +124,8 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
 
 		// Clear any existing handle box
-		gdk_draw_pixbuf(GDK_DRAWABLE(front_store), NULL, GDK_PIXBUF(backing_store), 0, 0, 1, 1, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);
-		gdk_window_invalidate_rect(main_drawing_area->window, &main_drawing_area->allocation, TRUE);
+		gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
+				GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
 
 		// Reset the stored mouse coordinates
 		stored_x = -1;
