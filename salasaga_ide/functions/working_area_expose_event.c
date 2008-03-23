@@ -33,6 +33,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "draw_handle_box.h"
 
 
 gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
@@ -49,6 +50,9 @@ gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpo
 		event->area.x, event->area.y,
 		event->area.x, event->area.y,
 		event->area.width, event->area.height);
+
+	// Draw a handle box around the selected layer
+	draw_handle_box();
 
 	return FALSE;
 }
