@@ -76,6 +76,7 @@ guint					capture_height;				// Height for screen captures
 guint					capture_width;				// Width for screen captures
 guint					capture_x;					// X offset for screen captures
 guint					capture_y;					// Y offset for screen captures
+layer					*copy_layer = NULL;			// The copy buffer for layers
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
 guint					debug_level = 0;			// Used to indicate debugging level
 guint					end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations 

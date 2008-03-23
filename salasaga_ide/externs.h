@@ -36,6 +36,7 @@ extern guint				capture_height;
 extern guint				capture_width;
 extern guint				capture_x;
 extern guint				capture_y;
+extern layer				*copy_layer;
 extern GList				*current_slide;
 extern guint				debug_level;
 extern guint				end_behaviour;
