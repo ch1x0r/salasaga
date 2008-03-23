@@ -39,11 +39,9 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	// Local variables
 	guint				finish_frame;				// Used when working out a layer's finish frame
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	gboolean			return_code;				// Catches a TRUE/FALSE return value
 	slide				*slide_data;				// Pointer to the data for the current slide
-
-	GtkTextIter			text_start;					// The start position of the text buffer
-	GtkTextIter			text_end;					// The end position of the text buffer
 
 	GtkTreeIter			*tmp_iter;					// Temporary iter
 	layer				*tmp_layer;					// Temporary layer
@@ -132,7 +130,6 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	tmp_iter = g_new(GtkTreeIter, 1);
 	tmp_layer->row_iter = tmp_iter;
 	gtk_list_store_prepend(slide_data->layer_store, tmp_iter);
-	gtk_text_buffer_get_bounds(tmp_text_ob->text_buffer, &text_start, &text_end);
 	gtk_list_store_set(slide_data->layer_store, tmp_iter,
 						TIMELINE_NAME, tmp_layer->name->str,
 						TIMELINE_VISIBILITY, TRUE,
@@ -153,8 +150,13 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	regenerate_film_strip_thumbnails();
 
 	// Select the new layer in the timeline widget
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &tmp_path, NULL);
+	if (NULL != tmp_path)
+		old_path = tmp_path;  // Make a backup of the old path, so we can free it
 	tmp_path = gtk_tree_path_new_first();
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(slide_data->timeline_widget), tmp_path, NULL, FALSE);
+	if (NULL != old_path)
+		gtk_tree_path_free(old_path);  // Free the old path
 
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Text layer added");
