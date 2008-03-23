@@ -52,7 +52,8 @@ void menu_file_new(void)
 	// Local variables
 	guint				guint_val;					// Used in the input validation process
 	GdkColor			new_bg_colour;				// Received the new background color for the project
-	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail 
+	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
+	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	GtkDialog			*project_dialog;			// Widget for the dialog
 	GtkWidget			*project_table;				// Table used for neat layout of the dialog box
 	guint				row_counter = 0;			// Used to count which row things are up to
@@ -264,13 +265,13 @@ void menu_file_new(void)
 
 	// Select the thumbnail for the new slide in the film strip
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
-	if (NULL == new_path)
-	{
-		// We couldn't get the existing path in order to reuse it, so we'll create a new one 
-		new_path = gtk_tree_path_new_first();
-	}
+	if (NULL != new_path)
+		old_path = new_path;  // Make a backup of the old path, so we can free it
+	new_path = gtk_tree_path_new_first();
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
+	if (NULL != old_path)
+		gtk_tree_path_free(old_path);  // Free the old path
 
 	// Set the global toggle that a project is now active
 	project_active = TRUE;
