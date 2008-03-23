@@ -39,18 +39,18 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 {
 	// Local variables
 	static GdkGC		*line_gc = NULL;
-	GdkSegment			lines[4];
+	GdkSegment			lines[4];					// Holds the lines used to draw the border
 	GdkRectangle		tmp_rectangle;				// Temporary rectangle used for invalidating part of the front store
 
 
-	// Ensure the invalidation (redraw) area is set to the maximum size that has been selected for this highlight
-	if (right < invalidation_start_x)
+	// Ensure the invalidation (redraw) area is set to the maximum size that has been selected
+	if (left < invalidation_start_x)
 	{
-		invalidation_start_x = right - 1;
+		invalidation_start_x = left;
 	}
-	if (bottom < invalidation_start_y)
+	if (top < invalidation_start_y)
 	{
-		invalidation_start_y = bottom - 1;
+		invalidation_start_y = top;
 	}
 	if (right > invalidation_end_x)
 	{
