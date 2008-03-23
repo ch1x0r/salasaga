@@ -49,6 +49,7 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				mouse_drag_height;			// The height the mouse was dragged
 	gint				mouse_drag_width;			// The width the mouse was dragged
+	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	gboolean			return_code;				// Catches a TRUE/FALSE return value
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio
 	gfloat				scaled_x;					// Scaled starting coordinate
@@ -207,8 +208,13 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	regenerate_film_strip_thumbnails();
 
 	// Select the new layer in the timeline widget
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &tmp_path, NULL);
+	if (NULL != tmp_path)
+		old_path = tmp_path;  // Make a backup of the old path, so we can free it
 	tmp_path = gtk_tree_path_new_first();
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(slide_data->timeline_widget), tmp_path, NULL, FALSE);
+	if (NULL != old_path)
+		gtk_tree_path_free(old_path);  // Free the old path
 
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Highlight layer added");
