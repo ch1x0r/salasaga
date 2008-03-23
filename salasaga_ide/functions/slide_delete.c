@@ -45,6 +45,7 @@ void slide_delete(void)
 	// Local variables
 	GtkTreePath			*new_path;					// Temporary path
 	gint				num_slides;					// Number of slides in the whole slide list
+	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	gint				slide_position;				// Which slide in the slide list we are deleting
 	GtkTreeSelection	*film_strip_selector;
 	GtkTreeIter			selection_iter;
@@ -81,9 +82,14 @@ void slide_delete(void)
 	current_slide = g_list_nth(slides, slide_position);
 
 	// Select the next thumbnail in the film strip and scroll to display it
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
+	if (NULL != new_path)
+		old_path = new_path;  // Make a backup of the old path, so we can free it
 	new_path = gtk_tree_path_new_from_indices(slide_position, -1);
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
+	if (NULL != old_path)
+		gtk_tree_path_free(old_path);  // Free the old path
 
 	// Recreate the slide tooltips
 	create_tooltips();
