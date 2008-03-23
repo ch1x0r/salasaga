@@ -136,10 +136,10 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				break;
 
 			case TYPE_TEXT:
-				present_x = layer_data->x_offset_start;
-				present_y = layer_data->y_offset_start;
-				width = ((layer_text *) layer_data->object_data)->rendered_width;
-				height = ((layer_text *) layer_data->object_data)->rendered_height;
+				present_x = layer_data->x_offset_start - 12;
+				present_y = layer_data->y_offset_start - 4;
+				width = ((layer_text *) layer_data->object_data)->rendered_width + 2;
+				height = ((layer_text *) layer_data->object_data)->rendered_height + 2;
 				break;
 
 			default:

@@ -121,10 +121,10 @@ gboolean draw_handle_box(void)
 			break;
 
 		case TYPE_TEXT:
-			present_x = layer_data->x_offset_start;
+			present_x = layer_data->x_offset_start - 8;
 			present_y = layer_data->y_offset_start;
-			width = ((layer_text *) layer_data->object_data)->rendered_width;
-			height = ((layer_text *) layer_data->object_data)->rendered_height;
+			width = ((layer_text *) layer_data->object_data)->rendered_width - 6;
+			height = ((layer_text *) layer_data->object_data)->rendered_height - 4;
 			break;
 
 		default:
