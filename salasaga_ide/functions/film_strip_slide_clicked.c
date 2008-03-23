@@ -46,7 +46,6 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 	GtkTreePath			*selected_path;
 	GtkTreeIter			selected_iter;
 	gchar				*selection_string;
-	GString				*tmp_gstring;
 
 
 	// Determine if a row has been selected
@@ -55,25 +54,15 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		// * Update current_slide to be the clicked on slide's GList entry, then redraw the timeline and workspace *
 
 		// Determine which slide is now selected
-		tmp_gstring = g_string_new("0");
-		if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &selected_iter, tmp_gstring->str))
-		{
-			if (debug_level) printf("film_strip_slide_clicked: Iter is valid\n");
-		} else
-		{
-			if (debug_level) printf("film_strip_slide_clicked: Iter is not valid\n");
-		}
-		g_string_free(tmp_gstring, TRUE);
-
+		gtk_tree_model_get_iter_first(GTK_TREE_MODEL(film_strip_store), &selected_iter);
 		gtk_tree_selection_get_selected(selection, NULL, &selected_iter);
 		if ((debug_level) && (!gtk_list_store_iter_is_valid(GTK_LIST_STORE(film_strip_store), &selected_iter)))
 		{
-			printf("Invalid iter!\n");
+			printf("Invalid iter! No layer selected when changing slide!\n");
 		}
 
 		selected_path = gtk_tree_model_get_path(GTK_TREE_MODEL(film_strip_store), &selected_iter);
 		selection_string = gtk_tree_path_to_string(selected_path);
-		if (debug_level) printf("film_strip_slide_clicked: Slide selected: %s\n", selection_string);
 
 		// Get a pointer to the clicked on slide's GList
 		slides = g_list_first(slides);
@@ -86,7 +75,6 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		draw_workspace();
 
 		// Free the memory used to deterine the newly selected slide
-//		g_free(selection_path);
-//		gtk_tree_path_free(path);
+		g_free(selection_string);
 	}
 }
