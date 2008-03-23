@@ -59,16 +59,8 @@ void layer_edit(void)
 	slide				*slide_data;				// Pointer to current slide data
 	gboolean			return_code;				// Did the edit dialog return ok?
 
-	GtkTextIter			text_start;					// The start position of the text buffer
-	GtkTextIter			text_end;					// The end position of the text buffer
-
-	layer_empty			*tmp_empty_ob;				// Temporary empty layer object
-	layer_highlight		*tmp_highlight_ob;			// Temporary highlight layer object
-	layer_image			*tmp_image_ob;				// Temporary image layer object
 	GtkTreeIter			*tmp_iter;					// Temporary iter
 	layer				*tmp_layer;					// Temporary layer
-	layer_mouse			*tmp_mouse_ob;				// Temporary mouse layer object
-	layer_text			*tmp_text_ob;				// Temporary text layer object
 	GtkTreePath			*tmp_path;					// Temporary path
 
 
@@ -101,13 +93,9 @@ void layer_edit(void)
 	{
 		case TYPE_EMPTY:
 			// Open a dialog box for the user to edit the background layer values
-			return_code = display_dialog_empty(tmp_layer, "Edit background color");
-			if (TRUE == return_code)
-			{
-				// * The dialog box returned successfully, so update the slide list store with the new values *
-				tmp_empty_ob = (layer_empty *) tmp_layer->object_data;
-				tmp_iter = tmp_layer->row_iter;
-			}
+			display_dialog_empty(tmp_layer, "Edit background color");
+
+			// Nothing to update in the timeline for empty layers
 			break;
 
 		case TYPE_GDK_PIXBUF:
@@ -124,7 +112,6 @@ void layer_edit(void)
 				}
 
 				// Update the slide list store with the new values
-				tmp_image_ob = (layer_image *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
 				gtk_list_store_set(list_pointer, tmp_iter,
 							TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
@@ -149,7 +136,6 @@ void layer_edit(void)
 				}
 
 				// Update the slide list store with the new values
-				tmp_mouse_ob = (layer_mouse *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
 				gtk_list_store_set(list_pointer, tmp_iter,
 							TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
@@ -175,9 +161,7 @@ void layer_edit(void)
 				}
 
 				// Update the slide list store with the new values
-				tmp_text_ob = (layer_text *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
-				gtk_text_buffer_get_bounds(((layer_text *) tmp_layer->object_data)->text_buffer, &text_start, &text_end);
 				gtk_list_store_set(list_pointer, tmp_iter,
 							TIMELINE_NAME, tmp_layer->name->str,
 							TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
@@ -203,7 +187,6 @@ void layer_edit(void)
 				}
 
 				// Update the slide list store with the new values
-				tmp_highlight_ob = (layer_highlight *) tmp_layer->object_data;
 				tmp_iter = tmp_layer->row_iter;
 				gtk_list_store_set(list_pointer, tmp_iter,
 							TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
@@ -231,5 +214,4 @@ void layer_edit(void)
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer edited");
 	gdk_flush();
-
 }
