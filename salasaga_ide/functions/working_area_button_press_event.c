@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Salasaga: Detect when the user presses the mouse button on the drawing area 
+ * Salasaga: Function called when the user presses the mouse button on the drawing area 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@salasaga.org>
  * 
@@ -50,7 +50,6 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
 	guint				num_collisions;
 	guint				num_layers;
-	gboolean			selection_hit;				// Status toggle
 	guint				selected_row;				// Holds the number of the row that is selected
 
 	guint				tmp_int;					// Temporary integer
@@ -68,7 +67,6 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	// Initialise some things
 	current_slide_data = current_slide->data;
 	list_widget = current_slide_data->timeline_widget;
-	selection_hit = FALSE;
 
 	// Check for primary mouse button click
 	if (1 != event->button)
@@ -155,50 +153,12 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	{
 		collision_list = g_list_first(collision_list);
 		collision_list = g_list_nth(collision_list, count_int);
-
 		current_slide_data->layers = g_list_first(current_slide_data->layers);
-
 		tmp_int = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
 		if (tmp_int == selected_row)
 		{
-			// * Yes, the presently selected row is in the collision list *
-			selection_hit = TRUE;
-
-			// If there are further collisions in the collision list, we just move the timeline row selection
-			// to the next collision row, otherwise we wrap to the collision row
-			if (count_int == num_collisions - 1)
-			{
-				// We're at the bottom of the collision hit list, so we wrap back to the start
-				collision_list = g_list_first(collision_list);
-				current_slide_data->layers = g_list_first(current_slide_data->layers);
-				tmp_int = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
-				g_string_printf(tmp_gstring, "%d", tmp_int);
-				tmp_path = gtk_tree_path_new_from_string(tmp_gstring->str);
-				gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
-
-				// Free the memory allocated during the collision detection
-				g_string_free(tmp_gstring, TRUE);
-				g_list_free(collision_list);
-				collision_list = NULL;
-
-				return TRUE;
-			} else
-			{
-				// There are further collision hits, so we just move the selection to the next one
-				collision_list = g_list_next(collision_list);
-				current_slide_data->layers = g_list_first(current_slide_data->layers);
-				tmp_int = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
-				g_string_printf(tmp_gstring, "%d", tmp_int);
-				tmp_path = gtk_tree_path_new_from_string(tmp_gstring->str);
-				gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
-
-				// Free the memory allocated during the collision detection
-				g_string_free(tmp_gstring, TRUE);
-				g_list_free(collision_list);
-				collision_list = NULL;
-
-				return TRUE;
-			}
+			// Return if the presently selected row is in the collision list, as we don't want to change our selected layer
+			return TRUE;
 		}
 	}
 
