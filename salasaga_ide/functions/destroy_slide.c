@@ -33,17 +33,15 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "display_warning.h"
+#include "layer_free.h"
 
 
-// fixme5: Had to comment out some of the "free's", as they were causing segfaults.  Thus this function needs to be rewritten properly at some point
 void destroy_slide(gpointer element, gpointer user_data)
 {
 	// Local variables
 	gint				layer_counter;			// Standard counter
 	layer				*layer_data;			// Used for freeing the elements of a deleted slide
 	gint				num_layers;				// Number of layers in a slide
-	GList				*removed_layer;			// Used for freeing the elements of a deleted slide
 	slide				*slide_data;			// Used for freeing the elements of a deleted slide
 
 
@@ -51,59 +49,31 @@ void destroy_slide(gpointer element, gpointer user_data)
 	slide_data = element;
 
 	// Free the memory allocated to the deleted slide
+	if (NULL != slide_data->thumbnail)
+		g_object_unref(slide_data->thumbnail);
 	if (NULL != slide_data->name)
-	{
 		g_string_free(slide_data->name, TRUE);
-	}
-	gtk_object_destroy(GTK_OBJECT(slide_data->tooltip));
-	if (NULL != slide_data->layer_store) g_object_unref(slide_data->layer_store);
-	if (NULL != slide_data->timeline_widget) g_object_unref(slide_data->timeline_widget);
+	if (NULL != slide_data->tooltip)
+		g_object_unref(G_OBJECT(slide_data->tooltip));
+	if (NULL != slide_data->layer_store)
+		g_object_unref(slide_data->layer_store);
+	if (NULL != slide_data->timeline_widget)
+		g_object_unref(slide_data->timeline_widget);
 
 	// Free the memory allocated to the deleted slides' layers
 	slide_data->layers = g_list_first(slide_data->layers);
 	num_layers = g_list_length(slide_data->layers);
 	for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 	{
-		// Point to the first remaining layer in the list
+		// Loop through the layers, freeing the memory allocated to them
 		slide_data->layers = g_list_first(slide_data->layers);
-		layer_data = (slide_data->layers)->data;
-
-		// Free its elements
-		g_string_free(layer_data->name, TRUE);
-		// This is causing a Segfault
-		// g_free(layer_data->row_iter);
-		switch (layer_data->object_type)
-		{
-			case TYPE_GDK_PIXBUF:
-				// This is causing a Segfault
-				// g_string_free(((layer_image *) layer_data->object_data)->image_path, TRUE);
-				if (NULL != ((layer_image *) layer_data->object_data)->image_data) g_object_unref(((layer_image *) layer_data->object_data)->image_data);
-				break;
-
-			case TYPE_MOUSE_CURSOR:
-				// Nothing here needs freeing
-				break;
-
-			case TYPE_EMPTY:
-				// Nothing here needs freeing
-				break;
-
-			case TYPE_TEXT:
-				if (NULL != ((layer_text *) layer_data->object_data)->text_buffer) g_object_unref(((layer_text *) layer_data->object_data)->text_buffer);
-				break;
-
-			case TYPE_HIGHLIGHT:
-				// Nothing here needs freeing
-				break;
-
-			default:
-				display_warning("Error ED57: Unknown layer type when destroying a slide.\n");
-		}
-		g_free(layer_data->object_data);
-
-		// Remove the layer from the list
-		removed_layer = slide_data->layers;
-		slide_data->layers = g_list_remove_link(slide_data->layers, slide_data->layers);
-		g_list_free(removed_layer);
+		layer_data = g_list_nth_data(slide_data->layers, layer_counter);
+		layer_free(layer_data);
 	}
+
+	// Free the memory allocated to the layer list itself
+	g_list_free(slide_data->layers);
+
+	// Free the memory allocated to the slide structure itself
+	g_free(slide_data);
 }
