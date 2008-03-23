@@ -41,6 +41,7 @@ void regenerate_film_strip_thumbnails()
 	// Local variables
 	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
 	gint				num_slides;
+	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	gint				slide_counter, slide_position;
 	GtkTreeIter			film_strip_iter;
 	GdkPixbuf			*new_thumbnail;
@@ -76,13 +77,13 @@ void regenerate_film_strip_thumbnails()
 	}
 
 	// Reselect the thumbnail that was previously selected
-	if (NULL == new_path)
-	{
-		// We couldn't get the existing path in order to reuse it, so we create a new one 
-		slides = g_list_first(slides);
-		slide_position = g_list_position(slides, current_slide);
-		new_path = gtk_tree_path_new_from_indices(slide_position, -1);
-	}
+	if (NULL != new_path)
+		old_path = new_path;  // Make a backup of the old path, so we can free it
+	slides = g_list_first(slides);
+	slide_position = g_list_position(slides, current_slide);
+	new_path = gtk_tree_path_new_from_indices(slide_position, -1);
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
+	if (NULL != old_path)
+		gtk_tree_path_free(old_path);  // Free the old path
 }
