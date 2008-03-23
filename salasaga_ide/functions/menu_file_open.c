@@ -55,6 +55,7 @@ void menu_file_open(void)
 	gchar				*filename;					// Pointer to the chosen file name
 	GtkFileFilter		*flame_filter;
 	GtkTreePath			*new_path;					// Temporary path
+	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	GtkWidget 			*open_dialog;
 	gboolean			return_code = FALSE;
 	GtkFileFilter		*salasaga_filter;
@@ -212,13 +213,13 @@ void menu_file_open(void)
 
 	// Scroll the film strip to show the new thumbnail position
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
-	if (NULL == new_path)
-	{
-		// We couldn't get the existing path in order to reuse it, so we'll create a new one 
-		new_path = gtk_tree_path_new_first();
-	}
+	if (NULL != new_path)
+		old_path = new_path;  // Make a backup of the old path, so we can free it
+	new_path = gtk_tree_path_new_first();
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.0);
+	if (NULL != old_path)
+		gtk_tree_path_free(old_path);  // Free the old path
 
 	// Enable the project based menu items
 	menu_enable("/Project", TRUE);
