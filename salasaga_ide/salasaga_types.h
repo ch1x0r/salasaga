@@ -76,11 +76,11 @@ enum {
 // The known layer types
 enum {
 	TYPE_NONE,
-	TYPE_GDK_PIXBUF,
-	TYPE_MOUSE_CURSOR,
 	TYPE_EMPTY,
-	TYPE_TEXT,
-	TYPE_HIGHLIGHT
+	TYPE_GDK_PIXBUF,
+	TYPE_HIGHLIGHT,
+	TYPE_MOUSE_CURSOR,
+	TYPE_TEXT
 };
 
 // The order of the main toolbar buttons
