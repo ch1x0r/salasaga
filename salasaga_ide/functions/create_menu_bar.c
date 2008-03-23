@@ -33,12 +33,14 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "layer_copy.h"
 #include "layer_delete.h"
 #include "layer_edit.h"
 #include "layer_new_highlight.h"
 #include "layer_new_image.h"
 #include "layer_new_mouse.h"
 #include "layer_new_text.h"
+#include "layer_paste.h"
 #include "menu_edit_preferences.h"
 #include "menu_enable.h"
 #include "menu_export_flash_animation.h"
@@ -111,8 +113,12 @@ void create_menu_bar()
 		{"/Slide/_Properties",			NULL,					slide_properties,				0,	"<Item>"},
 
 		{"/_Layer",						NULL,					NULL,							0,	"<Branch>"},
+//		{"/Layer/C_ut",					NULL,					layer_cut,						0,	"<Item>"},
+		{"/Layer/_Copy",				NULL,					layer_copy,						0,	"<Item>"},
+		{"/Layer/_Paste",				NULL,					layer_paste,					0,	"<Item>"},
 		{"/Layer/_Edit",				NULL,					layer_edit,						0,	"<Item>"},
 		{"/Layer/_Delete",				NULL,					layer_delete,					0,	"<Item>"},
+		{"/Layer/Sep",					NULL,					NULL,							0,	"<Separator>"},
 		{"/Layer/Add _Text",			NULL,					layer_new_text,					0,	"<Item>"},
 		{"/Layer/Add _Highlight",		NULL,					layer_new_highlight,			0,	"<Item>"},
 		{"/Layer/Add _Image",			NULL,					layer_new_image,				0,	"<Item>"},
@@ -124,11 +130,11 @@ void create_menu_bar()
 		{"/Export/_Image Layer",		NULL,					menu_export_layer,				0,	"<Item>"},
 
 		{"/_Help",						NULL,					NULL,							0,	"<LastBranch>"},
-		{"/_Help/_About",				NULL,					menu_help_about,				0,	"<Item>"	},
-		{"/_Help/Sep",					NULL,					NULL,							0,	"<Separator>"},
-		{"/_Help/_Register",			NULL,					menu_help_register,				0,	"<Item>"	},
-		{"/_Help/_Survey",				NULL,					menu_help_survey,				0,	"<Item>"	},
-		{"/_Help/_Website",				NULL,					menu_help_website,				0,	"<Item>"	}
+		{"/_Help/_About",				NULL,					menu_help_about,				0,	"<Item>"	}
+//		{"/_Help/Sep",					NULL,					NULL,							0,	"<Separator>"},
+//		{"/_Help/_Register",			NULL,					menu_help_register,				0,	"<Item>"	},
+//		{"/_Help/_Survey",				NULL,					menu_help_survey,				0,	"<Item>"	},
+//		{"/_Help/_Website",				NULL,					menu_help_website,				0,	"<Item>"	}
 	};  // The menu structure
 	static gint			num_items = sizeof(menu_items) / sizeof(menu_items[0]);	// The number of menu items
 
