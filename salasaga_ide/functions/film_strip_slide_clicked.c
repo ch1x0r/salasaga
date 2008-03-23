@@ -36,6 +36,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "draw_handle_box.h"
 #include "draw_timeline.h"
 #include "draw_workspace.h"
 
@@ -73,6 +74,9 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 
 		// Redraw the workspace
 		draw_workspace();
+
+		// Redraw the layer handle box
+		draw_handle_box();
 
 		// Free the memory used to deterine the newly selected slide
 		g_free(selection_string);
