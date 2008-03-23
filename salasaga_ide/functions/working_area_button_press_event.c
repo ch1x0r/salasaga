@@ -38,6 +38,7 @@
 #include "../externs.h"
 #include "calculate_object_boundaries.h"
 #include "detect_collisions.h"
+#include "draw_handle_box.h"
 #include "layer_edit.h"
 
 
@@ -122,6 +123,10 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		tmp_path = gtk_tree_path_new_from_string(tmp_gstring->str);
 		gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
 
+		// Clear any existing handle box
+		gdk_draw_pixbuf(GDK_DRAWABLE(front_store), NULL, GDK_PIXBUF(backing_store), 0, 0, 1, 1, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);
+		gdk_window_invalidate_rect(main_drawing_area->window, &main_drawing_area->allocation, TRUE);
+
 		// Reset the stored mouse coordinates
 		stored_x = -1;
 		stored_y = -1;
@@ -167,10 +172,13 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	// The presently selected row is not in the collision list, so move the selection row to the first collision
 	collision_list = g_list_first(collision_list);
 	current_slide_data->layers = g_list_first(current_slide_data->layers);
-	tmp_int = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
-	g_string_printf(tmp_gstring, "%d", tmp_int);
+	selected_row = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
+	g_string_printf(tmp_gstring, "%d", selected_row);
 	tmp_path = gtk_tree_path_new_from_string(tmp_gstring->str);
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
+
+	// Draw a handle box around the new selected object
+	draw_handle_box();
 
 	// Free the memory allocated during the collision detection
 	g_string_free(tmp_gstring, TRUE);
