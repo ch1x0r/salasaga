@@ -88,7 +88,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
 
 		// Determine which layer is selected in the timeline
-		tmp_path = gtk_tree_path_new();
 		gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
 		selected_row = gtk_tree_path_to_string(tmp_path);
 

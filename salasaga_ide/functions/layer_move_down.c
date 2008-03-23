@@ -46,13 +46,12 @@ void layer_move_down(void)
 	// Local variables
 	GList				*below_layer;				// The layer below the selected one
 	GList				*layer_pointer;				// Points to the layers in the selected slide
-	gint				num_layers;				// The number of layers in the select slide
-	GList				*our_layer;				// The selected layer
+	gint				num_layers;					// The number of layers in the select slide
+	GList				*our_layer;					// The selected layer
 	gint				selected_row;				// Holds the row that is selected
 
-	GtkTreeViewColumn		*tmp_column;				// Temporary column
-	GList				*tmp_glist;				// Temporary GList
-	GtkTreePath			*tmp_path;				// Temporary path
+	GList				*tmp_glist;					// Temporary GList
+	GtkTreePath			*tmp_path;					// Temporary path
 
 
 	// If no project is loaded then don't run this function
@@ -69,9 +68,7 @@ void layer_move_down(void)
 	num_layers = g_list_length(layer_pointer);
 
 	// Determine which layer the user has selected in the timeline
-	tmp_path = gtk_tree_path_new();
-	tmp_column = gtk_tree_view_column_new();
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), &tmp_path, &tmp_column);
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), &tmp_path, NULL);
 	selected_row = atoi(gtk_tree_path_to_string(tmp_path));
 	if (num_layers - 2 <= selected_row)
 	{

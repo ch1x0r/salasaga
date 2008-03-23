@@ -140,7 +140,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		if (1 == event->button)
 		{
 			// Determine which layer is selected in the timeline
-			tmp_path = gtk_tree_path_new();
 			gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
 			selected_row = gtk_tree_path_to_string(tmp_path);
 

@@ -38,25 +38,24 @@
 void menu_export_layer(void)
 {
 	// Local variables
-	GtkFileFilter		*all_filter;			// Filter for *.*
-	GtkWidget 			*export_dialog;			// Dialog widget
-	gchar				*filename;				// Pointer to the chosen file name
-	GtkFileFilter		*file_filter;			// Filter for *.swf
-	GList				*layer_pointer;			// Points to the layers in the selected slide
-	GtkListStore		*list_pointer;			//
-	GtkWidget			*list_widget;			// Points to the timeline widget
-	gint				return_code_gbool;		// Catches the return code from the inner swf export function
-	guint				selected_row;			// Holds the row that is selected
-	slide				*slide_data;			// Pointer to current slide data
-	GtkTreeViewColumn	*this_column;			// Temporary column
-	layer_image			*this_image_ob;			// Temporary image layer object
-	layer				*this_layer;			// Temporary layer
-	GtkTreePath			*this_path;				// Temporary path
+	GtkFileFilter		*all_filter;				// Filter for *.*
+	GtkWidget 			*export_dialog;				// Dialog widget
+	gchar				*filename;					// Pointer to the chosen file name
+	GtkFileFilter		*file_filter;				// Filter for *.swf
+	GList				*layer_pointer;				// Points to the layers in the selected slide
+	GtkListStore		*list_pointer;				//
+	GtkWidget			*list_widget;				// Points to the timeline widget
+	gint				return_code_gbool;			// Catches the return code from the inner swf export function
+	guint				selected_row;				// Holds the row that is selected
+	slide				*slide_data;				// Pointer to current slide data
+	layer_image			*this_image_ob;				// Temporary image layer object
+	layer				*this_layer;				// Temporary layer
+	GtkTreePath			*this_path;					// Temporary path
 	gboolean			useable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
-	GtkWidget			*warn_dialog;			// Widget for overwrite warning dialog
+	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
 
-	GString				*tmp_gstring;			// Temporary GString
+	GString				*tmp_gstring;				// Temporary GString
 
 
 	// Initialise some variables
@@ -66,9 +65,7 @@ void menu_export_layer(void)
 	list_widget = slide_data->timeline_widget;
 
 	// Determine which layer the user has selected in the timeline
-	this_path = gtk_tree_path_new();
-	this_column = gtk_tree_view_column_new();
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &this_path, &this_column);
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &this_path, NULL);
 	selected_row = atoi(gtk_tree_path_to_string(this_path));
 	this_layer = g_list_nth_data(layer_pointer, selected_row);
 

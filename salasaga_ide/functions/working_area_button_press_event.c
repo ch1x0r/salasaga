@@ -54,7 +54,6 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	guint				selected_row;				// Holds the number of the row that is selected
 
 	guint				tmp_int;					// Temporary integer
-	GtkTreeViewColumn	*tmp_column;				// Temporary column
 	GString				*tmp_gstring;				// Temporary GString
 	GtkTreePath			*tmp_path;					// Temporary path
 
@@ -146,9 +145,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	stored_y = event->y;
 
 	// Determine which layer the user has selected in the timeline
-	tmp_path = gtk_tree_path_new();
-	tmp_column = gtk_tree_view_column_new();
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, &tmp_column);
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
 	selected_row = atoi(gtk_tree_path_to_string(tmp_path));
 
 	// Is the presently selected layer in the collision list?
