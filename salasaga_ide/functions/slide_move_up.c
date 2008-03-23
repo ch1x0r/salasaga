@@ -40,7 +40,8 @@ void slide_move_up(void)
 {
 	// Local variables
 	GtkTreeIter			from_iter, to_iter;
-	GtkTreePath			*new_path;				// Temporary path
+	GtkTreePath			*new_path;					// Temporary path
+	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	GList				*previous_slide;			// Pointer to the slide above
 	gint				slide_position;				// Which slide in the slide list we are moving
 	slide				*this_slide_data;			// Pointer to the data for this slide
@@ -87,10 +88,14 @@ void slide_move_up(void)
 	create_tooltips();
 
 	// Scroll the film strip to show the new thumbnail position
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
+	if (NULL != new_path)
+		old_path = new_path;  // Make a backup of the old path, so we can free it
 	new_path = gtk_tree_path_new_from_indices(slide_position - 1, -1);
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
-//	gtk_tree_path_free(new_path);
+	if (NULL != old_path)
+		gtk_tree_path_free(old_path);  // Free the old path
 
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide moved up");
