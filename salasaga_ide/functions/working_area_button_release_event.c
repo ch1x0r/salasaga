@@ -55,10 +55,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
 	gint				mouse_x;
 	gint				mouse_y;
-	gint				onscreen_start_bottom;		// New Y coordinate of layer
-	gint				onscreen_start_left;		// New X coordinate of layer
-	gint				onscreen_start_right;		// New X coordinate of layer
-	gint				onscreen_start_top;			// New Y coordinate of layer
+	gint				onscreen_bottom;			// New Y coordinate of layer
+	gint				onscreen_left;				// New X coordinate of layer
+	gint				onscreen_right;				// New X coordinate of layer
+	gint				onscreen_top;				// New Y coordinate of layer
 	gint				project_x_position;			// X position in the project image
 	gint				project_y_position;			// Y position in the project image
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
@@ -162,47 +162,104 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		{
 			case RESIZE_HANDLES_RESIZING_TL:
 				// Top left resize
-				onscreen_start_left = layer_data->x_offset_start + x_diff;
-				onscreen_start_top = layer_data->y_offset_start + y_diff;
-				onscreen_start_right = (layer_data->x_offset_start + width);
-				onscreen_start_bottom = (layer_data->y_offset_start + height);
+				onscreen_left = layer_data->x_offset_start + x_diff;
+				onscreen_top = layer_data->y_offset_start + y_diff;
+				onscreen_right = layer_data->x_offset_start + width;
+				onscreen_bottom = layer_data->y_offset_start + height;
 				break;
 
-//fixme2: Need code written for the other resizing directions!
+			case RESIZE_HANDLES_RESIZING_TM:
+				// Top middle resize
+				onscreen_left = layer_data->x_offset_start;
+				onscreen_top = layer_data->y_offset_start + y_diff;
+				onscreen_right = layer_data->x_offset_start + width;
+				onscreen_bottom = layer_data->y_offset_start + height;
+				break;
 
+			case RESIZE_HANDLES_RESIZING_TR:
+				// Top right resize
+				onscreen_left = layer_data->x_offset_start;
+				onscreen_top = layer_data->y_offset_start + y_diff;
+				onscreen_right = layer_data->x_offset_start + width + x_diff;
+				onscreen_bottom = layer_data->y_offset_start + height;
+				break;
+
+			case RESIZE_HANDLES_RESIZING_RM:
+				// Middle right resize
+				onscreen_left = layer_data->x_offset_start;
+				onscreen_top = layer_data->y_offset_start;
+				onscreen_right = layer_data->x_offset_start + width + x_diff;
+				onscreen_bottom = layer_data->y_offset_start + height;
+				break;
+
+			case RESIZE_HANDLES_RESIZING_BR:
+				// Bottom right resize
+				onscreen_left = layer_data->x_offset_start;
+				onscreen_top = layer_data->y_offset_start;
+				onscreen_right = layer_data->x_offset_start + width + x_diff;
+				onscreen_bottom = layer_data->y_offset_start + height + y_diff;
+				break;
+
+			case RESIZE_HANDLES_RESIZING_BM:
+				// Bottom middle resize
+				onscreen_left = layer_data->x_offset_start;
+				onscreen_top = layer_data->y_offset_start;
+				onscreen_right = layer_data->x_offset_start + width;
+				onscreen_bottom = layer_data->y_offset_start + height + y_diff;
+				break;
+
+			case RESIZE_HANDLES_RESIZING_BL:
+				// Bottom left resize
+				onscreen_left = layer_data->x_offset_start + x_diff;
+				onscreen_top = layer_data->y_offset_start;
+				onscreen_right = layer_data->x_offset_start + width;
+				onscreen_bottom = layer_data->y_offset_start + height + y_diff;
+				break;
+
+			case RESIZE_HANDLES_RESIZING_LM:
+				// Left middle resize
+				onscreen_left = layer_data->x_offset_start + x_diff;
+				onscreen_top = layer_data->y_offset_start;
+				onscreen_right = layer_data->x_offset_start + width;
+				onscreen_bottom = layer_data->y_offset_start + height;
+				break;
+
+			default:
+				display_warning("Error ED296: Unknown resizing direction");
+				return FALSE;
 		}
 
 		// Swap left and right around if we need to
-		if (onscreen_start_left > onscreen_start_right)
+		if (onscreen_left > onscreen_right)
 		{
-			swap_value = onscreen_start_left;
-			onscreen_start_left = onscreen_start_right;
-			onscreen_start_right = swap_value;
+			swap_value = onscreen_left;
+			onscreen_left = onscreen_right;
+			onscreen_right = swap_value;
 		}
 
 		// Swap top and bottom around if we need to
-		if (onscreen_start_top > onscreen_start_bottom)
+		if (onscreen_top > onscreen_bottom)
 		{
-			swap_value = onscreen_start_top;
-			onscreen_start_top = onscreen_start_bottom;
-			onscreen_start_bottom = swap_value;
+			swap_value = onscreen_top;
+			onscreen_top = onscreen_bottom;
+			onscreen_bottom = swap_value;
 		}
 
 		// Calculate the new layer width and height
-		((layer_highlight *) layer_data->object_data)->width = width = onscreen_start_right - onscreen_start_left;
-		((layer_highlight *) layer_data->object_data)->height = height = onscreen_start_bottom - onscreen_start_top;
+		((layer_highlight *) layer_data->object_data)->width = width = onscreen_right - onscreen_left;
+		((layer_highlight *) layer_data->object_data)->height = height = onscreen_bottom - onscreen_top;
 
 		// Bounds check the starting x offset, then update the object with the new value
-		layer_data->x_offset_start = CLAMP(onscreen_start_left, 1, project_width - width - 2);
+		layer_data->x_offset_start = CLAMP(onscreen_left, 1, project_width - width - 2);
 
 		// Bounds check the finishing x offset, then update the object with the new value
-		layer_data->x_offset_finish = CLAMP(onscreen_start_left + x_change, 1, project_width - width - 2);
+		layer_data->x_offset_finish = CLAMP(onscreen_left + x_change, 1, project_width - width - 2);
 
 		// Bounds check the starting y offset, then update the object with the new value
-		layer_data->y_offset_start = CLAMP(onscreen_start_top, 1, project_height - height - 2);
+		layer_data->y_offset_start = CLAMP(onscreen_top, 1, project_height - height - 2);
 
 		// Bounds check the finishing y offset, then update the object with the new value
-		layer_data->y_offset_finish = CLAMP(onscreen_start_top + y_change, 1, project_height - height - 2);
+		layer_data->y_offset_finish = CLAMP(onscreen_top + y_change, 1, project_height - height - 2);
 
 		// Update the timeline widget with the new offsets
 		gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
