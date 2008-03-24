@@ -39,7 +39,21 @@ extern "C" {
 // Basic application constants
 #define APP_NAME "Salasaga"
 #define	APP_VERSION "0.8.0-pre"
-	
+
+// Statuses for the bounding box resize handles
+#define	RESIZE_HANDLES_INACTIVE		0
+#define	RESIZE_HANDLES_WAITING		1
+#define	RESIZE_HANDLES_RESIZING		2
+#define	RESIZE_HANDLES_RESIZING_TL	4
+#define	RESIZE_HANDLES_RESIZING_TM	8
+#define	RESIZE_HANDLES_RESIZING_TR	16
+#define	RESIZE_HANDLES_RESIZING_RM	32
+#define	RESIZE_HANDLES_RESIZING_BR	64
+#define	RESIZE_HANDLES_RESIZING_BM	128
+#define	RESIZE_HANDLES_RESIZING_BL	256
+#define	RESIZE_HANDLES_RESIZING_LM	512
+#define RESIZE_HANDLES_RESIZING_ALL	1020
+
 // Base types for the validate_value function
 #define V_CHAR				1
 #define V_FLOAT_UNSIGNED	2
