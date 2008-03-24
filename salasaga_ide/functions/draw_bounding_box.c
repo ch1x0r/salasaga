@@ -40,7 +40,22 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 	// Local variables
 	static GdkGC		*line_gc = NULL;
 	GdkSegment			lines[4];					// Holds the lines used to draw the border
+	gint				swap_value;					// Temp location while we swap galues
 
+
+	// Swap around the top and side positions if we need to
+	if (left > right)
+	{
+		swap_value = left;
+		left = right;
+		right = swap_value;
+	}
+	if (top > bottom)
+	{
+		swap_value = top;
+		top = bottom;
+		bottom = swap_value;
+	}
 
 	// Ensure the invalidation (redraw) area is set to the maximum size that has been selected
 	if (left - 2 < invalidation_start_x)
