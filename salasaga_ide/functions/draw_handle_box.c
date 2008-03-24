@@ -38,6 +38,7 @@
 #include "../externs.h"
 #include "display_warning.h"
 #include "draw_bounding_box.h"
+#include "draw_resize_handles.h"
 
 
 gboolean draw_handle_box(void)
@@ -148,6 +149,16 @@ gboolean draw_handle_box(void)
 
 	// Draw a bounding box onscreen
 	draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
+
+	// If this is a highlight layer, then draw the handle box handles onscreen and mark them as active
+	if (TYPE_HIGHLIGHT == layer_data->object_type)
+	{
+		draw_resize_handles(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom, 6);
+		resize_handles = TRUE;
+	} else
+	{
+		resize_handles = FALSE;
+	}
 
 	return TRUE;
 }
