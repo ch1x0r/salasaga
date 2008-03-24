@@ -57,7 +57,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gint				onscreen_top;				// Y coordinate of bounding box top
 	gint				present_x;
 	gint				present_y;
-	static guint		resize_direction = 0;		// Which direction the resizing is going in
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gchar				*selected_row;				// Holds the number of the row that is selected
@@ -79,7 +78,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	}
 
 	// If we're already aware of a resize operation going on, then draw the appropriate bounding box
-	if (RESIZE_HANDLES_RESIZING == resize_handles_status)
+	if (FALSE != (RESIZE_HANDLES_RESIZING & resize_handles_status))
 	{
 		// Initialise some things
 		current_slide_data = current_slide->data;
@@ -114,9 +113,9 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		y_diff = mouse_y - stored_y;
 
 		// Work out the bounding box boundaries
-		switch (resize_direction)
+		switch (resize_handles_status & RESIZE_HANDLES_RESIZING_ALL)
 		{
-			case 1:
+			case RESIZE_HANDLES_RESIZING_TL:
 				// Top left resize
 				onscreen_left = (present_x / scaled_width_ratio) + x_diff;
 				onscreen_top = (present_y / scaled_height_ratio) + y_diff;
@@ -124,7 +123,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				onscreen_bottom = ((present_y + height) / scaled_height_ratio);
 				break;
 
-			case 2:
+			case RESIZE_HANDLES_RESIZING_TM:
 				// Top middle resize
 				onscreen_left = (present_x / scaled_width_ratio);
 				onscreen_top = (present_y / scaled_height_ratio) + y_diff;
@@ -132,7 +131,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				onscreen_bottom = ((present_y + height) / scaled_height_ratio);
 				break;
 
-			case 3:
+			case RESIZE_HANDLES_RESIZING_TR:
 				// Top right resize
 				onscreen_left = (present_x / scaled_width_ratio);
 				onscreen_top = (present_y / scaled_height_ratio) + y_diff;
@@ -140,7 +139,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				onscreen_bottom = ((present_y + height) / scaled_height_ratio);
 				break;
 
-			case 4:
+			case RESIZE_HANDLES_RESIZING_RM:
 				// Middle right resize
 				onscreen_left = (present_x / scaled_width_ratio);
 				onscreen_top = (present_y / scaled_height_ratio);
@@ -148,7 +147,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				onscreen_bottom = ((present_y + height) / scaled_height_ratio);
 				break;
 
-			case 5:
+			case RESIZE_HANDLES_RESIZING_BR:
 				// Bottom right resize
 				onscreen_left = (present_x / scaled_width_ratio);
 				onscreen_top = (present_y / scaled_height_ratio);
@@ -156,7 +155,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				onscreen_bottom = ((present_y + height) / scaled_height_ratio) + y_diff;
 				break;
 
-			case 6:
+			case RESIZE_HANDLES_RESIZING_BM:
 				// Bottom middle resize
 				onscreen_left = (present_x / scaled_width_ratio);
 				onscreen_top = (present_y / scaled_height_ratio);
@@ -164,7 +163,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				onscreen_bottom = ((present_y + height) / scaled_height_ratio) + y_diff;
 				break;
 
-			case 7:
+			case RESIZE_HANDLES_RESIZING_BL:
 				// Bottom left resize
 				onscreen_left = (present_x / scaled_width_ratio) + x_diff;
 				onscreen_top = (present_y / scaled_height_ratio);
@@ -172,7 +171,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				onscreen_bottom = ((present_y + height) / scaled_height_ratio) + y_diff;
 				break;
 
-			case 8:
+			case RESIZE_HANDLES_RESIZING_LM:
 				// Left middle resize
 				onscreen_left = (present_x / scaled_width_ratio) + x_diff;
 				onscreen_top = (present_y / scaled_height_ratio);
@@ -307,32 +306,28 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[0], &mouse_pointer_rect, NULL))
 		{
 			// We're resizing from the top left
-			resize_handles_status = RESIZE_HANDLES_RESIZING;
-			resize_direction = 1;
+			resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_TL;
 		}
 
 		// Top right
 		if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[2], &mouse_pointer_rect, NULL))
 		{
 			// We're resizing from the top right
-			resize_handles_status = RESIZE_HANDLES_RESIZING;
-			resize_direction = 3;
+			resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_TR;
 		}
 
 		// Bottom right
 		if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[4], &mouse_pointer_rect, NULL))
 		{
 			// We're resizing from the bottom right
-			resize_handles_status = RESIZE_HANDLES_RESIZING;
-			resize_direction = 5;
+			resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_BR;
 		}
 
 		// Bottom left
 		if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[6], &mouse_pointer_rect, NULL))
 		{
 			// We're resizing from the bottom left
-			resize_handles_status = RESIZE_HANDLES_RESIZING;
-			resize_direction = 7;
+			resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_BL;
 		}
 
 		// If the horizontal resize handles are in use, check them
@@ -342,16 +337,14 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[3], &mouse_pointer_rect, NULL))
 			{
 				// We're resizing from the right middle
-				resize_handles_status = RESIZE_HANDLES_RESIZING;
-				resize_direction = 4;
+				resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_RM;
 			}
 
 			// Left middle
 			if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[7], &mouse_pointer_rect, NULL))
 			{
 				// We're resizing from the left middle
-				resize_handles_status = RESIZE_HANDLES_RESIZING;
-				resize_direction = 8;
+				resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_LM;
 			}
 		}
 
@@ -362,16 +355,14 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[1], &mouse_pointer_rect, NULL))
 			{
 				// We're resizing from the top middle
-				resize_handles_status = RESIZE_HANDLES_RESIZING;
-				resize_direction = 2;
+				resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_TM;
 			}
 
 			// Bottom middle
 			if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[5], &mouse_pointer_rect, NULL))
 			{
 				// We're resizing from the bottom middle
-				resize_handles_status = RESIZE_HANDLES_RESIZING;
-				resize_direction = 6;
+				resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_BM;
 			}
 		}
 
@@ -385,7 +376,9 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		invalidation_start_x = event->x - 1;
 		invalidation_start_y = event->y - 1;
 
-		// We drop through here on purpose, to allow checking for the start of a drag operation
+		// If we're resizing, then return, else drop through to the next check
+		if (FALSE != (RESIZE_HANDLES_RESIZING & resize_handles_status))
+			return TRUE;
 	}
 
 	// Check if the primary mouse button is down and we're not resizing a layer
