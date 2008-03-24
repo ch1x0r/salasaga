@@ -55,15 +55,20 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
 	gint				mouse_x;
 	gint				mouse_y;
-	gint				present_x;
-	gint				present_y;
+	gint				onscreen_start_bottom;		// New Y coordinate of layer
+	gint				onscreen_start_left;		// New X coordinate of layer
+	gint				onscreen_start_right;		// New X coordinate of layer
+	gint				onscreen_start_top;			// New Y coordinate of layer
 	gint				project_x_position;			// X position in the project image
 	gint				project_y_position;			// Y position in the project image
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gchar				*selected_row;				// Holds the number of the row that is selected
+	guint				swap_value;					// Temporary value used when swapping border positions
 	GtkTreePath			*tmp_path;					// Temporary path
 	gint				width;
+	gint				x_change;					// The X distance the layer object moves from start to finish 
+	gint				y_change;					// The Y distance the layer object moves from start to finish
 	gfloat				x_diff;						// The X distance the object was dragged, after scaling
 	gfloat				y_diff;						// The Y distance the object was dragged, after scaling
 
@@ -129,6 +134,110 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		return TRUE;
 	}
 
+	// If this release matches the end of a layer resize operation, we process it
+	if (FALSE != (RESIZE_HANDLES_RESIZING & resize_handles_status))
+	{
+		// Initialise some things
+		current_slide_data = current_slide->data;
+		list_widget = current_slide_data->timeline_widget;
+
+		// Determine which layer is selected in the timeline
+		gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
+		selected_row = gtk_tree_path_to_string(tmp_path);
+
+		// Get its present X and Y offsets
+		current_slide_data->layers = g_list_first(current_slide_data->layers);
+		layer_data = g_list_nth_data(current_slide_data->layers, atoi(selected_row));
+		width = ((layer_highlight *) layer_data->object_data)->width;
+		height = ((layer_highlight *) layer_data->object_data)->height;
+		x_change = layer_data->x_offset_finish - layer_data->x_offset_start;
+		y_change = layer_data->y_offset_finish - layer_data->y_offset_start;
+
+		// Calculate the distance the mouse was moved
+		x_diff = (mouse_x - stored_x) * scaled_width_ratio;
+		y_diff = (mouse_y - stored_y) * scaled_height_ratio;
+
+		// Work out the new size for the layer
+		switch (resize_handles_status & RESIZE_HANDLES_RESIZING_ALL)
+		{
+			case RESIZE_HANDLES_RESIZING_TL:
+				// Top left resize
+				onscreen_start_left = layer_data->x_offset_start + x_diff;
+				onscreen_start_top = layer_data->y_offset_start + y_diff;
+				onscreen_start_right = (layer_data->x_offset_start + width);
+				onscreen_start_bottom = (layer_data->y_offset_start + height);
+				break;
+
+//fixme2: Need code written for the other resizing directions!
+
+		}
+
+		// Swap left and right around if we need to
+		if (onscreen_start_left > onscreen_start_right)
+		{
+			swap_value = onscreen_start_left;
+			onscreen_start_left = onscreen_start_right;
+			onscreen_start_right = swap_value;
+		}
+
+		// Swap top and bottom around if we need to
+		if (onscreen_start_top > onscreen_start_bottom)
+		{
+			swap_value = onscreen_start_top;
+			onscreen_start_top = onscreen_start_bottom;
+			onscreen_start_bottom = swap_value;
+		}
+
+		// Calculate the new layer width and height
+		((layer_highlight *) layer_data->object_data)->width = width = onscreen_start_right - onscreen_start_left;
+		((layer_highlight *) layer_data->object_data)->height = height = onscreen_start_bottom - onscreen_start_top;
+
+		// Bounds check the starting x offset, then update the object with the new value
+		layer_data->x_offset_start = CLAMP(onscreen_start_left, 1, project_width - width - 2);
+
+		// Bounds check the finishing x offset, then update the object with the new value
+		layer_data->x_offset_finish = CLAMP(onscreen_start_left + x_change, 1, project_width - width - 2);
+
+		// Bounds check the starting y offset, then update the object with the new value
+		layer_data->y_offset_start = CLAMP(onscreen_start_top, 1, project_height - height - 2);
+
+		// Bounds check the finishing y offset, then update the object with the new value
+		layer_data->y_offset_finish = CLAMP(onscreen_start_top + y_change, 1, project_height - height - 2);
+
+		// Update the timeline widget with the new offsets
+		gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
+							TIMELINE_X_OFF_START, layer_data->x_offset_start, -1);
+		gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
+							TIMELINE_Y_OFF_START, layer_data->y_offset_start, -1);
+		gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
+							TIMELINE_X_OFF_FINISH, layer_data->x_offset_finish, -1);
+		gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
+							TIMELINE_Y_OFF_FINISH, layer_data->y_offset_finish, -1);
+
+		// Redraw the workspace
+		draw_workspace();
+
+		// Tell (force) the window system to redraw the working area *immediately*
+		gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+
+		// Recreate the slide thumbnail
+		film_strip_create_thumbnail((slide *) current_slide->data);
+
+		// Reset the resize switch and related info
+		resize_handles_status = RESIZE_HANDLES_WAITING;
+		stored_x = -1;
+		stored_y = -1;
+
+		// Free the allocated memory
+		g_free(selected_row);
+
+		// Use the status bar to give further feedback to the user
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer resized");
+		gdk_flush();
+
+		return TRUE;
+	}
+
 	// If this release matches the end of a mouse drag operation, we process it
 	if (TRUE == mouse_dragging)
 	{
@@ -156,8 +265,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 					return TRUE;
 
 				case TYPE_HIGHLIGHT:
-					present_x = layer_data->x_offset_start;
-					present_y = layer_data->y_offset_start;
 					width = ((layer_highlight *) layer_data->object_data)->width;
 					height = ((layer_highlight *) layer_data->object_data)->height;
 					break;
@@ -173,22 +280,16 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 					}
 
 					// No it's not, so process it
-					present_x = layer_data->x_offset_start;
-					present_y = layer_data->y_offset_start;
 					width = ((layer_image *) layer_data->object_data)->width;
 					height = ((layer_image *) layer_data->object_data)->height;
 					break;
 
 				case TYPE_MOUSE_CURSOR:
-					present_x = layer_data->x_offset_start;
-					present_y = layer_data->y_offset_start;
 					width = ((layer_mouse *) layer_data->object_data)->width;
 					height = ((layer_mouse *) layer_data->object_data)->height;
 					break;
 
 				case TYPE_TEXT:
-					present_x = layer_data->x_offset_start;
-					present_y = layer_data->y_offset_start;
 					width = ((layer_text *) layer_data->object_data)->rendered_width;
 					height = ((layer_text *) layer_data->object_data)->rendered_height;
 					break;
