@@ -68,6 +68,7 @@ extern GIOChannel			*output_file;
 extern gboolean				project_active;
 extern gulong				resolution_callback;
 extern GtkComboBox			*resolution_selector;
+extern gboolean				resize_handles;
 extern GtkWidget			*right_side;
 extern gboolean				screenshots_enabled;
 extern gint					screenshot_command_num;

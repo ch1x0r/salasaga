@@ -108,6 +108,7 @@ GIOChannel				*output_file;				// The output file handle
 gboolean				project_active;				// Whether or not a project is active (i.e. something is loaded or has been created)
 gulong					resolution_callback;		// Holds the id of the resolution selector callback
 GtkComboBox				*resolution_selector;		// Widget for the resolution selector
+gboolean				resize_handles;				// Are the layer resize handles active
 GtkWidget				*right_side;				// Widget for the right side area
 gboolean				screenshots_enabled = FALSE;  // Toggle for whether to enable screenshots
 gint					screenshot_command_num = -1;  // The metacity run command number used for the screenshot key
