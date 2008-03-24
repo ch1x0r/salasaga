@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom, guint handle_size);
+gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom);
 
 #ifdef __cplusplus
 }
