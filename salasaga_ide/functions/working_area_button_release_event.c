@@ -241,6 +241,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 			// Free the allocated memory
 			g_free(selected_row);
+
+			// Use the status bar to give further feedback to the user
+			gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer moved");
+			gdk_flush();
 		}
 	}
 
