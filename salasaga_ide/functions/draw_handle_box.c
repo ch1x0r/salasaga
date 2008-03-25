@@ -54,11 +54,11 @@ gboolean draw_handle_box(void)
 	gint				onscreen_top;				// Y coordinate of bounding box top
 	gint				present_x;
 	gint				present_y;
+	guint				required_size_for_handles;	// Minimum size we need in order to draw any resize handles
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	guint				selected_layer;				// Holds the number of the layer that is selected
 	gint				width;
-
 	GtkTreePath			*tmp_path;					// Temporary path
 
 
@@ -150,11 +150,15 @@ gboolean draw_handle_box(void)
 	// Draw a bounding box onscreen
 	draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
 
-	// If this is a highlight layer, then draw the handle box handles onscreen and mark them as active
+	// If this is a highlight layer and it's not too small, then draw the handle box handles onscreen and mark them as active
 	if (TYPE_HIGHLIGHT == layer_data->object_type)
 	{
-		draw_resize_handles(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
-		resize_handles_status = RESIZE_HANDLES_WAITING;
+		required_size_for_handles = (resize_handle_size * 2) + 1;
+		if ((required_size_for_handles < width) && (required_size_for_handles < height))
+		{
+			draw_resize_handles(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
+			resize_handles_status = RESIZE_HANDLES_WAITING;
+		}
 	} else
 	{
 		resize_handles_status = RESIZE_HANDLES_INACTIVE;
