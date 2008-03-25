@@ -303,6 +303,8 @@ typedef struct
 	GtkWidget			*timeline_widget;
 	GtkListStore		*layer_store;
 	guint				duration;
+	GdkPixbuf			*scaled_cached_pixbuf;
+	gboolean			cached_pixbuf_valid;	
 } slide;
 
 // Defines the information needed for each element of the swf timing array

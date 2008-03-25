@@ -528,6 +528,8 @@ gboolean project_read(gchar *filename)
 										G_TYPE_UINT,  // TIMELINE_Y_OFF_START
 										G_TYPE_UINT,  // TIMELINE_X_OFF_FINISH
 										G_TYPE_UINT);  // TIMELINE_Y_OFF_FINISH
+			tmp_slide->scaled_cached_pixbuf = NULL;
+			tmp_slide->cached_pixbuf_valid = FALSE;
 
 			// Process each layer
 			this_layer = this_slide->xmlChildrenNode;

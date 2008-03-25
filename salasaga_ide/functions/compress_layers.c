@@ -43,7 +43,7 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
 	GdkPixbuf			*backing_pixbuf;			// Pixbuf buffer things draw onto
 	layer				*layer_data;				// Pointer to the layer data
 	GList				*layer_pointer;				// Pointer to the layer GList
-	GdkPixbuf			*scaled_pixbuf;				// Smaller pixbuf
+	gboolean			use_cached_pixbuf;			// Should we use the cached pixbuf?
 	slide				*slide_ref;					// Pointer to the slide data
 
 
@@ -52,21 +52,58 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
 	layer_pointer = g_list_last(slide_ref->layers);  // The background layer is always the last (bottom) layer
 	layer_data = layer_pointer->data;
 
-	// Check if this is an empty slide
-	if (TYPE_EMPTY == layer_data->object_type)
+	// Determine if we have a cached background pixbuf we can reuse
+	use_cached_pixbuf = FALSE;
+	if (TRUE == slide_ref->cached_pixbuf_valid)
 	{
-		// This is an empty layer
-		bg_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, project_width, project_height);
-		gdk_pixbuf_fill(bg_pixbuf, ((((layer_empty *) layer_data->object_data)->bg_color.red / 255) << 24)
-			+ ((((layer_empty *) layer_data->object_data)->bg_color.green / 255) << 16)
-			+ ((((layer_empty *) layer_data->object_data)->bg_color.blue / 255) << 8) + 0xff);
-	} else
-	{
-		bg_pixbuf = GDK_PIXBUF((GObject *) ((layer_image *) layer_data->object_data)->image_data);
+		// There's a pixbuf cached, but is it the required size?
+		if ((height == gdk_pixbuf_get_height(slide_ref->scaled_cached_pixbuf)) && (width == gdk_pixbuf_get_width(slide_ref->scaled_cached_pixbuf)))
+			use_cached_pixbuf = TRUE;
 	}
 
-	// Copy the background image onto the drawing buffer (backing_pixbuf)
-	backing_pixbuf = gdk_pixbuf_add_alpha(bg_pixbuf, FALSE, 0, 0, 0);
+	// Do we have a cached background pixbuf we can use?
+	if (FALSE == use_cached_pixbuf)
+	{
+		// * No we don't, so we need to generate a new one *
+
+		// Check if this is an empty slide
+		if (TYPE_EMPTY == layer_data->object_type)
+		{
+			// This is an empty layer
+			backing_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width, height);
+			gdk_pixbuf_fill(backing_pixbuf, ((((layer_empty *) layer_data->object_data)->bg_color.red / 255) << 24)
+				+ ((((layer_empty *) layer_data->object_data)->bg_color.green / 255) << 16)
+				+ ((((layer_empty *) layer_data->object_data)->bg_color.blue / 255) << 8) + 0xff);
+		} else
+		{
+			// Point to the background image pixbuf for the source
+			bg_pixbuf = GDK_PIXBUF((GObject *) ((layer_image *) layer_data->object_data)->image_data);
+	
+			if ((width != gdk_pixbuf_get_width(bg_pixbuf)) || (height != gdk_pixbuf_get_height(bg_pixbuf)))
+			{
+				// Scale the background image pixbuf to the desired size
+				backing_pixbuf = gdk_pixbuf_scale_simple(bg_pixbuf, width, height, GDK_INTERP_TILES);
+			} else
+			{
+				// The existing background image pixbuf is already the correct size
+				backing_pixbuf = gdk_pixbuf_copy(bg_pixbuf);
+			}
+		}
+
+		// If there's an existing cache backing pixbuf, we free it
+		if (NULL != slide_ref->scaled_cached_pixbuf)
+		{
+			g_object_unref(slide_ref->scaled_cached_pixbuf);
+		}
+
+		// Cache the new backing pixbuf
+		slide_ref->scaled_cached_pixbuf = gdk_pixbuf_copy(backing_pixbuf);
+		slide_ref->cached_pixbuf_valid = TRUE;
+	} else
+	{
+		// Yes we do, so reuse the existing pixbuf
+		backing_pixbuf = gdk_pixbuf_copy(slide_ref->scaled_cached_pixbuf);
+	}
 
 	// Process each layer's data in turn.  We do the reverse() twice so things are drawn in visually correct order
 	layer_pointer = g_list_first(layer_pointer);
@@ -74,33 +111,6 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
 	g_list_foreach(layer_pointer, compress_layers_inner, backing_pixbuf);
 	layer_pointer = g_list_reverse(layer_pointer);
 
-	// Is the pixbuf at the correct dimensions already?
-	if ((width != gdk_pixbuf_get_width(backing_pixbuf)) || (height != gdk_pixbuf_get_height(backing_pixbuf)))
-	{
-		// Scale the composited pixbuf to the desired size
-		scaled_pixbuf = gdk_pixbuf_scale_simple(backing_pixbuf, width, height, GDK_INTERP_TILES);
-
-		// Free the memory allocated in this function
-		if (NULL != backing_pixbuf) g_object_unref(backing_pixbuf);
-		if (TYPE_EMPTY == layer_data->object_type)
-		{
-			g_object_unref(bg_pixbuf);
-		}
-
-		// Return the newly scaled pixbuf
-		return scaled_pixbuf;
-
-	} else
-	{
-		// * The present size is fine *
-
-		// Free the memory allocated in this function
-		if (TYPE_EMPTY == layer_data->object_type)
-		{
-			g_object_unref(bg_pixbuf);
-		}
-
-		// Return the pixbuf
-		return backing_pixbuf;
-	}
+	// Return the newly scaled pixbuf
+	return backing_pixbuf;
 }
