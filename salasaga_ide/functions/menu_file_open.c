@@ -200,9 +200,6 @@ void menu_file_open(void)
 	// Draw the timeline area
 	draw_timeline();
 
-	// Draw the workspace area
-	draw_workspace();
-
 	// Scroll the film strip to show the new thumbnail position
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
 	if (NULL != new_path)
