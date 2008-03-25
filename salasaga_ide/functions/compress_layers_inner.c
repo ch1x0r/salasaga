@@ -87,8 +87,6 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 	pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
 	scaled_height_ratio = (gfloat) pixbuf_height / (gfloat) project_height;
 	scaled_width_ratio = (gfloat) pixbuf_width / (gfloat) project_width;
-//	scaled_height_ratio = (gfloat) project_height / (gfloat) pixbuf_height;
-//	scaled_width_ratio = (gfloat) project_width / (gfloat) pixbuf_width;
 
 	// Determine the type of layer we're dealing with (we ignore background layers)
 	switch (layer_pointer->object_type)
