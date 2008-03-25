@@ -153,7 +153,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the width input
-	width_button = gtk_spin_button_new_with_range(0, valid_fields[HIGHLIGHT_WIDTH].max_value, 10);
+	width_button = gtk_spin_button_new_with_range(valid_fields[HIGHLIGHT_WIDTH].min_value, valid_fields[HIGHLIGHT_WIDTH].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(width_button), tmp_highlight_ob->width);
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
@@ -164,7 +164,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the height input
-	height_button = gtk_spin_button_new_with_range(0, valid_fields[HIGHLIGHT_HEIGHT].max_value, 10);
+	height_button = gtk_spin_button_new_with_range(valid_fields[HIGHLIGHT_HEIGHT].min_value, valid_fields[HIGHLIGHT_HEIGHT].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(height_button), tmp_highlight_ob->height);
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
