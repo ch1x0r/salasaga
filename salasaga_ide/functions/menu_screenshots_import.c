@@ -116,8 +116,8 @@ void menu_screenshots_import(void)
 	// * Scan the given directory for screenshot files to import *
 	while ((dir_entry = g_dir_read_name(dir_ptr)) != NULL)
 	{
-		// Look for files starting with the same name as the project
-		if (g_str_has_prefix(dir_entry, project_name->str))
+		// Look for files starting with the word "screenshot"
+		if (g_str_has_prefix(dir_entry, "screenshot"))
 		{
 			// The directory entry starts with the correct prefix, now let's check the file extension
 			if (g_str_has_suffix(dir_entry, ".png"))
@@ -187,7 +187,7 @@ void menu_screenshots_import(void)
 	if (0 == num_screenshots)
 	{
 		// Display the warning message using our function
-		g_string_printf(tmp_string, "Error ED05: No screenshots found in screenshot folder:\n\n  %s\n\nThey are case sensitive and must be named:\n\n  <ProjectName><Sequential Number>.png\n\ni.e.:\n\n\t%s0001.png\n\t%s0002.png", screenshots_folder->str, project_name->str, project_name->str);
+		g_string_printf(tmp_string, "Error ED05: No screenshots found in screenshot folder:\n\n  %s\n\nThey are case sensitive and must be named:\n\n  screenshot<Sequential Number>.png\n\ni.e.:\n\n\tscreenshot0001.png\n\tscreenshot0002.png", screenshots_folder->str);
 		display_warning(tmp_string->str);
 
 		return;
