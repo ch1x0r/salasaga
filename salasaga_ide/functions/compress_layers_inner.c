@@ -60,6 +60,9 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 	gint					width;					//
 	gint					height;					//
 
+	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio 
+	gfloat					scaled_width_ratio;		// Used to calculate a horizontal scaling ratio
+
 	GdkColormap				*tmp_colormap;			// Temporary colormap
 	GdkPixbuf				*tmp_pixbuf;			// GDK Pixbuf
 	GdkPixmap				*tmp_pixmap;			// GDK Pixmap
@@ -79,6 +82,14 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 		return;
 	}
 
+	// Calculate the height and width scaling values for the requested layer size
+	pixbuf_height = gdk_pixbuf_get_height(tmp_pixbuf);
+	pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
+	scaled_height_ratio = (gfloat) pixbuf_height / (gfloat) project_height;
+	scaled_width_ratio = (gfloat) pixbuf_width / (gfloat) project_width;
+//	scaled_height_ratio = (gfloat) project_height / (gfloat) pixbuf_height;
+//	scaled_width_ratio = (gfloat) project_width / (gfloat) pixbuf_width;
+
 	// Determine the type of layer we're dealing with (we ignore background layers)
 	switch (layer_pointer->object_type)
 	{
@@ -86,12 +97,10 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			// * We're processing an image layer *
 
 			// Calculate how much of the source image will fit onto the backing pixmap
-			pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
-			pixbuf_height = gdk_pixbuf_get_height(tmp_pixbuf);
-			x_offset = layer_pointer->x_offset_start;
-			y_offset = layer_pointer->y_offset_start;
-			width = ((layer_image *) layer_pointer->object_data)->width;
-			height = ((layer_image *) layer_pointer->object_data)->height;
+			x_offset = layer_pointer->x_offset_start * scaled_width_ratio;
+			y_offset = layer_pointer->y_offset_start * scaled_height_ratio;
+			width = ((layer_image *) layer_pointer->object_data)->width * scaled_width_ratio;
+			height = ((layer_image *) layer_pointer->object_data)->height * scaled_height_ratio;
 			if ((x_offset + width) > pixbuf_width)
 			{
 				width = pixbuf_width - x_offset;
@@ -110,8 +119,9 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			height,							// Height
 			x_offset,						// Source offsets
 			y_offset,						// Source offsets
-			1, 1,							// Scale factor (1 == no scale)
-			GDK_INTERP_NEAREST,					// Scaling type
+			scaled_width_ratio,				// Scale X
+			scaled_height_ratio,			// Scale Y
+			GDK_INTERP_TILES,				// Scaling type
 			255);							// Alpha
 			user_data = (GdkPixbuf *) tmp_pixbuf;
 
@@ -128,12 +138,10 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			}
 
 			// Calculate how much of the source image will fit onto the backing pixmap
-			pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
-			pixbuf_height = gdk_pixbuf_get_height(tmp_pixbuf);
-			x_offset = layer_pointer->x_offset_start;
-			y_offset = layer_pointer->y_offset_start;
-			width = ((layer_mouse *) layer_pointer->object_data)->width;
-			height = ((layer_mouse *) layer_pointer->object_data)->height;
+			x_offset = layer_pointer->x_offset_start * scaled_width_ratio;
+			y_offset = layer_pointer->y_offset_start * scaled_height_ratio;
+			width = ((layer_mouse *) layer_pointer->object_data)->width * scaled_width_ratio;
+			height = ((layer_mouse *) layer_pointer->object_data)->height * scaled_height_ratio;
 			if ((x_offset + width) > pixbuf_width)
 			{
 				width = pixbuf_width - x_offset;
@@ -144,7 +152,7 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			}
 
 			// Draw the mouse pointer onto the backing pixbuf
-			gdk_pixbuf_composite(mouse_ptr_pixbuf,			// Source pixbuf
+			gdk_pixbuf_composite(mouse_ptr_pixbuf,  // Source pixbuf
 			tmp_pixbuf,						// Destination pixbuf
 			x_offset,						// X offset
 			y_offset,						// Y offset
@@ -152,8 +160,9 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			height,							// Height
 			x_offset,						// Source offsets
 			y_offset,						// Source offsets
-			1, 1,							// Scale factor (1 == no scale)
-			GDK_INTERP_NEAREST,					// Scaling type
+			scaled_width_ratio,				// Scale X
+			scaled_height_ratio,			// Scale Y
+			GDK_INTERP_TILES,				// Scaling type
 			255);							// Alpha
 			user_data = (GdkPixbuf *) tmp_pixbuf;
 			return;
@@ -170,7 +179,7 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			pango_layout = pango_layout_new(pango_context);
 			font_description = pango_context_get_font_description(pango_context);
 			pango_font_description_set_size(font_description,
-				PANGO_SCALE * ((layer_text *) layer_pointer->object_data)->font_size);
+				PANGO_SCALE * ((layer_text *) layer_pointer->object_data)->font_size * scaled_height_ratio);
 			pango_font_description_set_family(font_description, "Bitstream Vera Sans");  // "Sans", "Serif", "Monospace"
 			pango_font_description_set_style(font_description, PANGO_STYLE_NORMAL);
 			pango_font_description_set_variant(font_description, PANGO_VARIANT_NORMAL);
@@ -187,12 +196,10 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			pango_layout_get_size(pango_layout, &pango_width, &pango_height);
 
 			// Calculate how much of the background will fit onto the backing pixmap
-			pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
-			pixbuf_height = gdk_pixbuf_get_height(tmp_pixbuf);
-			x_offset = layer_pointer->x_offset_start - 10;
-			y_offset = layer_pointer->y_offset_start - 2;
-			width = (pango_width / PANGO_SCALE) + 20;
-			height = (pango_height / PANGO_SCALE) + 4;
+			x_offset = (layer_pointer->x_offset_start - 10) * scaled_width_ratio;
+			y_offset = (layer_pointer->y_offset_start - 2) * scaled_height_ratio;
+			width = (pango_width / PANGO_SCALE) + (20 * scaled_width_ratio);
+			height = (pango_height / PANGO_SCALE) + (4 * scaled_height_ratio);
 			if ((x_offset + width) > pixbuf_width)
 			{
 				width = pixbuf_width - x_offset - 1;
@@ -214,10 +221,10 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			((layer_text *) layer_pointer->object_data)->rendered_width = width;
 			((layer_text *) layer_pointer->object_data)->rendered_height = height;
 
-			// Draw the highlight box (or as much as will fit)
+			// Draw the text background box (or as much as will fit)
 			draw_highlight_box(tmp_pixbuf, x_offset, y_offset, width, height,
 			0xFFFFCCFF,						// Fill color - light yellow
-			0x000000FF);						// Border color - black
+			0x000000FF);					// Border color - black
 
 			// Turn the pixbuf into a pixmap
 			tmp_colormap = gdk_colormap_get_system();
@@ -235,8 +242,8 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 
 			// Position the text
 			pango_matrix_translate(&pango_matrix,
-				layer_pointer->x_offset_start,
-				layer_pointer->y_offset_start);
+				layer_pointer->x_offset_start * scaled_width_ratio,
+				layer_pointer->y_offset_start * scaled_height_ratio);
 			pango_context_set_matrix(pango_context, &pango_matrix);
 
 			// Render the text onto the pixmap
@@ -265,12 +272,10 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			// 0x00FF00CC : Good border color
 
 			// Calculate how much of the highlight will fit onto the backing pixmap
-			pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
-			pixbuf_height = gdk_pixbuf_get_height(tmp_pixbuf);
-			x_offset = layer_pointer->x_offset_start;
-			y_offset = layer_pointer->y_offset_start;
-			width = ((layer_highlight *) layer_pointer->object_data)->width;
-			height = ((layer_highlight *) layer_pointer->object_data)->height;
+			x_offset = layer_pointer->x_offset_start * scaled_width_ratio;
+			y_offset = layer_pointer->y_offset_start * scaled_height_ratio;
+			width = ((layer_highlight *) layer_pointer->object_data)->width * scaled_width_ratio;
+			height = ((layer_highlight *) layer_pointer->object_data)->height * scaled_height_ratio;
 			if ((x_offset + width) > pixbuf_width)
 			{
 				width = pixbuf_width - x_offset;
