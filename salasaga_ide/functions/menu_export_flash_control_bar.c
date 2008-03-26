@@ -44,6 +44,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	gfloat				button_x;
 	gfloat				button_y;
 	SWFDisplayItem		buttons_display_item;
+	GString				*file_name_full;
 	gchar				*image_path;
 	gint				i;
 	SWFAction			main_movie_action;
@@ -293,10 +294,12 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	control_bar_x = cb_size_array[cb_index].cb_start_x;
 	control_bar_y = cb_size_array[cb_index].cb_start_y;
 
+	// Initialise various things
 	slides = g_list_first(slides);
 	num_slides = g_list_length(slides);
-	slide_names_gstring = g_string_new(NULL);
+	file_name_full = g_string_new(NULL); 
 	slide_name_tmp = g_string_new(NULL);
+	slide_names_gstring = g_string_new(NULL);
 
 	// Ensure the swf output starts out in the correct play state and the play button is correct
 	if (START_BEHAVIOUR_PLAY == start_behaviour)
@@ -356,12 +359,14 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	SWFMovie_add(main_movie, (SWFBlock) main_movie_action);
 
 	// Create a background for the control bar buttons to go on
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "background.svg", NULL);
-	cb_background = swf_shape_from_image_file(image_path, control_bar_width, control_bar_height);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "background", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	cb_background = swf_shape_from_image_file(file_name_full->str, control_bar_width, control_bar_height);
 	if (NULL == cb_background)
 	{
-		// Loading images isn't working.
-		g_free(image_path);
+		// Loading images isn't working
+		g_string_free(file_name_full, TRUE);
 		return FALSE;
 	}
 
@@ -369,35 +374,38 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	// *** Create the Restart button ***
 
 	// Load restart button's UP state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_up.svg", NULL);
-	restart_shape_up = swf_shape_from_image_file(image_path, button_width, button_width);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_up", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	restart_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == restart_shape_up)
 	{
 		// Loading images isn't working.
-		g_free(image_path);
 		destroySWFShape(cb_background);
 		return FALSE;
 	}
 
 	// Load restart button's OVER state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_over.svg", NULL);
-	restart_shape_over = swf_shape_from_image_file(image_path, button_width, button_width);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_over", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	restart_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == restart_shape_over)
 	{
 		// Loading images isn't working.
-		g_free(image_path);
 		destroySWFShape(cb_background);
 		destroySWFShape(restart_shape_up);
 		return FALSE;
 	}
 
 	// Load restart button's DOWN state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_down.svg", NULL);
-	restart_shape_down = swf_shape_from_image_file(image_path, button_width, button_width);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_down", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	restart_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == restart_shape_down)
 	{
 		// Loading images isn't working.
-		g_free(image_path);
 		destroySWFShape(cb_background);
 		destroySWFShape(restart_shape_up);
 		destroySWFShape(restart_shape_over);
@@ -444,35 +452,38 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 //	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
 //	{
 		// Load rewind button's UP state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_up.svg", NULL);
-		rewind_shape_up = swf_shape_from_image_file(image_path, button_width, button_width);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_up", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		g_free(image_path);
+		rewind_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == rewind_shape_up)
 		{
 			// Loading images isn't working.
-			g_free(image_path);
 			destroySWFShape(cb_background);
 			return FALSE;
 		}
 
 		// Load rewind button's OVER state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_over.svg", NULL);
-		rewind_shape_over = swf_shape_from_image_file(image_path, button_width, button_width);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_over", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		g_free(image_path);
+		rewind_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == rewind_shape_over)
 		{
 			// Loading images isn't working.
-			g_free(image_path);
 			destroySWFShape(cb_background);
 			destroySWFShape(rewind_shape_up);
 			return FALSE;
 		}
 
 		// Load rewind button's DOWN state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_down.svg", NULL);
-		rewind_shape_down = swf_shape_from_image_file(image_path, button_width, button_width);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_down", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		g_free(image_path);
+		rewind_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == rewind_shape_down)
 		{
 			// Loading images isn't working.
-			g_free(image_path);
 			destroySWFShape(cb_background);
 			destroySWFShape(rewind_shape_up);
 			destroySWFShape(rewind_shape_over);
@@ -563,35 +574,38 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	// *** Create the Pause button ***
 
 	// Load pause button's UP state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_up.svg", NULL);
-	pause_shape_up = swf_shape_from_image_file(image_path, button_width, button_width);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_up", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	pause_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == pause_shape_up)
 	{
 		// Loading images isn't working.
-		g_free(image_path);
 		destroySWFShape(cb_background);
 		return FALSE;
 	}
 
 	// Load pause button's OVER state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_over.svg", NULL);
-	pause_shape_over = swf_shape_from_image_file(image_path, button_width, button_width);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_over", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	pause_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == pause_shape_over)
 	{
 		// Loading images isn't working.
-		g_free(image_path);
 		destroySWFShape(cb_background);
 		destroySWFShape(pause_shape_up);
 		return FALSE;
 	}
 
 	// Load pause button's DOWN state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_down.svg", NULL);
-	pause_shape_down = swf_shape_from_image_file(image_path, button_width, button_width);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_down", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	pause_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == pause_shape_down)
 	{
 		// Loading images isn't working.
-		g_free(image_path);
 		destroySWFShape(cb_background);
 		destroySWFShape(pause_shape_up);
 		destroySWFShape(pause_shape_over);
@@ -629,35 +643,38 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	// *** Create the Play button ***
 
 	// Load play button's UP state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_up.svg", NULL);
-	play_shape_up = swf_shape_from_image_file(image_path, button_width, button_width);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_up", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	play_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == play_shape_up)
 	{
 		// Loading images isn't working.
-		g_free(image_path);
 		destroySWFShape(cb_background);
 		return FALSE;
 	}
 
 	// Load play button's OVER state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_over.svg", NULL);
-	play_shape_over = swf_shape_from_image_file(image_path, button_width, button_width);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_over", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	play_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == play_shape_over)
 	{
 		// Loading images isn't working.
-		g_free(image_path);
 		destroySWFShape(cb_background);
 		destroySWFShape(play_shape_up);
 		return FALSE;
 	}
 
 	// Load play button's DOWN state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_down.svg", NULL);
-	play_shape_down = swf_shape_from_image_file(image_path, button_width, button_width);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_down", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	play_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == play_shape_down)
 	{
 		// Loading images isn't working.
-		g_free(image_path);
 		destroySWFShape(cb_background);
 		destroySWFShape(play_shape_up);
 		destroySWFShape(play_shape_over);
@@ -702,35 +719,38 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 //	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
 //	{
 		// Load forward button's UP state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_up.svg", NULL);
-		forward_shape_up = swf_shape_from_image_file(image_path, button_width, button_width);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_up", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		g_free(image_path);
+		forward_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == forward_shape_up)
 		{
 			// Loading images isn't working.
-			g_free(image_path);
 			destroySWFShape(cb_background);
 			return FALSE;
 		}
 
 		// Load forward button's OVER state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_over.svg", NULL);
-		forward_shape_over = swf_shape_from_image_file(image_path, button_width, button_width);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_over", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		g_free(image_path);
+		forward_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == forward_shape_over)
 		{
 			// Loading images isn't working.
-			g_free(image_path);
 			destroySWFShape(cb_background);
 			destroySWFShape(forward_shape_up);
 			return FALSE;
 		}
 
 		// Load forward button's DOWN state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_down.svg", NULL);
-		forward_shape_down = swf_shape_from_image_file(image_path, button_width, button_width);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_down", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		g_free(image_path);
+		forward_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == forward_shape_down)
 		{
 			// Loading images isn't working.
-			g_free(image_path);
 			destroySWFShape(cb_background);
 			destroySWFShape(forward_shape_up);
 			destroySWFShape(forward_shape_over);
@@ -807,35 +827,38 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	// *** Create the Finish button ***
 
 	// Load finish button's UP state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3rightarrow_up.svg", NULL);
-	finish_shape_up = swf_shape_from_image_file(image_path, button_width, button_width);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3rightarrow_up", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	finish_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == finish_shape_up)
 	{
 		// Loading images isn't working.
-		g_free(image_path);
 		destroySWFShape(cb_background);
 		return FALSE;
 	}
 
 	// Load finish button's OVER state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3rightarrow_over.svg", NULL);
-	finish_shape_over = swf_shape_from_image_file(image_path, button_width, button_width);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3rightarrow_over", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	finish_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == finish_shape_over)
 	{
 		// Loading images isn't working.
-		g_free(image_path);
 		destroySWFShape(cb_background);
 		destroySWFShape(finish_shape_up);
 		return FALSE;
 	}
 
 	// Load finish button's DOWN state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3rightarrow_down.svg", NULL);
-	finish_shape_down = swf_shape_from_image_file(image_path, button_width, button_width);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3rightarrow_down", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	finish_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == finish_shape_down)
 	{
 		// Loading images isn't working.
-		g_free(image_path);
 		destroySWFShape(cb_background);
 		destroySWFShape(finish_shape_up);
 		destroySWFShape(finish_shape_over);
@@ -948,7 +971,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	SWFDisplayItem_moveTo(buttons_display_item, control_bar_x, control_bar_y);
 
 	// Free the memory allocated in the function thus far
-	g_free(image_path);
+	g_string_free(file_name_full, TRUE);
 
 	// Control bar was created successfully, so indicate this
 	return TRUE;
