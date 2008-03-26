@@ -216,8 +216,8 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			}
 
 			// Store the calculated width and height so we can do collision detection in the event handler
-			((layer_text *) layer_pointer->object_data)->rendered_width = width;
-			((layer_text *) layer_pointer->object_data)->rendered_height = height;
+			((layer_text *) layer_pointer->object_data)->rendered_width = width / scaled_width_ratio;
+			((layer_text *) layer_pointer->object_data)->rendered_height = height / scaled_height_ratio;
 
 			// Draw the text background box (or as much as will fit)
 			draw_highlight_box(tmp_pixbuf, x_offset, y_offset, width, height,
