@@ -74,6 +74,10 @@ void slide_insert(void)
 	tmp_layer->y_offset_start = 0;
 	tmp_layer->x_offset_finish = 0;
 	tmp_layer->y_offset_finish = 0;
+	tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+	tmp_layer->transition_in_duration = 0.0;
+	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+	tmp_layer->transition_out_duration = 0.0;
 
 	// Create a blank thumbnail using the default background color
 	tmp_gdk_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, (guint) preview_width * 0.75);

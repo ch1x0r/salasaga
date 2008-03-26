@@ -222,6 +222,10 @@ void menu_screenshots_import(void)
 		tmp_layer->y_offset_start = 0;
 		tmp_layer->x_offset_finish = 0;
 		tmp_layer->y_offset_finish = 0;
+		tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+		tmp_layer->transition_in_duration = 0.0;
+		tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+		tmp_layer->transition_out_duration = 0.0;
 
 		// Work out the full path to the image file
 		g_string_printf(tmp_string, "%s%c", screenshots_folder->str, G_DIR_SEPARATOR);

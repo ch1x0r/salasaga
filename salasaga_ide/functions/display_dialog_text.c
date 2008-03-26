@@ -40,7 +40,8 @@
 gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 {
 	// Local variables
-	gfloat				gfloat_val;					// Temporary gfloat value used for validation	
+	gfloat				gfloat_val;					// Temporary gfloat value used for validation
+	gint				gint_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
 	guint				row_counter = 0;			// Used to count which row things are up to
 	GtkDialog			*text_dialog;				// Widget for the text dialog
@@ -52,6 +53,10 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	guint				valid_finish_frame;			// Receives the new finish frame once validated
 	gfloat				valid_font_size;			// Receives the new font size once validated
 	guint				valid_start_frame;			// Receives the new start frame once validated
+	gfloat				valid_trans_in_duration;	// Receives the new appearance transition duration once validated
+	guint				valid_trans_in_type;		// Receives the new appearance transition type once validated
+	gfloat				valid_trans_out_duration;	// Receives the new exit transition duration once validated
+	guint				valid_trans_out_type;		// Receives the new exit transition type once validated
 	guint				valid_x_offset_finish;		// Receives the new finish frame x offset once validated
 	guint				valid_x_offset_start;		// Receives the new start frame x offset once validated
 	guint				valid_y_offset_finish;		// Receives the new finish frame y offset once validated
@@ -99,6 +104,18 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 
 	GtkWidget			*external_link_win_label;	// Label widget
 	GtkWidget			*external_link_win_entry;	//
+
+	GtkWidget			*label_trans_in_type;		// Transition in type
+	GtkWidget			*selector_trans_in_type;	//
+
+	GtkWidget			*label_trans_in_duration;	// Transition in duration (seconds)
+	GtkWidget			*button_trans_in_duration;	//
+
+	GtkWidget			*label_trans_out_type;		// Transition out type
+	GtkWidget			*selector_trans_out_type;	//
+
+	GtkWidget			*label_trans_out_duration;	// Transition out duration (seconds)
+	GtkWidget			*button_trans_out_duration;	//
 
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 
@@ -258,6 +275,66 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
+	// Appearance transition type
+	label_trans_in_type = gtk_label_new("Appearance transition: ");
+	gtk_misc_set_alignment(GTK_MISC(label_trans_in_type), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(label_trans_in_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	selector_trans_in_type = gtk_combo_box_new_text();
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "No transition");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "Fade in");
+	switch (tmp_layer->transition_in_type)
+	{
+		case TRANS_LAYER_FADE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_FADE);
+			break;
+
+		default:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_NONE);
+	}
+	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(selector_trans_in_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Appearance transition duration label
+	label_trans_in_duration = gtk_label_new("Appearance (seconds):");
+	gtk_misc_set_alignment(GTK_MISC(label_trans_in_duration), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(label_trans_in_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Appearance transition duration entry
+	button_trans_in_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_in_duration), tmp_layer->transition_in_duration);
+	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(button_trans_in_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Exit Transition type
+	label_trans_out_type = gtk_label_new("Exit transition: ");
+	gtk_misc_set_alignment(GTK_MISC(label_trans_out_type), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(label_trans_out_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	selector_trans_out_type = gtk_combo_box_new_text();
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "No transition");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "Fade out");
+	switch (tmp_layer->transition_out_type)
+	{
+		case TRANS_LAYER_FADE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_FADE);
+			break;
+
+		default:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_NONE);
+	}
+	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(selector_trans_out_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Exit transition duration label
+	label_trans_out_duration = gtk_label_new("Exit (seconds):");
+	gtk_misc_set_alignment(GTK_MISC(label_trans_out_duration), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(label_trans_out_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Exit transition duration entry
+	button_trans_out_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_out_duration), tmp_layer->transition_out_duration);
+	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(button_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
 	// Ensure everything will show
 	gtk_widget_show_all(GTK_WIDGET(text_dialog));
 
@@ -408,6 +485,58 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			g_string_free(validated_string, TRUE);
 			validated_string = NULL;
 		}
+
+		// Retrieve the transition in type
+		gint_val = gtk_combo_box_get_active(GTK_COMBO_BOX(selector_trans_in_type));
+		if (-1 == gint_val)
+		{
+			// A -1 return means no value was selected
+			display_warning("Error ED309: There was something wrong with the appearance transition type selected.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			// A value was selected
+			valid_trans_in_type = gint_val;
+		}
+
+		// Retrieve the transition in duration
+		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_trans_in_duration));
+		validated_gfloat = validate_value(TRANSITION_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
+		if (NULL == validated_gfloat)
+		{
+			display_warning("Error ED310: There was something wrong with the appearance transition duration value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_trans_in_duration = *validated_gfloat;
+			g_free(validated_gfloat);
+		}
+
+		// Retrieve the transition out type
+		gint_val = gtk_combo_box_get_active(GTK_COMBO_BOX(selector_trans_out_type));
+		if (-1 == gint_val)
+		{
+			// A -1 return means no value was selected
+			display_warning("Error ED311: There was something wrong with the exit transition type selected.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			// A value was selected
+			valid_trans_out_type = gint_val;
+		}
+
+		// Retrieve the transition out duration
+		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_trans_out_duration));
+		validated_gfloat = validate_value(TRANSITION_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
+		if (NULL == validated_gfloat)
+		{
+			display_warning("Error ED312: There was something wrong with the exit transition duration value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_trans_out_duration = *validated_gfloat;
+			g_free(validated_gfloat);
+		}
 	} while (FALSE == useable_input);
 
 	// * We only get here after all input is considered valid *
@@ -423,6 +552,10 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	g_string_printf(tmp_layer->name, "%s", valid_layer_name->str);
 	g_string_printf(tmp_layer->external_link, "%s", valid_ext_link->str);
 	g_string_printf(tmp_layer->external_link_window, "%s", valid_ext_link_win->str);
+	tmp_layer->transition_in_type = valid_trans_in_type;
+	tmp_layer->transition_in_duration = valid_trans_in_duration;
+	tmp_layer->transition_out_type = valid_trans_out_type;
+	tmp_layer->transition_out_duration = valid_trans_out_duration;
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(color_button), &(tmp_text_ob->text_color));
 
 	// Copy the text buffer from the onscreen widget to our existing text buffer

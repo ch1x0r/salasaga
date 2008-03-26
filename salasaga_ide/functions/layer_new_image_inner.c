@@ -86,6 +86,10 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	tmp_layer->name = g_string_new("Image");
 	tmp_layer->external_link = g_string_new(NULL);
 	tmp_layer->external_link_window = g_string_new("_self");
+	tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+	tmp_layer->transition_in_duration = 0.0;
+	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+	tmp_layer->transition_out_duration = 0.0;
 
 	// Display a dialog box to edit these values, using our new image layer object
 	return_code = display_dialog_image(tmp_layer, "Add new image layer", TRUE);

@@ -191,6 +191,12 @@ enum
 	TIMELINE_N_COLUMNS
 };
 
+// The layer transition types
+enum {
+	TRANS_LAYER_NONE,
+	TRANS_LAYER_FADE
+};
+
 // The known layer types
 enum {
 	TYPE_NONE,

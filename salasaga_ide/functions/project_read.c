@@ -558,6 +558,10 @@ gboolean project_read(gchar *filename)
 								tmp_layer->visible = TRUE;
 								tmp_layer->background = TRUE;
 								tmp_layer->external_link_window = g_string_new("_self");
+								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+								tmp_layer->transition_in_duration = 0.0;
+								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+								tmp_layer->transition_out_duration = 0.0;
 
 								// Load the empty layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -734,6 +738,10 @@ gboolean project_read(gchar *filename)
 								tmp_layer->visible = TRUE;
 								tmp_layer->background = FALSE;
 								tmp_layer->external_link_window = g_string_new("_self");
+								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+								tmp_layer->transition_in_duration = 0.0;
+								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+								tmp_layer->transition_out_duration = 0.0;
 
 								// Load the image layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -1062,6 +1070,10 @@ gboolean project_read(gchar *filename)
 								tmp_layer->visible = TRUE;
 								tmp_layer->background = FALSE;
 								tmp_layer->external_link_window = g_string_new("_self");
+								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+								tmp_layer->transition_in_duration = 0.0;
+								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+								tmp_layer->transition_out_duration = 0.0;
 
 								// Load the highlight layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -1283,6 +1295,10 @@ gboolean project_read(gchar *filename)
 								tmp_layer->visible = TRUE;
 								tmp_layer->background = FALSE;
 								tmp_layer->external_link_window = g_string_new("_self");
+								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+								tmp_layer->transition_in_duration = 0.0;
+								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+								tmp_layer->transition_out_duration = 0.0;
 
 								// Load the highlight layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -1527,6 +1543,10 @@ gboolean project_read(gchar *filename)
 								tmp_layer->visible = TRUE;
 								tmp_layer->background = FALSE;
 								tmp_layer->external_link_window = g_string_new("_self");
+								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+								tmp_layer->transition_in_duration = 0.0;
+								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+								tmp_layer->transition_out_duration = 0.0;
 
 								// Load the text layer values
 								this_node = this_layer->xmlChildrenNode;

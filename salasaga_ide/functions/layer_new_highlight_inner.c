@@ -145,6 +145,10 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	tmp_layer->name = g_string_new("Highlight");
 	tmp_layer->external_link = g_string_new(NULL);
 	tmp_layer->external_link_window = g_string_new("_self");
+	tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+	tmp_layer->transition_in_duration = 0.0;
+	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+	tmp_layer->transition_out_duration = 0.0;
 
 	// Display a dialog box to edit these values, using our new highlight layer object
 	return_code = display_dialog_highlight(tmp_layer, "Add new highlight layer");
