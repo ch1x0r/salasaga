@@ -74,29 +74,6 @@ extern "C" {
 #define V_SPACES			256
 #define V_UNDERSCORES		512
 
-// The end behaviour types
-enum {
-	END_BEHAVIOUR_STOP,
-	END_BEHAVIOUR_LOOP_PLAY,
-	END_BEHAVIOUR_LOOP_STOP
-};
-
-// The start behaviour types
-enum {
-	START_BEHAVIOUR_PAUSED,
-	START_BEHAVIOUR_PLAY
-};
-
-// The known layer types
-enum {
-	TYPE_NONE,
-	TYPE_EMPTY,
-	TYPE_GDK_PIXBUF,
-	TYPE_HIGHLIGHT,
-	TYPE_MOUSE_CURSOR,
-	TYPE_TEXT
-};
-
 // The order of the main toolbar buttons
 enum
 {
@@ -111,50 +88,6 @@ enum
 	SEPARATOR_2,
 	EXPORT_FLASH,
 	MAIN_TB_COUNT
-};
-
-// The order of the layer toolbar buttons
-enum
-{
-	LAYER_EDIT,
-	LAYER_CROP,
-	LAYER_DELETE,
-	LAYER_DOWN,
-	LAYER_UP,
-	LAYER_SEPARATOR_1,
-	LAYER_MOUSE,
-	LAYER_TEXT,
-	LAYER_HIGHLIGHT,
-	LAYER_IMAGE,
-	LAYER_TB_COUNT
-};
-
-// Types of mouse click
-enum
-{
-	MOUSE_NONE,
-	MOUSE_LEFT_ONE,
-	MOUSE_LEFT_DOUBLE,
-	MOUSE_LEFT_TRIPLE,
-	MOUSE_RIGHT_ONE,
-	MOUSE_RIGHT_DOUBLE,
-	MOUSE_RIGHT_TRIPLE,
-	MOUSE_MIDDLE_ONE,
-	MOUSE_MIDDLE_DOUBLE,
-	MOUSE_MIDDLE_TRIPLE
-};
-
-// Fields of the timeline widget
-enum
-{
-	TIMELINE_NAME,
-	TIMELINE_VISIBILITY,
-	TIMELINE_DURATION,
-	TIMELINE_X_OFF_START,
-	TIMELINE_Y_OFF_START,
-	TIMELINE_X_OFF_FINISH,
-	TIMELINE_Y_OFF_FINISH,
-	TIMELINE_N_COLUMNS
 };
 
 // Field IDs for the validate_value function
@@ -195,9 +128,77 @@ enum
 	SLIDE_LENGTH,
 	SLIDE_NAME,
 	START_BEHAVIOUR,
+	TRANSITION_DURATION,
 	X_OFFSET,
 	Y_OFFSET,
 	ZOOM_LEVEL
+};
+
+// The end behaviour types
+enum {
+	END_BEHAVIOUR_STOP,
+	END_BEHAVIOUR_LOOP_PLAY,
+	END_BEHAVIOUR_LOOP_STOP
+};
+
+// The order of the layer toolbar buttons
+enum
+{
+	LAYER_EDIT,
+	LAYER_CROP,
+	LAYER_DELETE,
+	LAYER_DOWN,
+	LAYER_UP,
+	LAYER_SEPARATOR_1,
+	LAYER_MOUSE,
+	LAYER_TEXT,
+	LAYER_HIGHLIGHT,
+	LAYER_IMAGE,
+	LAYER_TB_COUNT
+};
+
+// Types of mouse click
+enum
+{
+	MOUSE_NONE,
+	MOUSE_LEFT_ONE,
+	MOUSE_LEFT_DOUBLE,
+	MOUSE_LEFT_TRIPLE,
+	MOUSE_RIGHT_ONE,
+	MOUSE_RIGHT_DOUBLE,
+	MOUSE_RIGHT_TRIPLE,
+	MOUSE_MIDDLE_ONE,
+	MOUSE_MIDDLE_DOUBLE,
+	MOUSE_MIDDLE_TRIPLE
+};
+
+// The start behaviour types
+enum {
+	START_BEHAVIOUR_PAUSED,
+	START_BEHAVIOUR_PLAY
+};
+
+// Fields of the timeline widget
+enum
+{
+	TIMELINE_NAME,
+	TIMELINE_VISIBILITY,
+	TIMELINE_DURATION,
+	TIMELINE_X_OFF_START,
+	TIMELINE_Y_OFF_START,
+	TIMELINE_X_OFF_FINISH,
+	TIMELINE_Y_OFF_FINISH,
+	TIMELINE_N_COLUMNS
+};
+
+// The known layer types
+enum {
+	TYPE_NONE,
+	TYPE_EMPTY,
+	TYPE_GDK_PIXBUF,
+	TYPE_HIGHLIGHT,
+	TYPE_MOUSE_CURSOR,
+	TYPE_TEXT
 };
 
 // * Define the structures used in the application *
@@ -244,6 +245,10 @@ typedef struct
 	void				*dictionary_shape;			// SWF dictionary shape
 	void				*display_list_item;			// SWF display list item
 	gboolean			background;					// Is this the background layer?
+	gint				transition_in_type;			// The type of transition this layer uses to appear (transition in)
+	gfloat				transition_in_duration;		// Number of seconds it takes for the transition in to complete
+	gint				transition_out_type;		// The type of transition this layer uses to disappear (transition out)
+	gfloat				transition_out_duration;	// Number of seconds it takes for the transition out to complete
 } layer;
 
 // Defines the properties making up an empty layer
