@@ -40,8 +40,8 @@
 void menu_project_properties(void)
 {
 	// Local variables
+	gint				gint_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
-	gint				gint_val;					// Temporary guint value
 	GtkDialog			*main_dialog;				// Widget for the main dialog
 	GtkWidget			*proj_dialog_table;			// Table used for neat layout of the labels and fields in project preferences
 	gint				proj_row_counter;			// Used when building the project preferences dialog box
@@ -69,7 +69,7 @@ void menu_project_properties(void)
 	GtkWidget			*label_slide_length;		// Slide Length
 	GtkWidget			*button_slide_length;		//
 
-	GtkWidget			*label_frames_per_second;	// Slide Length
+	GtkWidget			*label_frames_per_second;	// Frames per second 
 	GtkWidget			*button_frames_per_second;	//
 
 	GtkWidget			*label_project_width;		// Project width
