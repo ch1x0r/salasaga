@@ -130,11 +130,11 @@ void create_menu_bar()
 		{"/Export/_Image Layer",		NULL,					menu_export_layer,				0,	"<Item>"},
 
 		{"/_Help",						NULL,					NULL,							0,	"<LastBranch>"},
-		{"/_Help/_About",				NULL,					menu_help_about,				0,	"<Item>"	}
-//		{"/_Help/Sep",					NULL,					NULL,							0,	"<Separator>"},
+		{"/_Help/_About",				NULL,					menu_help_about,				0,	"<Item>"	},
+		{"/_Help/Sep",					NULL,					NULL,							0,	"<Separator>"},
 //		{"/_Help/_Register",			NULL,					menu_help_register,				0,	"<Item>"	},
 //		{"/_Help/_Survey",				NULL,					menu_help_survey,				0,	"<Item>"	},
-//		{"/_Help/_Website",				NULL,					menu_help_website,				0,	"<Item>"	}
+		{"/_Help/_Website",				NULL,					menu_help_website,				0,	"<Item>"	}
 	};  // The menu structure
 	static gint			num_items = sizeof(menu_items) / sizeof(menu_items[0]);	// The number of menu items
 
