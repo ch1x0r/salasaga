@@ -54,7 +54,7 @@ validatation_entry		valid_fields[] =
 	{ PROJECT_FPS,			"Frames per Second for this project",	V_INT_UNSIGNED,		V_NONE,		0,		120 },
 	{ PROJECT_HEIGHT,		"Height of this project",				V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ PROJECT_NAME,			"Name of this project",					V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
-	{ PROJECT_VERSION,		"Version number of the project file",	V_FLOAT_UNSIGNED,	V_NONE,		0,		3.0 },
+	{ PROJECT_VERSION,		"Version number of the project file",	V_FLOAT_UNSIGNED,	V_NONE,		0,		3.1 },
 	{ PROJECT_WIDTH,		"Width of this project",				V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ RESOLUTION,			"An X * Y resolution value",			V_RESOLUTION,		V_NONE,		0,		16 },
 	{ SCREENSHOT_HEIGHT,	"Height for next screenshot",			V_INT_UNSIGNED,		V_NONE,		0,		4096 },
@@ -66,6 +66,7 @@ validatation_entry		valid_fields[] =
 	{ SLIDE_NAME,			"Name of this slide",					V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
 	{ START_BEHAVIOUR, 		"Animation behaviour after loading",	V_CHAR,				V_UNDERSCORES,		0,		6 },
 	{ TRANSITION_DURATION,	"Transition duration in seconds",		V_FLOAT_UNSIGNED,	V_NONE,		0,		20 },
+	{ TRANSITION_TYPE, 		"Type of transition",					V_CHAR,				V_UNDERSCORES,		0,		4 },
 	{ X_OFFSET,				"Y Offset",								V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ Y_OFFSET,				"X Offset"			,					V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ ZOOM_LEVEL,			"Magnification level of working area",	V_ZOOM,				V_NONE,		0,		12 }
