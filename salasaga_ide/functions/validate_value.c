@@ -58,8 +58,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 	gint				string_length;
 	gint				string_max;
 	guint				string_min;
-	guint				value_max;
-	guint				value_min;
+	gfloat				value_max;
+	gfloat				value_min;
 
 
 	// Initialise various things
