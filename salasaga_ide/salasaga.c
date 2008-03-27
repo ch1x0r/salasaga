@@ -305,9 +305,19 @@ gint main(gint argc, gchar *argv[])
 
 			if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
 			{
-				// Unable to determine the location for icons, so generate an error then exit
-				display_warning("Error ED112: Unable to find the icons directory. Exiting.");
-				exit(1);
+				// Not there, try /opt/local/share/salasaga/icons
+				g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "opt", "local", "share", "salasaga", "icons", "72x72", NULL));
+
+				// Display debugging info if requested
+				if (debug_level)
+					printf("Icon path being checked: %s\n", icon_path->str);
+
+				if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
+				{
+					// Unable to determine the location for icons, so generate an error then exit
+					display_warning("Error ED112: Unable to find the icons directory. Exiting.");
+					exit(1);
+				}
 			}
 		}
 	}
@@ -355,9 +365,19 @@ gint main(gint argc, gchar *argv[])
 
 					if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
 					{
-						// Unable to determine the location for icons, so generate an error then exit
-						display_warning("Error ED113: Unable to find the icons directory. Exiting.");
-						exit(1);				
+						// Not there, try /opt/local/share/salasaga/icons
+						g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "opt", "local", "share", "salasaga", "icons", "scalable", NULL));
+
+						// Display debugging info if requested
+						if (debug_level)
+							printf("Icon path being checked: %s\n", icon_path->str);
+
+						if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
+						{
+							// Unable to determine the location for icons, so generate an error then exit
+							display_warning("Error ED113: Unable to find the icons directory. Exiting.");
+							exit(1);
+						}
 					}
 				}
 			}
