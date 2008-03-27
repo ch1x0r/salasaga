@@ -286,23 +286,23 @@ gboolean project_read(gchar *filename)
 		return FALSE;
 	}
 
-	// * All of the required meta-data and preferences are present, so we proceed *
-
-	// Reset the useable input flag
-	useable_input = TRUE;
-
 	// Retrieve the save format input
 	validated_gfloat = validate_value(PROJECT_VERSION, V_CHAR, save_format_data);
-	if (NULL == validated_guint)
+	if (NULL == validated_gfloat)
 	{
-		display_warning("Error ED210: There was something wrong with the file format version value in the project file.");
-		useable_input = FALSE;
+		display_warning("Error ED210: The file format value in the project file is not recognised.  This project file can't be used.");
+		return FALSE;
 	} else
 	{
 		valid_save_format = *validated_gfloat;
 		g_free(validated_gfloat);
 		xmlFree(save_format_data);
 	}
+
+	// Reset the useable input flag
+	useable_input = TRUE;
+
+	// * All of the required meta-data and preferences are present, so we proceed *
 
 	// Validate the project name input
 	validated_string = validate_value(PROJECT_NAME, V_CHAR, project_name_data);
@@ -999,7 +999,78 @@ gboolean project_read(gchar *filename)
 										// Create an empty image path string
 										tmp_image_ob->image_path = g_string_new(NULL);
 									}
-
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_in_type")))
+									{
+										// Get the type of transition in
+										validated_string = validate_value(TRANSITION_TYPE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED313: There was something wrong with a transition in type value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
+											{
+												tmp_layer->transition_in_type = TRANS_LAYER_FADE;
+											} else
+											{
+												tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+											}
+											g_string_free(validated_string, TRUE);
+											validated_string = NULL;
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_in_duration")))
+									{
+										// Get the transition in duration
+										validated_gfloat = validate_value(TRANSITION_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_gfloat)
+										{
+											display_warning("Error ED314: There was something wrong with a transition in duration value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->transition_in_duration = 1;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->transition_in_duration = *validated_gfloat;
+											g_free(validated_gfloat);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_out_type")))
+									{
+										// Get the type of transition out
+										validated_string = validate_value(TRANSITION_TYPE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED315: There was something wrong with a transition out type value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
+											{
+												tmp_layer->transition_out_type = TRANS_LAYER_FADE;
+											} else
+											{
+												tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+											}
+											g_string_free(validated_string, TRUE);
+											validated_string = NULL;
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_out_duration")))
+									{
+										// Get the transition out duration
+										validated_gfloat = validate_value(TRANSITION_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_gfloat)
+										{
+											display_warning("Error ED316: There was something wrong with a transition out duration value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->transition_out_duration = 1;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->transition_out_duration = *validated_gfloat;
+											g_free(validated_gfloat);
+										}
+									}
 									this_node = this_node->next;	
 								}
 
@@ -1259,6 +1330,78 @@ gboolean project_read(gchar *filename)
 											validated_string = NULL;
 										}
 									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_in_type")))
+									{
+										// Get the type of transition in
+										validated_string = validate_value(TRANSITION_TYPE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED317: There was something wrong with a transition in type value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
+											{
+												tmp_layer->transition_in_type = TRANS_LAYER_FADE;
+											} else
+											{
+												tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+											}
+											g_string_free(validated_string, TRUE);
+											validated_string = NULL;
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_in_duration")))
+									{
+										// Get the transition in duration
+										validated_gfloat = validate_value(TRANSITION_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_gfloat)
+										{
+											display_warning("Error ED318: There was something wrong with a transition in duration value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->transition_in_duration = 1;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->transition_in_duration = *validated_gfloat;
+											g_free(validated_gfloat);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_out_type")))
+									{
+										// Get the type of transition out
+										validated_string = validate_value(TRANSITION_TYPE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED319: There was something wrong with a transition out type value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
+											{
+												tmp_layer->transition_out_type = TRANS_LAYER_FADE;
+											} else
+											{
+												tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+											}
+											g_string_free(validated_string, TRUE);
+											validated_string = NULL;
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_out_duration")))
+									{
+										// Get the transition out duration
+										validated_gfloat = validate_value(TRANSITION_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_gfloat)
+										{
+											display_warning("Error ED320: There was something wrong with a transition out duration value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->transition_out_duration = 1;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->transition_out_duration = *validated_gfloat;
+											g_free(validated_gfloat);
+										}
+									}
 									this_node = this_node->next;	
 								}
 
@@ -1505,6 +1648,78 @@ gboolean project_read(gchar *filename)
 											tmp_layer->external_link_window = g_string_assign(tmp_layer->external_link_window, validated_string->str);
 											g_string_free(validated_string,TRUE);
 											validated_string = NULL;
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_in_type")))
+									{
+										// Get the type of transition in
+										validated_string = validate_value(TRANSITION_TYPE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED321: There was something wrong with a transition in type value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
+											{
+												tmp_layer->transition_in_type = TRANS_LAYER_FADE;
+											} else
+											{
+												tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+											}
+											g_string_free(validated_string, TRUE);
+											validated_string = NULL;
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_in_duration")))
+									{
+										// Get the transition in duration
+										validated_gfloat = validate_value(TRANSITION_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_gfloat)
+										{
+											display_warning("Error ED322: There was something wrong with a transition in duration value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->transition_in_duration = 1;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->transition_in_duration = *validated_gfloat;
+											g_free(validated_gfloat);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_out_type")))
+									{
+										// Get the type of transition out
+										validated_string = validate_value(TRANSITION_TYPE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED323: There was something wrong with a transition out type value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
+											{
+												tmp_layer->transition_out_type = TRANS_LAYER_FADE;
+											} else
+											{
+												tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+											}
+											g_string_free(validated_string, TRUE);
+											validated_string = NULL;
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_out_duration")))
+									{
+										// Get the transition out duration
+										validated_gfloat = validate_value(TRANSITION_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_gfloat)
+										{
+											display_warning("Error ED324: There was something wrong with a transition out duration value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->transition_out_duration = 1;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->transition_out_duration = *validated_gfloat;
+											g_free(validated_gfloat);
 										}
 									}
 									this_node = this_node->next;	
@@ -1767,6 +1982,78 @@ gboolean project_read(gchar *filename)
 											tmp_layer->external_link_window = g_string_assign(tmp_layer->external_link_window, validated_string->str);
 											g_string_free(validated_string,TRUE);
 											validated_string = NULL;
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_in_type")))
+									{
+										// Get the type of transition in
+										validated_string = validate_value(TRANSITION_TYPE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED325: There was something wrong with a transition in type value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
+											{
+												tmp_layer->transition_in_type = TRANS_LAYER_FADE;
+											} else
+											{
+												tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+											}
+											g_string_free(validated_string, TRUE);
+											validated_string = NULL;
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_in_duration")))
+									{
+										// Get the transition in duration
+										validated_gfloat = validate_value(TRANSITION_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_gfloat)
+										{
+											display_warning("Error ED326: There was something wrong with a transition in duration value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->transition_in_duration = 1;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->transition_in_duration = *validated_gfloat;
+											g_free(validated_gfloat);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_out_type")))
+									{
+										// Get the type of transition out
+										validated_string = validate_value(TRANSITION_TYPE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_string)
+										{
+											display_warning("Error ED327: There was something wrong with a transition out type value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
+											{
+												tmp_layer->transition_out_type = TRANS_LAYER_FADE;
+											} else
+											{
+												tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+											}
+											g_string_free(validated_string, TRUE);
+											validated_string = NULL;
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_out_duration")))
+									{
+										// Get the transition out duration
+										validated_gfloat = validate_value(TRANSITION_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_gfloat)
+										{
+											display_warning("Error ED328: There was something wrong with a transition out duration value in the project file.");
+											useable_input = FALSE;
+											tmp_layer->transition_out_duration = 1;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_layer->transition_out_duration = *validated_gfloat;
+											g_free(validated_gfloat);
 										}
 									}
 									this_node = this_node->next;
