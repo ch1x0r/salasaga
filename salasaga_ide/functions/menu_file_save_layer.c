@@ -98,6 +98,30 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	{
 		xmlNewChild(layer_node, NULL, (const xmlChar *) "external_link_window", (const xmlChar *) layer_pointer->external_link_window->str);
 	}
+	switch (layer_pointer->transition_in_type)
+	{
+		case TRANS_LAYER_FADE:
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "transition_in_type", (const xmlChar *) "fade");
+			break;
+
+		default:
+			// Default to no transition in
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "transition_in_type", (const xmlChar *) "none");
+	}
+	g_string_printf(tmp_gstring, "%0.4f", layer_pointer->transition_in_duration);
+	xmlNewChild(layer_node, NULL, (const xmlChar *) "transition_in_duration", (const xmlChar *) tmp_gstring->str);
+	switch (layer_pointer->transition_out_type)
+	{
+		case TRANS_LAYER_FADE:
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "transition_out_type", (const xmlChar *) "fade");
+			break;
+
+		default:
+			// Default to no transition in
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "transition_out_type", (const xmlChar *) "none");
+	}
+	g_string_printf(tmp_gstring, "%0.4f", layer_pointer->transition_out_duration);
+	xmlNewChild(layer_node, NULL, (const xmlChar *) "transition_out_duration", (const xmlChar *) tmp_gstring->str);
 	switch (layer_type)
 	{
 		case TYPE_GDK_PIXBUF:
