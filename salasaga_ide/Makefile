@@ -217,9 +217,12 @@ OFILES = \
 	functions/menu_file_save_layer.o \
 	functions/menu_file_save_slide.o \
 	functions/menu_help_about.o \
+	functions/menu_help_forum.o \
 	functions/menu_help_register.o \
 	functions/menu_help_survey.o \
+	functions/menu_help_support.o \
 	functions/menu_help_website.o \
+	functions/menu_help_wiki.o \
 	functions/menu_project_properties.o \
 	functions/menu_screenshots_capture.o \
 	functions/menu_screenshots_import.o \
@@ -469,7 +472,13 @@ menu_file_save_slide.o:
 menu_help_about.o:
 	$(CC) $(CFLAGS) -c menu_help_about.c -o menu_help_about.o
 
+menu_help_forum.o:
+	$(CC) $(CFLAGS) -c menu_help_register.c -o menu_help_register.o
+
 menu_help_register.o:
+	$(CC) $(CFLAGS) -c menu_help_register.c -o menu_help_register.o
+
+menu_help_support.o:
 	$(CC) $(CFLAGS) -c menu_help_register.c -o menu_help_register.o
 
 menu_help_survey.o:
@@ -477,6 +486,9 @@ menu_help_survey.o:
 
 menu_help_website.o:
 	$(CC) $(CFLAGS) -c menu_help_website.c -o menu_help_website.o
+
+menu_help_wiki.o:
+	$(CC) $(CFLAGS) -c menu_help_register.c -o menu_help_register.o
 
 menu_project_properties.o:
 	$(CC) $(CFLAGS) -c menu_project_properties.c -o menu_project_properties.o
@@ -590,8 +602,8 @@ salasaga: $(OFILES)
 	$(CC) $(CFLAGS) $(OFILES) $(LDFLAGS) $(LIBS) -o salasaga
 
 install:
-	$(INSTALL) -d $(bindir)
-	$(INSTALL_PROGRAM) -m 0755 salasaga $(bindir)
+	$(INSTALL) -d $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) -m 0755 salasaga $(DESTDIR)$(bindir)
 	$(INSTALL) -d $(datadir)/applications/
 	$(INSTALL_DATA) $(DESKTOP_FILE) $(datadir)/applications/
 	$(INSTALL) -d $(datadir)/salasaga/icons/
@@ -618,8 +630,8 @@ install:
 	cd sounds; $(INSTALL_DATA) $(SOUNDS) $(datadir)/salasaga/sounds/
 
 uninstall:
-	if [ -f "$(bindir)/salasaga" ]; then \
-		rm -f $(bindir)/salasaga; \
+	if [ -f "$(DESTDIR)$(bindir)/salasaga" ]; then \
+		rm -f $(DESTDIR)$(bindir)/salasaga; \
 	fi
 
 	if [ -d "$(datadir)/salasaga/fonts/BitstreamVera/fdb" ]; then \
@@ -696,8 +708,8 @@ uninstall:
 		rmdir $(datadir)/salasaga; \
 	fi
 
-	if [ -d "$(bindir)" ]; then \
-		rmdir --ignore-fail-on-non-empty $(bindir); \
+	if [ -d "$(DESTDIR)$(bindir)" ]; then \
+		rmdir --ignore-fail-on-non-empty $(DESTDIR)$(bindir); \
 	fi
 
 	if [ -d "$(datadir)" ]; then \
