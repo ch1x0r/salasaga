@@ -56,6 +56,7 @@ extern gint					invalidation_end_x;
 extern gint					invalidation_end_y;
 extern gint					invalidation_start_x;
 extern gint					invalidation_start_y;
+extern GString				*last_folder;
 extern GtkWidget			*main_area;
 extern GtkWidget			*main_drawing_area;
 extern GtkWidget			*main_window;
