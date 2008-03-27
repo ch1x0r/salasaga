@@ -20,16 +20,16 @@ salasaga_screencapture: $(OFILES)
 	$(CC) $(CFLAGS) $(OFILES) $(LDFLAGS) $(LIBS) -o salasaga_screencapture
 
 install:
-	$(INSTALL) -d $(bindir)
-	$(INSTALL_PROGRAM) -m 0755 salasaga_screencapture $(bindir)
+	$(INSTALL) -d $(DESTDIR)$(bindir)
+	$(INSTALL_PROGRAM) -m 0755 salasaga_screencapture $(DESTDIR)$(bindir)
 
 uninstall:
-	if [ -f "$(bindir)/salasaga_screencapture" ]; then \
-		rm -f $(bindir)/salasaga_screencapture; \
+	if [ -f "$(DESTDIR)$(bindir)/salasaga_screencapture" ]; then \
+		rm -f $(DESTDIR)$(bindir)/salasaga_screencapture; \
 	fi
 
-	if [ -d "$(bindir)" ]; then \
-		rmdir --ignore-fail-on-non-empty $(bindir); \
+	if [ -d "$(DESTDIR)$(bindir)" ]; then \
+		rmdir --ignore-fail-on-non-empty $(DESTDIR)$(bindir); \
 	fi
 
 clean:
