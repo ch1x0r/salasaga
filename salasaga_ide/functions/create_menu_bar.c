@@ -50,9 +50,12 @@
 #include "menu_file_open.h"
 #include "menu_file_save.h"
 #include "menu_help_about.h"
+#include "menu_help_forum.h"
 #include "menu_help_register.h"
+#include "menu_help_support.h"
 #include "menu_help_survey.h"
 #include "menu_help_website.h"
+#include "menu_help_wiki.h"
 #include "menu_project_properties.h"
 #include "menu_screenshots_capture.h"
 #include "menu_screenshots_import.h"
@@ -131,10 +134,13 @@ void create_menu_bar()
 
 		{"/_Help",						NULL,					NULL,							0,	"<LastBranch>"},
 		{"/_Help/_About",				NULL,					menu_help_about,				0,	"<Item>"	},
+		{"/_Help/_Main Website",		NULL,					menu_help_website,				0,	"<Item>"	},
 		{"/_Help/Sep",					NULL,					NULL,							0,	"<Separator>"},
-//		{"/_Help/_Register",			NULL,					menu_help_register,				0,	"<Item>"	},
 //		{"/_Help/_Survey",				NULL,					menu_help_survey,				0,	"<Item>"	},
-		{"/_Help/_Website",				NULL,					menu_help_website,				0,	"<Item>"	}
+		{"/_Help/_Forum",				NULL,					menu_help_forum,				0,	"<Item>"	},
+		{"/_Help/_Register",			NULL,					menu_help_register,				0,	"<Item>"	},
+		{"/_Help/_Support",				NULL,					menu_help_support,				0,	"<Item>"	},
+		{"/_Help/_Wiki",				NULL,					menu_help_wiki,					0,	"<Item>"	}
 	};  // The menu structure
 	static gint			num_items = sizeof(menu_items) / sizeof(menu_items[0]);	// The number of menu items
 
