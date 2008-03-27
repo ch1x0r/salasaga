@@ -24,7 +24,6 @@
 
 // Standard includes
 #include <unistd.h>
-#include <locale.h>
 
 // GLib includes
 #include <glib/gstdio.h>
@@ -96,6 +95,7 @@ gint					invalidation_end_x;			// Right side of the front store area to invalida
 gint					invalidation_end_y;			// Bottom of the front store area to invalidate
 gint					invalidation_start_x;		// Left side of the front store area to invalidate
 gint					invalidation_start_y;		// Top of the front store area to invalidate
+GString					*last_folder;				// Keeps track of the last folder the user visited
 GtkWidget				*main_area;					// Widget for the onscreen display
 GtkWidget				*main_drawing_area;			// Widget for the drawing area
 GtkWidget				*main_window;				// Widget for the main window
@@ -203,6 +203,8 @@ gint main(gint argc, gchar *argv[])
 	default_output_folder = g_string_new(NULL);
 	default_project_folder = g_string_new(NULL);
 	default_zoom_level = g_string_new("Fit to width");  // Sensible default
+	last_folder = g_string_new(g_get_home_dir());
+	g_string_append(last_folder, "/");  //  Add a trailing slash to the folder name
 	output_folder = g_string_new(NULL);
 	project_folder = g_string_new(NULL);
 	project_name = g_string_new("New Project");
@@ -231,14 +233,7 @@ gint main(gint argc, gchar *argv[])
 	    layer_toolbar_signals[tmp_int] = 0;
 	}
 
-	// Set the locale to C for now, so the output of numbers is correct
-	if ((NULL == setlocale(LC_ALL, "")) | (NULL == setlocale(LC_NUMERIC, "C")))
-	{
-		printf("Locale was unable to be set.\n");
-	}
-
 	// Initialise GTK
-	gtk_disable_setlocale();
 	gtk_init(&argc, &argv);
 
 	// Redirect log output so it doesn't pop open a console window
