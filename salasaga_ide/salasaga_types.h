@@ -129,6 +129,7 @@ enum
 	SLIDE_NAME,
 	START_BEHAVIOUR,
 	TRANSITION_DURATION,
+	TRANSITION_TYPE,
 	X_OFFSET,
 	Y_OFFSET,
 	ZOOM_LEVEL
@@ -340,8 +341,8 @@ typedef struct
 	gchar				*name_string;
 	guint				base_type;
 	guint				capabilities;
-	guint				min_value;
-	gint				max_value;
+	gfloat				min_value;
+	gfloat				max_value;
 } validatation_entry;
 
 #ifdef __cplusplus
