@@ -194,18 +194,6 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Create the label asking for the layer duration
-	duration_label = gtk_label_new("Display for (seconds): ");
-	gtk_misc_set_alignment(GTK_MISC(duration_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-	// Create the entry that accepts the duration input
-	duration_button = gtk_spin_button_new_with_range(valid_fields[FRAME_NUMBER].min_value, valid_fields[FRAME_NUMBER].max_value, 0.1);
-	gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(duration_button), TRUE);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(duration_button), tmp_layer->duration);
-	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(duration_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	row_counter = row_counter + 1;
-
 	// Create the label asking for the starting time
 	start_label = gtk_label_new("Starting time (seconds): ");
 	gtk_misc_set_alignment(GTK_MISC(start_label), 0, 0.5);
@@ -213,7 +201,6 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 
 	// Create the entry that accepts the starting time input
 	start_button = gtk_spin_button_new_with_range(valid_fields[FRAME_NUMBER].min_value, valid_fields[FRAME_NUMBER].max_value, 0.1);
-	gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(start_button), TRUE);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(start_button), tmp_layer->start_time);
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(start_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
@@ -244,9 +231,19 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 
 	// Appearance transition duration entry
 	button_trans_in_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
-	gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(button_trans_in_duration), TRUE);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_in_duration), tmp_layer->transition_in_duration);
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(button_trans_in_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Create the label asking for the layer duration
+	duration_label = gtk_label_new("Display for (seconds): ");
+	gtk_misc_set_alignment(GTK_MISC(duration_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the entry that accepts the duration input
+	duration_button = gtk_spin_button_new_with_range(valid_fields[FRAME_NUMBER].min_value, valid_fields[FRAME_NUMBER].max_value, 0.1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(duration_button), tmp_layer->duration);
+	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(duration_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Exit Transition type
@@ -275,7 +272,6 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 
 	// Exit transition duration entry
 	button_trans_out_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
-	gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(button_trans_out_duration), TRUE);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_out_duration), tmp_layer->transition_out_duration);
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(button_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;

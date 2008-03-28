@@ -45,15 +45,11 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	guint				guint_val;					// Temporary guint value used for validation
 	GtkDialog			*image_dialog;				// Widget for the dialog
 	GtkWidget			*image_table;				// Table used for neat layout of the dialog box
-	GdkPixbuf			*new_image_data;			// Receives the new image data
-	gint				new_image_height;			// Receives the height of the new image
-	gint				new_image_width;			// Receives the width of the new image
 	guint				row_counter = 0;			// Used to count which row things are up to
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
 	gfloat				valid_duration;				// Receives the new finish frame once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
-	GString				*valid_image_path;			// Receives the new image path once validated
 	gfloat				valid_start_time;			// Receives the new start time once validated
 	gfloat				valid_trans_in_duration;	// Receives the new appearance transition duration once validated
 	guint				valid_trans_in_type;		// Receives the new appearance transition type once validated
@@ -66,9 +62,6 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function 
 	GString				*validated_string;			// Receives known good strings from the validation function
-
-	GtkWidget			*path_widget;				// File selection widget
-	GString				*path_gstring;				// Holds the file selection path
 
 	GtkWidget			*x_off_label_start;			// Label widget
 	GtkWidget			*x_off_button_start;		//
@@ -110,11 +103,9 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 
 
 	// Initialise some things
-	path_gstring = g_string_new(NULL);
 	tmp_image_ob = (layer_image *) tmp_layer->object_data;
 	valid_ext_link = g_string_new(NULL);
 	valid_ext_link_win = g_string_new(NULL);
-	valid_image_path = g_string_new(NULL);
 
 	// * Open a dialog box asking the user for the details of the layer *
 
@@ -130,131 +121,127 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		x_off_label_start = gtk_label_new("Start X Offset: ");
 		gtk_misc_set_alignment(GTK_MISC(x_off_label_start), 0, 0.5);
 		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(x_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	
+
 		// Create the entry that accepts the starting X Offset input
 		x_off_button_start = gtk_spin_button_new_with_range(0, project_width, 10);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_off_button_start), tmp_layer->x_offset_start);
 		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(x_off_button_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 		row_counter = row_counter + 1;
-	
+
 		// Create the label asking for the starting Y Offset
 		y_off_label_start = gtk_label_new("Start Y Offset: ");
 		gtk_misc_set_alignment(GTK_MISC(y_off_label_start), 0, 0.5);
 		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(y_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	
+
 		// Create the entry that accepts the starting Y Offset input
 		y_off_button_start = gtk_spin_button_new_with_range(0, project_height, 10);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_off_button_start), tmp_layer->y_offset_start);
 		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(y_off_button_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 		row_counter = row_counter + 1;
-	
+
 		// Create the label asking for the finishing X Offset
 		x_off_label_finish = gtk_label_new("Finish X Offset: ");
 		gtk_misc_set_alignment(GTK_MISC(x_off_label_finish), 0, 0.5);
 		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(x_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	
+
 		// Create the entry that accepts the finishing X Offset input
 		x_off_button_finish = gtk_spin_button_new_with_range(0, project_width, 10);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_off_button_finish), tmp_layer->x_offset_finish);
 		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(x_off_button_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 		row_counter = row_counter + 1;
-	
+
 		// Create the label asking for the finishing Y Offset
 		y_off_label_finish = gtk_label_new("Finish Y Offset: ");
 		gtk_misc_set_alignment(GTK_MISC(y_off_label_finish), 0, 0.5);
 		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(y_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	
+
 		// Create the entry that accepts the finishing Y Offset input
 		y_off_button_finish = gtk_spin_button_new_with_range(0, project_height, 10);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_off_button_finish), tmp_layer->y_offset_finish);
 		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(y_off_button_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 		row_counter = row_counter + 1;
 
-	// Create the label asking for the layer duration
-	duration_label = gtk_label_new("Display for (seconds): ");
-	gtk_misc_set_alignment(GTK_MISC(duration_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+		// Create the label asking for the starting time
+		start_label = gtk_label_new("Starting time (seconds): ");
+		gtk_misc_set_alignment(GTK_MISC(start_label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(start_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the duration input
-	duration_button = gtk_spin_button_new_with_range(valid_fields[FRAME_NUMBER].min_value, valid_fields[FRAME_NUMBER].max_value, 0.1);
-	gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(duration_button), TRUE);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(duration_button), tmp_layer->duration);
-	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(duration_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	row_counter = row_counter + 1;
+		// Create the entry that accepts the starting time input
+		start_button = gtk_spin_button_new_with_range(valid_fields[FRAME_NUMBER].min_value, valid_fields[FRAME_NUMBER].max_value, 0.1);
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(start_button), tmp_layer->start_time);
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(start_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+		row_counter = row_counter + 1;
 
-	// Create the label asking for the starting time
-	start_label = gtk_label_new("Starting time (seconds): ");
-	gtk_misc_set_alignment(GTK_MISC(start_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(start_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+		// Appearance transition type
+		label_trans_in_type = gtk_label_new("Start how: ");
+		gtk_misc_set_alignment(GTK_MISC(label_trans_in_type), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_in_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+		selector_trans_in_type = gtk_combo_box_new_text();
+		gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "Immediate");
+		gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "Fade in");
+		switch (tmp_layer->transition_in_type)
+		{
+			case TRANS_LAYER_FADE:
+				gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_FADE);
+				break;
+	
+			default:
+				gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_NONE);
+		}
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(selector_trans_in_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+		row_counter = row_counter + 1;
 
-	// Create the entry that accepts the starting time input
-	start_button = gtk_spin_button_new_with_range(valid_fields[FRAME_NUMBER].min_value, valid_fields[FRAME_NUMBER].max_value, 0.1);
-	gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(start_button), TRUE);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(start_button), tmp_layer->start_time);
-	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(start_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	row_counter = row_counter + 1;
+		// Appearance transition duration label
+		label_trans_in_duration = gtk_label_new("Start duration (seconds):");
+		gtk_misc_set_alignment(GTK_MISC(label_trans_in_duration), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_in_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Appearance transition type
-	label_trans_in_type = gtk_label_new("Start how: ");
-	gtk_misc_set_alignment(GTK_MISC(label_trans_in_type), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_in_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	selector_trans_in_type = gtk_combo_box_new_text();
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "Immediate");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "Fade in");
-	switch (tmp_layer->transition_in_type)
-	{
-		case TRANS_LAYER_FADE:
-			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_FADE);
-			break;
+		// Appearance transition duration entry
+		button_trans_in_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_in_duration), tmp_layer->transition_in_duration);
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(button_trans_in_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+		row_counter = row_counter + 1;
 
-		default:
-			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_NONE);
-	}
-	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(selector_trans_in_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	row_counter = row_counter + 1;
+		// Create the label asking for the layer duration
+		duration_label = gtk_label_new("Display for (seconds): ");
+		gtk_misc_set_alignment(GTK_MISC(duration_label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Appearance transition duration label
-	label_trans_in_duration = gtk_label_new("Start duration (seconds):");
-	gtk_misc_set_alignment(GTK_MISC(label_trans_in_duration), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_in_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+		// Create the entry that accepts the duration input
+		duration_button = gtk_spin_button_new_with_range(valid_fields[FRAME_NUMBER].min_value, valid_fields[FRAME_NUMBER].max_value, 0.1);
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(duration_button), tmp_layer->duration);
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(duration_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+		row_counter = row_counter + 1;
 
-	// Appearance transition duration entry
-	button_trans_in_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
-	gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(button_trans_in_duration), TRUE);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_in_duration), tmp_layer->transition_in_duration);
-	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(button_trans_in_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	row_counter = row_counter + 1;
+		// Exit Transition type
+		label_trans_out_type = gtk_label_new("Exit how: ");
+		gtk_misc_set_alignment(GTK_MISC(label_trans_out_type), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_out_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+		selector_trans_out_type = gtk_combo_box_new_text();
+		gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "Immediate");
+		gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "Fade out");
+		switch (tmp_layer->transition_out_type)
+		{
+			case TRANS_LAYER_FADE:
+				gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_FADE);
+				break;
+	
+			default:
+				gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_NONE);
+		}
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(selector_trans_out_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+		row_counter = row_counter + 1;
 
-	// Exit Transition type
-	label_trans_out_type = gtk_label_new("Exit how: ");
-	gtk_misc_set_alignment(GTK_MISC(label_trans_out_type), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_out_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	selector_trans_out_type = gtk_combo_box_new_text();
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "Immediate");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "Fade out");
-	switch (tmp_layer->transition_out_type)
-	{
-		case TRANS_LAYER_FADE:
-			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_FADE);
-			break;
+		// Exit transition duration label
+		label_trans_out_duration = gtk_label_new("Exit duration (seconds):");
+		gtk_misc_set_alignment(GTK_MISC(label_trans_out_duration), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_out_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-		default:
-			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_NONE);
-	}
-	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(selector_trans_out_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	row_counter = row_counter + 1;
-
-	// Exit transition duration label
-	label_trans_out_duration = gtk_label_new("Exit duration (seconds):");
-	gtk_misc_set_alignment(GTK_MISC(label_trans_out_duration), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_out_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-	// Exit transition duration entry
-	button_trans_out_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
-	gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(button_trans_out_duration), TRUE);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_out_duration), tmp_layer->transition_out_duration);
-	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(button_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	row_counter = row_counter + 1;
+		// Exit transition duration entry
+		button_trans_out_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
+		gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_out_duration), tmp_layer->transition_out_duration);
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(button_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+		row_counter = row_counter + 1;
 	}
 
 	// Create the label asking for an external link
@@ -495,10 +482,8 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	gtk_widget_destroy(GTK_WIDGET(image_dialog));
 
 	// Free the memory allocated in this function
-	// (Note - Do NOT free the path_gstring variable here, as it gets attached to the temporary object)
 	g_string_free(valid_ext_link, TRUE);
 	g_string_free(valid_ext_link_win, TRUE);
-	g_string_free(valid_image_path, TRUE);
 
 	return TRUE;
 }
