@@ -52,6 +52,7 @@ void layer_edit(void)
 {
 	// Local variables
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	gfloat 				layer_total_time;			// Total length in time that a layer is displayed
 	GtkListStore		*list_pointer;				//
 	GtkWidget			*list_widget;				// Points to the timeline widget
 	guint				num_layers;					// Number of layers
@@ -106,9 +107,10 @@ void layer_edit(void)
 				// * The dialog box returned successfully *
 
 				// If the new layer end time is longer than the slide duration, then extend the slide duration
-				if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > slide_data->duration)
+				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration; 
+				if (layer_total_time > slide_data->duration)
 				{
-					slide_data->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+					slide_data->duration = layer_total_time;
 				}
 
 				// Update the slide list store with the new values
@@ -130,9 +132,10 @@ void layer_edit(void)
 				// * The dialog box returned successfully *
 
 				// If the new layer end time is longer than the slide duration, then extend the slide duration
-				if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > slide_data->duration)
+				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration; 
+				if (layer_total_time > slide_data->duration)
 				{
-					slide_data->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+					slide_data->duration = layer_total_time;
 				}
 
 				// Update the slide list store with the new values
@@ -155,9 +158,10 @@ void layer_edit(void)
 				// * The dialog box returned successfully *
 
 				// If the new layer end time is longer than the slide duration, then extend the slide duration
-				if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > slide_data->duration)
+				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration; 
+				if (layer_total_time > slide_data->duration)
 				{
-					slide_data->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+					slide_data->duration = layer_total_time;
 				}
 
 				// Update the slide list store with the new values
@@ -181,9 +185,10 @@ void layer_edit(void)
 				// * The dialog box returned successfully *
 
 				// If the new layer end time is longer than the slide duration, then extend the slide duration
-				if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > slide_data->duration)
+				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration; 
+				if (layer_total_time > slide_data->duration)
 				{
-					slide_data->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+					slide_data->duration = layer_total_time;
 				}
 
 				// Update the slide list store with the new values
