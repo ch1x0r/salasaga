@@ -22,6 +22,12 @@
  */
 
 
+// Turn on C99 compatibility - needed for roundf() to work
+#define _ISOC99_SOURCE
+
+// Standard includes
+#include <stdlib.h>
+
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -57,6 +63,7 @@ gboolean project_read(gchar *filename)
 	GString				*error_string;				// Used to create error strings
 	GtkTreeIter			film_strip_iter;
 	xmlChar				*fps_data = NULL;
+	gfloat				gfloat_val;					// Temporary gfloat value used for validation
 	guint				guint_val;					// Temporary guint value used for validation
 	GdkPixbufLoader		*image_loader;				// Used for loading images embedded in project files
 	xmlNodePtr			layer_ptr;					// Temporary pointer
@@ -73,6 +80,7 @@ gboolean project_read(gchar *filename)
 	gboolean			return_code;				// Boolean return code
 	xmlChar				*save_format_data = NULL;
 	guint				slide_counter;				// Counter used for looping
+	xmlChar				*slide_duration_data = NULL;
 	xmlChar				*slide_length_data = NULL;
 	xmlNodePtr			slides_node = NULL;			// Points to the slides structure
 	xmlChar				*start_behaviour_data = NULL;
@@ -90,7 +98,7 @@ gboolean project_read(gchar *filename)
 	guint				valid_project_height;		// Receives the new project height once validated
 	guint				valid_project_width;		// Receives the new project width once validated
 	gfloat				valid_save_format;			// Receives the project file format version once validated
-	guint				valid_slide_length;			// Receives the new slide length once validated
+	gfloat				valid_slide_duration;		// Receives the new slide duration once validated
 	guint				valid_start_behaviour;		// Receives the new start behaviour once validated
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
@@ -241,6 +249,11 @@ gboolean project_read(gchar *filename)
 			// Project Height found.  Extract and store it
 			project_height_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
 		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "slide_duration")))
+		{
+			// Slide Duration found.  Extract and store it
+			slide_duration_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
 		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "slide_length")))
 		{
 			// Slide Length found.  Extract and store it
@@ -388,20 +401,6 @@ gboolean project_read(gchar *filename)
 		xmlFree(project_height_data);
 	}
 
-	// Retrieve the new slide length input
-	guint_val = atoi((const char *) slide_length_data);
-	validated_guint = validate_value(SLIDE_LENGTH, V_INT_UNSIGNED, &guint_val);
-	if (NULL == validated_guint)
-	{
-		display_warning("Error ED208: There was something wrong with the slide length value in the project file.");
-		useable_input = FALSE;
-	} else
-	{
-		valid_slide_length = *validated_guint;
-		g_free(validated_guint);
-		xmlFree(slide_length_data);
-	}
-
 	// Retrieve the new frames per second input
 	if (NULL != fps_data)
 	{
@@ -416,6 +415,39 @@ gboolean project_read(gchar *filename)
 			valid_fps = *validated_guint;
 			g_free(validated_guint);
 			xmlFree(fps_data);
+		}
+	}
+
+	// If the file format is less the version 4.0, then it has slides with frame based input rather than time based input
+	if (4.0 > valid_save_format)
+	{
+		// Retrieve the new slide length input
+		guint_val = atoi((const char *) slide_length_data);
+		validated_guint = validate_value(SLIDE_LENGTH, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			display_warning("Error ED208: There was something wrong with the slide length value in the project file.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_slide_duration = *validated_guint / valid_fps;
+			g_free(validated_guint);
+			xmlFree(slide_length_data);
+		}
+	} else
+	{
+		// Retrieve the new slide duration input
+		gfloat_val = strtof((const char *) slide_duration_data, NULL);
+		validated_gfloat = validate_value(SLIDE_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
+		if (NULL == validated_gfloat)
+		{
+			display_warning("Error ED335: There was something wrong with the slide duration value in the project file.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_slide_duration = *validated_gfloat;
+			g_free(validated_gfloat);
+			xmlFree(slide_duration_data);
 		}
 	}
 
@@ -519,7 +551,7 @@ gboolean project_read(gchar *filename)
 			// Create a new slide in memory
 			tmp_slide = g_new0(slide, 1);
 			tmp_slide->layers = NULL;
-			tmp_slide->duration = slide_length;
+			tmp_slide->duration = slide_duration;
 			tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
 										G_TYPE_STRING,  // TIMELINE_NAME
 										G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
@@ -558,8 +590,10 @@ gboolean project_read(gchar *filename)
 								tmp_layer->visible = TRUE;
 								tmp_layer->background = TRUE;
 								tmp_layer->external_link_window = g_string_new("_self");
+								tmp_layer->start_time = 0.0;
 								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_in_duration = 0.0;
+								tmp_layer->duration = slide_duration;
 								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_out_duration = 0.0;
 
@@ -612,34 +646,70 @@ gboolean project_read(gchar *filename)
 											g_free(validated_guint);
 										}
 									}
-									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
+									// If the file format is less the version 4.0, then it has layers with frame based input rather than time based input
+									if (4.0 > valid_save_format)
 									{
-										// Get the start frame
-										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
-										if (NULL == validated_guint)
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 										{
-											display_warning("Error ED214: There was something wrong with a start frame value in the project file.");
-											useable_input = FALSE;
-											tmp_layer->start_frame = 0;  // Fill in the value, just to be safe
-										} else
-										{
-											tmp_layer->start_frame = *validated_guint;
-											g_free(validated_guint);
+											// Get the start frame
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_guint)
+											{
+												display_warning("Error ED214: There was something wrong with a start frame value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->start_time = *validated_guint / valid_fps;
+												g_free(validated_guint);
+											}
 										}
-									}
-									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+										{
+											// Get the finish frame
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_guint)
+											{
+												display_warning("Error ED215: There was something wrong with a finish frame value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->duration = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->duration = (*validated_guint / valid_fps) - tmp_layer->start_time;
+												g_free(validated_guint);
+											}
+										}
+									} else
 									{
-										// Get the finish frame
-										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
-										if (NULL == validated_guint)
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_time")))
 										{
-											display_warning("Error ED215: There was something wrong with a finish frame value in the project file.");
-											useable_input = FALSE;
-											tmp_layer->finish_frame = 0;  // Fill in the value, just to be safe
-										} else
+											// Get the start time
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_gfloat)
+											{
+												display_warning("Error ED336: There was something wrong with a layer start time value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->start_time = *validated_gfloat;
+												g_free(validated_gfloat);
+											}
+										}
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "duration")))
 										{
-											tmp_layer->finish_frame = *validated_guint;
-											g_free(validated_guint);
+											// Get the finish frame
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_gfloat)
+											{
+												display_warning("Error ED337: There was something wrong with a layer duration value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->duration = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->duration = *validated_gfloat;
+												g_free(validated_gfloat);
+											}
 										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
@@ -705,8 +775,11 @@ gboolean project_read(gchar *filename)
 									this_node = this_node->next;	
 								}
 
-								// If the finish_frame is longer than the slide duration, we increase the slide duration
-								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
+								// If the new layer end time is longer than the slide duration, then extend the slide duration
+								if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > tmp_slide->duration)
+								{
+									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+								}
 
 								// Add the layer to the slide list store
 								tmp_iter = g_new0(GtkTreeIter, 1);
@@ -738,8 +811,10 @@ gboolean project_read(gchar *filename)
 								tmp_layer->visible = TRUE;
 								tmp_layer->background = FALSE;
 								tmp_layer->external_link_window = g_string_new("_self");
+								tmp_layer->start_time = 0.0;
 								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_in_duration = 0.0;
+								tmp_layer->duration = layer_duration;
 								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_out_duration = 0.0;
 
@@ -851,34 +926,70 @@ gboolean project_read(gchar *filename)
 											g_free(validated_guint);
 										}
 									}
-									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
+									// If the file format is less the version 4.0, then it has layers with frame based input rather than time based input
+									if (4.0 > valid_save_format)
 									{
-										// Get the start frame
-										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
-										if (NULL == validated_guint)
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 										{
-											display_warning("Error ED227: There was something wrong with a start frame value in the project file.");
-											tmp_layer->start_frame = 0;  // Fill in the value, just to be safe
-											useable_input = FALSE;
-										} else
-										{
-											tmp_layer->start_frame = *validated_guint;
-											g_free(validated_guint);
+											// Get the start frame
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_guint)
+											{
+												display_warning("Error ED227: There was something wrong with a start frame value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->start_time = *validated_guint / valid_fps;
+												g_free(validated_guint);
+											}
 										}
-									}
-									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+										{
+											// Get the finish frame
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_guint)
+											{
+												display_warning("Error ED228: There was something wrong with a finish frame value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->duration = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->duration = (*validated_guint / valid_fps) - tmp_layer->start_time;
+												g_free(validated_guint);
+											}
+										}
+									} else
 									{
-										// Get the finish frame
-										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
-										if (NULL == validated_guint)
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_time")))
 										{
-											display_warning("Error ED228: There was something wrong with a finish frame value in the project file.");
-											tmp_layer->finish_frame = 0;  // Fill in the value, just to be safe
-											useable_input = FALSE;
-										} else
+											// Get the start time
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_gfloat)
+											{
+												display_warning("Error ED336: There was something wrong with a layer start time value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->start_time = *validated_gfloat;
+												g_free(validated_gfloat);
+											}
+										}
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "duration")))
 										{
-											tmp_layer->finish_frame = *validated_guint;
-											g_free(validated_guint);
+											// Get the finish frame
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_gfloat)
+											{
+												display_warning("Error ED337: There was something wrong with a layer duration value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->duration = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->duration = *validated_gfloat;
+												g_free(validated_gfloat);
+											}
 										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
@@ -952,15 +1063,12 @@ gboolean project_read(gchar *filename)
 											if (NULL == validated_string)
 											{
 												display_warning("Error ED233: There was something wrong with a file name path value in the project file.");
-												tmp_image_ob->image_path = g_string_new(NULL);  // Fill in the value, just to be safe
 												useable_input = FALSE;
 											} else
 											{
-												tmp_image_ob->image_path = validated_string;  // We keep the validated string instead of copying then freeing it
-												validated_string = NULL;
-
 												// Load the image data
-												tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_image_ob->image_path->str, NULL);
+												tmp_image_ob->image_data = gdk_pixbuf_new_from_file(validated_string->str, NULL);
+												validated_string = NULL;
 											}
 										}
 									} else
@@ -995,9 +1103,6 @@ gboolean project_read(gchar *filename)
 												g_free(validated_guint);
 											}
 										}
-
-										// Create an empty image path string
-										tmp_image_ob->image_path = g_string_new(NULL);
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_in_type")))
 									{
@@ -1108,8 +1213,11 @@ gboolean project_read(gchar *filename)
 								// Set the modified flag for this image to false
 								tmp_image_ob->modified = FALSE;
 
-								// If the finish_frame is longer than the slide duration, we increase the slide duration
-								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
+								// If the new layer end time is longer than the slide duration, then extend the slide duration
+								if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > tmp_slide->duration)
+								{
+									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+								}
 
 								// Add the layer to the slide list store
 								tmp_iter = g_new0(GtkTreeIter, 1);
@@ -1141,8 +1249,10 @@ gboolean project_read(gchar *filename)
 								tmp_layer->visible = TRUE;
 								tmp_layer->background = FALSE;
 								tmp_layer->external_link_window = g_string_new("_self");
+								tmp_layer->start_time = 0.0;
 								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_in_duration = 0.0;
+								tmp_layer->duration = layer_duration;
 								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_out_duration = 0.0;
 
@@ -1240,34 +1350,70 @@ gboolean project_read(gchar *filename)
 											g_free(validated_guint);
 										}
 									}
-									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
+									// If the file format is less the version 4.0, then it has layers with frame based input rather than time based input
+									if (4.0 > valid_save_format)
 									{
-										// Get the start frame
-										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
-										if (NULL == validated_guint)
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 										{
-											display_warning("Error ED242: There was something wrong with a start frame value in the project file.");
-											tmp_layer->start_frame = 0;  // Fill in the value, just to be safe
-											useable_input = FALSE;
-										} else
-										{
-											tmp_layer->start_frame = *validated_guint;
-											g_free(validated_guint);
+											// Get the start frame
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_guint)
+											{
+												display_warning("Error ED242: There was something wrong with a start frame value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->start_time = *validated_guint / valid_fps;
+												g_free(validated_guint);
+											}
 										}
-									}
-									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+										{
+											// Get the finish frame
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_guint)
+											{
+												display_warning("Error ED243: There was something wrong with a finish frame value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->duration = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->duration = (*validated_guint / valid_fps) - tmp_layer->start_time;
+												g_free(validated_guint);
+											}
+										}
+									} else
 									{
-										// Get the finish frame
-										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
-										if (NULL == validated_guint)
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_time")))
 										{
-											display_warning("Error ED243: There was something wrong with a finish frame value in the project file.");
-											tmp_layer->finish_frame = 0;  // Fill in the value, just to be safe
-											useable_input = FALSE;
-										} else
+											// Get the start time
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_gfloat)
+											{
+												display_warning("Error ED336: There was something wrong with a layer start time value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->start_time = *validated_gfloat;
+												g_free(validated_gfloat);
+											}
+										}
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "duration")))
 										{
-											tmp_layer->finish_frame = *validated_guint;
-											g_free(validated_guint);
+											// Get the finish frame
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_gfloat)
+											{
+												display_warning("Error ED337: There was something wrong with a layer duration value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->duration = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->duration = *validated_gfloat;
+												g_free(validated_gfloat);
+											}
 										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
@@ -1405,8 +1551,11 @@ gboolean project_read(gchar *filename)
 									this_node = this_node->next;	
 								}
 
-								// If the finish_frame is longer than the slide duration, we increase the slide duration
-								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
+								// If the new layer end time is longer than the slide duration, then extend the slide duration
+								if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > tmp_slide->duration)
+								{
+									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+								}
 
 								// Add the layer to the slide list store
 								tmp_iter = g_new0(GtkTreeIter, 1);
@@ -1438,8 +1587,10 @@ gboolean project_read(gchar *filename)
 								tmp_layer->visible = TRUE;
 								tmp_layer->background = FALSE;
 								tmp_layer->external_link_window = g_string_new("_self");
+								tmp_layer->start_time = 0.0;
 								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_in_duration = 0.0;
+								tmp_layer->duration = layer_duration;
 								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_out_duration = 0.0;
 
@@ -1560,34 +1711,70 @@ gboolean project_read(gchar *filename)
 											validated_string = NULL;
 										}
 									}
-									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
+									// If the file format is less the version 4.0, then it has layers with frame based input rather than time based input
+									if (4.0 > valid_save_format)
 									{
-										// Get the start frame
-										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
-										if (NULL == validated_guint)
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 										{
-											display_warning("Error ED255: There was something wrong with a start frame value in the project file.");
-											tmp_layer->start_frame = 0;  // Fill in the value, just to be safe
-											useable_input = FALSE;
-										} else
-										{
-											tmp_layer->start_frame = *validated_guint;
-											g_free(validated_guint);
+											// Get the start frame
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_guint)
+											{
+												display_warning("Error ED255: There was something wrong with a start frame value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->start_time = *validated_guint / valid_fps;
+												g_free(validated_guint);
+											}
 										}
-									}
-									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+										{
+											// Get the finish frame
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_guint)
+											{
+												display_warning("Error ED256: There was something wrong with a finish frame value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->duration = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->duration = (*validated_guint / valid_fps) - tmp_layer->start_time;
+												g_free(validated_guint);
+											}
+										}
+									} else
 									{
-										// Get the finish frame
-										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
-										if (NULL == validated_guint)
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_time")))
 										{
-											display_warning("Error ED256: There was something wrong with a finish frame value in the project file.");
-											tmp_layer->finish_frame = 0;  // Fill in the value, just to be safe
-											useable_input = FALSE;
-										} else
+											// Get the start time
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_gfloat)
+											{
+												display_warning("Error ED336: There was something wrong with a layer start time value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->start_time = *validated_gfloat;
+												g_free(validated_gfloat);
+											}
+										}
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "duration")))
 										{
-											tmp_layer->finish_frame = *validated_guint;
-											g_free(validated_guint);
+											// Get the finish frame
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_gfloat)
+											{
+												display_warning("Error ED337: There was something wrong with a layer duration value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->duration = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->duration = *validated_gfloat;
+												g_free(validated_gfloat);
+											}
 										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
@@ -1725,8 +1912,11 @@ gboolean project_read(gchar *filename)
 									this_node = this_node->next;	
 								}
 
-								// If the finish_frame is longer than the slide duration, we increase the slide duration
-								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
+								// If the new layer end time is longer than the slide duration, then extend the slide duration
+								if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > tmp_slide->duration)
+								{
+									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+								}
 
 								// Add the layer to the slide list store
 								tmp_iter = g_new0(GtkTreeIter, 1);
@@ -1758,8 +1948,10 @@ gboolean project_read(gchar *filename)
 								tmp_layer->visible = TRUE;
 								tmp_layer->background = FALSE;
 								tmp_layer->external_link_window = g_string_new("_self");
+								tmp_layer->start_time = 0.0;
 								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_in_duration = 0.0;
+								tmp_layer->duration = layer_duration;
 								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_out_duration = 0.0;
 
@@ -1894,34 +2086,70 @@ gboolean project_read(gchar *filename)
 										tmp_text_ob->text_buffer = gtk_text_buffer_new(NULL);
 										gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), (const gchar *) xmlNodeListGetString(document, this_node->xmlChildrenNode, 1), -1);
 									}
-									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
+									// If the file format is less the version 4.0, then it has layers with frame based input rather than time based input
+									if (4.0 > valid_save_format)
 									{
-										// Get the start frame
-										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
-										if (NULL == validated_guint)
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 										{
-											display_warning("Error ED269: There was something wrong with a start frame value in the project file.");
-											useable_input = FALSE;
-											tmp_layer->start_frame = 0;  // Fill in the value, just to be safe
-										} else
-										{
-											tmp_layer->start_frame = *validated_guint;
-											g_free(validated_guint);
+											// Get the start frame
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_guint)
+											{
+												display_warning("Error ED269: There was something wrong with a start frame value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->start_time = *validated_guint / valid_fps;
+												g_free(validated_guint);
+											}
 										}
-									}
-									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
+										{
+											// Get the finish frame
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_guint)
+											{
+												display_warning("Error ED270: There was something wrong with a finish frame value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->duration = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->duration = (*validated_guint / valid_fps) - tmp_layer->start_time;
+												g_free(validated_guint);
+											}
+										}
+									} else
 									{
-										// Get the finish frame
-										validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
-										if (NULL == validated_guint)
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_time")))
 										{
-											display_warning("Error ED270: There was something wrong with a finish frame value in the project file.");
-											useable_input = FALSE;
-											tmp_layer->finish_frame = 0;  // Fill in the value, just to be safe
-										} else
+											// Get the start time
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_gfloat)
+											{
+												display_warning("Error ED336: There was something wrong with a layer start time value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->start_time = *validated_gfloat;
+												g_free(validated_gfloat);
+											}
+										}
+										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "duration")))
 										{
-											tmp_layer->finish_frame = *validated_guint;
-											g_free(validated_guint);
+											// Get the finish frame
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											if (NULL == validated_gfloat)
+											{
+												display_warning("Error ED337: There was something wrong with a layer duration value in the project file.");
+												useable_input = FALSE;
+												tmp_layer->duration = 0;  // Fill in the value, just to be safe
+											} else
+											{
+												tmp_layer->duration = *validated_gfloat;
+												g_free(validated_gfloat);
+											}
 										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
@@ -2059,8 +2287,11 @@ gboolean project_read(gchar *filename)
 									this_node = this_node->next;
 								}
 
-								// If the finish_frame is longer than the slide duration, we increase the slide duration
-								if (tmp_layer->finish_frame > tmp_slide->duration) tmp_slide->duration = tmp_layer->finish_frame;
+								// If the new layer end time is longer than the slide duration, then extend the slide duration
+								if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > tmp_slide->duration)
+								{
+									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+								}
 
 								// Add the layer to the slide list store
 								tmp_iter = g_new0(GtkTreeIter, 1);
@@ -2086,7 +2317,7 @@ gboolean project_read(gchar *filename)
 				this_layer = this_layer->next;
 			}
 
-			// Read the slide name from the save file
+			// Read the slide name from the project file
 			tmp_slide->name = NULL;
 			tmp_char = xmlGetProp(this_slide, (const xmlChar *) "name");
 			if (NULL != tmp_char)
@@ -2105,21 +2336,21 @@ gboolean project_read(gchar *filename)
 				}
 			}
 
-			// Read the slide duration from the save file
-			tmp_slide->duration = default_slide_length;
+			// Read the slide duration from the project file
+			tmp_slide->duration = default_slide_duration;
 			tmp_char = xmlGetProp(this_slide, (const xmlChar *) "duration");
 			if (NULL != tmp_char)
 			{
 				// A duration for the slide is in the project file, so we use it if it validates
-				validated_guint = validate_value(SLIDE_LENGTH, V_CHAR, tmp_char);
-				if (NULL == validated_guint)
+				validated_gfloat = validate_value(SLIDE_DURATION, V_CHAR, tmp_char);
+				if (NULL == validated_gfloat)
 				{
 					display_warning("Error ED276: There was something wrong with a slide duration value in the project file.");
 					useable_input = FALSE;
 				} else
 				{
-					tmp_slide->duration = *validated_guint;
-					g_free(validated_guint);
+					tmp_slide->duration = *validated_gfloat;
+					g_free(validated_gfloat);
 					xmlFree(tmp_char);
 				}
 			}
@@ -2192,8 +2423,8 @@ gboolean project_read(gchar *filename)
 	// Load project height
 	project_height = valid_project_height;
 
-	// Load slide length
-	slide_length = valid_slide_length;
+	// Load slide duration
+	slide_duration = valid_slide_duration;
 
 	// Load frames per second
 	if (0 != valid_fps)
