@@ -64,43 +64,54 @@ void regenerate_timeline_duration_images(slide *target_slide)
 
 
 	// Slide 
-	pixels_per_frame = duration_width / target_slide->duration;
+	pixels_per_frame = duration_width / (target_slide->duration * frames_per_second);
 
 	// Create the duration slider images for the timeline area
 	layer_ptr = g_list_first(target_slide->layers);
 	num_layers = g_list_length(layer_ptr);
 	for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 	{
-		// Work out the start and ending frames for this layer
+		// Select the correct layer
 		layer_data = g_list_nth_data(layer_ptr, layer_counter);
-		start_frame = layer_data->start_time * frames_per_second;
 
-		// If there's a transition in, work things out
-		if (TRANS_LAYER_NONE != layer_data->transition_in_type)
+		// If this layer isn't a background layer, we need to process it
+		if (FALSE == layer_data->background)
 		{
-			trans_in_finish = start_frame + (layer_data->transition_in_duration * frames_per_second);
+			// Work out the start and ending frames for this layer
+			start_frame = layer_data->start_time * frames_per_second;
+
+			// If there's a transition in, work things out
+			if (TRANS_LAYER_NONE != layer_data->transition_in_type)
+			{
+				trans_in_finish = start_frame + (layer_data->transition_in_duration * frames_per_second);
+			} else
+			{
+				trans_in_finish = start_frame;
+			}
+
+			// Work out the main layer display time 
+			trans_out_start = trans_in_finish + (layer_data->duration * frames_per_second);
+
+			// Work out the frame where the layer finishes displaying
+			if (TRANS_LAYER_NONE != layer_data->transition_out_type)
+			{
+				finish_frame = trans_out_start + (layer_data->transition_out_duration * frames_per_second);
+			} else
+			{
+				finish_frame = trans_out_start;
+			}
+
+			// Calculate the duration of the layer for drawing inside the slider
+			start_pixel = roundf(start_frame * pixels_per_frame);
+			trans_in_finish_pixel = roundf(trans_in_finish * pixels_per_frame);
+			trans_out_start_pixel = roundf(trans_out_start  * pixels_per_frame);
+			finish_pixel = roundf(finish_frame * pixels_per_frame);
 		} else
 		{
-			trans_in_finish = start_frame;
+			// This is a background layer
+			start_pixel = trans_in_finish_pixel = 0;
+			finish_pixel = trans_out_start_pixel = duration_width;
 		}
-
-		// Work out the main layer display time 
-		trans_out_start = trans_in_finish + (layer_data->duration * frames_per_second);
-
-		// Work out the frame where the layer finishes displaying
-		if (TRANS_LAYER_NONE != layer_data->transition_out_type)
-		{
-			finish_frame = trans_out_start + (layer_data->transition_out_duration * frames_per_second);
-		} else
-		{
-			finish_frame = trans_out_start;
-		}
-
-		// Calculate the duration of the layer for drawing inside the slider
-		start_pixel = roundf(start_frame * pixels_per_frame);
-		trans_in_finish_pixel = roundf(trans_in_finish * pixels_per_frame);
-		trans_out_start_pixel = roundf(trans_out_start  * pixels_per_frame);
-		finish_pixel = roundf(finish_frame * pixels_per_frame);
 
 		// Create duration image
 		layer_pixbuf = NULL;
