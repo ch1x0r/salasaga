@@ -40,12 +40,20 @@ GdkPixbuf *create_timeline_slider(GdkPixbuf *output_pixbuf, gint total_width, gi
 {
 	// Local variables
 	GdkColormap			*drawable_colormap;			// Used for adjusting the system colormap
+	guint				duration_trans_in;			// Pixel width of the transition in
+	guint				duration_trans_out;			// Pixel width of the transition out
+	guint				duration_main;				// Pixel width of the main layer display
 	GdkDrawable			*layer_drawable;			// Points to slider images as they're created
 	GdkGC				*layer_graphics_context;	// Used for working with graphics contexts
 	GdkColor			slider_bg;					// Backgroud colour of sliders
 	GdkColor			slider_fg;					// Foreground colour of sliders
 	GdkColor			slider_transition;			// Transition colour of sliders
 
+
+	// Determine the pixel widths of things
+	duration_trans_in = trans_in_pixel - start_pixel;
+	duration_trans_out = finish_pixel - trans_out_pixel;
+	duration_main = trans_out_pixel - trans_in_pixel;
 
 	// Set up the colors used for drawing the slider
 	drawable_colormap = gdk_colormap_get_system();
@@ -85,10 +93,6 @@ GdkPixbuf *create_timeline_slider(GdkPixbuf *output_pixbuf, gint total_width, gi
 	// Draw the background of the slider as grey
 	gdk_gc_set_rgb_fg_color(layer_graphics_context, &slider_bg);
 	gdk_draw_rectangle(GDK_DRAWABLE(layer_drawable), layer_graphics_context, TRUE, 0, 0, total_width, total_height);
-
-	guint duration_trans_in = trans_in_pixel - start_pixel;
-	guint duration_trans_out = finish_pixel - trans_out_pixel;
-	guint duration_main = trans_out_pixel - trans_in_pixel;
 
 	// If there's a transition in, draw it
 	if (0 != duration_trans_in)
