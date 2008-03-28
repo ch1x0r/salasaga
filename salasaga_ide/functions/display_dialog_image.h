@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean request_file);
+gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title);
 
 #ifdef __cplusplus
 }
