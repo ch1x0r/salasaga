@@ -73,7 +73,7 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 	}
 
 	// Add the slide duration to the slide container attributes
-	g_string_printf(tmp_gstring, "%u", slide_pointer->duration);
+	g_string_printf(tmp_gstring, "%0.4f", slide_pointer->duration);
 	xmlNewProp(slide_node, (const xmlChar *) "duration", (const xmlChar *) tmp_gstring->str);
 
 	// Add the layer data to the slide container
