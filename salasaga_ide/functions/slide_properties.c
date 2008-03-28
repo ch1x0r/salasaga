@@ -45,7 +45,7 @@ void slide_properties(void)
 	gfloat				gfloat_val;					// Temporary gfloat value used for validation
 	guint				layer_counter;				// Counter used in loops
 	guint				num_layers;					// Receives the number of layers present in the slide
-	guint				old_slide_duration;			// Holds the old slide duration
+	gfloat				old_slide_duration;			// Holds the old slide duration
 	guint				row_counter = 0;			// Used to count which row things are up to
 	GtkDialog			*slide_dialog;				// Widget for the dialog
 	layer				*this_layer_data;			// Pointer to individual layer data
@@ -105,7 +105,7 @@ void slide_properties(void)
 	gtk_table_attach(GTK_TABLE(dialog_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry holding the slide duration
-	duration_entry = gtk_spin_button_new_with_range(valid_fields[SLIDE_DURATION].min_value, valid_fields[SLIDE_DURATION].max_value, 10);
+	duration_entry = gtk_spin_button_new_with_range(valid_fields[SLIDE_DURATION].min_value, valid_fields[SLIDE_DURATION].max_value, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(duration_entry), old_slide_duration);
 	gtk_table_attach(GTK_TABLE(dialog_table), GTK_WIDGET(duration_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
