@@ -22,9 +22,14 @@
  */
 
 
+// Turn on C99 compatibility
+#define _ISOC99_SOURCE
+
+// Standard includes
+#include <stdlib.h>
+
 // GTK includes
 #include <gtk/gtk.h>
-
 
 #ifndef _WIN32
 	// Non-windows code
@@ -47,12 +52,14 @@ gboolean preferences_load()
 	// Local variables
 	GError				*error = NULL;				// Pointer to error return structure
 	GConfEngine			*gconf_engine;				// GConf engine
+	gfloat				gfloat_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
 	gboolean			should_maximise = FALSE;	// Briefly keeps track of whether the window should be maximised
 	gboolean			useable_input;				// Used to control loop flow
 	GdkColor			valid_bg_colour;			// Receives the new default background color for slides once validated
 	guint				valid_default_fps;			// Receives the new default fps once validated
 	guint				valid_icon_height;			// Receives the new icon height once validated
+	gfloat				valid_layer_duration;		// Receives the new default layer duration once validated
 	GString				*valid_output_folder;		// Receives the new output folder once validated
 	guint				valid_output_height;		// Receives the new default output height once validated
 	guint				valid_output_width;			// Receives the new default output width once validated
@@ -60,9 +67,10 @@ gboolean preferences_load()
 	guint				valid_project_height;		// Receives the new project height once validated
 	guint				valid_project_width;		// Receives the new project width once validated
 	GString				*valid_project_folder;		// Receives the new default project folder once validated
-	guint				valid_slide_length;			// Receives the new default slide length once validated
+	gfloat				valid_slide_duration;		// Receives the new default slide duration once validated
 	GString				*valid_zoom_level;			// Receives the new default zoom level once validated
 	GString				*valid_screenshot_folder;	// Receives the new screenshot folder once validated
+	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
@@ -195,17 +203,30 @@ gboolean preferences_load()
 		g_free(validated_guint);
 	}
 
-	// Retrieve the new default slide length input
-	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/slide_length", NULL);
-	validated_guint = validate_value(SLIDE_LENGTH, V_INT_UNSIGNED, &guint_val);
-	if (NULL == validated_guint)
+	// Retrieve the new default slide duration input
+	gfloat_val = gconf_engine_get_float(gconf_engine, "/apps/salasaga/defaults/slide_duration", NULL);
+	validated_gfloat = validate_value(SLIDE_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
+	if (NULL == validated_gfloat)
 	{
-		display_warning("Error ED193: There was something wrong with the default slide length value stored in the preferences.  Using default preferences instead.");
+		display_warning("Error ED193: There was something wrong with the default slide duration value stored in the preferences.  Using default preferences instead.");
 		useable_input = FALSE;
 	} else
 	{
-		valid_slide_length = *validated_guint;
-		g_free(validated_guint);
+		valid_slide_duration = *validated_gfloat;
+		g_free(validated_gfloat);
+	}
+
+	// Retrieve the new default layer duration input
+	gfloat_val = gconf_engine_get_float(gconf_engine, "/apps/salasaga/defaults/layer_duration", NULL);
+	validated_gfloat = validate_value(LAYER_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
+	if (NULL == validated_gfloat)
+	{
+		display_warning("Error ED333: There was something wrong with the default layer duration value stored in the preferences.  Using default preferences instead.");
+		useable_input = FALSE;
+	} else
+	{
+		valid_layer_duration = *validated_gfloat;
+		g_free(validated_gfloat);
 	}
 
 	// Retrieve the new default background colour, red component
@@ -348,8 +369,11 @@ gboolean preferences_load()
 	// Set the default output height
 	default_output_height = valid_output_height;
 
-	// Set the default slide length (in frames)
-	default_slide_length = slide_length = valid_slide_length;
+	// Set the default slide duration (in seconds)
+	default_slide_duration = slide_duration = valid_slide_duration;
+
+	// Set the default layer duration (in seconds)
+	layer_duration = valid_layer_duration;
 
 	// Set the default background colour
 	default_bg_colour.red = valid_bg_colour.red;
@@ -548,26 +572,6 @@ gboolean preferences_load()
 			RegCloseKey(hkey);
 		}
 
-		// Retrieve the value for the default slide length
-		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
-		{
-			// Value is missing, so warn the user and set a sensible default
-			missing_keys = TRUE;
-			default_slide_length = slide_length = 60;
-		} else
-		{
-			// Retrieve the value
-			buffer_size = sizeof(buffer_data);
-			return_code = RegQueryValueExA(hkey, "slide_length", NULL, NULL, buffer_ptr, &buffer_size);
-			if (ERROR_SUCCESS == return_code)
-			{
-				default_slide_length = slide_length = atoi(buffer_ptr);
-			}
-
-			// Close the registry key
-			RegCloseKey(hkey);
-		}
-
 		// Retrieve the value for the default thumbnail width
 		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
@@ -588,20 +592,40 @@ gboolean preferences_load()
 			RegCloseKey(hkey);
 		}
 
-		// Retrieve the value for the default slide length
+		// Retrieve the value for the default slide duration
 		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			default_slide_length = slide_length = 60;
+			default_slide_duration = slide_duration = 60;
 		} else
 		{
 			// Retrieve the value
 			buffer_size = sizeof(buffer_data);
-			return_code = RegQueryValueExA(hkey, "slide_length", NULL, NULL, buffer_ptr, &buffer_size);
+			return_code = RegQueryValueExA(hkey, "slide_duration", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				default_slide_length = slide_length = atoi(buffer_ptr);
+				default_slide_duration = slide_duration = strtof(buffer_ptr, NULL);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
+		// Retrieve the value for the default layer duration
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			layer_duration = 60;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "layer_duration", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				layer_duration = strtof(buffer_ptr, NULL);
 			}
 
 			// Close the registry key

@@ -1041,8 +1041,8 @@ gint menu_export_flash_inner(gchar *output_filename)
 				start_y_position_unscaled = this_layer_data->y_offset_start;
 				finish_x_position_unscaled = this_layer_data->x_offset_finish;
 				finish_y_position_unscaled = this_layer_data->y_offset_finish;
-				guint start_frame = this_layer_data->start_frame;
-				guint finish_frame = this_layer_data->finish_frame;
+				guint start_frame = this_layer_data->start_time * frames_per_second;
+				guint finish_frame = start_frame + (this_layer_data->duration * frames_per_second);
 				guint num_displayed_frames = (finish_frame - start_frame) + 1;
 				element_x_position_start = scaled_width_ratio * start_x_position_unscaled;
 				element_x_position_finish = scaled_width_ratio * finish_x_position_unscaled;

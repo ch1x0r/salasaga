@@ -212,7 +212,7 @@ void menu_screenshots_import(void)
 		// Allocate a new slide structure for use
 		tmp_slide = g_new(slide, 1);
 		tmp_slide->layers = NULL;
-		tmp_slide->duration = slide_length;
+		tmp_slide->duration = slide_duration;
 		tmp_slide->scaled_cached_pixbuf = NULL;
 		tmp_slide->cached_pixbuf_valid = FALSE;
 
@@ -222,8 +222,10 @@ void menu_screenshots_import(void)
 		tmp_layer->y_offset_start = 0;
 		tmp_layer->x_offset_finish = 0;
 		tmp_layer->y_offset_finish = 0;
+		tmp_layer->start_time = 0.0;
 		tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 		tmp_layer->transition_in_duration = 0.0;
+		tmp_layer->duration = layer_duration;
 		tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 		tmp_layer->transition_out_duration = 0.0;
 
@@ -281,8 +283,6 @@ void menu_screenshots_import(void)
 		// Wrap the background layer info around it
 		tmp_layer->object_data = (GObject *) tmp_image_ob;
 		tmp_layer->object_type = TYPE_GDK_PIXBUF;
-		tmp_layer->start_frame = 0;
-		tmp_layer->finish_frame = slide_length;
 		tmp_layer->visible = TRUE;
 		tmp_layer->background = TRUE;
 		tmp_layer->name = g_string_new("Background");

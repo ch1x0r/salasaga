@@ -22,6 +22,12 @@
  */
 
 
+// Turn on C99 compatibility
+#define _ISOC99_SOURCE
+
+// Standard includes
+#include <math.h>
+
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -58,8 +64,8 @@ void regenerate_timeline_duration_images(slide *target_slide)
 	{
 		// Work out the start and ending frames for this layer
 		layer_data = g_list_nth_data(layer_ptr, layer_counter);
-		start_frame = layer_data->start_frame;
-		finish_frame = layer_data->finish_frame;
+		start_frame = roundf(layer_data->start_time * frames_per_second);
+		finish_frame = roundf(start_frame + (layer_data->duration * frames_per_second));
 
 		// Calculate the duration of the layer for drawing inside the slider
 		start_pixel = 180 * ((gfloat) start_frame / (gfloat) target_slide->duration);

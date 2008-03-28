@@ -38,7 +38,6 @@
 void layer_new_image_inner(guint release_x, guint release_y)
 {
 	// Local variables
-	guint				finish_frame;				// Used when working out a layer's finish frame
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	GdkPixbuf			*new_image_data;			// Receives the new image data
 	gint				new_image_height;			// Receives the height of the new image
@@ -86,7 +85,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	tmp_layer->object_type = TYPE_GDK_PIXBUF;
 	tmp_layer->object_data = (GObject *) tmp_image_ob;
 	tmp_layer->start_time = 0.0;
-	tmp_layer->duration = slide_data->duration;
+	tmp_layer->duration = layer_duration;
 	tmp_layer->x_offset_start = release_x;
 	tmp_layer->y_offset_start = release_y;
 	tmp_layer->x_offset_finish = release_x;
@@ -172,14 +171,10 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	layer_pointer = g_list_first(layer_pointer);
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
 
-	// Simplify the ending frame for this layer
-	finish_frame = tmp_layer->finish_frame;
-
-	// If the user gave a finish frame that's longer than the present slide duration, we need to increase the slide duration to match
-	if (finish_frame > slide_data->duration)
+	// If the new layer end time is longer than the slide duration, then extend the slide duration
+	if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > slide_data->duration)
 	{
-		// Update slide duration data
-		slide_data->duration = finish_frame;
+		slide_data->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 	}
 
 	// Add the new layer to slide list store

@@ -52,15 +52,15 @@ void slide_insert(void)
 	tmp_slide = g_new(slide, 1);
 	tmp_slide->layers = NULL;
 	tmp_slide->name = NULL;
-	tmp_slide->duration = default_slide_length;
+	tmp_slide->duration = default_slide_duration;
 	tmp_slide->scaled_cached_pixbuf = NULL;
 	tmp_slide->cached_pixbuf_valid = FALSE;
 
 	// Allocate a new layer structure for use in the slide
 	tmp_layer = g_new(layer, 1);
 	tmp_layer->object_type = TYPE_EMPTY;
-	tmp_layer->start_frame = 0;
-	tmp_layer->finish_frame = slide_length;
+	tmp_layer->start_time = 0;
+	tmp_layer->duration = layer_duration;
 	tmp_layer->visible = TRUE;
 	tmp_layer->background = TRUE;
 	tmp_layer->name = g_string_new("Empty");

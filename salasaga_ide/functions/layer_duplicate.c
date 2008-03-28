@@ -49,8 +49,12 @@ layer *layer_duplicate(layer *source_layer)
 
 	// Copy the selected layer into the new layer
 	new_layer->object_type = source_layer->object_type;
-	new_layer->start_frame = source_layer->start_frame;
-	new_layer->finish_frame = source_layer->finish_frame;
+	new_layer->start_time = source_layer->start_time;
+	new_layer->transition_in_type = source_layer->transition_in_type;
+	new_layer->transition_in_duration = source_layer->transition_in_duration;
+	new_layer->duration = source_layer->duration;
+	new_layer->transition_out_type = source_layer->transition_out_type;
+	new_layer->transition_out_duration = source_layer->transition_out_duration;
 	new_layer->x_offset_start = source_layer->x_offset_start;
 	new_layer->y_offset_start = source_layer->y_offset_start;
 	new_layer->x_offset_finish = source_layer->x_offset_finish;

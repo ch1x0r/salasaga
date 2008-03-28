@@ -42,7 +42,7 @@ void slide_properties(void)
 {
 	// Local variables
 	GtkWidget			*dialog_table;				// Table used for neat layout of the dialog box
-	guint				guint_val;					// Temporary guint value used for validation
+	gfloat				gfloat_val;					// Temporary gfloat value used for validation
 	guint				layer_counter;				// Counter used in loops
 	guint				num_layers;					// Receives the number of layers present in the slide
 	guint				old_slide_duration;			// Holds the old slide duration
@@ -51,9 +51,9 @@ void slide_properties(void)
 	layer				*this_layer_data;			// Pointer to individual layer data
 	slide				*this_slide;				// Points to the slide we're working with
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
-	guint				valid_slide_duration;		// Receives the new slide duration once validated
+	gfloat				valid_slide_duration;		// Receives the new slide duration once validated
 	GString				*valid_slide_name;			// Receives the new slide name once validated
-	guint				*validated_guint;			// Receives known good guint values from the validation function
+	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
 	GtkWidget			*name_label;				// Label widget
@@ -105,7 +105,7 @@ void slide_properties(void)
 	gtk_table_attach(GTK_TABLE(dialog_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry holding the slide duration
-	duration_entry = gtk_spin_button_new_with_range(0, valid_fields[SLIDE_LENGTH].max_value, 10);
+	duration_entry = gtk_spin_button_new_with_range(valid_fields[SLIDE_DURATION].min_value, valid_fields[SLIDE_DURATION].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(duration_entry), old_slide_duration);
 	gtk_table_attach(GTK_TABLE(dialog_table), GTK_WIDGET(duration_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
@@ -144,16 +144,16 @@ void slide_properties(void)
 		}
 
 		// Retrieve the new slide duration input
-		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(duration_entry));
-		validated_guint = validate_value(SLIDE_LENGTH, V_INT_UNSIGNED, &guint_val);
-		if (NULL == validated_guint)
+		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(duration_entry));
+		validated_gfloat = validate_value(SLIDE_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
+		if (NULL == validated_gfloat)
 		{
 			display_warning("Error ED141: There was something wrong with the slide duration value.  Please try again.");
 			useable_input = FALSE;
 		} else
 		{
-			valid_slide_duration = *validated_guint;
-			g_free(validated_guint);
+			valid_slide_duration = *validated_gfloat;
+			g_free(validated_gfloat);
 		}
 	} while (FALSE == useable_input);
 
@@ -177,10 +177,20 @@ void slide_properties(void)
 		{
 			// Does this layer last too long?
 			this_layer_data = g_list_nth_data(this_slide->layers, layer_counter);
-			if (this_layer_data->finish_frame > valid_slide_duration)
+
+			// If the layer end time is longer than the new slide duration, so we need to shorten the layer somehow
+			if ((this_layer_data->start_time + this_layer_data->duration + this_layer_data->transition_in_duration + this_layer_data->transition_out_duration) > valid_slide_duration)
 			{
-				// This layer now lasts too long, so we shorten it's finish frame to match the new slide duration
-				this_layer_data->finish_frame = valid_slide_duration;
+				if (this_layer_data->start_time >= valid_slide_duration)
+				{
+					// The layer is completely outside of the slide duration, so reset it to be at the end of the slide
+					this_layer_data->start_time = valid_slide_duration - (1 / frames_per_second);
+					this_layer_data->duration = 1 / frames_per_second;
+				} else
+				{
+					// The layer start time is in bounds, so we just shorted the duration
+					this_layer_data->duration = valid_slide_duration - this_layer_data->start_time;
+				}
 			}
 		}
 	}

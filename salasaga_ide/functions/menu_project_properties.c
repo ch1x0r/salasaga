@@ -40,6 +40,7 @@
 void menu_project_properties(void)
 {
 	// Local variables
+	gfloat				gfloat_val;					// Temporary gint value
 	gint				gint_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
 	GtkDialog			*main_dialog;				// Widget for the main dialog
@@ -52,8 +53,9 @@ void menu_project_properties(void)
 	GString				*valid_output_folder;		// Receives the new output folder once validated
 	GString				*valid_proj_name;			// Receives the new project name once validated
 	GString				*valid_project_folder;		// Receives the new project folder once validated
-	guint				valid_slide_length;			// Receives the new project default slide length once validated
+	gfloat				valid_slide_duration;		// Receives the new project default slide duration once validated
 	guint				valid_start_behaviour;		// Receives the new start behaviour once validated
+	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
@@ -66,8 +68,8 @@ void menu_project_properties(void)
 	GtkWidget			*label_output_folder;		// Output Folder
 	GtkWidget			*button_output_folder;		//
 
-	GtkWidget			*label_slide_length;		// Slide Length
-	GtkWidget			*button_slide_length;		//
+	GtkWidget			*label_slide_duration;		// Slide Duration
+	GtkWidget			*button_slide_duration;		//
 
 	GtkWidget			*label_frames_per_second;	// Frames per second 
 	GtkWidget			*button_frames_per_second;	//
@@ -130,20 +132,20 @@ void menu_project_properties(void)
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_output_folder), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
 
-	// Slide Length
-	label_slide_length = gtk_label_new("Default Slide Length: \n(in frames)");
-	gtk_misc_set_alignment(GTK_MISC(label_slide_length), 0, 1);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_slide_length), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_slide_length = gtk_spin_button_new_with_range(0, valid_fields[SLIDE_LENGTH].max_value, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_slide_length), slide_length);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_slide_length), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Slide Duration
+	label_slide_duration = gtk_label_new("Default Slide Duration: \n(in seconds)");
+	gtk_misc_set_alignment(GTK_MISC(label_slide_duration), 0, 1);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_slide_duration), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	button_slide_duration = gtk_spin_button_new_with_range(valid_fields[SLIDE_DURATION].min_value, valid_fields[SLIDE_DURATION].max_value, 0.1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_slide_duration), slide_duration);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_slide_duration), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Frames per second
 	label_frames_per_second = gtk_label_new("Frames per second: ");
 	gtk_misc_set_alignment(GTK_MISC(label_frames_per_second), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_frames_per_second), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_frames_per_second = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_FPS].max_value, 1);
+	button_frames_per_second = gtk_spin_button_new_with_range(valid_fields[PROJECT_FPS].min_value, valid_fields[PROJECT_FPS].max_value, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_frames_per_second), frames_per_second);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_frames_per_second), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
@@ -289,17 +291,17 @@ void menu_project_properties(void)
 			validated_string = NULL;
 		}
 
-		// Retrieve the new project default slide length input
-		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_slide_length));
-		validated_guint = validate_value(SLIDE_LENGTH, V_INT_UNSIGNED, &guint_val);
-		if (NULL == validated_guint)
+		// Retrieve the new project default slide duration input
+		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_slide_duration));
+		validated_gfloat = validate_value(SLIDE_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
+		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED138: There was something wrong with the project default slide length value.  Please try again.");
+			display_warning("Error ED138: There was something wrong with the project default slide duration value.  Please try again.");
 			useable_input = FALSE;
 		} else
 		{
-			valid_slide_length = *validated_guint;
-			g_free(validated_guint);
+			valid_slide_duration = *validated_gfloat;
+			g_free(validated_gfloat);
 		}
 
 		// Retrieve the new frames per second input
@@ -363,8 +365,8 @@ void menu_project_properties(void)
 	output_folder = g_string_assign(output_folder, valid_output_folder->str);
 	g_string_free(valid_output_folder, TRUE);
 
-	// Slide Length
-	slide_length = valid_slide_length;
+	// Slide Duration
+	slide_duration = valid_slide_duration;
 
 	// Frames per second
 	frames_per_second = valid_fps;

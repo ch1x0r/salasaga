@@ -105,10 +105,10 @@ void layer_edit(void)
 			{
 				// * The dialog box returned successfully *
 
-				// If the new layer finish_frame is longer than the slide duration, then extend the slide duration
-				if (tmp_layer->finish_frame > slide_data->duration)
+				// If the new layer end time is longer than the slide duration, then extend the slide duration
+				if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > slide_data->duration)
 				{
-					slide_data->duration = tmp_layer->finish_frame;
+					slide_data->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 				}
 
 				// Update the slide list store with the new values
@@ -129,10 +129,10 @@ void layer_edit(void)
 			{
 				// * The dialog box returned successfully *
 
-				// If the new layer finish_frame is longer than the slide duration, then extend the slide duration
-				if (tmp_layer->finish_frame > slide_data->duration)
+				// If the new layer end time is longer than the slide duration, then extend the slide duration
+				if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > slide_data->duration)
 				{
-					slide_data->duration = tmp_layer->finish_frame;
+					slide_data->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 				}
 
 				// Update the slide list store with the new values
@@ -154,10 +154,10 @@ void layer_edit(void)
 			{
 				// * The dialog box returned successfully *
 
-				// If the new layer finish_frame is longer than the slide duration, then extend the slide duration
-				if (tmp_layer->finish_frame > slide_data->duration)
+				// If the new layer end time is longer than the slide duration, then extend the slide duration
+				if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > slide_data->duration)
 				{
-					slide_data->duration = tmp_layer->finish_frame;
+					slide_data->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 				}
 
 				// Update the slide list store with the new values
@@ -180,10 +180,10 @@ void layer_edit(void)
 			{
 				// * The dialog box returned successfully *
 
-				// If the new layer finish_frame is longer than the slide duration, then extend the slide duration
-				if (tmp_layer->finish_frame > slide_data->duration)
+				// If the new layer end time is longer than the slide duration, then extend the slide duration
+				if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > slide_data->duration)
 				{
-					slide_data->duration = tmp_layer->finish_frame;
+					slide_data->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 				}
 
 				// Update the slide list store with the new values

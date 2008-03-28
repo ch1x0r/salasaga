@@ -37,7 +37,6 @@
 void layer_paste(void)
 {
 	// Local variables
-	guint				finish_frame;				// Used when working out a layer's finish frame
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	GtkTreeIter			*new_iter;					// New iter
 	layer				*new_layer;					// Newly created layer
@@ -65,17 +64,15 @@ void layer_paste(void)
 	// Simplify pointers
 	slide_data = current_slide->data;
 	layer_pointer = slide_data->layers;
-	finish_frame = new_layer->finish_frame;
 
 	// Insert it into the present slide
 	layer_pointer = g_list_first(layer_pointer);
 	layer_pointer = g_list_prepend(layer_pointer, new_layer);
 
-	// If the finish frame for the copied layer is longer than the present slide duration, we need to increase the slide duration to match
-	if (finish_frame > slide_data->duration)
+	// If the new layer end time is longer than the slide duration, then extend the slide duration
+	if ((new_layer->start_time + new_layer->duration + new_layer->transition_in_duration + new_layer->transition_out_duration) > slide_data->duration)
 	{
-		// Update slide duration data
-		slide_data->duration = finish_frame;
+		slide_data->duration = new_layer->start_time + new_layer->duration + new_layer->transition_in_duration + new_layer->transition_out_duration;
 	}
 
 	// Add the new layer to slide list store

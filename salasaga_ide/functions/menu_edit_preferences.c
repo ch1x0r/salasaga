@@ -48,6 +48,7 @@ void menu_edit_preferences(void)
 	// Local variables
 	GtkWidget			*app_dialog_table;					// Table used for neat layout of the labels and fields in application preferences
 	gint				app_row_counter;					// Used when building the application preferences dialog box
+	gfloat				gfloat_val;							// Temporary gfloat value used for validation
 	guint				guint_val;							// Temporary guint value used for validation
 	GValue				*handle_size;						// The size of the dividing handle for the film strip
 	GtkDialog			*main_dialog;						// Widget for the main dialog
@@ -56,13 +57,15 @@ void menu_edit_preferences(void)
 	gboolean			useable_input;						// Used to control loop flow
 	guint				valid_default_fps;					// Receives the new default fps once validated
 	guint				valid_icon_height;					// Receives the new icon height once validated
+	gfloat				valid_layer_duration;				// Receives the new default layer duration once validated
 	GString				*valid_output_folder;				// Receives the new output folder once validated
 	GString				*valid_output_resolution;			// Receives the new default output resolution once validated
 	guint				valid_preview_width;				// Receives the new film strip thumbnail width once validated
 	GString				*valid_project_folder;				// Receives the new default project folder once validated
 	GString				*valid_screenshot_folder;			// Receives the new screenshot folder once validated
-	guint				valid_slide_length;					// Receives the new default slide length once validated
+	gfloat				valid_slide_duration;				// Receives the new default slide duration once validated
 	GString				*valid_zoom_level;					// Receives the new default zoom level once validated
+	gfloat				*validated_gfloat;					// Receives known good gfloat values from the validation function
 	guint				*validated_guint;					// Receives known good guint values from the validation function 
 	GString				*validated_string;					// Receives known good strings from the validation function
 
@@ -79,8 +82,11 @@ void menu_edit_preferences(void)
 	GtkWidget			*label_default_output_res;			// Default Output Resolution
 	GtkWidget			*selector_default_output_res;		//
 
-	GtkWidget			*label_default_slide_length;		// Default Slide Length
-	GtkWidget			*button_default_slide_length;		//
+	GtkWidget			*label_default_slide_duration;		// Default Slide Duration
+	GtkWidget			*button_default_slide_duration;		//
+
+	GtkWidget			*label_default_layer_duration;		// Default Layer Duration
+	GtkWidget			*button_default_layer_duration;		//
 
 	GtkWidget			*label_default_fps;					// Default Frames Per Second
 	GtkWidget			*button_default_fps;				//
@@ -147,20 +153,29 @@ void menu_edit_preferences(void)
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_default_output_res), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
-	// Default Slide Length
-	label_default_slide_length = gtk_label_new("Default Slide Length: ");
-	gtk_misc_set_alignment(GTK_MISC(label_default_slide_length), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_slide_length), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_default_slide_length = gtk_spin_button_new_with_range(0, valid_fields[SLIDE_LENGTH].max_value, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_slide_length), default_slide_length);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_slide_length), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Default Slide Duration
+	label_default_slide_duration = gtk_label_new("Default Slide Duration: ");
+	gtk_misc_set_alignment(GTK_MISC(label_default_slide_duration), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_slide_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	button_default_slide_duration = gtk_spin_button_new_with_range(valid_fields[SLIDE_DURATION].min_value, valid_fields[SLIDE_DURATION].max_value, 0.1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_slide_duration), default_slide_duration);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_slide_duration), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	app_row_counter = app_row_counter + 1;
+
+	// Default Layer Duration
+	label_default_layer_duration = gtk_label_new("Default Layer Duration: ");
+	gtk_misc_set_alignment(GTK_MISC(label_default_layer_duration), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_layer_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	button_default_layer_duration = gtk_spin_button_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 0.1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_layer_duration), layer_duration);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_layer_duration), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Frames Per Second
 	label_default_fps = gtk_label_new("Default Frames Per Second: ");
 	gtk_misc_set_alignment(GTK_MISC(label_default_fps), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_fps), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_default_fps = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_FPS].max_value, 10);
+	button_default_fps = gtk_spin_button_new_with_range(valid_fields[PROJECT_FPS].min_value, valid_fields[PROJECT_FPS].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_fps), default_fps);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_fps), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
@@ -169,7 +184,7 @@ void menu_edit_preferences(void)
 	label_preview_width = gtk_label_new("Film Strip Width: ");
 	gtk_misc_set_alignment(GTK_MISC(label_preview_width), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_preview_width), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_preview_width = gtk_spin_button_new_with_range(0, valid_fields[PREVIEW_WIDTH].max_value, 10);
+	button_preview_width = gtk_spin_button_new_with_range(valid_fields[PREVIEW_WIDTH].min_value, valid_fields[PREVIEW_WIDTH].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_preview_width), preview_width);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_preview_width), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
@@ -178,7 +193,7 @@ void menu_edit_preferences(void)
 	label_icon_height = gtk_label_new("Icon Height: ");
 	gtk_misc_set_alignment(GTK_MISC(label_icon_height), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_icon_height), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_icon_height = gtk_spin_button_new_with_range(0, valid_fields[ICON_HEIGHT].max_value, 10);
+	button_icon_height = gtk_spin_button_new_with_range(valid_fields[ICON_HEIGHT].min_value, valid_fields[ICON_HEIGHT].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_icon_height), icon_height);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_icon_height), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
@@ -276,17 +291,30 @@ void menu_edit_preferences(void)
 			validated_string = NULL;
 		}
 
-		// Retrieve the new default slide length input
-		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_slide_length));
-		validated_guint = validate_value(SLIDE_LENGTH, V_INT_UNSIGNED, &guint_val);
-		if (NULL == validated_guint)
+		// Retrieve the new default slide duration input
+		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_slide_duration));
+		validated_gfloat = validate_value(SLIDE_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
+		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED130: There was something wrong with the default slide length value.  Please try again.");
+			display_warning("Error ED130: There was something wrong with the default slide duration value.  Please try again.");
 			useable_input = FALSE;
 		} else
 		{
-			valid_slide_length = *validated_guint;
-			g_free(validated_guint);
+			valid_slide_duration = *validated_gfloat;
+			g_free(validated_gfloat);
+		}
+
+		// Retrieve the new default layer duration input
+		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_default_layer_duration));
+		validated_gfloat = validate_value(LAYER_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
+		if (NULL == validated_gfloat)
+		{
+			display_warning("Error ED334: There was something wrong with the default layer duration value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_layer_duration = *validated_gfloat;
+			g_free(validated_gfloat);
 		}
 
 		// Retrieve the new default frames per second input
@@ -364,8 +392,11 @@ void menu_edit_preferences(void)
 	g_string_free(valid_output_resolution, TRUE);
 	g_strfreev(strings);
 
-	// Default Slide Length
-	default_slide_length = valid_slide_length;
+	// Default Slide Duration
+	default_slide_duration = valid_slide_duration;
+
+	// Default Layer Duration
+	layer_duration = valid_layer_duration;
 
 	// Default Frames Per Second
 	default_fps = valid_default_fps;
