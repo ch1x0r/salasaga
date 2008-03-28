@@ -63,8 +63,8 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/project_height", project_height, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_width", default_output_width, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_height", default_output_height, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/slide_duration", default_slide_duration, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/layer_duration", layer_duration, NULL);
+	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/slide_duration", default_slide_duration, NULL);
+	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/layer_duration", layer_duration, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/thumbnail_width", preview_width, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/frames_per_second", default_fps, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_red", default_bg_colour.red, NULL);
