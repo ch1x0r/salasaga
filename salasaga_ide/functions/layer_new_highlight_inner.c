@@ -45,12 +45,10 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	// Local variables
 	gfloat				end_x;						// Right side of the highlight layer
 	gfloat				end_y;						// Bottom side of the highlight layer
-	guint				finish_frame;				// Used when working out a layer's finish frame
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				mouse_drag_height;			// The height the mouse was dragged
 	gint				mouse_drag_width;			// The width the mouse was dragged
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
-	gboolean			return_code;				// Catches a TRUE/FALSE return value
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio
 	gfloat				scaled_x;					// Scaled starting coordinate
 	gfloat				scaled_y;					// Scaled starting coordinate
@@ -150,43 +148,10 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_out_duration = 0.0;
 
-	// Display a dialog box to edit these values, using our new highlight layer object
-	return_code = display_dialog_highlight(tmp_layer, "Add new highlight layer");
-	if (TRUE != return_code)
-	{
-		// The user cancelled out of the dialog box, so destroy our new layer and return
-		g_string_free(tmp_layer->name, TRUE);
-		g_string_free(tmp_layer->external_link, TRUE);
-		g_string_free(tmp_layer->external_link_window, TRUE);
-		g_free(tmp_layer);
-		g_free(tmp_highlight_ob);
-
-		// Redraw the workspace
-		draw_workspace();
-
-		// Update the status bar
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " New layer cancelled");
-		gdk_flush();
-
-		return;
-	}
-
-	// * To get here, the user must have clicked OK in the create highlight layer dialog box, so we process the results *
-
 	// Add the new layer to the slide
 	layer_pointer = slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
-
-	// Simplify the ending frame for this layer
-	finish_frame = tmp_layer->finish_frame;
-
-	// If the user gave a finish frame that's longer than the present slide duration, we need to increase the slide duration to match
-	if (finish_frame > slide_data->duration)
-	{
-		// Update slide duration data
-		slide_data->duration = finish_frame;
-	}
 
 	// Add the new layer to slide list store
 	tmp_iter = g_new(GtkTreeIter, 1);
