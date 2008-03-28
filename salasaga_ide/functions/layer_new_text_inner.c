@@ -28,7 +28,6 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "display_dialog_text.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
 #include "regenerate_timeline_duration_images.h"
