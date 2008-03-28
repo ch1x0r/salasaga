@@ -28,10 +28,11 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "display_dialog_image.h"
+#include "display_warning.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
 #include "regenerate_timeline_duration_images.h"
+#include "validate_value.h"
 
 
 void layer_new_image_inner(guint release_x, guint release_y)
@@ -39,9 +40,16 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	// Local variables
 	guint				finish_frame;				// Used when working out a layer's finish frame
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	GdkPixbuf			*new_image_data;			// Receives the new image data
+	gint				new_image_height;			// Receives the height of the new image
+	gint				new_image_width;			// Receives the width of the new image
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
-	gboolean			return_code;				// Catches a TRUE/FALSE return value
+	GString				*path_gstring;				// Holds the file selection path
+	GtkWidget			*path_widget;				// File selection widget
 	slide				*slide_data;				// Pointer to the data for the current slide
+	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	GString				*valid_image_path;			// Receives the new image path once validated
+	GString				*validated_string;			// Receives known good strings from the validation function
 
 	layer_image			*tmp_image_ob;				// Temporary image layer object
 	GtkTreeIter			*tmp_iter;					// Temporary iter
@@ -57,6 +65,10 @@ void layer_new_image_inner(guint release_x, guint release_y)
 		return;
 	}
 
+	// Initialise some things
+	path_gstring = g_string_new(NULL);
+	valid_image_path = g_string_new(NULL);
+
 	// Change the cursor back to normal
 	gdk_window_set_cursor(main_drawing_area->window, NULL);
 
@@ -67,16 +79,14 @@ void layer_new_image_inner(guint release_x, guint release_y)
 
 	// Create the image layer data
 	tmp_image_ob = g_new(layer_image, 1);
-	tmp_image_ob->width = 400;
-	tmp_image_ob->height = 300;
 	tmp_image_ob->modified = FALSE;
 
-	// Constuct the new image layer
+	// Constuct the new image layer with some defaults
 	tmp_layer = g_new(layer, 1);
 	tmp_layer->object_type = TYPE_GDK_PIXBUF;
 	tmp_layer->object_data = (GObject *) tmp_image_ob;
-	tmp_layer->start_frame = 0;
-	tmp_layer->finish_frame = slide_data->duration;
+	tmp_layer->start_time = 0.0;
+	tmp_layer->duration = slide_data->duration;
 	tmp_layer->x_offset_start = release_x;
 	tmp_layer->y_offset_start = release_y;
 	tmp_layer->x_offset_finish = release_x;
@@ -91,25 +101,71 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_out_duration = 0.0;
 
-	// Display a dialog box to edit these values, using our new image layer object
-	return_code = display_dialog_image(tmp_layer, "Add new image layer", TRUE);
-	if (TRUE != return_code)
+	// Open a dialog asking the user to select an image
+	path_widget = gtk_file_chooser_dialog_new("Please choose an image file", GTK_WINDOW(main_window), GTK_FILE_CHOOSER_ACTION_OPEN,
+				      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,  // Cancel button
+				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,  // Open button
+				      NULL);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(path_widget), last_folder->str);
+	gtk_widget_show_all(GTK_WIDGET(path_widget));
+
+	// Loop around until we have all valid values, or the user cancels out
+	validated_string = NULL;
+	do
 	{
-		// The user cancelled out of the dialog box, so destroy our new layer and return
-		g_string_free(tmp_layer->name, TRUE);
-		g_string_free(tmp_layer->external_link, TRUE);
-		g_string_free(tmp_layer->external_link_window, TRUE);
-		g_free(tmp_layer);
-		g_free(tmp_image_ob);
+		// Display the dialog
+		if (GTK_RESPONSE_ACCEPT != gtk_dialog_run(GTK_DIALOG(path_widget)))
+		{
+			// The dialog was cancelled, so destroy it and return to the caller
+			gtk_widget_destroy(GTK_WIDGET(path_widget));
+			g_string_free(path_gstring, TRUE);
+			g_string_free(valid_image_path, TRUE);
+			return;
+		}
 
-		// Update the status bar
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " New layer cancelled");
-		gdk_flush();
+		// Grab the folder the user may have changed too  
+		last_folder = g_string_assign(last_folder, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(path_widget)));
 
-		return;
-	}
+		// Reset the useable input flag
+		useable_input = TRUE;
 
-	// * To get here, the user must have clicked OK in the dialog box, so we process the results *
+		// Retrieve the new image path
+		validated_string = validate_value(FILE_PATH, V_CHAR, (gchar *) gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(path_widget)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED330: There was something wrong with the image path given.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			// Load the image
+			new_image_data = gdk_pixbuf_new_from_file(validated_string->str, NULL);
+			if (NULL == new_image_data)
+			{
+				display_warning("Error ED331: There was something wrong with the image file selected.  Please try again.");
+				useable_input = FALSE;					
+			} else
+			{
+				// Retrieve the image dimensions
+				new_image_height = gdk_pixbuf_get_height(new_image_data);
+				new_image_width = gdk_pixbuf_get_width(new_image_data);
+				g_string_free(validated_string, TRUE);
+				validated_string = NULL;
+
+				// Create the rest of the image layer data
+				tmp_image_ob->image_data = new_image_data;
+				tmp_image_ob->width = gdk_pixbuf_get_width(new_image_data);
+				tmp_image_ob->height = gdk_pixbuf_get_height(new_image_data);
+				g_string_free(validated_string, TRUE);
+				validated_string = NULL;
+			}
+		}
+
+	} while (FALSE == useable_input);
+
+	// Destroy the file selection dialog box
+	gtk_widget_destroy(GTK_WIDGET(path_widget));
+
+	// * To get here, the user must have chosen a valid image file, so we process the results *
 
 	// Add the new layer to the slide
 	layer_pointer = slide_data->layers;
