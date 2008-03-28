@@ -37,10 +37,8 @@
 void layer_new_mouse_inner(guint release_x, guint release_y)
 {
 	// Local variables
-	guint				finish_frame;				// Used when working out a layer's finish frame
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
-	gboolean			return_code;				// Catches a TRUE/FALSE return value
 	slide				*slide_data;				// Pointer to the data for the current slide
 
 	layer_mouse			*tmp_mouse_ob;				// Temporary mouse layer object
@@ -70,7 +68,6 @@ void layer_new_mouse_inner(guint release_x, guint release_y)
 	tmp_mouse_ob->width = 22;
 	tmp_mouse_ob->height = 32;
 	tmp_mouse_ob->click = MOUSE_NONE;
-	tmp_mouse_ob->image_path = g_string_new("");
 
 	// Constuct the new mouse pointer layer
 	tmp_layer = g_new(layer, 1);
@@ -92,40 +89,10 @@ void layer_new_mouse_inner(guint release_x, guint release_y)
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_out_duration = 0.0;
 
-	// Display a dialog box to edit these values, using our new mouse pointer layer object
-	return_code = display_dialog_mouse(tmp_layer, "Add mouse pointer", TRUE);
-	if (TRUE != return_code)
-	{
-		// The user cancelled out of the dialog box, so destroy our new layer and return
-		g_string_free(tmp_layer->name, TRUE);
-		g_string_free(tmp_layer->external_link, TRUE);
-		g_string_free(tmp_layer->external_link_window, TRUE);
-		g_free(tmp_layer);
-		g_free(tmp_mouse_ob);
-
-		// Update the status bar
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " New layer cancelled");
-		gdk_flush();
-
-		return;
-	}
-
-	// * To get here, the user must have clicked OK in the dialog box, so we process the results *
-
 	// Add the new layer to the slide
 	layer_pointer = slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
-
-	// Simplify the ending frame for this layer
-	finish_frame = tmp_layer->finish_frame;
-
-	// If the user gave a finish frame that's longer than the present slide duration, we need to increase the slide duration to match
-	if (finish_frame > slide_data->duration)
-	{
-		// Update slide duration data
-		slide_data->duration = finish_frame;
-	}
 
 	// Add the new layer to slide list store
 	tmp_iter = g_new(GtkTreeIter, 1);
