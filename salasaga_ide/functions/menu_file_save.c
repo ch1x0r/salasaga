@@ -48,7 +48,7 @@ void menu_file_save(void)
 	gchar				*dir_name_part;				// Briefly used for holding a directory name
 	gchar				*filename;					// Pointer to the chosen file name
 	gchar				*file_name_part;			// Briefly used for holding a file name
-	GtkFileFilter		*salasaga_filter;				// Filter for *.salasaga
+	GtkFileFilter		*salasaga_filter;			// Filter for *.salasaga
 	GtkWidget 			*save_dialog;				// Dialog widget
 	gboolean			useable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
@@ -199,7 +199,7 @@ void menu_file_save(void)
 	}
 
 	// Add the save format version number to the XML document
-	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "3.1");
+	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "4.0");
 
     // Create the preferences container
 	pref_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "preferences", NULL);
@@ -220,8 +220,8 @@ void menu_file_save(void)
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_width", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", project_height);
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_height", (const xmlChar *) tmp_gstring->str);
-	g_string_printf(tmp_gstring, "%u", slide_length);
-	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "slide_length", (const xmlChar *) tmp_gstring->str);
+	g_string_printf(tmp_gstring, "%0.4f", slide_duration);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "slide_duration", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", frames_per_second);
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "frames_per_second", (const xmlChar *) tmp_gstring->str);
 	switch (start_behaviour)
