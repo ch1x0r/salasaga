@@ -231,25 +231,10 @@ void menu_screenshots_import(void)
 		g_string_printf(tmp_string, "%s%c", screenshots_folder->str, G_DIR_SEPARATOR);
 		tmp_string = g_string_append(tmp_string, g_slist_nth(entries, tmp_int - 1)->data);
 
-		// Load the image file(s) into a thumbnail sized pixel buffer
-		tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_string->str, preview_width, -1, &error);
-		if (NULL == tmp_gdk_pixbuf)
-		{
-			// * Something went wrong when loading the screenshot *
-
-			// Display a warning message using our function
-			g_string_printf(tmp_string, "Error ED06: Something went wrong when loading the screenshot '%s'", tmp_string->str);
-			display_warning(tmp_string->str);
-			g_string_free(tmp_string, TRUE);
-
-			return;
-		}
-
 		// * Create the new background layer *
 
 		// Construct a new image object
 		tmp_image_ob = g_new(layer_image, 1);
-		tmp_image_ob->image_path = g_string_new(NULL);  // Images don't have a path after they've been imported, as we delete them!
 		if (FALSE == project_active)
 		{
 			// This is the first screenshot, so we make the project size the same dimensions as it
@@ -267,6 +252,21 @@ void menu_screenshots_import(void)
 		tmp_image_ob->width = project_width;
 		tmp_image_ob->height = project_height;
 		tmp_image_ob->modified = FALSE;
+
+		// Load the image file(s) into a thumbnail sized pixel buffer
+		tmp_gdk_pixbuf = gdk_pixbuf_scale_simple(tmp_image_ob->image_data, preview_width, (guint) preview_width * 0.75, GDK_INTERP_TILES);
+		if (NULL == tmp_gdk_pixbuf)
+		{
+			// * Something went wrong when loading the screenshot *
+
+			// Display a warning message using our function
+			g_string_printf(tmp_string, "Error ED06: Something went wrong when loading the screenshot '%s'", tmp_string->str);
+			display_warning(tmp_string->str);
+			g_string_free(tmp_string, TRUE);
+
+			return;
+		}
+
 
 		// If the new image is larger than the others loaded, we keep the new dimensions
 		if (tmp_image_ob->height > largest_height)
