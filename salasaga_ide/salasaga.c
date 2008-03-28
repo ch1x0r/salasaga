@@ -429,8 +429,8 @@ gint main(gint argc, gchar *argv[])
 		project_height = gdk_screen_get_height(which_screen);
 		default_output_width = 800;
 		default_output_height = 600;
-		default_slide_duration = slide_duration = 60;  // Default number of seconds to use for new slides
-		layer_duration = 60;  // Default number of seconds to use for new layers
+		default_slide_duration = slide_duration = 20;  // Default number of seconds to use for new slides
+		layer_duration = 10;  // Default number of seconds to use for new layers
 	}
 
 	// Set various required defaults that will be overwritten by the first project loaded
