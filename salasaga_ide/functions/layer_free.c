@@ -54,8 +54,6 @@ gboolean layer_free(layer *this_layer)
 			break;
 
 		case TYPE_GDK_PIXBUF:
-			if (NULL != ((layer_image *) this_layer->object_data)->image_path)
-				g_string_free(((layer_image *) this_layer->object_data)->image_path, TRUE);
 			if (NULL != ((layer_image *) this_layer->object_data)->image_data)
 				g_object_unref(((layer_image *) this_layer->object_data)->image_data);
 			break;
@@ -65,8 +63,7 @@ gboolean layer_free(layer *this_layer)
 			break;
 
 		case TYPE_MOUSE_CURSOR:
-			if (NULL != ((layer_mouse *) this_layer->object_data)->image_path)
-				g_string_free(((layer_mouse *) this_layer->object_data)->image_path, TRUE);
+			// Nothing here needs freeing
 			break;
 
 		case TYPE_TEXT:

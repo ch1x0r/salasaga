@@ -98,7 +98,6 @@ layer *layer_duplicate(layer *source_layer)
 			}
 			((layer_image *) new_layer->object_data)->width = ((layer_image *) source_layer->object_data)->width;
 			((layer_image *) new_layer->object_data)->height = ((layer_image *) source_layer->object_data)->height;
-			((layer_image *) new_layer->object_data)->image_path = g_string_new(((layer_image *) source_layer->object_data)->image_path->str);
 			((layer_image *) new_layer->object_data)->image_data = gdk_pixbuf_copy(((layer_image *) source_layer->object_data)->image_data);
 			((layer_image *) new_layer->object_data)->modified = ((layer_image *) source_layer->object_data)->modified;
 			break;
@@ -128,7 +127,6 @@ layer *layer_duplicate(layer *source_layer)
 			((layer_mouse *) new_layer->object_data)->width = ((layer_mouse *) source_layer->object_data)->width;
 			((layer_mouse *) new_layer->object_data)->height = ((layer_mouse *) source_layer->object_data)->height;
 			((layer_mouse *) new_layer->object_data)->click = ((layer_mouse *) source_layer->object_data)->click;
-			((layer_mouse *) new_layer->object_data)->image_path = g_string_new(((layer_mouse *) source_layer->object_data)->image_path->str);
 			break;
 
 		case TYPE_TEXT:

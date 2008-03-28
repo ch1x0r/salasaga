@@ -203,7 +203,6 @@ void project_crop(void)
 		((layer_image *) last_layer->object_data)->image_data = new_pixbuf;
 		((layer_image *) last_layer->object_data)->width = new_width;
 		((layer_image *) last_layer->object_data)->height = new_height;
-		g_string_assign(((layer_image *) last_layer->object_data)->image_path, "");
 
 		// Free the memory used by the old pixbuf
 		g_object_unref(tmp_pixbuf);

@@ -100,7 +100,7 @@ void layer_edit(void)
 
 		case TYPE_GDK_PIXBUF:
 			// Open a dialog box for the user to edit the image layer values
-			return_code = display_dialog_image(tmp_layer, "Edit image layer", FALSE);
+			return_code = display_dialog_image(tmp_layer, "Edit image layer");
 			if (TRUE == return_code)
 			{
 				// * The dialog box returned successfully *
