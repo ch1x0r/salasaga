@@ -37,7 +37,7 @@
 #include "validate_value.h"
 
 
-gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean request_file)
+gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 {
 	// Local variables
 	gfloat				gfloat_val;					// Temporary gfloat value
@@ -45,13 +45,16 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	guint				guint_val;					// Temporary guint value used for validation
 	GtkDialog			*image_dialog;				// Widget for the dialog
 	GtkWidget			*image_table;				// Table used for neat layout of the dialog box
+	GdkPixbuf			*new_image_data;			// Receives the new image data
+	gint				new_image_height;			// Receives the height of the new image
+	gint				new_image_width;			// Receives the width of the new image
 	guint				row_counter = 0;			// Used to count which row things are up to
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gfloat				valid_duration;				// Receives the new finish frame once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
-	guint				valid_finish_frame;			// Receives the new finish frame once validated
 	GString				*valid_image_path;			// Receives the new image path once validated
-	guint				valid_start_frame;			// Receives the new start frame once validated
+	gfloat				valid_start_time;			// Receives the new start time once validated
 	gfloat				valid_trans_in_duration;	// Receives the new appearance transition duration once validated
 	guint				valid_trans_in_type;		// Receives the new appearance transition type once validated
 	gfloat				valid_trans_out_duration;	// Receives the new exit transition duration once validated
@@ -66,9 +69,6 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 
 	GtkWidget			*path_widget;				// File selection widget
 	GString				*path_gstring;				// Holds the file selection path
-
-	GtkWidget			*image_label;				// Label widget
-	GtkWidget			*image_button;				//
 
 	GtkWidget			*x_off_label_start;			// Label widget
 	GtkWidget			*x_off_button_start;		//
@@ -85,8 +85,8 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	GtkWidget			*start_label;				// Label widget
 	GtkWidget			*start_button;				//
 
-	GtkWidget			*finish_label;				// Label widget
-	GtkWidget			*finish_button;				//
+	GtkWidget			*duration_label;			// Label widget
+	GtkWidget			*duration_button;			//
 
 	GtkWidget			*external_link_label;		// Label widget
 	GtkWidget			*external_link_entry;		// Widget for accepting an external link for clicking on
@@ -116,85 +116,12 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	valid_ext_link_win = g_string_new(NULL);
 	valid_image_path = g_string_new(NULL);
 
-	// If we're supposed to ask for a file, then do so
-	if (TRUE == request_file)
-	{
-		// * Open a dialog asking the user to select an image *
-		path_widget = gtk_file_selection_new("Choose an image file");
-		g_string_printf(path_gstring, "%s/", screenshots_folder->str);  //  Add a trailing slash to the folder name
-		gtk_file_selection_set_filename(GTK_FILE_SELECTION(path_widget), path_gstring->str);
-
-		// Ensure everything will show
-		gtk_widget_show_all(GTK_WIDGET(path_widget));
-
-		// Loop around until we have all valid values, or the user cancels out
-		validated_string = NULL;
-		do
-		{
-			// Display the dialog
-			if (GTK_RESPONSE_OK != gtk_dialog_run(GTK_DIALOG(path_widget)))
-			{
-				// The dialog was cancelled, so destroy it and return to the caller
-				gtk_widget_destroy(GTK_WIDGET(path_widget));
-				g_string_free(path_gstring, TRUE);
-				g_string_free(valid_ext_link, TRUE);
-				g_string_free(valid_ext_link_win, TRUE);
-				g_string_free(valid_image_path, TRUE);
-				return FALSE;
-			}
-
-			// Reset the useable input flag
-			useable_input = TRUE;
-
-			// Retrieve the new image path
-			validated_string = validate_value(FILE_PATH, V_CHAR, (gchar *) gtk_file_selection_get_filename(GTK_FILE_SELECTION(path_widget)));
-			if (NULL == validated_string)
-			{
-				display_warning("Error ED154: There was something wrong with the image path given.  Please try again.");
-				useable_input = FALSE;
-			} else
-			{
-				g_string_printf(valid_image_path, "%s", validated_string->str);
-				g_string_free(validated_string, TRUE);
-				validated_string = NULL;
-			}
-
-		} while (FALSE == useable_input);
-
-		// Retrieve the selected image file path
-		g_string_printf(path_gstring, "%s", valid_image_path->str);
-
-		// Destroy the file selection dialog box
-		gtk_widget_destroy(GTK_WIDGET(path_widget));
-	} else
-	{
-		// We've been instructed to not request a file, which only happens if we've already got one
-		path_gstring = tmp_image_ob->image_path;
-	}
-
 	// * Open a dialog box asking the user for the details of the layer *
 
 	// Create the dialog window, and table to hold its children
 	image_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(dialog_title, GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
 	image_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(image_dialog->vbox), GTK_WIDGET(image_table), FALSE, FALSE, 10);
-
-	// Imported images and background images don't have a filesystem path, so check for this
-	if ((0 != path_gstring->len) && (TRUE != tmp_layer->background))
-	{
-		// * We have a path, it's a regular image *
-
-		// Create the label for the path to the image
-		image_label = gtk_label_new("Image file:");
-		gtk_misc_set_alignment(GTK_MISC(image_label), 0, 0.5);
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(image_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-		// Create the entry confirming the path to the image
-		image_button = gtk_file_chooser_button_new("Select the Image File", GTK_FILE_CHOOSER_ACTION_OPEN);
-		gtk_file_chooser_set_filename(GTK_FILE_CHOOSER(image_button), path_gstring->str);
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(image_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-		row_counter = row_counter + 1;
-	}
 
 	// Background images don't have offsets, nor changeable duration
 	if (FALSE == tmp_layer->background)
@@ -243,27 +170,91 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(y_off_button_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 		row_counter = row_counter + 1;
 
-		// Create the label asking for the starting frame
-		start_label = gtk_label_new("Start frame: ");
-		gtk_misc_set_alignment(GTK_MISC(start_label), 0, 0.5);
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(start_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	
-		// Create the entry that accepts the starting frame input
-		start_button = gtk_spin_button_new_with_range(0, valid_fields[FRAME_NUMBER].max_value, 10);
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(start_button), tmp_layer->start_frame);
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(start_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-		row_counter = row_counter + 1;
-	
-		// Create the label asking for the finishing frame
-		finish_label = gtk_label_new("Finish frame: ");
-		gtk_misc_set_alignment(GTK_MISC(finish_label), 0, 0.5);
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(finish_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	
-		// Create the entry that accepts the finishing frame input
-		finish_button = gtk_spin_button_new_with_range(0, valid_fields[FRAME_NUMBER].max_value, 10);
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(finish_button), tmp_layer->finish_frame);
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(finish_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-		row_counter = row_counter + 1;
+	// Create the label asking for the layer duration
+	duration_label = gtk_label_new("Display for (seconds): ");
+	gtk_misc_set_alignment(GTK_MISC(duration_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the entry that accepts the duration input
+	duration_button = gtk_spin_button_new_with_range(valid_fields[FRAME_NUMBER].min_value, valid_fields[FRAME_NUMBER].max_value, 0.1);
+	gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(duration_button), TRUE);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(duration_button), tmp_layer->duration);
+	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(duration_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Create the label asking for the starting time
+	start_label = gtk_label_new("Starting time (seconds): ");
+	gtk_misc_set_alignment(GTK_MISC(start_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(start_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the entry that accepts the starting time input
+	start_button = gtk_spin_button_new_with_range(valid_fields[FRAME_NUMBER].min_value, valid_fields[FRAME_NUMBER].max_value, 0.1);
+	gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(start_button), TRUE);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(start_button), tmp_layer->start_time);
+	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(start_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Appearance transition type
+	label_trans_in_type = gtk_label_new("Start how: ");
+	gtk_misc_set_alignment(GTK_MISC(label_trans_in_type), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_in_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	selector_trans_in_type = gtk_combo_box_new_text();
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "Immediate");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "Fade in");
+	switch (tmp_layer->transition_in_type)
+	{
+		case TRANS_LAYER_FADE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_FADE);
+			break;
+
+		default:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_NONE);
+	}
+	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(selector_trans_in_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Appearance transition duration label
+	label_trans_in_duration = gtk_label_new("Start duration (seconds):");
+	gtk_misc_set_alignment(GTK_MISC(label_trans_in_duration), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_in_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Appearance transition duration entry
+	button_trans_in_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
+	gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(button_trans_in_duration), TRUE);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_in_duration), tmp_layer->transition_in_duration);
+	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(button_trans_in_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Exit Transition type
+	label_trans_out_type = gtk_label_new("Exit how: ");
+	gtk_misc_set_alignment(GTK_MISC(label_trans_out_type), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_out_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	selector_trans_out_type = gtk_combo_box_new_text();
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "Immediate");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "Fade out");
+	switch (tmp_layer->transition_out_type)
+	{
+		case TRANS_LAYER_FADE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_FADE);
+			break;
+
+		default:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_NONE);
+	}
+	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(selector_trans_out_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Exit transition duration label
+	label_trans_out_duration = gtk_label_new("Exit duration (seconds):");
+	gtk_misc_set_alignment(GTK_MISC(label_trans_out_duration), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_out_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Exit transition duration entry
+	button_trans_out_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
+	gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(button_trans_out_duration), TRUE);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_out_duration), tmp_layer->transition_out_duration);
+	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(button_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
 	}
 
 	// Create the label asking for an external link
@@ -290,72 +281,6 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Background images don't have offsets, nor changeable duration
-	if (FALSE == tmp_layer->background)
-	{
-		// * We have this group of options separated from the above, purely for consistency of display among the dialogs *
-
-		// Appearance transition type
-		label_trans_in_type = gtk_label_new("Appearance transition: ");
-		gtk_misc_set_alignment(GTK_MISC(label_trans_in_type), 0, 0.5);
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_in_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-		selector_trans_in_type = gtk_combo_box_new_text();
-		gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "No transition");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "Fade in");
-		switch (tmp_layer->transition_in_type)
-		{
-			case TRANS_LAYER_FADE:
-				gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_FADE);
-				break;
-	
-			default:
-				gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_NONE);
-		}
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(selector_trans_in_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-		row_counter = row_counter + 1;
-
-		// Appearance transition duration label
-		label_trans_in_duration = gtk_label_new("Appearance (seconds):");
-		gtk_misc_set_alignment(GTK_MISC(label_trans_in_duration), 0, 0.5);
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_in_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-		// Appearance transition duration entry
-		button_trans_in_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_in_duration), tmp_layer->transition_in_duration);
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(button_trans_in_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-		row_counter = row_counter + 1;
-
-		// Exit Transition type
-		label_trans_out_type = gtk_label_new("Exit transition: ");
-		gtk_misc_set_alignment(GTK_MISC(label_trans_out_type), 0, 0.5);
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_out_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-		selector_trans_out_type = gtk_combo_box_new_text();
-		gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "No transition");
-		gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "Fade out");
-		switch (tmp_layer->transition_out_type)
-		{
-			case TRANS_LAYER_FADE:
-				gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_FADE);
-				break;
-	
-			default:
-				gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_NONE);
-		}
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(selector_trans_out_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-		row_counter = row_counter + 1;
-
-		// Exit transition duration label
-		label_trans_out_duration = gtk_label_new("Exit (seconds):");
-		gtk_misc_set_alignment(GTK_MISC(label_trans_out_duration), 0, 0.5);
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(label_trans_out_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-		// Exit transition duration entry
-		button_trans_out_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_out_duration), tmp_layer->transition_out_duration);
-		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(button_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-		row_counter = row_counter + 1;
-	}
-
 	// Ensure everything will show
 	gtk_widget_show_all(GTK_WIDGET(image_dialog));
 
@@ -375,23 +300,6 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 
 		// Reset the useable input flag
 		useable_input = TRUE;
-
-		// Imported images and background images don't have a filesystem path, so check for this
-		if (0 != path_gstring->len)
-		{
-			// Retrieve the new image path
-			validated_string = validate_value(FILE_PATH, V_CHAR, gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(image_button)));
-			if (NULL == validated_string)
-			{
-				display_warning("Error ED155: There was something wrong with the project folder given.  Please try again.");
-				useable_input = FALSE;
-			} else
-			{
-				valid_image_path = g_string_assign(valid_image_path, validated_string->str);
-				g_string_free(validated_string, TRUE);
-				validated_string = NULL;
-			}
-		}
 
 		// Background images don't have offsets, nor changeable duration
 		if (FALSE == tmp_layer->background)
@@ -449,30 +357,30 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 				g_free(validated_guint);
 			}
 
-			// Retrieve the new start frame
-			guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(start_button));
-			validated_guint = validate_value(FRAME_NUMBER, V_INT_UNSIGNED, &guint_val);
-			if (NULL == validated_guint)
+			// Retrieve the new starting time
+			gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(start_button));
+			validated_gfloat = validate_value(LAYER_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
+			if (NULL == validated_gfloat)
 			{
-				display_warning("Error ED160: There was something wrong with the start frame value.  Please try again.");
+				display_warning("Error ED160: There was something wrong with the starting time value.  Please try again.");
 				useable_input = FALSE;
 			} else
 			{
-				valid_start_frame = *validated_guint;
-				g_free(validated_guint);
+				valid_start_time = *validated_gfloat;
+				g_free(validated_gfloat);
 			}
-	
-			// Retrieve the new finish frame
-			guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(finish_button));
-			validated_guint = validate_value(FRAME_NUMBER, V_INT_UNSIGNED, &guint_val);
-			if (NULL == validated_guint)
+
+			// Retrieve the new duration
+			gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(duration_button));
+			validated_gfloat = validate_value(LAYER_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
+			if (NULL == validated_gfloat)
 			{
-				display_warning("Error ED161: There was something wrong with the finish frame value.  Please try again.");
+				display_warning("Error ED161: There was something wrong with the duration value.  Please try again.");
 				useable_input = FALSE;
 			} else
 			{
-				valid_finish_frame = *validated_guint;
-				g_free(validated_guint);
+				valid_duration = *validated_gfloat;
+				g_free(validated_gfloat);
 			}
 
 			// Retrieve the transition in type
@@ -564,8 +472,8 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 		tmp_layer->y_offset_start = 0;
 		tmp_layer->x_offset_finish = 0;
 		tmp_layer->y_offset_finish = 0;
-		tmp_layer->start_frame = 0;
-		tmp_layer->finish_frame = ((slide *) current_slide->data)->duration;
+		tmp_layer->start_time = 0;
+		tmp_layer->duration = ((slide *) current_slide->data)->duration;
 	}
 	else
 	{
@@ -573,8 +481,8 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 		tmp_layer->y_offset_start = valid_y_offset_start;
 		tmp_layer->x_offset_finish = valid_x_offset_finish;
 		tmp_layer->y_offset_finish = valid_y_offset_finish;
-		tmp_layer->start_frame = valid_start_frame;
-		tmp_layer->finish_frame = valid_finish_frame;
+		tmp_layer->start_time = valid_start_time;
+		tmp_layer->duration = valid_duration;
 		tmp_layer->transition_in_type = valid_trans_in_type;
 		tmp_layer->transition_in_duration = valid_trans_in_duration;
 		tmp_layer->transition_out_type = valid_trans_out_type;
@@ -582,25 +490,6 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title, gboolean re
 	}
 	g_string_printf(tmp_layer->external_link, "%s", valid_ext_link->str);
 	g_string_printf(tmp_layer->external_link_window, "%s", valid_ext_link_win->str);
-
-	// Imported images and background images don't have a filesystem path
-	if (0 != path_gstring->len)
-	{
-		// * Not an imported image, so get the path information from the widget *
-		g_string_printf(path_gstring, "%s", valid_image_path->str);
-		tmp_image_ob->image_path = path_gstring;
-
-		// If we already have image data loaded, get rid of it
-		if (TRUE != request_file)
-		{
-			g_object_unref(GDK_PIXBUF(tmp_image_ob->image_data));
-		}
-
-		// Load the new image and get its dimensions
-		tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_image_ob->image_path->str, NULL);
-		tmp_image_ob->width = gdk_pixbuf_get_width(tmp_image_ob->image_data);
-		tmp_image_ob->height = gdk_pixbuf_get_height(tmp_image_ob->image_data);
-	}
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(image_dialog));
