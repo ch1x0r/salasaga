@@ -45,7 +45,6 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	// Local variables
 	gchar				*base64_string;			// Pointer to an Base64 string
 	GError				*error = NULL;			// Pointer to error return structure
-	guint				finish_frame;			// The finish frame in which the object appears
 	GString				*layer_name;			// Name of the layer
 	xmlNodePtr			layer_node;				// Pointer to the new layer node
 	layer				*layer_pointer;			// Points to the presently processing layer
@@ -53,7 +52,6 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	gchar				*pixbuf_buffer;			// Gets given a pointer to a compressed jpeg image
 	gsize				pixbuf_size;			// Gets given the size of a compressed jpeg image
 	xmlNodePtr			slide_node;				// Pointer to the slide node
-	guint				start_frame;			// The first frame in which the object appears
 	GtkTextIter			text_end;				// The end position of the text buffer
 	GtkTextIter			text_start;				// The start position of the text buffer
 
@@ -69,8 +67,6 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	slide_node = user_data;
 
 	// Create some useful pointers
-	start_frame = layer_pointer->start_frame;
-	finish_frame = layer_pointer->finish_frame;
 	layer_name	= layer_pointer->name;
 	layer_type = layer_pointer->object_type;
 
@@ -84,10 +80,10 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 
 	// Add the layer data to the layer container
 	xmlNewChild(layer_node, NULL, (const xmlChar *) "name", (const xmlChar *) layer_name->str);
-	g_string_printf(tmp_gstring, "%u", start_frame);
-	xmlNewChild(layer_node, NULL, (const xmlChar *) "start_frame", (const xmlChar *) tmp_gstring->str);
-	g_string_printf(tmp_gstring, "%u", finish_frame);
-	xmlNewChild(layer_node, NULL, (const xmlChar *) "finish_frame", (const xmlChar *) tmp_gstring->str);
+	g_string_printf(tmp_gstring, "%0.4f", layer_pointer->start_time);
+	xmlNewChild(layer_node, NULL, (const xmlChar *) "start_time", (const xmlChar *) tmp_gstring->str);
+	g_string_printf(tmp_gstring, "%0.4f", layer_pointer->duration);
+	xmlNewChild(layer_node, NULL, (const xmlChar *) "duration", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%d", layer_pointer->visible);
 	xmlNewChild(layer_node, NULL, (const xmlChar *) "visible", (const xmlChar *) tmp_gstring->str);
 	if (0 != layer_pointer->external_link->len)
