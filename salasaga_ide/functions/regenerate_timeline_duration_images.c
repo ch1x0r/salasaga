@@ -63,7 +63,7 @@ void regenerate_timeline_duration_images(slide *target_slide)
 	guint				trans_out_start_pixel;		// Pixel where the transition out starts
 
 
-	// Slide 
+	// Initialisation
 	pixels_per_frame = duration_width / (target_slide->duration * frames_per_second);
 
 	// Create the duration slider images for the timeline area
