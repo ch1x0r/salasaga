@@ -155,9 +155,10 @@ GString					*default_output_folder;		// Application default save path for export
 guint					default_output_height;		// Application default for how high to create project output
 guint					default_output_width;		// Application default for how wide to create project output
 GString					*default_project_folder;	// Application default save path for project folders
-guint					default_slide_length;		// Default length of all new slides, in frames
+gfloat					default_slide_duration;		// Default length of all new slides, in frames
 GString					*default_zoom_level;		// Default zoom level to use
 guint					icon_height = 30;			// Height in pixels for the toolbar icons (they're scalable SVG's)
+gfloat					layer_duration;				// Length of all new layers, in frames
 guint					preview_width;				// Width in pixel for the film strip preview (might turn into a structure later)
 GString					*screenshots_folder;		// Application default for where to store screenshots
 
@@ -169,7 +170,7 @@ GString					*project_folder;			// The path to the project folder
 guint					project_height;				// The height of the project in pixels
 GString					*project_name;				// The name of the project
 guint					project_width;				// The width of the project in pixels
-guint					slide_length;				// Length of all new slides, in frames
+gfloat					slide_duration;				// Length of all new slides, in frames
 
 #ifdef _WIN32
 // Windows only variables
@@ -428,7 +429,8 @@ gint main(gint argc, gchar *argv[])
 		project_height = gdk_screen_get_height(which_screen);
 		default_output_width = 800;
 		default_output_height = 600;
-		default_slide_length = slide_length = 60;  // Default number of frames to use in new slides
+		default_slide_duration = slide_duration = 60;  // Default number of seconds to use for new slides
+		layer_duration = 60;  // Default number of seconds to use for new layers
 	}
 
 	// Set various required defaults that will be overwritten by the first project loaded
