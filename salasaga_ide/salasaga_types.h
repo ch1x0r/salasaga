@@ -108,6 +108,7 @@ enum
 	IMAGE_DATA,
 	IMAGE_DATA_LENGTH,
 	LAYER_BACKGROUND,
+	LAYER_DURATION,
 	LAYER_HEIGHT,
 	LAYER_NAME,
 	LAYER_VISIBLE,
@@ -126,6 +127,7 @@ enum
 	SCREENSHOT_Y_OFFSET,
 	SHOW_CONTROL_BAR,
 	SLIDE_LENGTH,
+	SLIDE_DURATION,
 	SLIDE_NAME,
 	START_BEHAVIOUR,
 	TRANSITION_DURATION,
@@ -238,9 +240,14 @@ typedef struct
 {
 	guint				object_type;
 	GObject				*object_data;
-	guint				start_frame;
-	guint				finish_frame;
 	GString				*name;
+	gboolean			background;					// Is this the background layer?
+	gfloat				start_time;					// Number of seconds into the slide when the layer should start to appear
+	gint				transition_in_type;			// The type of transition this layer uses to appear (transition in)
+	gfloat				transition_in_duration;		// Number of seconds it takes for the transition in to complete
+	gfloat				duration;					// Number of seconds the layer is visible for after the appearance transition
+	gint				transition_out_type;		// The type of transition this layer uses to disappear (transition out)
+	gfloat				transition_out_duration;	// Number of seconds it takes for the transition out to complete
 	gint				x_offset_start;
 	gint				y_offset_start;
 	gint				x_offset_finish;
@@ -251,11 +258,6 @@ typedef struct
 	GString				*external_link_window;		// Name of the target window to load the external link in. Defaults to _self for swf.
 	void				*dictionary_shape;			// SWF dictionary shape
 	void				*display_list_item;			// SWF display list item
-	gboolean			background;					// Is this the background layer?
-	gint				transition_in_type;			// The type of transition this layer uses to appear (transition in)
-	gfloat				transition_in_duration;		// Number of seconds it takes for the transition in to complete
-	gint				transition_out_type;		// The type of transition this layer uses to disappear (transition out)
-	gfloat				transition_out_duration;	// Number of seconds it takes for the transition out to complete
 } layer;
 
 // Defines the properties making up an empty layer
@@ -276,7 +278,6 @@ typedef struct
 {
 	gint				width;
 	gint				height;
-	GString				*image_path;
 	GdkPixbuf			*image_data;
 	gboolean			modified;					// FALSE if an image hasn't been modified, TRUE if it has (i.e. cropped)
 } layer_image;
@@ -287,7 +288,6 @@ typedef struct
 	gint				width;
 	gint				height;
 	gint				click;
-	GString				*image_path;
 } layer_mouse;
 
 // Defines the properties making up a text layer
@@ -314,7 +314,7 @@ typedef struct
 	GString				*name;
 	GtkWidget			*timeline_widget;
 	GtkListStore		*layer_store;
-	guint				duration;
+	gfloat				duration;
 	GdkPixbuf			*scaled_cached_pixbuf;
 	gboolean			cached_pixbuf_valid;	
 } slide;
