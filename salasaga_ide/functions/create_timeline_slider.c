@@ -36,34 +36,43 @@
 #include "display_warning.h"
 
 
-GdkPixbuf *create_timeline_slider(GdkPixbuf *output_pixbuf, gint total_width, gint total_height, gint duration_start, gint duration_width)
+GdkPixbuf *create_timeline_slider(GdkPixbuf *output_pixbuf, gint total_width, gint total_height, gint start_pixel, gint trans_in_pixel, gint trans_out_pixel, gint finish_pixel)
 {
 	// Local variables
 	GdkColormap			*drawable_colormap;			// Used for adjusting the system colormap
 	GdkDrawable			*layer_drawable;			// Points to slider images as they're created
-	GdkGC				*layer_graphics_context;		// Used for working with graphics contexts
-	GdkColor			slider_bg;				// Backgroud color of sliders
-	GdkColor			slider_fg;				// Foreground color of sliders
+	GdkGC				*layer_graphics_context;	// Used for working with graphics contexts
+	GdkColor			slider_bg;					// Backgroud colour of sliders
+	GdkColor			slider_fg;					// Foreground colour of sliders
+	GdkColor			slider_transition;			// Transition colour of sliders
 
 
 	// Set up the colors used for drawing the slider
 	drawable_colormap = gdk_colormap_get_system();
 	if (NULL == drawable_colormap) display_warning("Error ED87: No colormap exists in system\n");
 	slider_bg.pixel = 0;
-	slider_bg.red = 32000;
-	slider_bg.green = 32000;
-	slider_bg.blue = 32000;
+	slider_bg.red = 48000;
+	slider_bg.green = 48000;
+	slider_bg.blue = 48000;
 	if (TRUE != gdk_colormap_alloc_color(GDK_COLORMAP(drawable_colormap), &slider_bg, FALSE, TRUE))
 	{
-		printf("Error ED88: Unable to slider background color\n");
+		printf("Error ED88: Unable to set slider background color\n");
 	}
-	slider_fg.pixel = 0;
-	slider_fg.red = 48000;
-	slider_fg.green = 48000;
+	slider_fg.pixel = 1;
+	slider_fg.red = 32000;
+	slider_fg.green = 32000;
 	slider_fg.blue = 48000;
 	if (TRUE != gdk_colormap_alloc_color(GDK_COLORMAP(drawable_colormap), &slider_fg, FALSE, TRUE))
 	{
-		printf("Error ED89: Unable to set slider internal color\n");
+		printf("Error ED89: Unable to set slider display color\n");
+	}
+	slider_transition.pixel = 2;
+	slider_transition.red = 32000;
+	slider_transition.green = 0;
+	slider_transition.blue = 0;
+	if (TRUE != gdk_colormap_alloc_color(GDK_COLORMAP(drawable_colormap), &slider_transition, FALSE, TRUE))
+	{
+		printf("Error ED338: Unable to set slider transition color\n");
 	}
 
 	// * Create a GdkDrawable displaying the duration of the layer in the slide *
@@ -77,12 +86,34 @@ GdkPixbuf *create_timeline_slider(GdkPixbuf *output_pixbuf, gint total_width, gi
 	gdk_gc_set_rgb_fg_color(layer_graphics_context, &slider_bg);
 	gdk_draw_rectangle(GDK_DRAWABLE(layer_drawable), layer_graphics_context, TRUE, 0, 0, total_width, total_height);
 
-	// Set the contrast color for the duration slider
-	gdk_gc_set_rgb_fg_color(layer_graphics_context, &slider_fg);
-	gdk_draw_rectangle(GDK_DRAWABLE(layer_drawable), layer_graphics_context, TRUE, duration_start, 2, duration_width, total_height - 4);
+	guint duration_trans_in = trans_in_pixel - start_pixel;
+	guint duration_trans_out = finish_pixel - trans_out_pixel;
+	guint duration_main = trans_out_pixel - trans_in_pixel;
+
+	// If there's a transition in, draw it
+	if (0 != duration_trans_in)
+	{
+		gdk_gc_set_rgb_fg_color(layer_graphics_context, &slider_transition);
+		gdk_draw_rectangle(GDK_DRAWABLE(layer_drawable), layer_graphics_context, TRUE, start_pixel, 2, duration_trans_in, total_height - 4);
+	}
+
+	// If there's a main duration, draw it
+	if (0 != duration_main)
+	{
+		// Draw the main duration
+		gdk_gc_set_rgb_fg_color(layer_graphics_context, &slider_fg);
+		gdk_draw_rectangle(GDK_DRAWABLE(layer_drawable), layer_graphics_context, TRUE, trans_in_pixel, 2, duration_main, total_height - 4);
+	}
+
+	// If there's a transition out, draw it
+	if (trans_out_pixel != finish_pixel)
+	{
+		gdk_gc_set_rgb_fg_color(layer_graphics_context, &slider_transition);
+		gdk_draw_rectangle(GDK_DRAWABLE(layer_drawable), layer_graphics_context, TRUE, trans_out_pixel, 2, duration_trans_out, total_height - 4);
+	}
 
 	// Convert drawable to GdkPixbuf
-	output_pixbuf = gdk_pixbuf_get_from_drawable(output_pixbuf, layer_drawable, NULL, 0, 0, 0, 0, -1, -1);
+	output_pixbuf = gdk_pixbuf_get_from_drawable(output_pixbuf, GDK_DRAWABLE(layer_drawable), NULL, 0, 0, 0, 0, -1, -1);
 	if (NULL == output_pixbuf) display_warning("Error ED86: Could not allocate GdkPixbuf\n");
 
 	return output_pixbuf;

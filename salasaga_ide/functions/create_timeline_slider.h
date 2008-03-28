@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-GdkPixbuf *create_timeline_slider(GdkPixbuf *output_pixbuf, gint total_width, gint total_height, gint duration_start, gint duration_width);
+GdkPixbuf *create_timeline_slider(GdkPixbuf *output_pixbuf, gint total_width, gint total_height, gint start_pixel, gint trans_in_pixel, gint trans_out_pixel, gint finish_pixel);
 
 #ifdef __cplusplus
 }
