@@ -90,7 +90,13 @@ void slide_insert(void)
 
 	// Create duration image
 	layer_pixbuf = NULL;
-	layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, 0, 180);
+	layer_pixbuf = create_timeline_slider(GDK_PIXBUF(layer_pixbuf),
+						180,		// Slider width
+						20,			// Slider height
+						0,			// Displayed start
+						0,			// Transition in width
+						180,		// Displayed width
+						0);			// Transition out width
 
 	// Create the List store the slide layer data is kept in
 	tmp_iter = g_new(GtkTreeIter, 1);

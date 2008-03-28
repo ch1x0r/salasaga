@@ -45,17 +45,26 @@
 void regenerate_timeline_duration_images(slide *target_slide)
 {
 	// Local variables
-	guint				finish_frame;				// Used when working out a layer's finish frame
-	gfloat				finish_pixel;				// Ending slider pixel to fill in
+	guint				duration_height = 20;		// Total height of the duration slider image in pixels
+	guint				duration_width = 180;		// Total width of the duration slider image in pixels
+	gfloat				finish_frame;				// Used when working out a layer's finish frame
+	guint				finish_pixel;				// Ending slider pixel to fill in
 	guint				layer_counter;				// Counter used when processing layers
 	layer				*layer_data;				// Pointer to the layer data we're working on
 	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
 	GList				*layer_ptr;					// Pointer to the layer Glist entry
 	guint				num_layers;					// Number of layers in a slide (used for a loop)
-	gfloat				pixel_width;				// Width of pixels to fill
-	guint				start_frame;				// Used when working out a layer's start frame
-	gfloat				start_pixel;				// Starting slider pixel to fill in
+	gfloat				pixels_per_frame;			// Number of pixels is frame takes
+	gfloat				start_frame;				// Frame number where the transition in begins
+	guint				start_pixel;				// Starting slider pixel to fill in
+	gfloat				trans_in_finish;			// Frame number where the transition in finishes
+	guint				trans_in_finish_pixel;		// Pixel where the transition out finishes
+	gfloat				trans_out_start;			// Frame number where the transition out starts
+	guint				trans_out_start_pixel;		// Pixel where the transition out starts
 
+
+	// Slide 
+	pixels_per_frame = duration_width / target_slide->duration;
 
 	// Create the duration slider images for the timeline area
 	layer_ptr = g_list_first(target_slide->layers);
@@ -64,17 +73,38 @@ void regenerate_timeline_duration_images(slide *target_slide)
 	{
 		// Work out the start and ending frames for this layer
 		layer_data = g_list_nth_data(layer_ptr, layer_counter);
-		start_frame = roundf(layer_data->start_time * frames_per_second);
-		finish_frame = roundf(start_frame + (layer_data->duration * frames_per_second));
+		start_frame = layer_data->start_time * frames_per_second;
+
+		// If there's a transition in, work things out
+		if (TRANS_LAYER_NONE != layer_data->transition_in_type)
+		{
+			trans_in_finish = start_frame + (layer_data->transition_in_duration * frames_per_second);
+		} else
+		{
+			trans_in_finish = start_frame;
+		}
+
+		// Work out the main layer display time 
+		trans_out_start = trans_in_finish + (layer_data->duration * frames_per_second);
+
+		// Work out the frame where the layer finishes displaying
+		if (TRANS_LAYER_NONE != layer_data->transition_out_type)
+		{
+			finish_frame = trans_out_start + (layer_data->transition_out_duration * frames_per_second);
+		} else
+		{
+			finish_frame = trans_out_start;
+		}
 
 		// Calculate the duration of the layer for drawing inside the slider
-		start_pixel = 180 * ((gfloat) start_frame / (gfloat) target_slide->duration);
-		finish_pixel = 180 * ((gfloat) finish_frame / (gfloat) target_slide->duration);
-		pixel_width = finish_pixel - start_pixel;
+		start_pixel = roundf(start_frame * pixels_per_frame);
+		trans_in_finish_pixel = roundf(trans_in_finish * pixels_per_frame);
+		trans_out_start_pixel = roundf(trans_out_start  * pixels_per_frame);
+		finish_pixel = roundf(finish_frame * pixels_per_frame);
 
 		// Create duration image
 		layer_pixbuf = NULL;
-		layer_pixbuf = create_timeline_slider(layer_pixbuf, 180, 20, start_pixel, pixel_width);
+		layer_pixbuf = create_timeline_slider(GDK_PIXBUF(layer_pixbuf), duration_width, duration_height, start_pixel, trans_in_finish_pixel, trans_out_start_pixel, finish_pixel);
 
 		// fixme4: We should probably free the memory of the old timeline duration image here
 
