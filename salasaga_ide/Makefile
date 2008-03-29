@@ -604,116 +604,116 @@ salasaga: $(OFILES)
 install:
 	$(INSTALL) -d $(DESTDIR)$(bindir)
 	$(INSTALL_PROGRAM) -m 0755 salasaga $(DESTDIR)$(bindir)
-	$(INSTALL) -d $(datadir)/applications/
-	$(INSTALL_DATA) $(DESKTOP_FILE) $(datadir)/applications/
-	$(INSTALL) -d $(datadir)/salasaga/icons/
-	$(INSTALL) -d $(datadir)/salasaga/fonts/
-	$(INSTALL) -d $(datadir)/salasaga/fonts/BitstreamVera
-	$(INSTALL) -d $(datadir)/salasaga/fonts/BitstreamVera/fdb
-	$(INSTALL) -d $(datadir)/pixmaps/
-	cd images; $(INSTALL_DATA) $(ICON_MAIN) $(datadir)/salasaga/icons/
-	cd images; $(INSTALL_DATA) $(ICON_PNG) $(datadir)/pixmaps/
-	$(INSTALL) -d $(datadir)/salasaga/icons/scalable/
-	cd images; $(INSTALL_DATA) $(ICONS_SCALABLE) $(datadir)/salasaga/icons/scalable/
-	$(INSTALL) -d $(datadir)/salasaga/icons/scalable/control_bar/
-	cd images; cd control_bar; $(INSTALL_DATA) $(ICONS_CONTROL_BAR_SCALABLE) $(datadir)/salasaga/icons/scalable/control_bar
-	$(INSTALL) -d $(datadir)/salasaga/icons/scalable/pointers/
-	cd images; cd pointers; $(INSTALL_DATA) $(MOUSE_SCALABLE) $(datadir)/salasaga/icons/scalable/pointers/
-	$(INSTALL) -d $(datadir)/salasaga/icons/72x72/
-	cd images; $(INSTALL_DATA) $(ICONS_PNG) $(datadir)/salasaga/icons/72x72/
-	$(INSTALL) -d $(datadir)/salasaga/icons/72x72/control_bar/
-	cd images; cd control_bar; $(INSTALL_DATA) $(ICONS_CONTROL_BAR_PNG) $(datadir)/salasaga/icons/72x72/control_bar
-	$(INSTALL) -d $(datadir)/salasaga/icons/72x72/pointers/
-	cd images; cd pointers; $(INSTALL_DATA) $(MOUSE_PNG) $(datadir)/salasaga/icons/72x72/pointers/
-	cd fonts; cd BitstreamVera; cd fdb; $(INSTALL_DATA) $(FONT_BITSTREAM_VERA_FDB) $(datadir)/salasaga/fonts/BitstreamVera/fdb
-	$(INSTALL) -d $(datadir)/salasaga/sounds/
-	cd sounds; $(INSTALL_DATA) $(SOUNDS) $(datadir)/salasaga/sounds/
+	$(INSTALL) -d $(DESTDIR)$(datadir)/applications/
+	$(INSTALL_DATA) $(DESKTOP_FILE) $(DESTDIR)$(datadir)/applications/
+	$(INSTALL) -d $(DESTDIR)$(datadir)/salasaga/icons/
+	$(INSTALL) -d $(DESTDIR)$(datadir)/salasaga/fonts/
+	$(INSTALL) -d $(DESTDIR)$(datadir)/salasaga/fonts/BitstreamVera
+	$(INSTALL) -d $(DESTDIR)$(datadir)/salasaga/fonts/BitstreamVera/fdb
+	$(INSTALL) -d $(DESTDIR)$(datadir)/pixmaps/
+	cd images; $(INSTALL_DATA) $(ICON_MAIN) $(DESTDIR)$(datadir)/salasaga/icons/
+	cd images; $(INSTALL_DATA) $(ICON_PNG) $(DESTDIR)$(datadir)/pixmaps/
+	$(INSTALL) -d $(DESTDIR)$(datadir)/salasaga/icons/scalable/
+	cd images; $(INSTALL_DATA) $(ICONS_SCALABLE) $(DESTDIR)$(datadir)/salasaga/icons/scalable/
+	$(INSTALL) -d $(DESTDIR)$(datadir)/salasaga/icons/scalable/control_bar/
+	cd images; cd control_bar; $(INSTALL_DATA) $(ICONS_CONTROL_BAR_SCALABLE) $(DESTDIR)$(datadir)/salasaga/icons/scalable/control_bar
+	$(INSTALL) -d $(DESTDIR)$(datadir)/salasaga/icons/scalable/pointers/
+	cd images; cd pointers; $(INSTALL_DATA) $(MOUSE_SCALABLE) $(DESTDIR)$(datadir)/salasaga/icons/scalable/pointers/
+	$(INSTALL) -d $(DESTDIR)$(datadir)/salasaga/icons/72x72/
+	cd images; $(INSTALL_DATA) $(ICONS_PNG) $(DESTDIR)$(datadir)/salasaga/icons/72x72/
+	$(INSTALL) -d $(DESTDIR)$(datadir)/salasaga/icons/72x72/control_bar/
+	cd images; cd control_bar; $(INSTALL_DATA) $(ICONS_CONTROL_BAR_PNG) $(DESTDIR)$(datadir)/salasaga/icons/72x72/control_bar
+	$(INSTALL) -d $(DESTDIR)$(datadir)/salasaga/icons/72x72/pointers/
+	cd images; cd pointers; $(INSTALL_DATA) $(MOUSE_PNG) $(DESTDIR)$(datadir)/salasaga/icons/72x72/pointers/
+	cd fonts; cd BitstreamVera; cd fdb; $(INSTALL_DATA) $(FONT_BITSTREAM_VERA_FDB) $(DESTDIR)$(datadir)/salasaga/fonts/BitstreamVera/fdb
+	$(INSTALL) -d $(DESTDIR)$(datadir)/salasaga/sounds/
+	cd sounds; $(INSTALL_DATA) $(SOUNDS) $(DESTDIR)$(datadir)/salasaga/sounds/
 
 uninstall:
 	if [ -f "$(DESTDIR)$(bindir)/salasaga" ]; then \
 		rm -f $(DESTDIR)$(bindir)/salasaga; \
 	fi
 
-	if [ -d "$(datadir)/salasaga/fonts/BitstreamVera/fdb" ]; then \
-		cd $(datadir)/salasaga/fonts/BitstreamVera/fdb/; \
+	if [ -d "$(DESTDIR)$(datadir)/salasaga/fonts/BitstreamVera/fdb" ]; then \
+		cd $(DESTDIR)$(datadir)/salasaga/fonts/BitstreamVera/fdb/; \
 		rm -f $(FONT_BITSTREAM_VERA_FDB); \
-		rmdir $(datadir)/salasaga/fonts/BitstreamVera/fdb/; \
+		rmdir $(DESTDIR)$(datadir)/salasaga/fonts/BitstreamVera/fdb/; \
 	fi
 
-	if [ -d "$(datadir)/salasaga/fonts/BitstreamVera" ]; then \
-		rmdir $(datadir)/salasaga/fonts/BitstreamVera/; \
+	if [ -d "$(DESTDIR)$(datadir)/salasaga/fonts/BitstreamVera" ]; then \
+		rmdir $(DESTDIR)$(datadir)/salasaga/fonts/BitstreamVera/; \
 	fi
 
-	if [ -d "$(datadir)/salasaga/fonts" ]; then \
-		rmdir $(datadir)/salasaga/fonts/; \
+	if [ -d "$(DESTDIR)$(datadir)/salasaga/fonts" ]; then \
+		rmdir $(DESTDIR)$(datadir)/salasaga/fonts/; \
 	fi
 
-	if [ -d "$(datadir)/salasaga/icons/scalable" ]; then \
-		if [ -d "$(datadir)/salasaga/icons/scalable/control_bar" ]; then \
-			cd $(datadir)/salasaga/icons/scalable/control_bar/; \
+	if [ -d "$(DESTDIR)$(datadir)/salasaga/icons/scalable" ]; then \
+		if [ -d "$(DESTDIR)$(datadir)/salasaga/icons/scalable/control_bar" ]; then \
+			cd $(DESTDIR)$(datadir)/salasaga/icons/scalable/control_bar/; \
 			rm -f $(ICONS_CONTROL_BAR_SCALABLE); \
-			rmdir $(datadir)/salasaga/icons/scalable/control_bar/; \
+			rmdir $(DESTDIR)$(datadir)/salasaga/icons/scalable/control_bar/; \
 		fi; \
-		if [ -d "$(datadir)/salasaga/icons/scalable/pointers" ]; then \
-			cd $(datadir)/salasaga/icons/scalable/pointers/; \
+		if [ -d "$(DESTDIR)$(datadir)/salasaga/icons/scalable/pointers" ]; then \
+			cd $(DESTDIR)$(datadir)/salasaga/icons/scalable/pointers/; \
 			rm -f $(MOUSE_SCALABLE); \
-			rmdir $(datadir)/salasaga/icons/scalable/pointers/; \
+			rmdir $(DESTDIR)$(datadir)/salasaga/icons/scalable/pointers/; \
 		fi; \
-		cd $(datadir)/salasaga/icons/scalable/; \
+		cd $(DESTDIR)$(datadir)/salasaga/icons/scalable/; \
 		rm -f $(ICONS_SCALABLE); \
-		rmdir $(datadir)/salasaga/icons/scalable/; \
+		rmdir $(DESTDIR)$(datadir)/salasaga/icons/scalable/; \
 	fi
 
-	if [ -d "$(datadir)/salasaga/icons/72x72" ]; then \
-		if [ -d "$(datadir)/salasaga/icons/72x72/control_bar" ]; then \
-			cd $(datadir)/salasaga/icons/72x72/control_bar/; \
+	if [ -d "$(DESTDIR)$(datadir)/salasaga/icons/72x72" ]; then \
+		if [ -d "$(DESTDIR)$(datadir)/salasaga/icons/72x72/control_bar" ]; then \
+			cd $(DESTDIR)$(datadir)/salasaga/icons/72x72/control_bar/; \
 			rm -f $(ICONS_CONTROL_BAR_PNG); \
-			rmdir $(datadir)/salasaga/icons/72x72/control_bar/; \
+			rmdir $(DESTDIR)$(datadir)/salasaga/icons/72x72/control_bar/; \
 		fi; \
-		if [ -d "$(datadir)/salasaga/icons/72x72/pointers" ]; then \
-			cd $(datadir)/salasaga/icons/72x72/pointers/; \
+		if [ -d "$(DESTDIR)$(datadir)/salasaga/icons/72x72/pointers" ]; then \
+			cd $(DESTDIR)$(datadir)/salasaga/icons/72x72/pointers/; \
 			rm -f $(MOUSE_PNG); \
-			rmdir $(datadir)/salasaga/icons/72x72/pointers/; \
+			rmdir $(DESTDIR)$(datadir)/salasaga/icons/72x72/pointers/; \
 		fi; \
-		cd $(datadir)/salasaga/icons/72x72/; \
+		cd $(DESTDIR)$(datadir)/salasaga/icons/72x72/; \
 		rm -f $(ICONS_PNG); \
-		rmdir $(datadir)/salasaga/icons/72x72/; \
+		rmdir $(DESTDIR)$(datadir)/salasaga/icons/72x72/; \
 	fi
 
-	if [ -d "$(datadir)/salasaga/sounds" ]; then \
-		cd $(datadir)/salasaga/sounds/; \
+	if [ -d "$(DESTDIR)$(datadir)/salasaga/sounds" ]; then \
+		cd $(DESTDIR)$(datadir)/salasaga/sounds/; \
 		rm -f $(SOUNDS); \
-		rmdir $(datadir)/salasaga/sounds; \
+		rmdir $(DESTDIR)$(datadir)/salasaga/sounds; \
 	fi
 
-	if [ -f "$(datadir)/salasaga/icons/$(ICON_MAIN)" ]; then \
-		rm -f $(datadir)/salasaga/icons/$(ICON_MAIN); \
+	if [ -f "$(DESTDIR)$(datadir)/salasaga/icons/$(ICON_MAIN)" ]; then \
+		rm -f $(DESTDIR)$(datadir)/salasaga/icons/$(ICON_MAIN); \
 	fi
 
-	if [ -f "$(datadir)/pixmaps/$(ICON_PNG)" ]; then \
-		rm -f $(datadir)/pixmaps/$(ICON_PNG); \
-		rmdir $(datadir)/pixmaps; \
+	if [ -f "$(DESTDIR)$(datadir)/pixmaps/$(ICON_PNG)" ]; then \
+		rm -f $(DESTDIR)$(datadir)/pixmaps/$(ICON_PNG); \
+		rmdir $(DESTDIR)$(datadir)/pixmaps; \
 	fi
 
-	if [ -f "$(datadir)/applications/$(DESKTOP_FILE)" ]; then \
-		rm -f $(datadir)/applications/$(DESKTOP_FILE); \
-		rmdir $(datadir)/applications; \
+	if [ -f "$(DESTDIR)$(datadir)/applications/$(DESKTOP_FILE)" ]; then \
+		rm -f $(DESTDIR)$(datadir)/applications/$(DESKTOP_FILE); \
+		rmdir $(DESTDIR)$(datadir)/applications; \
 	fi
 
-	if [ -d "$(datadir)/salasaga/icons" ]; then \
-		rmdir $(datadir)/salasaga/icons; \
+	if [ -d "$(DESTDIR)$(datadir)/salasaga/icons" ]; then \
+		rmdir $(DESTDIR)$(datadir)/salasaga/icons; \
 	fi
 
-	if [ -d "$(datadir)/salasaga" ]; then \
-		rmdir $(datadir)/salasaga; \
+	if [ -d "$(DESTDIR)$(datadir)/salasaga" ]; then \
+		rmdir $(DESTDIR)$(datadir)/salasaga; \
 	fi
 
 	if [ -d "$(DESTDIR)$(bindir)" ]; then \
 		rmdir --ignore-fail-on-non-empty $(DESTDIR)$(bindir); \
 	fi
 
-	if [ -d "$(datadir)" ]; then \
-		rmdir --ignore-fail-on-non-empty $(datadir); \
+	if [ -d "$(DESTDIR)$(datadir)" ]; then \
+		rmdir --ignore-fail-on-non-empty $(DESTDIR)$(datadir); \
 	fi
 
 clean:
