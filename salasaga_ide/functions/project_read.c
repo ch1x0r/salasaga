@@ -2349,7 +2349,14 @@ gboolean project_read(gchar *filename)
 					useable_input = FALSE;
 				} else
 				{
-					tmp_slide->duration = *validated_gfloat;
+					// If the file format is less the version 4.0, then it has slides with frame based input rather than time based input
+					if (4.0 > valid_save_format)
+					{
+						tmp_slide->duration = *validated_gfloat / valid_fps;
+					} else
+					{
+						tmp_slide->duration = *validated_gfloat;
+					}
 					g_free(validated_gfloat);
 					xmlFree(tmp_char);
 				}
