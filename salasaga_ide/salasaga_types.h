@@ -325,12 +325,14 @@ typedef struct
 	gboolean			action_this;				// Process this element?
 	guint				layer_type;					// The type of element being displayed
 	layer				*layer_info;				// Pointer to the layer info
+	GString				*object_name;				// The name of the object on the display list
 	gboolean			add;						// Add to the display list in this frame?
 	gboolean			remove;						// Remove from the display list in this frame?
-	gint				opacity;					// Opacity level (0-65535)
+	gboolean			opacity_change;				// Should there be a change in opacity?
 	gboolean			is_moving;					// Should the position of this element be adjusted in this frame?
 	gfloat				x_position;					// In twips
 	gfloat				y_position;					// In twips
+	gint				opacity;					// Opacity level (0-65535)
 	gint				depth;						// The layer depth of this item when displayed
 } swf_frame_element;
 
