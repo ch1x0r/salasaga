@@ -35,7 +35,7 @@
 #include "swf_shape_from_image_file.h"
 
 
-gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
+gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guint depth_number)
 {
 	// Create local variables
 	gfloat				button_height;
@@ -965,7 +965,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index)
 	SWFDisplayItem_setName(buttons_display_item, "cb_main");
 
 	// Set the movie clip to be shown higher in the display stack than the main movie
-	SWFDisplayItem_setDepth(buttons_display_item, 200);
+	SWFDisplayItem_setDepth(buttons_display_item, depth_number);
 
 	// Position the entire control bar object in the correct position onscreen
 	SWFDisplayItem_moveTo(buttons_display_item, control_bar_x, control_bar_y);

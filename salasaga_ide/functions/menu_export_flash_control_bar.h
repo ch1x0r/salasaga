@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index);
+gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guint depth_number);
 
 #ifdef __cplusplus
 }
