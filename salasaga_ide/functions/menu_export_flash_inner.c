@@ -1087,8 +1087,8 @@ gfloat	opacity_step;
 					frame_number = (layer_counter * (slide_duration + 1)) + start_frame;
 					swf_timing_array[frame_number].add = TRUE;
 					swf_timing_array[frame_number].depth = total_num_layers;
-					swf_timing_array[frame_number].x_position = element_x_position_start;
-					swf_timing_array[frame_number].y_position = element_y_position_start;
+					swf_timing_array[frame_number].x_position = scaled_width_ratio * start_x_position_unscaled;
+					swf_timing_array[frame_number].y_position = scaled_height_ratio * start_y_position_unscaled;
 					swf_timing_array[frame_number].action_this = TRUE;
 					swf_timing_array[frame_number].object_name = g_string_new(NULL);
 					g_string_printf(swf_timing_array[frame_number].object_name, "Object%d", total_num_layers);
@@ -1130,8 +1130,8 @@ gfloat	opacity_step;
 					frame_number = (layer_counter * (slide_duration + 1)) + (this_layer_data->start_time * frames_per_second);
 					swf_timing_array[frame_number].add = TRUE;
 					swf_timing_array[frame_number].depth = total_num_layers;
-					swf_timing_array[frame_number].x_position = element_x_position_start;
-					swf_timing_array[frame_number].y_position = element_y_position_start;
+					swf_timing_array[frame_number].x_position = scaled_width_ratio * start_x_position_unscaled;
+					swf_timing_array[frame_number].y_position = scaled_height_ratio * start_y_position_unscaled;
 					swf_timing_array[frame_number].action_this = TRUE;
 					swf_timing_array[frame_number].object_name = g_string_new(NULL);
 					g_string_printf(swf_timing_array[frame_number].object_name, "Object%d", total_num_layers);
@@ -1154,9 +1154,9 @@ gfloat	opacity_step;
 					finish_frame = (this_layer_data->transition_out_duration * frames_per_second) + start_frame;
 
 					// Work out how much opacity to increment each frame by
-					opacity_step = (100 / (this_layer_data->transition_out_duration * frames_per_second)) * -1.0;
+					opacity_step = 100 / (this_layer_data->transition_out_duration * frames_per_second);
 
-					// Loop through each frame of the fade in, setting the opacity values
+					// Loop through each frame of the fade out, setting the opacity values
 					for (frame_counter = start_frame; frame_counter <= finish_frame; frame_counter++)
 					{
 						// Point to the desired element 
@@ -1201,13 +1201,13 @@ gfloat	opacity_step;
 
 guint	x_position;
 guint	y_position;
+				x_position = element_x_position_start;
+				y_position = element_y_position_start;
 
 				// If the layer moves, work out the movement related values
 				if ((element_x_position_start != element_x_position_finish) || (element_y_position_start != element_y_position_finish))
 				{
 					// Work out how much to increment the frame movement by in each direction
-					x_position = element_x_position_start;
-					y_position = element_y_position_start;
 					element_x_position_increment = (element_x_position_finish - element_x_position_start) / (num_displayed_frames - 1);
 					element_y_position_increment = (element_y_position_finish - element_y_position_start) / (num_displayed_frames - 1);
 				}
@@ -1222,6 +1222,10 @@ guint	y_position;
 					// Ensure the appropriate layer data can be found by later code
 					this_frame_ptr->layer_info = this_layer_data;
 
+					// Store the x and y positions for this layer for this frame
+					this_frame_ptr->x_position = x_position;
+					this_frame_ptr->y_position = y_position;
+
 					// If the layer moves, fill in the relevant elements
 					if ((element_x_position_start != element_x_position_finish) || (element_y_position_start != element_y_position_finish))
 					{
@@ -1229,9 +1233,7 @@ guint	y_position;
 						this_frame_ptr->action_this = TRUE;
 						this_frame_ptr->is_moving = TRUE;
 
-						// Store the x and y positions for this layer for this frame
-						this_frame_ptr->x_position = x_position;
-						this_frame_ptr->y_position = y_position;
+						// Update the element position with each loop
 						x_position += element_x_position_increment;
 						y_position += element_y_position_increment;
 
@@ -1245,14 +1247,6 @@ guint	y_position;
 					// Store the opacity setting for each frame
 					this_frame_ptr->opacity = 100;
 				}
-/*
-				// Indicate on which frame the element should be displayed, at what display depth, and its starting co-ordinates
-				frame_number = (layer_counter * (slide_duration + 1)) + start_frame;
-				swf_timing_array[frame_number].add = TRUE;
-				swf_timing_array[frame_number].depth = total_num_layers;
-				swf_timing_array[frame_number].x_position = element_x_position_start;
-				swf_timing_array[frame_number].y_position = element_y_position_start;
-*/
 /*
 				// Indicate on which frame the element should be removed from display
 				frame_number = (layer_counter * (slide_duration + 1)) + finish_frame + 1;
