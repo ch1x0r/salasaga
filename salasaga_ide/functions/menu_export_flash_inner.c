@@ -48,8 +48,6 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
 	GError				*error = NULL;				// Pointer to error return structure
 	guint				finish_frame;
-	gfloat				finish_x_position_unscaled;
-	gfloat				finish_y_position_unscaled;
 	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
 	guint				frame_counter;				// Holds the number of frames
 	guint				new_opacity;				// Used when constructing the opacity value for an object
@@ -63,6 +61,8 @@ gint menu_export_flash_inner(gchar *output_filename)
 	guint				num_displayed_frames;
 	guint				num_layers = 0;				// The number of layers in the slide
 	guint				num_slides;					// The number of slides in the movie
+	guint				opacity_count;				// Used when calculating object opacity
+	gfloat				opacity_step;				// Used when calculating object opacity
 	guint				out_res_index;				// Index into the array of output resolution entries 
 	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
 	gsize				pixbuf_size;				// Is given the size of a compressed png image
@@ -76,16 +76,17 @@ gint menu_export_flash_inner(gchar *output_filename)
 	guint				slide_duration;				// Holds the total number of frames in this slide
 	GString				*slide_name_tmp;			// Temporary slide names are constructed with this
 	guint				start_frame;
-	gfloat				start_x_position_unscaled;
-	gfloat				start_y_position_unscaled;
 	swf_frame_element	*swf_timing_array = NULL;	// Used to coordinate the actions in each frame
 	swf_frame_element 	*this_frame_ptr;			// Points to frame information when looping
 	layer				*this_layer_data;			// Points to the data in the present layer
 	layer				*this_layer_info;			// Used to point to layer data when looping
 	slide				*this_slide_data;			// Points to the data in the present slide
 	guint				total_frames;				// The total number of frames in the animation
+	guint				total_num_layers;			// The total number of layers in the animation
 	gfloat				total_seconds;				// The duration of the entire animation in seconds	
 	gboolean			unknown_resolution;
+	guint				x_position;					// Used in calculating layer object position
+	guint				y_position;					// Used in calculating layer object position
 
 	SWFDisplayItem		display_list_object;		// Temporary display list object
 	SWFAction			end_action;					// The actionscript for the end behaviour
@@ -407,7 +408,6 @@ gint menu_export_flash_inner(gchar *output_filename)
 	}
 
 	// Count the total number of layers in the movie
-guint	total_num_layers;
 	total_num_layers = 2;
 	for (slide_counter = 0; slide_counter <  num_slides; slide_counter++)
 	{
@@ -515,10 +515,6 @@ guint	total_num_layers;
 			display_warning("Error ED339: We couldn't allocate enough memory to generate the swf.  Export aborted.");
 			return FALSE;
 		}
-
-		// Set the depth at which the layers in this slide will be displayed downwards from
-//		this_start_depth += num_layers;
-//		display_depth = this_start_depth;
 
 		// Process each layer in turn.  For every frame the layer is in, store in the array
 		// whether the object in the layer is visible, it's position, transparency, etc
@@ -1068,13 +1064,10 @@ guint	total_num_layers;
 				// * Process the element array, setting flags and info as required for this layer *
 
 				// Calculate the scaled start and finish positions for each element
-				start_x_position_unscaled = this_layer_data->x_offset_start;
-				start_y_position_unscaled = this_layer_data->y_offset_start;
-				finish_x_position_unscaled = this_layer_data->x_offset_finish;
-				finish_y_position_unscaled = this_layer_data->y_offset_finish;
-
-guint	opacity_count;
-gfloat	opacity_step;
+				element_x_position_start = scaled_width_ratio * this_layer_data->x_offset_start;
+				element_x_position_finish = scaled_width_ratio * this_layer_data->x_offset_finish;
+				element_y_position_start = scaled_height_ratio * this_layer_data->y_offset_start;
+				element_y_position_finish = scaled_height_ratio * this_layer_data->y_offset_finish;
 
 				// If there is a fade in transition, fill in the relevant elements
 				if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
@@ -1087,8 +1080,8 @@ gfloat	opacity_step;
 					frame_number = (layer_counter * (slide_duration + 1)) + start_frame;
 					swf_timing_array[frame_number].add = TRUE;
 					swf_timing_array[frame_number].depth = total_num_layers;
-					swf_timing_array[frame_number].x_position = scaled_width_ratio * start_x_position_unscaled;
-					swf_timing_array[frame_number].y_position = scaled_height_ratio * start_y_position_unscaled;
+					swf_timing_array[frame_number].x_position = element_x_position_start;
+					swf_timing_array[frame_number].y_position = element_y_position_start;
 					swf_timing_array[frame_number].action_this = TRUE;
 					swf_timing_array[frame_number].object_name = g_string_new(NULL);
 					g_string_printf(swf_timing_array[frame_number].object_name, "Object%d", total_num_layers);
@@ -1130,8 +1123,8 @@ gfloat	opacity_step;
 					frame_number = (layer_counter * (slide_duration + 1)) + (this_layer_data->start_time * frames_per_second);
 					swf_timing_array[frame_number].add = TRUE;
 					swf_timing_array[frame_number].depth = total_num_layers;
-					swf_timing_array[frame_number].x_position = scaled_width_ratio * start_x_position_unscaled;
-					swf_timing_array[frame_number].y_position = scaled_height_ratio * start_y_position_unscaled;
+					swf_timing_array[frame_number].x_position = element_x_position_start;
+					swf_timing_array[frame_number].y_position = element_y_position_start;
 					swf_timing_array[frame_number].action_this = TRUE;
 					swf_timing_array[frame_number].object_name = g_string_new(NULL);
 					g_string_printf(swf_timing_array[frame_number].object_name, "Object%d", total_num_layers);
@@ -1153,8 +1146,9 @@ gfloat	opacity_step;
 					start_frame += this_layer_data->duration * frames_per_second;
 					finish_frame = (this_layer_data->transition_out_duration * frames_per_second) + start_frame;
 
-					// Work out how much opacity to increment each frame by
+					// Work out how much opacity to decrement each frame by
 					opacity_step = 100 / (this_layer_data->transition_out_duration * frames_per_second);
+					opacity_count = 100;
 
 					// Loop through each frame of the fade out, setting the opacity values
 					for (frame_counter = start_frame; frame_counter <= finish_frame; frame_counter++)
@@ -1182,25 +1176,16 @@ gfloat	opacity_step;
 				// Work out the starting and ending frames for the fully visible layer display
 				start_frame = this_layer_data->start_time * frames_per_second;
 				if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-					start_frame += (this_layer_data->duration * frames_per_second);
+					start_frame += (this_layer_data->transition_in_duration * frames_per_second);
 				finish_frame = start_frame + (this_layer_data->duration * frames_per_second);
 				num_displayed_frames = (finish_frame - start_frame) + 1;
-
-				// Work out the start and finish x and y positions for the layer
-				element_x_position_start = scaled_width_ratio * start_x_position_unscaled;
-				element_x_position_finish = scaled_width_ratio * finish_x_position_unscaled;
-				element_y_position_start = scaled_height_ratio * start_y_position_unscaled;
-				element_y_position_finish = scaled_height_ratio * finish_y_position_unscaled;
 
 				// Displaying debugging info if requested
 				if (debug_level)
 				{
 					printf("Dict. shape OK. Start frame: %u\tFinish frame: %u\t # of displayed frames: %u\n", start_frame, finish_frame, num_displayed_frames);
-					printf("Start X pos (unscaled): %.2f\tStart Y pos (unscaled): %.2f\tFinish X pos (unscaled): %.2f\tFinish Y pos (unscaled): %.2f\n", start_x_position_unscaled, start_y_position_unscaled, finish_x_position_unscaled, finish_y_position_unscaled);
 				}
 
-guint	x_position;
-guint	y_position;
 				x_position = element_x_position_start;
 				y_position = element_y_position_start;
 
