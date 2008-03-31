@@ -50,6 +50,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	// Local variables
 	GString				*as_gstring;				// Used for constructing action script statements
 	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
+	guint				element_index;				// Points to the start of a layers elements in the swf frame array
 	SWFAction			end_action;					// The actionscript for the end behaviour
 	guint				frame_counter;				// Holds the number of frames
 	guint				frame_number;
@@ -249,7 +250,11 @@ gint menu_export_flash_inner(gchar *output_filename)
 			// If the creation of the dictionary shape worked, we add this layer to the list for processing
 			if (TRUE == dictionary_shape_ok)
 			{
-				menu_export_flash_create_layer_elements(swf_timing_array, slide_duration + 1, this_layer_data, total_num_layers);
+				// Determine where in the array this layer's elements start
+				element_index = layer_counter * (slide_duration + 1);
+
+				// Process the layer information, filling out the relevant elements
+				menu_export_flash_create_layer_elements(&swf_timing_array[layer_counter], slide_duration + 1, this_layer_data, total_num_layers);
 			}
 
 			// Decrement the depth at which this element will be displayed
