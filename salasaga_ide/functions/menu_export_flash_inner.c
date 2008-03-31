@@ -1232,10 +1232,13 @@ gint menu_export_flash_inner(gchar *output_filename)
 					// Store the opacity setting for each frame
 					this_frame_ptr->opacity = 100;
 				}
-/*
+
 				// Indicate on which frame the element should be removed from display
-				frame_number = (layer_counter * (slide_duration + 1)) + finish_frame + 1;
-				frame_number = (layer_counter * (slide_duration + 1)) + finish_frame;
+				frame_number = finish_frame;
+				if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+						frame_number += this_layer_data->transition_out_duration * frames_per_second;
+//				frame_number = (layer_counter * (slide_duration + 1)) + finish_frame + 1;
+//				frame_number = (layer_counter * (slide_duration + 1)) + finish_frame;
 				swf_timing_array[frame_number].remove = TRUE;
 
 				// Displaying debugging info if requested
@@ -1243,16 +1246,12 @@ gint menu_export_flash_inner(gchar *output_filename)
 				{
 					printf("Setting REMOVE value for layer %u in swf element %u\n", layer_counter, frame_number);
 				}
-*/
+
 			}
 
 			// Decrement the depth at which this element will be displayed
 			total_num_layers--;
 		}
-
-SWFAction	opacity_action;
-GString		*opacity_gstring;
-			opacity_gstring = g_string_new(NULL);
 
 		// Debugging output, displaying what we have in the pre-processing element array thus far
 		if (3 == debug_level)
@@ -1349,8 +1348,9 @@ GString		*opacity_gstring;
 						display_list_object = this_layer_info->display_list_item;
 
 						// Remove the character from the display list
-						// fixme3: We could possibly try setting the _visible properly of the object to false instead
-						SWFDisplayItem_remove(display_list_object);
+						g_string_printf(as_gstring, "%s._visible = false;", this_frame_ptr->object_name->str);
+						swf_action = newSWFAction(as_gstring->str);
+						SWFMovie_add(swf_movie, (SWFBlock) swf_action);
 					}
 
 					// Does the layer need to be moved/positioned in this frame?
@@ -1373,9 +1373,9 @@ GString		*opacity_gstring;
 
 						// Set the opacity level for the object
 						new_opacity = this_frame_ptr->opacity;
-						g_string_printf(opacity_gstring, "%s._alpha = %d;", this_frame_ptr->object_name->str, new_opacity);
-						opacity_action = newSWFAction(opacity_gstring->str);
-						SWFMovie_add(swf_movie, (SWFBlock) opacity_action);
+						g_string_printf(as_gstring, "%s._alpha = %d;", this_frame_ptr->object_name->str, new_opacity);
+						swf_action = newSWFAction(as_gstring->str);
+						SWFMovie_add(swf_movie, (SWFBlock) swf_action);
 					}
 				}
 			}
