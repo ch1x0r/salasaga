@@ -254,7 +254,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 				element_index = layer_counter * (slide_duration + 1);
 
 				// Process the layer information, filling out the relevant elements
-				menu_export_flash_create_layer_elements(&swf_timing_array[layer_counter], slide_duration + 1, this_layer_data, total_num_layers);
+				menu_export_flash_create_layer_elements(&swf_timing_array[element_index], slide_duration + 1, this_layer_data, total_num_layers);
 			}
 
 			// Decrement the depth at which this element will be displayed
