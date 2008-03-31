@@ -46,12 +46,13 @@ gint menu_export_flash_inner(gchar *output_filename)
 	// Local variables
 	GString				*as_gstring;				// Used for constructing action script statements
 	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
-	gint				display_depth;				// The depth at which an item is displayed in the swf output
 	GError				*error = NULL;				// Pointer to error return structure
+	guint				finish_frame;
 	gfloat				finish_x_position_unscaled;
 	gfloat				finish_y_position_unscaled;
 	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
 	guint				frame_counter;				// Holds the number of frames
+	guint				new_opacity;				// Used when constructing the opacity value for an object
 	gint				num_bytes_written;			// Receives the number of bytes written to disk for the swf output
 	gint				highlight_box_height;		// Used while generating swf output for highlight boxes
 	gint				highlight_box_width;		// Used while generating swf output for highlight boxes
@@ -59,12 +60,12 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gint				image_width;				// Temporarily used to store the width of an image
 	GString				*initial_action_gstring;	// Swf action script can be constructed with this
 	guint				layer_counter;				// Holds the number of layers
+	guint				num_displayed_frames;
 	guint				num_layers = 0;				// The number of layers in the slide
 	guint				num_slides;					// The number of slides in the movie
 	guint				out_res_index;				// Index into the array of output resolution entries 
 	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
 	gsize				pixbuf_size;				// Is given the size of a compressed png image
-	guint				position_counter;			// Temporary counter integer
 	GdkPixbuf			*resized_pixbuf;			// Temporary pixbuf used while scaling images
 	gboolean			return_code_bool;			// Receives boolean return codes
 	gint				scaled_height;				// Used to calculate the final size an object should be scaled to
@@ -74,6 +75,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	guint				slide_counter;				// Holds the number of slides
 	guint				slide_duration;				// Holds the total number of frames in this slide
 	GString				*slide_name_tmp;			// Temporary slide names are constructed with this
+	guint				start_frame;
 	gfloat				start_x_position_unscaled;
 	gfloat				start_y_position_unscaled;
 	swf_frame_element	*swf_timing_array = NULL;	// Used to coordinate the actions in each frame
@@ -81,8 +83,8 @@ gint menu_export_flash_inner(gchar *output_filename)
 	layer				*this_layer_data;			// Points to the data in the present layer
 	layer				*this_layer_info;			// Used to point to layer data when looping
 	slide				*this_slide_data;			// Points to the data in the present slide
-	gint				this_start_depth = 2;
 	guint				total_frames;				// The total number of frames in the animation
+	gfloat				total_seconds;				// The duration of the entire animation in seconds	
 	gboolean			unknown_resolution;
 
 	SWFDisplayItem		display_list_object;		// Temporary display list object
@@ -150,6 +152,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	as_gstring = g_string_new(NULL);
 	slide_name_tmp = g_string_new(NULL);
 	total_frames = 0;
+	total_seconds = 0;
 	initial_action_gstring = g_string_new(NULL);
 
 	// Determine which of the control bar resolutions to use
@@ -393,10 +396,41 @@ gint menu_export_flash_inner(gchar *output_filename)
 		printf("Scaled width ratio: %.2f\n", scaled_width_ratio);
 	}
 
+	// Count the number of slides in the movie
+	slides = g_list_first(slides);
+	num_slides = g_list_length(slides);
+
+	// Output some debugging info if requested
+	if (debug_level)
+	{
+		printf("Number of slides: %u\n", num_slides);
+	}
+
+	// Count the total number of layers in the movie
+guint	total_num_layers;
+	total_num_layers = 2;
+	for (slide_counter = 0; slide_counter <  num_slides; slide_counter++)
+	{
+		// Point to the selected slide
+		slides = g_list_first(slides);
+		this_slide_data = g_list_nth_data(slides, slide_counter);
+
+		// Add the number of layers in this slide to the total count
+		this_slide_data->layers = g_list_first(this_slide_data->layers);
+		num_layers = g_list_length(this_slide_data->layers);
+		total_num_layers += num_layers;
+	}
+
+	// Output some debugging info if requested
+	if (debug_level)
+	{
+		printf("Total number of layers: %u\n", total_num_layers);
+	}
+
 	// If requested, add the swf control bar to the movie
 	if (TRUE == show_control_bar)
 	{
-		return_code_bool = menu_export_flash_control_bar(swf_movie, out_res_index);
+		return_code_bool = menu_export_flash_control_bar(swf_movie, out_res_index, total_num_layers + 5);
 		if (TRUE != return_code_bool)
 		{
 			// Something went wrong when adding the control bar to the movie
@@ -436,21 +470,18 @@ gint menu_export_flash_inner(gchar *output_filename)
 // (sounds like a reasonable approach (theory) for a first go, lets see it works in reality though)
 
 	// For each slide, work out how many layers there are and how many frames the entire slide lasts for
-	slides = g_list_first(slides);
-	num_slides = g_list_length(slides);
-
-	// Output some debugging info if requested
-	if (debug_level)
-	{
-		printf("Number of slides: %u\n", num_slides);
-	}
-
 	for (slide_counter = 0; slide_counter <  num_slides; slide_counter++)
 	{
 		// Initialise things for this slide
 		slides = g_list_first(slides);
 		this_slide_data = g_list_nth_data(slides, slide_counter);
-		slide_duration = this_slide_data->duration;
+		slide_duration = this_slide_data->duration * frames_per_second;
+
+		// Add the duration in seconds to the total duration count for the animation
+		total_seconds += this_slide_data->duration;
+
+		// Add the frames for this slide to the total count of frames for the animation
+		total_frames += slide_duration;
 
 		// Add the slide name to the output swf
 		if (NULL == this_slide_data->name)
@@ -476,22 +507,22 @@ gint menu_export_flash_inner(gchar *output_filename)
 			printf("Maximum frame number in slide %u is %u\n", slide_counter, slide_duration);
 		}
 
-		// Add the frames for this slide to the total count of frames for the animation
-		total_frames += slide_duration;
-
 		// Create an array that's layers x "number of frames in the slide"
 		frame_number = num_layers * (slide_duration + 1);  // +1 because if (ie.) we say slide 5, then we really mean the 6th slide (we start from 0)
-		swf_timing_array = g_try_new0(swf_frame_element, frame_number); 
-
-		// Point to the first layer again
-		this_slide_data = g_list_nth_data(slides, slide_counter);
+		swf_timing_array = g_try_new0(swf_frame_element, frame_number);
+		if (NULL == swf_timing_array)
+		{
+			display_warning("Error ED339: We couldn't allocate enough memory to generate the swf.  Export aborted.");
+			return FALSE;
+		}
 
 		// Set the depth at which the layers in this slide will be displayed downwards from
-		this_start_depth += num_layers;
-		display_depth = this_start_depth;
+//		this_start_depth += num_layers;
+//		display_depth = this_start_depth;
 
 		// Process each layer in turn.  For every frame the layer is in, store in the array
 		// whether the object in the layer is visible, it's position, transparency, etc
+		this_slide_data = g_list_nth_data(slides, slide_counter);
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 		{
@@ -1041,9 +1072,121 @@ gint menu_export_flash_inner(gchar *output_filename)
 				start_y_position_unscaled = this_layer_data->y_offset_start;
 				finish_x_position_unscaled = this_layer_data->x_offset_finish;
 				finish_y_position_unscaled = this_layer_data->y_offset_finish;
-				guint start_frame = this_layer_data->start_time * frames_per_second;
-				guint finish_frame = start_frame + (this_layer_data->duration * frames_per_second);
-				guint num_displayed_frames = (finish_frame - start_frame) + 1;
+
+guint	opacity_count;
+gfloat	opacity_step;
+
+				// If there is a fade in transition, fill in the relevant elements
+				if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+				{
+					// Work out the starting and ending frames for the fade
+					start_frame = this_layer_data->start_time * frames_per_second;
+					finish_frame = (this_layer_data->transition_in_duration + this_layer_data->start_time) * frames_per_second;
+
+					// Indicate on which frame the element should be displayed, at what display depth, and its starting co-ordinates
+					frame_number = (layer_counter * (slide_duration + 1)) + start_frame;
+					swf_timing_array[frame_number].add = TRUE;
+					swf_timing_array[frame_number].depth = total_num_layers;
+					swf_timing_array[frame_number].x_position = element_x_position_start;
+					swf_timing_array[frame_number].y_position = element_y_position_start;
+					swf_timing_array[frame_number].action_this = TRUE;
+					swf_timing_array[frame_number].object_name = g_string_new(NULL);
+					g_string_printf(swf_timing_array[frame_number].object_name, "Object%d", total_num_layers);
+
+					// Displaying debugging info if requested
+					if (debug_level)
+					{
+						printf("Setting ADD value for layer %u in swf element %u, with display depth of %u\n", layer_counter, frame_number, total_num_layers);
+					}
+
+					// Work out how much opacity to increment each frame by
+					opacity_step = 100 / (this_layer_data->transition_in_duration * frames_per_second);
+					opacity_count = 0;
+
+					// Loop through each frame of the fade in, setting the opacity values
+					for (frame_counter = start_frame; frame_counter <= finish_frame; frame_counter++)
+					{
+						// Point to the desired element 
+						element_number = (layer_counter * (slide_duration + 1)) + frame_counter;
+						this_frame_ptr = &swf_timing_array[element_number];
+
+						// Mark this element as needing action taken
+						this_frame_ptr->action_this = TRUE;
+						this_frame_ptr->opacity_change = TRUE;
+
+						// Ensure the appropriate layer data can be found by later code
+						this_frame_ptr->layer_info = this_layer_data;
+
+						// Point to this object's display list item object name
+						this_frame_ptr->object_name = swf_timing_array[frame_number].object_name;
+
+						// Store the opacity value for this layer on this frame
+						this_frame_ptr->opacity = opacity_count;
+						opacity_count += floorf(opacity_step);
+					}
+				} else
+				{
+					// Indicate on which frame the element should be displayed, at what display depth, and its starting co-ordinates
+					frame_number = (layer_counter * (slide_duration + 1)) + (this_layer_data->start_time * frames_per_second);
+					swf_timing_array[frame_number].add = TRUE;
+					swf_timing_array[frame_number].depth = total_num_layers;
+					swf_timing_array[frame_number].x_position = element_x_position_start;
+					swf_timing_array[frame_number].y_position = element_y_position_start;
+					swf_timing_array[frame_number].action_this = TRUE;
+					swf_timing_array[frame_number].object_name = g_string_new(NULL);
+					g_string_printf(swf_timing_array[frame_number].object_name, "Object%d", total_num_layers);
+
+					// Displaying debugging info if requested
+					if (debug_level)
+					{
+						printf("Setting ADD value for layer %u in swf element %u, with display depth of %u\n", layer_counter, frame_number, total_num_layers);
+					}
+				}
+
+				// If there is a fade out transition, fill in the relevant elements
+				if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+				{
+					// Work out the starting and ending frames for the fade
+					start_frame = this_layer_data->start_time * frames_per_second;
+					if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+						start_frame += this_layer_data->transition_in_duration * frames_per_second;
+					start_frame += this_layer_data->duration * frames_per_second;
+					finish_frame = (this_layer_data->transition_out_duration * frames_per_second) + start_frame;
+
+					// Work out how much opacity to increment each frame by
+					opacity_step = (100 / (this_layer_data->transition_out_duration * frames_per_second)) * -1.0;
+
+					// Loop through each frame of the fade in, setting the opacity values
+					for (frame_counter = start_frame; frame_counter <= finish_frame; frame_counter++)
+					{
+						// Point to the desired element 
+						element_number = (layer_counter * (slide_duration + 1)) + frame_counter;
+						this_frame_ptr = &swf_timing_array[element_number];
+
+						// Mark this element as needing action taken
+						this_frame_ptr->action_this = TRUE;
+						this_frame_ptr->opacity_change = TRUE;
+
+						// Ensure the appropriate layer data can be found by later code
+						this_frame_ptr->layer_info = this_layer_data;
+
+						// Point to this object's display list item object name
+						this_frame_ptr->object_name = swf_timing_array[frame_number].object_name;
+
+						// Store the opacity value for this layer on this frame
+						this_frame_ptr->opacity = opacity_count;
+						opacity_count -= floorf(opacity_step);
+					}
+				}
+
+				// Work out the starting and ending frames for the fully visible layer display
+				start_frame = this_layer_data->start_time * frames_per_second;
+				if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+					start_frame += (this_layer_data->duration * frames_per_second);
+				finish_frame = start_frame + (this_layer_data->duration * frames_per_second);
+				num_displayed_frames = (finish_frame - start_frame) + 1;
+
+				// Work out the start and finish x and y positions for the layer
 				element_x_position_start = scaled_width_ratio * start_x_position_unscaled;
 				element_x_position_finish = scaled_width_ratio * finish_x_position_unscaled;
 				element_y_position_start = scaled_height_ratio * start_y_position_unscaled;
@@ -1056,90 +1199,84 @@ gint menu_export_flash_inner(gchar *output_filename)
 					printf("Start X pos (unscaled): %.2f\tStart Y pos (unscaled): %.2f\tFinish X pos (unscaled): %.2f\tFinish Y pos (unscaled): %.2f\n", start_x_position_unscaled, start_y_position_unscaled, finish_x_position_unscaled, finish_y_position_unscaled);
 				}
 
-				// If the layer moves, flag this and calculate the increment in each direction
+guint	x_position;
+guint	y_position;
+
+				// If the layer moves, work out the movement related values
 				if ((element_x_position_start != element_x_position_finish) || (element_y_position_start != element_y_position_finish))
 				{
-					swf_timing_array[(layer_counter * (slide_duration + 1)) + start_frame].is_moving = TRUE;
+					// Work out how much to increment the frame movement by in each direction
+					x_position = element_x_position_start;
+					y_position = element_y_position_start;
 					element_x_position_increment = (element_x_position_finish - element_x_position_start) / (num_displayed_frames - 1);
 					element_y_position_increment = (element_y_position_finish - element_y_position_start) / (num_displayed_frames - 1);
-
-					// Displaying debugging info if requested
-					if (debug_level)
-					{
-						printf("This shape moves! X increment: %.2f\tY increment: %.2f\n", element_x_position_increment, element_y_position_increment);
-					}
 				}
 
-				// Indicate on which frame the element should be displayed, at what display depth, and its co-ordinates
+				// Loop through each frame of the fully visible layer, filling in the relevant elements
+				for (frame_number = start_frame; frame_number <= finish_frame; frame_number++)
+				{
+					// Point to the desired element 
+					element_number = (layer_counter * (slide_duration + 1)) + frame_number;
+					this_frame_ptr = &swf_timing_array[element_number];
+
+					// Ensure the appropriate layer data can be found by later code
+					this_frame_ptr->layer_info = this_layer_data;
+
+					// If the layer moves, fill in the relevant elements
+					if ((element_x_position_start != element_x_position_finish) || (element_y_position_start != element_y_position_finish))
+					{
+						// Mark this element as needing action taken
+						this_frame_ptr->action_this = TRUE;
+						this_frame_ptr->is_moving = TRUE;
+
+						// Store the x and y positions for this layer for this frame
+						this_frame_ptr->x_position = x_position;
+						this_frame_ptr->y_position = y_position;
+						x_position += element_x_position_increment;
+						y_position += element_y_position_increment;
+
+						// Displaying debugging info if requested
+						if (debug_level)
+						{
+							printf("This shape moves! X increment: %.2f\tY increment: %.2f\n", element_x_position_increment, element_y_position_increment);
+						}
+					}
+
+					// Store the opacity setting for each frame
+					this_frame_ptr->opacity = 100;
+				}
+/*
+				// Indicate on which frame the element should be displayed, at what display depth, and its starting co-ordinates
 				frame_number = (layer_counter * (slide_duration + 1)) + start_frame;
 				swf_timing_array[frame_number].add = TRUE;
-				swf_timing_array[frame_number].depth = display_depth;
+				swf_timing_array[frame_number].depth = total_num_layers;
 				swf_timing_array[frame_number].x_position = element_x_position_start;
 				swf_timing_array[frame_number].y_position = element_y_position_start;
-
-				// Displaying debugging info if requested
-				if (debug_level)
-				{
-					printf("Setting ADD value for layer %u in swf element %u, with display depth of %u\n", layer_counter, frame_number, display_depth);
-				}
-
+*/
+/*
 				// Indicate on which frame the element should be removed from display
-//				frame_number = (layer_counter * (slide_duration + 1)) + finish_frame + 1;
-//				frame_number = (layer_counter * (slide_duration + 1)) + finish_frame;
-//				swf_timing_array[frame_number].remove = TRUE;
+				frame_number = (layer_counter * (slide_duration + 1)) + finish_frame + 1;
+				frame_number = (layer_counter * (slide_duration + 1)) + finish_frame;
+				swf_timing_array[frame_number].remove = TRUE;
 
 				// Displaying debugging info if requested
 				if (debug_level)
 				{
 					printf("Setting REMOVE value for layer %u in swf element %u\n", layer_counter, frame_number);
 				}
-
-				// Re-initialise the position counter for each shape
-				position_counter = 0;
-				for (frame_number = start_frame; frame_number <= finish_frame; frame_number++)
-				{
-					element_number = (layer_counter * (slide_duration + 1)) + frame_number;
-					this_frame_ptr = &swf_timing_array[element_number];
-
-					// Display debugging info if requested
-					if (debug_level)
-					{
-						printf("Setting values inside element # %u\n", element_number);
-					}
-
-					// Indicate the element should be processed on this frame
-					this_frame_ptr->action_this = TRUE;
-
-					// Ensure the appropriate layer data can be found by later code
-					this_frame_ptr->layer_info = this_layer_data;
-
-					// If the layer moves, store the x and y positions for each frame
-					if (TRUE == swf_timing_array[(layer_counter * (slide_duration + 1)) + start_frame].is_moving)
-					{
-						this_frame_ptr->is_moving = TRUE;
-						this_frame_ptr->x_position = element_x_position_start + (element_x_position_increment * position_counter);
-						this_frame_ptr->y_position = element_y_position_start + (element_y_position_increment * position_counter);
-						position_counter++;
-
-						// Display debugging info if requested
-						if (debug_level)
-						{
-							printf("Scaled X position: %.2f\tScaled Y position: %.2f\n", this_frame_ptr->x_position, this_frame_ptr->y_position);
-						}
-					}
-
-					// Store the opacity setting for each frame
-					// fixme2: Still need to calculate properly rather than hard code to 100% for the moment
-					this_frame_ptr->opacity = 65535;
-				}
+*/
 			}
 
 			// Decrement the depth at which this element will be displayed
-			display_depth--;
+			total_num_layers--;
 		}
 
+SWFAction	opacity_action;
+GString		*opacity_gstring;
+			opacity_gstring = g_string_new(NULL);
+
 		// Debugging output, displaying what we have in the pre-processing element array thus far
-		if (debug_level)
+		if (3 == debug_level)
 		{
 			for (frame_counter = 0; frame_counter <= slide_duration; frame_counter++)  // This loops _frame + 1_ number of times
 			{
@@ -1214,6 +1351,9 @@ gint menu_export_flash_inner(gchar *output_filename)
 						// Store the display list object for future reference
 						this_layer_info->display_list_item = display_list_object;
 
+						// Ensure the object has it's name set, so we can reference it with action script
+						SWFDisplayItem_setName(display_list_object, this_frame_ptr->object_name->str);
+
 						// Ensure the object is at the correct display depth
 						SWFDisplayItem_setDepth(display_list_object, this_frame_ptr->depth);
 
@@ -1230,6 +1370,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 						display_list_object = this_layer_info->display_list_item;
 
 						// Remove the character from the display list
+						// fixme3: We could possibly try setting the _visible properly of the object to false instead
 						SWFDisplayItem_remove(display_list_object);
 					}
 
@@ -1243,6 +1384,19 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 						// (Re-)position the object
 						SWFDisplayItem_moveTo(display_list_object, this_frame_ptr->x_position, this_frame_ptr->y_position);
+					}
+
+					// Does the layer have an opacity change that needs to be actioned in this frame?
+					if (TRUE == this_frame_ptr->opacity_change)
+					{
+						// Get the appropriate display list object
+						display_list_object = this_layer_info->display_list_item;
+
+						// Set the opacity level for the object
+						new_opacity = this_frame_ptr->opacity;
+						g_string_printf(opacity_gstring, "%s._alpha = %d;", this_frame_ptr->object_name->str, new_opacity);
+						opacity_action = newSWFAction(opacity_gstring->str);
+						SWFMovie_add(swf_movie, (SWFBlock) opacity_action);
 					}
 				}
 			}
