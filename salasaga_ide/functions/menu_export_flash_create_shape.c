@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Salasaga: 
+ * Salasaga: Creates a swf shape from a given layer
  * 
  * Copyright (C) 2008 Justin Clift <justin@salasaga.org>
  * 

@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Salasaga: 
+ * Salasaga: Turns an individual element of a swf frame element array into swf display list blocks 
  * 
  * Copyright (C) 2008 Justin Clift <justin@salasaga.org>
  * 

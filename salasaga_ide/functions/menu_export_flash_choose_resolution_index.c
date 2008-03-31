@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Salasaga: 
+ * Salasaga: Determines the index into the output resolution table, from the global output height and width
  * 
  * Copyright (C) 2008 Justin Clift <justin@salasaga.org>
  * 
