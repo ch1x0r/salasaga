@@ -96,7 +96,7 @@ gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start,
 		array_start[start_frame_rounded].y_position = element_y_position_start;
 
 		// Work out how much opacity to increment each frame by
-		opacity_step = 100 / (this_layer_data->transition_in_duration * frames_per_second);
+		opacity_step = 100 / ((this_layer_data->transition_in_duration * frames_per_second) - 1);
 
 		// Loop through each frame of the fade in, setting the opacity values
 		opacity_count = 0;
@@ -107,6 +107,11 @@ gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start,
 			array_start[frame_counter].opacity = opacity_count;
 			opacity_count += floorf(opacity_step);
 		}
+
+		// Ensure the layer is completely visible after the end of the fade in
+		array_start[frame_counter].action_this = TRUE;
+		array_start[frame_counter].opacity_change = TRUE;
+		array_start[frame_counter].opacity = 100;
 	} else
 	{
 		// Indicate on which frame the element should be displayed, at what display depth, and its starting co-ordinates
@@ -130,17 +135,22 @@ gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start,
 		finish_frame_rounded = roundf(finish_frame);
 
 		// Work out how much opacity to decrement each frame by
-		opacity_step = 100 / (this_layer_data->transition_out_duration * frames_per_second);
+		opacity_step = 100 / ((this_layer_data->transition_out_duration * frames_per_second) - 1);
 
 		// Loop through each frame of the fade out, setting the opacity values
 		opacity_count = 100;
-		for (frame_counter = start_frame_rounded; frame_counter <= finish_frame_rounded; frame_counter++)
+		for (frame_counter = start_frame_rounded; frame_counter < finish_frame_rounded; frame_counter++)
 		{
 			array_start[frame_counter].action_this = TRUE;
 			array_start[frame_counter].opacity_change = TRUE;
 			array_start[frame_counter].opacity = opacity_count;
 			opacity_count -= floorf(opacity_step);
 		}
+
+		// Ensure the layer is completely invisible after the end of the fade out
+		array_start[finish_frame_rounded].action_this = TRUE;
+		array_start[finish_frame_rounded].opacity_change = TRUE;
+		array_start[finish_frame_rounded].opacity = 0;
 	}
 
 	// Work out the start frame of the fully visible layer display
@@ -170,8 +180,8 @@ gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start,
 		if ((element_x_position_start != element_x_position_finish) || (element_y_position_start != element_y_position_finish))
 		{
 			// Work out how much to increment the frame movement by in each direction
-			element_x_position_increment = (element_x_position_finish - element_x_position_start) / num_displayed_frames;
-			element_y_position_increment = (element_y_position_finish - element_y_position_start) / num_displayed_frames;
+			element_x_position_increment = (element_x_position_finish - element_x_position_start) / (num_displayed_frames - 1);
+			element_y_position_increment = (element_y_position_finish - element_y_position_start) / (num_displayed_frames - 1);
 		}
 
 		// Loop through each frame of the fully visible layer, filling in the relevant elements
