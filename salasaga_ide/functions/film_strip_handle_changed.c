@@ -38,10 +38,19 @@
 void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data)
 {
 	// Temporary variables
+	GValue				*handle_size;						// The size of the dividing handle for the film strip
 	gint				new_position;
+
 
 	// Get the new position of the film strip seperator
 	new_position = gtk_paned_get_position(GTK_PANED(paned));
+
+	// Get the handle size of the film strip widget
+	handle_size = g_new0(GValue, 1);
+	g_value_init(handle_size, G_TYPE_INT);
+	gtk_widget_style_get_property(GTK_WIDGET(main_area), "handle-size", handle_size);
+	new_position -= (g_value_get_int(handle_size) + 15);
+	g_free(handle_size);
 
 	// If the handle has moved, set the new thumbnail width in the application preferences
 	if (new_position != preview_width)
