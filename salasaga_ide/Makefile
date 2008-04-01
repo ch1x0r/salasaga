@@ -207,8 +207,12 @@ OFILES = \
 	functions/menu_edit_preferences.o \
 	functions/menu_enable.o \
 	functions/menu_export_flash_animation.o \
+	functions/menu_export_flash_choose_resolution_index.o \
 	functions/menu_export_flash_control_bar.o \
+	functions/menu_export_flash_create_layer_elements.o \
+	functions/menu_export_flash_create_shape.o \
 	functions/menu_export_flash_inner.o \
+	functions/menu_export_flash_process_element.o \
 	functions/menu_export_layer.o \
 	functions/menu_export_slide.o \
 	functions/menu_file_new.o \
@@ -250,6 +254,7 @@ OFILES = \
 	functions/timeline_edited_x_offset_start.o \
 	functions/timeline_edited_y_offset_finish.o \
 	functions/timeline_edited_y_offset_start.o \
+	functions/timeline_row_selected_event.o \
 	functions/uri_decode.o \
 	functions/uri_encode_base64.o \
 	functions/validate_value.o \
@@ -442,11 +447,23 @@ menu_enable.o:
 menu_export_flash_animation.o:
 	$(CC) $(CFLAGS) -c menu_export_flash_animation.c -o menu_export_flash_animation.o
 
+menu_export_flash_choose_resolution_index.o:
+	$(CC) $(CFLAGS) -c menu_export_flash_choose_resolution_index.c -o menu_export_flash_choose_resolution_index.o
+
 menu_export_flash_control_bar.o:
 	$(CC) $(CFLAGS) -c menu_export_flash_control_bar.c -o menu_export_flash_control_bar.o
 
+menu_export_flash_create_layer_elements.o:
+	$(CC) $(CFLAGS) -c menu_export_flash_create_layer_elements.c -o menu_export_flash_create_layer_elements.o
+
+menu_export_flash_create_shape.o:
+	$(CC) $(CFLAGS) -c menu_export_flash_create_shape.c -o menu_export_flash_create_shape.o
+
 menu_export_flash_inner.o:
 	$(CC) $(CFLAGS) -c menu_export_flash_inner.c -o menu_export_flash_inner.o
+
+menu_export_flash_process_element.o:
+	$(CC) $(CFLAGS) -c menu_export_flash_process_element.c -o menu_export_flash_process_element.o
 
 menu_export_layer.o:
 	$(CC) $(CFLAGS) -c menu_export_layer.c -o menu_export_layer.o
@@ -570,6 +587,9 @@ timeline_edited_y_offset_finish.o:
 
 timeline_edited_y_offset_start.o:
 	$(CC) $(CFLAGS) -c timeline_edited_y_offset_start.c -o timeline_edited_y_offset_start.o
+
+timeline_row_selected_event.o:
+	$(CC) $(CFLAGS) -c timeline_row_selected_event.c -o timeline_row_selected_event.o
 
 uri_decode.o:
 	$(CC) $(CFLAGS) -c uri_decode.c -o uri_decode.o
