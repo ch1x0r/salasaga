@@ -42,6 +42,7 @@
 #include "layer_new_image.h"
 #include "layer_new_mouse.h"
 #include "layer_new_text.h"
+#include "timeline_row_selected_event.h"
 
 
 GtkWidget *create_time_line(void)
@@ -79,6 +80,9 @@ GtkWidget *create_time_line(void)
 	// Create the time line container contents
 	time_line_container = gtk_viewport_new(NULL, NULL);
 	gtk_container_add(GTK_CONTAINER(time_line_scrolled_window), GTK_WIDGET(time_line_container));
+
+	// Add a signal handler to the time line area, letting us know when the time line area is clicked
+	g_signal_connect(time_line_scrolled_window, "button_release_event", G_CALLBACK(timeline_row_selected_event), NULL);
 
 	// Create the time line toolbar
 	time_line_toolbar = gtk_toolbar_new();
