@@ -370,10 +370,10 @@ gboolean preferences_load()
 	default_output_height = valid_output_height;
 
 	// Set the default slide duration (in seconds)
-	default_slide_duration = slide_duration = valid_slide_duration;
+	default_slide_duration = valid_slide_duration;
 
 	// Set the default layer duration (in seconds)
-	layer_duration = valid_layer_duration;
+	default_layer_duration = valid_layer_duration;
 
 	// Set the default background colour
 	default_bg_colour.red = valid_bg_colour.red;
@@ -597,7 +597,7 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			default_slide_duration = slide_duration = 60;
+			default_slide_duration = 60;
 		} else
 		{
 			// Retrieve the value
@@ -605,7 +605,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "slide_duration", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				default_slide_duration = slide_duration = strtof(buffer_ptr, NULL);
+				default_slide_duration = strtof(buffer_ptr, NULL);
 			}
 
 			// Close the registry key
@@ -617,7 +617,7 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			layer_duration = 60;
+			default_layer_duration = 60;
 		} else
 		{
 			// Retrieve the value
@@ -625,7 +625,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "layer_duration", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				layer_duration = strtof(buffer_ptr, NULL);
+				default_layer_duration = strtof(buffer_ptr, NULL);
 			}
 
 			// Close the registry key

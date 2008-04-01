@@ -212,7 +212,7 @@ void menu_screenshots_import(void)
 		// Allocate a new slide structure for use
 		tmp_slide = g_new(slide, 1);
 		tmp_slide->layers = NULL;
-		tmp_slide->duration = slide_duration;
+		tmp_slide->duration = default_slide_duration;
 		tmp_slide->scaled_cached_pixbuf = NULL;
 		tmp_slide->cached_pixbuf_valid = FALSE;
 
@@ -225,7 +225,7 @@ void menu_screenshots_import(void)
 		tmp_layer->start_time = 0.0;
 		tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 		tmp_layer->transition_in_duration = 0.0;
-		tmp_layer->duration = layer_duration;
+		tmp_layer->duration = default_slide_duration;  // Slide duration rather than layer duration, because these become slides
 		tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 		tmp_layer->transition_out_duration = 0.0;
 

@@ -76,7 +76,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	tmp_layer->object_type = TYPE_TEXT;
 	tmp_layer->object_data = (GObject *) tmp_text_ob;
 	tmp_layer->start_time = 0.0;
-	tmp_layer->duration = layer_duration;
+	tmp_layer->duration = default_layer_duration;
 	tmp_layer->x_offset_start = release_x;
 	tmp_layer->y_offset_start = release_y;
 	tmp_layer->x_offset_finish = release_x;

@@ -117,7 +117,7 @@ extern GString				*default_project_folder;
 extern gfloat				default_slide_duration;
 extern GString				*default_zoom_level;
 extern guint				icon_height;
-extern gfloat				layer_duration;
+extern gfloat				default_layer_duration;
 extern guint				preview_width;
 extern GString				*screenshots_folder;
 
@@ -128,7 +128,6 @@ extern GString				*project_folder;
 extern guint				project_height;
 extern GString				*project_name;
 extern guint				project_width;
-extern gfloat				slide_duration;
 
 // Field descriptions used for bounds and validation
 extern validatation_entry	valid_fields[];

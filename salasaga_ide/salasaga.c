@@ -136,17 +136,17 @@ GtkComboBox				*zoom_selector;				// Widget for the zoom selector
 
 // Main toolbar items
 GtkTooltips				*main_toolbar_tooltips;		// Tooltips structure
-GtkWidget				*main_toolbar_icons[MAIN_TB_COUNT];	// Array of toolbar icons
-GtkWidget				*main_toolbar_icons_gray[MAIN_TB_COUNT];  // Array of toolbar icons (the grayed out ones)
-GtkToolItem				*main_toolbar_items[MAIN_TB_COUNT];	// Array of toolbar items
-gulong					main_toolbar_signals[MAIN_TB_COUNT];	// Array of toolbar signals
+GtkWidget				*main_toolbar_icons[MAIN_TB_COUNT];			// Array of toolbar icons
+GtkWidget				*main_toolbar_icons_gray[MAIN_TB_COUNT];	// Array of toolbar icons (the grayed out ones)
+GtkToolItem				*main_toolbar_items[MAIN_TB_COUNT];			// Array of toolbar items
+gulong					main_toolbar_signals[MAIN_TB_COUNT];		// Array of toolbar signals
 
 // Layer toolbar items
 GtkTooltips				*layer_toolbar_tooltips;	// Tooltips structure
-GtkWidget				*layer_toolbar_icons[MAIN_TB_COUNT];	// Array of toolbar icons
-GtkWidget				*layer_toolbar_icons_gray[MAIN_TB_COUNT];   // Array of toolbar icons (the grayed out ones)
-GtkToolItem				*layer_toolbar_items[MAIN_TB_COUNT];	// Array of toolbar items
-gulong					layer_toolbar_signals[MAIN_TB_COUNT];	// Array of toolbar signals
+GtkWidget				*layer_toolbar_icons[MAIN_TB_COUNT];		// Array of toolbar icons
+GtkWidget				*layer_toolbar_icons_gray[MAIN_TB_COUNT];	// Array of toolbar icons (the grayed out ones)
+GtkToolItem				*layer_toolbar_items[MAIN_TB_COUNT];		// Array of toolbar items
+gulong					layer_toolbar_signals[MAIN_TB_COUNT];		// Array of toolbar signals
 
 // Application default preferences
 GdkColor				default_bg_colour;			// Default background color for slides
@@ -158,7 +158,7 @@ GString					*default_project_folder;	// Application default save path for projec
 gfloat					default_slide_duration;		// Default length of all new slides, in frames
 GString					*default_zoom_level;		// Default zoom level to use
 guint					icon_height = 30;			// Height in pixels for the toolbar icons (they're scalable SVG's)
-gfloat					layer_duration;				// Length of all new layers, in frames
+gfloat					default_layer_duration;		// Length of all new layers, in frames
 guint					preview_width;				// Width in pixel for the film strip preview (might turn into a structure later)
 GString					*screenshots_folder;		// Application default for where to store screenshots
 
@@ -170,7 +170,6 @@ GString					*project_folder;			// The path to the project folder
 guint					project_height;				// The height of the project in pixels
 GString					*project_name;				// The name of the project
 guint					project_width;				// The width of the project in pixels
-gfloat					slide_duration;				// Length of all new slides, in frames
 
 #ifdef _WIN32
 // Windows only variables
@@ -429,8 +428,8 @@ gint main(gint argc, gchar *argv[])
 		project_height = gdk_screen_get_height(which_screen);
 		default_output_width = 800;
 		default_output_height = 600;
-		default_slide_duration = slide_duration = 20;  // Default number of seconds to use for new slides
-		layer_duration = 10;  // Default number of seconds to use for new layers
+		default_slide_duration = 20;  // Default number of seconds to use for new slides
+		default_layer_duration = 10;  // Default number of seconds to use for new layers
 	}
 
 	// Set various required defaults that will be overwritten by the first project loaded

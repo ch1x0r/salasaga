@@ -60,7 +60,7 @@ void slide_insert(void)
 	tmp_layer = g_new(layer, 1);
 	tmp_layer->object_type = TYPE_EMPTY;
 	tmp_layer->start_time = 0;
-	tmp_layer->duration = layer_duration;
+	tmp_layer->duration = default_layer_duration;
 	tmp_layer->visible = TRUE;
 	tmp_layer->background = TRUE;
 	tmp_layer->name = g_string_new("Empty");

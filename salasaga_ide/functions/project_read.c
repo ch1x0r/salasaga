@@ -63,7 +63,6 @@ gboolean project_read(gchar *filename)
 	GString				*error_string;				// Used to create error strings
 	GtkTreeIter			film_strip_iter;
 	xmlChar				*fps_data = NULL;
-	gfloat				gfloat_val;					// Temporary gfloat value used for validation
 	guint				guint_val;					// Temporary guint value used for validation
 	GdkPixbufLoader		*image_loader;				// Used for loading images embedded in project files
 	guint				layer_counter;				// Counter used in loops
@@ -101,7 +100,6 @@ gboolean project_read(gchar *filename)
 	guint				valid_project_height;		// Receives the new project height once validated
 	guint				valid_project_width;		// Receives the new project width once validated
 	gfloat				valid_save_format;			// Receives the project file format version once validated
-	gfloat				valid_slide_duration;		// Receives the new slide duration once validated
 	guint				valid_start_behaviour;		// Receives the new start behaviour once validated
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
@@ -421,39 +419,6 @@ gboolean project_read(gchar *filename)
 		}
 	}
 
-	// If the file format is less the version 4.0, then it has slides with frame based input rather than time based input
-	if (4.0 > valid_save_format)
-	{
-		// Retrieve the new slide length input
-		guint_val = atoi((const char *) slide_length_data);
-		validated_guint = validate_value(SLIDE_LENGTH, V_INT_UNSIGNED, &guint_val);
-		if (NULL == validated_guint)
-		{
-			display_warning("Error ED208: There was something wrong with the slide length value in the project file.");
-			useable_input = FALSE;
-		} else
-		{
-			valid_slide_duration = *validated_guint / valid_fps;
-			g_free(validated_guint);
-			xmlFree(slide_length_data);
-		}
-	} else
-	{
-		// Retrieve the new slide duration input
-		gfloat_val = strtof((const char *) slide_duration_data, NULL);
-		validated_gfloat = validate_value(SLIDE_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
-		if (NULL == validated_gfloat)
-		{
-			display_warning("Error ED335: There was something wrong with the slide duration value in the project file.");
-			useable_input = FALSE;
-		} else
-		{
-			valid_slide_duration = *validated_gfloat;
-			g_free(validated_gfloat);
-			xmlFree(slide_duration_data);
-		}
-	}
-
 	// Retrieve the new start behaviour input
 	if (NULL != start_behaviour_data)
 	{
@@ -554,7 +519,7 @@ gboolean project_read(gchar *filename)
 			// Create a new slide in memory
 			tmp_slide = g_new0(slide, 1);
 			tmp_slide->layers = NULL;
-			tmp_slide->duration = slide_duration;
+			tmp_slide->duration = default_slide_duration;
 			tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
 										G_TYPE_STRING,  // TIMELINE_NAME
 										G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
@@ -596,7 +561,7 @@ gboolean project_read(gchar *filename)
 								tmp_layer->start_time = 0.0;
 								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_in_duration = 0.0;
-								tmp_layer->duration = slide_duration;
+								tmp_layer->duration = default_slide_duration;
 								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_out_duration = 0.0;
 
@@ -817,7 +782,7 @@ gboolean project_read(gchar *filename)
 								tmp_layer->start_time = 0.0;
 								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_in_duration = 0.0;
-								tmp_layer->duration = layer_duration;
+								tmp_layer->duration = default_layer_duration;
 								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_out_duration = 0.0;
 
@@ -1255,7 +1220,7 @@ gboolean project_read(gchar *filename)
 								tmp_layer->start_time = 0.0;
 								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_in_duration = 0.0;
-								tmp_layer->duration = layer_duration;
+								tmp_layer->duration = default_layer_duration;
 								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_out_duration = 0.0;
 
@@ -1593,7 +1558,7 @@ gboolean project_read(gchar *filename)
 								tmp_layer->start_time = 0.0;
 								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_in_duration = 0.0;
-								tmp_layer->duration = layer_duration;
+								tmp_layer->duration = default_layer_duration;
 								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_out_duration = 0.0;
 
@@ -1954,7 +1919,7 @@ gboolean project_read(gchar *filename)
 								tmp_layer->start_time = 0.0;
 								tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_in_duration = 0.0;
-								tmp_layer->duration = layer_duration;
+								tmp_layer->duration = default_layer_duration;
 								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_out_duration = 0.0;
 
@@ -2432,9 +2397,6 @@ gboolean project_read(gchar *filename)
 
 	// Load project height
 	project_height = valid_project_height;
-
-	// Load slide duration
-	slide_duration = valid_slide_duration;
 
 	// Load frames per second
 	if (0 != valid_fps)

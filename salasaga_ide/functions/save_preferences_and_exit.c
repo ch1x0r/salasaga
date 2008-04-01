@@ -64,7 +64,7 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_width", default_output_width, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_height", default_output_height, NULL);
 	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/slide_duration", default_slide_duration, NULL);
-	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/layer_duration", layer_duration, NULL);
+	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/layer_duration", default_layer_duration, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/thumbnail_width", preview_width, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/frames_per_second", default_fps, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_red", default_bg_colour.red, NULL);
@@ -217,12 +217,12 @@ void save_preferences_and_exit(void)
 	return_code = RegSetValueEx(hkey, "output_height", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the default slide duration
-	g_string_printf(tmp_gstring, "%d", slide_duration);
+	g_string_printf(tmp_gstring, "%d", default_slide_duration);
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "slide_duration", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the default layer duration
-	g_string_printf(tmp_gstring, "%d", layer_duration);
+	g_string_printf(tmp_gstring, "%d", default_layer_duration);
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "layer_duration", 0, REG_SZ, tmp_gstring->str, string_size);
 
