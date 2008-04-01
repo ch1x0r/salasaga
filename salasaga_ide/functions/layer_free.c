@@ -55,7 +55,7 @@ gboolean layer_free(layer *this_layer)
 
 		case TYPE_GDK_PIXBUF:
 			if (NULL != ((layer_image *) this_layer->object_data)->image_data)
-				g_object_unref(((layer_image *) this_layer->object_data)->image_data);
+				gtk_object_destroy(GTK_OBJECT(((layer_image *) this_layer->object_data)->image_data));
 			break;
 
 		case TYPE_HIGHLIGHT:
@@ -68,7 +68,7 @@ gboolean layer_free(layer *this_layer)
 
 		case TYPE_TEXT:
 			if (NULL != ((layer_text *) this_layer->object_data)->text_buffer)
-				g_object_unref(((layer_text *) this_layer->object_data)->text_buffer);
+				gtk_object_destroy(GTK_OBJECT(((layer_text *) this_layer->object_data)->text_buffer));
 			break;
 
 		default:

@@ -93,7 +93,7 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
 		// If there's an existing cache backing pixbuf, we free it
 		if (NULL != slide_ref->scaled_cached_pixbuf)
 		{
-			g_object_unref(slide_ref->scaled_cached_pixbuf);
+			gtk_object_destroy(GTK_OBJECT(slide_ref->scaled_cached_pixbuf));
 		}
 
 		// Cache the new backing pixbuf

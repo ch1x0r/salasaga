@@ -201,7 +201,7 @@ void image_crop(void)
 	((layer_image *) this_layer->object_data)->modified = TRUE;
 
 	// Free the memory used by the old pixbuf
-	g_object_unref(tmp_pixbuf);
+	gtk_object_destroy(GTK_OBJECT(tmp_pixbuf));
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(crop_dialog));

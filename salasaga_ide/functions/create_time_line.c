@@ -100,7 +100,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons[LAYER_EDIT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 	layer_toolbar_items[LAYER_EDIT] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_EDIT]), "Edit");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_tooltips, "Edit layer", "Private");
@@ -113,7 +113,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons[LAYER_CROP] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 	layer_toolbar_items[LAYER_CROP] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_CROP]), "Crop");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_CROP]), layer_toolbar_tooltips, "Crop image", "Private");
@@ -126,7 +126,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons[LAYER_DELETE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 	layer_toolbar_items[LAYER_DELETE] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_DELETE]), "Delete");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_tooltips, "Delete selected layer", "Private");
@@ -139,7 +139,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons[LAYER_DOWN] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 	layer_toolbar_items[LAYER_DOWN] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_DOWN]), "Down");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_tooltips, "Move layer down", "Private");
@@ -152,7 +152,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons[LAYER_UP] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 	layer_toolbar_items[LAYER_UP] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_UP]), "Up");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_UP]), layer_toolbar_tooltips, "Move layer up", "Private");
@@ -169,7 +169,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons[LAYER_MOUSE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 	layer_toolbar_items[LAYER_MOUSE] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_MOUSE]), "Mouse");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_tooltips, "Add a mouse pointer", "Private");
@@ -182,7 +182,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons[LAYER_TEXT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 	layer_toolbar_items[LAYER_TEXT] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_TEXT]), "Text");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_tooltips, "Add a text layer", "Private");
@@ -195,7 +195,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons[LAYER_HIGHLIGHT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 	layer_toolbar_items[LAYER_HIGHLIGHT] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_HIGHLIGHT]), "Highlight");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_tooltips, "Add a highlight layer", "Private");
@@ -208,7 +208,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons[LAYER_IMAGE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 	layer_toolbar_items[LAYER_IMAGE] = gtk_tool_button_new(GTK_WIDGET(layer_toolbar_icons[LAYER_IMAGE]), "Image");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_tooltips, "Add an image layer", "Private");
@@ -223,7 +223,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons_gray[LAYER_EDIT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 
 	// Create the grayed out Crop Layer icon
@@ -232,7 +232,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons_gray[LAYER_CROP] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 
 	// Create the grayed out Delete Layer icon
@@ -241,7 +241,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons_gray[LAYER_DELETE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 
 	// Create the grayed out Move Layer Down icon
@@ -250,7 +250,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons_gray[LAYER_DOWN] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 
 	// Create the grayed out Move Layer Up icon
@@ -259,7 +259,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons_gray[LAYER_UP] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 
 	// Create the grayed out Add Mouse Pointer icon
@@ -268,7 +268,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons_gray[LAYER_MOUSE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 
 	// Create the grayed out Add Text Layer icon
@@ -277,7 +277,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons_gray[LAYER_TEXT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 
 	// Create the grayed out Add Highlight Layer icon
@@ -286,7 +286,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons_gray[LAYER_HIGHLIGHT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 
 	// Create the grayed out Add Image Layer icon
@@ -295,7 +295,7 @@ GtkWidget *create_time_line(void)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		layer_toolbar_icons_gray[LAYER_IMAGE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		g_object_unref(tmp_gdk_pixbuf);
+		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
 	}
 
 	// Free the memory allocated during this function

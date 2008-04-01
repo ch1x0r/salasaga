@@ -399,7 +399,7 @@ void menu_screenshots_import(void)
 	// Free the existing front store for the workspace
 	if (NULL != front_store)
 	{
-		g_object_unref(front_store);
+		gtk_object_destroy(GTK_OBJECT(front_store));
 		front_store = NULL;
 	}
 

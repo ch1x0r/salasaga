@@ -50,13 +50,13 @@ void slide_free(gpointer element, gpointer user_data)
 
 	// Free the memory allocated to the deleted slide
 	if (NULL != slide_data->thumbnail)
-		g_object_unref(slide_data->thumbnail);
+		gtk_object_destroy(GTK_OBJECT(slide_data->thumbnail));
 	if (NULL != slide_data->name)
 		g_string_free(slide_data->name, TRUE);
 	if (NULL != slide_data->layer_store)
-		g_object_unref(slide_data->layer_store);
+		gtk_object_destroy(GTK_OBJECT(slide_data->layer_store));
 	if (NULL != slide_data->timeline_widget)
-		g_object_unref(slide_data->timeline_widget);
+		gtk_object_destroy(GTK_OBJECT(slide_data->timeline_widget));
 
 	// Free the memory allocated to the deleted slides' layers
 	slide_data->layers = g_list_first(slide_data->layers);

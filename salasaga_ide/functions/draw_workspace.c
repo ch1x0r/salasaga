@@ -60,7 +60,7 @@ void draw_workspace(void)
 
 	// Create a new backing store from the current slide
 	if (NULL != backing_store)
-		g_object_unref(backing_store);
+		gtk_object_destroy(GTK_OBJECT(backing_store));
 	backing_store = compress_layers(current_slide, working_width - 2, working_height - 2);
 
 	// Create the colourmap if needed
