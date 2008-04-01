@@ -61,6 +61,7 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 	SWFShape			image_shape;				// Used to hold a swf shape object
 	gint				image_width;				// Temporarily used to store the width of an image
 	gint				num_text_lines;				// Number of text lines in a particular text layer
+	SWFBlock			our_shape;					// The swf shape before it gets added to a swf movie clip
 	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
 	gsize				pixbuf_size;				// Is given the size of a compressed png image
 	guint16				red_component;				// Used when retrieving the foreground color of text
@@ -107,10 +108,6 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 	{
 		// Something went wrong creating the fill style, so we don't proceed with creating the swf
 		display_warning("Error ED97: Something went wrong when creating the highlight fill style for the swf");
-
-		// Free the memory allocated in this function
-//		destroySWFMovie(swf_movie);
-
 		return FALSE;
 	}
 
@@ -122,7 +119,6 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 		display_warning("Error ED102: Something went wrong when creating the text background fill style for the swf");
 
 		// Free the memory allocated in this function
-//		destroySWFMovie(swf_movie);
 		destroySWFFillStyle(highlight_fill_style);
 
 		return FALSE;
@@ -138,7 +134,6 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 		display_warning("Error ED96: Something went wrong when loading the font file");
 
 		// Free the memory allocated in this function
-//		destroySWFMovie(swf_movie);
 		destroySWFFillStyle(highlight_fill_style);
 		destroySWFFillStyle(text_bg_fill_style);
 		g_free(font_pathname);
@@ -239,12 +234,22 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				swf_action = newSWFAction(as_gstring->str);
 				SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
 
-				// Store the dictionary shape for future reference
-				this_layer_data->dictionary_shape = (SWFBlock) swf_button;
+				// Add the dictionary shape to a movie clip, then store for future reference
+				our_shape = (SWFBlock) swf_button;
+				this_layer_data->dictionary_shape = newSWFMovieClip();
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+
+				// Advance the movie clip one frame, else it doesn't get displayed
+				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
 			} else
 			{
-				// Store the dictionary shape for future reference
-				this_layer_data->dictionary_shape = (SWFBlock) image_bitmap;
+				// Add the dictionary shape to a movie clip, then store for future reference
+				our_shape = (SWFBlock) image_bitmap;
+				this_layer_data->dictionary_shape = newSWFMovieClip();
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+
+				// Advance the movie clip one frame, else it doesn't get displayed
+				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
 			}
 
 			// Indicate that the dictionary shape for this layer was created ok
@@ -306,12 +311,22 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				swf_action = newSWFAction(as_gstring->str);
 				SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
 
-				// Store the dictionary shape for future reference
-				this_layer_data->dictionary_shape = (SWFBlock) swf_button;
+				// Add the dictionary shape to a movie clip, then store for future reference
+				our_shape = (SWFBlock) swf_button;
+				this_layer_data->dictionary_shape = newSWFMovieClip();
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+
+				// Advance the movie clip one frame, else it doesn't get displayed
+				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
 			} else
 			{
-				// Store the dictionary shape for future reference
-				this_layer_data->dictionary_shape = (SWFBlock) empty_layer_shape;
+				// Add the dictionary shape to a movie clip, then store for future reference
+				our_shape = (SWFBlock) empty_layer_shape;
+				this_layer_data->dictionary_shape = newSWFMovieClip();
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+
+				// Advance the movie clip one frame, else it doesn't get displayed
+				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
 			}
 
 			// Indicate that the dictionary shape for this layer was created ok
@@ -366,12 +381,22 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				swf_action = newSWFAction(as_gstring->str);
 				SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
 
-				// Store the dictionary shape for future reference
-				this_layer_data->dictionary_shape = (SWFBlock) swf_button;
+				// Add the dictionary shape to a movie clip, then store for future reference
+				our_shape = (SWFBlock) swf_button;
+				this_layer_data->dictionary_shape = newSWFMovieClip();
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+
+				// Advance the movie clip one frame, else it doesn't get displayed
+				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
 			} else
 			{
-				// Store the dictionary shape for future reference
-				this_layer_data->dictionary_shape = (SWFBlock) highlight_box;
+				// Add the dictionary shape to a movie clip, then store for future reference
+				our_shape = (SWFBlock) highlight_box;
+				this_layer_data->dictionary_shape = newSWFMovieClip();
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+
+				// Advance the movie clip one frame, else it doesn't get displayed
+				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
 			}
 
 			// Indicate that the dictionary shape for this layer was created ok
@@ -472,12 +497,22 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				swf_action = newSWFAction(as_gstring->str);
 				SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
 
-				// Store the dictionary shape for future reference
-				this_layer_data->dictionary_shape = (SWFBlock) swf_button;
+				// Add the dictionary shape to a movie clip, then store for future reference
+				our_shape = (SWFBlock) swf_button;
+				this_layer_data->dictionary_shape = newSWFMovieClip();
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+
+				// Advance the movie clip one frame, else it doesn't get displayed
+				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
 			} else
 			{
-				// Store the dictionary shape for future reference
-				this_layer_data->dictionary_shape = (SWFBlock) image_bitmap;
+				// Add the dictionary shape to a movie clip, then store for future reference
+				our_shape = (SWFBlock) image_bitmap;
+				this_layer_data->dictionary_shape = newSWFMovieClip();
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+
+				// Advance the movie clip one frame, else it doesn't get displayed
+				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
 			}
 
 			// Indicate that the dictionary shape for this layer was created ok
@@ -633,12 +668,22 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				swf_action = newSWFAction(as_gstring->str);
 				SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
 
-				// Store the dictionary shape for future reference
-				this_layer_data->dictionary_shape = (SWFBlock) swf_button;
+				// Add the dictionary shape to a movie clip, then store for future reference
+				our_shape = (SWFBlock) swf_button;
+				this_layer_data->dictionary_shape = newSWFMovieClip();
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+
+				// Advance the movie clip one frame, else it doesn't get displayed
+				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
 			} else
 			{
-				// Store the dictionary shape for future reference
-				this_layer_data->dictionary_shape = (SWFBlock) text_movie_clip;
+				// Add the dictionary shape to a movie clip, then store for future reference
+				our_shape = (SWFBlock) text_movie_clip;
+				this_layer_data->dictionary_shape = newSWFMovieClip();
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+
+				// Advance the movie clip one frame, else it doesn't get displayed
+				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
 			}
 
 			// Indicate that the dictionary shape for this layer was created ok
