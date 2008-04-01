@@ -59,7 +59,7 @@ layer *layer_duplicate(layer *source_layer)
 	new_layer->y_offset_start = source_layer->y_offset_start;
 	new_layer->x_offset_finish = source_layer->x_offset_finish;
 	new_layer->visible = source_layer->visible;
-	new_layer->background = FALSE;  // Not a background layer when copied (may change in future though, unsure)
+	new_layer->background = FALSE;  // Not a background layer when copied
 	new_layer->row_iter = NULL;  // Should get set by the paste function
 	new_layer->external_link = g_string_new(source_layer->external_link->str);
 	new_layer->external_link_window = g_string_new(source_layer->external_link_window->str);
@@ -70,7 +70,21 @@ layer *layer_duplicate(layer *source_layer)
 		new_layer->name = NULL;
 	} else
 	{
-		new_layer->name = g_string_new(source_layer->name->str);
+		// If the source layer is a background layer, it gets special treatment
+		if (0 == g_ascii_strncasecmp(source_layer->name->str, "Background", 10))
+		{
+			if (TYPE_GDK_PIXBUF == source_layer->object_type)
+			{
+				new_layer->name = g_string_new("Image");
+			} else
+			{
+				new_layer->name = g_string_new("Empty");
+			}
+		} else
+		{
+			// It's not a background layer, so we just copy the name
+			new_layer->name = g_string_new(source_layer->name->str);
+		}
 	}
 
 	// Layer type specific data
