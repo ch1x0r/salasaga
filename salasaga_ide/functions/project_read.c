@@ -66,9 +66,11 @@ gboolean project_read(gchar *filename)
 	gfloat				gfloat_val;					// Temporary gfloat value used for validation
 	guint				guint_val;					// Temporary guint value used for validation
 	GdkPixbufLoader		*image_loader;				// Used for loading images embedded in project files
+	guint				layer_counter;				// Counter used in loops
 	xmlNodePtr			layer_ptr;					// Temporary pointer
 	xmlNodePtr			meta_data_node = NULL;		// Points to the meta-data structure
 	GList				*new_slides = NULL;			// Linked list holding the new slide info
+	guint				num_layers;					// Holds the number of layers in a slide
 	guint				num_slides;					// Holds the number of slides we've processed
 	xmlNodePtr			preferences_node = NULL;	// Points to the preferences structure
 	xmlChar				*project_name_data = NULL;
@@ -85,6 +87,7 @@ gboolean project_read(gchar *filename)
 	xmlNodePtr			slides_node = NULL;			// Points to the slides structure
 	xmlChar				*start_behaviour_data = NULL;
 	xmlNodePtr			this_layer;					// Temporary pointer
+	layer				*this_layer_ptr;			// Pointer into a layer structure
 	xmlNodePtr			this_node;					// Temporary pointer
 	xmlNodePtr			this_slide;					// Temporary pointer
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
@@ -2456,6 +2459,23 @@ gboolean project_read(gchar *filename)
 		// Select the desired slide
 		slides = g_list_first(slides);
 		tmp_slide = g_list_nth_data(slides, slide_counter);
+
+		// As a workaround for potentially incorrectly saved (old) project files,
+		// we scan through all of the layers in each slide, setting the duration
+		// of background layers to match that of the slide
+		tmp_slide->layers = g_list_first(tmp_slide->layers);
+		num_layers = g_list_length(tmp_slide->layers);
+		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
+		{
+			tmp_slide->layers = g_list_first(tmp_slide->layers);
+			this_layer_ptr = g_list_nth_data(tmp_slide->layers, layer_counter);
+
+			if (TRUE == this_layer_ptr->background)
+			{
+				// This is a background layer, so we set its duration to match it the slide
+				this_layer_ptr->duration = tmp_slide->duration;
+			}
+		}
 
 		// Regenerate the timeline duration images for all layers in the slide
 		regenerate_timeline_duration_images(tmp_slide);
