@@ -32,7 +32,7 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 
-gboolean menu_export_flash_process_element(SWFMovie this_movie, swf_frame_element *this_element)
+gboolean menu_export_flash_process_element(SWFMovie this_movie, swf_frame_element *this_element, gboolean process_removes)
 {
 	// Local variables
 	GString				*as_gstring;				// Used for constructing action script statements
@@ -69,10 +69,15 @@ gboolean menu_export_flash_process_element(SWFMovie this_movie, swf_frame_elemen
 
 			// Position the object
 			SWFDisplayItem_moveTo(display_list_object, this_element->x_position, this_element->y_position);
+
+			// Ensure the object is visible
+			g_string_printf(as_gstring, "%s._visible = true;", this_element->object_name->str);
+			swf_action = newSWFAction(as_gstring->str);
+			SWFMovie_add(this_movie, (SWFBlock) swf_action);
 		}
 
 		// Is this the frame in which the layer is removed from the display?
-		if (TRUE == this_element->remove)
+		if ((TRUE == this_element->remove) && (FALSE == last_frame))
 		{
 			// * Remove the character from the swf display list *
 
@@ -105,7 +110,7 @@ gboolean menu_export_flash_process_element(SWFMovie this_movie, swf_frame_elemen
 
 			// Set the opacity level for the object
 			new_opacity = this_element->opacity;
-			g_string_printf(as_gstring, "%s._alpha = %d;", this_element->object_name->str, new_opacity);
+			g_string_printf(as_gstring, "_root.%s._alpha = %d;", this_element->object_name->str, new_opacity);
 			swf_action = newSWFAction(as_gstring->str);
 			SWFMovie_add(this_movie, (SWFBlock) swf_action);
 		}

@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-gboolean menu_export_flash_process_element(SWFMovie this_movie, swf_frame_element *this_element);
+gboolean menu_export_flash_process_element(SWFMovie this_movie, swf_frame_element *this_element, gboolean process_removes);
 
 #ifdef __cplusplus
 }
