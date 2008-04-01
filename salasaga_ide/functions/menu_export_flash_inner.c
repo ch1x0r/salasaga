@@ -50,6 +50,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	// Local variables
 	GString				*as_gstring;				// Used for constructing action script statements
 	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
+	guint				display_depth;				// Depth at which to display a layer
 	guint				element_index;				// Points to the start of a layers elements in the swf frame array
 	SWFAction			end_action;					// The actionscript for the end behaviour
 	guint				frame_counter;				// Holds the number of frames
@@ -66,6 +67,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to 
 	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
 	guint				slide_counter;				// Holds the number of slides
+	guint				slide_depth;				// Used in calculating the depth of layers in a slide
 	guint				slide_duration;				// Holds the total number of frames in this slide
 	GString				*slide_name_tmp;			// Temporary slide names are constructed with this
 	SWFMovie			swf_movie;					// Swf movie object
@@ -81,6 +83,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	// Initialise variables
 	as_gstring = g_string_new(NULL);
 	slide_name_tmp = g_string_new(NULL);
+	slide_depth = 2;
 	total_frames = 0;
 	total_seconds = 0;
 	initial_action_gstring = g_string_new(NULL);
@@ -224,7 +227,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 		}
 
 		// Create an array that's layers x "number of frames in the slide"
-		frame_number = num_layers * (slide_duration + 1);  // +1 because if (ie.) we say slide 5, then we really mean the 6th slide (we start from 0)
+		frame_number = num_layers * slide_duration;
 		swf_timing_array = g_try_new0(swf_frame_element, frame_number);
 		if (NULL == swf_timing_array)
 		{
@@ -234,6 +237,8 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 		// Process each layer in turn.  For every frame the layer is in, store in the array
 		// whether the object in the layer is visible, it's position, transparency, etc
+		slide_depth += num_layers;
+		display_depth = slide_depth;
 		this_slide_data = g_list_nth_data(slides, slide_counter);
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
@@ -251,20 +256,20 @@ gint menu_export_flash_inner(gchar *output_filename)
 			if (TRUE == dictionary_shape_ok)
 			{
 				// Determine where in the array this layer's elements start
-				element_index = layer_counter * (slide_duration + 1);
+				element_index = layer_counter * slide_duration;
 
 				// Process the layer information, filling out the relevant elements
-				menu_export_flash_create_layer_elements(&swf_timing_array[element_index], slide_duration + 1, this_layer_data, total_num_layers);
+				menu_export_flash_create_layer_elements(&swf_timing_array[element_index], slide_duration, this_layer_data, display_depth);
 			}
 
 			// Decrement the depth at which this element will be displayed
-			total_num_layers--;
+			display_depth--;
 		}
 
 		// Debugging output, displaying what we have in the pre-processing element array thus far
 		if (3 == debug_level)
 		{
-			for (frame_counter = 0; frame_counter <= slide_duration; frame_counter++)  // This loops _frame + 1_ number of times
+			for (frame_counter = 0; frame_counter < slide_duration; frame_counter++)  // This loops _frame_ number of times
 			{
 				for (layer_counter = 0; layer_counter < num_layers; layer_counter++)  // This loops _num_layers_ of times
 				{
@@ -307,12 +312,12 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 		// * After all of the layers have been pre-processed we have an array with the per frame info of what should be *
 		// * where in the output swf, plus we also have the swf dictionary created and ready to use                     *
-		for (frame_counter = 0; frame_counter <= slide_duration; frame_counter++)  // This loops _frames + 1_ number of times
+		for (frame_counter = 0; frame_counter < slide_duration; frame_counter++)  // This loops _frames_ number of times
 		{
 			for (layer_counter = 0; layer_counter < num_layers; layer_counter++)  // This loops _num_layers_ of times
 			{
 				// For each frame, access all of the layers then move to the next frame
-				frame_number = (layer_counter * (slide_duration + 1)) + frame_counter;
+				frame_number = (layer_counter * slide_duration) + frame_counter;
 				this_frame_ptr = &swf_timing_array[frame_number];
 
 				// Display debugging info if requested
@@ -322,7 +327,8 @@ gint menu_export_flash_inner(gchar *output_filename)
 				}
 
 				// Process this frame element
-				menu_export_flash_process_element(swf_movie, this_frame_ptr);
+				// fixme3: Our present approach using swf_elements doesn't work very well with removes. :(
+				menu_export_flash_process_element(swf_movie, this_frame_ptr, FALSE);
 			}
 
 			// Advance to the next frame
