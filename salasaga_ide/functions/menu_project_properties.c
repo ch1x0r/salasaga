@@ -40,7 +40,6 @@
 void menu_project_properties(void)
 {
 	// Local variables
-	gfloat				gfloat_val;					// Temporary gint value
 	gint				gint_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
 	GtkDialog			*main_dialog;				// Widget for the main dialog
@@ -53,9 +52,7 @@ void menu_project_properties(void)
 	GString				*valid_output_folder;		// Receives the new output folder once validated
 	GString				*valid_proj_name;			// Receives the new project name once validated
 	GString				*valid_project_folder;		// Receives the new project folder once validated
-	gfloat				valid_slide_duration;		// Receives the new project default slide duration once validated
 	guint				valid_start_behaviour;		// Receives the new start behaviour once validated
-	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
@@ -67,9 +64,6 @@ void menu_project_properties(void)
 
 	GtkWidget			*label_output_folder;		// Output Folder
 	GtkWidget			*button_output_folder;		//
-
-	GtkWidget			*label_slide_duration;		// Slide Duration
-	GtkWidget			*button_slide_duration;		//
 
 	GtkWidget			*label_frames_per_second;	// Frames per second 
 	GtkWidget			*button_frames_per_second;	//
@@ -130,15 +124,6 @@ void menu_project_properties(void)
 	button_output_folder = gtk_file_chooser_button_new("Select the Output Folder", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_output_folder), output_folder->str);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_output_folder), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	proj_row_counter = proj_row_counter + 1;
-
-	// Slide Duration
-	label_slide_duration = gtk_label_new("Default Slide Duration: \n(in seconds)");
-	gtk_misc_set_alignment(GTK_MISC(label_slide_duration), 0, 1);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_slide_duration), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_slide_duration = gtk_spin_button_new_with_range(valid_fields[SLIDE_DURATION].min_value, valid_fields[SLIDE_DURATION].max_value, 0.1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_slide_duration), slide_duration);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_slide_duration), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Frames per second
@@ -291,19 +276,6 @@ void menu_project_properties(void)
 			validated_string = NULL;
 		}
 
-		// Retrieve the new project default slide duration input
-		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_slide_duration));
-		validated_gfloat = validate_value(SLIDE_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
-		if (NULL == validated_gfloat)
-		{
-			display_warning("Error ED138: There was something wrong with the project default slide duration value.  Please try again.");
-			useable_input = FALSE;
-		} else
-		{
-			valid_slide_duration = *validated_gfloat;
-			g_free(validated_gfloat);
-		}
-
 		// Retrieve the new frames per second input
 		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_frames_per_second));
 		validated_guint = validate_value(PROJECT_FPS, V_INT_UNSIGNED, &guint_val);
@@ -364,9 +336,6 @@ void menu_project_properties(void)
 	// Output Folder
 	output_folder = g_string_assign(output_folder, valid_output_folder->str);
 	g_string_free(valid_output_folder, TRUE);
-
-	// Slide Duration
-	slide_duration = valid_slide_duration;
 
 	// Frames per second
 	frames_per_second = valid_fps;
