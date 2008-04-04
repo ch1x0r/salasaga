@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user selects File -> Save from the top menu 
+ * Salasaga: Function called when the user selects File -> Save As from the top menu 
  * 
  * Copyright (C) 2007-2008 Justin Clift <justin@salasaga.org>
  * 
@@ -41,7 +41,7 @@
 #include "validate_value.h"
 
 
-void menu_file_save(void)
+void menu_file_save_as(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;				// Filter for *.*

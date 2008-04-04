@@ -19,18 +19,18 @@
  * 
  */
 
-#ifndef MENU_FILE_SAVE_H_
-#define MENU_FILE_SAVE_H_
+#ifndef MENU_FILE_SAVE_AS_H_
+#define MENU_FILE_SAVE_AS_H_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-void menu_file_save(void);
+void menu_file_save_as(void);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /*MENU_FILE_SAVE_H_*/
+#endif /*MENU_FILE_SAVE_AS_H_*/
