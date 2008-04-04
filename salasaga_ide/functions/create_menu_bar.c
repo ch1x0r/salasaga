@@ -92,6 +92,7 @@ void create_menu_bar()
 		{"/File/_New",					"<control>N",			menu_file_new,					0,	"<Item>"},
 		{"/File/_Open",					"<control>O",			menu_file_open,					0,	"<Item>"},
 		{"/File/_Save",					"<control>S",			menu_file_save,					0,	"<Item>"},
+		{"/File/Save_As",				"<control><shift>S",	menu_file_save_as,				0,	"<Item>"},
 		{"/File/Sep",					NULL,					NULL,							0,	"<Separator>"},
 		{"/File/_Quit",					"<control>Q",			save_preferences_and_exit,		0,	"<Item>"},
 
