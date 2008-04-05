@@ -88,4 +88,11 @@ void timeline_edited_visibility(GtkCellRendererToggle *selection, gchar *row, Gt
 
 	// Recreate the slide thumbnail
 	film_strip_create_thumbnail((slide *) current_slide->data);
+
+	// Set the changes made variable
+	changes_made = TRUE;
+
+	// Use the status bar to communicate the change
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Offset changed");
+	gdk_flush();
 }
