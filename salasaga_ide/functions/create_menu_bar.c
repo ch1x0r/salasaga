@@ -49,6 +49,7 @@
 #include "menu_file_new.h"
 #include "menu_file_open.h"
 #include "menu_file_save.h"
+#include "menu_file_save_as.h"
 #include "menu_help_about.h"
 #include "menu_help_forum.h"
 #include "menu_help_register.h"
