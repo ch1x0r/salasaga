@@ -51,8 +51,6 @@ validatation_entry		valid_fields[] =
 	{ LAYER_VISIBLE,		"Layer visibility switch",				V_INT_UNSIGNED,		V_NONE,		0,		1 },
 	{ LAYER_WIDTH,			"Width of this layer",					V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ MOUSE_CLICK,			"Mouse click",							V_CHAR,				V_UNDERSCORES,		0,		8 },
-	{ OBJECT_X_POSITION,	"X position of an object",				V_INT_UNSIGNED,		V_NONE,		0,		4096 },
-	{ OBJECT_Y_POSITION,	"Y position of an object",				V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ PREVIEW_WIDTH,		"Width of film strip thumbnails",		V_INT_UNSIGNED,		V_NONE,		20,		800 },
 	{ PROJECT_FPS,			"Frames per Second for this project",	V_INT_UNSIGNED,		V_NONE,		1,		120 },
 	{ PROJECT_HEIGHT,		"Height of this project",				V_INT_UNSIGNED,		V_NONE,		1,		4096 },
@@ -62,8 +60,6 @@ validatation_entry		valid_fields[] =
 	{ RESOLUTION,			"An X * Y resolution value",			V_RESOLUTION,		V_NONE,		0,		16 },
 	{ SCREENSHOT_HEIGHT,	"Height for next screenshot",			V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ SCREENSHOT_WIDTH,		"Width for next screenshot",			V_INT_UNSIGNED,		V_NONE,		1,		4096 },
-	{ SCREENSHOT_X_OFFSET,	"X offset for next screenshot",			V_INT_UNSIGNED,		V_NONE,		0,		4096 },
-	{ SCREENSHOT_Y_OFFSET,	"Y offset for next screenshot",			V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ SHOW_CONTROL_BAR,		"Include control bar in exported swf",	V_CHAR,				V_NONE,		0,		5 },
 	{ SLIDE_LENGTH,			"Number of frames per slide",			V_INT_UNSIGNED,		V_NONE,		1,		1200 },
 	{ SLIDE_DURATION,		"Number of seconds in a slide",			V_FLOAT_UNSIGNED,	V_NONE,		0.1,	300 },
@@ -71,8 +67,8 @@ validatation_entry		valid_fields[] =
 	{ START_BEHAVIOUR, 		"Animation behaviour after loading",	V_CHAR,				V_UNDERSCORES,		0,		6 },
 	{ TRANSITION_DURATION,	"Transition duration in seconds",		V_FLOAT_UNSIGNED,	V_NONE,		0,		20 },
 	{ TRANSITION_TYPE, 		"Type of transition",					V_CHAR,				V_UNDERSCORES,		0,		4 },
-	{ X_OFFSET,				"Y Offset",								V_INT_UNSIGNED,		V_NONE,		0,		4096 },
-	{ Y_OFFSET,				"X Offset"			,					V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ X_OFFSET,				"X Offset",								V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ Y_OFFSET,				"Y Offset"			,					V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ ZOOM_LEVEL,			"Magnification level of working area",	V_ZOOM,				V_NONE,		0,		12 }
 };
 
