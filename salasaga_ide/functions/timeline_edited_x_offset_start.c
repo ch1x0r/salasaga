@@ -91,7 +91,7 @@ void timeline_edited_x_offset_start(GtkCellRendererText *selection, gchar *row, 
 			}
 
 			// Validate the new value
-			validated_guint = validate_value(OBJECT_X_POSITION, V_CHAR, new_value);
+			validated_guint = validate_value(X_OFFSET, V_CHAR, new_value);
 			if (NULL == validated_guint)
 			{
 				display_warning("Error ED352: There was something wrong with the new x offset start value.  Ignoring it.");

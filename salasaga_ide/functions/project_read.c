@@ -793,7 +793,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED220: There was something wrong with an image x offset start value in the project file.");
@@ -808,7 +808,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										validated_guint = validate_value(SCREENSHOT_Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED221: There was something wrong with an image y offset start value in the project file.");
@@ -823,7 +823,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED222: There was something wrong with an image x offset finish value in the project file.");
@@ -838,7 +838,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED223: There was something wrong with an image y offset finish value in the project file.");
@@ -1231,7 +1231,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED236: There was something wrong with an x offset start value in the project file.");
@@ -1246,7 +1246,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										validated_guint = validate_value(SCREENSHOT_Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED237: There was something wrong with a y offset start value in the project file.");
@@ -1261,7 +1261,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED238: There was something wrong with an x offset finish value in the project file.");
@@ -1276,7 +1276,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED239: There was something wrong with a y offset finish value in the project file.");
@@ -1569,7 +1569,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED248: There was something wrong with an x offset start value in the project file.");
@@ -1584,7 +1584,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										validated_guint = validate_value(SCREENSHOT_Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED249: There was something wrong with a y offset start value in the project file.");
@@ -1599,7 +1599,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED250: There was something wrong with an x offset finish value in the project file.");
@@ -1614,7 +1614,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED251: There was something wrong with a y offset finish value in the project file.");
@@ -1930,7 +1930,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED261: There was something wrong with an x offset start value in the project file.");
@@ -1945,7 +1945,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										validated_guint = validate_value(SCREENSHOT_Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED262: There was something wrong with a y offset start value in the project file.");
@@ -1960,7 +1960,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED263: There was something wrong with an x offset finish value in the project file.");
@@ -1975,7 +1975,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_guint = validate_value(Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
 											display_warning("Error ED264: There was something wrong with a y offset finish value in the project file.");

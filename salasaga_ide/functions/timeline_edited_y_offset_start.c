@@ -92,7 +92,7 @@ void timeline_edited_y_offset_start(GtkCellRendererText *selection, gchar *row, 
 			}
 
 			// Validate the new value
-			validated_guint = validate_value(OBJECT_Y_POSITION, V_CHAR, new_value);
+			validated_guint = validate_value(Y_OFFSET, V_CHAR, new_value);
 			if (NULL == validated_guint)
 			{
 				display_warning("Error ED354: There was something wrong with the new y offset start value.  Ignoring it.");
