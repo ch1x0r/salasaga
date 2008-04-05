@@ -276,6 +276,9 @@ void menu_file_new(void)
 	// Set the global toggle that a project is now active
 	project_active = TRUE;
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project initialised");
 	gdk_flush();

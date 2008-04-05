@@ -215,6 +215,9 @@ void image_crop(void)
 	// Recreate the slide thumbnail
 	film_strip_create_thumbnail((slide *) current_slide->data);
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Image cropped");
 	gdk_flush();

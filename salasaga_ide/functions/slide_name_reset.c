@@ -44,6 +44,9 @@ void slide_name_reset(void)
 		((slide *) current_slide->data)->name = NULL;
 	}
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide name reset");
 	gdk_flush();

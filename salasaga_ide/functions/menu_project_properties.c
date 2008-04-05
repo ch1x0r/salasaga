@@ -349,6 +349,9 @@ void menu_project_properties(void)
 	// Control bar display
 	show_control_bar = valid_control_bar_behaviour;
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project properties updated");
 	gdk_flush();

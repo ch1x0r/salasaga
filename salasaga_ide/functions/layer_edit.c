@@ -216,6 +216,9 @@ void layer_edit(void)
 	// Recreate the slide thumbnail
 	film_strip_create_thumbnail(slide_data);
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer edited");
 	gdk_flush();

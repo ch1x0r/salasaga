@@ -419,6 +419,9 @@ void menu_screenshots_import(void)
 	enable_layer_toolbar_buttons();
 	enable_main_toolbar_buttons();
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	g_string_printf(tmp_string, " %u screenshots imported", num_screenshots);
 	recent_message = gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_string->str);

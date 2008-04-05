@@ -290,6 +290,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		// Free the allocated memory
 		g_free(selected_row);
 
+		// Set the changes made variable
+		changes_made = TRUE;
+
 		// Use the status bar to give further feedback to the user
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer resized");
 		gdk_flush();
@@ -401,6 +404,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 			// Free the allocated memory
 			g_free(selected_row);
+
+			// Set the changes made variable
+			changes_made = TRUE;
 
 			// Use the status bar to give further feedback to the user
 			gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer moved");

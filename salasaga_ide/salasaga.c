@@ -75,6 +75,7 @@ guint					capture_height;				// Height for screen captures
 guint					capture_width;				// Width for screen captures
 guint					capture_x;					// X offset for screen captures
 guint					capture_y;					// Y offset for screen captures
+gboolean				changes_made = FALSE;		// Have there been changes to the project since the last save?
 layer					*copy_layer = NULL;			// The copy buffer for layers
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
 guint					debug_level = 0;			// Used to indicate debugging level

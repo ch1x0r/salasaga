@@ -120,6 +120,9 @@ void layer_delete(void)
 	// Free the storage allocated by this function
 	gtk_tree_path_free(tmp_path);
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer deleted");
 	gdk_flush();

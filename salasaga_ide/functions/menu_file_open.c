@@ -220,6 +220,9 @@ void menu_file_open(void)
 	enable_layer_toolbar_buttons();
 	enable_main_toolbar_buttons();
 
+	// Clear the changes made variable
+	changes_made = FALSE;
+
 	// Use the status bar to communicate the successful loading of the project
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project loaded");
 	gdk_flush();

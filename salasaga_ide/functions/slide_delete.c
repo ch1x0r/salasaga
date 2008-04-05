@@ -96,6 +96,9 @@ void slide_delete(void)
 	// Redraw the workspace
 	draw_workspace();
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide deleted");
 	gdk_flush();

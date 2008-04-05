@@ -428,6 +428,9 @@ void menu_edit_preferences(void)
 	// Default Background Colour
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(button_default_bg_colour), &default_bg_colour);
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Application preferences updated");
 	gdk_flush();

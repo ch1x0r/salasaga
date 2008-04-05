@@ -209,6 +209,9 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Image layer added");
 	gdk_flush();

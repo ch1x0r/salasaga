@@ -221,6 +221,9 @@ void project_crop(void)
 	// Recreate the film strip thumbnails
 	regenerate_film_strip_thumbnails();
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, "Project cropped");
 	gdk_flush();

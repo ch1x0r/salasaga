@@ -283,6 +283,9 @@ void menu_file_save_as(void)
 	// Close the saving context
 	tmp_int = xmlSaveClose(save_context);
 
+	// Clear the changes made variable
+	changes_made = FALSE;
+
 	// Add a message to the status bar so the user gets visual feedback
 	g_string_printf(tmp_gstring, " Project saved - %s", validated_string->str);
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);

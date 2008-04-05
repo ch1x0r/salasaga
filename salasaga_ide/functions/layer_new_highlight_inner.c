@@ -184,6 +184,9 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Highlight layer added");
 	gdk_flush();

@@ -201,6 +201,9 @@ void slide_properties(void)
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(slide_dialog));
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide properties updated");
 	gdk_flush();

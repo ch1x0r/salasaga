@@ -56,6 +56,9 @@ void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new
 	// Update the layer with the new value
 	g_string_printf(layer_data->name, "%s", new_value);
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the timeline widget with the new value too
 	gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
 						TIMELINE_NAME, layer_data->name->str,

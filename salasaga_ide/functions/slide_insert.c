@@ -141,6 +141,9 @@ void slide_insert(void)
 		slides = g_list_append(slides, tmp_slide);
 	}
 
+	// Set the changes made variable
+	changes_made = TRUE;
+
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide added");
 	gdk_flush();
