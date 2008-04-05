@@ -39,6 +39,7 @@
 #include "display_warning.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
+#include "validate_value.h"
 
 
 void timeline_edited_x_offset_start(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
@@ -46,6 +47,7 @@ void timeline_edited_x_offset_start(GtkCellRendererText *selection, gchar *row, 
 	// Local variables
 	GList				*layer_pointer;
 	layer				*layer_data;
+	guint				*validated_guint;			// Receives known good guint values from the validation function
 
 
 	// Set up some pointers to make things easier
@@ -64,19 +66,42 @@ void timeline_edited_x_offset_start(GtkCellRendererText *selection, gchar *row, 
 			break;
 
 		case TYPE_GDK_PIXBUF:
-			layer_data->x_offset_start = atoi(new_value);
-			break;
+
+			// If this is a background layer, we ignore the edit
+			if (TRUE == layer_data->background)
+			{
+				if (layer_data->x_offset_start != atoi(new_value))
+				{
+					// If the user attempted to change the background layer offset, we give them feedback not to
+					display_warning("Error ED350: Background layers must remain at 0.");
+				}
+				return;
+			}
+
+			// Not a background layer, so we drop through and process it
 
 		case TYPE_HIGHLIGHT:
-			layer_data->x_offset_start = atoi(new_value);
-			break;
-
 		case TYPE_MOUSE_CURSOR:
-			layer_data->x_offset_start = atoi(new_value);
-			break;
-
 		case TYPE_TEXT:
-			layer_data->x_offset_start = atoi(new_value);
+
+			// If no changes have been made, then we ignore the edit
+			if (layer_data->x_offset_start == atoi(new_value))
+			{
+				return;
+			}
+
+			// Validate the new value
+			validated_guint = validate_value(OBJECT_X_POSITION, V_CHAR, new_value);
+			if (NULL == validated_guint)
+			{
+				display_warning("Error ED352: There was something wrong with the new x offset start value.  Ignoring it.");
+				return;
+			} else
+			{
+				// Apply the change
+				layer_data->x_offset_start = *validated_guint;
+				g_free(validated_guint);
+			}
 			break;
 
 		default:
@@ -93,4 +118,11 @@ void timeline_edited_x_offset_start(GtkCellRendererText *selection, gchar *row, 
 
 	// Recreate the slide thumbnail
 	film_strip_create_thumbnail((slide *) current_slide->data);
+
+	// Set the changes made variable
+	changes_made = TRUE;
+
+	// Use the status bar to communicate the change
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Offset changed");
+	gdk_flush();
 }

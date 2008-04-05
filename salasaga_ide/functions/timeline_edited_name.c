@@ -36,6 +36,8 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "display_warning.h"
+#include "validate_value.h"
 
 
 void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new_value, gpointer data)
@@ -43,6 +45,7 @@ void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new
 	// Local variables
 	GList				*layer_pointer;
 	layer				*layer_data;
+	GString				*validated_string;			// Receives known good strings from the validation function
 
 
 	// Set up some pointers to make things easier
@@ -53,8 +56,19 @@ void timeline_edited_name(GtkCellRendererText *selection, gchar *row, gchar *new
 	layer_pointer = g_list_nth(layer_pointer, atoi(row));
 	layer_data = layer_pointer->data;
 
-	// Update the layer with the new value
-	g_string_printf(layer_data->name, "%s", new_value);
+	// Validate the new value
+	validated_string = validate_value(LAYER_NAME, V_CHAR, new_value);
+	if (NULL == validated_string)
+	{
+		// The value did not validate, so we warn the user and ignore it
+		display_warning("Error ED356: There was something wrong with the new name value.  Ignoring it.");
+		return;
+	} else
+	{
+		// Update the layer with the new value
+		g_string_printf(layer_data->name, "%s", validated_string->str);
+		validated_string = NULL;
+	}
 
 	// Set the changes made variable
 	changes_made = TRUE;
