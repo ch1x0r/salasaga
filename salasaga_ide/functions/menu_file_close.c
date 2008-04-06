@@ -41,6 +41,10 @@ void menu_file_close()
 	GdkRectangle			tmp_rectangle;
 
 
+	// If there isn't an active project, we just return
+	if (FALSE == project_active)
+		return;
+
 	// If we have unsaved changes, warn the user
 	if (TRUE == changes_made)
 	{
@@ -63,6 +67,13 @@ void menu_file_close()
 
 	// Clear the changes made variable
 	changes_made = FALSE;
+
+	// Clear the saved file name string
+	if (NULL != file_name)
+	{
+		g_string_free(file_name, TRUE);
+		file_name = NULL;
+	}
 
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project closed");
