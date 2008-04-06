@@ -59,8 +59,8 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	GtkTreePath			*tmp_path;					// Temporary path
 
 
-	// Only do this function if we have a front store available
-	if (NULL == front_store)
+	// Only do this function if we have a front store available and a project loaded
+	if ((NULL == front_store) || (FALSE == project_active))
 	{
 		return TRUE;
 	}

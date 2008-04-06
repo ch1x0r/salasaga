@@ -62,8 +62,8 @@ gboolean draw_handle_box(void)
 	GtkTreePath			*tmp_path;					// Temporary path
 
 
-	// Only do this function if we have a front store available
-	if (NULL == front_store)
+	// Only do this function if we have a front store available and a project loaded
+	if ((NULL == front_store) || (FALSE == project_active))
 	{
 		return TRUE;
 	}

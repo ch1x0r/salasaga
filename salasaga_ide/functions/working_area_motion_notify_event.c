@@ -66,6 +66,12 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gfloat				y_diff;						// The Y distance the object was dragged, after scaling
 
 
+	// If the current slide hasn't been initialised, or there is no project active don't run this function
+	if ((NULL == current_slide) || (FALSE == project_active))
+	{
+		return;
+	}
+
 	// Find out where the mouse is positioned, and which buttons and modifier keys are down (active)
 	gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);
 

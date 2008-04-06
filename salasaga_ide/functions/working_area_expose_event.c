@@ -38,10 +38,10 @@
 
 gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
-	// Only do this function if we have a front store available
-	if (NULL == front_store)
+	// Only do this function if we have a front store available and a project loaded
+	if ((NULL == front_store) || (FALSE == project_active))
 	{
-		return FALSE;
+		return TRUE;
 	}
 
 	// Draw the invalidated front store area onto the working area

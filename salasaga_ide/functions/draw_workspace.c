@@ -48,8 +48,8 @@ void draw_workspace(void)
 	GdkRectangle			tmp_rectangle;
 
 
-	// If the current slide hasn't been initialised, don't run this function
-	if (NULL == current_slide)
+	// If the current slide hasn't been initialised, or there is no project active don't run this function
+	if ((NULL == current_slide) || (FALSE == project_active))
 	{
 		return;
 	}

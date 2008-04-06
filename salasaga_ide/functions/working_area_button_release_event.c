@@ -73,8 +73,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gfloat				y_diff;						// The Y distance the object was dragged, after scaling
 
 
-	// Only do this function if we have a front store available
-	if (NULL == front_store)
+	// Only do this function if we have a front store available and a project loaded
+	if ((NULL == front_store) || (FALSE == project_active))
 	{
 		return TRUE;
 	}
