@@ -80,6 +80,7 @@ enum
 	NEW,
 	OPEN,
 	SAVE,
+	SAVE_AS,
 	QUIT,
 	SEPARATOR_1,
 	CAPTURE,

@@ -37,6 +37,7 @@
 #include "menu_file_new.h"
 #include "menu_file_open.h"
 #include "menu_file_save.h"
+#include "menu_file_save_as.h"
 #include "menu_screenshots_capture.h"
 #include "menu_screenshots_import.h"
 #include "project_crop.h"
@@ -92,6 +93,13 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[SAVE]), main_toolbar_tooltips, "Save the project", "Private");
 	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[SAVE], SAVE);
 	main_toolbar_signals[SAVE] = g_signal_connect(G_OBJECT(main_toolbar_items[SAVE]), "clicked", G_CALLBACK(menu_file_save), (gpointer) NULL);
+
+	// Create the Save As button
+	main_toolbar_icons[SAVE_AS] = gtk_image_new_from_stock(GTK_STOCK_SAVE_AS, icon_height);
+	main_toolbar_items[SAVE_AS] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[SAVE_AS]), "Save As");
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[SAVE_AS]), main_toolbar_tooltips, "Save the project with a different file name", "Private");
+	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[SAVE_AS], SAVE_AS);
+	main_toolbar_signals[SAVE_AS] = g_signal_connect(G_OBJECT(main_toolbar_items[SAVE_AS]), "clicked", G_CALLBACK(menu_file_save_as), (gpointer) NULL);
 
 	// Create the Quit button
 	main_toolbar_icons[QUIT] = gtk_image_new_from_stock(GTK_STOCK_QUIT, icon_height);
