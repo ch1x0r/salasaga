@@ -46,6 +46,7 @@
 #include "menu_export_flash_animation.h"
 #include "menu_export_layer.h"
 #include "menu_export_slide.h"
+#include "menu_file_close.h"
 #include "menu_file_new.h"
 #include "menu_file_open.h"
 #include "menu_file_save.h"
@@ -90,10 +91,11 @@ void create_menu_bar()
 	static GtkItemFactoryEntry	menu_items[] =
 	{
 		{"/_File",						NULL,					NULL,							0,	"<Branch>"},
-		{"/File/_New",					"<control>N",			menu_file_new,					0,	"<Item>"},
-		{"/File/_Open",					"<control>O",			menu_file_open,					0,	"<Item>"},
-		{"/File/_Save",					"<control>S",			menu_file_save,					0,	"<Item>"},
-		{"/File/Save_As",				"<control><shift>S",	menu_file_save_as,				0,	"<Item>"},
+		{"/File/_New Project",			"<control>N",			menu_file_new,					0,	"<Item>"},
+		{"/File/_Open Project",			"<control>O",			menu_file_open,					0,	"<Item>"},
+		{"/File/_Save Project",			"<control>S",			menu_file_save,					0,	"<Item>"},
+		{"/File/Save _As Project",		"<control><shift>S",	menu_file_save_as,				0,	"<Item>"},
+		{"/File/Close Project",			"<control>W",			menu_file_close,				0,	"<Item>"},
 		{"/File/Sep",					NULL,					NULL,							0,	"<Separator>"},
 		{"/File/_Quit",					"<control>Q",			save_preferences_and_exit,		0,	"<Item>"},
 
