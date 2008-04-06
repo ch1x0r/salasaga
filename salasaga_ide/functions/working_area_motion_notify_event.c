@@ -69,7 +69,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	// If the current slide hasn't been initialised, or there is no project active don't run this function
 	if ((NULL == current_slide) || (FALSE == project_active))
 	{
-		return;
+		return TRUE;
 	}
 
 	// Find out where the mouse is positioned, and which buttons and modifier keys are down (active)
