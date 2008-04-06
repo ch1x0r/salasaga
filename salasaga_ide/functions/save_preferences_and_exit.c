@@ -37,6 +37,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "display_dialog_save_warning.h"
 
 
 void save_preferences_and_exit(void)
@@ -52,6 +53,12 @@ void save_preferences_and_exit(void)
 	GtkWindow			*tmp_gtk_window;			// Temporary GtkWindow
 	GdkWindow			*tmp_gdk_window;			// Temporary GdkWindow
 
+
+	// If we have unsaved changes, warn the user
+	if (TRUE == changes_made)
+	{
+		display_dialog_save_warning();
+	}
 
 	// Save the application preferences
 	gconf_engine = gconf_engine_get_default();

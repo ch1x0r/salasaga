@@ -36,6 +36,7 @@
 #include "create_resolution_selector.h"
 #include "disable_layer_toolbar_buttons.h"
 #include "disable_main_toolbar_buttons.h"
+#include "display_dialog_save_warning.h"
 #include "display_warning.h"
 #include "draw_timeline.h"
 #include "draw_workspace.h"
@@ -61,6 +62,12 @@ void menu_file_open(void)
 	gboolean			useable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
 
+
+	// If we have unsaved changes, warn the user
+	if (TRUE == changes_made)
+	{
+		display_dialog_save_warning();
+	}
 
 	// Create the dialog asking the user to select a Salasaga Project file
 	open_dialog = gtk_file_chooser_dialog_new("Open a Salasaga Project",

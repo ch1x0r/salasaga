@@ -36,6 +36,7 @@
 #include "../externs.h"
 #include "disable_layer_toolbar_buttons.h"
 #include "disable_main_toolbar_buttons.h"
+#include "display_dialog_save_warning.h"
 #include "display_warning.h"
 #include "draw_timeline.h"
 #include "draw_workspace.h"
@@ -80,6 +81,12 @@ void menu_file_new(void)
 	GtkWidget			*bg_color_label;			// Label widget
 	GtkWidget			*bg_color_button;			// Background color selection button
 
+
+	// If we have unsaved changes, warn the user
+	if (TRUE == changes_made)
+	{
+		display_dialog_save_warning();
+	}
 
 	// Initialise some things
 	valid_proj_name = g_string_new(NULL);
