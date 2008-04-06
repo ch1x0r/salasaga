@@ -169,6 +169,7 @@ OFILES = \
 	functions/display_dialog_highlight.o \
 	functions/display_dialog_image.o \
 	functions/display_dialog_mouse.o \
+	functions/display_dialog_save_warning.o \
 	functions/display_dialog_text.o \
 	functions/display_warning.o \
 	functions/draw_bounding_box.o \
@@ -215,9 +216,11 @@ OFILES = \
 	functions/menu_export_flash_process_element.o \
 	functions/menu_export_layer.o \
 	functions/menu_export_slide.o \
+	functions/menu_file_close.o \
 	functions/menu_file_new.o \
 	functions/menu_file_open.o \
 	functions/menu_file_save.o \
+	functions/menu_file_save_as.o \
 	functions/menu_file_save_layer.o \
 	functions/menu_file_save_slide.o \
 	functions/menu_help_about.o \
@@ -332,6 +335,9 @@ display_dialog_image.o:
 
 display_dialog_mouse.o:
 	$(CC) $(CFLAGS) -c display_dialog_mouse.c -o display_dialog_mouse.o
+
+display_dialog_save_warning.o:
+	$(CC) $(CFLAGS) -c display_dialog_save_warning.c -o display_dialog_save_warning.o
 
 display_dialog_text.o:
 	$(CC) $(CFLAGS) -c display_dialog_text.c -o display_dialog_text.o
@@ -471,6 +477,9 @@ menu_export_layer.o:
 menu_export_slide.o:
 	$(CC) $(CFLAGS) -c menu_export_slide.c -o menu_export_slide.o
 
+menu_file_close.o:
+	$(CC) $(CFLAGS) -c menu_file_close.c -o menu_file_close.o
+
 menu_file_new.o:
 	$(CC) $(CFLAGS) -c menu_file_new.c -o menu_file_new.o
 
@@ -479,6 +488,9 @@ menu_file_open.o:
 
 menu_file_save.o:
 	$(CC) $(CFLAGS) -c menu_file_save.c -o menu_file_save.o
+
+menu_file_save_as.o:
+	$(CC) $(CFLAGS) -c menu_file_save_as.c -o menu_file_save_as.o
 
 menu_file_save_layer.o:
 	$(CC) $(CFLAGS) -c menu_file_save_layer.c -o menu_file_save_layer.o
