@@ -72,7 +72,7 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 		// Free the memory allocated in this function
 		g_error_free(error);
 		if (NULL != image_pixbuf)
-			gtk_object_destroy(GTK_OBJECT(image_pixbuf));
+			g_object_unref(GDK_PIXBUF(image_pixbuf));
 
 		return NULL;
 	}
@@ -87,8 +87,9 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 		// Free the memory allocated in this function
 		g_error_free(error);
 		if (NULL != image_pixbuf)
-			gtk_object_destroy(GTK_OBJECT(image_pixbuf));
-		// fixme4: Wonder how we free the pixbuf_buffer?
+			g_object_unref(GDK_PIXBUF(image_pixbuf));
+		if (NULL != pixbuf_buffer)
+			g_object_unref(GDK_PIXBUF(pixbuf_buffer));
 
 		return NULL;
 	}
@@ -102,8 +103,9 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 		// Free the memory allocated in this function
 		g_error_free(error);
 		if (NULL != image_pixbuf)
-			gtk_object_destroy(GTK_OBJECT(image_pixbuf));
-		// fixme4: Wonder how we free the pixbuf_buffer?
+			g_object_unref(GDK_PIXBUF(image_pixbuf));
+		if (NULL != pixbuf_buffer)
+			g_object_unref(GDK_PIXBUF(pixbuf_buffer));
 		destroySWFInput(image_input);
 
 		return NULL;
@@ -119,8 +121,9 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 		// Free the memory allocated in this function
 		g_error_free(error);
 		if (NULL != image_pixbuf)
-			gtk_object_destroy(GTK_OBJECT(image_pixbuf));
-		// fixme4: Wonder how we free the pixbuf_buffer?
+			g_object_unref(GDK_PIXBUF(image_pixbuf));
+		if (NULL != pixbuf_buffer)
+			g_object_unref(GDK_PIXBUF(pixbuf_buffer));
 		destroySWFBitmap(image_bitmap);
 		destroySWFInput(image_input);
 

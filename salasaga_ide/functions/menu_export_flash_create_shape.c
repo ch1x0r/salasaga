@@ -190,7 +190,7 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				// Free the memory allocated in this function
 				g_error_free(error);
 				if (NULL != resized_pixbuf)
-					gtk_object_destroy(GTK_OBJECT(resized_pixbuf));
+					g_object_unref(GDK_PIXBUF(resized_pixbuf));
 				return FALSE;
 			}
 
@@ -217,7 +217,7 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 					// Free the memory allocated in this function
 					g_error_free(error);
 					if (NULL != resized_pixbuf)
-						gtk_object_destroy(GTK_OBJECT(resized_pixbuf));
+						g_object_unref(GDK_PIXBUF(resized_pixbuf));
 					destroySWFBitmap(image_bitmap);
 					destroySWFInput(image_input);
 					return FALSE;
@@ -453,7 +453,7 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				// Free the memory allocated in this function
 				g_error_free(error);
 				if (NULL != resized_pixbuf)
-					gtk_object_destroy(GTK_OBJECT(resized_pixbuf));
+					g_object_unref(GDK_PIXBUF(resized_pixbuf));
 				return FALSE;
 			}
 
@@ -480,7 +480,7 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 					// Free the memory allocated in this function
 					g_error_free(error);
 					if (NULL != resized_pixbuf)
-						gtk_object_destroy(GTK_OBJECT(resized_pixbuf));
+						g_object_unref(GDK_PIXBUF(resized_pixbuf));
 					destroySWFBitmap(image_bitmap);
 					destroySWFInput(image_input);
 					return FALSE;

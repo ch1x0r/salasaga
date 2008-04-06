@@ -257,9 +257,9 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			user_data = GDK_PIXBUF(tmp_pixbuf);
 
 			// Free the memory allocated but no longer needed
-			gtk_object_destroy(GTK_OBJECT(pango_layout));
-			gtk_object_destroy(GTK_OBJECT(graphics_context));
-			if (NULL != tmp_pixmap) gtk_object_destroy(GTK_OBJECT(tmp_pixmap));
+			g_object_unref(PANGO_LAYOUT(pango_layout));
+			g_object_unref(GDK_GC(graphics_context));
+			if (NULL != tmp_pixmap) g_object_unref(GDK_PIXMAP(tmp_pixmap));
 
 			break;
 

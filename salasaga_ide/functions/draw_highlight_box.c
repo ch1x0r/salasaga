@@ -76,7 +76,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 		255);								// Alpha
 
 	// Free the temporary pixbuf
-	gtk_object_destroy(GTK_OBJECT(highlight_pixbuf));
+	g_object_unref(GDK_PIXBUF(highlight_pixbuf));
 
 	// Create a vertical line
 	highlight_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, 2, height);
@@ -112,7 +112,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 		255);										// Alpha
 
 	// Free the temporary pixbuf
-	gtk_object_destroy(GTK_OBJECT(highlight_pixbuf));
+	g_object_unref(GDK_PIXBUF(highlight_pixbuf));
 
 	// Create the inner highlight box
 	highlight_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width - 2, height - 2);
@@ -131,6 +131,6 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 			     255);								// Alpha
 
 	// Free the temporary pixbuf
-	gtk_object_destroy(GTK_OBJECT(highlight_pixbuf));
+	g_object_unref(GDK_PIXBUF(highlight_pixbuf));
 	return;
 }

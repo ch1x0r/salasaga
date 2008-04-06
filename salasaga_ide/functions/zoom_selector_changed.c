@@ -76,7 +76,7 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 	// Free the existing front store for the workspace
 	if (NULL != front_store)
 	{
-		gtk_object_destroy(GTK_OBJECT(front_store));
+		g_object_unref(GDK_PIXMAP(front_store));
 		front_store = NULL;
 	}
 

@@ -119,7 +119,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons[CAPTURE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
+		g_object_unref(GDK_PIXBUF(tmp_gdk_pixbuf));
 	}
 	main_toolbar_items[CAPTURE] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[CAPTURE]), "Capture");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CAPTURE]), main_toolbar_tooltips, "Capture screenshots", "Private");
@@ -132,7 +132,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons[IMPORT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
+		g_object_unref(GDK_PIXBUF(tmp_gdk_pixbuf));
 	}
 	main_toolbar_items[IMPORT] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[IMPORT]), "Import");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[IMPORT]), main_toolbar_tooltips, "Import screenshots", "Private");
@@ -145,7 +145,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons[CROP_ALL] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
+		g_object_unref(GDK_PIXBUF(tmp_gdk_pixbuf));
 	}
 	main_toolbar_items[CROP_ALL] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[CROP_ALL]), "Crop all");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CROP_ALL]), main_toolbar_tooltips, "Crop all slides in the project", "Private");
@@ -162,7 +162,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons[EXPORT_FLASH] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
+		g_object_unref(GDK_PIXBUF(tmp_gdk_pixbuf));
 	}
 	main_toolbar_items[EXPORT_FLASH] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[EXPORT_FLASH]), "Flash");
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[EXPORT_FLASH]), main_toolbar_tooltips, "Export as a Flash animation", "Private");
@@ -177,7 +177,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons_gray[CAPTURE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
+		g_object_unref(GDK_PIXBUF(tmp_gdk_pixbuf));
 	}
 
 	// Create the grayed out Crop All icon
@@ -186,7 +186,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons_gray[CROP_ALL] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
+		g_object_unref(GDK_PIXBUF(tmp_gdk_pixbuf));
 	}
 
 	// Create the grayed out Export Flash icon
@@ -195,7 +195,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons_gray[EXPORT_FLASH] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
-		gtk_object_destroy(GTK_OBJECT(tmp_gdk_pixbuf));
+		g_object_unref(GDK_PIXBUF(tmp_gdk_pixbuf));
 	}
 
 	// Free memory allocated in this function

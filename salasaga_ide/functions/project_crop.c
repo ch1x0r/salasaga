@@ -205,7 +205,7 @@ void project_crop(void)
 		((layer_image *) last_layer->object_data)->height = new_height;
 
 		// Free the memory used by the old pixbuf
-		gtk_object_destroy(GTK_OBJECT(tmp_pixbuf));
+		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
 	}
 
 	// Update project width and height global variables
