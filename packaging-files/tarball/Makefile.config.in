@@ -32,9 +32,8 @@ includedir = @includedir@
 mandir = @mandir@
 
 XLIB = @XLIB@
-GIFLIB = @GIFLIB@
 ZLIB = @ZLIB@
 MINGLIB = @MINGLIB@
 
-LIBS = $(ZLIB) $(XLIB) $(GIFLIB) $(MINGLIB)
+LIBS = $(ZLIB) $(XLIB) $(MINGLIB)
 EXTRA_LIBS = $(LIBS)

@@ -16,17 +16,9 @@ AC_CANONICAL_HOST
 AC_PROG_CC
 AC_PROG_INSTALL
 
-dnl Check if the X libraries are installed (needed for libungif on at least Solaris)
+dnl Check if the X libraries are installed
 missing_x=0
 AC_CHECK_LIB(X11, XGetImage, XLIB="-lX11", [missing_x=1])
-
-dnl Check for the gif or ungif libraries
-missing_gif=1
-AC_CHECK_LIB(gif, PrintGifError, GIFLIB="-lgif" missing_gif=0, GIFLIB="")
-dnl MinGW check for libungif
-AC_CHECK_LIB(ungif, DGifOpen, GIFLIB="-lungif" missing_gif=0)
-dnl Solaris needs -lX11 on the linker line for ungif to work
-AC_CHECK_LIB(ungif, PrintGifError, GIFLIB="-lungif" missing_gif=0,, [-lX11])
 
 dnl Check for the zlib library
 missing_zlib=1
@@ -47,13 +39,6 @@ if test $missing_x == 1
 then
 	echo
 	echo "The X11 development libraries weren't found, please install them."
-	echo
-	we_should_exit=1
-fi
-if test $missing_gif == 1
-then
-	echo
-	echo "The gif or ungif development libraries weren't found, please install them."
 	echo
 	we_should_exit=1
 fi
@@ -122,7 +107,6 @@ AC_SUBST(LDFLAGS)
 AC_SUBST(SHLIBEXT)
 AC_SUBST(SHLIBLDFLAGS)
 AC_SUBST(SHCFLAGS)
-AC_SUBST(GIFLIB)
 AC_SUBST(XLIB)
 AC_SUBST(ZLIB)
 AC_SUBST(MINGLIB)
