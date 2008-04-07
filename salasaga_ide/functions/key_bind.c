@@ -109,7 +109,7 @@ gint key_bind(void)
 		if (0 != command_num)
 		{
 			g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", command_num);
-			gconf_engine_set_string(gconf_engine, command_key->str, "salasaga_screencapture", NULL);
+			gconf_engine_set_string(gconf_engine, command_key->str, return_code_gchar, NULL);
 			g_string_printf(command_key, "%s%u", "/apps/metacity/global_keybindings/run_command_", command_num);
 			gconf_engine_set_string(gconf_engine, command_key->str, "<Control>Print", NULL);
 		}
