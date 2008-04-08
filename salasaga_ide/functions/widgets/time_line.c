@@ -46,6 +46,10 @@ struct _TimeLinePrivate
 	gboolean			cached_bg_valid;			// Flag for whether the timeline background cache image is valid
 	gfloat				cursor_position;			// Where in the slide the cursor is positioned (in seconds or part thereof)
 	GdkPixmap			*display_buffer;			// The rendered version of the timeline
+	gint				left_border_width;			// Number of pixels in the left border (layer name) area
+	gint				pixels_per_second;			// Number of pixels used to display each second
+	gint				row_height;					// Number of pixels in each layer row
+	gint				top_border_height;			// Number of pixels in the top border (cursor) area
 };
 
 
@@ -215,10 +219,14 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 {
 	// Local variables
 	static GdkGC		*bg_image_gc = NULL;
+	GdkColor			colour_antique_white_2 = {0, (238 << 8), (223 << 8), (204 << 8) };  // 238, 223, 204
+	GdkColor			colour_black = {0, 0, 0, 0 };
+	GdkColor			colour_old_lace = {0, (253 << 8), (245 << 8), (230 << 8) };  // 253, 245, 230
+	GdkColor			colour_white = {0, 65535, 65535, 65535 };
 	GdkColormap			*colourmap = NULL;			// Colormap used for drawing
+	gint8				dash_list[2] = { 3, 3 };
 	static GdkGC		*display_buffer_gc = NULL;
-	gint				left, right, top, bottom;	// Holds the line positions
-	GdkSegment			lines[4];					// Holds the lines used for drawing
+	gint				loop_counter;				// Simple counter used in loops
 
 
 	// If we already have a background image, we free it
@@ -247,11 +255,62 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 		bg_image_gc = gdk_gc_new(GDK_DRAWABLE(priv->cached_bg_image));
 	}
 
-	// Initialise the background image
+	// Initialise the background image to white
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_white);
 	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, 0, 0, width, height);
+
+	// * Draw initial objects on the background image *
+
+	// Draw the top border area
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_old_lace);
+	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, 0, 0, width, priv->top_border_height);
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
+	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), 0, priv->top_border_height, width, priv->top_border_height);
+
+	// Draw the seconds markings
+	for (loop_counter = 0; loop_counter <= width; loop_counter++)
+	{
+		// In the top border area
+		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
+		gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+		gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
+						priv->left_border_width + (loop_counter * priv->pixels_per_second),
+						priv->top_border_height - 5,
+						priv->left_border_width + (loop_counter * priv->pixels_per_second),
+						priv->top_border_height - 1);
+
+		// In the main time line area
+		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_antique_white_2);
+		gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
+		gdk_gc_set_dashes(GDK_GC(bg_image_gc), 1, dash_list, 2);
+		gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
+						priv->left_border_width + (loop_counter * priv->pixels_per_second),
+						priv->top_border_height + 1,
+						priv->left_border_width + (loop_counter * priv->pixels_per_second),
+						height);
+	}
+	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+
+	// Draw the layer rows
+	for (loop_counter = 1; loop_counter <= height; loop_counter++)
+	{
+		// In the main time line area
+		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_antique_white_2);
+		gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
+						0,
+						priv->top_border_height + (loop_counter * priv->row_height),
+						width - 1,
+						priv->top_border_height + (loop_counter * priv->row_height));
+	}
+
+	// Draw the left border area
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
+	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), priv->left_border_width, priv->top_border_height, priv->left_border_width, height);
 
 	// Flag that we now have a valid background cache image
 	priv->cached_bg_valid = TRUE;
+
+	// * Display buffer image stuff now *
 
 	// If we already have a display buffer, we free it
 	if (NULL != priv->display_buffer)
@@ -283,31 +342,6 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 		0, 0,
 		width, height);
 
-	// Draw a border around the edge of the widget, to show it's possible
-	left = 5;
-	right = width - 5;
-	top = 5;
-	bottom = height - 5;
-	lines[0].x1 = left;
-	lines[0].y1 = top;
-	lines[0].x2 = right;
-	lines[0].y2 = top;
-	lines[1].x1 = right;
-	lines[1].y1 = top;
-	lines[1].x2 = right;
-	lines[1].y2 = bottom;
-	lines[2].x1 = right;
-	lines[2].y1 = bottom;
-	lines[2].x2 = left;
-	lines[2].y2 = bottom;
-	lines[3].x1 = left;
-	lines[3].y1 = bottom;
-	lines[3].x2 = left;
-	lines[3].y2 = top;
-	gdk_gc_set_function(GDK_GC(display_buffer_gc), GDK_INVERT);
-	gdk_draw_segments(priv->display_buffer, GDK_GC(display_buffer_gc), lines, 4);
-	gdk_gc_set_function(GDK_GC(display_buffer_gc), GDK_COPY);
-
 	return TRUE;
 }
 
@@ -322,6 +356,12 @@ static void time_line_init(TimeLine *time_line)
 	priv = TIME_LINE_GET_PRIVATE(time_line);
 	priv->cached_bg_valid = FALSE;
 	priv->display_buffer = NULL;
+
+	// fixme3: These would probably be good as properties
+	priv->left_border_width = 120;
+	priv->pixels_per_second = 60;
+	priv->row_height = 20;
+	priv->top_border_height = 15;
 
 	// Call our internal time line function to create the cached background image and display buffer
 	time_line_internal_create_images(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
