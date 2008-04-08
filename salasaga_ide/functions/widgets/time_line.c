@@ -28,11 +28,12 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../display_warning.h"
 #include "time_line.h"
 
 // fixme2: Pulled these initial sizes out of the air, they should probably be revisited
-#define WIDGET_MINIMUM_HEIGHT	100
-#define WIDGET_MINIMUM_WIDTH	300
+#define WIDGET_MINIMUM_HEIGHT	150
+#define WIDGET_MINIMUM_WIDTH	500
 
 // * Macros *
 #define TIME_LINE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj), TIME_LINE_TYPE, TimeLinePrivate))
@@ -46,6 +47,10 @@ struct _TimeLinePrivate
 	gfloat				cursor_position;			// Where in the slide the cursor is positioned (in seconds or part thereof)
 	GdkPixmap			*display_buffer;			// The rendered version of the timeline
 };
+
+
+// * Internal function declarations *
+gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height);
 
 
 // * Function definitions *
@@ -75,17 +80,22 @@ gboolean time_line_set_selected_layer_to_bg(void)
 static gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 {
 	// Local variables
-	TimeLinePrivate		*priv = TIME_LINE_GET_PRIVATE(widget);
+	TimeLinePrivate		*priv;
 	static GdkGC		*this_gc = NULL;
+	TimeLine			*this_time_line;
 
 
 	// Safety check
 	g_return_val_if_fail(widget != NULL || event != NULL, FALSE);
 	g_return_val_if_fail(IS_TIME_LINE(widget), FALSE);
 
+	// Initialisation
+	this_time_line = TIME_LINE(widget);
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+
+	// Ensure we have a display buffer to refresh from
 	if (NULL == priv->display_buffer)
 	{
-		// We don't have a display buffer to refresh from
 		return TRUE;
 	}
 
@@ -105,6 +115,7 @@ static gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 	return TRUE;
 }
 
+// Function to do initial creation of the GDK window (realisation)
 static void time_line_realise(GtkWidget *widget)
 {
 	// Local variables
@@ -146,9 +157,21 @@ static void time_line_realise(GtkWidget *widget)
 
 static void time_line_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
 {
+	// Local variables
+	TimeLinePrivate		*priv;
+	TimeLine			*this_time_line;
+
+
 	// Safety check
 	g_return_if_fail(allocation != NULL || widget != NULL);
 	g_return_if_fail(TIME_LINE(widget));
+
+	// Initialisation
+	this_time_line = TIME_LINE(widget);
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+
+	// Re-create the timeline background image and display buffer at the new size
+	time_line_internal_create_images(priv, allocation->width, allocation->height);
 
 	// Set the widget position and size
 	widget->allocation = *allocation;
@@ -169,6 +192,7 @@ static void time_line_size_request(GtkWidget *widget, GtkRequisition *requisitio
 	requisition->height = WIDGET_MINIMUM_HEIGHT;
 }
 
+// Class initialiser
 static void time_line_class_init(TimeLineClass *klass)
 {
 	// Local variables
@@ -186,32 +210,33 @@ static void time_line_class_init(TimeLineClass *klass)
 	g_type_class_add_private(klass, sizeof(TimeLinePrivate));
 }
 
-static void time_line_init(TimeLine *time_line)
+// Function to create the cached time line background image, and its display buffer 
+gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height)
 {
 	// Local variables
 	static GdkGC		*bg_image_gc = NULL;
 	GdkColormap			*colourmap = NULL;			// Colormap used for drawing
 	static GdkGC		*display_buffer_gc = NULL;
-	gint				left, right, top, bottom;	// Holds the line positions
-	GdkSegment			lines[4];					// Holds the lines used for drawing
-	TimeLinePrivate		*priv;
 
 
-	// Initialise variable defaults
-	priv = TIME_LINE_GET_PRIVATE(time_line);
-	priv->cached_bg_valid = FALSE;
-	priv->display_buffer = NULL;
+	// If we already have a background image, we free it
+	if (NULL != priv->cached_bg_image)
+	{
+		g_object_unref(GDK_PIXMAP(priv->cached_bg_image));
+		priv->cached_bg_image = NULL;
+	}
 
 	// Create the colourmap
 	colourmap = gdk_colormap_get_system();
 
-	// Create the initial background image
-	priv->cached_bg_image = gdk_pixmap_new(NULL, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT, colourmap->visual->depth);
+	// Create the background image
+	priv->cached_bg_image = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
 	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->cached_bg_image), GDK_COLORMAP(colourmap));
 	if (NULL == priv->cached_bg_image)
 	{
 		// Creating the background image didn't work
-		return;
+		display_warning("Error ED358: Couldn't create the time line background image!");
+		return FALSE;
 	}
 
 	// Create a graphic context for the timeline background cache image if we don't have one already
@@ -221,14 +246,50 @@ static void time_line_init(TimeLine *time_line)
 	}
 
 	// Initialise the background image
-	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
-			TRUE, 0, 0, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
+	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, 0, 0, width, height);
 
+	// Flag that we now have a valid background cache image
+	priv->cached_bg_valid = TRUE;
+
+	// If we already have a display buffer, we free it
+	if (NULL != priv->display_buffer)
+	{
+		g_object_unref(GDK_PIXMAP(priv->display_buffer));
+		priv->display_buffer = NULL;
+	}
+
+	// Create the display buffer
+	priv->display_buffer = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
+	if (NULL == priv->cached_bg_image)
+	{
+		// Creating the display buffer image didn't work
+		display_warning("Error ED357: Couldn't create the time line display buffer image!");
+		return FALSE;
+	}
+	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer), GDK_COLORMAP(colourmap));
+
+	// Create a graphic context for the display buffer image if we don't have one already
+	if (NULL == display_buffer_gc)
+	{
+		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
+	}
+
+	// Copy the timeline background image to the display buffer
+	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
+		GDK_PIXMAP(priv->cached_bg_image),
+		0, 0,
+		0, 0,
+		width, height);
+
+/*
 	// Draw a border around the edge of the widget
-	left = 0;
-	right = WIDGET_MINIMUM_WIDTH;
-	top = 0;
-	bottom = WIDGET_MINIMUM_HEIGHT;
+	gint				left, right, top, bottom;	// Holds the line positions
+	GdkSegment			lines[4];					// Holds the lines used for drawing
+
+	left = 5;
+	right = width - 5;
+	top = 5;
+	bottom = height - 5;
 	lines[0].x1 = left;
 	lines[0].y1 = top;
 	lines[0].x2 = right;
@@ -245,27 +306,27 @@ static void time_line_init(TimeLine *time_line)
 	lines[3].y1 = bottom;
 	lines[3].x2 = left;
 	lines[3].y2 = top;
+	gdk_gc_set_function(GDK_GC(display_buffer_gc), GDK_INVERT);
 	gdk_draw_segments(priv->cached_bg_image, GDK_GC(bg_image_gc), lines, 4);
+*/
 
-	// We have a valid background cache image
-	priv->cached_bg_valid = TRUE;
+	return TRUE;
+}
 
-	// Create the display buffer
-	priv->display_buffer = gdk_pixmap_new(NULL, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT, colourmap->visual->depth);
+// Instance initialiser
+static void time_line_init(TimeLine *time_line)
+{
+	// Local variables
+	TimeLinePrivate		*priv;
 
-	// Create a graphic context for the display buffer image if we don't have one already
-	if (NULL == display_buffer_gc)
-	{
-		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->cached_bg_image));
-	}
 
-	// Copy the timeline background image to the display buffer
-	gdk_draw_drawable(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(display_buffer_gc),
-		GDK_PIXMAP(priv->display_buffer),
-		0, 0,
-		0, 0,
-		WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
+	// Initialise variable defaults
+	priv = TIME_LINE_GET_PRIVATE(time_line);
+	priv->cached_bg_valid = FALSE;
+	priv->display_buffer = NULL;
 
+	// Call our internal time line function to create the cached background image and display buffer
+	time_line_internal_create_images(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
 }
 
 GType time_line_get_type(void)
