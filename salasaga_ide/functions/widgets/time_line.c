@@ -217,6 +217,8 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	static GdkGC		*bg_image_gc = NULL;
 	GdkColormap			*colourmap = NULL;			// Colormap used for drawing
 	static GdkGC		*display_buffer_gc = NULL;
+	gint				left, right, top, bottom;	// Holds the line positions
+	GdkSegment			lines[4];					// Holds the lines used for drawing
 
 
 	// If we already have a background image, we free it
@@ -281,11 +283,7 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 		0, 0,
 		width, height);
 
-/*
-	// Draw a border around the edge of the widget
-	gint				left, right, top, bottom;	// Holds the line positions
-	GdkSegment			lines[4];					// Holds the lines used for drawing
-
+	// Draw a border around the edge of the widget, to show it's possible
 	left = 5;
 	right = width - 5;
 	top = 5;
@@ -307,8 +305,8 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	lines[3].x2 = left;
 	lines[3].y2 = top;
 	gdk_gc_set_function(GDK_GC(display_buffer_gc), GDK_INVERT);
-	gdk_draw_segments(priv->cached_bg_image, GDK_GC(bg_image_gc), lines, 4);
-*/
+	gdk_draw_segments(priv->display_buffer, GDK_GC(display_buffer_gc), lines, 4);
+	gdk_gc_set_function(GDK_GC(display_buffer_gc), GDK_COPY);
 
 	return TRUE;
 }
