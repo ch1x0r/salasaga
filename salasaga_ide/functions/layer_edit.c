@@ -80,7 +80,7 @@ void layer_edit(void)
 
 	// Determine the number of layers present in this slide
 	layer_pointer = g_list_first(layer_pointer);
-	num_layers = g_list_length(layer_pointer);
+	num_layers = slide_data->num_layers;
 
 	// Determine which layer the user has selected in the timeline
 	selected_row = time_line_get_selected_layer_num();
