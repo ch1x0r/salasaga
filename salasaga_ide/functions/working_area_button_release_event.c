@@ -37,6 +37,7 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
+#include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
 #include "layer_new_highlight_inner.h"
@@ -279,6 +280,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		// Recreate the slide thumbnail
 		film_strip_create_thumbnail((slide *) current_slide->data);
 
+		// Redraw the timeline area
+		draw_timeline();
+
 		// Reset the resize switch and related info
 		resize_handles_status = RESIZE_HANDLES_WAITING;
 		stored_x = -1;
@@ -388,6 +392,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 			// Recreate the slide thumbnail
 			film_strip_create_thumbnail((slide *) current_slide->data);
+
+			// Redraw the timeline area
+			draw_timeline();
 
 			// Reset the mouse drag switch and related info
 			mouse_dragging = FALSE;
