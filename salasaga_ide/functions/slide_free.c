@@ -59,8 +59,7 @@ void slide_free(gpointer element, gpointer user_data)
 		gtk_object_destroy(GTK_OBJECT(slide_data->timeline_widget));
 
 	// Free the memory allocated to the deleted slides' layers
-	slide_data->layers = g_list_first(slide_data->layers);
-	num_layers = g_list_length(slide_data->layers);
+	num_layers = slide_data->num_layers;
 	for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 	{
 		// Loop through the layers, freeing the memory allocated to them
