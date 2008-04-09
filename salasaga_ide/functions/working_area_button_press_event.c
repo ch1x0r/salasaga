@@ -40,6 +40,7 @@
 #include "detect_collisions.h"
 #include "draw_handle_box.h"
 #include "layer_edit.h"
+#include "widgets/time_line.h"
 
 
 gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
@@ -50,13 +51,8 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	slide				*current_slide_data;		// Alias to make things easier
 	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
 	guint				num_collisions;
-	guint				num_layers;
-	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
-	guint				selected_row;				// Holds the number of the row that is selected
-
+	gint				selected_row;				// Holds the number of the row that is selected
 	guint				tmp_int;					// Temporary integer
-	GString				*tmp_gstring;				// Temporary GString
-	GtkTreePath			*tmp_path;					// Temporary path
 
 
 	// Only do this function if we have a front store available and a project loaded
@@ -112,21 +108,11 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 
 	// * Do collision detection here to determine if the user has clicked on a layer's object *
 	calculate_object_boundaries();
-	tmp_gstring = g_string_new(NULL);
 	collision_list = detect_collisions(collision_list, event->x, event->y);
 	if (NULL == collision_list)
 	{
 		// If there was no collision, then select the background layer
-		current_slide_data->layers = g_list_first(current_slide_data->layers);
-		num_layers = g_list_length(current_slide_data->layers);
-		g_string_printf(tmp_gstring, "%d", num_layers - 1);
-		gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &tmp_path, NULL);
-		if (NULL != tmp_path)
-			old_path = tmp_path;  // Make a backup of the old path, so we can free it
-		tmp_path = gtk_tree_path_new_from_string(tmp_gstring->str);
-		gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
-		if (NULL != old_path)
-			gtk_tree_path_free(old_path);  // Free the old path
+		time_line_set_selected_layer_to_bg();
 
 		// Clear any existing handle box
 		gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
@@ -137,7 +123,6 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		stored_y = -1;
 
 		// Free the memory allocated during the collision detection
-		g_string_free(tmp_gstring, TRUE);
 		g_list_free(collision_list);
 		collision_list = NULL;
 
@@ -151,8 +136,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	stored_y = event->y;
 
 	// Determine which layer the user has selected in the timeline
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
-	selected_row = atoi(gtk_tree_path_to_string(tmp_path));
+	selected_row = time_line_get_selected_layer_num();
 
 	// Is the presently selected layer in the collision list?
 	collision_list = g_list_first(collision_list);
@@ -174,21 +158,13 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 
 	// The presently selected row is not in the collision list, so move the selection row to the first collision
 	collision_list = g_list_first(collision_list);
-	current_slide_data->layers = g_list_first(current_slide_data->layers);
 	selected_row = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
-	g_string_printf(tmp_gstring, "%d", selected_row);
-	if (NULL != tmp_path)
-		old_path = tmp_path;  // Make a backup of the old path, so we can free it
-	tmp_path = gtk_tree_path_new_from_string(tmp_gstring->str);
-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), tmp_path, NULL, FALSE);
-	if (NULL != old_path)
-		gtk_tree_path_free(old_path);  // Free the old path
+	time_line_set_selected_layer_num(selected_row);
 
 	// Draw a handle box around the new selected object
 	draw_handle_box();
 
 	// Free the memory allocated during the collision detection
-	g_string_free(tmp_gstring, TRUE);
 	g_list_free(collision_list);
 	collision_list = NULL;
 

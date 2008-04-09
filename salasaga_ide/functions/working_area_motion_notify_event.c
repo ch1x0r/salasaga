@@ -38,6 +38,7 @@
 #include "../externs.h"
 #include "draw_bounding_box.h"
 #include "display_warning.h"
+#include "widgets/time_line.h"
 
 
 gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
@@ -59,8 +60,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gint				present_y;
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
-	gchar				*selected_row;				// Holds the number of the row that is selected
-	GtkTreePath			*tmp_path;					// Temporary path
+	gint				selected_row;				// Holds the number of the row that is selected
 	gint				width;
 	gfloat				x_diff;						// The X distance the object was dragged, after scaling
 	gfloat				y_diff;						// The Y distance the object was dragged, after scaling
@@ -95,12 +95,11 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
 
 		// Determine which layer is selected in the timeline
-		gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
-		selected_row = gtk_tree_path_to_string(tmp_path);
+		selected_row = time_line_get_selected_layer_num();
 
 		// Get its present X and Y offsets
 		current_slide_data->layers = g_list_first(current_slide_data->layers);
-		layer_data = g_list_nth_data(current_slide_data->layers, atoi(selected_row));
+		layer_data = g_list_nth_data(current_slide_data->layers, selected_row);
 		switch (layer_data->object_type)
 		{
 			case TYPE_HIGHLIGHT:
@@ -214,12 +213,11 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
 
 		// Determine which layer is selected in the timeline
-		gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
-		selected_row = gtk_tree_path_to_string(tmp_path);
+		selected_row = time_line_get_selected_layer_num();
 
 		// Get its present X and Y offsets
 		current_slide_data->layers = g_list_first(current_slide_data->layers);
-		layer_data = g_list_nth_data(current_slide_data->layers, atoi(selected_row));
+		layer_data = g_list_nth_data(current_slide_data->layers, selected_row);
 		switch (layer_data->object_type)
 		{
 			case TYPE_EMPTY:

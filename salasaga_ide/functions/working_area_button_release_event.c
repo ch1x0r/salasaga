@@ -43,6 +43,7 @@
 #include "layer_new_image_inner.h"
 #include "layer_new_mouse_inner.h"
 #include "layer_new_text_inner.h"
+#include "widgets/time_line.h"
 
 
 gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
@@ -63,7 +64,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gint				project_y_position;			// Y position in the project image
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
-	gchar				*selected_row;				// Holds the number of the row that is selected
+	gint				selected_row;				// Holds the number of the row that is selected
 	guint				swap_value;					// Temporary value used when swapping border positions
 	GtkTreePath			*tmp_path;					// Temporary path
 	gint				width;
@@ -142,12 +143,11 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		list_widget = current_slide_data->timeline_widget;
 
 		// Determine which layer is selected in the timeline
-		gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
-		selected_row = gtk_tree_path_to_string(tmp_path);
+		selected_row = time_line_get_selected_layer_num();
 
 		// Get its present X and Y offsets
 		current_slide_data->layers = g_list_first(current_slide_data->layers);
-		layer_data = g_list_nth_data(current_slide_data->layers, atoi(selected_row));
+		layer_data = g_list_nth_data(current_slide_data->layers, selected_row);
 		width = ((layer_highlight *) layer_data->object_data)->width;
 		height = ((layer_highlight *) layer_data->object_data)->height;
 		x_change = layer_data->x_offset_finish - layer_data->x_offset_start;
@@ -287,9 +287,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		stored_x = -1;
 		stored_y = -1;
 
-		// Free the allocated memory
-		g_free(selected_row);
-
 		// Set the changes made variable
 		changes_made = TRUE;
 
@@ -311,12 +308,11 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		if (1 == event->button)
 		{
 			// Determine which layer is selected in the timeline
-			gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
-			selected_row = gtk_tree_path_to_string(tmp_path);
+			selected_row = time_line_get_selected_layer_num();
 
 			// Get its present X and Y offsets
 			current_slide_data->layers = g_list_first(current_slide_data->layers);
-			layer_data = g_list_nth_data(current_slide_data->layers, atoi(selected_row));
+			layer_data = g_list_nth_data(current_slide_data->layers, selected_row);
 			switch (layer_data->object_type)
 			{
 				case TYPE_EMPTY:
@@ -401,9 +397,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			mouse_dragging = FALSE;
 			stored_x = -1;
 			stored_y = -1;
-
-			// Free the allocated memory
-			g_free(selected_row);
 
 			// Set the changes made variable
 			changes_made = TRUE;
