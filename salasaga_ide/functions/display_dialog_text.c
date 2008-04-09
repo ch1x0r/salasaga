@@ -568,7 +568,6 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_widget_destroy(GTK_WIDGET(text_dialog));
 
 	// Free the memory allocated in this function
-	g_object_unref(GTK_TEXT_BUFFER(text_buffer));
 	g_string_free(valid_ext_link, TRUE);
 	g_string_free(valid_ext_link_win, TRUE);
 	g_string_free(valid_layer_name, TRUE);
