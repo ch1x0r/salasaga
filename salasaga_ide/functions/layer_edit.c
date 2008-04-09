@@ -36,7 +36,6 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "create_timeline_slider.h"
 #include "display_dialog_empty.h"
 #include "display_dialog_highlight.h"
 #include "display_dialog_image.h"

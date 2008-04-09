@@ -33,15 +33,12 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "create_timeline_slider.h"
 
 
 void slide_insert(void)
 {
 	// Local variables
 	GtkTreeIter			film_strip_iter;
-	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
-
 	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
 	layer				*tmp_layer;					// Temporary layer
 	slide				*tmp_slide;					// Temporary slide
@@ -87,16 +84,6 @@ void slide_insert(void)
 
 	// Add the empty layer to the new slide being created
 	tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
-
-	// Create duration image
-	layer_pixbuf = NULL;
-	layer_pixbuf = create_timeline_slider(GDK_PIXBUF(layer_pixbuf),
-						180,		// Slider width
-						20,			// Slider height
-						0,			// Displayed start
-						0,			// Transition in width
-						180,		// Displayed width
-						0);			// Transition out width
 
 	// Add the thumbnail to the new slide structure
 	tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(tmp_gdk_pixbuf));

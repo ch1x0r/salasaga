@@ -45,7 +45,6 @@
 #include "../externs.h"
 #include "base64_decode.h"
 #include "compress_layers.h"
-#include "create_timeline_slider.h"
 #include "display_warning.h"
 #include "slide_free.h"
 #include "validate_value.h"
