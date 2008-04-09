@@ -49,6 +49,7 @@ struct _TimeLinePrivate
 	gint				left_border_width;			// Number of pixels in the left border (layer name) area
 	gint				pixels_per_second;			// Number of pixels used to display each second
 	gint				row_height;					// Number of pixels in each layer row
+	gint				selected_layer_num;			// The number of the selected layer
 	gint				top_border_height;			// Number of pixels in the top border (cursor) area
 };
 
@@ -60,21 +61,63 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 // * Function definitions *
 
 // Function to return the number of the presently selected timeline layer, or -1 if none
-gint time_line_get_selected_layer_num(void)
+// fixme3: Should this be done as a property instead?
+gint time_line_get_selected_layer_num(GtkWidget *widget)
 {
-	// Stub function for now
-	return 1;
+	// Local variables
+	TimeLinePrivate		*priv;
+	TimeLine			*this_time_line;
+
+
+	// Safety check
+	if (NULL == widget)
+	{
+		return -1;
+	}
+	if (FALSE == IS_TIME_LINE(widget))
+	{
+		return -1;
+	}
+
+	// Initialisation
+	this_time_line = TIME_LINE(widget);
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+
+	// Return the internal variable, as requested
+	return priv->selected_layer_num;
 }
 
 // Function to set the presently selected timeline layer to the given one
-gboolean time_line_set_selected_layer_num(gint selected_row)
+// fixme3: Should this be done as a property instead?
+gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 {
-	// Stub function for now
+	// Local variables
+	TimeLinePrivate		*priv;
+	TimeLine			*this_time_line;
+
+
+	// Safety check
+	if (NULL == widget)
+	{
+		return -1;
+	}
+	if (FALSE == IS_TIME_LINE(widget))
+	{
+		return -1;
+	}
+
+	// Initialisation
+	this_time_line = TIME_LINE(widget);
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+
+	// Set the internal variable, as requested
+	priv->selected_layer_num = selected_row;
+
 	return TRUE;
 }
 
 // Function to set the presently selected timeline layer to the background one
-gboolean time_line_set_selected_layer_to_bg(void)
+gboolean time_line_set_selected_layer_to_bg(GtkWidget *widget)
 {
 	// Stub function for now
 	return TRUE;
@@ -480,6 +523,7 @@ static void time_line_init(TimeLine *time_line)
 	priv = TIME_LINE_GET_PRIVATE(time_line);
 	priv->cached_bg_valid = FALSE;
 	priv->display_buffer = NULL;
+	priv->selected_layer_num = 0;
 
 	// fixme3: These would probably be good as properties
 	priv->left_border_width = 120;

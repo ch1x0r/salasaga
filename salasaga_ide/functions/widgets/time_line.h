@@ -54,9 +54,9 @@ struct _TimeLineClass
 // Public function definitions
 GType time_line_get_type(void) G_GNUC_CONST;
 GtkWidget* time_line_new(void);
-gint time_line_get_selected_layer_num(void);
-gboolean time_line_set_selected_layer_num(gint selected_row);
-gboolean time_line_set_selected_layer_to_bg(void);
+gint time_line_get_selected_layer_num(GtkWidget *widget);
+gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row);
+gboolean time_line_set_selected_layer_to_bg(GtkWidget *widget);
 
 #ifdef __cplusplus
 }
