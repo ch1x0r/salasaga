@@ -33,7 +33,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "construct_timeline_widget.h"
+#include "widgets/time_line.h"
 
 
 void draw_timeline(void)
@@ -49,7 +49,7 @@ void draw_timeline(void)
 	if (NULL == slide_pointer->timeline_widget)
 	{
 		// Construct the widget used to display the slide in the timeline
-		construct_timeline_widget(slide_pointer);
+		slide_pointer->timeline_widget = time_line_new();
 	}
 
 	// Remove the present table from the timeline area, this will also reduce it's reference count by one
