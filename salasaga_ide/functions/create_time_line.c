@@ -42,7 +42,6 @@
 #include "layer_new_image.h"
 #include "layer_new_mouse.h"
 #include "layer_new_text.h"
-#include "timeline_row_selected_event.h"
 #include "widgets/time_line.h"
 
 
