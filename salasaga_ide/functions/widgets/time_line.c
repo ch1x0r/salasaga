@@ -228,12 +228,17 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	static GdkGC		*display_buffer_gc = NULL;
 	PangoContext		*font_context;
 	PangoFontDescription  *font_description;
+	gint				font_height;
 	PangoLayout			*font_layout;
+	gint				font_width;
 	layer				*layer_data;
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				loop_counter;				// Simple counter used in loops
 	gint				loop_counter2;				// Simple counter used in loops
+	gint				loop_max;
+	gint				loop_max2;
 	gint				num_layers;					// The number of layers in the select slide
+	GString				*seconds_number;
 
 
 	// If we already have a background image, we free it
@@ -243,8 +248,12 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 		priv->cached_bg_image = NULL;
 	}
 
-	// Create the colourmap
+	// Initialisation
 	colourmap = gdk_colormap_get_system();
+	font_context = gdk_pango_context_get();
+	font_layout = pango_layout_new(font_context);
+	g_object_unref(font_context);
+	seconds_number = g_string_new(NULL);
 
 	// Create the background image
 	priv->cached_bg_image = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
@@ -275,7 +284,10 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), 0, priv->top_border_height, width, priv->top_border_height);
 
 	// Draw the seconds markings
-	for (loop_counter = 0; loop_counter <= width; loop_counter++)
+	font_description = pango_font_description_from_string("Sans, 10px");
+	pango_layout_set_font_description(font_layout, font_description);
+	loop_max = width / priv->pixels_per_second;
+	for (loop_counter = 0; loop_counter <= loop_max; loop_counter++)
 	{
 		// In the top border area
 		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
@@ -285,6 +297,14 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 						priv->top_border_height - 5,
 						priv->left_border_width + (loop_counter * priv->pixels_per_second),
 						priv->top_border_height - 1);
+
+		// The numbers themselves
+		g_string_printf(seconds_number, "%ds", loop_counter);
+		pango_layout_set_text(font_layout, seconds_number->str, -1);
+		pango_layout_get_size(font_layout, &font_width, &font_height);
+		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
+		gdk_draw_layout(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
+				priv->left_border_width + (loop_counter * priv->pixels_per_second) - ((font_width / PANGO_SCALE) / 2), -2, font_layout);
 
 		// In the main time line area
 		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_antique_white_2);
@@ -297,14 +317,17 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 						height);
 	}
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+	g_string_free(seconds_number, TRUE);
 
 	// Draw the horizontal layer components
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_antique_white_2);
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
-	for (loop_counter = 1; loop_counter <= height; loop_counter++)
+	loop_max = height / priv->row_height;
+	for (loop_counter = 1; loop_counter <= loop_max; loop_counter++)
 	{
 		// The half second markings
-		for (loop_counter2 = 0; loop_counter2 <= width; loop_counter2++)
+		loop_max2 = width / priv->pixels_per_second;
+		for (loop_counter2 = 0; loop_counter2 <= loop_max2; loop_counter2++)
 		{
 			gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
 							priv->left_border_width + (priv->pixels_per_second >> 1) + (loop_counter2 * priv->pixels_per_second),
@@ -362,9 +385,6 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 
 	// Display the layer names
 	font_description = pango_font_description_from_string("Sans");
-	font_context = gdk_pango_context_get();
-	font_layout = pango_layout_new(font_context);
-	g_object_unref(font_context);
 	pango_layout_set_font_description(font_layout, font_description);
 	layer_pointer = ((slide *) current_slide->data)->layers;
 	layer_pointer = g_list_first(layer_pointer);
