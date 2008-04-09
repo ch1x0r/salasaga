@@ -39,6 +39,7 @@
 #include "display_warning.h"
 #include "draw_bounding_box.h"
 #include "draw_resize_handles.h"
+#include "widgets/time_line.h"
 
 
 gboolean draw_handle_box(void)
@@ -59,7 +60,6 @@ gboolean draw_handle_box(void)
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	guint				selected_layer;				// Holds the number of the layer that is selected
 	gint				width;
-	GtkTreePath			*tmp_path;					// Temporary path
 
 
 	// Only do this function if we have a front store available and a project loaded
@@ -73,8 +73,7 @@ gboolean draw_handle_box(void)
 	list_widget = current_slide_data->timeline_widget;
 
 	// Determine which layer the user has selected in the timeline
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
-	selected_layer = atoi(gtk_tree_path_to_string(tmp_path));
+	selected_layer = time_line_get_selected_layer_num();
 
 	// Retrieve the dimensions of the selected object
 	current_slide_data->layers = g_list_first(current_slide_data->layers);
