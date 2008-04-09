@@ -42,6 +42,7 @@ void draw_timeline(void)
 	// Local variables
 	gboolean			return_code_gbool;			// Receives boolean return code
 	slide				*slide_pointer;				// Points to the presently processing slide
+	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
 
 
 	// If the slide doesn't have a timeline widget constructed for it yet, then make one
@@ -50,6 +51,15 @@ void draw_timeline(void)
 	{
 		// Construct the widget used to display the slide in the timeline
 		slide_pointer->timeline_widget = time_line_new();
+
+		// Check if the timeline area already has children
+		tmp_glist = gtk_container_get_children(GTK_CONTAINER(time_line_container));
+		if (NULL != tmp_glist)
+		{
+			// Remove timeline widget from the container
+			gtk_container_remove(GTK_CONTAINER(time_line_container), GTK_WIDGET(tmp_glist->data));
+		}
+		g_list_free(tmp_glist);
 
 		// Add the timeline widget to the onscreen timeline area
 		gtk_container_add(GTK_CONTAINER(time_line_container), GTK_WIDGET(slide_pointer->timeline_widget));
@@ -64,5 +74,6 @@ void draw_timeline(void)
 	
 	// Show all of the widgets in the timeline
 	gtk_widget_show_all(GTK_WIDGET(time_line_container));
-	gdk_window_invalidate_rect(slide_pointer->timeline_widget->window, &slide_pointer->timeline_widget->allocation, TRUE);
+	if (NULL != slide_pointer->timeline_widget->window)
+		gdk_window_invalidate_rect(slide_pointer->timeline_widget->window, &slide_pointer->timeline_widget->allocation, TRUE);
 }
