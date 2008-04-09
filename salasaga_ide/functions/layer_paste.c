@@ -28,10 +28,10 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
 #include "layer_duplicate.h"
-#include "regenerate_timeline_duration_images.h"
 
 
 void layer_paste(void)
@@ -89,8 +89,10 @@ void layer_paste(void)
 						TIMELINE_Y_OFF_FINISH, new_layer->y_offset_finish,
 						-1);
 
-	// Regenerate the timeline duration images
-	regenerate_timeline_duration_images(slide_data);
+	// Regenerate the timeline
+	gtk_widget_destroy(GTK_WIDGET(slide_data->timeline_widget));
+	slide_data->timeline_widget = NULL;
+	draw_timeline();
 
 	// Redraw the workspace
 	draw_workspace();

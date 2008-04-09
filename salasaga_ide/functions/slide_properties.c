@@ -33,8 +33,8 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "draw_timeline.h"
 #include "display_warning.h"
-#include "regenerate_timeline_duration_images.h"
 #include "validate_value.h"
 
 
@@ -195,8 +195,10 @@ void slide_properties(void)
 		}
 	}
 
-	// Regenerate the timeline duration images for all layers in this slide
-	regenerate_timeline_duration_images(this_slide);
+	// Regenerate the timeline
+	gtk_widget_destroy(GTK_WIDGET(this_slide->timeline_widget));
+	this_slide->timeline_widget = NULL;
+	draw_timeline();
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(slide_dialog));

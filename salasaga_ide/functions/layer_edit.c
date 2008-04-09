@@ -43,9 +43,9 @@
 #include "display_dialog_mouse.h"
 #include "display_dialog_text.h"
 #include "display_warning.h"
+#include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
-#include "regenerate_timeline_duration_images.h"
 #include "widgets/time_line.h"
 
 
@@ -205,8 +205,10 @@ void layer_edit(void)
 			return;
 	}
 
-	// Regenerate the timeline duration images for all layers in this slide
-	regenerate_timeline_duration_images(slide_data);
+	// Regenerate the timeline
+	gtk_widget_destroy(GTK_WIDGET(slide_data->timeline_widget));
+	slide_data->timeline_widget = NULL;
+	draw_timeline();
 
 	// Redraw the workspace
 	draw_workspace();
