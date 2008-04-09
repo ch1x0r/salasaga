@@ -47,7 +47,6 @@
 #include "compress_layers.h"
 #include "create_timeline_slider.h"
 #include "display_warning.h"
-#include "regenerate_timeline_duration_images.h"
 #include "slide_free.h"
 #include "validate_value.h"
 
@@ -2438,9 +2437,6 @@ gboolean project_read(gchar *filename)
 				this_layer_ptr->duration = tmp_slide->duration;
 			}
 		}
-
-		// Regenerate the timeline duration images for all layers in the slide
-		regenerate_timeline_duration_images(tmp_slide);
 
 		// Set the timeline widget for the slide to NULL, so we know to create it later on
 		tmp_slide->timeline_widget = NULL;
