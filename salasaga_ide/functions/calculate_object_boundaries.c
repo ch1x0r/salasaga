@@ -71,7 +71,7 @@ void calculate_object_boundaries(void)
 
 	// Work out how many layers we need to iterate through
 	layer_pointer = g_list_first(((slide *) current_slide->data)->layers);
-	num_layers = g_list_length(layer_pointer);
+	num_layers = ((slide *) current_slide->data)->num_layers;
 
 	// (Re-)Initialise the boundary list
 	if (NULL != boundary_list)
