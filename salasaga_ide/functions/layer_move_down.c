@@ -63,10 +63,9 @@ void layer_move_down(void)
 
 	// Initialise various things
 	layer_pointer = ((slide *) current_slide->data)->layers;
-	layer_pointer = g_list_first(layer_pointer);
-	num_layers = g_list_length(layer_pointer);
 
 	// Determine which layer the user has selected in the timeline
+	num_layers = ((slide *) current_slide->data)->num_layers;
 	selected_row = time_line_get_selected_layer_num();
 	if (num_layers - 2 <= selected_row)
 	{
@@ -77,6 +76,7 @@ void layer_move_down(void)
 	}
 
 	// Get details of the layers we're moving around
+	layer_pointer = g_list_first(layer_pointer);
 	our_layer = g_list_nth(layer_pointer, selected_row);
 	below_layer = g_list_nth(layer_pointer, selected_row + 1);
 
