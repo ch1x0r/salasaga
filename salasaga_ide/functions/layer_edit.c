@@ -46,6 +46,7 @@
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
 #include "regenerate_timeline_duration_images.h"
+#include "widgets/time_line.h"
 
 
 void layer_edit(void)
@@ -56,13 +57,11 @@ void layer_edit(void)
 	GtkListStore		*list_pointer;				//
 	GtkWidget			*list_widget;				// Points to the timeline widget
 	guint				num_layers;					// Number of layers
+	gboolean			return_code;				// Did the edit dialog return ok?
 	guint				selected_row;				// Holds the row that is selected
 	slide				*slide_data;				// Pointer to current slide data
-	gboolean			return_code;				// Did the edit dialog return ok?
-
 	GtkTreeIter			*tmp_iter;					// Temporary iter
 	layer				*tmp_layer;					// Temporary layer
-	GtkTreePath			*tmp_path;					// Temporary path
 
 
 	// If no project is loaded then don't run this function
@@ -84,8 +83,7 @@ void layer_edit(void)
 	num_layers = g_list_length(layer_pointer);
 
 	// Determine which layer the user has selected in the timeline
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
-	selected_row = atoi(gtk_tree_path_to_string(tmp_path));
+	selected_row = time_line_get_selected_layer_num();
 	tmp_layer = g_list_nth_data(layer_pointer, selected_row);
 
 	// * Open a dialog box showing the existing values, asking for the new ones *

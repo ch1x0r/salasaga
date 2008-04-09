@@ -39,6 +39,7 @@
 #include "display_warning.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
+#include "widgets/time_line.h"
 
 
 void layer_move_up(void)
@@ -48,9 +49,7 @@ void layer_move_up(void)
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	GList				*our_layer;					// The selected layer
 	guint				selected_row;				// Holds the row that is selected
-
 	GList				*tmp_glist;					// Temporary GList
-	GtkTreePath			*tmp_path;					// Temporary path
 
 
 	// If no project is loaded then don't run this function
@@ -66,8 +65,7 @@ void layer_move_up(void)
 	layer_pointer = g_list_first(layer_pointer);
 
 	// Determine which layer the user has selected in the timeline
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(((slide *) current_slide->data)->timeline_widget), &tmp_path, NULL);
-	selected_row = atoi(gtk_tree_path_to_string(tmp_path));
+	selected_row = time_line_get_selected_layer_num();
 	if (0 == selected_row)
 	{
 		// We're already at the top of the list, so return
