@@ -32,6 +32,7 @@
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
 #include "layer_duplicate.h"
+#include "widgets/time_line.h"
 
 
 void layer_paste(void)
@@ -40,13 +41,11 @@ void layer_paste(void)
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	GtkTreeIter			*new_iter;					// New iter
 	layer				*new_layer;					// Newly created layer
-	GtkTreePath			*new_path;					// New GtkPath
-	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	slide				*slide_data;				// Pointer to the data for the current slide
 
 
 	// If no project is loaded then don't run this function
-	if (NULL == current_slide)
+	if (FALSE == project_active)
 	{
 		// Make a beep, then return
 		gdk_beep();
@@ -89,6 +88,9 @@ void layer_paste(void)
 						TIMELINE_Y_OFF_FINISH, new_layer->y_offset_finish,
 						-1);
 
+	// Increase the layer counter for the slide
+	slide_data->num_layers++;
+
 	// Regenerate the timeline
 	gtk_widget_destroy(GTK_WIDGET(slide_data->timeline_widget));
 	slide_data->timeline_widget = NULL;
@@ -101,13 +103,7 @@ void layer_paste(void)
 	film_strip_create_thumbnail(slide_data);
 
 	// Select the new layer in the timeline widget
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(slide_data->timeline_widget), &new_path, NULL);
-	if (NULL != new_path)
-		old_path = new_path;  // Make a backup of the old path, so we can free it
-	new_path = gtk_tree_path_new_first();
-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(slide_data->timeline_widget), new_path, NULL, FALSE);
-	if (NULL != old_path)
-		gtk_tree_path_free(old_path);  // Free the old path
+	time_line_set_selected_layer_num(0);
 
 	// Set the changes made variable
 	changes_made = TRUE;
