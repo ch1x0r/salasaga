@@ -31,18 +31,17 @@
 #include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
+#include "widgets/time_line.h"
 
 
 void layer_new_text_inner(guint release_x, guint release_y)
 {
 	// Local variables
 	GList				*layer_pointer;				// Points to the layers in the selected slide
-	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	slide				*slide_data;				// Pointer to the data for the current slide
 
 	GtkTreeIter			*tmp_iter;					// Temporary iter
 	layer				*tmp_layer;					// Temporary layer
-	GtkTreePath			*tmp_path;					// Temporary GtkPath
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 
 
@@ -95,6 +94,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	layer_pointer = slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
+	slide_data->num_layers++;
 
 	// Add the new text layer to slide list store
 	tmp_iter = g_new(GtkTreeIter, 1);
@@ -122,13 +122,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	film_strip_create_thumbnail(slide_data);
 
 	// Select the new layer in the timeline widget
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(slide_data->timeline_widget), &tmp_path, NULL);
-	if (NULL != tmp_path)
-		old_path = tmp_path;  // Make a backup of the old path, so we can free it
-	tmp_path = gtk_tree_path_new_first();
-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(slide_data->timeline_widget), tmp_path, NULL, FALSE);
-	if (NULL != old_path)
-		gtk_tree_path_free(old_path);  // Free the old path
+	time_line_set_selected_layer_num(0);
 
 	// Set the changes made variable
 	changes_made = TRUE;
