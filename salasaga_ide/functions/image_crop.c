@@ -40,6 +40,7 @@
 #include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
+#include "widgets/time_line.h"
 
 
 void image_crop(void)
@@ -89,8 +90,7 @@ void image_crop(void)
 	// * Check if the selected layer is an image *
 
 	// Determine which layer the user has selected in the timeline
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
-	selected_row = atoi(gtk_tree_path_to_string(tmp_path));
+	selected_row = time_line_get_selected_layer_num();
 	layer_pointer = g_list_first(layer_pointer);
 	this_layer = g_list_nth_data(layer_pointer, selected_row);
 
