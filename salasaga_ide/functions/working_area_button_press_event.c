@@ -117,6 +117,9 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
 				GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
 
+		// Redraw the timeline area
+		draw_timeline();
+
 		// Reset the stored mouse coordinates
 		stored_x = -1;
 		stored_y = -1;
