@@ -110,7 +110,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	if (NULL == collision_list)
 	{
 		// If there was no collision, then select the background layer
-		time_line_set_selected_layer_to_bg(current_slide_data->timeline_widget);
+		time_line_set_selected_layer_num(current_slide_data->timeline_widget, current_slide_data->num_layers);
 
 		// Clear any existing handle box
 		gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
