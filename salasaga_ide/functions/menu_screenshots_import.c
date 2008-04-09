@@ -44,7 +44,6 @@
 #include "enable_layer_toolbar_buttons.h"
 #include "enable_main_toolbar_buttons.h"
 #include "menu_enable.h"
-#include "regenerate_timeline_duration_images.h"
 
 
 void menu_screenshots_import(void)
@@ -372,8 +371,10 @@ void menu_screenshots_import(void)
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
 
-	// Generate the timeline duration image(s)
-	regenerate_timeline_duration_images(tmp_slide);
+	// Regenerate the timeline
+	gtk_widget_destroy(GTK_WIDGET(tmp_slide->timeline_widget));
+	tmp_slide->timeline_widget = NULL;
+	draw_timeline();
 
 	// Get the presently selected zoom level
 	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(zoom_selector)));
