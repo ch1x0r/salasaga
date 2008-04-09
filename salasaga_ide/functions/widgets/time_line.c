@@ -251,6 +251,34 @@ static void time_line_class_init(TimeLineClass *klass)
 	g_type_class_add_private(klass, sizeof(TimeLinePrivate));
 }
 
+// Function to redraw the images for an already existing
+gboolean time_line_regenerate_images(GtkWidget *widget)
+{
+	// Local variables
+	TimeLinePrivate		*priv;
+	TimeLine			*this_time_line;
+
+
+	// Safety check
+	if (NULL == widget)
+	{
+		return FALSE;
+	}
+	if (FALSE == IS_TIME_LINE(widget))
+	{
+		return FALSE;
+	}
+
+	// Initialisation
+	this_time_line = TIME_LINE(widget);
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+
+	// Re-create the timeline background image and display buffer at the new size
+	time_line_internal_create_images(priv, GTK_WIDGET(widget)->allocation.width, GTK_WIDGET(widget)->allocation.height);
+
+	return TRUE;
+}
+
 // Function to highlight the layer in a specific row
 void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint width)
 {
