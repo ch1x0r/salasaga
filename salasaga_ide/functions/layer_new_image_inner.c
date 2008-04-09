@@ -33,6 +33,7 @@
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
 #include "validate_value.h"
+#include "widgets/time_line.h"
 
 
 void layer_new_image_inner(guint release_x, guint release_y)
@@ -42,7 +43,6 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	GdkPixbuf			*new_image_data;			// Receives the new image data
 	gint				new_image_height;			// Receives the height of the new image
 	gint				new_image_width;			// Receives the width of the new image
-	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	GString				*path_gstring;				// Holds the file selection path
 	GtkWidget			*path_widget;				// File selection widget
 	slide				*slide_data;				// Pointer to the data for the current slide
@@ -53,7 +53,6 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	layer_image			*tmp_image_ob;				// Temporary image layer object
 	GtkTreeIter			*tmp_iter;					// Temporary iter
 	layer				*tmp_layer;					// Temporary layer
-	GtkTreePath			*tmp_path;					// Temporary GtkPath
 
 
 	// If no project is loaded then don't run this function
@@ -170,6 +169,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	layer_pointer = slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
+	slide_data->num_layers++;
 
 	// If the new layer end time is longer than the slide duration, then extend the slide duration
 	if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > slide_data->duration)
@@ -203,13 +203,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	film_strip_create_thumbnail(slide_data);
 
 	// Select the new layer in the timeline widget
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(slide_data->timeline_widget), &tmp_path, NULL);
-	if (NULL != tmp_path)
-		old_path = tmp_path;  // Make a backup of the old path, so we can free it
-	tmp_path = gtk_tree_path_new_first();
-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(slide_data->timeline_widget), tmp_path, NULL, FALSE);
-	if (NULL != old_path)
-		gtk_tree_path_free(old_path);  // Free the old path
+	time_line_set_selected_layer_num(0);
 
 	// Set the changes made variable
 	changes_made = TRUE;

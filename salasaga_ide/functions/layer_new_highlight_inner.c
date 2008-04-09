@@ -37,6 +37,7 @@
 #include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
+#include "widgets/time_line.h"
 
 
 void layer_new_highlight_inner(gint release_x, gint release_y)
@@ -47,7 +48,6 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				mouse_drag_height;			// The height the mouse was dragged
 	gint				mouse_drag_width;			// The width the mouse was dragged
-	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio
 	gfloat				scaled_x;					// Scaled starting coordinate
 	gfloat				scaled_y;					// Scaled starting coordinate
@@ -59,7 +59,6 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	layer_highlight		*tmp_highlight_ob;			// Temporary highlight layer object
 	GtkTreeIter			*tmp_iter;					// Temporary iter
 	layer				*tmp_layer;					// Temporary layer
-	GtkTreePath			*tmp_path;					// Temporary GtkPath
 
 
 	// If no project is loaded then don't run this function
@@ -151,6 +150,7 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	layer_pointer = slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
+	slide_data->num_layers++;
 
 	// Add the new layer to slide list store
 	tmp_iter = g_new(GtkTreeIter, 1);
@@ -178,13 +178,7 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	film_strip_create_thumbnail(slide_data);
 
 	// Select the new layer in the timeline widget
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(slide_data->timeline_widget), &tmp_path, NULL);
-	if (NULL != tmp_path)
-		old_path = tmp_path;  // Make a backup of the old path, so we can free it
-	tmp_path = gtk_tree_path_new_first();
-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(slide_data->timeline_widget), tmp_path, NULL, FALSE);
-	if (NULL != old_path)
-		gtk_tree_path_free(old_path);  // Free the old path
+	time_line_set_selected_layer_num(0);
 
 	// Set the changes made variable
 	changes_made = TRUE;
