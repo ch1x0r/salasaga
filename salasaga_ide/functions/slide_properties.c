@@ -172,7 +172,7 @@ void slide_properties(void)
 	{
 		// New slide duration is shorter than it was, so we adjust any layers that now go past the end
 		this_slide->layers = g_list_first(this_slide->layers);
-		num_layers = g_list_length(this_slide->layers);
+		num_layers = this_slide->num_layers;
 		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 		{
 			// Does this layer last too long?
