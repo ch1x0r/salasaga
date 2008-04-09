@@ -227,6 +227,7 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	gint8				dash_list[2] = { 3, 3 };
 	static GdkGC		*display_buffer_gc = NULL;
 	gint				loop_counter;				// Simple counter used in loops
+	gint				loop_counter2;				// Simple counter used in loops
 
 
 	// If we already have a background image, we free it
@@ -291,11 +292,22 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	}
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 
-	// Draw the layer rows
+	// Draw the horizontal layer components
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_antique_white_2);
+	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	for (loop_counter = 1; loop_counter <= height; loop_counter++)
 	{
-		// In the main time line area
-		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_antique_white_2);
+		// The half second markings
+		for (loop_counter2 = 0; loop_counter2 <= width; loop_counter2++)
+		{
+			gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
+							priv->left_border_width + (priv->pixels_per_second >> 1) + (loop_counter2 * priv->pixels_per_second),
+							priv->top_border_height + (loop_counter * priv->row_height) - 3,
+							priv->left_border_width + (priv->pixels_per_second >> 1) + (loop_counter2 * priv->pixels_per_second),
+							priv->top_border_height + (loop_counter * priv->row_height));
+		}
+
+		// The solid rows
 		gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
 						0,
 						priv->top_border_height + (loop_counter * priv->row_height),
