@@ -48,7 +48,6 @@ gboolean draw_handle_box(void)
 	slide				*current_slide_data;		// Alias to make things easier
 	gint				height;
 	layer				*layer_data;
-	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
 	gint				onscreen_bottom;			// Y coordinate of bounding box bottom
 	gint				onscreen_left;				// X coordinate of bounding box left
 	gint				onscreen_right;				// X coordinate of bounding box right
@@ -70,10 +69,9 @@ gboolean draw_handle_box(void)
 
 	// Initialise some things
 	current_slide_data = current_slide->data;
-	list_widget = current_slide_data->timeline_widget;
 
 	// Determine which layer the user has selected in the timeline
-	selected_layer = time_line_get_selected_layer_num();
+	selected_layer = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
 
 	// Retrieve the dimensions of the selected object
 	current_slide_data->layers = g_list_first(current_slide_data->layers);

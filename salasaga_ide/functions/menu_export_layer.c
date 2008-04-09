@@ -45,7 +45,6 @@ void menu_export_layer(void)
 	GtkFileFilter		*file_filter;				// Filter for *.swf
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	GtkListStore		*list_pointer;				//
-	GtkWidget			*list_widget;				// Points to the timeline widget
 	gint				return_code_gbool;			// Catches the return code from the inner swf export function
 	guint				selected_row;				// Holds the row that is selected
 	slide				*slide_data;				// Pointer to current slide data
@@ -62,10 +61,9 @@ void menu_export_layer(void)
 	slide_data = (slide *) current_slide->data;
 	layer_pointer = slide_data->layers;
 	list_pointer = slide_data->layer_store;
-	list_widget = slide_data->timeline_widget;
 
 	// Determine which layer the user has selected in the timeline
-	selected_row = time_line_get_selected_layer_num();
+	selected_row = time_line_get_selected_layer_num(slide_data->timeline_widget);
 	this_layer = g_list_nth_data(layer_pointer, selected_row);
 
 	// Is the selected layer anything other than an image layer

@@ -53,7 +53,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	slide				*current_slide_data;		// Alias to make things easier
 	gint				height;
 	layer				*layer_data;
-	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
 	gint				mouse_x;
 	gint				mouse_y;
 	gint				onscreen_bottom;			// New Y coordinate of layer
@@ -139,10 +138,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	{
 		// Initialise some things
 		current_slide_data = current_slide->data;
-		list_widget = current_slide_data->timeline_widget;
 
 		// Determine which layer is selected in the timeline
-		selected_row = time_line_get_selected_layer_num();
+		selected_row = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
 
 		// Get its present X and Y offsets
 		current_slide_data->layers = g_list_first(current_slide_data->layers);
@@ -301,13 +299,12 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	{
 		// Initialise some things
 		current_slide_data = current_slide->data;
-		list_widget = current_slide_data->timeline_widget;
 
 		// Check for primary mouse button release
 		if (1 == event->button)
 		{
 			// Determine which layer is selected in the timeline
-			selected_row = time_line_get_selected_layer_num();
+			selected_row = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
 
 			// Get its present X and Y offsets
 			current_slide_data->layers = g_list_first(current_slide_data->layers);

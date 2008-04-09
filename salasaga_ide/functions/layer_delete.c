@@ -48,7 +48,6 @@ void layer_delete(void)
 	// Local variables
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	GtkListStore		*list_pointer;				//
-	GtkWidget			*list_widget;				// Points to the timeline widget
 	guint				num_layers;					// Number of layers
 	guint				selected_row;				// Holds the number of the row that is selected
 
@@ -68,13 +67,12 @@ void layer_delete(void)
 	// Initialise some variables
 	layer_pointer = ((slide *) current_slide->data)->layers;
 	list_pointer = ((slide *) current_slide->data)->layer_store;
-	list_widget = ((slide *) current_slide->data)->timeline_widget;
 
 	// Determine the number of layers present in this slide
 	num_layers = ((slide *) current_slide->data)->num_layers;
 
 	// Determine which layer the user has selected in the timeline
-	selected_row = time_line_get_selected_layer_num();
+	selected_row = time_line_get_selected_layer_num(((slide *) current_slide->data)->timeline_widget);
 
 	// If the background layer is selected, don't delete it
 	if (1 == (num_layers - selected_row))
@@ -95,7 +93,7 @@ void layer_delete(void)
 	((slide *) current_slide->data)->layers = layer_pointer;
 
 	// Select the row above in the Timeline widget
-	time_line_set_selected_layer_num(selected_row - 1);
+	time_line_set_selected_layer_num(((slide *) current_slide->data)->timeline_widget, selected_row - 1);
 
 	// Free the memory allocated to the layer
 	layer_free(tmp_layer);

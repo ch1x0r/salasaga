@@ -103,7 +103,7 @@ void layer_paste(void)
 	film_strip_create_thumbnail(slide_data);
 
 	// Select the new layer in the timeline widget
-	time_line_set_selected_layer_num(0);
+	time_line_set_selected_layer_num(slide_data->timeline_widget, 0);
 
 	// Set the changes made variable
 	changes_made = TRUE;

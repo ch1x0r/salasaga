@@ -52,7 +52,6 @@ void image_crop(void)
 	gint				dialog_result;				// Catches the return code from the dialog box
 
 	GList				*layer_pointer;				// Points to the layers in the selected slide
-	GtkWidget			*list_widget;				// Points to the timeline widget
 	gint				new_height;					// Hold the height of the cropped area
 	GdkPixbuf			*new_pixbuf;				// Holds the cropped image data
 	gint				new_width;					// Hold the width of the cropped area
@@ -84,12 +83,11 @@ void image_crop(void)
 
 	// Initialise some variables
 	layer_pointer = ((slide *) current_slide->data)->layers;
-	list_widget = ((slide *) current_slide->data)->timeline_widget;
 
 	// * Check if the selected layer is an image *
 
 	// Determine which layer the user has selected in the timeline
-	selected_row = time_line_get_selected_layer_num();
+	selected_row = time_line_get_selected_layer_num(((slide *) current_slide->data)->timeline_widget);
 	layer_pointer = g_list_first(layer_pointer);
 	this_layer = g_list_nth_data(layer_pointer, selected_row);
 

@@ -48,7 +48,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	slide				*current_slide_data;		// Alias to make things easier
 	gint				height;
 	layer				*layer_data;
-	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
 	GdkRectangle		mouse_pointer_rect;			// Rectangle holding the mouse pointer position
 	gint				mouse_x;					// Unscaled mouse x position
 	gint				mouse_y;					// Unscaled mouse x position
@@ -88,14 +87,13 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	{
 		// Initialise some things
 		current_slide_data = current_slide->data;
-		list_widget = current_slide_data->timeline_widget;
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
 		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
 		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
 
 		// Determine which layer is selected in the timeline
-		selected_row = time_line_get_selected_layer_num();
+		selected_row = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
 
 		// Get its present X and Y offsets
 		current_slide_data->layers = g_list_first(current_slide_data->layers);
@@ -206,14 +204,13 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	{
 		// Initialise some things
 		current_slide_data = current_slide->data;
-		list_widget = current_slide_data->timeline_widget;
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
 		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
 		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
 
 		// Determine which layer is selected in the timeline
-		selected_row = time_line_get_selected_layer_num();
+		selected_row = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
 
 		// Get its present X and Y offsets
 		current_slide_data->layers = g_list_first(current_slide_data->layers);

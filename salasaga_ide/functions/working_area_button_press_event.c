@@ -49,7 +49,6 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	GList				*collision_list = NULL;
 	guint				count_int;
 	slide				*current_slide_data;		// Alias to make things easier
-	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
 	guint				num_collisions;
 	gint				selected_row;				// Holds the number of the row that is selected
 	guint				tmp_int;					// Temporary integer
@@ -63,7 +62,6 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 
 	// Initialise some things
 	current_slide_data = current_slide->data;
-	list_widget = current_slide_data->timeline_widget;
 
 	// Check for primary mouse button click
 	if (1 != event->button)
@@ -112,7 +110,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	if (NULL == collision_list)
 	{
 		// If there was no collision, then select the background layer
-		time_line_set_selected_layer_to_bg();
+		time_line_set_selected_layer_to_bg(current_slide_data->timeline_widget);
 
 		// Clear any existing handle box
 		gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
@@ -136,7 +134,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	stored_y = event->y;
 
 	// Determine which layer the user has selected in the timeline
-	selected_row = time_line_get_selected_layer_num();
+	selected_row = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
 
 	// Is the presently selected layer in the collision list?
 	collision_list = g_list_first(collision_list);
@@ -159,7 +157,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	// The presently selected row is not in the collision list, so move the selection row to the first collision
 	collision_list = g_list_first(collision_list);
 	selected_row = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
-	time_line_set_selected_layer_num(selected_row);
+	time_line_set_selected_layer_num(current_slide_data->timeline_widget, selected_row);
 
 	// Draw a handle box around the new selected object
 	draw_handle_box();

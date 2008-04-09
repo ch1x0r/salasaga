@@ -65,7 +65,7 @@ void layer_move_up(void)
 	layer_pointer = g_list_first(layer_pointer);
 
 	// Determine which layer the user has selected in the timeline
-	selected_row = time_line_get_selected_layer_num();
+	selected_row = time_line_get_selected_layer_num(((slide *) current_slide->data)->timeline_widget);
 	if (0 == selected_row)
 	{
 		// We're already at the top of the list, so return

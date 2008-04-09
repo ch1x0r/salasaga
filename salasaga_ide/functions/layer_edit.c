@@ -55,7 +55,6 @@ void layer_edit(void)
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gfloat 				layer_total_time;			// Total length in time that a layer is displayed
 	GtkListStore		*list_pointer;				//
-	GtkWidget			*list_widget;				// Points to the timeline widget
 	guint				num_layers;					// Number of layers
 	gboolean			return_code;				// Did the edit dialog return ok?
 	guint				selected_row;				// Holds the row that is selected
@@ -76,14 +75,13 @@ void layer_edit(void)
 	slide_data = (slide *) current_slide->data;
 	layer_pointer = slide_data->layers;
 	list_pointer = slide_data->layer_store;
-	list_widget = slide_data->timeline_widget;
 
 	// Determine the number of layers present in this slide
 	layer_pointer = g_list_first(layer_pointer);
 	num_layers = slide_data->num_layers;
 
 	// Determine which layer the user has selected in the timeline
-	selected_row = time_line_get_selected_layer_num();
+	selected_row = time_line_get_selected_layer_num(slide_data->timeline_widget);
 	tmp_layer = g_list_nth_data(layer_pointer, selected_row);
 
 	// * Open a dialog box showing the existing values, asking for the new ones *

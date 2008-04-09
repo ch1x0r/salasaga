@@ -66,7 +66,7 @@ void layer_move_down(void)
 
 	// Determine which layer the user has selected in the timeline
 	num_layers = ((slide *) current_slide->data)->num_layers;
-	selected_row = time_line_get_selected_layer_num();
+	selected_row = time_line_get_selected_layer_num(((slide *) current_slide->data)->timeline_widget);
 	if (num_layers - 2 <= selected_row)
 	{
 		// We're already at the bottom of the list or the background layer is selected, so return
