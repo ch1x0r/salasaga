@@ -66,7 +66,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_row;				// Holds the number of the row that is selected
 	guint				swap_value;					// Temporary value used when swapping border positions
-	GtkTreePath			*tmp_path;					// Temporary path
 	gint				width;
 	gint				x_change;					// The X distance the layer object moves from start to finish 
 	gint				y_change;					// The Y distance the layer object moves from start to finish
