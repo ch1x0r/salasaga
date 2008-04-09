@@ -102,8 +102,6 @@ void layer_delete(void)
 	((slide *) current_slide->data)->num_layers--;
 
 	// Redraw the timeline area
-	gtk_widget_destroy(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget));
-	((slide *) current_slide->data)->timeline_widget = NULL;
 	draw_timeline();
 
 	// Redraw the workspace area

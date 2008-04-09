@@ -92,8 +92,6 @@ void layer_paste(void)
 	slide_data->num_layers++;
 
 	// Regenerate the timeline
-	gtk_widget_destroy(GTK_WIDGET(slide_data->timeline_widget));
-	slide_data->timeline_widget = NULL;
 	draw_timeline();
 
 	// Redraw the workspace

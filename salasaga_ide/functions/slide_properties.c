@@ -196,8 +196,6 @@ void slide_properties(void)
 	}
 
 	// Regenerate the timeline
-	gtk_widget_destroy(GTK_WIDGET(this_slide->timeline_widget));
-	this_slide->timeline_widget = NULL;
 	draw_timeline();
 
 	// Destroy the dialog box

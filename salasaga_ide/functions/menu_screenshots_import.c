@@ -373,8 +373,6 @@ void menu_screenshots_import(void)
 		gtk_tree_path_free(old_path);  // Free the old path
 
 	// Regenerate the timeline
-	gtk_widget_destroy(GTK_WIDGET(tmp_slide->timeline_widget));
-	tmp_slide->timeline_widget = NULL;
 	draw_timeline();
 
 	// Get the presently selected zoom level

@@ -167,8 +167,6 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 						-1);
 
 	// Regenerate the timeline
-	gtk_widget_destroy(GTK_WIDGET(slide_data->timeline_widget));
-	slide_data->timeline_widget = NULL;
 	draw_timeline();
 
 	// Redraw the workspace

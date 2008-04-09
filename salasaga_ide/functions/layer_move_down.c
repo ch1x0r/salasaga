@@ -87,8 +87,6 @@ void layer_move_down(void)
 	((slide *) current_slide->data)->layers = layer_pointer;
 
 	// Redraw the timeline area
-	gtk_widget_destroy(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget));
-	((slide *) current_slide->data)->timeline_widget = NULL;
 	draw_timeline();
 
 	// Move the row down one in the timeline widget

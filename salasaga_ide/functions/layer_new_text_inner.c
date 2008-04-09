@@ -111,8 +111,6 @@ void layer_new_text_inner(guint release_x, guint release_y)
 						-1);
 
 	// Regenerate the timeline
-	gtk_widget_destroy(GTK_WIDGET(slide_data->timeline_widget));
-	slide_data->timeline_widget = NULL;
 	draw_timeline();
 
 	// Redraw the workspace
