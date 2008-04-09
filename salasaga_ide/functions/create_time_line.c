@@ -81,8 +81,17 @@ GtkWidget *create_time_line(void)
 	time_line_container = gtk_viewport_new(NULL, NULL);
 	gtk_container_add(GTK_CONTAINER(time_line_scrolled_window), GTK_WIDGET(time_line_container));
 
-	// Add a signal handler to the time line area, letting us know when the time line area is clicked
+	// Add signal handlers to the time line area for receiving events (i.e. mouse clicks)
 	g_signal_connect(time_line_container, "button_release_event", G_CALLBACK(timeline_widget_button_release_event), NULL);
+	g_signal_connect(time_line_container, "button_press_event", G_CALLBACK(timeline_widget_button_press_event), NULL);
+
+	// Ensure we get the signals we want
+	gtk_widget_set_events(time_line_container, gtk_widget_get_events(time_line_container)
+		| GDK_LEAVE_NOTIFY_MASK
+		| GDK_BUTTON_PRESS_MASK
+		| GDK_BUTTON_RELEASE_MASK
+		| GDK_BUTTON1_MOTION_MASK
+		| GDK_POINTER_MOTION_HINT_MASK);
 
 	// Create the time line toolbar
 	time_line_toolbar = gtk_toolbar_new();
