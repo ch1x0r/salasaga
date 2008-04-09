@@ -39,6 +39,7 @@
 #include "calculate_object_boundaries.h"
 #include "detect_collisions.h"
 #include "draw_handle_box.h"
+#include "draw_timeline.h"
 #include "layer_edit.h"
 #include "widgets/time_line.h"
 
@@ -158,6 +159,9 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	collision_list = g_list_first(collision_list);
 	selected_row = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
 	time_line_set_selected_layer_num(current_slide_data->timeline_widget, selected_row);
+
+	// Redraw the timeline area
+	draw_timeline();
 
 	// Draw a handle box around the new selected object
 	draw_handle_box();
