@@ -116,13 +116,6 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	return TRUE;
 }
 
-// Function to set the presently selected timeline layer to the background one
-gboolean time_line_set_selected_layer_to_bg(GtkWidget *widget)
-{
-	// Stub function for now
-	return TRUE;
-}
-
 // Function to do the actual drawing of the timeline widget onscreen
 static gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 {
