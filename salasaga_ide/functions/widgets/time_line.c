@@ -34,6 +34,7 @@
 #include "../display_warning.h"
 #include "../draw_handle_box.h"
 #include "../draw_timeline.h"
+#include "../layer_edit.h"
 #include "time_line.h"
 
 // fixme2: Pulled these initial sizes out of the air, they should probably be revisited
@@ -655,7 +656,80 @@ GtkWidget* time_line_new()
 	return GTK_WIDGET(g_object_new(time_line_get_type(), NULL));
 }
 
+// Callback function for when the user presses the mouse button on the time line widget
+void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	// Local variables
+	gfloat				mouse_y;					// Used to determine the row clicked upon
+	TimeLinePrivate		*priv;
+	TimeLine			*this_time_line;
+	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
 
+
+	// Safety check
+	if (NULL == widget)
+	{
+		return;
+	}
+
+	// In this particular case, it's probably the child of the called widget that we need to get data from
+	if (FALSE == IS_TIME_LINE(widget))
+	{
+		tmp_glist = gtk_container_get_children(GTK_CONTAINER(widget));
+		if (NULL == tmp_glist)
+			return;
+		if (FALSE == IS_TIME_LINE(tmp_glist->data))
+		{
+			g_list_free(tmp_glist);
+			return;
+		}
+
+		// The child is the TimeLine widget
+		this_time_line = TIME_LINE(tmp_glist->data);
+	} else
+	{
+		// This is a time line widget
+		this_time_line = TIME_LINE(widget);		
+	}
+
+	// Check for primary mouse button
+	if (1 != event->button)
+	{
+		// Not a primary mouse, so we return
+		return;
+	}
+
+	// Check if this was a double mouse click.  If it was, open an edit dialog
+	if (GDK_2BUTTON_PRESS == event->type)
+	{
+		// Open an edit dialog
+		layer_edit();
+		return;
+	}
+
+	// Initialisation
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+
+	// Figure out which row the user has selected in the timeline area
+	mouse_y = floor((event->y - priv->top_border_height) / priv->row_height);
+
+	// Ensure the user clicked on a valid row
+	if (0 > mouse_y)
+		return;  // Too low, the user didn't click on a valid row
+	if (((slide *) current_slide->data)->num_layers <= mouse_y)
+		return;  // Too high, the user didn't click on a valid row
+
+	// The user clicked on a valid row, so update the selection
+	priv->selected_layer_num = mouse_y;
+
+	// Redraw the timeline area
+	draw_timeline();
+
+	// Draw a handle box around the newly selected row in the time line area
+	draw_handle_box();
+}
+
+// Callback function for when the user releases the mouse button on the time line widget
 void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
@@ -689,6 +763,13 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	{
 		// This is a time line widget
 		this_time_line = TIME_LINE(widget);		
+	}
+
+	// Check for primary mouse button
+	if (1 != event->button)
+	{
+		// Not a primary mouse, so return
+		return;
 	}
 
 	// Initialisation
