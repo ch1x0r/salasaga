@@ -153,12 +153,10 @@ OFILES = \
 	functions/calculate_object_boundaries.o \
 	functions/compress_layers.o \
 	functions/compress_layers_inner.o \
-	functions/construct_timeline_widget.o \
 	functions/create_film_strip.o \
 	functions/create_menu_bar.o \
 	functions/create_resolution_selector.o \
 	functions/create_time_line.o \
-	functions/create_timeline_slider.o \
 	functions/create_toolbar.o \
 	functions/create_working_area.o \
 	functions/create_zoom_selector.o \
@@ -238,7 +236,6 @@ OFILES = \
 	functions/project_read.o \
 	functions/quit_event.o \
 	functions/regenerate_film_strip_thumbnails.o \
-	functions/regenerate_timeline_duration_images.o \
 	functions/resolution_selector_changed.o \
 	functions/save_preferences_and_exit.o \
 	functions/slide_delete.o \
@@ -251,13 +248,6 @@ OFILES = \
 	functions/slide_name_reset.o \
 	functions/slide_properties.o \
 	functions/swf_shape_from_image_file.o \
-	functions/timeline_edited_name.o \
-	functions/timeline_edited_visibility.o \
-	functions/timeline_edited_x_offset_finish.o \
-	functions/timeline_edited_x_offset_start.o \
-	functions/timeline_edited_y_offset_finish.o \
-	functions/timeline_edited_y_offset_start.o \
-	functions/timeline_row_selected_event.o \
 	functions/uri_decode.o \
 	functions/uri_encode_base64.o \
 	functions/validate_value.o \
@@ -266,6 +256,7 @@ OFILES = \
 	functions/working_area_expose_event.o \
 	functions/working_area_motion_notify_event.o \
 	functions/zoom_selector_changed.o \
+	functions/widgets/time_line.o \
 	salasaga.o
 
 SOUNDS = \
@@ -288,9 +279,6 @@ compress_layers.o:
 compress_layers_inner.o:
 	$(CC) $(CFLAGS) -c compress_layers_inner.c -o compress_layers_inner.o
 
-construct_timeline_widget.o:
-	$(CC) $(CFLAGS) -c construct_timeline_widget.c -o construct_timeline_widget.o
-
 create_film_strip.o:
 	$(CC) $(CFLAGS) -c create_film_strip.c -o create_film_strip.o
 
@@ -302,9 +290,6 @@ create_resolution_selector.o:
 
 create_time_line.o:
 	$(CC) $(CFLAGS) -c create_time_line.c -o create_time_line.o
-
-create_timeline_slider.o:
-	$(CC) $(CFLAGS) -c create_timeline_slider.c -o create_timeline_slider.o
 
 create_toolbar.o:
 	$(CC) $(CFLAGS) -c create_toolbar.c -o create_toolbar.o
@@ -543,9 +528,6 @@ quit_event.o:
 regenerate_film_strip_thumbnails.o:
 	$(CC) $(CFLAGS) -c regenerate_film_strip_thumbnails.c -o regenerate_film_strip_thumbnails.o
 
-regenerate_timeline_duration_images.o:
-	$(CC) $(CFLAGS) -c regenerate_timeline_duration_images.c -o regenerate_timeline_duration_images.o
-
 resolution_selector_changed.o:
 	$(CC) $(CFLAGS) -c resolution_selector_changed.c -o resolution_selector_changed.o
 
@@ -582,27 +564,6 @@ slide_properties.o:
 swf_shape_from_image_file.o:
 	$(CC) $(CFLAGS) -c swf_shape_from_image_file.c -o swf_shape_from_image_file.o
 
-timeline_edited_name.o:
-	$(CC) $(CFLAGS) -c timeline_edited_name.c -o timeline_edited_name.o
-
-timeline_edited_visibility.o:
-	$(CC) $(CFLAGS) -c timeline_edited_visibility.c -o timeline_edited_visibility.o
-
-timeline_edited_x_offset_finish.o:
-	$(CC) $(CFLAGS) -c timeline_edited_x_offset_finish.c -o timeline_edited_x_offset_finish.o
-
-timeline_edited_x_offset_start.o:
-	$(CC) $(CFLAGS) -c timeline_edited_x_offset_start.c -o timeline_edited_x_offset_start.o
-
-timeline_edited_y_offset_finish.o:
-	$(CC) $(CFLAGS) -c timeline_edited_y_offset_finish.c -o timeline_edited_y_offset_finish.o
-
-timeline_edited_y_offset_start.o:
-	$(CC) $(CFLAGS) -c timeline_edited_y_offset_start.c -o timeline_edited_y_offset_start.o
-
-timeline_row_selected_event.o:
-	$(CC) $(CFLAGS) -c timeline_row_selected_event.c -o timeline_row_selected_event.o
-
 uri_decode.o:
 	$(CC) $(CFLAGS) -c uri_decode.c -o uri_decode.o
 
@@ -626,6 +587,9 @@ working_area_motion_notify_event.o:
 
 zoom_selector_changed.o:
 	$(CC) $(CFLAGS) -c zoom_selector_changed.c -o zoom_selector_changed.o
+
+widgets/time_line.o:
+	$(CC) $(CFLAGS) -c widgets/time_line.c -o widgets/time_line.o
 
 salasaga.o:
 	$(CC) $(CFLAGS) -c salasaga.c -o salasaga.o
