@@ -71,7 +71,6 @@ void layer_move_up(void)
 	{
 		// We're already at the top of the list, so return
 		gdk_beep();
-		display_warning("Error ED41: This layer is already at the top\n");
 		return;
 	}
 
@@ -92,11 +91,11 @@ void layer_move_up(void)
 	layer_pointer = g_list_insert_before(layer_pointer, above_layer, our_layer->data);
 	((slide *) current_slide->data)->layers = layer_pointer;
 
-	// Redraw the timeline area
-	draw_timeline();
-
 	// Move the row up one in the timeline widget
 	time_line_set_selected_layer_num(((slide *) current_slide->data)->timeline_widget, selected_row - 1);
+
+	// Redraw the timeline area
+	draw_timeline();
 
 	// Redraw the workspace
 	draw_workspace();

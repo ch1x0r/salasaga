@@ -72,7 +72,7 @@ void layer_move_down(void)
 	{
 		// We're already at the bottom of the list or the background layer is selected, so return
 		gdk_beep();
-		display_warning("Error ED40: This layer is already at the bottom\n");
+		display_warning("Error ED40: Layers can't be moved lower than the background");
 		return;
 	}
 
@@ -86,11 +86,11 @@ void layer_move_down(void)
 	layer_pointer = g_list_insert_before(layer_pointer, our_layer, below_layer->data);
 	((slide *) current_slide->data)->layers = layer_pointer;
 
-	// Redraw the timeline area
-	draw_timeline();
-
 	// Move the row down one in the timeline widget
 	time_line_set_selected_layer_num(((slide *) current_slide->data)->timeline_widget, selected_row + 1);
+
+	// Redraw the timeline area
+	draw_timeline();
 
 	// Redraw the workspace
 	draw_workspace();
