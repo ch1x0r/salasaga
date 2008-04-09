@@ -71,7 +71,6 @@ void image_crop(void)
 	GtkWidget			*bottom_label;				// Label widget
 	GtkWidget			*bottom_button;				//
 
-	GtkTreePath			*tmp_path;					// Temporary path
 	GdkPixbuf			*tmp_pixbuf;				// Temporary pixbuf
 
 
