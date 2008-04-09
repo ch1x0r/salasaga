@@ -37,6 +37,7 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
+#include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
 #include "widgets/time_line.h"
@@ -81,12 +82,17 @@ void layer_move_down(void)
 	below_layer = g_list_nth(layer_pointer, selected_row + 1);
 
 	// Move the row down one in the timeline widget
-	gtk_list_store_move_before(((slide *) current_slide->data)->layer_store, ((layer *) below_layer->data)->row_iter, ((layer *) our_layer->data)->row_iter);
+	time_line_set_selected_layer_num(((slide *) current_slide->data)->timeline_widget, selected_row + 1);
 
 	// Move the row down one in the layer list
 	tmp_glist = g_list_remove_link(layer_pointer, below_layer);
 	layer_pointer = g_list_insert_before(layer_pointer, our_layer, below_layer->data);
 	((slide *) current_slide->data)->layers = layer_pointer;
+
+	// Redraw the timeline area
+	gtk_widget_destroy(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget));
+	((slide *) current_slide->data)->timeline_widget = NULL;
+	draw_timeline();
 
 	// Redraw the workspace
 	draw_workspace();

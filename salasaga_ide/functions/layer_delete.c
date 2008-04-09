@@ -37,6 +37,7 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
+#include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
 #include "layer_free.h"
@@ -52,12 +53,11 @@ void layer_delete(void)
 	guint				selected_row;				// Holds the number of the row that is selected
 
 	gboolean			tmp_bool;					// Temporary boolean
-	GtkTreePath			*tmp_path;					// Temporary path
 	layer				*tmp_layer;					// Temporary layer
 
 
 	// If no project is loaded then don't run this function
-	if (NULL == current_slide)
+	if (FALSE == project_active)
 	{
 		// Make a beep, then return
 		gdk_beep();
@@ -79,7 +79,7 @@ void layer_delete(void)
 	{
 		// Give the user a warning, then return
 		gdk_beep();
-		display_warning("Error ED38: The background layer can not be deleted\n");
+		display_warning("Error ED38: The background layer can not be deleted");
 		return;
 	}
 
@@ -101,14 +101,16 @@ void layer_delete(void)
 	// Decrement the number of layers counter
 	((slide *) current_slide->data)->num_layers--;
 
+	// Redraw the timeline area
+	gtk_widget_destroy(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget));
+	((slide *) current_slide->data)->timeline_widget = NULL;
+	draw_timeline();
+
 	// Redraw the workspace area
 	draw_workspace();
 
 	// Recreate the slide thumbnail
 	film_strip_create_thumbnail((slide *) current_slide->data);
-
-	// Free the storage allocated by this function
-	gtk_tree_path_free(tmp_path);
 
 	// Set the changes made variable
 	changes_made = TRUE;
