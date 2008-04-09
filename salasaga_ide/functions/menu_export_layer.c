@@ -33,6 +33,7 @@
 #include "../externs.h"
 #include "display_warning.h"
 #include "validate_value.h"
+#include "widgets/time_line.h"
 
 
 void menu_export_layer(void)
@@ -50,7 +51,6 @@ void menu_export_layer(void)
 	slide				*slide_data;				// Pointer to current slide data
 	layer_image			*this_image_ob;				// Temporary image layer object
 	layer				*this_layer;				// Temporary layer
-	GtkTreePath			*this_path;					// Temporary path
 	gboolean			useable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
 	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
@@ -65,8 +65,7 @@ void menu_export_layer(void)
 	list_widget = slide_data->timeline_widget;
 
 	// Determine which layer the user has selected in the timeline
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &this_path, NULL);
-	selected_row = atoi(gtk_tree_path_to_string(this_path));
+	selected_row = time_line_get_selected_layer_num();
 	this_layer = g_list_nth_data(layer_pointer, selected_row);
 
 	// Is the selected layer anything other than an image layer
