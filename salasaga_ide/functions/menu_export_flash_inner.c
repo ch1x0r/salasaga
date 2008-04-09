@@ -141,9 +141,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 		this_slide_data = g_list_nth_data(slides, slide_counter);
 
 		// Add the number of layers in this slide to the total count
-		this_slide_data->layers = g_list_first(this_slide_data->layers);
-		num_layers = g_list_length(this_slide_data->layers);
-		total_num_layers += num_layers;
+		total_num_layers += this_slide_data->num_layers;
 	}
 
 	// Output some debugging info if requested
@@ -214,8 +212,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 		}
 
 		// Work out how many layers there are in this slide
-		this_slide_data->layers = g_list_first(this_slide_data->layers);
-		num_layers = g_list_length(this_slide_data->layers);
+		num_layers = this_slide_data->num_layers;
 
 		// * At this stage we should know both the number of frames (slide_duration) and number of layers (num_layers) in the slide *
 
