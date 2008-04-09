@@ -30,10 +30,6 @@ extern "C" {
 #endif // __cplusplus
 
 
-// Define a run time check that hasn't been added to GTK
-#define GTK_TYPE_TREE_ITER		(gtk_tree_iter_get_type ())
-#define GTK_TREE_ITER(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_ITER, GtkTreeIter))
-
 // * Define values used in the application *
 
 // Basic application constants
