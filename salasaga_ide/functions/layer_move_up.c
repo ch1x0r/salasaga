@@ -87,9 +87,6 @@ void layer_move_up(void)
 		return;
 	}
 
-	// Move the row up one in the timeline widget
-	time_line_set_selected_layer_num(((slide *) current_slide->data)->timeline_widget, selected_row - 1);
-
 	// Move the row up one in the layer list
 	tmp_glist = g_list_remove_link(layer_pointer, our_layer);
 	layer_pointer = g_list_insert_before(layer_pointer, above_layer, our_layer->data);
@@ -99,6 +96,9 @@ void layer_move_up(void)
 	gtk_widget_destroy(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget));
 	((slide *) current_slide->data)->timeline_widget = NULL;
 	draw_timeline();
+
+	// Move the row up one in the timeline widget
+	time_line_set_selected_layer_num(((slide *) current_slide->data)->timeline_widget, selected_row - 1);
 
 	// Redraw the workspace
 	draw_workspace();
