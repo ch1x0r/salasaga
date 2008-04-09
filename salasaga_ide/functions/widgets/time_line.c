@@ -394,7 +394,7 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	pango_layout_set_font_description(font_layout, font_description);
 	layer_pointer = ((slide *) current_slide->data)->layers;
 	layer_pointer = g_list_first(layer_pointer);
-	num_layers = g_list_length(layer_pointer);
+	num_layers = ((slide *) current_slide->data)->num_layers;
 	gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
 	for (loop_counter = 0; loop_counter < num_layers; loop_counter++)
 	{
