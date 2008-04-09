@@ -33,15 +33,15 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "display_warning.h"
 #include "widgets/time_line.h"
 
 
 void draw_timeline(void)
 {
 	// Local variables
+	gboolean			return_code_gbool;			// Receives boolean return code
 	slide				*slide_pointer;				// Points to the presently processing slide
-
-	GList				*tmp_glist;					// Temporary GList
 
 
 	// If the slide doesn't have a timeline widget constructed for it yet, then make one
@@ -50,22 +50,19 @@ void draw_timeline(void)
 	{
 		// Construct the widget used to display the slide in the timeline
 		slide_pointer->timeline_widget = time_line_new();
-	}
 
-	// Remove the present table from the timeline area, this will also reduce it's reference count by one
-	tmp_glist = gtk_container_get_children(GTK_CONTAINER(time_line_container));
-	if (NULL != tmp_glist)
+		// Add the timeline widget to the onscreen timeline area
+		gtk_container_add(GTK_CONTAINER(time_line_container), GTK_WIDGET(slide_pointer->timeline_widget));
+
+	} else
 	{
-		// Remove timeline widget from the container
-		gtk_container_remove(GTK_CONTAINER(time_line_container), GTK_WIDGET(tmp_glist->data));
+		// Regenerate the images in the time line
+		return_code_gbool = time_line_regenerate_images(slide_pointer->timeline_widget);
+		if (FALSE == return_code_gbool)
+			display_warning("Error ED359: Could not regenerate the time line images");
 	}
-
-	// Increase the reference count for the timeline widget, so it's not destroyed when this function is next called and it's removed
-	g_object_ref(slide_pointer->timeline_widget);
-
-	// Add the timeline widget to the onscreen timeline area
-	gtk_container_add(GTK_CONTAINER(time_line_container), GTK_WIDGET(slide_pointer->timeline_widget));
-
+	
 	// Show all of the widgets in the timeline
 	gtk_widget_show_all(GTK_WIDGET(time_line_container));
+	gdk_window_invalidate_rect(slide_pointer->timeline_widget->window, &slide_pointer->timeline_widget->allocation, TRUE);
 }
