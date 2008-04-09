@@ -68,7 +68,7 @@ void regenerate_timeline_duration_images(slide *target_slide)
 
 	// Create the duration slider images for the timeline area
 	layer_ptr = g_list_first(target_slide->layers);
-	num_layers = g_list_length(layer_ptr);
+	num_layers = target_slide->num_layers;
 	for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 	{
 		// Select the correct layer
