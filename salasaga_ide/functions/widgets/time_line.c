@@ -56,6 +56,7 @@ struct _TimeLinePrivate
 
 // * Internal function declarations *
 gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height);
+void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint width);
 
 
 // * Function definitions *
@@ -250,20 +251,53 @@ static void time_line_class_init(TimeLineClass *klass)
 	g_type_class_add_private(klass, sizeof(TimeLinePrivate));
 }
 
+// Function to highlight the layer in a specific row
+void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint width)
+{
+	// Local variables
+	GdkColor			colour_red = {0, 65535, 0, 0 };
+	gint8				dash_list[2] = { 3, 3 };
+	static GdkGC		*display_buffer_gc = NULL;
+	gint				selected_row;
+	gint				x1, y1, x2, y2;
+
+
+	// Create a graphic context for the display buffer image if we don't have one already
+	if (NULL == display_buffer_gc)
+	{
+		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
+	}
+
+	// Draw the selection
+	selected_row = priv->selected_layer_num;
+	x1 = 0;
+	y1 = priv->top_border_height + 1 + (selected_row * priv->row_height);
+	x2 = width - 1;
+	y2 = ((selected_row + 1) * priv->row_height) - 1;
+	gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_red);
+	gdk_gc_set_line_attributes(GDK_GC(display_buffer_gc), 1, GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
+	gdk_gc_set_dashes(GDK_GC(display_buffer_gc), 1, dash_list, 2);
+	gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), FALSE, x1, y1, x2, y2);
+}
+
 // Function to create the cached time line background image, and its display buffer 
 gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height)
 {
 	// Local variables
 	static GdkGC		*bg_image_gc = NULL;
-	GdkColor			colour_antique_white_2 = {0, (238 << 8), (223 << 8), (204 << 8) };  // 238, 223, 204
+	GdkColor			colour_antique_white_2 = {0, (238 << 8), (223 << 8), (204 << 8) };
 	GdkColor			colour_black = {0, 0, 0, 0 };
 	GdkColor			colour_fade = {0, (160 << 8), (160 << 8), (190 << 8) };
 	GdkColor			colour_fully_visible = {0, (200 << 8), (200 << 8), (230 << 8) };
-	GdkColor			colour_old_lace = {0, (253 << 8), (245 << 8), (230 << 8) };  // 253, 245, 230
-	GdkColor			colour_white = {0, 65535, 65535, 65535 };
+	GdkColor			colour_left_bg_first = {0, (255 << 8), (250 << 8), (240 << 8) };
+	GdkColor			colour_left_bg_second = {0, (253 << 8), (245 << 8), (230 << 8) };
+	GdkColor			colour_main_first = {0, 65535, 65535, 65535 };
+	GdkColor			colour_main_second = {0, 65000, 65000, 65000 };
+	GdkColor			colour_old_lace = {0, (253 << 8), (245 << 8), (230 << 8) };
 	GdkColormap			*colourmap = NULL;			// Colormap used for drawing
 	gint8				dash_list[2] = { 3, 3 };
 	static GdkGC		*display_buffer_gc = NULL;
+	gboolean			flip_flop = FALSE;			// Used to alternate between colours
 	PangoContext		*font_context;
 	PangoFontDescription  *font_description;
 	gint				font_height;
@@ -313,9 +347,6 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 		bg_image_gc = gdk_gc_new(GDK_DRAWABLE(priv->cached_bg_image));
 	}
 
-	// Initialise the background image to white
-	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_white);
-	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, 0, 0, width, height);
 
 	// * Draw initial objects on the background image *
 
@@ -324,6 +355,35 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, 0, 0, width, priv->top_border_height);
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
 	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), 0, priv->top_border_height, width, priv->top_border_height);
+
+	// Horizontal alternating background rows
+	loop_max = height / priv->row_height;
+	for (loop_counter = 0; loop_counter <= loop_max; loop_counter++)
+	{
+		if (TRUE == (flip_flop = !flip_flop))
+		{
+			// Background for left side
+			gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_left_bg_first);
+			gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE,
+								0, priv->top_border_height + 1 + (loop_counter * priv->row_height), priv->left_border_width, ((loop_counter + 1) * priv->row_height));
+
+			// Background for right side
+			gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_main_first);
+			gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE,
+								priv->left_border_width, priv->top_border_height + 1 + (loop_counter * priv->row_height), width, ((loop_counter + 1) * priv->row_height));
+		} else
+		{
+			// Alternative colour background for left side
+			gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_left_bg_second);
+			gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE,
+								0, priv->top_border_height + 1 + (loop_counter * priv->row_height), priv->left_border_width, ((loop_counter + 1) * priv->row_height));
+
+			// Alternative colour background for right side
+			gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_main_second);
+			gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE,
+								priv->left_border_width, priv->top_border_height + 1 + (loop_counter * priv->row_height), width, ((loop_counter + 1) * priv->row_height));
+		}
+	}
 
 	// Draw the seconds markings
 	font_description = pango_font_description_from_string("Sans, 10px");
@@ -446,7 +506,7 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 		layer_data = g_list_nth_data(layer_pointer, loop_counter);
 
 		layer_y = priv->top_border_height + (loop_counter * priv->row_height) + 2;
-		layer_height = priv->row_height - 4;
+		layer_height = priv->row_height - 3;
 
 		// Check if there's a fade in transition for this layer
 		if (TRANS_LAYER_FADE == layer_data->transition_in_type)
@@ -498,9 +558,10 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 					layer_width,
 					layer_height);
 		}
-
 	}
 
+	// Select the highlighted layer
+	time_line_internal_draw_selection_highlight(priv, width);
 
 	return TRUE;
 }
