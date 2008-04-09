@@ -529,7 +529,7 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	{
 		layer_data = g_list_nth_data(layer_pointer, loop_counter);
 		pango_layout_set_text(font_layout, layer_data->name->str, -1);
-		gdk_draw_layout(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), 5, (loop_counter + 1) * priv->row_height, font_layout);
+		gdk_draw_layout(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), 5, ((loop_counter + 1) * priv->row_height) - 2, font_layout);
 	}
 
 	// Draw the layer durations
