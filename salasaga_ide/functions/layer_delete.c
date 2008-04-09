@@ -71,8 +71,7 @@ void layer_delete(void)
 	list_widget = ((slide *) current_slide->data)->timeline_widget;
 
 	// Determine the number of layers present in this slide
-	layer_pointer = g_list_first(layer_pointer);
-	num_layers = g_list_length(layer_pointer);
+	num_layers = ((slide *) current_slide->data)->num_layers;
 
 	// Determine which layer the user has selected in the timeline
 	selected_row = time_line_get_selected_layer_num();
@@ -87,6 +86,7 @@ void layer_delete(void)
 	}
 
 	// Remove the layer from the Timeline widget
+	layer_pointer = g_list_first(layer_pointer);
 	tmp_layer = g_list_nth_data(layer_pointer, selected_row);
 	tmp_bool = gtk_list_store_remove(list_pointer, tmp_layer->row_iter);
 
@@ -99,6 +99,9 @@ void layer_delete(void)
 
 	// Free the memory allocated to the layer
 	layer_free(tmp_layer);
+
+	// Decrement the number of layers counter
+	((slide *) current_slide->data)->num_layers--;
 
 	// Redraw the workspace area
 	draw_workspace();
