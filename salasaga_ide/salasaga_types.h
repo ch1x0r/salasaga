@@ -311,7 +311,8 @@ typedef struct
 	GtkListStore		*layer_store;
 	gfloat				duration;
 	GdkPixbuf			*scaled_cached_pixbuf;
-	gboolean			cached_pixbuf_valid;	
+	gboolean			cached_pixbuf_valid;
+	gint				num_layers;
 } slide;
 
 // Defines the information needed for each element of the swf timing array
