@@ -226,8 +226,14 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	GdkColormap			*colourmap = NULL;			// Colormap used for drawing
 	gint8				dash_list[2] = { 3, 3 };
 	static GdkGC		*display_buffer_gc = NULL;
+	PangoContext		*font_context;
+	PangoFontDescription  *font_description;
+	PangoLayout			*font_layout;
+	layer				*layer_data;
+	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				loop_counter;				// Simple counter used in loops
 	gint				loop_counter2;				// Simple counter used in loops
+	gint				num_layers;					// The number of layers in the select slide
 
 
 	// If we already have a background image, we free it
@@ -353,6 +359,22 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 		0, 0,
 		0, 0,
 		width, height);
+
+	// Display the layer names
+	font_description = pango_font_description_from_string("Sans");
+	font_context = gdk_pango_context_get();
+	font_layout = pango_layout_new(font_context);
+	g_object_unref(font_context);
+	pango_layout_set_font_description(font_layout, font_description);
+	layer_pointer = ((slide *) current_slide->data)->layers;
+	layer_pointer = g_list_first(layer_pointer);
+	num_layers = g_list_length(layer_pointer);
+	for (loop_counter = 1; loop_counter < num_layers; loop_counter++)
+	{
+		layer_data = g_list_nth_data(layer_pointer, loop_counter);
+		pango_layout_set_text(font_layout, layer_data->name->str, -1);
+		gdk_draw_layout(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), 5, loop_counter * priv->row_height, font_layout);
+	}
 
 	return TRUE;
 }
