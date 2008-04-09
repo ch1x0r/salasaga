@@ -529,6 +529,7 @@ gboolean project_read(gchar *filename)
 										G_TYPE_UINT);  // TIMELINE_Y_OFF_FINISH
 			tmp_slide->scaled_cached_pixbuf = NULL;
 			tmp_slide->cached_pixbuf_valid = FALSE;
+			tmp_slide->num_layers = 0;
 
 			// Process each layer
 			this_layer = this_slide->xmlChildrenNode;
@@ -764,6 +765,7 @@ gboolean project_read(gchar *filename)
 
 								// Add this (now completed) empty layer to the slide
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+								tmp_slide->num_layers++;
 							}
 
 							// Test if this layer is an image layer
@@ -1202,6 +1204,7 @@ gboolean project_read(gchar *filename)
 
 								// Add this (now completed) image layer to the slide
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+								tmp_slide->num_layers++;
 							}
 
 							// Test if this layer is a highlight layer
@@ -1540,6 +1543,7 @@ gboolean project_read(gchar *filename)
 
 								// Add this (now completed) highlight layer to the slide
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+								tmp_slide->num_layers++;
 							}
 
 							// Test if this layer is a mouse pointer layer
@@ -1901,6 +1905,7 @@ gboolean project_read(gchar *filename)
 
 								// Add this (now completed) mouse pointer layer to the slide
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+								tmp_slide->num_layers++;
 							}
 
 							// Test if this layer is a text layer
@@ -2276,6 +2281,7 @@ gboolean project_read(gchar *filename)
 
 								// Add this (now completed) text layer to the slide
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+								tmp_slide->num_layers++;
 							}
 						}
 						layer_ptr = layer_ptr->next;
@@ -2424,8 +2430,7 @@ gboolean project_read(gchar *filename)
 		// As a workaround for potentially incorrectly saved (old) project files,
 		// we scan through all of the layers in each slide, setting the duration
 		// of background layers to match that of the slide
-		tmp_slide->layers = g_list_first(tmp_slide->layers);
-		num_layers = g_list_length(tmp_slide->layers);
+		num_layers = tmp_slide->num_layers;
 		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 		{
 			tmp_slide->layers = g_list_first(tmp_slide->layers);
