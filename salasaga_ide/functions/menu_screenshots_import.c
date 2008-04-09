@@ -214,6 +214,7 @@ void menu_screenshots_import(void)
 		tmp_slide->duration = default_slide_duration;
 		tmp_slide->scaled_cached_pixbuf = NULL;
 		tmp_slide->cached_pixbuf_valid = FALSE;
+		tmp_slide->num_layers = 1;
 
 		// Allocate a new layer structure for use in the slide
 		tmp_layer = g_new(layer, 1);
