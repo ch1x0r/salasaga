@@ -57,7 +57,7 @@ gboolean draw_handle_box(void)
 	guint				required_size_for_handles;	// Minimum size we need in order to draw any resize handles
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
-	guint				selected_layer;				// Holds the number of the layer that is selected
+	gint				selected_layer;				// Holds the number of the layer that is selected
 	gint				width;
 
 
@@ -72,6 +72,11 @@ gboolean draw_handle_box(void)
 
 	// Determine which layer the user has selected in the timeline
 	selected_layer = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
+	if (0 > selected_layer)
+	{
+		// If we're received an invalid layer number, we can't proceed
+		return TRUE;
+	}
 
 	// Retrieve the dimensions of the selected object
 	current_slide_data->layers = g_list_first(current_slide_data->layers);

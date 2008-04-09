@@ -46,13 +46,11 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	GString				*path_gstring;				// Holds the file selection path
 	GtkWidget			*path_widget;				// File selection widget
 	slide				*slide_data;				// Pointer to the data for the current slide
+	layer_image			*tmp_image_ob;				// Temporary image layer object
+	layer				*tmp_layer;					// Temporary layer
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
 	GString				*valid_image_path;			// Receives the new image path once validated
 	GString				*validated_string;			// Receives known good strings from the validation function
-
-	layer_image			*tmp_image_ob;				// Temporary image layer object
-	GtkTreeIter			*tmp_iter;					// Temporary iter
-	layer				*tmp_layer;					// Temporary layer
 
 
 	// If no project is loaded then don't run this function
@@ -176,20 +174,6 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	{
 		slide_data->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 	}
-
-	// Add the new layer to slide list store
-	tmp_iter = g_new(GtkTreeIter, 1);
-	tmp_layer->row_iter = tmp_iter;
-	gtk_list_store_prepend(slide_data->layer_store, tmp_iter);
-	gtk_list_store_set(slide_data->layer_store, tmp_iter,
-						TIMELINE_NAME, tmp_layer->name->str,
-						TIMELINE_VISIBILITY, TRUE,
-						TIMELINE_DURATION, NULL,
-						TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
-						TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
-						TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
-						TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
-						-1);
 
 	// Regenerate the timeline
 	draw_timeline();

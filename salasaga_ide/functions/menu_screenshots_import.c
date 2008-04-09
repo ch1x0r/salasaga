@@ -73,7 +73,6 @@ void menu_screenshots_import(void)
 	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
 	layer_image			*tmp_image_ob;				// Temporary image layer
 	gint				tmp_int = 0;				// Temporary integer
-	GtkTreeIter			*tmp_iter;					// Temporary GtkTreeIter
 	layer				*tmp_layer;					// Temporary layer
 	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
 	slide				*tmp_slide;					// Temporary slide
@@ -291,28 +290,6 @@ void menu_screenshots_import(void)
 
 		// Add the background layer to the new slide being created
 		tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
-
-		// Create the List store the slide layer data is kept in
-		tmp_iter = g_new(GtkTreeIter, 1);
-		tmp_layer->row_iter = tmp_iter;
-		tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
-									G_TYPE_STRING,  // TIMELINE_NAME
-									G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
-									GDK_TYPE_PIXBUF,  // TIMELINE_DURATION
-									G_TYPE_UINT,  // TIMELINE_X_OFF_START
-									G_TYPE_UINT,  // TIMELINE_Y_OFF_START
-									G_TYPE_UINT,  // TIMELINE_X_OFF_FINISH
-									G_TYPE_UINT);  // TIMELINE_Y_OFF_FINISH
-		gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
-		gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
-						TIMELINE_NAME, tmp_layer->name->str,
-						TIMELINE_VISIBILITY, TRUE,
-						TIMELINE_DURATION, NULL,
-						TIMELINE_X_OFF_START, 0,
-						TIMELINE_Y_OFF_START, 0,
-						TIMELINE_X_OFF_FINISH, 0,
-						TIMELINE_Y_OFF_FINISH, 0,
-						-1);
 
 		// Add the thumbnail to the new slide structure
 		tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(tmp_gdk_pixbuf));

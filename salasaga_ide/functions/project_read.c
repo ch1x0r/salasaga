@@ -112,7 +112,6 @@ gboolean project_read(gchar *filename)
 	layer_highlight		*tmp_highlight_ob;			// Temporary highlight layer object
 	layer_image			*tmp_image_ob;				// Temporary image layer object
 	gint				tmp_int;					// Temporary integer
-	GtkTreeIter			*tmp_iter;					// Temporary GtkTreeIter
 	layer				*tmp_layer;					// Temporary layer
 	layer_mouse			*tmp_mouse_ob;				// Temporary mouse layer object
 	GdkPixbuf			*tmp_pixbuf;				//
@@ -519,14 +518,6 @@ gboolean project_read(gchar *filename)
 			tmp_slide = g_new0(slide, 1);
 			tmp_slide->layers = NULL;
 			tmp_slide->duration = default_slide_duration;
-			tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
-										G_TYPE_STRING,  // TIMELINE_NAME
-										G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
-										GDK_TYPE_PIXBUF,  // TIMELINE_DURATION
-										G_TYPE_UINT,  // TIMELINE_X_OFF_START
-										G_TYPE_UINT,  // TIMELINE_Y_OFF_START
-										G_TYPE_UINT,  // TIMELINE_X_OFF_FINISH
-										G_TYPE_UINT);  // TIMELINE_Y_OFF_FINISH
 			tmp_slide->scaled_cached_pixbuf = NULL;
 			tmp_slide->cached_pixbuf_valid = FALSE;
 			tmp_slide->num_layers = 0;
@@ -748,20 +739,6 @@ gboolean project_read(gchar *filename)
 								{
 									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 								}
-
-								// Add the layer to the slide list store
-								tmp_iter = g_new0(GtkTreeIter, 1);
-								tmp_layer->row_iter = tmp_iter;
-								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
-								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
-										TIMELINE_NAME, tmp_layer->name->str,
-										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_DURATION, NULL,
-										TIMELINE_X_OFF_START, NULL,
-										TIMELINE_Y_OFF_START, NULL,
-										TIMELINE_X_OFF_FINISH, NULL,
-										TIMELINE_Y_OFF_FINISH, NULL,
-										-1);
 
 								// Add this (now completed) empty layer to the slide
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
@@ -1188,20 +1165,6 @@ gboolean project_read(gchar *filename)
 									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 								}
 
-								// Add the layer to the slide list store
-								tmp_iter = g_new0(GtkTreeIter, 1);
-								tmp_layer->row_iter = tmp_iter;
-								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
-								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
-										TIMELINE_NAME, tmp_layer->name->str,
-										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_DURATION, NULL,
-										TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
-										TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
-										TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
-										TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
-										-1);
-
 								// Add this (now completed) image layer to the slide
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
 								tmp_slide->num_layers++;
@@ -1526,20 +1489,6 @@ gboolean project_read(gchar *filename)
 								{
 									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 								}
-
-								// Add the layer to the slide list store
-								tmp_iter = g_new0(GtkTreeIter, 1);
-								tmp_layer->row_iter = tmp_iter;
-								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
-								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
-										TIMELINE_NAME, tmp_layer->name->str,
-										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_DURATION, NULL,
-										TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
-										TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
-										TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
-										TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
-										-1);
 
 								// Add this (now completed) highlight layer to the slide
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
@@ -1888,20 +1837,6 @@ gboolean project_read(gchar *filename)
 								{
 									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 								}
-
-								// Add the layer to the slide list store
-								tmp_iter = g_new0(GtkTreeIter, 1);
-								tmp_layer->row_iter = tmp_iter;
-								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
-								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
-										TIMELINE_NAME, tmp_layer->name->str,
-										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_DURATION, NULL,
-										TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
-										TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
-										TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
-										TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
-										-1);
 
 								// Add this (now completed) mouse pointer layer to the slide
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
@@ -2264,20 +2199,6 @@ gboolean project_read(gchar *filename)
 								{
 									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 								}
-
-								// Add the layer to the slide list store
-								tmp_iter = g_new0(GtkTreeIter, 1);
-								tmp_layer->row_iter = tmp_iter;
-								gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
-								gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
-										TIMELINE_NAME, tmp_layer->name->str,
-										TIMELINE_VISIBILITY, TRUE,
-										TIMELINE_DURATION, NULL,
-										TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
-										TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
-										TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
-										TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
-										-1);
 
 								// Add this (now completed) text layer to the slide
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);

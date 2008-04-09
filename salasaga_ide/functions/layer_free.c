@@ -39,8 +39,6 @@ gboolean layer_free(layer *this_layer)
 	// Free the easy variables first
 	if (NULL != this_layer->name)
 		g_string_free(this_layer->name, TRUE);
-	if (NULL != this_layer->row_iter)
-		g_free(this_layer->row_iter);
 	if (NULL != this_layer->external_link)
 		g_string_free(this_layer->external_link, TRUE);
 	if (NULL != this_layer->external_link_window)

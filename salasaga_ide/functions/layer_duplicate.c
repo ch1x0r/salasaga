@@ -60,7 +60,6 @@ layer *layer_duplicate(layer *source_layer)
 	new_layer->x_offset_finish = source_layer->x_offset_finish;
 	new_layer->visible = source_layer->visible;
 	new_layer->background = FALSE;  // Not a background layer when copied
-	new_layer->row_iter = NULL;  // Should get set by the paste function
 	new_layer->external_link = g_string_new(source_layer->external_link->str);
 	new_layer->external_link_window = g_string_new(source_layer->external_link_window->str);
 	new_layer->dictionary_shape = NULL;

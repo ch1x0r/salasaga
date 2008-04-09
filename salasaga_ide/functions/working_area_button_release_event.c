@@ -261,16 +261,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		// Bounds check the finishing y offset, then update the object with the new value
 		layer_data->y_offset_finish = CLAMP(onscreen_top + y_change, 1, project_height - height - 2);
 
-		// Update the timeline widget with the new offsets
-		gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-							TIMELINE_X_OFF_START, layer_data->x_offset_start, -1);
-		gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-							TIMELINE_Y_OFF_START, layer_data->y_offset_start, -1);
-		gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-							TIMELINE_X_OFF_FINISH, layer_data->x_offset_finish, -1);
-		gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-							TIMELINE_Y_OFF_FINISH, layer_data->y_offset_finish, -1);
-
 		// Redraw the workspace
 		draw_workspace();
 
@@ -373,16 +363,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 			// Bounds check the finishing y offset, then update the object with the new value
 			layer_data->y_offset_finish = CLAMP(layer_data->y_offset_finish + y_diff, 1, project_height - height - 2);
-
-			// Update the timeline widget with the new offsets
-			gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-								TIMELINE_X_OFF_START, layer_data->x_offset_start, -1);
-			gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-								TIMELINE_Y_OFF_START, layer_data->y_offset_start, -1);
-			gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-								TIMELINE_X_OFF_FINISH, layer_data->x_offset_finish, -1);
-			gtk_list_store_set(((slide *) current_slide->data)->layer_store, layer_data->row_iter,
-								TIMELINE_Y_OFF_FINISH, layer_data->y_offset_finish, -1);
 
 			// Redraw the workspace
 			draw_workspace();

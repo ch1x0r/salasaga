@@ -248,7 +248,6 @@ typedef struct
 	gint				x_offset_finish;
 	gint				y_offset_finish;
 	gboolean			visible;					// Is this layer visible or not?
-	GtkTreeIter			*row_iter;
 	GString				*external_link;
 	GString				*external_link_window;		// Name of the target window to load the external link in. Defaults to _self for swf.
 	void				*dictionary_shape;			// SWF dictionary shape
@@ -308,7 +307,6 @@ typedef struct
 	GList				*layers;
 	GString				*name;
 	GtkWidget			*timeline_widget;
-	GtkListStore		*layer_store;
 	gfloat				duration;
 	GdkPixbuf			*scaled_cached_pixbuf;
 	gboolean			cached_pixbuf_valid;

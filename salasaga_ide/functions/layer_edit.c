@@ -54,12 +54,10 @@ void layer_edit(void)
 	// Local variables
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gfloat 				layer_total_time;			// Total length in time that a layer is displayed
-	GtkListStore		*list_pointer;				//
 	guint				num_layers;					// Number of layers
 	gboolean			return_code;				// Did the edit dialog return ok?
 	guint				selected_row;				// Holds the row that is selected
 	slide				*slide_data;				// Pointer to current slide data
-	GtkTreeIter			*tmp_iter;					// Temporary iter
 	layer				*tmp_layer;					// Temporary layer
 
 
@@ -74,7 +72,6 @@ void layer_edit(void)
 	// Initialise some variables
 	slide_data = (slide *) current_slide->data;
 	layer_pointer = slide_data->layers;
-	list_pointer = slide_data->layer_store;
 
 	// Determine the number of layers present in this slide
 	layer_pointer = g_list_first(layer_pointer);
@@ -108,15 +105,6 @@ void layer_edit(void)
 				{
 					slide_data->duration = layer_total_time;
 				}
-
-				// Update the slide list store with the new values
-				tmp_iter = tmp_layer->row_iter;
-				gtk_list_store_set(list_pointer, tmp_iter,
-							TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
-							TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
-							TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
-							TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
-							-1);
 			}
 			break;
 
@@ -133,15 +121,6 @@ void layer_edit(void)
 				{
 					slide_data->duration = layer_total_time;
 				}
-
-				// Update the slide list store with the new values
-				tmp_iter = tmp_layer->row_iter;
-				gtk_list_store_set(list_pointer, tmp_iter,
-							TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
-							TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
-							TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
-							TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
-							-1);
 			}
 			break;
 
@@ -159,16 +138,6 @@ void layer_edit(void)
 				{
 					slide_data->duration = layer_total_time;
 				}
-
-				// Update the slide list store with the new values
-				tmp_iter = tmp_layer->row_iter;
-				gtk_list_store_set(list_pointer, tmp_iter,
-							TIMELINE_NAME, tmp_layer->name->str,
-							TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
-							TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
-							TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
-							TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
-							-1);
 			}
 			break;
 
@@ -186,15 +155,6 @@ void layer_edit(void)
 				{
 					slide_data->duration = layer_total_time;
 				}
-
-				// Update the slide list store with the new values
-				tmp_iter = tmp_layer->row_iter;
-				gtk_list_store_set(list_pointer, tmp_iter,
-							TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
-							TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
-							TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
-							TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
-							-1);
 			}
 			break;
 

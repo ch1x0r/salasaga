@@ -39,8 +39,6 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	// Local variables
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	slide				*slide_data;				// Pointer to the data for the current slide
-
-	GtkTreeIter			*tmp_iter;					// Temporary iter
 	layer				*tmp_layer;					// Temporary layer
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 
@@ -95,20 +93,6 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	layer_pointer = g_list_first(layer_pointer);
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
 	slide_data->num_layers++;
-
-	// Add the new text layer to slide list store
-	tmp_iter = g_new(GtkTreeIter, 1);
-	tmp_layer->row_iter = tmp_iter;
-	gtk_list_store_prepend(slide_data->layer_store, tmp_iter);
-	gtk_list_store_set(slide_data->layer_store, tmp_iter,
-						TIMELINE_NAME, tmp_layer->name->str,
-						TIMELINE_VISIBILITY, TRUE,
-						TIMELINE_DURATION, NULL,
-						TIMELINE_X_OFF_START, tmp_layer->x_offset_start,
-						TIMELINE_Y_OFF_START, tmp_layer->y_offset_start,
-						TIMELINE_X_OFF_FINISH, tmp_layer->x_offset_finish,
-						TIMELINE_Y_OFF_FINISH, tmp_layer->y_offset_finish,
-						-1);
 
 	// Regenerate the timeline
 	draw_timeline();

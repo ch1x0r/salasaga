@@ -53,8 +53,6 @@ void slide_free(gpointer element, gpointer user_data)
 		gtk_object_destroy(GTK_OBJECT(slide_data->thumbnail));
 	if (NULL != slide_data->name)
 		g_string_free(slide_data->name, TRUE);
-	if (NULL != slide_data->layer_store)
-		g_object_unref(GTK_LIST_STORE(slide_data->layer_store));
 	if (NULL != slide_data->timeline_widget)
 		gtk_object_destroy(GTK_OBJECT(slide_data->timeline_widget));
 

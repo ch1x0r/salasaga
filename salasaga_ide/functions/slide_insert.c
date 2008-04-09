@@ -43,7 +43,6 @@ void slide_insert(void)
 	GdkPixbuf			*layer_pixbuf;				// Pointer used when creating duration images for layers
 
 	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
-	GtkTreeIter			*tmp_iter;					// Temporary GtkTreeIter
 	layer				*tmp_layer;					// Temporary layer
 	slide				*tmp_slide;					// Temporary slide
 
@@ -98,28 +97,6 @@ void slide_insert(void)
 						0,			// Transition in width
 						180,		// Displayed width
 						0);			// Transition out width
-
-	// Create the List store the slide layer data is kept in
-	tmp_iter = g_new(GtkTreeIter, 1);
-	tmp_layer->row_iter = tmp_iter;
-	tmp_slide->layer_store = gtk_list_store_new(TIMELINE_N_COLUMNS,  // TIMELINE_N_COLUMNS
-									G_TYPE_STRING,  // TIMELINE_NAME
-									G_TYPE_BOOLEAN,  // TIMELINE_VISIBILITY
-									GDK_TYPE_PIXBUF,  // TIMELINE_DURATION
-									G_TYPE_UINT,  // TIMELINE_X_OFF_START
-									G_TYPE_UINT,  // TIMELINE_Y_OFF_START
-									G_TYPE_UINT,  // TIMELINE_X_OFF_FINISH
-									G_TYPE_UINT);  // TIMELINE_Y_OFF_FINISH
-	gtk_list_store_append(tmp_slide->layer_store, tmp_iter);
-	gtk_list_store_set(tmp_slide->layer_store, tmp_iter,
-					TIMELINE_NAME, tmp_layer->name->str,
-					TIMELINE_VISIBILITY, TRUE,
-					TIMELINE_DURATION, layer_pixbuf,
-					TIMELINE_X_OFF_START, 0,
-					TIMELINE_Y_OFF_START, 0,
-					TIMELINE_X_OFF_FINISH, 0,
-					TIMELINE_Y_OFF_FINISH, 0,
-					-1);
 
 	// Add the thumbnail to the new slide structure
 	tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(tmp_gdk_pixbuf));

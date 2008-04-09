@@ -48,11 +48,8 @@ void layer_delete(void)
 {
 	// Local variables
 	GList				*layer_pointer;				// Points to the layers in the selected slide
-	GtkListStore		*list_pointer;				//
 	guint				num_layers;					// Number of layers
 	guint				selected_row;				// Holds the number of the row that is selected
-
-	gboolean			tmp_bool;					// Temporary boolean
 	layer				*tmp_layer;					// Temporary layer
 
 
@@ -66,7 +63,6 @@ void layer_delete(void)
 
 	// Initialise some variables
 	layer_pointer = ((slide *) current_slide->data)->layers;
-	list_pointer = ((slide *) current_slide->data)->layer_store;
 
 	// Determine the number of layers present in this slide
 	num_layers = ((slide *) current_slide->data)->num_layers;
@@ -86,7 +82,6 @@ void layer_delete(void)
 	// Remove the layer from the Timeline widget
 	layer_pointer = g_list_first(layer_pointer);
 	tmp_layer = g_list_nth_data(layer_pointer, selected_row);
-	tmp_bool = gtk_list_store_remove(list_pointer, tmp_layer->row_iter);
 
 	// Remove the layer from the layer structure
 	layer_pointer = g_list_remove(layer_pointer, tmp_layer);

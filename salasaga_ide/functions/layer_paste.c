@@ -39,7 +39,6 @@ void layer_paste(void)
 {
 	// Local variables
 	GList				*layer_pointer;				// Points to the layers in the selected slide
-	GtkTreeIter			*new_iter;					// New iter
 	layer				*new_layer;					// Newly created layer
 	slide				*slide_data;				// Pointer to the data for the current slide
 
@@ -73,20 +72,6 @@ void layer_paste(void)
 	{
 		slide_data->duration = new_layer->start_time + new_layer->duration + new_layer->transition_in_duration + new_layer->transition_out_duration;
 	}
-
-	// Add the new layer to slide list store
-	new_iter = g_new0(GtkTreeIter, 1);
-	new_layer->row_iter = new_iter;
-	gtk_list_store_prepend(slide_data->layer_store, new_iter);
-	gtk_list_store_set(slide_data->layer_store, new_iter,
-						TIMELINE_NAME, new_layer->name->str,
-						TIMELINE_VISIBILITY, new_layer->visible,
-						TIMELINE_DURATION, NULL,
-						TIMELINE_X_OFF_START, new_layer->x_offset_start,
-						TIMELINE_Y_OFF_START, new_layer->y_offset_start,
-						TIMELINE_X_OFF_FINISH, new_layer->x_offset_finish,
-						TIMELINE_Y_OFF_FINISH, new_layer->y_offset_finish,
-						-1);
 
 	// Increase the layer counter for the slide
 	slide_data->num_layers++;
