@@ -51,32 +51,31 @@ void draw_timeline(void)
 	{
 		// Construct the widget used to display the slide in the timeline
 		slide_pointer->timeline_widget = time_line_new();
-
-		// Check if the timeline area already has children
-		tmp_glist = gtk_container_get_children(GTK_CONTAINER(time_line_container));
-		if (NULL != tmp_glist)
-		{
-			// Increase the reference count for the timeline widget, so it's not destroyed when it's removed from the container
-			g_object_ref(GTK_WIDGET(tmp_glist->data));
-
-			// Remove timeline widget from the container
-			gtk_container_remove(GTK_CONTAINER(time_line_container), GTK_WIDGET(tmp_glist->data));
-		}
-		g_list_free(tmp_glist);
-
-		// Add the timeline widget to the onscreen timeline area
-		gtk_container_add(GTK_CONTAINER(time_line_container), GTK_WIDGET(slide_pointer->timeline_widget));
-
 	} else
 	{
-		// Regenerate the images in the time line
+		// This slide already has a widget, so regenerate the images in it
 		return_code_gbool = time_line_regenerate_images(slide_pointer->timeline_widget);
 		if (FALSE == return_code_gbool)
 			display_warning("Error ED359: Could not regenerate the time line images");
 	}
-	
+
+	// Check if the timeline area already has children
+	tmp_glist = gtk_container_get_children(GTK_CONTAINER(time_line_container));
+	if (NULL != tmp_glist)
+	{
+		// Increase the reference count for the timeline widget, so it's not destroyed when it's removed from the container
+		g_object_ref(GTK_WIDGET(tmp_glist->data));
+
+		// Remove timeline widget from the container
+		gtk_container_remove(GTK_CONTAINER(time_line_container), GTK_WIDGET(tmp_glist->data));
+	}
+	g_list_free(tmp_glist);
+
+	// Add the timeline widget to the onscreen timeline area
+	gtk_container_add(GTK_CONTAINER(time_line_container), GTK_WIDGET(slide_pointer->timeline_widget));
+
 	// Show all of the widgets in the timeline
 	gtk_widget_show_all(GTK_WIDGET(time_line_container));
-	if (NULL != slide_pointer->timeline_widget->window)
-		gdk_window_invalidate_rect(slide_pointer->timeline_widget->window, &slide_pointer->timeline_widget->allocation, TRUE);
+	if (NULL != GTK_WIDGET(time_line_container)->window)
+		gdk_window_invalidate_rect(GTK_WIDGET(time_line_container)->window, &GTK_WIDGET(time_line_container)->allocation, TRUE);
 }
