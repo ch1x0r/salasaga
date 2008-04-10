@@ -73,9 +73,8 @@ void layer_delete(void)
 	// If the background layer is selected, don't delete it
 	if (1 == (num_layers - selected_row))
 	{
-		// Give the user a warning, then return
+		// Give the user a warning beep, then return
 		gdk_beep();
-		display_warning("Error ED38: The background layer can not be deleted");
 		return;
 	}
 
