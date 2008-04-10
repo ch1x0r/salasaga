@@ -62,6 +62,7 @@ struct _TimeLinePrivate
 
 // * Internal function declarations *
 gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height);
+gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint width, gint height);
 void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint width);
 
 
@@ -99,8 +100,11 @@ gint time_line_get_selected_layer_num(GtkWidget *widget)
 gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 {
 	// Local variables
+	static GdkGC		*display_buffer_gc = NULL;
+	gint				height;
 	TimeLinePrivate		*priv;
 	TimeLine			*this_time_line;
+	gint				width;
 
 
 	// Safety check
@@ -117,8 +121,54 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	this_time_line = TIME_LINE(widget);
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
+	// Ensure we have at least the minimum required widget size
+	if (WIDGET_MINIMUM_HEIGHT > GTK_WIDGET(widget)->allocation.height)
+	{
+		height = WIDGET_MINIMUM_HEIGHT;
+	} else
+	{
+		height = GTK_WIDGET(widget)->allocation.height;
+	}
+	if (WIDGET_MINIMUM_WIDTH > GTK_WIDGET(widget)->allocation.width)
+	{
+		width = WIDGET_MINIMUM_WIDTH;
+	} else
+	{
+		width = GTK_WIDGET(widget)->allocation.width;
+	}
+
+	// * Restore the background around the existing selection box *
+
+	// Ensure the background image we're about to use is valid
+	if (TRUE != priv->cached_bg_valid)
+	{
+		// It's not, so recreate the timeline background image and display buffer at the new size
+		time_line_internal_create_images(priv, width, height);
+	}
+
+	// Create a graphic context for the display buffer image if we don't have one already
+	if (NULL == display_buffer_gc)
+	{
+		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
+	}
+
+	// Copy the timeline background image to the display buffer
+//fixme2: Needs to be 4 instances, 2 each covering the vertical and horizontal lines 
+	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
+		GDK_PIXMAP(priv->cached_bg_image),
+		0, 0,
+		0, 0,
+		width, height);
+
 	// Set the internal variable, as requested
 	priv->selected_layer_num = selected_row;
+
+	// Draw a selection box around the newly selected layer
+	time_line_internal_draw_selection_highlight(priv, width);
+
+	// Have the time line area redrawn
+//fixme2: This can be reduced to just the changed area
+//	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &(GTK_WIDGET(widget)->allocation), TRUE);
 
 	return TRUE;
 }
@@ -127,9 +177,11 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 static gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 {
 	// Local variables
+	gint				height;
 	TimeLinePrivate		*priv;
 	static GdkGC		*this_gc = NULL;
 	TimeLine			*this_time_line;
+	gint				width;
 
 
 	// Safety check
@@ -140,16 +192,36 @@ static gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 	this_time_line = TIME_LINE(widget);
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
+	// Ensure we have at least the minimum required widget size
+	if (WIDGET_MINIMUM_HEIGHT > GTK_WIDGET(widget)->allocation.height)
+	{
+		height = WIDGET_MINIMUM_HEIGHT;
+	} else
+	{
+		height = GTK_WIDGET(widget)->allocation.height;
+	}
+	if (WIDGET_MINIMUM_WIDTH > GTK_WIDGET(widget)->allocation.width)
+	{
+		width = WIDGET_MINIMUM_WIDTH;
+	} else
+	{
+		width = GTK_WIDGET(widget)->allocation.width;
+	}
+
 	// Ensure we have a display buffer to refresh from
 	if (NULL == priv->display_buffer)
 	{
-		return TRUE;
+		// Draw the layer information
+		time_line_internal_draw_layer_info(priv, width, height);
+
+		// Highlight the selected row
+		time_line_internal_draw_selection_highlight(priv, width);
 	}
 
 	// Create a graphic context if we don't have one already
 	if (NULL == this_gc)
 	{
-		this_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
+		this_gc = gdk_gc_new(GDK_DRAWABLE(widget->window));
 	}
 
 	// Refresh the invalidated area from the local cached version
@@ -205,8 +277,10 @@ static void time_line_realise(GtkWidget *widget)
 static void time_line_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
 {
 	// Local variables
+	gint				height;
 	TimeLinePrivate		*priv;
 	TimeLine			*this_time_line;
+	gint				width;
 
 
 	// Safety check
@@ -217,14 +291,36 @@ static void time_line_size_allocate(GtkWidget *widget, GtkAllocation *allocation
 	this_time_line = TIME_LINE(widget);
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
-	// Re-create the timeline background image and display buffer at the new size
-	time_line_internal_create_images(priv, allocation->width, allocation->height);
+	// Ensure we have at least the minimum required widget size
+	if (WIDGET_MINIMUM_HEIGHT > allocation->height)
+	{
+		height = WIDGET_MINIMUM_HEIGHT;
+	} else
+	{
+		height = allocation->height;
+	}
+	if (WIDGET_MINIMUM_WIDTH > allocation->width)
+	{
+		width = WIDGET_MINIMUM_WIDTH;
+	} else
+	{
+		width = allocation->width;
+	}
+
+	// Create the background buffer
+	time_line_internal_create_images(priv, width, height);
+
+	// Draw the layer information
+	time_line_internal_draw_layer_info(priv, width, height);
+
+	// Highlight the selected row
+	time_line_internal_draw_selection_highlight(priv, width);
 
 	// Set the widget position and size
 	widget->allocation = *allocation;
 	if (GTK_WIDGET_REALIZED(widget))
 	{
-		gdk_window_move_resize(widget->window, allocation->x, allocation->y, allocation->width, allocation->height);
+		gdk_window_move_resize(widget->window, allocation->x, allocation->y, width, height);
 	}
 }
 
@@ -261,8 +357,10 @@ static void time_line_class_init(TimeLineClass *klass)
 gboolean time_line_regenerate_images(GtkWidget *widget)
 {
 	// Local variables
+	gint				height;
 	TimeLinePrivate		*priv;
 	TimeLine			*this_time_line;
+	gint				width;
 
 
 	// Safety check
@@ -279,8 +377,33 @@ gboolean time_line_regenerate_images(GtkWidget *widget)
 	this_time_line = TIME_LINE(widget);
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
-	// Re-create the timeline background image and display buffer at the new size
-	time_line_internal_create_images(priv, GTK_WIDGET(widget)->allocation.width, GTK_WIDGET(widget)->allocation.height);
+	// Ensure we have at least the minimum required widget size
+	if (WIDGET_MINIMUM_HEIGHT > GTK_WIDGET(widget)->allocation.height)
+	{
+		height = WIDGET_MINIMUM_HEIGHT;
+	} else
+	{
+		height = GTK_WIDGET(widget)->allocation.height;
+	}
+	if (WIDGET_MINIMUM_WIDTH > GTK_WIDGET(widget)->allocation.width)
+	{
+		width = WIDGET_MINIMUM_WIDTH;
+	} else
+	{
+		width = GTK_WIDGET(widget)->allocation.width;
+	}
+
+	// If the cached background image isn't valid, we need to recreate it
+	if (FALSE == priv->cached_bg_valid)
+	{
+		time_line_internal_create_images(priv, width, height);
+	}
+
+	// Draw the layer information
+	time_line_internal_draw_layer_info(priv, width, height);
+
+	// Highlight the selected row
+	time_line_internal_draw_selection_highlight(priv, width);
 
 	return TRUE;
 }
@@ -289,7 +412,7 @@ gboolean time_line_regenerate_images(GtkWidget *widget)
 void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint width)
 {
 	// Local variables
-	GdkColor			colour_red = {0, 65535, 0, 0 };
+	const GdkColor		colour_red = {0, 65535, 0, 0 };
 	gint8				dash_list[2] = { 3, 3 };
 	static GdkGC		*display_buffer_gc = NULL;
 	gint				selected_row;
@@ -314,49 +437,212 @@ void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint wid
 	gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), FALSE, x1, y1, x2, y2);
 }
 
-// Function to create the cached time line background image, and its display buffer 
-gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height)
+// Function to draw the layer information onto the display buffer
+gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint new_width, gint new_height)
 {
 	// Local variables
-	static GdkGC		*bg_image_gc = NULL;
-	GdkColor			colour_antique_white_2 = {0, (238 << 8), (223 << 8), (204 << 8) };
-	GdkColor			colour_black = {0, 0, 0, 0 };
-	GdkColor			colour_fade = {0, (160 << 8), (160 << 8), (190 << 8) };
-	GdkColor			colour_fully_visible = {0, (200 << 8), (200 << 8), (230 << 8) };
-	GdkColor			colour_left_bg_first = {0, (255 << 8), (250 << 8), (240 << 8) };
-	GdkColor			colour_left_bg_second = {0, (253 << 8), (245 << 8), (230 << 8) };
-	GdkColor			colour_main_first = {0, 65535, 65535, 65535 };
-	GdkColor			colour_main_second = {0, 65000, 65000, 65000 };
-	GdkColor			colour_old_lace = {0, (253 << 8), (245 << 8), (230 << 8) };
+	const GdkColor		colour_black = {0, 0, 0, 0 };
+	const GdkColor		colour_fade = {0, (160 << 8), (160 << 8), (190 << 8) };
+	const GdkColor		colour_fully_visible = {0, (200 << 8), (200 << 8), (230 << 8) };
 	GdkColormap			*colourmap = NULL;			// Colormap used for drawing
-	gint8				dash_list[2] = { 3, 3 };
 	static GdkGC		*display_buffer_gc = NULL;
-	gboolean			flip_flop = FALSE;			// Used to alternate between colours
+	gint				existing_bg_height;			// Height in pixels of an existing pixmap
+	gint				existing_bg_width;			// Width in pixels of an existing pixmap
 	PangoContext		*font_context;
 	PangoFontDescription  *font_description;
-	gint				font_height;
 	PangoLayout			*font_layout;
-	gint				font_width;
-	layer				*layer_data;
+	gint				height;
 	gint				layer_height;
+	layer				*layer_data;
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				layer_width;
 	gint				layer_x;
 	gint				layer_y;
 	gint				loop_counter;				// Simple counter used in loops
+	gint				num_layers;					// The number of layers in the select slide
+	gint				width;
+
+
+	// Initialisation
+	colourmap = gdk_colormap_get_system();
+	font_context = gdk_pango_context_get();
+	font_layout = pango_layout_new(font_context);
+	g_object_unref(font_context);
+
+	// Ensure we have at least the minimum required widget size
+	if (WIDGET_MINIMUM_HEIGHT > new_height)
+	{
+		height = WIDGET_MINIMUM_HEIGHT;
+	} else
+	{
+		height = new_height;
+	}
+	if (WIDGET_MINIMUM_WIDTH > new_width)
+	{
+		width = WIDGET_MINIMUM_WIDTH;
+	} else
+	{
+		width = new_width;
+	}
+
+
+	// If we already have a display buffer, we check if we can reuse it
+	if (NULL != priv->display_buffer)
+	{
+		// Retrieve the size of the existing cached display buffer
+		gdk_drawable_get_size(GDK_PIXMAP(priv->display_buffer), &existing_bg_width, &existing_bg_height);
+
+		// If the existing display buffer is not of the same height and width, we discard it
+		if ((existing_bg_width != width) || (existing_bg_height != height))
+		{
+			// The existing display buffer is not of the same height and width, so we discard it
+			g_object_unref(GDK_PIXMAP(priv->display_buffer));
+			priv->display_buffer = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
+			if (NULL == priv->cached_bg_image)
+			{
+				// Creating the display buffer image didn't work
+				display_warning("Error ED360: Couldn't create the time line display buffer image!");
+				return FALSE;
+			}
+		}
+	} else
+	{
+
+		// Create the display buffer
+		priv->display_buffer = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
+		if (NULL == priv->cached_bg_image)
+		{
+			// Creating the display buffer image didn't work
+			display_warning("Error ED357: Couldn't create the time line display buffer image!");
+			return FALSE;
+		}
+	}
+	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer), GDK_COLORMAP(colourmap));
+
+	// Create a graphic context for the display buffer image if we don't have one already
+	if (NULL == display_buffer_gc)
+	{
+		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
+	}
+
+	// Ensure the background image we're about to use is valid
+	if (TRUE != priv->cached_bg_valid)
+	{
+		// It's not, so recreate the timeline background image and display buffer at the new size
+		time_line_internal_create_images(priv, width, height);
+	}
+
+	// Copy the timeline background image to the display buffer
+	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
+		GDK_PIXMAP(priv->cached_bg_image),
+		0, 0,
+		0, 0,
+		width, height);
+
+	// Display the layer names
+	font_description = pango_font_description_from_string("Sans");
+	pango_layout_set_font_description(font_layout, font_description);
+	layer_pointer = ((slide *) current_slide->data)->layers;
+	layer_pointer = g_list_first(layer_pointer);
+	num_layers = ((slide *) current_slide->data)->num_layers;
+	gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
+	for (loop_counter = 0; loop_counter < num_layers; loop_counter++)
+	{
+		layer_data = g_list_nth_data(layer_pointer, loop_counter);
+		pango_layout_set_text(font_layout, layer_data->name->str, -1);
+		gdk_draw_layout(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), 5, ((loop_counter + 1) * priv->row_height) - 2, font_layout);
+	}
+
+	// Draw the layer durations
+	for (loop_counter = 0; loop_counter < num_layers; loop_counter++)
+	{
+		// Select the layer we're working with 
+		layer_data = g_list_nth_data(layer_pointer, loop_counter);
+
+		// Set the height related variables
+		layer_y = priv->top_border_height + (loop_counter * priv->row_height) + 2;
+		layer_height = priv->row_height - 3;
+
+		// Check if there's a fade in transition for this layer
+		if (TRANS_LAYER_FADE == layer_data->transition_in_type)
+		{
+			// Draw the fade in
+			layer_x = priv->left_border_width + (layer_data->start_time * priv->pixels_per_second) + 1;
+			layer_width = (layer_data->transition_in_duration * priv->pixels_per_second);
+			gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
+			gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
+					layer_x,
+					layer_y,
+					layer_width,
+					layer_height);
+
+			// Draw the fully visible duration
+			layer_x = priv->left_border_width + ((layer_data->start_time + layer_data->transition_in_duration) * priv->pixels_per_second) + 1;
+			layer_width = (layer_data->duration * priv->pixels_per_second);
+			gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
+			gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
+					layer_x,
+					layer_y,
+					layer_width,
+					layer_height);
+		} else
+		{
+			// There's no fade in transition for this layer
+			layer_x = priv->left_border_width + (layer_data->start_time * priv->pixels_per_second) + 1;
+			layer_width = (layer_data->duration * priv->pixels_per_second);
+			gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
+			gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
+					layer_x,
+					layer_y,
+					layer_width,
+					layer_height);
+		}
+
+		// Check if there's a fade out transition for this layer
+		if (TRANS_LAYER_FADE == layer_data->transition_out_type)
+		{
+			// Draw the fade out
+			layer_x += (layer_data->duration * priv->pixels_per_second);
+			layer_width = (layer_data->transition_out_duration * priv->pixels_per_second);
+			gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
+			gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
+					layer_x,
+					layer_y,
+					layer_width,
+					layer_height);
+		}
+	}
+
+	return TRUE;
+}
+
+// Function to create the cached time line background image, and its display buffer 
+gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height)
+{
+	// Local variables
+	static GdkGC		*bg_image_gc = NULL;
+	const GdkColor		colour_antique_white_2 = {0, (238 << 8), (223 << 8), (204 << 8) };
+	const GdkColor		colour_black = {0, 0, 0, 0 };
+	const GdkColor		colour_left_bg_first = {0, (255 << 8), (250 << 8), (240 << 8) };
+	const GdkColor		colour_left_bg_second = {0, (253 << 8), (245 << 8), (230 << 8) };
+	const GdkColor		colour_main_first = {0, 65535, 65535, 65535 };
+	const GdkColor		colour_main_second = {0, 65000, 65000, 65000 };
+	const GdkColor		colour_old_lace = {0, (253 << 8), (245 << 8), (230 << 8) };
+	GdkColormap			*colourmap = NULL;			// Colormap used for drawing
+	gint8				dash_list[2] = { 3, 3 };
+	gint				existing_bg_height;			// Height in pixels of an existing pixmap
+	gint				existing_bg_width;			// Width in pixels of an existing pixmap
+	gboolean			flip_flop = FALSE;			// Used to alternate between colours
+	PangoContext		*font_context;
+	PangoFontDescription  *font_description;
+	PangoLayout			*font_layout;
+	gint				font_width;
+	gint				loop_counter;				// Simple counter used in loops
 	gint				loop_counter2;				// Simple counter used in loops
 	gint				loop_max;
 	gint				loop_max2;
-	gint				num_layers;					// The number of layers in the select slide
 	GString				*seconds_number;
 
-
-	// If we already have a background image, we free it
-	if (NULL != priv->cached_bg_image)
-	{
-		g_object_unref(GDK_PIXMAP(priv->cached_bg_image));
-		priv->cached_bg_image = NULL;
-	}
 
 	// Initialisation
 	colourmap = gdk_colormap_get_system();
@@ -364,6 +650,24 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	font_layout = pango_layout_new(font_context);
 	g_object_unref(font_context);
 	seconds_number = g_string_new(NULL);
+
+	// If we already have a background image, we check if we can re-use it
+	if (NULL != priv->cached_bg_image)
+	{
+		// Retrieve the size of the existing cached background image
+		gdk_drawable_get_size(GDK_PIXMAP(priv->cached_bg_image), &existing_bg_width, &existing_bg_height);
+
+		// If we have an existing cached background image of the correct height and width, we re-use it
+		if ((existing_bg_width == width) && (existing_bg_height == height))
+		{
+			return TRUE;
+		}
+
+		// The existing cached image isn't usable, so we free it and proceed with creating a new one
+		g_object_unref(GDK_PIXMAP(priv->cached_bg_image));
+		priv->cached_bg_image = NULL;
+		priv->cached_bg_valid = FALSE;
+	}
 
 	// Create the background image
 	priv->cached_bg_image = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
@@ -380,9 +684,6 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	{
 		bg_image_gc = gdk_gc_new(GDK_DRAWABLE(priv->cached_bg_image));
 	}
-
-
-	// * Draw initial objects on the background image *
 
 	// Draw the top border area
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_old_lace);
@@ -437,7 +738,7 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 		// The numbers themselves
 		g_string_printf(seconds_number, "%ds", loop_counter);
 		pango_layout_set_text(font_layout, seconds_number->str, -1);
-		pango_layout_get_size(font_layout, &font_width, &font_height);
+		pango_layout_get_size(font_layout, &font_width, NULL);
 		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
 		gdk_draw_layout(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
 				priv->left_border_width + (loop_counter * priv->pixels_per_second) - ((font_width / PANGO_SCALE) / 2), -2, font_layout);
@@ -487,116 +788,6 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	// Flag that we now have a valid background cache image
 	priv->cached_bg_valid = TRUE;
 
-	// * Display buffer image stuff now *
-
-	// If we already have a display buffer, we free it
-	if (NULL != priv->display_buffer)
-	{
-		g_object_unref(GDK_PIXMAP(priv->display_buffer));
-		priv->display_buffer = NULL;
-	}
-
-	// Create the display buffer
-	priv->display_buffer = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
-	if (NULL == priv->cached_bg_image)
-	{
-		// Creating the display buffer image didn't work
-		display_warning("Error ED357: Couldn't create the time line display buffer image!");
-		return FALSE;
-	}
-	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer), GDK_COLORMAP(colourmap));
-
-	// Create a graphic context for the display buffer image if we don't have one already
-	if (NULL == display_buffer_gc)
-	{
-		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
-	}
-
-	// Copy the timeline background image to the display buffer
-	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
-		GDK_PIXMAP(priv->cached_bg_image),
-		0, 0,
-		0, 0,
-		width, height);
-
-	// Display the layer names
-	font_description = pango_font_description_from_string("Sans");
-	pango_layout_set_font_description(font_layout, font_description);
-	layer_pointer = ((slide *) current_slide->data)->layers;
-	layer_pointer = g_list_first(layer_pointer);
-	num_layers = ((slide *) current_slide->data)->num_layers;
-	gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
-	for (loop_counter = 0; loop_counter < num_layers; loop_counter++)
-	{
-		layer_data = g_list_nth_data(layer_pointer, loop_counter);
-		pango_layout_set_text(font_layout, layer_data->name->str, -1);
-		gdk_draw_layout(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), 5, ((loop_counter + 1) * priv->row_height) - 2, font_layout);
-	}
-
-	// Draw the layer durations
-	for (loop_counter = 0; loop_counter < num_layers; loop_counter++)
-	{
-		// Select the layer we're working with 
-		layer_data = g_list_nth_data(layer_pointer, loop_counter);
-
-		layer_y = priv->top_border_height + (loop_counter * priv->row_height) + 2;
-		layer_height = priv->row_height - 3;
-
-		// Check if there's a fade in transition for this layer
-		if (TRANS_LAYER_FADE == layer_data->transition_in_type)
-		{
-
-			// Draw the fade in
-			layer_x = priv->left_border_width + (layer_data->start_time * priv->pixels_per_second) + 1;
-			layer_width = (layer_data->transition_in_duration * priv->pixels_per_second);
-			gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
-			gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
-					layer_x,
-					layer_y,
-					layer_width,
-					layer_height);
-
-			// Draw the fully visible duration
-			layer_x = priv->left_border_width + ((layer_data->start_time + layer_data->transition_in_duration) * priv->pixels_per_second) + 1;
-			layer_width = (layer_data->duration * priv->pixels_per_second);
-			gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
-			gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
-					layer_x,
-					layer_y,
-					layer_width,
-					layer_height);
-		} else
-		{
-			// There's no transition in for this layer
-			layer_x = priv->left_border_width + (layer_data->start_time * priv->pixels_per_second) + 1;
-			layer_width = (layer_data->duration * priv->pixels_per_second);
-			gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
-			gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
-					layer_x,
-					layer_y,
-					layer_width,
-					layer_height);
-		}
-
-		// Check if there's a fade out transition for this layer
-		if (TRANS_LAYER_FADE == layer_data->transition_out_type)
-		{
-
-			// Draw the fade out
-			layer_x += (layer_data->duration * priv->pixels_per_second);
-			layer_width = (layer_data->transition_out_duration * priv->pixels_per_second);
-			gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
-			gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
-					layer_x,
-					layer_y,
-					layer_width,
-					layer_height);
-		}
-	}
-
-	// Select the highlighted layer
-	time_line_internal_draw_selection_highlight(priv, width);
-
 	return TRUE;
 }
 
@@ -621,6 +812,12 @@ static void time_line_init(TimeLine *time_line)
 
 	// Call our internal time line function to create the cached background image and display buffer
 	time_line_internal_create_images(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
+
+	// Draw the layer information
+	time_line_internal_draw_layer_info(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
+
+	// Select the highlighted layer
+	time_line_internal_draw_selection_highlight(priv, WIDGET_MINIMUM_WIDTH);
 }
 
 GType time_line_get_type(void)
