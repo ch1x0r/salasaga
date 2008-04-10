@@ -102,9 +102,15 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	// Local variables
 	static GdkGC		*display_buffer_gc = NULL;
 	gint				height;
+	GtkAllocation		new_allocation;
+	GtkAllocation		old_allocation;
 	TimeLinePrivate		*priv;
 	TimeLine			*this_time_line;
 	gint				width;
+	gint				x1;
+	gint				x2;
+	gint				y1;
+	gint				y2;
 
 
 	// Safety check
@@ -152,13 +158,57 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
 	}
 
-	// Copy the timeline background image to the display buffer
-//fixme2: Needs to be 4 instances, 2 each covering the vertical and horizontal lines 
-	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
-		GDK_PIXMAP(priv->cached_bg_image),
-		0, 0,
-		0, 0,
-		width, height);
+	// * Restore the display buffer for the old (unselecting) layer *
+
+	// Calculate the corner points
+	x1 = 0;
+	y1 = priv->top_border_height + 1 + (priv->selected_layer_num * priv->row_height);
+	x2 = width;
+	y2 = priv->row_height - 2;
+
+	// Restore top line segment
+	old_allocation.x = x1;
+	old_allocation.y = y1;
+	old_allocation.width = x2;
+	old_allocation.height = 1;
+	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), GDK_PIXMAP(priv->cached_bg_image),
+		old_allocation.x, old_allocation.y,
+		old_allocation.x, old_allocation.y,
+		old_allocation.width, old_allocation.height);
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
+
+	// Restore bottom line segment
+	old_allocation.x = x1;
+	old_allocation.y = y1 + y2;
+	old_allocation.width = x2;
+	old_allocation.height = 1;
+	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), GDK_PIXMAP(priv->cached_bg_image),
+		old_allocation.x, old_allocation.y,
+		old_allocation.x, old_allocation.y,
+		old_allocation.width, old_allocation.height);
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
+
+	// Restore left line segment
+	old_allocation.x = x1;
+	old_allocation.y = y1;
+	old_allocation.width = 1;
+	old_allocation.height = y2;
+	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), GDK_PIXMAP(priv->cached_bg_image),
+		old_allocation.x, old_allocation.y,
+		old_allocation.x, old_allocation.y,
+		old_allocation.width, old_allocation.height);
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
+
+	// Restore right line segment
+	old_allocation.x = width - 1;
+	old_allocation.y = y1;
+	old_allocation.width = 1;
+	old_allocation.height = y2;
+	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), GDK_PIXMAP(priv->cached_bg_image),
+		old_allocation.x, old_allocation.y,
+		old_allocation.x, old_allocation.y,
+		old_allocation.width, old_allocation.height);
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
 
 	// Set the internal variable, as requested
 	priv->selected_layer_num = selected_row;
@@ -167,8 +217,11 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	time_line_internal_draw_selection_highlight(priv, width);
 
 	// Have the time line area redrawn
-//fixme2: This can be reduced to just the changed area
-//	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &(GTK_WIDGET(widget)->allocation), TRUE);
+	new_allocation.x = 0;
+	new_allocation.y = priv->top_border_height + 1 + (selected_row * priv->row_height);
+	new_allocation.width = width;
+	new_allocation.height = priv->row_height - 1;
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
 
 	return TRUE;
 }
