@@ -117,9 +117,6 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
 				GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
 
-		// Redraw the timeline area
-		draw_timeline();
-
 		// Reset the stored mouse coordinates
 		stored_x = -1;
 		stored_y = -1;
@@ -162,9 +159,6 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	collision_list = g_list_first(collision_list);
 	selected_row = g_list_position(current_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
 	time_line_set_selected_layer_num(current_slide_data->timeline_widget, selected_row);
-
-	// Redraw the timeline area
-	draw_timeline();
 
 	// Draw a handle box around the new selected object
 	draw_handle_box();
