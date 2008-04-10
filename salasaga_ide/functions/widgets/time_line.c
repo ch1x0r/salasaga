@@ -62,6 +62,7 @@ struct _TimeLinePrivate
 
 // * Internal function declarations *
 gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height);
+gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint layer_number);
 gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint width, gint height);
 gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_number);
 void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint width);
@@ -517,30 +518,113 @@ void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint wid
 	gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), FALSE, x1, y1, x2, y2);
 }
 
-// Function to draw the layer information onto the display buffer
-gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint new_width, gint new_height)
+// Function to draw the layer duration onto the display buffer
+gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint layer_number)
 {
 	// Local variables
 	const GdkColor		colour_fade = {0, (160 << 8), (160 << 8), (190 << 8) };
 	const GdkColor		colour_fully_visible = {0, (200 << 8), (200 << 8), (230 << 8) };
-	GdkColormap			*colourmap = NULL;			// Colormap used for drawing
+	static GdkColormap	*colourmap = NULL;			// Colormap used for drawing
 	static GdkGC		*display_buffer_gc = NULL;
-	gint				existing_bg_height;			// Height in pixels of an existing pixmap
-	gint				existing_bg_width;			// Width in pixels of an existing pixmap
-	gint				height;
 	gint				layer_height;
 	layer				*layer_data;
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				layer_width;
 	gint				layer_x;
 	gint				layer_y;
+
+
+	// Initialisation
+	if (NULL == colourmap)
+	{
+		colourmap = gdk_colormap_get_system();
+		gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer), GDK_COLORMAP(colourmap));
+	}
+	if (NULL == display_buffer_gc)
+	{
+		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
+	}
+
+	// Select the layer we're working with
+	layer_pointer = ((slide *) current_slide->data)->layers;
+	layer_pointer = g_list_first(layer_pointer);
+	layer_data = g_list_nth_data(layer_pointer, layer_number);
+
+	// Set the height related variables
+	layer_y = priv->top_border_height + (layer_number * priv->row_height) + 2;
+	layer_height = priv->row_height - 3;
+
+	// Check if there's a fade in transition for this layer
+	if (TRANS_LAYER_FADE == layer_data->transition_in_type)
+		{
+		// Draw the fade in
+		layer_x = priv->left_border_width + (layer_data->start_time * priv->pixels_per_second) + 1;
+		layer_width = (layer_data->transition_in_duration * priv->pixels_per_second);
+		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
+				layer_x,
+				layer_y,
+				layer_width,
+				layer_height);
+
+		// Draw the fully visible duration
+		layer_x = priv->left_border_width + ((layer_data->start_time + layer_data->transition_in_duration) * priv->pixels_per_second) + 1;
+		layer_width = (layer_data->duration * priv->pixels_per_second);
+		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
+				layer_x,
+				layer_y,
+				layer_width,
+				layer_height);
+	} else
+	{
+		// There's no fade in transition for this layer
+		layer_x = priv->left_border_width + (layer_data->start_time * priv->pixels_per_second) + 1;
+		layer_width = (layer_data->duration * priv->pixels_per_second);
+		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
+				layer_x,
+				layer_y,
+				layer_width,
+				layer_height);
+	}
+
+	// Check if there's a fade out transition for this layer
+	if (TRANS_LAYER_FADE == layer_data->transition_out_type)
+	{
+		// Draw the fade out
+		layer_x += (layer_data->duration * priv->pixels_per_second);
+		layer_width = (layer_data->transition_out_duration * priv->pixels_per_second);
+		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
+				layer_x,
+				layer_y,
+				layer_width,
+				layer_height);
+	}
+
+	return TRUE;
+}
+
+// Function to draw the layer information onto the display buffer
+gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint new_width, gint new_height)
+{
+	// Local variables
+	static GdkColormap	*colourmap = NULL;			// Colormap used for drawing
+	static GdkGC		*display_buffer_gc = NULL;
+	gint				existing_bg_height;			// Height in pixels of an existing pixmap
+	gint				existing_bg_width;			// Width in pixels of an existing pixmap
+	gint				height;
 	gint				loop_counter;				// Simple counter used in loops
 	gint				num_layers;					// The number of layers in the select slide
 	gint				width;
 
 
 	// Initialisation
-	colourmap = gdk_colormap_get_system();
+	if (NULL == colourmap)
+	{
+		colourmap = gdk_colormap_get_system();
+	}
 
 	// Ensure we have at least the minimum required widget size
 	if (WIDGET_MINIMUM_HEIGHT > new_height)
@@ -607,79 +691,18 @@ gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint new_widt
 	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
 			GDK_PIXMAP(priv->cached_bg_image), 0, 0, 0, 0, width, height);
 
-	// Draw the layer names
+	// Draw the layer names and durations
 	num_layers = ((slide *) current_slide->data)->num_layers;
 	for (loop_counter = 0; loop_counter < num_layers; loop_counter++)
 	{
 		time_line_internal_draw_layer_name(priv, loop_counter);
-	}
-
-	// Draw the layer durations
-	layer_pointer = ((slide *) current_slide->data)->layers;
-	for (loop_counter = 0; loop_counter < num_layers; loop_counter++)
-	{
-		// Select the layer we're working with
-		layer_pointer = g_list_first(layer_pointer);
-		layer_data = g_list_nth_data(layer_pointer, loop_counter);
-
-		// Set the height related variables
-		layer_y = priv->top_border_height + (loop_counter * priv->row_height) + 2;
-		layer_height = priv->row_height - 3;
-
-		// Check if there's a fade in transition for this layer
-		if (TRANS_LAYER_FADE == layer_data->transition_in_type)
-		{
-			// Draw the fade in
-			layer_x = priv->left_border_width + (layer_data->start_time * priv->pixels_per_second) + 1;
-			layer_width = (layer_data->transition_in_duration * priv->pixels_per_second);
-			gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
-			gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
-					layer_x,
-					layer_y,
-					layer_width,
-					layer_height);
-
-			// Draw the fully visible duration
-			layer_x = priv->left_border_width + ((layer_data->start_time + layer_data->transition_in_duration) * priv->pixels_per_second) + 1;
-			layer_width = (layer_data->duration * priv->pixels_per_second);
-			gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
-			gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
-					layer_x,
-					layer_y,
-					layer_width,
-					layer_height);
-		} else
-		{
-			// There's no fade in transition for this layer
-			layer_x = priv->left_border_width + (layer_data->start_time * priv->pixels_per_second) + 1;
-			layer_width = (layer_data->duration * priv->pixels_per_second);
-			gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
-			gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
-					layer_x,
-					layer_y,
-					layer_width,
-					layer_height);
-		}
-
-		// Check if there's a fade out transition for this layer
-		if (TRANS_LAYER_FADE == layer_data->transition_out_type)
-		{
-			// Draw the fade out
-			layer_x += (layer_data->duration * priv->pixels_per_second);
-			layer_width = (layer_data->transition_out_duration * priv->pixels_per_second);
-			gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
-			gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
-					layer_x,
-					layer_y,
-					layer_width,
-					layer_height);
-		}
+		time_line_internal_draw_layer_duration(priv, loop_counter);
 	}
 
 	return TRUE;
 }
 
-// Function to draw the layer information onto the display buffer
+// Function to draw the layer name onto the display buffer
 gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_number)
 {
 	// Local variables
