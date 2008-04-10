@@ -87,9 +87,6 @@ void layer_delete(void)
 	layer_pointer = g_list_remove(layer_pointer, tmp_layer);
 	((slide *) current_slide->data)->layers = layer_pointer;
 
-	// Select the row above in the Timeline widget
-	time_line_set_selected_layer_num(((slide *) current_slide->data)->timeline_widget, selected_row - 1);
-
 	// Free the memory allocated to the layer
 	layer_free(tmp_layer);
 
