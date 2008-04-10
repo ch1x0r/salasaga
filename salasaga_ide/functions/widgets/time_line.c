@@ -63,6 +63,7 @@ struct _TimeLinePrivate
 // * Internal function declarations *
 gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height);
 gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint width, gint height);
+gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_number);
 void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint width);
 
 
@@ -216,11 +217,37 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	// Draw a selection box around the newly selected layer
 	time_line_internal_draw_selection_highlight(priv, width);
 
-	// Have the time line area redrawn
-	new_allocation.x = 0;
-	new_allocation.y = priv->top_border_height + 1 + (selected_row * priv->row_height);
-	new_allocation.width = width;
-	new_allocation.height = priv->row_height - 1;
+	// * Refresh the widget where the new lines were just drawn  *
+
+	// Update the corner points
+	y1 = priv->top_border_height + 1 + (selected_row * priv->row_height);
+
+	// Refresh top line segment
+	new_allocation.x = x1;
+	new_allocation.y = y1;
+	new_allocation.width = x2;
+	new_allocation.height = 1;
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
+
+	// Refresh bottom line segment
+	new_allocation.x = x1;
+	new_allocation.y = y1 + y2;
+	new_allocation.width = x2;
+	new_allocation.height = 1;
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
+
+	// Refresh left line segment
+	new_allocation.x = x1;
+	new_allocation.y = y1;
+	new_allocation.width = 1;
+	new_allocation.height = y2;
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
+
+	// Refresh right line segment
+	new_allocation.x = width - 1;
+	new_allocation.y = y1;
+	new_allocation.width = 1;
+	new_allocation.height = y2;
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
 
 	return TRUE;
@@ -494,16 +521,12 @@ void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint wid
 gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint new_width, gint new_height)
 {
 	// Local variables
-	const GdkColor		colour_black = {0, 0, 0, 0 };
 	const GdkColor		colour_fade = {0, (160 << 8), (160 << 8), (190 << 8) };
 	const GdkColor		colour_fully_visible = {0, (200 << 8), (200 << 8), (230 << 8) };
 	GdkColormap			*colourmap = NULL;			// Colormap used for drawing
 	static GdkGC		*display_buffer_gc = NULL;
 	gint				existing_bg_height;			// Height in pixels of an existing pixmap
 	gint				existing_bg_width;			// Width in pixels of an existing pixmap
-	PangoContext		*font_context;
-	PangoFontDescription  *font_description;
-	PangoLayout			*font_layout;
 	gint				height;
 	gint				layer_height;
 	layer				*layer_data;
@@ -518,9 +541,6 @@ gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint new_widt
 
 	// Initialisation
 	colourmap = gdk_colormap_get_system();
-	font_context = gdk_pango_context_get();
-	font_layout = pango_layout_new(font_context);
-	g_object_unref(font_context);
 
 	// Ensure we have at least the minimum required widget size
 	if (WIDGET_MINIMUM_HEIGHT > new_height)
@@ -538,7 +558,6 @@ gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint new_widt
 		width = new_width;
 	}
 
-
 	// If we already have a display buffer, we check if we can reuse it
 	if (NULL != priv->display_buffer)
 	{
@@ -548,24 +567,23 @@ gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint new_widt
 		// If the existing display buffer is not of the same height and width, we discard it
 		if ((existing_bg_width != width) || (existing_bg_height != height))
 		{
-			// The existing display buffer is not of the same height and width, so we discard it
+			// The existing display buffer is not of the same height and width
 			g_object_unref(GDK_PIXMAP(priv->display_buffer));
 			priv->display_buffer = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
 			if (NULL == priv->cached_bg_image)
 			{
-				// Creating the display buffer image didn't work
+				// Couldn't allocate memory for a new display buffer
 				display_warning("Error ED360: Couldn't create the time line display buffer image!");
 				return FALSE;
 			}
 		}
 	} else
 	{
-
 		// Create the display buffer
 		priv->display_buffer = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
 		if (NULL == priv->cached_bg_image)
 		{
-			// Creating the display buffer image didn't work
+			// Couldn't allocate memory for a new display buffer
 			display_warning("Error ED357: Couldn't create the time line display buffer image!");
 			return FALSE;
 		}
@@ -587,29 +605,21 @@ gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint new_widt
 
 	// Copy the timeline background image to the display buffer
 	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
-		GDK_PIXMAP(priv->cached_bg_image),
-		0, 0,
-		0, 0,
-		width, height);
+			GDK_PIXMAP(priv->cached_bg_image), 0, 0, 0, 0, width, height);
 
-	// Display the layer names
-	font_description = pango_font_description_from_string("Sans");
-	pango_layout_set_font_description(font_layout, font_description);
-	layer_pointer = ((slide *) current_slide->data)->layers;
-	layer_pointer = g_list_first(layer_pointer);
+	// Draw the layer names
 	num_layers = ((slide *) current_slide->data)->num_layers;
-	gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
 	for (loop_counter = 0; loop_counter < num_layers; loop_counter++)
 	{
-		layer_data = g_list_nth_data(layer_pointer, loop_counter);
-		pango_layout_set_text(font_layout, layer_data->name->str, -1);
-		gdk_draw_layout(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), 5, ((loop_counter + 1) * priv->row_height) - 2, font_layout);
+		time_line_internal_draw_layer_name(priv, loop_counter);
 	}
 
 	// Draw the layer durations
+	layer_pointer = ((slide *) current_slide->data)->layers;
 	for (loop_counter = 0; loop_counter < num_layers; loop_counter++)
 	{
-		// Select the layer we're working with 
+		// Select the layer we're working with
+		layer_pointer = g_list_first(layer_pointer);
 		layer_data = g_list_nth_data(layer_pointer, loop_counter);
 
 		// Set the height related variables
@@ -665,6 +675,57 @@ gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint new_widt
 					layer_height);
 		}
 	}
+
+	return TRUE;
+}
+
+// Function to draw the layer information onto the display buffer
+gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_number)
+{
+	// Local variables
+	const GdkColor		colour_black = {0, 0, 0, 0 };
+	static GdkColormap	*colourmap = NULL;			// Colormap used for drawing
+	static GdkGC		*display_buffer_gc = NULL;
+	static PangoContext *font_context = NULL;
+	static PangoFontDescription  *font_description = NULL;
+	static PangoLayout	*font_layout = NULL;
+	layer				*layer_data;
+	GList				*layer_pointer;				// Points to the layers in the selected slide
+
+
+	// Initialisation
+	if (NULL == colourmap)
+	{
+		colourmap = gdk_colormap_get_system();
+		gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer), GDK_COLORMAP(colourmap));
+	}
+	if (NULL == font_context)
+	{
+		font_context = gdk_pango_context_get();
+	}
+	if (NULL == font_layout)
+	{
+		font_layout = pango_layout_new(font_context);
+	}
+	if (NULL == display_buffer_gc)
+	{
+		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
+	}
+	if (NULL == font_description)
+	{
+		font_description = pango_font_description_from_string("Sans");
+		pango_layout_set_font_description(font_layout, font_description);
+	}
+
+	// Retrieve the layer name string
+	layer_pointer = ((slide *) current_slide->data)->layers;
+	layer_pointer = g_list_first(layer_pointer);
+	layer_data = g_list_nth_data(layer_pointer, layer_number);
+	pango_layout_set_text(font_layout, layer_data->name->str, -1);
+
+	// Draw the text string
+	gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
+	gdk_draw_layout(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), 5, ((layer_number + 1) * priv->row_height) - 3, font_layout);
 
 	return TRUE;
 }
@@ -922,6 +983,21 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 		return;
 	}
 
+	// Check for primary mouse button
+	if (1 != event->button)
+	{
+		// Not a primary mouse, so we return
+		return;
+	}
+
+	// Check if this was a double mouse click.  If it was, open an edit dialog
+	if (GDK_2BUTTON_PRESS == event->type)
+	{
+		// Open an edit dialog
+		layer_edit();
+		return;
+	}
+
 	// In this particular case, it's probably the child of the called widget that we need to get data from
 	if (FALSE == IS_TIME_LINE(widget))
 	{
@@ -942,21 +1018,6 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 		this_time_line = TIME_LINE(widget);		
 	}
 
-	// Check for primary mouse button
-	if (1 != event->button)
-	{
-		// Not a primary mouse, so we return
-		return;
-	}
-
-	// Check if this was a double mouse click.  If it was, open an edit dialog
-	if (GDK_2BUTTON_PRESS == event->type)
-	{
-		// Open an edit dialog
-		layer_edit();
-		return;
-	}
-
 	// Initialisation
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
@@ -970,10 +1031,7 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 		return;  // Too high, the user didn't click on a valid row
 
 	// The user clicked on a valid row, so update the selection
-	priv->selected_layer_num = mouse_y;
-
-	// Redraw the timeline area
-	draw_timeline();
+	time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), mouse_y);
 
 	// Draw a handle box around the newly selected row in the time line area
 	draw_handle_box();
@@ -983,7 +1041,6 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
-	gfloat				mouse_y;					// Used to determine the row clicked upon
 	TimeLinePrivate		*priv;
 	TimeLine			*this_time_line;
 	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
@@ -1025,21 +1082,5 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	// Initialisation
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
-	// Figure out which row the user has selected in the timeline area
-	mouse_y = floor((event->y - priv->top_border_height) / priv->row_height);
-
-	// Ensure the user clicked on a valid row
-	if (0 > mouse_y)
-		return;  // Too low, the user didn't click on a valid row
-	if (((slide *) current_slide->data)->num_layers <= mouse_y)
-		return;  // Too high, the user didn't click on a valid row
-
-	// The user clicked on a valid row, so update the selection
-	priv->selected_layer_num = mouse_y;
-
-	// Redraw the timeline area
-	draw_timeline();
-
-	// Draw a handle box around the newly selected row in the time line area
-	draw_handle_box();
+	/* Other button release stuff goes here */
 }
