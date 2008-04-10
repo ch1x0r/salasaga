@@ -98,11 +98,16 @@ void layer_edit(void)
 			{
 				// * The dialog box returned successfully *
 
-				// If the new layer end time is longer than the slide duration, then extend the slide duration
+				// If the new layer end time is longer than the slide duration, then extend the duration of the slide and background image
 				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration; 
 				if (layer_total_time > slide_data->duration)
 				{
+					// Change the slide duration
 					slide_data->duration = layer_total_time;
+
+					// Change the background layer duration
+					tmp_layer = g_list_nth_data(layer_pointer, slide_data->num_layers - 1);
+					tmp_layer->duration = layer_total_time;
 				}
 			}
 			break;
@@ -118,7 +123,12 @@ void layer_edit(void)
 				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration; 
 				if (layer_total_time > slide_data->duration)
 				{
+					// Change the slide duration
 					slide_data->duration = layer_total_time;
+
+					// Change the background layer duration
+					tmp_layer = g_list_nth_data(layer_pointer, slide_data->num_layers - 1);
+					tmp_layer->duration = layer_total_time;
 				}
 			}
 			break;
@@ -135,7 +145,12 @@ void layer_edit(void)
 				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration; 
 				if (layer_total_time > slide_data->duration)
 				{
+					// Change the slide duration
 					slide_data->duration = layer_total_time;
+
+					// Change the background layer duration
+					tmp_layer = g_list_nth_data(layer_pointer, slide_data->num_layers - 1);
+					tmp_layer->duration = layer_total_time;
 				}
 			}
 			break;
@@ -152,7 +167,12 @@ void layer_edit(void)
 				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration; 
 				if (layer_total_time > slide_data->duration)
 				{
+					// Change the slide duration
 					slide_data->duration = layer_total_time;
+
+					// Change the background layer duration
+					tmp_layer = g_list_nth_data(layer_pointer, slide_data->num_layers - 1);
+					tmp_layer->duration = layer_total_time;
 				}
 			}
 			break;
