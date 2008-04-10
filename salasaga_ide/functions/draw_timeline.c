@@ -56,6 +56,9 @@ void draw_timeline(void)
 		tmp_glist = gtk_container_get_children(GTK_CONTAINER(time_line_container));
 		if (NULL != tmp_glist)
 		{
+			// Increase the reference count for the timeline widget, so it's not destroyed when it's removed from the container
+			g_object_ref(GTK_WIDGET(tmp_glist->data));
+
 			// Remove timeline widget from the container
 			gtk_container_remove(GTK_CONTAINER(time_line_container), GTK_WIDGET(tmp_glist->data));
 		}
