@@ -72,7 +72,6 @@ void layer_move_down(void)
 	{
 		// We're already at the bottom of the list or the background layer is selected, so return
 		gdk_beep();
-		display_warning("Error ED40: Layers can't be moved lower than the background");
 		return;
 	}
 
