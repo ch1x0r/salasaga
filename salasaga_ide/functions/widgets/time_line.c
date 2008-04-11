@@ -1202,7 +1202,13 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		priv->drag_active = TRUE;
 
 		// Store the mouse coordinates so we know where to drag from
-		priv->stored_x = event->x;
+		if (event->x < priv->left_border_width)
+		{
+			priv->stored_x = priv->left_border_width;
+		} else
+		{
+			priv->stored_x = event->x;
+		}
 		priv->stored_y = event->y;
 
 		// Store the background layer end time
@@ -1298,7 +1304,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		}
 
 		// * Check if the row should be moved horizontally *
-		if (priv->stored_x != mouse_x)
+		if ((priv->stored_x != mouse_x) && (mouse_x > priv->left_border_width))
 		{
 			// Check if the layer is being moved to the right
 			if (priv->stored_x > mouse_x)
@@ -1369,24 +1375,24 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 				time_line_internal_draw_layer_duration(priv, end_row);
 				time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), end_row);
 			}
-
-			// Remove the old guide lines
-			guide_area.x = priv->guide_line_start;
-			guide_area.y = 0;
-			guide_area.height = GTK_WIDGET(this_time_line)->allocation.height;
-			guide_area.width = 1;
-			gtk_widget_draw(GTK_WIDGET(widget), &guide_area);  // Yes, this is deprecated, but it *works*
-			guide_area.x = priv->guide_line_end;
-			gtk_widget_draw(GTK_WIDGET(widget), &guide_area);  // Yes, this is deprecated, but it *works*
-
-			// Update the guide line positions so we know where to refresh
-			priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * priv->pixels_per_second);
-			priv->guide_line_end = priv->left_border_width + (end_time * priv->pixels_per_second);
-
-			// Draw the updated guide lines
-			time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
-			time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_end);
 		}
+
+		// Remove the old guide lines
+		guide_area.x = priv->guide_line_start;
+		guide_area.y = 0;
+		guide_area.height = GTK_WIDGET(this_time_line)->allocation.height;
+		guide_area.width = 1;
+		gtk_widget_draw(GTK_WIDGET(widget), &guide_area);  // Yes, this is deprecated, but it *works*
+		guide_area.x = priv->guide_line_end;
+		gtk_widget_draw(GTK_WIDGET(widget), &guide_area);  // Yes, this is deprecated, but it *works*
+
+		// Update the guide line positions so we know where to refresh
+		priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * priv->pixels_per_second);
+		priv->guide_line_end = priv->left_border_width + (end_time * priv->pixels_per_second);
+
+		// Draw the updated guide lines
+		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
+		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_end);
 	}
 
 	return;
