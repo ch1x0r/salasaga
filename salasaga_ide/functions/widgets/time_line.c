@@ -54,6 +54,8 @@ struct _TimeLinePrivate
 	gfloat				cursor_position;			// Where in the slide the cursor is positioned (in seconds or part thereof)
 	GdkPixmap			*display_buffer;			// The rendered version of the timeline
 	gboolean			drag_active;				// Tracks whether we have an active mouse drag or not
+	gint				guide_line_end;				// The pixel number of the ending guide line
+	gint				guide_line_start;			// The pixel number of the starting guide line
 	gint				left_border_width;			// Number of pixels in the left border (layer name) area
 	gint				pixels_per_second;			// Number of pixels used to display each second
 	gint				row_height;					// Number of pixels in each layer row
@@ -67,6 +69,7 @@ struct _TimeLinePrivate
 
 // * Internal function declarations *
 gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height);
+gboolean time_line_internal_draw_guide_line(GtkWidget *widget, gint pixel_num);
 gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint layer_number);
 gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint width, gint height);
 gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_number);
@@ -523,6 +526,59 @@ void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint wid
 	gdk_gc_set_line_attributes(GDK_GC(display_buffer_gc), 1, GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	gdk_gc_set_dashes(GDK_GC(display_buffer_gc), 1, dash_list, 2);
 	gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), FALSE, x1, y1, x2, y2);
+}
+
+// Function to draw a horizontal guide line directly on the time line widget
+gboolean time_line_internal_draw_guide_line(GtkWidget *widget, gint pixel_num)
+{
+	// Local variables
+	const GdkColor		colour_black = {0, 0, 0, 0 };
+	static GdkColormap	*colourmap = NULL;			// Colormap used for drawing
+	static gint8		dash_list[2] = { 3, 3 };
+	static GdkGC		*widget_gc = NULL;
+	GtkAllocation		guide_area;					// The area we need to invalidate
+	gint				pixmap_height;				// Height of the pixmap in pixels
+	TimeLinePrivate		*priv;
+	TimeLine			*this_time_line;
+
+
+	// Safety check
+	if (NULL == widget)
+		return FALSE;
+	if (FALSE == IS_TIME_LINE(widget))
+		return FALSE;
+
+	// Initialisation
+	this_time_line = TIME_LINE(widget);
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+	if (NULL == colourmap)
+	{
+		colourmap = gdk_colormap_get_system();
+		gdk_drawable_set_colormap(GDK_DRAWABLE(widget->window), GDK_COLORMAP(colourmap));
+	}
+	if (NULL == widget_gc)
+	{
+		widget_gc = gdk_gc_new(GDK_DRAWABLE(widget->window));
+	}
+	gdk_drawable_get_size(GDK_DRAWABLE(widget->window), NULL, &pixmap_height);
+
+	// Set the height related variables
+	guide_area.x = pixel_num;
+	guide_area.y = 0;
+	guide_area.height = pixmap_height;
+	guide_area.width = 1;
+
+	// Draw guide line
+	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
+	gdk_gc_set_line_attributes(GDK_GC(widget_gc), 1, GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
+	gdk_gc_set_dashes(GDK_GC(widget_gc), 1, dash_list, 2);
+	gdk_draw_line(GDK_DRAWABLE(widget->window), GDK_GC(widget_gc),
+			guide_area.x,
+			priv->top_border_height + 1,
+			guide_area.x,
+			guide_area.height);
+
+	return TRUE;
 }
 
 // Function to draw the layer duration onto the display buffer
@@ -1067,6 +1123,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	gint				distance_moved;				// Number of pixels the row has been scrolled by horizontally
 	gint				end_row;					// Number of the last layer in this slide
 	gfloat				end_time;					// The end time in seconds of the presently selected layer
+	GtkAllocation		guide_area;					// Area covered by an individual guide line
 	GList				*layer_above;				// The layer above the selected one
 	GList				*layer_below;				// The layer below the selected one
 	GList				*layer_pointer;				// Points to the layers in the selected slide
@@ -1118,16 +1175,23 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 	current_row = priv->selected_layer_num;
 
+	// Work out which row the mouse is over in the timeline area
+	new_row = floor((event->y - priv->top_border_height) / priv->row_height);
+
+	// If the user is trying to drag outside the valid layers, ignore this event
+	if ((0 > new_row) || (new_row >= end_row) || (current_row >= end_row) || (0 > current_row))
+		return;
+
 	// Retrieve the layer data for the selected row
 	layer_pointer = g_list_first(layer_pointer);
 	this_layer_data = g_list_nth_data(layer_pointer, current_row);
 
-	// Work out which row the mouse is over in the timeline area
-	new_row = floor((event->y - priv->top_border_height) / priv->row_height);
-
-	// If the user is trying to drag outside the valid layers, ignore it
-	if ((0 > new_row) || (new_row >= end_row) || (current_row >= end_row) || (0 > current_row))
-		return;
+	// Calculate the present end time of the layer (in seconds)
+	end_time = this_layer_data->start_time + this_layer_data->duration;
+	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+		end_time += this_layer_data->transition_in_duration;
+	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+		end_time += this_layer_data->transition_out_duration;
 
 	// Check if we're not already dragging
 	if (FALSE == priv->drag_active)
@@ -1141,6 +1205,14 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 
 		// Store the background layer end time
 		priv->stored_slide_duration = this_slide_data->duration;
+
+		// Store the position of the guide lines so we know where to refresh
+		priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * priv->pixels_per_second);
+		priv->guide_line_end = priv->left_border_width + (end_time * priv->pixels_per_second);
+
+		// Draw the guide lines for the start and end points of the layer
+		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
+		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_end);
 	} else
 	{
 		// * We are already dragging, so check if the selected row should be moved vertically *
@@ -1211,10 +1283,6 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			draw_workspace();
 		}
 
-
-//fixme2: Draw guide lines, so people can see where the start, fade, and end points line up with other rows
-//        Might be better done earlier in this function too!
-
 		// * Check if the row should be moved horizontally *
 		if (priv->stored_x != mouse_x)
 		{
@@ -1225,24 +1293,26 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 				mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
 				distance_moved = priv->stored_x - mouse_x;
 				time_moved = ((gfloat) distance_moved) / priv->pixels_per_second;
-	
+
 				// Update the layer data with the new timing
 				if (0 > (this_layer_data->start_time - time_moved))
 				{
+					end_time = end_time - this_layer_data->start_time;
 					this_layer_data->start_time = 0;
 				} else
 				{
 					this_layer_data->start_time -= time_moved;
+					end_time -= time_moved;
 				}
-	
+
 				// Update the stored position of the row in the widget
 				priv->stored_x = mouse_x;
-	
+
 				// Refresh the timeline display of the row
 				time_line_internal_redraw_layer_bg(priv, current_row);
 				time_line_internal_draw_layer_name(priv, current_row);
 				time_line_internal_draw_layer_duration(priv, current_row);
-	
+
 				// Tell the window system to update the current row area onscreen
 				time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
 			}
@@ -1254,29 +1324,23 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 				mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
 				distance_moved = mouse_x - priv->stored_x;
 				time_moved = ((gfloat) distance_moved) / priv->pixels_per_second;
-		
+
 				// Update the layer data with the new timing
 				this_layer_data->start_time += time_moved;
-		
+				end_time += time_moved;
+
 				// Update the stored position of the row in the widget
 				priv->stored_x = mouse_x;
-		
+
 				// Refresh the timeline display of the row
 				time_line_internal_redraw_layer_bg(priv, current_row);
 				time_line_internal_draw_layer_name(priv, current_row);
 				time_line_internal_draw_layer_duration(priv, current_row);
-		
+
 				// Tell the window system to update the current row area onscreen
 				time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
 			}
-	
-			// Calculate the new end time of the layer (in seconds)
-			end_time = this_layer_data->start_time + this_layer_data->duration;
-			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-				end_time += this_layer_data->transition_in_duration;
-			if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
-				end_time += this_layer_data->transition_out_duration;
-	
+
 			// Check if the new end time is longer than the slide duration
 			if (end_time > priv->stored_slide_duration)
 			{
@@ -1284,13 +1348,30 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 				this_slide_data->duration = end_time;
 				background_layer_data = g_list_nth_data(layer_pointer, end_row);
 				background_layer_data->duration = end_time;
-	
+
 				// Refresh the timeline display of the background layer
 				time_line_internal_redraw_layer_bg(priv, end_row);
 				time_line_internal_draw_layer_name(priv, end_row);
 				time_line_internal_draw_layer_duration(priv, end_row);
 				time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), end_row);
 			}
+
+			// Remove the old guide lines
+			guide_area.x = priv->guide_line_start;
+			guide_area.y = 0;
+			guide_area.height = GTK_WIDGET(this_time_line)->allocation.height;
+			guide_area.width = 1;
+			gtk_widget_draw(GTK_WIDGET(widget), &guide_area);  // Yes, this is deprecated, but it *works*
+			guide_area.x = priv->guide_line_end;
+			gtk_widget_draw(GTK_WIDGET(widget), &guide_area);  // Yes, this is deprecated, but it *works*
+
+			// Update the guide line positions so we know where to refresh
+			priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * priv->pixels_per_second);
+			priv->guide_line_end = priv->left_border_width + (end_time * priv->pixels_per_second);
+
+			// Draw the updated guide lines
+			time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
+			time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_end);
 		}
 	}
 
@@ -1372,6 +1453,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 {
 	// Local variables
 	GdkModifierType		button_state;				// Mouse button states
+	GtkAllocation		guide_area;					// Area covered by an individual guide line
 	gint				mouse_x;					// Mouse x position
 	gint				mouse_y;					// Mouse x position
 	TimeLinePrivate		*priv;
@@ -1425,10 +1507,19 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	// Initialisation
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
-	// If this mouse release matches a drag, note the drag is finished 
+	// Check if this mouse release matches a drag 
 	if (TRUE == priv->drag_active)
 	{
+		// Note that the drag has finished
 		priv->drag_active = FALSE;
-	}
 
+		// Remove the old guide lines
+		guide_area.x = priv->guide_line_start;
+		guide_area.y = 0;
+		guide_area.height = GTK_WIDGET(this_time_line)->allocation.height;
+		guide_area.width = 1;
+		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &guide_area, TRUE);
+		guide_area.x = priv->guide_line_end;
+		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &guide_area, TRUE);
+	}
 }
