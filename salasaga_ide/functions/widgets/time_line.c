@@ -585,6 +585,7 @@ gboolean time_line_internal_draw_guide_line(GtkWidget *widget, gint pixel_num)
 gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint layer_number)
 {
 	// Local variables
+	const GdkColor		colour_black = {0, 0, 0, 0 };
 	const GdkColor		colour_fade = {0, (160 << 8), (160 << 8), (190 << 8) };
 	const GdkColor		colour_fully_visible = {0, (200 << 8), (200 << 8), (230 << 8) };
 	static GdkColormap	*colourmap = NULL;			// Colormap used for drawing
@@ -625,20 +626,20 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 		layer_width = (layer_data->transition_in_duration * priv->pixels_per_second);
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
 		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
-				layer_x,
-				layer_y,
-				layer_width,
-				layer_height);
+				layer_x, layer_y, layer_width, layer_height);
+		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), FALSE,
+				layer_x, layer_y, layer_width, layer_height - 1);
 
 		// Draw the fully visible duration
 		layer_x = priv->left_border_width + ((layer_data->start_time + layer_data->transition_in_duration) * priv->pixels_per_second) + 1;
 		layer_width = (layer_data->duration * priv->pixels_per_second);
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
 		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
-				layer_x,
-				layer_y,
-				layer_width,
-				layer_height);
+				layer_x, layer_y, layer_width, layer_height);
+		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), FALSE,
+				layer_x, layer_y, layer_width - 1, layer_height - 1);
 	} else
 	{
 		// There's no fade in transition for this layer
@@ -646,10 +647,10 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 		layer_width = (layer_data->duration * priv->pixels_per_second);
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
 		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
-				layer_x,
-				layer_y,
-				layer_width,
-				layer_height);
+				layer_x, layer_y, layer_width, layer_height);
+		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), FALSE,
+				layer_x, layer_y, layer_width - 1, layer_height - 1);
 	}
 
 	// Check if there's a fade out transition for this layer
@@ -660,10 +661,10 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 		layer_width = (layer_data->transition_out_duration * priv->pixels_per_second);
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
 		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
-				layer_x,
-				layer_y,
-				layer_width,
-				layer_height);
+				layer_x, layer_y, layer_width, layer_height);
+		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), FALSE,
+				layer_x - 1, layer_y, layer_width, layer_height - 1);
 	}
 
 	return TRUE;
