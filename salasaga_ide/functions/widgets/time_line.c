@@ -1069,6 +1069,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 {
 	// Local variables
 	GdkModifierType		button_state;				// Mouse button states
+	gint				current_row;				// The presently selected row
 	gint				end_row;					// Number of the last layer in this slide
 	GList				*layer_above;				// The layer above the selected one
 	GList				*layer_below;				// The layer below the selected one
@@ -1076,8 +1077,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	gint				mouse_x;					// Mouse x position
 	gint				mouse_y;					// Mouse x position
 	gint				new_row;					// The row the mouse is above
-	gint				old_row;					// The presently selected row
-	GList				*selected_layer;				// The selected layer
+	GList				*selected_layer;			// The selected layer
 	TimeLinePrivate		*priv;
 	TimeLine			*this_time_line;
 	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
@@ -1116,13 +1116,16 @@ printf("Drag event.\n");
 	// Initialisation
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 	end_row = ((slide *) current_slide->data)->num_layers -1;
-	old_row = priv->selected_layer_num;
+	current_row = priv->selected_layer_num;
 
 	// Work out which row the mouse is over in the timeline area
 	new_row = floor((event->y - priv->top_border_height) / priv->row_height);
 
+printf("Old row: %.2f\n", floor(current_row));
+printf("New row: %.2f\n", floor(new_row));
+printf("End row: %.2f\n", floor(end_row));
 	// If the user is trying to drag outside the valid layers, ignore it
-	if ((0 > new_row) || (new_row >= end_row))
+	if ((0 > new_row) || (new_row >= end_row) || (current_row >= end_row) || (0 > current_row))
 		return;
 
 	// Check if we're not already dragging
@@ -1143,16 +1146,14 @@ printf("Drag started on valid layer.\n");
 	} else
 	{
 		// * We are already dragging, so check if the selected row should be moved vertically *
-printf("Old row: %.2f\n", floor(old_row));
-printf("New row: %.2f\n", floor(new_row));
-		if (old_row > new_row)
+		if (current_row > new_row)
 		{
 			// The layer is being moved vertically upwards
 			layer_pointer = ((slide *) current_slide->data)->layers;
 			layer_pointer = g_list_first(layer_pointer);
 
 			// Get details of the layers we're moving around
-			selected_layer = g_list_nth(layer_pointer, old_row);
+			selected_layer = g_list_nth(layer_pointer, current_row);
 			layer_above = g_list_nth(layer_pointer, new_row);
 
 			// Move the row up one in the layer list
@@ -1161,9 +1162,9 @@ printf("New row: %.2f\n", floor(new_row));
 			((slide *) current_slide->data)->layers = layer_pointer;
 
 			// Refresh the timeline display of the old row
-			time_line_internal_redraw_layer_bg(priv, old_row);
-			time_line_internal_draw_layer_name(priv, old_row);
-			time_line_internal_draw_layer_duration(priv, old_row);
+			time_line_internal_redraw_layer_bg(priv, current_row);
+			time_line_internal_draw_layer_name(priv, current_row);
+			time_line_internal_draw_layer_duration(priv, current_row);
 
 			// Refresh the timeline display of the new row
 			time_line_internal_redraw_layer_bg(priv, new_row);
@@ -1175,20 +1176,20 @@ printf("New row: %.2f\n", floor(new_row));
 
 			// Tell the window system to update the new widget areas onscreen
 			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), new_row);
-			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), old_row);
+			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
 
 			// Update the workspace area
 			draw_workspace();
 		}
 
-		if (old_row < new_row)
+		if (current_row < new_row)
 		{
 			// The layer is being moved vertically downwards
 			layer_pointer = ((slide *) current_slide->data)->layers;
 			layer_pointer = g_list_first(layer_pointer);
 
 			// Get details of the layers we're moving around
-			selected_layer = g_list_nth(layer_pointer, old_row);
+			selected_layer = g_list_nth(layer_pointer, current_row);
 			layer_below = g_list_nth(layer_pointer, new_row);
 
 			// Move the row down one in the layer list
@@ -1197,9 +1198,9 @@ printf("New row: %.2f\n", floor(new_row));
 			((slide *) current_slide->data)->layers = layer_pointer;
 
 			// Refresh the timeline display of the old row
-			time_line_internal_redraw_layer_bg(priv, old_row);
-			time_line_internal_draw_layer_name(priv, old_row);
-			time_line_internal_draw_layer_duration(priv, old_row);
+			time_line_internal_redraw_layer_bg(priv, current_row);
+			time_line_internal_draw_layer_name(priv, current_row);
+			time_line_internal_draw_layer_duration(priv, current_row);
 
 			// Refresh the timeline display of the new row
 			time_line_internal_redraw_layer_bg(priv, new_row);
@@ -1211,7 +1212,7 @@ printf("New row: %.2f\n", floor(new_row));
 
 			// Tell the window system to update the new widget areas onscreen
 			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), new_row);
-			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), old_row);
+			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
 
 			// Update the workspace area
 			draw_workspace();
