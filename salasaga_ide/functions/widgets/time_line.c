@@ -1127,7 +1127,7 @@ printf("New row: %.2f\n", floor(new_row));
 			layer_above = g_list_nth(layer_pointer, new_row);
 
 			// Move the row up one in the layer list
-			tmp_glist = g_list_remove_link(layer_pointer, selected_layer);
+			layer_pointer = g_list_remove_link(layer_pointer, selected_layer);
 			layer_pointer = g_list_insert_before(layer_pointer, layer_above, selected_layer->data);
 			((slide *) current_slide->data)->layers = layer_pointer;
 
