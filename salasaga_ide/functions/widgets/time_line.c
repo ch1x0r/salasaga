@@ -1063,6 +1063,8 @@ static void time_line_init(TimeLine *time_line)
 	priv->selected_layer_num = 0;
 	priv->stored_x = 0;
 	priv->stored_y = 0;
+	priv->guide_line_start = 0;
+	priv->guide_line_end = 0;
 
 	// fixme3: These would probably be good as properties
 	priv->left_border_width = 120;
@@ -1129,7 +1131,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				mouse_x;					// Mouse x position
 	gint				mouse_y;					// Mouse x position
-	gint				new_row;					// The row the mouse is above
+	gint				new_row;					// The row the mouse is over
 	GList				*selected_layer;			// The selected layer
 	TimeLinePrivate		*priv;
 	TimeLine			*this_time_line;
@@ -1178,10 +1180,6 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	// Work out which row the mouse is over in the timeline area
 	new_row = floor((event->y - priv->top_border_height) / priv->row_height);
 
-	// If the user is trying to drag outside the valid layers, ignore this event
-	if ((0 > new_row) || (new_row >= end_row) || (current_row >= end_row) || (0 > current_row))
-		return;
-
 	// Retrieve the layer data for the selected row
 	layer_pointer = g_list_first(layer_pointer);
 	this_layer_data = g_list_nth_data(layer_pointer, current_row);
@@ -1196,6 +1194,10 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	// Check if we're not already dragging
 	if (FALSE == priv->drag_active)
 	{
+		// If the user is trying to drag outside the valid layers, ignore this event
+		if ((0 > new_row) || (new_row >= end_row) || (current_row >= end_row) || (0 > current_row))
+			return;
+
 		// We're commencing a drag, so note this
 		priv->drag_active = TRUE;
 
@@ -1206,15 +1208,27 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		// Store the background layer end time
 		priv->stored_slide_duration = this_slide_data->duration;
 
-		// Store the position of the guide lines so we know where to refresh
+		// Remove the old guide lines
+		guide_area.x = priv->guide_line_start;
+		guide_area.y = 0;
+		guide_area.height = GTK_WIDGET(this_time_line)->allocation.height;
+		guide_area.width = 1;
+		gtk_widget_draw(GTK_WIDGET(widget), &guide_area);  // Yes, this is deprecated, but it *works*
+		guide_area.x = priv->guide_line_end;
+		gtk_widget_draw(GTK_WIDGET(widget), &guide_area);  // Yes, this is deprecated, but it *works*
+
+		// Store the position of the new guide lines so we know where to refresh
 		priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * priv->pixels_per_second);
 		priv->guide_line_end = priv->left_border_width + (end_time * priv->pixels_per_second);
 
-		// Draw the guide lines for the start and end points of the layer
+		// Draw the new guide lines
 		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
 		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_end);
 	} else
 	{
+		// Clamp the row number to acceptable bounds
+		new_row = CLAMP(new_row, 0, end_row - 1);
+
 		// * We are already dragging, so check if the selected row should be moved vertically *
 		if (current_row > new_row)
 		{
@@ -1382,8 +1396,12 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
-	gfloat				mouse_y;					// Used to determine the row clicked upon
+	gfloat				end_time;					// The end time in seconds of the presently selected layer
+	GList				*layer_pointer;				// Points to the layers in the selected slide
+	gint				new_row;					// Used to determine the row clicked upon
 	TimeLinePrivate		*priv;
+	layer				*this_layer_data;			// Data for the presently selected layer
+	slide				*this_slide_data;			// Data for the presently selected slide
 	TimeLine			*this_time_line;
 	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
 
@@ -1431,18 +1449,37 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 
 	// Initialisation
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+	this_slide_data = ((slide *) current_slide->data);
+	layer_pointer = this_slide_data->layers;
+	layer_pointer = g_list_first(layer_pointer);
 
 	// Figure out which row the user has selected in the timeline area
-	mouse_y = floor((event->y - priv->top_border_height) / priv->row_height);
+	new_row = floor((event->y - priv->top_border_height) / priv->row_height);
 
 	// Ensure the user clicked on a valid row
-	if (0 > mouse_y)
+	if (0 > new_row)
 		return;  // Too low, the user didn't click on a valid row
-	if (((slide *) current_slide->data)->num_layers <= mouse_y)
+	if (this_slide_data->num_layers <= new_row)
 		return;  // Too high, the user didn't click on a valid row
 
 	// The user clicked on a valid row, so update the selection
-	time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), mouse_y);
+	time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), new_row);
+
+	// Calculate the present end time of the layer (in seconds)
+	this_layer_data = g_list_nth_data(layer_pointer, new_row);
+	end_time = this_layer_data->start_time + this_layer_data->duration;
+	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+		end_time += this_layer_data->transition_in_duration;
+	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+		end_time += this_layer_data->transition_out_duration;
+
+	// Store the guide line positions so we know where to refresh
+	priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * priv->pixels_per_second);
+	priv->guide_line_end = priv->left_border_width + (end_time * priv->pixels_per_second);
+
+	// Draw guide lines
+	time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
+	time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_end);
 
 	// Draw a handle box around the newly selected row in the time line area
 	draw_handle_box();
@@ -1507,19 +1544,19 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	// Initialisation
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
+	// Remove guide lines from the widget
+	guide_area.x = priv->guide_line_start;
+	guide_area.y = 0;
+	guide_area.height = GTK_WIDGET(this_time_line)->allocation.height;
+	guide_area.width = 1;
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &guide_area, TRUE);
+	guide_area.x = priv->guide_line_end;
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &guide_area, TRUE);
+
 	// Check if this mouse release matches a drag 
 	if (TRUE == priv->drag_active)
 	{
 		// Note that the drag has finished
 		priv->drag_active = FALSE;
-
-		// Remove the old guide lines
-		guide_area.x = priv->guide_line_start;
-		guide_area.y = 0;
-		guide_area.height = GTK_WIDGET(this_time_line)->allocation.height;
-		guide_area.width = 1;
-		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &guide_area, TRUE);
-		guide_area.x = priv->guide_line_end;
-		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &guide_area, TRUE);
 	}
 }
