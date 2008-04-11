@@ -84,6 +84,7 @@ GtkWidget *create_time_line(void)
 	// Add signal handlers to the time line area for receiving events (i.e. mouse clicks)
 	g_signal_connect(time_line_container, "button_release_event", G_CALLBACK(timeline_widget_button_release_event), NULL);
 	g_signal_connect(time_line_container, "button_press_event", G_CALLBACK(timeline_widget_button_press_event), NULL);
+	g_signal_connect(time_line_container, "motion_notify_event", G_CALLBACK(timeline_widget_motion_notify_event), NULL);
 
 	// Ensure we get the signals we want
 	gtk_widget_set_events(time_line_container, gtk_widget_get_events(time_line_container)
