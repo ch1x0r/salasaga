@@ -1067,6 +1067,9 @@ static void time_line_init(TimeLine *time_line)
 	priv->guide_line_start = 0;
 	priv->guide_line_end = 0;
 
+	// Store the slide duration
+	priv->stored_slide_duration = ((slide *) current_slide->data)->duration;
+
 	// fixme3: These would probably be good as properties
 	priv->left_border_width = 120;
 	priv->pixels_per_second = 60;
@@ -1211,9 +1214,6 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			priv->stored_x = event->x;
 		}
 		priv->stored_y = event->y;
-
-		// Store the background layer end time
-		priv->stored_slide_duration = this_slide_data->duration;
 
 		// Remove the old guide lines
 		guide_area.x = priv->guide_line_start;
@@ -1361,21 +1361,21 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 				// Tell the window system to update the current row area onscreen
 				time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
 			}
+		}
 
-			// Check if the new end time is longer than the slide duration
-			if (end_time > priv->stored_slide_duration)
-			{
-				// The new end time is longer than the slide duration, so update the slide and background layer to match
-				this_slide_data->duration = end_time;
-				background_layer_data = g_list_nth_data(layer_pointer, end_row);
-				background_layer_data->duration = end_time;
+		// Check if the new end time is longer than the slide duration
+		if (end_time > priv->stored_slide_duration)
+		{
+			// The new end time is longer than the slide duration, so update the slide and background layer to match
+			this_slide_data->duration = end_time;
+			background_layer_data = g_list_nth_data(layer_pointer, end_row);
+			background_layer_data->duration = end_time;
 
-				// Refresh the timeline display of the background layer
-				time_line_internal_redraw_layer_bg(priv, end_row);
-				time_line_internal_draw_layer_name(priv, end_row);
-				time_line_internal_draw_layer_duration(priv, end_row);
-				time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), end_row);
-			}
+			// Refresh the timeline display of the background layer
+			time_line_internal_redraw_layer_bg(priv, end_row);
+			time_line_internal_draw_layer_name(priv, end_row);
+			time_line_internal_draw_layer_duration(priv, end_row);
+			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), end_row);
 		}
 
 		// Remove the old guide lines
@@ -1496,11 +1496,17 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
+	layer				*background_layer_data;		// Data for the background layer
 	GdkModifierType		button_state;				// Mouse button states
+	gint				end_row;					// Number of the last layer in this slide
+	gfloat				end_time;					// The end time in seconds of the presently selected layer
 	GtkAllocation		guide_area;					// Area covered by an individual guide line
+	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				mouse_x;					// Mouse x position
 	gint				mouse_y;					// Mouse x position
 	TimeLinePrivate		*priv;
+	layer				*this_layer_data;			// Data for the presently selected layer
+	slide				*this_slide_data;			// Data for the presently selected slide
 	TimeLine			*this_time_line;
 	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
 
@@ -1565,5 +1571,32 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	{
 		// Note that the drag has finished
 		priv->drag_active = FALSE;
+
+		// Calculate the end time of the layer (in seconds)
+		this_slide_data = (slide *) current_slide->data;
+		layer_pointer = this_slide_data->layers;
+		layer_pointer = g_list_first(layer_pointer);
+		this_layer_data = g_list_nth_data(layer_pointer, priv->selected_layer_num);
+		end_time = this_layer_data->start_time + this_layer_data->duration;
+		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+			end_time += this_layer_data->transition_in_duration;
+		if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+			end_time += this_layer_data->transition_out_duration;
+
+		// Check if the new end time is longer than the slide duration
+		if (end_time > priv->stored_slide_duration)
+		{
+			// The new slide duration is longer than the old one, so update the slide and background layer to match
+			this_slide_data->duration = priv->stored_slide_duration = end_time;
+			end_row = this_slide_data->num_layers - 1;
+			background_layer_data = g_list_nth_data(layer_pointer, end_row);
+			background_layer_data->duration = priv->stored_slide_duration;
+
+			// Refresh the timeline display of the background layer
+			time_line_internal_redraw_layer_bg(priv, end_row);
+			time_line_internal_draw_layer_name(priv, end_row);
+			time_line_internal_draw_layer_duration(priv, end_row);
+			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), end_row);
+		}
 	}
 }
