@@ -2398,7 +2398,7 @@ gboolean project_read(gchar *filename)
 
 			if (TRUE == this_layer_ptr->background)
 			{
-				// This is a background layer, so we set its duration to match it the slide
+				// This is a background layer, so we set its duration to match the slide
 				this_layer_ptr->duration = tmp_slide->duration;
 			}
 		}
