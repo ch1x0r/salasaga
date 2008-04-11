@@ -50,7 +50,6 @@ void layer_move_up(void)
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	GList				*our_layer;					// The selected layer
 	guint				selected_row;				// Holds the row that is selected
-	GList				*tmp_glist;					// Temporary GList
 
 
 	// If no project is loaded then don't run this function
@@ -87,7 +86,7 @@ void layer_move_up(void)
 	}
 
 	// Move the row up one in the layer list
-	tmp_glist = g_list_remove_link(layer_pointer, our_layer);
+	layer_pointer = g_list_remove_link(layer_pointer, our_layer);
 	layer_pointer = g_list_insert_before(layer_pointer, above_layer, our_layer->data);
 	((slide *) current_slide->data)->layers = layer_pointer;
 

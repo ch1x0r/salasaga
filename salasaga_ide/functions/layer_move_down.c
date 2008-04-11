@@ -51,7 +51,6 @@ void layer_move_down(void)
 	gint				num_layers;					// The number of layers in the select slide
 	GList				*our_layer;					// The selected layer
 	gint				selected_row;				// Holds the row that is selected
-	GList				*tmp_glist;					// Temporary GList
 
 
 	// If no project is loaded then don't run this function
@@ -81,7 +80,7 @@ void layer_move_down(void)
 	below_layer = g_list_nth(layer_pointer, selected_row + 1);
 
 	// Move the row down one in the layer list
-	tmp_glist = g_list_remove_link(layer_pointer, below_layer);
+	layer_pointer = g_list_remove_link(layer_pointer, below_layer);
 	layer_pointer = g_list_insert_before(layer_pointer, our_layer, below_layer->data);
 	((slide *) current_slide->data)->layers = layer_pointer;
 
