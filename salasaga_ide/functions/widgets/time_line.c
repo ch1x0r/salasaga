@@ -34,6 +34,7 @@
 #include "../display_warning.h"
 #include "../draw_handle_box.h"
 #include "../draw_timeline.h"
+#include "../draw_workspace.h"
 #include "../layer_edit.h"
 #include "time_line.h"
 
@@ -52,10 +53,17 @@ struct _TimeLinePrivate
 	gboolean			cached_bg_valid;			// Flag for whether the timeline background cache image is valid
 	gfloat				cursor_position;			// Where in the slide the cursor is positioned (in seconds or part thereof)
 	GdkPixmap			*display_buffer;			// The rendered version of the timeline
+	gboolean			drag_active;				// Tracks whether we have an active mouse drag or not
+	gint				invalidation_end_x;
+	gint				invalidation_end_y;
+	gint				invalidation_start_x;
+	gint				invalidation_start_y;
 	gint				left_border_width;			// Number of pixels in the left border (layer name) area
 	gint				pixels_per_second;			// Number of pixels used to display each second
 	gint				row_height;					// Number of pixels in each layer row
 	gint				selected_layer_num;			// The number of the selected layer
+	gint				stored_x;
+	gint				stored_y;
 	gint				top_border_height;			// Number of pixels in the top border (cursor) area
 };
 
@@ -65,6 +73,7 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint layer_number);
 gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint width, gint height);
 gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_number);
+gboolean time_line_internal_redraw_layer_bg(TimeLinePrivate *priv, gint layer_number);
 void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint width);
 
 
@@ -556,7 +565,7 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 
 	// Check if there's a fade in transition for this layer
 	if (TRANS_LAYER_FADE == layer_data->transition_in_type)
-		{
+	{
 		// Draw the fade in
 		layer_x = priv->left_border_width + (layer_data->start_time * priv->pixels_per_second) + 1;
 		layer_width = (layer_data->transition_in_duration * priv->pixels_per_second);
@@ -928,6 +937,35 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	return TRUE;
 }
 
+gboolean time_line_internal_redraw_layer_bg(TimeLinePrivate *priv, gint layer_number)
+{
+	// Local variables
+	static GdkGC		*display_buffer_gc = NULL;
+	gint				layer_height;
+	gint				layer_width;
+	gint				layer_x;
+	gint				layer_y;
+
+
+	// Initialisation
+	if (NULL == display_buffer_gc)
+	{
+		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
+	}
+
+	// Set the height related variables
+	layer_x = 0;
+	layer_y = priv->top_border_height + (layer_number * priv->row_height) + 2;
+	layer_height = priv->row_height - 3;
+	layer_width = -1;
+
+	// Refresh the display buffer for the selected layer
+	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
+			GDK_PIXMAP(priv->display_buffer), 0, 0, 0, 0, layer_width, layer_height);
+
+	return TRUE;
+}
+
 // Instance initialiser
 static void time_line_init(TimeLine *time_line)
 {
@@ -939,7 +977,14 @@ static void time_line_init(TimeLine *time_line)
 	priv = TIME_LINE_GET_PRIVATE(time_line);
 	priv->cached_bg_valid = FALSE;
 	priv->display_buffer = NULL;
+	priv->drag_active = FALSE;
 	priv->selected_layer_num = 0;
+	priv->stored_x = 0;
+	priv->stored_y = 0;
+	priv->invalidation_end_x = 0;
+	priv->invalidation_end_y = 0;
+	priv->invalidation_start_x = 0;
+	priv->invalidation_start_y = 0;
 
 	// fixme3: These would probably be good as properties
 	priv->left_border_width = 120;
@@ -990,6 +1035,145 @@ GtkWidget* time_line_new()
 	return GTK_WIDGET(g_object_new(time_line_get_type(), NULL));
 }
 
+// Callback function for when the user drags the mouse button on the time line widget
+void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	// Local variables
+	GdkModifierType		button_state;				// Mouse button states
+	gint				end_row;					// Number of the last layer in this slide
+	GList				*layer_above;				// The layer above the selected one
+	GList				*layer_below;				// The layer below the selected one
+	GList				*layer_pointer;				// Points to the layers in the selected slide
+	gint				mouse_x;					// Mouse x position
+	gint				mouse_y;					// Mouse x position
+	gint				new_row;					// The row the mouse is above
+	gint				old_row;					// The presently selected row
+	GList				*selected_layer;				// The selected layer
+	TimeLinePrivate		*priv;
+	TimeLine			*this_time_line;
+	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
+
+
+	// Safety checks
+	if (NULL == widget)
+	{
+		return;
+	}
+printf("Drag event.\n");
+
+	// Find out where the mouse is positioned, and which buttons and modifier keys are down (active)
+	gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);
+
+	// It's probably the child of the called widget that we need to get data from
+	if (FALSE == IS_TIME_LINE(widget))
+	{
+		tmp_glist = gtk_container_get_children(GTK_CONTAINER(widget));
+		if (NULL == tmp_glist)
+			return;
+		if (FALSE == IS_TIME_LINE(tmp_glist->data))
+		{
+			g_list_free(tmp_glist);
+			return;
+		}
+
+		// The child is the TimeLine widget
+		this_time_line = TIME_LINE(tmp_glist->data);
+	} else
+	{
+		// This is a time line widget
+		this_time_line = TIME_LINE(widget);		
+	}
+
+	// Initialisation
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+	end_row = ((slide *) current_slide->data)->num_layers -1;
+	old_row = priv->selected_layer_num;
+
+	// Work out which row the mouse is over in the timeline area
+	new_row = floor((event->y - priv->top_border_height) / priv->row_height);
+
+	// If the user is trying to drag outside the valid layers, ignore it
+	if ((0 > new_row) || (new_row >= end_row))
+		return;
+
+	// Check if we're not already dragging
+	if (FALSE == priv->drag_active)
+	{
+		// We're commencing a drag, so note this
+		priv->drag_active = TRUE;
+printf("Drag started on valid layer.\n");
+		// Store the mouse coordinates so we know where to drag from
+		priv->stored_x = event->x;
+		priv->stored_y = event->y;
+
+		// Reset the invalidation area
+		priv->invalidation_end_x = event->x;
+		priv->invalidation_end_y = event->y;
+		priv->invalidation_start_x = event->x - 1;
+		priv->invalidation_start_y = event->y - 1;
+	} else
+	{
+		// * We are already dragging, so check if the selected row should be moved vertically *
+printf("Old row: %.2f\n", floor(old_row));
+printf("New row: %.2f\n", floor(new_row));
+		if (old_row > new_row)
+		{
+			// The layer is being moved vertically upwards
+			layer_pointer = ((slide *) current_slide->data)->layers;
+			layer_pointer = g_list_first(layer_pointer);
+
+			// Get details of the layers we're moving around
+			selected_layer = g_list_nth(layer_pointer, old_row);
+			layer_above = g_list_nth(layer_pointer, new_row);
+
+			// Move the row up one in the layer list
+			tmp_glist = g_list_remove_link(layer_pointer, selected_layer);
+			layer_pointer = g_list_insert_before(layer_pointer, layer_above, selected_layer->data);
+			((slide *) current_slide->data)->layers = layer_pointer;
+
+			// Update the selected row
+			time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), new_row);
+
+			// Update the timeline display
+			// fixme3: This could be a lot more efficient!
+			time_line_regenerate_images(GTK_WIDGET(this_time_line));
+			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &GTK_WIDGET(this_time_line)->allocation, TRUE);
+
+			// Update the workspace area
+			draw_workspace();
+		}
+
+		if (old_row < new_row)
+		{
+			// The layer is being moved vertically downwards
+			layer_pointer = ((slide *) current_slide->data)->layers;
+			layer_pointer = g_list_first(layer_pointer);
+
+			// Get details of the layers we're moving around
+			selected_layer = g_list_nth(layer_pointer, old_row);
+			layer_below = g_list_nth(layer_pointer, new_row);
+
+			// Move the row down one in the layer list
+			layer_pointer = g_list_remove_link(layer_pointer, layer_below);
+			layer_pointer = g_list_insert_before(layer_pointer, selected_layer, layer_below->data);
+			((slide *) current_slide->data)->layers = layer_pointer;
+
+			// Update the selected row
+			time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), new_row);
+
+			// Update the timeline display
+			// fixme3: This could be a lot more efficient!
+			time_line_regenerate_images(GTK_WIDGET(this_time_line));
+			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &GTK_WIDGET(this_time_line)->allocation, TRUE);
+
+			// Update the workspace area
+			draw_workspace();
+		}
+	}
+
+	return;
+}
+
 // Callback function for when the user presses the mouse button on the time line widget
 void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
@@ -1021,7 +1205,7 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 		return;
 	}
 
-	// In this particular case, it's probably the child of the called widget that we need to get data from
+	// It's probably the child of the called widget that we need to get data from
 	if (FALSE == IS_TIME_LINE(widget))
 	{
 		tmp_glist = gtk_container_get_children(GTK_CONTAINER(widget));
@@ -1064,6 +1248,9 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
+	GdkModifierType		button_state;				// Mouse button states
+	gint				mouse_x;					// Mouse x position
+	gint				mouse_y;					// Mouse x position
 	TimeLinePrivate		*priv;
 	TimeLine			*this_time_line;
 	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
@@ -1074,8 +1261,18 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	{
 		return;
 	}
+printf("Release event.\n");
+	// Check for primary mouse button
+	if (1 != event->button)
+	{
+		// Not a primary mouse, so we return
+		return;
+	}
 
-	// In this particular case, it's probably the child of the called widget that we need to get data from
+	// Find out where the mouse is positioned, and which buttons and modifier keys are down (active)
+	gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);
+
+	// It's probably the child of the called widget that we need to get data from
 	if (FALSE == IS_TIME_LINE(widget))
 	{
 		tmp_glist = gtk_container_get_children(GTK_CONTAINER(widget));
@@ -1105,5 +1302,25 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	// Initialisation
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
-	/* Other button release stuff goes here */
+	// Check if we're dragging
+	if (TRUE == priv->drag_active)
+	{
+		// We're commencing a drag, so note this
+		priv->drag_active = FALSE;
+printf("Drag ended.\n");
+printf("Distance dragged - X: %.2f\tY: %.2fd\n", event->x - priv->stored_x, event->y - priv->stored_y);
+
+/*
+		// Store the mouse coordinates so we know where to drag from
+		priv->stored_x = event->x;
+		priv->stored_y = event->y;
+
+		// Reset the invalidation area
+		priv->invalidation_end_x = event->x;
+		priv->invalidation_end_y = event->y;
+		priv->invalidation_start_x = event->x - 1;
+		priv->invalidation_start_y = event->y - 1;
+*/
+	}
+
 }
