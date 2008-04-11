@@ -73,6 +73,7 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint layer_number);
 gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint width, gint height);
 gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_number);
+gboolean time_line_internal_invalidate_layer_area(GtkWidget *widget, gint layer_number);
 gboolean time_line_internal_redraw_layer_bg(TimeLinePrivate *priv, gint layer_number);
 void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint width);
 
@@ -762,6 +763,31 @@ gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_nu
 	return TRUE;
 }
 
+// Function to invalidate the widget area onscreen that's occupied by a specific row
+gboolean time_line_internal_invalidate_layer_area(GtkWidget *widget, gint layer_number)
+{
+	// Local variables
+	GtkAllocation		layer_area;
+	TimeLinePrivate		*priv;
+	TimeLine			*this_time_line;
+
+
+	// Initialisation
+	this_time_line = TIME_LINE(widget);
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+
+	// Set the height related variables
+	layer_area.x = 0;
+	layer_area.y = priv->top_border_height + (layer_number * priv->row_height) + 2;
+	layer_area.height = priv->row_height - 3;
+	layer_area.width = widget->allocation.width;
+
+	// Invalidate the selected area
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &layer_area, TRUE);
+
+	return TRUE;
+}
+
 // Function to create the cached time line background image, and its display buffer 
 gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height)
 {
@@ -961,7 +987,10 @@ gboolean time_line_internal_redraw_layer_bg(TimeLinePrivate *priv, gint layer_nu
 
 	// Refresh the display buffer for the selected layer
 	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
-			GDK_PIXMAP(priv->display_buffer), 0, 0, 0, 0, layer_width, layer_height);
+			GDK_PIXMAP(priv->cached_bg_image),
+			layer_x, layer_y,
+			layer_x, layer_y,
+			layer_width, layer_height);
 
 	return TRUE;
 }
@@ -1131,13 +1160,22 @@ printf("New row: %.2f\n", floor(new_row));
 			layer_pointer = g_list_insert_before(layer_pointer, layer_above, selected_layer->data);
 			((slide *) current_slide->data)->layers = layer_pointer;
 
+			// Refresh the timeline display of the old row
+			time_line_internal_redraw_layer_bg(priv, old_row);
+			time_line_internal_draw_layer_name(priv, old_row);
+			time_line_internal_draw_layer_duration(priv, old_row);
+
+			// Refresh the timeline display of the new row
+			time_line_internal_redraw_layer_bg(priv, new_row);
+			time_line_internal_draw_layer_name(priv, new_row);
+			time_line_internal_draw_layer_duration(priv, new_row);
+
 			// Update the selected row
 			time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), new_row);
 
-			// Update the timeline display
-			// fixme3: This could be a lot more efficient!
-			time_line_regenerate_images(GTK_WIDGET(this_time_line));
-			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &GTK_WIDGET(this_time_line)->allocation, TRUE);
+			// Tell the window system to update the new widget areas onscreen
+			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), new_row);
+			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), old_row);
 
 			// Update the workspace area
 			draw_workspace();
@@ -1158,13 +1196,22 @@ printf("New row: %.2f\n", floor(new_row));
 			layer_pointer = g_list_insert_before(layer_pointer, selected_layer, layer_below->data);
 			((slide *) current_slide->data)->layers = layer_pointer;
 
+			// Refresh the timeline display of the old row
+			time_line_internal_redraw_layer_bg(priv, old_row);
+			time_line_internal_draw_layer_name(priv, old_row);
+			time_line_internal_draw_layer_duration(priv, old_row);
+
+			// Refresh the timeline display of the new row
+			time_line_internal_redraw_layer_bg(priv, new_row);
+			time_line_internal_draw_layer_name(priv, new_row);
+			time_line_internal_draw_layer_duration(priv, new_row);
+
 			// Update the selected row
 			time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), new_row);
 
-			// Update the timeline display
-			// fixme3: This could be a lot more efficient!
-			time_line_regenerate_images(GTK_WIDGET(this_time_line));
-			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &GTK_WIDGET(this_time_line)->allocation, TRUE);
+			// Tell the window system to update the new widget areas onscreen
+			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), new_row);
+			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), old_row);
 
 			// Update the workspace area
 			draw_workspace();
