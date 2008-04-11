@@ -57,6 +57,7 @@ gboolean project_read(gchar *filename)
 	gint				data_length;				// Number of image data bytes a layer says it stores
 	xmlDocPtr			document;					// Holds a pointer to the XML document
 	xmlChar				*end_behaviour_data = NULL;
+	gfloat				end_time;					// Used to calculate the end time in seconds of a layer
 	GError				*error = NULL;				// Pointer to error return structure
 	GString				*error_string;				// Used to create error strings
 	GtkTreeIter			film_strip_iter;
@@ -69,6 +70,7 @@ gboolean project_read(gchar *filename)
 	GList				*new_slides = NULL;			// Linked list holding the new slide info
 	guint				num_layers;					// Holds the number of layers in a slide
 	guint				num_slides;					// Holds the number of slides we've processed
+	gfloat				potential_duration;			// Receives a slide duration from the project file that we may or may not use
 	xmlNodePtr			preferences_node = NULL;	// Points to the preferences structure
 	xmlChar				*project_name_data = NULL;
 	xmlChar				*output_folder_data = NULL;
@@ -516,7 +518,7 @@ gboolean project_read(gchar *filename)
 			// Create a new slide in memory
 			tmp_slide = g_new0(slide, 1);
 			tmp_slide->layers = NULL;
-			tmp_slide->duration = default_slide_duration;
+			tmp_slide->duration = 0;  // 0 on purpose instead of default_slide_duration, so we can calculate things correctly!
 			tmp_slide->scaled_cached_pixbuf = NULL;
 			tmp_slide->cached_pixbuf_valid = FALSE;
 			tmp_slide->num_layers = 0;
@@ -733,10 +735,17 @@ gboolean project_read(gchar *filename)
 									this_node = this_node->next;	
 								}
 
+								// Work out the end time in seconds of the presently selected layer
+								end_time = tmp_layer->start_time + tmp_layer->duration;
+								if (TRANS_LAYER_NONE != tmp_layer->transition_in_type)
+									end_time += tmp_layer->transition_in_duration;
+								if (TRANS_LAYER_NONE != tmp_layer->transition_out_type)
+									end_time += tmp_layer->transition_out_duration;
+
 								// If the new layer end time is longer than the slide duration, then extend the slide duration
-								if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > tmp_slide->duration)
+								if (end_time > tmp_slide->duration)
 								{
-									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+									tmp_slide->duration = end_time;
 								}
 
 								// Add this (now completed) empty layer to the slide
@@ -1158,10 +1167,17 @@ gboolean project_read(gchar *filename)
 								// Set the modified flag for this image to false
 								tmp_image_ob->modified = FALSE;
 
+								// Work out the end time in seconds of the presently selected layer
+								end_time = tmp_layer->start_time + tmp_layer->duration;
+								if (TRANS_LAYER_NONE != tmp_layer->transition_in_type)
+									end_time += tmp_layer->transition_in_duration;
+								if (TRANS_LAYER_NONE != tmp_layer->transition_out_type)
+									end_time += tmp_layer->transition_out_duration;
+
 								// If the new layer end time is longer than the slide duration, then extend the slide duration
-								if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > tmp_slide->duration)
+								if (end_time > tmp_slide->duration)
 								{
-									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+									tmp_slide->duration = end_time;
 								}
 
 								// Add this (now completed) image layer to the slide
@@ -1483,10 +1499,17 @@ gboolean project_read(gchar *filename)
 									this_node = this_node->next;	
 								}
 
+								// Work out the end time in seconds of the presently selected layer
+								end_time = tmp_layer->start_time + tmp_layer->duration;
+								if (TRANS_LAYER_NONE != tmp_layer->transition_in_type)
+									end_time += tmp_layer->transition_in_duration;
+								if (TRANS_LAYER_NONE != tmp_layer->transition_out_type)
+									end_time += tmp_layer->transition_out_duration;
+
 								// If the new layer end time is longer than the slide duration, then extend the slide duration
-								if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > tmp_slide->duration)
+								if (end_time > tmp_slide->duration)
 								{
-									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+									tmp_slide->duration = end_time;
 								}
 
 								// Add this (now completed) highlight layer to the slide
@@ -1831,10 +1854,17 @@ gboolean project_read(gchar *filename)
 									this_node = this_node->next;	
 								}
 
+								// Work out the end time in seconds of the presently selected layer
+								end_time = tmp_layer->start_time + tmp_layer->duration;
+								if (TRANS_LAYER_NONE != tmp_layer->transition_in_type)
+									end_time += tmp_layer->transition_in_duration;
+								if (TRANS_LAYER_NONE != tmp_layer->transition_out_type)
+									end_time += tmp_layer->transition_out_duration;
+
 								// If the new layer end time is longer than the slide duration, then extend the slide duration
-								if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > tmp_slide->duration)
+								if (end_time > tmp_slide->duration)
 								{
-									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+									tmp_slide->duration = end_time;
 								}
 
 								// Add this (now completed) mouse pointer layer to the slide
@@ -2193,10 +2223,17 @@ gboolean project_read(gchar *filename)
 									this_node = this_node->next;
 								}
 
+								// Work out the end time in seconds of the presently selected layer
+								end_time = tmp_layer->start_time + tmp_layer->duration;
+								if (TRANS_LAYER_NONE != tmp_layer->transition_in_type)
+									end_time += tmp_layer->transition_in_duration;
+								if (TRANS_LAYER_NONE != tmp_layer->transition_out_type)
+									end_time += tmp_layer->transition_out_duration;
+
 								// If the new layer end time is longer than the slide duration, then extend the slide duration
-								if ((tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration) > tmp_slide->duration)
+								if (end_time > tmp_slide->duration)
 								{
-									tmp_slide->duration = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
+									tmp_slide->duration = end_time;
 								}
 
 								// Add this (now completed) text layer to the slide
@@ -2230,11 +2267,10 @@ gboolean project_read(gchar *filename)
 			}
 
 			// Read the slide duration from the project file
-			tmp_slide->duration = default_slide_duration;
 			tmp_char = xmlGetProp(this_slide, (const xmlChar *) "duration");
 			if (NULL != tmp_char)
 			{
-				// A duration for the slide is in the project file, so we use it if it validates
+				// A duration for the slide is in the project file, so we use it if it validates and is longer than the one we worked out
 				validated_gfloat = validate_value(SLIDE_DURATION, V_CHAR, tmp_char);
 				if (NULL == validated_gfloat)
 				{
@@ -2245,13 +2281,17 @@ gboolean project_read(gchar *filename)
 					// If the file format is less the version 4.0, then it has slides with frame based input rather than time based input
 					if (4.0 > valid_save_format)
 					{
-						tmp_slide->duration = *validated_gfloat / valid_fps;
+						potential_duration = *validated_gfloat / valid_fps;
 					} else
 					{
-						tmp_slide->duration = *validated_gfloat;
+						potential_duration = *validated_gfloat;
 					}
 					g_free(validated_gfloat);
 					xmlFree(tmp_char);
+
+					// Use the larger of either the duration in the project file, or the one we calculated while loading frames
+					if (potential_duration > tmp_slide->duration)
+						tmp_slide->duration = potential_duration;
 				}
 			}
 
