@@ -38,7 +38,8 @@
 void menu_file_close()
 {
 	// Local variables
-	GdkRectangle			tmp_rectangle;
+	gboolean			return_code_gbool;			// Catches gboolean return codes
+	GdkRectangle		tmp_rectangle;
 
 
 	// If there isn't an active project, we just return
@@ -48,7 +49,12 @@ void menu_file_close()
 	// If we have unsaved changes, warn the user
 	if (TRUE == changes_made)
 	{
-		display_dialog_save_warning();
+		return_code_gbool = display_dialog_save_warning();
+		if (FALSE == return_code_gbool)
+		{
+			// The user pressed Cancel in the dialog
+			return;
+		}
 	}
 
 	// If there's a project presently loaded in memory, we unload it

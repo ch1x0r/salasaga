@@ -66,7 +66,12 @@ void menu_file_open(void)
 	// If we have unsaved changes, warn the user
 	if (TRUE == changes_made)
 	{
-		display_dialog_save_warning();
+		return_code = display_dialog_save_warning();
+		if (FALSE == return_code)
+		{
+			// The user pressed Cancel in the dialog
+			return;
+		}
 	}
 
 	// Create the dialog asking the user to select a Salasaga Project file

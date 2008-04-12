@@ -57,6 +57,7 @@ void menu_file_new(void)
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	GtkDialog			*project_dialog;			// Widget for the dialog
 	GtkWidget			*project_table;				// Table used for neat layout of the dialog box
+	gboolean			return_code_gbool;			// Catches gboolean return codes
 	guint				row_counter = 0;			// Used to count which row things are up to
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
 	guint				valid_fps;					// Receives the new project fps once validated
@@ -85,7 +86,12 @@ void menu_file_new(void)
 	// If we have unsaved changes, warn the user
 	if (TRUE == changes_made)
 	{
-		display_dialog_save_warning();
+		return_code_gbool = display_dialog_save_warning();
+		if (FALSE == return_code_gbool)
+		{
+			// The user pressed Cancel in the dialog
+			return;
+		}
 	}
 
 	// Initialise some things

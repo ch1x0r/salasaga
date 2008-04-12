@@ -48,7 +48,7 @@ void save_preferences_and_exit(void)
 	// Local variables
 	GString				*command_key;				// Used to work out paths into the GConf structure
 	GConfEngine			*gconf_engine;				// GConf engine
-
+	gboolean			return_code_gbool;			// Catches gboolean return codes
 	guint				tmp_int;					// Temporary integer
 	GtkWindow			*tmp_gtk_window;			// Temporary GtkWindow
 	GdkWindow			*tmp_gdk_window;			// Temporary GdkWindow
@@ -57,7 +57,12 @@ void save_preferences_and_exit(void)
 	// If we have unsaved changes, warn the user
 	if (TRUE == changes_made)
 	{
-		display_dialog_save_warning();
+		return_code_gbool = display_dialog_save_warning();
+		if (FALSE == return_code_gbool)
+		{
+			// The user pressed Cancel in the dialog
+			return;
+		}
 	}
 
 	// Save the application preferences
