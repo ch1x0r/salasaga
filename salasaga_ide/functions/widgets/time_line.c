@@ -61,7 +61,6 @@ struct _TimeLinePrivate
 	gint				guide_line_end;				// The pixel number of the ending guide line
 	gint				guide_line_start;			// The pixel number of the starting guide line
 	gint				left_border_width;			// Number of pixels in the left border (layer name) area
-	gint				pixels_per_second;			// Number of pixels used to display each second
 	gint				row_height;					// Number of pixels in each layer row
 	gint				selected_layer_num;			// The number of the selected layer
 	gfloat				stored_slide_duration;		// The original duration of the slide in seconds
@@ -82,6 +81,9 @@ gboolean time_line_internal_invalidate_layer_area(GtkWidget *widget, gint layer_
 gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint y1, gint width, gint height);
 gboolean time_line_internal_redraw_layer_bg(TimeLinePrivate *priv, gint layer_number);
 void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint width);
+
+// Library wide variables
+gint					pixels_per_second;			// Number of pixels used to display each second
 
 // * Function definitions *
 
@@ -594,8 +596,8 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 	if (TRANS_LAYER_FADE == layer_data->transition_in_type)
 	{
 		// Draw the fade in
-		layer_x = priv->left_border_width + (layer_data->start_time * priv->pixels_per_second) + 1;
-		layer_width = (layer_data->transition_in_duration * priv->pixels_per_second);
+		layer_x = priv->left_border_width + (layer_data->start_time * pixels_per_second) + 1;
+		layer_width = (layer_data->transition_in_duration * pixels_per_second);
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
 		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
 				layer_x, layer_y, layer_width, layer_height);
@@ -604,8 +606,8 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 				layer_x, layer_y, layer_width, layer_height - 1);
 
 		// Draw the fully visible duration
-		layer_x = priv->left_border_width + ((layer_data->start_time + layer_data->transition_in_duration) * priv->pixels_per_second) + 1;
-		layer_width = (layer_data->duration * priv->pixels_per_second);
+		layer_x = priv->left_border_width + ((layer_data->start_time + layer_data->transition_in_duration) * pixels_per_second) + 1;
+		layer_width = (layer_data->duration * pixels_per_second);
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
 		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
 				layer_x, layer_y, layer_width, layer_height);
@@ -615,8 +617,8 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 	} else
 	{
 		// There's no fade in transition for this layer
-		layer_x = priv->left_border_width + (layer_data->start_time * priv->pixels_per_second) + 1;
-		layer_width = (layer_data->duration * priv->pixels_per_second);
+		layer_x = priv->left_border_width + (layer_data->start_time * pixels_per_second) + 1;
+		layer_width = (layer_data->duration * pixels_per_second);
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
 		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
 				layer_x, layer_y, layer_width, layer_height);
@@ -629,8 +631,8 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 	if (TRANS_LAYER_FADE == layer_data->transition_out_type)
 	{
 		// Draw the fade out
-		layer_x += (layer_data->duration * priv->pixels_per_second);
-		layer_width = (layer_data->transition_out_duration * priv->pixels_per_second);
+		layer_x += (layer_data->duration * pixels_per_second);
+		layer_width = (layer_data->transition_out_duration * pixels_per_second);
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
 		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
 				layer_x, layer_y, layer_width, layer_height);
@@ -866,16 +868,16 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	// Draw the seconds markings
 	font_description = pango_font_description_from_string("Sans, 10px");
 	pango_layout_set_font_description(font_layout, font_description);
-	loop_max = width / priv->pixels_per_second;
+	loop_max = width / pixels_per_second;
 	for (loop_counter = 0; loop_counter <= loop_max; loop_counter++)
 	{
 		// In the top border area
 		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
 		gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 		gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
-						priv->left_border_width + (loop_counter * priv->pixels_per_second),
+						priv->left_border_width + (loop_counter * pixels_per_second),
 						priv->top_border_height - 5,
-						priv->left_border_width + (loop_counter * priv->pixels_per_second),
+						priv->left_border_width + (loop_counter * pixels_per_second),
 						priv->top_border_height - 1);
 
 		// The numbers themselves
@@ -884,16 +886,16 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 		pango_layout_get_size(font_layout, &font_width, NULL);
 		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
 		gdk_draw_layout(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
-				priv->left_border_width + (loop_counter * priv->pixels_per_second) - ((font_width / PANGO_SCALE) / 2), -2, font_layout);
+				priv->left_border_width + (loop_counter * pixels_per_second) - ((font_width / PANGO_SCALE) / 2), -2, font_layout);
 
 		// In the main time line area
 		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_antique_white_2);
 		gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
 		gdk_gc_set_dashes(GDK_GC(bg_image_gc), 1, dash_list, 2);
 		gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
-						priv->left_border_width + (loop_counter * priv->pixels_per_second),
+						priv->left_border_width + (loop_counter * pixels_per_second),
 						priv->top_border_height + 1,
-						priv->left_border_width + (loop_counter * priv->pixels_per_second),
+						priv->left_border_width + (loop_counter * pixels_per_second),
 						height);
 	}
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
@@ -906,13 +908,13 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	for (loop_counter = 1; loop_counter <= loop_max; loop_counter++)
 	{
 		// The half second markings
-		loop_max2 = width / priv->pixels_per_second;
+		loop_max2 = width / pixels_per_second;
 		for (loop_counter2 = 0; loop_counter2 <= loop_max2; loop_counter2++)
 		{
 			gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
-							priv->left_border_width + (priv->pixels_per_second >> 1) + (loop_counter2 * priv->pixels_per_second),
+							priv->left_border_width + (pixels_per_second >> 1) + (loop_counter2 * pixels_per_second),
 							priv->top_border_height + (loop_counter * priv->row_height) - 3,
-							priv->left_border_width + (priv->pixels_per_second >> 1) + (loop_counter2 * priv->pixels_per_second),
+							priv->left_border_width + (pixels_per_second >> 1) + (loop_counter2 * pixels_per_second),
 							priv->top_border_height + (loop_counter * priv->row_height));
 		}
 
@@ -1061,6 +1063,7 @@ static void time_line_init(TimeLine *time_line)
 
 
 	// Initialise variable defaults
+	pixels_per_second = 60;
 	priv = TIME_LINE_GET_PRIVATE(time_line);
 	priv->cached_bg_valid = FALSE;
 	priv->display_buffer = NULL;
@@ -1076,7 +1079,6 @@ static void time_line_init(TimeLine *time_line)
 
 	// fixme3: These would probably be good as properties
 	priv->left_border_width = 120;
-	priv->pixels_per_second = 60;
 	priv->row_height = 20;
 	priv->top_border_height = 15;
 
@@ -1232,8 +1234,8 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
 
 		// Store the position of the new guide lines so we know where to refresh
-		priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * priv->pixels_per_second);
-		priv->guide_line_end = priv->left_border_width + (end_time * priv->pixels_per_second);
+		priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
+		priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second);
 
 		// Draw the new guide lines
 		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
@@ -1320,7 +1322,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 				// Calculate the time and distance travelled
 				mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
 				distance_moved = priv->stored_x - mouse_x;
-				time_moved = ((gfloat) distance_moved) / priv->pixels_per_second;
+				time_moved = ((gfloat) distance_moved) / pixels_per_second;
 
 				// Update the layer data with the new timing
 				if (0 > (this_layer_data->start_time - time_moved))
@@ -1351,7 +1353,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 				// Calculate the time and distance travelled
 				mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
 				distance_moved = mouse_x - priv->stored_x;
-				time_moved = ((gfloat) distance_moved) / priv->pixels_per_second;
+				time_moved = ((gfloat) distance_moved) / pixels_per_second;
 
 				// Update the layer data with the new timing
 				this_layer_data->start_time += time_moved;
@@ -1377,7 +1379,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			background_layer_data->duration = priv->stored_slide_duration;
 
 			// Refresh the timeline display of the background layer
-			area.x = priv->stored_slide_duration * priv->pixels_per_second;
+			area.x = priv->stored_slide_duration * pixels_per_second;
 			area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
 			area.height = priv->row_height - 3;
 			area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
@@ -1396,7 +1398,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			background_layer_data->duration = end_time;
 
 			// Refresh the timeline display of the background layer
-			area.x = priv->stored_slide_duration * priv->pixels_per_second;
+			area.x = priv->stored_slide_duration * pixels_per_second;
 			area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
 			area.height = priv->row_height - 3;
 			area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
@@ -1417,8 +1419,8 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
 
 		// Update the guide line positions so we know where to refresh
-		priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * priv->pixels_per_second);
-		priv->guide_line_end = priv->left_border_width + (end_time * priv->pixels_per_second);
+		priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
+		priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second);
 
 		// Draw the updated guide lines
 		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
@@ -1519,8 +1521,8 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 		end_time += this_layer_data->transition_out_duration;
 
 	// Store the guide line positions so we know where to refresh
-	priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * priv->pixels_per_second);
-	priv->guide_line_end = priv->left_border_width + (end_time * priv->pixels_per_second);
+	priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
+	priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second);
 
 	// Draw guide lines
 	time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
@@ -1598,7 +1600,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 		if ((ADJUSTMENTS_X <= mouse_x) && ((ADJUSTMENTS_X + ADJUSTMENTS_SIZE) >= mouse_x))
 		{
 			// Sanity check
-			if (priv->pixels_per_second >= 96)
+			if (pixels_per_second >= 96)
 			{
 				// We're already at the acceptable scaling limit, so beep then return
 				gdk_beep();
@@ -1606,7 +1608,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 			}
 
 			// Adjust the number of pixels per second
-			priv->pixels_per_second = priv->pixels_per_second * 2;
+			pixels_per_second = pixels_per_second * 2;
 			g_object_unref(GDK_PIXMAP(priv->cached_bg_image));
 			priv->cached_bg_image = NULL;
 
@@ -1640,7 +1642,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 		if ((ADJUSTMENTS_X + 15 <= mouse_x) && ((ADJUSTMENTS_X + 15 + ADJUSTMENTS_SIZE) >= mouse_x))
 		{
 			// Sanity check
-			if (priv->pixels_per_second <= 24)
+			if (pixels_per_second <= 24)
 			{
 				// We're already at the acceptable scaling limit, so beep then return
 				gdk_beep();
@@ -1648,7 +1650,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 			}
 
 			// Adjust the number of pixels per second
-			priv->pixels_per_second = priv->pixels_per_second / 2;
+			pixels_per_second = pixels_per_second / 2;
 			g_object_unref(GDK_PIXMAP(priv->cached_bg_image));
 			priv->cached_bg_image = NULL;
 
