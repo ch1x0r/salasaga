@@ -68,11 +68,11 @@ struct _TimeLinePrivate
 
 
 // * Internal function declarations *
-gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height);
 gboolean time_line_internal_draw_guide_line(GtkWidget *widget, gint pixel_num);
 gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint layer_number);
 gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv);
 gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_number);
+gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint width, gint height);
 gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gint new_width, gint new_height);
 gboolean time_line_internal_invalidate_layer_area(GtkWidget *widget, gint layer_number);
 gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint y1, gint width, gint height);
@@ -361,7 +361,7 @@ static void time_line_size_allocate(GtkWidget *widget, GtkAllocation *allocation
 	}
 
 	// Create the background buffer
-	time_line_internal_create_images(priv, width, height);
+	time_line_internal_initialise_bg_image(priv, width, height);
 
 	// Create the display buffer
 	time_line_internal_initialise_display_buffer(priv, width, height);
@@ -452,7 +452,7 @@ gboolean time_line_regenerate_images(GtkWidget *widget)
 	// If the cached background image isn't valid, we need to recreate it
 	if (FALSE == priv->cached_bg_valid)
 	{
-		time_line_internal_create_images(priv, width, height);
+		time_line_internal_initialise_bg_image(priv, width, height);
 	}
 
 	// Recreate the display buffer
@@ -733,8 +733,8 @@ gboolean time_line_internal_invalidate_layer_area(GtkWidget *widget, gint layer_
 	return TRUE;
 }
 
-// Function to create the cached time line background image, and its display buffer 
-gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height)
+// Function to create the cached time line background image
+gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint width, gint height)
 {
 	// Local variables
 	static GdkGC		*bg_image_gc = NULL;
@@ -994,8 +994,8 @@ gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint 
 	// Ensure the background image we're about to use is valid
 	if (TRUE != priv->cached_bg_valid)
 	{
-		// It's not, so recreate the timeline background image and display buffer at the new size
-		time_line_internal_create_images(priv, width, height);
+		// It's not, so recreate the timeline background image
+		time_line_internal_initialise_bg_image(priv, width, height);
 	}
 
 	// Refresh the display buffer for the desired area
@@ -1054,8 +1054,8 @@ static void time_line_init(TimeLine *time_line)
 	priv->row_height = 20;
 	priv->top_border_height = 15;
 
-	// Call our internal time line function to create the cached background image and display buffer
-	time_line_internal_create_images(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
+	// Call our internal time line function to create the cached background image
+	time_line_internal_initialise_bg_image(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
 
 	// Call our internal function to create the display buffer
 	time_line_internal_initialise_display_buffer(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
