@@ -70,6 +70,7 @@ struct _TimeLinePrivate
 	gboolean			drag_active;				// Tracks whether we have an active mouse drag or not
 	gint				guide_line_end;				// The pixel number of the ending guide line
 	gint				guide_line_start;			// The pixel number of the starting guide line
+	gint				guide_line_resize;			// The pixel number of the resizing guide line
 	gint				left_border_width;			// Number of pixels in the left border (layer name) area
 	guint				resize_type;				// Tracks whether we have an active layer resize or not
 	gint				row_height;					// Number of pixels in each layer row
@@ -1218,10 +1219,10 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
 		end_time += this_layer_data->transition_out_duration;
 
-	// Check if we're not already doing something
+	// If we're not already resizing or dragging, check for a new resize starting
 	if ((RESIZE_NONE == priv->resize_type) && (FALSE == priv->drag_active))
 	{
-		// * Check if the user clicked on the start of the layer (i.e. wants to adjust the start time)
+		// Check if the user clicked on the start of the layer (i.e. wants to adjust the start time)
 		check_pixel = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
 		if (1 < check_pixel)
 			check_pixel -= 1;
@@ -1237,6 +1238,52 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			{
 				// We're adjusting the start time of the main duration
 				priv->resize_type = RESIZE_LAYER_START;
+				priv->stored_x = mouse_x;
+			}
+		}
+
+		// Is there a transition in for this layer?
+		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+		{
+			// Check if the user clicked on the end of a transition in
+			check_pixel = priv->left_border_width +
+							((this_layer_data->start_time + this_layer_data->transition_in_duration) * pixels_per_second);
+			if (1 < check_pixel)
+				check_pixel -= 1;
+			if ((mouse_x >= check_pixel) && (mouse_x <= check_pixel + 5))
+			{
+				// We're adjusting the end time of the transition in
+				priv->resize_type = RESIZE_LAYER_START;
+				priv->stored_x = mouse_x;
+			}
+		}
+
+		// Check if the user clicked on the end of the duration for the layer (i.e. wants to adjust the duration time)
+		check_pixel = priv->left_border_width + ((this_layer_data->start_time + this_layer_data->duration) * pixels_per_second);
+		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+			check_pixel += this_layer_data->transition_in_duration * pixels_per_second;
+		if (1 < check_pixel)
+			check_pixel -= 1;
+		if ((mouse_x >= check_pixel) && (mouse_x <= check_pixel + 5))
+		{
+			// We're adjusting the main duration time
+			priv->resize_type = RESIZE_LAYER_DURATION;
+			priv->stored_x = mouse_x;
+		}
+
+		// Is there a transition out for this layer?
+		if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+		{
+			// Check if the user clicked on the end of a transition out
+			check_pixel = priv->left_border_width + ((this_layer_data->start_time + this_layer_data->duration + this_layer_data->transition_out_duration) * pixels_per_second);
+			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+				check_pixel += this_layer_data->transition_in_duration * pixels_per_second;
+			if (1 < check_pixel)
+				check_pixel -= 1;
+			if ((mouse_x >= check_pixel) && (mouse_x <= check_pixel + 5))
+			{
+				// We're adjusting the end time of the transition in
+				priv->resize_type = RESIZE_TRANS_OUT_DURATION;
 				priv->stored_x = mouse_x;
 			}
 		}
@@ -1258,10 +1305,10 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			{
 				case RESIZE_TRANS_IN_START:
 					
-					// We're adjusting the transition in
+					// We're adjusting the transition in start
 					if (this_layer_data->transition_in_duration < time_moved)
 					{
-						// We've shortened the layer to 0 duration
+						// We've shortened the transition in to 0 duration
 						this_layer_data->start_time += time_moved;
 						this_layer_data->transition_in_duration = 0;
 					} else
@@ -1274,18 +1321,49 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 
 				case RESIZE_LAYER_START:
 
-					// We're adjusting the layer duration
+					// We're adjusting the main layer start
 					if (this_layer_data->duration < time_moved)
 					{
 						// We've shortened the layer to 0 duration
-						this_layer_data->start_time += time_moved;
 						this_layer_data->duration = 0;
+						this_layer_data->transition_in_duration += time_moved;
+						if (this_layer_data->transition_out_duration < time_moved)
+						{
+							// We've shortened the transition out duration to 0 as well
+							this_layer_data->transition_out_duration = 0;
+						} else
+						{
+							this_layer_data->transition_out_duration -= time_moved;
+						}
 					} else
 					{
 						// Adjust the layer timing
 						this_layer_data->duration -= time_moved;
-						this_layer_data->start_time += time_moved;
+						this_layer_data->transition_in_duration += time_moved;
 					}
+					break;
+
+				case RESIZE_LAYER_DURATION:
+
+					// We're adjusting the main layer duration
+					if (this_layer_data->transition_out_duration < time_moved)
+					{
+						// We've shortened the transition out duration to 0
+						this_layer_data->duration += time_moved;
+						this_layer_data->transition_out_duration = 0;
+					} else
+					{
+						// Adjust the layer timing
+						this_layer_data->duration += time_moved;
+						this_layer_data->transition_out_duration -= time_moved;
+					}
+					break;
+
+				case RESIZE_TRANS_OUT_DURATION:
+
+					// We're adjusting the transition out duration
+					this_layer_data->transition_out_duration += time_moved;
+					end_time += time_moved;
 					break;
 
 				default:
@@ -1306,21 +1384,76 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			{
 				case RESIZE_TRANS_IN_START:
 
-					// Adjust the layer timing
+					// We're adjusting the transition in start
 					this_layer_data->start_time -= time_moved;
 					this_layer_data->transition_in_duration += time_moved;
 					break;
 
 				case RESIZE_LAYER_START:
 
-					// Adjust the layer timing
-					this_layer_data->start_time -= time_moved;
-					this_layer_data->duration += time_moved;
+					// We're adjusting the main layer start
+					if (this_layer_data->transition_in_duration < time_moved)
+					{
+						// We've shortened the duration to 0
+						this_layer_data->start_time -= time_moved;
+						this_layer_data->transition_in_duration = 0;
+						this_layer_data->duration += time_moved;
+					} else
+					{
+						// Adjust the layer timing
+						this_layer_data->transition_in_duration -= time_moved;
+						this_layer_data->duration += time_moved;
+					}
+					break;
+
+				case RESIZE_LAYER_DURATION:
+
+					// We're adjusting the main layer duration
+					if (this_layer_data->duration < time_moved)
+					{
+						// We've shortened the main layer duration to 0
+						this_layer_data->duration = 0;
+						this_layer_data->transition_out_duration += time_moved;
+
+						if (this_layer_data->transition_in_duration < time_moved)
+						{
+							// We've shortened the transition in duration to 0 as well
+							this_layer_data->transition_in_duration = 0;
+							this_layer_data->start_time -= time_moved;
+						} else
+						{
+							this_layer_data->transition_in_duration -= time_moved;
+						}
+					} else
+					{
+						// Adjust the layer timing
+						this_layer_data->duration -= time_moved;
+						this_layer_data->transition_out_duration += time_moved;
+					}
+					break;
+
+				case RESIZE_TRANS_OUT_DURATION:
+
+					// We're adjusting the transition out duration
+					if (this_layer_data->transition_out_duration < time_moved)
+					{
+						this_layer_data->transition_out_duration = 0;
+					} else
+					{
+						this_layer_data->transition_out_duration -= time_moved;						
+					}
+					end_time -= time_moved;
 					break;
 
 				default:
 					display_warning("Error ED367: Unknown layer resize type.");
 			}
+		}
+
+		// Safety check
+		if (0 > this_layer_data->start_time)
+		{
+			this_layer_data->start_time = 0;
 		}
 
 		// Update the stored position of the row in the widget
@@ -1332,9 +1465,60 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		time_line_internal_draw_layer_duration(priv, current_row);
 
 		// Tell the window system to update the current row area onscreen
-		time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);		
+		time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
+
+		// Wipe existing guide line if present
+		if (0 != priv->guide_line_resize)
+		{
+			area.x = priv->guide_line_resize;
+			area.y = 0;
+			area.height = GTK_WIDGET(this_time_line)->allocation.height;
+			area.width = 1;
+			gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+		}
+
+		// Store the guide line position so we know where to refresh
+		switch (priv->resize_type)
+		{
+			case RESIZE_TRANS_IN_START:
+				// No guide line needed
+				break;
+
+			case RESIZE_LAYER_START:
+
+				// Draw guide line if needed
+				if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+				{
+					priv->guide_line_resize = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
+					priv->guide_line_resize += this_layer_data->transition_in_duration * pixels_per_second;
+					time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_resize);
+				}
+				break;
+
+			case RESIZE_LAYER_DURATION:
+
+				// Draw guide line if needed
+				if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+				{
+					priv->guide_line_resize = priv->left_border_width + ((this_layer_data->start_time + this_layer_data->duration) * pixels_per_second);
+					if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+						priv->guide_line_resize += this_layer_data->transition_in_duration * pixels_per_second;
+					time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_resize);
+				}
+				break;
+
+			case RESIZE_TRANS_OUT_DURATION:
+				// No guide line needed
+				break;
+
+			default:
+				display_warning("Error ED368: Unknown layer resize type.");
+		}
+
+		// Resize finished
+		return;
 	}
-	
+
 	// Check if we're not already dragging
 	if (FALSE == priv->drag_active)
 	{
@@ -1366,7 +1550,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 
 		// Store the position of the new guide lines so we know where to refresh
 		priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
-		priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second);
+		priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second) - 1;
 
 		// Draw the new guide lines
 		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
@@ -1540,13 +1724,14 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 
 		// Update the guide line positions so we know where to refresh
 		priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
-		priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second);
+		priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second) - 1;
 
 		// Draw the updated guide lines
 		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
 		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_end);
 	}
 
+	// Drag finished
 	return;
 }
 
@@ -1640,7 +1825,7 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 
 	// Store the guide line positions so we know where to refresh
 	priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
-	priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second);
+	priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second) - 1;
 
 	// Draw guide lines
 	time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
@@ -1813,6 +1998,18 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	{
 		// Note that the resize has finished
 		priv->resize_type = RESIZE_NONE;
+
+		// Mark that there are unsaved changes
+		changes_made = TRUE;
+
+		// Remove the resize guideline from the widget
+		area.x = priv->guide_line_resize;
+		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+		priv->guide_line_resize = 0;
+
+		// Use the status bar to communicate the resize has completed
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Resize completed");
+		gdk_flush();
 	}
 
 	// Check if this mouse release matches a drag 
@@ -1820,6 +2017,9 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	{
 		// Note that the drag has finished
 		priv->drag_active = FALSE;
+
+		// Mark that there are unsaved changes
+		changes_made = TRUE;
 
 		// Calculate the end time of the layer (in seconds)
 		this_slide_data = (slide *) current_slide->data;
@@ -1847,5 +2047,9 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 			time_line_internal_draw_layer_duration(priv, end_row);
 			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), end_row);
 		}
+
+		// Use the status bar to communicate the drag has completed
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Drag completed");
+		gdk_flush();
 	}
 }
