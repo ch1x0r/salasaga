@@ -1311,6 +1311,23 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 						// We've shortened the transition in to 0 duration
 						this_layer_data->start_time += time_moved;
 						this_layer_data->transition_in_duration = 0;
+						if (this_layer_data->duration < time_moved)
+						{
+							this_layer_data->duration = 0;
+							if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+							{
+								if (this_layer_data->transition_out_duration < time_moved)
+								{
+									this_layer_data->transition_out_duration = 0;
+								} else
+								{
+									this_layer_data->transition_out_duration -= time_moved;
+								}
+							}
+						} else
+						{
+							this_layer_data->duration -= time_moved;
+						}
 					} else
 					{
 						// Adjust the layer timing
@@ -1326,20 +1343,35 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 					{
 						// We've shortened the layer to 0 duration
 						this_layer_data->duration = 0;
-						this_layer_data->transition_in_duration += time_moved;
-						if (this_layer_data->transition_out_duration < time_moved)
+						if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 						{
-							// We've shortened the transition out duration to 0 as well
-							this_layer_data->transition_out_duration = 0;
+							this_layer_data->transition_in_duration += time_moved;
 						} else
 						{
-							this_layer_data->transition_out_duration -= time_moved;
+							this_layer_data->start_time += time_moved;
+						}
+						if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+						{
+							if (this_layer_data->transition_out_duration < time_moved)
+							{
+								// We've shortened the transition out duration to 0 as well
+								this_layer_data->transition_out_duration = 0;
+							} else
+							{
+								this_layer_data->transition_out_duration -= time_moved;
+							}
 						}
 					} else
 					{
 						// Adjust the layer timing
 						this_layer_data->duration -= time_moved;
-						this_layer_data->transition_in_duration += time_moved;
+						if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+						{
+							this_layer_data->transition_in_duration += time_moved;
+						} else
+						{
+							this_layer_data->start_time += time_moved;
+						}
 					}
 					break;
 
@@ -1401,7 +1433,13 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 					} else
 					{
 						// Adjust the layer timing
-						this_layer_data->transition_in_duration -= time_moved;
+						if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+						{
+							this_layer_data->transition_in_duration -= time_moved;
+						} else
+						{
+							this_layer_data->start_time -= time_moved;
+						}
 						this_layer_data->duration += time_moved;
 					}
 					break;
@@ -1440,6 +1478,27 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 					if (this_layer_data->transition_out_duration < time_moved)
 					{
 						this_layer_data->transition_out_duration = 0;
+						if (this_layer_data->duration < time_moved)
+						{
+							this_layer_data->duration = 0;
+							if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+							{
+								if (this_layer_data->transition_in_duration < time_moved)
+								{
+									this_layer_data->transition_in_duration = 0;
+									this_layer_data->start_time -= time_moved;
+								} else
+								{
+									this_layer_data->transition_in_duration -= time_moved;
+								}
+							} else
+							{
+								this_layer_data->start_time -= time_moved;
+							}
+						} else
+						{
+							this_layer_data->duration -= time_moved;
+						}
 					} else
 					{
 						this_layer_data->transition_out_duration -= time_moved;						
