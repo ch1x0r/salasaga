@@ -33,25 +33,22 @@
 #include "../externs.h"
 #include "layer_duplicate.h"
 #include "layer_free.h"
+#include "widgets/time_line.h"
 
 
 void layer_copy(void)
 {
 	// Local variables
 	slide				*current_slide_data;		// Alias to make things easier
-	GtkWidget			*list_widget;				// Alias to the timeline widget to make things easier
 	guint				selected_layer;				// Holds the number of the layer that is selected
 	layer				*this_layer;				// Pointer to the presently selected layer
-	GtkTreePath			*tmp_path;					// Temporary path
 
 
 	// Initialise some things
 	current_slide_data = current_slide->data;
-	list_widget = current_slide_data->timeline_widget;
 
 	// Determine which layer the user has selected in the timeline
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(list_widget), &tmp_path, NULL);
-	selected_layer = atoi(gtk_tree_path_to_string(tmp_path));
+	selected_layer = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
 	current_slide_data->layers = g_list_first(current_slide_data->layers);
 	this_layer = g_list_nth_data(current_slide_data->layers, selected_layer);
 
@@ -66,6 +63,7 @@ void layer_copy(void)
 	if (NULL == copy_layer)
 	{
 		// Something went wrong duplicating the existing layer.  Not much we can do
+		gdk_beep();
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Copy failed");
 		gdk_flush();
 		return;
