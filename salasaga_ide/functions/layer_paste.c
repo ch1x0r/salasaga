@@ -38,9 +38,11 @@
 void layer_paste(void)
 {
 	// Local variables
+	gfloat				end_time;					// Used to calculate the end time in seconds of a layer
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	layer				*new_layer;					// Newly created layer
 	slide				*slide_data;				// Pointer to the data for the current slide
+	layer				*tmp_layer;					// Temporary layer
 
 
 	// If no project is loaded then don't run this function
@@ -67,14 +69,27 @@ void layer_paste(void)
 	layer_pointer = g_list_first(layer_pointer);
 	layer_pointer = g_list_prepend(layer_pointer, new_layer);
 
-	// If the new layer end time is longer than the slide duration, then extend the slide duration
-	if ((new_layer->start_time + new_layer->duration + new_layer->transition_in_duration + new_layer->transition_out_duration) > slide_data->duration)
-	{
-		slide_data->duration = new_layer->start_time + new_layer->duration + new_layer->transition_in_duration + new_layer->transition_out_duration;
-	}
-
 	// Increase the layer counter for the slide
 	slide_data->num_layers++;
+
+	// Work out the end time in seconds of the layer
+	end_time = new_layer->start_time + new_layer->duration;
+	if (TRANS_LAYER_NONE != new_layer->transition_in_type)
+		end_time += new_layer->transition_in_duration;
+	if (TRANS_LAYER_NONE != new_layer->transition_out_type)
+		end_time += new_layer->transition_out_duration;
+
+	// If the new layer end time is longer than the slide duration, then extend the slide duration
+	if (end_time > slide_data->duration)
+	{
+		// Change the slide duration
+		slide_data->duration = end_time;
+
+		// Change the background layer duration
+		layer_pointer = g_list_first(layer_pointer);
+		tmp_layer = g_list_nth_data(layer_pointer, slide_data->num_layers - 1);
+		tmp_layer->duration = slide_data->duration;
+	}
 
 	// Regenerate the timeline
 	draw_timeline();

@@ -150,6 +150,17 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
 	slide_data->num_layers++;
 
+	// If the new layer end time is longer than the slide duration, then extend the slide duration 
+	if (tmp_layer->duration > slide_data->duration)
+	{
+		// Change the slide duration
+		slide_data->duration = tmp_layer->duration;
+
+		// Change the background layer duration
+		tmp_layer = g_list_nth_data(layer_pointer, slide_data->num_layers - 1);
+		tmp_layer->duration = slide_data->duration;
+	}
+
 	// Regenerate the timeline
 	draw_timeline();
 
