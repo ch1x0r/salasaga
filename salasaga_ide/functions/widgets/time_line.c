@@ -1430,6 +1430,8 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 						this_layer_data->duration -= time_moved;
 						this_layer_data->transition_out_duration += time_moved;
 					}
+					if (TRANS_LAYER_NONE == this_layer_data->transition_out_type)
+						end_time -= time_moved;
 					break;
 
 				case RESIZE_TRANS_OUT_DURATION:
@@ -1477,7 +1479,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 		}
 
-		// Store the guide line position so we know where to refresh
+		// Store the resize guide line position so we know where to refresh
 		switch (priv->resize_type)
 		{
 			case RESIZE_TRANS_IN_START:
@@ -1516,11 +1518,11 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		}
 
 		// Resize finished
-		return;
+//		return;
 	}
 
-	// Check if we're not already dragging
-	if (FALSE == priv->drag_active)
+	// If we're not already dragging, nor in a resize, assume we should be dragging
+	if ((RESIZE_NONE == priv->resize_type) && (FALSE == priv->drag_active))
 	{
 		// If the user is trying to drag outside the valid layers, ignore this event
 		if ((0 > new_row) || (new_row >= end_row) || (current_row >= end_row) || (0 > current_row))
@@ -1538,23 +1540,6 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			priv->stored_x = event->x;
 		}
 		priv->stored_y = event->y;
-
-		// Remove the old guide lines
-		area.x = priv->guide_line_start;
-		area.y = 0;
-		area.height = GTK_WIDGET(this_time_line)->allocation.height;
-		area.width = 1;
-		gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
-		area.x = priv->guide_line_end;
-		gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
-
-		// Store the position of the new guide lines so we know where to refresh
-		priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
-		priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second) - 1;
-
-		// Draw the new guide lines
-		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
-		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_end);
 	} else
 	{
 		// Clamp the row number to acceptable bounds
@@ -1712,26 +1697,25 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			// Refresh the newly drawn widget area
 			gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 		}
-
-		// Remove the old guide lines
-		area.x = priv->guide_line_start;
-		area.y = 0;
-		area.height = GTK_WIDGET(this_time_line)->allocation.height;
-		area.width = 1;
-		gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
-		area.x = priv->guide_line_end;
-		gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
-
-		// Update the guide line positions so we know where to refresh
-		priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
-		priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second) - 1;
-
-		// Draw the updated guide lines
-		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
-		time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_end);
 	}
 
-	// Drag finished
+	// Remove the old guide lines
+	area.y = 0;
+	area.height = GTK_WIDGET(this_time_line)->allocation.height;
+	area.width = 1;
+	area.x = priv->guide_line_start;
+	gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
+	area.x = priv->guide_line_end;
+	gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
+
+	// Update the guide line positions so we know where to refresh
+	priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
+	priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second) - 1;
+
+	// Draw the updated guide lines
+	time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
+	time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_end);
+
 	return;
 }
 
