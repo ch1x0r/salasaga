@@ -42,6 +42,9 @@
 #define WIDGET_MINIMUM_HEIGHT	150
 #define WIDGET_MINIMUM_WIDTH	500
 
+#define ADJUSTMENTS_X	85
+#define ADJUSTMENTS_Y	2
+
 // * Macros *
 #define TIME_LINE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj), TIME_LINE_TYPE, TimeLinePrivate))
 
@@ -745,6 +748,7 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	const GdkColor		colour_main_first = {0, 65535, 65535, 65535 };
 	const GdkColor		colour_main_second = {0, 65000, 65000, 65000 };
 	const GdkColor		colour_old_lace = {0, (253 << 8), (245 << 8), (230 << 8) };
+	const GdkColor		colour_white = {0, 65535, 65535, 65535 };
 	GdkColormap			*colourmap = NULL;			// Colormap used for drawing
 	gint8				dash_list[2] = { 3, 3 };
 	gint				existing_bg_height;			// Height in pixels of an existing pixmap
@@ -802,11 +806,32 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 		bg_image_gc = gdk_gc_new(GDK_DRAWABLE(priv->cached_bg_image));
 	}
 
-	// Draw the top border area
+	// Draw the background of the top border area
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_old_lace);
 	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, 0, 0, width, priv->top_border_height);
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
 	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), 0, priv->top_border_height, width, priv->top_border_height);
+
+	// Draw the plus symbol
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_white);
+	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, ADJUSTMENTS_X, ADJUSTMENTS_Y, 10, 10);
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
+	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), FALSE, ADJUSTMENTS_X, ADJUSTMENTS_Y, 10, 10);
+	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
+			ADJUSTMENTS_X + 5, ADJUSTMENTS_Y + 2, ADJUSTMENTS_X + 5, ADJUSTMENTS_Y + 9);  // Vertical line
+	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
+			ADJUSTMENTS_X + 2, ADJUSTMENTS_Y + 5, ADJUSTMENTS_X + 9, ADJUSTMENTS_Y + 5);  // Horizontal line
+
+	// Draw the minus symbol
+	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_white);
+	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, ADJUSTMENTS_X + 15, ADJUSTMENTS_Y, 10, 10);
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
+	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), FALSE, ADJUSTMENTS_X + 15, ADJUSTMENTS_Y, 10, 10);
+	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
+			ADJUSTMENTS_X + 17, ADJUSTMENTS_Y + 5, ADJUSTMENTS_X + 24, ADJUSTMENTS_Y + 5);  // Horizontal line
 
 	// Horizontal alternating background rows
 	loop_max = height / priv->row_height;
