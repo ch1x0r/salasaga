@@ -35,6 +35,7 @@
 #include "../draw_handle_box.h"
 #include "../draw_timeline.h"
 #include "../draw_workspace.h"
+#include "../film_strip_create_thumbnail.h"
 #include "../layer_edit.h"
 #include "time_line.h"
 
@@ -1575,9 +1576,6 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			default:
 				display_warning("Error ED368: Unknown layer resize type.");
 		}
-
-		// Resize finished
-//		return;
 	}
 
 	// If we're not already dragging, nor in a resize, assume we should be dragging
@@ -1637,6 +1635,9 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 
 			// Update the workspace area
 			draw_workspace();
+
+			// Recreate the film strip thumbnail
+			film_strip_create_thumbnail(this_slide_data);
 		}
 		if (current_row < new_row)
 		{
@@ -1670,6 +1671,9 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 
 			// Update the workspace area
 			draw_workspace();
+
+			// Recreate the film strip thumbnail
+			film_strip_create_thumbnail(this_slide_data);
 		}
 
 		// * Check if the row should be moved horizontally *
