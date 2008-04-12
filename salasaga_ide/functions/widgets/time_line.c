@@ -813,18 +813,16 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
 	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), 0, priv->top_border_height, width, priv->top_border_height);
 
-	// Draw the plus symbol
+	// Draw the minus symbol
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_white);
 	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, ADJUSTMENTS_X, ADJUSTMENTS_Y, ADJUSTMENTS_SIZE, ADJUSTMENTS_SIZE);
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
 	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), FALSE, ADJUSTMENTS_X, ADJUSTMENTS_Y, ADJUSTMENTS_SIZE, ADJUSTMENTS_SIZE);
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
-			ADJUSTMENTS_X + 5, ADJUSTMENTS_Y + 2, ADJUSTMENTS_X + 5, ADJUSTMENTS_Y + 9);  // Vertical line
-	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
 			ADJUSTMENTS_X + 2, ADJUSTMENTS_Y + 5, ADJUSTMENTS_X + 9, ADJUSTMENTS_Y + 5);  // Horizontal line
 
-	// Draw the minus symbol
+	// Draw the plus symbol
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_white);
 	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, ADJUSTMENTS_X + 15, ADJUSTMENTS_Y, ADJUSTMENTS_SIZE, ADJUSTMENTS_SIZE);
@@ -833,6 +831,8 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
 			ADJUSTMENTS_X + 17, ADJUSTMENTS_Y + 5, ADJUSTMENTS_X + 24, ADJUSTMENTS_Y + 5);  // Horizontal line
+	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
+			ADJUSTMENTS_X + 20, ADJUSTMENTS_Y + 2, ADJUSTMENTS_X + 20, ADJUSTMENTS_Y + 9);  // Vertical line
 
 	// Horizontal alternating background rows
 	loop_max = height / priv->row_height;
@@ -1455,14 +1455,6 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 		return;
 	}
 
-	// Check if this was a double mouse click.  If it was, open an edit dialog
-	if (GDK_2BUTTON_PRESS == event->type)
-	{
-		// Open an edit dialog
-		layer_edit();
-		return;
-	}
-
 	// It's probably the child of the called widget that we need to get data from
 	if (FALSE == IS_TIME_LINE(widget))
 	{
@@ -1488,6 +1480,23 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 	this_slide_data = ((slide *) current_slide->data);
 	layer_pointer = this_slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
+
+	// Check if this button press is in the top border area
+	if ((ADJUSTMENTS_Y <= event->y) && (ADJUSTMENTS_Y + ADJUSTMENTS_SIZE) >= event->y)
+	{
+		// * It's in the correct range *
+		
+		// For now, we just ignore the button click
+		return;
+	}
+
+	// Check if this was a double mouse click.  If it was, open an edit dialog
+	if (GDK_2BUTTON_PRESS == event->type)
+	{
+		// Open an edit dialog
+		layer_edit();
+		return;
+	}
 
 	// Figure out which row the user has selected in the timeline area
 	new_row = floor((event->y - priv->top_border_height) / priv->row_height);
@@ -1534,6 +1543,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	gint				mouse_x;					// Mouse x position
 	gint				mouse_y;					// Mouse x position
 	TimeLinePrivate		*priv;
+	gboolean			return_code_gbool;			// Receives boolean return codes
 	layer				*this_layer_data;			// Data for the presently selected layer
 	slide				*this_slide_data;			// Data for the presently selected slide
 	TimeLine			*this_time_line;
@@ -1584,17 +1594,41 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	{
 		// * It's in the correct range *
 
-		// Check if this button release is for the plus button
+		// Check if this button release is for the minus button
 		if ((ADJUSTMENTS_X <= mouse_x) && ((ADJUSTMENTS_X + ADJUSTMENTS_SIZE) >= mouse_x))
 		{
+			// Sanity check
+			if (priv->pixels_per_second >= 96)
+			{
+				// We're already at the acceptable scaling limit, so beep then return
+				gdk_beep();
+				return;
+			}
+
 			// Adjust the number of pixels per second
 			priv->pixels_per_second = priv->pixels_per_second * 2;
-			priv->cached_bg_valid = FALSE;
+			g_object_unref(GDK_PIXMAP(priv->cached_bg_image));
+			priv->cached_bg_image = NULL;
 
 			// Regenerate the timeline images with the new pixel scale
-			time_line_internal_initialise_bg_image(priv, widget->allocation.width, widget->allocation.height);
-			time_line_internal_initialise_display_buffer(priv, widget->allocation.width, widget->allocation.height);
-			time_line_internal_draw_layer_info(priv);
+			return_code_gbool = time_line_internal_initialise_bg_image(priv, widget->allocation.width, widget->allocation.height);
+			if (FALSE == return_code_gbool)
+			{
+				display_warning("Error ED361: Couldn't recreate time line background image");
+				return;
+			}
+			return_code_gbool = time_line_internal_initialise_display_buffer(priv, widget->allocation.width, widget->allocation.height);
+			if (FALSE == return_code_gbool)
+			{
+				display_warning("Error ED362: Couldn't recreate time line display buffer");
+				return;
+			}
+			return_code_gbool = time_line_internal_draw_layer_info(priv);
+			if (FALSE == return_code_gbool)
+			{
+				display_warning("Error ED363: Couldn't redraw the time line layer information");
+				return;
+			}
 			area.x = 0;
 			area.y = 0;
 			area.width = widget->allocation.width;
@@ -1602,17 +1636,41 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 			gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 		}
 
-		// Check if this button release is for the minus button
+		// Check if this button release is for the plus button
 		if ((ADJUSTMENTS_X + 15 <= mouse_x) && ((ADJUSTMENTS_X + 15 + ADJUSTMENTS_SIZE) >= mouse_x))
 		{
+			// Sanity check
+			if (priv->pixels_per_second <= 24)
+			{
+				// We're already at the acceptable scaling limit, so beep then return
+				gdk_beep();
+				return;
+			}
+
 			// Adjust the number of pixels per second
 			priv->pixels_per_second = priv->pixels_per_second / 2;
-			priv->cached_bg_valid = FALSE;
+			g_object_unref(GDK_PIXMAP(priv->cached_bg_image));
+			priv->cached_bg_image = NULL;
 
 			// Regenerate the timeline images with the new pixel scale
-			time_line_internal_initialise_bg_image(priv, widget->allocation.width, widget->allocation.height);
-			time_line_internal_initialise_display_buffer(priv, widget->allocation.width, widget->allocation.height);
-			time_line_internal_draw_layer_info(priv);
+			return_code_gbool = time_line_internal_initialise_bg_image(priv, widget->allocation.width, widget->allocation.height);
+			if (FALSE == return_code_gbool)
+			{
+				display_warning("Error ED364: Couldn't recreate time line background image");
+				return;
+			}
+			return_code_gbool = time_line_internal_initialise_display_buffer(priv, widget->allocation.width, widget->allocation.height);
+			if (FALSE == return_code_gbool)
+			{
+				display_warning("Error ED365: Couldn't recreate time line display buffer");
+				return;
+			}
+			return_code_gbool = time_line_internal_draw_layer_info(priv);
+			if (FALSE == return_code_gbool)
+			{
+				display_warning("Error ED366: Couldn't redraw the time line layer information");
+				return;
+			}
 			area.x = 0;
 			area.y = 0;
 			area.width = widget->allocation.width;
