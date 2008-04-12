@@ -74,6 +74,7 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint width, gint height);
 gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_number);
 gboolean time_line_internal_invalidate_layer_area(GtkWidget *widget, gint layer_number);
+gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint y1, gint width, gint height);
 gboolean time_line_internal_redraw_layer_bg(TimeLinePrivate *priv, gint layer_number);
 void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint width);
 
@@ -1017,6 +1018,27 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	return TRUE;
 }
 
+// Function to refresh an area of the display buffer from the cached background image
+gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint y1, gint width, gint height)
+{
+	static GdkGC		*display_buffer_gc = NULL;
+
+
+	// Initialisation
+	if (NULL == display_buffer_gc)
+	{
+		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
+	}
+
+	// Refresh the display buffer for the desired area
+	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
+			GDK_PIXMAP(priv->cached_bg_image), x1, y1, x1, y1, width, height);
+
+	return TRUE;
+	
+}
+
+// Function to refresh the area of the display buffer covered by a layer, from the cached background image
 gboolean time_line_internal_redraw_layer_bg(TimeLinePrivate *priv, gint layer_number)
 {
 	// Local variables
@@ -1129,7 +1151,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	gint				distance_moved;				// Number of pixels the row has been scrolled by horizontally
 	gint				end_row;					// Number of the last layer in this slide
 	gfloat				end_time;					// The end time in seconds of the presently selected layer
-	GtkAllocation		guide_area;					// Area covered by an individual guide line
+	GtkAllocation		area;						// Rectangular area
 	GList				*layer_above;				// The layer above the selected one
 	GList				*layer_below;				// The layer below the selected one
 	GList				*layer_pointer;				// Points to the layers in the selected slide
@@ -1216,13 +1238,13 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		priv->stored_y = event->y;
 
 		// Remove the old guide lines
-		guide_area.x = priv->guide_line_start;
-		guide_area.y = 0;
-		guide_area.height = GTK_WIDGET(this_time_line)->allocation.height;
-		guide_area.width = 1;
-		gtk_widget_draw(GTK_WIDGET(widget), &guide_area);  // Yes, this is deprecated, but it *works*
-		guide_area.x = priv->guide_line_end;
-		gtk_widget_draw(GTK_WIDGET(widget), &guide_area);  // Yes, this is deprecated, but it *works*
+		area.x = priv->guide_line_start;
+		area.y = 0;
+		area.height = GTK_WIDGET(this_time_line)->allocation.height;
+		area.width = 1;
+		gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
+		area.x = priv->guide_line_end;
+		gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
 
 		// Store the position of the new guide lines so we know where to refresh
 		priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * priv->pixels_per_second);
@@ -1363,29 +1385,51 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			}
 		}
 
+		// Ensure the background layer end is kept correct 
+		background_layer_data = g_list_nth_data(layer_pointer, end_row);
+		if (background_layer_data->duration != priv->stored_slide_duration)
+		{
+			background_layer_data->duration = priv->stored_slide_duration;
+
+			// Refresh the timeline display of the background layer
+			area.x = priv->stored_slide_duration * priv->pixels_per_second;
+			area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
+			area.height = priv->row_height - 3;
+			area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
+			time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
+			time_line_internal_draw_layer_duration(priv, end_row);
+
+			// Refresh the newly drawn widget area
+			gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+		}
+
 		// Check if the new end time is longer than the slide duration
 		if (end_time > priv->stored_slide_duration)
 		{
 			// The new end time is longer than the slide duration, so update the slide and background layer to match
 			this_slide_data->duration = end_time;
-			background_layer_data = g_list_nth_data(layer_pointer, end_row);
 			background_layer_data->duration = end_time;
 
 			// Refresh the timeline display of the background layer
-			time_line_internal_redraw_layer_bg(priv, end_row);
-			time_line_internal_draw_layer_name(priv, end_row);
+			area.x = priv->stored_slide_duration * priv->pixels_per_second;
+			area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
+			area.height = priv->row_height - 3;
+			area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
+			time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
 			time_line_internal_draw_layer_duration(priv, end_row);
-			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), end_row);
+
+			// Refresh the newly drawn widget area
+			gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 		}
 
 		// Remove the old guide lines
-		guide_area.x = priv->guide_line_start;
-		guide_area.y = 0;
-		guide_area.height = GTK_WIDGET(this_time_line)->allocation.height;
-		guide_area.width = 1;
-		gtk_widget_draw(GTK_WIDGET(widget), &guide_area);  // Yes, this is deprecated, but it *works*
-		guide_area.x = priv->guide_line_end;
-		gtk_widget_draw(GTK_WIDGET(widget), &guide_area);  // Yes, this is deprecated, but it *works*
+		area.x = priv->guide_line_start;
+		area.y = 0;
+		area.height = GTK_WIDGET(this_time_line)->allocation.height;
+		area.width = 1;
+		gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
+		area.x = priv->guide_line_end;
+		gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
 
 		// Update the guide line positions so we know where to refresh
 		priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * priv->pixels_per_second);
