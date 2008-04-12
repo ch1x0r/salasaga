@@ -71,13 +71,13 @@ struct _TimeLinePrivate
 gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gint height);
 gboolean time_line_internal_draw_guide_line(GtkWidget *widget, gint pixel_num);
 gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint layer_number);
-gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint width, gint height);
+gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv);
 gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_number);
+gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gint new_width, gint new_height);
 gboolean time_line_internal_invalidate_layer_area(GtkWidget *widget, gint layer_number);
 gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint y1, gint width, gint height);
 gboolean time_line_internal_redraw_layer_bg(TimeLinePrivate *priv, gint layer_number);
 void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint width);
-
 
 // * Function definitions *
 
@@ -113,7 +113,6 @@ gint time_line_get_selected_layer_num(GtkWidget *widget)
 gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 {
 	// Local variables
-	static GdkGC		*display_buffer_gc = NULL;
 	gint				height;
 	GtkAllocation		new_allocation;
 	GtkAllocation		old_allocation;
@@ -156,22 +155,7 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 		width = GTK_WIDGET(widget)->allocation.width;
 	}
 
-	// * Restore the background around the existing selection box *
-
-	// Ensure the background image we're about to use is valid
-	if (TRUE != priv->cached_bg_valid)
-	{
-		// It's not, so recreate the timeline background image and display buffer at the new size
-		time_line_internal_create_images(priv, width, height);
-	}
-
-	// Create a graphic context for the display buffer image if we don't have one already
-	if (NULL == display_buffer_gc)
-	{
-		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
-	}
-
-	// * Restore the display buffer for the old (unselecting) layer *
+	// * Restore the background underneath the existing selection box *
 
 	// Calculate the corner points
 	x1 = 0;
@@ -184,43 +168,24 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	old_allocation.y = y1;
 	old_allocation.width = x2;
 	old_allocation.height = 1;
-	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), GDK_PIXMAP(priv->cached_bg_image),
-		old_allocation.x, old_allocation.y,
-		old_allocation.x, old_allocation.y,
-		old_allocation.width, old_allocation.height);
+	time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
 
 	// Restore bottom line segment
-	old_allocation.x = x1;
 	old_allocation.y = y1 + y2;
-	old_allocation.width = x2;
-	old_allocation.height = 1;
-	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), GDK_PIXMAP(priv->cached_bg_image),
-		old_allocation.x, old_allocation.y,
-		old_allocation.x, old_allocation.y,
-		old_allocation.width, old_allocation.height);
+	time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
 
 	// Restore left line segment
-	old_allocation.x = x1;
 	old_allocation.y = y1;
 	old_allocation.width = 1;
 	old_allocation.height = y2;
-	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), GDK_PIXMAP(priv->cached_bg_image),
-		old_allocation.x, old_allocation.y,
-		old_allocation.x, old_allocation.y,
-		old_allocation.width, old_allocation.height);
+	time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
 
 	// Restore right line segment
 	old_allocation.x = width - 1;
-	old_allocation.y = y1;
-	old_allocation.width = 1;
-	old_allocation.height = y2;
-	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), GDK_PIXMAP(priv->cached_bg_image),
-		old_allocation.x, old_allocation.y,
-		old_allocation.x, old_allocation.y,
-		old_allocation.width, old_allocation.height);
+	time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
 
 	// Set the internal variable, as requested
@@ -242,14 +207,10 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
 
 	// Refresh bottom line segment
-	new_allocation.x = x1;
 	new_allocation.y = y1 + y2;
-	new_allocation.width = x2;
-	new_allocation.height = 1;
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
 
 	// Refresh left line segment
-	new_allocation.x = x1;
 	new_allocation.y = y1;
 	new_allocation.width = 1;
 	new_allocation.height = y2;
@@ -257,9 +218,6 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 
 	// Refresh right line segment
 	new_allocation.x = width - 1;
-	new_allocation.y = y1;
-	new_allocation.width = 1;
-	new_allocation.height = y2;
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
 
 	return TRUE;
@@ -303,8 +261,11 @@ static gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 	// Ensure we have a display buffer to refresh from
 	if (NULL == priv->display_buffer)
 	{
+		// Create the display buffer
+		time_line_internal_initialise_display_buffer(priv, width, height);
+
 		// Draw the layer information
-		time_line_internal_draw_layer_info(priv, width, height);
+		time_line_internal_draw_layer_info(priv);
 
 		// Highlight the selected row
 		time_line_internal_draw_selection_highlight(priv, width);
@@ -402,8 +363,11 @@ static void time_line_size_allocate(GtkWidget *widget, GtkAllocation *allocation
 	// Create the background buffer
 	time_line_internal_create_images(priv, width, height);
 
+	// Create the display buffer
+	time_line_internal_initialise_display_buffer(priv, width, height);
+
 	// Draw the layer information
-	time_line_internal_draw_layer_info(priv, width, height);
+	time_line_internal_draw_layer_info(priv);
 
 	// Highlight the selected row
 	time_line_internal_draw_selection_highlight(priv, width);
@@ -491,8 +455,11 @@ gboolean time_line_regenerate_images(GtkWidget *widget)
 		time_line_internal_create_images(priv, width, height);
 	}
 
+	// Recreate the display buffer
+	time_line_internal_initialise_display_buffer(priv, width, height);
+
 	// Draw the layer information
-	time_line_internal_draw_layer_info(priv, width, height);
+	time_line_internal_draw_layer_info(priv);
 
 	// Highlight the selected row
 	time_line_internal_draw_selection_highlight(priv, width);
@@ -672,89 +639,12 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 }
 
 // Function to draw the layer information onto the display buffer
-gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv, gint new_width, gint new_height)
+gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv)
 {
 	// Local variables
-	static GdkColormap	*colourmap = NULL;			// Colormap used for drawing
-	static GdkGC		*display_buffer_gc = NULL;
-	gint				existing_bg_height;			// Height in pixels of an existing pixmap
-	gint				existing_bg_width;			// Width in pixels of an existing pixmap
-	gint				height;
 	gint				loop_counter;				// Simple counter used in loops
 	gint				num_layers;					// The number of layers in the select slide
-	gint				width;
 
-
-	// Initialisation
-	if (NULL == colourmap)
-	{
-		colourmap = gdk_colormap_get_system();
-	}
-
-	// Ensure we have at least the minimum required widget size
-	if (WIDGET_MINIMUM_HEIGHT > new_height)
-	{
-		height = WIDGET_MINIMUM_HEIGHT;
-	} else
-	{
-		height = new_height;
-	}
-	if (WIDGET_MINIMUM_WIDTH > new_width)
-	{
-		width = WIDGET_MINIMUM_WIDTH;
-	} else
-	{
-		width = new_width;
-	}
-
-	// If we already have a display buffer, we check if we can reuse it
-	if (NULL != priv->display_buffer)
-	{
-		// Retrieve the size of the existing cached display buffer
-		gdk_drawable_get_size(GDK_PIXMAP(priv->display_buffer), &existing_bg_width, &existing_bg_height);
-
-		// If the existing display buffer is not of the same height and width, we discard it
-		if ((existing_bg_width != width) || (existing_bg_height != height))
-		{
-			// The existing display buffer is not of the same height and width
-			g_object_unref(GDK_PIXMAP(priv->display_buffer));
-			priv->display_buffer = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
-			if (NULL == priv->cached_bg_image)
-			{
-				// Couldn't allocate memory for a new display buffer
-				display_warning("Error ED360: Couldn't create the time line display buffer image!");
-				return FALSE;
-			}
-		}
-	} else
-	{
-		// Create the display buffer
-		priv->display_buffer = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
-		if (NULL == priv->cached_bg_image)
-		{
-			// Couldn't allocate memory for a new display buffer
-			display_warning("Error ED357: Couldn't create the time line display buffer image!");
-			return FALSE;
-		}
-	}
-	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer), GDK_COLORMAP(colourmap));
-
-	// Create a graphic context for the display buffer image if we don't have one already
-	if (NULL == display_buffer_gc)
-	{
-		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
-	}
-
-	// Ensure the background image we're about to use is valid
-	if (TRUE != priv->cached_bg_valid)
-	{
-		// It's not, so recreate the timeline background image and display buffer at the new size
-		time_line_internal_create_images(priv, width, height);
-	}
-
-	// Copy the timeline background image to the display buffer
-	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
-			GDK_PIXMAP(priv->cached_bg_image), 0, 0, 0, 0, width, height);
 
 	// Draw the layer names and durations
 	num_layers = ((slide *) current_slide->data)->num_layers;
@@ -1018,6 +908,77 @@ gboolean time_line_internal_create_images(TimeLinePrivate *priv, gint width, gin
 	return TRUE;
 }
 
+// Function to create the display buffer
+gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gint new_width, gint new_height)
+{
+	// Local variables
+	static GdkColormap	*colourmap = NULL;			// Colormap used for drawing
+	gint				existing_bg_height;			// Height in pixels of an existing pixmap
+	gint				existing_bg_width;			// Width in pixels of an existing pixmap
+	gint				height;
+	gint				width;
+
+
+	// Initialisation
+	if (NULL == colourmap)
+	{
+		colourmap = gdk_colormap_get_system();
+	}
+
+	// Ensure we have at least the minimum required widget size
+	if (WIDGET_MINIMUM_HEIGHT > new_height)
+	{
+		height = WIDGET_MINIMUM_HEIGHT;
+	} else
+	{
+		height = new_height;
+	}
+	if (WIDGET_MINIMUM_WIDTH > new_width)
+	{
+		width = WIDGET_MINIMUM_WIDTH;
+	} else
+	{
+		width = new_width;
+	}
+
+	// If we already have a display buffer, we check if we can reuse it
+	if (NULL != priv->display_buffer)
+	{
+		// Retrieve the size of the existing cached display buffer
+		gdk_drawable_get_size(GDK_PIXMAP(priv->display_buffer), &existing_bg_width, &existing_bg_height);
+
+		// If the existing display buffer is not of the same height and width, we discard it
+		if ((existing_bg_width != width) || (existing_bg_height != height))
+		{
+			// The existing display buffer is not of the same height and width
+			g_object_unref(GDK_PIXMAP(priv->display_buffer));
+			priv->display_buffer = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
+			if (NULL == priv->cached_bg_image)
+			{
+				// Couldn't allocate memory for a new display buffer
+				display_warning("Error ED360: Couldn't create the time line display buffer image!");
+				return FALSE;
+			}
+		}
+	} else
+	{
+		// Create the display buffer
+		priv->display_buffer = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
+		if (NULL == priv->cached_bg_image)
+		{
+			// Couldn't allocate memory for a new display buffer
+			display_warning("Error ED357: Couldn't create the time line display buffer image!");
+			return FALSE;
+		}
+	}
+	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer), GDK_COLORMAP(colourmap));
+
+	// Copy the timeline background image to the display buffer
+	time_line_internal_redraw_bg_area(priv, 0, 0, width, height);
+
+	return TRUE;
+}
+
 // Function to refresh an area of the display buffer from the cached background image
 gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint y1, gint width, gint height)
 {
@@ -1030,30 +991,29 @@ gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint 
 		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
 	}
 
+	// Ensure the background image we're about to use is valid
+	if (TRUE != priv->cached_bg_valid)
+	{
+		// It's not, so recreate the timeline background image and display buffer at the new size
+		time_line_internal_create_images(priv, width, height);
+	}
+
 	// Refresh the display buffer for the desired area
 	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
 			GDK_PIXMAP(priv->cached_bg_image), x1, y1, x1, y1, width, height);
 
-	return TRUE;
-	
+	return TRUE;	
 }
 
 // Function to refresh the area of the display buffer covered by a layer, from the cached background image
 gboolean time_line_internal_redraw_layer_bg(TimeLinePrivate *priv, gint layer_number)
 {
 	// Local variables
-	static GdkGC		*display_buffer_gc = NULL;
 	gint				layer_height;
 	gint				layer_width;
 	gint				layer_x;
 	gint				layer_y;
 
-
-	// Initialisation
-	if (NULL == display_buffer_gc)
-	{
-		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
-	}
 
 	// Set the height related variables
 	layer_x = 0;
@@ -1062,11 +1022,7 @@ gboolean time_line_internal_redraw_layer_bg(TimeLinePrivate *priv, gint layer_nu
 	layer_width = -1;
 
 	// Refresh the display buffer for the selected layer
-	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
-			GDK_PIXMAP(priv->cached_bg_image),
-			layer_x, layer_y,
-			layer_x, layer_y,
-			layer_width, layer_height);
+	time_line_internal_redraw_bg_area(priv, layer_x, layer_y, layer_width, layer_height);
 
 	return TRUE;
 }
@@ -1101,8 +1057,11 @@ static void time_line_init(TimeLine *time_line)
 	// Call our internal time line function to create the cached background image and display buffer
 	time_line_internal_create_images(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
 
+	// Call our internal function to create the display buffer
+	time_line_internal_initialise_display_buffer(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
+
 	// Draw the layer information
-	time_line_internal_draw_layer_info(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
+	time_line_internal_draw_layer_info(priv);
 
 	// Select the highlighted layer
 	time_line_internal_draw_selection_highlight(priv, WIDGET_MINIMUM_WIDTH);
