@@ -44,6 +44,7 @@
 
 #define ADJUSTMENTS_X	85
 #define ADJUSTMENTS_Y	2
+#define ADJUSTMENTS_SIZE	10
 
 // * Macros *
 #define TIME_LINE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj), TIME_LINE_TYPE, TimeLinePrivate))
@@ -814,9 +815,9 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 
 	// Draw the plus symbol
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_white);
-	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, ADJUSTMENTS_X, ADJUSTMENTS_Y, 10, 10);
+	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, ADJUSTMENTS_X, ADJUSTMENTS_Y, ADJUSTMENTS_SIZE, ADJUSTMENTS_SIZE);
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
-	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), FALSE, ADJUSTMENTS_X, ADJUSTMENTS_Y, 10, 10);
+	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), FALSE, ADJUSTMENTS_X, ADJUSTMENTS_Y, ADJUSTMENTS_SIZE, ADJUSTMENTS_SIZE);
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
 			ADJUSTMENTS_X + 5, ADJUSTMENTS_Y + 2, ADJUSTMENTS_X + 5, ADJUSTMENTS_Y + 9);  // Vertical line
@@ -826,9 +827,9 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	// Draw the minus symbol
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_white);
-	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, ADJUSTMENTS_X + 15, ADJUSTMENTS_Y, 10, 10);
+	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), TRUE, ADJUSTMENTS_X + 15, ADJUSTMENTS_Y, ADJUSTMENTS_SIZE, ADJUSTMENTS_SIZE);
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
-	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), FALSE, ADJUSTMENTS_X + 15, ADJUSTMENTS_Y, 10, 10);
+	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), FALSE, ADJUSTMENTS_X + 15, ADJUSTMENTS_Y, ADJUSTMENTS_SIZE, ADJUSTMENTS_SIZE);
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
 			ADJUSTMENTS_X + 17, ADJUSTMENTS_Y + 5, ADJUSTMENTS_X + 24, ADJUSTMENTS_Y + 5);  // Horizontal line
@@ -1528,7 +1529,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	GdkModifierType		button_state;				// Mouse button states
 	gint				end_row;					// Number of the last layer in this slide
 	gfloat				end_time;					// The end time in seconds of the presently selected layer
-	GtkAllocation		guide_area;					// Area covered by an individual guide line
+	GtkAllocation		area;						// Area covered by an individual guide line
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				mouse_x;					// Mouse x position
 	gint				mouse_y;					// Mouse x position
@@ -1575,24 +1576,59 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 		this_time_line = TIME_LINE(widget);		
 	}
 
-	// Check for primary mouse button
-	if (1 != event->button)
-	{
-		// Not a primary mouse, so return
-		return;
-	}
-
 	// Initialisation
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
+	// Check if this button release is within the vertical range of the adjustment buttons
+	if ((ADJUSTMENTS_Y <= mouse_y) && (ADJUSTMENTS_Y + ADJUSTMENTS_SIZE) >= mouse_y)
+	{
+		// * It's in the correct range *
+
+		// Check if this button release is for the plus button
+		if ((ADJUSTMENTS_X <= mouse_x) && ((ADJUSTMENTS_X + ADJUSTMENTS_SIZE) >= mouse_x))
+		{
+			// Adjust the number of pixels per second
+			priv->pixels_per_second = priv->pixels_per_second * 2;
+			priv->cached_bg_valid = FALSE;
+
+			// Regenerate the timeline images with the new pixel scale
+			time_line_internal_initialise_bg_image(priv, widget->allocation.width, widget->allocation.height);
+			time_line_internal_initialise_display_buffer(priv, widget->allocation.width, widget->allocation.height);
+			time_line_internal_draw_layer_info(priv);
+			area.x = 0;
+			area.y = 0;
+			area.width = widget->allocation.width;
+			area.height = widget->allocation.height;
+			gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+		}
+
+		// Check if this button release is for the minus button
+		if ((ADJUSTMENTS_X + 15 <= mouse_x) && ((ADJUSTMENTS_X + 15 + ADJUSTMENTS_SIZE) >= mouse_x))
+		{
+			// Adjust the number of pixels per second
+			priv->pixels_per_second = priv->pixels_per_second / 2;
+			priv->cached_bg_valid = FALSE;
+
+			// Regenerate the timeline images with the new pixel scale
+			time_line_internal_initialise_bg_image(priv, widget->allocation.width, widget->allocation.height);
+			time_line_internal_initialise_display_buffer(priv, widget->allocation.width, widget->allocation.height);
+			time_line_internal_draw_layer_info(priv);
+			area.x = 0;
+			area.y = 0;
+			area.width = widget->allocation.width;
+			area.height = widget->allocation.height;
+			gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+		}
+	}
+
 	// Remove guide lines from the widget
-	guide_area.x = priv->guide_line_start;
-	guide_area.y = 0;
-	guide_area.height = GTK_WIDGET(this_time_line)->allocation.height;
-	guide_area.width = 1;
-	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &guide_area, TRUE);
-	guide_area.x = priv->guide_line_end;
-	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &guide_area, TRUE);
+	area.x = priv->guide_line_start;
+	area.y = 0;
+	area.height = GTK_WIDGET(this_time_line)->allocation.height;
+	area.width = 1;
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+	area.x = priv->guide_line_end;
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 
 	// Check if this mouse release matches a drag 
 	if (TRUE == priv->drag_active)
