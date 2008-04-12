@@ -46,6 +46,16 @@
 #define ADJUSTMENTS_Y	2
 #define ADJUSTMENTS_SIZE	10
 
+// * Private enums *
+enum
+{
+	RESIZE_NONE,
+	RESIZE_TRANS_IN_START,
+	RESIZE_LAYER_START,
+	RESIZE_LAYER_DURATION,
+	RESIZE_TRANS_OUT_DURATION
+};
+
 // * Macros *
 #define TIME_LINE_GET_PRIVATE(obj) (G_TYPE_INSTANCE_GET_PRIVATE((obj), TIME_LINE_TYPE, TimeLinePrivate))
 
@@ -61,7 +71,7 @@ struct _TimeLinePrivate
 	gint				guide_line_end;				// The pixel number of the ending guide line
 	gint				guide_line_start;			// The pixel number of the starting guide line
 	gint				left_border_width;			// Number of pixels in the left border (layer name) area
-	gboolean			resize_active;				// Tracks whether we have an active layer resize or not
+	guint				resize_type;				// Tracks whether we have an active layer resize or not
 	gint				row_height;					// Number of pixels in each layer row
 	gint				selected_layer_num;			// The number of the selected layer
 	gfloat				stored_slide_duration;		// The original duration of the slide in seconds
@@ -1069,7 +1079,7 @@ static void time_line_init(TimeLine *time_line)
 	priv->cached_bg_valid = FALSE;
 	priv->display_buffer = NULL;
 	priv->drag_active = FALSE;
-	priv->resize_active = FALSE;
+	priv->resize_type = RESIZE_NONE;
 	priv->selected_layer_num = 0;
 	priv->stored_x = 0;
 	priv->stored_y = 0;
@@ -1209,7 +1219,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		end_time += this_layer_data->transition_out_duration;
 
 	// Check if we're not already doing something
-	if ((FALSE == priv->resize_active) && (FALSE == priv->drag_active))
+	if ((RESIZE_NONE == priv->resize_type) && (FALSE == priv->drag_active))
 	{
 		// * Check if the user clicked on the start of the layer (i.e. wants to adjust the start time)
 		check_pixel = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
@@ -1218,13 +1228,22 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		if ((mouse_x >= check_pixel) && (mouse_x <= check_pixel + 5))
 		{
 			// The user clicked on the start pixel for a layer, so we're commencing a resize
-			priv->resize_active = TRUE;
-			priv->stored_x = mouse_x;
+			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+			{
+				// We're adjusting the start time of a transition in
+				priv->resize_type = RESIZE_TRANS_IN_START;
+				priv->stored_x = mouse_x;
+			} else
+			{
+				// We're adjusting the start time of the main duration
+				priv->resize_type = RESIZE_LAYER_START;
+				priv->stored_x = mouse_x;
+			}
 		}
 	}
 
 	// Check if we're already resizing
-	if (TRUE == priv->resize_active)
+	if (RESIZE_NONE != priv->resize_type)
 	{
 		// Check if the resize is moving to the right
 		if (priv->stored_x < mouse_x)
@@ -1234,35 +1253,43 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			distance_moved = mouse_x - priv->stored_x;
 			time_moved = ((gfloat) distance_moved) / pixels_per_second;
 
-			// Work out if we're adjusting a transition in, or the main layer duration
-			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+			// Make the needed adjustments
+			switch (priv->resize_type)
 			{
-				// We're adjusting the transition in
-				if (this_layer_data->transition_in_duration < time_moved)
-				{
-					// We've shortened the layer to 0 duration
-					this_layer_data->start_time += time_moved;
-					this_layer_data->transition_in_duration = 0;
-				} else
-				{
-					// Adjust the layer timing
-					this_layer_data->transition_in_duration -= time_moved;
-					this_layer_data->start_time += time_moved;
-				}
-			} else
-			{
-				// We're adjusting the layer duration
-				if (this_layer_data->duration < time_moved)
-				{
-					// We've shortened the layer to 0 duration
-					this_layer_data->start_time += time_moved;
-					this_layer_data->duration = 0;
-				} else
-				{
-					// Adjust the layer timing
-					this_layer_data->duration -= time_moved;
-					this_layer_data->start_time += time_moved;
-				}
+				case RESIZE_TRANS_IN_START:
+					
+					// We're adjusting the transition in
+					if (this_layer_data->transition_in_duration < time_moved)
+					{
+						// We've shortened the layer to 0 duration
+						this_layer_data->start_time += time_moved;
+						this_layer_data->transition_in_duration = 0;
+					} else
+					{
+						// Adjust the layer timing
+						this_layer_data->transition_in_duration -= time_moved;
+						this_layer_data->start_time += time_moved;
+					}
+					break;
+
+				case RESIZE_LAYER_START:
+
+					// We're adjusting the layer duration
+					if (this_layer_data->duration < time_moved)
+					{
+						// We've shortened the layer to 0 duration
+						this_layer_data->start_time += time_moved;
+						this_layer_data->duration = 0;
+					} else
+					{
+						// Adjust the layer timing
+						this_layer_data->duration -= time_moved;
+						this_layer_data->start_time += time_moved;
+					}
+					break;
+
+				default:
+					display_warning("Error ED367: Unknown layer resize type.");
 			}
 		}
 
@@ -1274,17 +1301,25 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			distance_moved = priv->stored_x - mouse_x;
 			time_moved = ((gfloat) distance_moved) / pixels_per_second;
 
-			// Work out if we're adjusting a transition in, or the main layer duration
-			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+			// Make the needed adjustments
+			switch (priv->resize_type)
 			{
-				// Adjust the layer timing
-				this_layer_data->start_time -= time_moved;
-				this_layer_data->transition_in_duration += time_moved;
-			} else
-			{
-				// Adjust the layer timing
-				this_layer_data->start_time -= time_moved;
-				this_layer_data->duration += time_moved;
+				case RESIZE_TRANS_IN_START:
+
+					// Adjust the layer timing
+					this_layer_data->start_time -= time_moved;
+					this_layer_data->transition_in_duration += time_moved;
+					break;
+
+				case RESIZE_LAYER_START:
+
+					// Adjust the layer timing
+					this_layer_data->start_time -= time_moved;
+					this_layer_data->duration += time_moved;
+					break;
+
+				default:
+					display_warning("Error ED367: Unknown layer resize type.");
 			}
 		}
 
@@ -1774,10 +1809,10 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 
 	// Check if this mouse release matches a resize
-	if (TRUE == priv->resize_active)
+	if (RESIZE_NONE != priv->resize_type)
 	{
 		// Note that the resize has finished
-		priv->resize_active = FALSE;
+		priv->resize_type = RESIZE_NONE;
 	}
 
 	// Check if this mouse release matches a drag 
