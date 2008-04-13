@@ -1354,8 +1354,11 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		if (0 > priv->cursor_position)
 			priv->cursor_position = 0;
 
-		// Redraw the working area
+		// Update the workspace area
 		draw_workspace();
+
+		// Recreate the film strip thumbnail
+		film_strip_create_thumbnail(this_slide_data);
 
 		return;
 	}
