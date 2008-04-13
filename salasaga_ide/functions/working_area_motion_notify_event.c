@@ -46,8 +46,11 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	// Local variables
 	GdkModifierType		button_state;				// Mouse button states
 	slide				*current_slide_data;		// Alias to make things easier
+	gfloat				end_time;					// Time in seconds of the layer objects finish time
+	gint				finish_x;					// X position at the layer objects finish time
+	gint				finish_y;					// Y position at the layer objects finish time 
 	gint				height;
-	layer				*layer_data;
+	layer				*layer_data;				// Data for the layer we're working on
 	GdkRectangle		mouse_pointer_rect;			// Rectangle holding the mouse pointer position
 	gint				mouse_x;					// Unscaled mouse x position
 	gint				mouse_y;					// Unscaled mouse x position
@@ -60,9 +63,19 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_row;				// Holds the number of the row that is selected
+	gfloat				start_time;					// Time in seconds of the layer objects start time
+	gint				start_x;					// X position at the layer objects start time
+	gint				start_y;					// Y position at the layer objects start time
+	gfloat				time_offset;
+	gint				time_x;						// Unscaled X position of the layer at our desired point in time
+	gint				time_y;						// Unscaled Y position of the layer at our desired point in time
+	gfloat				time_diff;					// Used when calculating the object position at the desired point in time
+	gfloat				time_position;
 	gint				width;
 	gfloat				x_diff;						// The X distance the object was dragged, after scaling
+	gfloat				x_scale;					// Used when calculating the object position at the desired point in time
 	gfloat				y_diff;						// The Y distance the object was dragged, after scaling
+	gfloat				y_scale;					// Used when calculating the object position at the desired point in time
 
 
 	// If the current slide hasn't been initialised, or there is no project active don't run this function
@@ -205,16 +218,41 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// Initialise some things
 		current_slide_data = current_slide->data;
 
-		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
-
 		// Determine which layer is selected in the timeline
 		selected_row = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
+
+		// Find out where the time line cursor is
+		time_position = time_line_get_cursor_position(current_slide_data->timeline_widget);
 
 		// Get its present X and Y offsets
 		current_slide_data->layers = g_list_first(current_slide_data->layers);
 		layer_data = g_list_nth_data(current_slide_data->layers, selected_row);
+
+		// Simplify pointers
+		finish_x = layer_data->x_offset_finish;
+		finish_y = layer_data->y_offset_finish;
+		start_time = layer_data->start_time;
+		start_x = layer_data->x_offset_start;
+		start_y = layer_data->y_offset_start;
+		end_time = layer_data->start_time + layer_data->duration;
+		if (TRANS_LAYER_NONE != layer_data->transition_in_type)
+			end_time += layer_data->transition_in_duration;
+		if (TRANS_LAYER_NONE != layer_data->transition_out_type)
+			end_time += layer_data->transition_out_duration;
+
+		// Calculate how far into the layer movement we are
+		time_offset = time_position - start_time;
+		time_diff = end_time - start_time;
+		x_diff = finish_x - start_x;
+		x_scale = (((gfloat) x_diff) / time_diff);
+		time_x = start_x + (x_scale * time_offset);
+		y_diff = finish_y - start_y;
+		y_scale = (((gfloat) y_diff) / time_diff);
+		time_y = start_y + (y_scale * time_offset);
+
+		// Calculate the height and width scaling values for the main drawing area at its present size
+		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
+		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
 		switch (layer_data->object_type)
 		{
 			case TYPE_EMPTY:
@@ -225,8 +263,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				return TRUE;
 
 			case TYPE_HIGHLIGHT:
-				present_x = layer_data->x_offset_start;
-				present_y = layer_data->y_offset_start;
+				present_x = time_x;
+				present_y = time_y;
 				width = ((layer_highlight *) layer_data->object_data)->width;
 				height = ((layer_highlight *) layer_data->object_data)->height;
 				break;
@@ -242,22 +280,22 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				}
 
 				// No it's not, so process it
-				present_x = layer_data->x_offset_start;
-				present_y = layer_data->y_offset_start;
+				present_x = time_x;
+				present_y = time_y;
 				width = ((layer_image *) layer_data->object_data)->width;
 				height = ((layer_image *) layer_data->object_data)->height;
 				break;
 
 			case TYPE_MOUSE_CURSOR:
-				present_x = layer_data->x_offset_start;
-				present_y = layer_data->y_offset_start;
+				present_x = time_x;
+				present_y = time_y;
 				width = ((layer_mouse *) layer_data->object_data)->width;
 				height = ((layer_mouse *) layer_data->object_data)->height;
 				break;
 
 			case TYPE_TEXT:
-				present_x = layer_data->x_offset_start - 12;
-				present_y = layer_data->y_offset_start - 4;
+				present_x = time_x - 12;
+				present_y = time_y - 4;
 				width = ((layer_text *) layer_data->object_data)->rendered_width + 2;
 				height = ((layer_text *) layer_data->object_data)->rendered_height + 2;
 				break;
