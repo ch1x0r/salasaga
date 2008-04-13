@@ -1263,77 +1263,85 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 	current_row = priv->selected_layer_num;
 
-	// Check if this button press is in the top border area
-	if ((ADJUSTMENTS_Y <= event->y) && ((ADJUSTMENTS_Y + ADJUSTMENTS_SIZE) >= event->y) && (RESIZE_NONE == priv->resize_type) && (FALSE == priv->drag_active))
+	// Check if this mouse drag is in the cursor area, and no other operations are in progress
+	if ((ADJUSTMENTS_Y <= event->y) && ((ADJUSTMENTS_Y + ADJUSTMENTS_SIZE) >= event->y)
+			&& (RESIZE_NONE == priv->resize_type)
+			&& (FALSE == priv->drag_active)
+			&& (FALSE == priv->cursor_drag_active)
+			&& (event->x >= priv->left_border_width))
 	{
-		// * It's in the top border area *
+		// This is the first time we've heard of this cursor drag, so take note of it
+		priv->cursor_drag_active = TRUE;
+		priv->stored_x = mouse_x;
+		return;
+	}
 
-		if (TRUE == priv->cursor_drag_active)
+	// Check if a cursor drag is in progress
+	if ((RESIZE_NONE == priv->resize_type)
+			&& (FALSE == priv->drag_active)
+			&& (TRUE == priv->cursor_drag_active))
+	{
+		// Yes, this is definitely an in-progress cursor drag
+
+		// Check if the drag is moving to the right
+		if (priv->stored_x < mouse_x)
 		{
-			// * There's already an active cursor drag *
+			// Calculate the time and distance travelled
+			mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
+			distance_moved = mouse_x - priv->stored_x;
+			time_moved = ((gfloat) distance_moved) / pixels_per_second;
 
-			// Check if the resize is moving to the right
-			if (priv->stored_x < mouse_x)
-			{
-				// Calculate the time and distance travelled
-				mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
-				distance_moved = mouse_x - priv->stored_x;
-				time_moved = ((gfloat) distance_moved) / pixels_per_second;
+			// Invalidate the widget area where the cursor is presently
+			area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+			area.y = 0;
+			area.height = GTK_WIDGET(this_time_line)->allocation.height;
+			area.width = CURSOR_HEAD_WIDTH + 1;
+			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 
-				// Invalidate the widget area where the cursor is presently
-				area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
-				area.y = 0;
-				area.height = GTK_WIDGET(this_time_line)->allocation.height;
-				area.width = CURSOR_HEAD_WIDTH + 1;
-				gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
-
-				// Update the cursor position
-				priv->cursor_position += time_moved;
-				priv->stored_x = mouse_x;
-
-				// Invalidate the widget area where the cursor has moved to
-				area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
-				area.y = 0;
-				area.height = GTK_WIDGET(this_time_line)->allocation.height;
-				area.width = CURSOR_HEAD_WIDTH + 1;
-				gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
-			}
-
-			// Check if the resize is moving to the left
-			if (priv->stored_x > mouse_x)
-			{
-				// Calculate the time and distance travelled
-				mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
-				distance_moved = priv->stored_x - mouse_x;
-				time_moved = ((gfloat) distance_moved) / pixels_per_second;
-
-				// Invalidate the widget area where the cursor is presently
-				area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
-				area.y = 0;
-				area.height = GTK_WIDGET(this_time_line)->allocation.height;
-				area.width = CURSOR_HEAD_WIDTH + 1;
-				gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
-
-				// Update the cursor position
-				priv->cursor_position -= time_moved;
-				priv->stored_x = mouse_x;
-
-				// Invalidate the widget area where the cursor has moved to
-				area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
-				area.y = 0;
-				area.height = GTK_WIDGET(this_time_line)->allocation.height;
-				area.width = CURSOR_HEAD_WIDTH + 1;
-				gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
-			}
-
-			return;
-		} else
-		{
-			// This is the first time we've heard of this cursor drag, so take note of it
-			priv->cursor_drag_active = TRUE;
+			// Update the cursor position
+			priv->cursor_position += time_moved;
 			priv->stored_x = mouse_x;
-			return;
+
+			// Invalidate the widget area where the cursor has moved to
+			area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+			area.y = 0;
+			area.height = GTK_WIDGET(this_time_line)->allocation.height;
+			area.width = CURSOR_HEAD_WIDTH + 1;
+			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 		}
+
+		// Check if the drag is moving to the left
+		if (priv->stored_x > mouse_x)
+		{
+			// Calculate the time and distance travelled
+			mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
+			distance_moved = priv->stored_x - mouse_x;
+			time_moved = ((gfloat) distance_moved) / pixels_per_second;
+
+			// Invalidate the widget area where the cursor is presently
+			area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+			area.y = 0;
+			area.height = GTK_WIDGET(this_time_line)->allocation.height;
+			area.width = CURSOR_HEAD_WIDTH + 1;
+			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+
+			// Update the cursor position
+			priv->cursor_position -= time_moved;
+			priv->stored_x = mouse_x;
+
+			// Invalidate the widget area where the cursor has moved to
+			area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+			area.y = 0;
+			area.height = GTK_WIDGET(this_time_line)->allocation.height;
+			area.width = CURSOR_HEAD_WIDTH + 1;
+			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+		}
+
+		// Safety check
+		if (0 > priv->cursor_position)
+			priv->cursor_position = 0;
+
+		return;
 	}
 
 	// Work out which row the mouse is over in the timeline area
