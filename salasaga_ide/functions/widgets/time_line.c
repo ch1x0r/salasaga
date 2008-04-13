@@ -43,9 +43,15 @@
 #define WIDGET_MINIMUM_HEIGHT	150
 #define WIDGET_MINIMUM_WIDTH	500
 
+// Definitions for the scaling "adjustment" symbols (the plus and minus symbols)
 #define ADJUSTMENTS_X	85
 #define ADJUSTMENTS_Y	2
 #define ADJUSTMENTS_SIZE	10
+
+// Definitions for the cursor head - the triangular part at the top of the time line cursor 
+#define CURSOR_HEAD_TOP		1
+#define CURSOR_HEAD_WIDTH	10
+
 
 // * Private enums *
 enum
@@ -246,6 +252,10 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 static gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 {
 	// Local variables
+	const GdkColor		colour_black = { 0, 0, 0, 0 };
+	const GdkColor		colour_blue = { 0, 0, 0, 65535 };
+	gint				cursor_pixel;				// X position of the cursor on the widget 
+	GdkPoint			cursor_points[3];			// Holds the corner points for the (triangular) cursor head
 	gint				height;
 	TimeLinePrivate		*priv;
 	static GdkGC		*this_gc = NULL;
@@ -303,6 +313,22 @@ static gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 		event->area.x, event->area.y,
 		event->area.width, event->area.height);
 
+	// Draw the line part of the time line cursor
+	cursor_pixel = priv->left_border_width + priv->cursor_position * pixels_per_second;
+	gdk_gc_set_rgb_fg_color(GDK_GC(this_gc), &colour_blue);
+	gdk_gc_set_line_attributes(GDK_GC(this_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+	gdk_draw_line(GDK_DRAWABLE(widget->window), GDK_GC(this_gc), cursor_pixel, 0, cursor_pixel, height);
+
+	// Draw the top part of the time line cursor
+	cursor_points[0].x = cursor_pixel - (CURSOR_HEAD_WIDTH / 2);
+	cursor_points[0].y = CURSOR_HEAD_TOP;
+	cursor_points[1].x = cursor_pixel + (CURSOR_HEAD_WIDTH / 2);
+	cursor_points[1].y = CURSOR_HEAD_TOP;
+	cursor_points[2].x = cursor_pixel;
+	cursor_points[2].y = priv->top_border_height - 1;
+	gdk_draw_polygon(GDK_DRAWABLE(widget->window), GDK_GC(this_gc), TRUE, cursor_points, 3);
+	gdk_gc_set_rgb_fg_color(GDK_GC(this_gc), &colour_black);
+	gdk_draw_polygon(GDK_DRAWABLE(widget->window), GDK_GC(this_gc), FALSE, cursor_points, 3);
 	return TRUE;
 }
 
