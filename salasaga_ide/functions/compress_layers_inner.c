@@ -292,7 +292,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 			// Draw the text background box (or as much as will fit)
 			draw_highlight_box(tmp_pixbuf, x_offset, y_offset, width, height,
 			0xFFFFCCFF,						// Fill color - light yellow
-			0x000000FF);					// Border color - black
+			0x000000FF,						// Border color - black
+			time_alpha);
 
 			// Turn the pixbuf into a pixmap
 			tmp_colormap = gdk_colormap_get_system();
@@ -354,7 +355,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 			// Draw the highlight box (or as much as will fit)
 			draw_highlight_box(tmp_pixbuf, x_offset, y_offset, width, height,
 			0x00FF0040,						// Fill color
-			0x00FF00CC);					// Border color
+			0x00FF00CC,						// Border color
+			time_alpha);
 
 			break;		
 

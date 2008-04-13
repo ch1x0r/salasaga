@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gint width, gint height, guint32 fill_color, guint32 border_color);
+void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gint width, gint height, guint32 fill_color, guint32 border_color, guint alpha);
 
 #ifdef __cplusplus
 }

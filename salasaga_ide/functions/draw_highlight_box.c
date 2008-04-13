@@ -36,7 +36,7 @@
 #include "display_warning.h"
 
 
-void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gint width, gint height, guint32 fill_color, guint32 border_color)
+void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gint width, gint height, guint32 fill_color, guint32 border_color, guint alpha)
 {
 	// Local variables
 	GdkPixbuf			*highlight_pixbuf;			// GDK Pixbuf used for highlighting
@@ -52,28 +52,28 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 	gdk_pixbuf_fill(highlight_pixbuf, border_color);
 
 	// Composite the line onto the front store - top line
-	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
+	gdk_pixbuf_composite(highlight_pixbuf,	// Source pixbuf
 		tmp_pixbuf,							// Destination pixbuf
 		x_offset,							// X offset
 		y_offset,							// Y offset
 		width,								// Width
-		2,								// Height
+		2,									// Height
 		0, 0,								// Source offsets
 		1, 1,								// Scale factor (1 == no scale)
-		GDK_INTERP_NEAREST,						// Scaling type
-		255);								// Alpha
+		GDK_INTERP_NEAREST,					// Scaling type
+		alpha);								// Alpha
 
 	// Composite the line onto the front store - bottom line
-	gdk_pixbuf_composite(highlight_pixbuf,					// Source pixbuf
+	gdk_pixbuf_composite(highlight_pixbuf,	// Source pixbuf
 		tmp_pixbuf,							// Destination pixbuf
 		x_offset,							// X offset
-		y_offset + height - 1,						// Y offset
+		y_offset + height - 1,				// Y offset
 		width,								// Width
-		2,								// Height
+		2,									// Height
 		0, 0,								// Source offsets
 		1, 1,								// Scale factor (1 == no scale)
-		GDK_INTERP_NEAREST,						// Scaling type
-		255);								// Alpha
+		GDK_INTERP_NEAREST,					// Scaling type
+		alpha);								// Alpha
 
 	// Free the temporary pixbuf
 	g_object_unref(GDK_PIXBUF(highlight_pixbuf));
@@ -97,7 +97,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 		0, 0,										// Source offsets
 		1, 1,										// Scale factor (1 == no scale)
 		GDK_INTERP_NEAREST,							// Scaling type
-		255);										// Alpha
+		alpha);										// Alpha
 
 	// Composite the line onto the front store - right side
 	gdk_pixbuf_composite(highlight_pixbuf,			// Source pixbuf
@@ -109,7 +109,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 		0, 0,										// Source offsets
 		1, 1,										// Scale factor (1 == no scale)
 		GDK_INTERP_NEAREST,							// Scaling type
-		255);										// Alpha
+		alpha);										// Alpha
 
 	// Free the temporary pixbuf
 	g_object_unref(GDK_PIXBUF(highlight_pixbuf));
@@ -128,7 +128,7 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 			     0, 0,								// Source offsets
 			     1, 1,								// Scale factor (1 == no scale)
 			     GDK_INTERP_NEAREST,				// Scaling type
-			     255);								// Alpha
+			     alpha);							// Alpha
 
 	// Free the temporary pixbuf
 	g_object_unref(GDK_PIXBUF(highlight_pixbuf));
