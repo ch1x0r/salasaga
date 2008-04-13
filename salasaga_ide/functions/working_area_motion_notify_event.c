@@ -101,21 +101,47 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// Initialise some things
 		current_slide_data = current_slide->data;
 
-		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
-
 		// Determine which layer is selected in the timeline
 		selected_row = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
+
+		// Find out where the time line cursor is
+		time_position = time_line_get_cursor_position(current_slide_data->timeline_widget);
 
 		// Get its present X and Y offsets
 		current_slide_data->layers = g_list_first(current_slide_data->layers);
 		layer_data = g_list_nth_data(current_slide_data->layers, selected_row);
+
+		// Simplify pointers
+		finish_x = layer_data->x_offset_finish;
+		finish_y = layer_data->y_offset_finish;
+		start_time = layer_data->start_time;
+		start_x = layer_data->x_offset_start;
+		start_y = layer_data->y_offset_start;
+		end_time = layer_data->start_time + layer_data->duration;
+		if (TRANS_LAYER_NONE != layer_data->transition_in_type)
+			end_time += layer_data->transition_in_duration;
+		if (TRANS_LAYER_NONE != layer_data->transition_out_type)
+			end_time += layer_data->transition_out_duration;
+
+		// Calculate how far into the layer movement we are
+		time_offset = time_position - start_time;
+		time_diff = end_time - start_time;
+		x_diff = finish_x - start_x;
+		x_scale = (((gfloat) x_diff) / time_diff);
+		time_x = start_x + (x_scale * time_offset);
+		y_diff = finish_y - start_y;
+		y_scale = (((gfloat) y_diff) / time_diff);
+		time_y = start_y + (y_scale * time_offset);
+
+		// Calculate the height and width scaling values for the main drawing area at its present size
+		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
+		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+
 		switch (layer_data->object_type)
 		{
 			case TYPE_HIGHLIGHT:
-				present_x = layer_data->x_offset_start;
-				present_y = layer_data->y_offset_start;
+				present_x = time_x;
+				present_y = time_y;
 				width = ((layer_highlight *) layer_data->object_data)->width;
 				height = ((layer_highlight *) layer_data->object_data)->height;
 				break;
