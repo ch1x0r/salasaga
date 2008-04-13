@@ -22,6 +22,12 @@
  */
 
 
+// Turn on C99 compatibility - needed for roundf() to work
+#define _ISOC99_SOURCE
+
+// Standard include
+#include <math.h>
+
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -60,12 +66,14 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 	gfloat					start_time;				// Time in seconds of the layer objects start time
 	gint					start_x;				// X position at the layer objects start time
 	gint					start_y;				// Y position at the layer objects start time
+	GtkTextIter				text_end;				// The end position of the text buffer
+	GtkTextIter				text_start;				// The start position of the text buffer
+	gint					time_alpha = 255;		// Alpha value to use at our desired point in time (defaulting to 255 = fall opacity)
 	gfloat					time_offset;
 	gint					time_x;					// Unscaled X position of the layer at our desired point in time
 	gint					time_y;					// Unscaled Y position of the layer at our desired point in time
 	gfloat					time_diff;				// Used when calculating the object position at the desired point in time
-	GtkTextIter				text_end;				// The end position of the text buffer
-	GtkTextIter				text_start;				// The start position of the text buffer
+	gfloat					time_scale;				// Used when calculating the object alpha value at the desired point in time
 	GdkColormap				*tmp_colormap;			// Temporary colormap
 	GdkPixmap				*tmp_pixmap;			// GDK Pixmap
 	gint					width;					//
@@ -112,6 +120,36 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 	y_scale = (((gfloat) y_diff) / time_diff);
 	time_y = start_y + (y_scale * time_offset);
 
+	// If the time position is during a transition, we need to determine the correct alpha value
+	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+	{
+		// There is a transition in, so work out if the time position is during it
+		end_time = start_time + this_layer_data->transition_in_duration;
+		if ((time_position > start_time) && (time_position < end_time))
+		{
+			// The time position is during a transition in
+			time_diff = end_time - start_time;
+			time_scale = time_offset / time_diff;
+			time_alpha = CLAMP(roundf(time_scale * 256), 0, 255);
+		}
+	}
+	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+	{
+		// There is a transition out, so work out if the time position is during it
+		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+			start_time += this_layer_data->transition_in_duration;
+		start_time += this_layer_data->duration;
+		time_offset = time_position - start_time;
+		end_time = start_time + this_layer_data->transition_out_duration;
+		if ((time_position > start_time) && (time_position < end_time))
+		{
+			// The time position is during a transition out
+			time_diff = end_time - start_time;
+			time_scale = time_offset / time_diff;
+			time_alpha = CLAMP(roundf(256 - (time_scale * 256)), 0, 255);
+		}
+	}
+
 	// Calculate the height and width scaling values for the requested layer size
 	pixbuf_height = gdk_pixbuf_get_height(tmp_pixbuf);
 	pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
@@ -151,7 +189,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 			scaled_width_ratio,				// Scale X
 			scaled_height_ratio,			// Scale Y
 			GDK_INTERP_TILES,				// Scaling type
-			255);							// Alpha
+			time_alpha);					// Alpha
 
 			// All done
 			return;
@@ -192,7 +230,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 			scaled_width_ratio,				// Scale X
 			scaled_height_ratio,			// Scale Y
 			GDK_INTERP_TILES,				// Scaling type
-			255);							// Alpha
+			time_alpha);					// Alpha
 			return;
 
 		case TYPE_EMPTY:
