@@ -34,11 +34,13 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "compress_layers.h"
+#include "widgets/time_line.h"
 
 
 void regenerate_film_strip_thumbnails()
 {
 	// Local variables
+	gfloat				cursor_position;
 	GtkTreeIter			film_strip_iter;
 	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
 	GdkPixbuf			*new_thumbnail;
@@ -66,9 +68,14 @@ void regenerate_film_strip_thumbnails()
 	// Generate new thumbnails
 	for (slide_counter = 0; slide_counter < num_slides; slide_counter++)
 	{
-		// Create the thumbnail for the slide
+		// Point to the desired slide data
 		this_slide = g_list_nth(slides, slide_counter);
-		new_thumbnail = compress_layers(this_slide, preview_width, (guint) preview_width * 0.75);
+
+		// Get the current time line cursor position
+		cursor_position = time_line_get_cursor_position(((slide *) this_slide->data)->timeline_widget);
+
+		// Create the thumbnail for the slide
+		new_thumbnail = compress_layers(this_slide, cursor_position, preview_width, (guint) preview_width * 0.75);
 		((slide *) this_slide->data)->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(new_thumbnail)));
 
 		// Add the thumbnail to the film strip

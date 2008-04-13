@@ -34,18 +34,20 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "compress_layers.h"
+#include "widgets/time_line.h"
 
 
 void draw_workspace(void)
 {
 	// Local variables
-	static GdkColormap		*front_store_colourmap = NULL;  // Colormap used for the front store
-	gint					front_store_height;
-	gint					front_store_width;
-	const GdkColor			line_fg_colour = { 0, 0x00, 0x00, 0x00 };
-	static GdkGC			*line_gc = NULL;
-	GdkSegment				lines[4];
-	GdkRectangle			tmp_rectangle;
+	gfloat				cursor_position;
+	static GdkColormap	*front_store_colourmap = NULL;  // Colormap used for the front store
+	gint				front_store_height;
+	gint				front_store_width;
+	const GdkColor		line_fg_colour = { 0, 0x00, 0x00, 0x00 };
+	static GdkGC		*line_gc = NULL;
+	GdkSegment			lines[4];
+	GdkRectangle		tmp_rectangle;
 
 
 	// If the current slide hasn't been initialised, or there is no project active don't run this function
@@ -54,14 +56,17 @@ void draw_workspace(void)
 		return;
 	}
 
-	// Recalculate the size of the working area plus 1 pixel border
+	// Recalculate the size of the working area
 	front_store_height = working_height;
 	front_store_width = working_width;
+
+	// Get the current time line cursor position
+	cursor_position = time_line_get_cursor_position(((slide *) current_slide->data)->timeline_widget);
 
 	// Create a new backing store from the current slide
 	if (NULL != backing_store)
 		g_object_unref(GDK_PIXBUF(backing_store));
-	backing_store = compress_layers(current_slide, working_width - 2, working_height - 2);
+	backing_store = compress_layers(current_slide, cursor_position, working_width - 2, working_height - 2);
 
 	// Create the colourmap if needed
 	if (NULL == front_store_colourmap)

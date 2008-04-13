@@ -36,28 +36,30 @@
 #include "compress_layers_inner.h"
 
 
-GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
+GdkPixbuf *compress_layers(GList *which_slide, gfloat time_position, guint width, guint height)
 {
 	// Local variables
 	GdkPixbuf			*bg_pixbuf;					// Points to the background layer
 	GdkPixbuf			*backing_pixbuf;			// Pixbuf buffer things draw onto
 	layer				*layer_data;				// Pointer to the layer data
+	gint				layer_counter;				// Simple counter
 	GList				*layer_pointer;				// Pointer to the layer GList
 	gboolean			use_cached_pixbuf;			// Should we use the cached pixbuf?
-	slide				*slide_ref;					// Pointer to the slide data
+	layer				*this_layer_data;			// Layer data
+	slide				*this_slide_data;			// Pointer to the slide data
 
 
 	// Simplify various pointers
-	slide_ref = (slide *) which_slide->data;
-	layer_pointer = g_list_last(slide_ref->layers);  // The background layer is always the last (bottom) layer
+	this_slide_data = (slide *) which_slide->data;
+	layer_pointer = g_list_last(this_slide_data->layers);  // The background layer is always the last (bottom) layer
 	layer_data = layer_pointer->data;
 
 	// Determine if we have a cached background pixbuf we can reuse
 	use_cached_pixbuf = FALSE;
-	if (TRUE == slide_ref->cached_pixbuf_valid)
+	if (TRUE == this_slide_data->cached_pixbuf_valid)
 	{
 		// There's a pixbuf cached, but is it the required size?
-		if ((height == gdk_pixbuf_get_height(slide_ref->scaled_cached_pixbuf)) && (width == gdk_pixbuf_get_width(slide_ref->scaled_cached_pixbuf)))
+		if ((height == gdk_pixbuf_get_height(this_slide_data->scaled_cached_pixbuf)) && (width == gdk_pixbuf_get_width(this_slide_data->scaled_cached_pixbuf)))
 			use_cached_pixbuf = TRUE;
 	}
 
@@ -91,25 +93,27 @@ GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height)
 		}
 
 		// If there's an existing cache backing pixbuf, we free it
-		if (NULL != slide_ref->scaled_cached_pixbuf)
+		if (NULL != this_slide_data->scaled_cached_pixbuf)
 		{
-			g_object_unref(GDK_PIXBUF(slide_ref->scaled_cached_pixbuf));
+			g_object_unref(GDK_PIXBUF(this_slide_data->scaled_cached_pixbuf));
 		}
 
 		// Cache the new backing pixbuf
-		slide_ref->scaled_cached_pixbuf = gdk_pixbuf_copy(backing_pixbuf);
-		slide_ref->cached_pixbuf_valid = TRUE;
+		this_slide_data->scaled_cached_pixbuf = gdk_pixbuf_copy(backing_pixbuf);
+		this_slide_data->cached_pixbuf_valid = TRUE;
 	} else
 	{
 		// Yes we do, so reuse the existing pixbuf
-		backing_pixbuf = gdk_pixbuf_copy(slide_ref->scaled_cached_pixbuf);
+		backing_pixbuf = gdk_pixbuf_copy(this_slide_data->scaled_cached_pixbuf);
 	}
 
-	// Process each layer's data in turn.  We do the reverse() twice so things are drawn in visually correct order
-	layer_pointer = g_list_first(layer_pointer);
-	layer_pointer = g_list_reverse(layer_pointer);
-	g_list_foreach(layer_pointer, compress_layers_inner, backing_pixbuf);
-	layer_pointer = g_list_reverse(layer_pointer);
+	// Process each layer's data in turn
+	for (layer_counter = this_slide_data->num_layers - 1; layer_counter >= 0; layer_counter--)
+	{
+		layer_pointer = g_list_first(layer_pointer);
+		this_layer_data = g_list_nth_data(layer_pointer, layer_counter);
+		compress_layers_inner(this_layer_data, GDK_PIXBUF(backing_pixbuf), time_position);
+	}
 
 	// Return the newly scaled pixbuf
 	return backing_pixbuf;

@@ -37,50 +37,80 @@
 #include "draw_highlight_box.h"
 
 
-void compress_layers_inner(gpointer element, gpointer user_data)
+void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat time_position)
 {
 	// Local variables
-	GdkGC					*graphics_context;		// GDK graphics context
-	GdkScreen				*output_screen;			//
-	layer					*layer_pointer;			// Points to the data for this layer
-
-	PangoContext			*pango_context;			// Pango context used for text rendering
+	gfloat					end_time;				// Time in seconds of the layer objects finish time
+	gint					finish_x;				// X position at the layer objects finish time
+	gint					finish_y;				// Y position at the layer objects finish time 
 	PangoFontDescription	*font_description;		// Pango font description used for text rendering
-	PangoLayout				*pango_layout;			// Pango layout used for text rendering
-	gint					pango_height;			// Height of the Pango layout
-	gint					pango_width;			// Width of the Pango layout
-
-	GtkTextIter				text_start;				// The start position of the text buffer
-	GtkTextIter				text_end;				// The end position of the text buffer
-
-	gint					pixbuf_width;			// Width of the backing pixbuf
-	gint					pixbuf_height;			// Height of the backing pixbuf
-	gint					x_offset;				//
-	gint					y_offset;				//
-	gint					width;					//
+	GdkGC					*graphics_context;		// GDK graphics context
 	gint					height;					//
-
-	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio 
-	gfloat					scaled_width_ratio;		// Used to calculate a horizontal scaling ratio
-
-	GdkColormap				*tmp_colormap;			// Temporary colormap
-	GdkPixbuf				*tmp_pixbuf;			// GDK Pixbuf
-	GdkPixmap				*tmp_pixmap;			// GDK Pixmap
-
+	GdkScreen				*output_screen;			//
+	PangoContext			*pango_context;			// Pango context used for text rendering
+	gint					pango_height;			// Height of the Pango layout
+	PangoLayout				*pango_layout;			// Pango layout used for text rendering
 	PangoMatrix				pango_matrix = PANGO_MATRIX_INIT;  // Required for positioning the pango layout
 	PangoRenderer			*pango_renderer;		// Pango renderer
+	gint					pango_width;			// Width of the Pango layout
+	gint					pixbuf_height;			// Height of the backing pixbuf
+	gint					pixbuf_width;			// Width of the backing pixbuf
+	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio 
+	gfloat					scaled_width_ratio;		// Used to calculate a horizontal scaling ratio
+	gfloat					start_time;				// Time in seconds of the layer objects start time
+	gint					start_x;				// X position at the layer objects start time
+	gint					start_y;				// Y position at the layer objects start time
+	gfloat					time_offset;
+	gint					time_x;					// Unscaled X position of the layer at our desired point in time
+	gint					time_y;					// Unscaled Y position of the layer at our desired point in time
+	gfloat					time_diff;				// Used when calculating the object position at the desired point in time
+	GtkTextIter				text_end;				// The end position of the text buffer
+	GtkTextIter				text_start;				// The start position of the text buffer
+	GdkColormap				*tmp_colormap;			// Temporary colormap
+	GdkPixmap				*tmp_pixmap;			// GDK Pixmap
+	gint					width;					//
+	gint					x_diff;					// Used when calculating the object position at the desired point in time
+	gint					x_offset;				// X coordinate of the object at the desired point in time
+	gfloat					x_scale;				// Used when calculating the object position at the desired point in time
+	gint					y_diff;					// Used when calculating the object position at the desired point in time
+	gint					y_offset;				// Y coordinate of the object at the desired point in time
+	gfloat					y_scale;				// Used when calculating the object position at the desired point in time
 
-
-	// Initialise various pointers
-	layer_pointer = element;
-	tmp_pixbuf = user_data;  // The backing pixbuf
 
 	// Is this layer invisible, or is it a background layer?
-	if ((FALSE == layer_pointer->visible) || (TRUE == layer_pointer->background))
+	if ((FALSE == this_layer_data->visible) || (TRUE == this_layer_data->background))
 	{
 		// We don't need to process this layer
 		return;
 	}
+
+	// Simplify pointers
+	finish_x = this_layer_data->x_offset_finish;
+	finish_y = this_layer_data->y_offset_finish;
+	start_time = this_layer_data->start_time;
+	start_x = this_layer_data->x_offset_start;
+	start_y = this_layer_data->y_offset_start;
+
+	// If the layer isn't visible at the requested time, we don't need to proceed
+	end_time = this_layer_data->start_time + this_layer_data->duration;
+	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+		end_time += this_layer_data->transition_in_duration;
+	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+		end_time += this_layer_data->transition_out_duration;
+	if ((time_position < start_time) || (time_position > end_time))
+	{
+		return;
+	}
+
+	// Calculate how far into the layer movement we are
+	time_offset = time_position - start_time;
+	time_diff = end_time - start_time;
+	x_diff = finish_x - start_x;
+	x_scale = (((gfloat) x_diff) / time_diff);
+	time_x = start_x + (x_scale * time_offset);
+	y_diff = finish_y - start_y;
+	y_scale = (((gfloat) y_diff) / time_diff);
+	time_y = start_y + (y_scale * time_offset);
 
 	// Calculate the height and width scaling values for the requested layer size
 	pixbuf_height = gdk_pixbuf_get_height(tmp_pixbuf);
@@ -89,16 +119,17 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 	scaled_width_ratio = (gfloat) pixbuf_width / (gfloat) project_width;
 
 	// Determine the type of layer we're dealing with (we ignore background layers)
-	switch (layer_pointer->object_type)
+	switch (this_layer_data->object_type)
 	{
 		case TYPE_GDK_PIXBUF:
+
 			// * We're processing an image layer *
 
 			// Calculate how much of the source image will fit onto the backing pixmap
-			x_offset = layer_pointer->x_offset_start * scaled_width_ratio;
-			y_offset = layer_pointer->y_offset_start * scaled_height_ratio;
-			width = ((layer_image *) layer_pointer->object_data)->width * scaled_width_ratio;
-			height = ((layer_image *) layer_pointer->object_data)->height * scaled_height_ratio;
+			x_offset = time_x * scaled_width_ratio;
+			y_offset = time_y * scaled_height_ratio;
+			width = ((layer_image *) this_layer_data->object_data)->width * scaled_width_ratio;
+			height = ((layer_image *) this_layer_data->object_data)->height * scaled_height_ratio;
 			if ((x_offset + width) > pixbuf_width)
 			{
 				width = pixbuf_width - x_offset;
@@ -109,7 +140,7 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			}
 
 			// Draw the image onto the backing pixbuf
-			gdk_pixbuf_composite(((layer_image *) layer_pointer->object_data)->image_data,	// Source pixbuf
+			gdk_pixbuf_composite(((layer_image *) this_layer_data->object_data)->image_data,	// Source pixbuf
 			tmp_pixbuf,						// Destination pixbuf
 			x_offset,						// X offset
 			y_offset,						// Y offset
@@ -121,12 +152,12 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			scaled_height_ratio,			// Scale Y
 			GDK_INTERP_TILES,				// Scaling type
 			255);							// Alpha
-			user_data = (GdkPixbuf *) tmp_pixbuf;
 
 			// All done
 			return;
 
 		case TYPE_MOUSE_CURSOR:
+
 			// * Composite the mouse pointer image onto the backing pixmap *
 
 			// If the mouse pointer image wasn't able to be loaded then we skip this layer, as the compositing wont work with it
@@ -136,10 +167,10 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			}
 
 			// Calculate how much of the source image will fit onto the backing pixmap
-			x_offset = layer_pointer->x_offset_start * scaled_width_ratio;
-			y_offset = layer_pointer->y_offset_start * scaled_height_ratio;
-			width = ((layer_mouse *) layer_pointer->object_data)->width * scaled_width_ratio;
-			height = ((layer_mouse *) layer_pointer->object_data)->height * scaled_height_ratio;
+			x_offset = time_x * scaled_width_ratio;
+			y_offset = time_y * scaled_height_ratio;
+			width = ((layer_mouse *) this_layer_data->object_data)->width * scaled_width_ratio;
+			height = ((layer_mouse *) this_layer_data->object_data)->height * scaled_height_ratio;
 			if ((x_offset + width) > pixbuf_width)
 			{
 				width = pixbuf_width - x_offset;
@@ -162,14 +193,15 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			scaled_height_ratio,			// Scale Y
 			GDK_INTERP_TILES,				// Scaling type
 			255);							// Alpha
-			user_data = (GdkPixbuf *) tmp_pixbuf;
 			return;
 
 		case TYPE_EMPTY:
+
 			// Empty layer, just return
 			return;
 
 		case TYPE_TEXT:
+
 			// * Draw the text layer *
 
 			// Prepare the text
@@ -177,15 +209,15 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			pango_layout = pango_layout_new(pango_context);
 			font_description = pango_context_get_font_description(pango_context);
 			pango_font_description_set_size(font_description,
-				PANGO_SCALE * ((layer_text *) layer_pointer->object_data)->font_size * scaled_height_ratio);
+				PANGO_SCALE * ((layer_text *) this_layer_data->object_data)->font_size * scaled_height_ratio);
 			pango_font_description_set_family(font_description, "Bitstream Vera Sans");  // "Sans", "Serif", "Monospace"
 			pango_font_description_set_style(font_description, PANGO_STYLE_NORMAL);
 			pango_font_description_set_variant(font_description, PANGO_VARIANT_NORMAL);
 			pango_font_description_set_weight(font_description, PANGO_WEIGHT_NORMAL);
 			pango_font_description_set_stretch(font_description, PANGO_STRETCH_NORMAL);
-			gtk_text_buffer_get_bounds(((layer_text *) layer_pointer->object_data)->text_buffer, &text_start, &text_end);
+			gtk_text_buffer_get_bounds(((layer_text *) this_layer_data->object_data)->text_buffer, &text_start, &text_end);
 			pango_layout_set_markup(pango_layout,
-				gtk_text_buffer_get_text(((layer_text *) layer_pointer->object_data)->text_buffer, &text_start, &text_end, FALSE),  // Point to the text in the object buffer
+				gtk_text_buffer_get_text(((layer_text *) this_layer_data->object_data)->text_buffer, &text_start, &text_end, FALSE),  // Point to the text in the object buffer
 				-1);	  // Auto calculate string length
 
 			// * Draw a background for the text layer *
@@ -194,8 +226,8 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			pango_layout_get_size(pango_layout, &pango_width, &pango_height);
 
 			// Calculate how much of the background will fit onto the backing pixmap
-			x_offset = (layer_pointer->x_offset_start - 10) * scaled_width_ratio;
-			y_offset = (layer_pointer->y_offset_start - 2) * scaled_height_ratio;
+			x_offset = (time_x - 10) * scaled_width_ratio;
+			y_offset = (time_y - 2) * scaled_height_ratio;
 			width = (pango_width / PANGO_SCALE) + (20 * scaled_width_ratio);
 			height = (pango_height / PANGO_SCALE) + (4 * scaled_height_ratio);
 			if ((x_offset + width) > pixbuf_width)
@@ -216,8 +248,8 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			}
 
 			// Store the calculated width and height so we can do collision detection in the event handler
-			((layer_text *) layer_pointer->object_data)->rendered_width = width / scaled_width_ratio;
-			((layer_text *) layer_pointer->object_data)->rendered_height = height / scaled_height_ratio;
+			((layer_text *) this_layer_data->object_data)->rendered_width = width / scaled_width_ratio;
+			((layer_text *) this_layer_data->object_data)->rendered_height = height / scaled_height_ratio;
 
 			// Draw the text background box (or as much as will fit)
 			draw_highlight_box(tmp_pixbuf, x_offset, y_offset, width, height,
@@ -236,12 +268,10 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			pango_renderer = gdk_pango_renderer_get_default(GDK_SCREEN(output_screen));
 			gdk_pango_renderer_set_drawable(GDK_PANGO_RENDERER(pango_renderer), GDK_DRAWABLE(tmp_pixmap));
 			gdk_pango_renderer_set_gc(GDK_PANGO_RENDERER(pango_renderer), graphics_context);
-			gdk_pango_renderer_set_override_color(GDK_PANGO_RENDERER(pango_renderer), PANGO_RENDER_PART_FOREGROUND, &(((layer_text *) layer_pointer->object_data)->text_color));
+			gdk_pango_renderer_set_override_color(GDK_PANGO_RENDERER(pango_renderer), PANGO_RENDER_PART_FOREGROUND, &(((layer_text *) this_layer_data->object_data)->text_color));
 
 			// Position the text
-			pango_matrix_translate(&pango_matrix,
-				layer_pointer->x_offset_start * scaled_width_ratio,
-				layer_pointer->y_offset_start * scaled_height_ratio);
+			pango_matrix_translate(&pango_matrix, time_x * scaled_width_ratio, time_y * scaled_height_ratio);
 			pango_context_set_matrix(pango_context, &pango_matrix);
 
 			// Render the text onto the pixmap
@@ -254,7 +284,6 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 
 			// Copy the pixmap back onto the backing pixbuf
 			gdk_pixbuf_get_from_drawable(GDK_PIXBUF(tmp_pixbuf), GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);	
-			user_data = GDK_PIXBUF(tmp_pixbuf);
 
 			// Free the memory allocated but no longer needed
 			g_object_unref(PANGO_LAYOUT(pango_layout));
@@ -264,16 +293,17 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			break;
 
 		case TYPE_HIGHLIGHT:
+
 			// * Draw the highlight *
 
 			// 0x00FF0040 : Good fill color
 			// 0x00FF00CC : Good border color
 
 			// Calculate how much of the highlight will fit onto the backing pixmap
-			x_offset = layer_pointer->x_offset_start * scaled_width_ratio;
-			y_offset = layer_pointer->y_offset_start * scaled_height_ratio;
-			width = ((layer_highlight *) layer_pointer->object_data)->width * scaled_width_ratio;
-			height = ((layer_highlight *) layer_pointer->object_data)->height * scaled_height_ratio;
+			x_offset = time_x * scaled_width_ratio;
+			y_offset = time_y * scaled_height_ratio;
+			width = ((layer_highlight *) this_layer_data->object_data)->width * scaled_width_ratio;
+			height = ((layer_highlight *) this_layer_data->object_data)->height * scaled_height_ratio;
 			if ((x_offset + width) > pixbuf_width)
 			{
 				width = pixbuf_width - x_offset;
@@ -286,11 +316,11 @@ void compress_layers_inner(gpointer element, gpointer user_data)
 			// Draw the highlight box (or as much as will fit)
 			draw_highlight_box(tmp_pixbuf, x_offset, y_offset, width, height,
 			0x00FF0040,						// Fill color
-			0x00FF00CC);						// Border color
+			0x00FF00CC);					// Border color
 
 			break;		
 
 		default:
-			display_warning("Error ED33: Unknown layer type\n");		
+			display_warning("Error ED33: Unknown layer type");		
 	}
 }

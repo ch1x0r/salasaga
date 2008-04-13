@@ -2409,7 +2409,7 @@ gboolean project_read(gchar *filename)
 		// Create the thumbnail for the slide
 		tmp_glist = NULL;
 		tmp_glist = g_list_append(tmp_glist, tmp_slide);
-		tmp_pixbuf = compress_layers(tmp_glist, preview_width, (guint) preview_width * 0.75);
+		tmp_pixbuf = compress_layers(tmp_glist, 0, preview_width, (guint) preview_width * 0.75);
 		tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(tmp_pixbuf)));
 
 		// Add the thumbnail to the film strip

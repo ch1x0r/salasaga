@@ -153,14 +153,8 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 
 
 	// Safety check
-	if (NULL == widget)
-	{
-		return -1;
-	}
-	if (FALSE == IS_TIME_LINE(widget))
-	{
-		return -1;
-	}
+	g_return_val_if_fail(widget != NULL, -1);
+	g_return_val_if_fail(IS_TIME_LINE(widget), -1);
 
 	// Initialisation
 	this_time_line = TIME_LINE(widget);
@@ -248,6 +242,25 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
 
 	return TRUE;
+}
+
+// Function to return the time line cursor position
+gfloat time_line_get_cursor_position(GtkWidget *widget)
+{
+	// Local variables
+	TimeLinePrivate		*priv;
+	TimeLine			*this_time_line;
+
+
+	// Safety check
+	g_return_val_if_fail(widget != NULL, -1);
+	g_return_val_if_fail(IS_TIME_LINE(widget), -1);
+
+	// Initialisation
+	this_time_line = TIME_LINE(widget);
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+
+	return priv->cursor_position;
 }
 
 // Function to do the actual drawing of the timeline widget onscreen
@@ -1341,6 +1354,9 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		if (0 > priv->cursor_position)
 			priv->cursor_position = 0;
 
+		// Redraw the working area
+		draw_workspace();
+
 		return;
 	}
 
@@ -1917,6 +1933,12 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
 	time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_end);
 
+	// Update the workspace area
+	draw_workspace();
+
+	// Recreate the film strip thumbnail
+	film_strip_create_thumbnail(this_slide_data);
+
 	return;
 }
 
@@ -1996,6 +2018,12 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 		area.height = GTK_WIDGET(this_time_line)->allocation.height;
 		area.width = CURSOR_HEAD_WIDTH;
 		gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+
+		// Update the workspace area
+		draw_workspace();
+
+		// Recreate the film strip thumbnail
+		film_strip_create_thumbnail(this_slide_data);
 
 		return;
 	}

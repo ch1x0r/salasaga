@@ -31,12 +31,14 @@
 #include "compress_layers.h"
 #include "display_warning.h"
 #include "validate_value.h"
+#include "widgets/time_line.h"
 
 
 void menu_export_slide(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;				// Filter for *.*
+	gfloat				cursor_position;
 	GtkWidget 			*export_dialog;				// Dialog widget
 	GError				*error = NULL;				// Pointer to error return structure
 	gchar				*filename;					// Pointer to the chosen file name
@@ -140,8 +142,11 @@ void menu_export_slide(void)
 	// Destroy the dialog box, as it's not needed any more
 	gtk_widget_destroy(export_dialog);
 
+	// Get the current time line cursor position
+	cursor_position = time_line_get_cursor_position(((slide *) current_slide->data)->timeline_widget);
+
 	// Create a new pixbuf with all the layers of the current slide
-	slide_pixbuf = compress_layers(current_slide, working_width, working_height);
+	slide_pixbuf = compress_layers(current_slide, cursor_position, working_width, working_height);
 
 	// Save the image as a png file
 	return_code_gbool = gdk_pixbuf_save(GDK_PIXBUF(slide_pixbuf), validated_string->str, "png", &error, "tEXt::Software", "Salasaga: http://www.salasaga.org", NULL);

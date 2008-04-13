@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-GdkPixbuf *compress_layers(GList *which_slide, guint width, guint height);
+GdkPixbuf *compress_layers(GList *which_slide, gfloat time_position, guint width, guint height);
 
 #ifdef __cplusplus
 }
