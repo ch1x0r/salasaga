@@ -72,6 +72,7 @@ struct _TimeLinePrivate
 {
 	GdkPixmap			*cached_bg_image;			// Cache of the timeline background image, for drawing upon
 	gboolean			cached_bg_valid;			// Flag for whether the timeline background cache image is valid
+	gboolean			cursor_drag_active;			// Tracks whether we're dragging the time line cursor or not
 	gfloat				cursor_position;			// Where in the slide the cursor is positioned (in seconds or part thereof)
 	GdkPixmap			*display_buffer;			// The rendered version of the timeline
 	gboolean			drag_active;				// Tracks whether we have an active mouse drag or not
@@ -90,6 +91,7 @@ struct _TimeLinePrivate
 
 
 // * Internal function declarations *
+gboolean time_line_internal_draw_cursor(GtkWidget *widget, gint pixel_num);
 gboolean time_line_internal_draw_guide_line(GtkWidget *widget, gint pixel_num);
 gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint layer_number);
 gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv);
@@ -252,10 +254,6 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 static gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 {
 	// Local variables
-	const GdkColor		colour_black = { 0, 0, 0, 0 };
-	const GdkColor		colour_blue = { 0, 0, 0, 65535 };
-	gint				cursor_pixel;				// X position of the cursor on the widget 
-	GdkPoint			cursor_points[3];			// Holds the corner points for the (triangular) cursor head
 	gint				height;
 	TimeLinePrivate		*priv;
 	static GdkGC		*this_gc = NULL;
@@ -313,22 +311,8 @@ static gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 		event->area.x, event->area.y,
 		event->area.width, event->area.height);
 
-	// Draw the line part of the time line cursor
-	cursor_pixel = priv->left_border_width + priv->cursor_position * pixels_per_second;
-	gdk_gc_set_rgb_fg_color(GDK_GC(this_gc), &colour_blue);
-	gdk_gc_set_line_attributes(GDK_GC(this_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
-	gdk_draw_line(GDK_DRAWABLE(widget->window), GDK_GC(this_gc), cursor_pixel, 0, cursor_pixel, height);
+	time_line_internal_draw_cursor(widget, priv->left_border_width + (priv->cursor_position * pixels_per_second));
 
-	// Draw the top part of the time line cursor
-	cursor_points[0].x = cursor_pixel - (CURSOR_HEAD_WIDTH / 2);
-	cursor_points[0].y = CURSOR_HEAD_TOP;
-	cursor_points[1].x = cursor_pixel + (CURSOR_HEAD_WIDTH / 2);
-	cursor_points[1].y = CURSOR_HEAD_TOP;
-	cursor_points[2].x = cursor_pixel;
-	cursor_points[2].y = priv->top_border_height - 1;
-	gdk_draw_polygon(GDK_DRAWABLE(widget->window), GDK_GC(this_gc), TRUE, cursor_points, 3);
-	gdk_gc_set_rgb_fg_color(GDK_GC(this_gc), &colour_black);
-	gdk_draw_polygon(GDK_DRAWABLE(widget->window), GDK_GC(this_gc), FALSE, cursor_points, 3);
 	return TRUE;
 }
 
@@ -539,6 +523,53 @@ void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint wid
 	gdk_gc_set_line_attributes(GDK_GC(display_buffer_gc), 1, GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	gdk_gc_set_dashes(GDK_GC(display_buffer_gc), 1, dash_list, 2);
 	gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), FALSE, x1, y1, x2, y2);
+}
+
+// Function to draw the time line cursor directly on the widget
+gboolean time_line_internal_draw_cursor(GtkWidget *widget, gint pixel_num)
+{
+	// Local variables
+	const GdkColor		colour_black = { 0, 0, 0, 0 };
+	const GdkColor		colour_blue = { 0, 0, 0, 65535 };
+//	gint				cursor_pixel;				// X position of the cursor on the widget 
+	GdkPoint			cursor_points[3];			// Holds the corner points for the (triangular) cursor head
+	TimeLinePrivate		*priv;
+	static GdkGC		*this_gc = NULL;
+	TimeLine			*this_time_line;
+
+
+	// Safety check
+	g_return_val_if_fail(widget != NULL, FALSE);
+	g_return_val_if_fail(IS_TIME_LINE(widget), FALSE);
+printf("Drawing cursor!\n");
+	// Initialisation
+	this_time_line = TIME_LINE(widget);
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+
+	// Create a graphic context if we don't have one already
+	if (NULL == this_gc)
+	{
+		this_gc = gdk_gc_new(GDK_DRAWABLE(widget->window));
+	}
+
+	// Draw the line part of the time line cursor
+//	cursor_pixel = priv->left_border_width + priv->cursor_position * pixels_per_second;
+	gdk_gc_set_rgb_fg_color(GDK_GC(this_gc), &colour_blue);
+	gdk_gc_set_line_attributes(GDK_GC(this_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+	gdk_draw_line(GDK_DRAWABLE(widget->window), GDK_GC(this_gc), pixel_num, 0, pixel_num, widget->allocation.height);
+
+	// Draw the top part of the time line cursor
+	cursor_points[0].x = pixel_num - (CURSOR_HEAD_WIDTH / 2);
+	cursor_points[0].y = CURSOR_HEAD_TOP;
+	cursor_points[1].x = pixel_num + (CURSOR_HEAD_WIDTH / 2);
+	cursor_points[1].y = CURSOR_HEAD_TOP;
+	cursor_points[2].x = pixel_num;
+	cursor_points[2].y = priv->top_border_height - 1;
+	gdk_draw_polygon(GDK_DRAWABLE(widget->window), GDK_GC(this_gc), TRUE, cursor_points, 3);
+	gdk_gc_set_rgb_fg_color(GDK_GC(this_gc), &colour_black);
+	gdk_draw_polygon(GDK_DRAWABLE(widget->window), GDK_GC(this_gc), FALSE, cursor_points, 3);
+
+	return TRUE;	
 }
 
 // Function to draw a horizontal guide line directly on the time line widget
@@ -1105,6 +1136,7 @@ static void time_line_init(TimeLine *time_line)
 	pixels_per_second = 60;
 	priv = TIME_LINE_GET_PRIVATE(time_line);
 	priv->cached_bg_valid = FALSE;
+	priv->cursor_drag_active = FALSE;
 	priv->display_buffer = NULL;
 	priv->drag_active = FALSE;
 	priv->resize_type = RESIZE_NONE;
@@ -1173,6 +1205,7 @@ GtkWidget* time_line_new()
 void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
+	GtkAllocation		area;						// Rectangular area
 	layer				*background_layer_data;		// Data for the background layer
 	GdkModifierType		button_state;				// Mouse button states
 	gint				check_pixel;				// Used when calculating pixel positions 
@@ -1180,7 +1213,6 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	gint				distance_moved;				// Number of pixels the row has been scrolled by horizontally
 	gint				end_row;					// Number of the last layer in this slide
 	gfloat				end_time;					// The end time in seconds of the presently selected layer
-	GtkAllocation		area;						// Rectangular area
 	GList				*layer_above;				// The layer above the selected one
 	GList				*layer_below;				// The layer below the selected one
 	GList				*layer_pointer;				// Points to the layers in the selected slide
@@ -1231,7 +1263,82 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	end_row = this_slide_data->num_layers -1;
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 	current_row = priv->selected_layer_num;
+/*
+	// Check if this button press is in the top border area
+	if ((ADJUSTMENTS_Y <= event->y) && (ADJUSTMENTS_Y + ADJUSTMENTS_SIZE) >= event->y)
+	{
+		// * It's in the top border area *
 
+		// Check if the user is clicking on the cursor head
+		check_pixel = priv->left_border_width + (priv->cursor_position * pixels_per_second);
+		if (1 < check_pixel)
+			check_pixel -= 1;
+		if ((mouse_x >= check_pixel) && (mouse_x <= check_pixel + 5))
+		{
+printf("Cursor head clicked!\n");
+			if (TRUE == priv->cursor_drag_active)
+			{
+				// * There's already an active cursor drag *
+printf("Cursor drag already active!\n");
+				// Check if the resize is moving to the right
+				if (priv->stored_x < mouse_x)
+				{
+printf("Cursor moving right!\n");
+					// Calculate the time and distance travelled
+					mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
+					distance_moved = mouse_x - priv->stored_x;
+					time_moved = ((gfloat) distance_moved) / pixels_per_second;
+printf("Cursor time moved right: %.2f\n", time_moved);
+					// Update the cursor position
+					priv->cursor_position += time_moved;
+					priv->stored_x = mouse_x;
+
+					// Invalidate the widget area where the cursor is (so it gets redrawn)
+					area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+					area.y = 0;
+					area.height = GTK_WIDGET(this_time_line)->allocation.height;
+					area.width = CURSOR_HEAD_WIDTH;
+					gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+//					gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
+
+
+				}
+
+				// Check if the resize is moving to the left
+				if (priv->stored_x > mouse_x)
+				{
+printf("Cursor moving left!\n");
+					// Calculate the time and distance travelled
+					mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
+					distance_moved = priv->stored_x - mouse_x;
+					time_moved = ((gfloat) distance_moved) / pixels_per_second;
+printf("Cursor time moved left: %.2f\n", time_moved);
+					// Update the cursor position
+					priv->cursor_position -= time_moved;
+					priv->stored_x = mouse_x;
+
+					// Invalidate the widget area where the cursor is (so it gets redrawn)
+					area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+					area.y = 0;
+					area.height = GTK_WIDGET(this_time_line)->allocation.height;
+					area.width = CURSOR_HEAD_WIDTH;
+					gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+
+				}
+
+				return;
+			} else
+			{
+printf("Cursor drag going active!\n");
+				// This is the first time we've heard of this cursor drag, so take note of it
+				priv->cursor_drag_active = TRUE;
+				priv->stored_x = mouse_x;
+				return;
+			}
+		}
+		return;
+	}
+*/
 	// Work out which row the mouse is over in the timeline area
 	new_row = floor((event->y - priv->top_border_height) / priv->row_height);
 
@@ -1812,6 +1919,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
+	GtkAllocation		area;						// Rectangular area
 	gfloat				end_time;					// The end time in seconds of the presently selected layer
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				new_row;					// Used to determine the row clicked upon
@@ -1861,10 +1969,29 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 	layer_pointer = this_slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
 
-	// Check if this button press is in the top border area
-	if ((ADJUSTMENTS_Y <= event->y) && (ADJUSTMENTS_Y + ADJUSTMENTS_SIZE) >= event->y)
+	// Check if this button press is in time line cursor area
+	if ((ADJUSTMENTS_Y <= event->y) && ((ADJUSTMENTS_Y + ADJUSTMENTS_SIZE) >= event->y) && (priv->left_border_width < event->x))
 	{
-		// It's in the top area, so ignore the button click (the interesting stuff is in the motion notify handler)
+		// * Direct click in the cursor area *
+
+		// Remove the old cursor line
+		area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+		area.y = 0;
+		area.height = GTK_WIDGET(this_time_line)->allocation.height;
+		area.width = CURSOR_HEAD_WIDTH;
+		gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+
+		// Reposition the cursor
+		priv->cursor_position = (event->x - priv->left_border_width) / pixels_per_second;
+		priv->cursor_drag_active = FALSE;
+
+		// Draw the new cursor line
+		area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+		area.y = 0;
+		area.height = GTK_WIDGET(this_time_line)->allocation.height;
+		area.width = CURSOR_HEAD_WIDTH;
+		gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+
 		return;
 	}
 
@@ -2065,6 +2192,13 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 	area.x = priv->guide_line_end;
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+
+	// Check if this mouse releases matches a cursor drag
+	if (TRUE == priv->cursor_drag_active)
+	{
+		// Note that the cursor drag has finished
+		priv->cursor_drag_active = FALSE;
+	}
 
 	// Check if this mouse release matches a resize
 	if (RESIZE_NONE != priv->resize_type)
