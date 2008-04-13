@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-gboolean display_dialog_save_warning();
+gboolean display_dialog_save_warning(gboolean with_cancel);
 
 #ifdef __cplusplus
 }

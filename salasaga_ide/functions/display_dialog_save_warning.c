@@ -31,7 +31,7 @@
 #include "menu_file_save.h"
 
 
-gboolean display_dialog_save_warning()
+gboolean display_dialog_save_warning(gboolean with_cancel)
 {
 	// Local variables
 	gint				return_code_int;			// Status code returned from the dialog box
@@ -40,11 +40,20 @@ gboolean display_dialog_save_warning()
 
 	// Display the warning dialog
 	tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "Project has been modified.  Save changes?");
-	gtk_dialog_add_buttons(GTK_DIALOG(tmp_dialog),
-			GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-			GTK_STOCK_YES, GTK_RESPONSE_YES,
-			GTK_STOCK_NO, GTK_RESPONSE_NO,
-			NULL);
+	if (TRUE == with_cancel)
+	{
+		gtk_dialog_add_buttons(GTK_DIALOG(tmp_dialog),
+				GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
+				GTK_STOCK_YES, GTK_RESPONSE_YES,
+				GTK_STOCK_NO, GTK_RESPONSE_NO,
+				NULL);
+	} else
+	{
+		gtk_dialog_add_buttons(GTK_DIALOG(tmp_dialog),
+				GTK_STOCK_YES, GTK_RESPONSE_YES,
+				GTK_STOCK_NO, GTK_RESPONSE_NO,
+				NULL);
+	}
 	
 	return_code_int = gtk_dialog_run(GTK_DIALOG(tmp_dialog));
 	gtk_widget_destroy(tmp_dialog);
@@ -53,6 +62,7 @@ gboolean display_dialog_save_warning()
 	if (GTK_RESPONSE_YES == return_code_int)
 	{
 		menu_file_save();
+		changes_made = FALSE;
 	}
 
 	// If the user wants to cancel, then indicate this
