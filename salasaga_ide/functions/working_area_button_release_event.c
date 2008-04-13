@@ -36,11 +36,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "calculate_object_boundaries.h"
-#include "detect_collisions.h"
 #include "display_warning.h"
-#include "draw_handle_box.h"
-#include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
 #include "layer_new_highlight_inner.h"

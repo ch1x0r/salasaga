@@ -37,20 +37,10 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "layer_edit.h"
-
 #include "calculate_object_boundaries.h"
 #include "detect_collisions.h"
-#include "display_warning.h"
 #include "draw_handle_box.h"
-#include "draw_timeline.h"
-#include "draw_workspace.h"
-#include "film_strip_create_thumbnail.h"
-#include "layer_new_highlight_inner.h"
-#include "layer_new_image_inner.h"
-#include "layer_new_mouse_inner.h"
-#include "layer_new_text_inner.h"
 #include "widgets/time_line.h"
-
 
 
 gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
