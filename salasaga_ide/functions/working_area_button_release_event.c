@@ -36,7 +36,10 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "calculate_object_boundaries.h"
+#include "detect_collisions.h"
 #include "display_warning.h"
+#include "draw_handle_box.h"
 #include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
@@ -51,11 +54,14 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 {
 	// Local variables
 	GdkModifierType		button_state;
-	slide				*current_slide_data;		// Alias to make things easier
+	GList				*collision_list = NULL;
+	guint				count_int;
 	gint				height;
 	layer				*layer_data;
+	GList				*layer_pointer;
 	gint				mouse_x;
 	gint				mouse_y;
+	guint				num_collisions;
 	gint				onscreen_bottom;			// New Y coordinate of layer
 	gint				onscreen_left;				// New X coordinate of layer
 	gint				onscreen_right;				// New X coordinate of layer
@@ -66,11 +72,14 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_row;				// Holds the number of the row that is selected
 	guint				swap_value;					// Temporary value used when swapping border positions
+	slide				*this_slide_data;			// Alias to make things easier
+	guint				tmp_int;					// Temporary integer
 	gint				width;
 	gint				x_change;					// The X distance the layer object moves from start to finish 
 	gint				y_change;					// The Y distance the layer object moves from start to finish
 	gfloat				x_diff;						// The X distance the object was dragged, after scaling
 	gfloat				y_diff;						// The Y distance the object was dragged, after scaling
+
 
 
 	// Only do this function if we have a front store available and a project loaded
@@ -138,14 +147,14 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	if (FALSE != (RESIZE_HANDLES_RESIZING & resize_handles_status))
 	{
 		// Initialise some things
-		current_slide_data = current_slide->data;
+		this_slide_data = current_slide->data;
 
 		// Determine which layer is selected in the timeline
-		selected_row = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
+		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
 
 		// Get its present X and Y offsets
-		current_slide_data->layers = g_list_first(current_slide_data->layers);
-		layer_data = g_list_nth_data(current_slide_data->layers, selected_row);
+		this_slide_data->layers = g_list_first(this_slide_data->layers);
+		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
 		width = ((layer_highlight *) layer_data->object_data)->width;
 		height = ((layer_highlight *) layer_data->object_data)->height;
 		x_change = layer_data->x_offset_finish - layer_data->x_offset_start;
@@ -289,17 +298,17 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	if (TRUE == mouse_dragging)
 	{
 		// Initialise some things
-		current_slide_data = current_slide->data;
+		this_slide_data = current_slide->data;
 
 		// Check for primary mouse button release
 		if (1 == event->button)
 		{
 			// Determine which layer is selected in the timeline
-			selected_row = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
+			selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
 
 			// Get its present X and Y offsets
-			current_slide_data->layers = g_list_first(current_slide_data->layers);
-			layer_data = g_list_nth_data(current_slide_data->layers, selected_row);
+			this_slide_data->layers = g_list_first(this_slide_data->layers);
+			layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
 			switch (layer_data->object_type)
 			{
 				case TYPE_EMPTY:
@@ -383,6 +392,71 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			gdk_flush();
 		}
 	}
+
+
+	// * Do collision detection here to determine if the user has clicked on a layer's object *
+
+	this_slide_data = current_slide->data;
+	calculate_object_boundaries();
+	collision_list = detect_collisions(collision_list, event->x, event->y);
+	if (NULL == collision_list)
+	{
+		// If there was no collision, then select the background layer
+		time_line_set_selected_layer_num(this_slide_data->timeline_widget, this_slide_data->num_layers - 1);  // *Needs* the -1, don't remove
+
+		// Clear any existing handle box
+		gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
+				GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
+
+		// Reset the stored mouse coordinates
+		stored_x = -1;
+		stored_y = -1;
+
+		// Free the memory allocated during the collision detection
+		g_list_free(collision_list);
+		collision_list = NULL;
+
+		return TRUE;
+	}
+
+	// * To get here there must have been at least one collision *
+
+	// Save the mouse coordinates
+	stored_x = event->x;
+	stored_y = event->y;
+
+	// Determine which layer the user has selected in the timeline
+	selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
+
+	// Is the presently selected layer in the collision list?
+	collision_list = g_list_first(collision_list);
+	num_collisions = g_list_length(collision_list);
+	for (count_int = 0; count_int < num_collisions; count_int++)
+	{
+		collision_list = g_list_first(collision_list);
+		collision_list = g_list_nth(collision_list, count_int);
+		layer_pointer = g_list_first(this_slide_data->layers);
+		tmp_int = g_list_position(layer_pointer, ((boundary_box *) collision_list->data)->layer_ptr);
+		if (tmp_int == selected_row)
+		{
+			// Return if the presently selected row is in the collision list, as we don't want to change our selected layer
+			return TRUE;
+		}
+	}
+
+	// * To get here, the presently selected layer wasn't in the collision list *
+
+	// The presently selected row is not in the collision list, so move the selection row to the first collision
+	collision_list = g_list_first(collision_list);
+	selected_row = g_list_position(this_slide_data->layers, ((boundary_box *) collision_list->data)->layer_ptr);
+	time_line_set_selected_layer_num(this_slide_data->timeline_widget, selected_row);
+
+	// Draw a handle box around the new selected object
+	draw_handle_box();
+
+	// Free the memory allocated during the collision detection
+	g_list_free(collision_list);
+	collision_list = NULL;
 
 	return TRUE;
 }
