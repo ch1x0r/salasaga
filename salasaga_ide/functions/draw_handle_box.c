@@ -160,8 +160,8 @@ gboolean draw_handle_box(void)
 			break;
 
 		case TYPE_TEXT:
-			width = ((layer_text *) this_layer_data->object_data)->rendered_width - 6;
-			height = ((layer_text *) this_layer_data->object_data)->rendered_height - 4;
+			width = ((layer_text *) this_layer_data->object_data)->rendered_width;
+			height = ((layer_text *) this_layer_data->object_data)->rendered_height;
 			break;
 
 		default:
