@@ -43,7 +43,7 @@
 
 // Text padding defines (in pixels) 
 #define TEXT_BORDER_PADDING_WIDTH 4
-#define TEXT_BORDER_PADDING_HEIGHT 2
+#define TEXT_BORDER_PADDING_HEIGHT 4
 
 
 void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, gfloat time_position)
@@ -259,8 +259,10 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			// Calculate the text object (including background) offsets and sizing
 			x_offset = time_x * scaled_width_ratio;
 			y_offset = time_y * scaled_height_ratio;
-			width = CLAMP(text_extents.width + (TEXT_BORDER_PADDING_WIDTH * 2), 0, pixmap_width - x_offset - (TEXT_BORDER_PADDING_WIDTH * 2) - 1);
-			height = CLAMP(text_extents.height + (TEXT_BORDER_PADDING_HEIGHT * 2), 0, pixmap_height - y_offset - (TEXT_BORDER_PADDING_HEIGHT * 2) - 1);
+			width = CLAMP(text_extents.width + (TEXT_BORDER_PADDING_WIDTH * 2 * scaled_width_ratio),
+						0, pixmap_width - x_offset - (TEXT_BORDER_PADDING_WIDTH * 2 * scaled_width_ratio) - 1);
+			height = CLAMP(text_extents.height + (TEXT_BORDER_PADDING_HEIGHT * 2 * scaled_height_ratio),
+						0, pixmap_height - y_offset - (TEXT_BORDER_PADDING_HEIGHT * 2 * scaled_height_ratio) - 1);
 
 			// Store the rendered width of the text object with the layer itself, for use by bounding box code
 			((layer_text *) this_layer_data->object_data)->rendered_width = width / scaled_width_ratio;
@@ -287,8 +289,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			// * Draw the text string itself *
 
 			// Move to the desired text location
-			text_left = x_offset + TEXT_BORDER_PADDING_WIDTH;
-			text_top = y_offset + text_extents.height + TEXT_BORDER_PADDING_HEIGHT;
+			text_left = x_offset;
+			text_top = y_offset + text_extents.height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
 			cairo_move_to(cairo_context, text_left, text_top);
 
 			// Set the desired font foreground color
