@@ -40,40 +40,43 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
-#include "draw_highlight_box.h"
+
+// Text padding defines (in pixels) 
+#define TEXT_BORDER_PADDING_WIDTH 4
+#define TEXT_BORDER_PADDING_HEIGHT 2
 
 
-void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat time_position)
+void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, gfloat time_position)
 {
 	// Local variables
+	cairo_t					*cairo_context;			// Cairo drawing context
 	gfloat					end_time;				// Time in seconds of the layer objects finish time
 	gint					finish_x;				// X position at the layer objects finish time
 	gint					finish_y;				// Y position at the layer objects finish time 
-	PangoFontDescription	*font_description;		// Pango font description used for text rendering
 	GdkGC					*graphics_context;		// GDK graphics context
 	gint					height;					//
-	GdkScreen				*output_screen;			//
-	PangoContext			*pango_context;			// Pango context used for text rendering
-	gint					pango_height;			// Height of the Pango layout
-	PangoLayout				*pango_layout;			// Pango layout used for text rendering
-	PangoMatrix				pango_matrix = PANGO_MATRIX_INIT;  // Required for positioning the pango layout
-	PangoRenderer			*pango_renderer;		// Pango renderer
-	gint					pango_width;			// Width of the Pango layout
-	gint					pixbuf_height;			// Height of the backing pixbuf
-	gint					pixbuf_width;			// Width of the backing pixbuf
+	gint					pixmap_height;			// Receives the height of a given pixmap
+	gint					pixmap_width;			// Receives the width of a given pixmap
 	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio 
 	gfloat					scaled_width_ratio;		// Used to calculate a horizontal scaling ratio
 	gfloat					start_time;				// Time in seconds of the layer objects start time
 	gint					start_x;				// X position at the layer objects start time
 	gint					start_y;				// Y position at the layer objects start time
+	GdkColor				*text_colour;			// Pointer to the foreground colour of the text
+	gfloat					text_blue;				// Blue component of text fg colour
 	GtkTextIter				text_end;				// The end position of the text buffer
+	cairo_text_extents_t	text_extents;			// Meta information about an onscreen text string
+	gfloat					text_green;				// Green component of text fg colour
+	gint					text_left;				// Pixel number onscreen for the left side of text
+	gfloat					text_red;				// Red component of text fg colour
+	gint					text_top;				// Pixel number onscreen for the top of text
 	GtkTextIter				text_start;				// The start position of the text buffer
-	gint					time_alpha = 255;		// Alpha value to use at our desired point in time (defaulting to 255 = fall opacity)
+	gchar					*text_string;			// The text string to be displayed
+	gfloat					time_alpha = 1.0;		// Alpha value to use at our desired point in time (defaulting to 1.0 = fall opacity)
 	gfloat					time_offset;
 	gint					time_x;					// Unscaled X position of the layer at our desired point in time
 	gint					time_y;					// Unscaled Y position of the layer at our desired point in time
 	gfloat					time_diff;				// Used when calculating the object position at the desired point in time
-	gfloat					time_scale;				// Used when calculating the object alpha value at the desired point in time
 	GdkColormap				*tmp_colormap;			// Temporary colormap
 	GdkPixmap				*tmp_pixmap;			// GDK Pixmap
 	gint					width;					//
@@ -129,8 +132,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 		{
 			// The time position is during a transition in
 			time_diff = end_time - start_time;
-			time_scale = time_offset / time_diff;
-			time_alpha = CLAMP(roundf(time_scale * 256), 0, 255);
+			time_alpha = time_offset / time_diff;
 		}
 	}
 	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
@@ -145,16 +147,17 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 		{
 			// The time position is during a transition out
 			time_diff = end_time - start_time;
-			time_scale = time_offset / time_diff;
-			time_alpha = CLAMP(roundf(256 - (time_scale * 256)), 0, 255);
+			time_alpha = 1 - (time_offset / time_diff);
 		}
 	}
 
 	// Calculate the height and width scaling values for the requested layer size
-	pixbuf_height = gdk_pixbuf_get_height(tmp_pixbuf);
-	pixbuf_width = gdk_pixbuf_get_width(tmp_pixbuf);
-	scaled_height_ratio = (gfloat) pixbuf_height / (gfloat) project_height;
-	scaled_width_ratio = (gfloat) pixbuf_width / (gfloat) project_width;
+	gdk_drawable_get_size(GDK_PIXMAP(incoming_pixmap), &pixmap_width, &pixmap_height);
+	scaled_height_ratio = (gfloat) pixmap_height / (gfloat) project_height;
+	scaled_width_ratio = (gfloat) pixmap_width / (gfloat) project_width;
+
+	// Create a cairo drawing context
+	cairo_context = gdk_cairo_create(GDK_PIXMAP(incoming_pixmap));
 
 	// Determine the type of layer we're dealing with (we ignore background layers)
 	switch (this_layer_data->object_type)
@@ -168,15 +171,15 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 			y_offset = time_y * scaled_height_ratio;
 			width = ((layer_image *) this_layer_data->object_data)->width * scaled_width_ratio;
 			height = ((layer_image *) this_layer_data->object_data)->height * scaled_height_ratio;
-			if ((x_offset + width) > pixbuf_width)
+			if ((x_offset + width) > pixmap_width)
 			{
-				width = pixbuf_width - x_offset;
+				width = pixmap_width - x_offset;
 			}
-			if ((y_offset + height) > pixbuf_height)
+			if ((y_offset + height) > pixmap_height)
 			{
-				height = pixbuf_height - y_offset;
+				height = pixmap_height - y_offset;
 			}
-
+/*
 			// Draw the image onto the backing pixbuf
 			gdk_pixbuf_composite(((layer_image *) this_layer_data->object_data)->image_data,	// Source pixbuf
 			tmp_pixbuf,						// Destination pixbuf
@@ -190,8 +193,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 			scaled_height_ratio,			// Scale Y
 			GDK_INTERP_TILES,				// Scaling type
 			time_alpha);					// Alpha
-
-			// All done
+*/
 			return;
 
 		case TYPE_MOUSE_CURSOR:
@@ -209,15 +211,15 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 			y_offset = time_y * scaled_height_ratio;
 			width = ((layer_mouse *) this_layer_data->object_data)->width * scaled_width_ratio;
 			height = ((layer_mouse *) this_layer_data->object_data)->height * scaled_height_ratio;
-			if ((x_offset + width) > pixbuf_width)
+			if ((x_offset + width) > pixmap_width)
 			{
-				width = pixbuf_width - x_offset;
+				width = pixmap_width - x_offset;
 			}
-			if ((y_offset + height) > pixbuf_height)
+			if ((y_offset + height) > pixmap_height)
 			{
-				height = pixbuf_height - y_offset;
+				height = pixmap_height - y_offset;
 			}
-
+/*
 			// Draw the mouse pointer onto the backing pixbuf
 			gdk_pixbuf_composite(mouse_ptr_pixbuf,  // Source pixbuf
 			tmp_pixbuf,						// Destination pixbuf
@@ -231,6 +233,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 			scaled_height_ratio,			// Scale Y
 			GDK_INTERP_TILES,				// Scaling type
 			time_alpha);					// Alpha
+*/
 			return;
 
 		case TYPE_EMPTY:
@@ -242,92 +245,64 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 
 			// * Draw the text layer *
 
-			// Prepare the text
-			pango_context = gdk_pango_context_get();
-			pango_layout = pango_layout_new(pango_context);
-			font_description = pango_context_get_font_description(pango_context);
-			pango_font_description_set_size(font_description,
-				PANGO_SCALE * ((layer_text *) this_layer_data->object_data)->font_size * scaled_height_ratio);
-			pango_font_description_set_family(font_description, "Bitstream Vera Sans");  // "Sans", "Serif", "Monospace"
-			pango_font_description_set_style(font_description, PANGO_STYLE_NORMAL);
-			pango_font_description_set_variant(font_description, PANGO_VARIANT_NORMAL);
-			pango_font_description_set_weight(font_description, PANGO_WEIGHT_NORMAL);
-			pango_font_description_set_stretch(font_description, PANGO_STRETCH_NORMAL);
+			// Save the existing cairo state before making changes (i.e. clip region)
+			cairo_save(cairo_context);
+
+			// Retrieve the text to display
 			gtk_text_buffer_get_bounds(((layer_text *) this_layer_data->object_data)->text_buffer, &text_start, &text_end);
-			pango_layout_set_markup(pango_layout,
-				gtk_text_buffer_get_text(((layer_text *) this_layer_data->object_data)->text_buffer, &text_start, &text_end, FALSE),  // Point to the text in the object buffer
-				-1);	  // Auto calculate string length
+			text_string = gtk_text_buffer_get_text(((layer_text *) this_layer_data->object_data)->text_buffer, &text_start, &text_end, FALSE);
 
-			// * Draw a background for the text layer *
+			// Determine the on screen size of the text string itself
+			cairo_set_font_size(cairo_context, ((layer_text *) this_layer_data->object_data)->font_size);
+			cairo_text_extents(cairo_context, text_string, &text_extents);
 
-			// Work out how big the rendered text will be
-			pango_layout_get_size(pango_layout, &pango_width, &pango_height);
+			// Calculate the text object (including background) offsets and sizing
+			x_offset = time_x * scaled_width_ratio;
+			y_offset = time_y * scaled_height_ratio;
+			width = CLAMP(text_extents.width + (TEXT_BORDER_PADDING_WIDTH * 2), 0, pixmap_width - x_offset - (TEXT_BORDER_PADDING_WIDTH * 2) - 1);
+			height = CLAMP(text_extents.height + (TEXT_BORDER_PADDING_HEIGHT * 2), 0, pixmap_height - y_offset - (TEXT_BORDER_PADDING_HEIGHT * 2) - 1);
 
-			// Calculate how much of the background will fit onto the backing pixmap
-			x_offset = (time_x - 10) * scaled_width_ratio;
-			y_offset = (time_y - 2) * scaled_height_ratio;
-			width = (pango_width / PANGO_SCALE) + (20 * scaled_width_ratio);
-			height = (pango_height / PANGO_SCALE) + (4 * scaled_height_ratio);
-			if ((x_offset + width) > pixbuf_width)
-			{
-				width = pixbuf_width - x_offset - 1;
-			}
-			if ((y_offset + height) > pixbuf_height)
-			{
-				height = pixbuf_height - y_offset - 1;
-			}
-			if (x_offset < 0)
-			{
-				x_offset = 0;
-			}
-			if (y_offset < 0)
-			{
-				y_offset = 0;
-			}
-
-			// Store the calculated width and height so we can do collision detection in the event handler
+			// Store the rendered width of the text object with the layer itself, for use by bounding box code
 			((layer_text *) this_layer_data->object_data)->rendered_width = width / scaled_width_ratio;
 			((layer_text *) this_layer_data->object_data)->rendered_height = height / scaled_height_ratio;
 
-			// Draw the text background box (or as much as will fit)
-			draw_highlight_box(tmp_pixbuf, x_offset, y_offset, width, height,
-			0xFFFFCCFF,						// Fill color - light yellow
-			0x000000FF,						// Border color - black
-			time_alpha);
+			// * Draw the background for the text layer *
 
-			// Turn the pixbuf into a pixmap
-			tmp_colormap = gdk_colormap_get_system();
-			tmp_pixmap = gdk_pixmap_new(NULL, gdk_pixbuf_get_width(GDK_PIXBUF(tmp_pixbuf)), gdk_pixbuf_get_height(GDK_PIXBUF(tmp_pixbuf)), tmp_colormap->visual->depth);
-			gdk_drawable_set_colormap(GDK_DRAWABLE(tmp_pixmap), GDK_COLORMAP(tmp_colormap));
-			gdk_draw_pixbuf(GDK_PIXMAP(tmp_pixmap), NULL, GDK_PIXBUF(tmp_pixbuf), 0, 0, 0, 0, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);
-			graphics_context = gdk_gc_new(GDK_PIXMAP(tmp_pixmap));
+			// Create the background fill
+			cairo_set_operator(cairo_context, CAIRO_OPERATOR_SOURCE);
+			cairo_set_source_rgb(cairo_context, 1, 1, 0.8);
+			cairo_rectangle(cairo_context, x_offset, y_offset, width, height);
+			cairo_clip(cairo_context);
+			cairo_paint_with_alpha(cairo_context, time_alpha);
 
-			// Set the color of the text
-			output_screen = gdk_drawable_get_screen(GDK_DRAWABLE(tmp_pixmap));
-			pango_renderer = gdk_pango_renderer_get_default(GDK_SCREEN(output_screen));
-			gdk_pango_renderer_set_drawable(GDK_PANGO_RENDERER(pango_renderer), GDK_DRAWABLE(tmp_pixmap));
-			gdk_pango_renderer_set_gc(GDK_PANGO_RENDERER(pango_renderer), graphics_context);
-			gdk_pango_renderer_set_override_color(GDK_PANGO_RENDERER(pango_renderer), PANGO_RENDER_PART_FOREGROUND, &(((layer_text *) this_layer_data->object_data)->text_color));
+			// Create the background border
+			cairo_set_operator(cairo_context, CAIRO_OPERATOR_OVER);
+			cairo_set_source_rgba(cairo_context, 0, 0, 0, time_alpha);
+			cairo_set_line_width(cairo_context, 2.0);
+			cairo_set_line_join(cairo_context, CAIRO_LINE_JOIN_ROUND);
+			cairo_set_line_cap(cairo_context, CAIRO_LINE_CAP_ROUND);
+			cairo_rectangle(cairo_context, x_offset, y_offset, width, height);
+			cairo_stroke(cairo_context);
 
-			// Position the text
-			pango_matrix_translate(&pango_matrix, time_x * scaled_width_ratio, time_y * scaled_height_ratio);
-			pango_context_set_matrix(pango_context, &pango_matrix);
+			// * Draw the text string itself *
 
-			// Render the text onto the pixmap
-			pango_renderer_draw_layout(PANGO_RENDERER(pango_renderer), PANGO_LAYOUT(pango_layout), 0, 0);
+			// Move to the desired text location
+			text_left = x_offset + TEXT_BORDER_PADDING_WIDTH;
+			text_top = y_offset + text_extents.height + TEXT_BORDER_PADDING_HEIGHT;
+			cairo_move_to(cairo_context, text_left, text_top);
 
-			// Unset the renderer, as its shared
-			gdk_pango_renderer_set_override_color(GDK_PANGO_RENDERER(pango_renderer), PANGO_RENDER_PART_FOREGROUND, NULL);
-			gdk_pango_renderer_set_drawable(GDK_PANGO_RENDERER(pango_renderer), NULL);
-			gdk_pango_renderer_set_gc(GDK_PANGO_RENDERER(pango_renderer), NULL);
+			// Set the desired font foreground color
+			text_colour = &((layer_text *) this_layer_data->object_data)->text_color;
+			text_red = ((gfloat) text_colour->red) / 65536;
+			text_green = ((gfloat) text_colour->green) / 65536;
+			text_blue = ((gfloat) text_colour->blue) / 65536;
+			cairo_set_source_rgba(cairo_context, text_red, text_green, text_blue, time_alpha);
 
-			// Copy the pixmap back onto the backing pixbuf
-			gdk_pixbuf_get_from_drawable(GDK_PIXBUF(tmp_pixbuf), GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);	
+			// Draw the font text
+			cairo_show_text(cairo_context, text_string);
 
-			// Free the memory allocated but no longer needed
-			g_object_unref(PANGO_LAYOUT(pango_layout));
-			g_object_unref(GDK_GC(graphics_context));
-			if (NULL != tmp_pixmap) g_object_unref(GDK_PIXMAP(tmp_pixmap));
+			// Restore the cairo state to the way it was
+			cairo_restore(cairo_context);
 
 			break;
 
@@ -335,32 +310,56 @@ void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat
 
 			// * Draw the highlight *
 
-			// 0x00FF0040 : Good fill color
-			// 0x00FF00CC : Good border color
-
 			// Calculate how much of the highlight will fit onto the backing pixmap
 			x_offset = time_x * scaled_width_ratio;
 			y_offset = time_y * scaled_height_ratio;
 			width = ((layer_highlight *) this_layer_data->object_data)->width * scaled_width_ratio;
 			height = ((layer_highlight *) this_layer_data->object_data)->height * scaled_height_ratio;
-			if ((x_offset + width) > pixbuf_width)
+			if ((x_offset + width) > pixmap_width)
 			{
-				width = pixbuf_width - x_offset;
+				width = pixmap_width - x_offset;
 			}
-			if ((y_offset + height) > pixbuf_height)
+			if ((y_offset + height) > pixmap_height)
 			{
-				height = pixbuf_height - y_offset;
+				height = pixmap_height - y_offset;
 			}
 
-			// Draw the highlight box (or as much as will fit)
-			draw_highlight_box(tmp_pixbuf, x_offset, y_offset, width, height,
-			0x00FF0040,						// Fill color
-			0x00FF00CC,						// Border color
-			time_alpha);
+			// Save the existing cairo state before making changes (i.e. clip region)
+			cairo_save(cairo_context);
+
+			// Choose an operator for constructing the border
+			cairo_set_operator(cairo_context, CAIRO_OPERATOR_OVER);
+
+			// Create the border
+			cairo_set_source_rgba(cairo_context, 0, 0.25, 0, 0.60 * time_alpha);
+			cairo_set_line_width(cairo_context, 2.0);
+			cairo_set_line_join(cairo_context, CAIRO_LINE_JOIN_ROUND);
+			cairo_set_line_cap(cairo_context, CAIRO_LINE_CAP_ROUND);
+			cairo_move_to(cairo_context, x_offset, y_offset);
+			cairo_line_to(cairo_context, x_offset + width, y_offset);
+			cairo_line_to(cairo_context, x_offset + width, y_offset + height);
+			cairo_line_to(cairo_context, x_offset, y_offset + height);
+			cairo_line_to(cairo_context, x_offset, y_offset);
+			cairo_stroke(cairo_context);
+
+			// Choose an operator for constructing the fill
+			cairo_set_operator(cairo_context, CAIRO_OPERATOR_SOURCE);
+
+			// Create the fill
+			cairo_set_source_rgb(cairo_context, 0, 0.60, 0);
+			cairo_rectangle(cairo_context, x_offset + 1, y_offset + 1, width - 2, height - 2);
+			cairo_clip(cairo_context);
+			cairo_paint_with_alpha(cairo_context, 0.40 * time_alpha);
+
+			// Restore the cairo state to the way it was
+			cairo_restore(cairo_context);
 
 			break;		
 
 		default:
 			display_warning("Error ED33: Unknown layer type");		
 	}
+
+	// The cairo drawing context is no longer needed, so free it
+	cairo_destroy(cairo_context);
 }

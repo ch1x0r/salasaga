@@ -27,7 +27,7 @@
 extern "C" {
 #endif // __cplusplus
 
-void compress_layers_inner(layer *this_layer_data, GdkPixbuf *tmp_pixbuf, gfloat time_position);
+void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, gfloat time_position);
 
 #ifdef __cplusplus
 }

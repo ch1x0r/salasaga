@@ -49,8 +49,8 @@ void slide_insert(void)
 	tmp_slide->layers = NULL;
 	tmp_slide->name = NULL;
 	tmp_slide->duration = default_slide_duration;
-	tmp_slide->scaled_cached_pixbuf = NULL;
-	tmp_slide->cached_pixbuf_valid = FALSE;
+	tmp_slide->scaled_cached_pixmap = NULL;
+	tmp_slide->cached_pixmap_valid = FALSE;
 	tmp_slide->num_layers = 1;
 
 	// Allocate a new layer structure for use in the slide

@@ -308,8 +308,8 @@ typedef struct
 	GString				*name;
 	GtkWidget			*timeline_widget;
 	gfloat				duration;
-	GdkPixbuf			*scaled_cached_pixbuf;
-	gboolean			cached_pixbuf_valid;
+	GdkPixmap			*scaled_cached_pixmap;
+	gboolean			cached_pixmap_valid;
 	gint				num_layers;
 } slide;
 

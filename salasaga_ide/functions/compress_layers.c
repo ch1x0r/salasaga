@@ -41,30 +41,42 @@ GdkPixbuf *compress_layers(GList *which_slide, gfloat time_position, guint width
 	// Local variables
 	GdkPixbuf			*bg_pixbuf;					// Points to the background layer
 	GdkPixbuf			*backing_pixbuf;			// Pixbuf buffer things draw onto
+	GdkPixmap			*backing_pixmap;			// Pixmap buffer things draw onto
 	layer				*layer_data;				// Pointer to the layer data
 	gint				layer_counter;				// Simple counter
 	GList				*layer_pointer;				// Pointer to the layer GList
-	gboolean			use_cached_pixbuf;			// Should we use the cached pixbuf?
+	GdkGC				*pixmap_gc;
+	gint				pixmap_height;				// Receives the height of a given pixmap
+	gint				pixmap_width;				// Receives the width of a given pixmap
+	static GdkColormap	*system_colourmap = NULL;	// Colormap used for drawing
+	gboolean			use_cached_pixmap;			// Should we use the cached pixmap?
 	layer				*this_layer_data;			// Layer data
 	slide				*this_slide_data;			// Pointer to the slide data
 
+
+	// Initialisation
+	if (NULL == system_colourmap)
+	{
+		system_colourmap = gdk_colormap_get_system();
+	}
 
 	// Simplify various pointers
 	this_slide_data = (slide *) which_slide->data;
 	layer_pointer = g_list_last(this_slide_data->layers);  // The background layer is always the last (bottom) layer
 	layer_data = layer_pointer->data;
 
-	// Determine if we have a cached background pixbuf we can reuse
-	use_cached_pixbuf = FALSE;
-	if (TRUE == this_slide_data->cached_pixbuf_valid)
+	// Determine if we have a cached background pixmap we can reuse
+	use_cached_pixmap = FALSE;
+	if (TRUE == this_slide_data->cached_pixmap_valid)
 	{
-		// There's a pixbuf cached, but is it the required size?
-		if ((height == gdk_pixbuf_get_height(this_slide_data->scaled_cached_pixbuf)) && (width == gdk_pixbuf_get_width(this_slide_data->scaled_cached_pixbuf)))
-			use_cached_pixbuf = TRUE;
+		// There's a pixmap cached, but is it the required size?
+		gdk_drawable_get_size(GDK_PIXMAP(this_slide_data->scaled_cached_pixmap), &pixmap_width, &pixmap_height);
+		if ((height == pixmap_height) && (width == pixmap_width))
+			use_cached_pixmap = TRUE;
 	}
 
-	// Do we have a cached background pixbuf we can use?
-	if (FALSE == use_cached_pixbuf)
+	// Do we have a cached background pixmap we can use?
+	if (FALSE == use_cached_pixmap)
 	{
 		// * No we don't, so we need to generate a new one *
 
@@ -92,19 +104,33 @@ GdkPixbuf *compress_layers(GList *which_slide, gfloat time_position, guint width
 			}
 		}
 
-		// If there's an existing cache backing pixbuf, we free it
-		if (NULL != this_slide_data->scaled_cached_pixbuf)
+		// If there's an existing cache backing pixmap, we free it
+		if (NULL != this_slide_data->scaled_cached_pixmap)
 		{
-			g_object_unref(GDK_PIXBUF(this_slide_data->scaled_cached_pixbuf));
+			g_object_unref(GDK_PIXMAP(this_slide_data->scaled_cached_pixmap));
 		}
 
-		// Cache the new backing pixbuf
-		this_slide_data->scaled_cached_pixbuf = gdk_pixbuf_copy(backing_pixbuf);
-		this_slide_data->cached_pixbuf_valid = TRUE;
+		// Create a new backing pixmap 
+		backing_pixmap = gdk_pixmap_new(NULL, width, height, system_colourmap->visual->depth);
+		gdk_drawable_set_colormap(GDK_DRAWABLE(backing_pixmap), GDK_COLORMAP(system_colourmap));
+		gdk_draw_pixbuf(GDK_PIXMAP(backing_pixmap), NULL, GDK_PIXBUF(backing_pixbuf),
+				0, 0, 0, 0, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);		
+
+		// Cache the new backing pixmap
+		this_slide_data->scaled_cached_pixmap = gdk_pixmap_new(NULL, width, height, system_colourmap->visual->depth);
+		gdk_drawable_set_colormap(GDK_DRAWABLE(this_slide_data->scaled_cached_pixmap), GDK_COLORMAP(system_colourmap));
+		pixmap_gc = gdk_gc_new(GDK_DRAWABLE(this_slide_data->scaled_cached_pixmap));
+		gdk_draw_drawable(GDK_DRAWABLE(this_slide_data->scaled_cached_pixmap), GDK_GC(pixmap_gc), GDK_DRAWABLE(backing_pixmap),
+				0, 0, 0, 0, -1, -1);
+		this_slide_data->cached_pixmap_valid = TRUE;
 	} else
 	{
 		// Yes we do, so reuse the existing pixbuf
-		backing_pixbuf = gdk_pixbuf_copy(this_slide_data->scaled_cached_pixbuf);
+		backing_pixmap = gdk_pixmap_new(NULL, width, height, system_colourmap->visual->depth);
+		gdk_drawable_set_colormap(GDK_DRAWABLE(backing_pixmap), GDK_COLORMAP(system_colourmap));
+		pixmap_gc = gdk_gc_new(GDK_DRAWABLE(this_slide_data->scaled_cached_pixmap));
+		gdk_draw_drawable(GDK_DRAWABLE(backing_pixmap), GDK_GC(pixmap_gc), GDK_DRAWABLE(this_slide_data->scaled_cached_pixmap),
+				0, 0, 0, 0, -1, -1);
 	}
 
 	// Process each layer's data in turn
@@ -112,9 +138,15 @@ GdkPixbuf *compress_layers(GList *which_slide, gfloat time_position, guint width
 	{
 		layer_pointer = g_list_first(layer_pointer);
 		this_layer_data = g_list_nth_data(layer_pointer, layer_counter);
-		compress_layers_inner(this_layer_data, GDK_PIXBUF(backing_pixbuf), time_position);
+		compress_layers_inner(this_layer_data, backing_pixmap, time_position);
 	}
 
+GdkPixbuf	*return_pixbuf;
+
+	// Copy the pixmap to a pixbuf we can return
+	return_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(backing_pixmap), NULL, 0, 0, 0, 0, -1, -1);
+	return return_pixbuf;
+
 	// Return the newly scaled pixbuf
-	return backing_pixbuf;
+//	return backing_pixbuf;
 }

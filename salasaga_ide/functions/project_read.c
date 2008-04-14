@@ -519,8 +519,8 @@ gboolean project_read(gchar *filename)
 			tmp_slide = g_new0(slide, 1);
 			tmp_slide->layers = NULL;
 			tmp_slide->duration = 0;  // 0 on purpose instead of default_slide_duration, so we can calculate things correctly!
-			tmp_slide->scaled_cached_pixbuf = NULL;
-			tmp_slide->cached_pixbuf_valid = FALSE;
+			tmp_slide->scaled_cached_pixmap = NULL;
+			tmp_slide->cached_pixmap_valid = FALSE;
 			tmp_slide->num_layers = 0;
 
 			// Process each layer
