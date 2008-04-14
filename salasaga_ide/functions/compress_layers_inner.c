@@ -253,7 +253,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			text_string = gtk_text_buffer_get_text(((layer_text *) this_layer_data->object_data)->text_buffer, &text_start, &text_end, FALSE);
 
 			// Determine the on screen size of the text string itself
-			cairo_set_font_size(cairo_context, ((layer_text *) this_layer_data->object_data)->font_size);
+			cairo_set_font_size(cairo_context, ((layer_text *) this_layer_data->object_data)->font_size * scaled_width_ratio);
 			cairo_text_extents(cairo_context, text_string, &text_extents);
 
 			// Calculate the text object (including background) offsets and sizing
