@@ -2218,9 +2218,6 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	{
 		// Note that the cursor drag has finished
 		priv->cursor_drag_active = FALSE;
-
-		// Recreate the film strip thumbnail
-		film_strip_create_thumbnail(this_slide_data);
 	}
 
 	// Check if this mouse release matches a resize
@@ -2236,9 +2233,6 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 		area.x = priv->guide_line_resize;
 		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 		priv->guide_line_resize = 0;
-
-		// Recreate the film strip thumbnail
-		film_strip_create_thumbnail(this_slide_data);
 
 		// Use the status bar to communicate the resize has completed
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Resize completed");
@@ -2281,11 +2275,11 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), end_row);
 		}
 
-		// Recreate the film strip thumbnail
-		film_strip_create_thumbnail(this_slide_data);
-
 		// Use the status bar to communicate the drag has completed
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Drag completed");
 		gdk_flush();
 	}
+
+	// Recreate the film strip thumbnail
+	film_strip_create_thumbnail((slide *) current_slide->data);
 }
