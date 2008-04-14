@@ -88,7 +88,7 @@ GdkPixbuf *compress_layers(GList *which_slide, gfloat time_position, guint width
 			} else
 			{
 				// The existing background image pixbuf is already the correct size
-				backing_pixbuf = gdk_pixbuf_copy(bg_pixbuf);
+				backing_pixbuf = bg_pixbuf;
 			}
 		}
 
