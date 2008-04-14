@@ -43,11 +43,11 @@ void regenerate_film_strip_thumbnails()
 	gfloat				cursor_position;
 	GtkTreeIter			film_strip_iter;
 	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
-	GdkPixbuf			*new_thumbnail;
 	gint				num_slides;
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	gint				slide_counter, slide_position;
 	GList				*this_slide;
+	GdkPixmap			*tmp_pixmap;				// Used when converting from a pixmap to a pixbuf
 
 
 	// Safety check
@@ -75,12 +75,12 @@ void regenerate_film_strip_thumbnails()
 		cursor_position = time_line_get_cursor_position(((slide *) this_slide->data)->timeline_widget);
 
 		// Create the thumbnail for the slide
-		new_thumbnail = compress_layers(this_slide, cursor_position, preview_width, (guint) preview_width * 0.75);
-		((slide *) this_slide->data)->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(new_thumbnail)));
+		tmp_pixmap = compress_layers(this_slide, cursor_position, preview_width, (guint) preview_width * 0.75);
+		((slide *) this_slide->data)->thumbnail = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
 
 		// Add the thumbnail to the film strip
 		gtk_list_store_append(film_strip_store, &film_strip_iter);
-		gtk_list_store_set(film_strip_store, &film_strip_iter, 0, gtk_image_get_pixbuf(((slide *) this_slide->data)->thumbnail), -1);
+		gtk_list_store_set(film_strip_store, &film_strip_iter, 0, ((slide *) this_slide->data)->thumbnail, -1);
 	}
 
 	// Reselect the thumbnail that was previously selected

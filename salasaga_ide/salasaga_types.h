@@ -303,7 +303,7 @@ typedef struct {
 // Defines the collection of objects and properties making up a slide
 typedef struct
 {
-	GtkImage			*thumbnail;
+	GdkPixbuf			*thumbnail;
 	GList				*layers;
 	GString				*name;
 	GtkWidget			*timeline_widget;

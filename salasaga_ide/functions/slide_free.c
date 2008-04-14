@@ -50,7 +50,7 @@ void slide_free(gpointer element, gpointer user_data)
 
 	// Free the memory allocated to the deleted slide
 	if (NULL != slide_data->thumbnail)
-		gtk_object_destroy(GTK_OBJECT(slide_data->thumbnail));
+		g_object_unref(GDK_PIXBUF(slide_data->thumbnail));
 	if (NULL != slide_data->name)
 		g_string_free(slide_data->name, TRUE);
 	if (NULL != slide_data->timeline_widget)

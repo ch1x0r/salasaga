@@ -39,7 +39,6 @@ void slide_insert(void)
 {
 	// Local variables
 	GtkTreeIter			film_strip_iter;
-	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
 	layer				*tmp_layer;					// Temporary layer
 	slide				*tmp_slide;					// Temporary slide
 
@@ -76,21 +75,18 @@ void slide_insert(void)
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_out_duration = 0.0;
 
-	// Create a blank thumbnail using the default background color
-	tmp_gdk_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, (guint) preview_width * 0.75);
-	gdk_pixbuf_fill(tmp_gdk_pixbuf, ((default_bg_colour.red / 255) << 24)
+	// Create a blank thumbnail using the default background color, then add it to the new slide structure
+	tmp_slide->thumbnail = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, (guint) preview_width * 0.75);
+	gdk_pixbuf_fill(tmp_slide->thumbnail, ((default_bg_colour.red / 255) << 24)
 		+ ((default_bg_colour.green / 255) << 16)
 		+ ((default_bg_colour.blue / 255) << 8) + 0xff);
 
 	// Add the empty layer to the new slide being created
 	tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
 
-	// Add the thumbnail to the new slide structure
-	tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(tmp_gdk_pixbuf));
-
 	// Add the thumbnail to the GtkListView based film strip
 	gtk_list_store_append(film_strip_store, &film_strip_iter);  // Acquire an iterator
-	gtk_list_store_set(film_strip_store, &film_strip_iter, 0, gtk_image_get_pixbuf(tmp_slide->thumbnail), -1);
+	gtk_list_store_set(film_strip_store, &film_strip_iter, 0, tmp_slide->thumbnail, -1);
 
 	// Set the timeline widget for the slide to NULL, so we know to create it later on
 	tmp_slide->timeline_widget = NULL;

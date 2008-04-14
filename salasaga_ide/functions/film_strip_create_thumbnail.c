@@ -28,6 +28,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "display_warning.h"
 
 
 void film_strip_create_thumbnail(slide *slide_data)
@@ -36,6 +37,7 @@ void film_strip_create_thumbnail(slide *slide_data)
 	GdkPixbuf			*new_thumbnail;
 	GtkTreeIter			old_iter;					// Iter used to select the film strip thumbnail
 	GtkTreePath			*old_path;					// Path used to select the film strip thumbnail
+	GdkPixbuf			*tmp_pixbuf;				// Used to convert from a pixmap to a pixbuf 
 
 
 	// If no project is loaded then don't run this function
@@ -51,7 +53,19 @@ void film_strip_create_thumbnail(slide *slide_data)
 	gtk_tree_model_get_iter(GTK_TREE_MODEL(film_strip_store), &old_iter, old_path);
 
 	// Create the thumbnail for the slide from the backing store
-	new_thumbnail = gdk_pixbuf_scale_simple(backing_store, preview_width, (guint) preview_width * 0.75, GDK_INTERP_TILES);
+	tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(backing_store), NULL, 0, 0, 0, 0, -1, -1);
+	if (NULL == tmp_pixbuf)
+	{
+		display_warning("Error ED369: Couldn't create film strip thumbnail");
+		return;
+	}
+	new_thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, (guint) preview_width * 0.75, GDK_INTERP_TILES);
+	if (NULL == new_thumbnail)
+	{
+		display_warning("Error ED370: Couldn't allocate memory for a new film strip thumbnail");
+		return;
+	}
+	g_object_unref(GDK_PIXBUF(tmp_pixbuf));
 
 	// Replace the old slide thumbnail with the new thumbnail
 	gtk_image_set_from_pixbuf(GTK_IMAGE(slide_data->thumbnail), GDK_PIXBUF(new_thumbnail));

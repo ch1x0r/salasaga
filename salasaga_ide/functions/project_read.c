@@ -115,7 +115,7 @@ gboolean project_read(gchar *filename)
 	gint				tmp_int;					// Temporary integer
 	layer				*tmp_layer;					// Temporary layer
 	layer_mouse			*tmp_mouse_ob;				// Temporary mouse layer object
-	GdkPixbuf			*tmp_pixbuf;				//
+	GdkPixmap			*tmp_pixmap;				//
 	slide				*tmp_slide;					// Temporary slide
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 
@@ -2409,12 +2409,12 @@ gboolean project_read(gchar *filename)
 		// Create the thumbnail for the slide
 		tmp_glist = NULL;
 		tmp_glist = g_list_append(tmp_glist, tmp_slide);
-		tmp_pixbuf = compress_layers(tmp_glist, 0, preview_width, (guint) preview_width * 0.75);
-		tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(GDK_PIXBUF(tmp_pixbuf)));
+		tmp_pixmap = compress_layers(tmp_glist, 0, preview_width, (guint) preview_width * 0.75);
+		tmp_slide->thumbnail = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
 
 		// Add the thumbnail to the film strip
 		gtk_list_store_append(film_strip_store, &film_strip_iter);
-		gtk_list_store_set(film_strip_store, &film_strip_iter, 0, gtk_image_get_pixbuf(tmp_slide->thumbnail), -1);
+		gtk_list_store_set(film_strip_store, &film_strip_iter, 0, tmp_slide->thumbnail, -1);
 	}
 
 	// We're finished with this XML document, so release its memory

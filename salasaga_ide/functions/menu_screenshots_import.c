@@ -70,7 +70,6 @@ void menu_screenshots_import(void)
 	gboolean			using_first_screenshot;		// Used to indicate there's no project active, so we're using the dimensions of the first screenshot
 
 	GtkWidget			*tmp_dialog;
-	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
 	layer_image			*tmp_image_ob;				// Temporary image layer
 	gint				tmp_int = 0;				// Temporary integer
 	layer				*tmp_layer;					// Temporary layer
@@ -254,9 +253,9 @@ void menu_screenshots_import(void)
 		tmp_image_ob->height = project_height;
 		tmp_image_ob->modified = FALSE;
 
-		// Load the image file(s) into a thumbnail sized pixel buffer
-		tmp_gdk_pixbuf = gdk_pixbuf_scale_simple(tmp_image_ob->image_data, preview_width, (guint) preview_width * 0.75, GDK_INTERP_TILES);
-		if (NULL == tmp_gdk_pixbuf)
+		// Load the image file(s) into a thumbnail sized pixel buffer, then add it to the new slide structure
+		tmp_slide->thumbnail = gdk_pixbuf_scale_simple(tmp_image_ob->image_data, preview_width, (guint) preview_width * 0.75, GDK_INTERP_TILES);
+		if (NULL == tmp_slide->thumbnail)
 		{
 			// * Something went wrong when loading the screenshot *
 
@@ -267,7 +266,6 @@ void menu_screenshots_import(void)
 
 			return;
 		}
-
 
 		// If the new image is larger than the others loaded, we keep the new dimensions
 		if (tmp_image_ob->height > largest_height)
@@ -291,9 +289,6 @@ void menu_screenshots_import(void)
 		// Add the background layer to the new slide being created
 		tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
 
-		// Add the thumbnail to the new slide structure
-		tmp_slide->thumbnail = GTK_IMAGE(gtk_image_new_from_pixbuf(tmp_gdk_pixbuf));
-
 		// Mark the name for the slide as unset
 		tmp_slide->name = NULL;
 
@@ -302,7 +297,7 @@ void menu_screenshots_import(void)
 
 		// Add the thumbnail to the GtkListView based film strip
 		gtk_list_store_append (film_strip_store, &film_strip_iter);  // Acquire an iterator
-		gtk_list_store_set (film_strip_store, &film_strip_iter, 0, gtk_image_get_pixbuf(tmp_slide->thumbnail), -1);
+		gtk_list_store_set (film_strip_store, &film_strip_iter, 0, tmp_slide->thumbnail, -1);
 
 		// Add the temporary slide to the slides GList
 		slides = g_list_append(slides, tmp_slide);
