@@ -45,11 +45,11 @@ void menu_export_slide(void)
 	GtkFileFilter		*file_filter;				// Filter for *.swf
 	gboolean			return_code_gbool;			// Catches the return code of the g_pixbuf_save function
 	GdkPixbuf			*slide_pixbuf;				// Image of the slide workspace
+	GString				*tmp_gstring;				// Temporary GString
+	GdkPixmap			*tmp_pixmap;				// Used when converting from a pixmap to a pixbuf
 	gboolean			useable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
 	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
-
-	GString				*tmp_gstring;				// Temporary GString
 
 
 	// * Pop open a dialog asking the user for their desired filename *
@@ -145,8 +145,10 @@ void menu_export_slide(void)
 	// Get the current time line cursor position
 	cursor_position = time_line_get_cursor_position(((slide *) current_slide->data)->timeline_widget);
 
-	// Create a new pixbuf with all the layers of the current slide
-	slide_pixbuf = compress_layers(current_slide, cursor_position, working_width, working_height);
+	// Create a new pixbuf of the current slide at its cursor time position
+	tmp_pixmap = compress_layers(current_slide, cursor_position, working_width, working_height);
+	slide_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
+	g_object_unref(GDK_PIXMAP(tmp_pixmap));
 
 	// Save the image as a png file
 	return_code_gbool = gdk_pixbuf_save(GDK_PIXBUF(slide_pixbuf), validated_string->str, "png", &error, "tEXt::Software", "Salasaga: http://www.salasaga.org", NULL);

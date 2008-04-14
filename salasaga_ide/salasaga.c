@@ -69,7 +69,7 @@
 
 
 // Global variables
-GdkPixbuf				*backing_store;				// Backing store for double buffering the workspace area			
+GdkPixmap				*backing_store;				// Backing store for double buffering the workspace area			
 GList					*boundary_list = NULL;		// Stores a linked list of layer object boundaries
 guint					capture_height;				// Height for screen captures
 guint					capture_width;				// Width for screen captures

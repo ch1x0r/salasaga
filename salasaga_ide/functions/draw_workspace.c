@@ -47,6 +47,7 @@ void draw_workspace(void)
 	const GdkColor		line_fg_colour = { 0, 0x00, 0x00, 0x00 };
 	static GdkGC		*line_gc = NULL;
 	GdkSegment			lines[4];
+	GdkGC				*pixmap_gc;
 	GdkRectangle		tmp_rectangle;
 
 
@@ -65,7 +66,7 @@ void draw_workspace(void)
 
 	// Create a new backing store from the current slide
 	if (NULL != backing_store)
-		g_object_unref(GDK_PIXBUF(backing_store));
+		g_object_unref(GDK_PIXMAP(backing_store));
 	backing_store = compress_layers(current_slide, cursor_position, working_width - 2, working_height - 2);
 
 	// Create the colourmap if needed
@@ -83,7 +84,8 @@ void draw_workspace(void)
 	}
 
 	// Copy the backing store to the front store
-	gdk_draw_pixbuf(GDK_DRAWABLE(front_store), NULL, GDK_PIXBUF(backing_store), 0, 0, 1, 1, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);
+	pixmap_gc = gdk_gc_new(GDK_DRAWABLE(front_store));
+	gdk_draw_drawable(GDK_DRAWABLE(front_store), GDK_GC(pixmap_gc), GDK_DRAWABLE(backing_store), 0, 0, 1, 1, -1, -1);
 
 	// Make a 1 pixel border around the front store, to separate it visually from its background
 	if (NULL == line_gc)

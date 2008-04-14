@@ -30,7 +30,7 @@ extern "C" {
 #endif // __cplusplus
 
 // Variables defined elsewhere
-extern GdkPixbuf			*backing_store;
+extern GdkPixmap			*backing_store;
 extern GList				*boundary_list;
 extern guint				capture_height;
 extern guint				capture_width;
