@@ -36,7 +36,7 @@
 #include "compress_layers_inner.h"
 
 
-GdkPixbuf *compress_layers(GList *which_slide, gfloat time_position, guint width, guint height)
+GdkPixmap *compress_layers(GList *which_slide, gfloat time_position, guint width, guint height)
 {
 	// Local variables
 	GdkPixbuf			*bg_pixbuf;					// Points to the background layer
@@ -125,7 +125,7 @@ GdkPixbuf *compress_layers(GList *which_slide, gfloat time_position, guint width
 		this_slide_data->cached_pixmap_valid = TRUE;
 	} else
 	{
-		// Yes we do, so reuse the existing pixbuf
+		// Yes we do, so reuse the existing pixmap
 		backing_pixmap = gdk_pixmap_new(NULL, width, height, system_colourmap->visual->depth);
 		gdk_drawable_set_colormap(GDK_DRAWABLE(backing_pixmap), GDK_COLORMAP(system_colourmap));
 		pixmap_gc = gdk_gc_new(GDK_DRAWABLE(this_slide_data->scaled_cached_pixmap));
@@ -141,12 +141,6 @@ GdkPixbuf *compress_layers(GList *which_slide, gfloat time_position, guint width
 		compress_layers_inner(this_layer_data, backing_pixmap, time_position);
 	}
 
-GdkPixbuf	*return_pixbuf;
-
-	// Copy the pixmap to a pixbuf we can return
-	return_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(backing_pixmap), NULL, 0, 0, 0, 0, -1, -1);
-	return return_pixbuf;
-
-	// Return the newly scaled pixbuf
-//	return backing_pixbuf;
+	// Return the updated pixmap
+	return backing_pixmap;
 }
