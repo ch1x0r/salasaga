@@ -67,9 +67,6 @@ void film_strip_create_thumbnail(slide *slide_data)
 	}
 	g_object_unref(GDK_PIXBUF(tmp_pixbuf));
 
-	// Replace the old slide thumbnail with the new thumbnail
-	gtk_image_set_from_pixbuf(GTK_IMAGE(slide_data->thumbnail), GDK_PIXBUF(new_thumbnail));
-
 	// Replace the old film strip thumbnail with the new thumbnail
 	gtk_list_store_set(film_strip_store, &old_iter, 0, new_thumbnail, -1);
 }
