@@ -52,8 +52,8 @@ void film_strip_create_thumbnail(slide *slide_data)
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &old_path, NULL);
 	gtk_tree_model_get_iter(GTK_TREE_MODEL(film_strip_store), &old_iter, old_path);
 
-	// Create the thumbnail for the slide from the backing store
-	tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(backing_store), NULL, 0, 0, 0, 0, -1, -1);
+	// Create the thumbnail for the slide from the working space pixmap
+	tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(front_store), NULL, 0, 0, 0, 0, -1, -1);
 	if (NULL == tmp_pixbuf)
 	{
 		display_warning("Error ED369: Couldn't create film strip thumbnail");
