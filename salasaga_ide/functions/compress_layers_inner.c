@@ -255,26 +255,45 @@ gint	num_channels;
 				if (NULL == dest_image)
 				{
 					display_warning("Unable to allocate memory for pixel buffer");
+					return;
 				}
 //				dest_image = g_new0(); // ???  (width x height x 3 (RGB) perhaps?)
-				
-				for (x_counter = 0; x_counter < source_width; x_counter++)
+
+gint	source_num;
+gint	dest_num;
+				for (y_counter = 0; y_counter < source_height; y_counter++)
 				{
-					for (y_counter = 0; y_counter < source_height; y_counter++)
+					for (x_counter = 0; x_counter < source_width; x_counter++)
 					{
 						// Get pixel value
-						source_ptr = source_start + y_counter * row_stride + x_counter * num_channels;
+						source_num = (y_counter * row_stride) + (x_counter * num_channels);
+//printf("Source # %d\n", source_num);
+						source_ptr = source_start + source_num;
+//						source_ptr = source_start + (y_counter * row_stride) + (x_counter * num_channels);
+//						source_ptr = source_start + y_counter * row_stride + x_counter * num_channels;
 						red = source_ptr[0];
 						green = source_ptr[1];
 						blue = source_ptr[2];
 //						pixel_ptr[3] = alpha;
 	
 						// Put pixel value
-						dest_ptr = dest_image + y_counter * x_counter * 4;
-						dest_ptr[0] = 255;  // Hard coded alpha (hoping 255 means opaque)
-						dest_ptr[1] = red;
-						dest_ptr[2] = green;
-						dest_ptr[3] = blue;
+						dest_num = ((y_counter * source_width) + x_counter) * 4;
+//printf("Dest # %d\n", dest_num);
+						dest_ptr = dest_image + dest_num;
+/*						dest_ptr[0] = red;
+						dest_ptr[1] = green;  // Definitely the Green channel
+						dest_ptr[2] = blue;
+*/
+						dest_ptr[0] = 0;  // Blue (wtf?)
+						dest_ptr[1] = 0;  // Green (wtf?)
+						dest_ptr[2] = 0;  // Red
+						dest_ptr[3] = 0;
+
+/*
+						dest_ptr[1] = 255;  // Definitely the Green channel
+						dest_ptr[2] = 0;  // Definitely the Red channel
+						dest_ptr[3] = 0;  // Definitely the Blue channel
+*/
 					}
 				}
 			}
