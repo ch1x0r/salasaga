@@ -73,6 +73,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gint					text_top;				// Pixel number onscreen for the top of text
 	GtkTextIter				text_start;				// The start position of the text buffer
 	gchar					*text_string;			// The text string to be displayed
+	layer_image				*this_image_data;		// Pointer to image layer data
 	gfloat					time_alpha = 1.0;		// Alpha value to use at our desired point in time (defaulting to 1.0 = fall opacity)
 	gfloat					time_offset;
 	gint					time_x;					// Unscaled X position of the layer at our desired point in time
@@ -170,8 +171,9 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			// Calculate how much of the source image will fit onto the backing pixmap
 			x_offset = time_x * scaled_width_ratio;
 			y_offset = time_y * scaled_height_ratio;
-			width = ((layer_image *) this_layer_data->object_data)->width * scaled_width_ratio;
-			height = ((layer_image *) this_layer_data->object_data)->height * scaled_height_ratio;
+			this_image_data = (layer_image *) this_layer_data->object_data;
+			width = this_image_data->width * scaled_width_ratio;
+			height = this_image_data->height * scaled_height_ratio;
 			if ((x_offset + width) > pixmap_width)
 			{
 				width = pixmap_width - x_offset;
@@ -182,36 +184,21 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			}
 // fixme2: We should probably change this to use a cached pixmap instead, to ensure decent speed
 GdkPixbuf	*source_pixbuf;
-			source_pixbuf = ((layer_image *) this_layer_data->object_data)->image_data;
+			source_pixbuf = this_image_data->image_data;
 
 			// Save the existing cairo state before making changes (i.e. clip region)
 			cairo_save(cairo_context);
 
-			gdk_cairo_set_source_pixbuf(cairo_context, source_pixbuf, width, height);
-//			gdk_cairo_set_source_pixbuf(cairo_context, source_pixbuf, 0, 0);
-
-			cairo_rectangle(cairo_context, x_offset, y_offset, width, height);
+			// Draw the image onto the backing pixbuf
+			cairo_scale(cairo_context, scaled_width_ratio, scaled_height_ratio);
+			gdk_cairo_set_source_pixbuf(cairo_context, source_pixbuf, time_x, time_y);
+			cairo_rectangle(cairo_context, time_x, time_y, this_image_data->width, this_image_data->height);
 			cairo_clip(cairo_context);
 			cairo_paint_with_alpha(cairo_context, time_alpha);
 
 			// Restore the cairo state to the way it was
 			cairo_restore(cairo_context);
 
-/*
-			// Draw the image onto the backing pixbuf
-			gdk_pixbuf_composite(((layer_image *) this_layer_data->object_data)->image_data,	// Source pixbuf
-			tmp_pixbuf,						// Destination pixbuf
-			x_offset,						// X offset
-			y_offset,						// Y offset
-			width,							// Width
-			height,							// Height
-			x_offset,						// Source offsets
-			y_offset,						// Source offsets
-			scaled_width_ratio,				// Scale X
-			scaled_height_ratio,			// Scale Y
-			GDK_INTERP_TILES,				// Scaling type
-			time_alpha);					// Alpha
-*/
 			return;
 
 		case TYPE_MOUSE_CURSOR:
