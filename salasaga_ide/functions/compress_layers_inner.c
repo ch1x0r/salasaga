@@ -182,7 +182,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			{
 				height = pixmap_height - y_offset;
 			}
-// fixme2: We should probably change this to use a cached pixmap instead, to ensure decent speed
+// fixme2: We should probably change this to use a cached cairo surface/pattern instead, to ensure decent speed
 GdkPixbuf	*source_pixbuf;
 			source_pixbuf = this_image_data->image_data;
 
@@ -190,8 +190,119 @@ GdkPixbuf	*source_pixbuf;
 			cairo_save(cairo_context);
 
 			// Draw the image onto the backing pixbuf
+
+			// Check if our pixbuf is in a usable format
+			return_code_gbool = gdk_pixbuf_get_has_alpha(source_pixbuf);
+/*
+			if (TRUE == return_code_gbool)
+			{
+				display_warning("Error ED371: Unusable pixbuf format, this has Alpha!");
+				return;
+			}
+*/
+/*
+			if (GDK_COLORSPACE_RGB != gdk_pixbuf_get_colorspace(source_pixbuf))
+			{
+				display_warning("Error ED371: Wrong colour space.");
+				return;				
+			}
+
+			if (8 != gdk_pixbuf_get_bits_per_sample(source_pixbuf))
+			{
+				display_warning("Error ED371: Wrong number of bits per sample");
+				return;				
+			}
+gint	num_channels;
+		num_channels = gdk_pixbuf_get_n_channels(source_pixbuf);
+printf("Number of channels: %d\n", num_channels);
+			if (4 != num_channels)
+			{
+				display_warning("Error ED371: Wrong number of channels");
+				return;				
+			}
+*/
+
+gint	x_counter;
+gint	y_counter;
+gint	source_width;
+gint	source_height;
+guchar	*source_start;
+guchar	*source_ptr;
+guchar	red;
+guchar	green;
+guchar	blue;
+guchar	*dest_image;
+guchar	*dest_ptr;
+gint	row_stride;
+gint	num_channels;
+
+			num_channels = gdk_pixbuf_get_n_channels(source_pixbuf);
+
+			if ((GDK_COLORSPACE_RGB != gdk_pixbuf_get_colorspace(source_pixbuf)) ||
+					(8 != gdk_pixbuf_get_bits_per_sample(source_pixbuf)) ||
+					(4 != num_channels))
+			{
+				// The data isn't in a format we can use, so we have to create
+				// a temporary buffer with reformatted data and use that
+
+				row_stride = gdk_pixbuf_get_rowstride(source_pixbuf);
+				source_width = gdk_pixbuf_get_width(source_pixbuf);
+				source_height = gdk_pixbuf_get_height(source_pixbuf);
+				source_start = gdk_pixbuf_get_pixels(source_pixbuf);
+
+				dest_image = g_try_new0(guchar, source_width * source_height * 4);
+//				dest_image = g_try_new0(guchar, source_width * source_height * 3);
+				if (NULL == dest_image)
+				{
+					display_warning("Unable to allocate memory for pixel buffer");
+				}
+//				dest_image = g_new0(); // ???  (width x height x 3 (RGB) perhaps?)
+				
+				for (x_counter = 0; x_counter < source_width; x_counter++)
+				{
+					for (y_counter = 0; y_counter < source_height; y_counter++)
+					{
+						// Get pixel value
+						source_ptr = source_start + y_counter * row_stride + x_counter * num_channels;
+						red = source_ptr[0];
+						green = source_ptr[1];
+						blue = source_ptr[2];
+//						pixel_ptr[3] = alpha;
+	
+						// Put pixel value
+						dest_ptr = dest_image + y_counter * x_counter * 4;
+						dest_ptr[0] = 255;  // Hard coded alpha (hoping 255 means opaque)
+						dest_ptr[1] = red;
+						dest_ptr[2] = green;
+						dest_ptr[3] = blue;
+					}
+				}
+			}
+
+printf("Usable format!\n");
+
+cairo_surface_t		*image_surface;
+
+			// Create a cairo image surface
+			image_surface = cairo_image_surface_create_for_data(dest_image,  // Source pixbuf data
+//			image_surface = cairo_image_surface_create_for_data(gdk_pixbuf_get_pixels(source_pixbuf),  // Source pixbuf data
+								CAIRO_FORMAT_RGB24,  // Source format
+								gdk_pixbuf_get_width(source_pixbuf),
+								gdk_pixbuf_get_height(source_pixbuf),
+								gdk_pixbuf_get_rowstride(source_pixbuf));
+
+//fixme2: Remember to free with cairo_surface_finish()
+
+			// Turn it into a cairo pattern
+cairo_pattern_t		*image_pattern;
+			image_pattern = cairo_pattern_create_for_surface(image_surface);
+
+
+			cairo_set_source(cairo_context, image_pattern);
+
+
 			cairo_scale(cairo_context, scaled_width_ratio, scaled_height_ratio);
-			gdk_cairo_set_source_pixbuf(cairo_context, source_pixbuf, time_x, time_y);
+//			gdk_cairo_set_source_pixbuf(cairo_context, source_pixbuf, time_x, time_y);
 			cairo_rectangle(cairo_context, time_x, time_y, this_image_data->width, this_image_data->height);
 			cairo_clip(cairo_context);
 			cairo_paint_with_alpha(cairo_context, time_alpha);
