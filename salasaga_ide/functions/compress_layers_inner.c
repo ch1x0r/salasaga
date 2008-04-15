@@ -57,6 +57,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gint					height;					//
 	gint					pixmap_height;			// Receives the height of a given pixmap
 	gint					pixmap_width;			// Receives the width of a given pixmap
+	gboolean				return_code_gbool;		// Receives gboolean return codes
 	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio 
 	gfloat					scaled_width_ratio;		// Used to calculate a horizontal scaling ratio
 	gfloat					start_time;				// Time in seconds of the layer objects start time
@@ -179,6 +180,23 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			{
 				height = pixmap_height - y_offset;
 			}
+// fixme2: We should probably change this to use a cached pixmap instead, to ensure decent speed
+GdkPixbuf	*source_pixbuf;
+			source_pixbuf = ((layer_image *) this_layer_data->object_data)->image_data;
+
+			// Save the existing cairo state before making changes (i.e. clip region)
+			cairo_save(cairo_context);
+
+			gdk_cairo_set_source_pixbuf(cairo_context, source_pixbuf, width, height);
+//			gdk_cairo_set_source_pixbuf(cairo_context, source_pixbuf, 0, 0);
+
+			cairo_rectangle(cairo_context, x_offset, y_offset, width, height);
+			cairo_clip(cairo_context);
+			cairo_paint_with_alpha(cairo_context, time_alpha);
+
+			// Restore the cairo state to the way it was
+			cairo_restore(cairo_context);
+
 /*
 			// Draw the image onto the backing pixbuf
 			gdk_pixbuf_composite(((layer_image *) this_layer_data->object_data)->image_data,	// Source pixbuf
@@ -312,7 +330,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// * Draw the highlight *
 
-			// Calculate how much of the highlight will fit onto the backing pixmap
+			// Calculate how much of the highlight will fit onto the pixmap
 			x_offset = time_x * scaled_width_ratio;
 			y_offset = time_y * scaled_height_ratio;
 			width = ((layer_highlight *) this_layer_data->object_data)->width * scaled_width_ratio;
