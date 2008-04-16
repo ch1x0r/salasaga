@@ -56,6 +56,9 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gint					finish_y;				// Y position at the layer objects finish time 
 	gint					height;					//
 	cairo_matrix_t			image_matrix;			// Transformation matrix used to position a cairo pattern
+	gint					line_counter;
+	gfloat					max_line_width;
+	gint					num_lines;
 	gint					pixmap_height;			// Receives the height of a given pixmap
 	gint					pixmap_width;			// Receives the width of a given pixmap
 	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio 
@@ -63,12 +66,14 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gfloat					start_time;				// Time in seconds of the layer objects start time
 	gint					start_x;				// X position at the layer objects start time
 	gint					start_y;				// Y position at the layer objects start time
-	GdkColor				*text_colour;			// Pointer to the foreground colour of the text
+	gfloat					text_adjustment;		// Y offset for a specific line
 	gfloat					text_blue;				// Blue component of text fg colour
 	GtkTextBuffer			*text_buffer;			// Pointer to the text buffer we're using
+	GdkColor				*text_colour;			// Pointer to the foreground colour of the text
 	GtkTextIter				text_end;				// The end position of the text buffer
 	cairo_text_extents_t	text_extents;			// Meta information about an onscreen text string
 	gfloat					text_green;				// Green component of text fg colour
+	gfloat					text_height;
 	gint					text_left;				// Pixel number onscreen for the left side of text
 	layer_text				*text_object;			// Pointer to our object text data
 	gfloat					text_red;				// Red component of text fg colour
@@ -230,28 +235,40 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// * Draw the text layer *
 
+			// Save the existing cairo state before making changes (i.e. clip region)
+			cairo_save(cairo_context);
+
 			// Simplify pointers
 			text_object = (layer_text *) this_layer_data->object_data;
 			text_buffer = text_object->text_buffer;
 
-			// Retrieve the text to display
-			gtk_text_buffer_get_bounds(text_buffer, &text_start, &text_end);
-			text_string = gtk_text_buffer_get_text(text_buffer, &text_start, &text_end, FALSE);
-
-			// Save the existing cairo state before making changes (i.e. clip region)
-			cairo_save(cairo_context);
-
-			// Determine the on screen size of the text string itself
+			// Set the desired font size
 			cairo_set_font_size(cairo_context, text_object->font_size * scaled_width_ratio);
-			cairo_text_extents(cairo_context, text_string, &text_extents);
+
+			// Determine the on screen size of the text object
+			max_line_width = 0;
+			text_height = 0;
+			num_lines = gtk_text_buffer_get_line_count(text_buffer);
+			for (line_counter = 0; line_counter < num_lines; line_counter++)
+			{
+				gtk_text_buffer_get_iter_at_line(text_buffer, &text_start, line_counter);
+				text_end = text_start;
+				gtk_text_iter_forward_to_line_end(&text_end);
+				text_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
+				cairo_text_extents(cairo_context, text_string, &text_extents);
+				text_height += text_extents.height;
+				if ((text_extents.width + text_extents.x_bearing) > max_line_width)
+					max_line_width = text_extents.width + text_extents.x_bearing;
+			}
 
 			// Calculate the text object (including background) offsets and sizing
+			cairo_text_extents(cairo_context, text_string, &text_extents);
 			x_offset = time_x * scaled_width_ratio;
 			y_offset = time_y * scaled_height_ratio;
-			width = CLAMP(text_extents.width + (TEXT_BORDER_PADDING_WIDTH * 2 * scaled_width_ratio),
+			width = CLAMP(max_line_width + (TEXT_BORDER_PADDING_WIDTH * 2 * scaled_width_ratio),
 						0, pixmap_width - x_offset - (TEXT_BORDER_PADDING_WIDTH * 2 * scaled_width_ratio) - 1);
-			height = CLAMP(text_extents.height + (TEXT_BORDER_PADDING_HEIGHT * 2 * scaled_height_ratio),
-						0, pixmap_height - y_offset - (TEXT_BORDER_PADDING_HEIGHT * 2 * scaled_height_ratio) - 1);
+			height = CLAMP(text_height + (TEXT_BORDER_PADDING_HEIGHT * (num_lines + 2) * scaled_height_ratio),
+						0, pixmap_height - y_offset - (TEXT_BORDER_PADDING_HEIGHT * (num_lines + 2) * scaled_height_ratio) - 1);
 
 			// Store the rendered width of the text object with the layer itself, for use by bounding box code
 			text_object->rendered_width = width / scaled_width_ratio;
@@ -277,11 +294,6 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// * Draw the text string itself *
 
-			// Move to the desired text location
-			text_left = x_offset;
-			text_top = y_offset + text_extents.height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
-			cairo_move_to(cairo_context, text_left, text_top);
-
 			// Set the desired font foreground color
 			text_colour = &((layer_text *) this_layer_data->object_data)->text_color;
 			text_red = ((gfloat) text_colour->red) / 65536;
@@ -289,8 +301,27 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			text_blue = ((gfloat) text_colour->blue) / 65536;
 			cairo_set_source_rgba(cairo_context, text_red, text_green, text_blue, time_alpha);
 
-			// Draw the font text
-			cairo_show_text(cairo_context, text_string);
+			// Loop around, drawing lines of text
+			text_height = 0;
+			text_top = y_offset + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
+			for (line_counter = 0; line_counter < num_lines; line_counter++)
+			{
+				// Retrieve a line of text
+				gtk_text_buffer_get_iter_at_line(text_buffer, &text_start, line_counter);
+				text_end = text_start;
+				gtk_text_iter_forward_to_line_end(&text_end);
+				text_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
+
+				// Move onscreen X and Y coordinates to correct position for the line of text 
+				cairo_text_extents(cairo_context, text_string, &text_extents);
+				text_left = x_offset + text_extents.x_bearing + (TEXT_BORDER_PADDING_WIDTH * scaled_width_ratio);
+				text_top += text_extents.height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
+				text_adjustment = text_extents.height + text_extents.y_bearing;
+				cairo_move_to(cairo_context, text_left, text_top -(text_adjustment));
+
+				// Draw the line of text
+				cairo_show_text(cairo_context, text_string);
+			}
 
 			// Restore the cairo state to the way it was
 			cairo_restore(cairo_context);
