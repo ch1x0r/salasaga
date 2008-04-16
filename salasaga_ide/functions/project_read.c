@@ -48,6 +48,7 @@
 #include "display_warning.h"
 #include "slide_free.h"
 #include "validate_value.h"
+#include "cairo/create_cairo_pixbuf_pattern.h"
 
 
 gboolean project_read(gchar *filename)
@@ -1162,6 +1163,15 @@ gboolean project_read(gchar *filename)
 									{
 										display_warning("Error ED65: Error when loading image data");
 									}
+								}
+
+								// Create a cairo pattern from the image data
+								tmp_image_ob->cairo_pattern = create_cairo_pixbuf_pattern(tmp_image_ob->image_data);
+								if (NULL == tmp_image_ob->cairo_pattern)
+								{
+									// Something went wrong when creating the image pattern
+									display_warning("Error ED373: Couldn't create an image pattern");
+									return;
 								}
 
 								// Set the modified flag for this image to false

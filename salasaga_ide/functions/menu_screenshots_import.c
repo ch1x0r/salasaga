@@ -253,6 +253,15 @@ void menu_screenshots_import(void)
 		tmp_image_ob->height = project_height;
 		tmp_image_ob->modified = FALSE;
 
+		// Create a cairo pattern from the image data
+		tmp_image_ob->cairo_pattern = create_cairo_pixbuf_pattern(tmp_image_ob->image_data);
+		if (NULL == tmp_image_ob->cairo_pattern)
+		{
+			// Something went wrong when creating the image pattern
+			display_warning("Error ED376: Couldn't create an image pattern");
+			return;
+		}
+
 		// Load the image file(s) into a thumbnail sized pixel buffer, then add it to the new slide structure
 		tmp_slide->thumbnail = gdk_pixbuf_scale_simple(tmp_image_ob->image_data, preview_width, (guint) preview_width * 0.75, GDK_INTERP_TILES);
 		if (NULL == tmp_slide->thumbnail)

@@ -33,20 +33,20 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "display_warning.h"
 #include "draw_timeline.h"
 #include "draw_workspace.h"
 #include "regenerate_film_strip_thumbnails.h"
+#include "cairo/create_cairo_pixbuf_pattern.h"
 
 
 void project_crop(void)
 {
 	// Local variables
+	gint				bottom_value;
 	GtkDialog			*crop_dialog;				// Widget for the dialog
 	GtkWidget			*crop_table;				// Table used for neat layout of the dialog box
-	guint				row_counter = 0;			// Used to count which row things are up to
 	gint				dialog_result;				// Catches the return code from the dialog box
-
-	gint				bottom_value;
 	layer				*last_layer;				// Temporary layer
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				left_value;
@@ -54,9 +54,11 @@ void project_crop(void)
 	GdkPixbuf			*new_pixbuf;				// Holds the cropped image data
 	gint				new_width;					// Hold the width of the cropped area
 	gint				num_slides;					// Total number of layers
+	guint				row_counter = 0;			// Used to count which row things are up to
 	gint				right_value;
 	gint				slide_counter;
 	slide				*slide_data;
+	layer_image			*tmp_image_ob;				// Points to the image data in the selected layer
 	gint				top_value;
 
 	GtkWidget			*left_label;				// Label widget
@@ -162,6 +164,7 @@ void project_crop(void)
 		slide_data = g_list_nth_data(slides, slide_counter);
 		layer_pointer = slide_data->layers;
 		layer_pointer = g_list_last(layer_pointer);
+		tmp_image_ob = (layer_image *) last_layer->object_data;
 
 		// * Check if this slide has a background image *
 		last_layer = layer_pointer->data;
@@ -181,16 +184,16 @@ void project_crop(void)
 		}
 
 		// Create a new pixbuf, for storing the cropped image in
-		new_height = gdk_pixbuf_get_height(((layer_image *) last_layer->object_data)->image_data)
+		new_height = gdk_pixbuf_get_height(tmp_image_ob->image_data)
 			- top_value
 			- bottom_value;
-		new_width = gdk_pixbuf_get_width(((layer_image *) last_layer->object_data)->image_data)
+		new_width = gdk_pixbuf_get_width(tmp_image_ob->image_data)
 			- left_value
 			- right_value;
 		new_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, new_width, new_height);
 
 		// Create a new pixbuf, having just the cropped image data in it
-		gdk_pixbuf_copy_area(((layer_image *) last_layer->object_data)->image_data, // Source pixbuf
+		gdk_pixbuf_copy_area(tmp_image_ob->image_data, // Source pixbuf
 			left_value,  // Left crop
 			top_value,  // Top crop
 			new_width,  // Width
@@ -199,10 +202,19 @@ void project_crop(void)
 			0, 0);
 
 		// Update the layer with the new cropped data
-		tmp_pixbuf = ((layer_image *) last_layer->object_data)->image_data;
-		((layer_image *) last_layer->object_data)->image_data = new_pixbuf;
-		((layer_image *) last_layer->object_data)->width = new_width;
-		((layer_image *) last_layer->object_data)->height = new_height;
+		tmp_pixbuf = tmp_image_ob->image_data;
+		tmp_image_ob->image_data = new_pixbuf;
+		tmp_image_ob->width = new_width;
+		tmp_image_ob->height = new_height;
+
+		// Create a cairo pattern from the image data
+		tmp_image_ob->cairo_pattern = create_cairo_pixbuf_pattern(tmp_image_ob->image_data);
+		if (NULL == tmp_image_ob->cairo_pattern)
+		{
+			// Something went wrong when creating the image pattern
+			display_warning("Error ED374: Couldn't create an image pattern");
+			return;
+		}
 
 		// Free the memory used by the old pixbuf
 		g_object_unref(GDK_PIXBUF(tmp_pixbuf));

@@ -54,6 +54,11 @@ gboolean layer_free(layer *this_layer)
 		case TYPE_GDK_PIXBUF:
 			if (NULL != ((layer_image *) this_layer->object_data)->image_data)
 				g_object_unref(GDK_PIXBUF(((layer_image *) this_layer->object_data)->image_data));
+			if (NULL != ((layer_image *) this_layer->object_data)->cairo_pattern)
+			{
+				cairo_pattern_destroy(((layer_image *) this_layer->object_data)->cairo_pattern);
+				((layer_image *) this_layer->object_data)->cairo_pattern = NULL;
+			}
 			break;
 
 		case TYPE_HIGHLIGHT:

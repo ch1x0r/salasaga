@@ -29,6 +29,8 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
+#include "cairo/create_cairo_pixbuf_pattern.h"
+
 
 layer *layer_duplicate(layer *source_layer)
 {
@@ -117,6 +119,13 @@ layer *layer_duplicate(layer *source_layer)
 			((layer_image *) new_layer->object_data)->height = ((layer_image *) source_layer->object_data)->height;
 			((layer_image *) new_layer->object_data)->image_data = gdk_pixbuf_copy(((layer_image *) source_layer->object_data)->image_data);
 			((layer_image *) new_layer->object_data)->modified = ((layer_image *) source_layer->object_data)->modified;
+			((layer_image *) new_layer->object_data)->cairo_pattern = create_cairo_pixbuf_pattern(((layer_image *) new_layer->object_data)->image_data);
+			if (NULL == ((layer_image *) new_layer->object_data)->cairo_pattern)
+			{
+				// Something went wrong when creating the image pattern
+				display_warning("Error ED375: Couldn't create an image pattern");
+				return NULL;
+			}
 			break;
 
 		case TYPE_HIGHLIGHT:

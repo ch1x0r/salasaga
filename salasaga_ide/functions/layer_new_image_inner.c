@@ -33,6 +33,7 @@
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
 #include "validate_value.h"
+#include "cairo/create_cairo_pixbuf_pattern.h"
 #include "widgets/time_line.h"
 
 
@@ -153,6 +154,15 @@ void layer_new_image_inner(guint release_x, guint release_y)
 				tmp_image_ob->height = gdk_pixbuf_get_height(new_image_data);
 				g_string_free(validated_string, TRUE);
 				validated_string = NULL;
+
+				// Create a cairo pattern from the image data
+				tmp_image_ob->cairo_pattern = create_cairo_pixbuf_pattern(tmp_image_ob->image_data);
+				if (NULL == tmp_image_ob->cairo_pattern)
+				{
+					// Something went wrong when creating the image pattern
+					display_warning("Error ED372: Couldn't create an image pattern");
+					return;
+				}
 			}
 		}
 
