@@ -256,6 +256,8 @@ OFILES = \
 	functions/working_area_expose_event.o \
 	functions/working_area_motion_notify_event.o \
 	functions/zoom_selector_changed.o \
+	functions/cairo/calculate_text_object_size.o \
+	functions/cairo/create_cairo_pixbuf_pattern.o \
 	functions/widgets/time_line.o \
 	salasaga.o
 
@@ -587,6 +589,12 @@ working_area_motion_notify_event.o:
 
 zoom_selector_changed.o:
 	$(CC) $(CFLAGS) -c zoom_selector_changed.c -o zoom_selector_changed.o
+
+cairo/calculate_text_object_size.o:
+	$(CC) $(CFLAGS) -c cairo/calculate_text_object_size.c -o cairo/calculate_text_object_size.o
+
+cairo/create_cairo_pixbuf_pattern.o:
+	$(CC) $(CFLAGS) -c cairo/create_cairo_pixbuf_pattern.c -o cairo/create_cairo_pixbuf_pattern.o
 
 widgets/time_line.o:
 	$(CC) $(CFLAGS) -c widgets/time_line.c -o widgets/time_line.o
