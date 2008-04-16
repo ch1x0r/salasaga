@@ -173,6 +173,7 @@ OFILES = \
 	functions/draw_bounding_box.o \
 	functions/draw_handle_box.o \
 	functions/draw_highlight_box.o \
+	functions/draw_layer_start_and_end_points.o \
 	functions/draw_resize_handles.o \
 	functions/draw_timeline.o \
 	functions/draw_workspace.o \
@@ -340,6 +341,9 @@ draw_handle_box.o:
 
 draw_highlight_box.o:
 	$(CC) $(CFLAGS) -c draw_highlight_box.c -o draw_highlight_box.o
+
+draw_layer_start_and_end_points.o:
+	$(CC) $(CFLAGS) -c draw_layer_start_and_end_points.c -o draw_layer_start_and_end_points.o
 
 draw_resize_handles.o:
 	$(CC) $(CFLAGS) -c draw_resize_handles.c -o draw_resize_handles.o
