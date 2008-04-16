@@ -1171,7 +1171,6 @@ gboolean project_read(gchar *filename)
 								{
 									// Something went wrong when creating the image pattern
 									display_warning("Error ED373: Couldn't create an image pattern");
-									return;
 								}
 
 								// Set the modified flag for this image to false
