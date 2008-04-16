@@ -207,17 +207,9 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			// Save the existing cairo state before making changes (i.e. clip region)
 			cairo_save(cairo_context);
 
-			// Position the pixbuf pattern at the desired x,y coordinates
-			cairo_matrix_init_translate(&image_matrix, -(time_x), -(time_y));
-			cairo_pattern_set_matrix(mouse_ptr_pattern, &image_matrix);
-
-			// Set the correct scale for the pattern
+			// Draw the mouse cursor
 			cairo_scale(cairo_context, scaled_width_ratio, scaled_height_ratio);
-
-			// Set the pattern as the source
-			cairo_set_source(cairo_context, mouse_ptr_pattern);
-
-			// Draw the source onto our backing pixmap
+			gdk_cairo_set_source_pixbuf(cairo_context, GDK_PIXBUF(mouse_ptr_pixbuf), time_x, time_y);
 			cairo_rectangle(cairo_context, time_x, time_y, width, height);
 			cairo_clip(cairo_context);
 			cairo_paint_with_alpha(cairo_context, time_alpha);
