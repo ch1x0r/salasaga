@@ -273,6 +273,7 @@ typedef struct
 	gint				width;
 	gint				height;
 	GdkPixbuf			*image_data;
+	cairo_pattern_t		*cairo_pattern;				// Cairo pattern representation of the image_data pixbuf
 	gboolean			modified;					// FALSE if an image hasn't been modified, TRUE if it has (i.e. cropped)
 } layer_image;
 
