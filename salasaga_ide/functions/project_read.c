@@ -1899,6 +1899,8 @@ gboolean project_read(gchar *filename)
 								tmp_layer->duration = default_layer_duration;
 								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_out_duration = 0.0;
+								tmp_text_ob->rendered_height = 0;
+								tmp_text_ob->rendered_width = 0;
 
 								// Load the text layer values
 								this_node = this_layer->xmlChildrenNode;
