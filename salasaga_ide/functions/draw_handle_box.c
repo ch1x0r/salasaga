@@ -39,6 +39,7 @@
 #include "display_warning.h"
 #include "draw_bounding_box.h"
 #include "draw_resize_handles.h"
+#include "cairo/calculate_text_object_size.h"
 #include "widgets/time_line.h"
 
 
@@ -171,6 +172,11 @@ gboolean draw_handle_box(void)
 			break;
 
 		case TYPE_TEXT:
+			// If the text hasn't ever been rendered, we'll have to work out the size ourselves now
+			if (0 == ((layer_text *) this_layer_data->object_data)->rendered_width)
+			{
+				calculate_text_object_size((layer_text *) this_layer_data->object_data);
+			}
 			width = ((layer_text *) this_layer_data->object_data)->rendered_width;
 			height = ((layer_text *) this_layer_data->object_data)->rendered_height;
 			break;
