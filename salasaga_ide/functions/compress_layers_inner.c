@@ -166,20 +166,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// * We're processing an image layer *
 
-			// Calculate how much of the source pixbuf will fit onto the backing pixmap
-			x_offset = time_x * scaled_width_ratio;
-			y_offset = time_y * scaled_height_ratio;
+			// Simplify pointers
 			this_image_data = (layer_image *) this_layer_data->object_data;
-			width = this_image_data->width * scaled_width_ratio;
-			height = this_image_data->height * scaled_height_ratio;
-			if ((x_offset + width) > pixmap_width)
-			{
-				width = pixmap_width - x_offset;
-			}
-			if ((y_offset + height) > pixmap_height)
-			{
-				height = pixmap_height - y_offset;
-			}
 
 			// Save the existing cairo state before making changes (i.e. clip region)
 			cairo_save(cairo_context);
@@ -208,40 +196,35 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// * Composite the mouse pointer image onto the backing pixmap *
 
-			// If the mouse pointer image wasn't able to be loaded then we skip this layer, as the compositing wont work with it
+			// If the mouse pointer image hasn't been loaded then we skip this layer
 			if (NULL == mouse_ptr_pixbuf)
-			{
 				return;
-			}
 
-			// Calculate how much of the source image will fit onto the backing pixmap
-			x_offset = time_x * scaled_width_ratio;
-			y_offset = time_y * scaled_height_ratio;
-			width = ((layer_mouse *) this_layer_data->object_data)->width * scaled_width_ratio;
-			height = ((layer_mouse *) this_layer_data->object_data)->height * scaled_height_ratio;
-			if ((x_offset + width) > pixmap_width)
-			{
-				width = pixmap_width - x_offset;
-			}
-			if ((y_offset + height) > pixmap_height)
-			{
-				height = pixmap_height - y_offset;
-			}
-/*
-			// Draw the mouse pointer onto the backing pixbuf
-			gdk_pixbuf_composite(mouse_ptr_pixbuf,  // Source pixbuf
-			tmp_pixbuf,						// Destination pixbuf
-			x_offset,						// X offset
-			y_offset,						// Y offset
-			width,							// Width
-			height,							// Height
-			x_offset,						// Source offsets
-			y_offset,						// Source offsets
-			scaled_width_ratio,				// Scale X
-			scaled_height_ratio,			// Scale Y
-			GDK_INTERP_TILES,				// Scaling type
-			time_alpha);					// Alpha
-*/
+			// Simplify pointers
+			width = ((layer_mouse *) this_layer_data->object_data)->width;
+			height = ((layer_mouse *) this_layer_data->object_data)->height;
+
+			// Save the existing cairo state before making changes (i.e. clip region)
+			cairo_save(cairo_context);
+
+			// Position the pixbuf pattern at the desired x,y coordinates
+			cairo_matrix_init_translate(&image_matrix, -(time_x), -(time_y));
+			cairo_pattern_set_matrix(mouse_ptr_pattern, &image_matrix);
+
+			// Set the correct scale for the pattern
+			cairo_scale(cairo_context, scaled_width_ratio, scaled_height_ratio);
+
+			// Set the pattern as the source
+			cairo_set_source(cairo_context, mouse_ptr_pattern);
+
+			// Draw the source onto our backing pixmap
+			cairo_rectangle(cairo_context, time_x, time_y, width, height);
+			cairo_clip(cairo_context);
+			cairo_paint_with_alpha(cairo_context, time_alpha);
+
+			// Restore the cairo state to the way it was
+			cairo_restore(cairo_context);
+
 			return;
 
 		case TYPE_EMPTY:
