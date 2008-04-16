@@ -40,6 +40,7 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
+#include "cairo/create_cairo_pixbuf_pattern.h"
 
 // Text padding defines (in pixels) 
 #define TEXT_BORDER_PADDING_WIDTH 4
@@ -53,11 +54,10 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gfloat					end_time;				// Time in seconds of the layer objects finish time
 	gint					finish_x;				// X position at the layer objects finish time
 	gint					finish_y;				// Y position at the layer objects finish time 
-	GdkGC					*graphics_context;		// GDK graphics context
 	gint					height;					//
+	cairo_matrix_t			image_matrix;			// Transformation matrix used to position a cairo pattern
 	gint					pixmap_height;			// Receives the height of a given pixmap
 	gint					pixmap_width;			// Receives the width of a given pixmap
-	gboolean				return_code_gbool;		// Receives gboolean return codes
 	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio 
 	gfloat					scaled_width_ratio;		// Used to calculate a horizontal scaling ratio
 	gfloat					start_time;				// Time in seconds of the layer objects start time
@@ -79,8 +79,6 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gint					time_x;					// Unscaled X position of the layer at our desired point in time
 	gint					time_y;					// Unscaled Y position of the layer at our desired point in time
 	gfloat					time_diff;				// Used when calculating the object position at the desired point in time
-	GdkColormap				*tmp_colormap;			// Temporary colormap
-	GdkPixmap				*tmp_pixmap;			// GDK Pixmap
 	gint					width;					//
 	gint					x_diff;					// Used when calculating the object position at the desired point in time
 	gint					x_offset;				// X coordinate of the object at the desired point in time
@@ -168,7 +166,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// * We're processing an image layer *
 
-			// Calculate how much of the source image will fit onto the backing pixmap
+			// Calculate how much of the source pixbuf will fit onto the backing pixmap
 			x_offset = time_x * scaled_width_ratio;
 			y_offset = time_y * scaled_height_ratio;
 			this_image_data = (layer_image *) this_layer_data->object_data;
@@ -183,99 +181,18 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 				height = pixmap_height - y_offset;
 			}
 
-// fixme2: We should probably change this to use a cached cairo surface/pattern instead, to ensure decent speed
-
-			// Draw the image onto the backing pixbuf
-guchar	*dest_buffer;
-guchar	*dest_start;
-guchar	*dest_ptr;
-cairo_matrix_t		image_matrix;
-cairo_pattern_t		*image_pattern;
-cairo_surface_t *image_surface;
-guint	num_channels;
-guchar	*row_end;
-guint	row_stride;
-gint	source_height;
-GdkPixbuf	*source_pixbuf;
-guchar	*source_start;
-guchar	*source_ptr;
-gint	source_width;
-gint	y_counter;
-
-
-			// Retrieve data about the source pixbuf
-			source_pixbuf = this_image_data->image_data;
-			row_stride = gdk_pixbuf_get_rowstride(source_pixbuf);
-			num_channels = gdk_pixbuf_get_n_channels(source_pixbuf);
-			source_height = gdk_pixbuf_get_height(source_pixbuf);
-			source_width = gdk_pixbuf_get_width(source_pixbuf);
-			source_start = gdk_pixbuf_get_pixels(source_pixbuf);
-
-			// Create a memory buffer for re-formatting our pixbuf data 
-			dest_buffer = g_try_new0(guchar, source_width * source_height * 4);
-			if (NULL == dest_buffer)
-			{
-				display_warning("Error ED371: Unable to allocate memory for pixel buffer");
-				return;
-			}
-			dest_start = dest_buffer;
-
-			// Reformat the pixbuf data to something cairo can use
-			for (y_counter = 0; y_counter < source_height; y_counter++)
-			{
-				source_ptr = source_start;
-				row_end = source_ptr + (3 * source_width);
-				dest_ptr = dest_start;
-
-				// Reformat a row of data 
-				while (source_ptr < row_end)
-				{
-					// * Native byte ordering is used, so we have to be careful *
-
-#if G_LITTLE_ENDIAN == G_BYTE_ORDER 
-
-					// Little endian (i.e. x86)
-					dest_ptr[2] = source_ptr[0];
-					dest_ptr[1] = source_ptr[1];
-					dest_ptr[0] = source_ptr[2];
-
-#else
-
-					// Big endian (i.e. SPARC)
-					dest_ptr[1] = source_ptr[0];
-					dest_ptr[2] = source_ptr[1];
-					dest_ptr[3] = source_ptr[2];
-
-#endif
-
-					// Point to the next source and destination pixel
-					source_ptr += 3;
-					dest_ptr += 4;
-				}
-
-				// Point to the start of the next source and destination rows
-				source_start += row_stride;
-				dest_start += 4 * source_width;
-			}
-
 			// Save the existing cairo state before making changes (i.e. clip region)
 			cairo_save(cairo_context);
 
-			// Turn the reformatted buffer into a cairo surface
-			image_surface = cairo_image_surface_create_for_data(dest_buffer, CAIRO_FORMAT_RGB24, source_width, source_height, source_width * 4);
-
-			// Turn the surface into a cairo pattern
-			image_pattern = cairo_pattern_create_for_surface(image_surface);
-			cairo_surface_destroy(image_surface);
+			// Position the pixbuf pattern at the desired x,y coordinates
 			cairo_matrix_init_translate(&image_matrix, -(time_x), -(time_y));
-			cairo_pattern_set_matrix(image_pattern, &image_matrix);
+			cairo_pattern_set_matrix(this_image_data->cairo_pattern, &image_matrix);
 
 			// Set the correct scale for the pattern
 			cairo_scale(cairo_context, scaled_width_ratio, scaled_height_ratio);
 
 			// Set the pattern as the source
-			cairo_set_source(cairo_context, image_pattern);
-			cairo_pattern_destroy(image_pattern);
+			cairo_set_source(cairo_context, this_image_data->cairo_pattern);
 
 			// Draw the source onto our backing pixmap
 			cairo_rectangle(cairo_context, time_x, time_y, this_image_data->width, this_image_data->height);
