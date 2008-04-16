@@ -104,26 +104,37 @@ gboolean draw_handle_box(void)
 	start_x = this_layer_data->x_offset_start;
 	start_y = this_layer_data->y_offset_start;
 
-	// If the layer isn't visible at the requested time, we don't need to proceed
+	// Calculate the position of the handle box
 	end_time = this_layer_data->start_time + this_layer_data->duration;
 	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 		end_time += this_layer_data->transition_in_duration;
 	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
 		end_time += this_layer_data->transition_out_duration;
-	if ((time_position < start_time) || (time_position > end_time))
+	if ((time_position >= start_time) && (time_position <= end_time))
 	{
-		return TRUE;
+		// Calculate how far into the layer movement we are
+		time_offset = time_position - start_time;
+		time_diff = end_time - start_time;
+		x_diff = finish_x - start_x;
+		x_scale = (((gfloat) x_diff) / time_diff);
+		time_x = start_x + (x_scale * time_offset);
+		y_diff = finish_y - start_y;
+		y_scale = (((gfloat) y_diff) / time_diff);
+		time_y = start_y + (y_scale * time_offset);
+	} else
+	{
+		if (time_position < start_time)
+		{
+			// The desired point in time is before the layer is visible, so we use the object start position
+			time_x = start_x;
+			time_y = start_y;
+		} else
+		{
+			// The desired point in time after layer is visible, so we use the object finish position
+			time_x = finish_x;
+			time_y = finish_y;
+		}
 	}
-
-	// Calculate how far into the layer movement we are
-	time_offset = time_position - start_time;
-	time_diff = end_time - start_time;
-	x_diff = finish_x - start_x;
-	x_scale = (((gfloat) x_diff) / time_diff);
-	time_x = start_x + (x_scale * time_offset);
-	y_diff = finish_y - start_y;
-	y_scale = (((gfloat) y_diff) / time_diff);
-	time_y = start_y + (y_scale * time_offset);
 
 	// Retrieve the dimensions of the selected object
 	switch (this_layer_data->object_type)
