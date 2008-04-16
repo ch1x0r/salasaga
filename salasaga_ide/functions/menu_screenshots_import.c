@@ -44,6 +44,7 @@
 #include "enable_layer_toolbar_buttons.h"
 #include "enable_main_toolbar_buttons.h"
 #include "menu_enable.h"
+#include "cairo/create_cairo_pixbuf_pattern.h"
 
 
 void menu_screenshots_import(void)
