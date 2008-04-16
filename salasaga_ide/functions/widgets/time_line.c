@@ -80,12 +80,15 @@ struct _TimeLinePrivate
 	gint				guide_line_start;			// The pixel number of the starting guide line
 	gint				guide_line_resize;			// The pixel number of the resizing guide line
 	gint				left_border_width;			// Number of pixels in the left border (layer name) area
+	gint				mouse_x;					// Mouse pointer position
+	gint				mouse_y;					// Mouse pointer position
 	guint				resize_type;				// Tracks whether we have an active layer resize or not
 	gint				row_height;					// Number of pixels in each layer row
 	gint				selected_layer_num;			// The number of the selected layer
 	gfloat				stored_slide_duration;		// The original duration of the slide in seconds
 	gint				stored_x;
 	gint				stored_y;
+	guint				timeout_id;					// ID for the timeout source
 	gint				top_border_height;			// Number of pixels in the top border (cursor) area
 };
 
@@ -101,6 +104,7 @@ gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gin
 gboolean time_line_internal_invalidate_layer_area(GtkWidget *widget, gint layer_number);
 gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint y1, gint width, gint height);
 gboolean time_line_internal_redraw_layer_bg(TimeLinePrivate *priv, gint layer_number);
+gboolean time_line_internal_widget_motion_notify_handler(TimeLine *time_line);
 void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint width);
 
 // Library wide variables
@@ -1178,6 +1182,13 @@ static void time_line_init(TimeLine *time_line)
 
 	// Select the highlighted layer
 	time_line_internal_draw_selection_highlight(priv, WIDGET_MINIMUM_WIDTH);
+
+	// Set a periodic time out, so we rate limit the calls to the motion notify (mouse drag) handler
+	priv->mouse_x = -1;
+	priv->mouse_y = -1;
+	priv->timeout_id = g_timeout_add(125,  // Timeout interval (1/1000ths of a second)
+							(GSourceFunc) time_line_internal_widget_motion_notify_handler,  // Function to call
+							time_line);  // Pass the time line widget to the function
 }
 
 GType time_line_get_type(void)
@@ -1217,26 +1228,8 @@ GtkWidget* time_line_new()
 void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
-	GtkAllocation		area;						// Rectangular area
-	layer				*background_layer_data;		// Data for the background layer
-	GdkModifierType		button_state;				// Mouse button states
-	gint				check_pixel;				// Used when calculating pixel positions 
-	gint				current_row;				// The presently selected row
-	gint				distance_moved;				// Number of pixels the row has been scrolled by horizontally
-	gint				end_row;					// Number of the last layer in this slide
-	gfloat				end_time;					// The end time in seconds of the presently selected layer
-	GList				*layer_above;				// The layer above the selected one
-	GList				*layer_below;				// The layer below the selected one
-	GList				*layer_pointer;				// Points to the layers in the selected slide
-	gint				mouse_x;					// Mouse x position
-	gint				mouse_y;					// Mouse x position
-	gint				new_row;					// The row the mouse is over
-	GList				*selected_layer;			// The selected layer
 	TimeLinePrivate		*priv;
 	TimeLine			*this_time_line;
-	layer				*this_layer_data;			// Data for the presently selected layer
-	slide				*this_slide_data;			// Data for the presently selected slide
-	gfloat				time_moved;					// Number of seconds the row is being adjusted by
 	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
 
 
@@ -1245,9 +1238,6 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	{
 		return;
 	}
-
-	// Find out where the mouse is positioned, and which buttons and modifier keys are down (active)
-	gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);
 
 	// It's probably the child of the called widget that we need to get data from
 	if (FALSE == IS_TIME_LINE(widget))
@@ -1270,23 +1260,62 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	}
 
 	// Initialisation
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+
+	// Update the mouse position
+	priv->mouse_x = event->x;
+	priv->mouse_y = event->y;
+}
+
+gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_line)
+{
+	// Local variables
+	GtkAllocation		area;						// Rectangular area
+	layer				*background_layer_data;		// Data for the background layer
+	gint				check_pixel;				// Used when calculating pixel positions 
+	gint				current_row;				// The presently selected row
+	gint				distance_moved;				// Number of pixels the row has been scrolled by horizontally
+	gint				end_row;					// Number of the last layer in this slide
+	gfloat				end_time;					// The end time in seconds of the presently selected layer
+	GList				*layer_above;				// The layer above the selected one
+	GList				*layer_below;				// The layer below the selected one
+	GList				*layer_pointer;				// Points to the layers in the selected slide
+	gint				new_row;					// The row the mouse is over
+	GList				*selected_layer;			// The selected layer
+	TimeLinePrivate		*priv;
+	layer				*this_layer_data;			// Data for the presently selected layer
+	slide				*this_slide_data;			// Data for the presently selected slide
+	gfloat				time_moved;					// Number of seconds the row is being adjusted by
+
+
+	// If there isn't anything to do, then skip running on this call
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+	if ((-1 == priv->mouse_x) && (-1 == priv->mouse_y))
+	{
+		return TRUE;
+	}
+
+	// Initialisation
 	this_slide_data = ((slide *) current_slide->data);
 	layer_pointer = this_slide_data->layers;
 	end_row = this_slide_data->num_layers -1;
-	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 	current_row = priv->selected_layer_num;
 
 	// Check if this mouse drag is in the cursor area, and no other operations are in progress
-	if ((ADJUSTMENTS_Y <= event->y) && ((ADJUSTMENTS_Y + ADJUSTMENTS_SIZE) >= event->y)
+	if ((ADJUSTMENTS_Y <= priv->mouse_y) && ((ADJUSTMENTS_Y + ADJUSTMENTS_SIZE) >= priv->mouse_y)
 			&& (RESIZE_NONE == priv->resize_type)
 			&& (FALSE == priv->drag_active)
 			&& (FALSE == priv->cursor_drag_active)
-			&& (event->x >= priv->left_border_width))
+			&& (priv->mouse_x >= priv->left_border_width))
 	{
 		// This is the first time we've heard of this cursor drag, so take note of it
 		priv->cursor_drag_active = TRUE;
-		priv->stored_x = mouse_x;
-		return;
+		priv->stored_x = priv->mouse_x;
+
+		// Mark this function as complete, and return
+		priv->mouse_x = -1;
+		priv->mouse_y = -1;
+		return TRUE;
 	}
 
 	// Check if a cursor drag is in progress
@@ -1297,11 +1326,11 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		// Yes, this is definitely an in-progress cursor drag
 
 		// Check if the drag is moving to the right
-		if (priv->stored_x < mouse_x)
+		if (priv->stored_x < priv->mouse_x)
 		{
 			// Calculate the time and distance travelled
-			mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
-			distance_moved = mouse_x - priv->stored_x;
+			priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
+			distance_moved = priv->mouse_x - priv->stored_x;
 			time_moved = ((gfloat) distance_moved) / pixels_per_second;
 
 			// Invalidate the widget area where the cursor is presently
@@ -1313,7 +1342,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 
 			// Update the cursor position
 			priv->cursor_position += time_moved;
-			priv->stored_x = mouse_x;
+			priv->stored_x = priv->mouse_x;
 
 			// Invalidate the widget area where the cursor has moved to
 			area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
@@ -1324,11 +1353,11 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		}
 
 		// Check if the drag is moving to the left
-		if (priv->stored_x > mouse_x)
+		if (priv->stored_x > priv->mouse_x)
 		{
 			// Calculate the time and distance travelled
-			mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
-			distance_moved = priv->stored_x - mouse_x;
+			priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
+			distance_moved = priv->stored_x - priv->mouse_x;
 			time_moved = ((gfloat) distance_moved) / pixels_per_second;
 
 			// Invalidate the widget area where the cursor is presently
@@ -1340,7 +1369,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 
 			// Update the cursor position
 			priv->cursor_position -= time_moved;
-			priv->stored_x = mouse_x;
+			priv->stored_x = priv->mouse_x;
 
 			// Invalidate the widget area where the cursor has moved to
 			area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
@@ -1357,11 +1386,14 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		// Update the workspace area
 		draw_workspace();
 
-		return;
+		// Mark this function as complete, and return
+		priv->mouse_x = -1;
+		priv->mouse_y = -1;
+		return TRUE;
 	}
 
 	// Work out which row the mouse is over in the timeline area
-	new_row = floor((event->y - priv->top_border_height) / priv->row_height);
+	new_row = floor((priv->mouse_y - priv->top_border_height) / priv->row_height);
 
 	// Retrieve the layer data for the selected row
 	layer_pointer = g_list_first(layer_pointer);
@@ -1381,19 +1413,19 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		check_pixel = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
 		if (1 < check_pixel)
 			check_pixel -= 1;
-		if ((mouse_x >= check_pixel) && (mouse_x <= check_pixel + 5))
+		if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 5))
 		{
 			// The user clicked on the start pixel for a layer, so we're commencing a resize
 			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 			{
 				// We're adjusting the start time of a transition in
 				priv->resize_type = RESIZE_TRANS_IN_START;
-				priv->stored_x = mouse_x;
+				priv->stored_x = priv->mouse_x;
 			} else
 			{
 				// We're adjusting the start time of the main duration
 				priv->resize_type = RESIZE_LAYER_START;
-				priv->stored_x = mouse_x;
+				priv->stored_x = priv->mouse_x;
 			}
 		}
 
@@ -1405,11 +1437,11 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 							((this_layer_data->start_time + this_layer_data->transition_in_duration) * pixels_per_second);
 			if (1 < check_pixel)
 				check_pixel -= 1;
-			if ((mouse_x >= check_pixel) && (mouse_x <= check_pixel + 5))
+			if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 5))
 			{
 				// We're adjusting the end time of the transition in
 				priv->resize_type = RESIZE_LAYER_START;
-				priv->stored_x = mouse_x;
+				priv->stored_x = priv->mouse_x;
 			}
 		}
 
@@ -1419,11 +1451,11 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			check_pixel += this_layer_data->transition_in_duration * pixels_per_second;
 		if (1 < check_pixel)
 			check_pixel -= 1;
-		if ((mouse_x >= check_pixel) && (mouse_x <= check_pixel + 5))
+		if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 5))
 		{
 			// We're adjusting the main duration time
 			priv->resize_type = RESIZE_LAYER_DURATION;
-			priv->stored_x = mouse_x;
+			priv->stored_x = priv->mouse_x;
 		}
 
 		// Is there a transition out for this layer?
@@ -1435,11 +1467,11 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 				check_pixel += this_layer_data->transition_in_duration * pixels_per_second;
 			if (1 < check_pixel)
 				check_pixel -= 1;
-			if ((mouse_x >= check_pixel) && (mouse_x <= check_pixel + 5))
+			if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 5))
 			{
 				// We're adjusting the end time of the transition in
 				priv->resize_type = RESIZE_TRANS_OUT_DURATION;
-				priv->stored_x = mouse_x;
+				priv->stored_x = priv->mouse_x;
 			}
 		}
 	}
@@ -1448,11 +1480,11 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	if (RESIZE_NONE != priv->resize_type)
 	{
 		// Check if the resize is moving to the right
-		if (priv->stored_x < mouse_x)
+		if (priv->stored_x < priv->mouse_x)
 		{
 			// Calculate the time and distance travelled
-			mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
-			distance_moved = mouse_x - priv->stored_x;
+			priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
+			distance_moved = priv->mouse_x - priv->stored_x;
 			time_moved = ((gfloat) distance_moved) / pixels_per_second;
 
 			// Make the needed adjustments
@@ -1559,11 +1591,11 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		}
 
 		// Check if the resize is moving to the left
-		if (priv->stored_x > mouse_x)
+		if (priv->stored_x > priv->mouse_x)
 		{
 			// Calculate the time and distance travelled
-			mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
-			distance_moved = priv->stored_x - mouse_x;
+			priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
+			distance_moved = priv->stored_x - priv->mouse_x;
 			time_moved = ((gfloat) distance_moved) / pixels_per_second;
 
 			// Make the needed adjustments
@@ -1673,7 +1705,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		}
 
 		// Update the stored position of the row in the widget
-		priv->stored_x = mouse_x;
+		priv->stored_x = priv->mouse_x;
 
 		// Refresh the timeline display of the row
 		time_line_internal_redraw_layer_bg(priv, current_row);
@@ -1690,7 +1722,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			area.y = 0;
 			area.height = GTK_WIDGET(this_time_line)->allocation.height;
 			area.width = 1;
-			gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 		}
 
 		// Store the resize guide line position so we know where to refresh
@@ -1737,20 +1769,25 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	{
 		// If the user is trying to drag outside the valid layers, ignore this event
 		if ((0 > new_row) || (new_row >= end_row) || (current_row >= end_row) || (0 > current_row))
-			return;
+		{
+			// Mark this function as complete, and return
+			priv->mouse_x = -1;
+			priv->mouse_y = -1;
+			return TRUE;
+		}
 
 		// We're commencing a drag, so note this
 		priv->drag_active = TRUE;
 
 		// Store the mouse coordinates so we know where to drag from
-		if (event->x < priv->left_border_width)
+		if (priv->mouse_x < priv->left_border_width)
 		{
 			priv->stored_x = priv->left_border_width;
 		} else
 		{
-			priv->stored_x = event->x;
+			priv->stored_x = priv->mouse_x;
 		}
-		priv->stored_y = event->y;
+		priv->stored_y = priv->mouse_y;
 	} else
 	{
 		// Clamp the row number to acceptable bounds
@@ -1825,14 +1862,14 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 		}
 
 		// * Check if the row should be moved horizontally *
-		if ((priv->stored_x != mouse_x) && (mouse_x > priv->left_border_width))
+		if ((priv->stored_x != priv->mouse_x) && (priv->mouse_x > priv->left_border_width))
 		{
 			// Check if the layer is being moved to the right
-			if (priv->stored_x > mouse_x)
+			if (priv->stored_x > priv->mouse_x)
 			{
 				// Calculate the time and distance travelled
-				mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
-				distance_moved = priv->stored_x - mouse_x;
+				priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
+				distance_moved = priv->stored_x - priv->mouse_x;
 				time_moved = ((gfloat) distance_moved) / pixels_per_second;
 
 				// Update the layer data with the new timing
@@ -1848,11 +1885,11 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			}
 
 			// Check if the layer is being moved to the left
-			if (priv->stored_x < mouse_x)
+			if (priv->stored_x < priv->mouse_x)
 			{
 				// Calculate the time and distance travelled
-				mouse_x = CLAMP(mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
-				distance_moved = mouse_x - priv->stored_x;
+				priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
+				distance_moved = priv->mouse_x - priv->stored_x;
 				time_moved = ((gfloat) distance_moved) / pixels_per_second;
 
 				// Update the layer data with the new timing
@@ -1861,7 +1898,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			}
 
 			// Update the stored position of the row in the widget
-			priv->stored_x = mouse_x;
+			priv->stored_x = priv->mouse_x;
 
 			// Refresh the timeline display of the row
 			time_line_internal_redraw_layer_bg(priv, current_row);
@@ -1887,7 +1924,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			time_line_internal_draw_layer_duration(priv, end_row);
 
 			// Refresh the newly drawn widget area
-			gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 		}
 
 		// Check if the new end time is longer than the slide duration
@@ -1906,7 +1943,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 			time_line_internal_draw_layer_duration(priv, end_row);
 
 			// Refresh the newly drawn widget area
-			gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 		}
 	}
 
@@ -1915,9 +1952,16 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	area.height = GTK_WIDGET(this_time_line)->allocation.height;
 	area.width = 1;
 	area.x = priv->guide_line_start;
-	gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
+	gtk_widget_draw(GTK_WIDGET(this_time_line), &area);  // Yes, this is deprecated, but it *works*
 	area.x = priv->guide_line_end;
-	gtk_widget_draw(GTK_WIDGET(widget), &area);  // Yes, this is deprecated, but it *works*
+	gtk_widget_draw(GTK_WIDGET(this_time_line), &area);  // Yes, this is deprecated, but it *works*
+
+	// Recalculate the present end time of the layer (in seconds)
+	end_time = this_layer_data->start_time + this_layer_data->duration;
+	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+		end_time += this_layer_data->transition_in_duration;
+	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+		end_time += this_layer_data->transition_out_duration;
 
 	// Update the guide line positions so we know where to refresh
 	priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
@@ -1930,7 +1974,10 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	// Update the workspace area
 	draw_workspace();
 
-	return;
+	// Mark this function as complete, and return
+	priv->mouse_x = -1;
+	priv->mouse_y = -1;
+	return TRUE;
 }
 
 // Callback function for when the user presses the mouse button on the time line widget
