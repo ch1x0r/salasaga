@@ -43,7 +43,7 @@
 #include "cairo/create_cairo_pixbuf_pattern.h"
 
 // Text padding defines (in pixels) 
-#define TEXT_BORDER_PADDING_WIDTH 4
+#define TEXT_BORDER_PADDING_WIDTH 10
 #define TEXT_BORDER_PADDING_HEIGHT 4
 
 
