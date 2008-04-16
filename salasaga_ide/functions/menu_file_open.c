@@ -39,7 +39,6 @@
 #include "display_dialog_save_warning.h"
 #include "display_warning.h"
 #include "draw_timeline.h"
-#include "draw_workspace.h"
 #include "enable_layer_toolbar_buttons.h"
 #include "enable_main_toolbar_buttons.h"
 #include "menu_enable.h"
