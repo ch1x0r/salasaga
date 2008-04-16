@@ -65,10 +65,12 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gint					start_y;				// Y position at the layer objects start time
 	GdkColor				*text_colour;			// Pointer to the foreground colour of the text
 	gfloat					text_blue;				// Blue component of text fg colour
+	GtkTextBuffer			*text_buffer;			// Pointer to the text buffer we're using
 	GtkTextIter				text_end;				// The end position of the text buffer
 	cairo_text_extents_t	text_extents;			// Meta information about an onscreen text string
 	gfloat					text_green;				// Green component of text fg colour
 	gint					text_left;				// Pixel number onscreen for the left side of text
+	layer_text				*text_object;			// Pointer to our object text data
 	gfloat					text_red;				// Red component of text fg colour
 	gint					text_top;				// Pixel number onscreen for the top of text
 	GtkTextIter				text_start;				// The start position of the text buffer
@@ -228,15 +230,19 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// * Draw the text layer *
 
+			// Simplify pointers
+			text_object = (layer_text *) this_layer_data->object_data;
+			text_buffer = text_object->text_buffer;
+
+			// Retrieve the text to display
+			gtk_text_buffer_get_bounds(text_buffer, &text_start, &text_end);
+			text_string = gtk_text_buffer_get_text(text_buffer, &text_start, &text_end, FALSE);
+
 			// Save the existing cairo state before making changes (i.e. clip region)
 			cairo_save(cairo_context);
 
-			// Retrieve the text to display
-			gtk_text_buffer_get_bounds(((layer_text *) this_layer_data->object_data)->text_buffer, &text_start, &text_end);
-			text_string = gtk_text_buffer_get_text(((layer_text *) this_layer_data->object_data)->text_buffer, &text_start, &text_end, FALSE);
-
 			// Determine the on screen size of the text string itself
-			cairo_set_font_size(cairo_context, ((layer_text *) this_layer_data->object_data)->font_size * scaled_width_ratio);
+			cairo_set_font_size(cairo_context, text_object->font_size * scaled_width_ratio);
 			cairo_text_extents(cairo_context, text_string, &text_extents);
 
 			// Calculate the text object (including background) offsets and sizing
@@ -248,8 +254,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 						0, pixmap_height - y_offset - (TEXT_BORDER_PADDING_HEIGHT * 2 * scaled_height_ratio) - 1);
 
 			// Store the rendered width of the text object with the layer itself, for use by bounding box code
-			((layer_text *) this_layer_data->object_data)->rendered_width = width / scaled_width_ratio;
-			((layer_text *) this_layer_data->object_data)->rendered_height = height / scaled_height_ratio;
+			text_object->rendered_width = width / scaled_width_ratio;
+			text_object->rendered_height = height / scaled_height_ratio;
 
 			// * Draw the background for the text layer *
 
