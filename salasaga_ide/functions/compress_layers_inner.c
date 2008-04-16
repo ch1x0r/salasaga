@@ -42,10 +42,6 @@
 #include "display_warning.h"
 #include "cairo/create_cairo_pixbuf_pattern.h"
 
-// Text padding defines (in pixels) 
-#define TEXT_BORDER_PADDING_WIDTH 10
-#define TEXT_BORDER_PADDING_HEIGHT 4
-
 
 void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, gfloat time_position)
 {
