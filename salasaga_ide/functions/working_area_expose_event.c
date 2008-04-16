@@ -34,6 +34,7 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "draw_handle_box.h"
+#include "draw_layer_start_and_end_points.h"
 
 
 gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
@@ -53,6 +54,9 @@ gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpo
 
 	// Draw a handle box around the selected layer
 	draw_handle_box();
+
+	// Draw the start and end points for the layer
+	draw_layer_start_and_end_points();
 
 	return FALSE;
 }

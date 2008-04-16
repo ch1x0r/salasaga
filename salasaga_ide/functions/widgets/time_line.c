@@ -33,6 +33,7 @@
 #include "../../externs.h"
 #include "../display_warning.h"
 #include "../draw_handle_box.h"
+#include "../draw_layer_start_and_end_points.h"
 #include "../draw_timeline.h"
 #include "../draw_workspace.h"
 #include "../film_strip_create_thumbnail.h"
@@ -2100,6 +2101,9 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 
 	// Draw a handle box around the newly selected row in the time line area
 	draw_handle_box();
+
+	// Draw the start and end points for the layer
+	draw_layer_start_and_end_points();
 }
 
 // Callback function for when the user releases the mouse button on the time line widget
@@ -2329,4 +2333,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 
 	// Recreate the film strip thumbnail
 	film_strip_create_thumbnail((slide *) current_slide->data);
+
+	// Draw the start and end points for the layer
+	draw_layer_start_and_end_points();
 }
