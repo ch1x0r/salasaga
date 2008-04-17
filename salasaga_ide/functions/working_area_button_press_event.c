@@ -39,6 +39,8 @@
 #include "layer_edit.h"
 #include "calculate_object_boundaries.h"
 #include "detect_collisions.h"
+#include "display_warning.h"
+#include "draw_bounding_box.h"
 #include "draw_handle_box.h"
 #include "widgets/time_line.h"
 
@@ -46,6 +48,8 @@
 gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
+	gint				box_height;					// Height of the bounding box
+	gint				box_width;					// Width of the bounding box
 	GList				*collision_list = NULL;
 	guint				count_int;
 	gint				finish_x;					// X position at the layer objects finish time
@@ -53,6 +57,10 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	gint				height;						//
 	GList				*layer_pointer;
 	guint				num_collisions;
+	gint				onscreen_bottom;			// Y coordinate of bounding box bottom
+	gint				onscreen_left;				// X coordinate of bounding box left
+	gint				onscreen_right;				// X coordinate of bounding box right
+	gint				onscreen_top;				// Y coordinate of bounding box top
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_row;				// Holds the number of the row that is selected
@@ -124,7 +132,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
 		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
 
-		// Initial size of the points to draw
+		// Size of the points being drawn
 		width = 15 * scaled_width_ratio;
 		height = 15 * scaled_height_ratio;
 
@@ -139,22 +147,93 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		start_x = (this_layer_data->x_offset_start + 20) / scaled_width_ratio;
 		start_y = (this_layer_data->y_offset_start + 20) / scaled_height_ratio;
 
-		// Is the user clicking on the start point?
-		if ((event->x >= start_x)				// Left
-			&& (event->x <= start_x + width)	// Right
-			&& (event->y >= start_y)			// Top
-			&& (event->y <= start_y + height))	// Bottom
+		// Is the user clicking on an end point?
+		if (((event->x >= start_x)				// Start point
+			&& (event->x <= start_x + width)	
+			&& (event->y >= start_y)			
+			&& (event->y <= start_y + height)) ||
+			((event->x >= finish_x)				// End point
+			&& (event->x <= finish_x + width)
+			&& (event->y >= finish_y)
+			&& (event->y <= finish_y + height)))
 		{
-			// Start point clicked, so we return in order to avoid the collision detection
-			return TRUE;
-		}
-		
-		// Is the user clicking on the end point?
-		if ((event->x >= finish_x)				// Left
-			&& (event->x <= finish_x + width)	// Right
-			&& (event->y >= finish_y)			// Top
-			&& (event->y <= finish_y + height))	// Bottom
-		{
+			// Retrieve the layer size information
+			switch (this_layer_data->object_type)
+			{
+				case TYPE_EMPTY:
+					// We can't drag an empty layer, so reset things and return
+					mouse_dragging = FALSE;
+					end_point_status = END_POINTS_INACTIVE;
+					stored_x = -1;
+					stored_y = -1;
+					return TRUE;
+
+				case TYPE_HIGHLIGHT:
+					box_width = ((layer_highlight *) this_layer_data->object_data)->width;
+					box_height = ((layer_highlight *) this_layer_data->object_data)->height;
+					break;
+
+				case TYPE_GDK_PIXBUF:
+					// If this is the background layer, then we ignore it
+					if (TRUE == this_layer_data->background)
+					{
+						mouse_dragging = FALSE;
+						end_point_status = END_POINTS_INACTIVE;
+						stored_x = -1;
+						stored_y = -1;
+						return TRUE;
+					}
+
+					// No it's not, so process it
+					box_width = ((layer_image *) this_layer_data->object_data)->width;
+					box_height = ((layer_image *) this_layer_data->object_data)->height;
+					break;
+
+				case TYPE_MOUSE_CURSOR:
+					box_width = ((layer_mouse *) this_layer_data->object_data)->width;
+					box_height = ((layer_mouse *) this_layer_data->object_data)->height;
+					break;
+
+				case TYPE_TEXT:
+					box_width = ((layer_text *) this_layer_data->object_data)->rendered_width;
+					box_height = ((layer_text *) this_layer_data->object_data)->rendered_height;
+					break;
+
+				default:
+					display_warning("Error ED377: Unknown layer type");
+
+					return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
+			}
+
+			// Work out the bounding box boundaries (scaled)
+			if ((event->x >= start_x)				// Left
+				&& (event->x <= start_x + width)	// Right
+				&& (event->y >= start_y)			// Top
+				&& (event->y <= start_y + height))	// Bottom
+			{
+				// Start point clicked
+				onscreen_left = this_layer_data->x_offset_start / scaled_width_ratio;
+				onscreen_top = this_layer_data->y_offset_start / scaled_width_ratio;;
+				onscreen_right = (this_layer_data->x_offset_start + box_width) / scaled_height_ratio;
+				onscreen_bottom = (this_layer_data->y_offset_start + box_height) / scaled_height_ratio;
+			} else
+			{
+				// End point clicked
+				onscreen_left = this_layer_data->x_offset_finish / scaled_width_ratio;
+				onscreen_top = this_layer_data->y_offset_finish / scaled_width_ratio;;
+				onscreen_right = (this_layer_data->x_offset_finish + box_width) / scaled_height_ratio;
+				onscreen_bottom = (this_layer_data->y_offset_finish + box_height) / scaled_height_ratio;
+			}
+
+			// Ensure the bounding box doesn't go out of bounds
+			onscreen_left = CLAMP(onscreen_left, 2, main_drawing_area->allocation.width - (box_width / scaled_width_ratio) - 2);
+			onscreen_top = CLAMP(onscreen_top, 2, main_drawing_area->allocation.height - (box_height / scaled_height_ratio) - 2);
+			onscreen_right = CLAMP(onscreen_right, 2 + (box_width / scaled_width_ratio), main_drawing_area->allocation.width - 2);
+			onscreen_bottom = CLAMP(onscreen_bottom, 2 + (box_height / scaled_height_ratio), main_drawing_area->allocation.height - 2);
+
+			// Draw a bounding box onscreen
+			draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
+
 			// End point clicked, so we return in order to avoid the collision detection
 			return TRUE;
 		}
