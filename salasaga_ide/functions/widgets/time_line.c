@@ -1808,22 +1808,25 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			layer_pointer = g_list_insert_before(layer_pointer, layer_above, selected_layer->data);
 			this_slide_data->layers = layer_pointer;
 
-			// Refresh the timeline display of the old row
-			time_line_internal_redraw_layer_bg(priv, current_row);
-			time_line_internal_draw_layer_name(priv, current_row);
-			time_line_internal_draw_layer_duration(priv, current_row);
+			// Refresh the display buffer
+			time_line_internal_initialise_display_buffer(priv,
+					GTK_WIDGET(this_time_line)->allocation.width,
+					GTK_WIDGET(this_time_line)->allocation.height);
 
-			// Refresh the timeline display of the new row
-			time_line_internal_redraw_layer_bg(priv, new_row);
-			time_line_internal_draw_layer_name(priv, new_row);
-			time_line_internal_draw_layer_duration(priv, new_row);
+			// Draw the layer information
+			time_line_internal_draw_layer_info(priv);
 
 			// Update the selected row
 			time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), new_row);
 
-			// Tell the window system to update the new widget areas onscreen
-			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), new_row);
-			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
+			// Set the height related variables
+			area.x = 0;
+			area.y = 0;
+			area.height = GTK_WIDGET(this_time_line)->allocation.height;
+			area.width = GTK_WIDGET(this_time_line)->allocation.width;
+
+			// Invalidate the selected area
+			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 		}
 		if (current_row < new_row)
 		{
@@ -1838,22 +1841,25 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			layer_pointer = g_list_insert_before(layer_pointer, selected_layer, layer_below->data);
 			this_slide_data->layers = layer_pointer;
 
-			// Refresh the timeline display of the old row
-			time_line_internal_redraw_layer_bg(priv, current_row);
-			time_line_internal_draw_layer_name(priv, current_row);
-			time_line_internal_draw_layer_duration(priv, current_row);
+			// Refresh the display buffer
+			time_line_internal_initialise_display_buffer(priv,
+					GTK_WIDGET(this_time_line)->allocation.width,
+					GTK_WIDGET(this_time_line)->allocation.height);
 
-			// Refresh the timeline display of the new row
-			time_line_internal_redraw_layer_bg(priv, new_row);
-			time_line_internal_draw_layer_name(priv, new_row);
-			time_line_internal_draw_layer_duration(priv, new_row);
+			// Draw the layer information
+			time_line_internal_draw_layer_info(priv);
 
 			// Update the selected row
 			time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), new_row);
 
-			// Tell the window system to update the new widget areas onscreen
-			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), new_row);
-			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
+			// Set the height related variables
+			area.x = 0;
+			area.y = 0;
+			area.height = GTK_WIDGET(this_time_line)->allocation.height;
+			area.width = GTK_WIDGET(this_time_line)->allocation.width;
+
+			// Invalidate the selected area
+			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 		}
 
 		// * Check if the row should be moved horizontally *
