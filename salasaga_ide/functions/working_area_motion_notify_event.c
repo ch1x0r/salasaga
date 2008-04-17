@@ -45,7 +45,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 {
 	// Local variables
 	GdkModifierType		button_state;				// Mouse button states
-	slide				*this_slide_data;			// Alias to make things easier
+	gfloat				cursor_movement_x;
+	gfloat				cursor_movement_y;
 	gfloat				end_time;					// Time in seconds of the layer objects finish time
 	gint				finish_x;					// X position at the layer objects finish time
 	gint				finish_y;					// Y position at the layer objects finish time 
@@ -54,6 +55,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	GdkRectangle		mouse_pointer_rect;			// Rectangle holding the mouse pointer position
 	gint				mouse_x;					// Unscaled mouse x position
 	gint				mouse_y;					// Unscaled mouse x position
+	gint				new_x_val;
+	gint				new_y_val;
 	gint				onscreen_bottom;			// Y coordinate of bounding box bottom
 	gint				onscreen_left;				// X coordinate of bounding box left
 	gint				onscreen_right;				// X coordinate of bounding box right
@@ -68,6 +71,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gint				start_y;					// Y position at the layer objects start time
 	static gfloat 		stored_x_val;
 	static gfloat		stored_y_val;
+	slide				*this_slide_data;			// Alias to make things easier
 	gfloat				time_offset;
 	gint				time_x;						// Unscaled X position of the layer at our desired point in time
 	gint				time_y;						// Unscaled Y position of the layer at our desired point in time
@@ -281,7 +285,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			{
 				// Start point clicked
 				end_point_status = END_POINTS_START_ACTIVE;
-				mouse_dragging = TRUE;
 				stored_x = event->x;
 				stored_y = event->y;
 				stored_x_val = layer_data->x_offset_start;
@@ -297,7 +300,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			{
 				// End point clicked
 				end_point_status = END_POINTS_END_ACTIVE;
-				mouse_dragging = TRUE;
 				stored_x = event->x;
 				stored_y = event->y;
 				stored_x_val = layer_data->x_offset_finish;
@@ -307,11 +309,15 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		}
 	}
 
-	// If we're already aware of a mouse drag operation going on, then draw a bounding box
-	if (TRUE == mouse_dragging)
+	// Check if we're already aware of an end point drag operation going on
+	if (END_POINTS_INACTIVE != end_point_status)
 	{
 		// Initialise some things
 		this_slide_data = current_slide->data;
+
+		// Calculate the height and width scaling values for the main drawing area at its present size
+		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
+		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
 
 		// Determine which layer is selected in the timeline
 		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
@@ -335,10 +341,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		if (TRANS_LAYER_NONE != layer_data->transition_out_type)
 			end_time += layer_data->transition_out_duration;
 
-		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
-
 		// Calculate how far into the layer movement we are
 		time_offset = time_position - start_time;
 		time_diff = end_time - start_time;
@@ -349,30 +351,26 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		y_scale = (((gfloat) y_diff) / time_diff);
 		time_y = start_y + (y_scale * time_offset);
 
+		// Work out the distance the cursor has moved in screen pixels
+		cursor_movement_x = event->x - stored_x;
+		cursor_movement_y = event->y - stored_y;
+
 		// Calculate the distance the object has been dragged
-		x_diff = event->x - stored_x;
-		y_diff = event->y - stored_y;
+		x_diff = cursor_movement_x * scaled_width_ratio;
+		y_diff = cursor_movement_y * scaled_height_ratio;
 
 		// If the start or end point is being moved, we use the start or end time instead of time line cursor time
 		if (END_POINTS_START_ACTIVE == end_point_status)
 		{
 			// The start point is being dragged
-			time_x = start_x;
-			time_y = start_y;
-
-			// Calculate the distance the object has been dragged
-			x_diff = (event->x - stored_x) * scaled_width_ratio;
-			y_diff = (event->y - stored_y) * scaled_height_ratio;
+			time_x = stored_x_val;
+			time_y = stored_y_val;
 		}
 		if (END_POINTS_END_ACTIVE == end_point_status)
 		{
 			// The end point is being dragged
-			time_x = finish_x;
-			time_y = finish_y;
-
-			// Calculate the distance the object has been dragged
-			x_diff = (event->x - stored_x) * scaled_width_ratio;
-			y_diff = (event->y - stored_y) * scaled_height_ratio;
+			time_x = stored_x_val;
+			time_y = stored_y_val;
 		}
 
 		// Retrieve the layer size information
@@ -423,6 +421,142 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
 		}
 
+		// Work out the bounding box boundaries (scaled)
+		new_x_val = stored_x_val + x_diff;
+		new_y_val = stored_y_val + y_diff;
+		onscreen_right = new_x_val + width;
+		onscreen_bottom = new_y_val + height;
+
+		// Scale the bounding box boundaries
+		onscreen_left = new_x_val / scaled_width_ratio;
+		onscreen_top = new_y_val / scaled_height_ratio;
+		onscreen_right /= scaled_width_ratio;
+		onscreen_bottom /= scaled_height_ratio;
+
+		// Ensure the bounding box doesn't go out of bounds
+		onscreen_left = CLAMP(onscreen_left, 2, main_drawing_area->allocation.width - (width / scaled_width_ratio) - 2);
+		onscreen_top = CLAMP(onscreen_top, 2, main_drawing_area->allocation.height - (height / scaled_height_ratio) - 2);
+		onscreen_right = CLAMP(onscreen_right, 2 + (width / scaled_width_ratio), main_drawing_area->allocation.width - 2);
+		onscreen_bottom = CLAMP(onscreen_bottom, 2 + (height / scaled_height_ratio), main_drawing_area->allocation.height - 2);
+
+		// Update the layer object positions
+		if (END_POINTS_START_ACTIVE == end_point_status)
+		{
+			// Bounds check the starting x offset, then update the object with the new value
+			layer_data->x_offset_start = CLAMP(new_x_val, 1, project_width - width - 2);
+
+			// Bounds check the starting y offset, then update the object with the new value
+			layer_data->y_offset_start = CLAMP(new_y_val, 1, project_height - height - 2);
+		}
+		if (END_POINTS_END_ACTIVE == end_point_status)
+		{
+			// Bounds check the finishing x offset, then update the object with the new value
+			layer_data->x_offset_finish = CLAMP(new_x_val, 1, project_width - width - 2);
+
+			// Bounds check the finishing y offset, then update the object with the new value
+			layer_data->y_offset_finish = CLAMP(new_y_val, 1, project_height - height - 2);
+		}
+
+		// Draw a bounding box onscreen
+		draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
+
+		return TRUE;
+	}
+
+	// If we're already aware of a mouse drag operation going on, then draw a bounding box
+	if (TRUE == mouse_dragging)
+	{
+		// Initialise some things
+		this_slide_data = current_slide->data;
+
+		// Calculate the height and width scaling values for the main drawing area at its present size
+		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
+		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+
+		// Determine which layer is selected in the timeline
+		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
+
+		// Find out where the time line cursor is
+		time_position = time_line_get_cursor_position(this_slide_data->timeline_widget);
+
+		// Get its present X and Y offsets
+		this_slide_data->layers = g_list_first(this_slide_data->layers);
+		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
+
+		// Simplify pointers
+		finish_x = layer_data->x_offset_finish;
+		finish_y = layer_data->y_offset_finish;
+		start_time = layer_data->start_time;
+		start_x = layer_data->x_offset_start;
+		start_y = layer_data->y_offset_start;
+		end_time = layer_data->start_time + layer_data->duration;
+		if (TRANS_LAYER_NONE != layer_data->transition_in_type)
+			end_time += layer_data->transition_in_duration;
+		if (TRANS_LAYER_NONE != layer_data->transition_out_type)
+			end_time += layer_data->transition_out_duration;
+
+		// Calculate how far into the layer movement we are
+		time_offset = time_position - start_time;
+		time_diff = end_time - start_time;
+		x_diff = finish_x - start_x;
+		x_scale = (((gfloat) x_diff) / time_diff);
+		time_x = start_x + (x_scale * time_offset);
+		y_diff = finish_y - start_y;
+		y_scale = (((gfloat) y_diff) / time_diff);
+		time_y = start_y + (y_scale * time_offset);
+
+		// Retrieve the layer size information
+		switch (layer_data->object_type)
+		{
+			case TYPE_EMPTY:
+				// We can't drag an empty layer, so reset things and return
+				mouse_dragging = FALSE;
+				end_point_status = END_POINTS_INACTIVE;
+				stored_x = -1;
+				stored_y = -1;
+				return TRUE;
+
+			case TYPE_HIGHLIGHT:
+				width = ((layer_highlight *) layer_data->object_data)->width;
+				height = ((layer_highlight *) layer_data->object_data)->height;
+				break;
+
+			case TYPE_GDK_PIXBUF:
+				// If this is the background layer, then we ignore it
+				if (TRUE == layer_data->background)
+				{
+					mouse_dragging = FALSE;
+					end_point_status = END_POINTS_INACTIVE;
+					stored_x = -1;
+					stored_y = -1;
+					return TRUE;
+				}
+
+				// No it's not, so process it
+				width = ((layer_image *) layer_data->object_data)->width;
+				height = ((layer_image *) layer_data->object_data)->height;
+				break;
+
+			case TYPE_MOUSE_CURSOR:
+				width = ((layer_mouse *) layer_data->object_data)->width;
+				height = ((layer_mouse *) layer_data->object_data)->height;
+				break;
+
+			case TYPE_TEXT:
+				width = ((layer_text *) layer_data->object_data)->rendered_width;
+				height = ((layer_text *) layer_data->object_data)->rendered_height;
+				break;
+
+			default:
+				display_warning("Error ED284: Unknown layer type");
+
+				return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
+		}
+
+		// Calculate the distance the object has been dragged onscreen
+		x_diff = mouse_x - stored_x;
+		y_diff = mouse_y - stored_y;
+
 		// Work out the bounding box boundaries
 		onscreen_left = (time_x / scaled_width_ratio) + x_diff;
 		onscreen_top = (time_y / scaled_height_ratio) + y_diff;
@@ -434,36 +568,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		onscreen_top = CLAMP(onscreen_top, 2, main_drawing_area->allocation.height - (height / scaled_height_ratio) - 2);
 		onscreen_right = CLAMP(onscreen_right, 2 + (width / scaled_width_ratio), main_drawing_area->allocation.width - 2);
 		onscreen_bottom = CLAMP(onscreen_bottom, 2 + (height / scaled_height_ratio), main_drawing_area->allocation.height - 2);
-
-		if (END_POINTS_START_ACTIVE == end_point_status)
-		{
-			// * Update the layer start point position *
-
-			// Bounds check the starting x offset, then update the object with the new value
-			layer_data->x_offset_start = CLAMP(stored_x_val + x_diff, 1, project_width - width - 2);
-
-			// Bounds check the starting y offset, then update the object with the new value
-			layer_data->y_offset_start = CLAMP(stored_y_val + y_diff, 1, project_height - height - 2);
-
-			// Update the stored mouse position
-//			stored_x = event->x;
-//			stored_y = event->y;
-		}
-
-		if (END_POINTS_END_ACTIVE == end_point_status)
-		{
-			// * Update the layer end point position *
-
-			// Bounds check the finishing x offset, then update the object with the new value
-			layer_data->x_offset_finish = CLAMP(stored_x_val + x_diff, 1, project_width - width - 2);
-
-			// Bounds check the finishing y offset, then update the object with the new value
-			layer_data->y_offset_finish = CLAMP(stored_y_val + y_diff, 1, project_height - height - 2);
-
-			// Update the stored mouse position
-//			stored_x = event->x;
-//			stored_y = event->y;
-		}
 
 		// Draw a bounding box onscreen
 		draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
