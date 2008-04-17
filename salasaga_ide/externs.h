@@ -40,6 +40,7 @@ extern layer				*copy_layer;
 extern GList				*current_slide;
 extern guint				debug_level;
 extern guint				end_behaviour;
+extern guint				end_point_status;
 extern gfloat				export_time_counter;
 extern GString				*file_name;
 extern gboolean				film_strip_being_resized;
