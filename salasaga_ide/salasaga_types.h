@@ -36,6 +36,11 @@ extern "C" {
 #define APP_NAME "Salasaga"
 #define	APP_VERSION "0.8.0-pre"
 
+// Statuses for the start and end points
+#define END_POINTS_INACTIVE			0
+#define END_POINTS_START_ACTIVE		1
+#define END_POINTS_END_ACTIVE		2
+
 // Statuses for the bounding box resize handles
 #define	RESIZE_HANDLES_INACTIVE		0
 #define	RESIZE_HANDLES_WAITING		1
