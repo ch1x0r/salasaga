@@ -33,6 +33,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "draw_layer_start_and_end_points.h"
 
 
 gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
@@ -111,6 +112,9 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 	lines[3].x2 = left;
 	lines[3].y2 = top;
 	gdk_draw_segments(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(line_gc), lines, 4);
+
+	// Draw the start and end points for the layer
+	draw_layer_start_and_end_points();
 
 	return TRUE;
 }
