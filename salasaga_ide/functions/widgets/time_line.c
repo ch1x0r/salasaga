@@ -1824,9 +1824,6 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			// Tell the window system to update the new widget areas onscreen
 			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), new_row);
 			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
-
-			// Update the workspace area
-			draw_workspace();
 		}
 		if (current_row < new_row)
 		{
@@ -1857,9 +1854,6 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			// Tell the window system to update the new widget areas onscreen
 			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), new_row);
 			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
-
-			// Update the workspace area
-			draw_workspace();
 		}
 
 		// * Check if the row should be moved horizontally *
