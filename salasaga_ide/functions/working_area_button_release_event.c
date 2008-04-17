@@ -72,7 +72,6 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gfloat				y_diff;						// The Y distance the object was dragged, after scaling
 
 
-
 	// Only do this function if we have a front store available and a project loaded
 	if ((NULL == front_store) || (FALSE == project_active))
 	{
@@ -413,6 +412,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			gdk_flush();
 		}
 	}
+
+	// Redraw the workspace
+	draw_workspace();
 
 	return TRUE;
 }
