@@ -131,7 +131,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	{
 		// There is a transition in, so work out if the time position is during it
 		end_time = start_time + this_layer_data->transition_in_duration;
-		if ((time_position > start_time) && (time_position < end_time))
+		if ((time_position >= start_time) && (time_position < end_time))
 		{
 			// The time position is during a transition in
 			time_diff = end_time - start_time;
@@ -146,7 +146,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 		start_time += this_layer_data->duration;
 		time_offset = time_position - start_time;
 		end_time = start_time + this_layer_data->transition_out_duration;
-		if ((time_position > start_time) && (time_position < end_time))
+		if ((time_position > start_time) && (time_position <= end_time))
 		{
 			// The time position is during a transition out
 			time_diff = end_time - start_time;
