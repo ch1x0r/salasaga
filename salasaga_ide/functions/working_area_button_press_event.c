@@ -48,12 +48,20 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	// Local variables
 	GList				*collision_list = NULL;
 	guint				count_int;
-	slide				*current_slide_data;		// Alias to make things easier
+	gint				finish_x;					// X position at the layer objects finish time
+	gint				finish_y;					// Y position at the layer objects finish time 
+	gint				height;						//
 	GList				*layer_pointer;
 	guint				num_collisions;
+	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
+	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_row;				// Holds the number of the row that is selected
+	gint				start_x;					// X position at the layer objects start time
+	gint				start_y;					// Y position at the layer objects start time
+	layer 				*this_layer_data;			// Pointer to the data for the selected layer
 	slide				*this_slide_data;			// Alias to make things easier
 	guint				tmp_int;					// Temporary integer
+	gint				width;						//
 
 
 	// Only do this function if we have a front store available and a project loaded
@@ -63,7 +71,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	}
 
 	// Initialise some things
-	current_slide_data = current_slide->data;
+	this_slide_data = current_slide->data;
 
 	// Check for primary mouse button click
 	if (1 != event->button)
@@ -104,6 +112,52 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		invalidation_start_y = event->y - 1;
 
 		return TRUE;
+	}
+
+	// If the user has clicked on the start or end points for the selected layer, we
+	// don't want to do the collision detection below that changes layers
+	if (END_POINTS_INACTIVE == end_point_status)
+	{
+		// * Check if the user is clicking on the layer start or end points *
+
+		// Calculate the height and width scaling values for the main drawing area at its present size
+		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
+		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+
+		// Initial size of the points to draw
+		width = 15 * scaled_width_ratio;
+		height = 15 * scaled_height_ratio;
+
+		// Determine which row is selected in the time line
+		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
+		layer_pointer = g_list_first(this_slide_data->layers);
+		this_layer_data = g_list_nth_data(layer_pointer, selected_row);
+
+		// Calculate start and end points
+		finish_x = (this_layer_data->x_offset_finish + 20) / scaled_width_ratio;
+		finish_y = (this_layer_data->y_offset_finish + 20) / scaled_height_ratio;
+		start_x = (this_layer_data->x_offset_start + 20) / scaled_width_ratio;
+		start_y = (this_layer_data->y_offset_start + 20) / scaled_height_ratio;
+
+		// Is the user clicking on the start point?
+		if ((event->x >= start_x)				// Left
+			&& (event->x <= start_x + width)	// Right
+			&& (event->y >= start_y)			// Top
+			&& (event->y <= start_y + height))	// Bottom
+		{
+			// Start point clicked, so we return in order to avoid the collision detection
+			return TRUE;
+		}
+		
+		// Is the user clicking on the end point?
+		if ((event->x >= finish_x)				// Left
+			&& (event->x <= finish_x + width)	// Right
+			&& (event->y >= finish_y)			// Top
+			&& (event->y <= finish_y + height))	// Bottom
+		{
+			// End point clicked, so we return in order to avoid the collision detection
+			return TRUE;
+		}
 	}
 
 	// * Do collision detection here to determine if the user has clicked on a layer's object *
