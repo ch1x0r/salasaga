@@ -431,19 +431,22 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			}
 		}
 
-		// Store the mouse coordinates so we know where to resize from
-		stored_x = event->x;
-		stored_y = event->y;
-
-		// Reset the invalidation area
-		invalidation_end_x = event->x;
-		invalidation_end_y = event->y;
-		invalidation_start_x = event->x - 1;
-		invalidation_start_y = event->y - 1;
-
 		// If we're resizing, then return, else drop through to the next check
 		if (FALSE != (RESIZE_HANDLES_RESIZING & resize_handles_status))
+		{
 			return TRUE;
+		} else
+		{
+			// Store the mouse coordinates so we know where to resize from
+			stored_x = event->x;
+			stored_y = event->y;
+
+			// Reset the invalidation area
+			invalidation_end_x = event->x;
+			invalidation_end_y = event->y;
+			invalidation_start_x = event->x - 1;
+			invalidation_start_y = event->y - 1;
+		}
 	}
 
 	// Check if the primary mouse button is down and we're not resizing a layer
