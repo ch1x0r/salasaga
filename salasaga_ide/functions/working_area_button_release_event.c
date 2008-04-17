@@ -134,6 +134,36 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		return TRUE;
 	}
 
+	// If this release matches an end point moving operation, we process it
+	if (END_POINTS_INACTIVE != end_point_status)
+	{
+		// Redraw the workspace
+		draw_workspace();
+
+		// Tell (force) the window system to redraw the working area *immediately*
+		gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+
+		// Recreate the slide thumbnail
+		film_strip_create_thumbnail((slide *) current_slide->data);
+
+		// Use the status bar to give further feedback to the user
+		if (END_POINTS_START_ACTIVE == end_point_status)
+			gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer start point moved");
+		if (END_POINTS_END_ACTIVE == end_point_status)
+			gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer end point moved");
+		gdk_flush();
+
+		// Reset the end point status switch and related info
+		end_point_status = END_POINTS_INACTIVE;
+		stored_x = -1;
+		stored_y = -1;
+
+		// Set the changes made variable
+		changes_made = TRUE;
+
+		return TRUE;
+	}
+
 	// If this release matches the end of a layer resize operation, we process it
 	if (FALSE != (RESIZE_HANDLES_RESIZING & resize_handles_status))
 	{
