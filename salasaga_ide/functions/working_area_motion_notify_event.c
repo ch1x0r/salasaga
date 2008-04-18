@@ -102,7 +102,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	}
 
 	// If we're already aware of a resize operation going on, then draw the appropriate bounding box
-	if (FALSE != (RESIZE_HANDLES_RESIZING & resize_handles_status))
+	if (TRUE == (RESIZE_HANDLES_RESIZING & resize_handles_status))
 	{
 		// Initialise some things
 		this_slide_data = current_slide->data;
@@ -153,7 +153,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				break;
 
 			default:
-				return FALSE;  // Unknown layer type, so ignore this event
+				return FALSE;  // We don't draw resize handles for this layer type, so ignore the event
 		}
 
 		// Calculate the distance the object has been dragged onscreen
@@ -246,7 +246,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 
 	// * Start and end point movement detection code *
 	if ((FALSE == mouse_dragging)								// Not dragging mouse already
-		&& (RESIZE_HANDLES_WAITING == resize_handles_status))	// Not resizing a layer already
+		&& ((RESIZE_HANDLES_WAITING == resize_handles_status)
+		|| (RESIZE_HANDLES_INACTIVE == resize_handles_status)))	// Not resizing a layer already
 	{
 		// Initialise some things
 		this_slide_data = current_slide->data;
@@ -277,34 +278,39 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 
 		if (END_POINTS_INACTIVE == end_point_status)  // Not moving end points already
 		{
-			// Is the user clicking on the start point?
-			if ((event->x >= start_x)				// Left
-				&& (event->x <= start_x + width)	// Right
-				&& (event->y >= start_y)			// Top
-				&& (event->y <= start_y + height))	// Bottom
+			// Is the user clicking on a start or end point?
+			if (((event->x >= start_x)				// Start point
+				&& (event->x <= start_x + width)	
+				&& (event->y >= start_y)			
+				&& (event->y <= start_y + height)) ||
+				((event->x >= finish_x)				// End point
+				&& (event->x <= finish_x + width)
+				&& (event->y >= finish_y)
+				&& (event->y <= finish_y + height)))
 			{
-				// Start point clicked
-				end_point_status = END_POINTS_START_ACTIVE;
-				stored_x = event->x;
-				stored_y = event->y;
-				stored_x_val = layer_data->x_offset_start;
-				stored_y_val = layer_data->y_offset_start;
-				return TRUE;
-			}
-
-			// Is the user clicking on the end point?
-			if ((event->x >= finish_x)				// Left
-				&& (event->x <= finish_x + width)	// Right
-				&& (event->y >= finish_y)			// Top
-				&& (event->y <= finish_y + height))	// Bottom
-			{
-				// End point clicked
-				end_point_status = END_POINTS_END_ACTIVE;
-				stored_x = event->x;
-				stored_y = event->y;
-				stored_x_val = layer_data->x_offset_finish;
-				stored_y_val = layer_data->y_offset_finish;
-				return TRUE;
+				// Is it the start point?
+				if ((event->x >= start_x)				// Left
+					&& (event->x <= start_x + width)	// Right
+					&& (event->y >= start_y)			// Top
+					&& (event->y <= start_y + height))	// Bottom
+				{
+					// Start point clicked
+					end_point_status = END_POINTS_START_ACTIVE;
+					stored_x = event->x;
+					stored_y = event->y;
+					stored_x_val = layer_data->x_offset_start;
+					stored_y_val = layer_data->y_offset_start;
+					return TRUE;
+				} else
+				{
+					// End point clicked
+					end_point_status = END_POINTS_END_ACTIVE;
+					stored_x = event->x;
+					stored_y = event->y;
+					stored_x_val = layer_data->x_offset_finish;
+					stored_y_val = layer_data->y_offset_finish;
+					return TRUE;
+				}
 			}
 		}
 	}
