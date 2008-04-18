@@ -259,6 +259,7 @@ OFILES = \
 	functions/zoom_selector_changed.o \
 	functions/cairo/calculate_text_object_size.o \
 	functions/cairo/create_cairo_pixbuf_pattern.o \
+	functions/callbacks/menu_screenshots_capture_full_screen.o \
 	functions/widgets/time_line.o \
 	salasaga.o
 
@@ -599,6 +600,9 @@ cairo/calculate_text_object_size.o:
 
 cairo/create_cairo_pixbuf_pattern.o:
 	$(CC) $(CFLAGS) -c cairo/create_cairo_pixbuf_pattern.c -o cairo/create_cairo_pixbuf_pattern.o
+
+callbacks/menu_screenshots_capture_full_screen.o:
+	$(CC) $(CFLAGS) -c callbacks/menu_screenshots_capture_full_screen.c -o callbacks/menu_screenshots_capture_full_screen.o
 
 widgets/time_line.o:
 	$(CC) $(CFLAGS) -c widgets/time_line.c -o widgets/time_line.o
