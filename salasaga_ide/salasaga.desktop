@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=Salasaga
-GenericName=eLearning Creator
+GenericName=eLearning IDE
 Comment=Create eLearning for desktop applications
 Icon=/usr/share/pixmaps/salasaga-icon.png
 Exec=salasaga
