@@ -213,10 +213,11 @@ gboolean draw_handle_box(void)
 		if ((required_size_for_handles < width) && (required_size_for_handles < height))
 		{
 			draw_resize_handles(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
-			resize_handles_status = RESIZE_HANDLES_WAITING;
+			resize_handles_status |= RESIZE_HANDLES_WAITING;
 		}
 	} else
 	{
+		// Either wrong layer type or it's too small
 		resize_handles_status = RESIZE_HANDLES_INACTIVE;
 	}
 
