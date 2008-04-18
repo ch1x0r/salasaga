@@ -70,6 +70,7 @@
 #include "slide_move_up.h"
 #include "slide_name_reset.h"
 #include "slide_properties.h"
+#include "callbacks/menu_screenshots_capture_full_screen.h"
 
 
 void create_menu_bar()
@@ -103,7 +104,8 @@ void create_menu_bar()
 		{"/Edit/_Preferences",			NULL,					menu_edit_preferences,			0,	"<Item>"},
 
 		{"/_Screenshots",				NULL,					NULL,							0,	"<Branch>"},
-		{"/Screenshots/_Capture",		NULL,					menu_screenshots_capture,		0,	"<Item>"},
+		{"/Screenshots/Capture _window",		NULL,			menu_screenshots_capture,		0,	"<Item>"},
+		{"/Screenshots/Capture _full screen",	NULL,			menu_screenshots_capture_full_screen,	0,	"<Item>"},
 		{"/Screenshots/_Import",		NULL,					menu_screenshots_import,		0,	"<Item>"},
 
 		{"/_Project",					NULL,					NULL,							0,	"<Branch>"},
