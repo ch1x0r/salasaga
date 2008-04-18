@@ -61,8 +61,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gint				onscreen_left;				// X coordinate of bounding box left
 	gint				onscreen_right;				// X coordinate of bounding box right
 	gint				onscreen_top;				// Y coordinate of bounding box top
-	gint				present_x;
-	gint				present_y;
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_row;				// Holds the number of the row that is selected
@@ -102,7 +100,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	}
 
 	// If we're already aware of a resize operation going on, then draw the appropriate bounding box
-	if (TRUE == (RESIZE_HANDLES_RESIZING & resize_handles_status))
+	if (FALSE != (RESIZE_HANDLES_RESIZING & resize_handles_status))
 	{
 		// Initialise some things
 		this_slide_data = current_slide->data;
@@ -146,8 +144,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		switch (layer_data->object_type)
 		{
 			case TYPE_HIGHLIGHT:
-				present_x = time_x;
-				present_y = time_y;
 				width = ((layer_highlight *) layer_data->object_data)->width;
 				height = ((layer_highlight *) layer_data->object_data)->height;
 				break;
@@ -165,66 +161,66 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		{
 			case RESIZE_HANDLES_RESIZING_TL:
 				// Top left resize
-				onscreen_left = (present_x / scaled_width_ratio) + x_diff;
-				onscreen_top = (present_y / scaled_height_ratio) + y_diff;
-				onscreen_right = ((present_x + width) / scaled_width_ratio);
-				onscreen_bottom = ((present_y + height) / scaled_height_ratio);
+				onscreen_left = (time_x / scaled_width_ratio) + x_diff;
+				onscreen_top = (time_y / scaled_height_ratio) + y_diff;
+				onscreen_right = ((time_x + width) / scaled_width_ratio);
+				onscreen_bottom = ((time_y + height) / scaled_height_ratio);
 				break;
 
 			case RESIZE_HANDLES_RESIZING_TM:
 				// Top middle resize
-				onscreen_left = (present_x / scaled_width_ratio);
-				onscreen_top = (present_y / scaled_height_ratio) + y_diff;
-				onscreen_right = ((present_x + width) / scaled_width_ratio);
-				onscreen_bottom = ((present_y + height) / scaled_height_ratio);
+				onscreen_left = (time_x / scaled_width_ratio);
+				onscreen_top = (time_y / scaled_height_ratio) + y_diff;
+				onscreen_right = ((time_x + width) / scaled_width_ratio);
+				onscreen_bottom = ((time_y + height) / scaled_height_ratio);
 				break;
 
 			case RESIZE_HANDLES_RESIZING_TR:
 				// Top right resize
-				onscreen_left = (present_x / scaled_width_ratio);
-				onscreen_top = (present_y / scaled_height_ratio) + y_diff;
-				onscreen_right = ((present_x + width) / scaled_width_ratio) + x_diff;
-				onscreen_bottom = ((present_y + height) / scaled_height_ratio);
+				onscreen_left = (time_x / scaled_width_ratio);
+				onscreen_top = (time_y / scaled_height_ratio) + y_diff;
+				onscreen_right = ((time_x + width) / scaled_width_ratio) + x_diff;
+				onscreen_bottom = ((time_y + height) / scaled_height_ratio);
 				break;
 
 			case RESIZE_HANDLES_RESIZING_RM:
 				// Middle right resize
-				onscreen_left = (present_x / scaled_width_ratio);
-				onscreen_top = (present_y / scaled_height_ratio);
-				onscreen_right = ((present_x + width) / scaled_width_ratio) + x_diff;
-				onscreen_bottom = ((present_y + height) / scaled_height_ratio);
+				onscreen_left = (time_x / scaled_width_ratio);
+				onscreen_top = (time_y / scaled_height_ratio);
+				onscreen_right = ((time_x + width) / scaled_width_ratio) + x_diff;
+				onscreen_bottom = ((time_y + height) / scaled_height_ratio);
 				break;
 
 			case RESIZE_HANDLES_RESIZING_BR:
 				// Bottom right resize
-				onscreen_left = (present_x / scaled_width_ratio);
-				onscreen_top = (present_y / scaled_height_ratio);
-				onscreen_right = ((present_x + width) / scaled_width_ratio) + x_diff;
-				onscreen_bottom = ((present_y + height) / scaled_height_ratio) + y_diff;
+				onscreen_left = (time_x / scaled_width_ratio);
+				onscreen_top = (time_y / scaled_height_ratio);
+				onscreen_right = ((time_x + width) / scaled_width_ratio) + x_diff;
+				onscreen_bottom = ((time_y + height) / scaled_height_ratio) + y_diff;
 				break;
 
 			case RESIZE_HANDLES_RESIZING_BM:
 				// Bottom middle resize
-				onscreen_left = (present_x / scaled_width_ratio);
-				onscreen_top = (present_y / scaled_height_ratio);
-				onscreen_right = ((present_x + width) / scaled_width_ratio);
-				onscreen_bottom = ((present_y + height) / scaled_height_ratio) + y_diff;
+				onscreen_left = (time_x / scaled_width_ratio);
+				onscreen_top = (time_y / scaled_height_ratio);
+				onscreen_right = ((time_x + width) / scaled_width_ratio);
+				onscreen_bottom = ((time_y + height) / scaled_height_ratio) + y_diff;
 				break;
 
 			case RESIZE_HANDLES_RESIZING_BL:
 				// Bottom left resize
-				onscreen_left = (present_x / scaled_width_ratio) + x_diff;
-				onscreen_top = (present_y / scaled_height_ratio);
-				onscreen_right = ((present_x + width) / scaled_width_ratio);
-				onscreen_bottom = ((present_y + height) / scaled_height_ratio) + y_diff;
+				onscreen_left = (time_x / scaled_width_ratio) + x_diff;
+				onscreen_top = (time_y / scaled_height_ratio);
+				onscreen_right = ((time_x + width) / scaled_width_ratio);
+				onscreen_bottom = ((time_y + height) / scaled_height_ratio) + y_diff;
 				break;
 
 			case RESIZE_HANDLES_RESIZING_LM:
 				// Left middle resize
-				onscreen_left = (present_x / scaled_width_ratio) + x_diff;
-				onscreen_top = (present_y / scaled_height_ratio);
-				onscreen_right = ((present_x + width) / scaled_width_ratio);
-				onscreen_bottom = ((present_y + height) / scaled_height_ratio);
+				onscreen_left = (time_x / scaled_width_ratio) + x_diff;
+				onscreen_top = (time_y / scaled_height_ratio);
+				onscreen_right = ((time_x + width) / scaled_width_ratio);
+				onscreen_bottom = ((time_y + height) / scaled_height_ratio);
 				break;
 
 			default:
@@ -587,8 +583,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	if ((GDK_BUTTON1_MASK & button_state) && (RESIZE_HANDLES_WAITING == resize_handles_status))
 	{
 		// Create the mouse pointer rectangle
-		mouse_pointer_rect.x = event->x;
-		mouse_pointer_rect.y = event->y;
+		mouse_pointer_rect.x = event->x - 5;
+		mouse_pointer_rect.y = event->y - 5;
 		mouse_pointer_rect.width = 10;  // I think that the bigger this is, the more likely for the handle click to happen 
 		mouse_pointer_rect.height = 10;  // I think that the bigger this is, the more likely for the handle click to happen
 
@@ -661,9 +657,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// If we're resizing, then return, else drop through to the next check
 		if (FALSE != (RESIZE_HANDLES_RESIZING & resize_handles_status))
 		{
-			return TRUE;
-		} else
-		{
 			// Store the mouse coordinates so we know where to resize from
 			stored_x = event->x;
 			stored_y = event->y;
@@ -677,7 +670,9 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	}
 
 	// Check if the primary mouse button is down and we're not resizing a layer
-	if ((GDK_BUTTON1_MASK & button_state) && (RESIZE_HANDLES_RESIZING != resize_handles_status))
+	if ((GDK_BUTTON1_MASK & button_state)
+		&& ((RESIZE_HANDLES_WAITING == resize_handles_status)
+		|| (RESIZE_HANDLES_INACTIVE == resize_handles_status)))	// Not resizing a layer already
 	{
 		// We're commencing a drag, so note this
 		mouse_dragging = TRUE;
