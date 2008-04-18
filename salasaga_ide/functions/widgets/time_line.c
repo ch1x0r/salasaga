@@ -1803,7 +1803,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			selected_layer = g_list_nth(layer_pointer, current_row);
 			layer_above = g_list_nth(layer_pointer, new_row);
 
-			// Move the row up one in the layer list
+			// Move the row up in the layer list
 			layer_pointer = g_list_remove_link(layer_pointer, selected_layer);
 			layer_pointer = g_list_insert_before(layer_pointer, layer_above, selected_layer->data);
 			this_slide_data->layers = layer_pointer;
@@ -1832,13 +1832,13 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		{
 			// * The layer is being moved vertically downwards *
 
-			// Get details of the layers we're moving around
+			// Get details of the layer we're moving around
 			selected_layer = g_list_nth(layer_pointer, current_row);
-			layer_below = g_list_nth(layer_pointer, new_row);
 
-			// Move the row down one in the layer list
-			layer_pointer = g_list_remove_link(layer_pointer, layer_below);
-			layer_pointer = g_list_insert_before(layer_pointer, selected_layer, layer_below->data);
+			// Move the row down in the layer list
+			layer_pointer = g_list_remove_link(layer_pointer, selected_layer);
+			layer_below = g_list_nth(layer_pointer, new_row);
+			layer_pointer = g_list_insert_before(layer_pointer, layer_below, selected_layer->data);
 			this_slide_data->layers = layer_pointer;
 
 			// Refresh the display buffer
