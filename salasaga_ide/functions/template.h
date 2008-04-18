@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Copyright (C) 2008 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  * 
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Lesser General Public
