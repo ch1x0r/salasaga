@@ -197,7 +197,7 @@ void menu_screenshots_capture(void)
 	// Display debugging info
 	if (debug_level)
 	{
-		printf("Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tWeight: %d\n", x_offset, y_offset, win_width, win_height);
+		printf("Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: %d\n", x_offset, y_offset, win_width, win_height);
 	}
 
 	// Use the returned offset and dimensions
