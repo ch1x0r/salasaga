@@ -128,14 +128,32 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			end_time += layer_data->transition_out_duration;
 
 		// Calculate how far into the layer movement we are
-		time_offset = time_position - start_time;
-		time_diff = end_time - start_time;
-		x_diff = finish_x - start_x;
-		x_scale = (((gfloat) x_diff) / time_diff);
-		time_x = start_x + (x_scale * time_offset);
-		y_diff = finish_y - start_y;
-		y_scale = (((gfloat) y_diff) / time_diff);
-		time_y = start_y + (y_scale * time_offset);
+		if ((time_position >= start_time) && (time_position <= end_time))
+		{
+			// The time line cursor is in the layers visible range
+			time_offset = time_position - start_time;
+			time_diff = end_time - start_time;
+			x_diff = finish_x - start_x;
+			x_scale = (((gfloat) x_diff) / time_diff);
+			time_x = start_x + (x_scale * time_offset);
+			y_diff = finish_y - start_y;
+			y_scale = (((gfloat) y_diff) / time_diff);
+			time_y = start_y + (y_scale * time_offset);
+		} else
+		{
+			// The time line cursor is outside the layers visible range, so figure out where
+			if (time_position < start_time)
+			{
+				// Time line cursor is before the layers visible range
+				time_x = start_x;
+				time_y = start_y;
+			} else
+			{
+				// Time line cursor is after the layers visible range
+				time_x = finish_x;
+				time_y = finish_y;
+			}
+		}
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
 		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
