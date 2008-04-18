@@ -277,36 +277,32 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
 		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
 
-		// Initial size of the points to draw
-		width = 15 * scaled_width_ratio;
-		height = 15 * scaled_height_ratio;
-
 		// Calculate start and end points
 		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
-		finish_x = (layer_data->x_offset_finish + 20) / scaled_width_ratio;
-		finish_y = (layer_data->y_offset_finish + 20) / scaled_height_ratio;
-		start_x = (layer_data->x_offset_start + 20) / scaled_width_ratio;
-		start_y = (layer_data->y_offset_start + 20) / scaled_height_ratio;
 
-		// * Check if the user is clicking on the layer start or end points *
+		finish_x = (layer_data->x_offset_finish / scaled_width_ratio) + END_POINT_HORIZONTAL_OFFSET;
+		finish_y = (layer_data->y_offset_finish / scaled_height_ratio) + END_POINT_VERTICAL_OFFSET;
+		start_x = (layer_data->x_offset_start / scaled_width_ratio) + END_POINT_HORIZONTAL_OFFSET;
+		start_y = (layer_data->y_offset_start / scaled_height_ratio) + END_POINT_VERTICAL_OFFSET;
 
-		if (END_POINTS_INACTIVE == end_point_status)  // Not moving end points already
+		// Check if the user is clicking on the layer start or end points
+		if (END_POINTS_INACTIVE == end_point_status)
 		{
 			// Is the user clicking on a start or end point?
-			if (((event->x >= start_x)				// Start point
-				&& (event->x <= start_x + width)	
+			if (((event->x >= start_x)							// Start point
+				&& (event->x <= start_x + END_POINT_WIDTH)	
 				&& (event->y >= start_y)			
-				&& (event->y <= start_y + height)) ||
-				((event->x >= finish_x)				// End point
-				&& (event->x <= finish_x + width)
+				&& (event->y <= start_y + END_POINT_HEIGHT)) ||
+				((event->x >= finish_x)							// End point
+				&& (event->x <= finish_x + END_POINT_WIDTH)
 				&& (event->y >= finish_y)
-				&& (event->y <= finish_y + height)))
+				&& (event->y <= finish_y + END_POINT_HEIGHT)))
 			{
 				// Is it the start point?
-				if ((event->x >= start_x)				// Left
-					&& (event->x <= start_x + width)	// Right
-					&& (event->y >= start_y)			// Top
-					&& (event->y <= start_y + height))	// Bottom
+				if ((event->x >= start_x)							// Left
+					&& (event->x <= start_x + END_POINT_WIDTH)		// Right
+					&& (event->y >= start_y)						// Top
+					&& (event->y <= start_y + END_POINT_HEIGHT))	// Bottom
 				{
 					// Start point clicked
 					end_point_status = END_POINTS_START_ACTIVE;

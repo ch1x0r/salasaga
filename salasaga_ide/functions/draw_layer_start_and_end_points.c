@@ -42,7 +42,6 @@ gboolean draw_layer_start_and_end_points()
 	gint				finish_mid_point_y;
 	gint				finish_x;					// X position at the layer objects finish time
 	gint				finish_y;					// Y position at the layer objects finish time 
-	gint				height;						//
 	GList				*layer_pointer;
 	gint				old_start_x = 0;			// Value used in the previous run
 	gint				old_start_y = 0;			// Value used in the previous run
@@ -60,7 +59,6 @@ gboolean draw_layer_start_and_end_points()
 	layer 				*this_layer_data;			// Pointer to the data for the selected layer
 	slide				*this_slide_data;			// Pointer to the data for the selected slide
 	static GdkGC		*widget_gc = NULL;
-	gint				width;						//
 
 
 	// Determine which row is selected in the time line
@@ -96,25 +94,22 @@ gboolean draw_layer_start_and_end_points()
 	scaled_height_ratio = (gfloat) pixmap_height / (gfloat) project_height;
 	scaled_width_ratio = (gfloat) pixmap_width / (gfloat) project_width;
 
-	// Initial size of the points to draw
-	width = 15 * scaled_width_ratio;
-	height = 15 * scaled_height_ratio;
-
 	// Calculate start and end points
-	finish_x = (this_layer_data->x_offset_finish + 20) * scaled_width_ratio;
-	finish_y = (this_layer_data->y_offset_finish + 20) * scaled_height_ratio;
-	start_x = (this_layer_data->x_offset_start + 20) * scaled_width_ratio;
-	start_y = (this_layer_data->y_offset_start + 20) * scaled_height_ratio;
-	start_mid_point_x = start_x + (width / 2);
-	start_mid_point_y = start_y + (height / 2);
-	finish_mid_point_x = finish_x + (width / 2);
-	finish_mid_point_y = finish_y + (height / 2);
+	finish_x = (this_layer_data->x_offset_finish * scaled_width_ratio) + END_POINT_HORIZONTAL_OFFSET;
+	finish_y = (this_layer_data->y_offset_finish * scaled_height_ratio) + END_POINT_VERTICAL_OFFSET;
+	start_x = (this_layer_data->x_offset_start * scaled_width_ratio) + END_POINT_HORIZONTAL_OFFSET;
+	start_y = (this_layer_data->y_offset_start * scaled_height_ratio) + END_POINT_VERTICAL_OFFSET;
+
+	start_mid_point_x = start_x + (END_POINT_WIDTH / 2);
+	start_mid_point_y = start_y + (END_POINT_HEIGHT / 2);
+	finish_mid_point_x = finish_x + (END_POINT_WIDTH / 2);
+	finish_mid_point_y = finish_y + (END_POINT_HEIGHT / 2);
 
 	// Store the end points, for the next refresh
 	old_start_x = start_x;
 	old_start_y = start_y;
-	old_width = finish_x + width;
-	old_height = finish_y + height;
+	old_width = finish_x + END_POINT_WIDTH;
+	old_height = finish_y + END_POINT_HEIGHT;
 
 	// Draw a line joining the start and end points
 	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
@@ -125,18 +120,18 @@ gboolean draw_layer_start_and_end_points()
 	// Draw end point
 	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_red);
 	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), TRUE,
-			finish_x, finish_y, width, height);
+			finish_x, finish_y, END_POINT_WIDTH, END_POINT_HEIGHT);
 	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
 	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), FALSE,
-			finish_x, finish_y, width, height);
+			finish_x, finish_y, END_POINT_WIDTH, END_POINT_HEIGHT);
 
 	// Draw start point
 	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_green);
 	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), TRUE,
-			start_x, start_y, width, height);
+			start_x, start_y, END_POINT_WIDTH, END_POINT_HEIGHT);
 	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
 	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), FALSE,
-			start_x, start_y, width, height);
+			start_x, start_y, END_POINT_WIDTH, END_POINT_HEIGHT);
 
 	return TRUE;
 }

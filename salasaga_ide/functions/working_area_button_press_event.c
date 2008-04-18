@@ -54,7 +54,6 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	guint				count_int;
 	gint				finish_x;					// X position at the layer objects finish time
 	gint				finish_y;					// Y position at the layer objects finish time 
-	gint				height;						//
 	GList				*layer_pointer;
 	guint				num_collisions;
 	gint				onscreen_bottom;			// Y coordinate of bounding box bottom
@@ -69,7 +68,6 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	layer 				*this_layer_data;			// Pointer to the data for the selected layer
 	slide				*this_slide_data;			// Alias to make things easier
 	guint				tmp_int;					// Temporary integer
-	gint				width;						//
 
 
 	// Only do this function if we have a front store available and a project loaded
@@ -132,30 +130,26 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
 		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
 
-		// Size of the points being drawn
-		width = 15 * scaled_width_ratio;
-		height = 15 * scaled_height_ratio;
-
 		// Determine which row is selected in the time line
 		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
 		layer_pointer = g_list_first(this_slide_data->layers);
 		this_layer_data = g_list_nth_data(layer_pointer, selected_row);
 
 		// Calculate start and end points
-		finish_x = (this_layer_data->x_offset_finish + 20) / scaled_width_ratio;
-		finish_y = (this_layer_data->y_offset_finish + 20) / scaled_height_ratio;
-		start_x = (this_layer_data->x_offset_start + 20) / scaled_width_ratio;
-		start_y = (this_layer_data->y_offset_start + 20) / scaled_height_ratio;
+		finish_x = (this_layer_data->x_offset_finish / scaled_width_ratio) + END_POINT_HORIZONTAL_OFFSET;
+		finish_y = (this_layer_data->y_offset_finish / scaled_height_ratio) + END_POINT_VERTICAL_OFFSET;
+		start_x = (this_layer_data->x_offset_start / scaled_width_ratio) + END_POINT_HORIZONTAL_OFFSET;
+		start_y = (this_layer_data->y_offset_start / scaled_height_ratio) + END_POINT_VERTICAL_OFFSET;
 
 		// Is the user clicking on an end point?
-		if (((event->x >= start_x)				// Start point
-			&& (event->x <= start_x + width)	
+		if (((event->x >= start_x)							// Start point
+			&& (event->x <= start_x + END_POINT_WIDTH)	
 			&& (event->y >= start_y)			
-			&& (event->y <= start_y + height)) ||
-			((event->x >= finish_x)				// End point
-			&& (event->x <= finish_x + width)
+			&& (event->y <= start_y + END_POINT_HEIGHT)) ||
+			((event->x >= finish_x)							// End point
+			&& (event->x <= finish_x + END_POINT_WIDTH)
 			&& (event->y >= finish_y)
-			&& (event->y <= finish_y + height)))
+			&& (event->y <= finish_y + END_POINT_HEIGHT)))
 		{
 			// Retrieve the layer size information
 			switch (this_layer_data->object_type)
@@ -206,10 +200,10 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 			}
 
 			// Work out the bounding box boundaries (scaled)
-			if ((event->x >= start_x)				// Left
-				&& (event->x <= start_x + width)	// Right
-				&& (event->y >= start_y)			// Top
-				&& (event->y <= start_y + height))	// Bottom
+			if ((event->x >= start_x)							// Left
+				&& (event->x <= start_x + END_POINT_WIDTH)		// Right
+				&& (event->y >= start_y)						// Top
+				&& (event->y <= start_y + END_POINT_HEIGHT))	// Bottom
 			{
 				// Start point clicked
 				onscreen_left = this_layer_data->x_offset_start / scaled_width_ratio;

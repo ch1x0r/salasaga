@@ -41,6 +41,12 @@ extern "C" {
 #define END_POINTS_START_ACTIVE		1
 #define END_POINTS_END_ACTIVE		2
 
+// Start and end point sizing
+#define END_POINT_HEIGHT			10
+#define END_POINT_WIDTH				10
+#define END_POINT_VERTICAL_OFFSET	15
+#define END_POINT_HORIZONTAL_OFFSET	15
+
 // Statuses for the bounding box resize handles
 #define	RESIZE_HANDLES_INACTIVE		0
 #define	RESIZE_HANDLES_WAITING		1
