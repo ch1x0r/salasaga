@@ -260,6 +260,7 @@ OFILES = \
 	functions/cairo/calculate_text_object_size.o \
 	functions/cairo/create_cairo_pixbuf_pattern.o \
 	functions/callbacks/menu_screenshots_capture_full_screen.o \
+	functions/layer/get_layer_position.o \
 	functions/widgets/time_line.o \
 	salasaga.o
 
@@ -603,6 +604,9 @@ cairo/create_cairo_pixbuf_pattern.o:
 
 callbacks/menu_screenshots_capture_full_screen.o:
 	$(CC) $(CFLAGS) -c callbacks/menu_screenshots_capture_full_screen.c -o callbacks/menu_screenshots_capture_full_screen.o
+
+layer/get_layer_position.o
+	$(CC) $(CFLAGS) -c layer/get_layer_position.c -o layer/get_layer_position.o
 
 widgets/time_line.o:
 	$(CC) $(CFLAGS) -c widgets/time_line.c -o widgets/time_line.o
