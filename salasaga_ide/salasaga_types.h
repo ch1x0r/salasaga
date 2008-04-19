@@ -64,7 +64,7 @@ extern "C" {
 #define RESIZE_HANDLES_RESIZING_ALL	1020
 
 // Text padding defines (in pixels) 
-#define TEXT_BORDER_PADDING_WIDTH 10
+#define TEXT_BORDER_PADDING_WIDTH 4
 #define TEXT_BORDER_PADDING_HEIGHT 4
 
 // Base types for the validate_value function

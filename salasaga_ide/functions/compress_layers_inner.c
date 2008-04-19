@@ -263,7 +263,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			cairo_text_extents(cairo_context, text_string, &text_extents);
 			x_offset = time_x * scaled_width_ratio;
 			y_offset = time_y * scaled_height_ratio;
-			width = max_line_width + (TEXT_BORDER_PADDING_WIDTH * 2 * scaled_width_ratio);
+			width = max_line_width + (TEXT_BORDER_PADDING_WIDTH * 4 * scaled_width_ratio);
 			height = text_height + (TEXT_BORDER_PADDING_HEIGHT * (num_lines + 2) * scaled_height_ratio);
 
 			// Store the rendered width of the text object with the layer itself, for use by bounding box code
@@ -298,7 +298,6 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			cairo_set_source_rgba(cairo_context, text_red, text_green, text_blue, time_alpha);
 
 			// Loop around, drawing lines of text
-			text_height = 0;
 			text_top = y_offset + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
 			for (line_counter = 0; line_counter < num_lines; line_counter++)
 			{
