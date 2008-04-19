@@ -29,6 +29,7 @@
 
 #ifndef _WIN32
 	// Non-windows code
+	#include <gdk/gdkx.h>
 	#include <gconf/gconf.h>
 #endif
 
@@ -51,12 +52,19 @@ gint key_bind(void)
 	guint				command_num = 0;			// Used to work out which metacity run command to use
 
 
+	// If we're not running Metacity as our window manager, then display a warning to the user
+	if (0 != g_ascii_strncasecmp(gdk_x11_screen_get_window_manager_name(gdk_screen_get_default()), "Metacity", 8))
+	{
+		display_warning("Error ED379: Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, so not sure how to.)  You will need to do this yourself manually.");
+		return -1;
+	}
+
 	// Check if the "salasaga_screencapture" program is in the OS search path
 	return_code_gchar = g_find_program_in_path("salasaga_screencapture");
 	if (NULL == return_code_gchar)
 	{
 		display_warning("Error ED114: 'salasaga_screencapture' not found in the search path. Screenshot capturing is disabled.");
-		return 0;
+		return -1;
 	}
 
 	// Enable screenshots
