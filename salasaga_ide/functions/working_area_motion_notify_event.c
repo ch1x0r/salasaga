@@ -685,15 +685,120 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// We're commencing a drag, so note this
 		mouse_dragging = TRUE;
 
+		// Initialise some things
+		this_slide_data = current_slide->data;
+
+		// Calculate the height and width scaling values for the main drawing area at its present size
+		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
+		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+
+		// Determine which layer is selected in the timeline
+		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
+
+		// Find out where the time line cursor is
+		time_position = time_line_get_cursor_position(this_slide_data->timeline_widget);
+
+		// Get its present X and Y offsets
+		this_slide_data->layers = g_list_first(this_slide_data->layers);
+		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
+
+		// Simplify pointers
+		finish_x = layer_data->x_offset_finish;
+		finish_y = layer_data->y_offset_finish;
+		start_time = layer_data->start_time;
+		start_x = layer_data->x_offset_start;
+		start_y = layer_data->y_offset_start;
+		end_time = layer_data->start_time + layer_data->duration;
+		if (TRANS_LAYER_NONE != layer_data->transition_in_type)
+			end_time += layer_data->transition_in_duration;
+		if (TRANS_LAYER_NONE != layer_data->transition_out_type)
+			end_time += layer_data->transition_out_duration;
+
+		// Calculate how far into the layer movement we are
+		if ((time_position >= start_time) && (time_position <= end_time))
+		{
+			// The time line cursor is in the layers visible range
+			time_offset = time_position - start_time;
+			time_diff = end_time - start_time;
+			x_diff = finish_x - start_x;
+			x_scale = (((gfloat) x_diff) / time_diff);
+			time_x = start_x + (x_scale * time_offset);
+			y_diff = finish_y - start_y;
+			y_scale = (((gfloat) y_diff) / time_diff);
+			time_y = start_y + (y_scale * time_offset);
+		} else
+		{
+			// The time line cursor is outside the layers visible range, so figure out where
+			if (time_position < start_time)
+			{
+				// Time line cursor is before the layers visible range
+				time_x = start_x;
+				time_y = start_y;
+			} else
+			{
+				// Time line cursor is after the layers visible range
+				time_x = finish_x;
+				time_y = finish_y;
+			}
+		}
+
+		// Retrieve the layer size information
+		switch (layer_data->object_type)
+		{
+			case TYPE_EMPTY:
+				// We can't drag an empty layer, so reset things and return
+				mouse_dragging = FALSE;
+				end_point_status = END_POINTS_INACTIVE;
+				stored_x = -1;
+				stored_y = -1;
+				return TRUE;
+
+			case TYPE_HIGHLIGHT:
+				width = ((layer_highlight *) layer_data->object_data)->width;
+				height = ((layer_highlight *) layer_data->object_data)->height;
+				break;
+
+			case TYPE_GDK_PIXBUF:
+				// If this is the background layer, then we ignore it
+				if (TRUE == layer_data->background)
+				{
+					mouse_dragging = FALSE;
+					end_point_status = END_POINTS_INACTIVE;
+					stored_x = -1;
+					stored_y = -1;
+					return TRUE;
+				}
+
+				// No it's not, so process it
+				width = ((layer_image *) layer_data->object_data)->width;
+				height = ((layer_image *) layer_data->object_data)->height;
+				break;
+
+			case TYPE_MOUSE_CURSOR:
+				width = ((layer_mouse *) layer_data->object_data)->width;
+				height = ((layer_mouse *) layer_data->object_data)->height;
+				break;
+
+			case TYPE_TEXT:
+				width = ((layer_text *) layer_data->object_data)->rendered_width;
+				height = ((layer_text *) layer_data->object_data)->rendered_height;
+				break;
+
+			default:
+				display_warning("Error ED380: Unknown layer type");
+
+				return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
+		}
+
 		// Store the mouse coordinates so we know where to drag from
 		stored_x = event->x;
 		stored_y = event->y;
 
-		// Reset the invalidation area
-		invalidation_end_x = event->x;
-		invalidation_end_y = event->y;
-		invalidation_start_x = event->x - 1;
-		invalidation_start_y = event->y - 1;
+		// Reset the invalidation area to the size of the selected layer
+		invalidation_end_x = ((time_x + width) / scaled_width_ratio) + x_diff;
+		invalidation_end_y = ((time_y + height) / scaled_height_ratio) + y_diff;
+		invalidation_start_x = (time_x / scaled_width_ratio) + x_diff;
+		invalidation_start_y = (time_y / scaled_height_ratio) + y_diff;
 
 		return TRUE;
 	}
