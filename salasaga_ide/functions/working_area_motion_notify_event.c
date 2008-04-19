@@ -40,6 +40,7 @@
 #include "../externs.h"
 #include "display_warning.h"
 #include "draw_bounding_box.h"
+#include "layer/get_layer_position.h"
 #include "widgets/time_line.h"
 
 
@@ -49,11 +50,11 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	GdkModifierType		button_state;				// Mouse button states
 	gfloat				cursor_movement_x;
 	gfloat				cursor_movement_y;
-	gfloat				end_time;					// Time in seconds of the layer objects finish time
 	gint				finish_x;					// X position at the layer objects finish time
 	gint				finish_y;					// Y position at the layer objects finish time 
 	gint				height;
 	layer				*layer_data;				// Data for the layer we're working on
+	GtkAllocation		layer_positions;			// Offset and dimensions for a given layer object
 	GdkRectangle		mouse_pointer_rect;			// Rectangle holding the mouse pointer position
 	gint				mouse_x;					// Unscaled mouse x position
 	gint				mouse_y;					// Unscaled mouse x position
@@ -63,25 +64,21 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gint				onscreen_left;				// X coordinate of bounding box left
 	gint				onscreen_right;				// X coordinate of bounding box right
 	gint				onscreen_top;				// Y coordinate of bounding box top
+	gboolean			return_code_gbool;			// Receives gboolean return codes
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_row;				// Holds the number of the row that is selected
-	gfloat				start_time;					// Time in seconds of the layer objects start time
 	gint				start_x;					// X position at the layer objects start time
 	gint				start_y;					// Y position at the layer objects start time
 	static gfloat 		stored_x_val;
 	static gfloat		stored_y_val;
 	slide				*this_slide_data;			// Alias to make things easier
-	gfloat				time_offset;
 	gint				time_x;						// Unscaled X position of the layer at our desired point in time
 	gint				time_y;						// Unscaled Y position of the layer at our desired point in time
-	gfloat				time_diff;					// Used when calculating the object position at the desired point in time
 	gfloat				time_position;
 	gint				width;
 	gfloat				x_diff;						// The X distance the object was dragged, after scaling
-	gfloat				x_scale;					// Used when calculating the object position at the desired point in time
 	gfloat				y_diff;						// The Y distance the object was dragged, after scaling
-	gfloat				y_scale;					// Used when calculating the object position at the desired point in time
 
 
 	// If the current slide hasn't been initialised, or there is no project active don't run this function
@@ -116,61 +113,13 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// Get its present X and Y offsets
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
-
-		// Simplify pointers
-		finish_x = layer_data->x_offset_finish;
-		finish_y = layer_data->y_offset_finish;
-		start_time = layer_data->start_time;
-		start_x = layer_data->x_offset_start;
-		start_y = layer_data->y_offset_start;
-		end_time = layer_data->start_time + layer_data->duration;
-		if (TRANS_LAYER_NONE != layer_data->transition_in_type)
-			end_time += layer_data->transition_in_duration;
-		if (TRANS_LAYER_NONE != layer_data->transition_out_type)
-			end_time += layer_data->transition_out_duration;
-
-		// Calculate how far into the layer movement we are
-		if ((time_position >= start_time) && (time_position <= end_time))
-		{
-			// The time line cursor is in the layers visible range
-			time_offset = time_position - start_time;
-			time_diff = end_time - start_time;
-			x_diff = finish_x - start_x;
-			x_scale = (((gfloat) x_diff) / time_diff);
-			time_x = start_x + (x_scale * time_offset);
-			y_diff = finish_y - start_y;
-			y_scale = (((gfloat) y_diff) / time_diff);
-			time_y = start_y + (y_scale * time_offset);
-		} else
-		{
-			// The time line cursor is outside the layers visible range, so figure out where
-			if (time_position < start_time)
-			{
-				// Time line cursor is before the layers visible range
-				time_x = start_x;
-				time_y = start_y;
-			} else
-			{
-				// Time line cursor is after the layers visible range
-				time_x = finish_x;
-				time_y = finish_y;
-			}
-		}
+		return_code_gbool = get_layer_position(&layer_positions, layer_data, time_position);
+		if (FALSE == return_code_gbool)
+			return TRUE;
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
 		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
 		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
-
-		switch (layer_data->object_type)
-		{
-			case TYPE_HIGHLIGHT:
-				width = ((layer_highlight *) layer_data->object_data)->width;
-				height = ((layer_highlight *) layer_data->object_data)->height;
-				break;
-
-			default:
-				return FALSE;  // We don't draw resize handles for this layer type, so ignore the event
-		}
 
 		// Calculate the distance the object has been dragged onscreen
 		x_diff = mouse_x - stored_x;
@@ -181,66 +130,66 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		{
 			case RESIZE_HANDLES_RESIZING_TL:
 				// Top left resize
-				onscreen_left = (time_x / scaled_width_ratio) + x_diff;
-				onscreen_top = (time_y / scaled_height_ratio) + y_diff;
-				onscreen_right = ((time_x + width) / scaled_width_ratio);
-				onscreen_bottom = ((time_y + height) / scaled_height_ratio);
+				onscreen_left = (layer_positions.x / scaled_width_ratio) + x_diff;
+				onscreen_top = (layer_positions.y / scaled_height_ratio) + y_diff;
+				onscreen_right = ((layer_positions.x + layer_positions.width) / scaled_width_ratio);
+				onscreen_bottom = ((layer_positions.y + layer_positions.height) / scaled_height_ratio);
 				break;
 
 			case RESIZE_HANDLES_RESIZING_TM:
 				// Top middle resize
-				onscreen_left = (time_x / scaled_width_ratio);
-				onscreen_top = (time_y / scaled_height_ratio) + y_diff;
-				onscreen_right = ((time_x + width) / scaled_width_ratio);
-				onscreen_bottom = ((time_y + height) / scaled_height_ratio);
+				onscreen_left = (layer_positions.x / scaled_width_ratio);
+				onscreen_top = (layer_positions.y / scaled_height_ratio) + y_diff;
+				onscreen_right = ((layer_positions.x + layer_positions.width) / scaled_width_ratio);
+				onscreen_bottom = ((layer_positions.y + layer_positions.height) / scaled_height_ratio);
 				break;
 
 			case RESIZE_HANDLES_RESIZING_TR:
 				// Top right resize
-				onscreen_left = (time_x / scaled_width_ratio);
-				onscreen_top = (time_y / scaled_height_ratio) + y_diff;
-				onscreen_right = ((time_x + width) / scaled_width_ratio) + x_diff;
-				onscreen_bottom = ((time_y + height) / scaled_height_ratio);
+				onscreen_left = (layer_positions.x / scaled_width_ratio);
+				onscreen_top = (layer_positions.y / scaled_height_ratio) + y_diff;
+				onscreen_right = ((layer_positions.x + layer_positions.width) / scaled_width_ratio) + x_diff;
+				onscreen_bottom = ((layer_positions.y + layer_positions.height) / scaled_height_ratio);
 				break;
 
 			case RESIZE_HANDLES_RESIZING_RM:
 				// Middle right resize
-				onscreen_left = (time_x / scaled_width_ratio);
-				onscreen_top = (time_y / scaled_height_ratio);
-				onscreen_right = ((time_x + width) / scaled_width_ratio) + x_diff;
-				onscreen_bottom = ((time_y + height) / scaled_height_ratio);
+				onscreen_left = (layer_positions.x / scaled_width_ratio);
+				onscreen_top = (layer_positions.y / scaled_height_ratio);
+				onscreen_right = ((layer_positions.x + layer_positions.width) / scaled_width_ratio) + x_diff;
+				onscreen_bottom = ((layer_positions.y + layer_positions.height) / scaled_height_ratio);
 				break;
 
 			case RESIZE_HANDLES_RESIZING_BR:
 				// Bottom right resize
-				onscreen_left = (time_x / scaled_width_ratio);
-				onscreen_top = (time_y / scaled_height_ratio);
-				onscreen_right = ((time_x + width) / scaled_width_ratio) + x_diff;
-				onscreen_bottom = ((time_y + height) / scaled_height_ratio) + y_diff;
+				onscreen_left = (layer_positions.x / scaled_width_ratio);
+				onscreen_top = (layer_positions.y / scaled_height_ratio);
+				onscreen_right = ((layer_positions.x + layer_positions.width) / scaled_width_ratio) + x_diff;
+				onscreen_bottom = ((layer_positions.y + layer_positions.height) / scaled_height_ratio) + y_diff;
 				break;
 
 			case RESIZE_HANDLES_RESIZING_BM:
 				// Bottom middle resize
-				onscreen_left = (time_x / scaled_width_ratio);
-				onscreen_top = (time_y / scaled_height_ratio);
-				onscreen_right = ((time_x + width) / scaled_width_ratio);
-				onscreen_bottom = ((time_y + height) / scaled_height_ratio) + y_diff;
+				onscreen_left = (layer_positions.x / scaled_width_ratio);
+				onscreen_top = (layer_positions.y / scaled_height_ratio);
+				onscreen_right = ((layer_positions.x + layer_positions.width) / scaled_width_ratio);
+				onscreen_bottom = ((layer_positions.y + layer_positions.height) / scaled_height_ratio) + y_diff;
 				break;
 
 			case RESIZE_HANDLES_RESIZING_BL:
 				// Bottom left resize
-				onscreen_left = (time_x / scaled_width_ratio) + x_diff;
-				onscreen_top = (time_y / scaled_height_ratio);
-				onscreen_right = ((time_x + width) / scaled_width_ratio);
-				onscreen_bottom = ((time_y + height) / scaled_height_ratio) + y_diff;
+				onscreen_left = (layer_positions.x / scaled_width_ratio) + x_diff;
+				onscreen_top = (layer_positions.y / scaled_height_ratio);
+				onscreen_right = ((layer_positions.x + layer_positions.width) / scaled_width_ratio);
+				onscreen_bottom = ((layer_positions.y + layer_positions.height) / scaled_height_ratio) + y_diff;
 				break;
 
 			case RESIZE_HANDLES_RESIZING_LM:
 				// Left middle resize
-				onscreen_left = (time_x / scaled_width_ratio) + x_diff;
-				onscreen_top = (time_y / scaled_height_ratio);
-				onscreen_right = ((time_x + width) / scaled_width_ratio);
-				onscreen_bottom = ((time_y + height) / scaled_height_ratio);
+				onscreen_left = (layer_positions.x) + x_diff;
+				onscreen_top = (layer_positions.y / scaled_height_ratio);
+				onscreen_right = ((layer_positions.x + layer_positions.width) / scaled_width_ratio);
+				onscreen_bottom = ((layer_positions.y + layer_positions.height) / scaled_height_ratio);
 				break;
 
 			default:
@@ -474,110 +423,25 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// Get its present X and Y offsets
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
-
-		// Simplify pointers
-		finish_x = layer_data->x_offset_finish;
-		finish_y = layer_data->y_offset_finish;
-		start_time = layer_data->start_time;
-		start_x = layer_data->x_offset_start;
-		start_y = layer_data->y_offset_start;
-		end_time = layer_data->start_time + layer_data->duration;
-		if (TRANS_LAYER_NONE != layer_data->transition_in_type)
-			end_time += layer_data->transition_in_duration;
-		if (TRANS_LAYER_NONE != layer_data->transition_out_type)
-			end_time += layer_data->transition_out_duration;
-
-		// Calculate how far into the layer movement we are
-		if ((time_position >= start_time) && (time_position <= end_time))
-		{
-			// The time line cursor is in the layers visible range
-			time_offset = time_position - start_time;
-			time_diff = end_time - start_time;
-			x_diff = finish_x - start_x;
-			x_scale = (((gfloat) x_diff) / time_diff);
-			time_x = start_x + (x_scale * time_offset);
-			y_diff = finish_y - start_y;
-			y_scale = (((gfloat) y_diff) / time_diff);
-			time_y = start_y + (y_scale * time_offset);
-		} else
-		{
-			// The time line cursor is outside the layers visible range, so figure out where
-			if (time_position < start_time)
-			{
-				// Time line cursor is before the layers visible range
-				time_x = start_x;
-				time_y = start_y;
-			} else
-			{
-				// Time line cursor is after the layers visible range
-				time_x = finish_x;
-				time_y = finish_y;
-			}
-		}
-
-		// Retrieve the layer size information
-		switch (layer_data->object_type)
-		{
-			case TYPE_EMPTY:
-				// We can't drag an empty layer, so reset things and return
-				mouse_dragging = FALSE;
-				end_point_status = END_POINTS_INACTIVE;
-				stored_x = -1;
-				stored_y = -1;
-				return TRUE;
-
-			case TYPE_HIGHLIGHT:
-				width = ((layer_highlight *) layer_data->object_data)->width;
-				height = ((layer_highlight *) layer_data->object_data)->height;
-				break;
-
-			case TYPE_GDK_PIXBUF:
-				// If this is the background layer, then we ignore it
-				if (TRUE == layer_data->background)
-				{
-					mouse_dragging = FALSE;
-					end_point_status = END_POINTS_INACTIVE;
-					stored_x = -1;
-					stored_y = -1;
-					return TRUE;
-				}
-
-				// No it's not, so process it
-				width = ((layer_image *) layer_data->object_data)->width;
-				height = ((layer_image *) layer_data->object_data)->height;
-				break;
-
-			case TYPE_MOUSE_CURSOR:
-				width = ((layer_mouse *) layer_data->object_data)->width;
-				height = ((layer_mouse *) layer_data->object_data)->height;
-				break;
-
-			case TYPE_TEXT:
-				width = ((layer_text *) layer_data->object_data)->rendered_width;
-				height = ((layer_text *) layer_data->object_data)->rendered_height;
-				break;
-
-			default:
-				display_warning("Error ED284: Unknown layer type");
-
-				return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
-		}
+		return_code_gbool = get_layer_position(&layer_positions, layer_data, time_position);
+		if (FALSE == return_code_gbool)
+			return TRUE;
 
 		// Calculate the distance the object has been dragged onscreen
 		x_diff = mouse_x - stored_x;
 		y_diff = mouse_y - stored_y;
 
 		// Work out the bounding box boundaries
-		onscreen_left = (time_x / scaled_width_ratio) + x_diff;
-		onscreen_top = (time_y / scaled_height_ratio) + y_diff;
-		onscreen_right = ((time_x + width) / scaled_width_ratio) + x_diff;
-		onscreen_bottom = ((time_y + height) / scaled_height_ratio) + y_diff;
+		onscreen_left = (layer_positions.x / scaled_width_ratio) + x_diff;
+		onscreen_top = (layer_positions.y / scaled_height_ratio) + y_diff;
+		onscreen_right = ((layer_positions.x + layer_positions.width) / scaled_width_ratio) + x_diff;
+		onscreen_bottom = ((layer_positions.y + layer_positions.height) / scaled_height_ratio) + y_diff;
 
 		// Ensure the bounding box doesn't go out of bounds
-		onscreen_left = CLAMP(onscreen_left, 2, main_drawing_area->allocation.width - (width / scaled_width_ratio) - 2);
-		onscreen_top = CLAMP(onscreen_top, 2, main_drawing_area->allocation.height - (height / scaled_height_ratio) - 2);
-		onscreen_right = CLAMP(onscreen_right, 2 + (width / scaled_width_ratio), main_drawing_area->allocation.width - 2);
-		onscreen_bottom = CLAMP(onscreen_bottom, 2 + (height / scaled_height_ratio), main_drawing_area->allocation.height - 2);
+		onscreen_left = CLAMP(onscreen_left, 2, main_drawing_area->allocation.width - (layer_positions.width / scaled_width_ratio) - 2);
+		onscreen_top = CLAMP(onscreen_top, 2, main_drawing_area->allocation.height - (layer_positions.height / scaled_height_ratio) - 2);
+		onscreen_right = CLAMP(onscreen_right, 2 + (layer_positions.width / scaled_width_ratio), main_drawing_area->allocation.width - 2);
+		onscreen_bottom = CLAMP(onscreen_bottom, 2 + (layer_positions.height / scaled_height_ratio), main_drawing_area->allocation.height - 2);
 
 		// Draw a bounding box onscreen
 		draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
@@ -701,104 +565,19 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// Get its present X and Y offsets
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
-
-		// Simplify pointers
-		finish_x = layer_data->x_offset_finish;
-		finish_y = layer_data->y_offset_finish;
-		start_time = layer_data->start_time;
-		start_x = layer_data->x_offset_start;
-		start_y = layer_data->y_offset_start;
-		end_time = layer_data->start_time + layer_data->duration;
-		if (TRANS_LAYER_NONE != layer_data->transition_in_type)
-			end_time += layer_data->transition_in_duration;
-		if (TRANS_LAYER_NONE != layer_data->transition_out_type)
-			end_time += layer_data->transition_out_duration;
-
-		// Calculate how far into the layer movement we are
-		if ((time_position >= start_time) && (time_position <= end_time))
-		{
-			// The time line cursor is in the layers visible range
-			time_offset = time_position - start_time;
-			time_diff = end_time - start_time;
-			x_diff = finish_x - start_x;
-			x_scale = (((gfloat) x_diff) / time_diff);
-			time_x = start_x + (x_scale * time_offset);
-			y_diff = finish_y - start_y;
-			y_scale = (((gfloat) y_diff) / time_diff);
-			time_y = start_y + (y_scale * time_offset);
-		} else
-		{
-			// The time line cursor is outside the layers visible range, so figure out where
-			if (time_position < start_time)
-			{
-				// Time line cursor is before the layers visible range
-				time_x = start_x;
-				time_y = start_y;
-			} else
-			{
-				// Time line cursor is after the layers visible range
-				time_x = finish_x;
-				time_y = finish_y;
-			}
-		}
-
-		// Retrieve the layer size information
-		switch (layer_data->object_type)
-		{
-			case TYPE_EMPTY:
-				// We can't drag an empty layer, so reset things and return
-				mouse_dragging = FALSE;
-				end_point_status = END_POINTS_INACTIVE;
-				stored_x = -1;
-				stored_y = -1;
-				return TRUE;
-
-			case TYPE_HIGHLIGHT:
-				width = ((layer_highlight *) layer_data->object_data)->width;
-				height = ((layer_highlight *) layer_data->object_data)->height;
-				break;
-
-			case TYPE_GDK_PIXBUF:
-				// If this is the background layer, then we ignore it
-				if (TRUE == layer_data->background)
-				{
-					mouse_dragging = FALSE;
-					end_point_status = END_POINTS_INACTIVE;
-					stored_x = -1;
-					stored_y = -1;
-					return TRUE;
-				}
-
-				// No it's not, so process it
-				width = ((layer_image *) layer_data->object_data)->width;
-				height = ((layer_image *) layer_data->object_data)->height;
-				break;
-
-			case TYPE_MOUSE_CURSOR:
-				width = ((layer_mouse *) layer_data->object_data)->width;
-				height = ((layer_mouse *) layer_data->object_data)->height;
-				break;
-
-			case TYPE_TEXT:
-				width = ((layer_text *) layer_data->object_data)->rendered_width;
-				height = ((layer_text *) layer_data->object_data)->rendered_height;
-				break;
-
-			default:
-				display_warning("Error ED380: Unknown layer type");
-
-				return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
-		}
+		return_code_gbool = get_layer_position(&layer_positions, layer_data, time_position);
+		if (FALSE == return_code_gbool)
+			return TRUE;
 
 		// Store the mouse coordinates so we know where to drag from
 		stored_x = event->x;
 		stored_y = event->y;
 
 		// Reset the invalidation area to the size of the selected layer
-		invalidation_end_x = ((time_x + width) / scaled_width_ratio) + x_diff;
-		invalidation_end_y = ((time_y + height) / scaled_height_ratio) + y_diff;
-		invalidation_start_x = (time_x / scaled_width_ratio) + x_diff;
-		invalidation_start_y = (time_y / scaled_height_ratio) + y_diff;
+		invalidation_end_x = ((layer_positions.x + layer_positions.width) / scaled_width_ratio) + x_diff;
+		invalidation_end_y = ((layer_positions.y + layer_positions.height) / scaled_height_ratio) + y_diff;
+		invalidation_start_x = (layer_positions.x / scaled_width_ratio) + x_diff;
+		invalidation_start_y = (layer_positions.y / scaled_height_ratio) + y_diff;
 
 		return TRUE;
 	}
