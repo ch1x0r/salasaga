@@ -66,7 +66,10 @@ void draw_workspace(void)
 
 	// Create a new front store from the current slide
 	if (NULL != front_store)
+	{
 		g_object_unref(GDK_PIXMAP(front_store));
+		front_store = NULL;
+	}
 	front_store = compress_layers(current_slide, cursor_position, working_width, working_height);
 
 	// Make a 1 pixel border around the front store, to separate it visually from its background
