@@ -50,34 +50,34 @@ void calculate_object_boundaries(void)
 	// Local variables
 	boundary_box		*boundary;					// Boundary information
 	guint				count_int;					// Counter used to loop through the layers
-	GList				*layer_pointer;
-	guint				num_layers;					// The number of layers in the slide
-	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
-	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
-	layer_highlight		*this_highlight;			// Pointer to the highlight layer data we're working on
-	layer_image			*this_image;				// Pointer to the image layer data we're working on
-	layer_mouse			*this_mouse;				// Pointer to the mouse layer data we're working on
-	layer_text			*this_text;					// Pointer to the text layer data we're working on
-	slide				*this_slide_data;			// Pointer to the data for the slide we're working on
-	layer				*this_layer_data;			// Pointer to the layer we're working on
-	GdkRectangle		tmp_rectangle;				//
-
 	gfloat				end_time;					// Time in seconds of the layer objects finish time
 	gint				finish_x;					// X position at the layer objects finish time
 	gint				finish_y;					// Y position at the layer objects finish time 
+	GList				*layer_pointer;
+	guint				num_layers;					// The number of layers in the slide
+	gint				pixmap_height;				// Height of the front stoe
+	gint				pixmap_width;				// Width of the front store
+	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
+	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gfloat				start_time;					// Time in seconds of the layer objects start time
 	gint				start_x;					// X position at the layer objects start time
 	gint				start_y;					// Y position at the layer objects start time
+	layer_highlight		*this_highlight;			// Pointer to the highlight layer data we're working on
+	layer_image			*this_image;				// Pointer to the image layer data we're working on
+	layer				*this_layer_data;			// Pointer to the layer we're working on
+	layer_mouse			*this_mouse;				// Pointer to the mouse layer data we're working on
+	layer_text			*this_text;					// Pointer to the text layer data we're working on
+	slide				*this_slide_data;			// Pointer to the data for the slide we're working on
+	gfloat				time_diff;					// Used when calculating the object position at the desired point in time
 	gfloat				time_offset;
 	gfloat 				time_position;				// The point in time we need the handle box for
 	gint				time_x;						// Unscaled X position of the layer at our desired point in time
 	gint				time_y;						// Unscaled Y position of the layer at our desired point in time
-	gfloat				time_diff;					// Used when calculating the object position at the desired point in time
+	GdkRectangle		tmp_rectangle;				//
 	gint				x_diff;						// Used when calculating the object position at the desired point in time
 	gfloat				x_scale;					// Used when calculating the object position at the desired point in time
 	gint				y_diff;						// Used when calculating the object position at the desired point in time
 	gfloat				y_scale;					// Used when calculating the object position at the desired point in time
-
 
 
 	// Only continue in this function if we have a slide structure available
@@ -90,8 +90,9 @@ void calculate_object_boundaries(void)
 	this_slide_data = current_slide->data;
 
 	// Calculate the height and width scaling values for the main drawing area at its present size
-	scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
-	scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
+	scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
 
 	// Work out how many layers we need to iterate through
 	layer_pointer = g_list_first(this_slide_data->layers);

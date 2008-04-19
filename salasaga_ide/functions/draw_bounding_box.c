@@ -43,6 +43,8 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 	// Local variables
 	static GdkGC		*line_gc = NULL;
 	GdkSegment			lines[4];					// Holds the lines used to draw the border
+	gint				pixmap_height;				// Height of the front stoe
+	gint				pixmap_width;				// Width of the front store
 	gint				swap_value;					// Temp location while we swap galues
 
 
@@ -79,10 +81,11 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 	}
 
 	// Ensure the invalidation area can't go out of bounds
-	invalidation_start_x = CLAMP(invalidation_start_x, 1, main_drawing_area->allocation.width - 1);
-	invalidation_start_y = CLAMP(invalidation_start_y, 1, main_drawing_area->allocation.height - 1);
-	invalidation_end_x = CLAMP(invalidation_end_x, 1, main_drawing_area->allocation.width - 1);
-	invalidation_end_y = CLAMP(invalidation_end_y, 1, main_drawing_area->allocation.height - 1);
+	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	invalidation_start_x = CLAMP(invalidation_start_x, 1, pixmap_width - 1);
+	invalidation_start_y = CLAMP(invalidation_start_y, 1, pixmap_height - 1);
+	invalidation_end_x = CLAMP(invalidation_end_x, 1, pixmap_width - 1);
+	invalidation_end_y = CLAMP(invalidation_end_y, 1, pixmap_height - 1);
 
 	// Restore the widget area we're going over from the front store
 	gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),

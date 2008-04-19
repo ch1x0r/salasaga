@@ -31,6 +31,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../display_warning.h"
+#include "../cairo/calculate_text_object_size.h"
 
 
 gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfloat time_position)
@@ -124,6 +125,11 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 			break;
 
 		case TYPE_TEXT:
+			// If the text hasn't ever been rendered, we'll have to work out the size ourselves now
+			if (0 == ((layer_text *) this_layer_data->object_data)->rendered_width)
+			{
+				calculate_text_object_size((layer_text *) this_layer_data->object_data);
+			}
 			position->width = ((layer_text *) this_layer_data->object_data)->rendered_width;
 			position->height = ((layer_text *) this_layer_data->object_data)->rendered_height;
 			break;

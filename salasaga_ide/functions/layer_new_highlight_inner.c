@@ -50,6 +50,8 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				mouse_drag_height;			// The height the mouse was dragged
 	gint				mouse_drag_width;			// The width the mouse was dragged
+	gint				pixmap_height;				// Height of the front stoe
+	gint				pixmap_width;				// Width of the front store
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio
 	gfloat				scaled_x;					// Scaled starting coordinate
 	gfloat				scaled_y;					// Scaled starting coordinate
@@ -90,14 +92,15 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	}
 
 	// Ensure the mouse coordinates can't go out of bounds
-	start_x = CLAMP(start_x, 1, main_drawing_area->allocation.width - valid_fields[HIGHLIGHT_WIDTH].min_value);
-	start_y = CLAMP(start_y, 1, main_drawing_area->allocation.height - valid_fields[HIGHLIGHT_HEIGHT].min_value);
-	end_x = CLAMP(end_x, 1, main_drawing_area->allocation.width - 1);
-	end_y = CLAMP(end_y, 1, main_drawing_area->allocation.height - 1);
+	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	start_x = CLAMP(start_x, 1, pixmap_width - valid_fields[HIGHLIGHT_WIDTH].min_value);
+	start_y = CLAMP(start_y, 1, pixmap_height - valid_fields[HIGHLIGHT_HEIGHT].min_value);
+	end_x = CLAMP(end_x, 1, pixmap_width - 1);
+	end_y = CLAMP(end_y, 1, pixmap_height - 1);
 
 	// Calculate the height and width scaling values for the main drawing area at its present size
-	scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
-	scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+	scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
+	scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
 
 	// Work out where the mouse is positioned
 	scaled_x = start_x * scaled_width_ratio;

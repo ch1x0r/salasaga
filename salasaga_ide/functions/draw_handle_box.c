@@ -57,6 +57,8 @@ gboolean draw_handle_box(void)
 	gint				onscreen_left;				// X coordinate of bounding box left
 	gint				onscreen_right;				// X coordinate of bounding box right
 	gint				onscreen_top;				// Y coordinate of bounding box top
+	gint				pixmap_height;				// Height of the front stoe
+	gint				pixmap_width;				// Width of the front store
 	guint				required_size_for_handles;	// Minimum size we need in order to draw any resize handles
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
@@ -86,6 +88,7 @@ gboolean draw_handle_box(void)
 
 	// Initialise some things
 	current_slide_data = current_slide->data;
+	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
 
 	// Determine which layer the user has selected in the timeline
 	selected_layer = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
@@ -190,8 +193,8 @@ gboolean draw_handle_box(void)
 	}
 
 	// Calculate the height and width scaling values for the main drawing area at its present size
-	scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
-	scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+	scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
+	scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
 
 	// Work out the bounding box boundaries
 	onscreen_left = (time_x + 1) / scaled_width_ratio;
@@ -200,10 +203,10 @@ gboolean draw_handle_box(void)
 	onscreen_bottom = (time_y + height) / scaled_height_ratio;
 
 	// Ensure the bounding box doesn't go out of bounds
-	onscreen_left = CLAMP(onscreen_left, 2, main_drawing_area->allocation.width - (width / scaled_width_ratio) - 2);
-	onscreen_top = CLAMP(onscreen_top, 2, main_drawing_area->allocation.height - (height / scaled_height_ratio) - 2);
-	onscreen_right = CLAMP(onscreen_right, 2 + (width / scaled_width_ratio), main_drawing_area->allocation.width - 2);
-	onscreen_bottom = CLAMP(onscreen_bottom, 2 + (height / scaled_height_ratio), main_drawing_area->allocation.height - 2);
+	onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - (width / scaled_width_ratio) - 2);
+	onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - (height / scaled_height_ratio) - 2);
+	onscreen_right = CLAMP(onscreen_right, 2 + (width / scaled_width_ratio), pixmap_width - 2);
+	onscreen_bottom = CLAMP(onscreen_bottom, 2 + (height / scaled_height_ratio), pixmap_height - 2);
 
 	// Draw a bounding box onscreen
 	draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);

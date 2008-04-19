@@ -40,6 +40,8 @@
 void menu_file_close()
 {
 	// Local variables
+	gint				pixmap_height;				// Height of the front stoe
+	gint				pixmap_width;				// Width of the front store
 	gboolean			return_code_gbool;			// Catches gboolean return codes
 	GdkRectangle		tmp_rectangle;
 
@@ -101,9 +103,10 @@ void menu_file_close()
 	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
 
 	// Clear the working area
+	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
 	tmp_rectangle.x = 0;
 	tmp_rectangle.y = 0;
-	tmp_rectangle.width = main_drawing_area->allocation.width;
-	tmp_rectangle.height = main_drawing_area->allocation.height;
+	tmp_rectangle.width = pixmap_width;
+	tmp_rectangle.height = pixmap_height;
 	gdk_window_invalidate_rect(main_drawing_area->window, &tmp_rectangle, TRUE);
 }
