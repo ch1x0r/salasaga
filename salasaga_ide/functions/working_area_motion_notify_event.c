@@ -64,6 +64,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gint				onscreen_left;				// X coordinate of bounding box left
 	gint				onscreen_right;				// X coordinate of bounding box right
 	gint				onscreen_top;				// Y coordinate of bounding box top
+	gint				pixmap_height;				// Height of the front stoe
+	gint				pixmap_width;				// Width of the front store
 	gboolean			return_code_gbool;			// Receives gboolean return codes
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
@@ -89,6 +91,9 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 
 	// Find out where the mouse is positioned, and which buttons and modifier keys are down (active)
 	gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);
+
+	// Initialise things
+	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
 
 	// If we're creating a new highlight layer, draw a bounding box
 	if (TYPE_HIGHLIGHT == new_layer_selected)
@@ -118,8 +123,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			return TRUE;
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+		scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
+		scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
 
 		// Calculate the distance the object has been dragged onscreen
 		x_diff = mouse_x - stored_x;
@@ -186,7 +191,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 
 			case RESIZE_HANDLES_RESIZING_LM:
 				// Left middle resize
-				onscreen_left = (layer_positions.x) + x_diff;
+				onscreen_left = (layer_positions.x / scaled_width_ratio) + x_diff;
 				onscreen_top = (layer_positions.y / scaled_height_ratio);
 				onscreen_right = ((layer_positions.x + layer_positions.width) / scaled_width_ratio);
 				onscreen_bottom = ((layer_positions.y + layer_positions.height) / scaled_height_ratio);
@@ -198,10 +203,10 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		}
 
 		// Ensure the bounding box doesn't go out of bounds
-		onscreen_left = CLAMP(onscreen_left, 2, main_drawing_area->allocation.width - 2);
-		onscreen_top = CLAMP(onscreen_top, 2, main_drawing_area->allocation.height - 2);
-		onscreen_right = CLAMP(onscreen_right, 2, main_drawing_area->allocation.width - 2);
-		onscreen_bottom = CLAMP(onscreen_bottom, 2, main_drawing_area->allocation.height - 2);
+		onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - 2);
+		onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - 2);
+		onscreen_right = CLAMP(onscreen_right, 2, pixmap_width - 2);
+		onscreen_bottom = CLAMP(onscreen_bottom, 2, pixmap_height - 2);
 
 		// Draw a bounding box onscreen
 		draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
@@ -225,12 +230,11 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		time_position = time_line_get_cursor_position(this_slide_data->timeline_widget);
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+		scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
+		scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
 
 		// Calculate start and end points
 		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
-
 		finish_x = (layer_data->x_offset_finish / scaled_width_ratio) + END_POINT_HORIZONTAL_OFFSET;
 		finish_y = (layer_data->y_offset_finish / scaled_height_ratio) + END_POINT_VERTICAL_OFFSET;
 		start_x = (layer_data->x_offset_start / scaled_width_ratio) + END_POINT_HORIZONTAL_OFFSET;
@@ -286,8 +290,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+		scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
+		scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
 
 		// Find out where the time line cursor is
 		time_position = time_line_get_cursor_position(this_slide_data->timeline_widget);
@@ -375,10 +379,10 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		onscreen_bottom /= scaled_height_ratio;
 
 		// Ensure the bounding box doesn't go out of bounds
-		onscreen_left = CLAMP(onscreen_left, 2, main_drawing_area->allocation.width - (width / scaled_width_ratio) - 2);
-		onscreen_top = CLAMP(onscreen_top, 2, main_drawing_area->allocation.height - (height / scaled_height_ratio) - 2);
-		onscreen_right = CLAMP(onscreen_right, 2 + (width / scaled_width_ratio), main_drawing_area->allocation.width - 2);
-		onscreen_bottom = CLAMP(onscreen_bottom, 2 + (height / scaled_height_ratio), main_drawing_area->allocation.height - 2);
+		onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - (width / scaled_width_ratio) - 2);
+		onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - (height / scaled_height_ratio) - 2);
+		onscreen_right = CLAMP(onscreen_right, 2 + (width / scaled_width_ratio), pixmap_width - 2);
+		onscreen_bottom = CLAMP(onscreen_bottom, 2 + (height / scaled_height_ratio), pixmap_height - 2);
 
 		// Update the layer object positions
 		if (END_POINTS_START_ACTIVE == end_point_status)
@@ -411,8 +415,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		this_slide_data = current_slide->data;
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+		scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
+		scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
 
 		// Determine which layer is selected in the timeline
 		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
@@ -438,10 +442,10 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		onscreen_bottom = ((layer_positions.y + layer_positions.height) / scaled_height_ratio) + y_diff;
 
 		// Ensure the bounding box doesn't go out of bounds
-		onscreen_left = CLAMP(onscreen_left, 2, main_drawing_area->allocation.width - (layer_positions.width / scaled_width_ratio) - 2);
-		onscreen_top = CLAMP(onscreen_top, 2, main_drawing_area->allocation.height - (layer_positions.height / scaled_height_ratio) - 2);
-		onscreen_right = CLAMP(onscreen_right, 2 + (layer_positions.width / scaled_width_ratio), main_drawing_area->allocation.width - 2);
-		onscreen_bottom = CLAMP(onscreen_bottom, 2 + (layer_positions.height / scaled_height_ratio), main_drawing_area->allocation.height - 2);
+		onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - (layer_positions.width / scaled_width_ratio) - 2);
+		onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - (layer_positions.height / scaled_height_ratio) - 2);
+		onscreen_right = CLAMP(onscreen_right, 2 + (layer_positions.width / scaled_width_ratio), pixmap_width - 2);
+		onscreen_bottom = CLAMP(onscreen_bottom, 2 + (layer_positions.height / scaled_height_ratio), pixmap_height - 2);
 
 		// Draw a bounding box onscreen
 		draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
@@ -553,8 +557,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		this_slide_data = current_slide->data;
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) main_drawing_area->allocation.height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) main_drawing_area->allocation.width;
+		scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
+		scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
 
 		// Determine which layer is selected in the timeline
 		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
