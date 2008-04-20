@@ -322,7 +322,8 @@ gint menu_export_flash_inner(gchar *output_filename)
 				// Display debugging info if requested
 				if (debug_level)
 				{
-					printf("Processing slide %d, swf array element # %u\n", slide_counter, frame_number);
+					// Commented out for now, as it's WAY too verbose until extremely needed, even when debugging
+					// printf("Processing slide %d, swf array element # %u\n", slide_counter, frame_number);
 				}
 
 				// Process this frame element
