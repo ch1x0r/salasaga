@@ -1412,6 +1412,16 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 	// If we're not already resizing or dragging, check for a new resize starting
 	if ((RESIZE_NONE == priv->resize_type) && (FALSE == priv->drag_active))
 	{
+		// If the user is trying to drag outside the valid layers, ignore this event
+		// fixme2: We should allow resizing the background layer from the end at some point
+		if ((0 > new_row) || (new_row >= end_row) || (current_row >= end_row) || (0 > current_row))
+		{
+			// Mark this function as complete, and return
+			priv->mouse_x = -1;
+			priv->mouse_y = -1;
+			return TRUE;
+		}
+
 		// Check if the user clicked on the start of the layer (i.e. wants to adjust the start time)
 		check_pixel = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
 		if (1 < check_pixel)
