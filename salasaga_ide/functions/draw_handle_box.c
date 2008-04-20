@@ -42,6 +42,7 @@
 #include "draw_bounding_box.h"
 #include "draw_resize_handles.h"
 #include "cairo/calculate_text_object_size.h"
+#include "layer/get_layer_position.h"
 #include "widgets/time_line.h"
 
 
@@ -49,10 +50,9 @@ gboolean draw_handle_box(void)
 {
 	// Local variables
 	slide				*current_slide_data;		// Alias to make things easier
-	gfloat				end_time;					// Time in seconds of the layer objects finish time
 	gint				finish_x;					// X position at the layer objects finish time
 	gint				finish_y;					// Y position at the layer objects finish time 
-	gint				height;
+	GtkAllocation		layer_positions;			// Offset and dimensions for a given layer object
 	gint				onscreen_bottom;			// Y coordinate of bounding box bottom
 	gint				onscreen_left;				// X coordinate of bounding box left
 	gint				onscreen_right;				// X coordinate of bounding box right
@@ -60,6 +60,7 @@ gboolean draw_handle_box(void)
 	gint				pixmap_height;				// Height of the front stoe
 	gint				pixmap_width;				// Width of the front store
 	guint				required_size_for_handles;	// Minimum size we need in order to draw any resize handles
+	gboolean			return_code_gbool;			// Receives gboolean return codes
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_layer;				// Holds the number of the layer that is selected
@@ -67,17 +68,8 @@ gboolean draw_handle_box(void)
 	gint				start_x;					// X position at the layer objects start time
 	gint				start_y;					// Y position at the layer objects start time
 	layer				*this_layer_data;
-	gfloat				time_offset;
+	gfloat				time_alpha;
 	gfloat 				time_position;				// The point in time we need the handle box for
-	gint				time_x;						// Unscaled X position of the layer at our desired point in time
-	gint				time_y;						// Unscaled Y position of the layer at our desired point in time
-	gfloat				time_diff;					// Used when calculating the object position at the desired point in time
-	gint				width;
-	gint				x_diff;						// Used when calculating the object position at the desired point in time
-	gfloat				x_scale;					// Used when calculating the object position at the desired point in time
-	gint				y_diff;						// Used when calculating the object position at the desired point in time
-	gfloat				y_scale;					// Used when calculating the object position at the desired point in time
-
 
 
 	// Only do this function if we have a front store available and a project loaded
@@ -110,86 +102,29 @@ gboolean draw_handle_box(void)
 	start_x = this_layer_data->x_offset_start;
 	start_y = this_layer_data->y_offset_start;
 
-	// Calculate the position of the handle box
-	end_time = this_layer_data->start_time + this_layer_data->duration;
-	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-		end_time += this_layer_data->transition_in_duration;
-	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
-		end_time += this_layer_data->transition_out_duration;
-	if ((time_position >= start_time) && (time_position <= end_time))
-	{
-		// Calculate how far into the layer movement we are
-		time_offset = time_position - start_time;
-		time_diff = end_time - start_time;
-		x_diff = finish_x - start_x;
-		x_scale = (((gfloat) x_diff) / time_diff);
-		time_x = start_x + (x_scale * time_offset);
-		y_diff = finish_y - start_y;
-		y_scale = (((gfloat) y_diff) / time_diff);
-		time_y = start_y + (y_scale * time_offset);
-	} else
-	{
-		if (time_position < start_time)
-		{
-			// The desired point in time is before the layer is visible, so we use the object start position
-			time_x = start_x;
-			time_y = start_y;
-		} else
-		{
-			// The desired point in time after layer is visible, so we use the object finish position
-			time_x = finish_x;
-			time_y = finish_y;
-		}
-	}
+	// Retrieve the layer position and alpha for the given point in time
+	return_code_gbool = get_layer_position(&layer_positions, this_layer_data, time_position, &time_alpha);
+	if (FALSE == return_code_gbool)
+		return TRUE;
 
-	// Retrieve the dimensions of the selected object
+	// If this is a layer that isn't selectable, then clear any existing handle box and return
 	switch (this_layer_data->object_type)
 	{
 		case TYPE_EMPTY:
-			// This is an empty layer, so clear any existing handle box
+			// This is an empty layer, so clear any existing handle box then return
 			gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
 					GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
 			return TRUE;
 
-		case TYPE_HIGHLIGHT:
-			width = ((layer_highlight *) this_layer_data->object_data)->width;
-			height = ((layer_highlight *) this_layer_data->object_data)->height;
-			break;
-
 		case TYPE_GDK_PIXBUF:
-			// If this is the background layer, then we clear any existing handle box
+			// If this is the background layer, then we clear any existing handle box then return
 			if (TRUE == this_layer_data->background)
 			{
-				// Clear any existing handle box
+				// Clear any existing handle box then return
 				gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
 						GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
 				return TRUE;
 			}
-
-			// No it's not, so process it
-			width = ((layer_image *) this_layer_data->object_data)->width;
-			height = ((layer_image *) this_layer_data->object_data)->height;
-			break;
-
-		case TYPE_MOUSE_CURSOR:
-			width = ((layer_mouse *) this_layer_data->object_data)->width;
-			height = ((layer_mouse *) this_layer_data->object_data)->height;
-			break;
-
-		case TYPE_TEXT:
-			// If the text hasn't ever been rendered, we'll have to work out the size ourselves now
-			if (0 == ((layer_text *) this_layer_data->object_data)->rendered_width)
-			{
-				calculate_text_object_size((layer_text *) this_layer_data->object_data);
-			}
-			width = ((layer_text *) this_layer_data->object_data)->rendered_width;
-			height = ((layer_text *) this_layer_data->object_data)->rendered_height;
-			break;
-
-		default:
-			// Unknown layer type, so no idea how to extract the needed data for the next code
-			display_warning("Error ED285: Unknown layer type");
-			return TRUE;
 	}
 
 	// Calculate the height and width scaling values for the main drawing area at its present size
@@ -197,16 +132,16 @@ gboolean draw_handle_box(void)
 	scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
 
 	// Work out the bounding box boundaries
-	onscreen_left = (time_x + 1) / scaled_width_ratio;
-	onscreen_top = (time_y + 1) / scaled_height_ratio;
-	onscreen_right = (time_x + width) / scaled_width_ratio;
-	onscreen_bottom = (time_y + height) / scaled_height_ratio;
+	onscreen_left = (layer_positions.x + 1) / scaled_width_ratio;
+	onscreen_top = (layer_positions.y + 1) / scaled_height_ratio;
+	onscreen_right = (layer_positions.x + layer_positions.width) / scaled_width_ratio;
+	onscreen_bottom = (layer_positions.y + layer_positions.height) / scaled_height_ratio;
 
 	// Ensure the bounding box doesn't go out of bounds
-	onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - (width / scaled_width_ratio) - 2);
-	onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - (height / scaled_height_ratio) - 2);
-	onscreen_right = CLAMP(onscreen_right, 2 + (width / scaled_width_ratio), pixmap_width - 2);
-	onscreen_bottom = CLAMP(onscreen_bottom, 2 + (height / scaled_height_ratio), pixmap_height - 2);
+	onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - (layer_positions.width / scaled_width_ratio) - 2);
+	onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - (layer_positions.height / scaled_height_ratio) - 2);
+	onscreen_right = CLAMP(onscreen_right, 2 + (layer_positions.width / scaled_width_ratio), pixmap_width - 2);
+	onscreen_bottom = CLAMP(onscreen_bottom, 2 + (layer_positions.height / scaled_height_ratio), pixmap_height - 2);
 
 	// Draw a bounding box onscreen
 	draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
@@ -215,7 +150,7 @@ gboolean draw_handle_box(void)
 	if (TYPE_HIGHLIGHT == this_layer_data->object_type)
 	{
 		required_size_for_handles = (resize_handle_size * 2) + 1;
-		if ((required_size_for_handles < width) && (required_size_for_handles < height))
+		if ((required_size_for_handles < layer_positions.width) && (required_size_for_handles < layer_positions.height))
 		{
 			draw_resize_handles(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
 			resize_handles_status |= RESIZE_HANDLES_WAITING;
