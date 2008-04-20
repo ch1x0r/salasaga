@@ -44,6 +44,7 @@ gboolean calculate_text_object_size(layer_text *text_object)
 	gint					pixmap_width;			// Receives the width of a given pixmap
 	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio 
 	gfloat					scaled_width_ratio;		// Used to calculate a horizontal scaling ratio
+	static GdkColormap		*system_colourmap = NULL;	// Colormap used for drawing
 	GtkTextBuffer			*text_buffer;			// Pointer to the text buffer we're using
 	GtkTextIter				text_end;				// The end position of the text buffer
 	cairo_text_extents_t	text_extents;			// Meta information about an onscreen text string
@@ -59,6 +60,16 @@ gboolean calculate_text_object_size(layer_text *text_object)
 
 	// Simplify pointers
 	text_buffer = text_object->text_buffer;
+
+	if (NULL == front_store)
+	{
+		if (NULL == system_colourmap)
+		{
+			system_colourmap = gdk_colormap_get_system();
+		}
+		front_store = gdk_pixmap_new(NULL, project_width, project_height, system_colourmap->visual->depth);
+		gdk_drawable_set_colormap(GDK_DRAWABLE(front_store), GDK_COLORMAP(system_colourmap));
+	}
 
 	// Calculate the height and width scaling values for the requested layer size
 	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
