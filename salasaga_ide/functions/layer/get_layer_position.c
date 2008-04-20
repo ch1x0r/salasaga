@@ -39,7 +39,9 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 	// Local variables
 	gfloat				end_time;					// Time in seconds of the layer objects finish time
 	gint				finish_x;					// X position at the layer objects finish time
-	gint				finish_y;					// Y position at the layer objects finish time 
+	gint				finish_y;					// Y position at the layer objects finish time
+	gfloat				full_end_time;				// Time in seconds when the layer finishes being fully visible
+	gfloat				full_start_time;			// Time in seconds when the layer starts being fully visible
 	gfloat				start_time;					// Time in seconds of the layer objects start time
 	gint				start_x;					// X position at the layer objects start time
 	gint				start_y;					// Y position at the layer objects start time
@@ -55,6 +57,7 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 	finish_x = this_layer_data->x_offset_finish;
 	finish_y = this_layer_data->y_offset_finish;
 	start_time = this_layer_data->start_time;
+	time_offset = time_position - start_time;
 	start_x = this_layer_data->x_offset_start;
 	start_y = this_layer_data->y_offset_start;
 	end_time = this_layer_data->start_time + this_layer_data->duration;
@@ -63,59 +66,80 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
 		end_time += this_layer_data->transition_out_duration;
 
+
 	// Calculate how far into the layer movement we are
 	if ((time_position >= start_time) && (time_position <= end_time))
 	{
-		// The time line cursor is in the layers visible range
-		time_offset = time_position - start_time;
-		time_diff = end_time - start_time;
-		x_diff = finish_x - start_x;
-		x_scale = (((gfloat) x_diff) / time_diff);
-		position->x = start_x + (x_scale * time_offset);
-		y_diff = finish_y - start_y;
-		y_scale = (((gfloat) y_diff) / time_diff);
-		position->y = start_y + (y_scale * time_offset);
+		// Work out the full opacity start and end times
+		full_start_time = this_layer_data->start_time;
+		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+			full_start_time += this_layer_data->transition_in_duration;
+		full_end_time = full_start_time + this_layer_data->duration;
+
+		// If there's a transition in, check if the time point is during it
+		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+		{
+			if (time_position < full_start_time)
+			{
+				// Yes.  The time position is during the transition in
+				time_diff = full_start_time - start_time;
+				*time_alpha = time_offset / time_diff;
+	
+				// We also reset the position to be at the start point
+				position->x = start_x;
+				position->y = start_y;
+			}
+		}
+
+		// If there's a transition out, check if the time point is during it 
+		if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+		{
+			// There is a transition out, so work out if the time position is during it
+			if (time_position > full_end_time)
+			{
+				// Yes. The time position is during a transition out
+				time_diff = end_time - full_end_time;
+				time_offset = time_position - full_end_time;
+				*time_alpha = 1 - (time_offset / time_diff);
+	
+				// We also reset the position to be at the end point
+				position->x = finish_x;
+				position->y = finish_y;
+			}
+		}
+
+		// Check if the time position is during the layer's fully visible time
+		if ((time_position >= full_start_time) && (time_position <= full_end_time))
+		{
+			// Yes.  The time position is during the fully visible time
+			time_offset = time_position - full_start_time;
+			time_diff = full_end_time - full_start_time;
+			x_diff = finish_x - start_x;
+			x_scale = (((gfloat) x_diff) / time_diff);
+			position->x = start_x + (x_scale * time_offset);
+			y_diff = finish_y - start_y;
+			y_scale = (((gfloat) y_diff) / time_diff);
+			position->y = start_y + (y_scale * time_offset);
+			*time_alpha = 1;
+		}
 	} else
 	{
-		// The time line cursor is outside the layers visible range, so figure out where
+		// Check if the desired time is before the layers visible range
 		if (time_position < start_time)
 		{
-			// Time line cursor is before the layers visible range
+			// Time position is before the layers visible range
 			position->x = start_x;
 			position->y = start_y;
-		} else
+			*time_alpha = 0;
+		}
+
+		// Check if the desired time is after the layers visible range
+		if (time_position > end_time)
 		{
-			// Time line cursor is after the layers visible range
+			// Time position is after the layers visible range
 			position->x = finish_x;
 			position->y = finish_y;
-		}
-	}
-
-	// If the time position is during a transition, we need to determine the correct alpha value
-	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-	{
-		// There is a transition in, so work out if the time position is during it
-		end_time = start_time + this_layer_data->transition_in_duration;
-		if ((time_position >= start_time) && (time_position < end_time))
-		{
-			// The time position is during a transition in
-			time_diff = end_time - start_time;
-			*time_alpha = time_offset / time_diff;
-		}
-	}
-	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
-	{
-		// There is a transition out, so work out if the time position is during it
-		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-			start_time += this_layer_data->transition_in_duration;
-		start_time += this_layer_data->duration;
-		time_offset = time_position - start_time;
-		end_time = start_time + this_layer_data->transition_out_duration;
-		if ((time_position > start_time) && (time_position <= end_time))
-		{
-			// The time position is during a transition out
-			time_diff = end_time - start_time;
-			*time_alpha = 1 - (time_offset / time_diff);
+			*time_alpha = 0;
 		}
 	}
 
