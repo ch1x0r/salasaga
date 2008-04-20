@@ -34,7 +34,7 @@
 #include "../cairo/calculate_text_object_size.h"
 
 
-gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfloat time_position)
+gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfloat time_position, gfloat *time_alpha)
 {
 	// Local variables
 	gfloat				end_time;					// Time in seconds of the layer objects finish time
@@ -91,6 +91,34 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 		}
 	}
 
+	// If the time position is during a transition, we need to determine the correct alpha value
+	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+	{
+		// There is a transition in, so work out if the time position is during it
+		end_time = start_time + this_layer_data->transition_in_duration;
+		if ((time_position >= start_time) && (time_position < end_time))
+		{
+			// The time position is during a transition in
+			time_diff = end_time - start_time;
+			*time_alpha = time_offset / time_diff;
+		}
+	}
+	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+	{
+		// There is a transition out, so work out if the time position is during it
+		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+			start_time += this_layer_data->transition_in_duration;
+		start_time += this_layer_data->duration;
+		time_offset = time_position - start_time;
+		end_time = start_time + this_layer_data->transition_out_duration;
+		if ((time_position > start_time) && (time_position <= end_time))
+		{
+			// The time position is during a transition out
+			time_diff = end_time - start_time;
+			*time_alpha = 1 - (time_offset / time_diff);
+		}
+	}
+
 	// Retrieve the layer size information
 	switch (this_layer_data->object_type)
 	{
@@ -136,7 +164,6 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 
 		default:
 			display_warning("Error ED381: Unknown layer type");
-
 			return FALSE;
 	}
 

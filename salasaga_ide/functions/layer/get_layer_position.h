@@ -29,7 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
-gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfloat time_position);
+gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfloat time_position, gfloat *time_alpha);
 
 #ifdef __cplusplus
 }
