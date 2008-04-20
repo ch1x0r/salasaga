@@ -367,10 +367,10 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		}
 
 		// Work out the bounding box boundaries (scaled)
-		new_x_val = stored_x_val + x_diff;
-		new_y_val = stored_y_val + y_diff;
-		onscreen_right = new_x_val + width;
-		onscreen_bottom = new_y_val + height;
+		new_x_val = CLAMP(stored_x_val + x_diff, 1, project_width - width - 2);
+		new_y_val = CLAMP(stored_y_val + y_diff, 1, project_height - height - 2);
+		onscreen_right = CLAMP(new_x_val + width, 1, project_width - 2);
+		onscreen_bottom = CLAMP(new_y_val + height, 1, project_height - 2);
 
 		// Scale the bounding box boundaries
 		onscreen_left = new_x_val / scaled_width_ratio;
@@ -388,18 +388,18 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		if (END_POINTS_START_ACTIVE == end_point_status)
 		{
 			// Bounds check the starting x offset, then update the object with the new value
-			layer_data->x_offset_start = CLAMP(new_x_val, 1, project_width - width - 2);
+			layer_data->x_offset_start = new_x_val;
 
 			// Bounds check the starting y offset, then update the object with the new value
-			layer_data->y_offset_start = CLAMP(new_y_val, 1, project_height - height - 2);
+			layer_data->y_offset_start = new_y_val;
 		}
 		if (END_POINTS_END_ACTIVE == end_point_status)
 		{
 			// Bounds check the finishing x offset, then update the object with the new value
-			layer_data->x_offset_finish = CLAMP(new_x_val, 1, project_width - width - 2);
+			layer_data->x_offset_finish = new_x_val;
 
 			// Bounds check the finishing y offset, then update the object with the new value
-			layer_data->y_offset_finish = CLAMP(new_y_val, 1, project_height - height - 2);
+			layer_data->y_offset_finish = new_y_val;
 		}
 
 		// Draw a bounding box onscreen
