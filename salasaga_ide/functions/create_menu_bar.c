@@ -98,7 +98,7 @@ void create_menu_bar()
 		{"/File/_Open Project",			"<control>O",			menu_file_open,					0,	"<Item>"},
 		{"/File/_Save Project",			"<control>S",			menu_file_save,					0,	"<Item>"},
 		{"/File/Save _As Project",		"<control><shift>S",	menu_file_save_as,				0,	"<Item>"},
-		{"/File/Close Project",			"<control>W",			menu_file_close,				0,	"<Item>"},
+		{"/File/_Close Project",		"<control>W",			menu_file_close,				0,	"<Item>"},
 		{"/File/Sep",					NULL,					NULL,							0,	"<Separator>"},
 		{"/File/_Quit",					"<control>Q",			save_preferences_and_exit,		0,	"<Item>"},
 
