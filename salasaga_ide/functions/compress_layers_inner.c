@@ -43,6 +43,7 @@
 #include "../externs.h"
 #include "display_warning.h"
 #include "cairo/create_cairo_pixbuf_pattern.h"
+#include "layer/get_layer_position.h"
 
 
 void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, gfloat time_position)
@@ -50,20 +51,18 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	// Local variables
 	cairo_t					*cairo_context;			// Cairo drawing context
 	gfloat					end_time;				// Time in seconds of the layer objects finish time
-	gint					finish_x;				// X position at the layer objects finish time
-	gint					finish_y;				// Y position at the layer objects finish time 
 	gint					height;					//
 	cairo_matrix_t			image_matrix;			// Transformation matrix used to position a cairo pattern
+	GtkAllocation			layer_positions;		// Offset and dimensions for a given layer object
 	gint					line_counter;
 	gfloat					max_line_width;
 	gint					num_lines;
 	gint					pixmap_height;			// Receives the height of a given pixmap
 	gint					pixmap_width;			// Receives the width of a given pixmap
+	gboolean				return_code_gbool;		// Receives gboolean return codes
 	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio 
 	gfloat					scaled_width_ratio;		// Used to calculate a horizontal scaling ratio
 	gfloat					start_time;				// Time in seconds of the layer objects start time
-	gint					start_x;				// X position at the layer objects start time
-	gint					start_y;				// Y position at the layer objects start time
 	gfloat					text_adjustment;		// Y offset for a specific line
 	gfloat					text_blue;				// Blue component of text fg colour
 	GtkTextBuffer			*text_buffer;			// Pointer to the text buffer we're using
@@ -80,17 +79,9 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gchar					*text_string;			// The text string to be displayed
 	layer_image				*this_image_data;		// Pointer to image layer data
 	gfloat					time_alpha = 1.0;		// Alpha value to use at our desired point in time (defaulting to 1.0 = fall opacity)
-	gfloat					time_offset;
-	gint					time_x;					// Unscaled X position of the layer at our desired point in time
-	gint					time_y;					// Unscaled Y position of the layer at our desired point in time
-	gfloat					time_diff;				// Used when calculating the object position at the desired point in time
 	gint					width;					//
-	gint					x_diff;					// Used when calculating the object position at the desired point in time
 	gint					x_offset;				// X coordinate of the object at the desired point in time
-	gfloat					x_scale;				// Used when calculating the object position at the desired point in time
-	gint					y_diff;					// Used when calculating the object position at the desired point in time
 	gint					y_offset;				// Y coordinate of the object at the desired point in time
-	gfloat					y_scale;				// Used when calculating the object position at the desired point in time
 
 
 	// Is this layer invisible, or is it a background layer?
@@ -100,14 +91,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 		return;
 	}
 
-	// Simplify pointers
-	finish_x = this_layer_data->x_offset_finish;
-	finish_y = this_layer_data->y_offset_finish;
-	start_time = this_layer_data->start_time;
-	start_x = this_layer_data->x_offset_start;
-	start_y = this_layer_data->y_offset_start;
-
 	// If the layer isn't visible at the requested time, we don't need to proceed
+	start_time = this_layer_data->start_time;
 	end_time = this_layer_data->start_time + this_layer_data->duration;
 	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 		end_time += this_layer_data->transition_in_duration;
@@ -118,43 +103,10 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 		return;
 	}
 
-	// Calculate how far into the layer movement we are
-	time_offset = time_position - start_time;
-	time_diff = end_time - start_time;
-	x_diff = finish_x - start_x;
-	x_scale = (((gfloat) x_diff) / time_diff);
-	time_x = start_x + (x_scale * time_offset);
-	y_diff = finish_y - start_y;
-	y_scale = (((gfloat) y_diff) / time_diff);
-	time_y = start_y + (y_scale * time_offset);
-
-	// If the time position is during a transition, we need to determine the correct alpha value
-	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-	{
-		// There is a transition in, so work out if the time position is during it
-		end_time = start_time + this_layer_data->transition_in_duration;
-		if ((time_position >= start_time) && (time_position < end_time))
-		{
-			// The time position is during a transition in
-			time_diff = end_time - start_time;
-			time_alpha = time_offset / time_diff;
-		}
-	}
-	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
-	{
-		// There is a transition out, so work out if the time position is during it
-		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-			start_time += this_layer_data->transition_in_duration;
-		start_time += this_layer_data->duration;
-		time_offset = time_position - start_time;
-		end_time = start_time + this_layer_data->transition_out_duration;
-		if ((time_position > start_time) && (time_position <= end_time))
-		{
-			// The time position is during a transition out
-			time_diff = end_time - start_time;
-			time_alpha = 1 - (time_offset / time_diff);
-		}
-	}
+	// Retrieve the layer position and alpha for the given point in time
+	return_code_gbool = get_layer_position(&layer_positions, this_layer_data, time_position, &time_alpha);
+	if (FALSE == return_code_gbool)
+		return;
 
 	// Calculate the height and width scaling values for the requested layer size
 	gdk_drawable_get_size(GDK_PIXMAP(incoming_pixmap), &pixmap_width, &pixmap_height);
@@ -178,7 +130,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			cairo_save(cairo_context);
 
 			// Position the pixbuf pattern at the desired x,y coordinates
-			cairo_matrix_init_translate(&image_matrix, -(time_x), -(time_y));
+			cairo_matrix_init_translate(&image_matrix, -(layer_positions.x), -(layer_positions.y));
 			cairo_pattern_set_matrix(this_image_data->cairo_pattern, &image_matrix);
 
 			// Set the correct scale for the pattern
@@ -188,7 +140,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			cairo_set_source(cairo_context, this_image_data->cairo_pattern);
 
 			// Draw the source onto our backing pixmap
-			cairo_rectangle(cairo_context, time_x, time_y, this_image_data->width, this_image_data->height);
+			cairo_rectangle(cairo_context, layer_positions.x, layer_positions.y, this_image_data->width, this_image_data->height);
 			cairo_clip(cairo_context);
 			cairo_paint_with_alpha(cairo_context, time_alpha);
 
@@ -214,8 +166,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// Draw the mouse cursor
 			cairo_scale(cairo_context, scaled_width_ratio, scaled_height_ratio);
-			gdk_cairo_set_source_pixbuf(cairo_context, GDK_PIXBUF(mouse_ptr_pixbuf), time_x, time_y);
-			cairo_rectangle(cairo_context, time_x, time_y, width, height);
+			gdk_cairo_set_source_pixbuf(cairo_context, GDK_PIXBUF(mouse_ptr_pixbuf), layer_positions.x, layer_positions.y);
+			cairo_rectangle(cairo_context, layer_positions.x, layer_positions.y, width, height);
 			cairo_clip(cairo_context);
 			cairo_paint_with_alpha(cairo_context, time_alpha);
 
@@ -261,8 +213,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// Calculate the text object (including background) offsets and sizing
 			cairo_text_extents(cairo_context, text_string, &text_extents);
-			x_offset = time_x * scaled_width_ratio;
-			y_offset = time_y * scaled_height_ratio;
+			x_offset = layer_positions.x * scaled_width_ratio;
+			y_offset = layer_positions.y * scaled_height_ratio;
 			width = max_line_width + (TEXT_BORDER_PADDING_WIDTH * 4 * scaled_width_ratio);
 			height = text_height + (TEXT_BORDER_PADDING_HEIGHT * (num_lines + 2) * scaled_height_ratio);
 
@@ -328,8 +280,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			// * Draw the highlight *
 
 			// Calculate how much of the highlight will fit onto the pixmap
-			x_offset = time_x * scaled_width_ratio;
-			y_offset = time_y * scaled_height_ratio;
+			x_offset = layer_positions.x * scaled_width_ratio;
+			y_offset = layer_positions.y * scaled_height_ratio;
 			width = ((layer_highlight *) this_layer_data->object_data)->width * scaled_width_ratio;
 			height = ((layer_highlight *) this_layer_data->object_data)->height * scaled_height_ratio;
 			if ((x_offset + width) > pixmap_width)
@@ -348,8 +300,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			cairo_set_operator(cairo_context, CAIRO_OPERATOR_OVER);
 
 			// Create the border
-			cairo_set_source_rgba(cairo_context, 0, 0.25, 0, 0.60 * time_alpha);
-			cairo_set_line_width(cairo_context, 2.0);
+			cairo_set_source_rgba(cairo_context, 0, 0.25, 0, time_alpha);
+			cairo_set_line_width(cairo_context, 2.5);
 			cairo_set_line_join(cairo_context, CAIRO_LINE_JOIN_ROUND);
 			cairo_set_line_cap(cairo_context, CAIRO_LINE_CAP_ROUND);
 			cairo_move_to(cairo_context, x_offset, y_offset);
@@ -366,7 +318,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			cairo_set_source_rgb(cairo_context, 0, 0.60, 0);
 			cairo_rectangle(cairo_context, x_offset + 1, y_offset + 1, width - 2, height - 2);
 			cairo_clip(cairo_context);
-			cairo_paint_with_alpha(cairo_context, 0.40 * time_alpha);
+			cairo_paint_with_alpha(cairo_context, 0.10 * time_alpha);
 
 			// Restore the cairo state to the way it was
 			cairo_restore(cairo_context);
