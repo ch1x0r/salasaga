@@ -73,7 +73,8 @@ gboolean menu_export_flash_process_element(SWFMovie this_movie, swf_frame_elemen
 			SWFDisplayItem_moveTo(display_list_object, this_element->x_position, this_element->y_position);
 
 			// Ensure the object is visible
-			g_string_printf(as_gstring, "_root.%s._visible = true;", this_element->object_name->str);
+			g_string_printf(as_gstring, "_root.%s._visible = true;",
+					this_element->object_name->str);
 			swf_action = compileSWFActionCode(as_gstring->str);
 			SWFMovie_add(this_movie, (SWFBlock) swf_action);
 
@@ -88,11 +89,42 @@ gboolean menu_export_flash_process_element(SWFMovie this_movie, swf_frame_elemen
 			display_list_object = this_layer_info->display_list_item;
 
 			// Remove the character from the display list
-			g_string_printf(as_gstring, "_root.%s._visible = false; _root.%s._alpha = 0;",
+			g_string_printf(as_gstring, "_root.%s._visible = false; _root.%s._alpha = 0; _root.%s._x = %.2f; _root.%s._y = %.2f;",
 					this_element->object_name->str,
-					this_element->object_name->str);
+					this_element->object_name->str,
+					this_element->object_name->str,
+					this_element->x_position,
+					this_element->object_name->str,
+					this_element->y_position);
 			swf_action = compileSWFActionCode(as_gstring->str);
 			SWFMovie_add(this_movie, (SWFBlock) swf_action);
+
+			// Display debugging info if requested
+			if (debug_level)
+				printf("Remove string: '%s'\n", as_gstring->str);
+		}
+
+		// Does the layer have an opacity change that needs to be actioned in this frame?
+		if (TRUE == this_element->opacity_change)
+		{
+			// Get the appropriate display list object
+			display_list_object = this_layer_info->display_list_item;
+
+			// Set the opacity level for the object
+			new_opacity = this_element->opacity;
+			g_string_printf(as_gstring, " _root.%s._x = %.2f; _root.%s._y = %.2f; _root.%s._alpha = %d;",
+					this_element->object_name->str,
+					this_element->x_position,
+					this_element->object_name->str,
+					this_element->y_position,
+					this_element->object_name->str,
+					new_opacity);
+			swf_action = compileSWFActionCode(as_gstring->str);
+			SWFMovie_add(this_movie, (SWFBlock) swf_action);
+
+			// Display debugging info if requested
+			if (debug_level)
+				printf("Opacity string: '%s'\n", as_gstring->str);
 		}
 
 		// Does the layer need to be moved/positioned in this frame?
@@ -111,19 +143,10 @@ gboolean menu_export_flash_process_element(SWFMovie this_movie, swf_frame_elemen
 					this_element->y_position);
 			swf_action = compileSWFActionCode(as_gstring->str);
 			SWFMovie_add(this_movie, (SWFBlock) swf_action);
-		}
 
-		// Does the layer have an opacity change that needs to be actioned in this frame?
-		if (TRUE == this_element->opacity_change)
-		{
-			// Get the appropriate display list object
-			display_list_object = this_layer_info->display_list_item;
-
-			// Set the opacity level for the object
-			new_opacity = this_element->opacity;
-			g_string_printf(as_gstring, "_root.%s._alpha = %d;", this_element->object_name->str, new_opacity);
-			swf_action = compileSWFActionCode(as_gstring->str);
-			SWFMovie_add(this_movie, (SWFBlock) swf_action);
+			// Display debugging info if requested
+			if (debug_level)
+				printf("Move string: '%s'\n", as_gstring->str);
 		}
 	}
 
