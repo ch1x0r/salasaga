@@ -75,6 +75,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	static gfloat 		stored_x_val;
 	static gfloat		stored_y_val;
 	slide				*this_slide_data;			// Alias to make things easier
+	gfloat				time_alpha = 1.0;			// Alpha value to use at our desired point in time (defaulting to 1.0 = fall opacity)
 	gint				time_x;						// Unscaled X position of the layer at our desired point in time
 	gint				time_y;						// Unscaled Y position of the layer at our desired point in time
 	gfloat				time_position;
@@ -118,7 +119,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// Get its present X and Y offsets
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
-		return_code_gbool = get_layer_position(&layer_positions, layer_data, time_position);
+		return_code_gbool = get_layer_position(&layer_positions, layer_data, time_position, &time_alpha);
 		if (FALSE == return_code_gbool)
 			return TRUE;
 
@@ -427,7 +428,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// Get its present X and Y offsets
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
-		return_code_gbool = get_layer_position(&layer_positions, layer_data, time_position);
+		return_code_gbool = get_layer_position(&layer_positions, layer_data, time_position, &time_alpha);
 		if (FALSE == return_code_gbool)
 			return TRUE;
 
@@ -569,7 +570,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// Get its present X and Y offsets
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
-		return_code_gbool = get_layer_position(&layer_positions, layer_data, time_position);
+		return_code_gbool = get_layer_position(&layer_positions, layer_data, time_position, &time_alpha);
 		if (FALSE == return_code_gbool)
 			return TRUE;
 
