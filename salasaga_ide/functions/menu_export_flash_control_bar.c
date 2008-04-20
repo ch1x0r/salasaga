@@ -69,9 +69,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	// Variables used for the finish button
 	SWFAction			finish_action;
 	SWFButton			finish_button;
-	SWFButtonRecord		finish_record_down;
-	SWFButtonRecord		finish_record_over;
-	SWFButtonRecord		finish_record_up;
 	SWFShape			finish_shape_down;
 	SWFShape			finish_shape_over;
 	SWFShape			finish_shape_up;
@@ -79,9 +76,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	// Variables used for the forward button
 	SWFAction			forward_action;
 	SWFButton			forward_button;
-	SWFButtonRecord		forward_record_down;
-	SWFButtonRecord		forward_record_over;
-	SWFButtonRecord		forward_record_up;
 	SWFShape			forward_shape_down;
 	SWFShape			forward_shape_over;
 	SWFShape			forward_shape_up;
@@ -89,9 +83,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	// Variables used for the pause button
 	SWFAction			pause_action;
 	SWFButton			pause_button;
-	SWFButtonRecord		pause_record_down;
-	SWFButtonRecord		pause_record_over;
-	SWFButtonRecord		pause_record_up;
 	SWFShape			pause_shape_down;
 	SWFShape			pause_shape_over;
 	SWFShape			pause_shape_up;
@@ -99,9 +90,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	// Variables used for the play button
 	SWFAction			play_action;
 	SWFButton			play_button;
-	SWFButtonRecord		play_record_down;
-	SWFButtonRecord		play_record_over;
-	SWFButtonRecord		play_record_up;
 	SWFShape			play_shape_down;
 	SWFShape			play_shape_over;
 	SWFShape			play_shape_up;
@@ -109,9 +97,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	// Variables used for the restart button
 	SWFAction			restart_action;
 	SWFButton			restart_button;
-	SWFButtonRecord		restart_record_down;
-	SWFButtonRecord		restart_record_over;
-	SWFButtonRecord		restart_record_up;
 	SWFShape			restart_shape_down;
 	SWFShape			restart_shape_over;
 	SWFShape			restart_shape_up;
@@ -119,9 +104,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	// Variables used for the rewind button
 	SWFAction			rewind_action;
 	SWFButton			rewind_button;
-	SWFButtonRecord		rewind_record_down;
-	SWFButtonRecord		rewind_record_over;
-	SWFButtonRecord		rewind_record_up;
 	SWFShape			rewind_shape_down;
 	SWFShape			rewind_shape_over;
 	SWFShape			rewind_shape_up;
@@ -357,7 +339,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	}
 
 	// Add the initialisation action to the movie
-	main_movie_action = newSWFAction(slide_names_gstring->str);
+	main_movie_action = compileSWFActionCode(slide_names_gstring->str);
 	SWFMovie_add(main_movie, (SWFBlock) main_movie_action);
 
 	// Create a background for the control bar buttons to go on
@@ -418,15 +400,15 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	restart_button = newSWFButton();
 
 	// Add the shapes to the button for its various states
-	restart_record_up = SWFButton_addCharacter(restart_button, (SWFCharacter) restart_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
-	restart_record_over = SWFButton_addCharacter(restart_button, (SWFCharacter) restart_shape_over, SWFBUTTON_OVER);
-	restart_record_down = SWFButton_addCharacter(restart_button, (SWFCharacter) restart_shape_down, SWFBUTTON_DOWN);
+	SWFButton_addShape(restart_button, (SWFCharacter) restart_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
+	SWFButton_addShape(restart_button, (SWFCharacter) restart_shape_over, SWFBUTTON_OVER);
+	SWFButton_addShape(restart_button, (SWFCharacter) restart_shape_down, SWFBUTTON_DOWN);
 
 	// Add the restart action to the restart button
 	if (debug_level)
 	{
 		// If we're debugging, then generate debugging swf's too
-		restart_action = newSWFAction(
+		restart_action = compileSWFActionCode(
 				" _root.this_slide = 0;"
 				" trace(\"Restart button pressed, slide counter has been set to: \" + _root.this_slide + \".\");"
 				" trace(\"We should now jump to the slide named '\" + _root.slide_names[_root.this_slide] + \"'.\");"
@@ -437,7 +419,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 				" };");
 	} else
 	{
-		restart_action = newSWFAction(
+		restart_action = compileSWFActionCode(
 				" _root.this_slide = 0;"
 				" if (true == _root.playing) {"
 				" _root.gotoAndPlay(2, _root.slide_names[_root.this_slide]);"
@@ -496,15 +478,15 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 		rewind_button = newSWFButton();
 
 		// Add the shapes to the button for its various states
-		rewind_record_up = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
-		rewind_record_over = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_over, SWFBUTTON_OVER);
-		rewind_record_down = SWFButton_addCharacter(rewind_button, (SWFCharacter) rewind_shape_down, SWFBUTTON_DOWN);
+		SWFButton_addShape(rewind_button, (SWFCharacter) rewind_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
+		SWFButton_addShape(rewind_button, (SWFCharacter) rewind_shape_over, SWFBUTTON_OVER);
+		SWFButton_addShape(rewind_button, (SWFCharacter) rewind_shape_down, SWFBUTTON_DOWN);
 
 		// Add the rewind action to the rewind button
 		if (debug_level)
 		{
 			// If we're debugging, then generate debugging swf's too
-			rewind_action = newSWFAction(
+			rewind_action = compileSWFActionCode(
 					"if (0 == _root.this_slide)"
 					" {"  // We're in the first slide, so jump back to the start of the movie
 						" _root.this_slide = 0;"
@@ -543,7 +525,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 					" };");
 		} else
 		{
-			rewind_action = newSWFAction(
+			rewind_action = compileSWFActionCode(
 					"if (0 == _root.this_slide)"
 					" {"  // We're in the first slide, so jump back to the start of the movie
 						" _root.this_slide = 0;"
@@ -618,15 +600,15 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	pause_button = newSWFButton();
 
 	// Add the shapes to the button for its various states
-	pause_record_up = SWFButton_addCharacter(pause_button, (SWFCharacter) pause_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
-	pause_record_over = SWFButton_addCharacter(pause_button, (SWFCharacter) pause_shape_over, SWFBUTTON_OVER);
-	pause_record_down = SWFButton_addCharacter(pause_button, (SWFCharacter) pause_shape_down, SWFBUTTON_DOWN);
+	SWFButton_addShape(pause_button, (SWFCharacter) pause_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
+	SWFButton_addShape(pause_button, (SWFCharacter) pause_shape_over, SWFBUTTON_OVER);
+	SWFButton_addShape(pause_button, (SWFCharacter) pause_shape_down, SWFBUTTON_DOWN);
 
 	// Add the pause action to the pause button
 	if (debug_level)
 	{
 		// If we're debugging, then generate debugging swf's too
-		pause_action = newSWFAction(
+		pause_action = compileSWFActionCode(
 				"cb_play._visible = true;"
 				" _root.playing = false;"
 				" trace(\"Pause button pressed. Slide counter equals: \" + _root.this_slide + \".\");"
@@ -634,7 +616,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 				" _root.stop();");
 	} else
 	{
-		pause_action = newSWFAction(
+		pause_action = compileSWFActionCode(
 				"cb_play._visible = true;"
 				" _root.playing = false;"
 				" _root.stop();");
@@ -687,15 +669,15 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	play_button = newSWFButton();
 
 	// Add the shapes to the button for its various states
-	play_record_up = SWFButton_addCharacter(play_button, (SWFCharacter) play_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
-	play_record_over = SWFButton_addCharacter(play_button, (SWFCharacter) play_shape_over, SWFBUTTON_OVER);
-	play_record_down = SWFButton_addCharacter(play_button, (SWFCharacter) play_shape_down, SWFBUTTON_DOWN);
+	SWFButton_addShape(play_button, (SWFCharacter) play_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
+	SWFButton_addShape(play_button, (SWFCharacter) play_shape_over, SWFBUTTON_OVER);
+	SWFButton_addShape(play_button, (SWFCharacter) play_shape_down, SWFBUTTON_DOWN);
 
 	// Add the Play action to the play button 
 	if (debug_level)
 	{
 		// If we're debugging, then generate debugging swf's too
-		play_action = newSWFAction(
+		play_action = compileSWFActionCode(
 				" cb_play._visible = false;"
 				" _root.reversing = false;"
 				" _root.playing = true;"
@@ -706,7 +688,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 				" _root.play();");
 	} else
 	{
-		play_action = newSWFAction(
+		play_action = compileSWFActionCode(
 				" cb_play._visible = false;"
 				" _root.reversing = false;"
 				" _root.playing = true;"
@@ -763,15 +745,15 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 		forward_button = newSWFButton();
 
 		// Add the shapes to the button for its various states
-		forward_record_up = SWFButton_addCharacter(forward_button, (SWFCharacter) forward_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
-		forward_record_over = SWFButton_addCharacter(forward_button, (SWFCharacter) forward_shape_over, SWFBUTTON_OVER);
-		forward_record_down = SWFButton_addCharacter(forward_button, (SWFCharacter) forward_shape_down, SWFBUTTON_DOWN);
+		SWFButton_addShape(forward_button, (SWFCharacter) forward_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
+		SWFButton_addShape(forward_button, (SWFCharacter) forward_shape_over, SWFBUTTON_OVER);
+		SWFButton_addShape(forward_button, (SWFCharacter) forward_shape_down, SWFBUTTON_DOWN);
 
 		// Add the forward action to the forward button
 		if (debug_level)
 		{
 			// If we're debugging, then generate debugging swf's too
-			forward_action = newSWFAction(
+			forward_action = compileSWFActionCode(
 					"if (_root.this_slide >= (_root.num_slides - 1))"
 					" {"
 						// We're in the last slide, so we jump to the end of the movie
@@ -801,7 +783,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 					" };");
 		} else
 		{
-			forward_action = newSWFAction(
+			forward_action = compileSWFActionCode(
 					"if (_root.this_slide >= (_root.num_slides - 1))"
 					" {"
 						// We're in the last slide, so we jump to the end of the movie
@@ -871,15 +853,15 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	finish_button = newSWFButton();
 
 	// Add the shapes to the button for its various states
-	finish_record_up = SWFButton_addCharacter(finish_button, (SWFCharacter) finish_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
-	finish_record_over = SWFButton_addCharacter(finish_button, (SWFCharacter) finish_shape_over, SWFBUTTON_OVER);
-	finish_record_down = SWFButton_addCharacter(finish_button, (SWFCharacter) finish_shape_down, SWFBUTTON_DOWN);
+	SWFButton_addShape(finish_button, (SWFCharacter) finish_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
+	SWFButton_addShape(finish_button, (SWFCharacter) finish_shape_over, SWFBUTTON_OVER);
+	SWFButton_addShape(finish_button, (SWFCharacter) finish_shape_down, SWFBUTTON_DOWN);
 
 	// Add the finish action to the finish button 
 	if (debug_level)
 	{
 		// If we're debugging, then generate debugging swf's too
-		finish_action = newSWFAction(
+		finish_action = compileSWFActionCode(
 				"cb_play._visible = true;"
 				" _root.this_slide = _root.num_slides - 1;"
 				" _root.reversing = false;"
@@ -889,7 +871,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 				" _root.gotoAndStop(_root._totalframes);");  // Jump to the last frame of the movie
 	} else
 	{
-		finish_action = newSWFAction(
+		finish_action = compileSWFActionCode(
 				"cb_play._visible = true;"
 				" _root.this_slide = _root.num_slides - 1;"
 				" _root.reversing = false;"
@@ -961,7 +943,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	SWFMovieClip_nextFrame(movie_clip);
 
 	// Add the movie clip to the main movie
-	buttons_display_item = SWFMovie_add(main_movie, movie_clip);
+	buttons_display_item = SWFMovie_add(main_movie, (SWFBlock) movie_clip);
 
 	// Name the movie clip
 	SWFDisplayItem_setName(buttons_display_item, "cb_main");

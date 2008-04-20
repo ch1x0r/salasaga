@@ -29,6 +29,7 @@
 
 // Math include
 #include <math.h>
+#include <stdio.h>
 
 // GTK includes
 #include <gtk/gtk.h>
@@ -49,6 +50,7 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 	gfloat				current_ming_scale;			// Used when creating text swf output
 	SWFFillStyle		empty_layer_fill;			// Fill style used when constructing empty layer shapes
 	SWFShape			empty_layer_shape;			// Temporary swf shape used when constructing empty layers
+	FILE				*font_file;					// The file we load the font from
 	SWFFont				font_object;				// The font we use gets loaded into this
 	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
 	GError				*error = NULL;				// Pointer to error return structure
@@ -76,7 +78,6 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
 	SWFAction			swf_action;					// Used when constructing action script
 	SWFButton			swf_button;					// Holds a swf button
-	SWFButtonRecord		swf_button_record;			// Holds a swf button record
 	SWFShape			text_bg;					// The text background shape goes in this
 	gfloat				text_bg_box_height;			// Used while generating swf output for text boxes
 	gfloat				text_bg_box_width;			// Used while generating swf output for text boxes
@@ -103,41 +104,29 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 	gfloat				layer_right;
 	gfloat				layer_up;
 
-
-	// Create the fill style used in highlight boxes
-	highlight_fill_style = newSWFSolidFillStyle(0x00, 0xff, 0x00, 0x40);
-	if (NULL == highlight_fill_style)
-	{
-		// Something went wrong creating the fill style, so we don't proceed with creating the swf
-		display_warning("Error ED97: Something went wrong when creating the highlight fill style for the swf");
-		return FALSE;
-	}
-
-	// Create the fill style used in text background shapes
-	text_bg_fill_style = newSWFSolidFillStyle(0xff, 0xff, 0xcc, 0xff);
-	if (NULL == text_bg_fill_style)
-	{
-		// Something went wrong creating the fill style, so we don't proceed with creating the swf
-		display_warning("Error ED102: Something went wrong when creating the text background fill style for the swf");
-
-		// Free the memory allocated in this function
-		destroySWFFillStyle(highlight_fill_style);
-
-		return FALSE;
-	}
-
 	// Create the (one and only for now) font style used in text boxes
 	font_pathname = g_build_path(G_DIR_SEPARATOR_S, font_path, "fdb", "Bitstream Vera Sans.fdb", NULL);
 	if (debug_level) printf("Full path name to font file is: %s\n", font_pathname);
-	font_object = newSWFFont_fromFile(font_pathname);
+
+	// Load the font file if needed
+	font_file = fopen(font_pathname, "r");
+	if (NULL == font_file)
+	{
+		// Something went wrong when loading the font file, so return
+		display_warning("Error ED380: Something went wrong when opening the font file");
+
+		return FALSE;
+	}
+	font_object = loadSWFFontFromFile(font_file);
 	if (NULL == font_object)
 	{
 		// Something went wrong when loading the font file, so return
 		display_warning("Error ED96: Something went wrong when loading the font file");
 
 		// Free the memory allocated in this function
-		destroySWFFillStyle(highlight_fill_style);
-		destroySWFFillStyle(text_bg_fill_style);
+		// fixme3: Ming 0.3.0 doesn't have destroySWFFillStyle()
+		//destroySWFFillStyle(highlight_fill_style);
+		//destroySWFFillStyle(text_bg_fill_style);
 		g_free(font_pathname);
 
 		return FALSE;
@@ -229,11 +218,11 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				swf_button = newSWFButton();
 
 				// Add the shape to the button for all of its states
-				swf_button_record = SWFButton_addCharacter(swf_button, (SWFCharacter) image_shape, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
+				SWFButton_addShape(swf_button, (SWFCharacter) image_shape, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
 
 				// Add action script to the button, jumping to the external link
 				g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
-				swf_action = newSWFAction(as_gstring->str);
+				swf_action = compileSWFActionCode(as_gstring->str);
 				SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
 
 				// Add the dictionary shape to a movie clip, then store for future reference
@@ -306,11 +295,11 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				swf_button = newSWFButton();
 
 				// Add the shape to the button for all of its states
-				swf_button_record = SWFButton_addCharacter(swf_button, (SWFCharacter) empty_layer_shape, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
+				SWFButton_addShape(swf_button, (SWFCharacter) empty_layer_shape, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
 
 				// Add action script to the button, jumping to the external link
 				g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
-				swf_action = newSWFAction(as_gstring->str);
+				swf_action = compileSWFActionCode(as_gstring->str);
 				SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
 
 				// Add the dictionary shape to a movie clip, then store for future reference
@@ -348,6 +337,7 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 			}
 
 			// Set the semi-transparent green fill for the highlight box
+			highlight_fill_style = SWFShape_addSolidFillStyle(highlight_box, 0x00, 0xff, 0x00, 0x40);
 			SWFShape_setRightFillStyle(highlight_box, highlight_fill_style);
 
 			// Set the line style
@@ -376,11 +366,11 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				swf_button = newSWFButton();
 
 				// Add the shape to the button for all of its states
-				swf_button_record = SWFButton_addCharacter(swf_button, (SWFCharacter) highlight_box, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
+				SWFButton_addShape(swf_button, (SWFCharacter) highlight_box, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
 
 				// Add action script to the button, jumping to the external link
 				g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
-				swf_action = newSWFAction(as_gstring->str);
+				swf_action = compileSWFActionCode(as_gstring->str);
 				SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
 
 				// Add the dictionary shape to a movie clip, then store for future reference
@@ -492,11 +482,11 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				swf_button = newSWFButton();
 
 				// Add the shape to the button for all of its states
-				swf_button_record = SWFButton_addCharacter(swf_button, (SWFCharacter) image_shape, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
+				SWFButton_addShape(swf_button, (SWFCharacter) image_shape, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
 
 				// Add action script to the button, jumping to the external link
 				g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
-				swf_action = newSWFAction(as_gstring->str);
+				swf_action = compileSWFActionCode(as_gstring->str);
 				SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
 
 				// Add the dictionary shape to a movie clip, then store for future reference
@@ -581,7 +571,7 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				// * We need to know which of the strings is widest, so we can calculate the width of the text background box *
 
 				// If this is the widest string, we keep the value of this one
-				this_text_string_width = SWFText_getStringWidth(text_object, (gchar *) visible_string);
+				this_text_string_width = SWFText_getStringWidth(text_object, (guchar *) visible_string);
 				if (this_text_string_width > widest_text_string_width)
 					widest_text_string_width = this_text_string_width;
 
@@ -615,6 +605,7 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 			}
 
 			// Set the solid fill for the text background box
+			text_bg_fill_style = SWFShape_addSolidFillStyle(text_bg, 0xff, 0xff, 0xcc, 0xff);
 			SWFShape_setRightFillStyle(text_bg, text_bg_fill_style);
 
 			// Set the line style
@@ -660,14 +651,14 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				swf_button = newSWFButton();
 
 				// Add the shape to the button for all of its states, excluding the hit state
-				swf_button_record = SWFButton_addCharacter(swf_button, (SWFCharacter) text_movie_clip, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN);
+				SWFButton_addShape(swf_button, (SWFCharacter) text_movie_clip, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN);
 
 				// Use the text background area as the hit state
-				swf_button_record = SWFButton_addCharacter(swf_button, (SWFCharacter) text_bg, SWFBUTTON_HIT);
+				SWFButton_addShape(swf_button, (SWFCharacter) text_bg, SWFBUTTON_HIT);
 
 				// Add action script to the button, jumping to the external link
 				g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
-				swf_action = newSWFAction(as_gstring->str);
+				swf_action = compileSWFActionCode(as_gstring->str);
 				SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
 
 				// Add the dictionary shape to a movie clip, then store for future reference

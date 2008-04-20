@@ -177,7 +177,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 		initial_action_gstring = g_string_append(initial_action_gstring, " if (false == _root.playing) { _root.stop(); };");
 
 		// Add the initialisation action to the movie
-		initial_action = newSWFAction(initial_action_gstring->str);
+		initial_action = compileSWFActionCode(initial_action_gstring->str);
 		SWFMovie_add(swf_movie, (SWFBlock) initial_action);
 	}
 
@@ -338,7 +338,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 		if (debug_level)
 		{
 			// If we're debugging, then generate debugging swf's too
-			inc_slide_counter_action = newSWFAction(
+			inc_slide_counter_action = compileSWFActionCode(
 					"if ((_root.this_slide <= (_root.num_slides - 1)) && (false == _root.reversing))"
 					" {"
 						" _root.this_slide += 1;"
@@ -361,7 +361,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 					);
 		} else
 		{
-			inc_slide_counter_action = newSWFAction(
+			inc_slide_counter_action = compileSWFActionCode(
 					"if ((_root.this_slide <= (_root.num_slides - 1)) && (false == _root.reversing))"
 					" {"
 						" _root.this_slide += 1;"
@@ -386,18 +386,18 @@ gint menu_export_flash_inner(gchar *output_filename)
 	switch (end_behaviour)
 	{
 		case END_BEHAVIOUR_LOOP_PLAY:
-			end_action = newSWFAction("_root.playing = true; cb_main.cb_play._visible = false; _root.gotoAndPlay(2);");
+			end_action = compileSWFActionCode("_root.playing = true; cb_main.cb_play._visible = false; _root.gotoAndPlay(2);");
 			SWFMovie_add(swf_movie, (SWFBlock) end_action);
 			break;
 
 		case END_BEHAVIOUR_LOOP_STOP:
-			end_action = newSWFAction("_root.playing = false; cb_main.cb_play._visible = true; _root.gotoAndStop(2);");
+			end_action = compileSWFActionCode("_root.playing = false; cb_main.cb_play._visible = true; _root.gotoAndStop(2);");
 			SWFMovie_add(swf_movie, (SWFBlock) end_action);
 			break;
 
 		case END_BEHAVIOUR_STOP:
 		default:
-			end_action = newSWFAction("_root.playing = false; cb_main.cb_play._visible = true; _root.stop();");
+			end_action = compileSWFActionCode("_root.playing = false; cb_main.cb_play._visible = true; _root.stop();");
 			SWFMovie_add(swf_movie, (SWFBlock) end_action);
 			break;
 	}
