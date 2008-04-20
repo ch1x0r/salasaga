@@ -107,6 +107,8 @@ gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start,
 			array_start[frame_counter].action_this = TRUE;
 			array_start[frame_counter].opacity_change = TRUE;
 			array_start[frame_counter].opacity = opacity_count;
+			array_start[frame_counter].x_position = element_x_position_start;
+			array_start[frame_counter].y_position = element_y_position_start;
 			opacity_count += floorf(opacity_step);
 		}
 
@@ -146,6 +148,8 @@ gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start,
 			array_start[frame_counter].action_this = TRUE;
 			array_start[frame_counter].opacity_change = TRUE;
 			array_start[frame_counter].opacity = opacity_count;
+			array_start[frame_counter].x_position = element_x_position_finish;
+			array_start[frame_counter].y_position = element_y_position_finish;
 			opacity_count -= floorf(opacity_step);
 		}
 
@@ -153,6 +157,8 @@ gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start,
 		array_start[finish_frame_rounded].action_this = TRUE;
 		array_start[finish_frame_rounded].opacity_change = TRUE;
 		array_start[finish_frame_rounded].opacity = 0;
+		array_start[finish_frame_rounded].x_position = element_x_position_start;
+		array_start[finish_frame_rounded].y_position = element_y_position_start;
 	}
 
 	// Work out the start frame of the fully visible layer display
@@ -161,13 +167,7 @@ gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start,
 		start_frame += this_layer_data->transition_in_duration * frames_per_second;
 
 	// Work out the finish frame of the fully visible layer display
-	if (TRUE == this_layer_data->background)
-	{
-		finish_frame = start_frame + (this_layer_data->duration * frames_per_second) - 1;
-	} else
-	{
-		finish_frame = start_frame + (this_layer_data->duration * frames_per_second) - 1;
-	}
+	finish_frame = start_frame + (this_layer_data->duration * frames_per_second) - 1;
 	start_frame_rounded = roundf(start_frame);
 	finish_frame_rounded = roundf(finish_frame);
 	num_displayed_frames = finish_frame_rounded - start_frame_rounded;
@@ -182,8 +182,8 @@ gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start,
 		if ((element_x_position_start != element_x_position_finish) || (element_y_position_start != element_y_position_finish))
 		{
 			// Work out how much to increment the frame movement by in each direction
-			element_x_position_increment = (element_x_position_finish - element_x_position_start) / (num_displayed_frames - 1);
-			element_y_position_increment = (element_y_position_finish - element_y_position_start) / (num_displayed_frames - 1);
+			element_x_position_increment = (element_x_position_finish - element_x_position_start) / (num_displayed_frames);
+			element_y_position_increment = (element_y_position_finish - element_y_position_start) / (num_displayed_frames);
 		}
 
 		// Loop through each frame of the fully visible layer, filling in the relevant elements
