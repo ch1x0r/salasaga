@@ -605,7 +605,7 @@ cairo/create_cairo_pixbuf_pattern.o:
 callbacks/menu_screenshots_capture_full_screen.o:
 	$(CC) $(CFLAGS) -c callbacks/menu_screenshots_capture_full_screen.c -o callbacks/menu_screenshots_capture_full_screen.o
 
-layer/get_layer_position.o
+layer/get_layer_position.o:
 	$(CC) $(CFLAGS) -c layer/get_layer_position.c -o layer/get_layer_position.o
 
 widgets/time_line.o:
