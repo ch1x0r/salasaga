@@ -49,7 +49,7 @@ void project_crop(void)
 	GtkDialog			*crop_dialog;				// Widget for the dialog
 	GtkWidget			*crop_table;				// Table used for neat layout of the dialog box
 	gint				dialog_result;				// Catches the return code from the dialog box
-	layer				*last_layer;				// Temporary layer
+	layer				*last_layer = NULL;			// Temporary layer
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				left_value;
 	gint				new_height;					// Hold the height of the cropped area

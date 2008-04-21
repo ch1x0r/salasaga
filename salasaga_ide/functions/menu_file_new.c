@@ -63,9 +63,9 @@ void menu_file_new(void)
 	guint				row_counter = 0;			// Used to count which row things are up to
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
 	guint				valid_fps;					// Receives the new project fps once validated
-	guint				valid_height;				// Receives the new project height once validated
+	guint				valid_height = 0;			// Receives the new project height once validated
 	GString				*valid_proj_name;			// Receives the new project name once validated
-	guint				valid_width;				// Receives the new project width once validated
+	guint				valid_width = 0;			// Receives the new project width once validated
 	guint				*validated_guint;			// Receives known good guint values from the validation function 
 	GString				*validated_string;			// Receives known good strings from the validation function
 

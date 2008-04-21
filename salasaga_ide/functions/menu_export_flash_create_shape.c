@@ -45,7 +45,7 @@
 gboolean menu_export_flash_create_shape(layer *this_layer_data)
 {
 	// Local variables
-	GString				*as_gstring;				// Used for constructing action script statements
+	GString				*as_gstring = NULL;			// Used for constructing action script statements
 	guint16				blue_component;				// Used when retrieving the foreground color of text
 	gfloat				current_ming_scale;			// Used when creating text swf output
 	SWFFillStyle		empty_layer_fill;			// Fill style used when constructing empty layer shapes
@@ -55,7 +55,7 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
 	GError				*error = NULL;				// Pointer to error return structure
 	guint16				green_component;			// Used when retrieving the foreground color of text
-	SWFShape			highlight_box;				// Temporary swf shape used when constructing highlight boxes
+	SWFShape			highlight_box = NULL;		// Temporary swf shape used when constructing highlight boxes
 	gint				highlight_box_height;		// Used while generating swf output for highlight boxes
 	gint				highlight_box_width;		// Used while generating swf output for highlight boxes
 	SWFFillStyle		highlight_fill_style;		// Fill style used when constructing highlight boxes

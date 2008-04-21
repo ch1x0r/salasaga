@@ -49,18 +49,18 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	GtkWidget			*mouse_table;				// Table used for neat layout of the dialog box
 	guint				row_counter = 0;			// Used to count which row things are up to
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
-	gfloat				valid_duration;				// Receives the new finish frame once validated
+	gfloat				valid_duration = 0;			// Receives the new finish frame once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
-	gfloat				valid_start_time;			// Receives the new start time once validated
-	gfloat				valid_trans_in_duration;	// Receives the new appearance transition duration once validated
-	guint				valid_trans_in_type;		// Receives the new appearance transition type once validated
+	gfloat				valid_start_time = 0;		// Receives the new start time once validated
+	gfloat				valid_trans_in_duration = 0;// Receives the new appearance transition duration once validated
+	guint				valid_trans_in_type = 0;	// Receives the new appearance transition type once validated
 	gfloat				valid_trans_out_duration;	// Receives the new exit transition duration once validated
-	guint				valid_trans_out_type;		// Receives the new exit transition type once validated
-	guint				valid_x_offset_finish;		// Receives the new finish frame x offset once validated
-	guint				valid_x_offset_start;		// Receives the new start frame x offset once validated
-	guint				valid_y_offset_finish;		// Receives the new finish frame y offset once validated
-	guint				valid_y_offset_start;		// Receives the new start frame y offset once validated
+	guint				valid_trans_out_type = 0;	// Receives the new exit transition type once validated
+	guint				valid_x_offset_finish = 0;	// Receives the new finish frame x offset once validated
+	guint				valid_x_offset_start = 0;	// Receives the new start frame x offset once validated
+	guint				valid_y_offset_finish = 0;	// Receives the new finish frame y offset once validated
+	guint				valid_y_offset_start = 0;	// Receives the new start frame y offset once validated
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function

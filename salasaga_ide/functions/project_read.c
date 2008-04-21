@@ -93,17 +93,17 @@ gboolean project_read(gchar *filename)
 	xmlNodePtr			this_node;					// Temporary pointer
 	xmlNodePtr			this_slide;					// Temporary pointer
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
-	gboolean			valid_control_bar_behaviour;  // Receives the new control bar display behaviour
-	guint				valid_end_behaviour;		// Receives the new end behaviour once validated
-	guint				valid_fps;					// Receives the new fps once validated
-	guint				valid_output_height;		// Receives the new output height once validated
+	gboolean			valid_control_bar_behaviour = 0;// Receives the new control bar display behaviour
+	guint				valid_end_behaviour = 0;	// Receives the new end behaviour once validated
+	guint				valid_fps = 0;				// Receives the new fps once validated
+	guint				valid_output_height = 0;	// Receives the new output height once validated
 	GString				*valid_output_folder;		// Receives the new output folder once validated
-	guint				valid_output_width;			// Receives the new output width once validated
+	guint				valid_output_width = 0;		// Receives the new output width once validated
 	GString				*valid_project_name;		// Receives the new project name once validated
-	guint				valid_project_height;		// Receives the new project height once validated
-	guint				valid_project_width;		// Receives the new project width once validated
+	guint				valid_project_height = 0;	// Receives the new project height once validated
+	guint				valid_project_width = 0;	// Receives the new project width once validated
 	gfloat				valid_save_format;			// Receives the project file format version once validated
-	guint				valid_start_behaviour;		// Receives the new start behaviour once validated
+	guint				valid_start_behaviour = 0;	// Receives the new start behaviour once validated
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function

@@ -50,9 +50,9 @@ gboolean calculate_text_object_size(layer_text *text_object)
 	cairo_text_extents_t	text_extents;			// Meta information about an onscreen text string
 	gfloat					text_height;
 	GtkTextIter				text_start;				// The start position of the text buffer
-	gchar					*text_string;			// The text string to be displayed
-	gint					time_x;					// Unscaled X position of the layer at our desired point in time
-	gint					time_y;					// Unscaled Y position of the layer at our desired point in time
+	gchar					*text_string = NULL;	// The text string to be displayed
+	gint					time_x = 0;				// Unscaled X position of the layer at our desired point in time
+	gint					time_y = 0;				// Unscaled Y position of the layer at our desired point in time
 	gint					width;					//
 	gint					x_offset;				// X coordinate of the object at the desired point in time
 	gint					y_offset;				// Y coordinate of the object at the desired point in time

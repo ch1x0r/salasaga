@@ -57,15 +57,15 @@ void menu_edit_preferences(void)
 	gchar				**strings;							// Text string are split apart with this
 	GString				*tmp_gstring;						// Text strings are constructed in this
 	gboolean			useable_input;						// Used to control loop flow
-	guint				valid_default_fps;					// Receives the new default fps once validated
-	guint				valid_icon_height;					// Receives the new icon height once validated
-	gfloat				valid_layer_duration;				// Receives the new default layer duration once validated
+	guint				valid_default_fps = 0;				// Receives the new default fps once validated
+	guint				valid_icon_height = 0;				// Receives the new icon height once validated
+	gfloat				valid_layer_duration = 0;			// Receives the new default layer duration once validated
 	GString				*valid_output_folder;				// Receives the new output folder once validated
 	GString				*valid_output_resolution;			// Receives the new default output resolution once validated
-	guint				valid_preview_width;				// Receives the new film strip thumbnail width once validated
+	guint				valid_preview_width = 0;			// Receives the new film strip thumbnail width once validated
 	GString				*valid_project_folder;				// Receives the new default project folder once validated
 	GString				*valid_screenshot_folder;			// Receives the new screenshot folder once validated
-	gfloat				valid_slide_duration;				// Receives the new default slide duration once validated
+	gfloat				valid_slide_duration = 0;			// Receives the new default slide duration once validated
 	GString				*valid_zoom_level;					// Receives the new default zoom level once validated
 	gfloat				*validated_gfloat;					// Receives known good gfloat values from the validation function
 	guint				*validated_guint;					// Receives known good guint values from the validation function 

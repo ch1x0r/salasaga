@@ -76,7 +76,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gfloat					text_red;				// Red component of text fg colour
 	gint					text_top;				// Pixel number onscreen for the top of text
 	GtkTextIter				text_start;				// The start position of the text buffer
-	gchar					*text_string;			// The text string to be displayed
+	gchar					*text_string = NULL;	// The text string to be displayed
 	layer_image				*this_image_data;		// Pointer to image layer data
 	gfloat					time_alpha = 1.0;		// Alpha value to use at our desired point in time (defaulting to 1.0 = fall opacity)
 	gint					width;					//

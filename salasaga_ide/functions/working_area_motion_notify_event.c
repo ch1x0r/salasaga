@@ -80,8 +80,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gint				time_y;						// Unscaled Y position of the layer at our desired point in time
 	gfloat				time_position;
 	gint				width;
-	gfloat				x_diff;						// The X distance the object was dragged, after scaling
-	gfloat				y_diff;						// The Y distance the object was dragged, after scaling
+	gfloat				x_diff = 0;					// The X distance the object was dragged, after scaling
+	gfloat				y_diff = 0;					// The Y distance the object was dragged, after scaling
 
 
 	// If the current slide hasn't been initialised, or there is no project active don't run this function

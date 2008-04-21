@@ -59,18 +59,18 @@ gboolean preferences_load()
 	gboolean			should_maximise = FALSE;	// Briefly keeps track of whether the window should be maximised
 	gboolean			should_keybind_warn = TRUE;	// Receives the gboolean as to whether the non-metacity key bind warning should be displayed
 	gboolean			useable_input;				// Used to control loop flow
-	GdkColor			valid_bg_colour;			// Receives the new default background color for slides once validated
-	guint				valid_default_fps;			// Receives the new default fps once validated
+	GdkColor			valid_bg_colour = {0,0,0};	// Receives the new default background color for slides once validated
+	guint				valid_default_fps = 0;		// Receives the new default fps once validated
 	guint				valid_icon_height;			// Receives the new icon height once validated
-	gfloat				valid_layer_duration;		// Receives the new default layer duration once validated
+	gfloat				valid_layer_duration = 0;	// Receives the new default layer duration once validated
 	GString				*valid_output_folder;		// Receives the new output folder once validated
-	guint				valid_output_height;		// Receives the new default output height once validated
-	guint				valid_output_width;			// Receives the new default output width once validated
-	guint				valid_preview_width;		// Receives the new film strip thumbnail width once validated
-	guint				valid_project_height;		// Receives the new project height once validated
-	guint				valid_project_width;		// Receives the new project width once validated
+	guint				valid_output_height = 0;	// Receives the new default output height once validated
+	guint				valid_output_width = 0;		// Receives the new default output width once validated
+	guint				valid_preview_width = 0;	// Receives the new film strip thumbnail width once validated
+	guint				valid_project_height = 0;	// Receives the new project height once validated
+	guint				valid_project_width = 0;	// Receives the new project width once validated
 	GString				*valid_project_folder;		// Receives the new default project folder once validated
-	gfloat				valid_slide_duration;		// Receives the new default slide duration once validated
+	gfloat				valid_slide_duration = 0;	// Receives the new default slide duration once validated
 	GString				*valid_zoom_level;			// Receives the new default zoom level once validated
 	GString				*valid_screenshot_folder;	// Receives the new screenshot folder once validated
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
