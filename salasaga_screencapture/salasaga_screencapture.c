@@ -169,9 +169,9 @@ gint main(gint argc, gchar *argv[])
 	GString				*valid_project_name;			// Receives the project name once validated
 	GString				*valid_screenshot_folder;	// Receives the screenshot folder once validated
 	guint				valid_height;				// Receives the screenshot height once validated
-	guint				valid_width;				// Receives the screenshot width once validated
-	guint				valid_x_offset;				// Receives the screenshot x offset once validated
-	guint				valid_y_offset;				// Receives the screenshot y offset once validated
+	guint				valid_width = 0;			// Receives the screenshot width once validated
+	guint				valid_x_offset = 0;			// Receives the screenshot x offset once validated
+	guint				valid_y_offset = 0;			// Receives the screenshot y offset once validated
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 	gint				x_offset, x_length;			// Values from the lock file
