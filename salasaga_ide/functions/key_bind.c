@@ -55,8 +55,15 @@ gint key_bind(void)
 	// If we're not running Metacity as our window manager, then display a warning to the user
 	if (0 != g_ascii_strncasecmp(gdk_x11_screen_get_window_manager_name(gdk_screen_get_default()), "Metacity", 8))
 	{
-		display_warning("Error ED379: Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, so not sure how to.)  You will need to do this yourself manually.");
-		return -1;
+		if (TRUE == metacity_key_warning)
+		{
+			// Display the warning
+			display_warning("Error ED379: Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, so not sure how to.)  You will need to do this yourself manually.");
+
+			// Ensure the the warning is only displayed once unless the user specifically requests otherwise 
+			metacity_key_warning = FALSE; 
+			return -1;
+		}
 	}
 
 	// Check if the "salasaga_screencapture" program is in the OS search path

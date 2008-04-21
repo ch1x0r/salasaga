@@ -105,6 +105,8 @@ void menu_edit_preferences(void)
 	GtkWidget			*label_default_bg_colour;			// Default background colour
 	GtkWidget			*button_default_bg_colour;			// Color button
 
+	GtkWidget			*check_metacity_key_bind;			// Label widget
+
 
 	// Initialise various things
 	app_row_counter = 0;
@@ -215,6 +217,18 @@ void menu_edit_preferences(void)
 	button_default_bg_colour = gtk_color_button_new_with_color(&default_bg_colour);
 	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(button_default_bg_colour), TRUE);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_bg_colour), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	app_row_counter = app_row_counter + 1;
+
+	// Non-metacity key bind warning
+	check_metacity_key_bind = gtk_check_button_new_with_label("Display non-metacity key bind warning?");
+	if (FALSE == metacity_key_warning)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_metacity_key_bind), FALSE);
+	} else
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_metacity_key_bind), TRUE);
+	}
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_metacity_key_bind), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Ensure everything will show
@@ -430,8 +444,14 @@ void menu_edit_preferences(void)
 	// Default Background Colour
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(button_default_bg_colour), &default_bg_colour);
 
-	// Set the changes made variable
-	changes_made = TRUE;
+	// Get the Metacity key bind warning value
+	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_metacity_key_bind)))
+	{
+		metacity_key_warning = TRUE;
+	} else
+	{
+		metacity_key_warning = FALSE;
+	}
 
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Application preferences updated");

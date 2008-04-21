@@ -65,6 +65,7 @@ extern GtkWidget			*main_drawing_area;
 extern GtkWidget			*main_window;
 extern GtkItemFactory		*menu_bar;
 extern GtkTable				*message_bar;
+extern gboolean				metacity_key_warning;
 extern gboolean				mouse_dragging;
 extern GdkPixbuf			*mouse_ptr_pixbuf;
 extern gboolean				new_layer_selected;

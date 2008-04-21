@@ -80,6 +80,7 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_green", default_bg_colour.green, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_blue", default_bg_colour.blue, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/icon_height", icon_height, NULL);
+	gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/metacity_key_warning", metacity_key_warning, NULL);
 
 	// * Save the present window maximised state (i.e. if we're maximised or not) *
 

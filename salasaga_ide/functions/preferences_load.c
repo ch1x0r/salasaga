@@ -57,6 +57,7 @@ gboolean preferences_load()
 	gfloat				gfloat_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
 	gboolean			should_maximise = FALSE;	// Briefly keeps track of whether the window should be maximised
+	gboolean			should_keybind_warn = TRUE;	// Receives the gboolean as to whether the non-metacity key bind warning should be displayed
 	gboolean			useable_input;				// Used to control loop flow
 	GdkColor			valid_bg_colour;			// Receives the new default background color for slides once validated
 	guint				valid_default_fps;			// Receives the new default fps once validated
@@ -328,6 +329,9 @@ gboolean preferences_load()
 	// Check if the application should start maximised or not
 	should_maximise = gconf_engine_get_bool(gconf_engine, "/apps/salasaga/defaults/window_maximised", NULL);
 
+	// Check if the Metacity key bind warning should be displayed or not
+	should_keybind_warn = gconf_engine_get_bool(gconf_engine, "/apps/salasaga/defaults/metacity_key_warning", NULL);
+
 	// Check if all the values were validated ok
 	if (FALSE == useable_input)
 	{
@@ -390,6 +394,9 @@ gboolean preferences_load()
 
 	// Set the icon height
 	icon_height = valid_icon_height;
+
+	// Set the non-metacity key bind warning 
+	metacity_key_warning = should_keybind_warn;
 
 	// Free our GConf engine
 	gconf_engine_unref(gconf_engine);

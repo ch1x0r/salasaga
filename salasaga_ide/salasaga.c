@@ -104,6 +104,7 @@ GtkWidget				*main_drawing_area;			// Widget for the drawing area
 GtkWidget				*main_window;				// Widget for the main window
 GtkItemFactory			*menu_bar = NULL;			// Widget for the menu bar
 GtkTable				*message_bar;				// Widget for message bar
+gboolean				metacity_key_warning;		// Should the metacity key bind warning be displayed?
 gboolean				mouse_dragging = FALSE;		// Is the mouse being dragged?
 GdkPixbuf				*mouse_ptr_pixbuf;			// Temporary GDK Pixbuf
 gboolean				new_layer_selected = TYPE_NONE;	// Is a new layer being created?
@@ -433,6 +434,7 @@ gint main(gint argc, gchar *argv[])
 		default_output_height = 600;
 		default_slide_duration = 20;  // Default number of seconds to use for new slides
 		default_layer_duration = 10;  // Default number of seconds to use for new layers
+		metacity_key_warning = TRUE;
 	}
 
 	// Set various required defaults that will be overwritten by the first project loaded
