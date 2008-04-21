@@ -198,7 +198,6 @@
 <listOptionValue builtIn="false" value="/usr/include/atk-1.0"/>
 <listOptionValue builtIn="false" value="/usr/include/libxml2"/>
 <listOptionValue builtIn="false" value="/usr/include/freetype2/freetype/config"/>
-<listOptionValue builtIn="false" value="/tmp/ming/include"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.700765062" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
@@ -583,7 +582,6 @@
 <listOptionValue builtIn="false" value="/usr/include/atk-1.0"/>
 <listOptionValue builtIn="false" value="/usr/include/libxml2"/>
 <listOptionValue builtIn="false" value="/usr/include/freetype2/freetype/config"/>
-<listOptionValue builtIn="false" value="/tmp/ming/include"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.641308527" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
