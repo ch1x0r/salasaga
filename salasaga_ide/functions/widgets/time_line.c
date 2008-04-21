@@ -1425,8 +1425,8 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		// Check if the user clicked on the start of the layer (i.e. wants to adjust the start time)
 		check_pixel = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
 		if (1 < check_pixel)
-			check_pixel -= 1;
-		if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 5))
+			check_pixel -= 5;
+		if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 10))
 		{
 			// The user clicked on the start pixel for a layer, so we're commencing a resize
 			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
@@ -1449,8 +1449,8 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			check_pixel = priv->left_border_width +
 							((this_layer_data->start_time + this_layer_data->transition_in_duration) * pixels_per_second);
 			if (1 < check_pixel)
-				check_pixel -= 1;
-			if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 5))
+				check_pixel -= 5;
+			if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 10))
 			{
 				// We're adjusting the end time of the transition in
 				priv->resize_type = RESIZE_LAYER_START;
@@ -1463,8 +1463,8 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 			check_pixel += this_layer_data->transition_in_duration * pixels_per_second;
 		if (1 < check_pixel)
-			check_pixel -= 1;
-		if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 5))
+			check_pixel -= 5;
+		if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 10))
 		{
 			// We're adjusting the main duration time
 			priv->resize_type = RESIZE_LAYER_DURATION;
@@ -1479,8 +1479,8 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 				check_pixel += this_layer_data->transition_in_duration * pixels_per_second;
 			if (1 < check_pixel)
-				check_pixel -= 1;
-			if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 5))
+				check_pixel -= 5;
+			if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 10))
 			{
 				// We're adjusting the end time of the transition in
 				priv->resize_type = RESIZE_TRANS_OUT_DURATION;
