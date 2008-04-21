@@ -36,7 +36,7 @@ extern "C" {
 
 // Basic application constants
 #define APP_NAME "Salasaga"
-#define	APP_VERSION "0.8.0-pre"
+#define	APP_VERSION "0.8.0-alpha1"
 
 // Statuses for the start and end points
 #define END_POINTS_INACTIVE			0
