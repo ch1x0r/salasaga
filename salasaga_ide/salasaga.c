@@ -154,7 +154,7 @@ gulong					layer_toolbar_signals[MAIN_TB_COUNT];		// Array of toolbar signals
 
 // Application default preferences
 GdkColor				default_bg_colour;			// Default background color for slides
-guint					default_fps;				// Defaut number of frames per second
+guint					default_fps;				// Default number of frames per second
 GString					*default_output_folder;		// Application default save path for exporting animations
 guint					default_output_height;		// Application default for how high to create project output
 guint					default_output_width;		// Application default for how wide to create project output
@@ -434,6 +434,7 @@ gint main(gint argc, gchar *argv[])
 		default_output_height = 600;
 		default_slide_duration = 20;  // Default number of seconds to use for new slides
 		default_layer_duration = 10;  // Default number of seconds to use for new layers
+		default_fps = 12;
 		metacity_key_warning = TRUE;
 	}
 
