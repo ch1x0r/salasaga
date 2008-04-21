@@ -50,6 +50,7 @@ gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start,
 	guint				finish_frame_rounded;
 	guint				frame_counter;				// Holds the number of frames
 	GString 			*layer_name;				// The text name for the layer
+	guint				loop_counter = 0;			// Simple counter used in loops
 	gint				num_displayed_frames;
 	guint				opacity_count;				// Used when calculating object opacity
 	gfloat				opacity_step;				// Used when calculating object opacity
@@ -187,6 +188,7 @@ gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start,
 		}
 
 		// Loop through each frame of the fully visible layer, filling in the relevant elements
+		loop_counter = 0;
 		for (frame_counter = start_frame_rounded; frame_counter <= finish_frame_rounded; frame_counter++)
 		{
 			// Store the x and y positions for this layer for this frame
@@ -201,8 +203,9 @@ gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start,
 				array_start[frame_counter].is_moving = TRUE;
 
 				// Update the element position with each loop
-				x_position += element_x_position_increment;
-				y_position += element_y_position_increment;
+				x_position = element_x_position_start + (element_x_position_increment * loop_counter);
+				y_position = element_y_position_start + (element_y_position_increment * loop_counter);
+				loop_counter++;  // We use a separate loop counter now in order to minimise the accumulated rounding effect
 			}
 
 			// This frame should be shown with full opacity
