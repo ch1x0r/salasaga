@@ -59,7 +59,6 @@
 <listOptionValue builtIn="false" value="/usr/include/atk-1.0"/>
 <listOptionValue builtIn="false" value="/usr/include/libxml2"/>
 <listOptionValue builtIn="false" value="/usr/include/freetype2/freetype/config"/>
-<listOptionValue builtIn="false" value="/tmp/ming/include"/>
 </option>
 <option id="gnu.c.link.option.libs.1138107155" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 <listOptionValue builtIn="false" value="gnomeui-2"/>
@@ -113,7 +112,6 @@
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.exe.debug.1197839021" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.debug">
 <option id="gnu.c.link.option.paths.1745777081" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="stringList">
-<listOptionValue builtIn="false" value="/tmp/ming/lib"/>
 <listOptionValue builtIn="false" value="/usr/local/lib"/>
 <listOptionValue builtIn="false" value="/usr/lib/opengl/xorg-x11/lib"/>
 <listOptionValue builtIn="false" value="/usr/i686-pc-linux-gnu/lib"/>
@@ -159,6 +157,18 @@
 <listOptionValue builtIn="false" value="pam_misc"/>
 <listOptionValue builtIn="false" value="ming"/>
 </option>
+<option id="gnu.c.link.option.nostart.808177875" name="Do not use standard start files (-nostartfiles)" superClass="gnu.c.link.option.nostart"/>
+<option id="gnu.c.link.option.nodeflibs.924567995" name="Do not use default libraries (-nodefaultlibs)" superClass="gnu.c.link.option.nodeflibs"/>
+<option id="gnu.c.link.option.nostdlibs.1227603682" name="No startup or default libs (-nostdlib)" superClass="gnu.c.link.option.nostdlibs"/>
+<option id="gnu.c.link.option.strip.1182346665" name="Omit all symbol information (-s)" superClass="gnu.c.link.option.strip"/>
+<option id="gnu.c.link.option.noshared.1587957333" name="No shared libraries (-static)" superClass="gnu.c.link.option.noshared"/>
+<option id="gnu.c.link.option.ldflags.387317149" name="Linker flags" superClass="gnu.c.link.option.ldflags"/>
+<option id="gnu.c.link.option.other.453239103" name="Other options (-Xlinker [option])" superClass="gnu.c.link.option.other"/>
+<option id="gnu.c.link.option.userobjs.102230807" name="Other objects" superClass="gnu.c.link.option.userobjs"/>
+<option id="gnu.c.link.option.shared.92828947" name="Shared (-shared)" superClass="gnu.c.link.option.shared"/>
+<option id="gnu.c.link.option.soname.977946094" name="Shared object name (-Wl,-soname=)" superClass="gnu.c.link.option.soname"/>
+<option id="gnu.c.link.option.implname.1377960383" name="Import Library name (-Wl,--out-implib=)" superClass="gnu.c.link.option.implname"/>
+<option id="gnu.c.link.option.defname.46636123" name="DEF file name (-Wl,--output-def=)" superClass="gnu.c.link.option.defname"/>
 <inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1941719950" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 <additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 <additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -499,7 +509,6 @@
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.exe.release.95040959" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.exe.release">
 <option id="gnu.c.link.option.paths.1745777082" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="stringList">
-<listOptionValue builtIn="false" value="/tmp/ming/lib"/>
 <listOptionValue builtIn="false" value="/usr/local/lib"/>
 <listOptionValue builtIn="false" value="/usr/lib/opengl/xorg-x11/lib"/>
 <listOptionValue builtIn="false" value="/usr/i686-pc-linux-gnu/lib"/>
