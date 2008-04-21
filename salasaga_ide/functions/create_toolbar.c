@@ -106,7 +106,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	// Create the Quit button
 	main_toolbar_icons[QUIT] = gtk_image_new_from_stock(GTK_STOCK_QUIT, icon_height);
 	main_toolbar_items[QUIT] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[QUIT]), "Quit");
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[SAVE]), main_toolbar_tooltips, "Quit the application", "Private");
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[QUIT]), main_toolbar_tooltips, "Quit the application", "Private");
 	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[QUIT], QUIT);
 	main_toolbar_signals[QUIT] = g_signal_connect(G_OBJECT(main_toolbar_items[QUIT]), "clicked", G_CALLBACK(quit_event), (gpointer) NULL);
 
