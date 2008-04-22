@@ -1,3 +1,9 @@
+salasaga (0.8.0.alpha1-0ubuntu1) unstable; urgency=low
+
+  * First Alpha Release.
+
+ -- Justin Clift <justin@salasaga.org>  Tue, 22 Apr 2008 11:59:00 +1000
+
 flameproject (0.7.7.dev-0ubuntu10) unstable; urgency=low
 
   * Layer duration now displays graphically in time line area.
