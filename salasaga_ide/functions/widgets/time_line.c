@@ -251,6 +251,28 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	return TRUE;
 }
 
+// Function to update the timeline's internal stored slide duration value
+gboolean time_line_set_stored_slide_duration(GtkWidget *widget, gfloat new_duration)
+{
+	// Local variables
+	TimeLinePrivate		*priv;
+	TimeLine			*this_time_line;
+
+
+	// Safety check
+	g_return_val_if_fail(widget != NULL, -1);
+	g_return_val_if_fail(IS_TIME_LINE(widget), -1);
+
+	// Initialisation
+	this_time_line = TIME_LINE(widget);
+	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+
+	// Set the new internal stored slide duration
+	priv->stored_slide_duration = new_duration;
+
+	return TRUE;
+}
+
 // Function to return the time line cursor position
 gfloat time_line_get_cursor_position(GtkWidget *widget)
 {
