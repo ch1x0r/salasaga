@@ -62,6 +62,7 @@ layer *layer_duplicate(layer *source_layer)
 	new_layer->x_offset_start = source_layer->x_offset_start;
 	new_layer->y_offset_start = source_layer->y_offset_start;
 	new_layer->x_offset_finish = source_layer->x_offset_finish;
+	new_layer->y_offset_finish = source_layer->y_offset_finish;
 	new_layer->visible = source_layer->visible;
 	new_layer->background = FALSE;  // Not a background layer when copied
 	new_layer->external_link = g_string_new(source_layer->external_link->str);
