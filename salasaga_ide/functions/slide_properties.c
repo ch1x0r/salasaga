@@ -38,6 +38,7 @@
 #include "draw_timeline.h"
 #include "display_warning.h"
 #include "validate_value.h"
+#include "widgets/time_line.h"
 
 
 void slide_properties(void)
@@ -196,6 +197,9 @@ void slide_properties(void)
 			}
 		}
 	}
+
+	// Update the timeline widget with the new slide duration
+	time_line_set_stored_slide_duration(this_slide->timeline_widget, this_layer_data->duration);
 
 	// Regenerate the timeline
 	draw_timeline();
