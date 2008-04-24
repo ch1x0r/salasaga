@@ -94,7 +94,6 @@ ICONS_CONTROL_BAR_PNG = \
 	3rightarrow_down.png \
 	3rightarrow_over.png \
 	3rightarrow_up.png \
-	background.png \
 	help_down.png \
 	help_over.png \
 	help_up.png \
@@ -127,7 +126,6 @@ ICONS_CONTROL_BAR_SCALABLE = \
 	3rightarrow_down.svg \
 	3rightarrow_over.svg \
 	3rightarrow_up.svg \
-	background.svg \
 	help_down.svg \
 	help_over.svg \
 	help_up.svg \

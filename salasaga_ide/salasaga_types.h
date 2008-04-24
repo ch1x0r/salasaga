@@ -245,6 +245,7 @@ typedef struct
 	gfloat				cb_start_y;
 	gfloat				cb_height;
 	gfloat				cb_width;
+	gfloat				cb_curve;
 } control_bar_elements;
 
 // Defines the object and properties making up a layer
