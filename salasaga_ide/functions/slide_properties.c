@@ -45,10 +45,12 @@ void slide_properties(void)
 {
 	// Local variables
 	GtkWidget			*dialog_table;				// Table used for neat layout of the dialog box
+	gfloat				end_time;					// Used to calculate the end time in seconds of a layer
 	gfloat				gfloat_val;					// Temporary gfloat value used for validation
 	guint				layer_counter;				// Counter used in loops
 	guint				num_layers;					// Receives the number of layers present in the slide
 	gfloat				old_slide_duration;			// Holds the old slide duration
+	gfloat				overall_duration;			// Used when working out the visible time for a layer
 	guint				row_counter = 0;			// Used to count which row things are up to
 	GtkDialog			*slide_dialog;				// Widget for the dialog
 	layer				*this_layer_data;			// Pointer to individual layer data
@@ -178,21 +180,35 @@ void slide_properties(void)
 		num_layers = this_slide->num_layers;
 		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 		{
-			// Does this layer last too long?
+			// Update the background layer (note that this always runs last, which is useful)
 			this_layer_data = g_list_nth_data(this_slide->layers, layer_counter);
+			if (TRUE == this_layer_data->background)
+			{
+				this_layer_data->duration = valid_slide_duration;
+				continue;
+			}
+				
+			// Work out the end time for the layer
+			end_time = this_layer_data->start_time + this_layer_data->duration;
+			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+				end_time += this_layer_data->transition_in_duration;
+			if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+				end_time += this_layer_data->transition_out_duration;
 
 			// If the layer end time is longer than the new slide duration, so we need to shorten the layer somehow
-			if ((this_layer_data->start_time + this_layer_data->duration + this_layer_data->transition_in_duration + this_layer_data->transition_out_duration) > valid_slide_duration)
+			if (end_time > valid_slide_duration)
 			{
-				if (this_layer_data->start_time >= valid_slide_duration)
+				// If the layer is small enough, we just move it's start time back a bit
+				overall_duration = end_time - this_layer_data->start_time;
+				if (overall_duration <= valid_slide_duration)
 				{
-					// The layer is completely outside of the slide duration, so reset it to be at the end of the slide
-					this_layer_data->start_time = valid_slide_duration - (1 / frames_per_second);
-					this_layer_data->duration = 1 / frames_per_second;
+					this_layer_data->start_time = valid_slide_duration - overall_duration;
 				} else
 				{
-					// The layer start time is in bounds, so we just shorted the duration
-					this_layer_data->duration = valid_slide_duration - this_layer_data->start_time;
+					// No, the layer is still longer than the slide duration.  We move the layer back as far as
+					// possible, then extend the slide duration to let it fit
+					this_layer_data->start_time = 0;
+					this_slide->duration = valid_slide_duration = overall_duration;
 				}
 			}
 		}
