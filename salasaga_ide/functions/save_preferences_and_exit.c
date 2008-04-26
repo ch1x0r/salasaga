@@ -124,6 +124,8 @@ void save_preferences_and_exit(void)
 		command_key = g_string_new(NULL);
 		g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", screenshot_command_num);
 		gconf_engine_set_string(gconf_engine, command_key->str, "", NULL);
+		g_string_printf(command_key, "%s%u", "/apps/metacity/global_keybindings/run_command_", screenshot_command_num);
+		gconf_engine_set_string(gconf_engine, command_key->str, "disabled", NULL);
 		g_string_free(command_key, TRUE);
 	}
 
