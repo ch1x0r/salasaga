@@ -48,7 +48,6 @@ gint key_bind(void)
 	gboolean			key_already_set = FALSE;	// Used to work out which metacity run command is unassigned
 	gchar				*return_code_gchar;			// Catches string based return codes
 	guint				tmp_guint;					// Temporary guint
-	guint				tmp_int;					// Temporary guint
 	guint				command_num = 0;			// Used to work out which metacity run command to use
 
 
@@ -61,7 +60,10 @@ gint key_bind(void)
 			display_warning("Error ED379: Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, so not sure how to.)  You will need to do this yourself manually.");
 
 			// Ensure the the warning is only displayed once unless the user specifically requests otherwise 
-			metacity_key_warning = FALSE; 
+			metacity_key_warning = FALSE;
+
+			// Enable screenshots, as the user should have set up the key binding themself
+			screenshots_enabled = TRUE;
 			return -1;
 		}
 	}
@@ -89,8 +91,7 @@ gint key_bind(void)
 		gconf_value = gconf_engine_get_string(gconf_engine, command_key->str, NULL);
 
 		// Check if the key is unused
-		tmp_int = g_ascii_strncasecmp(gconf_value, "", 1);
-		if (0 == tmp_int)
+		if (0 == g_ascii_strncasecmp(gconf_value, "", 1))
 		{
 			// Yes it's unused, so make a note of it
 			command_num = tmp_guint;
@@ -99,8 +100,7 @@ gint key_bind(void)
 			// * This command is being used *
 			
 			// Check if it's already assigned to salasaga_screencapture
-			tmp_int = g_ascii_strncasecmp(gconf_value, "salasaga_screencapture", 13);
-			if (0 == tmp_int)
+			if (TRUE == g_str_has_suffix(gconf_value, "salasaga_screencapture"))
 			{
 				// Yes it is, so we make a note of it
 				command_num = tmp_guint;
@@ -109,8 +109,7 @@ gint key_bind(void)
 			} else
 			{
 				// Check if it's already assigned to flame-capture, the previous name for the screenshot program
-				tmp_int = g_ascii_strncasecmp(gconf_value, "flame-capture", 13);
-				if (0 == tmp_int)
+				if (TRUE == g_str_has_suffix(gconf_value, "flame-capture"))
 				{
 					// Yes it is, so we'll overwrite it with the new one
 					command_num = tmp_guint;
