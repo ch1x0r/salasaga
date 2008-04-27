@@ -111,6 +111,9 @@ void layer_edit(void)
 					tmp_layer = g_list_nth_data(layer_pointer, slide_data->num_layers - 1);
 					tmp_layer->duration = layer_total_time;
 				}
+
+				// Set the changes made variable
+				changes_made = TRUE;
 			}
 			break;
 
@@ -132,6 +135,9 @@ void layer_edit(void)
 					tmp_layer = g_list_nth_data(layer_pointer, slide_data->num_layers - 1);
 					tmp_layer->duration = layer_total_time;
 				}
+
+				// Set the changes made variable
+				changes_made = TRUE;
 			}
 			break;
 
@@ -154,6 +160,9 @@ void layer_edit(void)
 					tmp_layer = g_list_nth_data(layer_pointer, slide_data->num_layers - 1);
 					tmp_layer->duration = layer_total_time;
 				}
+
+				// Set the changes made variable
+				changes_made = TRUE;
 			}
 			break;
 
@@ -176,6 +185,9 @@ void layer_edit(void)
 					tmp_layer = g_list_nth_data(layer_pointer, slide_data->num_layers - 1);
 					tmp_layer->duration = layer_total_time;
 				}
+
+				// Set the changes made variable
+				changes_made = TRUE;
 			}
 			break;
 
@@ -192,9 +204,6 @@ void layer_edit(void)
 
 	// Recreate the slide thumbnail
 	film_strip_create_thumbnail(slide_data);
-
-	// Set the changes made variable
-	changes_made = TRUE;
 
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer edited");
