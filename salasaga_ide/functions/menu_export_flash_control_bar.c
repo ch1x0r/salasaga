@@ -306,7 +306,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	if (1 == num_slides)
 	{
 		control_bar_width -= (button_width * 2);
-		control_bar_x += control_bar_width;
+		control_bar_x += button_width;
 	}
 
 	// Ensure the swf output starts out in the correct play state and the play button is correct
@@ -482,7 +482,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 
 	// *** Create the Rewind button ***
 
-// fixme3: Commented out until another, smaller, background image is added specific for this
 	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
 	{
 		// Load rewind button's UP state image
@@ -749,7 +748,6 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 
 	// *** Create the Fast Forward button ***
 
-// fixme3: Commented out until another, smaller, background image is added specific for this
 	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
 	{
 		// Load forward button's UP state image
@@ -947,8 +945,8 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	SWFDisplayItem_setName(mc_display_item, "cb_restart");
 	button_x = button_x + button_width + button_spacing;
 
-// fixme3: Commented out until another, smaller, background image is added specific for this
-	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
+	// No need for a Rewind button if there's only one slide in the project
+	if (1 < num_slides)
 	{
 		// Add the rewind button to the control bar
 		mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) rewind_button);
@@ -971,8 +969,8 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	SWFDisplayItem_setName(mc_display_item, "cb_play");
 	button_x = button_x + button_width + button_spacing;
 
-// fixme3: Commented out until another, smaller, background image is added specific for this
-	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
+	// No need for a Forward button if there's only one slide in the project
+	if (1 < num_slides)
 	{
 		// Add the rewind button to the control bar
 		mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) forward_button);
