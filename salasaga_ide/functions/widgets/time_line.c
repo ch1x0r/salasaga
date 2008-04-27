@@ -1739,7 +1739,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			this_layer_data->start_time = 0;
 		}
 
-		// Update the stored position of the row in the widget
+		// Update the stored position of the mouse in the widget
 		priv->stored_x = priv->mouse_x;
 
 		// Refresh the timeline display of the row
@@ -1800,185 +1800,188 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 	}
 
 	// If we're not already dragging, nor in a resize, assume we should be dragging
-	if ((RESIZE_NONE == priv->resize_type) && (FALSE == priv->drag_active))
+	if (RESIZE_NONE == priv->resize_type)
 	{
-		// If the user is trying to drag outside the valid layers, ignore this event
-		if ((0 > new_row) || (new_row >= end_row) || (current_row >= end_row) || (0 > current_row))
+		if (FALSE == priv->drag_active)
 		{
-			// Mark this function as complete, and return
-			priv->mouse_x = -1;
-			priv->mouse_y = -1;
-			return TRUE;
-		}
+			// If the user is trying to drag outside the valid layers, ignore this event
+			if ((0 > new_row) || (new_row >= end_row) || (current_row >= end_row) || (0 > current_row))
+			{
+				// Mark this function as complete, and return
+				priv->mouse_x = -1;
+				priv->mouse_y = -1;
+				return TRUE;
+			}
 
-		// We're commencing a drag, so note this
-		priv->drag_active = TRUE;
+			// We're commencing a drag, so note this
+			priv->drag_active = TRUE;
 
-		// Store the mouse coordinates so we know where to drag from
-		if (priv->mouse_x < priv->left_border_width)
-		{
-			priv->stored_x = priv->left_border_width;
+			// Store the mouse coordinates so we know where to drag from
+			if (priv->mouse_x < priv->left_border_width)
+			{
+				priv->stored_x = priv->left_border_width;
+			} else
+			{
+				priv->stored_x = priv->mouse_x;
+			}
+			priv->stored_y = priv->mouse_y;
 		} else
 		{
-			priv->stored_x = priv->mouse_x;
-		}
-		priv->stored_y = priv->mouse_y;
-	} else
-	{
-		// Clamp the row number to acceptable bounds
-		new_row = CLAMP(new_row, 0, end_row - 1);
+			// Clamp the row number to acceptable bounds
+			new_row = CLAMP(new_row, 0, end_row - 1);
 
-		// * We are already dragging, so check if the selected row should be moved vertically *
-		if (current_row > new_row)
-		{
-			// * The layer is being moved vertically upwards *
-
-			// Get details of the layers we're moving around
-			selected_layer = g_list_nth(layer_pointer, current_row);
-			layer_above = g_list_nth(layer_pointer, new_row);
-
-			// Move the row up in the layer list
-			layer_pointer = g_list_remove_link(layer_pointer, selected_layer);
-			layer_pointer = g_list_insert_before(layer_pointer, layer_above, selected_layer->data);
-			this_slide_data->layers = layer_pointer;
-
-			// Refresh the display buffer
-			time_line_internal_initialise_display_buffer(priv,
-					GTK_WIDGET(this_time_line)->allocation.width,
-					GTK_WIDGET(this_time_line)->allocation.height);
-
-			// Draw the layer information
-			time_line_internal_draw_layer_info(priv);
-
-			// Update the selected row
-			time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), new_row);
-
-			// Set the height related variables
-			area.x = 0;
-			area.y = 0;
-			area.height = GTK_WIDGET(this_time_line)->allocation.height;
-			area.width = GTK_WIDGET(this_time_line)->allocation.width;
-
-			// Invalidate the selected area
-			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
-		}
-		if (current_row < new_row)
-		{
-			// * The layer is being moved vertically downwards *
-
-			// Get details of the layer we're moving around
-			selected_layer = g_list_nth(layer_pointer, current_row);
-
-			// Move the row down in the layer list
-			layer_pointer = g_list_remove_link(layer_pointer, selected_layer);
-			layer_below = g_list_nth(layer_pointer, new_row);
-			layer_pointer = g_list_insert_before(layer_pointer, layer_below, selected_layer->data);
-			this_slide_data->layers = layer_pointer;
-
-			// Refresh the display buffer
-			time_line_internal_initialise_display_buffer(priv,
-					GTK_WIDGET(this_time_line)->allocation.width,
-					GTK_WIDGET(this_time_line)->allocation.height);
-
-			// Draw the layer information
-			time_line_internal_draw_layer_info(priv);
-
-			// Update the selected row
-			time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), new_row);
-
-			// Set the height related variables
-			area.x = 0;
-			area.y = 0;
-			area.height = GTK_WIDGET(this_time_line)->allocation.height;
-			area.width = GTK_WIDGET(this_time_line)->allocation.width;
-
-			// Invalidate the selected area
-			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
-		}
-
-		// * Check if the row should be moved horizontally *
-		if ((priv->stored_x != priv->mouse_x) && (priv->mouse_x > priv->left_border_width))
-		{
-			// Check if the layer is being moved to the right
-			if (priv->stored_x > priv->mouse_x)
+			// * We are already dragging, so check if the selected row should be moved vertically *
+			if (current_row > new_row)
 			{
-				// Calculate the time and distance travelled
-				priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
-				distance_moved = priv->stored_x - priv->mouse_x;
-				time_moved = ((gfloat) distance_moved) / pixels_per_second;
+				// * The layer is being moved vertically upwards *
 
-				// Update the layer data with the new timing
-				if (0 > (this_layer_data->start_time - time_moved))
+				// Get details of the layers we're moving around
+				selected_layer = g_list_nth(layer_pointer, current_row);
+				layer_above = g_list_nth(layer_pointer, new_row);
+
+				// Move the row up in the layer list
+				layer_pointer = g_list_remove_link(layer_pointer, selected_layer);
+				layer_pointer = g_list_insert_before(layer_pointer, layer_above, selected_layer->data);
+				this_slide_data->layers = layer_pointer;
+
+				// Refresh the display buffer
+				time_line_internal_initialise_display_buffer(priv,
+						GTK_WIDGET(this_time_line)->allocation.width,
+						GTK_WIDGET(this_time_line)->allocation.height);
+
+				// Draw the layer information
+				time_line_internal_draw_layer_info(priv);
+
+				// Update the selected row
+				time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), new_row);
+
+				// Set the height related variables
+				area.x = 0;
+				area.y = 0;
+				area.height = GTK_WIDGET(this_time_line)->allocation.height;
+				area.width = GTK_WIDGET(this_time_line)->allocation.width;
+
+				// Invalidate the selected area
+				gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+			}
+			if (current_row < new_row)
+			{
+				// * The layer is being moved vertically downwards *
+
+				// Get details of the layer we're moving around
+				selected_layer = g_list_nth(layer_pointer, current_row);
+
+				// Move the row down in the layer list
+				layer_pointer = g_list_remove_link(layer_pointer, selected_layer);
+				layer_below = g_list_nth(layer_pointer, new_row);
+				layer_pointer = g_list_insert_before(layer_pointer, layer_below, selected_layer->data);
+				this_slide_data->layers = layer_pointer;
+
+				// Refresh the display buffer
+				time_line_internal_initialise_display_buffer(priv,
+						GTK_WIDGET(this_time_line)->allocation.width,
+						GTK_WIDGET(this_time_line)->allocation.height);
+
+				// Draw the layer information
+				time_line_internal_draw_layer_info(priv);
+
+				// Update the selected row
+				time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), new_row);
+
+				// Set the height related variables
+				area.x = 0;
+				area.y = 0;
+				area.height = GTK_WIDGET(this_time_line)->allocation.height;
+				area.width = GTK_WIDGET(this_time_line)->allocation.width;
+
+				// Invalidate the selected area
+				gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+			}
+
+			// * Check if the row should be moved horizontally *
+			if ((priv->stored_x != priv->mouse_x) && (priv->mouse_x > priv->left_border_width))
+			{
+				// Check if the layer is being moved to the right
+				if (priv->stored_x > priv->mouse_x)
 				{
-					end_time = end_time - this_layer_data->start_time;
-					this_layer_data->start_time = 0;
-				} else
-				{
-					this_layer_data->start_time -= time_moved;
-					end_time -= time_moved;
+					// Calculate the time and distance travelled
+					priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
+					distance_moved = priv->stored_x - priv->mouse_x;
+					time_moved = ((gfloat) distance_moved) / pixels_per_second;
+
+					// Update the layer data with the new timing
+					if (0 > (this_layer_data->start_time - time_moved))
+					{
+						end_time = end_time - this_layer_data->start_time;
+						this_layer_data->start_time = 0;
+					} else
+					{
+						this_layer_data->start_time -= time_moved;
+						end_time -= time_moved;
+					}
 				}
+
+				// Check if the layer is being moved to the left
+				if (priv->stored_x < priv->mouse_x)
+				{
+					// Calculate the time and distance travelled
+					priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
+					distance_moved = priv->mouse_x - priv->stored_x;
+					time_moved = ((gfloat) distance_moved) / pixels_per_second;
+
+					// Update the layer data with the new timing
+					this_layer_data->start_time += time_moved;
+					end_time += time_moved;
+				}
+
+				// Update the stored position of the row in the widget
+				priv->stored_x = priv->mouse_x;
+
+				// Refresh the timeline display of the row
+				time_line_internal_redraw_layer_bg(priv, current_row);
+				time_line_internal_draw_layer_name(priv, current_row);
+				time_line_internal_draw_layer_duration(priv, current_row);
+
+				// Tell the window system to update the current row area onscreen
+				time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
 			}
 
-			// Check if the layer is being moved to the left
-			if (priv->stored_x < priv->mouse_x)
+			// Ensure the background layer end is kept correct 
+			background_layer_data = g_list_nth_data(layer_pointer, end_row);
+			if (background_layer_data->duration != priv->stored_slide_duration)
 			{
-				// Calculate the time and distance travelled
-				priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
-				distance_moved = priv->mouse_x - priv->stored_x;
-				time_moved = ((gfloat) distance_moved) / pixels_per_second;
+				background_layer_data->duration = priv->stored_slide_duration;
 
-				// Update the layer data with the new timing
-				this_layer_data->start_time += time_moved;
-				end_time += time_moved;
+				// Refresh the timeline display of the background layer
+				area.x = priv->stored_slide_duration * pixels_per_second;
+				area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
+				area.height = priv->row_height - 3;
+				area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
+				time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
+				time_line_internal_draw_layer_duration(priv, end_row);
+
+				// Refresh the newly drawn widget area
+				gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 			}
 
-			// Update the stored position of the row in the widget
-			priv->stored_x = priv->mouse_x;
+			// Check if the new end time is longer than the slide duration
+			if (end_time > priv->stored_slide_duration)
+			{
+				// The new end time is longer than the slide duration, so update the slide and background layer to match
+				this_slide_data->duration = end_time;
+				background_layer_data->duration = end_time;
 
-			// Refresh the timeline display of the row
-			time_line_internal_redraw_layer_bg(priv, current_row);
-			time_line_internal_draw_layer_name(priv, current_row);
-			time_line_internal_draw_layer_duration(priv, current_row);
+				// Refresh the timeline display of the background layer
+				area.x = priv->stored_slide_duration * pixels_per_second;
+				area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
+				area.height = priv->row_height - 3;
+				area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
+				time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
+				time_line_internal_draw_layer_duration(priv, end_row);
 
-			// Tell the window system to update the current row area onscreen
-			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
-		}
-
-		// Ensure the background layer end is kept correct 
-		background_layer_data = g_list_nth_data(layer_pointer, end_row);
-		if (background_layer_data->duration != priv->stored_slide_duration)
-		{
-			background_layer_data->duration = priv->stored_slide_duration;
-
-			// Refresh the timeline display of the background layer
-			area.x = priv->stored_slide_duration * pixels_per_second;
-			area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
-			area.height = priv->row_height - 3;
-			area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
-			time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
-			time_line_internal_draw_layer_duration(priv, end_row);
-
-			// Refresh the newly drawn widget area
-			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
-		}
-
-		// Check if the new end time is longer than the slide duration
-		if (end_time > priv->stored_slide_duration)
-		{
-			// The new end time is longer than the slide duration, so update the slide and background layer to match
-			this_slide_data->duration = end_time;
-			background_layer_data->duration = end_time;
-
-			// Refresh the timeline display of the background layer
-			area.x = priv->stored_slide_duration * pixels_per_second;
-			area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
-			area.height = priv->row_height - 3;
-			area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
-			time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
-			time_line_internal_draw_layer_duration(priv, end_row);
-
-			// Refresh the newly drawn widget area
-			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+				// Refresh the newly drawn widget area
+				gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+			}
 		}
 	}
 
