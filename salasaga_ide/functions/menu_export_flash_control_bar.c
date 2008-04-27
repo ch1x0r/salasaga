@@ -381,28 +381,28 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	SWFShape_movePen(cb_background, control_bar_curve, 0.0);
 
 	// Draw top straight
-	SWFShape_drawLine(cb_background, control_bar_width - (control_bar_curve * 2), 0.0);
+	SWFShape_drawLine(cb_background, control_bar_width - (control_bar_curve * 2) - 2, 0.0);
 
 	// Curve down to right
-	SWFShape_drawCurve(cb_background, control_bar_curve, 0, 0, control_bar_curve);
+	SWFShape_drawCurve(cb_background, control_bar_curve, 0, 2, control_bar_curve);
 
 	// Draw right
-	SWFShape_drawLine(cb_background, 0.0, control_bar_height - (control_bar_curve * 2));
+	SWFShape_drawLine(cb_background, 0.0, control_bar_height - (control_bar_curve * 2) - 2);
 
 	// Curve down to bottom
-	SWFShape_drawCurve(cb_background, 0.0, control_bar_curve, -(control_bar_curve), 0);
+	SWFShape_drawCurve(cb_background, 0.0, control_bar_curve, -(control_bar_curve), 2);
 
 	// Draw bottom
-	SWFShape_drawLine(cb_background, -(control_bar_width - (control_bar_curve * 2)), 0.0);
+	SWFShape_drawLine(cb_background, -(control_bar_width - (control_bar_curve * 2) - 2), 0.0);
 
 	// Curve up to left
-	SWFShape_drawCurve(cb_background, -(control_bar_curve), 0.0, 0.0, -(control_bar_curve));
+	SWFShape_drawCurve(cb_background, -(control_bar_curve + 1), 0.5, -0.5, -(control_bar_curve));
 
 	// Draw left
-	SWFShape_drawLine(cb_background, 0.0, -(control_bar_height - (control_bar_curve * 2)));
+	SWFShape_drawLine(cb_background, 0.0, -(control_bar_height - (control_bar_curve * 2) - 1));
 
 	// Curve up to top
-	SWFShape_drawCurve(cb_background, 0.0, -(control_bar_curve), control_bar_curve, 0.0);
+	SWFShape_drawCurve(cb_background, 0.0, -(control_bar_curve + 2), control_bar_curve, 0.25);
 
 
 	// *** Create the Restart button ***
