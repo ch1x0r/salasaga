@@ -53,7 +53,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
 	gfloat				valid_font_size = 0;		// Receives the new font size once validated
-	GString				*valid_layer_name;			// Receives the new layer name once validated
+	GString				*valid_name;				// Receives the new layer name once validated
 	gfloat				valid_start_time = 0;		// Receives the new start time once validated
 	gfloat				valid_trans_in_duration = 0;// Receives the new appearance transition duration once validated
 	guint				valid_trans_in_type = 0;	// Receives the new appearance transition type once validated
@@ -75,7 +75,9 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*text_view;					// Widget for accepting the new text data
 
 	GtkWidget			*name_label;				// Label widget
-	GtkWidget			*name_entry;				// Widget for accepting the name of the new layer
+	GtkWidget			*name_entry;				//
+
+	GtkWidget			*visibility_checkbox;		// Visibility widget
 
 	GtkWidget			*color_label;				// Label widget
 	GtkWidget			*color_button;				// Color selection button
@@ -126,7 +128,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	tmp_text_ob = (layer_text *) tmp_layer->object_data;
 	valid_ext_link = g_string_new(NULL);
 	valid_ext_link_win = g_string_new(NULL);
-	valid_layer_name = g_string_new(NULL);
+	valid_name = g_string_new(NULL);
 
 	// * Open a dialog box asking the user for the details of the new text layer *
 
@@ -152,6 +154,18 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
 	text_gstring = g_string_new(gtk_text_buffer_get_slice(tmp_text_ob->text_buffer, &text_start, &text_end, TRUE));
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(text_buffer), text_gstring->str, text_gstring->len);
+
+	// Create the label asking for the layer name
+	name_label = gtk_label_new("Layer Name: ");
+	gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the entry that accepts the new layer name
+	name_entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(name_entry), valid_fields[LAYER_NAME].max_value);
+	gtk_entry_set_text(GTK_ENTRY(name_entry), tmp_layer->name->str);
+	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
 
 	// Create the label next to the color swatch
 	color_label = gtk_label_new("Color: ");
@@ -219,16 +233,16 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(font_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Create the label asking for the new layer name
-	name_label = gtk_label_new("Layer name: ");
-	gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-	// Create the entry that accepts the new layer name
-	name_entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(name_entry), valid_fields[LAYER_NAME].max_value);
-	gtk_entry_set_text(GTK_ENTRY(name_entry), tmp_layer->name->str);
-	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the check box asking if the layer should be visible
+	visibility_checkbox = gtk_check_button_new_with_label("Is this layer visible?");
+	if (FALSE == tmp_layer->visible)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(visibility_checkbox), FALSE);
+	} else
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(visibility_checkbox), TRUE);
+	}
+	gtk_table_attach(GTK_TABLE(text_table), GTK_WIDGET(visibility_checkbox), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting time
@@ -351,12 +365,25 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			gtk_widget_destroy(GTK_WIDGET(text_dialog));
 			g_string_free(valid_ext_link, TRUE);
 			g_string_free(valid_ext_link_win, TRUE);
-			g_string_free(valid_layer_name, TRUE);
+			g_string_free(valid_name, TRUE);
 			return FALSE;
 		}
 
 		// Reset the useable input flag
 		useable_input = TRUE;
+
+		// Validate the layer name input
+		validated_string = validate_value(LAYER_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED177: There was something wrong with the layer name value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_name = g_string_assign(valid_name, validated_string->str);
+			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
+		}
 
 		// Retrieve the new starting frame x offset
 		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_off_button_start));
@@ -421,19 +448,6 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		{
 			valid_font_size = *validated_gfloat;
 			g_free(validated_gfloat);
-		}
-
-		// Validate the layer name input
-		validated_string = validate_value(LAYER_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
-		if (NULL == validated_string)
-		{
-			display_warning("Error ED177: There was something wrong with the layer name value.  Please try again.");
-			useable_input = FALSE;
-		} else
-		{
-			valid_layer_name = g_string_assign(valid_layer_name, validated_string->str);
-			g_string_free(validated_string, TRUE);
-			validated_string = NULL;
 		}
 
 		// Retrieve the new starting time
@@ -551,7 +565,14 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	tmp_text_ob->font_size = valid_font_size;
 	tmp_layer->start_time = valid_start_time;
 	tmp_layer->duration = valid_duration;
-	g_string_printf(tmp_layer->name, "%s", valid_layer_name->str);
+	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(visibility_checkbox)))
+	{
+		tmp_layer->visible = TRUE;
+	} else
+	{
+		tmp_layer->visible = FALSE;
+	}
+	g_string_printf(tmp_layer->name, "%s", valid_name->str);
 	g_string_printf(tmp_layer->external_link, "%s", valid_ext_link->str);
 	g_string_printf(tmp_layer->external_link_window, "%s", valid_ext_link_win->str);
 	tmp_layer->transition_in_type = valid_trans_in_type;
@@ -572,7 +593,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	// Free the memory allocated in this function
 	g_string_free(valid_ext_link, TRUE);
 	g_string_free(valid_ext_link_win, TRUE);
-	g_string_free(valid_layer_name, TRUE);
+	g_string_free(valid_name, TRUE);
 	g_string_free(text_gstring, TRUE);
 
 	return TRUE;

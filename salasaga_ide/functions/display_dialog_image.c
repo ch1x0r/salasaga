@@ -52,6 +52,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	gfloat				valid_duration = 0;			// Receives the new finish frame once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
+	GString				*valid_name;				// Receives the new layer name once validated
 	gfloat				valid_start_time = 0;		// Receives the new start time once validated
 	gfloat				valid_trans_in_duration = 0;// Receives the new appearance transition duration once validated
 	guint				valid_trans_in_type = 0;	// Receives the new appearance transition type once validated
@@ -64,6 +65,11 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function 
 	GString				*validated_string;			// Receives known good strings from the validation function
+
+	GtkWidget			*name_label;				// Label widget
+	GtkWidget			*name_entry;				//
+
+	GtkWidget			*visibility_checkbox;		// Visibility widget
 
 	GtkWidget			*x_off_label_start;			// Label widget
 	GtkWidget			*x_off_button_start = 0;	//
@@ -108,6 +114,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	tmp_image_ob = (layer_image *) tmp_layer->object_data;
 	valid_ext_link = g_string_new(NULL);
 	valid_ext_link_win = g_string_new(NULL);
+	valid_name = g_string_new(NULL);
 
 	// * Open a dialog box asking the user for the details of the layer *
 
@@ -119,6 +126,18 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	// Background images don't have offsets, nor changeable duration
 	if (FALSE == tmp_layer->background)
 	{
+		// Create the label asking for the layer name
+		name_label = gtk_label_new("Layer Name: ");
+		gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+		// Create the entry that accepts the new layer name
+		name_entry = gtk_entry_new();
+		gtk_entry_set_max_length(GTK_ENTRY(name_entry), valid_fields[LAYER_NAME].max_value);
+		gtk_entry_set_text(GTK_ENTRY(name_entry), tmp_layer->name->str);
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+		row_counter = row_counter + 1;
+
 		// Create the label asking for the starting X Offset
 		x_off_label_start = gtk_label_new("Start X Offset: ");
 		gtk_misc_set_alignment(GTK_MISC(x_off_label_start), 0, 0.5);
@@ -161,6 +180,18 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		y_off_button_finish = gtk_spin_button_new_with_range(0, project_height, 10);
 		gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_off_button_finish), tmp_layer->y_offset_finish);
 		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(y_off_button_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+		row_counter = row_counter + 1;
+
+		// Create the check box asking if the layer should be visible
+		visibility_checkbox = gtk_check_button_new_with_label("Is this layer visible?");
+		if (FALSE == tmp_layer->visible)
+		{
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(visibility_checkbox), FALSE);
+		} else
+		{
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(visibility_checkbox), TRUE);
+		}
+		gtk_table_attach(GTK_TABLE(image_table), GTK_WIDGET(visibility_checkbox), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 		row_counter = row_counter + 1;
 
 		// Create the label asking for the starting time
@@ -290,9 +321,22 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		// Reset the useable input flag
 		useable_input = TRUE;
 
-		// Background images don't have offsets, nor changeable duration
+		// Background images have some uneditable fields
 		if (FALSE == tmp_layer->background)
 		{
+			// Validate the layer name input
+			validated_string = validate_value(LAYER_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
+			if (NULL == validated_string)
+			{
+				display_warning("Error ED384: There was something wrong with the new layer name.  Please try again.");
+				useable_input = FALSE;
+			} else
+			{
+				g_string_assign(valid_name, validated_string->str);
+				g_string_free(validated_string, TRUE);
+				validated_string = NULL;
+			}
+
 			// Retrieve the new starting frame x offset
 			guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_off_button_start));
 			validated_guint = validate_value(X_OFFSET, V_INT_UNSIGNED, &guint_val);
@@ -305,8 +349,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 				valid_x_offset_start = *validated_guint;
 				g_free(validated_guint);
 			}
-	
-	
+
 			// Retrieve the new starting frame y offset
 			guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_off_button_start));
 			validated_guint = validate_value(Y_OFFSET, V_INT_UNSIGNED, &guint_val);
@@ -319,7 +362,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 				valid_y_offset_start = *validated_guint;
 				g_free(validated_guint);
 			}
-	
+
 			// Retrieve the new finish frame x offset
 			guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_off_button_finish));
 			validated_guint = validate_value(X_OFFSET, V_INT_UNSIGNED, &guint_val);
@@ -332,7 +375,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 				valid_x_offset_finish = *validated_guint;
 				g_free(validated_guint);
 			}
-	
+
 			// Retrieve the new finish frame y offset
 			guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_off_button_finish));
 			validated_guint = validate_value(Y_OFFSET, V_INT_UNSIGNED, &guint_val);
@@ -454,7 +497,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 
 	// * We only get here after all input is considered valid, so fill out the temporary layer with the requested details
 
-	// Background images don't have offsets, nor changeable duration
+	// Background images have some uneditable fields
 	if (TRUE == tmp_layer->background)
 	{
 		tmp_layer->x_offset_start = 0;
@@ -463,9 +506,19 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		tmp_layer->y_offset_finish = 0;
 		tmp_layer->start_time = 0;
 		tmp_layer->duration = ((slide *) current_slide->data)->duration;
-	}
-	else
+
+		// Free the memory allocated in this function
+		g_string_free(valid_name, TRUE);
+	} else
 	{
+		g_string_printf(tmp_layer->name, "%s", valid_name->str);
+		if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(visibility_checkbox)))
+		{
+			tmp_layer->visible = TRUE;
+		} else
+		{
+			tmp_layer->visible = FALSE;
+		}
 		tmp_layer->x_offset_start = valid_x_offset_start;
 		tmp_layer->y_offset_start = valid_y_offset_start;
 		tmp_layer->x_offset_finish = valid_x_offset_finish;

@@ -53,6 +53,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
 	guint				valid_height = 0;			// Receives the new height value once validated
+	GString				*valid_name;				// Receives the new layer name once validated
 	gfloat				valid_start_time = 0;		// Receives the new start time once validated
 	gfloat				valid_trans_in_duration = 0;// Receives the new appearance transition duration once validated
 	guint				valid_trans_in_type = 0;	// Receives the new appearance transition type once validated
@@ -66,6 +67,11 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
+
+	GtkWidget			*name_label;				// Label widget
+	GtkWidget			*name_entry;				//
+
+	GtkWidget			*visibility_checkbox;		// Visibility widget
 
 	GtkWidget			*x_off_label_start;			// Label widget
 	GtkWidget			*x_off_button_start;		//
@@ -116,6 +122,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	tmp_highlight_ob = (layer_highlight *) tmp_layer->object_data;
 	valid_ext_link = g_string_new(NULL);
 	valid_ext_link_win = g_string_new(NULL);
+	valid_name = g_string_new(NULL);
 
 	// * Pop open a dialog box asking the user for the details of the layer *
 
@@ -123,6 +130,18 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	highlight_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(dialog_title, GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
 	highlight_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(highlight_dialog->vbox), GTK_WIDGET(highlight_table), FALSE, FALSE, 10);
+
+	// Create the label asking for the layer name
+	name_label = gtk_label_new("Layer Name: ");
+	gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the entry that accepts the new layer name
+	name_entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(name_entry), valid_fields[LAYER_NAME].max_value);
+	gtk_entry_set_text(GTK_ENTRY(name_entry), tmp_layer->name->str);
+	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting X Offset
 	x_off_label_start = gtk_label_new("Starting X Offset:");
@@ -194,6 +213,18 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	gtk_spin_button_set_wrap(GTK_SPIN_BUTTON(y_off_button_finish), TRUE);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(height_button), tmp_highlight_ob->height);
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Create the check box asking if the layer should be visible
+	visibility_checkbox = gtk_check_button_new_with_label("Is this layer visible?");
+	if (FALSE == tmp_layer->visible)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(visibility_checkbox), FALSE);
+	} else
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(visibility_checkbox), TRUE);
+	}
+	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(visibility_checkbox), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting time
@@ -321,6 +352,19 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 
 		// Reset the useable input flag
 		useable_input = TRUE;
+
+		// Validate the layer name input
+		validated_string = validate_value(LAYER_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED382: There was something wrong with the new layer name.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			g_string_assign(valid_name, validated_string->str);
+			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
+		}
 
 		// Retrieve the new starting frame x offset
 		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_off_button_start));
@@ -508,12 +552,20 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	// * We only get here after all input is considered valid *
 
 	// Fill out the temporary layer with the requested details
+	g_string_printf(tmp_layer->name, "%s", valid_name->str);
 	tmp_layer->x_offset_start = valid_x_offset_start;
 	tmp_layer->y_offset_start = valid_y_offset_start;
 	tmp_layer->x_offset_finish = valid_x_offset_finish;
 	tmp_layer->y_offset_finish = valid_y_offset_finish;
 	tmp_highlight_ob->width = valid_width;
 	tmp_highlight_ob->height = valid_height;
+	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(visibility_checkbox)))
+	{
+		tmp_layer->visible = TRUE;
+	} else
+	{
+		tmp_layer->visible = FALSE;
+	}
 	tmp_layer->start_time = valid_start_time;
 	tmp_layer->duration = valid_duration;
 	g_string_printf(tmp_layer->external_link, "%s", valid_ext_link->str);
@@ -527,6 +579,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	gtk_widget_destroy(GTK_WIDGET(highlight_dialog));
 
 	// Free the memory allocated in this function
+	g_string_free(valid_name, TRUE);
 	g_string_free(valid_ext_link, TRUE);
 	g_string_free(valid_ext_link_win, TRUE);
 	return TRUE;
