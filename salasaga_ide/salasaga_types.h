@@ -283,6 +283,9 @@ typedef struct
 {
 	gint				width;
 	gint				height;
+	GdkColor			fill_colour;
+	GdkColor			line_colour;
+	gfloat				line_width;
 } layer_highlight;
 
 // Defines the properties making up an image layer
@@ -311,6 +314,10 @@ typedef struct
 	GdkColor			text_color;
 	gfloat				font_size;
 	GtkTextBuffer		*text_buffer;
+	gboolean			show_bg;
+	GdkColor			bg_fill_colour;
+	GdkColor			bg_line_colour;
+	gfloat				bg_line_width;
 } layer_text;
 
 // Resolution storing structure
