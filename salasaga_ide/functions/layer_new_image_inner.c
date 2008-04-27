@@ -154,8 +154,6 @@ void layer_new_image_inner(guint release_x, guint release_y)
 				tmp_image_ob->image_data = new_image_data;
 				tmp_image_ob->width = gdk_pixbuf_get_width(new_image_data);
 				tmp_image_ob->height = gdk_pixbuf_get_height(new_image_data);
-				g_string_free(validated_string, TRUE);
-				validated_string = NULL;
 
 				// Create a cairo pattern from the image data
 				tmp_image_ob->cairo_pattern = create_cairo_pixbuf_pattern(tmp_image_ob->image_data);
