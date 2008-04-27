@@ -283,6 +283,13 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	};
 
 
+	// Initialise various things
+	slides = g_list_first(slides);
+	num_slides = g_list_length(slides);
+	file_name_full = g_string_new(NULL); 
+	slide_name_tmp = g_string_new(NULL);
+	slide_names_gstring = g_string_new(NULL);
+
 	// Retrieve the control bar element positions
 	button_x = cb_size_array[cb_index].button_start_x;
 	button_y = cb_size_array[cb_index].button_start_y;
@@ -295,12 +302,12 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	control_bar_x = cb_size_array[cb_index].cb_start_x;
 	control_bar_y = cb_size_array[cb_index].cb_start_y;
 
-	// Initialise various things
-	slides = g_list_first(slides);
-	num_slides = g_list_length(slides);
-	file_name_full = g_string_new(NULL); 
-	slide_name_tmp = g_string_new(NULL);
-	slide_names_gstring = g_string_new(NULL);
+	// If there is only a single slide, the control bar background is not as wide
+	if (1 == num_slides)
+	{
+		control_bar_width -= (button_width * 2);
+		control_bar_x += control_bar_width;
+	}
 
 	// Ensure the swf output starts out in the correct play state and the play button is correct
 	if (START_BEHAVIOUR_PLAY == start_behaviour)
@@ -476,8 +483,8 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	// *** Create the Rewind button ***
 
 // fixme3: Commented out until another, smaller, background image is added specific for this
-//	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
-//	{
+	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
+	{
 		// Load rewind button's UP state image
 		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_up", NULL);
 		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
@@ -596,7 +603,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 					" };");
 		}
 		SWFButton_addAction(rewind_button, rewind_action, SWFBUTTON_MOUSEUP);
-//	}
+	}
 
 	// *** Create the Pause button ***
 
@@ -743,8 +750,8 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	// *** Create the Fast Forward button ***
 
 // fixme3: Commented out until another, smaller, background image is added specific for this
-//	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
-//	{
+	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
+	{
 		// Load forward button's UP state image
 		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_up", NULL);
 		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
@@ -849,7 +856,7 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 					" };");
 		}
 		SWFButton_addAction(forward_button, forward_action, SWFBUTTON_MOUSEUP);
-//	}
+	}
 
 	// *** Create the Finish button ***
 
@@ -941,15 +948,15 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	button_x = button_x + button_width + button_spacing;
 
 // fixme3: Commented out until another, smaller, background image is added specific for this
-//	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
-//	{
+	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
+	{
 		// Add the rewind button to the control bar
 		mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) rewind_button);
 		SWFDisplayItem_setDepth(mc_display_item, 3);
 		SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 		SWFDisplayItem_setName(mc_display_item, "cb_rewind");
 		button_x = button_x + button_width + button_spacing;
-//	}
+	}
 
 	// Add the pause button to the control bar
 	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) pause_button);
@@ -965,15 +972,15 @@ gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guin
 	button_x = button_x + button_width + button_spacing;
 
 // fixme3: Commented out until another, smaller, background image is added specific for this
-//	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
-//	{
+	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
+	{
 		// Add the rewind button to the control bar
 		mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) forward_button);
 		SWFDisplayItem_setDepth(mc_display_item, 6);
 		SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 		SWFDisplayItem_setName(mc_display_item, "cb_rewind");
 		button_x = button_x + button_width + button_spacing;
-//	}
+	}
 
 	// Add the finish button to the control bar
 	mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) finish_button);
