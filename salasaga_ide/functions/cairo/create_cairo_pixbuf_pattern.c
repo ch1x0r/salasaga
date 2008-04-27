@@ -36,6 +36,7 @@
 cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 {
 	// Local variables
+	cairo_status_t		cairo_status;
 	guchar				*dest_buffer;
 	guchar				*dest_start;
 	guchar				*dest_ptr;
@@ -108,8 +109,24 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 	// Turn the reformatted buffer into a cairo surface
 	image_surface = cairo_image_surface_create_for_data(dest_buffer, CAIRO_FORMAT_RGB24, source_width, source_height, source_width * 4);
 
+	// Check if an error occured when creating this image surface
+	cairo_status = cairo_surface_status(image_surface);
+	if (CAIRO_STATUS_SUCCESS != cairo_status)
+	{
+		display_warning("Error ED385: Couldn't create image surface.");
+	}
+
 	// Turn the surface into a cairo pattern
 	image_pattern = cairo_pattern_create_for_surface(image_surface);
+
+	// Check if an erorr occured when creating this pattern
+	cairo_pattern_status(image_pattern);
+	if (CAIRO_STATUS_SUCCESS != cairo_status)
+	{
+		display_warning("Error ED386: Couldn't create surface pattern.");
+	}
+
+	// Free the memory used in this function
 	cairo_surface_destroy(image_surface);
 
 	return image_pattern;
