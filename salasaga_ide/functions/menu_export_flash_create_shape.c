@@ -50,6 +50,7 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 	gfloat				current_ming_scale;			// Used when creating text swf output
 	SWFFillStyle		empty_layer_fill;			// Fill style used when constructing empty layer shapes
 	SWFShape			empty_layer_shape;			// Temporary swf shape used when constructing empty layers
+	guint				final_opacity;				// Used when calculating the final opacity figure for a highlight layer
 	FILE				*font_file;					// The file we load the font from
 	SWFFont				font_object;				// The font we use gets loaded into this
 	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
@@ -58,6 +59,7 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 	SWFShape			highlight_box = NULL;		// Temporary swf shape used when constructing highlight boxes
 	gint				highlight_box_height;		// Used while generating swf output for highlight boxes
 	gint				highlight_box_width;		// Used while generating swf output for highlight boxes
+	layer_highlight		*highlight_data;			// Points to the highlight object data inside the layer
 	SWFFillStyle		highlight_fill_style;		// Fill style used when constructing highlight boxes
 	SWFBitmap			image_bitmap;				// Used to hold a scaled bitmap object
 	gint				image_height;				// Temporarily used to store the height of an image
@@ -328,6 +330,8 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 			// * We're processing a highlight layer *
 
 			// Create the initial empty shape
+			highlight_data = (layer_highlight *) this_layer_data->object_data;
+			final_opacity = roundf((highlight_data->opacity / 100) * 255);
 			highlight_box = newSWFShape();
 			if (NULL == highlight_box)
 			{
@@ -337,15 +341,30 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 			}
 
 			// Set the semi-transparent green fill for the highlight box
-			highlight_fill_style = SWFShape_addSolidFillStyle(highlight_box, 0x00, 0xff, 0x00, 0x40);
+			red_component = highlight_data->fill_colour.red;
+			green_component = highlight_data->fill_colour.green;
+			blue_component = highlight_data->fill_colour.blue;
+			highlight_fill_style = SWFShape_addSolidFillStyle(highlight_box,
+					roundf(red_component / 255),
+					roundf(green_component / 255),
+					roundf(blue_component / 255),
+					final_opacity);
 			SWFShape_setRightFillStyle(highlight_box, highlight_fill_style);
 
-			// Set the line style
-			SWFShape_setLine(highlight_box, 2, 0x00, 0xff, 0x00, 0xcc);  // Width = 2 seems to work ok
+			// Set the border style
+			red_component = highlight_data->border_colour.red;
+			green_component = highlight_data->border_colour.green;
+			blue_component = highlight_data->border_colour.blue;
+			SWFShape_setLine(highlight_box,
+					highlight_data->border_width,
+					roundf(red_component / 255),
+					roundf(green_component / 255),
+					roundf(blue_component / 255),
+					final_opacity);
 
 			// Work out the scaled dimensions of the highlight box
-			highlight_box_width = roundf(scaled_width_ratio * (gfloat) ((layer_highlight *) this_layer_data->object_data)->width);
-			highlight_box_height = roundf(scaled_height_ratio * (gfloat) ((layer_highlight *) this_layer_data->object_data)->height);
+			highlight_box_width = roundf(scaled_width_ratio * (gfloat) highlight_data->width);
+			highlight_box_height = roundf(scaled_height_ratio * (gfloat) highlight_data->height);
 
 			// Create the highlight box
 			SWFShape_drawLine(highlight_box, highlight_box_width, 0.0);
