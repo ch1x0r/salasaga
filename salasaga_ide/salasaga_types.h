@@ -127,6 +127,7 @@ enum
 	LAYER_NAME,
 	LAYER_VISIBLE,
 	LAYER_WIDTH,
+	LINE_WIDTH,
 	MOUSE_CLICK,
 	PREVIEW_WIDTH,
 	PROJECT_FPS,
@@ -138,6 +139,7 @@ enum
 	SCREENSHOT_HEIGHT,
 	SCREENSHOT_WIDTH,
 	SHOW_CONTROL_BAR,
+	SHOW_TEXT_BG,
 	SLIDE_LENGTH,
 	SLIDE_DURATION,
 	SLIDE_NAME,
@@ -316,8 +318,8 @@ typedef struct
 	GtkTextBuffer		*text_buffer;
 	gboolean			show_bg;
 	GdkColor			bg_fill_colour;
-	GdkColor			bg_line_colour;
-	gfloat				bg_line_width;
+	GdkColor			bg_border_colour;
+	gfloat				bg_border_width;
 } layer_text;
 
 // Resolution storing structure
