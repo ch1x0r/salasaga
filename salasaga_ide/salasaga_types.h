@@ -286,8 +286,8 @@ typedef struct
 	gint				width;
 	gint				height;
 	GdkColor			fill_colour;
-	GdkColor			line_colour;
-	gfloat				line_width;
+	GdkColor			border_colour;
+	gfloat				border_width;
 } layer_highlight;
 
 // Defines the properties making up an image layer
