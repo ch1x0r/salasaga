@@ -37,8 +37,10 @@
 layer *layer_duplicate(layer *source_layer)
 {
 	// Local variables
+	layer_highlight		*dest_highlight_data;		// Pointer to the destination highlight specific data
 	layer_text			*dest_text_data;			// Pointer to the destination text specific data
 	layer				*new_layer;					// Pointer to the newly created layer
+	layer_highlight		*source_highlight_data;		// Pointer to the source highlight specific data
 	layer_text			*source_text_data;			// Pointer to the source text specific data
 	GtkTextIter			text_start;					// The start position of the text buffer
 	GtkTextIter			text_end;					// The end position of the text buffer
@@ -142,8 +144,18 @@ layer *layer_duplicate(layer *source_layer)
 				g_free(new_layer);
 				return NULL;
 			}
-			((layer_highlight *) new_layer->object_data)->width = ((layer_highlight *) source_layer->object_data)->width;
-			((layer_highlight *) new_layer->object_data)->height = ((layer_highlight *) source_layer->object_data)->height;
+			dest_highlight_data = (layer_highlight *) new_layer->object_data;
+			source_highlight_data = (layer_highlight *) source_layer->object_data;
+			dest_highlight_data->width = ((layer_highlight *) source_layer->object_data)->width;
+			dest_highlight_data->height = ((layer_highlight *) source_layer->object_data)->height;
+			dest_highlight_data->border_colour.red = source_highlight_data->border_colour.red;
+			dest_highlight_data->border_colour.green = source_highlight_data->border_colour.green;
+			dest_highlight_data->border_colour.blue = source_highlight_data->border_colour.blue;
+			dest_highlight_data->border_width = source_highlight_data->border_width;
+			dest_highlight_data->fill_colour.red = source_highlight_data->fill_colour.red;
+			dest_highlight_data->fill_colour.green = source_highlight_data->fill_colour.green;
+			dest_highlight_data->fill_colour.blue = source_highlight_data->fill_colour.blue;
+			dest_highlight_data->opacity = source_highlight_data->opacity;
 			break;
 
 		case TYPE_MOUSE_CURSOR:
