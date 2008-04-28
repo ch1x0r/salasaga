@@ -105,7 +105,7 @@ void menu_file_save(void)
 	}
 
 	// Add the save format version number to the XML document
-	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "4.1");
+	xmlNewChild(meta_pointer, NULL, (const xmlChar *) "save_format", (const xmlChar *) "4.2");
 
     // Create the preferences container
 	pref_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "preferences", NULL);
