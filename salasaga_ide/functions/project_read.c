@@ -1903,6 +1903,14 @@ gboolean project_read(gchar *filename)
 								tmp_layer->transition_out_duration = 0.0;
 								tmp_text_ob->rendered_height = 0;
 								tmp_text_ob->rendered_width = 0;
+								tmp_text_ob->show_bg = TRUE;
+								tmp_text_ob->bg_border_width = 2.0;
+								tmp_text_ob->bg_border_colour.red = 0;
+								tmp_text_ob->bg_border_colour.green = 0;
+								tmp_text_ob->bg_border_colour.blue = 0;
+								tmp_text_ob->bg_fill_colour.red = 65535;
+								tmp_text_ob->bg_fill_colour.green = 65535;
+								tmp_text_ob->bg_fill_colour.blue = 52428;  // Sensible default
 
 								// Load the text layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -2013,6 +2021,94 @@ gboolean project_read(gchar *filename)
 											g_free(validated_guint);
 										}
 									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "bg_border_colour_red")))
+									{
+										// Get the red value
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED388: There was something wrong with a red component colour value in the project file.");
+											useable_input = FALSE;
+											tmp_text_ob->bg_border_colour.red = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_text_ob->bg_border_colour.red = *validated_guint;
+											g_free(validated_guint);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "bg_border_colour_green")))
+									{
+										// Get the green value
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED389: There was something wrong with a green component colour value in the project file.");
+											useable_input = FALSE;
+											tmp_text_ob->bg_border_colour.green = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_text_ob->bg_border_colour.green = *validated_guint;
+											g_free(validated_guint);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "bg_border_colour_blue")))
+									{
+										// Get the blue value
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED390: There was something wrong with a blue component colour value in the project file.");
+											useable_input = FALSE;
+											tmp_text_ob->bg_border_colour.blue = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_text_ob->bg_border_colour.blue = *validated_guint;
+											g_free(validated_guint);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "bg_fill_colour_red")))
+									{
+										// Get the red value
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED391: There was something wrong with a red component colour value in the project file.");
+											useable_input = FALSE;
+											tmp_text_ob->bg_fill_colour.red = 0;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_text_ob->bg_fill_colour.red = *validated_guint;
+											g_free(validated_guint);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "bg_fill_colour_green")))
+									{
+										// Get the green value
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED392: There was something wrong with a green component colour value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_text_ob->bg_fill_colour.green = *validated_guint;
+											g_free(validated_guint);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "bg_fill_colour_blue")))
+									{
+										// Get the blue value
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED393: There was something wrong with a blue component colour value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_text_ob->bg_fill_colour.blue = *validated_guint;
+											g_free(validated_guint);
+										}
+									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "font_size")))
 									{
 										// Get the font size
@@ -2026,6 +2122,41 @@ gboolean project_read(gchar *filename)
 										{
 											tmp_text_ob->font_size = *validated_gfloat;
 											g_free(validated_gfloat);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "bg_border_width")))
+									{
+										// Get the background border width
+										validated_gfloat = validate_value(FONT_SIZE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_gfloat)
+										{
+											display_warning("Error ED394: There was something wrong with a background border width value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_text_ob->bg_border_width = *validated_gfloat;
+											g_free(validated_gfloat);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "show_bg")))
+									{
+										// Get the background visibility
+										validated_string = validate_value(SHOW_TEXT_BG, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED395: There was something wrong with a text background visibility value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											if (0 == g_ascii_strncasecmp(validated_string->str, "true", 4))
+											{
+												tmp_text_ob->show_bg = TRUE;
+											} else
+											{
+												tmp_text_ob->show_bg = FALSE;
+											}
+											g_string_free(validated_string, TRUE);
+											validated_string = NULL;
 										}
 									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "text_value")))
