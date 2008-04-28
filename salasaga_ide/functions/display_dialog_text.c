@@ -286,7 +286,6 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(display_bg_checkbox), TRUE);
 	}
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(display_bg_checkbox), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	row_counter = row_counter + 1;
 
 	// Create the check box asking if the layer should be visible
 	visibility_checkbox = gtk_check_button_new_with_label("Is this layer visible?");
@@ -297,7 +296,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(visibility_checkbox), TRUE);
 	}
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(visibility_checkbox), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(visibility_checkbox), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// * Duration tab fields *
