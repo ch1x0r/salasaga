@@ -1214,11 +1214,131 @@ gboolean project_read(gchar *filename)
 								tmp_layer->duration = default_layer_duration;
 								tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 								tmp_layer->transition_out_duration = 0.0;
+								tmp_highlight_ob->border_colour.red = 0;
+								tmp_highlight_ob->border_colour.green = 65535;
+								tmp_highlight_ob->border_colour.blue = 0;
+								tmp_highlight_ob->border_width = 2.0;
+								tmp_highlight_ob->fill_colour.red = 0;
+								tmp_highlight_ob->fill_colour.green = 40000;
+								tmp_highlight_ob->fill_colour.blue = 0;
+								tmp_highlight_ob->opacity = 50;  // Sensible default
 
 								// Load the highlight layer values
 								this_node = this_layer->xmlChildrenNode;
 								while (NULL != this_node)
 								{
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "border_colour_red")))
+									{
+										// Get the border colour red value
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED397: There was something wrong with a red component colour value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_highlight_ob->border_colour.red = *validated_guint;
+											g_free(validated_guint);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "border_colour_green")))
+									{
+										// Get the border colour green value
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED398: There was something wrong with a green component colour value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_highlight_ob->border_colour.green = *validated_guint;
+											g_free(validated_guint);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "border_colour_blue")))
+									{
+										// Get the border colour blue value
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED399: There was something wrong with a blue component colour value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_highlight_ob->border_colour.blue = *validated_guint;
+											g_free(validated_guint);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "border_width")))
+									{
+										// Get the border width
+										validated_gfloat = validate_value(LINE_WIDTH, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_gfloat)
+										{
+											display_warning("Error ED400: There was something wrong with a highlight border width value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_highlight_ob->border_width = *validated_gfloat;
+											g_free(validated_gfloat);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "fill_colour_red")))
+									{
+										// Get the fill colour red value
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED401: There was something wrong with a red component colour value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_highlight_ob->fill_colour.red = *validated_guint;
+											g_free(validated_guint);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "fill_colour_green")))
+									{
+										// Get the fill colour green value
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED402: There was something wrong with a green component colour value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_highlight_ob->fill_colour.green = *validated_guint;
+											g_free(validated_guint);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "fill_colour_blue")))
+									{
+										// Get the fill colour blue value
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_guint)
+										{
+											display_warning("Error ED403: There was something wrong with a blue component colour value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_highlight_ob->fill_colour.blue = *validated_guint;
+											g_free(validated_guint);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "opacity")))
+									{
+										// Get the highlight opacity value
+										validated_gfloat = validate_value(OPACITY, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										if (NULL == validated_gfloat)
+										{
+											display_warning("Error ED404: There was something wrong with a highlight opacity value in the project file.");
+											useable_input = FALSE;
+										} else
+										{
+											tmp_highlight_ob->opacity = *validated_gfloat;
+											g_free(validated_gfloat);
+										}
+									}
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
@@ -2127,7 +2247,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "bg_border_width")))
 									{
 										// Get the background border width
-										validated_gfloat = validate_value(FONT_SIZE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										validated_gfloat = validate_value(LINE_WIDTH, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_gfloat)
 										{
 											display_warning("Error ED394: There was something wrong with a background border width value in the project file.");
