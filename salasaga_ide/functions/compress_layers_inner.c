@@ -49,8 +49,10 @@
 void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, gfloat time_position)
 {
 	// Local variables
+	gfloat					blue_component;			// Blue component of a colour
 	cairo_t					*cairo_context;			// Cairo drawing context
 	gfloat					end_time;				// Time in seconds of the layer objects finish time
+	gfloat					green_component;		// Green component of a colour
 	gint					height;					//
 	cairo_matrix_t			image_matrix;			// Transformation matrix used to position a cairo pattern
 	GtkAllocation			layer_positions;		// Offset and dimensions for a given layer object
@@ -59,21 +61,19 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gint					num_lines;
 	gint					pixmap_height;			// Receives the height of a given pixmap
 	gint					pixmap_width;			// Receives the width of a given pixmap
+	gfloat					red_component;			// Red component of a colour
 	gboolean				return_code_gbool;		// Receives gboolean return codes
 	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio 
 	gfloat					scaled_width_ratio;		// Used to calculate a horizontal scaling ratio
+	GdkColor				*selected_colour;		// Pointer to the foreground colour of the text
 	gfloat					start_time;				// Time in seconds of the layer objects start time
 	gfloat					text_adjustment;		// Y offset for a specific line
-	gfloat					text_blue;				// Blue component of text fg colour
 	GtkTextBuffer			*text_buffer;			// Pointer to the text buffer we're using
-	GdkColor				*text_colour;			// Pointer to the foreground colour of the text
 	GtkTextIter				text_end;				// The end position of the text buffer
 	cairo_text_extents_t	text_extents;			// Meta information about an onscreen text string
-	gfloat					text_green;				// Green component of text fg colour
 	gfloat					text_height;
 	gint					text_left;				// Pixel number onscreen for the left side of text
 	layer_text				*text_object;			// Pointer to our object text data
-	gfloat					text_red;				// Red component of text fg colour
 	gint					text_top;				// Pixel number onscreen for the top of text
 	GtkTextIter				text_start;				// The start position of the text buffer
 	gchar					*text_string = NULL;	// The text string to be displayed
@@ -222,32 +222,42 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			text_object->rendered_width = width / scaled_width_ratio;
 			text_object->rendered_height = height / scaled_height_ratio;
 
-			// * Draw the background for the text layer *
+			// * If required, draw the background for the text layer *
+			if (TRUE == text_object->show_bg)
+			{
+				// Create the background fill
+				cairo_set_operator(cairo_context, CAIRO_OPERATOR_SOURCE);
+				selected_colour = &((layer_text *) this_layer_data->object_data)->bg_fill_colour;
+				red_component = ((gfloat) selected_colour->red) / 65536;
+				green_component = ((gfloat) selected_colour->green) / 65536;
+				blue_component = ((gfloat) selected_colour->blue) / 65536;
+				cairo_set_source_rgb(cairo_context, red_component, green_component, blue_component);
+				cairo_rectangle(cairo_context, x_offset, y_offset, width, height);
+				cairo_clip(cairo_context);
+				cairo_paint_with_alpha(cairo_context, time_alpha);
 
-			// Create the background fill
-			cairo_set_operator(cairo_context, CAIRO_OPERATOR_SOURCE);
-			cairo_set_source_rgb(cairo_context, 1, 1, 0.8);
-			cairo_rectangle(cairo_context, x_offset, y_offset, width, height);
-			cairo_clip(cairo_context);
-			cairo_paint_with_alpha(cairo_context, time_alpha);
-
-			// Create the background border
-			cairo_set_operator(cairo_context, CAIRO_OPERATOR_OVER);
-			cairo_set_source_rgba(cairo_context, 0, 0, 0, time_alpha);
-			cairo_set_line_width(cairo_context, 2.0);
-			cairo_set_line_join(cairo_context, CAIRO_LINE_JOIN_ROUND);
-			cairo_set_line_cap(cairo_context, CAIRO_LINE_CAP_ROUND);
-			cairo_rectangle(cairo_context, x_offset, y_offset, width, height);
-			cairo_stroke(cairo_context);
+				// Create the background border
+				cairo_set_operator(cairo_context, CAIRO_OPERATOR_OVER);
+				selected_colour = &((layer_text *) this_layer_data->object_data)->bg_border_colour;
+				red_component = ((gfloat) selected_colour->red) / 65536;
+				green_component = ((gfloat) selected_colour->green) / 65536;
+				blue_component = ((gfloat) selected_colour->blue) / 65536;
+				cairo_set_source_rgba(cairo_context, red_component, green_component, blue_component, time_alpha);
+				cairo_set_line_width(cairo_context, ((layer_text *) this_layer_data->object_data)->bg_border_width);
+				cairo_set_line_join(cairo_context, CAIRO_LINE_JOIN_ROUND);
+				cairo_set_line_cap(cairo_context, CAIRO_LINE_CAP_ROUND);
+				cairo_rectangle(cairo_context, x_offset, y_offset, width, height);
+				cairo_stroke(cairo_context);
+			}
 
 			// * Draw the text string itself *
 
 			// Set the desired font foreground color
-			text_colour = &((layer_text *) this_layer_data->object_data)->text_color;
-			text_red = ((gfloat) text_colour->red) / 65536;
-			text_green = ((gfloat) text_colour->green) / 65536;
-			text_blue = ((gfloat) text_colour->blue) / 65536;
-			cairo_set_source_rgba(cairo_context, text_red, text_green, text_blue, time_alpha);
+			selected_colour = &((layer_text *) this_layer_data->object_data)->text_color;
+			red_component = ((gfloat) selected_colour->red) / 65536;
+			green_component = ((gfloat) selected_colour->green) / 65536;
+			blue_component = ((gfloat) selected_colour->blue) / 65536;
+			cairo_set_source_rgba(cairo_context, red_component, green_component, blue_component, time_alpha);
 
 			// Loop around, drawing lines of text
 			text_top = y_offset + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);

@@ -595,44 +595,64 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 				}
 			}
 
-			// * Create the background for the text object *
-			text_bg = newSWFShape();
-			if (NULL == text_bg)
-			{
-				// Something went wrong when creating the empty shape, so we skip this layer
-				display_warning("Error ED101: Something went wrong when creating a text layer background for swf output");
-				return FALSE;
-			}
-
-			// Set the solid fill for the text background box
-			text_bg_fill_style = SWFShape_addSolidFillStyle(text_bg, 0xff, 0xff, 0xcc, 0xff);
-			SWFShape_setRightFillStyle(text_bg, text_bg_fill_style);
-
-			// Set the line style
-			SWFShape_setLine(text_bg, 1, 0x00, 0x00, 0x00, 0xff);  // Width = 1 seems to work ok
-
-			// Work out the scaled dimensions of the text background box
-			text_leading = SWFText_getLeading(text_object);
-			text_bg_box_height = (text_real_font_size * num_text_lines) * 1.02;
-			text_bg_box_width = widest_text_string_width + (text_leading * 2);
-
-			// Create the text background box
-			SWFShape_drawLine(text_bg, text_bg_box_width, 0.0);
-			SWFShape_drawLine(text_bg, 0.0, text_bg_box_height);
-			SWFShape_drawLine(text_bg, -(text_bg_box_width), 0.0);
-			SWFShape_drawLine(text_bg, 0.0, -(text_bg_box_height));
-
 			// * Create the swf movie clip object that holds the text background and text *
 			text_movie_clip = newSWFMovieClip();
 
-			// Add the text background to the movie clip
-			text_bg_display_item = SWFMovieClip_add(text_movie_clip, (SWFBlock) text_bg);
+			// * Create the background for the text object *
+			if (TRUE == text_data->show_bg)
+			{
+				text_bg = newSWFShape();
+				if (NULL == text_bg)
+				{
+					// Something went wrong when creating the empty shape, so we skip this layer
+					display_warning("Error ED101: Something went wrong when creating a text layer background for swf output");
+					return FALSE;
+				}
+
+				// Set the solid fill for the text background box
+				red_component = text_data->bg_fill_colour.red;
+				green_component = text_data->bg_fill_colour.green;
+				blue_component = text_data->bg_fill_colour.blue;
+				text_bg_fill_style = SWFShape_addSolidFillStyle(text_bg,
+						roundf(red_component / 255),
+						roundf(green_component / 255),
+						roundf(blue_component / 255),
+						0xff); // Alpha of 255 is full opacity
+				SWFShape_setRightFillStyle(text_bg, text_bg_fill_style);
+
+				// Set the line style
+				red_component = text_data->bg_border_colour.red;
+				green_component = text_data->bg_border_colour.green;
+				blue_component = text_data->bg_border_colour.blue;
+				SWFShape_setLine(text_bg,
+						text_data->bg_border_width,
+						roundf(red_component / 255),
+						roundf(green_component / 255),
+						roundf(blue_component / 255),
+						0xff); // Alpha of 255 is full opacity
+
+				// Work out the scaled dimensions of the text background box
+				text_leading = SWFText_getLeading(text_object);
+				text_bg_box_height = (text_real_font_size * num_text_lines) * 1.02;
+				text_bg_box_width = widest_text_string_width + (text_leading * 2);
+
+				// Create the text background box
+				SWFShape_drawLine(text_bg, text_bg_box_width, 0.0);
+				SWFShape_drawLine(text_bg, 0.0, text_bg_box_height);
+				SWFShape_drawLine(text_bg, -(text_bg_box_width), 0.0);
+				SWFShape_drawLine(text_bg, 0.0, -(text_bg_box_height));
+
+				// Add the text background to the movie clip
+				text_bg_display_item = SWFMovieClip_add(text_movie_clip, (SWFBlock) text_bg);
+
+				// Position the background
+				SWFDisplayItem_moveTo(text_bg_display_item, 0.0, 0.0);
+			}
 
 			// Add the text object to the movie clip
 			text_display_item = SWFMovieClip_add(text_movie_clip, (SWFBlock) text_object);
 
-			// Position the background and text elements
-			SWFDisplayItem_moveTo(text_bg_display_item, 0.0, 0.0);
+			// Position the text elements
 			SWFDisplayItem_moveTo(text_display_item, text_leading, SWFText_getAscent(text_object));
 
 			// Advance the movie clip one frame, else it won't be displayed
