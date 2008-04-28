@@ -37,7 +37,9 @@
 layer *layer_duplicate(layer *source_layer)
 {
 	// Local variables
+	layer_text			*dest_text_data;			// Pointer to the destination text specific data
 	layer				*new_layer;					// Pointer to the newly created layer
+	layer_text			*source_text_data;			// Pointer to the source text specific data
 	GtkTextIter			text_start;					// The start position of the text buffer
 	GtkTextIter			text_end;					// The end position of the text buffer
 
@@ -167,18 +169,28 @@ layer *layer_duplicate(layer *source_layer)
 				g_free(new_layer);
 				return NULL;
 			}
-			((layer_text *) new_layer->object_data)->rendered_width = ((layer_text *) source_layer->object_data)->rendered_width;
-			((layer_text *) new_layer->object_data)->rendered_height = ((layer_text *) source_layer->object_data)->rendered_height;
-			((layer_text *) new_layer->object_data)->text_color.pixel = ((layer_text *) source_layer->object_data)->text_color.pixel;
-			((layer_text *) new_layer->object_data)->text_color.red = ((layer_text *) source_layer->object_data)->text_color.red;
-			((layer_text *) new_layer->object_data)->text_color.green = ((layer_text *) source_layer->object_data)->text_color.green;
-			((layer_text *) new_layer->object_data)->text_color.blue = ((layer_text *) source_layer->object_data)->text_color.blue;
-			((layer_text *) new_layer->object_data)->font_size = ((layer_text *) source_layer->object_data)->font_size;
+			dest_text_data = (layer_text *) new_layer->object_data;
+			source_text_data = (layer_text *) source_layer->object_data;
+			dest_text_data->rendered_width = source_text_data->rendered_width;
+			dest_text_data->rendered_height = source_text_data->rendered_height;
+			dest_text_data->text_color.pixel = source_text_data->text_color.pixel;
+			dest_text_data->text_color.red = source_text_data->text_color.red;
+			dest_text_data->text_color.green = source_text_data->text_color.green;
+			dest_text_data->text_color.blue = source_text_data->text_color.blue;
+			dest_text_data->font_size = source_text_data->font_size;
+			dest_text_data->show_bg = source_text_data->show_bg;
+			dest_text_data->bg_border_width = source_text_data->bg_border_width;
+			dest_text_data->bg_border_colour.red = source_text_data->bg_border_colour.red;
+			dest_text_data->bg_border_colour.green = source_text_data->bg_border_colour.green;
+			dest_text_data->bg_border_colour.blue = source_text_data->bg_border_colour.blue;
+			dest_text_data->bg_fill_colour.red = source_text_data->bg_fill_colour.red;
+			dest_text_data->bg_fill_colour.green = source_text_data->bg_fill_colour.green;
+			dest_text_data->bg_fill_colour.blue = source_text_data->bg_fill_colour.blue;
 
 			// Copy the existing text buffer
-			((layer_text *) new_layer->object_data)->text_buffer = gtk_text_buffer_new(NULL);
-			gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(((layer_text *) source_layer->object_data)->text_buffer), &text_start, &text_end);
-			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(((layer_text *) new_layer->object_data)->text_buffer), gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(((layer_text *) source_layer->object_data)->text_buffer), &text_start, &text_end, TRUE), -1);
+			dest_text_data->text_buffer = gtk_text_buffer_new(NULL);
+			gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(source_text_data->text_buffer), &text_start, &text_end);
+			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(dest_text_data->text_buffer), gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(source_text_data->text_buffer), &text_start, &text_end, TRUE), -1);
 			break;
 
 		default:
