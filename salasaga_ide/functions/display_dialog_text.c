@@ -47,6 +47,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	guint				guint_val;					// Temporary guint value used for validation
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gfloat				valid_border_width = 0;		// Receives the new border width once validated
 	gfloat				valid_duration = 0;			// Receives the new finish frame once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
@@ -86,10 +87,20 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*name_label;				// Label widget
 	GtkWidget			*name_entry;				//
 
-	GtkWidget			*visibility_checkbox;		// Layer visibility check box widget
+	GtkWidget			*font_label;				// Label widget
+	GtkWidget			*font_button;				//
 
 	GtkWidget			*fg_colour_label;			// Label widget
 	GtkWidget			*fg_colour_button;			// Forground colour selection button
+
+	GtkWidget			*fill_colour_label;			// Label widget
+	GtkWidget			*fill_colour_button;		// Colour selection button
+
+	GtkWidget			*border_colour_label;		// Label widget
+	GtkWidget			*border_colour_button;		// Colour selection button
+
+	GtkWidget			*border_width_label;		// Label widget
+	GtkWidget			*border_width_button;		//
 
 	GtkWidget			*external_link_label;		// Label widget
 	GtkWidget			*external_link_entry;		// Widget for accepting an external link for clicking on
@@ -97,8 +108,9 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*external_link_win_label;	// Label widget
 	GtkWidget			*external_link_win_entry;	//
 
-	GtkWidget			*font_label;				// Label widget
-	GtkWidget			*font_button;				//
+	GtkWidget			*display_bg_checkbox;		// Background visibility check box widget
+
+	GtkWidget			*visibility_checkbox;		// Layer visibility check box widget
 
 	// * Duration tab fields *
 
@@ -174,7 +186,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(text_buffer), text_gstring->str, text_gstring->len);
 
 	// Create the label asking for the layer name
-	name_label = gtk_label_new("Layer Name: ");
+	name_label = gtk_label_new("Layer name: ");
 	gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -191,20 +203,53 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the font size input
-	font_button = gtk_spin_button_new_with_range(0, valid_fields[FRAME_NUMBER].max_value, 10);
+	font_button = gtk_spin_button_new_with_range(valid_fields[FONT_SIZE].min_value, valid_fields[FONT_SIZE].max_value, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(font_button), tmp_text_ob->font_size);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Create the label next to the colour swatch
-	fg_colour_label = gtk_label_new("Colour: ");
+	// Create the foreground colour selection label
+	fg_colour_label = gtk_label_new("Text colour: ");
 	gtk_misc_set_alignment(GTK_MISC(fg_colour_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fg_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the colour selection button
+	// Create the foreground colour selection button
     fg_colour_button = gtk_color_button_new_with_color(&(tmp_text_ob->text_color));
     gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(fg_colour_button), TRUE);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fg_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Create the background fill colour selection label
+	fill_colour_label = gtk_label_new("Background fill colour: ");
+	gtk_misc_set_alignment(GTK_MISC(fill_colour_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fill_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the background fill colour selection button
+    fill_colour_button = gtk_color_button_new_with_color(&(tmp_text_ob->bg_fill_colour));
+    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(fill_colour_button), TRUE);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fill_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Create the background line colour selection label
+	border_colour_label = gtk_label_new("Background border colour: ");
+	gtk_misc_set_alignment(GTK_MISC(border_colour_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the background line colour selection button
+    border_colour_button = gtk_color_button_new_with_color(&(tmp_text_ob->bg_border_colour));
+    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(border_colour_button), TRUE);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Create the label asking for the background border width
+	border_width_label = gtk_label_new("Background border width: ");
+	gtk_misc_set_alignment(GTK_MISC(border_width_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the entry that accepts the background border width input
+	border_width_button = gtk_spin_button_new_with_range(valid_fields[LINE_WIDTH].min_value, valid_fields[LINE_WIDTH].max_value, 0.1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(border_width_button), tmp_text_ob->bg_border_width);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for an external link
@@ -229,6 +274,18 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), valid_fields[EXTERNAL_LINK_WINDOW].max_value);
 	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), tmp_layer->external_link_window->str);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Create the check box asking if the background should be visible
+	display_bg_checkbox = gtk_check_button_new_with_label("Display the background?");
+	if (FALSE == tmp_text_ob->show_bg)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(display_bg_checkbox), FALSE);
+	} else
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(display_bg_checkbox), TRUE);
+	}
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(display_bg_checkbox), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the check box asking if the layer should be visible
@@ -473,6 +530,19 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			g_free(validated_gfloat);
 		}
 
+		// Retrieve the new background border width
+		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(border_width_button));
+		validated_gfloat = validate_value(LINE_WIDTH, V_FLOAT_UNSIGNED, &gfloat_val);
+		if (NULL == validated_gfloat)
+		{
+			display_warning("Error ED387: There was something wrong with the background border width value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_border_width = *validated_gfloat;
+			g_free(validated_gfloat);
+		}
+
 		// Retrieve the new starting time
 		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(start_button));
 		validated_gfloat = validate_value(LAYER_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
@@ -588,6 +658,14 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	tmp_text_ob->font_size = valid_font_size;
 	tmp_layer->start_time = valid_start_time;
 	tmp_layer->duration = valid_duration;
+	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(display_bg_checkbox)))
+	{
+		tmp_text_ob->show_bg = TRUE;
+	} else
+	{
+		tmp_text_ob->show_bg = FALSE;
+	}
+
 	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(visibility_checkbox)))
 	{
 		tmp_layer->visible = TRUE;
@@ -603,6 +681,9 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	tmp_layer->transition_out_type = valid_trans_out_type;
 	tmp_layer->transition_out_duration = valid_trans_out_duration;
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(fg_colour_button), &(tmp_text_ob->text_color));
+	gtk_color_button_get_color(GTK_COLOR_BUTTON(border_colour_button), &(tmp_text_ob->bg_border_colour));
+	gtk_color_button_get_color(GTK_COLOR_BUTTON(fill_colour_button), &(tmp_text_ob->bg_fill_colour));
+	tmp_text_ob->bg_border_width = valid_border_width;
 
 	// Copy the text buffer from the onscreen widget to our existing text buffer
 	gtk_text_buffer_get_start_iter(text_buffer, &text_start);
