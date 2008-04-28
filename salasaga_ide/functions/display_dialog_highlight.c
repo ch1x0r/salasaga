@@ -49,6 +49,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*highlight_table;			// Table used for neat layout of the dialog box
 	guint				row_counter = 0;			// Used to count which row things are up to
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gfloat				valid_border_width = 0;		// Receives the new border width once validated
 	gfloat				valid_duration = 0;			// Receives the new finish frame once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
@@ -70,6 +71,15 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 
 	GtkWidget			*name_label;				// Label widget
 	GtkWidget			*name_entry;				//
+
+	GtkWidget			*fill_colour_label;			// Label widget
+	GtkWidget			*fill_colour_button;		// Colour selection button
+
+	GtkWidget			*border_colour_label;		// Label widget
+	GtkWidget			*border_colour_button;		// Colour selection button
+
+	GtkWidget			*border_width_label;		// Label widget
+	GtkWidget			*border_width_button;		//
 
 	GtkWidget			*visibility_checkbox;		// Visibility widget
 
@@ -141,6 +151,39 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	gtk_entry_set_max_length(GTK_ENTRY(name_entry), valid_fields[LAYER_NAME].max_value);
 	gtk_entry_set_text(GTK_ENTRY(name_entry), tmp_layer->name->str);
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Create the background fill colour selection label
+	fill_colour_label = gtk_label_new("Background fill colour: ");
+	gtk_misc_set_alignment(GTK_MISC(fill_colour_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(fill_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the background fill colour selection button
+    fill_colour_button = gtk_color_button_new_with_color(&(tmp_highlight_ob->fill_colour));
+    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(fill_colour_button), TRUE);
+	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(fill_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Create the background line colour selection label
+	border_colour_label = gtk_label_new("Background border colour: ");
+	gtk_misc_set_alignment(GTK_MISC(border_colour_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(border_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the background line colour selection button
+    border_colour_button = gtk_color_button_new_with_color(&(tmp_highlight_ob->border_colour));
+    gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(border_colour_button), TRUE);
+	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(border_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Create the label asking for the background border width
+	border_width_label = gtk_label_new("Background border width: ");
+	gtk_misc_set_alignment(GTK_MISC(border_width_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(border_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the entry that accepts the background border width input
+	border_width_button = gtk_spin_button_new_with_range(valid_fields[LINE_WIDTH].min_value, valid_fields[LINE_WIDTH].max_value, 0.1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(border_width_button), tmp_highlight_ob->border_width);
+	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(border_width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting X Offset
@@ -366,6 +409,19 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 			validated_string = NULL;
 		}
 
+		// Retrieve the new background border width
+		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(border_width_button));
+		validated_gfloat = validate_value(LINE_WIDTH, V_FLOAT_UNSIGNED, &gfloat_val);
+		if (NULL == validated_gfloat)
+		{
+			display_warning("Error ED396: There was something wrong with the background border width value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_border_width = *validated_gfloat;
+			g_free(validated_gfloat);
+		}
+
 		// Retrieve the new starting frame x offset
 		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_off_button_start));
 		validated_guint = validate_value(X_OFFSET, V_INT_UNSIGNED, &guint_val);
@@ -574,6 +630,9 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	tmp_layer->transition_in_duration = valid_trans_in_duration;
 	tmp_layer->transition_out_type = valid_trans_out_type;
 	tmp_layer->transition_out_duration = valid_trans_out_duration;
+	gtk_color_button_get_color(GTK_COLOR_BUTTON(border_colour_button), &(tmp_highlight_ob->border_colour));
+	gtk_color_button_get_color(GTK_COLOR_BUTTON(fill_colour_button), &(tmp_highlight_ob->fill_colour));
+	tmp_highlight_ob->border_width = valid_border_width;
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(highlight_dialog));
