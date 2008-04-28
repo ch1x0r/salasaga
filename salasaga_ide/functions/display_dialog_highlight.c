@@ -55,6 +55,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
 	guint				valid_height = 0;			// Receives the new height value once validated
 	GString				*valid_name;				// Receives the new layer name once validated
+	gfloat				valid_opacity = 0;			// Receives the new opacity once validated
 	gfloat				valid_start_time = 0;		// Receives the new start time once validated
 	gfloat				valid_trans_in_duration = 0;// Receives the new appearance transition duration once validated
 	guint				valid_trans_in_type = 0;	// Receives the new appearance transition type once validated
@@ -80,6 +81,9 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 
 	GtkWidget			*border_width_label;		// Label widget
 	GtkWidget			*border_width_button;		//
+
+	GtkWidget			*opacity_label;				// Label widget
+	GtkWidget			*opacity_button;			//
 
 	GtkWidget			*visibility_checkbox;		// Visibility widget
 
@@ -184,6 +188,17 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	border_width_button = gtk_spin_button_new_with_range(valid_fields[LINE_WIDTH].min_value, valid_fields[LINE_WIDTH].max_value, 0.1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(border_width_button), tmp_highlight_ob->border_width);
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(border_width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Create the label asking for the opacity
+	opacity_label = gtk_label_new("Opacity: ");
+	gtk_misc_set_alignment(GTK_MISC(opacity_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(opacity_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the entry that accepts the opacity input
+	opacity_button = gtk_spin_button_new_with_range(valid_fields[OPACITY].min_value, valid_fields[OPACITY].max_value, 1.0);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(opacity_button), tmp_highlight_ob->opacity);
+	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(opacity_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting X Offset
@@ -409,16 +424,29 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 			validated_string = NULL;
 		}
 
-		// Retrieve the new background border width
+		// Retrieve the new border width
 		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(border_width_button));
 		validated_gfloat = validate_value(LINE_WIDTH, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED396: There was something wrong with the background border width value.  Please try again.");
+			display_warning("Error ED396: There was something wrong with the border width value.  Please try again.");
 			useable_input = FALSE;
 		} else
 		{
 			valid_border_width = *validated_gfloat;
+			g_free(validated_gfloat);
+		}
+
+		// Retrieve the new opacity value
+		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(opacity_button));
+		validated_gfloat = validate_value(OPACITY, V_FLOAT_UNSIGNED, &gfloat_val);
+		if (NULL == validated_gfloat)
+		{
+			display_warning("Error ED405: There was something wrong with the opacity value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_opacity = *validated_gfloat;
 			g_free(validated_gfloat);
 		}
 
@@ -633,6 +661,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(border_colour_button), &(tmp_highlight_ob->border_colour));
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(fill_colour_button), &(tmp_highlight_ob->fill_colour));
 	tmp_highlight_ob->border_width = valid_border_width;
+	tmp_highlight_ob->opacity = valid_opacity;
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(highlight_dialog));
