@@ -314,7 +314,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			red_component = ((gfloat) selected_colour->red) / 65536;
 			green_component = ((gfloat) selected_colour->green) / 65536;
 			blue_component = ((gfloat) selected_colour->blue) / 65536;
-			cairo_set_source_rgba(cairo_context, red_component, green_component, blue_component, time_alpha);
+			cairo_set_source_rgba(cairo_context, red_component, green_component, blue_component,
+					time_alpha * (((layer_highlight *) this_layer_data->object_data)->opacity / 100.0));
 			cairo_set_line_width(cairo_context, ((layer_highlight *) this_layer_data->object_data)->border_width);
 			cairo_set_line_join(cairo_context, CAIRO_LINE_JOIN_ROUND);
 			cairo_set_line_cap(cairo_context, CAIRO_LINE_CAP_ROUND);
@@ -336,7 +337,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			cairo_set_source_rgb(cairo_context, red_component, green_component, blue_component);
 			cairo_rectangle(cairo_context, x_offset + 1, y_offset + 1, width - 2, height - 2);
 			cairo_clip(cairo_context);
-			cairo_paint_with_alpha(cairo_context, 0.10 * time_alpha);
+			cairo_paint_with_alpha(cairo_context, time_alpha * (((layer_highlight *) this_layer_data->object_data)->opacity / 100.0));
 
 			// Restore the cairo state to the way it was
 			cairo_restore(cairo_context);
