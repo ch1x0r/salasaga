@@ -128,6 +128,14 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	tmp_highlight_ob = g_new(layer_highlight, 1);
 	tmp_highlight_ob->width = mouse_drag_width;
 	tmp_highlight_ob->height = mouse_drag_height;
+	tmp_highlight_ob->border_colour.red = 0;
+	tmp_highlight_ob->border_colour.green = 65535;
+	tmp_highlight_ob->border_colour.blue = 0;
+	tmp_highlight_ob->border_width = 2.0;
+	tmp_highlight_ob->fill_colour.red = 0;
+	tmp_highlight_ob->fill_colour.green = 40000;
+	tmp_highlight_ob->fill_colour.blue = 0;
+	tmp_highlight_ob->opacity = 50;  // Sensible default
 
 	// Constuct the new highlight layer
 	tmp_layer = g_new(layer, 1);

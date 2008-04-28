@@ -69,6 +69,14 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	tmp_text_ob->font_size = 40;
 	tmp_text_ob->text_buffer = gtk_text_buffer_new(NULL);
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), "New text...", -1);
+	tmp_text_ob->show_bg = TRUE;
+	tmp_text_ob->bg_border_width = 2.0;
+	tmp_text_ob->bg_border_colour.red = 0;
+	tmp_text_ob->bg_border_colour.green = 0;
+	tmp_text_ob->bg_border_colour.blue = 0;
+	tmp_text_ob->bg_fill_colour.red = 65535;
+	tmp_text_ob->bg_fill_colour.green = 65535;
+	tmp_text_ob->bg_fill_colour.blue = 52428;  // Sensible defaults
 
 	// Construct a new text layer
 	tmp_layer = g_new(layer, 1);
