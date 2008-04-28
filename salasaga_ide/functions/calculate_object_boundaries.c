@@ -42,6 +42,7 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
+#include "layer/get_layer_position.h"
 #include "widgets/time_line.h"
 
 
@@ -50,34 +51,23 @@ void calculate_object_boundaries(void)
 	// Local variables
 	boundary_box		*boundary;					// Boundary information
 	guint				count_int;					// Counter used to loop through the layers
-	gfloat				end_time;					// Time in seconds of the layer objects finish time
-	gint				finish_x;					// X position at the layer objects finish time
-	gint				finish_y;					// Y position at the layer objects finish time 
 	GList				*layer_pointer;
+	GtkAllocation		layer_positions;			// Offset and dimensions for a given layer object
 	guint				num_layers;					// The number of layers in the slide
 	gint				pixmap_height;				// Height of the front stoe
 	gint				pixmap_width;				// Width of the front store
+	gboolean			return_code_gbool;			// Receives gboolean return codes
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
-	gfloat				start_time;					// Time in seconds of the layer objects start time
-	gint				start_x;					// X position at the layer objects start time
-	gint				start_y;					// Y position at the layer objects start time
 	layer_highlight		*this_highlight;			// Pointer to the highlight layer data we're working on
 	layer_image			*this_image;				// Pointer to the image layer data we're working on
 	layer				*this_layer_data;			// Pointer to the layer we're working on
 	layer_mouse			*this_mouse;				// Pointer to the mouse layer data we're working on
 	layer_text			*this_text;					// Pointer to the text layer data we're working on
 	slide				*this_slide_data;			// Pointer to the data for the slide we're working on
-	gfloat				time_diff;					// Used when calculating the object position at the desired point in time
-	gfloat				time_offset;
+	gfloat				time_alpha;
 	gfloat 				time_position;				// The point in time we need the handle box for
-	gint				time_x;						// Unscaled X position of the layer at our desired point in time
-	gint				time_y;						// Unscaled Y position of the layer at our desired point in time
 	GdkRectangle		tmp_rectangle;				//
-	gint				x_diff;						// Used when calculating the object position at the desired point in time
-	gfloat				x_scale;					// Used when calculating the object position at the desired point in time
-	gint				y_diff;						// Used when calculating the object position at the desired point in time
-	gfloat				y_scale;					// Used when calculating the object position at the desired point in time
 
 
 	// Only continue in this function if we have a slide structure available
@@ -117,44 +107,10 @@ void calculate_object_boundaries(void)
 		layer_pointer = g_list_nth(layer_pointer, count_int);
 		this_layer_data = layer_pointer->data;
 
-		// Simplify pointers
-		finish_x = this_layer_data->x_offset_finish;
-		finish_y = this_layer_data->y_offset_finish;
-		start_time = this_layer_data->start_time;
-		start_x = this_layer_data->x_offset_start;
-		start_y = this_layer_data->y_offset_start;
-
-		// Calculate the position of the object
-		end_time = this_layer_data->start_time + this_layer_data->duration;
-		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-			end_time += this_layer_data->transition_in_duration;
-		if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
-			end_time += this_layer_data->transition_out_duration;
-		if ((time_position >= start_time) && (time_position <= end_time))
-		{
-			// Calculate how far into the layer movement we are
-			time_offset = time_position - start_time;
-			time_diff = end_time - start_time;
-			x_diff = finish_x - start_x;
-			x_scale = (((gfloat) x_diff) / time_diff);
-			time_x = start_x + (x_scale * time_offset);
-			y_diff = finish_y - start_y;
-			y_scale = (((gfloat) y_diff) / time_diff);
-			time_y = start_y + (y_scale * time_offset);
-		} else
-		{
-			if (time_position < start_time)
-			{
-				// The desired point in time is before the layer is visible, so we use the object start position
-				time_x = start_x;
-				time_y = start_y;
-			} else
-			{
-				// The desired point in time after layer is visible, so we use the object finish position
-				time_x = finish_x;
-				time_y = finish_y;
-			}
-		}
+		// Retrieve the layer position and alpha for the given point in time
+		return_code_gbool = get_layer_position(&layer_positions, this_layer_data, time_position, &time_alpha);
+		if (FALSE == return_code_gbool)
+			return;
 
 		// Determine the layer type then calculate its boundaries accordingly
 		switch (this_layer_data->object_type)
@@ -178,9 +134,9 @@ void calculate_object_boundaries(void)
 				this_image = (layer_image *) this_layer_data->object_data;
 
 				// Translate the area covered by the layer object, with the zoom factor
-				tmp_rectangle.x = roundf(time_x / scaled_width_ratio);
+				tmp_rectangle.x = roundf(layer_positions.x / scaled_width_ratio);
 				tmp_rectangle.width = roundf(this_image->width / scaled_width_ratio);
-				tmp_rectangle.y = roundf(time_y / scaled_height_ratio);
+				tmp_rectangle.y = roundf(layer_positions.y / scaled_height_ratio);
 				tmp_rectangle.height = roundf(this_image->height / scaled_height_ratio);
 				break;
 
@@ -190,9 +146,9 @@ void calculate_object_boundaries(void)
 				this_highlight = (layer_highlight *) this_layer_data->object_data;
 
 				// Work out the working area covered by this object
-				tmp_rectangle.x = roundf(time_x / scaled_width_ratio);
+				tmp_rectangle.x = roundf(layer_positions.x / scaled_width_ratio);
 				tmp_rectangle.width = roundf(this_highlight->width / scaled_width_ratio);
-				tmp_rectangle.y = roundf(time_y / scaled_height_ratio);
+				tmp_rectangle.y = roundf(layer_positions.y / scaled_height_ratio);
 				tmp_rectangle.height = roundf(this_highlight->height / scaled_height_ratio);
 				break;
 
@@ -202,9 +158,9 @@ void calculate_object_boundaries(void)
 				this_mouse = (layer_mouse *) this_layer_data->object_data;
 
 				// Translate the area covered by the layer object, with the zoom factor
-				tmp_rectangle.x = roundf(time_x / scaled_width_ratio);
+				tmp_rectangle.x = roundf(layer_positions.x / scaled_width_ratio);
 				tmp_rectangle.width = roundf(this_mouse->width / scaled_width_ratio);
-				tmp_rectangle.y = roundf(time_y / scaled_height_ratio);
+				tmp_rectangle.y = roundf(layer_positions.y / scaled_height_ratio);
 				tmp_rectangle.height = roundf(this_mouse->height / scaled_height_ratio);
 				break;
 
@@ -214,9 +170,9 @@ void calculate_object_boundaries(void)
 				this_text = (layer_text *) this_layer_data->object_data;
 
 				// Translate the area covered by the layer object, with the zoom factor
-				tmp_rectangle.x = roundf(time_x / scaled_width_ratio);
+				tmp_rectangle.x = roundf(layer_positions.x / scaled_width_ratio);
 				tmp_rectangle.width = roundf(this_text->rendered_width / scaled_width_ratio);
-				tmp_rectangle.y = roundf(time_y / scaled_height_ratio);
+				tmp_rectangle.y = roundf(layer_positions.y / scaled_height_ratio);
 				tmp_rectangle.height = roundf(this_text->rendered_height / scaled_height_ratio);
 				break;
 
