@@ -129,6 +129,7 @@ enum
 	LAYER_WIDTH,
 	LINE_WIDTH,
 	MOUSE_CLICK,
+	OPACITY,
 	PREVIEW_WIDTH,
 	PROJECT_FPS,
 	PROJECT_HEIGHT,
@@ -288,6 +289,7 @@ typedef struct
 	GdkColor			fill_colour;
 	GdkColor			border_colour;
 	gfloat				border_width;
+	gfloat				opacity;
 } layer_highlight;
 
 // Defines the properties making up an image layer
