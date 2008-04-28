@@ -254,7 +254,7 @@ gboolean menu_export_flash_create_shape(layer *this_layer_data)
 
 			// Create the initial empty shape
 			empty_layer_shape = newSWFShape();
-			if (NULL == highlight_box)
+			if (NULL == empty_layer_shape)
 			{
 				// Something went wrong when creating the empty shape, so we skip this layer
 				display_warning("Error ED111: Something went wrong when creating an empty layer for swf output");
