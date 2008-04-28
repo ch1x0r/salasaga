@@ -271,6 +271,22 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "width", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->height);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "height", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->border_colour.red);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "border_colour_red", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->border_colour.green);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "border_colour_green", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->border_colour.blue);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "border_colour_blue", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%f", ((layer_highlight *) layer_pointer->object_data)->border_width);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "border_width", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->fill_colour.red);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "fill_colour_red", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->fill_colour.green);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "fill_colour_green", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->fill_colour.blue);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "fill_colour_blue", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%f", ((layer_highlight *) layer_pointer->object_data)->opacity);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "opacity", (const xmlChar *) tmp_gstring->str);
 			break;
 	}
 
