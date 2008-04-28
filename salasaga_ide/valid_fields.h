@@ -54,6 +54,7 @@ validatation_entry		valid_fields[] =
 	{ LAYER_WIDTH,			"Width of this layer",					V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ LINE_WIDTH,			"Line width",							V_FLOAT_UNSIGNED,	V_NONE,		0.05,	20 },
 	{ MOUSE_CLICK,			"Mouse click",							V_CHAR,				V_UNDERSCORES,		0,		8 },
+	{ OPACITY,				"Opacity level",						V_FLOAT_UNSIGNED,	V_NONE,		0,		100 },
 	{ PREVIEW_WIDTH,		"Width of film strip thumbnails",		V_INT_UNSIGNED,		V_NONE,		20,		800 },
 	{ PROJECT_FPS,			"Frames per Second for this project",	V_INT_UNSIGNED,		V_NONE,		1,		120 },
 	{ PROJECT_HEIGHT,		"Height of this project",				V_INT_UNSIGNED,		V_NONE,		1,		4096 },
