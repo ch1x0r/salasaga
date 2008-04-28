@@ -274,6 +274,13 @@ void menu_file_new(void)
 	// Set the default background color
 	default_bg_colour = new_bg_colour;
 
+	// Set the initial information text and link
+	info_link = g_string_new("http://www.salasaga.org");
+	info_link_target = g_string_new("_blank");
+	info_text = gtk_text_buffer_new(NULL);
+	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), "Created using Salasaga", -1);
+	info_display = TRUE;
+
 	// Create an initial blank slide for the project
 	slide_insert();
 	current_slide = slides;

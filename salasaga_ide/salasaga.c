@@ -94,6 +94,10 @@ guint					frames_per_second;			// Number of frames per second
 GdkPixmap				*front_store;				// Front store for double buffering the workspace area
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
 GString					*icon_path;					// Points to the base location for Salasaga icon files
+gboolean				info_display = TRUE;		// Toggle for whether to display the information button in swf output
+GString					*info_link;					//
+GString					*info_link_target;			//
+GtkTextBuffer			*info_text;					// Text to be shown in the information button in swf output
 gint					invalidation_end_x;			// Right side of the front store area to invalidate
 gint					invalidation_end_y;			// Bottom of the front store area to invalidate
 gint					invalidation_start_x;		// Left side of the front store area to invalidate

@@ -51,6 +51,7 @@ void menu_project_properties(void)
 	gboolean			valid_control_bar_behaviour;  // Receives the new control bar display behaviour
 	guint				valid_end_behaviour;		// Receives the new end behaviour once validated
 	guint				valid_fps = 0;				// Receives the new project fps once validated
+	gboolean			valid_info_display;			// Receives the new informatio button display behaviour
 	GString				*valid_output_folder;		// Receives the new output folder once validated
 	GString				*valid_proj_name;			// Receives the new project name once validated
 	GString				*valid_project_folder;		// Receives the new project folder once validated
@@ -58,13 +59,13 @@ void menu_project_properties(void)
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
-	GtkWidget			*label_project_name;		// Project Name
+	GtkWidget			*label_project_name;		// Project name
 	GtkWidget			*entry_project_name;		//
 
-	GtkWidget			*label_project_folder;		// Project Folder
+	GtkWidget			*label_project_folder;		// Project folder
 	GtkWidget			*button_project_folder;		//
 
-	GtkWidget			*label_output_folder;		// Output Folder
+	GtkWidget			*label_output_folder;		// Output folder
 	GtkWidget			*button_output_folder;		//
 
 	GtkWidget			*label_frames_per_second;	// Frames per second 
@@ -82,8 +83,27 @@ void menu_project_properties(void)
 	GtkWidget			*label_end_behaviour;		// End behaviour
 	GtkWidget			*selector_end_behaviour;	//
 
-	GtkWidget			*label_control_bar;			// Display Control bar
-	GtkWidget			*check_control_bar;			// 
+	GtkWidget			*label_control_bar;			// Display control bar
+	GtkWidget			*check_control_bar;			//
+
+	GtkWidget			*label_display_info;		// Display information button
+	GtkWidget			*check_display_info;		//
+
+	// * Information button variables *
+
+	GtkWidget			*label_info_text;			// Label for the information text field
+	GtkTextBuffer		*text_buffer;				// Temporary text buffer the user words with 
+	GtkTextIter			text_end;					// End position of text buffer
+	GtkWidget			*text_frame;				// Frame to go around the text widget
+	GString				*text_gstring;				// Temporary text buffer
+	GtkTextIter			text_start;					// Start position of text buffer
+	GtkWidget			*text_view;					// Widget for accepting the new text data
+
+	GtkWidget			*external_link_label;		// Label widget
+	GtkWidget			*external_link_entry;		//
+
+	GtkWidget			*external_link_win_label;	// Label widget
+	GtkWidget			*external_link_win_entry;	//
 
 	GString				*tmp_gstring;				// Temporary GString used for constructing text
 
@@ -217,8 +237,70 @@ void menu_project_properties(void)
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_control_bar), FALSE);
 	}
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(check_control_bar), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	proj_row_counter = proj_row_counter + 1;
 
-	// Ensure everything will show
+	// Display information button
+	label_display_info = gtk_label_new("Display SWF information button: ");
+	gtk_misc_set_alignment(GTK_MISC(label_display_info), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_display_info), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	check_display_info = gtk_check_button_new();
+	if (TRUE == info_display)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_display_info), TRUE);
+	} else
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_display_info), FALSE);
+	}
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(check_display_info), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	proj_row_counter = proj_row_counter + 1;
+
+	// Create a label for the informatino button text view
+	label_info_text = gtk_label_new("Information button text");
+	gtk_misc_set_alignment(GTK_MISC(label_info_text), 0.5, 0.5);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_info_text), 0, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	proj_row_counter = proj_row_counter + 1;
+
+	// Create the text view that accepts the new information button text
+	text_frame = gtk_frame_new(NULL);
+	gtk_container_set_border_width(GTK_CONTAINER(text_frame), 2);
+	gtk_frame_set_shadow_type(GTK_FRAME(text_frame), GTK_SHADOW_OUT);
+	text_view = gtk_text_view_new();
+	gtk_widget_set_size_request(GTK_WIDGET(text_view), 0, 100);
+	gtk_container_add(GTK_CONTAINER(text_frame), text_view);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(text_frame), 0, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	proj_row_counter = proj_row_counter + 1;
+
+	// Copy the text string from the existing text buffer to a new, temporary one
+	// (Note - this is so we don't work directly with the text buffer, which would keep edits even if the user hits the Cancel button)
+	gtk_text_buffer_get_bounds(info_text, &text_start, &text_end);
+	text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
+	text_gstring = g_string_new(gtk_text_buffer_get_slice(info_text, &text_start, &text_end, TRUE));
+	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(text_buffer), text_gstring->str, text_gstring->len);
+
+	// Create the label asking for an external link
+	external_link_label = gtk_label_new("Information button link: ");
+	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_label), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the entry that accepts an external link
+	external_link_entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), valid_fields[EXTERNAL_LINK].max_value);
+	gtk_entry_set_text(GTK_ENTRY(external_link_entry), info_link->str);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_entry), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	proj_row_counter = proj_row_counter + 1;
+
+	// Create the label asking for the window to open the external link in
+	external_link_win_label = gtk_label_new("Information button link window: ");
+	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_win_label), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the entry that accepts a text string for the window to open the external link in
+	external_link_win_entry = gtk_entry_new();
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), valid_fields[EXTERNAL_LINK_WINDOW].max_value);
+	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), info_link_target->str);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_win_entry), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Ensure everything will be shown
 	gtk_widget_show_all(GTK_WIDGET(main_dialog));
 
 	// Loop around until we have all valid values, or the user cancels out
@@ -320,6 +402,8 @@ void menu_project_properties(void)
 		// Retrieve the new control bar display behaviour
 		valid_control_bar_behaviour = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_control_bar));
 
+		// Retrieve the new information button display behaviour
+		valid_info_display = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_display_info));
 	} while (FALSE == useable_input);
 
 	// * We only get here after all input is considered valid *
@@ -350,6 +434,9 @@ void menu_project_properties(void)
 
 	// Control bar display
 	show_control_bar = valid_control_bar_behaviour;
+
+	// Information button display
+	info_display = valid_info_display;
 
 	// Set the changes made variable
 	changes_made = TRUE;
