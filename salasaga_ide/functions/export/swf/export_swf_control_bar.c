@@ -1202,7 +1202,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		SWFDisplayItem_setDepth(info_bg_display_item, depth_number + 1);
 		SWFDisplayItem_moveTo(info_bg_display_item,
 				control_bar_x + (control_bar_width / 2) - (widest_text_string_width / 2) - (control_bar_curve / 3),
-				control_bar_y - info_real_font_size - 4);
+				control_bar_y - (info_real_font_size * num_text_lines) - 4);
 	}
 
 	// Advance the movie clip one frame, else it won't be displayed
