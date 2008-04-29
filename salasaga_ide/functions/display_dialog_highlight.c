@@ -568,7 +568,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		}
 
 		// Retrieve the external link window input
-		validated_string = validate_value(EXTERNAL_LINK, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(external_link_win_entry)));
+		validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(external_link_win_entry)));
 		if (NULL == validated_string)
 		{
 			display_warning("Error ED153: There was something wrong with the external link target window value.  Please try again.");
