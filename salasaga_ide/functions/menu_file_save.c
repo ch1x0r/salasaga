@@ -53,7 +53,8 @@ void menu_file_save(void)
 	xmlNodePtr			pref_pointer;				// Points to the preferences node
 	xmlNodePtr			root_node;					// Points to the root node
 	xmlSaveCtxt			*save_context;				// Points to the save context
-
+	GtkTextIter			text_end;					// End position of text buffer
+	GtkTextIter			text_start;					// Start position of text buffer
 	GString				*tmp_gstring;				// Temporary GString
 	gint				tmp_int;					// Temporary integer
 	glong				tmp_long;					// Temporary long integer
@@ -167,6 +168,17 @@ void menu_file_save(void)
 	{
 		xmlNewChild(pref_pointer, NULL, (const xmlChar *) "show_control_bar", (const xmlChar *) "false");
 	}
+	if (TRUE == info_display)
+	{
+		xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_display", (const xmlChar *) "true");
+	} else
+	{
+		xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_display", (const xmlChar *) "false");
+	}
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_link", (const xmlChar *) info_link->str);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_link_target", (const xmlChar *) info_link_target->str);
+	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(info_text), &text_start, &text_end);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_text", (const xmlChar *) gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(info_text), &text_start, &text_end, TRUE));
 
     // Create a container for the slides
 	slide_root = xmlNewChild(root_node, NULL, (const xmlChar *) "slides", NULL);
