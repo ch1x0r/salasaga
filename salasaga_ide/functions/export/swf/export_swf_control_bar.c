@@ -23,6 +23,11 @@
  *
  */
 
+// Turn on C99 compatibility
+#define _ISOC99_SOURCE
+
+// Math include
+#include <math.h>
 
 // GTK includes
 #include <gtk/gtk.h>
@@ -34,6 +39,7 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "../../display_warning.h"
+#include "create_swf_text_shape.h"
 #include "swf_shape_from_image_file.h"
 
 
@@ -53,9 +59,13 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFDisplayItem		mc_display_item;
 	SWFMovieClip		movie_clip;
 	gint				num_slides;
+	gint				num_text_lines;				// Number of text lines in a particular text layer
+	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to
+	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
 	slide				*slide_data;
 	GString				*slide_name_tmp;
 	GString				*slide_names_gstring;
+	gfloat				widest_text_string_width;	// Used when calculating how wide to draw the text background box
 
 	// Variables used creating the control bar background
 	SWFShape			cb_background;
@@ -109,6 +119,24 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFShape			rewind_shape_down;
 	SWFShape			rewind_shape_over;
 	SWFShape			rewind_shape_up;
+
+	// Variables used for the information button
+	SWFAction			info_action;
+	SWFDisplayItem		info_bg_display_item;
+	gfloat				info_bg_box_height;			// Used while generating swf output for text boxes
+	gfloat				info_bg_box_width;			// Used while generating swf output for text boxes
+	SWFButton			info_button;
+	gfloat				info_leading;				// Spacing to use at the edges of the font
+	SWFMovieClip		info_movie_clip;			// The movie clip that contains the information text background and text
+	SWFText				info_object;				// The information button text object we're working on goes in this
+	gfloat				info_real_font_size;
+	SWFShape			info_shape_down;
+	SWFShape			info_shape_over;
+	SWFShape			info_shape_up;
+	SWFShape			info_text_bg;
+	SWFButton			info_text_button;
+	SWFFillStyle		info_text_fill_style;
+	layer_text			info_text_structure;
 
 	// Control bar and button resolutions
 	control_bar_elements	cb_size_array[] =
@@ -309,6 +337,13 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		control_bar_x += button_width;
 	}
 
+	// If the information button should be displayed, we add that to the control bar background width
+	if (TRUE == info_display)
+	{
+		control_bar_width += button_width + button_spacing;
+		control_bar_x -= (button_width + button_spacing) / 2;		
+	}
+
 	// Ensure the swf output starts out in the correct play state and the play button is correct
 	if (START_BEHAVIOUR_PLAY == start_behaviour)
 	{
@@ -320,6 +355,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 
 	// Create an action script list of slide names in the project
 	g_string_append_printf(slide_names_gstring,
+			" _root.info_text._visible = false;"
 			" var num_slides = %u;"
 			" var this_slide = 0;"
 			" var reversing = false;"
@@ -927,6 +963,142 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	}
 	SWFButton_addAction(finish_button, finish_action, SWFBUTTON_MOUSEUP);
 
+	// * Create the information button *
+
+	if (TRUE == info_display)
+	{
+		// Load info button's UP state image
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "info_up", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		g_free(image_path);
+		info_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
+		if (NULL == info_shape_up)
+		{
+			// Loading images isn't working.
+			destroySWFShape(cb_background);
+			return FALSE;
+		}
+
+		// Load info button's OVER state image
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "info_over", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		g_free(image_path);
+		info_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
+		if (NULL == info_shape_over)
+		{
+			// Loading images isn't working.
+			destroySWFShape(cb_background);
+			destroySWFShape(info_shape_up);
+			return FALSE;
+		}
+
+		// Load finish button's DOWN state image
+		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "info_down", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		g_free(image_path);
+		info_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
+		if (NULL == info_shape_down)
+		{
+			// Loading images isn't working.
+			destroySWFShape(cb_background);
+			destroySWFShape(info_shape_up);
+			destroySWFShape(info_shape_over);
+			return FALSE;
+		}
+
+		// Create an empty button object we can use
+		info_button = newSWFButton();
+
+		// Add the shapes to the button for its various states
+		SWFButton_addShape(info_button, (SWFCharacter) info_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
+		SWFButton_addShape(info_button, (SWFCharacter) info_shape_over, SWFBUTTON_OVER);
+		SWFButton_addShape(info_button, (SWFCharacter) info_shape_down, SWFBUTTON_DOWN);
+
+		// Add the finish action to the finish button 
+		if (debug_level)
+		{
+			// If we're debugging, then generate debugging swf's too
+			info_action = compileSWFActionCode(
+					" _root.info_text._visible = !(_root.info_text._visible);"
+					" trace(\"info_text visibility set to: \" + _root.info_text._visible);"); // Toggle the visible state of the info button text
+		} else
+		{
+			info_action = compileSWFActionCode(
+					" _root.info_text._visible = !(_root.info_text._visible); "); // Toggle the visible state of the info button text
+		}
+		SWFButton_addAction(info_button, info_action, SWFBUTTON_MOUSEUP);
+
+		// * Create the information text object *
+
+		// Create a structure with the required fields
+		info_text_structure.rendered_width = 0;
+		info_text_structure.rendered_height = 0;
+		info_text_structure.text_color.red = 0;
+		info_text_structure.text_color.green = 0;
+		info_text_structure.text_color.blue = 0;
+		info_text_structure.font_size = 20;
+		info_text_structure.text_buffer = info_text;
+		info_text_structure.show_bg = TRUE;
+		info_text_structure.bg_fill_colour.red = 65535;
+		info_text_structure.bg_fill_colour.green = 65535;
+		info_text_structure.bg_fill_colour.blue = 59110;
+		info_text_structure.bg_border_colour.red = 0;
+		info_text_structure.bg_border_colour.green = 0;
+		info_text_structure.bg_border_colour.blue = 0;
+		info_text_structure.bg_border_width = 1;
+
+		// Calculate the height and width scaling values needed for this swf shape
+		scaled_height_ratio = (gfloat) output_height / (gfloat) project_height;
+		scaled_width_ratio = (gfloat) output_width / (gfloat) project_width;
+
+		// Create the text object
+		info_object = create_swf_text_shape(&info_text_structure, scaled_width_ratio, scaled_height_ratio,
+				&num_text_lines, &widest_text_string_width, &info_real_font_size);
+
+		// Create the information text background object
+		info_text_bg = newSWFShape();
+		if (NULL == info_text_bg)
+		{
+			// Something went wrong when creating the empty shape, so we skip this layer
+			display_warning("Error ED406: Something went wrong when creating the information button background shape");
+			return FALSE;
+		}
+
+		// Set the fill and border style for the information text background object
+		info_text_fill_style = SWFShape_addSolidFillStyle(info_text_bg, 0xff, 0xff, 0xe6, 0xff);
+		SWFShape_setRightFillStyle(info_text_bg, info_text_fill_style);
+		SWFShape_setLine(info_text_bg, 1, 0x00, 0x00, 0x00, 0xff);
+
+		// Work out the scaled dimensions of the information text background object
+		info_leading = SWFText_getLeading(info_object);
+		info_bg_box_height = (info_real_font_size * num_text_lines) * 1.02;
+		info_bg_box_width = widest_text_string_width + (info_leading * 2);
+
+		// Create the information text background
+		SWFShape_drawLine(info_text_bg, info_bg_box_width, 0.0);
+		SWFShape_drawLine(info_text_bg, 0.0, info_bg_box_height);
+		SWFShape_drawLine(info_text_bg, -(info_bg_box_width), 0.0);
+		SWFShape_drawLine(info_text_bg, 0.0, -(info_bg_box_height));
+
+		// Create the movie clip the information button text object will go into
+		info_movie_clip = newSWFMovieClip();
+
+		// Add the information text background to the movie clip
+		info_bg_display_item = SWFMovieClip_add(info_movie_clip, (SWFBlock) info_text_bg);
+
+		// Position the background
+		SWFDisplayItem_moveTo(info_bg_display_item, 0.0, 0.0);
+
+		// Add the text object to the movie clip
+		info_bg_display_item = SWFMovieClip_add(info_movie_clip, (SWFBlock) info_object);
+
+		// Position the text elements
+		SWFDisplayItem_moveTo(info_bg_display_item, info_leading, SWFText_getAscent(info_object));
+
+		// Advance the movie clip one frame, else it won't be displayed
+		SWFMovieClip_nextFrame(info_movie_clip);
+	}
+
 
 	// *** Add the buttons to a movie clip and attach it to the main movie ***
 
@@ -986,6 +1158,25 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 	SWFDisplayItem_setName(mc_display_item, "cb_finish");
 	button_x = button_x + button_width + button_spacing;
+
+	// Add the information button components
+	if (TRUE == info_display)
+	{
+		// Add the info button to the control bar
+		mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) info_button);
+		SWFDisplayItem_setDepth(mc_display_item, 8);
+		SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
+		SWFDisplayItem_setName(mc_display_item, "cb_info");
+		button_x = button_x + button_width + button_spacing;
+
+		// Add the information button text to the main movie
+		info_bg_display_item = SWFMovie_add(main_movie, (SWFBlock) info_movie_clip);
+		SWFDisplayItem_setName(info_bg_display_item, "info_text");
+		SWFDisplayItem_setDepth(info_bg_display_item, depth_number + 1);
+		SWFDisplayItem_moveTo(info_bg_display_item,
+				control_bar_x + (control_bar_width / 2) - (widest_text_string_width / 2) - (control_bar_curve / 3),
+				control_bar_y - info_real_font_size - 4);
+	}
 
 	// Advance the movie clip one frame, else it won't be displayed
 	SWFMovieClip_nextFrame(movie_clip);
