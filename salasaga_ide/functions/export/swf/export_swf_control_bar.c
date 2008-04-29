@@ -443,6 +443,9 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	// Curve up to top
 	SWFShape_drawCurve(cb_background, 0.0, -(control_bar_curve + 2), control_bar_curve, 0.25);
 
+	// Manually close the shape
+	SWFShape_drawLineTo(cb_background, control_bar_curve, 0.0);
+
 
 	// *** Create the Restart button ***
 
