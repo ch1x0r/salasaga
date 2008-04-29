@@ -1039,7 +1039,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		info_text_structure.text_color.red = 0;
 		info_text_structure.text_color.green = 0;
 		info_text_structure.text_color.blue = 0;
-		info_text_structure.font_size = 20;
+		info_text_structure.font_size = 26;
 		info_text_structure.text_buffer = info_text;
 		info_text_structure.show_bg = TRUE;
 		info_text_structure.bg_fill_colour.red = 65535;
