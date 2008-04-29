@@ -39,6 +39,7 @@
 // Salasaga includes
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
+#include "../../display_warning.h"
 
 
 SWFText create_swf_text_shape(layer_text *text_data, gfloat scaled_width_ratio, gfloat scaled_height_ratio, gint *num_text_lines, gfloat *widest_text_string_width, gfloat *text_real_font_size)
