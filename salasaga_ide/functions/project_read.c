@@ -67,6 +67,10 @@ gboolean project_read(gchar *filename)
 	xmlChar				*fps_data = NULL;
 	guint				guint_val;					// Temporary guint value used for validation
 	GdkPixbufLoader		*image_loader;				// Used for loading images embedded in project files
+	xmlChar				*info_display_data = NULL;
+	xmlChar				*info_link_data = NULL;
+	xmlChar				*info_link_target_data = NULL;
+	xmlChar				*info_text_data = NULL;
 	guint				layer_counter;				// Counter used in loops
 	xmlNodePtr			layer_ptr;					// Temporary pointer
 	xmlNodePtr			meta_data_node = NULL;		// Points to the meta-data structure
@@ -88,14 +92,20 @@ gboolean project_read(gchar *filename)
 	xmlChar				*slide_length_data = NULL;
 	xmlNodePtr			slides_node = NULL;			// Points to the slides structure
 	xmlChar				*start_behaviour_data = NULL;
+	GtkTextIter			text_end;					// End position of text buffer
+	GtkTextIter			text_start;					// Start position of text buffer
 	xmlNodePtr			this_layer;					// Temporary pointer
 	layer				*this_layer_ptr;			// Pointer into a layer structure
 	xmlNodePtr			this_node;					// Temporary pointer
 	xmlNodePtr			this_slide;					// Temporary pointer
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
-	gboolean			valid_control_bar_behaviour = 0;// Receives the new control bar display behaviour
+	gboolean			valid_control_bar_behaviour = TRUE;// Receives the new control bar display behaviour
 	guint				valid_end_behaviour = 0;	// Receives the new end behaviour once validated
 	guint				valid_fps = 0;				// Receives the new fps once validated
+	gboolean			valid_info_display = TRUE;	// Receives the new information button display state once validated
+	GString				*valid_info_link;			//
+	GString				*valid_info_link_target;	//
+	GtkTextBuffer		*valid_info_text;			// Text to be shown in the information button in swf output
 	guint				valid_output_height = 0;	// Receives the new output height once validated
 	GString				*valid_output_folder;		// Receives the new output folder once validated
 	guint				valid_output_width = 0;		// Receives the new output width once validated
@@ -129,6 +139,13 @@ gboolean project_read(gchar *filename)
 	error_string = g_string_new(NULL);
 	valid_output_folder = g_string_new(NULL);
 	valid_project_name = g_string_new(NULL);
+
+	// Set sensible defaults for the swf information button
+	valid_info_link = g_string_new("http://www.salasaga.org");
+	valid_info_link_target = g_string_new("_blank");
+	valid_info_text = gtk_text_buffer_new(NULL);
+	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(valid_info_text), "Created using Salasaga", -1);
+	valid_info_display = TRUE;
 
 	// Begin reading the file
 	document = xmlParseFile(filename);
@@ -282,6 +299,27 @@ gboolean project_read(gchar *filename)
 			// Show control bar behaviour found.  Extract and store it
 			control_bar_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
 		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "info_display")))
+		{
+			// Show information button found.  Extract and store it
+			info_display_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "info_link")))
+		{
+			// Show information button link found.  Extract and store it
+			info_link_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "info_link_target")))
+		{
+			// Show information button link target found.  Extract and store it
+			info_link_target_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "info_text")))
+		{
+			// Show information button text found.  Extract and store it
+			info_text_data = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+		}
+
 		this_node = this_node->next;
 	}
 
@@ -508,6 +546,68 @@ gboolean project_read(gchar *filename)
 		valid_control_bar_behaviour = TRUE;
 	}
 
+	// Retrieve the new information button display state
+	if (NULL != info_display_data)
+	{
+		validated_string = validate_value(SHOW_INFO_BUTTON, V_CHAR, info_display_data);
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED409: There was something wrong with the information button display value in the project file.");
+			useable_input = FALSE;
+		} else
+		{
+			if (0 == g_ascii_strncasecmp(validated_string->str, "true", 4))
+			{
+				valid_info_display = TRUE;
+			} else
+			{
+				valid_info_display = FALSE;
+			}
+			g_string_free(validated_string, TRUE);
+			xmlFree(info_display_data);
+			validated_string = NULL;
+		}
+	}
+
+	// Retrieve the new information button link input
+	if (NULL != info_link_data)
+	{
+		validated_string = validate_value(EXTERNAL_LINK, V_CHAR, info_link_data);
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED410: There was something wrong with the information button link value in the project file.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_info_link = g_string_assign(valid_info_link, validated_string->str);
+			g_string_free(validated_string, TRUE);
+			xmlFree(info_link_data);
+			validated_string = NULL;
+		}
+	}
+
+	// Retrieve the new information button link target input
+	if (NULL != info_link_target_data)
+	{
+		validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, info_link_target_data);
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED411: There was something wrong with the information button link value in the project file.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_info_link_target = g_string_assign(valid_info_link_target, validated_string->str);
+			g_string_free(validated_string, TRUE);
+			xmlFree(info_link_target_data);
+			validated_string = NULL;
+		}
+	}
+
+	// Retrieve the new information button text input
+	if (NULL != info_text_data)
+	{
+		gtk_text_buffer_set_text(GTK_TEXT_BUFFER(valid_info_text), (const gchar *) info_text_data, -1);
+	}
 
 	// * Preferences are loaded, so now load the slides *
 
@@ -2641,6 +2741,14 @@ gboolean project_read(gchar *filename)
 
 	// Control bar display
 	show_control_bar = valid_control_bar_behaviour;
+
+	// Information button variables
+	info_link = valid_info_link;
+	info_link_target = valid_info_link_target;
+	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(valid_info_text), &text_start, &text_end);
+	info_text = gtk_text_buffer_new(NULL);
+	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(valid_info_text), &text_start, &text_end, TRUE), -1);
+	info_display = valid_info_display;
 
 	// Make the new slides active, and update them to fill in their remaining pieces
 	slides = g_list_first(new_slides);
