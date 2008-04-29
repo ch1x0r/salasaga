@@ -50,6 +50,8 @@ void menu_project_properties(void)
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
 	gboolean			valid_control_bar_behaviour;  // Receives the new control bar display behaviour
 	guint				valid_end_behaviour;		// Receives the new end behaviour once validated
+	GString				*valid_ext_link;			// Receives the new external link once validated
+	GString				*valid_ext_link_win;		// Receives the new external link window once validated
 	guint				valid_fps = 0;				// Receives the new project fps once validated
 	gboolean			valid_info_display;			// Receives the new informatio button display behaviour
 	GString				*valid_output_folder;		// Receives the new output folder once validated
@@ -110,6 +112,8 @@ void menu_project_properties(void)
 
 	// Initialise various things
 	proj_row_counter = 0;
+	valid_ext_link = g_string_new(NULL);
+	valid_ext_link_win = g_string_new(NULL);
 	valid_output_folder = g_string_new(NULL);
 	valid_proj_name = g_string_new(NULL);
 	valid_project_folder = g_string_new(NULL);
@@ -254,7 +258,7 @@ void menu_project_properties(void)
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(check_display_info), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
 
-	// Create a label for the informatino button text view
+	// Create a label for the information button text view
 	label_info_text = gtk_label_new("Information button text");
 	gtk_misc_set_alignment(GTK_MISC(label_info_text), 0.5, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_info_text), 0, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
@@ -404,9 +408,40 @@ void menu_project_properties(void)
 
 		// Retrieve the new information button display behaviour
 		valid_info_display = gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_display_info));
+
+		// Validate the link input
+		validated_string = validate_value(EXTERNAL_LINK, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED407: There was something wrong with the information button link value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_ext_link = g_string_assign(valid_ext_link, validated_string->str);
+			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
+		}
+
+		// Validate the link window input
+		validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(external_link_win_entry)));
+		if (NULL == validated_string)
+		{
+			display_warning("Error ED408: There was something wrong with the information button target window value.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			valid_ext_link_win = g_string_assign(valid_ext_link_win, validated_string->str);
+			g_string_free(validated_string, TRUE);
+			validated_string = NULL;
+		}
 	} while (FALSE == useable_input);
 
 	// * We only get here after all input is considered valid *
+
+	// Copy the text buffer from the onscreen widget to our existing text buffer
+	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(text_buffer), &text_start, &text_end);
+	text_gstring = g_string_assign(text_gstring, gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(text_buffer), &text_start, &text_end, TRUE));
+	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), text_gstring->str, text_gstring->len);
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(main_dialog));
@@ -437,6 +472,8 @@ void menu_project_properties(void)
 
 	// Information button display
 	info_display = valid_info_display;
+	g_string_printf(info_link, "%s", valid_ext_link->str);
+	g_string_printf(info_link_target, "%s", valid_ext_link_win->str);
 
 	// Set the changes made variable
 	changes_made = TRUE;
@@ -446,5 +483,8 @@ void menu_project_properties(void)
 	gdk_flush();
 
 	// Free the memory allocated in this function
+	g_string_free(valid_ext_link, TRUE);
+	g_string_free(valid_ext_link_win, TRUE);
+	g_string_free(text_gstring, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 }
