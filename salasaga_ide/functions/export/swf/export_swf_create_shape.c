@@ -98,6 +98,10 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 	gfloat				layer_right;
 	gfloat				layer_up;
 
+
+	// Initialisation
+	as_gstring = g_string_new(NULL);
+
 	// Calculate the height and width scaling values needed for this swf output
 	scaled_height_ratio = (gfloat) output_height / (gfloat) project_height;
 	scaled_width_ratio = (gfloat) output_width / (gfloat) project_width;
