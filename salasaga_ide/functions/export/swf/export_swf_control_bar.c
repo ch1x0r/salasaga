@@ -121,11 +121,13 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFShape			rewind_shape_up;
 
 	// Variables used for the information button
+	GString				*as_gstring = NULL;			// Used for constructing action script statements
 	SWFAction			info_action;
 	SWFDisplayItem		info_bg_display_item;
 	gfloat				info_bg_box_height;			// Used while generating swf output for text boxes
 	gfloat				info_bg_box_width;			// Used while generating swf output for text boxes
 	SWFButton			info_button;
+	SWFMovieClip		info_button_movie_clip;		// The movie clip that contains the information text background and text
 	gfloat				info_leading;				// Spacing to use at the edges of the font
 	SWFMovieClip		info_movie_clip;			// The movie clip that contains the information text background and text
 	SWFText				info_object;				// The information button text object we're working on goes in this
@@ -317,6 +319,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	file_name_full = g_string_new(NULL); 
 	slide_name_tmp = g_string_new(NULL);
 	slide_names_gstring = g_string_new(NULL);
+	as_gstring = g_string_new(NULL);
 
 	// Retrieve the control bar element positions
 	button_x = cb_size_array[cb_index].button_start_x;
@@ -1097,6 +1100,27 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 
 		// Advance the movie clip one frame, else it won't be displayed
 		SWFMovieClip_nextFrame(info_movie_clip);
+
+		// Create an empty button object we can use
+		info_text_button = newSWFButton();
+
+		// Add the shape to the button for all of its states, excluding the hit state
+		SWFButton_addShape(info_text_button, (SWFCharacter) info_movie_clip, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN);
+
+		// Use the text background area as the hit state
+		SWFButton_addShape(info_text_button, (SWFCharacter) info_text_bg, SWFBUTTON_HIT);
+
+		// Add action script to the button, jumping to the external link
+		g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", info_link->str, info_link_target->str);
+		info_action = compileSWFActionCode(as_gstring->str);
+		SWFButton_addAction(info_text_button, info_action, SWFBUTTON_MOUSEUP);
+
+		// Add the information text button to the movie clip
+		info_button_movie_clip = newSWFMovieClip();
+		SWFMovieClip_add(info_button_movie_clip, (SWFBlock) info_text_button);
+
+		// Advance the movie clip one frame, else it won't be displayed
+		SWFMovieClip_nextFrame(info_button_movie_clip);
 	}
 
 
@@ -1170,7 +1194,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		button_x = button_x + button_width + button_spacing;
 
 		// Add the information button text to the main movie
-		info_bg_display_item = SWFMovie_add(main_movie, (SWFBlock) info_movie_clip);
+		info_bg_display_item = SWFMovie_add(main_movie, (SWFBlock) info_button_movie_clip);
 		SWFDisplayItem_setName(info_bg_display_item, "info_text");
 		SWFDisplayItem_setDepth(info_bg_display_item, depth_number + 1);
 		SWFDisplayItem_moveTo(info_bg_display_item,
