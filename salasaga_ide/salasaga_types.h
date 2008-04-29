@@ -76,16 +76,20 @@ extern "C" {
 
 // Capabilities for the validate_value function
 #define V_NONE				0
-#define V_EQUALS			1
-#define V_FORWARD_SLASHES	2
-#define V_FULL_STOP			4
-#define V_HYPENS			8
-#define V_NEW_LINES			16
-#define V_PATH_SEP			32
-#define V_PERCENT			64
-#define V_PLUSES			128
-#define V_SPACES			256
-#define V_UNDERSCORES		512
+#define V_AMPERSAND			1
+#define V_AT				2
+#define V_COLON				4
+#define V_EQUALS			8
+#define V_FORWARD_SLASHES	16
+#define V_FULL_STOP			32
+#define V_HYPENS			64
+#define V_NEW_LINES			128
+#define V_PATH_SEP			256
+#define V_PERCENT			512
+#define V_PLUSES			1024
+#define V_QUESTION			2048
+#define V_SPACES			4096
+#define V_UNDERSCORES		8192
 
 // The order of the main toolbar buttons
 enum
