@@ -31,13 +31,13 @@
 #include <ming.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
+#include "../../../salasaga_types.h"
+#include "../../../externs.h"
+#include "../../display_warning.h"
 #include "swf_shape_from_image_file.h"
 
 
-gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guint depth_number)
+gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth_number)
 {
 	// Create local variables
 	gfloat				button_height;

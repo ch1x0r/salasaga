@@ -38,11 +38,11 @@
 #include <ming.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
+#include "../../../salasaga_types.h"
+#include "../../../externs.h"
+#include "../../display_warning.h"
 
-gboolean menu_export_flash_create_shape(layer *this_layer_data)
+gboolean export_swf_create_shape(layer *this_layer_data)
 {
 	// Local variables
 	GString				*as_gstring = NULL;			// Used for constructing action script statements

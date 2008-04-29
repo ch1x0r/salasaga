@@ -21,18 +21,18 @@
  *
  */
 
-#ifndef MENU_EXPORT_FLASH_PROCESS_ELEMENT_H_
-#define MENU_EXPORT_FLASH_PROCESS_ELEMENT_H_
+#ifndef EXPORT_SWF_PROCESS_ELEMENT_H_
+#define EXPORT_SWF_PROCESS_ELEMENT_H_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-gboolean menu_export_flash_process_element(SWFMovie this_movie, swf_frame_element *this_element, gboolean process_removes);
+gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this_element, gboolean process_removes);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /*MENU_EXPORT_FLASH_PROCESS_ELEMENT_H_*/
+#endif /*EXPORT_SWF_PROCESS_ELEMENT_H_*/

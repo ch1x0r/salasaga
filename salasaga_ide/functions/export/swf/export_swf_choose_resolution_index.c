@@ -28,10 +28,10 @@
 #include <gtk/gtk.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
+#include "../../../salasaga_types.h"
+#include "../../../externs.h"
 
-gint menu_export_flash_choose_resolution_index()
+gint export_swf_choose_resolution_index()
 {
 	// Local variables
 	switch (output_width)

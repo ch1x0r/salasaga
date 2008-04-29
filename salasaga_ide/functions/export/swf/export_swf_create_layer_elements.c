@@ -34,10 +34,10 @@
 #include <gtk/gtk.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
+#include "../../../salasaga_types.h"
+#include "../../../externs.h"
 
-gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start, guint num_frames, layer *this_layer_data, guint layer_depth)
+gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint num_frames, layer *this_layer_data, guint layer_depth)
 {
 	// Local variables
 	gfloat				element_x_position_finish = 0;

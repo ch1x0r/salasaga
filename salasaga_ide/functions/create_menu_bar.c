@@ -45,7 +45,7 @@
 #include "layer_paste.h"
 #include "menu_edit_preferences.h"
 #include "menu_enable.h"
-#include "menu_export_flash_animation.h"
+#include "menu_export_swf.h"
 #include "menu_export_layer.h"
 #include "menu_export_slide.h"
 #include "menu_file_close.h"
@@ -136,7 +136,7 @@ void create_menu_bar()
 		{"/Layer/Add _Mouse",			NULL,					layer_new_mouse,				0,	"<Item>"},
 
 		{"/E_xport",					NULL,					NULL,							0,	"<Branch>"},
-		{"/Export/_Flash Animation",	"<control><shift>F",	menu_export_flash_animation,	0,	"<Item>"},
+		{"/Export/_Flash Animation",	"<control><shift>F",	menu_export_swf,				0,	"<Item>"},
 		{"/Export/_Slide as Image",		NULL,					menu_export_slide,				0,	"<Item>"},
 		{"/Export/_Image Layer",		NULL,					menu_export_layer,				0,	"<Item>"},
 

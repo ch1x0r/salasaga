@@ -31,9 +31,9 @@
 #include <ming.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
+#include "../../../salasaga_types.h"
+#include "../../../externs.h"
+#include "../../display_warning.h"
 
 
 SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)

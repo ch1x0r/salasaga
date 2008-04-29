@@ -21,18 +21,18 @@
  *
  */
 
-#ifndef MENU_EXPORT_FLASH_CREATE_LAYER_ELEMENTS_H_
-#define MENU_EXPORT_FLASH_CREATE_LAYER_ELEMENTS_H_
+#ifndef EXPORT_SWF_CREATE_LAYER_ELEMENTS_H_
+#define EXPORT_SWF_CREATE_LAYER_ELEMENTS_H_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-gboolean menu_export_flash_create_layer_elements(swf_frame_element *array_start, guint num_frames, layer *this_layer_data, guint layer_depth);
+gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint num_frames, layer *this_layer_data, guint layer_depth);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /*MENU_EXPORT_FLASH_CREATE_LAYER_ELEMENTS_H_*/
+#endif /*EXPORT_SWF_CREATE_LAYER_ELEMENTS_H_*/

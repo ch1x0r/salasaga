@@ -31,10 +31,10 @@
 #include <ming.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
+#include "../../../salasaga_types.h"
+#include "../../../externs.h"
 
-gboolean menu_export_flash_process_element(SWFMovie this_movie, swf_frame_element *this_element, gboolean process_removes)
+gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this_element, gboolean process_removes)
 {
 	// Local variables
 	GString				*as_gstring;				// Used for constructing action script statements

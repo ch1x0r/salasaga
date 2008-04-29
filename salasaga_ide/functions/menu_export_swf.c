@@ -34,11 +34,11 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "display_warning.h"
-#include "menu_export_flash_inner.h"
 #include "validate_value.h"
+#include "export/swf/export_swf_inner.h"
 
 
-void menu_export_flash_animation(void)
+void menu_export_swf(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;				// Filter for *.*
@@ -153,7 +153,7 @@ void menu_export_flash_animation(void)
 	gtk_widget_destroy(export_dialog);
 
 	// Export the swf
-	return_code_gint = menu_export_flash_inner(validated_string->str);
+	return_code_gint = export_swf_inner(validated_string->str);
 	if (FALSE == return_code_gint)
 	{
 		// Something went wrong when creating the swf output stream

@@ -21,18 +21,18 @@
  *
  */
 
-#ifndef MENU_EXPORT_FLASH_CONTROL_BAR_
-#define MENU_EXPORT_FLASH_CONTROL_BAR_
+#ifndef EXPORT_SWF_CONTROL_BAR_
+#define EXPORT_SWF_CONTROL_BAR_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-gboolean menu_export_flash_control_bar(SWFMovie main_movie, guint cb_index, guint depth_number);
+gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth_number);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /*MENU_EXPORT_FLASH_CONTROL_BAR_*/
+#endif /*EXPORT_SWF_CONTROL_BAR_*/

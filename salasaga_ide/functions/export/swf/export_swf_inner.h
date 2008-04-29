@@ -21,18 +21,18 @@
  *
  */
 
-#ifndef MENU_EXPORT_FLASH_INNER_H_
-#define MENU_EXPORT_FLASH_INNER_H_
+#ifndef EXPORT_SWF_INNER_H_
+#define EXPORT_SWF_INNER_H_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-gint menu_export_flash_inner(gchar *output_filename);
+gint export_swf_inner(gchar *output_filename);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /*MENU_EXPORT_FLASH_INNER_H_*/
+#endif /*EXPORT_SWF_INNER_H_*/

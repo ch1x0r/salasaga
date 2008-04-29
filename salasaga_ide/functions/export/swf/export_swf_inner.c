@@ -37,17 +37,17 @@
 #include <ming.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
-#include "menu_export_flash_choose_resolution_index.h"
-#include "menu_export_flash_control_bar.h"
-#include "menu_export_flash_create_layer_elements.h"
-#include "menu_export_flash_create_shape.h"
-#include "menu_export_flash_process_element.h"
+#include "../../../salasaga_types.h"
+#include "../../../externs.h"
+#include "../../display_warning.h"
+#include "export_swf_choose_resolution_index.h"
+#include "export_swf_control_bar.h"
+#include "export_swf_create_layer_elements.h"
+#include "export_swf_create_shape.h"
+#include "export_swf_process_element.h"
 
 
-gint menu_export_flash_inner(gchar *output_filename)
+gint export_swf_inner(gchar *output_filename)
 {
 	// Local variables
 	GString				*as_gstring;				// Used for constructing action script statements
@@ -91,7 +91,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	initial_action_gstring = g_string_new(NULL);
 
 	// Determine which of the control bar resolutions to use
-	out_res_index = menu_export_flash_choose_resolution_index();
+	out_res_index = export_swf_choose_resolution_index();
 
 	// If an unknown output resolution is given, indicate an error and return
 	if (-1 == out_res_index)
@@ -155,7 +155,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 	// If requested, add the swf control bar to the movie
 	if (TRUE == show_control_bar)
 	{
-		return_code_bool = menu_export_flash_control_bar(swf_movie, out_res_index, total_num_layers + 5);
+		return_code_bool = export_swf_control_bar(swf_movie, out_res_index, total_num_layers + 5);
 		if (TRUE != return_code_bool)
 		{
 			// Something went wrong when adding the control bar to the movie
@@ -249,7 +249,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 				continue;
 
 			// Create the dictionary shape for the layer
-			dictionary_shape_ok = menu_export_flash_create_shape(this_layer_data);
+			dictionary_shape_ok = export_swf_create_shape(this_layer_data);
 
 			// If the creation of the dictionary shape worked, we add this layer to the list for processing
 			if (TRUE == dictionary_shape_ok)
@@ -258,7 +258,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 				element_index = layer_counter * slide_duration;
 
 				// Process the layer information, filling out the relevant elements
-				menu_export_flash_create_layer_elements(&swf_timing_array[element_index], slide_duration, this_layer_data, display_depth);
+				export_swf_create_layer_elements(&swf_timing_array[element_index], slide_duration, this_layer_data, display_depth);
 			}
 
 			// Decrement the depth at which this element will be displayed
@@ -328,7 +328,7 @@ gint menu_export_flash_inner(gchar *output_filename)
 
 				// Process this frame element
 				// fixme3: Our present approach using swf_elements doesn't work very well with removes. :(
-				menu_export_flash_process_element(swf_movie, this_frame_ptr, FALSE);
+				export_swf_process_element(swf_movie, this_frame_ptr, FALSE);
 			}
 
 			// Advance to the next frame
