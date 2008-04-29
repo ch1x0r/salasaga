@@ -41,19 +41,17 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "../../display_warning.h"
+#include "create_swf_text_shape.h"
+
 
 gboolean export_swf_create_shape(layer *this_layer_data)
 {
 	// Local variables
 	GString				*as_gstring = NULL;			// Used for constructing action script statements
 	guint16				blue_component;				// Used when retrieving the foreground color of text
-	gfloat				current_ming_scale;			// Used when creating text swf output
 	SWFFillStyle		empty_layer_fill;			// Fill style used when constructing empty layer shapes
 	SWFShape			empty_layer_shape;			// Temporary swf shape used when constructing empty layers
 	guint				final_opacity;				// Used when calculating the final opacity figure for a highlight layer
-	FILE				*font_file;					// The file we load the font from
-	SWFFont				font_object;				// The font we use gets loaded into this
-	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
 	GError				*error = NULL;				// Pointer to error return structure
 	guint16				green_component;			// Used when retrieving the foreground color of text
 	SWFShape			highlight_box = NULL;		// Temporary swf shape used when constructing highlight boxes
@@ -73,7 +71,6 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 	guint16				red_component;				// Used when retrieving the foreground color of text
 	GdkPixbuf			*resized_pixbuf;			// Temporary pixbuf used while scaling images
 	gboolean			return_code_bool;			// Receives boolean return codes
-	gfloat				scaled_font_size;			// Display height of a font in swf, when scaled to the desired output size
 	gint				scaled_height;				// Used to calculate the final size an object should be scaled to
 	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to
 	gint				scaled_width;				// Used to calculate the final size an object should be scaled to
@@ -87,15 +84,10 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 	SWFFillStyle		text_bg_fill_style;			// Fill style used when constructing text background shape
 	layer_text			*text_data;					// Points to the text object data inside the layer
 	SWFDisplayItem		text_display_item;
-	GtkTextIter			text_end;					// End position of text buffer
 	gfloat				text_leading;				// Spacing to use at the edges of the font
-	gint				text_lines_counter;			// Counter used when processing text
 	SWFMovieClip		text_movie_clip;			// The movie clip that contains the text background and text
 	SWFText				text_object;				// The text object we're working on goes in this
 	gfloat				text_real_font_size;
-	GtkTextIter			text_start;					// Start position of text buffer
-	gfloat				this_text_string_width;		// Used when calculating how wide to draw the text background box
-	gchar				*visible_string;			// Text string is retrieved into this
 	gfloat				widest_text_string_width;	// Used when calculating how wide to draw the text background box
 
 	// (Hopefully) temporary variables put in place to get around a *bizarre*
@@ -105,34 +97,6 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 	gfloat				layer_left;
 	gfloat				layer_right;
 	gfloat				layer_up;
-
-	// Create the (one and only for now) font style used in text boxes
-	font_pathname = g_build_path(G_DIR_SEPARATOR_S, font_path, "fdb", "Bitstream Vera Sans.fdb", NULL);
-	if (debug_level) printf("Full path name to font file is: %s\n", font_pathname);
-
-	// Load the font file if needed
-	font_file = fopen(font_pathname, "r");
-	if (NULL == font_file)
-	{
-		// Something went wrong when loading the font file, so return
-		display_warning("Error ED380: Something went wrong when opening the font file");
-
-		return FALSE;
-	}
-	font_object = loadSWFFontFromFile(font_file);
-	if (NULL == font_object)
-	{
-		// Something went wrong when loading the font file, so return
-		display_warning("Error ED96: Something went wrong when loading the font file");
-
-		// Free the memory allocated in this function
-		// fixme3: Ming 0.3.0 doesn't have destroySWFFillStyle()
-		//destroySWFFillStyle(highlight_fill_style);
-		//destroySWFFillStyle(text_bg_fill_style);
-		g_free(font_pathname);
-
-		return FALSE;
-	}
 
 	// Calculate the height and width scaling values needed for this swf output
 	scaled_height_ratio = (gfloat) output_height / (gfloat) project_height;
@@ -340,7 +304,7 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 				return FALSE;
 			}
 
-			// Set the semi-transparent green fill for the highlight box
+			// Set the fill for the highlight box
 			red_component = highlight_data->fill_colour.red;
 			green_component = highlight_data->fill_colour.green;
 			blue_component = highlight_data->fill_colour.blue;
@@ -536,83 +500,13 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 			// Simplify pointers and work out element positioning info
 			text_data = (layer_text *) this_layer_data->object_data;
 
-			// * Create the text object *
-
-			// Create the text object we'll be using
-			text_object = newSWFText();
-
-			// Assign a font to the text object
-			SWFText_setFont(text_object, font_object);
-
-			// Set the height we want for the text
-			scaled_font_size = scaled_height_ratio * text_data->font_size;
-			SWFText_setHeight(text_object, scaled_font_size);
-			text_real_font_size = SWFText_getAscent(text_object) + SWFText_getDescent(text_object);
-
-			// Displaying debugging info if requested
-			if (debug_level)
-			{
-				printf("Scaled font size: '%.2f'\n", scaled_font_size);
-				printf("Real font size: '%.2f'\n", text_real_font_size);
-				printf("'Leading' for this text is: %.2f\n", SWFText_getLeading(text_object));
-				printf("'Ascent' for this text is: %.2f\n", SWFText_getAscent(text_object));
-				printf("'Descent' for this text is: %.2f\n", SWFText_getDescent(text_object));
-			}
-
-			// Set the foreground color for the text
-			red_component = text_data->text_color.red;
-			green_component = text_data->text_color.green;
-			blue_component = text_data->text_color.blue;
-			SWFText_setColor(text_object, roundf(red_component / 255), roundf(green_component / 255), roundf(blue_component / 255), 0xff);
-
-			// Work out how many lines of text we're dealing with
-			num_text_lines = gtk_text_buffer_get_line_count(text_data->text_buffer);
-
-			// Displaying debugging info if requested
-			if (debug_level)
-			{
-				printf("Number of lines of text: %d\n", num_text_lines);
-			}
-
-			// Add each line of text to the output
-			widest_text_string_width = 0;
-			for (text_lines_counter = 0; text_lines_counter < num_text_lines; text_lines_counter++)
-			{
-				// Select the start and end positions for the given line, in the text buffer
-				gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(text_data->text_buffer), &text_start, text_lines_counter);
-				text_end = text_start;
-				gtk_text_iter_forward_to_line_end(&text_end);
-
-				// Retrieve the text for the given line, and add it to the text object
-				visible_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
-				SWFText_addString(text_object, visible_string, NULL);
-
-				// * We need to know which of the strings is widest, so we can calculate the width of the text background box *
-
-				// If this is the widest string, we keep the value of this one
-				this_text_string_width = SWFText_getStringWidth(text_object, (guchar *) visible_string);
-				if (this_text_string_width > widest_text_string_width)
-					widest_text_string_width = this_text_string_width;
-
-				// * Move the pen down to the start of the next line *
-
-				// Move to the appropriate Y position
-				SWFText_moveTo(text_object, 0, (text_lines_counter + 1) * text_real_font_size);
-
-				// Try and move X as close as possible to 0.  We can't use 0 in SWFText_moveTo() due to a bug in Ming
-				current_ming_scale = Ming_getScale();
-				Ming_setScale(1);
-				SWFText_moveTo(text_object, 1, 0);
-				Ming_setScale(current_ming_scale);
-
-				// Displaying debugging info if requested
-				if (debug_level)
-				{
-					printf("Line %d of %d: %s\n", text_lines_counter, num_text_lines, gtk_text_iter_get_visible_text(&text_start, &text_end));
-					printf("Width of this string: %.2f\n", this_text_string_width);
-					printf("Width of widest string thus far: %.2f\n", widest_text_string_width);
-				}
-			}
+			// Create the text object
+			text_object = create_swf_text_shape(text_data,
+					scaled_width_ratio,
+					scaled_height_ratio,
+					&num_text_lines,
+					&widest_text_string_width,
+					&text_real_font_size);
 
 			// * Create the swf movie clip object that holds the text background and text *
 			text_movie_clip = newSWFMovieClip();
