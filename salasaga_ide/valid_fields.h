@@ -65,6 +65,7 @@ validatation_entry		valid_fields[] =
 	{ SCREENSHOT_HEIGHT,	"Height for next screenshot",			V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ SCREENSHOT_WIDTH,		"Width for next screenshot",			V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ SHOW_CONTROL_BAR,		"Include control bar in exported swf",	V_CHAR,				V_NONE,		0,		5 },
+	{ SHOW_INFO_BUTTON,		"Include info button in exported swf",	V_CHAR,				V_NONE,		0,		5 },
 	{ SHOW_TEXT_BG,			"Show the background for text layers",	V_CHAR,				V_NONE,		0,		5 },
 	{ SLIDE_LENGTH,			"Number of frames per slide",			V_INT_UNSIGNED,		V_NONE,		1,		1200 },
 	{ SLIDE_DURATION,		"Number of seconds in a slide",			V_FLOAT_UNSIGNED,	V_NONE,		0.1,	300 },
