@@ -35,7 +35,7 @@ validatation_entry		valid_fields[] =
 	{ COLOUR_COMP8,			"8 Bit Colour Value Component",			V_INT_UNSIGNED,		V_NONE,		0,		255 },
 	{ COLOUR_COMP16, 		"16 Bit Colour Value Component",		V_INT_UNSIGNED,		V_NONE,		0,		65535 },
 	{ END_BEHAVIOUR, 		"Animation behaviour after playing",	V_CHAR,				V_UNDERSCORES,		0,		9 },
-	{ EXTERNAL_LINK,		"External link",						V_CHAR,				V_HYPENS | V_PATH_SEP | V_PERCENT | V_SPACES | V_UNDERSCORES,		0,		200 },
+	{ EXTERNAL_LINK,		"External link",						V_CHAR,				V_AMPERSAND | V_AT | V_COLON | V_EQUALS | V_FORWARD_SLASHES | V_FULL_STOP | V_HYPENS | V_PATH_SEP | V_PERCENT | V_QUESTION | V_SPACES | V_UNDERSCORES,		0,		200 },
 	{ EXTERNAL_LINK_WINDOW,	"Window target for an external link",	V_CHAR,				V_UNDERSCORES,		0,		20 },
 	{ FILE_PATH,			"Full path to a file",					V_CHAR,				V_FULL_STOP | V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
 	{ FOLDER_PATH,			"Full path to a folder",				V_CHAR,				V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
