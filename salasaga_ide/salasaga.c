@@ -124,6 +124,7 @@ gboolean				screenshots_enabled = FALSE;  // Toggle for whether to enable screen
 gint					screenshot_command_num = -1;  // The metacity run command number used for the screenshot key
 gboolean				show_control_bar = TRUE;	// Toggle for whether to display the control bar in swf output
 GList					*slides = NULL;				// Linked list holding the slide info
+gchar					*sound_path;				// Points to the base location for Salasaga sound files
 guint					start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
 GtkWidget				*status_bar;				// Widget for the status bar
 guint					statusbar_context;			// Context id for the status bar messages
@@ -400,6 +401,14 @@ gint main(gint argc, gchar *argv[])
 	font_path = g_build_path(G_DIR_SEPARATOR_S, "fonts", "BitstreamVera", NULL);
 #else
 	font_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "..", "fonts", "BitstreamVera", NULL);
+#endif
+
+	// Create the path to the sound files
+#ifdef _WIN32
+	// Hard code a different path for windows
+	sound_path = g_build_path(G_DIR_SEPARATOR_S, "sounds", "BitstreamVera", NULL);
+#else
+	sound_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "..", "sounds", NULL);
 #endif
 
 	// Start up the GUI part of things

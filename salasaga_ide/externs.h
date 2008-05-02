@@ -85,6 +85,7 @@ extern gboolean				screenshots_enabled;
 extern gint					screenshot_command_num;
 extern gboolean				show_control_bar;
 extern GList				*slides;
+extern gchar				*sound_path;
 extern guint				start_behaviour;
 extern GtkWidget			*status_bar;
 extern guint				statusbar_context;
