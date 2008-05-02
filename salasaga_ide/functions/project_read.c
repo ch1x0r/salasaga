@@ -125,7 +125,6 @@ gboolean project_read(gchar *filename)
 	GString				*tmp_gstring2;				// Temporary GString
 	layer_highlight		*tmp_highlight_ob;			// Temporary highlight layer object
 	layer_image			*tmp_image_ob;				// Temporary image layer object
-	gint				tmp_int;					// Temporary integer
 	layer				*tmp_layer;					// Temporary layer
 	layer_mouse			*tmp_mouse_ob;				// Temporary mouse layer object
 	GdkPixmap			*tmp_pixmap;				//
@@ -1872,14 +1871,25 @@ gboolean project_read(gchar *filename)
 											tmp_mouse_ob->click = MOUSE_NONE;  // Fill in the value, just to be safe
 										} else
 										{
-											tmp_int = g_ascii_strncasecmp(validated_string->str, "left_one", 8);
-											if (0 == tmp_int)
-											{
+											tmp_mouse_ob->click = MOUSE_NONE;  // Set the default
+											if (0 == g_ascii_strncasecmp(validated_string->str, "left_one", 8))
 												tmp_mouse_ob->click = MOUSE_LEFT_ONE;
-											} else
-											{
-												tmp_mouse_ob->click = MOUSE_NONE;
-											}
+											if (0 == g_ascii_strncasecmp(validated_string->str, "left_double", 11))
+												tmp_mouse_ob->click = MOUSE_LEFT_DOUBLE;
+											if (0 == g_ascii_strncasecmp(validated_string->str, "left_triple", 11))
+												tmp_mouse_ob->click = MOUSE_LEFT_TRIPLE;
+											if (0 == g_ascii_strncasecmp(validated_string->str, "right_one", 9))
+												tmp_mouse_ob->click = MOUSE_RIGHT_ONE;
+											if (0 == g_ascii_strncasecmp(validated_string->str, "right_double", 12))
+												tmp_mouse_ob->click = MOUSE_RIGHT_DOUBLE;
+											if (0 == g_ascii_strncasecmp(validated_string->str, "right_triple", 12))
+												tmp_mouse_ob->click = MOUSE_RIGHT_TRIPLE;
+											if (0 == g_ascii_strncasecmp(validated_string->str, "middle_one", 10))
+												tmp_mouse_ob->click = MOUSE_MIDDLE_ONE;
+											if (0 == g_ascii_strncasecmp(validated_string->str, "middle_double", 13))
+												tmp_mouse_ob->click = MOUSE_MIDDLE_DOUBLE;
+											if (0 == g_ascii_strncasecmp(validated_string->str, "middle_triple", 13))
+												tmp_mouse_ob->click = MOUSE_MIDDLE_TRIPLE;
 											g_string_free(validated_string,TRUE);
 											validated_string = NULL;
 										}

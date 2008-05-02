@@ -202,12 +202,46 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "width", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->height);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "height", (const xmlChar *) tmp_gstring->str);
-			if (MOUSE_NONE == ((layer_mouse *) layer_pointer->object_data)->click)
+			switch (((layer_mouse *) layer_pointer->object_data)->click)
 			{
-				xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "none");
-			} else
-			{
-				xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "left_one");
+				case MOUSE_LEFT_ONE:
+					xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "left_one");
+					break;
+
+				case MOUSE_LEFT_DOUBLE:
+					xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "left_double");
+					break;
+
+				case MOUSE_LEFT_TRIPLE:
+					xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "left_triple");
+					break;
+
+				case MOUSE_RIGHT_ONE:
+					xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "right_one");
+					break;
+
+				case MOUSE_RIGHT_DOUBLE:
+					xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "right_double");
+					break;
+
+				case MOUSE_RIGHT_TRIPLE:
+					xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "right_triple");
+					break;
+
+				case MOUSE_MIDDLE_ONE:
+					xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "middle_one");
+					break;
+
+				case MOUSE_MIDDLE_DOUBLE:
+					xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "middle_double");
+					break;
+
+				case MOUSE_MIDDLE_TRIPLE:
+					xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "middle_triple");
+					break;
+
+				default:
+					xmlNewChild(layer_node, NULL, (const xmlChar *) "click", (const xmlChar *) "none");
 			}
 			break;
 
