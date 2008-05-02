@@ -76,6 +76,14 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to
 	gint				scaled_width;				// Used to calculate the final size an object should be scaled to
 	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
+	SWFDisplayItem 		sound_display_item;
+	FILE				*sound_file;				// The file we load the sound from
+	guint				sound_loop;
+	SWFMovieClip		sound_movie_clip;			// Movie clip specifically to hold a sound
+	SWFSoundStream 		sound_stream;				// The sound we use gets loaded into this
+	gfloat				sound_start;
+	guint				sound_start_frame;
+	gchar				*sound_pathname;			// Full pathname to a sound file to load is constructed in this
 	SWFAction			swf_action;					// Used when constructing action script
 	SWFButton			swf_button;					// Holds a swf button
 	SWFShape			text_bg;					// The text background shape goes in this
@@ -479,6 +487,68 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 				our_shape = (SWFBlock) image_bitmap;
 				this_layer_data->dictionary_shape = newSWFMovieClip();
 				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+
+				// If this object has a mouse click, then pad the object with the correct number of frames
+				// plus add the sound
+				if (MOUSE_NONE != mouse_data->click)
+				{
+					// Determine the sound file to load
+					switch (mouse_data->click)
+					{
+						case MOUSE_LEFT_ONE:
+						case MOUSE_RIGHT_ONE:
+						case MOUSE_MIDDLE_ONE:
+
+						// Single click mouse sound
+						sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_single_click.mp3", NULL);
+						break;
+					}
+
+					// Create the sound object we'll be using
+					if (debug_level) printf("Full path name to sound file is: %s\n", sound_pathname);
+
+					// Load the sound file
+					sound_file = fopen(sound_pathname, "rb");
+					if (NULL == sound_file)
+					{
+						// Something went wrong when loading the sound file, so return
+						display_warning("Error ED412: Something went wrong when opening a mouse click sound file");
+						return FALSE;
+					}
+					sound_stream = newSWFSoundStream(sound_file);
+
+					// Pad the movie clip by enough frames to start the sound at the correct place
+					sound_start = 0.0;
+					if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+						sound_start += this_layer_data->transition_in_duration;
+					sound_start += this_layer_data->duration;
+					sound_start_frame = CLAMP(floorf(sound_start * frames_per_second) - 2, 0, 1000); // 1000 was picked from the air
+					for (sound_loop = 0; sound_loop < sound_start_frame; sound_loop++)
+					{
+						SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
+					}
+
+					// Create a new movie clip file, containing only the sound
+					sound_movie_clip = newSWFMovieClip();
+
+					// Ensure the movie clip sound starts out playing
+					swf_action = compileSWFActionCode("this.play();");
+					SWFMovieClip_add(sound_movie_clip, (SWFBlock) swf_action);
+
+					// Add the sound stream to the sound movie clip
+					SWFMovieClip_setSoundStream(sound_movie_clip, sound_stream, 1);
+					SWFMovieClip_nextFrame(sound_movie_clip);
+
+					// Add the sound movie clip to the object movie clip
+					sound_display_item = SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) sound_movie_clip);
+
+					// Advance the movie clip one frame, else it doesn't get displayed
+					SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
+
+					// Stop the sound from looping
+					swf_action = compileSWFActionCode("this.stop();");
+					SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) swf_action);
+				}
 
 				// Advance the movie clip one frame, else it doesn't get displayed
 				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
