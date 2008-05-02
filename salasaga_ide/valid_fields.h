@@ -53,7 +53,7 @@ validatation_entry		valid_fields[] =
 	{ LAYER_VISIBLE,		"Layer visibility switch",				V_INT_UNSIGNED,		V_NONE,		0,		1 },
 	{ LAYER_WIDTH,			"Width of this layer",					V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ LINE_WIDTH,			"Line width",							V_FLOAT_UNSIGNED,	V_NONE,		0.05,	20 },
-	{ MOUSE_CLICK,			"Mouse click",							V_CHAR,				V_UNDERSCORES,		0,		8 },
+	{ MOUSE_CLICK,			"Mouse click",							V_CHAR,				V_UNDERSCORES,		0,		13 },
 	{ OPACITY,				"Opacity level",						V_FLOAT_UNSIGNED,	V_NONE,		0,		100 },
 	{ PREVIEW_WIDTH,		"Width of film strip thumbnails",		V_INT_UNSIGNED,		V_NONE,		20,		800 },
 	{ PROJECT_FPS,			"Frames per Second for this project",	V_INT_UNSIGNED,		V_NONE,		1,		120 },
