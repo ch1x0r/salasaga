@@ -49,6 +49,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	GtkWidget			*mouse_table;				// Table used for neat layout of the dialog box
 	guint				row_counter = 0;			// Used to count which row things are up to
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	guint				valid_click_type = 0;		// Receives the new mouse click type once validated
 	gfloat				valid_duration = 0;			// Receives the new finish frame once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
@@ -89,7 +90,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	GtkWidget			*duration_label;			// Label widget
 	GtkWidget			*duration_button;			//
 
-	GtkWidget			*click_button;				// Label widget
+	GtkWidget			*label_click;				// Mouse click type
+	GtkWidget			*selector_click;			//
 
 	GtkWidget			*external_link_label;		// Label widget
 	GtkWidget			*external_link_entry;		// Widget for accepting an external link for clicking on
@@ -275,16 +277,67 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(button_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Create the check box asking if there should be a mouse click sound
-	click_button = gtk_check_button_new_with_label("Include mouse click?");
-	if (MOUSE_NONE == tmp_mouse_ob->click)
+	// Mouse click type
+	label_click = gtk_label_new("Mouse click type: ");
+	gtk_misc_set_alignment(GTK_MISC(label_click), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(label_click), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	selector_click = gtk_combo_box_new_text();
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "No mouse click");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Left single click");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Left double click");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Left triple click");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Right single click");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Right double click");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Right triple click");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Middle single click");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Middle double click");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Middle triple click");
+	switch (tmp_mouse_ob->click)
 	{
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(click_button), FALSE);
-	} else
-	{
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(click_button), TRUE);
+		case MOUSE_NONE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_click), MOUSE_NONE);
+			break;
+
+		case MOUSE_LEFT_ONE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_click), MOUSE_LEFT_ONE);
+			break;
+
+		case MOUSE_LEFT_DOUBLE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_click), MOUSE_LEFT_DOUBLE);
+			break;
+
+		case MOUSE_LEFT_TRIPLE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_click), MOUSE_LEFT_TRIPLE);
+			break;
+
+		case MOUSE_RIGHT_ONE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_click), MOUSE_RIGHT_ONE);
+			break;
+
+		case MOUSE_RIGHT_DOUBLE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_click), MOUSE_RIGHT_DOUBLE);
+			break;
+
+		case MOUSE_RIGHT_TRIPLE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_click), MOUSE_RIGHT_TRIPLE);
+			break;
+
+		case MOUSE_MIDDLE_ONE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_click), MOUSE_MIDDLE_ONE);
+			break;
+
+		case MOUSE_MIDDLE_DOUBLE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_click), MOUSE_MIDDLE_DOUBLE);
+			break;
+
+		case MOUSE_MIDDLE_TRIPLE:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_click), MOUSE_MIDDLE_TRIPLE);
+			break;
+
+		default:
+			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_click), MOUSE_NONE);
 	}
-	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(click_button), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(selector_click), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for an external link
@@ -499,6 +552,19 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 			valid_trans_out_duration = *validated_gfloat;
 			g_free(validated_gfloat);
 		}
+
+		// Retrieve the mouse click type
+		gint_val = gtk_combo_box_get_active(GTK_COMBO_BOX(selector_click));
+		if (-1 == gint_val)
+		{
+			// A -1 return means no value was selected
+			display_warning("Error ED413: There was something wrong with the mouse click type selected.  Please try again.");
+			useable_input = FALSE;
+		} else
+		{
+			// A value was selected
+			valid_click_type = gint_val;
+		}
 	} while (FALSE == useable_input);
 
 	// * We only get here after all input is considered valid *
@@ -511,13 +577,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	tmp_layer->y_offset_finish = valid_y_offset_finish;
 	tmp_layer->start_time = valid_start_time;
 	tmp_layer->duration = valid_duration;
-	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(click_button)))
-	{
-		tmp_mouse_ob->click = MOUSE_LEFT_ONE;
-	} else
-	{
-		tmp_mouse_ob->click = MOUSE_NONE;
-	}
+	tmp_mouse_ob->click = valid_click_type;
 	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(visibility_checkbox)))
 	{
 		tmp_layer->visible = TRUE;
