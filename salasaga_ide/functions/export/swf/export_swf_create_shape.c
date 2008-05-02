@@ -64,6 +64,7 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 	SWFInput			image_input;				// Used to hold a swf input object
 	SWFShape			image_shape;				// Used to hold a swf shape object
 	gint				image_width;				// Temporarily used to store the width of an image
+	layer_mouse			*mouse_data;				// Points to the mouse object data inside the layer
 	gint				num_text_lines;				// Number of text lines in a particular text layer
 	SWFBlock			our_shape;					// The swf shape before it gets added to a swf movie clip
 	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
@@ -89,14 +90,6 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 	SWFText				text_object;				// The text object we're working on goes in this
 	gfloat				text_real_font_size;
 	gfloat				widest_text_string_width;	// Used when calculating how wide to draw the text background box
-
-	// (Hopefully) temporary variables put in place to get around a *bizarre*
-	// problem whereby calculating basic stuff like "0 - output_width" gives bogus results (computers are infallible eh?) :(
-	// (Suspect it's caused by some optimisation at compile time going wrong)
-	gfloat				layer_down;
-	gfloat				layer_left;
-	gfloat				layer_right;
-	gfloat				layer_up;
 
 
 	// Initialisation
@@ -242,15 +235,11 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 					red_component / 255, green_component / 255, blue_component / 255, 0xff);  // Alpha value - solid fill
 
 			// Create the empty layer object
-			layer_right = output_width;
-			layer_down = output_height;
-			layer_left = 0 - layer_right;  // This is bizarre.  Should NOT have to do this to get a correct result. :(
-			layer_up = 0 - layer_down;  // This is bizarre.  Should NOT have to do this to get a correct result. :(
 			SWFShape_movePenTo(empty_layer_shape, 0.0, 0.0);
-			SWFShape_drawLine(empty_layer_shape, layer_right, 0.0);
-			SWFShape_drawLine(empty_layer_shape, 0.0, layer_down);
-			SWFShape_drawLine(empty_layer_shape, layer_left, 0.0);
-			SWFShape_drawLine(empty_layer_shape, 0.0, layer_up);
+			SWFShape_drawLine(empty_layer_shape, output_width, 0.0);
+			SWFShape_drawLine(empty_layer_shape, 0.0, output_height);
+			SWFShape_drawLine(empty_layer_shape, -((gint) output_width), 0.0);
+			SWFShape_drawLine(empty_layer_shape, 0.0, -((gint) output_height));
 
 			// If this layer has an external link associated with it, turn it into a button
 			if (0 < this_layer_data->external_link->len)
@@ -394,9 +383,10 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 			}
 
 			// Work out the correct dimensions for the mouse cursor in the output
-			image_height = ((layer_mouse *) this_layer_data->object_data)->height;
+			mouse_data = (layer_mouse *) this_layer_data->object_data;
+			image_height = mouse_data->height;
 			scaled_height = roundf(scaled_height_ratio * (gfloat) image_height);
-			image_width = ((layer_mouse *) this_layer_data->object_data)->width;
+			image_width = mouse_data->width;
 			scaled_width = roundf(scaled_width_ratio * (gfloat) image_width);
 
 			// Displaying debugging info if requested
@@ -476,7 +466,7 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 				swf_action = compileSWFActionCode(as_gstring->str);
 				SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
 
-				// Add the dictionary shape to a movie clip, then store for future reference
+				// Add the button to a movie clip, then keep for future reference
 				our_shape = (SWFBlock) swf_button;
 				this_layer_data->dictionary_shape = newSWFMovieClip();
 				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
