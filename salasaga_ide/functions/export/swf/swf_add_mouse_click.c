@@ -62,9 +62,25 @@ SWFMovieClip swf_add_mouse_click(SWFMovieClip movie_clip, layer *this_layer_data
 		case MOUSE_RIGHT_ONE:
 		case MOUSE_MIDDLE_ONE:
 
-		// Single click mouse sound
-		sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_single_click.mp3", NULL);
-		break;
+			// Single click mouse sound
+			sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_single_click.mp3", NULL);
+			break;
+
+		case MOUSE_LEFT_DOUBLE:
+		case MOUSE_RIGHT_DOUBLE:
+		case MOUSE_MIDDLE_DOUBLE:
+
+			// Double click mouse sound
+			sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_double_click.mp3", NULL);
+			break;
+
+		case MOUSE_LEFT_TRIPLE:
+		case MOUSE_RIGHT_TRIPLE:
+		case MOUSE_MIDDLE_TRIPLE:
+
+			// Triple click mouse sound
+			sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_triple_click.mp3", NULL);
+			break;
 	}
 
 	// Create the sound object we'll be using
