@@ -86,6 +86,16 @@ void menu_screenshots_import(void)
 	image_differences = FALSE;
 	using_first_screenshot = FALSE;
 
+	// Set the default information button display info if there isn't a project already active
+	if (TRUE != project_active)
+	{
+		info_link = g_string_new("http://www.salasaga.org");
+		info_link_target = g_string_new("_blank");
+		info_text = gtk_text_buffer_new(NULL);
+		gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), "Created using Salasaga", -1);
+		info_display = TRUE;
+	}
+
 	// * We know the path to get the screenshots from (screenshots_folder), and their prefix name (project_name),
 	//   so we make a list of them and add them to the slides linked list *
 
