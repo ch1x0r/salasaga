@@ -204,13 +204,7 @@ OFILES = \
 	functions/logger_with_domain.o \
 	functions/menu_edit_preferences.o \
 	functions/menu_enable.o \
-	functions/menu_export_flash_animation.o \
-	functions/menu_export_flash_choose_resolution_index.o \
-	functions/menu_export_flash_control_bar.o \
-	functions/menu_export_flash_create_layer_elements.o \
-	functions/menu_export_flash_create_shape.o \
-	functions/menu_export_flash_inner.o \
-	functions/menu_export_flash_process_element.o \
+	functions/menu_export_swf.o \
 	functions/menu_export_layer.o \
 	functions/menu_export_slide.o \
 	functions/menu_file_close.o \
@@ -246,7 +240,6 @@ OFILES = \
 	functions/slide_move_up.o \
 	functions/slide_name_reset.o \
 	functions/slide_properties.o \
-	functions/swf_shape_from_image_file.o \
 	functions/uri_decode.o \
 	functions/uri_encode_base64.o \
 	functions/validate_value.o \
@@ -258,12 +251,23 @@ OFILES = \
 	functions/cairo/calculate_text_object_size.o \
 	functions/cairo/create_cairo_pixbuf_pattern.o \
 	functions/callbacks/menu_screenshots_capture_full_screen.o \
+	functions/export/swf/create_swf_text_shape.o \
+	functions/export/swf/export_swf_choose_resolution_index.o \
+	functions/export/swf/export_swf_control_bar.o \
+	functions/export/swf/export_swf_create_layer_elements.o \
+	functions/export/swf/export_swf_create_shape.o \
+	functions/export/swf/export_swf_inner.o \
+	functions/export/swf/export_swf_process_element.o \
+	functions/export/swf/swf_add_mouse_click.o \
+	functions/export/swf/swf_shape_from_image_file.o \
 	functions/layer/get_layer_position.o \
 	functions/widgets/time_line.o \
 	salasaga.o
 
 SOUNDS = \
-	generic.wav
+	mouse_single_click.mp3 \
+	mouse_double_click.mp3 \
+	mouse_triple_click.mp3
 
 all: salasaga
 
@@ -441,26 +445,8 @@ menu_edit_preferences.o:
 menu_enable.o:
 	$(CC) $(CFLAGS) -c menu_enable.c -o menu_enable.o
 
-menu_export_flash_animation.o:
-	$(CC) $(CFLAGS) -c menu_export_flash_animation.c -o menu_export_flash_animation.o
-
-menu_export_flash_choose_resolution_index.o:
-	$(CC) $(CFLAGS) -c menu_export_flash_choose_resolution_index.c -o menu_export_flash_choose_resolution_index.o
-
-menu_export_flash_control_bar.o:
-	$(CC) $(CFLAGS) -c menu_export_flash_control_bar.c -o menu_export_flash_control_bar.o
-
-menu_export_flash_create_layer_elements.o:
-	$(CC) $(CFLAGS) -c menu_export_flash_create_layer_elements.c -o menu_export_flash_create_layer_elements.o
-
-menu_export_flash_create_shape.o:
-	$(CC) $(CFLAGS) -c menu_export_flash_create_shape.c -o menu_export_flash_create_shape.o
-
-menu_export_flash_inner.o:
-	$(CC) $(CFLAGS) -c menu_export_flash_inner.c -o menu_export_flash_inner.o
-
-menu_export_flash_process_element.o:
-	$(CC) $(CFLAGS) -c menu_export_flash_process_element.c -o menu_export_flash_process_element.o
+menu_export_swf.o:
+	$(CC) $(CFLAGS) -c menu_export_swf.c -o menu_export_swf.o
 
 menu_export_layer.o:
 	$(CC) $(CFLAGS) -c menu_export_layer.c -o menu_export_layer.o
@@ -602,6 +588,33 @@ cairo/create_cairo_pixbuf_pattern.o:
 
 callbacks/menu_screenshots_capture_full_screen.o:
 	$(CC) $(CFLAGS) -c callbacks/menu_screenshots_capture_full_screen.c -o callbacks/menu_screenshots_capture_full_screen.o
+
+export/swf/create_swf_text_shape.o:
+	$(CC) $(CFLAGS) -c export/swf/create_swf_text_shape.c -o export/swf/create_swf_text_shape.o
+
+export/swf/export_swf_choose_resolution_index.o:
+	$(CC) $(CFLAGS) -c export/swf/export_swf_choose_resolution_index.c -o export/swf/export_swf_choose_resolution_index.o
+
+export/swf/export_swf_control_bar.o:
+	$(CC) $(CFLAGS) -c export/swf/export_swf_control_bar.c -o export/swf/export_swf_control_bar.o
+
+export/swf/export_swf_create_layer_elements.o:
+	$(CC) $(CFLAGS) -c export/swf/export_swf_create_layer_elements.c -o export/swf/export_swf_create_layer_elements.o
+
+export/swf/export_swf_create_shape.o:
+	$(CC) $(CFLAGS) -c export/swf/export_swf_create_shape.c -o export/swf/export_swf_create_shape.o
+
+export/swf/export_swf_inner.o:
+	$(CC) $(CFLAGS) -c export/swf/export_swf_inner.c -o export/swf/export_swf_inner.o
+
+export/swf/export_swf_process_element.o:
+	$(CC) $(CFLAGS) -c export/swf/export_swf_process_element.c -o export/swf/export_swf_process_element.o
+
+export/swf/swf_add_mouse_click.o:
+	$(CC) $(CFLAGS) -c export/swf/swf_add_mouse_click.c -o export/swf/swf_add_mouse_click.o
+
+export/swf/swf_shape_from_image_file.o:
+	$(CC) $(CFLAGS) -c export/swf/swf_shape_from_image_file.c -o export/swf/swf_shape_from_image_file.o
 
 layer/get_layer_position.o:
 	$(CC) $(CFLAGS) -c layer/get_layer_position.c -o layer/get_layer_position.o
