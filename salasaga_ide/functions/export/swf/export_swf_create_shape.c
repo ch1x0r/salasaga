@@ -386,9 +386,9 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 			// Work out the correct dimensions for the mouse cursor in the output
 			mouse_data = (layer_mouse *) this_layer_data->object_data;
 			image_height = mouse_data->height;
-			scaled_height = roundf(scaled_height_ratio * (gfloat) image_height);
+			scaled_height = roundf(scaled_height_ratio * (gfloat) image_height) - 1;
 			image_width = mouse_data->width;
-			scaled_width = roundf(scaled_width_ratio * (gfloat) image_width);
+			scaled_width = roundf(scaled_width_ratio * (gfloat) image_width) - 1;
 
 			// Displaying debugging info if requested
 			if (debug_level)
