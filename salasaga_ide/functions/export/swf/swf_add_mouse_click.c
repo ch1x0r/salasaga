@@ -111,7 +111,12 @@ SWFMovieClip swf_add_mouse_click(SWFMovieClip movie_clip, layer *this_layer_data
 	sound_movie_clip = newSWFMovieClip();
 
 	// Ensure the movie clip sound starts out playing
-	swf_action = compileSWFActionCode("this.play();");
+	swf_action = compileSWFActionCode(
+					" if (true == _root.playing) {"
+						" this.play();"
+					" } else {"
+						" this.stop();"
+					" };");
 	SWFMovieClip_add(sound_movie_clip, (SWFBlock) swf_action);
 
 	// Add the sound stream to the sound movie clip
