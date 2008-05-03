@@ -49,7 +49,7 @@ void menu_project_properties(void)
 	gint				proj_row_counter;			// Used when building the project preferences dialog box
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
 	gboolean			valid_control_bar_behaviour;  // Receives the new control bar display behaviour
-	guint				valid_end_behaviour;		// Receives the new end behaviour once validated
+	guint				valid_end_behaviour = 0;	// Receives the new end behaviour once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
 	guint				valid_fps = 0;				// Receives the new project fps once validated

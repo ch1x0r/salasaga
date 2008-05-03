@@ -53,7 +53,7 @@ void slide_properties(void)
 	gfloat				overall_duration;			// Used when working out the visible time for a layer
 	guint				row_counter = 0;			// Used to count which row things are up to
 	GtkDialog			*slide_dialog;				// Widget for the dialog
-	layer				*this_layer_data;			// Pointer to individual layer data
+	layer				*this_layer_data = NULL;	// Pointer to individual layer data
 	slide				*this_slide;				// Points to the slide we're working with
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
 	gfloat				valid_slide_duration;		// Receives the new slide duration once validated

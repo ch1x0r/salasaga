@@ -51,7 +51,7 @@ SWFMovieClip swf_add_mouse_click(SWFMovieClip movie_clip, layer *this_layer_data
 	SWFSoundStream 		sound_stream;				// The sound we use gets loaded into this
 	gfloat				sound_start;
 	guint				sound_start_frame;
-	gchar				*sound_pathname;			// Full pathname to a sound file to load is constructed in this
+	gchar				*sound_pathname = NULL;		// Full pathname to a sound file to load is constructed in this
 	SWFAction			swf_action;					// Used when constructing action script
 
 

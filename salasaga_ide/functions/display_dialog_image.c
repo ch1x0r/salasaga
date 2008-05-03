@@ -67,9 +67,9 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	GString				*validated_string;			// Receives known good strings from the validation function
 
 	GtkWidget			*name_label;				// Label widget
-	GtkWidget			*name_entry;				//
+	GtkWidget			*name_entry = 0;			//
 
-	GtkWidget			*visibility_checkbox;		// Visibility widget
+	GtkWidget			*visibility_checkbox = 0;	// Visibility widget
 
 	GtkWidget			*x_off_label_start;			// Label widget
 	GtkWidget			*x_off_button_start = 0;	//

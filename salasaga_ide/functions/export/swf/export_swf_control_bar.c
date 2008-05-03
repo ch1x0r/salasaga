@@ -87,7 +87,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 
 	// Variables used for the forward button
 	SWFAction			forward_action;
-	SWFButton			forward_button;
+	SWFButton			forward_button = NULL;
 	SWFShape			forward_shape_down;
 	SWFShape			forward_shape_over;
 	SWFShape			forward_shape_up;
@@ -115,7 +115,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 
 	// Variables used for the rewind button
 	SWFAction			rewind_action;
-	SWFButton			rewind_button;
+	SWFButton			rewind_button = NULL;
 	SWFShape			rewind_shape_down;
 	SWFShape			rewind_shape_over;
 	SWFShape			rewind_shape_up;
@@ -126,8 +126,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFDisplayItem		info_bg_display_item;
 	gfloat				info_bg_box_height;			// Used while generating swf output for text boxes
 	gfloat				info_bg_box_width;			// Used while generating swf output for text boxes
-	SWFButton			info_button;
-	SWFMovieClip		info_button_movie_clip;		// The movie clip that contains the information text background and text
+	SWFButton			info_button = NULL;
+	SWFMovieClip		info_button_movie_clip = NULL;  // The movie clip that contains the information text background and text
 	gfloat				info_leading;				// Spacing to use at the edges of the font
 	SWFMovieClip		info_movie_clip;			// The movie clip that contains the information text background and text
 	SWFText				info_object;				// The information button text object we're working on goes in this

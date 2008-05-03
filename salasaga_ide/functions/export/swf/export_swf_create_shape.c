@@ -79,14 +79,14 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
 	SWFAction			swf_action;					// Used when constructing action script
 	SWFButton			swf_button;					// Holds a swf button
-	SWFShape			text_bg;					// The text background shape goes in this
+	SWFShape			text_bg = NULL;				// The text background shape goes in this
 	gfloat				text_bg_box_height;			// Used while generating swf output for text boxes
 	gfloat				text_bg_box_width;			// Used while generating swf output for text boxes
 	SWFDisplayItem		text_bg_display_item;
 	SWFFillStyle		text_bg_fill_style;			// Fill style used when constructing text background shape
 	layer_text			*text_data;					// Points to the text object data inside the layer
 	SWFDisplayItem		text_display_item;
-	gfloat				text_leading;				// Spacing to use at the edges of the font
+	gfloat				text_leading = 0.0;			// Spacing to use at the edges of the font
 	SWFMovieClip		text_movie_clip;			// The movie clip that contains the text background and text
 	SWFText				text_object;				// The text object we're working on goes in this
 	gfloat				text_real_font_size;

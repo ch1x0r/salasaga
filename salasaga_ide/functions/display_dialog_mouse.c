@@ -57,7 +57,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	gfloat				valid_start_time = 0;		// Receives the new start time once validated
 	gfloat				valid_trans_in_duration = 0;// Receives the new appearance transition duration once validated
 	guint				valid_trans_in_type = 0;	// Receives the new appearance transition type once validated
-	gfloat				valid_trans_out_duration;	// Receives the new exit transition duration once validated
+	gfloat				valid_trans_out_duration = 0;  // Receives the new exit transition duration once validated
 	guint				valid_trans_out_type = 0;	// Receives the new exit transition type once validated
 	guint				valid_x_offset_finish = 0;	// Receives the new finish frame x offset once validated
 	guint				valid_x_offset_start = 0;	// Receives the new start frame x offset once validated
