@@ -1,3 +1,17 @@
+salasaga (0.8.0.alpha2-0ubuntu1) unstable; urgency=low
+
+  * Second Alpha Release.
+  * 2008-05-02 - Added mouse click sounds to mouse pointer layers in exported swf.
+  * 2008-04-29 - Added an information button to the navigation bar for (i.e.) "sending feedback" to the author.
+  * 2008-04-28 - Colour, opacity, and border attributes of highlight layers can now be adjusted.
+  * 2008-04-28 - Colour and border attributes of text layers can now be adjusted.
+  * 2008-04-27 - Added fields for editing the layer name and visibility status to the layer dialogs.
+  * 2008-04-27 - Fixed bugs in the screen capture key setting code for metacity.
+  * 2008-04-24 - Control bar background fuzziness fixed.  Now looks clean and sharp (now vector based).
+  * 2008-04-23 - Raised the Project Name length limit to 120 characters.
+
+ -- Justin Clift <justin@salasaga.org>  Sat, 03 May 2008 12:40:00 +1000
+
 salasaga (0.8.0.alpha1-0ubuntu1) unstable; urgency=low
 
   * First Alpha Release.
