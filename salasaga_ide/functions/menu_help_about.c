@@ -35,28 +35,45 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "menu_help_website.h"
 
 
 void menu_help_about(void)
 {
 	// Local variables
 	GtkAboutDialog		*about_dialog;
-	const gchar			*authors[] = {"Justin Clift", NULL};
+	const gchar			*authors[] = {"Justin Clift <justin@salasaga.org>", NULL};
 	GString				*tmp_gstring;
 	gint				tmp_int;
 
-	// Add the build date
-	tmp_gstring = g_string_new(NULL);
-	g_string_printf(tmp_gstring, "%s. Built on: %s", APP_VERSION, __DATE__);
 
 	// Create an About dialog
 	about_dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 	gtk_about_dialog_set_name(about_dialog, APP_NAME);
-	gtk_about_dialog_set_version(about_dialog, tmp_gstring->str);
-	gtk_about_dialog_set_copyright(about_dialog, "(C) 2005-2008 Justin Clift <justin@salasaga.org>");
-	gtk_about_dialog_set_license(about_dialog, "LGPL");
-	gtk_about_dialog_set_license(about_dialog, NULL);
+	gtk_about_dialog_set_version(about_dialog, APP_VERSION);
+	gtk_about_dialog_set_copyright(about_dialog, "Copyright (C) 2005-2008 Justin Clift\n<justin@salasaga.org>");
+	gtk_about_dialog_set_license(about_dialog,
+			"This program is free software: you can redistribute it and/or modify\n"
+			"it under the terms of the GNU Lesser General Public License as\n"
+			"published by the Free Software Foundation, either version 3 of\n"
+			"the License, or (at your option) any later version.\n"
+			"\n"
+			"This program is distributed in the hope that it will be useful,\n"
+			"but WITHOUT ANY WARRANTY; without even the implied warranty of\n"
+			"MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the\n"
+			"GNU Lesser General Public License for more details.\n"
+			"\n"
+			"You should have received a copy of the GNU Lesser General Public\n"
+			"License along with this program.  If not, see\n"
+			"http://www.gnu.org/licenses/.");
 	gtk_about_dialog_set_authors(about_dialog, authors);
+	gtk_about_dialog_set_url_hook((gpointer) menu_help_website, NULL, NULL);
+	gtk_about_dialog_set_website(about_dialog, "www.salasaga.org");
+
+	// Add the build date
+	tmp_gstring = g_string_new(NULL);
+	g_string_printf(tmp_gstring, "Built on: %s", __DATE__);
+	gtk_about_dialog_set_comments(about_dialog, tmp_gstring->str);
 
 	// Display the dialog box
 	tmp_int = gtk_dialog_run(GTK_DIALOG(about_dialog));
