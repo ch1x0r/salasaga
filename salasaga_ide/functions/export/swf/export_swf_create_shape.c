@@ -227,13 +227,13 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 			red_component = ((layer_empty *) this_layer_data->object_data)->bg_color.red;
 			green_component = ((layer_empty *) this_layer_data->object_data)->bg_color.green;
 			blue_component = ((layer_empty *) this_layer_data->object_data)->bg_color.blue;
-			empty_layer_fill = SWFShape_addSolidFillStyle(empty_layer_shape, red_component / 255, green_component / 255, blue_component / 255, 0xff);  // Alpha value - solid fill
+			empty_layer_fill = SWFShape_addSolidFillStyle(empty_layer_shape, red_component / 256, green_component / 256, blue_component / 256, 0xff);  // Alpha value - solid fill
 			SWFShape_setRightFillStyle(empty_layer_shape, empty_layer_fill);
 
 			// Set the line style
 			SWFShape_setLine(empty_layer_shape,
 					1,  // Line width
-					red_component / 255, green_component / 255, blue_component / 255, 0xff);  // Alpha value - solid fill
+					red_component / 256, green_component / 256, blue_component / 256, 0xff);  // Alpha value - solid fill
 
 			// Create the empty layer object
 			SWFShape_movePenTo(empty_layer_shape, 0.0, 0.0);
@@ -289,7 +289,7 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 
 			// Create the initial empty shape
 			highlight_data = (layer_highlight *) this_layer_data->object_data;
-			final_opacity = roundf((highlight_data->opacity / 100) * 255);
+			final_opacity = roundf((highlight_data->opacity / 100) * 256);
 			highlight_box = newSWFShape();
 			if (NULL == highlight_box)
 			{
@@ -299,26 +299,17 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 			}
 
 			// Set the fill for the highlight box
-			red_component = highlight_data->fill_colour.red;
-			green_component = highlight_data->fill_colour.green;
-			blue_component = highlight_data->fill_colour.blue;
-			highlight_fill_style = SWFShape_addSolidFillStyle(highlight_box,
-					roundf(red_component / 255),
-					roundf(green_component / 255),
-					roundf(blue_component / 255),
-					final_opacity);
+			red_component = roundf(highlight_data->fill_colour.red / 256);
+			green_component = roundf(highlight_data->fill_colour.green / 256);
+			blue_component = roundf(highlight_data->fill_colour.blue / 256);
+			highlight_fill_style = SWFShape_addSolidFillStyle(highlight_box, red_component, green_component, blue_component, final_opacity);
 			SWFShape_setRightFillStyle(highlight_box, highlight_fill_style);
 
 			// Set the border style
-			red_component = highlight_data->border_colour.red;
-			green_component = highlight_data->border_colour.green;
-			blue_component = highlight_data->border_colour.blue;
-			SWFShape_setLine(highlight_box,
-					highlight_data->border_width,
-					roundf(red_component / 255),
-					roundf(green_component / 255),
-					roundf(blue_component / 255),
-					final_opacity);
+			red_component = roundf(highlight_data->border_colour.red / 256);
+			green_component = roundf(highlight_data->border_colour.green / 256);
+			blue_component = roundf(highlight_data->border_colour.blue / 256);
+			SWFShape_setLine(highlight_box, highlight_data->border_width, red_component, green_component, blue_component, final_opacity);
 
 			// Work out the scaled dimensions of the highlight box
 			highlight_box_width = roundf(scaled_width_ratio * (gfloat) highlight_data->width);
@@ -532,26 +523,17 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 				}
 
 				// Set the solid fill for the text background box
-				red_component = text_data->bg_fill_colour.red;
-				green_component = text_data->bg_fill_colour.green;
-				blue_component = text_data->bg_fill_colour.blue;
-				text_bg_fill_style = SWFShape_addSolidFillStyle(text_bg,
-						roundf(red_component / 255),
-						roundf(green_component / 255),
-						roundf(blue_component / 255),
-						0xff); // Alpha of 255 is full opacity
+				red_component = roundf(text_data->bg_fill_colour.red / 256);
+				green_component = roundf(text_data->bg_fill_colour.green / 256);
+				blue_component = roundf(text_data->bg_fill_colour.blue / 256);
+				text_bg_fill_style = SWFShape_addSolidFillStyle(text_bg, red_component, green_component, blue_component, 0xff); // Alpha of 0xff is full opacity
 				SWFShape_setRightFillStyle(text_bg, text_bg_fill_style);
 
 				// Set the line style
-				red_component = text_data->bg_border_colour.red;
-				green_component = text_data->bg_border_colour.green;
-				blue_component = text_data->bg_border_colour.blue;
-				SWFShape_setLine(text_bg,
-						text_data->bg_border_width,
-						roundf(red_component / 255),
-						roundf(green_component / 255),
-						roundf(blue_component / 255),
-						0xff); // Alpha of 255 is full opacity
+				red_component = roundf(text_data->bg_border_colour.red / 256);
+				green_component = roundf(text_data->bg_border_colour.green / 256);
+				blue_component = roundf(text_data->bg_border_colour.blue / 256);
+				SWFShape_setLine(text_bg, text_data->bg_border_width, red_component, green_component, blue_component, 0xff); // Alpha of 0xff is full opacity
 
 				// Work out the scaled dimensions of the text background box
 				text_leading = SWFText_getLeading(text_object);
