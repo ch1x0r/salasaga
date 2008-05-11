@@ -49,7 +49,7 @@ validatation_entry		valid_fields[] =
 	{ LAYER_BACKGROUND,		"Layer background switch",				V_INT_UNSIGNED,		V_NONE,		0,		1 },
 	{ LAYER_DURATION,		"Layer duration in seconds",			V_FLOAT_UNSIGNED,	V_NONE,		0,		300.0 },
 	{ LAYER_HEIGHT,			"Height of this layer",					V_INT_UNSIGNED,		V_NONE,		1,		4096 },
-	{ LAYER_NAME,			"Name of this layer",					V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
+	{ LAYER_NAME,			"Name of this layer",					V_CHAR,				V_COLON | V_FULL_STOP | V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
 	{ LAYER_VISIBLE,		"Layer visibility switch",				V_INT_UNSIGNED,		V_NONE,		0,		1 },
 	{ LAYER_WIDTH,			"Width of this layer",					V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ LINE_WIDTH,			"Line width",							V_FLOAT_UNSIGNED,	V_NONE,		0.05,	20 },
