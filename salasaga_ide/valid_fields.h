@@ -58,7 +58,7 @@ validatation_entry		valid_fields[] =
 	{ PREVIEW_WIDTH,		"Width of film strip thumbnails",		V_INT_UNSIGNED,		V_NONE,		20,		800 },
 	{ PROJECT_FPS,			"Frames per Second for this project",	V_INT_UNSIGNED,		V_NONE,		1,		120 },
 	{ PROJECT_HEIGHT,		"Height of this project",				V_INT_UNSIGNED,		V_NONE,		1,		4096 },
-	{ PROJECT_NAME,			"Name of this project",					V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		120 },
+	{ PROJECT_NAME,			"Name of this project",					V_CHAR,				V_FULL_STOP | V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		120 },
 	{ PROJECT_VERSION,		"Version number of the project file",	V_FLOAT_UNSIGNED,	V_NONE,		0,		4.2 },
 	{ PROJECT_WIDTH,		"Width of this project",				V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ RESOLUTION,			"An X * Y resolution value",			V_RESOLUTION,		V_NONE,		0,		16 },
