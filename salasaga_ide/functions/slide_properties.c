@@ -215,7 +215,7 @@ void slide_properties(void)
 	}
 
 	// Update the timeline widget with the new slide duration
-	time_line_set_stored_slide_duration(this_slide->timeline_widget, this_layer_data->duration);
+	time_line_set_stored_slide_duration(this_slide->timeline_widget, this_slide->duration);
 
 	// Regenerate the timeline
 	draw_timeline();
