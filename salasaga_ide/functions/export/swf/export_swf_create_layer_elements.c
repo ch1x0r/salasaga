@@ -46,6 +46,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 	gfloat				element_y_position_finish = 0;
 	gfloat				element_y_position_increment = 0;
 	gfloat				element_y_position_start = 0;
+	gfloat				fade_frame;
 	gfloat				finish_frame;
 	guint				finish_frame_rounded;
 	guint				frame_counter;				// Holds the number of frames
@@ -58,8 +59,8 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
 	gfloat				start_frame;
 	guint				start_frame_rounded;
-	guint				x_position;					// Used in calculating layer object position
-	guint				y_position;					// Used in calculating layer object position
+	gfloat				x_position;					// Used in calculating layer object position
+	gfloat				y_position;					// Used in calculating layer object position
 
 
 	// Initialisation
@@ -69,9 +70,11 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 	// Set some basic properties for the layer, across all of its frames
 	for (frame_counter = 0; frame_counter < num_frames; frame_counter++)
 	{
+		array_start[frame_counter].action_this = FALSE;
 		array_start[frame_counter].object_name = layer_name;
 		array_start[frame_counter].depth = layer_depth;
 		array_start[frame_counter].layer_info = this_layer_data;
+		array_start[frame_counter].is_moving = FALSE;
 	}
 
 	// Calculate the height and width scaling values needed for this swf output
@@ -85,11 +88,11 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 	element_y_position_finish = scaled_height_ratio * this_layer_data->y_offset_finish;
 
 	// If there is a fade in transition, fill in the relevant elements
+	start_frame = this_layer_data->start_time * frames_per_second;
 	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 	{
 		// Work out the starting and ending frames for the fade
-		start_frame = this_layer_data->start_time * frames_per_second;
-		finish_frame = start_frame + (this_layer_data->transition_in_duration * frames_per_second) - 1;
+		finish_frame = start_frame + (this_layer_data->transition_in_duration * frames_per_second);
 
 		// Indicate on which frame the element should be displayed, at what display depth, and its starting co-ordinates
 		start_frame_rounded = roundf(start_frame);
@@ -99,7 +102,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 		array_start[start_frame_rounded].y_position = element_y_position_start;
 
 		// Work out how much opacity to increment each frame by
-		opacity_step = 100 / ((this_layer_data->transition_in_duration * frames_per_second) - 1);
+		opacity_step = 100 / ((this_layer_data->transition_in_duration * frames_per_second));
 
 		// Loop through each frame of the fade in, setting the opacity values
 		opacity_count = 0;
@@ -120,31 +123,32 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 	} else
 	{
 		// Indicate on which frame the element should be displayed, at what display depth, and its starting co-ordinates
-		start_frame_rounded = roundf(this_layer_data->start_time * frames_per_second);
+		start_frame_rounded = roundf(start_frame);
 		array_start[start_frame_rounded].add = TRUE;
 		array_start[start_frame_rounded].x_position = element_x_position_start;
 		array_start[start_frame_rounded].y_position = element_y_position_start;
 		array_start[start_frame_rounded].action_this = TRUE;
+		array_start[start_frame_rounded].opacity = 100;
 	}
 
 	// If there is a fade out transition, fill in the relevant elements
 	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
 	{
 		// Work out the starting and ending frames for the fade
-		start_frame = this_layer_data->start_time * frames_per_second;
+		fade_frame = start_frame;
 		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-			start_frame += this_layer_data->transition_in_duration * frames_per_second;
-		start_frame += this_layer_data->duration * frames_per_second;
-		finish_frame = start_frame + (this_layer_data->transition_out_duration * frames_per_second) - 1;
-		start_frame_rounded = roundf(start_frame);
+			fade_frame += this_layer_data->transition_in_duration * frames_per_second;
+		fade_frame += this_layer_data->duration * frames_per_second;
+		finish_frame = fade_frame + (this_layer_data->transition_out_duration * frames_per_second);
+		start_frame_rounded = roundf(fade_frame);
 		finish_frame_rounded = roundf(finish_frame);
 
 		// Work out how much opacity to decrement each frame by
-		opacity_step = 100 / ((this_layer_data->transition_out_duration * frames_per_second) - 1);
+		opacity_step = 100 / ((this_layer_data->transition_out_duration * frames_per_second));
 
 		// Loop through each frame of the fade out, setting the opacity values
 		opacity_count = 100;
-		for (frame_counter = start_frame_rounded; frame_counter < finish_frame_rounded; frame_counter++)
+		for (frame_counter = start_frame_rounded; frame_counter <= finish_frame_rounded; frame_counter++)
 		{
 			array_start[frame_counter].action_this = TRUE;
 			array_start[frame_counter].opacity_change = TRUE;
@@ -163,12 +167,11 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 	}
 
 	// Work out the start frame of the fully visible layer display
-	start_frame = this_layer_data->start_time * frames_per_second;
 	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 		start_frame += this_layer_data->transition_in_duration * frames_per_second;
 
 	// Work out the finish frame of the fully visible layer display
-	finish_frame = start_frame + (this_layer_data->duration * frames_per_second) - 1;
+	finish_frame = start_frame + (this_layer_data->duration * frames_per_second);
 	start_frame_rounded = roundf(start_frame);
 	finish_frame_rounded = roundf(finish_frame);
 	num_displayed_frames = finish_frame_rounded - start_frame_rounded;
@@ -215,7 +218,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 
 	// Determine on which frame the element should be removed from display
 	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
-			finish_frame += (this_layer_data->transition_out_duration * frames_per_second) - 1;
+			finish_frame += (this_layer_data->transition_out_duration * frames_per_second);
 	finish_frame_rounded = roundf(finish_frame);
 	array_start[finish_frame_rounded].action_this = TRUE;
 	array_start[finish_frame_rounded].remove = TRUE;
