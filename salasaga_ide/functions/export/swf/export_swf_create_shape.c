@@ -66,6 +66,8 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	SWFShape			image_shape;				// Used to hold a swf shape object
 	gint				image_width;				// Temporarily used to store the width of an image
 	layer_mouse			*mouse_data;				// Points to the mouse object data inside the layer
+	SWFFillStyle		mouse_fill_style;			// Fill style used when constructing mouse pointers
+	SWFShape			mouse_shape = NULL;			// 
 	gint				num_text_lines;				// Number of text lines in a particular text layer
 	SWFBlock			our_shape;					// The swf shape before it gets added to a swf movie clip
 	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
@@ -366,61 +368,30 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 			// * We're processing a mouse layer *
 
-			// If we weren't able to load the mouse cursor graphic, we aren't going to be able to export it
-			if (NULL == mouse_ptr_pixbuf)
+			// Create the initial empty shape
+			mouse_shape = newSWFShape();
+			if (NULL == mouse_shape)
 			{
 				// Something went wrong when creating the empty shape, so we skip this layer
-				display_warning("Error ED99: Couldn't load the mouse pointer image, for adding to the swf output");
+				display_warning("Error ED414: Something went wrong when creating a mouse pointer shape for swf output");
 				return FALSE;
 			}
 
-			// Work out the correct dimensions for the mouse cursor in the output
-			mouse_data = (layer_mouse *) this_layer_data->object_data;
-			image_height = mouse_data->height;
-			scaled_height = roundf(scaled_height_ratio * (gfloat) image_height) - 1;
-			image_width = mouse_data->width;
-			scaled_width = roundf(scaled_width_ratio * (gfloat) image_width) - 1;
+			// Set the fill for the mouse pointer
+			mouse_fill_style = SWFShape_addSolidFillStyle(mouse_shape, 0xff, 0xff, 0xff, 0xff);
+			SWFShape_setRightFillStyle(mouse_shape, mouse_fill_style);
 
-			// Displaying debugging info if requested
-			if (debug_level)
-			{
-				printf("Mouse cursor height: %d\n", image_height);
-				printf("Scaled height: %d\n", scaled_height);
-				printf("Mouse cursor: %d\n", image_width);
-				printf("Scaled width: %d\n", scaled_width);
-			}
+			// Set the border style
+			SWFShape_setLine(mouse_shape, 1, 0x00, 0x00, 0x00, 0xff);
 
-			// Scale the mouse cursor to the correct dimensions
-			resized_pixbuf = gdk_pixbuf_scale_simple(mouse_ptr_pixbuf, scaled_width, scaled_height, GDK_INTERP_HYPER);  // Do the scaling at best possible quality
-			if (NULL == resized_pixbuf)
-			{
-				// Something went wrong when creating the dictionary shape for this layer
-				display_warning("Error ED93: Something went wrong when creating the dictionary shape for the mouse cursor");
-				return FALSE;
-			}
-
-			// Convert the scaled mouse cursor into image data
-			return_code_bool = gdk_pixbuf_save_to_buffer(GDK_PIXBUF(resized_pixbuf),
-							&pixbuf_buffer,  // Will come back filled out with location of image data
-							&pixbuf_size,  // Will come back filled out with size of image data
-							"png",
-							&error,
-							NULL);
-			if (FALSE == return_code_bool)
-			{
-				// Something went wrong when encoding the mouse cursor to image format
-				display_warning("Error ED94: Something went wrong when encoding a mouse cursor to required format");
-
-				// Free the memory allocated in this function
-				g_error_free(error);
-				if (NULL != resized_pixbuf)
-					g_object_unref(GDK_PIXBUF(resized_pixbuf));
-				return FALSE;
-			}
-
-			// Turn the image data into a swf bitmap
-			image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
-			image_bitmap = newSWFBitmap_fromInput(image_input);
+			// Create the mouse pointer
+			SWFShape_drawLine(mouse_shape, 22.0 * scaled_width_ratio, 17.0 * scaled_height_ratio);
+			SWFShape_drawLine(mouse_shape, -11.0 * scaled_width_ratio, 0.0);
+			SWFShape_drawLine(mouse_shape, 9.0 * scaled_width_ratio, 14.0 * scaled_height_ratio);
+			SWFShape_drawLine(mouse_shape, -6.0 * scaled_width_ratio, 0.0);
+			SWFShape_drawLine(mouse_shape, -8.0 * scaled_width_ratio, -13.0 * scaled_height_ratio);
+			SWFShape_drawLine(mouse_shape, -6.0 * scaled_width_ratio, 8.0 * scaled_height_ratio);
+			SWFShape_drawLineTo(mouse_shape, 0.0, 0.0);
 
 			// If this layer has an external link associated with it, turn it into a button
 			if (0 < this_layer_data->external_link->len)
@@ -431,27 +402,11 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 					printf("This mouse cursor layer has an external link: '%s'\n", this_layer_data->external_link->str);
 				}
 
-				// Turn the swf image into a swf shape 
-				image_shape = newSWFShapeFromBitmap(image_bitmap, SWFFILL_CLIPPED_BITMAP);
-				if (NULL == image_shape)
-				{
-					// Something went wrong when encoding the image to required format
-					display_warning("Error ED110: Something went wrong converting an image to a swf shape object");
-
-					// Free the memory allocated in this function
-					g_error_free(error);
-					if (NULL != resized_pixbuf)
-						g_object_unref(GDK_PIXBUF(resized_pixbuf));
-					destroySWFBitmap(image_bitmap);
-					destroySWFInput(image_input);
-					return FALSE;
-				}
-
 				// Create an empty button object we can use
 				swf_button = newSWFButton();
 
 				// Add the shape to the button for all of its states
-				SWFButton_addShape(swf_button, (SWFCharacter) image_shape, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
+				SWFButton_addShape(swf_button, (SWFCharacter) mouse_shape, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
 
 				// Add action script to the button, jumping to the external link
 				g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
@@ -459,11 +414,11 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
 
 				// Add the button to a movie clip, then keep for future reference
-				our_shape = (SWFBlock) swf_button;
 				this_layer_data->dictionary_shape = newSWFMovieClip();
-				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) swf_button);
 
 				// If this object has a mouse click, then add the sound
+				mouse_data = (layer_mouse *) this_layer_data->object_data;
 				if (MOUSE_NONE != mouse_data->click)
 				{
 					swf_add_mouse_click(this_movie, mouse_data->click);
@@ -473,12 +428,13 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
 			} else
 			{
+
 				// Add the dictionary shape to a movie clip, then store for future reference
-				our_shape = (SWFBlock) image_bitmap;
 				this_layer_data->dictionary_shape = newSWFMovieClip();
-				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) mouse_shape);
 
 				// If this object has a mouse click, then add the sound
+				mouse_data = (layer_mouse *) this_layer_data->object_data;
 				if (MOUSE_NONE != mouse_data->click)
 				{
 					swf_add_mouse_click(this_movie, mouse_data->click);
