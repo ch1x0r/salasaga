@@ -29,7 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
-gboolean export_swf_create_shape(layer *this_layer_data);
+gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data);
 
 #ifdef __cplusplus
 }
