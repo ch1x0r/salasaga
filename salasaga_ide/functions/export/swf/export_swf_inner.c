@@ -89,6 +89,9 @@ gint export_swf_inner(gchar *output_filename)
 	total_frames = 0;
 	total_seconds = 0;
 	initial_action_gstring = g_string_new(NULL);
+	mouse_click_double_added = FALSE;
+	mouse_click_single_added = FALSE;
+	mouse_click_triple_added = FALSE;
 
 	// Determine which of the control bar resolutions to use
 	out_res_index = export_swf_choose_resolution_index();
@@ -249,7 +252,7 @@ gint export_swf_inner(gchar *output_filename)
 				continue;
 
 			// Create the dictionary shape for the layer
-			dictionary_shape_ok = export_swf_create_shape(this_layer_data);
+			dictionary_shape_ok = export_swf_create_shape(swf_movie, this_layer_data);
 
 			// If the creation of the dictionary shape worked, we add this layer to the list for processing
 			if (TRUE == dictionary_shape_ok)
