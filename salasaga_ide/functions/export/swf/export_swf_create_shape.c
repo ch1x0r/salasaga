@@ -45,7 +45,7 @@
 #include "swf_add_mouse_click.h"
 
 
-gboolean export_swf_create_shape(layer *this_layer_data)
+gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 {
 	// Local variables
 	GString				*as_gstring = NULL;			// Used for constructing action script statements
@@ -466,8 +466,7 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 				// If this object has a mouse click, then add the sound
 				if (MOUSE_NONE != mouse_data->click)
 				{
-					this_layer_data->dictionary_shape = swf_add_mouse_click(this_layer_data->dictionary_shape,
-							this_layer_data, mouse_data->click);
+					swf_add_mouse_click(this_movie, mouse_data->click);
 				}
 
 				// Advance the movie clip one frame, else it doesn't get displayed
@@ -482,8 +481,7 @@ gboolean export_swf_create_shape(layer *this_layer_data)
 				// If this object has a mouse click, then add the sound
 				if (MOUSE_NONE != mouse_data->click)
 				{
-					this_layer_data->dictionary_shape = swf_add_mouse_click(this_layer_data->dictionary_shape,
-							this_layer_data, mouse_data->click);
+					swf_add_mouse_click(this_movie, mouse_data->click);
 				}
 
 				// Advance the movie clip one frame, else it doesn't get displayed
