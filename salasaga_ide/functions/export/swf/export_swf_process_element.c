@@ -148,6 +148,37 @@ gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this
 			if (debug_level)
 				printf("Move string: '%s'\n", as_gstring->str);
 		}
+
+		// Does this layer have a mouse click sound needing to be started in this frame?
+		if (MOUSE_NONE != this_element->click_sound_to_play)
+		{
+			switch (this_element->click_sound_to_play)
+			{
+				case MOUSE_LEFT_ONE:
+				case MOUSE_RIGHT_ONE:
+				case MOUSE_MIDDLE_ONE:
+
+					swf_action = compileSWFActionCode("_root.mouse_single_click.play();");
+					SWFMovie_add(this_movie, (SWFBlock) swf_action);
+					break;
+
+				case MOUSE_LEFT_DOUBLE:
+				case MOUSE_RIGHT_DOUBLE:
+				case MOUSE_MIDDLE_DOUBLE:
+
+					swf_action = compileSWFActionCode("_root.mouse_double_click.play();");
+					SWFMovie_add(this_movie, (SWFBlock) swf_action);
+					break;
+
+				case MOUSE_LEFT_TRIPLE:
+				case MOUSE_RIGHT_TRIPLE:
+				case MOUSE_MIDDLE_TRIPLE:
+
+					swf_action = compileSWFActionCode("_root.mouse_triple_click.play();");
+					SWFMovie_add(this_movie, (SWFBlock) swf_action);
+					break;
+			}
+		}
 	}
 
 	return TRUE;	
