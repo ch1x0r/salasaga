@@ -148,6 +148,7 @@ gint export_swf_inner(gchar *output_filename)
 		// Add the number of layers in this slide to the total count
 		total_num_layers += this_slide_data->num_layers;
 	}
+	total_num_layers += num_slides; // Extra safety margin
 
 	// Output some debugging info if requested
 	if (debug_level)
@@ -239,7 +240,7 @@ gint export_swf_inner(gchar *output_filename)
 
 		// Process each layer in turn.  For every frame the layer is in, store in the array
 		// whether the object in the layer is visible, it's position, transparency, etc
-		slide_depth += num_layers;
+		slide_depth += num_layers + 1;
 		display_depth = slide_depth;
 		this_slide_data = g_list_nth_data(slides, slide_counter);
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
