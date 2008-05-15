@@ -40,6 +40,8 @@
 gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint num_frames, layer *this_layer_data, guint layer_depth)
 {
 	// Local variables
+	gfloat				click_duration;
+	guint				click_frames;
 	gfloat				element_x_position_finish = 0;
 	gfloat				element_x_position_increment = 0;
 	gfloat				element_x_position_start = 0;
@@ -261,9 +263,36 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 		// If a click sound should be played, we mark this
 		if (MOUSE_NONE != play_click)
 		{
-			// fixme3: The "- 2" is just a guess, and may not work with all frame rates and mouse click types
-			array_start[frame_counter - 2].action_this = TRUE;
-			array_start[frame_counter - 2].click_sound_to_play = play_click;
+			switch (play_click)
+			{
+				case MOUSE_LEFT_ONE:
+				case MOUSE_RIGHT_ONE:
+				case MOUSE_MIDDLE_ONE:
+
+					click_duration = 0.3;
+					click_frames = roundf(click_duration * frames_per_second);
+					break;
+
+				case MOUSE_LEFT_DOUBLE:
+				case MOUSE_RIGHT_DOUBLE:
+				case MOUSE_MIDDLE_DOUBLE:
+
+					click_duration = 0.4;
+					click_frames = roundf(click_duration * frames_per_second);
+					break;
+
+				case MOUSE_LEFT_TRIPLE:
+				case MOUSE_RIGHT_TRIPLE:
+				case MOUSE_MIDDLE_TRIPLE:
+
+					click_duration = 0.6;
+					click_frames = roundf(click_duration * frames_per_second);
+					break;
+			}
+
+			// Mark the appropriate frame as needing the mouse click sound to be played
+			array_start[frame_counter - click_frames].action_this = TRUE;
+			array_start[frame_counter - click_frames].click_sound_to_play = play_click;
 		}
 	}
 
