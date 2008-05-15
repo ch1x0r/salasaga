@@ -41,19 +41,20 @@
 #include "../../display_warning.h"
 
 
-SWFMovieClip swf_add_mouse_click(SWFMovieClip movie_clip, layer *this_layer_data, gint click_type)
+gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 {
 	// Local variables
+	GString				*click_name;				// The name of the mouse click sound we'll need to play
 	SWFDisplayItem 		sound_display_item;
 	FILE				*sound_file;				// The file we load the sound from
-	guint				sound_loop;
 	SWFMovieClip		sound_movie_clip;			// Movie clip specifically to hold a sound
 	SWFSoundStream 		sound_stream;				// The sound we use gets loaded into this
-	gfloat				sound_start;
-	guint				sound_start_frame;
 	gchar				*sound_pathname = NULL;		// Full pathname to a sound file to load is constructed in this
 	SWFAction			swf_action;					// Used when constructing action script
 
+
+	// Initialisation
+	click_name = g_string_new(NULL);
 
 	// Determine the sound file to load
 	switch (click_type)
@@ -62,76 +63,96 @@ SWFMovieClip swf_add_mouse_click(SWFMovieClip movie_clip, layer *this_layer_data
 		case MOUSE_RIGHT_ONE:
 		case MOUSE_MIDDLE_ONE:
 
-			// Single click mouse sound
-			sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_single_click.mp3", NULL);
+			// If we've already added the sound to the movie, we don't need to add it again
+			if (FALSE == mouse_click_single_added)
+			{
+				// Single click mouse sound
+				sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_single_click.mp3", NULL);
+
+				// Make sure we only add this click sound once
+				mouse_click_single_added = TRUE;
+			}
+
+			click_name = g_string_assign(click_name, "mouse_single_click");
 			break;
 
 		case MOUSE_LEFT_DOUBLE:
 		case MOUSE_RIGHT_DOUBLE:
 		case MOUSE_MIDDLE_DOUBLE:
 
-			// Double click mouse sound
-			sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_double_click.mp3", NULL);
+			// If we've already added the sound to the movie, we don't need to add it again
+			if (FALSE == mouse_click_double_added)
+			{
+				// Double click mouse sound
+				sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_double_click.mp3", NULL);
+
+				// Make sure we only add this click sound once
+				mouse_click_double_added = TRUE;
+			}
+
+			click_name = g_string_assign(click_name, "mouse_double_click");
 			break;
 
 		case MOUSE_LEFT_TRIPLE:
 		case MOUSE_RIGHT_TRIPLE:
 		case MOUSE_MIDDLE_TRIPLE:
 
-			// Triple click mouse sound
-			sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_triple_click.mp3", NULL);
+			// If we've already added the sound to the movie, we don't need to add it again
+			if (FALSE == mouse_click_triple_added)
+			{
+				// Triple click mouse sound
+				sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_triple_click.mp3", NULL);
+
+				// Make sure we only add this click sound once
+				mouse_click_triple_added = TRUE;
+			}
+
+			click_name = g_string_assign(click_name, "mouse_triple_click");
 			break;
 	}
 
-	// Create the sound object we'll be using
-	if (debug_level) printf("Full path name to sound file is: %s\n", sound_pathname);
-
-	// Load the sound file
-	sound_file = fopen(sound_pathname, "rb");
-	if (NULL == sound_file)
+	if (NULL != sound_pathname)
 	{
-		// Something went wrong when loading the sound file, so return
-		display_warning("Error ED412: Something went wrong when opening a mouse click sound file");
-		return FALSE;
+		// Create the sound object we'll be using
+		if (debug_level) printf("Full path name to sound file is: %s\n", sound_pathname);
+
+		// Load the sound file
+		sound_file = fopen(sound_pathname, "rb");
+		if (NULL == sound_file)
+		{
+			// Something went wrong when loading the sound file, so return
+			display_warning("Error ED412: Something went wrong when opening a mouse click sound file");
+			return FALSE;
+		}
+		sound_stream = newSWFSoundStream(sound_file);
+
+		// Create a new movie clip file, containing only the sound
+		sound_movie_clip = newSWFMovieClip();
+
+		// Add the sound stream to the sound movie clip
+		SWFMovieClip_setSoundStream(sound_movie_clip, sound_stream, 1);
+		SWFMovieClip_nextFrame(sound_movie_clip);
+
+		// We give it 2 extra frames for the moment, to allow for a triple mouse click to play
+		// fixme5: Might need fine tuning, to better utilise frames per second and so on
+		SWFMovieClip_nextFrame(sound_movie_clip);
+		SWFMovieClip_nextFrame(sound_movie_clip);
+
+		// Ensure the clip doesn't loop
+		// fixme3: Unsure if this is needed
+		swf_action = compileSWFActionCode("this.stop();");
+		SWFMovieClip_add(sound_movie_clip, (SWFBlock) swf_action);
+		SWFMovieClip_nextFrame(sound_movie_clip);
+
+		// Add the sound movie clip to the swf movie
+		sound_display_item = SWFMovie_add(this_movie, (SWFBlock) sound_movie_clip);
+
+		// Name the display item
+		SWFDisplayItem_setName(sound_display_item, click_name->str);
+
+		// Ensure the object is at the correct display depth
+		SWFDisplayItem_setDepth(sound_display_item, 1000 + click_type); // Trying to pick a non conflicting depth
 	}
-	sound_stream = newSWFSoundStream(sound_file);
 
-	// Pad the movie clip by enough frames to start the sound at the correct place
-	sound_start = 0.0;
-	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-		sound_start += this_layer_data->transition_in_duration;
-	sound_start += this_layer_data->duration;
-	sound_start_frame = CLAMP(floorf(sound_start * frames_per_second) - 2, 0, 1000); // 1000 was picked from the air
-	for (sound_loop = 0; sound_loop < sound_start_frame; sound_loop++)
-	{
-		SWFMovieClip_nextFrame(movie_clip);
-	}
-
-	// Create a new movie clip file, containing only the sound
-	sound_movie_clip = newSWFMovieClip();
-
-	// Ensure the movie clip sound starts out playing
-	swf_action = compileSWFActionCode(
-					" if (true == _root.playing) {"
-						" this.play();"
-					" } else {"
-						" this.stop();"
-					" };");
-	SWFMovieClip_add(sound_movie_clip, (SWFBlock) swf_action);
-
-	// Add the sound stream to the sound movie clip
-	SWFMovieClip_setSoundStream(sound_movie_clip, sound_stream, 1);
-	SWFMovieClip_nextFrame(sound_movie_clip);
-
-	// Add the sound movie clip to the object movie clip
-	sound_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) sound_movie_clip);
-
-	// Advance the movie clip one frame, else it doesn't get displayed
-	SWFMovieClip_nextFrame(movie_clip);
-
-	// Stop the sound from looping
-	swf_action = compileSWFActionCode("this.stop();");
-	SWFMovieClip_add(movie_clip, (SWFBlock) swf_action);
-
-	return movie_clip;
+	return TRUE;
 }
