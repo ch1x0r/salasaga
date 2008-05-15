@@ -51,10 +51,12 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 	guint				finish_frame_rounded;
 	guint				frame_counter;				// Holds the number of frames
 	GString 			*layer_name;				// The text name for the layer
+	layer_mouse			*mouse_data;				// Points to the mouse object data inside the layer
 	guint				loop_counter = 0;			// Simple counter used in loops
 	gint				num_displayed_frames;
 	guint				opacity_count;				// Used when calculating object opacity
 	gfloat				opacity_step;				// Used when calculating object opacity
+	guint				play_click = MOUSE_NONE;	// Should a click sound be played?
 	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to 
 	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
 	gfloat				start_frame;
@@ -172,6 +174,47 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 
 	// Work out the finish frame of the fully visible layer display
 	finish_frame = start_frame + (this_layer_data->duration * frames_per_second);
+
+	// If this is a mouse cursor with a click, we squeeze the movement part into a smaller number of frames
+	// to give time for the click sound to play while the mouse is stationery and before it fades
+	if (TYPE_MOUSE_CURSOR == this_layer_data->object_type)
+	{
+		// Simplify the pointer to the mouse click data
+		mouse_data = (layer_mouse *) this_layer_data->object_data;
+
+		// Determine how many frames to compress the mouse movement by, and also add the click sound
+		switch (mouse_data->click)
+		{
+			case MOUSE_LEFT_ONE:
+			case MOUSE_RIGHT_ONE:
+			case MOUSE_MIDDLE_ONE:
+
+				finish_frame -= 1;
+				play_click = mouse_data->click;
+				break;
+
+			case MOUSE_LEFT_DOUBLE:
+			case MOUSE_RIGHT_DOUBLE:
+			case MOUSE_MIDDLE_DOUBLE:
+
+				finish_frame -= 2;
+				play_click = mouse_data->click;
+				break;
+
+			case MOUSE_LEFT_TRIPLE:
+			case MOUSE_RIGHT_TRIPLE:
+			case MOUSE_MIDDLE_TRIPLE:
+
+				finish_frame -= 3;
+				play_click = mouse_data->click;
+				break;
+
+			case MOUSE_NONE:
+			default:
+				break;
+		}
+	}
+	
 	start_frame_rounded = roundf(start_frame);
 	finish_frame_rounded = roundf(finish_frame);
 	num_displayed_frames = finish_frame_rounded - start_frame_rounded;
@@ -213,6 +256,14 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 
 			// This frame should be shown with full opacity
 			array_start[frame_counter].opacity = 100;
+		}
+
+		// If a click sound should be played, we mark this
+		if (MOUSE_NONE != play_click)
+		{
+			// fixme3: The "- 2" is just a guess, and may not work with all frame rates and mouse click types
+			array_start[frame_counter - 2].action_this = TRUE;
+			array_start[frame_counter - 2].click_sound_to_play = play_click;
 		}
 	}
 
