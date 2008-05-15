@@ -44,7 +44,10 @@
 gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 {
 	// Local variables
+	gfloat				click_duration;
+	guint				click_frames;
 	GString				*click_name;				// The name of the mouse click sound we'll need to play
+	guint				i;							// Counter
 	SWFDisplayItem 		sound_display_item;
 	FILE				*sound_file;				// The file we load the sound from
 	SWFMovieClip		sound_movie_clip;			// Movie clip specifically to hold a sound
@@ -73,7 +76,8 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 				mouse_click_single_added = TRUE;
 			}
 
-			click_name = g_string_assign(click_name, "mouse_single_click");
+			click_name = g_string_assign(click_name, "mousesingleclick");
+			click_duration = 0.5;
 			break;
 
 		case MOUSE_LEFT_DOUBLE:
@@ -90,7 +94,8 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 				mouse_click_double_added = TRUE;
 			}
 
-			click_name = g_string_assign(click_name, "mouse_double_click");
+			click_name = g_string_assign(click_name, "mousedoubleclick");
+			click_duration = 0.5;
 			break;
 
 		case MOUSE_LEFT_TRIPLE:
@@ -107,7 +112,8 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 				mouse_click_triple_added = TRUE;
 			}
 
-			click_name = g_string_assign(click_name, "mouse_triple_click");
+			click_name = g_string_assign(click_name, "mousetripleclick");
+			click_duration = 0.5;
 			break;
 	}
 
@@ -129,20 +135,21 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 		// Create a new movie clip file, containing only the sound
 		sound_movie_clip = newSWFMovieClip();
 
+		// Ensure the clip doesn't start out playing nor keep looping
+		swf_action = compileSWFActionCode("this.stop(); ");
+		SWFMovieClip_add(sound_movie_clip, (SWFBlock) swf_action);
+		SWFMovieClip_nextFrame(sound_movie_clip);
+
 		// Add the sound stream to the sound movie clip
 		SWFMovieClip_setSoundStream(sound_movie_clip, sound_stream, 1);
 		SWFMovieClip_nextFrame(sound_movie_clip);
 
-		// We give it 2 extra frames for the moment, to allow for a triple mouse click to play
-		// fixme5: Might need fine tuning, to better utilise frames per second and so on
-		SWFMovieClip_nextFrame(sound_movie_clip);
-		SWFMovieClip_nextFrame(sound_movie_clip);
-
-		// Ensure the clip doesn't loop
-		// fixme3: Unsure if this is needed
-		swf_action = compileSWFActionCode("this.stop();");
-		SWFMovieClip_add(sound_movie_clip, (SWFBlock) swf_action);
-		SWFMovieClip_nextFrame(sound_movie_clip);
+		// Add extra frames to allow the click to play it's full length
+		click_frames = roundf(click_duration * frames_per_second);
+		for (i = 0; i < click_frames; i++)
+		{
+			SWFMovieClip_nextFrame(sound_movie_clip);
+		}
 
 		// Add the sound movie clip to the swf movie
 		sound_display_item = SWFMovie_add(this_movie, (SWFBlock) sound_movie_clip);
@@ -153,6 +160,9 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 		// Ensure the object is at the correct display depth
 		SWFDisplayItem_setDepth(sound_display_item, 1000 + click_type); // Trying to pick a non conflicting depth
 	}
+
+	// Free the memory allocated in this functions
+	g_string_free(click_name, TRUE);
 
 	return TRUE;
 }
