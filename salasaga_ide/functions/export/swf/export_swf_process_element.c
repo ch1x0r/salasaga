@@ -123,8 +123,8 @@ gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this
 			SWFMovie_add(this_movie, (SWFBlock) swf_action);
 
 			// Display debugging info if requested
-			if (debug_level)
-				printf("Opacity string: '%s'\n", as_gstring->str);
+			//if (debug_level)
+			//	printf("Opacity string: '%s'\n", as_gstring->str);
 		}
 
 		// Does the layer need to be moved/positioned in this frame?
@@ -145,8 +145,8 @@ gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this
 			SWFMovie_add(this_movie, (SWFBlock) swf_action);
 
 			// Display debugging info if requested
-			if (debug_level)
-				printf("Move string: '%s'\n", as_gstring->str);
+			//if (debug_level)
+			//	printf("Move string: '%s'\n", as_gstring->str);
 		}
 
 		// Does this layer have a mouse click sound needing to be started in this frame?
@@ -158,7 +158,7 @@ gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this
 				case MOUSE_RIGHT_ONE:
 				case MOUSE_MIDDLE_ONE:
 
-					swf_action = compileSWFActionCode("_root.mouse_single_click.play();");
+					swf_action = compileSWFActionCode("_root.mousesingleclick.gotoAndPlay(1);");
 					SWFMovie_add(this_movie, (SWFBlock) swf_action);
 					break;
 
@@ -166,7 +166,7 @@ gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this
 				case MOUSE_RIGHT_DOUBLE:
 				case MOUSE_MIDDLE_DOUBLE:
 
-					swf_action = compileSWFActionCode("_root.mouse_double_click.play();");
+					swf_action = compileSWFActionCode("_root.mousedoubleclick.gotoAndPlay(1);");
 					SWFMovie_add(this_movie, (SWFBlock) swf_action);
 					break;
 
@@ -174,7 +174,7 @@ gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this
 				case MOUSE_RIGHT_TRIPLE:
 				case MOUSE_MIDDLE_TRIPLE:
 
-					swf_action = compileSWFActionCode("_root.mouse_triple_click.play();");
+					swf_action = compileSWFActionCode("_root.mousetripleclick.gotoAndPlay(1);");
 					SWFMovie_add(this_movie, (SWFBlock) swf_action);
 					break;
 			}
