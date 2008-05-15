@@ -29,7 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
-SWFMovieClip swf_add_mouse_click(SWFMovieClip movie_clip, layer *this_layer_data, gint click_type);
+gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type);
 
 #ifdef __cplusplus
 }
