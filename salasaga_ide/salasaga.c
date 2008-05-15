@@ -109,6 +109,9 @@ GtkWidget				*main_window;				// Widget for the main window
 GtkItemFactory			*menu_bar = NULL;			// Widget for the menu bar
 GtkTable				*message_bar;				// Widget for message bar
 gboolean				metacity_key_warning;		// Should the metacity key bind warning be displayed?
+gboolean				mouse_click_double_added;	// Have we added a double mouse click to the exported swf yet?
+gboolean				mouse_click_single_added;	// Have we added a single mouse click to the exported swf yet?
+gboolean				mouse_click_triple_added;	// Have we added a triple mouse click to the exported swf yet?
 gboolean				mouse_dragging = FALSE;		// Is the mouse being dragged?
 GdkPixbuf				*mouse_ptr_pixbuf;			// Temporary GDK Pixbuf
 gboolean				new_layer_selected = TYPE_NONE;	// Is a new layer being created?
