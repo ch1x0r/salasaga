@@ -191,8 +191,8 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 			case MOUSE_RIGHT_ONE:
 			case MOUSE_MIDDLE_ONE:
 
-				click_duration = 0.3;
-				click_frames = roundf(click_duration * frames_per_second);
+				click_duration = 0.5;
+				click_frames = roundf(click_duration * frames_per_second) + 1;
 				play_click = mouse_data->click;
 				break;
 
@@ -200,8 +200,8 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 			case MOUSE_RIGHT_DOUBLE:
 			case MOUSE_MIDDLE_DOUBLE:
 
-				click_duration = 0.3;
-				click_frames = roundf(click_duration * frames_per_second);
+				click_duration = 0.5;
+				click_frames = roundf(click_duration * frames_per_second) + 1;
 				play_click = mouse_data->click;
 				break;
 
@@ -209,8 +209,8 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 			case MOUSE_RIGHT_TRIPLE:
 			case MOUSE_MIDDLE_TRIPLE:
 
-				click_duration = 0.4;
-				click_frames = roundf(click_duration * frames_per_second);
+				click_duration = 0.5;
+				click_frames = roundf(click_duration * frames_per_second) + 1;
 				play_click = mouse_data->click;
 				break;
 
