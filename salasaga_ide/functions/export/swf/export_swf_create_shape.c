@@ -380,6 +380,9 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 			// * We're processing a mouse layer *
 
+			// Create the swf movie clip object that holds the layer object
+			container_movie_clip = newSWFMovieClip();
+
 			// Create the initial empty shape
 			mouse_shape = newSWFShape();
 			if (NULL == mouse_shape)
@@ -405,6 +408,15 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			SWFShape_drawLine(mouse_shape, -6.0 * scaled_width_ratio, 8.0 * scaled_height_ratio);
 			SWFShape_drawLineTo(mouse_shape, 0.0, 0.0);
 
+			// Add the mouse layer object to the movie clip
+			container_display_item = SWFMovieClip_add(container_movie_clip, (SWFBlock) mouse_shape);
+
+			// Position the background
+			SWFDisplayItem_moveTo(container_display_item, 0.0, 0.0);
+
+			// Advance the movie clip one frame, else it won't be displayed
+			SWFMovieClip_nextFrame(container_movie_clip);
+
 			// If this layer has an external link associated with it, turn it into a button
 			if (0 < this_layer_data->external_link->len)
 			{
@@ -418,7 +430,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				swf_button = newSWFButton();
 
 				// Add the shape to the button for all of its states
-				SWFButton_addShape(swf_button, (SWFCharacter) mouse_shape, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
+				SWFButton_addShape(swf_button, (SWFCharacter) container_movie_clip, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
 
 				// Add action script to the button, jumping to the external link
 				g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
@@ -443,7 +455,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 				// Add the dictionary shape to a movie clip, then store for future reference
 				this_layer_data->dictionary_shape = newSWFMovieClip();
-				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) mouse_shape);
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) container_movie_clip);
 
 				// If this object has a mouse click, then add the sound
 				mouse_data = (layer_mouse *) this_layer_data->object_data;
