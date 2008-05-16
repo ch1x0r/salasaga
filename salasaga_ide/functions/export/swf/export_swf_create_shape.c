@@ -50,6 +50,8 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	// Local variables
 	GString				*as_gstring = NULL;			// Used for constructing action script statements
 	guint16				blue_component;				// Used when retrieving the foreground color of text
+	SWFDisplayItem		container_display_item;
+	SWFMovieClip		container_movie_clip;		// The movie clip that contains the layer object
 	layer_empty			*empty_data;				// Points to the empty object data inside the layer
 	SWFFillStyle		empty_layer_fill;			// Fill style used when constructing empty layer shapes
 	SWFShape			empty_layer_shape;			// Temporary swf shape used when constructing empty layers
@@ -287,9 +289,14 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 			// * We're processing a highlight layer *
 
-			// Create the initial empty shape
+			// Simplify pointers and work out element positioning info
 			highlight_data = (layer_highlight *) this_layer_data->object_data;
 			final_opacity = roundf((highlight_data->opacity / 100) * 256);
+
+			// Create the swf movie clip object that holds the layer object
+			container_movie_clip = newSWFMovieClip();
+
+			// Create an empty object to make the highlight out of
 			highlight_box = newSWFShape();
 			if (NULL == highlight_box)
 			{
@@ -321,6 +328,15 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			SWFShape_drawLine(highlight_box, -(highlight_box_width), 0.0);
 			SWFShape_drawLine(highlight_box, 0.0, -(highlight_box_height));
 
+			// Add the highlight object to the movie clip
+			container_display_item = SWFMovieClip_add(container_movie_clip, (SWFBlock) highlight_box);
+
+			// Position the background
+			SWFDisplayItem_moveTo(container_display_item, 0.0, 0.0);
+
+			// Advance the movie clip one frame, else it won't be displayed
+			SWFMovieClip_nextFrame(container_movie_clip);
+
 			// If this layer has an external link associated with it, turn it into a button
 			if (0 < this_layer_data->external_link->len)
 			{
@@ -334,7 +350,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				swf_button = newSWFButton();
 
 				// Add the shape to the button for all of its states
-				SWFButton_addShape(swf_button, (SWFCharacter) highlight_box, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
+				SWFButton_addShape(swf_button, (SWFCharacter) container_movie_clip, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN|SWFBUTTON_HIT);
 
 				// Add action script to the button, jumping to the external link
 				g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
@@ -342,18 +358,16 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				SWFButton_addAction(swf_button, swf_action, SWFBUTTON_MOUSEUP);
 
 				// Add the dictionary shape to a movie clip, then store for future reference
-				our_shape = (SWFBlock) swf_button;
 				this_layer_data->dictionary_shape = newSWFMovieClip();
-				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) swf_button);
 
 				// Advance the movie clip one frame, else it doesn't get displayed
 				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
 			} else
 			{
 				// Add the dictionary shape to a movie clip, then store for future reference
-				our_shape = (SWFBlock) highlight_box;
 				this_layer_data->dictionary_shape = newSWFMovieClip();
-				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) container_movie_clip);
 
 				// Advance the movie clip one frame, else it doesn't get displayed
 				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
