@@ -81,9 +81,6 @@ SWFText create_swf_text_shape(layer_text *text_data, gfloat scaled_width_ratio, 
 		display_warning("Error ED96: Something went wrong when loading the font file");
 
 		// Free the memory allocated in this function
-		// fixme3: Ming 0.3.0 doesn't have destroySWFFillStyle()
-		//destroySWFFillStyle(highlight_fill_style);
-		//destroySWFFillStyle(text_bg_fill_style);
 		g_free(font_pathname);
 
 		return FALSE;
@@ -111,10 +108,10 @@ SWFText create_swf_text_shape(layer_text *text_data, gfloat scaled_width_ratio, 
 	}
 
 	// Set the foreground color for the text
-	red_component = text_data->text_color.red;
-	green_component = text_data->text_color.green;
-	blue_component = text_data->text_color.blue;
-	SWFText_setColor(text_object, roundf(red_component / 255), roundf(green_component / 255), roundf(blue_component / 255), 0xff);
+	red_component = roundf(text_data->text_color.red / 256);
+	green_component = roundf(text_data->text_color.green / 256);
+	blue_component = roundf(text_data->text_color.blue / 256);
+	SWFText_setColor(text_object, red_component, green_component, blue_component, 0xff);
 
 	// Work out how many lines of text we're dealing with
 	*num_text_lines = gtk_text_buffer_get_line_count(text_data->text_buffer);
