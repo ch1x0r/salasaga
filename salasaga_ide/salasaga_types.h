@@ -363,6 +363,7 @@ typedef struct
 	gfloat				y_position;					// In twips
 	gint				opacity;					// Opacity level (0-65535)
 	gint				depth;						// The layer depth of this item when displayed
+	guint				click_sound_to_play;		// Type of mouse click sound to play
 } swf_frame_element;
 
 // Defines the structure of a validation field entry
