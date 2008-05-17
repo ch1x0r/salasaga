@@ -39,7 +39,6 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "../../display_warning.h"
-#include "create_swf_text_shape.h"
 #include "swf_shape_from_image_file.h"
 
 
@@ -52,7 +51,11 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	gfloat				button_x;
 	gfloat				button_y;
 	SWFDisplayItem		buttons_display_item;
+	gfloat				current_ming_scale;			// Used when creating text swf output
 	GString				*file_name_full;
+	FILE				*font_file;					// The file we load the font from
+	SWFFont				font_object;				// The font we use gets loaded into this
+	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
 	gchar				*image_path;
 	gint				i;
 	SWFAction			main_movie_action;
@@ -60,11 +63,17 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFMovieClip		movie_clip;
 	gint				num_slides;
 	gint				num_text_lines;				// Number of text lines in a particular text layer
+	gfloat				scaled_font_size;			// Display height of a font in swf, when scaled to the desired output size
 	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to
 	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
 	slide				*slide_data;
 	GString				*slide_name_tmp;
 	GString				*slide_names_gstring;
+	GtkTextIter			text_end;					// End position of text buffer
+	gint				text_lines_counter;			// Counter used when processing text
+	GtkTextIter			text_start;					// Start position of text buffer
+	gfloat				this_text_string_width;		// Used when calculating how wide to draw the text background box
+	gchar				*visible_string;			// Text string is retrieved into this
 	gfloat				widest_text_string_width;	// Used when calculating how wide to draw the text background box
 
 	// Variables used creating the control bar background
@@ -138,7 +147,6 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFShape			info_text_bg;
 	SWFButton			info_text_button;
 	SWFFillStyle		info_text_fill_style;
-	layer_text			info_text_structure;
 
 	// Control bar and button resolutions
 	control_bar_elements	cb_size_array[] =
@@ -973,6 +981,9 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 
 	if (TRUE == info_display)
 	{
+		// Create an empty button object we can use
+		info_button = newSWFButton();
+
 		// Load info button's UP state image
 		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "info_up", NULL);
 		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
@@ -1012,9 +1023,6 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			return FALSE;
 		}
 
-		// Create an empty button object we can use
-		info_button = newSWFButton();
-
 		// Add the shapes to the button for its various states
 		SWFButton_addShape(info_button, (SWFCharacter) info_shape_up, SWFBUTTON_UP|SWFBUTTON_HIT);
 		SWFButton_addShape(info_button, (SWFCharacter) info_shape_over, SWFBUTTON_OVER);
@@ -1036,30 +1044,82 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 
 		// * Create the information text object *
 
-		// Create a structure with the required fields
-		info_text_structure.rendered_width = 0;
-		info_text_structure.rendered_height = 0;
-		info_text_structure.text_color.red = 0;
-		info_text_structure.text_color.green = 0;
-		info_text_structure.text_color.blue = 0;
-		info_text_structure.font_size = 26;
-		info_text_structure.text_buffer = info_text;
-		info_text_structure.show_bg = TRUE;
-		info_text_structure.bg_fill_colour.red = 65535;
-		info_text_structure.bg_fill_colour.green = 65535;
-		info_text_structure.bg_fill_colour.blue = 59110;
-		info_text_structure.bg_border_colour.red = 0;
-		info_text_structure.bg_border_colour.green = 0;
-		info_text_structure.bg_border_colour.blue = 0;
-		info_text_structure.bg_border_width = 1;
-
 		// Calculate the height and width scaling values needed for this swf shape
 		scaled_height_ratio = (gfloat) output_height / (gfloat) project_height;
 		scaled_width_ratio = (gfloat) output_width / (gfloat) project_width;
 
-		// Create the text object
-		info_object = create_swf_text_shape(&info_text_structure, scaled_width_ratio, scaled_height_ratio,
-				&num_text_lines, &widest_text_string_width, &info_real_font_size);
+		// Create the text object we'll be using
+		info_object = newSWFText();
+
+		// Create the font object we'll be using
+		font_pathname = g_build_path(G_DIR_SEPARATOR_S, font_path, "fdb", "Bitstream Vera Sans.fdb", NULL);
+
+		// Load the font file if needed
+		font_file = fopen(font_pathname, "r");
+		if (NULL == font_file)
+		{
+			// Something went wrong when loading the font file, so return
+			display_warning("Error ED415: Something went wrong when opening the font file");
+
+			return FALSE;
+		}
+		font_object = loadSWFFontFromFile(font_file);
+		if (NULL == font_object)
+		{
+			// Something went wrong when loading the font file, so return
+			display_warning("Error ED416: Something went wrong when loading the font file");
+
+			// Free the memory allocated in this function
+			g_free(font_pathname);
+
+			return FALSE;
+		}
+
+		// Assign a font to the text object
+		SWFText_setFont(info_object, font_object);
+
+		// Set the height we want for the text
+		scaled_font_size = scaled_height_ratio * 26;
+		SWFText_setHeight(info_object, scaled_font_size);
+		info_real_font_size = SWFText_getAscent(info_object) + SWFText_getDescent(info_object);
+
+		// Set the foreground color for the text
+		SWFText_setColor(info_object, 0, 0, 0, 0xff);
+
+		// Work out how many lines of text we're dealing with
+		num_text_lines = gtk_text_buffer_get_line_count(info_text);
+
+		// Add each line of text to the output
+		widest_text_string_width = 0;
+		for (text_lines_counter = 0; text_lines_counter < num_text_lines; text_lines_counter++)
+		{
+			// Select the start and end positions for the given line, in the text buffer
+			gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(info_text), &text_start, text_lines_counter);
+			text_end = text_start;
+			gtk_text_iter_forward_to_line_end(&text_end);
+
+			// Retrieve the text for the given line, and add it to the text object
+			visible_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
+			SWFText_addString(info_object, visible_string, NULL);
+
+			// * We need to know which of the strings is widest, so we can calculate the width of the text background box *
+
+			// If this is the widest string, we keep the value of this one
+			this_text_string_width = SWFText_getStringWidth(info_object, (guchar *) visible_string);
+			if (this_text_string_width > widest_text_string_width)
+				widest_text_string_width = this_text_string_width;
+
+			// * Move the pen down to the start of the next line *
+
+			// Move to the appropriate Y position
+			SWFText_moveTo(info_object, 0, (text_lines_counter + 1) * info_real_font_size);
+
+			// Try and move X as close as possible to 0.  We can't use 0 in SWFText_moveTo() due to a bug in Ming
+			current_ming_scale = Ming_getScale();
+			Ming_setScale(1);
+			SWFText_moveTo(info_object, 1, 0);
+			Ming_setScale(current_ming_scale);
+		}
 
 		// Create the information text background object
 		info_text_bg = newSWFShape();
@@ -1192,8 +1252,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		// Add the info button to the control bar
 		mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) info_button);
 		SWFDisplayItem_setDepth(mc_display_item, 8);
-		SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 		SWFDisplayItem_setName(mc_display_item, "cb_info");
+		SWFDisplayItem_moveTo(mc_display_item, button_x, button_y);
 		button_x = button_x + button_width + button_spacing;
 
 		// Add the information button text to the main movie
