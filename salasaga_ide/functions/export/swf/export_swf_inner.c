@@ -159,7 +159,7 @@ gint export_swf_inner(gchar *output_filename)
 	// If requested, add the swf control bar to the movie
 	if (TRUE == show_control_bar)
 	{
-		return_code_bool = export_swf_control_bar(swf_movie, out_res_index, total_num_layers + 5);
+		return_code_bool = export_swf_control_bar(swf_movie, out_res_index, total_num_layers + 8);
 		if (TRUE != return_code_bool)
 		{
 			// Something went wrong when adding the control bar to the movie
