@@ -39,7 +39,7 @@
 #include "../draw_timeline.h"
 #include "../draw_workspace.h"
 #include "../film_strip_create_thumbnail.h"
-#include "../layer_edit.h"
+#include "../layer/layer_edit.h"
 #include "time_line.h"
 
 // fixme2: Pulled these initial sizes out of the air, they should probably be revisited

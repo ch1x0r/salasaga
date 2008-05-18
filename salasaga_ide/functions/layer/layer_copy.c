@@ -31,11 +31,11 @@
 #include <gtk/gtk.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../widgets/time_line.h"
 #include "layer_duplicate.h"
 #include "layer_free.h"
-#include "widgets/time_line.h"
 
 
 void layer_copy(void)

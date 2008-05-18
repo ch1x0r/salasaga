@@ -184,22 +184,6 @@ OFILES = \
 	functions/film_strip_slide_clicked.o \
 	functions/image_crop.o \
 	functions/key_bind.o \
-	functions/layer_copy.o \
-	functions/layer_delete.o \
-	functions/layer_duplicate.o \
-	functions/layer_edit.o \
-	functions/layer_free.o \
-	functions/layer_move_down.o \
-	functions/layer_move_up.o \
-	functions/layer_new_highlight.o \
-	functions/layer_new_highlight_inner.o \
-	functions/layer_new_image.o \
-	functions/layer_new_image_inner.o \
-	functions/layer_new_mouse.o \
-	functions/layer_new_mouse_inner.o \
-	functions/layer_new_text.o \
-	functions/layer_new_text_inner.o \
-	functions/layer_paste.o \
 	functions/logger_simple.o \
 	functions/logger_with_domain.o \
 	functions/menu_edit_preferences.o \
@@ -251,7 +235,6 @@ OFILES = \
 	functions/cairo/calculate_text_object_size.o \
 	functions/cairo/create_cairo_pixbuf_pattern.o \
 	functions/callbacks/menu_screenshots_capture_full_screen.o \
-	functions/export/swf/create_swf_text_shape.o \
 	functions/export/swf/export_swf_choose_resolution_index.o \
 	functions/export/swf/export_swf_control_bar.o \
 	functions/export/swf/export_swf_create_layer_elements.o \
@@ -261,6 +244,22 @@ OFILES = \
 	functions/export/swf/swf_add_mouse_click.o \
 	functions/export/swf/swf_shape_from_image_file.o \
 	functions/layer/get_layer_position.o \
+	functions/layer/layer_copy.o \
+	functions/layer/layer_delete.o \
+	functions/layer/layer_duplicate.o \
+	functions/layer/layer_edit.o \
+	functions/layer/layer_free.o \
+	functions/layer/layer_move_down.o \
+	functions/layer/layer_move_up.o \
+	functions/layer/layer_new_highlight.o \
+	functions/layer/layer_new_highlight_inner.o \
+	functions/layer/layer_new_image.o \
+	functions/layer/layer_new_image_inner.o \
+	functions/layer/layer_new_mouse.o \
+	functions/layer/layer_new_mouse_inner.o \
+	functions/layer/layer_new_text.o \
+	functions/layer/layer_new_text_inner.o \
+	functions/layer/layer_paste.o \
 	functions/widgets/time_line.o \
 	salasaga.o
 
@@ -384,54 +383,6 @@ image_crop.o:
 
 key_bind.o:
 	$(CC) $(CFLAGS) -c key_bind.c -o key_bind.o
-
-layer_copy.o:
-	$(CC) $(CFLAGS) -c layer_copy.c -o layer_copy.o
-
-layer_delete.o:
-	$(CC) $(CFLAGS) -c layer_delete.c -o layer_delete.o
-
-layer_duplicate.o:
-	$(CC) $(CFLAGS) -c layer_duplicate.c -o layer_duplicate.o
-
-layer_edit.o:
-	$(CC) $(CFLAGS) -c layer_edit.c -o layer_edit.o
-
-layer_free.o:
-	$(CC) $(CFLAGS) -c layer_free.c -o layer_free.o
-
-layer_move_down.o:
-	$(CC) $(CFLAGS) -c layer_move_down.c -o layer_move_down.o
-
-layer_move_up.o:
-	$(CC) $(CFLAGS) -c layer_move_up.c -o layer_move_up.o
-
-layer_new_highlight.o:
-	$(CC) $(CFLAGS) -c layer_new_highlight.c -o layer_new_highlight.o
-
-layer_new_highlight_inner.o:
-	$(CC) $(CFLAGS) -c layer_new_highlight_inner.c -o layer_new_highlight_inner.o
-
-layer_new_image.o:
-	$(CC) $(CFLAGS) -c layer_new_image.c -o layer_new_image.o
-
-layer_new_image_inner.o:
-	$(CC) $(CFLAGS) -c layer_new_image_inner.c -o layer_new_image_inner.o
-
-layer_new_mouse.o:
-	$(CC) $(CFLAGS) -c layer_new_mouse.c -o layer_new_mouse.o
-
-layer_new_mouse_inner.o:
-	$(CC) $(CFLAGS) -c layer_new_mouse_inner.c -o layer_new_mouse_inner.o
-
-layer_new_text.o:
-	$(CC) $(CFLAGS) -c layer_new_text.c -o layer_new_text.o
-
-layer_new_text_inner.o:
-	$(CC) $(CFLAGS) -c layer_new_text_inner.c -o layer_new_text_inner.o
-
-layer_paste.o:
-	$(CC) $(CFLAGS) -c layer_paste.c -o layer_paste.o
 
 logger_simple.o:
 	$(CC) $(CFLAGS) -c logger_simple.c -o logger_simple.o
@@ -589,9 +540,6 @@ cairo/create_cairo_pixbuf_pattern.o:
 callbacks/menu_screenshots_capture_full_screen.o:
 	$(CC) $(CFLAGS) -c callbacks/menu_screenshots_capture_full_screen.c -o callbacks/menu_screenshots_capture_full_screen.o
 
-export/swf/create_swf_text_shape.o:
-	$(CC) $(CFLAGS) -c export/swf/create_swf_text_shape.c -o export/swf/create_swf_text_shape.o
-
 export/swf/export_swf_choose_resolution_index.o:
 	$(CC) $(CFLAGS) -c export/swf/export_swf_choose_resolution_index.c -o export/swf/export_swf_choose_resolution_index.o
 
@@ -618,6 +566,54 @@ export/swf/swf_shape_from_image_file.o:
 
 layer/get_layer_position.o:
 	$(CC) $(CFLAGS) -c layer/get_layer_position.c -o layer/get_layer_position.o
+
+layer/layer_copy.o:
+	$(CC) $(CFLAGS) -c layer/layer_copy.c -o layer/layer_copy.o
+
+layer/layer_delete.o:
+	$(CC) $(CFLAGS) -c layer/layer_delete.c -o layer/layer_delete.o
+
+layer/layer_duplicate.o:
+	$(CC) $(CFLAGS) -c layer/layer_duplicate.c -o layer/layer_duplicate.o
+
+layer/layer_edit.o:
+	$(CC) $(CFLAGS) -c layer/layer_edit.c -o layer/layer_edit.o
+
+layer/layer_free.o:
+	$(CC) $(CFLAGS) -c layer/layer_free.c -o layer/layer_free.o
+
+layer/layer_move_down.o:
+	$(CC) $(CFLAGS) -c layer/layer_move_down.c -o layer/layer_move_down.o
+
+layer/layer_move_up.o:
+	$(CC) $(CFLAGS) -c layer/layer_move_up.c -o layer/layer_move_up.o
+
+layer/layer_new_highlight.o:
+	$(CC) $(CFLAGS) -c layer/layer_new_highlight.c -o layer/layer_new_highlight.o
+
+layer/layer_new_highlight_inner.o:
+	$(CC) $(CFLAGS) -c layer/layer_new_highlight_inner.c -o layer/layer_new_highlight_inner.o
+
+layer/layer_new_image.o:
+	$(CC) $(CFLAGS) -c layer/layer_new_image.c -o layer/layer_new_image.o
+
+layer/layer_new_image_inner.o:
+	$(CC) $(CFLAGS) -c layer/layer_new_image_inner.c -o layer/layer_new_image_inner.o
+
+layer/layer_new_mouse.o:
+	$(CC) $(CFLAGS) -c layer/layer_new_mouse.c -o layer/layer_new_mouse.o
+
+layer/layer_new_mouse_inner.o:
+	$(CC) $(CFLAGS) -c layer/layer_new_mouse_inner.c -o layer/layer_new_mouse_inner.o
+
+layer/layer_new_text.o:
+	$(CC) $(CFLAGS) -c layer/layer_new_text.c -o layer/layer_new_text.o
+
+layer/layer_new_text_inner.o:
+	$(CC) $(CFLAGS) -c layer/layer_new_text_inner.c -o layer/layer_new_text_inner.o
+
+layer/layer_paste.o:
+	$(CC) $(CFLAGS) -c layer/layer_paste.c -o layer/layer_paste.o
 
 widgets/time_line.o:
 	$(CC) $(CFLAGS) -c widgets/time_line.c -o widgets/time_line.o

@@ -35,14 +35,6 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "layer_copy.h"
-#include "layer_delete.h"
-#include "layer_edit.h"
-#include "layer_new_highlight.h"
-#include "layer_new_image.h"
-#include "layer_new_mouse.h"
-#include "layer_new_text.h"
-#include "layer_paste.h"
 #include "menu_edit_preferences.h"
 #include "menu_enable.h"
 #include "menu_export_swf.h"
@@ -73,6 +65,14 @@
 #include "slide_name_reset.h"
 #include "slide_properties.h"
 #include "callbacks/menu_screenshots_capture_full_screen.h"
+#include "layer/layer_copy.h"
+#include "layer/layer_delete.h"
+#include "layer/layer_edit.h"
+#include "layer/layer_new_highlight.h"
+#include "layer/layer_new_image.h"
+#include "layer/layer_new_mouse.h"
+#include "layer/layer_new_text.h"
+#include "layer/layer_paste.h"
 
 
 void create_menu_bar()

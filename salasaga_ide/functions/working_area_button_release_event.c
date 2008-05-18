@@ -41,10 +41,10 @@
 #include "display_warning.h"
 #include "draw_workspace.h"
 #include "film_strip_create_thumbnail.h"
-#include "layer_new_highlight_inner.h"
-#include "layer_new_image_inner.h"
-#include "layer_new_mouse_inner.h"
-#include "layer_new_text_inner.h"
+#include "layer/layer_new_highlight_inner.h"
+#include "layer/layer_new_image_inner.h"
+#include "layer/layer_new_mouse_inner.h"
+#include "layer/layer_new_text_inner.h"
 #include "widgets/time_line.h"
 
 

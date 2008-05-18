@@ -31,9 +31,9 @@
 #include <gtk/gtk.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../display_warning.h"
 
 
 gboolean layer_free(layer *this_layer)

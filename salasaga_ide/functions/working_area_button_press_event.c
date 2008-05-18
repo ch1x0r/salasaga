@@ -38,12 +38,12 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "layer_edit.h"
 #include "calculate_object_boundaries.h"
 #include "detect_collisions.h"
 #include "display_warning.h"
 #include "draw_bounding_box.h"
 #include "draw_handle_box.h"
+#include "layer/layer_edit.h"
 #include "widgets/time_line.h"
 
 
