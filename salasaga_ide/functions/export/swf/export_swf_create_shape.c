@@ -642,7 +642,13 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				SWFButton_addShape(swf_button, (SWFCharacter) text_movie_clip, SWFBUTTON_UP|SWFBUTTON_OVER|SWFBUTTON_DOWN);
 
 				// Use the text background area as the hit state
-				SWFButton_addShape(swf_button, (SWFCharacter) text_bg, SWFBUTTON_HIT);
+				if (TRUE == text_data->show_bg)
+				{
+					SWFButton_addShape(swf_button, (SWFCharacter) text_bg, SWFBUTTON_HIT);
+				} else
+				{
+					SWFButton_addShape(swf_button, (SWFCharacter) text_movie_clip, SWFBUTTON_HIT);
+				}
 
 				// Add action script to the button, jumping to the external link
 				g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", this_layer_data->external_link->str, this_layer_data->external_link_window->str);
