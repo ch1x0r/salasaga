@@ -70,7 +70,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	tmp_text_ob->text_buffer = gtk_text_buffer_new(NULL);
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), "New text...", -1);
 	tmp_text_ob->show_bg = TRUE;
-	tmp_text_ob->bg_border_width = 2.0;
+	tmp_text_ob->bg_border_width = 1.0;
 	tmp_text_ob->bg_border_colour.red = 0;
 	tmp_text_ob->bg_border_colour.green = 0;
 	tmp_text_ob->bg_border_colour.blue = 0;
