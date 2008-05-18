@@ -5,7 +5,7 @@ inherit autotools eutils flag-o-matic multilib
 
 DESCRIPTION="An Integrated Development Environment for producing eLearning"
 HOMEPAGE="http://www.salasaga.org/"
-SRC_URI="http://internap.dl.sourceforge.net/sourceforge/salasaga/salasaga-0.8.0.alpha2.tar.bz2"
+SRC_URI="http://www.salasaga.org/downloads/alpha3/salasaga-0.8.0.alpha3.tar.bz2"
 
 LICENSE="LGPL-2"
 SLOT="0"
@@ -27,7 +27,7 @@ RDEPEND="sys-devel/autoconf
 DEPEND="${RDEPEND}"
 
 src_compile() {
-	mv ${WORKDIR}/salasaga-0.8.0.alpha2 ${WORKDIR}/${P}
+	mv ${WORKDIR}/salasaga-0.8.0.alpha3 ${WORKDIR}/${P}
 	cd "${S}" || die "Directory not found"
 	autoconf || die "Autoconfig failed"
 	econf || die "econf failed"
