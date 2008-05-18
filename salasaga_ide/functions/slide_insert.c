@@ -79,9 +79,9 @@ void slide_insert(void)
 
 	// Create a blank thumbnail using the default background color, then add it to the new slide structure
 	tmp_slide->thumbnail = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, (guint) preview_width * 0.75);
-	gdk_pixbuf_fill(tmp_slide->thumbnail, ((default_bg_colour.red / 255) << 24)
-		+ ((default_bg_colour.green / 255) << 16)
-		+ ((default_bg_colour.blue / 255) << 8) + 0xff);
+	gdk_pixbuf_fill(tmp_slide->thumbnail, ((default_bg_colour.red / 256) << 24)
+		+ ((default_bg_colour.green / 256) << 16)
+		+ ((default_bg_colour.blue / 256) << 8) + 0xff);
 
 	// Add the empty layer to the new slide being created
 	tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);

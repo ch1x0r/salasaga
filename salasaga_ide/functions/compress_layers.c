@@ -87,9 +87,9 @@ GdkPixmap *compress_layers(GList *which_slide, gfloat time_position, guint width
 		{
 			// This is an empty layer
 			backing_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width, height);
-			gdk_pixbuf_fill(backing_pixbuf, ((((layer_empty *) layer_data->object_data)->bg_color.red / 255) << 24)
-				+ ((((layer_empty *) layer_data->object_data)->bg_color.green / 255) << 16)
-				+ ((((layer_empty *) layer_data->object_data)->bg_color.blue / 255) << 8) + 0xff);
+			gdk_pixbuf_fill(backing_pixbuf, ((((layer_empty *) layer_data->object_data)->bg_color.red / 256) << 24)
+				+ ((((layer_empty *) layer_data->object_data)->bg_color.green / 256) << 16)
+				+ ((((layer_empty *) layer_data->object_data)->bg_color.blue / 256) << 8) + 0xff);
 		} else
 		{
 			// Point to the background image pixbuf for the source
