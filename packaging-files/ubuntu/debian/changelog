@@ -1,3 +1,18 @@
+salasaga (0.8.0.alpha3-0ubuntu1) unstable; urgency=low
+
+  * Third Alpha Release.
+  * 2008-05-18 - Fixed a usability bug.  Screenshots are now imported in the same order they were taken.
+  * 2008-05-18 - Fixed the crashing bug when exporting swf in non English locales.
+  * 2008-05-18 - Fixed a division bug, causing bright slide colours to be incorrect. (i.e. white backgrounds drawn as black)
+  * 2008-05-18 - Fixed a small bug with editing of empty layers.  Changing their colour now takes immediate effect.
+  * 2008-05-17 - Fixed a major crashing bug when exporting swf.
+  * 2008-05-15 - Fixed visual mouse cursor corruption in exported swf.  It's now drawn dynamically using vectors.
+  * 2008-05-15 - Fixed the timing and accuracy of mouse click sounds.
+  * 2008-05-14 - Fixed the bug causing exported swf objects to wobble around.
+  * 2008-05-11 - Fixed critical bug in calculation of text layer background colours.
+
+ -- Justin Clift <justin@salasaga.org>  Sun, 18 May 2008 22:30:00 +1000
+ 
 salasaga (0.8.0.alpha2-0ubuntu1) unstable; urgency=low
 
   * Second Alpha Release.
