@@ -203,6 +203,9 @@ void menu_screenshots_import(void)
 		return;
 	}
 
+	// Sort the screenshots in numeric order
+	entries = g_slist_sort(entries, (GCompareFunc) g_ascii_strcasecmp);
+
 	// Use the status bar to communicate the number of screenshots found
 	g_string_printf(tmp_string, " Found %u screenshots", num_screenshots);
 	recent_message = gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_string->str);
