@@ -88,7 +88,17 @@ void layer_edit(void)
 	{
 		case TYPE_EMPTY:
 			// Open a dialog box for the user to edit the background layer values
-			display_dialog_empty(tmp_layer, "Edit background color");
+			return_code = display_dialog_empty(tmp_layer, "Edit background color");
+			if (TRUE == return_code)
+			{
+				// * The dialog box returned successfully *
+
+				// Invalidate the cached background pixmap for the slide
+				slide_data->cached_pixmap_valid = FALSE;
+
+				// Set the changes made variable
+				changes_made = TRUE;
+			}
 
 			// Nothing to update in the timeline for empty layers
 			break;
