@@ -30,6 +30,10 @@
 // Math include
 #include <math.h>
 
+// Locale includes
+#include <locale.h>
+#include <langinfo.h>
+
 // GTK include
 #include <gtk/gtk.h>
 
@@ -61,6 +65,7 @@ gint export_swf_inner(gchar *output_filename)
 	GString				*initial_action_gstring;	// Swf action script can be constructed with this
 	SWFAction			inc_slide_counter_action;	// Swf action object used to run some action script
 	guint				layer_counter;				// Holds the number of layers
+	gchar				*locale_return;				// Receives a return code from the locale setting function
 	gint				num_bytes_written;			// Receives the number of bytes written to disk for the swf output
 	guint				num_layers = 0;				// The number of layers in the slide
 	guint				num_slides;					// The number of slides in the movie
@@ -79,7 +84,7 @@ gint export_swf_inner(gchar *output_filename)
 	slide				*this_slide_data;			// Points to the data in the present slide
 	guint				total_frames;				// The total number of frames in the animation
 	guint				total_num_layers;			// The total number of layers in the animation
-	gfloat				total_seconds;				// The duration of the entire animation in seconds	
+	gfloat				total_seconds;				// The duration of the entire animation in seconds
 
 
 	// Initialise variables
@@ -92,6 +97,13 @@ gint export_swf_inner(gchar *output_filename)
 	mouse_click_double_added = FALSE;
 	mouse_click_single_added = FALSE;
 	mouse_click_triple_added = FALSE;
+
+	// Force the numeric collation for use full stops (for ming text output)
+	locale_return = setlocale(LC_NUMERIC, "C");
+	if (NULL == locale_return)
+	{
+		display_warning("Error ED417: Unable to force locale to C.  Export in non-english locales may not work!");
+	}
 
 	// Determine which of the control bar resolutions to use
 	out_res_index = export_swf_choose_resolution_index();
@@ -428,6 +440,12 @@ gint export_swf_inner(gchar *output_filename)
 
 	// Free the memory allocated in this function
 	destroySWFMovie(swf_movie);
+
+	// Reset the numeric locale back to the user's one
+	if (NULL != locale_return)
+	{
+		setlocale(LC_NUMERIC, "");
+	}
 
 	// Indicate that the swf was created successfully
 	return TRUE;
