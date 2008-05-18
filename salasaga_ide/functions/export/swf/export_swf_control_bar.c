@@ -62,7 +62,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFDisplayItem		mc_display_item;
 	SWFMovieClip		movie_clip;
 	gint				num_slides;
-	gint				num_text_lines;				// Number of text lines in a particular text layer
+	gint				num_text_lines = 0;			// Number of text lines in a particular text layer
 	gfloat				scaled_font_size;			// Display height of a font in swf, when scaled to the desired output size
 	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to
 	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
@@ -74,7 +74,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	GtkTextIter			text_start;					// Start position of text buffer
 	gfloat				this_text_string_width;		// Used when calculating how wide to draw the text background box
 	gchar				*visible_string;			// Text string is retrieved into this
-	gfloat				widest_text_string_width;	// Used when calculating how wide to draw the text background box
+	gfloat				widest_text_string_width = 0.0;  // Used when calculating how wide to draw the text background box
 
 	// Variables used creating the control bar background
 	SWFShape			cb_background;
@@ -140,7 +140,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	gfloat				info_leading;				// Spacing to use at the edges of the font
 	SWFMovieClip		info_movie_clip;			// The movie clip that contains the information text background and text
 	SWFText				info_object;				// The information button text object we're working on goes in this
-	gfloat				info_real_font_size;
+	gfloat				info_real_font_size = 0.0;
 	SWFShape			info_shape_down;
 	SWFShape			info_shape_over;
 	SWFShape			info_shape_up;
