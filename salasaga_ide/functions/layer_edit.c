@@ -192,7 +192,7 @@ void layer_edit(void)
 			break;
 
 		default:
-			display_warning("Error ED34: Unknown layer type\n");
+			display_warning("Error ED34: Unknown layer type");
 			return;
 	}
 
