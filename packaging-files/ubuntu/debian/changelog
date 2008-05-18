@@ -1,0 +1,103 @@
+salasaga (0.8.0.alpha3-0ubuntu1) unstable; urgency=low
+
+  * Third Alpha Release.
+  * 2008-05-18 - Fixed a usability bug.  Screenshots are now imported in the same order they were taken.
+  * 2008-05-18 - Fixed the crashing bug when exporting swf in non English locales.
+  * 2008-05-18 - Fixed a division bug, causing bright slide colours to be incorrect. (i.e. white backgrounds drawn as black)
+  * 2008-05-18 - Fixed a small bug with editing of empty layers.  Changing their colour now takes immediate effect.
+  * 2008-05-17 - Fixed a major crashing bug when exporting swf.
+  * 2008-05-15 - Fixed visual mouse cursor corruption in exported swf.  It's now drawn dynamically using vectors.
+  * 2008-05-15 - Fixed the timing and accuracy of mouse click sounds.
+  * 2008-05-14 - Fixed the bug causing exported swf objects to wobble around.
+  * 2008-05-11 - Fixed critical bug in calculation of text layer background colours.
+
+ -- Justin Clift <justin@salasaga.org>  Sun, 18 May 2008 22:30:00 +1000
+ 
+salasaga (0.8.0.alpha2-0ubuntu1) unstable; urgency=low
+
+  * Second Alpha Release.
+  * 2008-05-02 - Added mouse click sounds to mouse pointer layers in exported swf.
+  * 2008-04-29 - Added an information button to the navigation bar for (i.e.) "sending feedback" to the author.
+  * 2008-04-28 - Colour, opacity, and border attributes of highlight layers can now be adjusted.
+  * 2008-04-28 - Colour and border attributes of text layers can now be adjusted.
+  * 2008-04-27 - Added fields for editing the layer name and visibility status to the layer dialogs.
+  * 2008-04-27 - Fixed bugs in the screen capture key setting code for metacity.
+  * 2008-04-24 - Control bar background fuzziness fixed.  Now looks clean and sharp (now vector based).
+  * 2008-04-23 - Raised the Project Name length limit to 120 characters.
+
+ -- Justin Clift <justin@salasaga.org>  Sat, 03 May 2008 12:40:00 +1000
+
+salasaga (0.8.0.alpha1-0ubuntu1) unstable; urgency=low
+
+  * First Alpha Release.
+
+ -- Justin Clift <justin@salasaga.org>  Tue, 22 Apr 2008 11:59:00 +1000
+
+flameproject (0.7.7.dev-0ubuntu10) unstable; urgency=low
+
+  * Layer duration now displays graphically in time line area.
+  * Minor bug fixes.
+
+ -- Justin Clift <justin@postgresql.org>  Sun, 29 Jul 2007 22:46:00 +1100
+
+flameproject (0.7.7.dev-0ubuntu9) unstable; urgency=low
+
+  * The mouse pointers (previously missing from the packages) are now
+    included.
+  * Updated the display area drag code to handle mouse layers.
+
+ -- Justin Clift <justin@postgresql.org>  Wed, 25 Jul 2007 23:15:00 +1100
+
+flameproject (0.7.7.dev-0ubuntu8) unstable; urgency=low
+
+  * The fix in the previous release didnt work after all.  This one has
+    been verified as working properly, thus the exported SVG is correct.
+
+ -- Justin Clift <justin@postgresql.org>  Tue, 24 Jul 2007 00:25:00 +1100
+
+flameproject (0.7.7.dev-0ubuntu7) unstable; urgency=low
+
+  * Fixed a bug whereby exported SVG experienced incorrect numbering
+    with some locales
+
+ -- Justin Clift <justin@postgresql.org>  Wed, 18 Jul 2007 23:37:00 +1100
+
+flameproject (0.7.7.dev-0ubuntu6) unstable; urgency=low
+
+  * Added initial Flame icon suitable for gnome menu bar
+  * Shortcut now added to gnome menu
+
+ -- Justin Clift <justin@postgresql.org>  Sun, 15 Jul 2007 14:44:00 +1100
+ 
+flameproject (0.7.7.dev-0ubuntu5) unstable; urgency=low
+
+  * No longer requires 1280x1024 resolution or higher.  Even 800x600 works.
+  * Refactored the film strip code to use a GtkListStore
+     * Selected slide is now obvious
+     * Added "move to top" and "move to bottom" options
+     * Remapped the "Delete Slide" key to use Alt-i-d, easier to remember
+     * Changing width of film strip is fairly smooth and resizes thumbnails
+     * Changed film strip width is saved between sessions
+     * Changed film strip width also gets updated into the Preferences
+  * Path to icon and sound file(s) are now calculated dynamically
+  * Bug fixes with exported SVG code.  Multi-line text works ok now.
+
+ -- Justin Clift <justin@postgresql.org>  Tue, 09 Jul 2007 23:55:00 +1100
+
+flameproject (0.7.7.dev-0ubuntu4) unstable; urgency=low
+
+  * Screenshot slides now deleted after import
+
+ -- Justin Clift <justin@postgresql.org>  Tue, 26 Jun 2007 22:01:00 +1100
+
+flameproject (0.7.7.dev-0ubuntu3) unstable; urgency=low
+
+  * Bug fix version, removing known crashes
+
+ -- Justin Clift <justin@postgresql.org>  Tue, 26 Jun 2007 20:35:00 +1100
+
+flameproject (0.7.7.dev-0ubuntu2) unstable; urgency=low
+
+  * Next version of the package, with slightly improved SVG output
+
+ -- Justin Clift <justin@postgresql.org>  Mon, 25 Feb 2007 18:37:00 +1100

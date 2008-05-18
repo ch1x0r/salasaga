@@ -1,0 +1,30 @@
+This is the Ubuntu prepackaged version of Salasaga.
+
+This application is an Integrated Development Environment for producing
+eLearning.
+
+This package was first put together by Justin Clift and is currently
+maintained by him. The source for this release was taken from:
+
+	http://www.salasaga.org
+
+The changes were very minimal:
+
+- Adding support for the Debian package maintenance scheme, by adding
+  various debian/* files.
+
+Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as
+published by the Free Software Foundation, either version 3 of
+the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public
+License along with this program.  If not, see
+<http://www.gnu.org/licenses/>.
