@@ -180,7 +180,7 @@ void slide_properties(void)
 		num_layers = this_slide->num_layers;
 		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 		{
-			// Update the background layer (note that this always runs last, which is useful)
+			// Update the background layer (note that this always comes last, which is useful)
 			this_layer_data = g_list_nth_data(this_slide->layers, layer_counter);
 			if (TRUE == this_layer_data->background)
 			{
@@ -211,6 +211,19 @@ void slide_properties(void)
 					this_slide->duration = valid_slide_duration = overall_duration;
 				}
 			}
+		}
+	}
+	if (valid_slide_duration > old_slide_duration)
+	{
+		// New slide duration is longer than it was, so we adjust the background layer to match
+		this_slide->layers = g_list_first(this_slide->layers);
+		num_layers = this_slide->num_layers;
+		this_layer_data = g_list_nth_data(this_slide->layers, num_layers - 1);
+
+		// Double check that it's a background layer, just to be careful
+		if (TRUE == this_layer_data->background)
+		{
+			this_layer_data->duration = valid_slide_duration;
 		}
 	}
 
