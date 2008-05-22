@@ -192,6 +192,22 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
 			image_bitmap = newSWFBitmap_fromInput(image_input);
 
+			// Turn the swf image into a swf shape 
+			image_shape = newSWFShapeFromBitmap(image_bitmap, SWFFILL_CLIPPED_BITMAP);
+			if (NULL == image_shape)
+			{
+				// Something went wrong when encoding the image to required format
+				display_warning("Error ED109: Something went wrong converting an image to a swf shape object");
+				
+				// Free the memory allocated in this function
+				g_error_free(error);
+				if (NULL != resized_pixbuf)
+					g_object_unref(GDK_PIXBUF(resized_pixbuf));
+				destroySWFBitmap(image_bitmap);
+				destroySWFInput(image_input);
+				return FALSE;
+			}
+
 			// If this layer has an external link associated with it, turn it into a button
 			if (0 < this_layer_data->external_link->len)
 			{
@@ -199,22 +215,6 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				if (debug_level)
 				{
 					printf("This image has an external link: '%s'\n", this_layer_data->external_link->str);
-				}
-
-				// Turn the swf image into a swf shape 
-				image_shape = newSWFShapeFromBitmap(image_bitmap, SWFFILL_CLIPPED_BITMAP);
-				if (NULL == image_shape)
-				{
-					// Something went wrong when encoding the image to required format
-					display_warning("Error ED109: Something went wrong converting an image to a swf shape object");
-				
-					// Free the memory allocated in this function
-					g_error_free(error);
-					if (NULL != resized_pixbuf)
-						g_object_unref(GDK_PIXBUF(resized_pixbuf));
-					destroySWFBitmap(image_bitmap);
-					destroySWFInput(image_input);
-					return FALSE;
 				}
 
 				// Create an empty button object we can use
@@ -238,9 +238,8 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			} else
 			{
 				// Add the dictionary shape to a movie clip, then store for future reference
-				our_shape = (SWFBlock) image_bitmap;
 				this_layer_data->dictionary_shape = newSWFMovieClip();
-				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) our_shape);
+				SWFMovieClip_add(this_layer_data->dictionary_shape, (SWFBlock) image_shape);
 
 				// Advance the movie clip one frame, else it doesn't get displayed
 				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
@@ -270,8 +269,9 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			empty_layer_fill = SWFShape_addSolidFillStyle(empty_layer_shape, red_component, green_component, blue_component, 0xff);  // Alpha value - solid fill
 			SWFShape_setRightFillStyle(empty_layer_shape, empty_layer_fill);
 
-			// Set the line style
-			SWFShape_setLine(empty_layer_shape, 0, red_component, green_component, blue_component, 0xff);
+			// Ensure there is no border
+			SWFShape_hideLine(empty_layer_shape);
+
 
 			// Create the empty layer object
 			SWFShape_movePenTo(empty_layer_shape, 0.0, 0.0);
