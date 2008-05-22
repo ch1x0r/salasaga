@@ -36,11 +36,11 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "draw_handle_box.h"
-#include "draw_timeline.h"
-#include "draw_workspace.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../draw_timeline.h"
+#include "../working_area/draw_handle_box.h"
+#include "../working_area/draw_workspace.h"
 
 
 void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)

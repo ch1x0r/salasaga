@@ -28,13 +28,13 @@
 #include <gtk/gtk.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "disable_layer_toolbar_buttons.h"
-#include "disable_main_toolbar_buttons.h"
-#include "display_dialog_save_warning.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../disable_layer_toolbar_buttons.h"
+#include "../disable_main_toolbar_buttons.h"
+#include "../dialog/display_dialog_save_warning.h"
+#include "../slide/slide_free.h"
 #include "menu_enable.h"
-#include "slide_free.h"
 
 
 void menu_file_close()

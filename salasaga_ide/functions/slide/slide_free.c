@@ -33,9 +33,9 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "layer/layer_free.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../layer/layer_free.h"
 
 
 void slide_free(gpointer element, gpointer user_data)

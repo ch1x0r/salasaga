@@ -48,19 +48,13 @@
 // Salasaga includes
 #include "salasaga_types.h"
 #include "externs.h"
-#include "functions/create_film_strip.h"
 #include "functions/create_menu_bar.h"
 #include "functions/create_resolution_selector.h"
 #include "functions/create_time_line.h"
 #include "functions/create_toolbar.h"
-#include "functions/create_working_area.h"
 #include "functions/create_zoom_selector.h"
 #include "functions/disable_layer_toolbar_buttons.h"
 #include "functions/disable_main_toolbar_buttons.h"
-#include "functions/display_warning.h"
-#include "functions/event_size_allocate_received.h"
-#include "functions/film_strip_handle_changed.h"
-#include "functions/film_strip_handle_released.h"
 #include "functions/key_bind.h"
 #include "functions/logger_simple.h"
 #include "functions/logger_with_domain.h"
@@ -68,6 +62,12 @@
 #include "functions/quit_event.h"
 #include "functions/resolution_selector_changed.h"
 #include "functions/zoom_selector_changed.h"
+#include "functions/dialog/display_warning.h"
+#include "functions/film_strip/create_film_strip.h"
+#include "functions/film_strip/film_strip_handle_changed.h"
+#include "functions/film_strip/film_strip_handle_released.h"
+#include "functions/working_area/create_working_area.h"
+#include "functions/working_area/event_size_allocate_received.h"
 
 
 // Global variables

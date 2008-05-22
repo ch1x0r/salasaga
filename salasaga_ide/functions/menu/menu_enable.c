@@ -33,8 +33,8 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
 
 
 void menu_enable(const gchar *full_path, gboolean enable)

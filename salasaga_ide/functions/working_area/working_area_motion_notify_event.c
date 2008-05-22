@@ -36,12 +36,12 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../dialog/display_warning.h"
+#include "../layer/get_layer_position.h"
+#include "../widgets/time_line.h"
 #include "draw_bounding_box.h"
-#include "layer/get_layer_position.h"
-#include "widgets/time_line.h"
 
 
 gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)

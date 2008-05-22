@@ -39,7 +39,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "display_dialog_save_warning.h"
+#include "dialog/display_dialog_save_warning.h"
 
 
 void save_preferences_and_exit(void)

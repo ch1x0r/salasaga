@@ -36,16 +36,16 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../dialog/display_warning.h"
+#include "../film_strip/film_strip_create_thumbnail.h"
+#include "../layer/layer_new_highlight_inner.h"
+#include "../layer/layer_new_image_inner.h"
+#include "../layer/layer_new_mouse_inner.h"
+#include "../layer/layer_new_text_inner.h"
+#include "../widgets/time_line.h"
 #include "draw_workspace.h"
-#include "film_strip_create_thumbnail.h"
-#include "layer/layer_new_highlight_inner.h"
-#include "layer/layer_new_image_inner.h"
-#include "layer/layer_new_mouse_inner.h"
-#include "layer/layer_new_text_inner.h"
-#include "widgets/time_line.h"
 
 
 gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)

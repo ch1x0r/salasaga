@@ -38,7 +38,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "draw_workspace.h"
+#include "working_area/draw_workspace.h"
 
 
 gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)

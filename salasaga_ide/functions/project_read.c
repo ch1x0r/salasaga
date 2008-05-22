@@ -45,12 +45,12 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "base64_decode.h"
-#include "compress_layers.h"
-#include "display_warning.h"
-#include "slide_free.h"
 #include "validate_value.h"
 #include "cairo/create_cairo_pixbuf_pattern.h"
+#include "conversion/base64_decode.h"
+#include "dialog/display_warning.h"
+#include "slide/slide_free.h"
+#include "layer/compress_layers.h"
 
 
 gboolean project_read(gchar *filename)

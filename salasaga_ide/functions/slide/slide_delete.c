@@ -33,11 +33,11 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
-#include "draw_timeline.h"
-#include "draw_workspace.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../draw_timeline.h"
+#include "../dialog/display_warning.h"
+#include "../working_area/draw_workspace.h"
 #include "slide_free.h"
 
 

@@ -33,10 +33,10 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "compress_layers.h"
-#include "widgets/time_line.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../layer/compress_layers.h"
+#include "../widgets/time_line.h"
 
 
 void regenerate_film_strip_thumbnails()

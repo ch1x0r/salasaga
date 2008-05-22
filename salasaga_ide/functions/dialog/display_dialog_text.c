@@ -33,10 +33,10 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../validate_value.h"
 #include "display_warning.h"
-#include "validate_value.h"
 
 
 gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)

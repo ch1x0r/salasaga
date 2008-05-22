@@ -33,8 +33,8 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
 
 
 void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data)

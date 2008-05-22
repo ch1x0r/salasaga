@@ -33,9 +33,9 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "zoom_selector_changed.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../zoom_selector_changed.h"
 
 
 gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer data)

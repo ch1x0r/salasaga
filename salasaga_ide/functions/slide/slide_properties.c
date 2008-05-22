@@ -33,12 +33,12 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "draw_timeline.h"
-#include "display_warning.h"
-#include "validate_value.h"
-#include "widgets/time_line.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../dialog/display_warning.h"
+#include "../validate_value.h"
+#include "../widgets/time_line.h"
+#include "../draw_timeline.h"
 
 
 void slide_properties(void)

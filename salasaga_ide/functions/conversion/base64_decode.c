@@ -33,9 +33,9 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../dialog/display_warning.h"
 
 
 GString *base64_decode(GString *input_string, GString *output_string)

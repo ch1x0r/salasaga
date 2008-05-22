@@ -35,7 +35,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "menu_export_swf.h"
+#include "menu/menu_export_swf.h"
 #include "project_crop.h"
 
 

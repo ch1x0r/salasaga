@@ -30,8 +30,8 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../display_warning.h"
 #include "../cairo/create_cairo_pixbuf_pattern.h"
+#include "../dialog/display_warning.h"
 
 
 layer *layer_duplicate(layer *source_layer)

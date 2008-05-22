@@ -38,7 +38,7 @@
 // Salasaga includes
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
-#include "../../display_warning.h"
+#include "../../dialog/display_warning.h"
 
 
 gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)

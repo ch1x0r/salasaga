@@ -33,13 +33,13 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../display_warning.h"
-#include "../draw_handle_box.h"
-#include "../draw_layer_start_and_end_points.h"
 #include "../draw_timeline.h"
-#include "../draw_workspace.h"
-#include "../film_strip_create_thumbnail.h"
+#include "../dialog/display_warning.h"
+#include "../film_strip/film_strip_create_thumbnail.h"
 #include "../layer/layer_edit.h"
+#include "../working_area/draw_handle_box.h"
+#include "../working_area/draw_layer_start_and_end_points.h"
+#include "../working_area/draw_workspace.h"
 #include "time_line.h"
 
 // fixme2: Pulled these initial sizes out of the air, they should probably be revisited

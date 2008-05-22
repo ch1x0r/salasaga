@@ -33,9 +33,9 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "draw_layer_start_and_end_points.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../working_area/draw_layer_start_and_end_points.h"
 
 
 gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)

@@ -33,8 +33,8 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
 #include "draw_handle_box.h"
 #include "draw_layer_start_and_end_points.h"
 

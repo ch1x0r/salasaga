@@ -31,11 +31,11 @@
 #include <ming.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
-#include "validate_value.h"
-#include "export/swf/export_swf_inner.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../validate_value.h"
+#include "../dialog/display_warning.h"
+#include "../export/swf/export_swf_inner.h"
 
 
 void menu_export_swf(void)

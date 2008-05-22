@@ -36,10 +36,10 @@
 #include <libxml/parser.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "base64_encode.h"
-#include "display_warning.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../conversion/base64_encode.h"
+#include "../dialog/display_warning.h"
 
 
 void menu_file_save_layer(gpointer element, gpointer user_data)

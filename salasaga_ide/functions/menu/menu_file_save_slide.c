@@ -36,9 +36,9 @@
 #include <libxml/parser.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../dialog/display_warning.h"
 #include "menu_file_save_layer.h"
 
 

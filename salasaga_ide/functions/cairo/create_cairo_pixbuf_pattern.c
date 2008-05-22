@@ -30,7 +30,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../display_warning.h"
+#include "../dialog/display_warning.h"
 
 
 cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)

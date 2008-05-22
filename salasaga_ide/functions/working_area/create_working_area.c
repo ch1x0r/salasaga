@@ -33,8 +33,8 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
 #include "working_area_button_press_event.h"
 #include "working_area_button_release_event.h"
 #include "working_area_expose_event.h"

@@ -36,14 +36,14 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../dialog/display_warning.h"
+#include "../cairo/calculate_text_object_size.h"
+#include "../layer/get_layer_position.h"
+#include "../widgets/time_line.h"
 #include "draw_bounding_box.h"
 #include "draw_resize_handles.h"
-#include "cairo/calculate_text_object_size.h"
-#include "layer/get_layer_position.h"
-#include "widgets/time_line.h"
 
 
 gboolean draw_handle_box(void)

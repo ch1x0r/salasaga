@@ -38,15 +38,15 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
-#include "draw_timeline.h"
-#include "draw_workspace.h"
-#include "enable_layer_toolbar_buttons.h"
-#include "enable_main_toolbar_buttons.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../draw_timeline.h"
+#include "../enable_layer_toolbar_buttons.h"
+#include "../enable_main_toolbar_buttons.h"
+#include "../cairo/create_cairo_pixbuf_pattern.h"
+#include "../dialog/display_warning.h"
+#include "../working_area/draw_workspace.h"
 #include "menu_enable.h"
-#include "cairo/create_cairo_pixbuf_pattern.h"
 
 
 void menu_screenshots_import(void)

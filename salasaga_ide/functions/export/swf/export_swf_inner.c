@@ -43,7 +43,7 @@
 // Salasaga includes
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
-#include "../../display_warning.h"
+#include "../../dialog/display_warning.h"
 #include "export_swf_choose_resolution_index.h"
 #include "export_swf_control_bar.h"
 #include "export_swf_create_layer_elements.h"

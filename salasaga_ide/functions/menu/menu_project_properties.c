@@ -33,10 +33,10 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
-#include "validate_value.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../validate_value.h"
+#include "../dialog/display_warning.h"
 
 
 void menu_project_properties(void)

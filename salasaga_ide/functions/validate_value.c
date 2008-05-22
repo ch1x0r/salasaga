@@ -40,7 +40,7 @@
 #include "../salasaga_types.h"
 #include "../valid_fields.h"
 #include "../externs.h"
-#include "display_warning.h"
+#include "dialog/display_warning.h"
 
 void *validate_value(gint value_id, gint input_type, void *value)
 {

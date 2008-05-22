@@ -35,7 +35,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "image_crop.h"
+#include "layer/image_crop.h"
 #include "layer/layer_delete.h"
 #include "layer/layer_edit.h"
 #include "layer/layer_move_down.h"

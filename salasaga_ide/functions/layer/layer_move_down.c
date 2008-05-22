@@ -38,11 +38,11 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../display_warning.h"
 #include "../draw_timeline.h"
-#include "../draw_workspace.h"
-#include "../film_strip_create_thumbnail.h"
+#include "../dialog/display_warning.h"
+#include "../film_strip/film_strip_create_thumbnail.h"
 #include "../widgets/time_line.h"
+#include "../working_area/draw_workspace.h"
 
 
 void layer_move_down(void)

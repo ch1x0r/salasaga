@@ -39,7 +39,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../display_warning.h"
+#include "../dialog/display_warning.h"
 
 
 void menu_screenshots_capture_full_screen(void)

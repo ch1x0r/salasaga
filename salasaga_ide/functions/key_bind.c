@@ -36,7 +36,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "display_warning.h"
+#include "dialog/display_warning.h"
 
 
 gint key_bind(void)

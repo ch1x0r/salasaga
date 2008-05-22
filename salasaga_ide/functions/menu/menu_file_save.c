@@ -36,12 +36,12 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../validate_value.h"
+#include "../dialog/display_warning.h"
 #include "menu_file_save_as.h"
 #include "menu_file_save_slide.h"
-#include "validate_value.h"
 
 
 void menu_file_save(void)

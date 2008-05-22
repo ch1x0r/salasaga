@@ -33,9 +33,9 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../dialog/display_warning.h"
 
 
 gboolean base64_encode(gpointer data, guint length, gchar **output_string)

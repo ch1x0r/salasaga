@@ -38,16 +38,16 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../display_dialog_empty.h"
-#include "../display_dialog_highlight.h"
-#include "../display_dialog_image.h"
-#include "../display_dialog_mouse.h"
-#include "../display_dialog_text.h"
-#include "../display_warning.h"
 #include "../draw_timeline.h"
-#include "../draw_workspace.h"
-#include "../film_strip_create_thumbnail.h"
+#include "../dialog/display_dialog_empty.h"
+#include "../dialog/display_dialog_highlight.h"
+#include "../dialog/display_dialog_image.h"
+#include "../dialog/display_dialog_mouse.h"
+#include "../dialog/display_dialog_text.h"
+#include "../dialog/display_warning.h"
+#include "../film_strip/film_strip_create_thumbnail.h"
 #include "../widgets/time_line.h"
+#include "../working_area/draw_workspace.h"
 
 
 void layer_edit(void)

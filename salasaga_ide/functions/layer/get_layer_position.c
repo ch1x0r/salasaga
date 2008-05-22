@@ -30,8 +30,8 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../display_warning.h"
 #include "../cairo/calculate_text_object_size.h"
+#include "../dialog/display_warning.h"
 
 
 gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfloat time_position, gfloat *time_alpha)

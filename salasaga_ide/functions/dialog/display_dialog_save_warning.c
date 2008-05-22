@@ -28,9 +28,9 @@
 #include <gtk/gtk.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "menu_file_save.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../menu/menu_file_save.h"
 
 
 gboolean display_dialog_save_warning(gboolean with_cancel)

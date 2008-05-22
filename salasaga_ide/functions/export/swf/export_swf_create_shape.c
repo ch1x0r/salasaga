@@ -40,7 +40,7 @@
 // Salasaga includes
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
-#include "../../display_warning.h"
+#include "../../dialog/display_warning.h"
 #include "swf_add_mouse_click.h"
 
 

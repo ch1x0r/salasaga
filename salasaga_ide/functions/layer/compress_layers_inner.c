@@ -39,11 +39,11 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "display_warning.h"
-#include "cairo/create_cairo_pixbuf_pattern.h"
-#include "layer/get_layer_position.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../cairo/create_cairo_pixbuf_pattern.h"
+#include "../dialog/display_warning.h"
+#include "get_layer_position.h"
 
 
 void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, gfloat time_position)
