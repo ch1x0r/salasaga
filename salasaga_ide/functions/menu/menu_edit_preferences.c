@@ -162,6 +162,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_default_slide_duration), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_slide_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_default_slide_duration = gtk_spin_button_new_with_range(valid_fields[SLIDE_DURATION].min_value, valid_fields[SLIDE_DURATION].max_value, 1);
+	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(button_default_slide_duration), 2);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_slide_duration), default_slide_duration);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_slide_duration), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
@@ -171,6 +172,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_default_layer_duration), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_layer_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_default_layer_duration = gtk_spin_button_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 1);
+	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(button_default_layer_duration), 2);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_layer_duration), default_layer_duration);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_layer_duration), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
