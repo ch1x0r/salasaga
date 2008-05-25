@@ -21,18 +21,18 @@
  *
  */
 
-#ifndef SLIDE_PROPERTIES_
-#define SLIDE_PROPERTIES_
+#ifndef SLIDE_DURATION_
+#define SLIDE_DURATION_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-void slide_properties(void);
+void slide_duration(void);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /*SLIDE_PROPERTIES_*/
+#endif /*SLIDE_DURATION_*/

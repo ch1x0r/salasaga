@@ -67,12 +67,11 @@
 #include "menu/menu_screenshots_import.h"
 #include "slide/slide_insert.h"
 #include "slide/slide_delete.h"
+#include "slide/slide_duration.h"
 #include "slide/slide_move_bottom.h"
 #include "slide/slide_move_down.h"
 #include "slide/slide_move_top.h"
 #include "slide/slide_move_up.h"
-#include "slide/slide_name_reset.h"
-#include "slide/slide_properties.h"
 
 
 void create_menu_bar()
@@ -116,12 +115,11 @@ void create_menu_bar()
 		{"/Sl_ide",						NULL,					NULL,							0,	"<Branch>"},
 		{"/Slide/_Insert",				NULL,					slide_insert,					0,	"<Item>"},
 		{"/Slide/_Delete",				NULL,					slide_delete,					0,	"<Item>"},
+		{"/Slide/Du_ration",			NULL,					slide_duration,					0,	"<Item>"},
 		{"/Slide/Move _up",				NULL,					slide_move_up,					0,	"<Item>"},
 		{"/Slide/Move dow_n",			NULL,					slide_move_down,				0,	"<Item>"},
 		{"/Slide/Move to _top",			NULL,					slide_move_top,					0,	"<Item>"},
 		{"/Slide/Move to _bottom",		NULL,					slide_move_bottom,				0,	"<Item>"},
-		{"/Slide/_Reset slide name",	NULL,					slide_name_reset,				0,	"<Item>"},
-		{"/Slide/_Properties",			NULL,					slide_properties,				0,	"<Item>"},
 
 		{"/_Layer",						NULL,					NULL,							0,	"<Branch>"},
 //		{"/Layer/C_ut",					NULL,					layer_cut,						0,	"<Item>"},
