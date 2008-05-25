@@ -45,7 +45,6 @@ void export_html_wrapper(void)
 	gchar				*filename;					// Pointer to the chosen file name
 	GtkFileFilter		*file_filter;				// Filter for *.html
 	FILE				*output_file;
-	gint				return_code_gint;			// Catches integer return codes
 	gchar				**string_tokens;
 	gchar				*suffix_start;
 	gchar				*swf_file;
@@ -163,22 +162,27 @@ void export_html_wrapper(void)
 	}
 
 	// Start the html output
-	return_code_gint = fprintf(output_file, "<html>\n");
+	fprintf(output_file, "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\"\n"
+			"\"http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd\">\n");
+	fprintf(output_file, "<html>\n");
+	fprintf(output_file, "\t<head>\n");
+	fprintf(output_file, "\t\t<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n");
 
 	// If the project has a title, add it to the output file
 	if (0 < project_name->len)
 	{
-		return_code_gint = fprintf(output_file, "\t<head><title>%s</title></head>\n\n", project_name->str);
+		fprintf(output_file, "\t\t<title>%s</title>\n", project_name->str);
 	}
+	fprintf(output_file, "\t</head>\n");
 
 	// Create the html wrapper for the given resolution
-	return_code_gint = fprintf(output_file, "\t<body>\n"
-						"\t\t<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0\" align=\"middle\" width=\"%u\" height=\"%u\">\n"
-						"\t\t\t<param name=\"movie\" value=\"%s\"></param>\n"
-						"\t\t\t<param name=\"quality\" value=\"high\"></param>\n"
-						"\t\t\t<embed src=\"%s\" quality=\"high\" pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" type=\"application/x-shockwave-flash\" align=\"middle\" width=\"%u\" height=\"%u\"></embed>\n"
-						"\t\t</object>\n", output_width, output_height, swf_file, swf_file, output_width, output_height); 
-	return_code_gint = fprintf(output_file, "\t</body>\n</html>");
+	fprintf(output_file, "\t<body>\n"
+			"\t\t<object classid=\"clsid:D27CDB6E-AE6D-11cf-96B8-444553540000\" codebase=\"http://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0\" width=\"%u\" height=\"%u\">\n"
+			"\t\t\t<param name=\"movie\" value=\"%s\"></param>\n"
+			"\t\t\t<param name=\"quality\" value=\"high\"></param>\n"
+			"\t\t\t<embed src=\"%s\" quality=\"high\" pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" type=\"application/x-shockwave-flash\" align=\"middle\" width=\"%u\" height=\"%u\"></embed>\n"
+			"\t\t</object>\n", output_width, output_height, swf_file, swf_file, output_width, output_height); 
+	fprintf(output_file, "\t</body>\n</html>");
 
 	// Close the output file
 	fclose(output_file);
