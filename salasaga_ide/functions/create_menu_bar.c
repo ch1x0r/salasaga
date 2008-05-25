@@ -37,6 +37,7 @@
 #include "../externs.h"
 #include "save_preferences_and_exit.h"
 #include "callbacks/menu_screenshots_capture_full_screen.h"
+#include "export/html/export_html_wrapper.h"
 #include "layer/layer_copy.h"
 #include "layer/layer_delete.h"
 #include "layer/layer_edit.h"
@@ -135,6 +136,7 @@ void create_menu_bar()
 
 		{"/E_xport",					NULL,					NULL,							0,	"<Branch>"},
 		{"/Export/_Flash Animation",	"<control><shift>F",	menu_export_swf,				0,	"<Item>"},
+		{"/Export/_Html Wrapper",		NULL,					export_html_wrapper,			0,	"<Item>"},
 		{"/Export/_Slide as Image",		NULL,					menu_export_slide,				0,	"<Item>"},
 		{"/Export/_Image Layer",		NULL,					menu_export_layer,				0,	"<Item>"},
 
