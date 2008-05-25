@@ -41,13 +41,14 @@ void export_html_wrapper(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;				// Filter for *.*
+	gchar				*base_name;					// Pointer to the file name, excluding the path component
 	GtkWidget 			*export_dialog;				// Dialog widget
 	gchar				*filename;					// Pointer to the chosen file name
 	GtkFileFilter		*file_filter;				// Filter for *.html
-	FILE				*output_file;
+	FILE				*output_file;				// Name of the html output file
 	gchar				**string_tokens;
 	gchar				*suffix_start;
-	gchar				*swf_file;
+	gchar				*swf_file;					// Name of the swf file we add to the html content
 	GString				*tmp_gstring;				// Temporary GString
 	gboolean			useable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
@@ -145,10 +146,11 @@ void export_html_wrapper(void)
 	gtk_widget_destroy(export_dialog);
 
 	// Get a pointer to the start of file name suffix
-	suffix_start = g_strrstr(validated_string->str, ".");
+	base_name = g_path_get_basename(validated_string->str);
+	suffix_start = g_strrstr(base_name, ".");
 
 	// Get the file name, minus the suffix
-	string_tokens = g_strsplit(validated_string->str, suffix_start, 2);
+	string_tokens = g_strsplit(base_name, suffix_start, 2);
 
 	// Create a string for the matching .swf file
 	swf_file = g_strjoin(NULL, string_tokens[0], ".swf", NULL);
@@ -166,6 +168,7 @@ void export_html_wrapper(void)
 			"\"http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd\">\n");
 	fprintf(output_file, "<html>\n");
 	fprintf(output_file, "\t<head>\n");
+	fprintf(output_file, "\t\t<meta name=\"generator\" content=\"Salasaga, see www.salasaga.org\">\n");
 	fprintf(output_file, "\t\t<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n");
 
 	// If the project has a title, add it to the output file
