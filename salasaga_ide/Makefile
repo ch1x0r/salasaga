@@ -236,14 +236,13 @@ OFILES = \
 	functions/menu/menu_screenshots_capture.o \
 	functions/menu/menu_screenshots_import.o \
 	functions/slide/slide_delete.o \
+	functions/slide/slide_duration.o \
 	functions/slide/slide_free.o \
 	functions/slide/slide_insert.o \
 	functions/slide/slide_move_bottom.o \
 	functions/slide/slide_move_down.o \
 	functions/slide/slide_move_top.o \
 	functions/slide/slide_move_up.o \
-	functions/slide/slide_name_reset.o \
-	functions/slide/slide_properties.o \
 	functions/widgets/time_line.o \
 	functions/working_area/calculate_object_boundaries.o \
 	functions/working_area/create_working_area.o \
@@ -538,6 +537,9 @@ menu/menu_screenshots_import.o:
 slide/slide_delete.o:
 	$(CC) $(CFLAGS) -c slide/slide_delete.c -o slide/slide_delete.o
 
+slide/slide_duration.o:
+	$(CC) $(CFLAGS) -c slide/slide_duration.c -o slide/slide_duration.o
+
 slide/slide_free.o:
 	$(CC) $(CFLAGS) -c slide/slide_free.c -o slide/slide_free.o
 
@@ -555,12 +557,6 @@ slide/slide_move_top.o:
 
 slide/slide_move_up.o:
 	$(CC) $(CFLAGS) -c slide/slide_move_up.c -o slide/slide_move_up.o
-
-slide/slide_name_reset.o:
-	$(CC) $(CFLAGS) -c slide/slide_name_reset.c -o slide/slide_name_reset.o
-
-slide/slide_properties.o:
-	$(CC) $(CFLAGS) -c slide/slide_properties.c -o slide/slide_properties.o
 
 widgets/time_line.o:
 	$(CC) $(CFLAGS) -c widgets/time_line.c -o widgets/time_line.o
