@@ -44,7 +44,7 @@ void menu_export_slide(void)
 	GtkWidget 			*export_dialog;				// Dialog widget
 	GError				*error = NULL;				// Pointer to error return structure
 	gchar				*filename;					// Pointer to the chosen file name
-	GtkFileFilter		*file_filter;				// Filter for *.swf
+	GtkFileFilter		*file_filter;				// Filter for *.png
 	gboolean			return_code_gbool;			// Catches the return code of the g_pixbuf_save function
 	GdkPixbuf			*slide_pixbuf;				// Image of the slide workspace
 	GString				*tmp_gstring;				// Temporary GString
