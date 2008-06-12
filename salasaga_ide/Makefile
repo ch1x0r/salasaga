@@ -179,6 +179,7 @@ OFILES = \
 	functions/dialog/display_dialog_save_warning.o \
 	functions/dialog/display_dialog_text.o \
 	functions/dialog/display_warning.o \
+	functions/export/html/export_html_wrapper.o \
 	functions/export/swf/export_swf_choose_resolution_index.o \
 	functions/export/swf/export_swf_control_bar.o \
 	functions/export/swf/export_swf_create_layer_elements.o \
@@ -365,6 +366,9 @@ dialog/display_dialog_text.o:
 
 dialog/display_warning.o:
 	$(CC) $(CFLAGS) -c dialog/display_warning.c -o dialog/display_warning.o
+
+export/html/export_html_wrapper.o:
+	$(CC) $(CFLAGS) -c export/html/export_html_wrapper.c -o export/html/export_html_wrapper.o
 
 export/swf/export_swf_choose_resolution_index.o:
 	$(CC) $(CFLAGS) -c export/swf/export_swf_choose_resolution_index.c -o export/swf/export_swf_choose_resolution_index.o
