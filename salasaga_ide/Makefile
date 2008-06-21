@@ -71,7 +71,6 @@ ICONS_SCALABLE = \
 	export_flash_grayed.svg \
 	import.svg \
 	import_grayed.svg \
-	salasaga_logo.svg \
 	up_arrow.svg \
 	up_arrow_grayed.svg
 
