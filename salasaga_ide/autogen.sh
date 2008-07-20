@@ -1,6 +1,6 @@
 #!/bin/bash
 
-aclocal
+aclocal -I config
 autoheader
 touch stamp-h
 autoconf
