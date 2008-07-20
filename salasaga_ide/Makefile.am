@@ -1,1 +1,1 @@
-SUBDIRS = po functions
+SUBDIRS = po desktop fonts functions images sounds
