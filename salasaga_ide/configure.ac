@@ -41,6 +41,9 @@ dnl Check for the ming library
 missing_ming=1
 AC_CHECK_LIB(ming, Ming_init, MINGLIB="-lming" missing_ming=0)
 
+dnl Turn on GNU gettext support
+dnl AM_GNU_GETTEXT
+
 dnl Let the user know about missing libraries
 we_should_exit=0
 if test $missing_x == 1
@@ -123,6 +126,6 @@ AC_SUBST(MINOR_VERSION)
 AC_SUBST(MICRO_VERSION)
 AC_SUBST(SALASAGA_VERSION)
 
-AC_CONFIG_FILES(Makefile)
+AC_CONFIG_FILES(Makefile functions/Makefile)
 
 AC_OUTPUT()
