@@ -2,7 +2,7 @@
 Name=Salasaga
 GenericName=eLearning IDE
 Comment=Create eLearning for desktop applications
-Icon=/usr/share/pixmaps/salasaga-icon.png
+Icon=@ICON_PNG_DIR@/salasaga-icon.png
 Exec=salasaga
 Type=Application
 Terminal=false
