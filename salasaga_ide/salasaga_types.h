@@ -35,8 +35,8 @@ extern "C" {
 // * Define values used in the application *
 
 // Basic application constants
-#define APP_NAME "Salasaga"
-#define	APP_VERSION "0.8.0-alpha3"
+#define APP_NAME PACKAGE_NAME
+#define	APP_VERSION PACKAGE_VERSION
 
 // Statuses for the start and end points
 #define END_POINTS_INACTIVE			0
