@@ -1,7 +1,4 @@
-AC_INIT(salasaga, [0.8.0-alpha3], [salasaga-devel@lists.sourceforge.net])
-
-dnl 2008-07-18 JC Testing out Automake stuff again
-AM_CONFIG_HEADER(config.h)
+AC_INIT(Salasaga, [0.8.0-alpha3], [salasaga-devel@lists.sourceforge.net])
 
 MAJOR_VERSION=0
 MINOR_VERSION=8
@@ -12,6 +9,9 @@ SALASAGA_VERSION=[${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}]
 dnl Tell configure to look in the config subdirectory
 dnl for config.guess, config.sub, etc
 AC_CONFIG_AUX_DIR(config)
+
+dnl config.h needs to be generated
+AC_CONFIG_HEADERS(config.h)
 
 dnl 2008-07-18 JC Testing out Automake stuff again
 dnl Specify the version of automake needed
@@ -126,6 +126,6 @@ AC_SUBST(MINOR_VERSION)
 AC_SUBST(MICRO_VERSION)
 AC_SUBST(SALASAGA_VERSION)
 
-AC_CONFIG_FILES(Makefile functions/Makefile)
+AC_CONFIG_FILES(Makefile po/Makefile desktop/Makefile fonts/Makefile fonts/BitstreamVera/Makefile fonts/BitstreamVera/fdb/Makefile functions/Makefile images/Makefile images/control_bar/Makefile images/pointers/Makefile sounds/Makefile)
 
 AC_OUTPUT()
