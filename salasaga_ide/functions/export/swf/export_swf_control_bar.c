@@ -1052,7 +1052,11 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		info_object = newSWFText();
 
 		// Create the font object we'll be using
-		font_pathname = g_build_path(G_DIR_SEPARATOR_S, font_path, "fdb", "Bitstream_Vera_Sans.fdb", NULL);
+		font_pathname = g_build_path(FONT_DIR, G_DIR_SEPARATOR_S, "Bitstream_Vera_Sans.fdb", NULL);
+
+		// Display debugging info if requested
+		if (debug_level)
+			printf("Font path: %s\n", font_pathname);
 
 		// Load the font file if needed
 		font_file = fopen(font_pathname, "r");

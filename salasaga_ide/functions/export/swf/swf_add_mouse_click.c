@@ -70,7 +70,7 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 			if (FALSE == mouse_click_single_added)
 			{
 				// Single click mouse sound
-				sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_single_click.mp3", NULL);
+				sound_pathname = g_build_path(SOUND_DIR, G_DIR_SEPARATOR_S, "mouse_single_click.mp3", NULL);
 
 				// Make sure we only add this click sound once
 				mouse_click_single_added = TRUE;
@@ -88,7 +88,7 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 			if (FALSE == mouse_click_double_added)
 			{
 				// Double click mouse sound
-				sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_double_click.mp3", NULL);
+				sound_pathname = g_build_path(SOUND_DIR, G_DIR_SEPARATOR_S, "mouse_double_click.mp3", NULL);
 
 				// Make sure we only add this click sound once
 				mouse_click_double_added = TRUE;
@@ -106,7 +106,7 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 			if (FALSE == mouse_click_triple_added)
 			{
 				// Triple click mouse sound
-				sound_pathname = g_build_path(G_DIR_SEPARATOR_S, sound_path, "mouse_triple_click.mp3", NULL);
+				sound_pathname = g_build_path(SOUND_DIR, G_DIR_SEPARATOR_S, "mouse_triple_click.mp3", NULL);
 
 				// Make sure we only add this click sound once
 				mouse_click_triple_added = TRUE;

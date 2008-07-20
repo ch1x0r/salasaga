@@ -115,7 +115,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	scaled_width_ratio = (gfloat) output_width / (gfloat) project_width;
 
 	// Create the font object we'll be using
-	font_pathname = g_build_path(G_DIR_SEPARATOR_S, font_path, "fdb", "Bitstream_Vera_Sans.fdb", NULL);
+	font_pathname = g_build_path(FONT_DIR, G_DIR_SEPARATOR_S, "Bitstream_Vera_Sans.fdb", NULL);
 	if (debug_level) printf("Full path name to font file is: %s\n", font_pathname);
 
 	// Load the font file if needed
