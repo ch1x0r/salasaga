@@ -27,7 +27,12 @@
 // Standard includes
 #include <unistd.h>
 
-// GLib includes
+// Locale and internationalisation bits
+#include <locale.h>
+#include <libintl.h>
+#define _(String) gettext (String)
+
+// GLib include
 #include <glib/gstdio.h>
 
 // GTK includes
@@ -46,6 +51,7 @@
 #include <ming.h>
 
 // Salasaga includes
+#include "config.h"
 #include "salasaga_types.h"
 #include "externs.h"
 #include "functions/create_menu_bar.h"
@@ -89,7 +95,6 @@ GtkTreeViewColumn		*film_strip_column;			// Pointer to the film strip column
 GtkScrolledWindow		*film_strip_container;		// Container for the film strip
 GtkListStore			*film_strip_store;			// Film strip list store
 GtkWidget				*film_strip_view;			// The view of the film strip list store
-gchar					*font_path;					// Points to the base location for Salasaga font files
 guint					frames_per_second;			// Number of frames per second
 GdkPixmap				*front_store;				// Front store for double buffering the workspace area
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
@@ -127,7 +132,6 @@ gboolean				screenshots_enabled = FALSE;  // Toggle for whether to enable screen
 gint					screenshot_command_num = -1;  // The metacity run command number used for the screenshot key
 gboolean				show_control_bar = TRUE;	// Toggle for whether to display the control bar in swf output
 GList					*slides = NULL;				// Linked list holding the slide info
-gchar					*sound_path;				// Points to the base location for Salasaga sound files
 guint					start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
 GtkWidget				*status_bar;				// Widget for the status bar
 guint					statusbar_context;			// Context id for the status bar messages
@@ -197,6 +201,7 @@ gint main(gint argc, gchar *argv[])
 	gint				format_counter;				// Used to determine if SVG images can be loaded
 	GdkPixbufFormat		*format_data;				// Used to determine if SVG images can be loaded
 	GValue				*handle_size;				// The size of the handle in the main area
+	GString				*mouse_ptr_string;			// Full path to the mouse pointer graphic
 	gint				num_formats;				// Used to determine if SVG images can be loaded
 	GtkWidget			*outer_box;					// Widget for the onscreen display
 	GtkLabel			*resolution_label;			// Widget for the resolution selector label
@@ -214,6 +219,7 @@ gint main(gint argc, gchar *argv[])
 	// Initialise various things
 	default_output_folder = g_string_new(NULL);
 	default_project_folder = g_string_new(NULL);
+	mouse_ptr_string = g_string_new(NULL);
 	default_zoom_level = g_string_new("Fit to width");  // Sensible default
 	last_folder = g_string_new(g_get_home_dir());
 	g_string_append(last_folder, "/");  //  Add a trailing slash to the folder name
@@ -245,6 +251,11 @@ gint main(gint argc, gchar *argv[])
 	    layer_toolbar_signals[tmp_int] = 0;
 	}
 
+	// Initialse the gettext related bits
+	setlocale(LC_ALL, "");
+	bindtextdomain(PACKAGE, PACKAGE_LOCALE_DIR);
+	textdomain(PACKAGE);
+
 	// Initialise GTK
 	gtk_init(&argc, &argv);
 
@@ -253,7 +264,7 @@ gint main(gint argc, gchar *argv[])
 	{
 		// Disable logging
 		debug_level = 1;
-		printf("Debugging mode, errors will be shown on stdout.\n");
+		printf(_("Debugging mode, errors will be shown on stdout.\n"));
 	} else
 	{
 		g_set_print_handler(logger_simple);
@@ -271,64 +282,29 @@ gint main(gint argc, gchar *argv[])
 	{
 		printf("Program path: '%s'\n", argv[0]);
 		printf("Directory base: '%s'\n", g_path_get_dirname(argv[0]));
-		g_string_printf(icon_path, g_path_get_dirname(argv[0]));
-		g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", NULL));
-		printf("Location for icons: '%s'\n", icon_path->str);
 	}
 
 	// Initialise Ming
 	Ming_init();
 
 	// * Work out if SVG images can be loaded *
+
 #ifdef _WIN32
-	// Hard code a different path for windows
+	// Hard coded icon path for windows
 	icon_path = g_string_assign(icon_path, "icons");
+
+	// Mouse pointer image file
+	g_string_printf(mouse_ptr_string, "%s%c%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", icon_extension->str);			
+
 #else
-	g_string_assign(icon_path, g_path_get_dirname(argv[0]));
-	g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", "salasaga", "icons", "72x72", NULL));
+	// Default to PNG images, in case an SVG loader isn't present
+	g_string_assign(icon_path, IMAGES_PNG_DIR);
+
+#endif
 
 	// Display debugging info if requested
 	if (debug_level)
-		printf("Icon path being checked: %s\n", icon_path->str);
-
-	// Check if the above directory exists
-	if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
-	{
-		// First guess of icon directory didn't work, lets try /usr/share/salasaga/icons next
-		g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "share", "salasaga", "icons", "72x72", NULL));
-
-		// Display debugging info if requested
-		if (debug_level)
-			printf("Icon path being checked: %s\n", icon_path->str);
-
-		if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
-		{
-			// Not there, try /usr/local/share/salasaga/icons
-			g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "local", "share", "salasaga", "icons", "72x72", NULL));
-
-			// Display debugging info if requested
-			if (debug_level)
-				printf("Icon path being checked: %s\n", icon_path->str);
-
-			if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
-			{
-				// Not there, try /opt/local/share/salasaga/icons
-				g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "opt", "local", "share", "salasaga", "icons", "72x72", NULL));
-
-				// Display debugging info if requested
-				if (debug_level)
-					printf("Icon path being checked: %s\n", icon_path->str);
-
-				if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
-				{
-					// Unable to determine the location for icons, so generate an error then exit
-					display_warning("Error ED112: Unable to find the icons directory. Exiting.");
-					exit(1);
-				}
-			}
-		}
-	}
-#endif
+		printf("Icon path: %s\n", icon_path->str);
 
 	supported_formats = gdk_pixbuf_get_formats();
 	num_formats = g_slist_length(supported_formats);
@@ -340,79 +316,25 @@ gint main(gint argc, gchar *argv[])
 			// SVG is supported
 			icon_extension = g_string_assign(icon_extension, "svg");
 
-#ifdef _WIN32
-			// Hard code a different path for windows
-			icon_path = g_string_assign(icon_path, "icons");
+#ifndef _WIN32
+			// Point to the svg image directory
+			g_string_assign(icon_path, IMAGES_SVG_DIR);
+
+			// Determine path for mouse pointer image file
+			g_string_printf(mouse_ptr_string, "%s%c%s.%s", MOUSE_PTR_SVG_DIR, G_DIR_SEPARATOR, "standard", icon_extension->str);
 #else
-			g_string_assign(icon_path, g_path_get_dirname(argv[0]));
-			g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "share", "salasaga", "icons", "scalable", NULL));
-
-			// Display debugging info if requested
-			if (debug_level)
-				printf("Icon path being checked: %s\n", icon_path->str);
-
-			// Check if the above directory exists
-			if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
-			{
-				// First guess of icon directory didn't work, lets try /usr/share/salasaga/icons next
-				g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "share", "salasaga", "icons", "scalable", NULL));
-
-				// Display debugging info if requested
-				if (debug_level)
-					printf("Icon path being checked: %s\n", icon_path->str);
-
-				if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
-				{
-					// Not there, try /usr/local/share/salasaga/icons
-					g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "usr", "local", "share", "salasaga", "icons", "scalable", NULL));
-
-					// Display debugging info if requested
-					if (debug_level)
-						printf("Icon path being checked: %s\n", icon_path->str);
-
-					if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
-					{
-						// Not there, try /opt/local/share/salasaga/icons
-						g_string_printf(icon_path, g_build_path(G_DIR_SEPARATOR_S, "/", "opt", "local", "share", "salasaga", "icons", "scalable", NULL));
-
-						// Display debugging info if requested
-						if (debug_level)
-							printf("Icon path being checked: %s\n", icon_path->str);
-
-						if (TRUE != g_file_test(icon_path->str, G_FILE_TEST_IS_DIR))
-						{
-							// Unable to determine the location for icons, so generate an error then exit
-							display_warning("Error ED113: Unable to find the icons directory. Exiting.");
-							exit(1);
-						}
-					}
-				}
-			}
+			// Windows specific
+			g_string_printf(mouse_ptr_string, "%s%c%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", icon_extension->str);
 #endif
-
 		}
 	}
 	g_string_free(dot_string, TRUE);
 
+	// Display debugging info if requested
+	if (debug_level) printf("Mouse pointer graphic: %s\n", mouse_ptr_string->str);
+
 	// Load initial mouse pointer graphic
-	g_string_printf(tmp_gstring, "%s%c%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", icon_extension->str);
-	mouse_ptr_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
-
-	// Create the path to the font files
-#ifdef _WIN32
-	// Hard code a different path for windows
-	font_path = g_build_path(G_DIR_SEPARATOR_S, "fonts", "BitstreamVera", NULL);
-#else
-	font_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "..", "fonts", "BitstreamVera", NULL);
-#endif
-
-	// Create the path to the sound files
-#ifdef _WIN32
-	// Hard code a different path for windows
-	sound_path = g_build_path(G_DIR_SEPARATOR_S, "sounds", "BitstreamVera", NULL);
-#else
-	sound_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "..", "..", "sounds", NULL);
-#endif
+	mouse_ptr_pixbuf = gdk_pixbuf_new_from_file_at_size(mouse_ptr_string->str, -1, icon_height, NULL);
 
 	// Start up the GUI part of things
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
@@ -474,7 +396,7 @@ gint main(gint argc, gchar *argv[])
 	output_height = default_output_height;
 
 	// Set the application title
-	snprintf(wintitle, 40, "%s v%s", APP_NAME, APP_VERSION);
+	snprintf(wintitle, 40, "%s v%s", PACKAGE_NAME, PACKAGE_VERSION);
 
 	// Set the window title and border
 	gtk_window_set_title(GTK_WINDOW(main_window), wintitle);
