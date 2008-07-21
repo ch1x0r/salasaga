@@ -10,6 +10,13 @@ dnl Tell configure to look in the config subdirectory
 dnl for config.guess, config.sub, etc
 AC_CONFIG_AUX_DIR(config)
 
+dnl config.h needs to be generated
+AC_CONFIG_HEADERS(config.h)
+
+dnl 2008-07-18 JC Testing out Automake stuff again
+dnl Specify the version of automake needed
+AM_INIT_AUTOMAKE(1.8)
+
 dnl GNU recommended way to determine host variables (OS, etc)
 AC_CANONICAL_HOST
 
@@ -22,7 +29,8 @@ AC_CHECK_LIB(z, compress2, ZLIB="-lz")
 dnl Windows has the zlib library, but its named zdll instead
 dnl Note the smoke-and-mirrors setting of HAVE_LIBZ if it's found. :) (should allow MinGW to work)
 AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll")
-AC_CHECK_LIB(zdll, compress2, AC_DEFINE([HAVE_LIBZ]))
+dnl 2008-07-18 JC Had to comment this out for autoheader to work
+dnl AC_CHECK_LIB(zdll, compress2, AC_DEFINE([HAVE_LIBZ]))
 
 dnl Check for the GTK, GLib, GConf, Gnome, xml, and png libraries
 AC_CHECK_PROG(PKG_CONFIG, pkg-config, [yes])
@@ -75,6 +83,6 @@ AC_SUBST(MINOR_VERSION)
 AC_SUBST(MICRO_VERSION)
 AC_SUBST(SALASAGA_VERSION)
 
-AC_CONFIG_FILES(Makefile.config)
+AC_CONFIG_FILES(Makefile)
 
 AC_OUTPUT()
