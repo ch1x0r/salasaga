@@ -42,13 +42,17 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 {
 	// Local variables
 	GdkPixbuf			*highlight_pixbuf;			// GDK Pixbuf used for highlighting
+	GString				*message;					// Used to construct message strings
 
 
 	// Create a horizontal line
 	highlight_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width, 2);
 	if (NULL == highlight_pixbuf)
 	{
-		display_warning("Error ED52: Not enough memory for pixbuf allocation");
+		message = g_string_new(NULL);
+		g_string_printf(message, "%s ED52: %s", _("Error"), _("Not enough memory for pixbuf allocation."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 	gdk_pixbuf_fill(highlight_pixbuf, border_color);
@@ -84,7 +88,10 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 	highlight_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, 2, height);
 	if (NULL == highlight_pixbuf)
 	{
-		display_warning("Error ED53: Not enough memory for pixbuf allocation");
+		message = g_string_new(NULL);
+		g_string_printf(message, "%s ED53: %s", _("Error"), _("Not enough memory for pixbuf allocation."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 	gdk_pixbuf_fill(highlight_pixbuf, border_color);

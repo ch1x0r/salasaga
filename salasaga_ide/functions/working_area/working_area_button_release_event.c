@@ -54,6 +54,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	GdkModifierType		button_state;
 	gint				height;
 	layer				*layer_data;
+	GString				*message;					// Used to construct message strings
 	gint				mouse_x;
 	gint				mouse_y;
 	gint				onscreen_bottom;			// New Y coordinate of layer
@@ -152,9 +153,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 		// Use the status bar to give further feedback to the user
 		if (END_POINTS_START_ACTIVE == end_point_status)
-			gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer start point moved");
+			gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Layer start point moved"));
 		if (END_POINTS_END_ACTIVE == end_point_status)
-			gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer end point moved");
+			gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Layer end point moved"));
 		gdk_flush();
 
 		// Reset the end point status switch and related info
@@ -257,7 +258,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 				break;
 
 			default:
-				display_warning("Error ED296: Unknown resizing direction");
+				message = g_string_new(NULL);
+				g_string_printf(message, "%s ED296: %s", _("Error"), _("Unknown resizing direction."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return FALSE;
 		}
 
@@ -313,7 +317,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		changes_made = TRUE;
 
 		// Use the status bar to give further feedback to the user
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer resized");
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Layer resized"));
 		gdk_flush();
 
 		return TRUE;
@@ -374,7 +378,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 					break;
 
 				default:
-					display_warning("Error ED32: Unknown layer type");
+					message = g_string_new(NULL);
+					g_string_printf(message, "%s ED32: %s", _("Error"), _("Unknown layer type."));
+					display_warning(message->str);
+					g_string_free(message, TRUE);
 
 					return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
 			}
@@ -413,7 +420,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			changes_made = TRUE;
 
 			// Use the status bar to give further feedback to the user
-			gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer moved");
+			gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Layer moved"));
 			gdk_flush();
 		}
 	}

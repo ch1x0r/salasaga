@@ -53,6 +53,7 @@ void calculate_object_boundaries(void)
 	guint				count_int;					// Counter used to loop through the layers
 	GList				*layer_pointer;
 	GtkAllocation		layer_positions;			// Offset and dimensions for a given layer object
+	GString				*message;					// Used to construct message strings
 	guint				num_layers;					// The number of layers in the slide
 	gint				pixmap_height;				// Height of the front stoe
 	gint				pixmap_width;				// Width of the front store
@@ -177,7 +178,10 @@ void calculate_object_boundaries(void)
 				break;
 
 			default:
-				display_warning("Error ED27: Unknown layer type\n");
+				message = g_string_new(NULL);
+				g_string_printf(message, "%s ED27: %s", _("Error"), _("Unknown layer type."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 		}
 
 		// * Store the calculated boundary *

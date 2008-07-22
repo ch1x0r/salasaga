@@ -57,6 +57,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	gint				finish_x;					// X position at the layer objects finish time
 	gint				finish_y;					// Y position at the layer objects finish time 
 	GList				*layer_pointer;
+	GString				*message;					// Used to construct message strings
 	guint				num_collisions;
 	gint				onscreen_bottom;			// Y coordinate of bounding box bottom
 	gint				onscreen_left;				// X coordinate of bounding box left
@@ -199,7 +200,10 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 					break;
 
 				default:
-					display_warning("Error ED377: Unknown layer type");
+					message = g_string_new(NULL);
+					g_string_printf(message, "%s ED377: %s", _("Error"), _("Unknown layer type."));
+					display_warning(message->str);
+					g_string_free(message, TRUE);
 
 					return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
 			}

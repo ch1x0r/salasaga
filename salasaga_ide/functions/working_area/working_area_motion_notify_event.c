@@ -55,6 +55,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gint				height;
 	layer				*layer_data;				// Data for the layer we're working on
 	GtkAllocation		layer_positions;			// Offset and dimensions for a given layer object
+	GString				*message;					// Used to construct message strings
 	GdkRectangle		mouse_pointer_rect;			// Rectangle holding the mouse pointer position
 	gint				mouse_x;					// Unscaled mouse x position
 	gint				mouse_y;					// Unscaled mouse x position
@@ -199,7 +200,10 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				break;
 
 			default:
-				display_warning("Error ED295: Unknown resizing direction");
+				message = g_string_new(NULL);
+				g_string_printf(message, "%s ED295: %s", _("Error"), _("Unknown resizing direction."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return FALSE;
 		}
 
@@ -362,7 +366,10 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				break;
 
 			default:
-				display_warning("Error ED284: Unknown layer type");
+				message = g_string_new(NULL);
+				g_string_printf(message, "%s ED284: %s", _("Error"), _("Unknown layer type."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 
 				return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
 		}
