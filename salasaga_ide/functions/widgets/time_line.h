@@ -56,7 +56,7 @@ struct _TimeLineClass
 // Public function definitions
 GType time_line_get_type(void) G_GNUC_CONST;
 GtkWidget* time_line_new(void);
-gboolean time_line_regenerate_images(GtkWidget *widget);
+gboolean time_line_regenerate_widget(GtkWidget *widget);
 gfloat time_line_get_cursor_position(GtkWidget *widget);
 gint time_line_get_selected_layer_num(GtkWidget *widget);
 gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row);
