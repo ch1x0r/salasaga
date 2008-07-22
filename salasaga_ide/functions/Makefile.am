@@ -116,9 +116,10 @@ salasaga_SOURCES = create_menu_bar.c \
 salasaga_LDADD = $(DEPS_LIBS) $(GTK_LIBS) $(ZLIB) $(XLIB) $(MINGLIB)
 
 AM_CPPFLAGS = $(DEPS_CFLAGS) $(GTK_CFLAGS) \
-	-DIMAGES_PNG_DIR=\""$(datadir)/salasaga/icons/72x72"\" \
-	-DIMAGES_SVG_DIR=\""$(datadir)/salasaga/icons/scalable"\" \
-	-DMOUSE_PTR_PNG_DIR=\""$(datadir)/salasaga/icons/72x72/pointers"\" \
-	-DMOUSE_PTR_SVG_DIR=\""$(datadir)/salasaga/icons/scalable/pointers"\" \
-	-DFONT_DIR=\""$(datadir)/salasaga/fonts/BitstreamVera/fdb/"\" \
-	-DSOUND_DIR=\""$(datadir)/salasaga/sounds/"\"
+	-DFONT_DIR=\""$(DESTDIR)/$(datadir)/salasaga/fonts/BitstreamVera/fdb/"\" \
+	-DIMAGES_PNG_DIR=\""$(DESTDIR)/$(datadir)/salasaga/icons/72x72"\" \
+	-DIMAGES_SVG_DIR=\""$(DESTDIR)/$(datadir)/salasaga/icons/scalable"\" \
+	-DLOCALEDIR=\""$(DESTDIR)/$(datadir)/salasaga/locale"\" \
+	-DMOUSE_PTR_PNG_DIR=\""$(DESTDIR)/$(datadir)/salasaga/icons/72x72/pointers"\" \
+	-DMOUSE_PTR_SVG_DIR=\""$(DESTDIR)/$(datadir)/salasaga/icons/scalable/pointers"\" \
+	-DSOUND_DIR=\""$(DESTDIR)/$(datadir)/salasaga/sounds/"\"
