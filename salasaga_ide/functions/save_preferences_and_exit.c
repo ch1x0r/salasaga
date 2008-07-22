@@ -165,7 +165,7 @@ void save_preferences_and_exit(void)
 		if (ERROR_SUCCESS != return_code)
 		{
 			// Creating the base registry key failed, so display a warning then exit
-			g_string_printf(message, "%s %s: %s", _("Error"), "ED54", _("Saving preferences in the registry failed."));
+			g_string_printf(message, "%s ED54: %s", _("Error"), _("Saving preferences in the registry failed."));
 			display_warning(message->str);
 			g_string_free(message, TRUE);
 			gtk_main_quit();
@@ -185,7 +185,7 @@ void save_preferences_and_exit(void)
 		if (ERROR_SUCCESS != return_code)
 		{
 			// Creating the defaults registry key failed, so display a warning then exit
-			g_string_printf(message, "%s %s: %s", _("Error"), "ED55", _("Saving preferences in the registry failed."));
+			g_string_printf(message, "%s ED55: %s", _("Error"), _("Saving preferences in the registry failed."));
 			display_warning(message->str);
 			g_string_free(message, TRUE);
 			gtk_main_quit();
