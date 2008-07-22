@@ -55,7 +55,6 @@ void slide_move_bottom(void)
 	// Safety check
 	slides = g_list_first(slides);
 	slide_position = g_list_position(slides, current_slide);
-	if (debug_level) printf("slide_move_bottom: slide position: %u\n", slide_position);
 	num_slides = g_list_length(slides);
 	if (num_slides == (slide_position + 1))
 	{
@@ -74,11 +73,7 @@ void slide_move_bottom(void)
 	g_string_printf(tmp_gstring, "%u", slide_position);
 	if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &new_iter, tmp_gstring->str))
 	{
-		if (debug_level) printf("slide_move_bottom: Iter is valid\n");
 		gtk_list_store_move_before(GTK_LIST_STORE(film_strip_store), &new_iter, NULL);
-	} else
-	{
-		if (debug_level) printf("slide_move_bottom: Iter is not valid\n");
 	}
 	g_string_free(tmp_gstring, TRUE);
 
@@ -96,6 +91,6 @@ void slide_move_bottom(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide moved to bottom");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Slide moved to bottom"));
 	gdk_flush();
 }

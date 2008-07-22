@@ -48,6 +48,7 @@ void slide_duration(void)
 	gfloat				end_time;					// Used to calculate the end time in seconds of a layer
 	gfloat				gfloat_val;					// Temporary gfloat value used for validation
 	guint				layer_counter;				// Counter used in loops
+	GString				*message;					// Used to construct message strings
 	guint				num_layers;					// Receives the number of layers present in the slide
 	gfloat				old_slide_duration;			// Holds the old slide duration
 	gfloat				overall_duration;			// Used when working out the visible time for a layer
@@ -71,12 +72,12 @@ void slide_duration(void)
 	// * Display a dialog box asking for the new name of the slide *
 
 	// Create the dialog window, and table to hold its children
-	slide_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Edit slide duration", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	slide_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Edit slide duration"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
 	dialog_table = gtk_table_new(8, 2, FALSE);
 	gtk_box_pack_start(GTK_BOX(slide_dialog->vbox), GTK_WIDGET(dialog_table), FALSE, FALSE, 0);
 
 	// Create the label for the slide duration
-	duration_label = gtk_label_new("Slide duration: ");
+	duration_label = gtk_label_new(_("Slide duration: "));
 	gtk_misc_set_alignment(GTK_MISC(duration_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(dialog_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -110,7 +111,10 @@ void slide_duration(void)
 		validated_gfloat = validate_value(SLIDE_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED141: There was something wrong with the slide duration value.  Please try again.");
+			message = g_string_new(NULL);
+			g_string_printf(message, "%s ED141: %s", _("Error"), _("There was something wrong with the slide duration value.  Please try again."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			useable_input = FALSE;
 		} else
 		{
@@ -193,6 +197,6 @@ void slide_duration(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide properties updated");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Slide properties updated"));
 	gdk_flush();
 }

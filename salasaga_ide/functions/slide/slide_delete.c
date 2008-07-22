@@ -60,7 +60,7 @@ void slide_delete(void)
 	if (1 == num_slides)
 	{
 		// Yes we are, so give a warning message and don't delete the slide
-		display_warning("You must leave at least one slide in a project.\n");
+		display_warning(_("You must leave at least one slide in a project."));
 		return;
 	}
 
@@ -102,7 +102,7 @@ void slide_delete(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide deleted");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Slide deleted"));
 	gdk_flush();
 
 	// Free the resources allocated to the deleted slide

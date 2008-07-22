@@ -54,7 +54,6 @@ void slide_move_top(void)
 	// Safety check
 	slides = g_list_first(slides);
 	slide_position = g_list_position(slides, current_slide);
-	if (debug_level) printf("slide_move_top: slide position: %u\n", slide_position);
 	if (0 == slide_position)
 	{
 		// We can't move the upper most slide any further up, so just return
@@ -72,11 +71,7 @@ void slide_move_top(void)
 	g_string_printf(tmp_gstring, "%u", slide_position);
 	if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &new_iter, tmp_gstring->str))
 	{
-		if (debug_level) printf("slide_move_top: Iter is valid\n");
 		gtk_list_store_move_after(GTK_LIST_STORE(film_strip_store), &new_iter, NULL);
-	} else
-	{
-		if (debug_level) printf("slide_move_top: Iter is not valid\n");
 	}
 	g_string_free(tmp_gstring, TRUE);
 
@@ -94,6 +89,6 @@ void slide_move_top(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide moved to top");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Slide moved to top"));
 	gdk_flush();
 }

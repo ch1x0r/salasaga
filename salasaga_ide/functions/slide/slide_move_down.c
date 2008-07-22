@@ -74,16 +74,11 @@ void slide_move_down(void)
 	g_string_printf(tmp_gstring, "%u", slide_position);
 	if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &from_iter, tmp_gstring->str))
 	{
-		if (debug_level) printf("slide_move_top: 'From' iter is valid\n");
 		g_string_printf(tmp_gstring, "%u", slide_position + 1);
 		if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &to_iter, tmp_gstring->str))
 		{
-			if (debug_level) printf("slide_move_top: 'To' iter is valid\n");
 			gtk_list_store_move_after(GTK_LIST_STORE(film_strip_store), &from_iter, &to_iter);
 		}
-	} else
-	{
-		if (debug_level) printf("slide_move_top: 'From' iter is not valid\n");
 	}
 	g_string_free(tmp_gstring, TRUE);
 
@@ -101,6 +96,6 @@ void slide_move_down(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide moved down");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Slide moved down"));
 	gdk_flush();
 }

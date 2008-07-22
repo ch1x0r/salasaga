@@ -61,9 +61,9 @@ void slide_insert(void)
 	tmp_layer->duration = default_layer_duration;
 	tmp_layer->visible = TRUE;
 	tmp_layer->background = TRUE;
-	tmp_layer->name = g_string_new("Empty");
+	tmp_layer->name = g_string_new(_("Empty"));
 	tmp_layer->external_link = g_string_new(NULL);
-	tmp_layer->external_link_window = g_string_new("_self");
+	tmp_layer->external_link_window = g_string_new(_("_self"));
 	tmp_layer->object_data = (GObject *) g_new(layer_empty, 1);
 	((layer_empty *) tmp_layer->object_data)->bg_color.red = default_bg_colour.red;
 	((layer_empty *) tmp_layer->object_data)->bg_color.green = default_bg_colour.green;
@@ -108,6 +108,6 @@ void slide_insert(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Slide added");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Slide added"));
 	gdk_flush();
 }
