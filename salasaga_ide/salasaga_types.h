@@ -32,6 +32,20 @@ extern "C" {
 #endif // __cplusplus
 
 
+// * Set up i18n bits *
+
+#include <libintl.h>
+#include <locale.h>
+#ifndef _
+#define _(String) gettext(String)
+#endif
+#ifndef gettext_noop
+#define gettext_noop(String) (String)
+#endif
+#ifndef N_
+#define N_(String) gettext_noop(String)
+#endif
+
 // * Define values used in the application *
 
 // Basic application constants
