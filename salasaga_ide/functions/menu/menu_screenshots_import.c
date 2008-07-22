@@ -63,6 +63,7 @@ void menu_screenshots_import(void)
 	gint				image_width;
 	guint				largest_height = 0;			// Holds the height of the largest screenshot thus far
 	guint				largest_width = 0;			// Holds the width of the largest screenshot thus far
+	GString				*message;					// Used to construct message strings
 	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
 	gint				num_screenshots = 0;		// Switch to track if other screenshots already exist
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
@@ -82,17 +83,18 @@ void menu_screenshots_import(void)
 
 
 	// Initialise various things
-	tmp_string = g_string_new(NULL);
 	image_differences = FALSE;
+	message = g_string_new(NULL);
+	tmp_string = g_string_new(NULL);
 	using_first_screenshot = FALSE;
 
 	// Set the default information button display info if there isn't a project already active
 	if (TRUE != project_active)
 	{
 		info_link = g_string_new("http://www.salasaga.org");
-		info_link_target = g_string_new("_blank");
+		info_link_target = g_string_new(_("_blank"));
 		info_text = gtk_text_buffer_new(NULL);
-		gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), "Created using Salasaga", -1);
+		gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), _("Created using Salasaga"), -1);
 		info_display = TRUE;
 	}
 
@@ -108,17 +110,20 @@ void menu_screenshots_import(void)
 			// * The error was something other than the folder not existing, which we could cope with *
 
 			// Display the warning message using our function
-			g_string_printf(tmp_string, "Error ED03: Something went wrong opening the screenshots folder '%s': %s", screenshots_folder->str, error->message);
-			display_warning(tmp_string->str);
+			g_string_printf(message, "%s ED03: %s '%s': %", _("Error"), _("Something went wrong opening the screenshots folder."), screenshots_folder->str, error->message);
+			display_warning(message->str);
 
 			// Free the memory allocated in this function
+			g_string_free(message, TRUE);
 			g_string_free(tmp_string, TRUE);
 			g_error_free(error);
 			exit(3);
 		}
 
 		// The screenshots folder doesn't exist.  Notify the user and direct them to change this in the preferences menu
-		display_warning("Error ED04: The screenshots folder doesn't exist.  Please update this in the project preferences and try again");
+		g_string_printf(message, "%s ED04: %s", _("Error"), _("The screenshots folder doesn't exist.  Please update this in the project preferences and try again."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		g_error_free(error);
 		return;
 	}
@@ -127,7 +132,7 @@ void menu_screenshots_import(void)
 	while ((dir_entry = g_dir_read_name(dir_ptr)) != NULL)
 	{
 		// Look for files starting with the word "screenshot"
-		if (g_str_has_prefix(dir_entry, "screenshot"))
+		if (g_str_has_prefix(dir_entry, _("screenshot")))
 		{
 			// The directory entry starts with the correct prefix, now let's check the file extension
 			if (g_str_has_suffix(dir_entry, ".png"))
@@ -169,10 +174,10 @@ void menu_screenshots_import(void)
 	{
 		if (TRUE == project_active)
 		{
-			g_string_printf(tmp_string, "Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, they will be scaled to the same size as the project.  Do you want to proceed?");
+			g_string_printf(tmp_string, _("Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, they will be scaled to the same size as the project.  Do you want to proceed?"));
 		} else
 		{
-			g_string_printf(tmp_string, "Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, they will all be scaled to the size of the first one.  Do you want to proceed?");
+			g_string_printf(tmp_string, _("Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, they will all be scaled to the size of the first one.  Do you want to proceed?"));
 		}
 
 		// Display the warning dialog
@@ -197,7 +202,17 @@ void menu_screenshots_import(void)
 	if (0 == num_screenshots)
 	{
 		// Display the warning message using our function
-		g_string_printf(tmp_string, "Error ED05: No screenshots found in screenshot folder:\n\n  %s\n\nThey are case sensitive and must be named:\n\n  screenshot<Sequential Number>.png\n\ni.e.:\n\n\tscreenshot0001.png\n\tscreenshot0002.png", screenshots_folder->str);
+		g_string_printf(message, "%s ED05: %s '%s'\n\n%s:\n\n  %s<%s>.png\n\n%s:\n\n\t%s0001.png\n\t%s0002.png",
+							_("Error"),
+							_("No screenshots found in screenshot folder"), screenshots_folder->str,
+							_("They are case sensitive and must be named"),
+							_("screenshot"),
+							_("Sequential Number"),
+							_("For example"),
+							_("screenshot"),
+							_("screenshot"));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		display_warning(tmp_string->str);
 
 		return;
@@ -207,7 +222,7 @@ void menu_screenshots_import(void)
 	entries = g_slist_sort(entries, (GCompareFunc) g_ascii_strcasecmp);
 
 	// Use the status bar to communicate the number of screenshots found
-	g_string_printf(tmp_string, " Found %u screenshots", num_screenshots);
+	g_string_printf(tmp_string, " %u %s", num_screenshots, _("Screenshots found"));
 	recent_message = gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_string->str);
 	gdk_flush();
 
@@ -274,7 +289,12 @@ void menu_screenshots_import(void)
 		if (NULL == tmp_image_ob->cairo_pattern)
 		{
 			// Something went wrong when creating the image pattern
-			display_warning("Error ED376: Couldn't create an image pattern");
+			g_string_printf(message, "%s ED376: %s", _("Error"), _("Couldn't create an image pattern."));
+			display_warning(message->str);
+
+			// Free the memory used in this function
+			g_string_free(message, TRUE);
+			g_string_free(tmp_string, TRUE);
 			return;
 		}
 
@@ -282,13 +302,13 @@ void menu_screenshots_import(void)
 		tmp_slide->thumbnail = gdk_pixbuf_scale_simple(tmp_image_ob->image_data, preview_width, (guint) preview_width * 0.75, GDK_INTERP_TILES);
 		if (NULL == tmp_slide->thumbnail)
 		{
-			// * Something went wrong when loading the screenshot *
+			// Something went wrong when loading the screenshot
+			g_string_printf(message, "%s ED06: %s '%s'", _("Error"), _("Something went wrong when loading the screenshot"), tmp_string->str);
+			display_warning(message->str);
 
-			// Display a warning message using our function
-			g_string_printf(tmp_string, "Error ED06: Something went wrong when loading the screenshot '%s'", tmp_string->str);
-			display_warning(tmp_string->str);
+			// Free the memory used in this function
+			g_string_free(message, TRUE);
 			g_string_free(tmp_string, TRUE);
-
 			return;
 		}
 
@@ -307,9 +327,9 @@ void menu_screenshots_import(void)
 		tmp_layer->object_type = TYPE_GDK_PIXBUF;
 		tmp_layer->visible = TRUE;
 		tmp_layer->background = TRUE;
-		tmp_layer->name = g_string_new("Background");
+		tmp_layer->name = g_string_new(_("Background"));
 		tmp_layer->external_link = g_string_new(NULL);
-		tmp_layer->external_link_window = g_string_new("_self");
+		tmp_layer->external_link_window = g_string_new(_("_self"));
 
 		// Add the background layer to the new slide being created
 		tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
@@ -321,8 +341,8 @@ void menu_screenshots_import(void)
 		tmp_slide->timeline_widget = NULL;
 
 		// Add the thumbnail to the GtkListView based film strip
-		gtk_list_store_append (film_strip_store, &film_strip_iter);  // Acquire an iterator
-		gtk_list_store_set (film_strip_store, &film_strip_iter, 0, tmp_slide->thumbnail, -1);
+		gtk_list_store_append(film_strip_store, &film_strip_iter);  // Acquire an iterator
+		gtk_list_store_set(film_strip_store, &film_strip_iter, 0, tmp_slide->thumbnail, -1);
 
 		// Add the temporary slide to the slides GList
 		slides = g_list_append(slides, tmp_slide);
@@ -334,12 +354,12 @@ void menu_screenshots_import(void)
 			// * Something went wrong when deleting the screenshot *
 
 			// Display a warning message using our function
-			g_string_printf(tmp_string, "Error ED85: Something went wrong when deleting the screenshot file '%s'", tmp_string->str);
-			display_warning(tmp_string->str);
+			g_string_printf(message, "%s ED85: %s '%s'", _("Error"), _("Something went wrong when deleting the screenshot file"), tmp_string->str);
+			display_warning(message->str);
 		}
 
 		// Update the status bar with a progress counter
-		g_string_printf(tmp_string, " Loaded image %u of %u", tmp_int, num_screenshots);
+		g_string_printf(tmp_string, " %s %u of %u", _("Loaded image"), tmp_int, num_screenshots);
 		recent_message = gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_string->str);
 		gdk_flush();
 
@@ -420,7 +440,7 @@ void menu_screenshots_import(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	g_string_printf(tmp_string, " %u screenshots imported", num_screenshots);
+	g_string_printf(tmp_string, " %u %s", num_screenshots, _("screenshots imported"));
 	recent_message = gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_string->str);
 	gdk_flush();
 
