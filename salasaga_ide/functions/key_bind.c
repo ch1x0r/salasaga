@@ -46,10 +46,14 @@ gint key_bind(void)
 	GConfEngine			*gconf_engine;				// GConf engine
 	gchar				*gconf_value;				//
 	gboolean			key_already_set = FALSE;	// Used to work out which metacity run command is unassigned
+	GString				*message;					// Used to construct message strings
 	gchar				*return_code_gchar;			// Catches string based return codes
 	guint				tmp_guint;					// Temporary guint
 	guint				command_num = 0;			// Used to work out which metacity run command to use
 
+
+	// Initialisation
+	message = g_string_new(NULL);
 
 	// If we're not running Metacity as our window manager, then display a warning to the user
 	if (0 != g_ascii_strncasecmp(gdk_x11_screen_get_window_manager_name(gdk_screen_get_default()), "Metacity", 8))
@@ -57,7 +61,8 @@ gint key_bind(void)
 		if (TRUE == metacity_key_warning)
 		{
 			// Display the warning
-			display_warning("Error ED379: Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, so not sure how to.)  You will need to do this yourself manually.");
+			g_string_printf(message, "%s ED379: %s", _("Error"), _("Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, so not sure how to.)  You will need to do this yourself manually."));
+			display_warning(message->str);
 
 			// Ensure the the warning is only displayed once unless the user specifically requests otherwise 
 			metacity_key_warning = FALSE;
@@ -72,7 +77,8 @@ gint key_bind(void)
 	return_code_gchar = g_find_program_in_path("salasaga_screencapture");
 	if (NULL == return_code_gchar)
 	{
-		display_warning("Error ED114: 'salasaga_screencapture' not found in the search path. Screenshot capturing is disabled.");
+		g_string_printf(message, "%s ED114: %s", _("Error"), _("'salasaga_screencapture' not found in the search path. Screenshot capturing is disabled."));
+		display_warning(message->str);
 		return -1;
 	}
 
@@ -134,6 +140,9 @@ gint key_bind(void)
 
 	// Free our GConf engine
 	gconf_engine_unref(gconf_engine);
+
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
 
 	// Return the command number that was set, or -1 if it wasn't
 	if (0 != command_num)
