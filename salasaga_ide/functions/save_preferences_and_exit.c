@@ -144,6 +144,7 @@ void save_preferences_and_exit(void)
 
 	// Check if we have a saved configuration in the windows registry
 	HKEY		hkey;
+	GString		*message;					// Used to construct message strings
 	glong		return_code;
 	glong		string_size;
 
@@ -151,6 +152,7 @@ void save_preferences_and_exit(void)
 
 
 	// Initialise some things
+	message = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 
 
@@ -163,7 +165,9 @@ void save_preferences_and_exit(void)
 		if (ERROR_SUCCESS != return_code)
 		{
 			// Creating the base registry key failed, so display a warning then exit
-			display_warning("Error ED54: Saving preferences in the registry failed\n");
+			g_string_printf(message, "%s %s: %s", _("Error"), "ED54", _("Saving preferences in the registry failed."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			gtk_main_quit();
 		}
 	} else
@@ -181,7 +185,9 @@ void save_preferences_and_exit(void)
 		if (ERROR_SUCCESS != return_code)
 		{
 			// Creating the defaults registry key failed, so display a warning then exit
-			display_warning("Error ED55: Saving preferences in the registry failed\n");
+			g_string_printf(message, "%s %s: %s", _("Error"), "ED55", _("Saving preferences in the registry failed."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			gtk_main_quit();
 		}
 	}
@@ -282,6 +288,9 @@ void save_preferences_and_exit(void)
 	{
 		UnhookWindowsHookEx(win32_keyboard_hook_handle);
 	}
+
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
 
 #endif
 
