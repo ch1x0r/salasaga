@@ -218,7 +218,7 @@ void project_crop(void)
 		if (NULL == tmp_image_ob->cairo_pattern)
 		{
 			// Something went wrong when creating the image pattern
-			g_string_printf(message, "%s %s: %s", _("Error"), "ED374", _("Couldn't create an image pattern."));
+			g_string_printf(message, "%s ED374: %s", _("Error"), _("Couldn't create an image pattern."));
 			display_warning(message->str);
 			return;
 		}
@@ -227,7 +227,7 @@ void project_crop(void)
 		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
 	}
 
-	// Free the memory use in this function
+	// Free the memory used in this function
 	g_string_free(message, TRUE);
 
 	// Update project width and height global variables
