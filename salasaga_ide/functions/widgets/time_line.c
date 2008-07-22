@@ -481,8 +481,8 @@ static void time_line_class_init(TimeLineClass *klass)
 	g_type_class_add_private(klass, sizeof(TimeLinePrivate));
 }
 
-// Function to redraw the images for an already existing
-gboolean time_line_regenerate_images(GtkWidget *widget)
+// Function to redraw the images in an already existing timeline widget
+gboolean time_line_regenerate_widget(GtkWidget *widget)
 {
 	// Local variables
 	gint				height;
@@ -876,6 +876,7 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	gint				loop_counter2;				// Simple counter used in loops
 	gint				loop_max;
 	gint				loop_max2;
+	GString				*message;					// Used to construct message strings
 	GString				*seconds_number;
 
 
@@ -910,7 +911,10 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	if (NULL == priv->cached_bg_image)
 	{
 		// Creating the background image didn't work
-		display_warning("Error ED358: Couldn't create the time line background image!");
+		message = g_string_new(NULL);
+		g_string_printf(message, "%s ED358: %s", _("Error"), _("Couldn't create the time line background image."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return FALSE;
 	}
 
@@ -1055,6 +1059,7 @@ gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gin
 	gint				existing_bg_height;			// Height in pixels of an existing pixmap
 	gint				existing_bg_width;			// Width in pixels of an existing pixmap
 	gint				height;
+	GString				*message;					// Used to construct message strings
 	gint				width;
 
 
@@ -1095,7 +1100,10 @@ gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gin
 			if (NULL == priv->cached_bg_image)
 			{
 				// Couldn't allocate memory for a new display buffer
-				display_warning("Error ED360: Couldn't create the time line display buffer image!");
+				message = g_string_new(NULL);
+				g_string_printf(message, "%s ED360: %s", _("Error"), _("Couldn't create the time line display buffer image."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return FALSE;
 			}
 		}
@@ -1106,7 +1114,10 @@ gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gin
 		if (NULL == priv->cached_bg_image)
 		{
 			// Couldn't allocate memory for a new display buffer
-			display_warning("Error ED357: Couldn't create the time line display buffer image!");
+			message = g_string_new(NULL);
+			g_string_printf(message, "%s ED357: %s", _("Error"), _("Couldn't create the time line display buffer image."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			return FALSE;
 		}
 	}
@@ -1305,6 +1316,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 	GList				*layer_above;				// The layer above the selected one
 	GList				*layer_below;				// The layer below the selected one
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	GString				*message;					// Used to construct message strings
 	gint				new_row;					// The row the mouse is over
 	GList				*selected_layer;			// The selected layer
 	TimeLinePrivate		*priv;
@@ -1621,7 +1633,10 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 					break;
 
 				default:
-					display_warning("Error ED367: Unknown layer resize type.");
+					message = g_string_new(NULL);
+					g_string_printf(message, "%s ED367: %s", _("Error"), _("Unknown layer resize type."));
+					display_warning(message->str);
+					g_string_free(message, TRUE);
 			}
 		}
 
@@ -1729,7 +1744,10 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 					break;
 
 				default:
-					display_warning("Error ED367: Unknown layer resize type.");
+					message = g_string_new(NULL);
+					g_string_printf(message, "%s ED420: %s", _("Error"), _("Unknown layer resize type."));
+					display_warning(message->str);
+					g_string_free(message, TRUE);
 			}
 		}
 
@@ -1795,7 +1813,10 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				break;
 
 			default:
-				display_warning("Error ED368: Unknown layer resize type.");
+				message = g_string_new(NULL);
+				g_string_printf(message, "%s ED368: %s", _("Error"), _("Unknown layer resize type."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 		}
 	}
 
@@ -2153,6 +2174,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	gfloat				end_time;					// The end time in seconds of the presently selected layer
 	GtkAllocation		area;						// Area covered by an individual guide line
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	GString				*message;					// Used to construct message strings
 	gint				mouse_x;					// Mouse x position
 	gint				mouse_y;					// Mouse x position
 	TimeLinePrivate		*priv;
@@ -2200,6 +2222,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	}
 
 	// Initialisation
+	message = g_string_new(NULL);
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
 	// Check if this button release is within the vertical range of the adjustment buttons
@@ -2227,19 +2250,25 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 			return_code_gbool = time_line_internal_initialise_bg_image(priv, widget->allocation.width, widget->allocation.height);
 			if (FALSE == return_code_gbool)
 			{
-				display_warning("Error ED361: Couldn't recreate time line background image");
+				g_string_printf(message, "%s ED361: %s", _("Error"), _("Couldn't recreate time line background image."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return;
 			}
 			return_code_gbool = time_line_internal_initialise_display_buffer(priv, widget->allocation.width, widget->allocation.height);
 			if (FALSE == return_code_gbool)
 			{
-				display_warning("Error ED362: Couldn't recreate time line display buffer");
+				g_string_printf(message, "%s ED362: %s", _("Error"), _("Couldn't recreate time line display buffer."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return;
 			}
 			return_code_gbool = time_line_internal_draw_layer_info(priv);
 			if (FALSE == return_code_gbool)
 			{
-				display_warning("Error ED363: Couldn't redraw the time line layer information");
+				g_string_printf(message, "%s ED363: %s", _("Error"), _("Couldn't redraw the time line layer information."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return;
 			}
 			area.x = 0;
@@ -2269,19 +2298,25 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 			return_code_gbool = time_line_internal_initialise_bg_image(priv, widget->allocation.width, widget->allocation.height);
 			if (FALSE == return_code_gbool)
 			{
-				display_warning("Error ED364: Couldn't recreate time line background image");
+				g_string_printf(message, "%s ED364: %s", _("Error"), _("Couldn't recreate time line background image."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return;
 			}
 			return_code_gbool = time_line_internal_initialise_display_buffer(priv, widget->allocation.width, widget->allocation.height);
 			if (FALSE == return_code_gbool)
 			{
-				display_warning("Error ED365: Couldn't recreate time line display buffer");
+				g_string_printf(message, "%s ED365: %s", _("Error"), _("Couldn't recreate time line display buffer."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return;
 			}
 			return_code_gbool = time_line_internal_draw_layer_info(priv);
 			if (FALSE == return_code_gbool)
 			{
-				display_warning("Error ED366: Couldn't redraw the time line layer information");
+				g_string_printf(message, "%s ED366: %s", _("Error"), _("Couldn't redraw the time line layer information."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return;
 			}
 			area.x = 0;
@@ -2323,7 +2358,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 		priv->guide_line_resize = 0;
 
 		// Use the status bar to communicate the resize has completed
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Resize completed");
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Resize completed"));
 		gdk_flush();
 	}
 
@@ -2364,9 +2399,12 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 		}
 
 		// Use the status bar to communicate the drag has completed
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Drag completed");
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Drag completed"));
 		gdk_flush();
 	}
+
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
 
 	// Recreate the film strip thumbnail
 	film_strip_create_thumbnail((slide *) current_slide->data);
