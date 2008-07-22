@@ -91,64 +91,64 @@ void create_menu_bar()
 
 	// Local variables
 	GtkAccelGroup			*accel_group;			// Holds the accelerator (shortcut) keys
-	static GtkItemFactoryEntry	menu_items[] =
+	GtkItemFactoryEntry	menu_items[] =
 	{
-		{"/_File",						NULL,					NULL,							0,	"<Branch>"},
-		{"/File/_New Project",			"<control>N",			menu_file_new,					0,	"<Item>"},
-		{"/File/_Open Project",			"<control>O",			menu_file_open,					0,	"<Item>"},
-		{"/File/_Save Project",			"<control>S",			menu_file_save,					0,	"<Item>"},
-		{"/File/Save _As Project",		"<control><shift>S",	menu_file_save_as,				0,	"<Item>"},
-		{"/File/_Close Project",		"<control>W",			menu_file_close,				0,	"<Item>"},
-		{"/File/Sep",					NULL,					NULL,							0,	"<Separator>"},
-		{"/File/_Quit",					"<control>Q",			save_preferences_and_exit,		0,	"<Item>"},
+		{_("/_File"),					NULL,					NULL,							0,	"<Branch>"},
+		{_("/File/_New Project"),		_("<control>N"),		menu_file_new,					0,	"<Item>"},
+		{_("/File/_Open Project"),		_("<control>O"),		menu_file_open,					0,	"<Item>"},
+		{_("/File/_Save Project"),		_("<control>S"),		menu_file_save,					0,	"<Item>"},
+		{_("/File/Save _As Project"),	_("<control><shift>S"),	menu_file_save_as,				0,	"<Item>"},
+		{_("/File/_Close Project"),		_("<control>W"),		menu_file_close,				0,	"<Item>"},
+		{_("/File/Sep"),				NULL,					NULL,							0,	"<Separator>"},
+		{_("/File/_Quit"),				_("<control>Q"),		save_preferences_and_exit,		0,	"<Item>"},
 
-		{"/_Edit",						NULL,					NULL,							0,	"<Branch>"},
-		{"/Edit/_Preferences",			NULL,					menu_edit_preferences,			0,	"<Item>"},
+		{_("/_Edit"),					NULL,					NULL,							0,	"<Branch>"},
+		{_("/Edit/_Preferences"),		NULL,					menu_edit_preferences,			0,	"<Item>"},
 
-		{"/_Screenshots",				NULL,					NULL,							0,	"<Branch>"},
-		{"/Screenshots/Capture _window",		NULL,			menu_screenshots_capture,		0,	"<Item>"},
-		{"/Screenshots/Capture _full screen",	NULL,			menu_screenshots_capture_full_screen,	0,	"<Item>"},
-		{"/Screenshots/_Import",		NULL,					menu_screenshots_import,		0,	"<Item>"},
+		{_("/_Screenshots"),			NULL,					NULL,							0,	"<Branch>"},
+		{_("/Screenshots/Capture _window"),	NULL,				menu_screenshots_capture,		0,	"<Item>"},
+		{_("/Screenshots/Capture _full screen"),	NULL,		menu_screenshots_capture_full_screen,	0,	"<Item>"},
+		{_("/Screenshots/_Import"),		NULL,					menu_screenshots_import,		0,	"<Item>"},
 
-		{"/_Project",					NULL,					NULL,							0,	"<Branch>"},
-		{"/Project/P_roperties",		NULL,					menu_project_properties,		0,	"<Item>"},
+		{_("/_Project"),				NULL,					NULL,							0,	"<Branch>"},
+		{_("/Project/P_roperties"),		NULL,					menu_project_properties,		0,	"<Item>"},
 
-		{"/Sl_ide",						NULL,					NULL,							0,	"<Branch>"},
-		{"/Slide/_Insert",				NULL,					slide_insert,					0,	"<Item>"},
-		{"/Slide/_Delete",				NULL,					slide_delete,					0,	"<Item>"},
-		{"/Slide/Du_ration",			NULL,					slide_duration,					0,	"<Item>"},
-		{"/Slide/Move _up",				NULL,					slide_move_up,					0,	"<Item>"},
-		{"/Slide/Move dow_n",			NULL,					slide_move_down,				0,	"<Item>"},
-		{"/Slide/Move to _top",			NULL,					slide_move_top,					0,	"<Item>"},
-		{"/Slide/Move to _bottom",		NULL,					slide_move_bottom,				0,	"<Item>"},
+		{_("/Sl_ide"),					NULL,					NULL,							0,	"<Branch>"},
+		{_("/Slide/_Insert"),			NULL,					slide_insert,					0,	"<Item>"},
+		{_("/Slide/_Delete"),			NULL,					slide_delete,					0,	"<Item>"},
+		{_("/Slide/Du_ration"),			NULL,					slide_duration,					0,	"<Item>"},
+		{_("/Slide/Move _up"),			NULL,					slide_move_up,					0,	"<Item>"},
+		{_("/Slide/Move dow_n"),		NULL,					slide_move_down,				0,	"<Item>"},
+		{_("/Slide/Move to _top"),		NULL,					slide_move_top,					0,	"<Item>"},
+		{_("/Slide/Move to _bottom"),	NULL,					slide_move_bottom,				0,	"<Item>"},
 
-		{"/_Layer",						NULL,					NULL,							0,	"<Branch>"},
+		{_("/_Layer"),					NULL,					NULL,							0,	"<Branch>"},
 //		{"/Layer/C_ut",					NULL,					layer_cut,						0,	"<Item>"},
-		{"/Layer/_Copy",				NULL,					layer_copy,						0,	"<Item>"},
-		{"/Layer/_Paste",				NULL,					layer_paste,					0,	"<Item>"},
-		{"/Layer/_Edit",				NULL,					layer_edit,						0,	"<Item>"},
-		{"/Layer/_Delete",				NULL,					layer_delete,					0,	"<Item>"},
-		{"/Layer/Sep",					NULL,					NULL,							0,	"<Separator>"},
-		{"/Layer/Add _Text",			NULL,					layer_new_text,					0,	"<Item>"},
-		{"/Layer/Add _Highlight",		NULL,					layer_new_highlight,			0,	"<Item>"},
-		{"/Layer/Add _Image",			NULL,					layer_new_image,				0,	"<Item>"},
-		{"/Layer/Add _Mouse",			NULL,					layer_new_mouse,				0,	"<Item>"},
+		{_("/Layer/_Copy"),				NULL,					layer_copy,						0,	"<Item>"},
+		{_("/Layer/_Paste"),			NULL,					layer_paste,					0,	"<Item>"},
+		{_("/Layer/_Edit"),				NULL,					layer_edit,						0,	"<Item>"},
+		{_("/Layer/_Delete"),			NULL,					layer_delete,					0,	"<Item>"},
+		{_("/Layer/Sep"),				NULL,					NULL,							0,	"<Separator>"},
+		{_("/Layer/Add _Text"),			NULL,					layer_new_text,					0,	"<Item>"},
+		{_("/Layer/Add _Highlight"),	NULL,					layer_new_highlight,			0,	"<Item>"},
+		{_("/Layer/Add _Image"),		NULL,					layer_new_image,				0,	"<Item>"},
+		{_("/Layer/Add _Mouse"),		NULL,					layer_new_mouse,				0,	"<Item>"},
 
-		{"/E_xport",					NULL,					NULL,							0,	"<Branch>"},
-		{"/Export/_Flash Animation",	"<control><shift>F",	menu_export_swf,				0,	"<Item>"},
-		{"/Export/_Html Wrapper",		NULL,					export_html_wrapper,			0,	"<Item>"},
-		{"/Export/_Slide as Image",		NULL,					menu_export_slide,				0,	"<Item>"},
-		{"/Export/_Image Layer",		NULL,					menu_export_layer,				0,	"<Item>"},
+		{_("/E_xport"),					NULL,					NULL,							0,	"<Branch>"},
+		{_("/Export/_Flash Animation"),	_("<control><shift>F"),	menu_export_swf,				0,	"<Item>"},
+		{_("/Export/_Html Wrapper"),	NULL,					export_html_wrapper,			0,	"<Item>"},
+		{_("/Export/_Slide as Image"),	NULL,					menu_export_slide,				0,	"<Item>"},
+		{_("/Export/_Image Layer"),		NULL,					menu_export_layer,				0,	"<Item>"},
 
-		{"/_Help",						NULL,					NULL,							0,	"<LastBranch>"},
-		{"/_Help/_About",				NULL,					menu_help_about,				0,	"<Item>"	},
-		{"/_Help/_Main Website",		NULL,					menu_help_website,				0,	"<Item>"	},
-		{"/_Help/Sep",					NULL,					NULL,							0,	"<Separator>"},
+		{_("/_Help"),					NULL,					NULL,							0,	"<LastBranch>"},
+		{_("/_Help/_About"),			NULL,					menu_help_about,				0,	"<Item>"	},
+		{_("/_Help/_Main Website"),		NULL,					menu_help_website,				0,	"<Item>"	},
+		{_("/_Help/Sep"),				NULL,					NULL,							0,	"<Separator>"},
 //		{"/_Help/_Survey",				NULL,					menu_help_survey,				0,	"<Item>"	},
-		{"/_Help/_Forum",				NULL,					menu_help_forum,				0,	"<Item>"	},
-		{"/_Help/_Register",			NULL,					menu_help_register,				0,	"<Item>"	},
-		{"/_Help/_Support",				NULL,					menu_help_support,				0,	"<Item>"	},
-		{"/_Help/_Wiki",				NULL,					menu_help_wiki,					0,	"<Item>"	}
+		{_("/_Help/_Forum"),			NULL,					menu_help_forum,				0,	"<Item>"	},
+		{_("/_Help/_Register"),			NULL,					menu_help_register,				0,	"<Item>"	},
+		{_("/_Help/_Support"),			NULL,					menu_help_support,				0,	"<Item>"	},
+		{_("/_Help/_Wiki"),				NULL,					menu_help_wiki,					0,	"<Item>"	}
 	};  // The menu structure
 	static gint			num_items = sizeof(menu_items) / sizeof(menu_items[0]);	// The number of menu items
 
@@ -166,12 +166,15 @@ void create_menu_bar()
 	gtk_item_factory_create_items(menu_bar, num_items, menu_items, NULL);
 
 	// Grey out the menu items
-	menu_enable("/Project", FALSE);
-	menu_enable("/Slide", FALSE);
-	menu_enable("/Layer", FALSE);
-	menu_enable("/Export", FALSE);
+	menu_enable(_("/Project"), FALSE);
+	menu_enable(_("/Slide"), FALSE);
+	menu_enable(_("/Layer"), FALSE);
+	menu_enable(_("/Export"), FALSE);
 
-	// If screenshots are disabled, then grey out the screenshot menu item
+	// If screenshots are disabled, then grey out the screenshot menu items
 	if (FALSE == screenshots_enabled)
-		menu_enable("/Screenshots/Capture", FALSE);
+	{
+		menu_enable(_("/Screenshots/Capture _window"), FALSE);
+		menu_enable(_("/Screenshots/Capture _full screen"), FALSE);
+	}
 }
