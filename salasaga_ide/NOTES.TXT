@@ -18,3 +18,12 @@ $ pkg-config gtk+-2.0 --libs
  http://mirror.internode.on.net/pub/gnome/platform/2.12/2.12.2/win32/
 
 ***********
+
+I18n notes
+
+ "gettextize" version 0.17 was used to prepare the m4, po and intl directories.
+
+ Strings initially extracted with:
+
+  xgettext -L C -k_ -kN_ -f po/POTFILES.in -o po/salasaga.pot
+
