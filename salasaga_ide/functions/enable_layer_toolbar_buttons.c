@@ -53,7 +53,7 @@ void enable_layer_toolbar_buttons(void)
 	{
 		g_object_ref(layer_toolbar_icons_gray[LAYER_EDIT]);
 		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_icons[LAYER_EDIT]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_tooltips, "Edit layer", "Private");
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_EDIT]), layer_toolbar_tooltips, _("Edit layer"), "Private");
 		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_EDIT]));
 	}
 
@@ -62,7 +62,7 @@ void enable_layer_toolbar_buttons(void)
 	{
 		g_object_ref(layer_toolbar_icons_gray[LAYER_CROP]);
 		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_CROP]), layer_toolbar_icons[LAYER_CROP]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_CROP]), layer_toolbar_tooltips, "Crop image", "Private");
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_CROP]), layer_toolbar_tooltips, _("Crop image"), "Private");
 		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_CROP]));
 	}
 
@@ -71,7 +71,7 @@ void enable_layer_toolbar_buttons(void)
 	{
 		g_object_ref(layer_toolbar_icons_gray[LAYER_DELETE]);
 		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_icons[LAYER_DELETE]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_tooltips, "Delete selected layer", "Private");
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DELETE]), layer_toolbar_tooltips, _("Delete selected layer"), "Private");
 		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_DELETE]));
 	}
 
@@ -80,7 +80,7 @@ void enable_layer_toolbar_buttons(void)
 	{
 		g_object_ref(layer_toolbar_icons_gray[LAYER_DOWN]);
 		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_icons[LAYER_DOWN]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_tooltips, "Move layer down", "Private");
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_DOWN]), layer_toolbar_tooltips, _("Move layer down"), "Private");
 		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_DOWN]));
 	}
 
@@ -89,7 +89,7 @@ void enable_layer_toolbar_buttons(void)
 	{
 		g_object_ref(layer_toolbar_icons_gray[LAYER_UP]);
 		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_UP]), layer_toolbar_icons[LAYER_UP]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_UP]), layer_toolbar_tooltips, "Move layer up", "Private");
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_UP]), layer_toolbar_tooltips, _("Move layer up"), "Private");
 		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_UP]));
 	}
 
@@ -98,7 +98,7 @@ void enable_layer_toolbar_buttons(void)
 	{
 		g_object_ref(layer_toolbar_icons_gray[LAYER_MOUSE]);
 		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_icons[LAYER_MOUSE]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_tooltips, "Add a mouse pointer", "Private");
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_MOUSE]), layer_toolbar_tooltips, _("Add a mouse pointer"), "Private");
 		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_MOUSE]));
 	}
 
@@ -107,7 +107,7 @@ void enable_layer_toolbar_buttons(void)
 	{
 		g_object_ref(layer_toolbar_icons_gray[LAYER_TEXT]);
 		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_icons[LAYER_TEXT]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_tooltips, "Add a text layer", "Private");
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_TEXT]), layer_toolbar_tooltips, _("Add a text layer"), "Private");
 		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_TEXT]));
 	}
 
@@ -116,7 +116,7 @@ void enable_layer_toolbar_buttons(void)
 	{
 		g_object_ref(layer_toolbar_icons_gray[LAYER_HIGHLIGHT]);
 		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_icons[LAYER_HIGHLIGHT]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_tooltips, "Add a highlight layer", "Private");
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_HIGHLIGHT]), layer_toolbar_tooltips, _("Add a highlight layer"), "Private");
 		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_HIGHLIGHT]));
 	}
 
@@ -125,7 +125,7 @@ void enable_layer_toolbar_buttons(void)
 	{
 		g_object_ref(layer_toolbar_icons_gray[LAYER_IMAGE]);
 		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_icons[LAYER_IMAGE]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_tooltips, "Add an image layer", "Private");
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(layer_toolbar_items[LAYER_IMAGE]), layer_toolbar_tooltips, _("Add an image layer"), "Private");
 		gtk_widget_show_all(GTK_WIDGET(layer_toolbar_items[LAYER_IMAGE]));
 	}
 

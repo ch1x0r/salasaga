@@ -42,6 +42,7 @@
 void draw_timeline(void)
 {
 	// Local variables
+	GString				*message;					// Used to construct message strings
 	gboolean			return_code_gbool;			// Receives boolean return code
 	slide				*slide_pointer;				// Points to the presently processing slide
 	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
@@ -55,10 +56,15 @@ void draw_timeline(void)
 		slide_pointer->timeline_widget = time_line_new();
 	} else
 	{
-		// This slide already has a widget, so regenerate the images in it
-		return_code_gbool = time_line_regenerate_images(slide_pointer->timeline_widget);
+		// This slide already has a widget, so regenerate it
+		return_code_gbool = time_line_regenerate_widget(slide_pointer->timeline_widget);
 		if (FALSE == return_code_gbool)
-			display_warning("Error ED359: Could not regenerate the time line images");
+		{
+			message = g_string_new(NULL);
+			g_string_printf(message, "%s ED359: %s", _("Error"), _("Could not regenerate the time line widget."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
+		}
 	}
 
 	// Check if the timeline area already has children

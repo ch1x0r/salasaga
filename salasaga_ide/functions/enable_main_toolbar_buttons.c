@@ -46,7 +46,7 @@ void enable_main_toolbar_buttons(void)
 	{
 		g_object_ref(main_toolbar_icons_gray[CROP_ALL]);
 		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[CROP_ALL]), main_toolbar_icons[CROP_ALL]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CROP_ALL]), main_toolbar_tooltips, "Crop all slides in the project", "Private");
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CROP_ALL]), main_toolbar_tooltips, _("Crop all slides in the project"), "Private");
 		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[CROP_ALL]));
 	}
 
@@ -55,7 +55,7 @@ void enable_main_toolbar_buttons(void)
 	{
 		g_object_ref(main_toolbar_icons_gray[EXPORT_FLASH]);
 		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[EXPORT_FLASH]), main_toolbar_icons[EXPORT_FLASH]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[EXPORT_FLASH]), main_toolbar_tooltips, "Export as a Flash animation", "Private");
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[EXPORT_FLASH]), main_toolbar_tooltips, _("Export as a Flash animation"), "Private");
 		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[EXPORT_FLASH]));
 	}
 
