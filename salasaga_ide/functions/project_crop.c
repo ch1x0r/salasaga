@@ -52,6 +52,7 @@ void project_crop(void)
 	layer				*last_layer = NULL;			// Temporary layer
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				left_value;
+	GString				*message;					// Used to construct message strings
 	gint				new_height;					// Hold the height of the cropped area
 	GdkPixbuf			*new_pixbuf;				// Holds the cropped image data
 	gint				new_width;					// Hold the width of the cropped area
@@ -86,15 +87,18 @@ void project_crop(void)
 		return;
 	}
 
+	// Initialisation
+	message = g_string_new(NULL);
+
 	// * Pop open a dialog box asking the user how much to crop off each side of the image *
 
 	// Create the dialog window, and table to hold its children
-	crop_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Crop image layer", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	crop_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Crop image layer"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
 	crop_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(crop_dialog->vbox), GTK_WIDGET(crop_table), FALSE, FALSE, 10);
 
 	// Create the label asking for the left side crop amount
-	left_label = gtk_label_new("Left crop: ");
+	left_label = gtk_label_new(_("Left crop: "));
 	gtk_misc_set_alignment(GTK_MISC(left_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -105,7 +109,7 @@ void project_crop(void)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the right side crop amount
-	right_label = gtk_label_new("Right crop: ");
+	right_label = gtk_label_new(_("Right crop: "));
 	gtk_misc_set_alignment(GTK_MISC(right_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -116,7 +120,7 @@ void project_crop(void)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the top crop amount
-	top_label = gtk_label_new("Top crop: ");
+	top_label = gtk_label_new(_("Top crop: "));
 	gtk_misc_set_alignment(GTK_MISC(top_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -127,7 +131,7 @@ void project_crop(void)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the right side crop amount
-	bottom_label = gtk_label_new("Bottom crop: ");
+	bottom_label = gtk_label_new(_("Bottom crop: "));
 	gtk_misc_set_alignment(GTK_MISC(bottom_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -214,13 +218,17 @@ void project_crop(void)
 		if (NULL == tmp_image_ob->cairo_pattern)
 		{
 			// Something went wrong when creating the image pattern
-			display_warning("Error ED374: Couldn't create an image pattern");
+			g_string_printf(message, "%s %s: %s", _("Error"), "ED374", _("Couldn't create an image pattern."));
+			display_warning(message->str);
 			return;
 		}
 
 		// Free the memory used by the old pixbuf
 		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
 	}
+
+	// Free the memory use in this function
+	g_string_free(message, TRUE);
 
 	// Update project width and height global variables
 	project_height = project_height - top_value - bottom_value;
@@ -239,6 +247,6 @@ void project_crop(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, "Project cropped");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _("Project cropped"));
 	gdk_flush();
 }
