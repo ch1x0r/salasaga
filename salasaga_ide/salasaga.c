@@ -27,11 +27,6 @@
 // Standard includes
 #include <unistd.h>
 
-// Locale and internationalisation bits
-#include <locale.h>
-#include <libintl.h>
-#define _(String) gettext (String)
-
 // GLib include
 #include <glib/gstdio.h>
 
@@ -197,51 +192,62 @@ HHOOK					win32_keyboard_hook_handle = NULL;		// Handle used to keep track of th
 gint main(gint argc, gchar *argv[])
 {
 	// Local variables
-	GString				*dot_string;
 	gint				format_counter;				// Used to determine if SVG images can be loaded
 	GdkPixbufFormat		*format_data;				// Used to determine if SVG images can be loaded
 	GValue				*handle_size;				// The size of the handle in the main area
+	GString				*message;					// Used to construct message strings
 	GString				*mouse_ptr_string;			// Full path to the mouse pointer graphic
 	gint				num_formats;				// Used to determine if SVG images can be loaded
 	GtkWidget			*outer_box;					// Widget for the onscreen display
 	GtkLabel			*resolution_label;			// Widget for the resolution selector label
 	GSList				*supported_formats;			// Used to determine if SVG images can be loaded
-	GtkWidget			*toolbar = NULL;			// Widget for the toolbar
+	GtkWidget			*toolbar;					// Widget for the toolbar
 	GdkScreen			*which_screen;				// Gets given the screen the monitor is on
 	gchar				wintitle[40];				// Stores the window title
 	GtkLabel			*zoom_label;				// Widget for the zoom selector label
 
 	GString				*tmp_gstring;				// Temporary GString
 	guint				tmp_int;					// Temporary guint
-	GtkWidget			*tmp_widget = NULL;			// Temporary widget
+	GtkWidget			*tmp_widget;				// Temporary widget
 
 
-	// Initialise various things
-	default_output_folder = g_string_new(NULL);
-	default_project_folder = g_string_new(NULL);
-	mouse_ptr_string = g_string_new(NULL);
-	default_zoom_level = g_string_new("Fit to width");  // Sensible default
-	last_folder = g_string_new(g_get_home_dir());
-	g_string_append(last_folder, "/");  //  Add a trailing slash to the folder name
-	output_folder = g_string_new(NULL);
-	project_folder = g_string_new(NULL);
-	project_name = g_string_new("New Project");
-	screenshots_folder = g_string_new(NULL);
-	tmp_gstring = g_string_new(NULL);
+	// Set defaults
 	project_active = FALSE;
 	default_bg_colour.red = 0;
 	default_bg_colour.green = 0;
 	default_bg_colour.blue = 0;
 	preview_width = 300;
 	frames_per_second = 12;  // Half of 24 fps (film)
-	icon_path = g_string_new(NULL);
-	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
-	dot_string = g_string_new(".");
 	table_x_padding = 5;
 	table_y_padding = 5;
+	toolbar = NULL;
+	tmp_widget = NULL;
 	unscaled_button_height = 50;
 	unscaled_button_spacing = 5;
 	unscaled_button_width = 50;
+
+	// Initialse i18n
+	setlocale(LC_ALL, "");
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	textdomain(PACKAGE);
+
+	// Initialise various strings
+	default_output_folder = g_string_new(NULL);
+	default_project_folder = g_string_new(NULL);
+	default_zoom_level = g_string_new(_("Fit to width"));  // Sensible default
+	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
+	icon_path = g_string_new(NULL);
+	message = g_string_new(NULL);
+	mouse_ptr_string = g_string_new(NULL);
+	output_folder = g_string_new(NULL);
+	project_folder = g_string_new(NULL);
+	project_name = g_string_new(_("New Project"));
+	screenshots_folder = g_string_new(NULL);
+	tmp_gstring = g_string_new(NULL);
+
+	// Initialise the string holding the path of the most recent directory the user accessed 
+	last_folder = g_string_new(g_get_home_dir());
+	g_string_append(last_folder, G_DIR_SEPARATOR_S);  //  Add a trailing slash to the folder name
 
 	// Initialise the button event handlers on the toolbars to NULL
 	main_toolbar_signals[CROP_ALL] = 0;
@@ -250,11 +256,6 @@ gint main(gint argc, gchar *argv[])
 	{
 	    layer_toolbar_signals[tmp_int] = 0;
 	}
-
-	// Initialse the gettext related bits
-	setlocale(LC_ALL, "");
-	bindtextdomain(PACKAGE, PACKAGE_LOCALE_DIR);
-	textdomain(PACKAGE);
 
 	// Initialise GTK
 	gtk_init(&argc, &argv);
@@ -280,8 +281,8 @@ gint main(gint argc, gchar *argv[])
 
 	if (debug_level)
 	{
-		printf("Program path: '%s'\n", argv[0]);
-		printf("Directory base: '%s'\n", g_path_get_dirname(argv[0]));
+		printf(_("Program path: '%s'\n"), argv[0]);
+		printf(_("Directory base: '%s'\n"), g_path_get_dirname(argv[0]));
 	}
 
 	// Initialise Ming
@@ -291,7 +292,7 @@ gint main(gint argc, gchar *argv[])
 
 #ifdef _WIN32
 	// Hard coded icon path for windows
-	icon_path = g_string_assign(icon_path, "icons");
+	icon_path = g_string_assign(icon_path, _("icons"));
 
 	// Mouse pointer image file
 	g_string_printf(mouse_ptr_string, "%s%c%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", icon_extension->str);			
@@ -303,8 +304,7 @@ gint main(gint argc, gchar *argv[])
 #endif
 
 	// Display debugging info if requested
-	if (debug_level)
-		printf("Icon path: %s\n", icon_path->str);
+	if (debug_level) printf(_("Icon path: %s\n"), icon_path->str);
 
 	supported_formats = gdk_pixbuf_get_formats();
 	num_formats = g_slist_length(supported_formats);
@@ -328,10 +328,9 @@ gint main(gint argc, gchar *argv[])
 #endif
 		}
 	}
-	g_string_free(dot_string, TRUE);
 
 	// Display debugging info if requested
-	if (debug_level) printf("Mouse pointer graphic: %s\n", mouse_ptr_string->str);
+	if (debug_level) printf(_("Path to mouse pointer image: %s\n"), mouse_ptr_string->str);
 
 	// Load initial mouse pointer graphic
 	mouse_ptr_pixbuf = gdk_pixbuf_new_from_file_at_size(mouse_ptr_string->str, -1, icon_height, NULL);
@@ -414,7 +413,8 @@ gint main(gint argc, gchar *argv[])
 	if (FALSE == menu_bar)
 	{
 		// Something went wrong when creating the menu bar
-		display_warning("Error ED01: Something went wrong when creating the menu bar");
+		g_string_printf(message, "%s %s: %s", _("Error"), "ED01", _("Something went wrong when creating the menu bar."));
+		display_warning(message->str);
 		exit(1);
 	}
 	gtk_box_pack_start(GTK_BOX(outer_box), GTK_WIDGET(gtk_item_factory_get_widget(menu_bar, "<main>")), FALSE, FALSE, 0);
@@ -424,7 +424,8 @@ gint main(gint argc, gchar *argv[])
 	if (FALSE == toolbar)
 	{
 		// Something went wrong when creating the toolbar
-		display_warning("Error ED07: Something went wrong when creating the toolbar");
+		g_string_printf(message, "%s %s: %s", _("Error"), "ED07", _("Something went wrong when creating the toolbar."));
+		display_warning(message->str);
 		exit(1);
 	}
 	gtk_box_pack_start(GTK_BOX(outer_box), GTK_WIDGET(toolbar), FALSE, FALSE, 0);
@@ -452,7 +453,7 @@ gint main(gint argc, gchar *argv[])
 	gtk_table_attach(message_bar, GTK_WIDGET(status_bar), 0, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
 
 	// Create the zoom selector label
-	zoom_label = GTK_LABEL(gtk_label_new("Zoom: "));
+	zoom_label = GTK_LABEL(gtk_label_new(_("Zoom: ")));
 	gtk_misc_set_alignment(GTK_MISC(zoom_label), 1, 0.5);
 	gtk_table_attach(message_bar, GTK_WIDGET(zoom_label), 2, 3, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
 
@@ -464,7 +465,7 @@ gint main(gint argc, gchar *argv[])
 	g_signal_connect(G_OBJECT(zoom_selector), "changed", G_CALLBACK(zoom_selector_changed), (gpointer) NULL);
 
 	// Create the resolution selector label
-	resolution_label = GTK_LABEL(gtk_label_new("Output: "));
+	resolution_label = GTK_LABEL(gtk_label_new(_("Output: ")));
 	gtk_misc_set_alignment(GTK_MISC(resolution_label), 1, 0.5);
 	gtk_table_attach(message_bar, GTK_WIDGET(resolution_label), 4, 5, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
 
@@ -480,7 +481,8 @@ gint main(gint argc, gchar *argv[])
 	if (FALSE == film_strip_container)
 	{
 		// Something went wrong when creating the film strip
-		display_warning("Error ED02: Something went wrong when creating the film strip");
+		g_string_printf(message, "%s %s: %s", _("Error"), "ED02", _("Something went wrong when creating the film strip."));
+		display_warning(message->str);
 		exit(2);
 	}
 	gtk_paned_add1(GTK_PANED(main_area), GTK_WIDGET(film_strip_container));
@@ -495,10 +497,11 @@ gint main(gint argc, gchar *argv[])
 	gtk_paned_add2(GTK_PANED(main_area), GTK_WIDGET(right_side));
 
 	// Create the general global status bar context
-	statusbar_context = gtk_statusbar_get_context_id(GTK_STATUSBAR(status_bar), "Status bar messages");
+	statusbar_context = gtk_statusbar_get_context_id(GTK_STATUSBAR(status_bar), _("Status bar messages"));
 
 	// Display a "Ready" message in the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Ready");
+	g_string_printf(message, " %s", _("Ready"));
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, message->str);
 
 	// Calculate the zoom and drawing area, and initialise the project dimensions
 	zoom_selector_changed(GTK_WIDGET(zoom_selector), NULL, (gpointer) NULL);
@@ -519,35 +522,13 @@ gint main(gint argc, gchar *argv[])
 		{
 			g_object_ref(main_toolbar_icons[CAPTURE]);
 			gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[CAPTURE]), main_toolbar_icons_gray[CAPTURE]);
-			gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CAPTURE]), main_toolbar_tooltips, "Screenshots disabled: salasaga_screencapture not found in search path", "Private");
+			gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CAPTURE]), main_toolbar_tooltips, _("Screenshots disabled: salasaga_screencapture not found in search path"), "Private");
 			gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[CAPTURE]));
 		}
 
 		// Disconnect the Capture icon signal handler
 		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[CAPTURE]), main_toolbar_signals[CAPTURE]);
 	}
-
-	// Things we need:
-	//  + Menu bar at the top for standard items
-	//    + Have this toggleable, to enable the saving of screen real estate
-	//  + Time line (top?)
-	//    + Output file frame rate selector (i.e. 15 fps)
-	//    + Layers
-	//  + Preview/working area (main?)
-	//  + Icons to change working state (top? right?)
-	//  + Key bindings to make common tasks efficient
-	//    + One handed keyboard operation possible (very efficient)?
-	//      + Use keyboard modifiers for right mouse button, etc?
-	//    + Maya/SoftImage spacebar/overlay thing?
-	//  + Support wheel mouse especially in some way down the track?
-	//    + Maya style, whereby shift/ctrl/alt changes scroll wheel meaning?
-	//  + Status bar of some sort
-	//    + Have this toggleable, to enable the saving of screen real estate
-	//  + Killer feature? 3D
-
-	// Windows we'll need
-	//  + Sprite/Object window
-	//  + Layers
 
 	// Display the main window
 	gtk_widget_show_all(main_window);
@@ -558,6 +539,7 @@ gint main(gint argc, gchar *argv[])
 	// Free the memory use in this function
 	g_string_free(icon_extension, TRUE);
 	g_string_free(icon_path, TRUE);
+	g_string_free(message, TRUE);
 	g_slist_free(supported_formats);
 
 	// Exit
