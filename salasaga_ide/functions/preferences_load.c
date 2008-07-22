@@ -778,5 +778,8 @@ gboolean preferences_load()
 		gtk_window_maximize(GTK_WINDOW(main_window));
 	}
 
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
+
 	return TRUE;
 }
