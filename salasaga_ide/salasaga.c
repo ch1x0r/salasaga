@@ -413,7 +413,7 @@ gint main(gint argc, gchar *argv[])
 	if (FALSE == menu_bar)
 	{
 		// Something went wrong when creating the menu bar
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED01", _("Something went wrong when creating the menu bar."));
+		g_string_printf(message, "%s ED01: %s", _("Error"), _("Something went wrong when creating the menu bar."));
 		display_warning(message->str);
 		exit(1);
 	}
@@ -424,7 +424,7 @@ gint main(gint argc, gchar *argv[])
 	if (FALSE == toolbar)
 	{
 		// Something went wrong when creating the toolbar
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED07", _("Something went wrong when creating the toolbar."));
+		g_string_printf(message, "%s ED07: %s", _("Error"), _("Something went wrong when creating the toolbar."));
 		display_warning(message->str);
 		exit(1);
 	}
@@ -481,7 +481,7 @@ gint main(gint argc, gchar *argv[])
 	if (FALSE == film_strip_container)
 	{
 		// Something went wrong when creating the film strip
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED02", _("Something went wrong when creating the film strip."));
+		g_string_printf(message, "%s ED02: %s", _("Error"), _("Something went wrong when creating the film strip."));
 		display_warning(message->str);
 		exit(2);
 	}
