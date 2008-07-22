@@ -13,7 +13,6 @@ AC_CONFIG_AUX_DIR(config)
 dnl config.h needs to be generated
 AC_CONFIG_HEADERS(config.h)
 
-dnl 2008-07-18 JC Testing out Automake stuff again
 dnl Specify the version of automake needed
 AM_INIT_AUTOMAKE(1.8)
 
@@ -46,7 +45,7 @@ AC_USE_SYSTEM_EXTENSIONS
 
 dnl Turn on GNU gettext support
 AM_GNU_GETTEXT
-AM_GNU_GETTEXT_VERSION(0.17)
+AM_GNU_GETTEXT_VERSION([0.17])
 
 dnl Let the user know about missing libraries
 we_should_exit=0
