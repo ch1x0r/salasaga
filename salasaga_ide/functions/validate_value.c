@@ -563,7 +563,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 				return NULL;
 
 			// If the length of the string is exactly 12, then check if the string is "Fit to width"
-			if ((12 == string_length) && (0 == g_ascii_strncasecmp("Fit to width", (gchar *) value, 12)))
+			if ((12 == string_length) && (0 == g_ascii_strncasecmp(_("Fit to width"), (gchar *) value, 12)))
 			{
 				// Yes, this is the "Fit to width" value
 				output_gstring = g_string_assign(output_gstring, value);
@@ -602,7 +602,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 
 			// Unknown value type, we should never get here
 			error_string = g_string_new(NULL);
-			g_string_printf(error_string, "Error ED119: Unknown value '%s' passed to validation function!", valid_fields[value_id].name_string);
+			g_string_printf(error_string, "%s %s: %s - '%s'", _("Error"), "ED119", _("Unknown value passed to validation function"), valid_fields[value_id].name_string);
 			display_warning(error_string->str);
 			g_string_free(error_string, TRUE);
 
