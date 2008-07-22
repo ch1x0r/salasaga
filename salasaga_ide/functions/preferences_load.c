@@ -104,7 +104,7 @@ gboolean preferences_load()
 	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/project_folder", NULL));
 	if (NULL == validated_string)
 	{
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED185", _("There was something wrong with the project folder value stored in the preferences.  Using default preferences instead."));
+		g_string_printf(message, "%s ED185: %s", _("Error"), _("There was something wrong with the project folder value stored in the preferences.  Using default preferences instead."));
 		display_warning(message->str);
 		useable_input = FALSE;
 	} else
@@ -118,7 +118,7 @@ gboolean preferences_load()
 	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/screenshots_folder", NULL));
 	if (NULL == validated_string)
 	{
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED186", _("There was something wrong with the screenshots folder value stored in the preferences.  Using default preferences instead."));
+		g_string_printf(message, "%s ED186: %s", _("Error"), _("There was something wrong with the screenshots folder value stored in the preferences.  Using default preferences instead."));
 		display_warning(message->str);
 		useable_input = FALSE;
 	} else
@@ -132,7 +132,7 @@ gboolean preferences_load()
 	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/output_folder", NULL));
 	if (NULL == validated_string)
 	{
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED187", _("There was something wrong with the default output folder value stored in the preferences.  Using default preferences instead."));
+		g_string_printf(message, "%s ED187: %s", _("Error"), _("There was something wrong with the default output folder value stored in the preferences.  Using default preferences instead."));
 		display_warning(message->str);
 		useable_input = FALSE;
 	} else
@@ -148,7 +148,7 @@ gboolean preferences_load()
 		validated_string = validate_value(ZOOM_LEVEL, V_ZOOM, gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/zoom_level", NULL));
 		if (NULL == validated_string)
 		{
-			g_string_printf(message, "%s %s: %s", _("Error"), "ED188", _("There was something wrong with the default zoom level value stored in the preferences.  Using default preferences instead."));
+			g_string_printf(message, "%s ED188: %s", _("Error"), _("There was something wrong with the default zoom level value stored in the preferences.  Using default preferences instead."));
 			display_warning(message->str);
 			useable_input = FALSE;
 		} else
@@ -164,7 +164,7 @@ gboolean preferences_load()
 	validated_guint = validate_value(PROJECT_WIDTH, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED189", _("There was something wrong with the default project width value stored in the preferences.  Using default preferences instead."));
+		g_string_printf(message, "%s ED189: %s", _("Error"), _("There was something wrong with the default project width value stored in the preferences.  Using default preferences instead."));
 		display_warning(message->str);
 		useable_input = FALSE;
 	} else
@@ -179,7 +179,7 @@ gboolean preferences_load()
 	validated_guint = validate_value(PROJECT_HEIGHT, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED190", _("There was something wrong with the default project width value stored in the preferences.  Using default preferences instead."));
+		g_string_printf(message, "%s ED190: %s", _("Error"), _("There was something wrong with the default project width value stored in the preferences.  Using default preferences instead."));
 		display_warning(message->str);
 		useable_input = FALSE;
 	} else
@@ -193,7 +193,7 @@ gboolean preferences_load()
 	validated_guint = validate_value(PROJECT_WIDTH, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED191", _("There was something wrong with the default output width value stored in the preferences.  Using default preferences instead."));
+		g_string_printf(message, "%s ED191: %s", _("Error"), _("There was something wrong with the default output width value stored in the preferences.  Using default preferences instead."));
 		display_warning(message->str);
 		useable_input = FALSE;
 	} else
@@ -207,7 +207,7 @@ gboolean preferences_load()
 	validated_guint = validate_value(PROJECT_HEIGHT, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED192", _("There was something wrong with the default output height value stored in the preferences.  Using default preferences instead."));
+		g_string_printf(message, "%s ED192: %s", _("Error"), _("There was something wrong with the default output height value stored in the preferences.  Using default preferences instead."));
 		display_warning(message->str);
 		useable_input = FALSE;
 	} else
@@ -221,7 +221,7 @@ gboolean preferences_load()
 	validated_gfloat = validate_value(SLIDE_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 	if (NULL == validated_gfloat)
 	{
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED193", _("There was something wrong with the default slide duration value stored in the preferences.  Using default preferences instead."));
+		g_string_printf(message, "%s ED193: %s", _("Error"), _("There was something wrong with the default slide duration value stored in the preferences.  Using default preferences instead."));
 		display_warning(message->str);
 		useable_input = FALSE;
 	} else
@@ -235,7 +235,7 @@ gboolean preferences_load()
 	validated_gfloat = validate_value(LAYER_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 	if (NULL == validated_gfloat)
 	{
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED333", _("There was something wrong with the default layer duration value stored in the preferences.  Using default preferences instead."));
+		g_string_printf(message, "%s ED333: %s", _("Error"), _("There was something wrong with the default layer duration value stored in the preferences.  Using default preferences instead."));
 		display_warning(message->str);
 		useable_input = FALSE;
 	} else
@@ -249,7 +249,7 @@ gboolean preferences_load()
 	validated_guint = validate_value(COLOUR_COMP16, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED194", _("There was something wrong with the default background color value stored in the preferences.  Using default preferences instead."));
+		g_string_printf(message, "%s ED194: %s", _("Error"), _("There was something wrong with the default background color value stored in the preferences.  Using default preferences instead."));
 		display_warning(message->str);
 		useable_input = FALSE;
 	} else
@@ -263,7 +263,7 @@ gboolean preferences_load()
 	validated_guint = validate_value(COLOUR_COMP16, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED195", _("There was something wrong with the default background color value stored in the preferences.  Using default preferences instead."));
+		g_string_printf(message, "%s ED195: %s", _("Error"), _("There was something wrong with the default background color value stored in the preferences.  Using default preferences instead."));
 		display_warning(message->str);
 		useable_input = FALSE;
 	} else
@@ -277,7 +277,7 @@ gboolean preferences_load()
 	validated_guint = validate_value(COLOUR_COMP16, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED196", _("There was something wrong with the default background color value stored in the preferences.  Using default preferences instead."));
+		g_string_printf(message, "%s ED196: %s", _("Error"), _("There was something wrong with the default background color value stored in the preferences.  Using default preferences instead."));
 		display_warning(message->str);
 		useable_input = FALSE;
 	} else
@@ -293,7 +293,7 @@ gboolean preferences_load()
 		validated_guint = validate_value(PREVIEW_WIDTH, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			g_string_printf(message, "%s %s: %s", _("Error"), "ED197", _("There was something wrong with the film strip thumbnail width value stored in the preferences.  Using default preferences instead."));
+			g_string_printf(message, "%s ED197: %s", _("Error"), _("There was something wrong with the film strip thumbnail width value stored in the preferences.  Using default preferences instead."));
 			display_warning(message->str);
 			useable_input = FALSE;
 		} else
@@ -313,7 +313,7 @@ gboolean preferences_load()
 	validated_guint = validate_value(PROJECT_FPS, V_INT_UNSIGNED, &guint_val);
 	if (NULL == validated_guint)
 	{
-		g_string_printf(message, "%s %s: %s", _("Error"), "ED198", _("There was something wrong with the default frames per second value stored in the preferences.  Using default preferences instead."));
+		g_string_printf(message, "%s ED198: %s", _("Error"), _("There was something wrong with the default frames per second value stored in the preferences.  Using default preferences instead."));
 		display_warning(message->str);
 		useable_input = FALSE;
 	} else
@@ -329,7 +329,7 @@ gboolean preferences_load()
 		validated_guint = validate_value(ICON_HEIGHT, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			g_string_printf(message, "%s %s: %s", _("Error"), "ED199", _("There was something wrong with the icon height value stored in the preferences.  Using default preferences instead."));
+			g_string_printf(message, "%s ED199: %s", _("Error"), _("There was something wrong with the icon height value stored in the preferences.  Using default preferences instead."));
 			display_warning(message->str);
 			useable_input = FALSE;
 		} else
