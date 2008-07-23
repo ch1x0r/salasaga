@@ -55,6 +55,7 @@ void menu_file_open(void)
 	GtkFileFilter		*all_filter;
 	gchar				*filename;					// Pointer to the chosen file name
 	GtkFileFilter		*flame_filter;
+	GString				*message;					// Used to construct message strings
 	GtkTreePath			*new_path;					// Temporary path
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	GtkWidget 			*open_dialog;
@@ -75,8 +76,11 @@ void menu_file_open(void)
 		}
 	}
 
+	// Initialisation
+	message = g_string_new(NULL);
+
 	// Create the dialog asking the user to select a Salasaga Project file
-	open_dialog = gtk_file_chooser_dialog_new("Open a Salasaga Project",
+	open_dialog = gtk_file_chooser_dialog_new(_("Open a Salasaga Project"),
 						  GTK_WINDOW(main_window),
 						  GTK_FILE_CHOOSER_ACTION_OPEN,
 						  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -86,19 +90,19 @@ void menu_file_open(void)
 	// Create a filter for *.salasaga files
 	salasaga_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(salasaga_filter, "*.salasaga");
-	gtk_file_filter_set_name(salasaga_filter, "Salasaga Project file (*.salasaga)");
+	gtk_file_filter_set_name(salasaga_filter, _("Salasaga Project file (*.salasaga)"));
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(open_dialog), salasaga_filter);
 
 	// Create a filter for *.flame files
 	flame_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(flame_filter, "*.flame");
-	gtk_file_filter_set_name(flame_filter, "Flame Project file (*.flame)");
+	gtk_file_filter_set_name(flame_filter, _("Flame Project file (*.flame)"));
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(open_dialog), flame_filter);
 
 	// Create a filter so all files (*.*) can be displayed
 	all_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(all_filter, "*.*");
-	gtk_file_filter_set_name(all_filter, "All files (*.*)");
+	gtk_file_filter_set_name(all_filter, _("All files (*.*)"));
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(open_dialog), all_filter);
 
 	// Set the path and name of the file to open
@@ -156,7 +160,8 @@ void menu_file_open(void)
 		validated_string = validate_value(FILE_PATH, V_CHAR, filename);
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED124: There was something wrong with the file name given.  Please try again.");
+			g_string_printf(message, "%s ED124: %s", _("Error"), _("There was something wrong with the file name given.  Please try again."));
+			display_warning(message->str);
 		} else
 		{
 			// Open and parse the selected file
@@ -224,10 +229,10 @@ void menu_file_open(void)
 		gtk_tree_path_free(old_path);  // Free the old path
 
 	// Enable the project based menu items
-	menu_enable("/Project", TRUE);
-	menu_enable("/Slide", TRUE);
-	menu_enable("/Layer", TRUE);
-	menu_enable("/Export", TRUE);
+	menu_enable(_("/Project"), TRUE);
+	menu_enable(_("/Slide"), TRUE);
+	menu_enable(_("/Layer"), TRUE);
+	menu_enable(_("/Export"), TRUE);
 
 	// Enable the toolbar buttons
 	enable_layer_toolbar_buttons();
@@ -237,11 +242,12 @@ void menu_file_open(void)
 	changes_made = FALSE;
 
 	// Use the status bar to communicate the successful loading of the project
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project loaded");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Project loaded"));
 	gdk_flush();
 
 	// Free the memory allocated in this function
 	// (note that salasaga_filter, flame_filter and the all_filter seem to be freed when the dialog is destroyed)
+	g_string_free(message, TRUE);
 	g_string_free(validated_string, TRUE);
 	g_free(filename);
 }

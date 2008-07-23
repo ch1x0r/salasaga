@@ -51,6 +51,7 @@ void menu_file_save_as(void)
 	gchar				*dir_name_part;				// Briefly used for holding a directory name
 	gchar				*filename;					// Pointer to the chosen file name
 	gchar				*file_name_part;			// Briefly used for holding a file name
+	GString				*message;					// Used to construct message strings
 	GtkFileFilter		*salasaga_filter;			// Filter for *.salasaga
 	GtkWidget 			*save_dialog;				// Dialog widget
 	gboolean			useable_input;				// Used to control loop flow
@@ -61,10 +62,11 @@ void menu_file_save_as(void)
 
 
 	// Initialise some things
+	message = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 
 	// Create the dialog asking the user for the name to save as
-	save_dialog = gtk_file_chooser_dialog_new("Save As",
+	save_dialog = gtk_file_chooser_dialog_new(_("Save As"),
 											  GTK_WINDOW(main_window),
 											  GTK_FILE_CHOOSER_ACTION_SAVE,
 											  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -74,13 +76,13 @@ void menu_file_save_as(void)
 	// Create the filter so only *.salasaga files are displayed
 	salasaga_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(salasaga_filter, "*.salasaga");
-	gtk_file_filter_set_name(salasaga_filter, "Salasaga Project file (*.salasaga)");
+	gtk_file_filter_set_name(salasaga_filter, _("Salasaga Project file (*.salasaga)"));
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(save_dialog), salasaga_filter);
 
 	// Create the filter so all files (*.*) can be displayed
 	all_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(all_filter, "*.*");
-	gtk_file_filter_set_name(all_filter, "All files (*.*)");
+	gtk_file_filter_set_name(all_filter, _("All files (*.*)"));
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(save_dialog), all_filter);
 
 	// Set the path and name of the file to save as.  Use project_name as a default
@@ -136,7 +138,8 @@ void menu_file_save_as(void)
 		if (NULL == validated_string)
 		{
 			// Invalid file name
-			display_warning("Error ED125: There was something wrong with the file name given.  Please try again.");
+			g_string_printf(message, "%s ED125: %s", _("Error"), _("There was something wrong with the file name given.  Please try again."));
+			display_warning(message->str);
 		} else
 		{
 			// * Valid file name, so check if there's an existing file of this name, and give an Overwrite? type prompt if there is
@@ -147,7 +150,7 @@ void menu_file_save_as(void)
 									GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 									GTK_MESSAGE_QUESTION,
 									GTK_BUTTONS_YES_NO,
-									"Overwrite existing file?");
+									_("Overwrite existing file?"));
 				if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
 				{
 					// We've been told to overwrite the existing file
@@ -178,6 +181,7 @@ void menu_file_save_as(void)
 	// * Function clean up area *
 
 	// Free the memory allocated in this function
+	g_string_free(message, TRUE);
 	g_free(filename);
 	g_string_free(validated_string, TRUE);
 	g_string_free(tmp_gstring, TRUE);
