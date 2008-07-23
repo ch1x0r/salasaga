@@ -45,6 +45,7 @@ void menu_project_properties(void)
 	gint				gint_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
 	GtkDialog			*main_dialog;				// Widget for the main dialog
+	GString				*message;					// Used to construct message strings
 	GtkWidget			*proj_dialog_table;			// Table used for neat layout of the labels and fields in project preferences
 	gint				proj_row_counter;			// Used when building the project preferences dialog box
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
@@ -111,6 +112,7 @@ void menu_project_properties(void)
 
 
 	// Initialise various things
+	message = g_string_new(NULL);
 	proj_row_counter = 0;
 	valid_ext_link = g_string_new(NULL);
 	valid_ext_link_win = g_string_new(NULL);
@@ -120,12 +122,12 @@ void menu_project_properties(void)
 	tmp_gstring = g_string_new(NULL);
 
 	// Create the main dialog window
-	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Project Properties", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Project Properties"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
 	proj_dialog_table = gtk_table_new(10, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(main_dialog->vbox), GTK_WIDGET(proj_dialog_table), FALSE, FALSE, 5);
 
 	// Project Name
-	label_project_name = gtk_label_new("Project Name: ");
+	label_project_name = gtk_label_new(_("Project Name: "));
 	gtk_misc_set_alignment(GTK_MISC(label_project_name), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_name), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	entry_project_name = gtk_entry_new();
@@ -135,25 +137,25 @@ void menu_project_properties(void)
 	proj_row_counter = proj_row_counter + 1;
 
 	// Project Folder
-	label_project_folder = gtk_label_new("Project Folder: ");
+	label_project_folder = gtk_label_new(_("Project Folder: "));
 	gtk_misc_set_alignment(GTK_MISC(label_project_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_folder), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_project_folder = gtk_file_chooser_button_new("Select the Project Folder", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+	button_project_folder = gtk_file_chooser_button_new(_("Select the Project Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_project_folder), project_folder->str);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_project_folder), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Output Folder
-	label_output_folder = gtk_label_new("Output Folder: ");
+	label_output_folder = gtk_label_new(_("Output Folder: "));
 	gtk_misc_set_alignment(GTK_MISC(label_output_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_output_folder), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_output_folder = gtk_file_chooser_button_new("Select the Output Folder", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+	button_output_folder = gtk_file_chooser_button_new(_("Select the Output Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_output_folder), output_folder->str);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_output_folder), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Frames per second
-	label_frames_per_second = gtk_label_new("Frames per second: ");
+	label_frames_per_second = gtk_label_new(_("Frames per second: "));
 	gtk_misc_set_alignment(GTK_MISC(label_frames_per_second), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_frames_per_second), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_frames_per_second = gtk_spin_button_new_with_range(valid_fields[PROJECT_FPS].min_value, valid_fields[PROJECT_FPS].max_value, 1);
@@ -162,36 +164,36 @@ void menu_project_properties(void)
 	proj_row_counter = proj_row_counter + 1;
 
 	// Project Width
-	label_project_width = gtk_label_new("Project Width: ");
+	label_project_width = gtk_label_new(_("Project Width: "));
 	gtk_misc_set_alignment(GTK_MISC(label_project_width), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_width), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	entry_project_width = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry_project_width), 12);
-	g_string_printf(tmp_gstring, "%d pixels", project_width);
+	g_string_printf(tmp_gstring, "%d %s", project_width, _("pixels"));
 	gtk_entry_set_text(GTK_ENTRY(entry_project_width), tmp_gstring->str);
 	gtk_editable_set_editable(GTK_EDITABLE(entry_project_width), FALSE);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_width), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Project Height
-	label_project_height = gtk_label_new("Project Height: ");
+	label_project_height = gtk_label_new(_("Project Height: "));
 	gtk_misc_set_alignment(GTK_MISC(label_project_height), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_height), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	entry_project_height = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry_project_height), 12);
-	g_string_printf(tmp_gstring, "%d pixels", project_height);
+	g_string_printf(tmp_gstring, "%d %s", project_height, _("pixels"));
 	gtk_entry_set_text(GTK_ENTRY(entry_project_height), tmp_gstring->str);
 	gtk_editable_set_editable(GTK_EDITABLE(entry_project_height), FALSE);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_height), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Start behaviour
-	label_start_behaviour = gtk_label_new("SWF start behaviour: ");
+	label_start_behaviour = gtk_label_new(_("SWF start behaviour: "));
 	gtk_misc_set_alignment(GTK_MISC(label_start_behaviour), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_start_behaviour), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	selector_start_behaviour = gtk_combo_box_new_text();
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_start_behaviour), "Paused");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_start_behaviour), "Play");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_start_behaviour), _("Paused"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_start_behaviour), _("Play"));
 	switch (start_behaviour)
 	{
 		case START_BEHAVIOUR_PLAY:
@@ -205,13 +207,13 @@ void menu_project_properties(void)
 	proj_row_counter = proj_row_counter + 1;
 
 	// End behaviour
-	label_end_behaviour = gtk_label_new("SWF end behaviour: ");
+	label_end_behaviour = gtk_label_new(_("SWF end behaviour: "));
 	gtk_misc_set_alignment(GTK_MISC(label_end_behaviour), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_end_behaviour), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	selector_end_behaviour = gtk_combo_box_new_text();
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), "Stop");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), "Loop and play");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), "Loop and stop");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), _("Stop"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), _("Loop and play"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), _("Loop and stop"));
 	switch (end_behaviour)
 	{
 		case END_BEHAVIOUR_LOOP_PLAY:
@@ -229,7 +231,7 @@ void menu_project_properties(void)
 	proj_row_counter = proj_row_counter + 1;
 
 	// Display control bar
-	label_control_bar = gtk_label_new("Display SWF control bar: ");
+	label_control_bar = gtk_label_new(_("Display SWF control bar: "));
 	gtk_misc_set_alignment(GTK_MISC(label_control_bar), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_control_bar), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	check_control_bar = gtk_check_button_new();
@@ -244,7 +246,7 @@ void menu_project_properties(void)
 	proj_row_counter = proj_row_counter + 1;
 
 	// Display information button
-	label_display_info = gtk_label_new("Display SWF information button: ");
+	label_display_info = gtk_label_new(_("Display SWF information button: "));
 	gtk_misc_set_alignment(GTK_MISC(label_display_info), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_display_info), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	check_display_info = gtk_check_button_new();
@@ -259,7 +261,7 @@ void menu_project_properties(void)
 	proj_row_counter = proj_row_counter + 1;
 
 	// Create a label for the information button text view
-	label_info_text = gtk_label_new("Information button text");
+	label_info_text = gtk_label_new(_("Information button text"));
 	gtk_misc_set_alignment(GTK_MISC(label_info_text), 0.5, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_info_text), 0, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
@@ -282,7 +284,7 @@ void menu_project_properties(void)
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(text_buffer), text_gstring->str, text_gstring->len);
 
 	// Create the label asking for an external link
-	external_link_label = gtk_label_new("Information button link: ");
+	external_link_label = gtk_label_new(_("Information button link: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_label), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -294,7 +296,7 @@ void menu_project_properties(void)
 	proj_row_counter = proj_row_counter + 1;
 
 	// Create the label asking for the window to open the external link in
-	external_link_win_label = gtk_label_new("Information button link window: ");
+	external_link_win_label = gtk_label_new(_("Information button link window: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_win_label), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -329,7 +331,8 @@ void menu_project_properties(void)
 		validated_string = validate_value(PROJECT_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(entry_project_name)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED135: There was something wrong with the project name value.  Please try again.");
+			g_string_printf(message, "%s ED135: %s", _("Error"), _("There was something wrong with the project name value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -342,7 +345,8 @@ void menu_project_properties(void)
 		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_project_folder)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED136: There was something wrong with the project folder given.  Please try again.");
+			g_string_printf(message, "%s ED136: %s", _("Error"), _("There was something wrong with the project folder given.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -355,7 +359,8 @@ void menu_project_properties(void)
 		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_output_folder)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED137: There was something wrong with the output folder given.  Please try again.");
+			g_string_printf(message, "%s ED137: %s", _("Error"), _("There was something wrong with the output folder given.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -369,7 +374,8 @@ void menu_project_properties(void)
 		validated_guint = validate_value(PROJECT_FPS, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED139: There was something wrong with the default frames per second value.  Please try again.");
+			g_string_printf(message, "%s ED139: %s", _("Error"), _("There was something wrong with the default frames per second value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -382,7 +388,8 @@ void menu_project_properties(void)
 		if (-1 == gint_val)
 		{
 			// A -1 return means no value was selected
-			display_warning("Error ED280: There was something wrong with the start behaviour value selected.  Please try again.");
+			g_string_printf(message, "%s ED280: %s", _("Error"), _("There was something wrong with the start behaviour value selected.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -395,7 +402,8 @@ void menu_project_properties(void)
 		if (-1 == gint_val)
 		{
 			// A -1 return means no value was selected
-			display_warning("Error ED277: There was something wrong with the end behaviour value selected.  Please try again.");
+			g_string_printf(message, "%s ED277: %s", _("Error"), _("There was something wrong with the end behaviour value selected.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -413,7 +421,8 @@ void menu_project_properties(void)
 		validated_string = validate_value(EXTERNAL_LINK, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED407: There was something wrong with the information button link value.  Please try again.");
+			g_string_printf(message, "%s ED407: %s", _("Error"), _("There was something wrong with the information button link value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -426,7 +435,8 @@ void menu_project_properties(void)
 		validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(external_link_win_entry)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED408: There was something wrong with the information button target window value.  Please try again.");
+			g_string_printf(message, "%s ED408: %s", _("Error"), _("There was something wrong with the information button target window value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -479,10 +489,11 @@ void menu_project_properties(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project properties updated");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Project properties updated"));
 	gdk_flush();
 
 	// Free the memory allocated in this function
+	g_string_free(message, TRUE);
 	g_string_free(valid_ext_link, TRUE);
 	g_string_free(valid_ext_link_win, TRUE);
 	g_string_free(text_gstring, TRUE);
