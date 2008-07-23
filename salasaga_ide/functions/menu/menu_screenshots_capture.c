@@ -50,6 +50,7 @@ void menu_screenshots_capture(void)
 	// Local variables
 	GError				*error = NULL;				// Pointer to error return structure
 	gchar				*full_file_name;			// Holds the fully worked out file name to save as
+	GString				*message;					// Used to construct message strings
 	GIOChannel			*output_file;				// The output file handle
 	GIOStatus			return_value;				// Return value used in most GIOChannel functions
 
@@ -62,6 +63,7 @@ void menu_screenshots_capture(void)
 
 
 	// Initialise various things
+	message = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 
 #ifndef _WIN32
@@ -91,7 +93,7 @@ void menu_screenshots_capture(void)
 
 	// Display a message to the user, asking them to click on the window they want to capture
 	message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-											"Please click on the window you want to capture (after closing this dialog box).");
+											_("Please click on the window you want to capture (after closing this dialog box)."));
 	gtk_dialog_run(GTK_DIALOG(message_dialog));
 	gtk_widget_destroy(message_dialog);
 
@@ -109,7 +111,8 @@ void menu_screenshots_capture(void)
 	new_cursor = XCreateFontCursor(x_display, GDK_QUESTION_ARROW);
 	if (None == new_cursor)
 	{
-		display_warning("Error ED112: Unable to create alternative cursor.");
+		g_string_printf(message, "%s ED112: %s", _("Error"), _("Unable to create alternative cursor."));
+		display_warning(message->str);
 	}
 
 	// Flush the X11 output buffer and process events
@@ -127,14 +130,16 @@ void menu_screenshots_capture(void)
 						CurrentTime);
 	if (GrabSuccess != return_code_int)
 	{
-		display_warning("Error ED112: Unable to grab the mouse pointer for selected display.  Please report this error!");
+		g_string_printf(message, "%s ED113: %s", _("Error"), _("Unable to grab the mouse pointer for selected display.  Please report this error."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
     }
 
 	// Display debugging info
 	if (debug_level)
 	{
-		printf("Mouse pointer grabbed.\n");
+		printf(_("Mouse pointer grabbed.\n"));
 	}
 
 	// Wait for the user to select a window for capture
@@ -156,7 +161,7 @@ void menu_screenshots_capture(void)
 				// Display debugging info
 				if (debug_level)
 				{
-					printf("Capture window set.\n");
+					printf(_("Capture window set.\n"));
 				}
 
 				// Increase the count of mouse buttons pressed
@@ -179,7 +184,7 @@ void menu_screenshots_capture(void)
 	// Display debugging info
 	if (debug_level)
 	{
-		printf("Mouse pointer grab released.\n");
+		printf(_("Mouse pointer grab released.\n"));
 	}
 
 	// Flush the X11 output buffer and process events
@@ -199,7 +204,7 @@ void menu_screenshots_capture(void)
 	// Display debugging info
 	if (debug_level)
 	{
-		printf("Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: %d\n", x_offset, y_offset, win_width, win_height);
+		printf(_("Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: %d\n"), x_offset, y_offset, win_width, win_height);
 	}
 
 	// Use the returned offset and dimensions
@@ -210,7 +215,7 @@ void menu_screenshots_capture(void)
 
 	// Let the user know that the window they selected has been successfully grabbed
 	message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-			"Window dimensions successfully retrieved.  Please use Control-Printscreen to take screenshots then Import when finished.");
+			_("Window dimensions successfully retrieved.  Please use Control-Printscreen to take screenshots then Import when finished."));
 	gtk_dialog_run(GTK_DIALOG(message_dialog));
 	gtk_widget_destroy(message_dialog);
 
@@ -247,12 +252,12 @@ void menu_screenshots_capture(void)
 
 
 	// Create the dialog window, and table to hold its children
-	capture_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Capture screenshots", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	capture_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Capture screenshots"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
 	capture_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(capture_dialog->vbox), GTK_WIDGET(capture_table), FALSE, FALSE, 10);
 
 	// Create the label asking for the X Offset
-	x_offset_label = gtk_label_new("X Offset: ");
+	x_offset_label = gtk_label_new(_("X Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(x_offset_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_offset_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -263,7 +268,7 @@ void menu_screenshots_capture(void)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the Y Offset
-	y_offset_label = gtk_label_new("Y Offset: ");
+	y_offset_label = gtk_label_new(_("Y Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(y_offset_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_offset_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -277,7 +282,7 @@ void menu_screenshots_capture(void)
 	which_screen = gtk_window_get_screen(GTK_WINDOW(main_window));
 
 	// Create the label asking for the X Length
-	x_length_label = gtk_label_new("Width: ");
+	x_length_label = gtk_label_new(_("Width: "));
 	gtk_misc_set_alignment(GTK_MISC(x_length_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_length_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -288,7 +293,7 @@ void menu_screenshots_capture(void)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the Y Length
-	y_length_label = gtk_label_new("Height: ");
+	y_length_label = gtk_label_new(_("Height: "));
 	gtk_misc_set_alignment(GTK_MISC(y_length_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_length_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);;
 
@@ -299,7 +304,7 @@ void menu_screenshots_capture(void)
 	row_counter = row_counter + 1;
 
 	// Create the label that tells the user about Control-Printscreen
-	key_combo_label = gtk_label_new("Hint: Use the Control-Printscreen key\ncombination to capture screenshots,\nthen the Import button to import them.");
+	key_combo_label = gtk_label_new(_("Hint: Use the Control-Printscreen key\ncombination to capture screenshots,\nthen the Import button to import them."));
 	gtk_misc_set_alignment(GTK_MISC(key_combo_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(key_combo_label), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -325,7 +330,7 @@ void menu_screenshots_capture(void)
 	gtk_widget_destroy(GTK_WIDGET(capture_dialog));
 #endif
 
-	// Construct the fullly qualified path name for ~/.salasaga-lock file (to hold capture settings in)
+	// Construct the fully qualified path name for ~/.salasaga-lock file, to hold capture settings in
 	tmp_ptr = (gchar *) g_get_home_dir();
 	full_file_name = g_build_filename(tmp_ptr, ".salasaga-lock", NULL);
 
@@ -342,13 +347,15 @@ void menu_screenshots_capture(void)
 	output_file = g_io_channel_new_file(full_file_name, "w", &error);
 	if (NULL == output_file)
 	{
-		// * An error occured when opening the file for writing, so alert the user, and return to the calling routine indicating failure *
+		// An error occured when opening the file for writing, so alert the user, and return to the calling routine indicating failure
 
 		// Display a warning message using our function
-		g_string_printf(tmp_gstring, "Error ED16: An error '%s' occured when opening '%s' for writing", error->message, full_file_name);
-		display_warning(tmp_gstring->str);
+		g_string_printf(message, "%s ED16: ", _("Error"));
+		g_string_append_printf(message, _("An error '%s' occured when opening '%s' for writing."), error->message, full_file_name);
+		display_warning(message->str);
 
 		// Free the memory allocated in this function
+		g_string_free(message, TRUE);
 		g_string_free(tmp_gstring, TRUE);
 		g_error_free(error);
 
@@ -361,10 +368,13 @@ void menu_screenshots_capture(void)
 	if (G_IO_STATUS_ERROR == return_value)
 	{
 		// * An error occured when writing to the output file, so alert the user, and return to the calling routine indicating failure *
-		g_string_printf(tmp_gstring, "Error ED17: An error '%s' occured when writing data to the '%s' file", error->message, full_file_name);
-		display_warning(tmp_gstring->str);
+		// Display a warning message using our function
+		g_string_printf(message, "%s ED17: ", _("Error"));
+		g_string_append_printf(message, _("An error '%s' occured when writing data to the file '%s'."), error->message, full_file_name);
+		display_warning(message->str);
 
 		// Free the memory allocated in this function
+		g_string_free(message, TRUE);
 		g_string_free(tmp_gstring, TRUE);
 		g_error_free(error);
 
@@ -376,9 +386,12 @@ void menu_screenshots_capture(void)
 	if (G_IO_STATUS_ERROR == return_value)
 	{
 		// * An error occured when closing the output file, so alert the user, and return to the calling routine indicating failure *
-		g_string_printf(tmp_gstring, "Error ED18: An error '%s' occured when closing the output file '%s'", error->message, full_file_name);
+		g_string_printf(message, "%s ED18: ", _("Error"));
+		g_string_append_printf(message, _("An error '%s' occured when closing the output file '%s'."), error->message, full_file_name);
+		display_warning(message->str);
 
-		// Display the warning message using our function
+		// Free the memory allocated in this function
+		g_string_free(message, TRUE);
 		display_warning(tmp_gstring->str);
 
 		// Free the memory allocated in this function
@@ -409,7 +422,7 @@ void menu_screenshots_capture(void)
 			last_error = GetLastError();
 			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, last_error,
 					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &message_buffer_pointer, 0, NULL);
-			wsprintf(text_buffer, "Keyboard hook LoadLibrary failed with error %d: %s", last_error, message_buffer_pointer); 
+			wsprintf(text_buffer, _("Keyboard hook LoadLibrary failed with error %d: %s"), last_error, message_buffer_pointer); 
 			MessageBox(NULL, text_buffer, "Error", MB_OK);
 			LocalFree(message_buffer_pointer);
 			exit(98);
@@ -420,7 +433,7 @@ void menu_screenshots_capture(void)
 			last_error = GetLastError();
 			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, last_error,
 					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &message_buffer_pointer, 0, NULL);
-			wsprintf(text_buffer, "Keyboard hook GetProcAddress failed with error %d: %s", last_error, message_buffer_pointer); 
+			wsprintf(text_buffer, _("Keyboard hook GetProcAddress failed with error %d: %s"), last_error, message_buffer_pointer); 
 			MessageBox(NULL, text_buffer, "Error", MB_OK);
 			LocalFree(message_buffer_pointer);
 			exit(97);
@@ -432,20 +445,20 @@ void menu_screenshots_capture(void)
 			last_error = GetLastError();
 			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, last_error,
 					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &message_buffer_pointer, 0, NULL);
-			wsprintf(text_buffer, "Keyboard hooking failed with error %d: %s", last_error, message_buffer_pointer); 
+			wsprintf(text_buffer, _("Keyboard hooking failed with error %d: %s"), last_error, message_buffer_pointer); 
 			MessageBox(NULL, text_buffer, "Error", MB_OK);
 			LocalFree(message_buffer_pointer);
 			exit(99);	    
 		}
 
 		// Add a message to the status bar so the user gets visual feedback
-		g_string_printf(tmp_gstring, " Wrote capture lock file - %s - and installed Control-Printscreen keyboard hook", full_file_name);
+		g_string_printf(tmp_gstring, _(" Wrote capture lock file - %s - and installed Control-Printscreen keyboard hook"), full_file_name);
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 		gdk_flush();
 	}
 #else
 	// Add a message to the status bar so the user gets visual feedback
-	g_string_printf(tmp_gstring, " Wrote capture lock file - %s", full_file_name);
+	g_string_printf(tmp_gstring, _(" Wrote capture settings file - %s"), full_file_name);
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 	gdk_flush();
 #endif
@@ -455,6 +468,7 @@ void menu_screenshots_capture(void)
 	// Close the lock file
 	g_key_file_free(lock_file);
 
-	// Free the temporary GString
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 }
