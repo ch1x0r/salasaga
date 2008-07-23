@@ -44,6 +44,6 @@ void menu_help_wiki(void)
 {
 #ifndef _WIN32  // Non-windows check
 	// Launch a browser window for the Salasaga Wiki
-	gnome_url_show("http://www.salasaga.org/wiki", NULL);
+	gnome_url_show(_("http://www.salasaga.org/wiki"), NULL);
 #endif
 }

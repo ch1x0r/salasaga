@@ -44,6 +44,6 @@ void menu_help_survey(void)
 {
 #ifndef _WIN32  // Non-windows check
 	// Launch a browser window of the Salasaga survey
-	gnome_url_show ("http://www.salasaga.org/go/survey", NULL);
+	gnome_url_show(_("http://www.salasaga.org/go/survey"), NULL);
 #endif
 }

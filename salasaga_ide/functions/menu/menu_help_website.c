@@ -44,6 +44,6 @@ void menu_help_website(void)
 {
 #ifndef _WIN32  // Non-windows check
 	// Launch a browser window for the Salasaga website
-	gnome_url_show("http://www.salasaga.org", NULL);
+	gnome_url_show(_("http://www.salasaga.org"), NULL);
 #endif
 }

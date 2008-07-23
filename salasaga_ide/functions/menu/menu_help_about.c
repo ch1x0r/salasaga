@@ -49,12 +49,14 @@ void menu_help_about(void)
 
 
 	// Create an About dialog
+	tmp_gstring = g_string_new(NULL);
 	about_dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 	gtk_about_dialog_set_name(about_dialog, PACKAGE_NAME);
 	gtk_about_dialog_set_version(about_dialog, PACKAGE_VERSION);
-	gtk_about_dialog_set_copyright(about_dialog, "Copyright (C) 2005-2008 Justin Clift\n<justin@salasaga.org>");
+	g_string_printf(tmp_gstring, "%s (C) 2005-2008 Justin Clift\n<justin@salasaga.org>", _("Copyright"));
+	gtk_about_dialog_set_copyright(about_dialog, tmp_gstring->str);
 	gtk_about_dialog_set_license(about_dialog,
-			"This program is free software: you can redistribute it and/or modify\n"
+			_("This program is free software: you can redistribute it and/or modify\n"
 			"it under the terms of the GNU Lesser General Public License as\n"
 			"published by the Free Software Foundation, either version 3 of\n"
 			"the License, or (at your option) any later version.\n"
@@ -66,14 +68,13 @@ void menu_help_about(void)
 			"\n"
 			"You should have received a copy of the GNU Lesser General Public\n"
 			"License along with this program.  If not, see\n"
-			"http://www.gnu.org/licenses/.");
+			"http://www.gnu.org/licenses/."));
 	gtk_about_dialog_set_authors(about_dialog, authors);
 	gtk_about_dialog_set_url_hook((gpointer) menu_help_website, NULL, NULL);
 	gtk_about_dialog_set_website(about_dialog, "www.salasaga.org");
 
 	// Add the build date
-	tmp_gstring = g_string_new(NULL);
-	g_string_printf(tmp_gstring, "Built on: %s", __DATE__);
+	g_string_printf(tmp_gstring, _("Built on: %s"), __DATE__);
 	gtk_about_dialog_set_comments(about_dialog, tmp_gstring->str);
 
 	// Display the dialog box
