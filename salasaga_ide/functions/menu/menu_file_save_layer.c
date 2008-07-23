@@ -51,6 +51,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	xmlNodePtr			layer_node;				// Pointer to the new layer node
 	layer				*layer_pointer;			// Points to the presently processing layer
 	guint				layer_type;				// The type of layer
+	GString				*message;					// Used to construct message strings
 	gchar				*pixbuf_buffer;			// Gets given a pointer to a compressed jpeg image
 	gsize				pixbuf_size;			// Gets given the size of a compressed jpeg image
 	xmlNodePtr			slide_node;				// Pointer to the slide node
@@ -63,10 +64,11 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 
 
 	// Initialise various things
-	tmp_gstring = g_string_new(NULL);
-	tmp_gstring2 = g_string_new(NULL);
 	layer_pointer = element;
 	slide_node = user_data;
+	message = g_string_new(NULL);
+	tmp_gstring = g_string_new(NULL);
+	tmp_gstring2 = g_string_new(NULL);
 
 	// Create some useful pointers
 	layer_name	= layer_pointer->name;
@@ -76,7 +78,13 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	layer_node = xmlNewChild(slide_node, NULL, (const xmlChar *) "layer", NULL);
 	if (NULL == layer_node)
 	{
-		display_warning("Error ED24: Error creating the layer elements\n");
+		g_string_printf(message, "%s ED24: %s", _("Error"), _("Error creating the layer elements."));
+		display_warning(message->str);
+
+		// Free the memory allocated in this function
+		g_string_free(tmp_gstring, TRUE);
+		g_string_free(tmp_gstring2, TRUE);
+		g_string_free(message, TRUE);
 		return;
 	}
 
@@ -137,10 +145,13 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			if (FALSE == tmp_bool)
 			{
 				// Something went wrong when encoding the image to jpeg format
-				display_warning("Error ED62: Something went wrong when encoding a slide to png format");
+				g_string_printf(message, "%s ED62: %s", _("Error"), _("Something went wrong when encoding a slide to png format."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 
 				// Free the memory allocated in this function
 				g_string_free(tmp_gstring, TRUE);
+				g_string_free(tmp_gstring2, TRUE);
 				g_error_free(error);
 				return;
 			}
@@ -325,6 +336,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 	}
 
 	// Free the memory used in this function
+	g_string_free(message, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 	g_string_free(tmp_gstring2, TRUE);
 

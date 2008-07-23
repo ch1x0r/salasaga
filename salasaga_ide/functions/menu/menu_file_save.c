@@ -48,11 +48,12 @@ void menu_file_save(void)
 {
 	// Local variables
 	xmlDocPtr			document_pointer;			// Points to the XML document structure in memory
-	xmlNodePtr			slide_root;					// Points to the root of the slide data
+	GString				*message;					// Used to construct message strings
 	xmlNodePtr			meta_pointer;				// Points to the meta-data node
 	xmlNodePtr			pref_pointer;				// Points to the preferences node
 	xmlNodePtr			root_node;					// Points to the root node
 	xmlSaveCtxt			*save_context;				// Points to the save context
+	xmlNodePtr			slide_root;					// Points to the root of the slide data
 	GtkTextIter			text_end;					// End position of text buffer
 	GtkTextIter			text_start;					// Start position of text buffer
 	GString				*tmp_gstring;				// Temporary GString
@@ -76,13 +77,16 @@ void menu_file_save(void)
 	}
 
 	// Initialise some things
+	message = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 
 	// Create an empty document pointer
 	document_pointer = xmlNewDoc((const xmlChar *) "1.0");
 	if (NULL == document_pointer)
 	{
-		display_warning("Error ED19: Error creating the XML save document.");
+		g_string_printf(message, "%s ED19: %s", _("Error"), _("Error creating the XML save document."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 
@@ -90,7 +94,9 @@ void menu_file_save(void)
 	root_node = xmlNewDocRawNode(document_pointer, NULL, (const xmlChar *) "salasaga_project", NULL);
 	if (NULL == root_node)
 	{
-		display_warning("Error ED21: Error creating the root node.");
+		g_string_printf(message, "%s ED21: %s", _("Error"), _("Error creating the root node."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 
@@ -101,7 +107,9 @@ void menu_file_save(void)
 	meta_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "meta-data", NULL);
 	if (NULL == meta_pointer)
 	{
-		display_warning("Error ED25: Error creating the meta-data container.");
+		g_string_printf(message, "%s ED25: %s", _("Error"), _("Error creating the meta-data container."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 
@@ -112,7 +120,9 @@ void menu_file_save(void)
 	pref_pointer = xmlNewChild(root_node, NULL, (const xmlChar *) "preferences", NULL);
 	if (NULL == pref_pointer)
 	{
-		display_warning("Error ED20: Error creating the preferences container.");
+		g_string_printf(message, "%s ED20: %s", _("Error"), _("Error creating the preferences container."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 
@@ -140,7 +150,9 @@ void menu_file_save(void)
 			break;
 
 		default:
-			display_warning("Error ED281: Error creating the start behaviour value.");
+			g_string_printf(message, "%s ED281: %s", _("Error"), _("Error creating the start behaviour value."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			return;
 	}
 	switch (end_behaviour)
@@ -158,7 +170,9 @@ void menu_file_save(void)
 			break;
 
 		default:
-			display_warning("Error ED278: Error creating the end behaviour value.");
+			g_string_printf(message, "%s ED278: %s", _("Error"), _("Error creating the end behaviour value."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			return;
 	}
 	if (TRUE == show_control_bar)
@@ -184,7 +198,9 @@ void menu_file_save(void)
 	slide_root = xmlNewChild(root_node, NULL, (const xmlChar *) "slides", NULL);
 	if (NULL == slide_root)
 	{
-		display_warning("Error ED22: Error creating the slides container.");
+		g_string_printf(message, "%s ED22: %s", _("Error"), _("Error creating the slides container."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 
@@ -205,7 +221,7 @@ void menu_file_save(void)
 	changes_made = FALSE;
 
 	// Add a message to the status bar so the user gets visual feedback
-	g_string_printf(tmp_gstring, " Project saved - %s", file_name->str);
+	g_string_printf(tmp_gstring, " %s - %s", _("Project saved"), file_name->str);
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 	gdk_flush();
 
@@ -214,5 +230,6 @@ void menu_file_save(void)
 	// Free the memory allocated in this function
 //	g_free(filename);
 //	g_string_free(validated_string, TRUE);
+	g_string_free(message, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 }
