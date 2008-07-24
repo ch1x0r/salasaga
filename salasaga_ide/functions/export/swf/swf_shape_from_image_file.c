@@ -43,19 +43,23 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 	SWFBitmap			image_bitmap;				// Used to hold a scaled bitmap object
 	SWFInput			image_input;				// Used to hold a swf input object
 	GdkPixbuf			*image_pixbuf;				// Temporary GDK Pixbuf
+	GString				*message;					// Used to construct message strings
 	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
 	gsize				pixbuf_size;				// Is given the size of a compressed png image
 	gboolean			return_code_bool;			// Receives boolean return codes
 	SWFShape			swf_shape;					// Holds the newly created swf shape
 
 
+	// Initialisation
+	message = g_string_new(NULL);
+
 	image_pixbuf = gdk_pixbuf_new_from_file_at_size(filename, width, height, NULL);
 	if (NULL == image_pixbuf)
 	{
 		// Something went wrong when loading the Play button's UP stat image
-		printf("Error ED104: Couldn't load image file: %s\n", filename);
-		display_warning("Error ED104: Something went wrong when loading the image for conversion to a swf shape");
-
+		g_string_printf(message, "%s ED104: %s - '%'", _("Error"), _("Something went wrong when loading the image for conversion to a swf shape"), filename);
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return NULL;
 	}
 
@@ -69,7 +73,9 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 	if (FALSE == return_code_bool)
 	{
 		// Something went wrong when encoding the image to required format
-		display_warning("Error ED105: Something went wrong when encoding an image to png format");
+		g_string_printf(message, "%s ED105: %s", _("Error"), _("Something went wrong when encoding an image to png format."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 
 		// Free the memory allocated in this function
 		g_error_free(error);
@@ -84,7 +90,9 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 	if (NULL == image_input)
 	{
 		// Something went wrong when encoding the image to required format
-		display_warning("Error ED106: Something went wrong converting an image to a swf input object");
+		g_string_printf(message, "%s ED106: %s", _("Error"), _("Something went wrong converting an image to a swf input object."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 
 		// Free the memory allocated in this function
 		g_error_free(error);
@@ -100,7 +108,9 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 	if (NULL == image_bitmap)
 	{
 		// Something went wrong when encoding the image to required format
-		display_warning("Error ED107: Something went wrong converting an image to a swf bitmap object");
+		g_string_printf(message, "%s ED107: %s", _("Error"), _("Something went wrong converting an image to a swf bitmap object."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 
 		// Free the memory allocated in this function
 		g_error_free(error);
@@ -118,7 +128,9 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 	if (NULL == swf_shape)
 	{
 		// Something went wrong when encoding the image to required format
-		display_warning("Error ED108: Something went wrong converting an image to a swf shape object");
+		g_string_printf(message, "%s ED108: %s", _("Error"), _("Something went wrong converting an image to a swf shape object."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 
 		// Free the memory allocated in this function
 		g_error_free(error);
@@ -131,6 +143,9 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 
 		return NULL;
 	}
+
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
 
 	return swf_shape;
 }
