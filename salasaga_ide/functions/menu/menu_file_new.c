@@ -54,6 +54,7 @@ void menu_file_new(void)
 {
 	// Local variables
 	guint				guint_val;					// Used in the input validation process
+	GString				*message;					// Used to construct message strings
 	GdkColor			new_bg_colour;				// Received the new background color for the project
 	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
@@ -97,15 +98,16 @@ void menu_file_new(void)
 	}
 
 	// Initialise some things
+	message = g_string_new(NULL);
 	valid_proj_name = g_string_new(NULL);
 
 	// Create the dialog window, and table to hold its children
-	project_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Create new Salasaga Project", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	project_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Create new Salasaga Project"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
 	project_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(project_dialog->vbox), GTK_WIDGET(project_table), FALSE, FALSE, 10);
 
 	// Create the label asking for the new project name
-	name_label = gtk_label_new("Project Name: ");
+	name_label = gtk_label_new(_("Project Name: "));
 	gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -117,7 +119,7 @@ void menu_file_new(void)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the project width
-	width_label = gtk_label_new("Width: ");
+	width_label = gtk_label_new(_("Width: "));
 	gtk_misc_set_alignment(GTK_MISC(width_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -128,7 +130,7 @@ void menu_file_new(void)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the project height
-	height_label = gtk_label_new("Height: ");
+	height_label = gtk_label_new(_("Height: "));
 	gtk_misc_set_alignment(GTK_MISC(height_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -139,7 +141,7 @@ void menu_file_new(void)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the number of frames per second
-	fps_label = gtk_label_new("Frames per second: ");
+	fps_label = gtk_label_new(_("Frames per second: "));
 	gtk_misc_set_alignment(GTK_MISC(fps_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(fps_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -150,7 +152,7 @@ void menu_file_new(void)
 	row_counter = row_counter + 1;
 
 	// Create the label next to the color swatch
-	bg_color_label = gtk_label_new("Background color: ");
+	bg_color_label = gtk_label_new(_("Background color: "));
 	gtk_misc_set_alignment(GTK_MISC(bg_color_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(bg_color_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -183,8 +185,9 @@ void menu_file_new(void)
 		validated_string = validate_value(PROJECT_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED118: There was something wrong with the new project name.  Defaulting to 'New Project' instead.");
-			g_string_assign(valid_proj_name, "New Project");
+			g_string_printf(message, "%s ED118: %s", _("Error"), _("There was something wrong with the new project name.  Defaulting to 'New Project' instead."));
+			display_warning(message->str);
+			g_string_assign(valid_proj_name, _("New Project"));
 		} else
 		{
 			g_string_assign(valid_proj_name, validated_string->str);
@@ -197,7 +200,8 @@ void menu_file_new(void)
 		validated_guint = validate_value(PROJECT_WIDTH, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED120: There was something wrong with the project width value.  Please try again.");
+			g_string_printf(message, "%s ED120: %s", _("Error"), _("There was something wrong with the project width value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -210,7 +214,8 @@ void menu_file_new(void)
 		validated_guint = validate_value(PROJECT_HEIGHT, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED121: There was something wrong with the project height value.  Please try again.");
+			g_string_printf(message, "%s ED121: %s", _("Error"), _("There was something wrong with the project height value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -223,7 +228,8 @@ void menu_file_new(void)
 		validated_guint = validate_value(PROJECT_FPS, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED122: There was something wrong with the project frames per second value.  Please try again.");
+			g_string_printf(message, "%s ED122: %s", _("Error"), _("There was something wrong with the project frames per second value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -275,10 +281,10 @@ void menu_file_new(void)
 	default_bg_colour = new_bg_colour;
 
 	// Set the initial information text and link
-	info_link = g_string_new("http://www.salasaga.org");
-	info_link_target = g_string_new("_blank");
+	info_link = g_string_new(_("http://www.salasaga.org"));
+	info_link_target = g_string_new(_("_blank"));
 	info_text = gtk_text_buffer_new(NULL);
-	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), "Created using Salasaga", -1);
+	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), _("Created using Salasaga"), -1);
 	info_display = TRUE;
 
 	// Create an initial blank slide for the project
@@ -302,7 +308,7 @@ void menu_file_new(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project initialised");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Project initialised"));
 	gdk_flush();
 
 	// Redraw the timeline
@@ -312,12 +318,15 @@ void menu_file_new(void)
 	draw_workspace();
 
 	// Enable the project based menu items
-	menu_enable("/Project", TRUE);
-	menu_enable("/Slide", TRUE);
-	menu_enable("/Layer", TRUE);
-	menu_enable("/Export", TRUE);
+	menu_enable(_("/Project"), TRUE);
+	menu_enable(_("/Slide"), TRUE);
+	menu_enable(_("/Layer"), TRUE);
+	menu_enable(_("/Export"), TRUE);
 
 	// Enable the toolbar buttons
 	enable_layer_toolbar_buttons();
 	enable_main_toolbar_buttons();
+
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
 }

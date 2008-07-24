@@ -45,6 +45,7 @@ void menu_export_swf(void)
 	GtkWidget 			*export_dialog;				// Dialog widget
 	gchar				*filename;					// Pointer to the chosen file name
 	GtkFileFilter		*flash_filter;				// Filter for *.swf
+	GString				*message;					// Used to construct message strings
 	gint				return_code_gint;			// Catches the return code from the inner swf export function
 	gboolean			useable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
@@ -58,14 +59,19 @@ void menu_export_swf(void)
 	{
 		// No project is active, so display a message and return
 		gdk_beep();
-		display_warning("Error ED35: There is no project loaded\n");
+		g_string_printf(message, "%s ED35: %s", _("Error"), _("There is no project loaded."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
+
+	// Initialisation
+	message = g_string_new(NULL);
 
 	// * Pop open a dialog asking the user for their desired filename *
 
 	// Create the dialog asking the user for the name to save as
-	export_dialog = gtk_file_chooser_dialog_new("Export as Flash",
+	export_dialog = gtk_file_chooser_dialog_new(_("Export as Flash"),
 						GTK_WINDOW(main_window),
 						GTK_FILE_CHOOSER_ACTION_SAVE,
 						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -75,13 +81,13 @@ void menu_export_swf(void)
 	// Create the filter so only *.flash files are displayed
 	flash_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(flash_filter, "*.swf");
-	gtk_file_filter_set_name(flash_filter, "Adobe Flash (*.swf)");
+	gtk_file_filter_set_name(flash_filter, _("Adobe Flash (*.swf)"));
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(export_dialog), flash_filter);
 
 	// Create the filter so all files (*.*) can be displayed
 	all_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(all_filter, "*.*");
-	gtk_file_filter_set_name(all_filter, "All files (*.*)");
+	gtk_file_filter_set_name(all_filter, _("All files (*.*)"));
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(export_dialog), all_filter);
 
 	// Set the name of the file to save as
@@ -121,7 +127,8 @@ void menu_export_swf(void)
 		if (NULL == validated_string)
 		{
 			// Invalid file name
-			display_warning("Error ED182: There was something wrong with the file name given.  Please try again.");
+			g_string_printf(message, "%s ED182: %s", _("Error"), _("There was something wrong with the file name given.  Please try again."));
+			display_warning(message->str);
 		} else
 		{
 			// * Valid file name, so check if there's an existing file of this name, and give an Overwrite? type prompt if there is
@@ -132,7 +139,7 @@ void menu_export_swf(void)
 									GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 									GTK_MESSAGE_QUESTION,
 									GTK_BUTTONS_YES_NO,
-									"Overwrite existing file?");
+									_("Overwrite existing file?"));
 				if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
 				{
 					// We've been told to overwrite the existing file
@@ -157,11 +164,12 @@ void menu_export_swf(void)
 	if (FALSE == return_code_gint)
 	{
 		// Something went wrong when creating the swf output stream
-		display_warning("Error ED91: Something went wrong when creating the swf movie.");
+		g_string_printf(message, "%s ED91: %s", _("Error"), _("Something went wrong when creating the swf movie."));
+		display_warning(message->str);
 	} else
 	{
 		// Movie created successfully, so update the status bar to let the user know
-		g_string_printf(tmp_gstring, " Exported %u x %u flash - %s", output_width, output_height, validated_string->str);
+		g_string_printf(tmp_gstring, " %s %u x %u flash - %s", _("Exported"), output_width, output_height, validated_string->str);
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 		gdk_flush();
 	}
@@ -172,6 +180,7 @@ void menu_export_swf(void)
 	g_free(filename);
 
 	// Free the temporary gstring
+	g_string_free(message, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 	g_string_free(validated_string, TRUE);
 }

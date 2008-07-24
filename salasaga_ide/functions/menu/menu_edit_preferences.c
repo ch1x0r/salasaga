@@ -54,6 +54,7 @@ void menu_edit_preferences(void)
 	guint				guint_val;							// Temporary guint value used for validation
 	GValue				*handle_size;						// The size of the dividing handle for the film strip
 	GtkDialog			*main_dialog;						// Widget for the main dialog
+	GString				*message;					// Used to construct message strings
 	gchar				**strings;							// Text string are split apart with this
 	GString				*tmp_gstring;						// Text strings are constructed in this
 	gboolean			useable_input;						// Used to control loop flow
@@ -110,6 +111,7 @@ void menu_edit_preferences(void)
 
 	// Initialise various things
 	app_row_counter = 0;
+	message = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 	valid_project_folder = g_string_new(NULL);
 	valid_screenshot_folder = g_string_new(NULL);
@@ -118,39 +120,39 @@ void menu_edit_preferences(void)
 	valid_zoom_level = g_string_new(NULL);
 
 	// Create the main dialog window
-	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Application Preferences", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Application Preferences"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
 	app_dialog_table = gtk_table_new(10, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(main_dialog->vbox), GTK_WIDGET(app_dialog_table), FALSE, FALSE, 5);
 
 	// Default Project Folder
-	label_default_project_folder = gtk_label_new("Default Project Folder: ");
+	label_default_project_folder = gtk_label_new(_("Default Project Folder: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_project_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_project_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_default_project_folder = gtk_file_chooser_button_new("Select the Default Project Folder", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+	button_default_project_folder = gtk_file_chooser_button_new(_("Select the Default Project Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_project_folder), default_project_folder->str);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_project_folder), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Screenshot Folder
-	label_screenshot_folder = gtk_label_new("Screenshots Folder: ");
+	label_screenshot_folder = gtk_label_new(_("Screenshots Folder: "));
 	gtk_misc_set_alignment(GTK_MISC(label_screenshot_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_screenshot_folder = gtk_file_chooser_button_new("Select the Screenshot Folder", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+	button_screenshot_folder = gtk_file_chooser_button_new(_("Select the Screenshot Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_screenshot_folder), screenshots_folder->str);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_folder), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Output Folder
-	label_default_output_folder = gtk_label_new("Default Output Folder: ");
+	label_default_output_folder = gtk_label_new(_("Default Output Folder: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_output_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	button_default_output_folder = gtk_file_chooser_button_new("Select the Default Output Folder", GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
+	button_default_output_folder = gtk_file_chooser_button_new(_("Select the Default Output Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_output_folder), default_output_folder->str);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_output_folder), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Output Resolution
-	label_default_output_res = gtk_label_new("Default Output Resolution: ");
+	label_default_output_res = gtk_label_new(_("Default Output Resolution: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_output_res), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_res), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	selector_default_output_res = GTK_WIDGET(create_resolution_selector(default_output_width, default_output_height));
@@ -158,7 +160,7 @@ void menu_edit_preferences(void)
 	app_row_counter = app_row_counter + 1;
 
 	// Default Slide Duration
-	label_default_slide_duration = gtk_label_new("Default Slide Duration: \n(seconds)");
+	label_default_slide_duration = gtk_label_new(_("Default Slide Duration: \n(seconds)"));
 	gtk_misc_set_alignment(GTK_MISC(label_default_slide_duration), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_slide_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_default_slide_duration = gtk_spin_button_new_with_range(valid_fields[SLIDE_DURATION].min_value, valid_fields[SLIDE_DURATION].max_value, 1);
@@ -168,7 +170,7 @@ void menu_edit_preferences(void)
 	app_row_counter = app_row_counter + 1;
 
 	// Default Layer Duration
-	label_default_layer_duration = gtk_label_new("Default Layer Duration: \n(seconds)");
+	label_default_layer_duration = gtk_label_new(_("Default Layer Duration: \n(seconds)"));
 	gtk_misc_set_alignment(GTK_MISC(label_default_layer_duration), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_layer_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_default_layer_duration = gtk_spin_button_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 1);
@@ -178,7 +180,7 @@ void menu_edit_preferences(void)
 	app_row_counter = app_row_counter + 1;
 
 	// Default Frames Per Second
-	label_default_fps = gtk_label_new("Default Frames Per Second: ");
+	label_default_fps = gtk_label_new(_("Default Frames Per Second: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_fps), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_fps), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_default_fps = gtk_spin_button_new_with_range(valid_fields[PROJECT_FPS].min_value, valid_fields[PROJECT_FPS].max_value, 1);
@@ -187,7 +189,7 @@ void menu_edit_preferences(void)
 	app_row_counter = app_row_counter + 1;
 
 	// Preview width
-	label_preview_width = gtk_label_new("Film Strip Width: ");
+	label_preview_width = gtk_label_new(_("Film Strip Width: "));
 	gtk_misc_set_alignment(GTK_MISC(label_preview_width), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_preview_width), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_preview_width = gtk_spin_button_new_with_range(valid_fields[PREVIEW_WIDTH].min_value, valid_fields[PREVIEW_WIDTH].max_value, 10);
@@ -196,7 +198,7 @@ void menu_edit_preferences(void)
 	app_row_counter = app_row_counter + 1;
 
 	// Icon Height
-	label_icon_height = gtk_label_new("Icon Height: ");
+	label_icon_height = gtk_label_new(_("Icon Height: "));
 	gtk_misc_set_alignment(GTK_MISC(label_icon_height), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_icon_height), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_icon_height = gtk_spin_button_new_with_range(valid_fields[ICON_HEIGHT].min_value, valid_fields[ICON_HEIGHT].max_value, 10);
@@ -205,7 +207,7 @@ void menu_edit_preferences(void)
 	app_row_counter = app_row_counter + 1;
 
 	// Default Zoom level
-	label_default_zoom_level = gtk_label_new("Default Zoom Level: ");
+	label_default_zoom_level = gtk_label_new(_("Default Zoom Level: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_zoom_level), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_zoom_level), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	selector_default_zoom_level = create_zoom_selector(default_zoom_level->str);
@@ -213,7 +215,7 @@ void menu_edit_preferences(void)
 	app_row_counter = app_row_counter + 1;
 
 	// Default Background Colour
-	label_default_bg_colour = gtk_label_new("Default Background Colour: ");
+	label_default_bg_colour = gtk_label_new(_("Default Background Colour: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_bg_colour), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_bg_colour), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_default_bg_colour = gtk_color_button_new_with_color(&default_bg_colour);
@@ -222,7 +224,7 @@ void menu_edit_preferences(void)
 	app_row_counter = app_row_counter + 1;
 
 	// Non-metacity key bind warning
-	check_metacity_key_bind = gtk_check_button_new_with_label("Display non-metacity key bind warning?");
+	check_metacity_key_bind = gtk_check_button_new_with_label(_("Display non-metacity key bind warning?"));
 	if (FALSE == metacity_key_warning)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_metacity_key_bind), FALSE);
@@ -261,7 +263,8 @@ void menu_edit_preferences(void)
 		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_default_project_folder)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED126: There was something wrong with the project folder given.  Please try again.");
+			g_string_printf(message, "%s ED126: %s", _("Error"), _("There was something wrong with the project folder given.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -274,7 +277,8 @@ void menu_edit_preferences(void)
 		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_screenshot_folder)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED127: There was something wrong with the screenshot folder given.  Please try again.");
+			g_string_printf(message, "%s ED127: %s", _("Error"), _("There was something wrong with the screenshot folder given.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -287,7 +291,8 @@ void menu_edit_preferences(void)
 		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_default_output_folder)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED128: There was something wrong with the output folder given.  Please try again.");
+			g_string_printf(message, "%s ED128: %s", _("Error"), _("There was something wrong with the output folder given.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -300,7 +305,8 @@ void menu_edit_preferences(void)
 		validated_string = validate_value(RESOLUTION, V_INT_UNSIGNED, gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_default_output_res)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED129: There was something wrong with the default output resolution given.  Please try again.");
+			g_string_printf(message, "%s ED129: %s", _("Error"), _("There was something wrong with the default output resolution given.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -314,7 +320,8 @@ void menu_edit_preferences(void)
 		validated_gfloat = validate_value(SLIDE_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED130: There was something wrong with the default slide duration value.  Please try again.");
+			g_string_printf(message, "%s ED130: %s", _("Error"), _("There was something wrong with the default slide duration value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -327,7 +334,8 @@ void menu_edit_preferences(void)
 		validated_gfloat = validate_value(LAYER_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED334: There was something wrong with the default layer duration value.  Please try again.");
+			g_string_printf(message, "%s ED334: %s", _("Error"), _("There was something wrong with the default layer duration value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -340,7 +348,8 @@ void menu_edit_preferences(void)
 		validated_guint = validate_value(PROJECT_FPS, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED134: There was something wrong with the default frames per second value.  Please try again.");
+			g_string_printf(message, "%s ED134: %s", _("Error"), _("There was something wrong with the default frames per second value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -353,7 +362,8 @@ void menu_edit_preferences(void)
 		validated_guint = validate_value(PREVIEW_WIDTH, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED131: There was something wrong with the preview width value.  Please try again.");
+			g_string_printf(message, "%s ED131: %s", _("Error"), _("There was something wrong with the preview width value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -366,7 +376,8 @@ void menu_edit_preferences(void)
 		validated_guint = validate_value(ICON_HEIGHT, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED132: There was something wrong with the icon height value.  Please try again.");
+			g_string_printf(message, "%s ED132: %s", _("Error"), _("There was something wrong with the icon height value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -378,7 +389,8 @@ void menu_edit_preferences(void)
 		validated_string = validate_value(ZOOM_LEVEL, V_ZOOM, gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_default_zoom_level)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED133: There was something wrong with the default zoom level given.  Please try again.");
+			g_string_printf(message, "%s ED133: %s", _("Error"), _("There was something wrong with the default zoom level given.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -456,10 +468,11 @@ void menu_edit_preferences(void)
 	}
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Application preferences updated");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Application preferences updated"));
 	gdk_flush();
 
 	// Free up the memory allocated in this function
+	g_string_free(message, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 	gtk_widget_destroy(GTK_WIDGET(label_default_project_folder));
 	gtk_widget_destroy(GTK_WIDGET(button_default_project_folder));

@@ -46,6 +46,7 @@ void menu_export_layer(void)
 	gchar				*filename;					// Pointer to the chosen file name
 	GtkFileFilter		*file_filter;				// Filter for *.swf
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	GString				*message;					// Used to construct message strings
 	gint				return_code_gbool;			// Catches the return code from the inner swf export function
 	guint				selected_row;				// Holds the row that is selected
 	slide				*slide_data;				// Pointer to current slide data
@@ -61,6 +62,7 @@ void menu_export_layer(void)
 	// Initialise some variables
 	slide_data = (slide *) current_slide->data;
 	layer_pointer = slide_data->layers;
+	message = g_string_new(NULL);
 
 	// Determine which layer the user has selected in the timeline
 	selected_row = time_line_get_selected_layer_num(slide_data->timeline_widget);
@@ -69,14 +71,16 @@ void menu_export_layer(void)
 	// Is the selected layer anything other than an image layer
 	if (TYPE_GDK_PIXBUF != this_layer->object_type)
 	{
-		display_warning("Error ED116: Only image layers can be exported to an image file.");
+		g_string_printf(message, "%s ED116: %s", _("Error"), _("Only image layers can be exported to an image file."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 
 	// * Pop open a dialog asking the user for their desired filename *
 
 	// Create the dialog asking the user for the name to save as
-	export_dialog = gtk_file_chooser_dialog_new("Export Slide as Image",
+	export_dialog = gtk_file_chooser_dialog_new(_("Export Slide as Image"),
 						GTK_WINDOW(main_window),
 						GTK_FILE_CHOOSER_ACTION_SAVE,
 						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -86,13 +90,13 @@ void menu_export_layer(void)
 	// Create the filter so only *.png files are displayed
 	file_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(file_filter, "*.png");
-	gtk_file_filter_set_name(file_filter, "Portable Network Graphics (*.png)");
+	gtk_file_filter_set_name(file_filter, _("Portable Network Graphics (*.png)"));
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(export_dialog), file_filter);
 
 	// Create the filter so all files (*.*) can be displayed
 	all_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(all_filter, "*.*");
-	gtk_file_filter_set_name(all_filter, "All files (*.*)");
+	gtk_file_filter_set_name(all_filter, _("All files (*.*)"));
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(export_dialog), all_filter);
 
 	// Set the name of the file to save as
@@ -132,7 +136,9 @@ void menu_export_layer(void)
 		if (NULL == validated_string)
 		{
 			// Invalid file name
-			display_warning("Error ED184: There was something wrong with the file name given.  Please try again.");
+			g_string_printf(message, "%s ED184: %s", _("Error"), _("There was something wrong with the file name given.  Please try again."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 		} else
 		{
 			// * Valid file name, so check if there's an existing file of this name, and give an Overwrite? type prompt if there is
@@ -143,7 +149,7 @@ void menu_export_layer(void)
 									GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 									GTK_MESSAGE_QUESTION,
 									GTK_BUTTONS_YES_NO,
-									"Overwrite existing file?");
+									_("Overwrite existing file?"));
 				if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
 				{
 					// We've been told to overwrite the existing file
@@ -165,15 +171,17 @@ void menu_export_layer(void)
 
 	// Export the image
 	this_image_ob = (layer_image *) this_layer->object_data;
-	return_code_gbool = gdk_pixbuf_save(GDK_PIXBUF(this_image_ob->image_data), validated_string->str, "png", NULL, "tEXt::Software", "Salasaga: http://www.salasaga.org", NULL);
+	return_code_gbool = gdk_pixbuf_save(GDK_PIXBUF(this_image_ob->image_data), validated_string->str, "png", NULL, "tEXt::Software", _("Salasaga: http://www.salasaga.org"), NULL);
 	if (FALSE == return_code_gbool)
 	{
 		// Something went wrong when saving the image file
-		display_warning("Error ED117: Something went wrong when saving the image file.");
+		g_string_printf(message, "%s ED117: %s", _("Error"), _("Something went wrong when saving the image file."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 	} else
 	{
 		// Image file was created successfully, so update the status bar to let the user know
-		g_string_printf(tmp_gstring, " Wrote image file - %s", validated_string->str);
+		g_string_printf(tmp_gstring, " %s - %s", _("Wrote image file"), validated_string->str);
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 		gdk_flush();
 	}
@@ -184,6 +192,7 @@ void menu_export_layer(void)
 	g_free(filename);
 
 	// Free the temporary gstring
+	g_string_free(message, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 	g_string_free(validated_string, TRUE);
 }

@@ -45,6 +45,7 @@ void menu_export_slide(void)
 	GError				*error = NULL;				// Pointer to error return structure
 	gchar				*filename;					// Pointer to the chosen file name
 	GtkFileFilter		*file_filter;				// Filter for *.png
+	GString				*message;					// Used to construct message strings
 	gboolean			return_code_gbool;			// Catches the return code of the g_pixbuf_save function
 	GdkPixbuf			*slide_pixbuf;				// Image of the slide workspace
 	GString				*tmp_gstring;				// Temporary GString
@@ -54,10 +55,13 @@ void menu_export_slide(void)
 	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
 
 
-	// * Pop open a dialog asking the user for their desired filename *
+	// * Display a dialog asking the user for the desired filename *
+
+	// Initialisation
+	message = g_string_new(NULL);
 
 	// Create the dialog asking the user for the name to save as
-	export_dialog = gtk_file_chooser_dialog_new("Export Slide as Image",
+	export_dialog = gtk_file_chooser_dialog_new(_("Export Slide as Image"),
 						GTK_WINDOW(main_window),
 						GTK_FILE_CHOOSER_ACTION_SAVE,
 						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -67,13 +71,13 @@ void menu_export_slide(void)
 	// Create the filter so only *.png files are displayed
 	file_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(file_filter, "*.png");
-	gtk_file_filter_set_name(file_filter, "Portable Network Graphics (*.png)");
+	gtk_file_filter_set_name(file_filter, _("Portable Network Graphics (*.png)"));
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(export_dialog), file_filter);
 
 	// Create the filter so all files (*.*) can be displayed
 	all_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(all_filter, "*.*");
-	gtk_file_filter_set_name(all_filter, "All files (*.*)");
+	gtk_file_filter_set_name(all_filter, _("All files (*.*)"));
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(export_dialog), all_filter);
 
 	// Set the name of the file to save as
@@ -113,7 +117,8 @@ void menu_export_slide(void)
 		if (NULL == validated_string)
 		{
 			// Invalid file name
-			display_warning("Error ED183: There was something wrong with the file name given.  Please try again.");
+			g_string_printf(message, "%s ED183: %s", _("Error"), _("There was something wrong with the file name given.  Please try again."));
+			display_warning(message->str);
 		} else
 		{
 			// * Valid file name, so check if there's an existing file of this name, and give an Overwrite? type prompt if there is
@@ -124,7 +129,7 @@ void menu_export_slide(void)
 									GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 									GTK_MESSAGE_QUESTION,
 									GTK_BUTTONS_YES_NO,
-									"Overwrite existing file?");
+									_("Overwrite existing file?"));
 				if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
 				{
 					// We've been told to overwrite the existing file
@@ -153,15 +158,16 @@ void menu_export_slide(void)
 	g_object_unref(GDK_PIXMAP(tmp_pixmap));
 
 	// Save the image as a png file
-	return_code_gbool = gdk_pixbuf_save(GDK_PIXBUF(slide_pixbuf), validated_string->str, "png", &error, "tEXt::Software", "Salasaga: http://www.salasaga.org", NULL);
+	return_code_gbool = gdk_pixbuf_save(GDK_PIXBUF(slide_pixbuf), validated_string->str, "png", &error, "tEXt::Software", _("Salasaga: http://www.salasaga.org"), NULL);
 	if (FALSE == return_code_gbool)
 	{
 		// Something went wrong when saving the image file
-		display_warning("Error ED115: Something went wrong when saving the image file.");
+		g_string_printf(message, "%s ED115: %s", _("Error"), _("Something went wrong when saving the image file."));
+		display_warning(message->str);
 	} else
 	{
 		// Image file was created successfully, so update the status bar to let the user know
-		g_string_printf(tmp_gstring, " Wrote image file - %s", validated_string->str);
+		g_string_printf(tmp_gstring, " %s - %s", _("Wrote image file"), validated_string->str);
 		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 		gdk_flush();
 	}
@@ -172,6 +178,7 @@ void menu_export_slide(void)
 	g_free(filename);
 
 	// Free the temporary gstring
+	g_string_free(message, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 	g_string_free(validated_string, TRUE);	
 }

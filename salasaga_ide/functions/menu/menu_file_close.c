@@ -86,7 +86,7 @@ void menu_file_close()
 	}
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Project closed");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Project closed"));
 	gdk_flush();
 
 	// Gray out the toolbar items that can't be used without a project loaded
@@ -94,10 +94,10 @@ void menu_file_close()
 	disable_main_toolbar_buttons();
 
 	// Disable the project based menu items
-	menu_enable("/Project", FALSE);
-	menu_enable("/Slide", FALSE);
-	menu_enable("/Layer", FALSE);
-	menu_enable("/Export", FALSE);
+	menu_enable(_("/Project"), FALSE);
+	menu_enable(_("/Slide"), FALSE);
+	menu_enable(_("/Layer"), FALSE);
+	menu_enable(_("/Export"), FALSE);
 
 	// If there's an existing film strip, we unload it
 	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
