@@ -79,9 +79,9 @@ void layer_new_mouse_inner(guint release_x, guint release_y)
 	tmp_layer->y_offset_finish = release_y;
 	tmp_layer->visible = TRUE;
 	tmp_layer->background = FALSE;
-	tmp_layer->name = g_string_new("Mouse Pointer");
+	tmp_layer->name = g_string_new(_("Mouse Pointer"));
 	tmp_layer->external_link = g_string_new(NULL);
-	tmp_layer->external_link_window = g_string_new("_self");
+	tmp_layer->external_link_window = g_string_new(_("_self"));
 	tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_in_duration = 0.0;
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
@@ -120,6 +120,6 @@ void layer_new_mouse_inner(guint release_x, guint release_y)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Mouse layer added");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Mouse layer added"));
 	gdk_flush();
 }

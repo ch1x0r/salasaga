@@ -149,9 +149,9 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	tmp_layer->y_offset_finish = roundf(scaled_y);
 	tmp_layer->visible = TRUE;
 	tmp_layer->background = FALSE;
-	tmp_layer->name = g_string_new("Highlight");
+	tmp_layer->name = g_string_new(_("Highlight"));
 	tmp_layer->external_link = g_string_new(NULL);
-	tmp_layer->external_link_window = g_string_new("_self");
+	tmp_layer->external_link_window = g_string_new(_("_self"));
 	tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_in_duration = 0.0;
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
@@ -190,6 +190,6 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Highlight layer added");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Highlight layer added"));
 	gdk_flush();
 }

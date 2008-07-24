@@ -43,6 +43,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 {
 	// Local variables
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	GString				*message;					// Used to construct message strings
 	GdkPixbuf			*new_image_data;			// Receives the new image data
 	gint				new_image_height;			// Receives the height of the new image
 	gint				new_image_width;			// Receives the width of the new image
@@ -65,6 +66,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	}
 
 	// Initialise some things
+	message = g_string_new(NULL);
 	path_gstring = g_string_new(NULL);
 	valid_image_path = g_string_new(NULL);
 
@@ -92,16 +94,16 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	tmp_layer->y_offset_finish = release_y;
 	tmp_layer->visible = TRUE;
 	tmp_layer->background = FALSE;
-	tmp_layer->name = g_string_new("Image");
+	tmp_layer->name = g_string_new(_("Image"));
 	tmp_layer->external_link = g_string_new(NULL);
-	tmp_layer->external_link_window = g_string_new("_self");
+	tmp_layer->external_link_window = g_string_new(_("_self"));
 	tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_in_duration = 0.0;
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_out_duration = 0.0;
 
 	// Open a dialog asking the user to select an image
-	path_widget = gtk_file_chooser_dialog_new("Please choose an image file", GTK_WINDOW(main_window), GTK_FILE_CHOOSER_ACTION_OPEN,
+	path_widget = gtk_file_chooser_dialog_new(_("Please choose an image file"), GTK_WINDOW(main_window), GTK_FILE_CHOOSER_ACTION_OPEN,
 				      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,  // Cancel button
 				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,  // Open button
 				      NULL);
@@ -132,7 +134,8 @@ void layer_new_image_inner(guint release_x, guint release_y)
 		validated_string = validate_value(FILE_PATH, V_CHAR, (gchar *) gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(path_widget)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED330: There was something wrong with the image path given.  Please try again.");
+			g_string_printf(message, "%s ED330: %s", _("Error"), _("There was something wrong with the image path given.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -140,7 +143,8 @@ void layer_new_image_inner(guint release_x, guint release_y)
 			new_image_data = gdk_pixbuf_new_from_file(validated_string->str, NULL);
 			if (NULL == new_image_data)
 			{
-				display_warning("Error ED331: There was something wrong with the image file selected.  Please try again.");
+				g_string_printf(message, "%s ED331: %s", _("Error"), _("There was something wrong with the image file selected.  Please try again."));
+				display_warning(message->str);
 				useable_input = FALSE;					
 			} else
 			{
@@ -160,7 +164,9 @@ void layer_new_image_inner(guint release_x, guint release_y)
 				if (NULL == tmp_image_ob->cairo_pattern)
 				{
 					// Something went wrong when creating the image pattern
-					display_warning("Error ED372: Couldn't create an image pattern");
+					g_string_printf(message, "%s ED372: %s", _("Error"), _("Couldn't create an image pattern."));
+					display_warning(message->str);
+					g_string_free(message, TRUE);
 					return;
 				}
 			}
@@ -190,6 +196,9 @@ void layer_new_image_inner(guint release_x, guint release_y)
 		tmp_layer->duration = slide_data->duration;
 	}
 
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
+
 	// Regenerate the timeline
 	draw_timeline();
 
@@ -206,6 +215,6 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Image layer added");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Image layer added"));
 	gdk_flush();
 }

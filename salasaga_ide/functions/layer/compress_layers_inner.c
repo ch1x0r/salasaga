@@ -58,6 +58,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	GtkAllocation			layer_positions;		// Offset and dimensions for a given layer object
 	gint					line_counter;
 	gfloat					max_line_width;
+	GString					*message;				// Used to construct message strings
 	gint					num_lines;
 	gint					pixmap_height;			// Receives the height of a given pixmap
 	gint					pixmap_width;			// Receives the width of a given pixmap
@@ -345,7 +346,10 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			break;		
 
 		default:
-			display_warning("Error ED33: Unknown layer type");		
+			message = g_string_new(NULL);
+			g_string_printf(message, "%s ED33: %s", _("Error"), _("Unknown layer type."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 	}
 
 	// The cairo drawing context is no longer needed, so free it

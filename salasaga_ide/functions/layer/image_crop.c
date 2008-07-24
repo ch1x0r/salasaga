@@ -51,13 +51,14 @@ void image_crop(void)
 	// Local variables
 	GtkDialog			*crop_dialog;				// Widget for the dialog
 	GtkWidget			*crop_table;				// Table used for neat layout of the dialog box
-	guint				row_counter = 0;			// Used to count which row things are up to
 	gint				dialog_result;				// Receives the return code from the dialog box
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	GString				*message;					// Used to construct message strings
+	GdkPixbuf			*old_pixbuf;				// Pointer to the full size (old) pixbuf
 	gint				new_height;					// Hold the height of the cropped area
 	GdkPixbuf			*new_pixbuf;				// Holds the cropped image data
 	gint				new_width;					// Hold the width of the cropped area
-	GdkPixbuf			*old_pixbuf;				// Pointer to the full size (old) pixbuf
+	guint				row_counter = 0;			// Used to count which row things are up to
 	guint				selected_row;				// Holds the number of the row that is selected
 	layer				*this_layer;				// Temporary layer
 	layer_image			*tmp_image_ob;				// Points to the image data in the selected layer
@@ -86,6 +87,7 @@ void image_crop(void)
 
 	// Initialise some variables
 	layer_pointer = ((slide *) current_slide->data)->layers;
+	message = g_string_new(NULL);
 
 	// * Check if the selected layer is an image *
 
@@ -100,7 +102,9 @@ void image_crop(void)
 	{
 		// Give the user feedback
 		gdk_beep();
-		display_warning("Error ED36: Only Image layers can be cropped");
+		g_string_printf(message, "%s ED36: %s", _("Error"), _("Only Image layers can be cropped."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 
@@ -109,19 +113,21 @@ void image_crop(void)
 	{
 		// Give the user feedback
 		gdk_beep();
-		display_warning("Error ED37: Background layers can not be cropped");
+		g_string_printf(message, "%s ED37: %s", _("Error"), _("Background layers can not be cropped."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 
 	// * Pop open a dialog box asking the user how much to crop off each side of the image *
 
 	// Create the dialog window, and table to hold its children
-	crop_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons("Crop image layer", GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	crop_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Crop image layer"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
 	crop_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(crop_dialog->vbox), GTK_WIDGET(crop_table), FALSE, FALSE, 10);
 
 	// Create the label asking for the left side crop amount
-	left_label = gtk_label_new("Left crop: ");
+	left_label = gtk_label_new(_("Left crop: "));
 	gtk_misc_set_alignment(GTK_MISC(left_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -132,7 +138,7 @@ void image_crop(void)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the right side crop amount
-	right_label = gtk_label_new("Right crop: ");
+	right_label = gtk_label_new(_("Right crop: "));
 	gtk_misc_set_alignment(GTK_MISC(right_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -143,7 +149,7 @@ void image_crop(void)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the top crop amount
-	top_label = gtk_label_new("Top crop: ");
+	top_label = gtk_label_new(_("Top crop: "));
 	gtk_misc_set_alignment(GTK_MISC(top_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -154,7 +160,7 @@ void image_crop(void)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the right side crop amount
-	bottom_label = gtk_label_new("Bottom crop: ");
+	bottom_label = gtk_label_new(_("Bottom crop: "));
 	gtk_misc_set_alignment(GTK_MISC(bottom_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -206,7 +212,9 @@ void image_crop(void)
 	if (NULL == tmp_image_ob->cairo_pattern)
 	{
 		// Something went wrong when creating the image pattern
-		display_warning("Error ED374: Couldn't create an image pattern");
+		g_string_printf(message, "%s ED374: %s", _("Error"), _("Couldn't create an image pattern."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 
@@ -229,6 +237,9 @@ void image_crop(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Image cropped");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Image cropped"));
 	gdk_flush();
+
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
 }

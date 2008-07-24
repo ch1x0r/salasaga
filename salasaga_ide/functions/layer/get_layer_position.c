@@ -42,6 +42,7 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 	gint				finish_y;					// Y position at the layer objects finish time
 	gfloat				full_end_time;				// Time in seconds when the layer finishes being fully visible
 	gfloat				full_start_time;			// Time in seconds when the layer starts being fully visible
+	GString				*message;					// Used to construct message strings
 	gfloat				start_time;					// Time in seconds of the layer objects start time
 	gint				start_x;					// X position at the layer objects start time
 	gint				start_y;					// Y position at the layer objects start time
@@ -52,6 +53,9 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 	gfloat				y_diff;						// The Y distance the object was dragged, after scaling
 	gfloat				y_scale;					// Used when calculating the object position at the desired point in time
 
+
+	// Initialisation
+	message = g_string_new(NULL);
 
 	// Simplify pointers
 	finish_x = this_layer_data->x_offset_finish;
@@ -187,7 +191,9 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 			break;
 
 		default:
-			display_warning("Error ED381: Unknown layer type");
+			g_string_printf(message, "%s ED381: %s", _("Error"), _("Unknown layer type."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			return FALSE;
 	}
 

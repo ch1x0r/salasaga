@@ -60,6 +60,6 @@ void layer_new_image(void)
 	new_layer_selected = TYPE_GDK_PIXBUF;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Please click the insertion point");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Please click the insertion point"));
 	gdk_flush();
 }

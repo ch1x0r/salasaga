@@ -38,6 +38,13 @@
 
 gboolean layer_free(layer *this_layer)
 {
+	// Local variables
+	GString				*message;					// Used to construct message strings
+
+
+	// Initialisation
+	message = g_string_new(NULL);
+
 	// Free the easy variables first
 	if (NULL != this_layer->name)
 		g_string_free(this_layer->name, TRUE);
@@ -77,12 +84,16 @@ gboolean layer_free(layer *this_layer)
 			break;
 
 		default:
-			display_warning("Error ED286: Unknown layer type when destroying a layer.\n");
+			g_string_printf(message, "%s ED286: %s", _("Error"), _("Unknown layer type when destroying a layer."));
+			display_warning(message->str);
 	}
 	g_free(this_layer->object_data);
 
-	// Finally, free the layer structure itself
+	// Free the layer structure itself
 	g_free(this_layer);
+
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
 
 	return TRUE;
 }

@@ -60,6 +60,6 @@ void layer_new_text(void)
 	new_layer_selected = TYPE_TEXT;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Please click the insertion point");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Please click the insertion point"));
 	gdk_flush();
 }

@@ -107,7 +107,7 @@ void layer_delete(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer deleted");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Layer deleted"));
 	gdk_flush();
 
 	return;

@@ -60,6 +60,6 @@ void layer_new_highlight(void)
 	new_layer_selected = TYPE_HIGHLIGHT;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Please draw the new layer");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Please draw the new layer"));
 	gdk_flush();
 }

@@ -102,6 +102,6 @@ void layer_move_down(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer moved down");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Layer moved down"));
 	gdk_flush();
 }

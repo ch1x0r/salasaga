@@ -55,6 +55,7 @@ void layer_edit(void)
 	// Local variables
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gfloat 				layer_total_time;			// Total length in time that a layer is displayed
+	GString				*message;					// Used to construct message strings
 	guint				num_layers;					// Number of layers
 	gboolean			return_code;				// Did the edit dialog return ok?
 	guint				selected_row;				// Holds the row that is selected
@@ -73,6 +74,7 @@ void layer_edit(void)
 	// Initialise some variables
 	slide_data = (slide *) current_slide->data;
 	layer_pointer = slide_data->layers;
+	message = g_string_new(NULL);
 
 	// Determine the number of layers present in this slide
 	layer_pointer = g_list_first(layer_pointer);
@@ -88,7 +90,7 @@ void layer_edit(void)
 	{
 		case TYPE_EMPTY:
 			// Open a dialog box for the user to edit the background layer values
-			return_code = display_dialog_empty(tmp_layer, "Edit background color");
+			return_code = display_dialog_empty(tmp_layer, _("Edit background color"));
 			if (TRUE == return_code)
 			{
 				// * The dialog box returned successfully *
@@ -105,7 +107,7 @@ void layer_edit(void)
 
 		case TYPE_GDK_PIXBUF:
 			// Open a dialog box for the user to edit the image layer values
-			return_code = display_dialog_image(tmp_layer, "Edit image layer");
+			return_code = display_dialog_image(tmp_layer, _("Edit image layer"));
 			if (TRUE == return_code)
 			{
 				// * The dialog box returned successfully *
@@ -129,7 +131,7 @@ void layer_edit(void)
 
 		case TYPE_MOUSE_CURSOR:
 			// Open a dialog box for the user to edit the mouse pointer values
-			return_code = display_dialog_mouse(tmp_layer, "Edit mouse pointer", FALSE);
+			return_code = display_dialog_mouse(tmp_layer, _("Edit mouse pointer"), FALSE);
 			if (TRUE == return_code)
 			{
 				// * The dialog box returned successfully *
@@ -154,7 +156,7 @@ void layer_edit(void)
 		case TYPE_TEXT:
 
 			// Open a dialog box for the user to edit the text layer values
-			return_code = display_dialog_text(tmp_layer, "Edit text layer");
+			return_code = display_dialog_text(tmp_layer, _("Edit text layer"));
 			if (TRUE == return_code)
 			{
 				// * The dialog box returned successfully *
@@ -179,7 +181,7 @@ void layer_edit(void)
 		case TYPE_HIGHLIGHT:
 
 			// Open a dialog box for the user to edit the highlight layer values
-			return_code = display_dialog_highlight(tmp_layer, "Edit highlight layer");
+			return_code = display_dialog_highlight(tmp_layer, _("Edit highlight layer"));
 			if (TRUE == return_code)
 			{
 				// * The dialog box returned successfully *
@@ -202,7 +204,9 @@ void layer_edit(void)
 			break;
 
 		default:
-			display_warning("Error ED34: Unknown layer type");
+			g_string_printf(message, "%s ED34: %s", _("Error"), _("Unknown layer type."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			return;
 	}
 
@@ -216,6 +220,9 @@ void layer_edit(void)
 	film_strip_create_thumbnail(slide_data);
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer edited");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Layer edited"));
 	gdk_flush();
+
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
 }

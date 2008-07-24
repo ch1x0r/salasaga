@@ -66,13 +66,13 @@ void layer_copy(void)
 	{
 		// Something went wrong duplicating the existing layer.  Not much we can do
 		gdk_beep();
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Copy failed");
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Copy failed"));
 		gdk_flush();
 		return;
 	}
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Layer copied to buffer");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Layer copied to buffer"));
 	gdk_flush();
 	return;
 }

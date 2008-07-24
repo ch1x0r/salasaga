@@ -39,6 +39,7 @@ layer *layer_duplicate(layer *source_layer)
 	// Local variables
 	layer_highlight		*dest_highlight_data;		// Pointer to the destination highlight specific data
 	layer_text			*dest_text_data;			// Pointer to the destination text specific data
+	GString				*message;					// Used to construct message strings
 	layer				*new_layer;					// Pointer to the newly created layer
 	layer_highlight		*source_highlight_data;		// Pointer to the source highlight specific data
 	layer_text			*source_text_data;			// Pointer to the source text specific data
@@ -46,12 +47,17 @@ layer *layer_duplicate(layer *source_layer)
 	GtkTextIter			text_end;					// The end position of the text buffer
 
 
+	// Initialisation
+	message = g_string_new(NULL);
+
 	// Allocate memory for a new layer
 	new_layer = g_try_new0(layer, 1);
 	if (NULL == new_layer)
 	{
 		// We couldn't allocate memory for a new layer
-		display_warning("Error ED287: Unable to allocate memory for the copy buffer.  Copy failed.");
+		g_string_printf(message, "%s ED287: %s", _("Error"), _("Unable to allocate memory for the copy buffer.  Copy failed."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return NULL;
 	}
 
@@ -79,14 +85,14 @@ layer *layer_duplicate(layer *source_layer)
 	} else
 	{
 		// If the source layer is a background layer, it gets special treatment
-		if (0 == g_ascii_strncasecmp(source_layer->name->str, "Background", 10))
+		if (0 == g_ascii_strncasecmp(source_layer->name->str, _("Background"), 10))
 		{
 			if (TYPE_GDK_PIXBUF == source_layer->object_type)
 			{
-				new_layer->name = g_string_new("Image");
+				new_layer->name = g_string_new(_("Image"));
 			} else
 			{
-				new_layer->name = g_string_new("Empty");
+				new_layer->name = g_string_new(_("Empty"));
 			}
 		} else
 		{
@@ -103,7 +109,9 @@ layer *layer_duplicate(layer *source_layer)
 			if (NULL == new_layer->object_data)
 			{
 				// We couldn't allocate memory for a new layer
-				display_warning("Error ED289: Unable to allocate memory in the copy buffer for layer specific data.  Copy failed.");
+				g_string_printf(message, "%s ED289: %s", _("Error"), _("Unable to allocate memory in the copy buffer for layer specific data.  Copy failed."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				g_free(new_layer);
 				return NULL;
 			}
@@ -118,7 +126,9 @@ layer *layer_duplicate(layer *source_layer)
 			if (NULL == new_layer->object_data)
 			{
 				// We couldn't allocate memory for a new layer
-				display_warning("Error ED290: Unable to allocate memory in the copy buffer for layer specific data.  Copy failed.");
+				g_string_printf(message, "%s ED290: %s", _("Error"), _("Unable to allocate memory in the copy buffer for layer specific data.  Copy failed."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				g_free(new_layer);
 				return NULL;
 			}
@@ -130,7 +140,9 @@ layer *layer_duplicate(layer *source_layer)
 			if (NULL == ((layer_image *) new_layer->object_data)->cairo_pattern)
 			{
 				// Something went wrong when creating the image pattern
-				display_warning("Error ED375: Couldn't create an image pattern");
+				g_string_printf(message, "%s ED375: %s", _("Error"), _("Couldn't create an image pattern."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return NULL;
 			}
 			break;
@@ -140,7 +152,9 @@ layer *layer_duplicate(layer *source_layer)
 			if (NULL == new_layer->object_data)
 			{
 				// We couldn't allocate memory for a new layer
-				display_warning("Error ED291: Unable to allocate memory in the copy buffer for layer specific data.  Copy failed.");
+				g_string_printf(message, "%s ED291: %s", _("Error"), _("Unable to allocate memory in the copy buffer for layer specific data.  Copy failed."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				g_free(new_layer);
 				return NULL;
 			}
@@ -163,7 +177,9 @@ layer *layer_duplicate(layer *source_layer)
 			if (NULL == new_layer->object_data)
 			{
 				// We couldn't allocate memory for a new layer
-				display_warning("Error ED292: Unable to allocate memory in the copy buffer for layer specific data.  Copy failed.");
+				g_string_printf(message, "%s ED292: %s", _("Error"), _("Unable to allocate memory in the copy buffer for layer specific data.  Copy failed."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				g_free(new_layer);
 				return NULL;
 			}
@@ -177,7 +193,9 @@ layer *layer_duplicate(layer *source_layer)
 			if (NULL == new_layer->object_data)
 			{
 				// We couldn't allocate memory for a new layer
-				display_warning("Error ED293: Unable to allocate memory in the copy buffer for layer specific data.  Copy failed.");
+				g_string_printf(message, "%s ED293: %s", _("Error"), _("Unable to allocate memory in the copy buffer for layer specific data.  Copy failed."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				g_free(new_layer);
 				return NULL;
 			}
@@ -208,7 +226,9 @@ layer *layer_duplicate(layer *source_layer)
 		default:
 
 			// No code written to handle this type of layer yet
-			display_warning("Error ED288: Unknown layer type");
+			g_string_printf(message, "%s ED288: %s", _("Error"), _("Unknown layer type when duplicating layer."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			g_free(new_layer);
 			return NULL;
 	}

@@ -68,7 +68,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	tmp_text_ob->text_color.blue = 0;
 	tmp_text_ob->font_size = 40;
 	tmp_text_ob->text_buffer = gtk_text_buffer_new(NULL);
-	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), "New text...", -1);
+	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), _("New text..."), -1);
 	tmp_text_ob->show_bg = TRUE;
 	tmp_text_ob->bg_border_width = 1.0;
 	tmp_text_ob->bg_border_colour.red = 0;
@@ -90,9 +90,9 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	tmp_layer->y_offset_finish = release_y;
 	tmp_layer->visible = TRUE;
 	tmp_layer->background = FALSE;
-	tmp_layer->name = g_string_new("Text layer");
+	tmp_layer->name = g_string_new(_("Text layer"));
 	tmp_layer->external_link = g_string_new(NULL);
-	tmp_layer->external_link_window = g_string_new("_self");
+	tmp_layer->external_link_window = g_string_new(_("_self"));
 	tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_in_duration = 0.0;
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
@@ -131,6 +131,6 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Text layer added");
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Text layer added"));
 	gdk_flush();
 }
