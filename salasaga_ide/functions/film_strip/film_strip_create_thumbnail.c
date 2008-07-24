@@ -36,6 +36,7 @@
 void film_strip_create_thumbnail(slide *slide_data)
 {
 	// Local variables
+	GString				*message;					// Used to construct message strings
 	GdkPixbuf			*new_thumbnail;
 	GtkTreeIter			old_iter;					// Iter used to select the film strip thumbnail
 	GtkTreePath			*old_path;					// Path used to select the film strip thumbnail
@@ -58,13 +59,19 @@ void film_strip_create_thumbnail(slide *slide_data)
 	tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(front_store), NULL, 0, 0, 0, 0, -1, -1);
 	if (NULL == tmp_pixbuf)
 	{
-		display_warning("Error ED369: Couldn't create film strip thumbnail");
+		message = g_string_new(NULL);
+		g_string_printf(message, "%s ED369: %s", _("Error"), _("Couldn't create film strip thumbnail."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 	new_thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, (guint) preview_width * 0.75, GDK_INTERP_TILES);
 	if (NULL == new_thumbnail)
 	{
-		display_warning("Error ED370: Couldn't allocate memory for a new film strip thumbnail");
+		message = g_string_new(NULL);
+		g_string_printf(message, "%s ED370: %s", _("Error"), _("Couldn't allocate memory for a new film strip thumbnail."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 	g_object_unref(GDK_PIXBUF(tmp_pixbuf));

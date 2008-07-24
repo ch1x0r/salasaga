@@ -76,7 +76,7 @@ void create_film_strip()
 	film_strip_view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(film_strip_store));
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(film_strip_view), FALSE);
 	renderer = gtk_cell_renderer_pixbuf_new();
-	film_strip_column = gtk_tree_view_column_new_with_attributes("Slide", renderer, "pixbuf", 0, NULL);
+	film_strip_column = gtk_tree_view_column_new_with_attributes(_("Slide"), renderer, "pixbuf", 0, NULL);
 	gtk_tree_view_column_set_sizing(film_strip_column, GTK_TREE_VIEW_COLUMN_FIXED);
 	gtk_tree_view_append_column(GTK_TREE_VIEW(film_strip_view), film_strip_column);
 
@@ -88,6 +88,6 @@ void create_film_strip()
 	gtk_tree_selection_set_mode(GTK_TREE_SELECTION(selector), GTK_SELECTION_SINGLE);
 
 	// Connect a signal handler to the film strip, which gets called whenever a selection is made
-	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);  // fixme4: Should investigate multiple selection at some point
+	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);
 	g_signal_connect(G_OBJECT(selector), "changed", G_CALLBACK(film_strip_slide_clicked), NULL);
 }

@@ -61,7 +61,7 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		gtk_tree_selection_get_selected(selection, NULL, &selected_iter);
 		if ((debug_level) && (!gtk_list_store_iter_is_valid(GTK_LIST_STORE(film_strip_store), &selected_iter)))
 		{
-			printf("Invalid iter! No layer selected when changing slide!\n");
+			printf(_("Invalid iter! No layer selected when changing slide!\n"));
 		}
 
 		selected_path = gtk_tree_model_get_path(GTK_TREE_MODEL(film_strip_store), &selected_iter);
@@ -84,7 +84,7 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		g_free(selection_string);
 
 		// Update the status bar
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, " Ready");
+		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Ready"));
 		gdk_flush();
 	}
 }
