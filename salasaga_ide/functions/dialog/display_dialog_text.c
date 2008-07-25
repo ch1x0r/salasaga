@@ -45,6 +45,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gfloat				gfloat_val;					// Temporary gfloat value used for validation
 	gint				gint_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
+	GString				*message;					// Used to construct message strings
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
 	gfloat				valid_border_width = 0;		// Receives the new border width once validated
@@ -147,6 +148,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 
 	// Initialise some things
 	tmp_text_ob = (layer_text *) tmp_layer->object_data;
+	message = g_string_new(NULL);
 	valid_ext_link = g_string_new(NULL);
 	valid_ext_link_win = g_string_new(NULL);
 	valid_name = g_string_new(NULL);
@@ -158,9 +160,9 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	notebook_widget = gtk_notebook_new();
 	gtk_notebook_set_tab_pos(GTK_NOTEBOOK(notebook_widget), GTK_POS_TOP);
 	appearance_table = gtk_table_new(8, 2, FALSE);
-	appearance_tab_label = gtk_label_new("Appearance & Links");
+	appearance_tab_label = gtk_label_new(_("Appearance & Links"));
 	duration_table = gtk_table_new(8, 2, FALSE);
-	duration_tab_label = gtk_label_new("Duration");
+	duration_tab_label = gtk_label_new(_("Duration"));
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook_widget), appearance_table, appearance_tab_label);
 	gtk_notebook_append_page(GTK_NOTEBOOK(notebook_widget), duration_table, duration_tab_label);
 	gtk_box_pack_start(GTK_BOX(text_dialog->vbox), GTK_WIDGET(notebook_widget), FALSE, FALSE, 0);
@@ -186,7 +188,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(text_buffer), text_gstring->str, text_gstring->len);
 
 	// Create the label asking for the layer name
-	name_label = gtk_label_new("Layer name: ");
+	name_label = gtk_label_new(_("Layer name: "));
 	gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -198,7 +200,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the font size
-	font_label = gtk_label_new("Font size: ");
+	font_label = gtk_label_new(_("Font size: "));
 	gtk_misc_set_alignment(GTK_MISC(font_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -210,7 +212,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the foreground colour selection label
-	fg_colour_label = gtk_label_new("Text colour: ");
+	fg_colour_label = gtk_label_new(_("Text colour: "));
 	gtk_misc_set_alignment(GTK_MISC(fg_colour_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fg_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -221,7 +223,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the background fill colour selection label
-	fill_colour_label = gtk_label_new("Background fill colour: ");
+	fill_colour_label = gtk_label_new(_("Background fill colour: "));
 	gtk_misc_set_alignment(GTK_MISC(fill_colour_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fill_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -232,7 +234,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the background line colour selection label
-	border_colour_label = gtk_label_new("Background border colour: ");
+	border_colour_label = gtk_label_new(_("Background border colour: "));
 	gtk_misc_set_alignment(GTK_MISC(border_colour_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -243,7 +245,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the background border width
-	border_width_label = gtk_label_new("Background border width: ");
+	border_width_label = gtk_label_new(_("Background border width: "));
 	gtk_misc_set_alignment(GTK_MISC(border_width_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -254,7 +256,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for an external link
-	external_link_label = gtk_label_new("External link: ");
+	external_link_label = gtk_label_new(_("External link: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -266,7 +268,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the window to open the external link in
-	external_link_win_label = gtk_label_new("External link window: ");
+	external_link_win_label = gtk_label_new(_("External link window: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -278,7 +280,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the check box asking if the background should be visible
-	display_bg_checkbox = gtk_check_button_new_with_label("Display the background?");
+	display_bg_checkbox = gtk_check_button_new_with_label(_("Display the background?"));
 	if (FALSE == tmp_text_ob->show_bg)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(display_bg_checkbox), FALSE);
@@ -289,7 +291,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(display_bg_checkbox), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the check box asking if the layer should be visible
-	visibility_checkbox = gtk_check_button_new_with_label("Is this layer visible?");
+	visibility_checkbox = gtk_check_button_new_with_label(_("Is this layer visible?"));
 	if (FALSE == tmp_layer->visible)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(visibility_checkbox), FALSE);
@@ -306,7 +308,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = 0;
 
 	// Create the label asking for the starting X Offset
-	x_off_label_start = gtk_label_new("Start X Offset: ");
+	x_off_label_start = gtk_label_new(_("Start X Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(x_off_label_start), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -317,7 +319,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting Y Offset
-	y_off_label_start = gtk_label_new("Start Y Offset: ");
+	y_off_label_start = gtk_label_new(_("Start Y Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(y_off_label_start), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -328,7 +330,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the finishing X Offset
-	x_off_label_finish = gtk_label_new("Finish X Offset: ");
+	x_off_label_finish = gtk_label_new(_("Finish X Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(x_off_label_finish), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -339,7 +341,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the finishing Y Offset
-	y_off_label_finish = gtk_label_new("Finish Y Offset: ");
+	y_off_label_finish = gtk_label_new(_("Finish Y Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(y_off_label_finish), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -350,7 +352,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting time
-	start_label = gtk_label_new("Starting time (seconds): ");
+	start_label = gtk_label_new(_("Starting time (seconds): "));
 	gtk_misc_set_alignment(GTK_MISC(start_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(start_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -362,12 +364,12 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Appearance transition type
-	label_trans_in_type = gtk_label_new("Start how: ");
+	label_trans_in_type = gtk_label_new(_("Start how: "));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_in_type), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_in_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	selector_trans_in_type = gtk_combo_box_new_text();
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "Immediate");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "Fade in");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), _("Immediate"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), _("Fade in"));
 	switch (tmp_layer->transition_in_type)
 	{
 		case TRANS_LAYER_FADE:
@@ -381,7 +383,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Appearance transition duration label
-	label_trans_in_duration = gtk_label_new("Start duration (seconds):");
+	label_trans_in_duration = gtk_label_new(_("Start duration (seconds):"));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_in_duration), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_in_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -393,7 +395,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the layer duration
-	duration_label = gtk_label_new("Display for (seconds): ");
+	duration_label = gtk_label_new(_("Display for (seconds): "));
 	gtk_misc_set_alignment(GTK_MISC(duration_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -405,12 +407,12 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Exit Transition type
-	label_trans_out_type = gtk_label_new("Exit how: ");
+	label_trans_out_type = gtk_label_new(_("Exit how: "));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_out_type), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_out_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	selector_trans_out_type = gtk_combo_box_new_text();
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "Immediate");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "Fade out");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), _("Immediate"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), _("Fade out"));
 	switch (tmp_layer->transition_out_type)
 	{
 		case TRANS_LAYER_FADE:
@@ -424,7 +426,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Exit transition duration label
-	label_trans_out_duration = gtk_label_new("Exit duration (seconds):");
+	label_trans_out_duration = gtk_label_new(_("Exit duration (seconds):"));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_out_duration), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_out_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -460,7 +462,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		validated_string = validate_value(LAYER_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED177: There was something wrong with the layer name value.  Please try again.");
+			g_string_printf(message, "%s ED177: %s", _("Error"), _("There was something wrong with the layer name value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -474,7 +477,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		validated_guint = validate_value(X_OFFSET, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED172: There was something wrong with the starting frame X offset value.  Please try again.");
+			g_string_printf(message, "%s ED172: %s", _("Error"), _("There was something wrong with the starting frame X offset value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -487,7 +491,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		validated_guint = validate_value(Y_OFFSET, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED173: There was something wrong with the starting frame Y offset value.  Please try again.");
+			g_string_printf(message, "%s ED173: %s", _("Error"), _("There was something wrong with the starting frame Y offset value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -500,7 +505,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		validated_guint = validate_value(X_OFFSET, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED174: There was something wrong with the finish frame X offset value.  Please try again.");
+			g_string_printf(message, "%s ED174: %s", _("Error"), _("There was something wrong with the finish frame X offset value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -513,7 +519,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		validated_guint = validate_value(Y_OFFSET, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED175: There was something wrong with the finish frame X offset value.  Please try again.");
+			g_string_printf(message, "%s ED175: %s", _("Error"), _("There was something wrong with the finish frame X offset value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -526,7 +533,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		validated_gfloat = validate_value(FONT_SIZE, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED176: There was something wrong with the font size value.  Please try again.");
+			g_string_printf(message, "%s ED176: %s", _("Error"), _("There was something wrong with the font size value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -539,7 +547,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		validated_gfloat = validate_value(LINE_WIDTH, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED387: There was something wrong with the background border width value.  Please try again.");
+			g_string_printf(message, "%s ED387: %s", _("Error"), _("There was something wrong with the background border width value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -552,7 +561,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		validated_gfloat = validate_value(LAYER_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED178: There was something wrong with the starting time value.  Please try again.");
+			g_string_printf(message, "%s ED178: %s", _("Error"), _("There was something wrong with the starting time value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -565,7 +575,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		validated_gfloat = validate_value(LAYER_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED179: There was something wrong with the duration value.  Please try again.");
+			g_string_printf(message, "%s ED179: %s", _("Error"), _("There was something wrong with the duration value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -577,7 +588,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		validated_string = validate_value(EXTERNAL_LINK, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED180: There was something wrong with the external link value.  Please try again.");
+			g_string_printf(message, "%s ED180: %s", _("Error"), _("There was something wrong with the external link value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -590,7 +602,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(external_link_win_entry)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED181: There was something wrong with the external link target window value.  Please try again.");
+			g_string_printf(message, "%s ED181: %s", _("Error"), _("There was something wrong with the external link target window value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -604,7 +617,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		if (-1 == gint_val)
 		{
 			// A -1 return means no value was selected
-			display_warning("Error ED309: There was something wrong with the appearance transition type selected.  Please try again.");
+			g_string_printf(message, "%s ED309: %s", _("Error"), _("There was something wrong with the appearance transition type selected.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -617,7 +631,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		validated_gfloat = validate_value(TRANSITION_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED310: There was something wrong with the appearance transition duration value.  Please try again.");
+			g_string_printf(message, "%s ED310: %s", _("Error"), _("There was something wrong with the appearance transition duration value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -630,7 +645,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		if (-1 == gint_val)
 		{
 			// A -1 return means no value was selected
-			display_warning("Error ED311: There was something wrong with the exit transition type selected.  Please try again.");
+			g_string_printf(message, "%s ED311: %s", _("Error"), _("There was something wrong with the exit transition type selected.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -643,7 +659,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		validated_gfloat = validate_value(TRANSITION_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED312: There was something wrong with the exit transition duration value.  Please try again.");
+			g_string_printf(message, "%s ED312: %s", _("Error"), _("There was something wrong with the exit transition duration value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -699,10 +716,11 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_widget_destroy(GTK_WIDGET(text_dialog));
 
 	// Free the memory allocated in this function
+	g_string_free(message, TRUE);
+	g_string_free(text_gstring, TRUE);
 	g_string_free(valid_ext_link, TRUE);
 	g_string_free(valid_ext_link_win, TRUE);
 	g_string_free(valid_name, TRUE);
-	g_string_free(text_gstring, TRUE);
 
 	return TRUE;
 }
