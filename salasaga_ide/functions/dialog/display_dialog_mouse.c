@@ -45,6 +45,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	gfloat				gfloat_val;					// Temporary gfloat value
 	gint				gint_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
+	GString				*message;					// Used to construct message strings
 	GtkDialog			*mouse_dialog;				// Widget for the dialog
 	GtkWidget			*mouse_table;				// Table used for neat layout of the dialog box
 	guint				row_counter = 0;			// Used to count which row things are up to
@@ -116,6 +117,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 
 	// Initialise some things
 	tmp_mouse_ob = (layer_mouse *) tmp_layer->object_data;
+	message = g_string_new(NULL); 
 	valid_ext_link = g_string_new(NULL);
 	valid_ext_link_win = g_string_new(NULL);
 	valid_name = g_string_new(NULL);
@@ -128,7 +130,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	gtk_box_pack_start(GTK_BOX(mouse_dialog->vbox), GTK_WIDGET(mouse_table), FALSE, FALSE, 10);
 
 	// Create the label asking for the layer name
-	name_label = gtk_label_new("Layer Name: ");
+	name_label = gtk_label_new(_("Layer Name: "));
 	gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -140,7 +142,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting X Offset
-	x_off_label_start = gtk_label_new("Start X Offset: ");
+	x_off_label_start = gtk_label_new(_("Start X Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(x_off_label_start), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(x_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -151,7 +153,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting Y Offset
-	y_off_label_start = gtk_label_new("Start Y Offset: ");
+	y_off_label_start = gtk_label_new(_("Start Y Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(y_off_label_start), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(y_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -162,7 +164,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the finishing X Offset
-	x_off_label_finish = gtk_label_new("Finish X Offset: ");
+	x_off_label_finish = gtk_label_new(_("Finish X Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(x_off_label_finish), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(x_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -173,7 +175,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the finishing Y Offset
-	y_off_label_finish = gtk_label_new("Finish Y Offset: ");
+	y_off_label_finish = gtk_label_new(_("Finish Y Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(y_off_label_finish), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(y_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -184,7 +186,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Create the check box asking if the layer should be visible
-	visibility_checkbox = gtk_check_button_new_with_label("Is this layer visible?");
+	visibility_checkbox = gtk_check_button_new_with_label(_("Is this layer visible?"));
 	if (FALSE == tmp_layer->visible)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(visibility_checkbox), FALSE);
@@ -196,7 +198,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting time
-	start_label = gtk_label_new("Starting time (seconds): ");
+	start_label = gtk_label_new(_("Starting time (seconds): "));
 	gtk_misc_set_alignment(GTK_MISC(start_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(start_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -208,12 +210,12 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Appearance transition type
-	label_trans_in_type = gtk_label_new("Start how: ");
+	label_trans_in_type = gtk_label_new(_("Start how: "));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_in_type), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(label_trans_in_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	selector_trans_in_type = gtk_combo_box_new_text();
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "Immediate");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), "Fade in");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), _("Immediate"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), _("Fade in"));
 	switch (tmp_layer->transition_in_type)
 	{
 		case TRANS_LAYER_FADE:
@@ -227,7 +229,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Appearance transition duration label
-	label_trans_in_duration = gtk_label_new("Start duration (seconds):");
+	label_trans_in_duration = gtk_label_new(_("Start duration (seconds):"));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_in_duration), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(label_trans_in_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -239,7 +241,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the layer duration
-	duration_label = gtk_label_new("Display for (seconds): ");
+	duration_label = gtk_label_new(_("Display for (seconds): "));
 	gtk_misc_set_alignment(GTK_MISC(duration_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -251,12 +253,12 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Exit Transition type
-	label_trans_out_type = gtk_label_new("Exit how: ");
+	label_trans_out_type = gtk_label_new(_("Exit how: "));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_out_type), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(label_trans_out_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	selector_trans_out_type = gtk_combo_box_new_text();
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "Immediate");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), "Fade out");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), _("Immediate"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), _("Fade out"));
 	switch (tmp_layer->transition_out_type)
 	{
 		case TRANS_LAYER_FADE:
@@ -270,7 +272,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Exit transition duration label
-	label_trans_out_duration = gtk_label_new("Exit duration (seconds):");
+	label_trans_out_duration = gtk_label_new(_("Exit duration (seconds):"));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_out_duration), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(label_trans_out_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -282,20 +284,20 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Mouse click type
-	label_click = gtk_label_new("Mouse click type: ");
+	label_click = gtk_label_new(_("Mouse click type: "));
 	gtk_misc_set_alignment(GTK_MISC(label_click), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(label_click), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	selector_click = gtk_combo_box_new_text();
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "No mouse click");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Left single click");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Left double click");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Left triple click");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Right single click");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Right double click");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Right triple click");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Middle single click");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Middle double click");
-	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), "Middle triple click");
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), _("No mouse click"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), _("Left single click"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), _("Left double click"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), _("Left triple click"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), _("Right single click"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), _("Right double click"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), _("Right triple click"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), _("Middle single click"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), _("Middle double click"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), _("Middle triple click"));
 	switch (tmp_mouse_ob->click)
 	{
 		case MOUSE_NONE:
@@ -345,7 +347,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Create the label asking for an external link
-	external_link_label = gtk_label_new("External link: ");
+	external_link_label = gtk_label_new(_("External link: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -357,7 +359,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the window to open the external link in
-	external_link_win_label = gtk_label_new("External link window: ");
+	external_link_win_label = gtk_label_new(_("External link window: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(mouse_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -392,7 +394,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		validated_string = validate_value(LAYER_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED383: There was something wrong with the new layer name.  Please try again.");
+			g_string_printf(message, "%s ED383: %s", _("Error"), _("There was something wrong with the new layer name.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -406,7 +409,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		validated_guint = validate_value(X_OFFSET, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED164: There was something wrong with the starting frame X offset value.  Please try again.");
+			g_string_printf(message, "%s ED164: %s", _("Error"), _("There was something wrong with the starting frame X offset value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -419,7 +423,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		validated_guint = validate_value(Y_OFFSET, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED165: There was something wrong with the starting frame Y offset value.  Please try again.");
+			g_string_printf(message, "%s ED165: %s", _("Error"), _("There was something wrong with the starting frame Y offset value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -432,7 +437,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		validated_guint = validate_value(X_OFFSET, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED166: There was something wrong with the finish frame X offset value.  Please try again.");
+			g_string_printf(message, "%s ED166: %s", _("Error"), _("There was something wrong with the finish frame X offset value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -445,7 +451,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		validated_guint = validate_value(Y_OFFSET, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
-			display_warning("Error ED167: There was something wrong with the finish frame X offset value.  Please try again.");
+			g_string_printf(message, "%s ED167: %s", _("Error"), _("There was something wrong with the finish frame X offset value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -458,7 +465,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		validated_gfloat = validate_value(LAYER_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED168: There was something wrong with the starting time value.  Please try again.");
+			g_string_printf(message, "%s ED168: %s", _("Error"), _("There was something wrong with the starting time value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -471,7 +479,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		validated_gfloat = validate_value(LAYER_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED169: There was something wrong with the duration value.  Please try again.");
+			g_string_printf(message, "%s ED169: %s", _("Error"), _("There was something wrong with the duration value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -483,7 +492,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		validated_string = validate_value(EXTERNAL_LINK, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED170: There was something wrong with the external link value.  Please try again.");
+			g_string_printf(message, "%s ED170: %s", _("Error"), _("There was something wrong with the external link value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -496,7 +506,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(external_link_win_entry)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED171: There was something wrong with the external link target window value.  Please try again.");
+			g_string_printf(message, "%s ED171: %s", _("Error"), _("There was something wrong with the external link target window value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -510,7 +521,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		if (-1 == gint_val)
 		{
 			// A -1 return means no value was selected
-			display_warning("Error ED305: There was something wrong with the appearance transition type selected.  Please try again.");
+			g_string_printf(message, "%s ED305: %s", _("Error"), _("There was something wrong with the appearance transition type selected.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -523,7 +535,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		validated_gfloat = validate_value(TRANSITION_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED306: There was something wrong with the appearance transition duration value.  Please try again.");
+			g_string_printf(message, "%s ED306: %s", _("Error"), _("There was something wrong with the appearance transition duration value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -536,7 +549,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		if (-1 == gint_val)
 		{
 			// A -1 return means no value was selected
-			display_warning("Error ED307: There was something wrong with the exit transition type selected.  Please try again.");
+			g_string_printf(message, "%s ED307: %s", _("Error"), _("There was something wrong with the exit transition type selected.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -549,7 +563,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		validated_gfloat = validate_value(TRANSITION_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
-			display_warning("Error ED308: There was something wrong with the exit transition duration value.  Please try again.");
+			g_string_printf(message, "%s ED308: %s", _("Error"), _("There was something wrong with the exit transition duration value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -562,7 +577,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		if (-1 == gint_val)
 		{
 			// A -1 return means no value was selected
-			display_warning("Error ED413: There was something wrong with the mouse click type selected.  Please try again.");
+			g_string_printf(message, "%s ED413: %s", _("Error"), _("There was something wrong with the mouse click type selected.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -600,9 +616,10 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	gtk_widget_destroy(GTK_WIDGET(mouse_dialog));
 
 	// Free the memory used in this function
-	g_string_free(valid_name, TRUE);
+	g_string_free(message, TRUE);
 	g_string_free(valid_ext_link, TRUE);
 	g_string_free(valid_ext_link_win, TRUE);
+	g_string_free(valid_name, TRUE);
 
 	return TRUE;
 }

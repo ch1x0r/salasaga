@@ -41,7 +41,7 @@ gboolean display_dialog_save_warning(gboolean with_cancel)
 
 
 	// Display the warning dialog
-	tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, "Project has been modified.  Save changes?");
+	tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_QUESTION, GTK_BUTTONS_NONE, _("Project has been modified.  Save changes?"));
 	if (TRUE == with_cancel)
 	{
 		gtk_dialog_add_buttons(GTK_DIALOG(tmp_dialog),
