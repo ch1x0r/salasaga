@@ -48,6 +48,7 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 	guint				click_frames;
 	GString				*click_name;				// The name of the mouse click sound we'll need to play
 	guint				i;							// Counter
+	GString				*message;					// Used to construct message strings
 	SWFDisplayItem 		sound_display_item;
 	FILE				*sound_file;				// The file we load the sound from
 	SWFMovieClip		sound_movie_clip;			// Movie clip specifically to hold a sound
@@ -120,14 +121,17 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 	if (NULL != sound_pathname)
 	{
 		// Create the sound object we'll be using
-		if (debug_level) printf("Full path name to sound file is: %s\n", sound_pathname);
+		if (debug_level) printf("%s: '%s'\n", _("Full path name to sound file is"), sound_pathname);
 
 		// Load the sound file
 		sound_file = fopen(sound_pathname, "rb");
 		if (NULL == sound_file)
 		{
 			// Something went wrong when loading the sound file, so return
-			display_warning("Error ED412: Something went wrong when opening a mouse click sound file");
+			message = g_string_new(NULL);
+			g_string_printf(message, "%s ED412: %s", _("Error"), _("Something went wrong when opening a mouse click sound file."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			return FALSE;
 		}
 		sound_stream = newSWFSoundStream(sound_file);

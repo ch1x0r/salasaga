@@ -82,27 +82,30 @@ gint export_swf_inner(gchar *output_filename)
 	swf_frame_element 	*this_frame_ptr;			// Points to frame information when looping
 	layer				*this_layer_data;			// Points to the data in the present layer
 	slide				*this_slide_data;			// Points to the data in the present slide
+	GString				*message;					// Used to construct message strings
 	guint				total_frames;				// The total number of frames in the animation
 	guint				total_num_layers;			// The total number of layers in the animation
 	gfloat				total_seconds;				// The duration of the entire animation in seconds
 
 
 	// Initialise variables
-	as_gstring = g_string_new(NULL);
-	slide_name_tmp = g_string_new(NULL);
 	slide_depth = 2;
 	total_frames = 0;
 	total_seconds = 0;
-	initial_action_gstring = g_string_new(NULL);
 	mouse_click_double_added = FALSE;
 	mouse_click_single_added = FALSE;
 	mouse_click_triple_added = FALSE;
+	as_gstring = g_string_new(NULL);
+	initial_action_gstring = g_string_new(NULL);
+	message = g_string_new(NULL);
+	slide_name_tmp = g_string_new(NULL);
 
 	// Force the numeric collation for use full stops (for ming text output)
 	locale_return = setlocale(LC_NUMERIC, "C");
 	if (NULL == locale_return)
 	{
-		display_warning("Error ED417: Unable to force locale to C.  Export in non-english locales may not work!");
+		g_string_printf(message, "%s ED417: %s", _("Error"), _("Unable to force locale to C.  Export in non-english locales may not work."));
+		display_warning(message->str);
 	}
 
 	// Determine which of the control bar resolutions to use
@@ -111,7 +114,9 @@ gint export_swf_inner(gchar *output_filename)
 	// If an unknown output resolution is given, indicate an error and return
 	if (-1 == out_res_index)
 	{
-		display_warning("Error ED201: Unknown output resolution selected for swf export.");
+		g_string_printf(message, "%s ED201: %s", _("Error"), _("Unknown output resolution selected for swf export."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return FALSE;
 	}
 
@@ -135,8 +140,8 @@ gint export_swf_inner(gchar *output_filename)
 	// Displaying debugging info if requested
 	if (debug_level)
 	{
-		printf("Scaled height ratio: %.2f\n", scaled_height_ratio);
-		printf("Scaled width ratio: %.2f\n", scaled_width_ratio);
+		printf("%s: %.2f\n", _("Scaled height ratio"), scaled_height_ratio);
+		printf("%s: %.2f\n", _("Scaled width ratio"), scaled_width_ratio);
 	}
 
 	// Count the number of slides in the movie
@@ -146,7 +151,7 @@ gint export_swf_inner(gchar *output_filename)
 	// Output some debugging info if requested
 	if (debug_level)
 	{
-		printf("Number of slides: %u\n", num_slides);
+		printf("%s: %u\n", _("Number of slides"), num_slides);
 	}
 
 	// Count the total number of layers in the movie
@@ -165,7 +170,7 @@ gint export_swf_inner(gchar *output_filename)
 	// Output some debugging info if requested
 	if (debug_level)
 	{
-		printf("Total number of layers: %u\n", total_num_layers);
+		printf("%s: %u\n", _("Total number of layers"), total_num_layers);
 	}
 
 	// If requested, add the swf control bar to the movie
@@ -237,8 +242,8 @@ gint export_swf_inner(gchar *output_filename)
 		// Output some debugging info if requested
 		if (debug_level)
 		{
-			printf("Number of layers in slide %u is %u\n", slide_counter, num_layers);
-			printf("Maximum frame number in slide %u is %u\n", slide_counter, slide_duration);
+			printf(_("Number of layers in slide %u is %u\n"), slide_counter, num_layers);
+			printf(_("Maximum frame number in slide %u is %u\n"), slide_counter, slide_duration);
 		}
 
 		// Create an array that's layers x "number of frames in the slide"
@@ -246,7 +251,9 @@ gint export_swf_inner(gchar *output_filename)
 		swf_timing_array = g_try_new0(swf_frame_element, frame_number);
 		if (NULL == swf_timing_array)
 		{
-			display_warning("Error ED339: We couldn't allocate enough memory to generate the swf.  Export aborted.");
+			g_string_printf(message, "%s ED339: %s", _("Error"), _("We couldn't allocate enough memory to generate the swf.  Export aborted."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			return FALSE;
 		}
 
@@ -291,34 +298,34 @@ gint export_swf_inner(gchar *output_filename)
 					frame_number = (frame_counter * num_layers) + layer_counter;
 					this_frame_ptr = &swf_timing_array[frame_number];
 
-					printf("Frame number %u:\n", frame_number);
+					printf(_("Frame number %u:\n"), frame_number);
 
 					if (TRUE == this_frame_ptr->action_this)
-						printf("Action frame:\tON\t");
+						printf(_("Action frame:\tON\t"));
 					else
-						printf("Action frame:\tOFF\t");
+						printf(_("Action frame:\tOFF\t"));
 
 					if (NULL != this_frame_ptr->layer_info)
-						printf("Layer info:\tSET\t");
+						printf(_("Layer info:\tSET\t"));
 					else
-						printf("Layer info:\tNULL\t");
+						printf(_("Layer info:\tNULL\t"));
 
 					if (TRUE == this_frame_ptr->add)
-						printf("Add frame:\tON\t");
+						printf(_("Add frame:\tON\t"));
 					else
-						printf("Add frame:\tOFF\t");
+						printf(_("Add frame:\tOFF\t"));
 
 					if (TRUE == this_frame_ptr->remove)
-						printf("Remove frame:\tON\t");
+						printf(_("Remove frame:\tON\t"));
 					else
-						printf("Remove frame:\tOFF\t");
+						printf(_("Remove frame:\tOFF\t"));
 
 					if (TRUE == this_frame_ptr->is_moving)
 					{
-						printf("Move frame:\tON\tX position:\t%.2f\tY position\t%.2f\t", this_frame_ptr->x_position, this_frame_ptr->y_position);
+						printf(_("Move frame:\tON\tX position:\t%.2f\tY position\t%.2f\t"), this_frame_ptr->x_position, this_frame_ptr->y_position);
 					}
 					else
-						printf("Move frame:\tOFF\t");
+						printf(_("Move frame:\tOFF\t"));
 
 					printf("\n\n");
 				}
@@ -355,27 +362,58 @@ gint export_swf_inner(gchar *output_filename)
 		if (debug_level)
 		{
 			// If we're debugging, then generate debugging swf's too
-			inc_slide_counter_action = compileSWFActionCode(
+			g_string_printf(message,
+					// Format string is grouped as per the string comments from one line below
+					"%s" "%s%s%s" "%s%s%s" "%s%s%s" "%s" "%s%s%s" "%s%s%s" "%s%s%s" "%s" "%s%s%s" "%s"
+
+					// The grouped strings and comments
 					"if ((_root.this_slide <= (_root.num_slides - 1)) && (false == _root.reversing))"
 					" {"
-						" _root.this_slide += 1;"
-						" trace(\"Slide counter incremented, now equals: \" + _root.this_slide + \".\");"
-						" trace(\"'reversing' variable was false, and remains so.\");"
-						" trace(\"'playing' variable is unchanged, at: \" + _root.playing + \".\");"
+						" _root.this_slide += 1;",												// %s
+
+						" trace(\"",															// %s
+						_("Slide counter incremented, now equals:"),							// %s
+						" \" + _root.this_slide + \".\");",										// %s
+
+						" trace(\"",															// %s
+						_("'reversing' variable was false, and remains so."),					// %s
+						"\");"																	// %s
+
+						" trace(\"",															// %s
+						_("'playing' variable is unchanged, at:"),								// %s
+						" \" + _root.playing + \".\");",										// %s
+
 					" }"
 					" if (true == _root.reversing)"
 					" {"
-						" _root.reversing = false;"
-						" trace(\"Slide counter unchanged, now at: \" + _root.this_slide + \".\");"
-						" trace(\"'reversing' variable was false, has been set to true.\");"
-						" trace(\"'playing' variable is unchanged, at: \" + _root.playing + \".\");"
+						" _root.reversing = false;"												// %s
+						
+						" trace(\"",															// %s
+						_("Slide counter unchanged, now at:"),									// %s
+						" \" + _root.this_slide + \".\");",										// %s
+
+						" trace(\"",															// %s
+						_("'reversing' variable was false, has been set to true."),				// %s
+						"\");",																	// %s
+
+						" trace(\"",															// %s
+						_("'playing' variable is unchanged, at:"),								// %s
+						" \" + _root.playing + \".\");", 										// %s
+
 					" };"
 					" if (_root.this_slide == _root.num_slides)"
 					" {"
-						" _root.playing = false;"
-						" trace(\"Last frame of movie reached, 'playing' variable has been set to: \" + _root.playing + \".\");"
-					" }"
+						" _root.playing = false;",												// %s
+
+						
+						" trace(\"",															// %s
+						_("Last frame of movie reached, 'playing' variable has been set to:"),	// %s
+						" \" + _root.playing + \".\");", 										// %s
+
+					" }"																		// %s
 					);
+			inc_slide_counter_action = compileSWFActionCode(message->str);
+			g_string_free(message, TRUE);
 		} else
 		{
 			inc_slide_counter_action = compileSWFActionCode(
@@ -423,7 +461,7 @@ gint export_swf_inner(gchar *output_filename)
 	// Output some debugging info if requested
 	if (debug_level)
 	{
-		printf("The animation is %u frames long\n", total_frames);
+		printf(_("The animation is %u frames long\n"), total_frames);
 	}
 
 	// Save the swf movie file to disk
@@ -431,9 +469,11 @@ gint export_swf_inner(gchar *output_filename)
 	if (-1 == num_bytes_written)  // -1 is returned if an error occurred during the save
 	{
 		// Something went wrong when saving the swf
-		display_warning("Error ED100: Something went wrong when saving the swf file to disk");
+		g_string_printf(message, "%s ED100: %s", _("Error"), _("Something went wrong when saving the swf file to disk."));
+		display_warning(message->str);
 
 		// Free the memory allocated in this function
+		g_string_free(message, TRUE);
 		destroySWFMovie(swf_movie);
 		return FALSE;
 	}

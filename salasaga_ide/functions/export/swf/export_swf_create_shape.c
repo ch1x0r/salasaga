@@ -71,6 +71,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	SWFInput			image_input;				// Used to hold a swf input object
 	SWFShape			image_shape;				// Used to hold a swf shape object
 	gint				image_width;				// Temporarily used to store the width of an image
+	GString				*message;					// Used to construct message strings
 	layer_mouse			*mouse_data;				// Points to the mouse object data inside the layer
 	SWFFillStyle		mouse_fill_style;			// Fill style used when constructing mouse pointers
 	SWFShape			mouse_shape = NULL;			// 
@@ -109,6 +110,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 	// Initialisation
 	as_gstring = g_string_new(NULL);
+	message = g_string_new(NULL);
 
 	// Calculate the height and width scaling values needed for this swf output
 	scaled_height_ratio = (gfloat) output_height / (gfloat) project_height;
@@ -116,24 +118,27 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 	// Create the font object we'll be using
 	font_pathname = g_build_path(FONT_DIR, G_DIR_SEPARATOR_S, "Bitstream_Vera_Sans.fdb", NULL);
-	if (debug_level) printf("Full path name to font file is: %s\n", font_pathname);
+	if (debug_level) printf(_("Full path name to font file is: %s\n"), font_pathname);
 
 	// Load the font file if needed
 	font_file = fopen(font_pathname, "r");
 	if (NULL == font_file)
 	{
 		// Something went wrong when loading the font file, so return
-		display_warning("Error ED380: Something went wrong when opening the font file");
-
+		g_string_printf(message, "%s ED380: %s", _("Error"), _("Something went wrong when opening the font file."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return FALSE;
 	}
 	font_object = loadSWFFontFromFile(font_file);
 	if (NULL == font_object)
 	{
 		// Something went wrong when loading the font file, so return
-		display_warning("Error ED96: Something went wrong when loading the font file");
+		g_string_printf(message, "%s ED96: %s", _("Error"), _("Something went wrong when loading the font file."));
+		display_warning(message->str);
 
 		// Free the memory allocated in this function
+		g_string_free(message, TRUE);
 		g_free(font_pathname);
 
 		return FALSE;
@@ -154,10 +159,10 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			// Displaying debugging info if requested
 			if (debug_level)
 			{
-				printf("Image width: %d\n", image_width);
-				printf("Scaled width: %d\n", scaled_width);
-				printf("Image height: %d\n", image_height);
-				printf("Scaled height: %d\n", scaled_height);
+				printf(_("Image width: %d\n"), image_width);
+				printf(_("Scaled width: %d\n"), scaled_width);
+				printf(_("Image height: %d\n"), image_height);
+				printf(_("Scaled height: %d\n"), scaled_height);
 			}
 
 			// Scale the image to the correct dimensions
@@ -165,7 +170,9 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			if (NULL == resized_pixbuf)
 			{
 				// Something went wrong when creating the dictionary shape for this layer
-				display_warning("Error ED90: Something went wrong when creating the dictionary shape for an image layer");
+				g_string_printf(message, "%s ED90: %s", _("Error"), _("Something went wrong when creating the dictionary shape for an image layer."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return FALSE;
 			}
 
@@ -179,9 +186,11 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			if (FALSE == return_code_bool)
 			{
 				// Something went wrong when encoding the image to required format
-				display_warning("Error ED92: Something went wrong when encoding an image to required format");
+				g_string_printf(message, "%s ED92: %s", _("Error"), _("Something went wrong when encoding an image to required format."));
+				display_warning(message->str);
 
 				// Free the memory allocated in this function
+				g_string_free(message, TRUE);
 				g_error_free(error);
 				if (NULL != resized_pixbuf)
 					g_object_unref(GDK_PIXBUF(resized_pixbuf));
@@ -197,9 +206,11 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			if (NULL == image_shape)
 			{
 				// Something went wrong when encoding the image to required format
-				display_warning("Error ED109: Something went wrong converting an image to a swf shape object");
+				g_string_printf(message, "%s ED109: %s", _("Error"), _("Something went wrong converting an image to a swf shape object."));
+				display_warning(message->str);
 				
 				// Free the memory allocated in this function
+				g_string_free(message, TRUE);
 				g_error_free(error);
 				if (NULL != resized_pixbuf)
 					g_object_unref(GDK_PIXBUF(resized_pixbuf));
@@ -214,7 +225,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				// Displaying debugging info if requested
 				if (debug_level)
 				{
-					printf("This image has an external link: '%s'\n", this_layer_data->external_link->str);
+					printf(_("This image has an external link: '%s'\n"), this_layer_data->external_link->str);
 				}
 
 				// Create an empty button object we can use
@@ -258,7 +269,9 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			if (NULL == empty_layer_shape)
 			{
 				// Something went wrong when creating the empty shape, so we skip this layer
-				display_warning("Error ED111: Something went wrong when creating an empty layer for swf output");
+				g_string_printf(message, "%s ED111: %s", _("Error"), _("Something went wrong when creating an empty layer for swf output."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return FALSE;
 			}
 
@@ -286,7 +299,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				// Displaying debugging info if requested
 				if (debug_level)
 				{
-					printf("This empty layer has an external link: '%s'\n", this_layer_data->external_link->str);
+					printf(_("This empty layer has an external link: '%s'\n"), this_layer_data->external_link->str);
 				}
 
 				// Create an empty button object we can use
@@ -335,7 +348,9 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			if (NULL == highlight_box)
 			{
 				// Something went wrong when creating the empty shape, so we skip this layer
-				display_warning("Error ED98: Something went wrong when creating a highlight layer for swf output");
+				g_string_printf(message, "%s ED98: %s", _("Error"), _("Something went wrong when creating a highlight layer for swf output."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return FALSE;
 			}
 
@@ -377,7 +392,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				// Displaying debugging info if requested
 				if (debug_level)
 				{
-					printf("This highlight has an external link: '%s'\n", this_layer_data->external_link->str);
+					printf(_("This highlight has an external link: '%s'\n"), this_layer_data->external_link->str);
 				}
 
 				// Create an empty button object we can use
@@ -422,7 +437,9 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			if (NULL == mouse_shape)
 			{
 				// Something went wrong when creating the empty shape, so we skip this layer
-				display_warning("Error ED414: Something went wrong when creating a mouse pointer shape for swf output");
+				g_string_printf(message, "%s ED414: %s", _("Error"), _("Something went wrong when creating a mouse pointer shape for swf output."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
 				return FALSE;
 			}
 
@@ -457,7 +474,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				// Displaying debugging info if requested
 				if (debug_level)
 				{
-					printf("This mouse cursor layer has an external link: '%s'\n", this_layer_data->external_link->str);
+					printf(_("This mouse cursor layer has an external link: '%s'\n"), this_layer_data->external_link->str);
 				}
 
 				// Create an empty button object we can use
@@ -566,9 +583,9 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				// Displaying debugging info if requested
 				if (debug_level)
 				{
-					printf("Line %d of %d: %s\n", text_lines_counter, num_text_lines, gtk_text_iter_get_visible_text(&text_start, &text_end));
-					printf("Width of this string: %.2f\n", this_text_string_width);
-					printf("Width of widest string thus far: %.2f\n", widest_text_string_width);
+					printf(_("Line %d of %d: %s\n"), text_lines_counter, num_text_lines, gtk_text_iter_get_visible_text(&text_start, &text_end));
+					printf(_("Width of this string: %.2f\n"), this_text_string_width);
+					printf(_("Width of widest string thus far: %.2f\n"), widest_text_string_width);
 				}
 			}
 
@@ -582,7 +599,9 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				if (NULL == text_bg)
 				{
 					// Something went wrong when creating the empty shape, so we skip this layer
-					display_warning("Error ED101: Something went wrong when creating a text layer background for swf output");
+					g_string_printf(message, "%s ED101: %s", _("Error"), _("Something went wrong when creating a text layer background for swf output."));
+					display_warning(message->str);
+					g_string_free(message, TRUE);
 					return FALSE;
 				}
 
@@ -632,7 +651,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				// Displaying debugging info if requested
 				if (debug_level)
 				{
-					printf("This text has an external link: '%s'\n", this_layer_data->external_link->str);
+					printf(_("This text has an external link: '%s'\n"), this_layer_data->external_link->str);
 				}
 
 				// Create an empty button object we can use
@@ -678,7 +697,12 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 		default:
 			// Unknown type
-			display_warning("Error ED83: Unknown layer type in swf output");
+			g_string_printf(message, "%s ED83: %s", _("Error"), _("Unknown layer type in swf output."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			return FALSE;
 	}
+
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
 }
