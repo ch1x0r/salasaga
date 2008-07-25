@@ -46,6 +46,7 @@ void export_html_wrapper(void)
 	gchar				*filename;					// Pointer to the chosen file name
 	GtkFileFilter		*file_filter;				// Filter for *.html
 	FILE				*output_file;				// Name of the html output file
+	GString				*message;					// Used to construct message strings
 	gchar				**string_tokens;
 	gchar				*suffix_start;
 	gchar				*swf_file;					// Name of the swf file we add to the html content
@@ -57,8 +58,11 @@ void export_html_wrapper(void)
 
 	// * Pop open a dialog asking the user for their desired filename *
 
+	// Initialisation
+	message = g_string_new(NULL);
+
 	// Create the dialog asking the user for the name to save as
-	export_dialog = gtk_file_chooser_dialog_new("Export Html",
+	export_dialog = gtk_file_chooser_dialog_new(_("Export Html"),
 						GTK_WINDOW(main_window),
 						GTK_FILE_CHOOSER_ACTION_SAVE,
 						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
@@ -68,13 +72,13 @@ void export_html_wrapper(void)
 	// Create the filter so only *.html files are displayed
 	file_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(file_filter, "*.html");
-	gtk_file_filter_set_name(file_filter, "HyperText Markup Language (*.html)");
+	gtk_file_filter_set_name(file_filter, _("HyperText Markup Language (*.html)"));
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(export_dialog), file_filter);
 
 	// Create the filter so all files (*.*) can be displayed
 	all_filter = gtk_file_filter_new();
 	gtk_file_filter_add_pattern(all_filter, "*.*");
-	gtk_file_filter_set_name(all_filter, "All files (*.*)");
+	gtk_file_filter_set_name(all_filter, _("All files (*.*)"));
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(export_dialog), all_filter);
 
 	// Set the name of the file to save as
@@ -114,7 +118,8 @@ void export_html_wrapper(void)
 		if (NULL == validated_string)
 		{
 			// Invalid file name
-			display_warning("Error ED418: There was something wrong with the file name given.  Please try again.");
+			g_string_printf(message, "%s ED418: %s", _("Error"), _("There was something wrong with the file name given.  Please try again."));
+			display_warning(message->str);
 		} else
 		{
 			// * Valid file name, so check if there's an existing file of this name, and give an Overwrite? type prompt if there is
@@ -125,7 +130,7 @@ void export_html_wrapper(void)
 									GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 									GTK_MESSAGE_QUESTION,
 									GTK_BUTTONS_YES_NO,
-									"Overwrite existing file?");
+									_("Overwrite existing file?"));
 				if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
 				{
 					// We've been told to overwrite the existing file
@@ -159,7 +164,9 @@ void export_html_wrapper(void)
 	output_file = fopen(validated_string->str, "w");
 	if (NULL == output_file)
 	{
-		display_warning("ED419: Couldn't create the output file.");
+		g_string_printf(message, "%s ED419: %s", _("Error"), _("Couldn't create the output file."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 
@@ -191,7 +198,7 @@ void export_html_wrapper(void)
 	fclose(output_file);
 
 	// Html wrapper file was created successfully, so update the status bar to let the user know
-	g_string_printf(tmp_gstring, " Wrote html wrapper - %s", validated_string->str);
+	g_string_printf(tmp_gstring, " %s - %s", _("Wrote html wrapper"), validated_string->str);
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
 	gdk_flush();
 
@@ -202,6 +209,7 @@ void export_html_wrapper(void)
 
 	// Free the temporary strings
 	g_string_free(tmp_gstring, TRUE);
+	g_string_free(message, TRUE);
 	g_strfreev(string_tokens);
 	g_string_free(validated_string, TRUE);
 }
