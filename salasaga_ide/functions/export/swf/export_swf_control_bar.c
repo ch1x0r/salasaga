@@ -1205,9 +1205,20 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		if (debug_level)
 		{
 			// If we're debugging, then generate debugging swf's too
-			info_action = compileSWFActionCode(
-					" _root.info_text._visible = !(_root.info_text._visible);"
-					" trace(\"info_text visibility set to: \" + _root.info_text._visible);"); // Toggle the visible state of the info button text
+			g_string_printf(message,
+
+					// Format string, grouped as per the strings directly below
+					"%s %s%s%s",
+
+					// The grouped strings
+					" _root.info_text._visible = !(_root.info_text._visible);",	// %s
+
+					// Toggle the visible state of the info button text
+					" trace(\"",												// %s
+					_("info_text visibility set to:"),							// %s
+					" \" + _root.info_text._visible);"							// %s
+			);
+			info_action = compileSWFActionCode(message->str);
 		} else
 		{
 			info_action = compileSWFActionCode(
