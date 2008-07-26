@@ -59,6 +59,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	gchar				*image_path;
 	gint				i;
 	SWFAction			main_movie_action;
+	GString				*message;					// Used to construct message strings
 	SWFDisplayItem		mc_display_item;
 	SWFMovieClip		movie_clip;
 	gint				num_slides;
@@ -324,10 +325,12 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	// Initialise various things
 	slides = g_list_first(slides);
 	num_slides = g_list_length(slides);
-	file_name_full = g_string_new(NULL); 
+
+	as_gstring = g_string_new(NULL);
+	file_name_full = g_string_new(NULL);
+	message = g_string_new(NULL);
 	slide_name_tmp = g_string_new(NULL);
 	slide_names_gstring = g_string_new(NULL);
-	as_gstring = g_string_new(NULL);
 
 	// Retrieve the control bar element positions
 	button_x = cb_size_array[cb_index].button_start_x;
@@ -378,7 +381,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		if (NULL == slide_data->name)
 		{
 			// The slide doesn't have a name, so we create a temporary one
-			g_string_printf(slide_name_tmp, "Slide%u", i);
+			g_string_printf(slide_name_tmp, "%s%u", _("Slide"), i);
 			g_string_append_printf(slide_names_gstring, "\"%s\", ", slide_name_tmp->str);
 		} else
 		{
@@ -392,7 +395,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		if (NULL == slide_data->name)
 		{
 			// The slide doesn't have a name, so we create a temporary one
-			g_string_printf(slide_name_tmp, "Slide%u", i);
+			g_string_printf(slide_name_tmp, "%s%u", _("Slide"), i);
 			g_string_append_printf(slide_names_gstring, "\"%s\"]; ", slide_name_tmp->str);  // The lack of comma and closing square bracket are on purpose
 		} else
 		{
@@ -406,7 +409,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	// Displaying debugging info if requested
 	if (debug_level)
 	{
-		printf("Slide name array Action Script: %s\n", slide_names_gstring->str);
+		printf(_("Slide name array Action Script: %s\n"), slide_names_gstring->str);
 	}
 
 	// Add the initialisation action to the movie
@@ -508,15 +511,28 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	if (debug_level)
 	{
 		// If we're debugging, then generate debugging swf's too
-		restart_action = compileSWFActionCode(
-				" _root.this_slide = 0;"
-				" trace(\"Restart button pressed, slide counter has been set to: \" + _root.this_slide + \".\");"
-				" trace(\"We should now jump to the slide named '\" + _root.slide_names[_root.this_slide] + \"'.\");"
-				" if (true == _root.playing) {"
+		g_string_printf(message,
+
+				// Format string, grouped as per the strings directly below
+				"%s %s%s%s %s%s%s %s",
+
+				// The grouped strings
+				" _root.this_slide = 0;",										// %s
+
+				" trace(\"",													// %s
+				_("Restart button pressed, slide counter has been set to:"),	// %s
+				" \" + _root.this_slide + \".\");",								// %s
+
+				" trace(\"",													// %s
+				_("We should now jump to the slide named"),						// %s
+				" '\" + _root.slide_names[_root.this_slide] + \"'.\");",		// %s
+
+				" if (true == _root.playing) {"									// %s
 				" _root.gotoAndPlay(2, _root.slide_names[_root.this_slide]);"
 				" } else {"
 				" _root.gotoAndStop(2, _root.slide_names[_root.this_slide]);"
 				" };");
+		restart_action = compileSWFActionCode(message->str);
 	} else
 	{
 		restart_action = compileSWFActionCode(
@@ -585,43 +601,101 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		if (debug_level)
 		{
 			// If we're debugging, then generate debugging swf's too
-			rewind_action = compileSWFActionCode(
-					"if (0 == _root.this_slide)"
-					" {"  // We're in the first slide, so jump back to the start of the movie
-						" _root.this_slide = 0;"
-						" trace(\"Rewind button pressed while in first slide, slide counter has been set to: \" + _root.this_slide + \".\");"
-						" trace(\"'playing' variable is unchanged, at: \" + _root.playing + \".\");"
-						" trace(\"We should now jump to the first frame of the movie.\");"
-						" if (true == _root.playing)"
-						" {"
-							" trace(\"Using gotoAndPlay.\");"
-							" _root.gotoAndPlay(2);"
+			g_string_printf(message,
+
+					// Format string, grouped as per the strings directly below
+					"%s %s%s%s %s%s%s %s%s%s %s %s%s%s %s %s%s%s %s",
+
+					// The grouped strings
+					"if (0 == _root.this_slide)"															// %s
+					" {"
+						// We're in the first slide, so jump back to the start of the movie
+						" _root.this_slide = 0;",
+
+						" trace(\"",																		// %s
+						_("Rewind button pressed while in first slide, slide counter has been set to:"),	// %s
+						" \" + _root.this_slide + \".\");",													// %s
+
+						" trace(\"",																		// %s
+						_("'playing' variable is unchanged, at:"),											// %s
+						" \" + _root.playing + \".\");",													// %s
+
+						" trace(\"",																		// %s
+						_("We should now jump to the first frame of the movie."),							// %s
+						" \");",																			// %s
+
+						" if (true == _root.playing)"														// %s
+						" {",
+
+							" trace(\"",																	// %s
+							_("Using"),																		// %s
+							" gotoAndPlay. \");",															// %s
+
+							" _root.gotoAndPlay(2);"														// %s
 						" }"
 						" else"
-						" {"
-							" trace(\"Using gotoAndStop.\");"
-							" _root.gotoAndStop(2);"
+						" {",
+
+							" trace(\"",																	// %s
+							_("Using"),																		// %s
+							" gotoAndStop. \");",															// %s
+
+							" _root.gotoAndStop(2);"														// %s
 						" }"
 					" }"
-					" else"
-					" {"  // We're past the first slide, so jump back to the start of the previous slide
+			);
+
+			g_string_append_printf(message,
+
+					// Format string, grouped as per the strings directly below
+					"%s %s%s%s %s%s%s %s%s%s %s%s%s %s %s%s%s %s %s%s%s %s",
+
+					// The grouped strings
+					" else"																					// %s
+					" {"
+						// We're past the first slide, so jump back to the start of the previous slide
 						" _root.this_slide -= 1;"
-						" _root.reversing = true;"
-						" trace(\"Rewind button pressed, slide counter has been set to: \" + _root.this_slide + \".\");"
-						" trace(\"'_root.reversing' variable has been set to true.\");"
-						" trace(\"'playing' variable is unchanged, at: \" + _root.playing + \".\");"
-						" trace(\"We should now jump to the slide named '\" + _root.slide_names[_root.this_slide] + \"'.\");"
-						" if (true == _root.playing)"
-						" {"
-							" trace(\"Using gotoAndPlay.\");"
-							" _root.gotoAndPlay(_root.slide_names[_root.this_slide]);"
+						" _root.reversing = true;",
+
+						" trace(\"",																		// %s
+						_("Rewind button pressed, slide counter has been set to:"),							// %s
+						" \" + _root.this_slide + \".\");",													// %s
+
+						" trace(\"",																		// %s
+						_("'_root.reversing' variable has been set to true."),								// %s
+						" \");",																			// %s
+
+						" trace(\"",																		// %s
+						_("'playing' variable is unchanged, at:"),											// %s
+						" \" + _root.playing + \".\");",													// %s
+
+						" trace(\"",																		// %s
+						_("We should now jump to the slide named"),											// %s
+						" '\" + _root.slide_names[_root.this_slide] + \"'.\");",							// %s
+
+						" if (true == _root.playing)"														// %s
+						" {",
+
+							" trace(\"",																	// %s
+							_("Using"),																		// %s
+							" gotoAndPlay.\");",															// %s
+
+							" _root.gotoAndPlay(_root.slide_names[_root.this_slide]);"						// %s
 						" }"
 						" else"
-						" {"
-							" trace(\"Using gotoAndStop.\");"
-							" _root.gotoAndStop(_root.slide_names[_root.this_slide]);"
+						" {",
+
+							" trace(\"",																	// %s
+							_("Using"),																		// %s
+							" gotoAndStop.\");",															// %s
+
+							" _root.gotoAndStop(_root.slide_names[_root.this_slide]);"						// %s
 						" }"
-					" };");
+					" };"
+
+			);
+
+			rewind_action = compileSWFActionCode(message->str);
 		} else
 		{
 			rewind_action = compileSWFActionCode(
@@ -1055,15 +1129,19 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		font_pathname = g_build_path(FONT_DIR, G_DIR_SEPARATOR_S, "Bitstream_Vera_Sans.fdb", NULL);
 
 		// Display debugging info if requested
-		if (debug_level)
-			printf("Font path: %s\n", font_pathname);
+		if (debug_level) printf(_("Font path: '%s'\n"), font_pathname);
 
 		// Load the font file if needed
 		font_file = fopen(font_pathname, "r");
 		if (NULL == font_file)
 		{
 			// Something went wrong when loading the font file, so return
-			display_warning("Error ED415: Something went wrong when opening the font file");
+			g_string_printf(message, "%s ED415: %s", _("Error"), _("Something went wrong when opening the font file."));
+			display_warning(message->str);
+
+			// Free the memory allocated in this function
+			g_string_free(message, TRUE);
+			g_free(font_pathname);
 
 			return FALSE;
 		}
@@ -1071,9 +1149,11 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		if (NULL == font_object)
 		{
 			// Something went wrong when loading the font file, so return
-			display_warning("Error ED416: Something went wrong when loading the font file");
+			g_string_printf(message, "%s ED416: %s", _("Error"), _("Something went wrong when loading the font file."));
+			display_warning(message->str);
 
 			// Free the memory allocated in this function
+			g_string_free(message, TRUE);
 			g_free(font_pathname);
 
 			return FALSE;
@@ -1130,7 +1210,9 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		if (NULL == info_text_bg)
 		{
 			// Something went wrong when creating the empty shape, so we skip this layer
-			display_warning("Error ED406: Something went wrong when creating the information button background shape");
+			g_string_printf(message, "%s ED406: %s", _("Error"), _("Something went wrong when creating the information button background shape."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			return FALSE;
 		}
 
@@ -1286,6 +1368,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 
 	// Free the memory allocated in the function thus far
 	g_string_free(file_name_full, TRUE);
+	g_string_free(message, TRUE);
 
 	// Control bar was created successfully, so indicate this
 	return TRUE;
