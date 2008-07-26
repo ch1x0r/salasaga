@@ -1114,14 +1114,32 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	if (debug_level)
 	{
 		// If we're debugging, then generate debugging swf's too
-		finish_action = compileSWFActionCode(
-				"cb_play._visible = true;"
+		g_string_printf(message,
+
+				// Format string, grouped as per the strings directly below
+				"%s %s%s%s %s%s%s %s%s%s %s",
+
+				// The grouped strings
+				"cb_play._visible = true;"								// %s
 				" _root.this_slide = _root.num_slides - 1;"
-				" _root.reversing = false;"
-				" trace(\"Finish button pressed.\");"
-				" trace(\"'_root.reversing' variable has been set to false.\");"
-				" trace(\"Now jumping to last frame of movie.\");"
-				" _root.gotoAndStop(_root._totalframes);");  // Jump to the last frame of the movie
+				" _root.reversing = false;",
+
+				" trace(\"",											// %s
+				_("Finish button pressed."),							// %s
+				"\");",													// %s
+
+				" trace(\"",											// %s
+				_("'_root.reversing' variable has been set to false."),	// %s
+				"\");",													// %s
+
+				" trace(\"",											// %s
+				_("Now jumping to last frame of movie."),				// %s
+				"\");",													// %s
+
+				// Jump to the last frame of the movie
+				" _root.gotoAndStop(_root._totalframes);"				// %s
+		);
+		finish_action = compileSWFActionCode(message->str);
 	} else
 	{
 		finish_action = compileSWFActionCode(
