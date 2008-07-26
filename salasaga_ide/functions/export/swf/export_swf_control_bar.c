@@ -960,34 +960,78 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		if (debug_level)
 		{
 			// If we're debugging, then generate debugging swf's too
-			forward_action = compileSWFActionCode(
-					"if (_root.this_slide >= (_root.num_slides - 1))"
+			g_string_printf(message,
+
+					// Format string, grouped as per the strings directly below
+					"%s %s%s%s %s%s%s %s%s%s %s",
+
+					// The grouped strings
+					"if (_root.this_slide >= (_root.num_slides - 1))"								// %s
 					" {"
 						// We're in the last slide, so we jump to the end of the movie
-						" _root.reversing = false;"
-						" trace(\"Fast forward button pressed while in last slide, slide counter is: \" + _root.this_slide + \".\");"
-						" trace(\"'_root.reversing' variable has been set to false.\");"
-						" trace(\"Now jumping to the last frame of the movie using gotoAndStop.\");"
-						" _root.gotoAndStop(_root._totalframes);"  // Jump to the last frame of the movie
+						" _root.reversing = false;",
+
+						" trace(\"",																// %s
+						_("Fast forward button pressed while in last slide, slide counter is:"),	// %s
+						" \" + _root.this_slide + \".\");",											// %s
+
+						" trace(\"",																// %s
+						_("'_root.reversing' variable has been set to false."),						// %s
+						" \");",																	// %s
+
+						" trace(\"",																// %s
+						_("Now jumping to the last frame of the movie using gotoAndStop."),			// %s
+						" \");",																	// %s
+
+						// Jump to the last frame of the movie
+						" _root.gotoAndStop(_root._totalframes);"									// %s
 					" }"
+			);
+
+			g_string_append_printf(message,
+
+					// Format string, grouped as per the strings directly below
+					"%s %s%s%s %s%s%s %s%s%s %s %s%s%s %s %s%s%s %s",
+
+					// The grouped strings
 					" else"
 					" {"
 						// We're not in the last slide yet, so jump to the start of the next slide
-						" _root.reversing = false;"
-						" trace(\"Fast forward button pressed, slide counter is: \" + _root.this_slide);"
-						" trace(\"'_root.reversing' variable has been set to false.\");"
-						" trace(\"We should now jump to the slide named '\" + _root.slide_names[_root.this_slide + 1] + \"'.\");"
-						" if (true == _root.playing)"
-						" {"
-							" trace(\"Using gotoAndPlay.\");"
-							" _root.gotoAndPlay(_root.slide_names[_root.this_slide + 1]);"
+						" _root.reversing = false;",										// %s
+
+						" trace(\"",														// %s
+						_("Fast forward button pressed, slide counter is:"),				// %s
+						" \" + _root.this_slide);",											// %s
+
+						" trace(\"",														// %s
+						_("'_root.reversing' variable has been set to false."),				// %s
+						" \");",															// %s
+
+						" trace(\"",														// %s
+						_("We should now jump to the slide named"),							// %s
+						" '\" + _root.slide_names[_root.this_slide + 1] + \"'.\");",		// %s
+
+						" if (true == _root.playing)"										// %s
+						" {",
+
+							" trace(\"",													// %s
+							_("Using"),														// %s
+							" gotoAndPlay.\");",											// %s
+
+							" _root.gotoAndPlay(_root.slide_names[_root.this_slide + 1]);"	// %s
 						" }"
 						" else"
-						" {"
-							" trace(\"Using gotoAndStop.\");"
-							" _root.gotoAndStop(_root.slide_names[_root.this_slide + 1]);"
+						" {",
+
+							" trace(\"",													// %s
+							_("Using"),														// %s
+							" gotoAndStop.\");",											// %s
+
+							" _root.gotoAndStop(_root.slide_names[_root.this_slide + 1]);"	// %s
 						" }"
-					" };");
+					" };"
+			);
+			forward_action = compileSWFActionCode(message->str);
 		} else
 		{
 			forward_action = compileSWFActionCode(
@@ -996,7 +1040,9 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 						// We're in the last slide, so we jump to the end of the movie
 						" cb_play._visible = true;"
 						" _root.reversing = false;"
-						" _root.gotoAndStop(_root._totalframes);"  // Jump to the last frame of the movie
+
+						// Jump to the last frame of the movie
+						" _root.gotoAndStop(_root._totalframes);"
 					" }"
 					" else"
 					" {"
