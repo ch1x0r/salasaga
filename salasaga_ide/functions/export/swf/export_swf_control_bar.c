@@ -531,7 +531,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				" _root.gotoAndPlay(2, _root.slide_names[_root.this_slide]);"
 				" } else {"
 				" _root.gotoAndStop(2, _root.slide_names[_root.this_slide]);"
-				" };");
+				" };"
+		);
 		restart_action = compileSWFActionCode(message->str);
 	} else
 	{
@@ -781,12 +782,26 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	if (debug_level)
 	{
 		// If we're debugging, then generate debugging swf's too
-		pause_action = compileSWFActionCode(
-				"cb_play._visible = true;"
-				" _root.playing = false;"
-				" trace(\"Pause button pressed. Slide counter equals: \" + _root.this_slide + \".\");"
-				" trace(\"'_root.playing' variable set to false.\");"
-				" _root.stop();");
+		g_string_printf(message,
+
+				// Format string, grouped as per the strings directly below
+				"%s %s%s%s %s%s%s %s",
+
+				// The grouped strings
+				"cb_play._visible = true;"							// %s
+				" _root.playing = false;",
+
+				" trace(\"",										// %s
+				_("Pause button pressed. Slide counter equals:"),	// %s
+				" \" + _root.this_slide + \".\");",					// %s
+
+				" trace(\"",										// %s
+				_("'_root.playing' variable set to false."),		// %s
+				" \");",											// %s
+
+				" _root.stop();"									// %s
+		);
+		pause_action = compileSWFActionCode(message->str);
 	} else
 	{
 		pause_action = compileSWFActionCode(
