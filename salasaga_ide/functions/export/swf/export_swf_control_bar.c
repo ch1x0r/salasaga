@@ -865,15 +865,35 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	if (debug_level)
 	{
 		// If we're debugging, then generate debugging swf's too
-		play_action = compileSWFActionCode(
-				" cb_play._visible = false;"
+		g_string_printf(message,
+
+				// Format string, grouped as per the strings directly below
+				"%s %s%s%s %s%s%s %s%s%s %s%s%s %s",
+
+				// The grouped strings
+				" cb_play._visible = false;"							// %s
 				" _root.reversing = false;"
-				" _root.playing = true;"
-				" trace(\"Play button pressed. Slide counter equals: \" + _root.this_slide + \".\");"
-				" trace(\"'_root.reversing' variable has been set to false.\");"
-				" trace(\"'_root.playing' variable set to true.\");"
-				" trace(\"Slide name array is: \" + _root.slide_names + \".\");"
-				" _root.play();");
+				" _root.playing = true;",
+				
+				" trace(\"",											// %s
+				_("Play button pressed. Slide counter equals:"),		// %s
+				" \" + _root.this_slide + \".\");",						// %s
+
+				" trace(\"",											// %s
+				_("'_root.reversing' variable has been set to false."),	// %s
+				" \");",												// %s
+
+				" trace(\"",											// %s
+				_("'_root.playing' variable set to true."),				// %s
+				" \");",												// %s
+
+				" trace(\"",											// %s
+				_("Slide name array is:"),								// %s
+				" \" + _root.slide_names + \".\");",					// %s
+
+				" _root.play();"										// %s
+		);
+		play_action = compileSWFActionCode(message->str);
 	} else
 	{
 		play_action = compileSWFActionCode(
