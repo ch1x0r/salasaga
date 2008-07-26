@@ -44,6 +44,7 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 	// Local variables
 	GtkDialog			*empty_dialog;				// Widget for the dialog
 	GtkWidget			*empty_table;				// Table used for neat layout of the dialog box
+	GString				*message;					// Used to construct message strings
 	guint				row_counter = 0;			// Used to count which row things are up to
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
 	GString				*valid_ext_link;			// Receives the new external link once validated
@@ -64,6 +65,7 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 
 	// Initialise some things
 	tmp_empty_ob = (layer_empty *) tmp_layer->object_data;
+	message = g_string_new(NULL);
 	valid_ext_link = g_string_new(NULL);
 	valid_ext_link_win = g_string_new(NULL);
 
@@ -75,7 +77,7 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 	gtk_box_pack_start(GTK_BOX(empty_dialog->vbox), GTK_WIDGET(empty_table), FALSE, FALSE, 10);
 
 	// Background Colour
-	label_bg_colour = gtk_label_new("Background Colour: ");
+	label_bg_colour = gtk_label_new(_("Background Colour: "));
 	gtk_misc_set_alignment(GTK_MISC(label_bg_colour), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(label_bg_colour), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_bg_colour = gtk_color_button_new_with_color(&tmp_empty_ob->bg_color);
@@ -84,7 +86,7 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for an external link
-	external_link_label = gtk_label_new("External link: ");
+	external_link_label = gtk_label_new(_("External link: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -96,7 +98,7 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the window to open the external link in
-	external_link_win_label = gtk_label_new("External link window: ");
+	external_link_win_label = gtk_label_new(_("External link window: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -131,7 +133,8 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 		validated_string = validate_value(EXTERNAL_LINK, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED142: There was something wrong with the external link value.  Please try again.");
+			g_string_printf(message, "%s ED142: %s", _("Error"), _("There was something wrong with the external link value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -144,7 +147,8 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 		validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(external_link_win_entry)));
 		if (NULL == validated_string)
 		{
-			display_warning("Error ED143: There was something wrong with the external link window target value.  Please try again.");
+			g_string_printf(message, "%s ED143: %s", _("Error"), _("There was something wrong with the external link window target value.  Please try again."));
+			display_warning(message->str);
 			useable_input = FALSE;
 		} else
 		{
@@ -165,6 +169,7 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 	gtk_widget_destroy(GTK_WIDGET(empty_dialog));
 
 	// Free the memory allocated in this function
+	g_string_free(message, TRUE);
 	g_string_free(valid_ext_link, TRUE);
 	g_string_free(valid_ext_link_win, TRUE);
 	return TRUE;
