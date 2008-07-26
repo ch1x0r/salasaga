@@ -861,7 +861,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFButton_addShape(play_button, (SWFCharacter) play_shape_over, SWFBUTTON_OVER);
 	SWFButton_addShape(play_button, (SWFCharacter) play_shape_down, SWFBUTTON_DOWN);
 
-	// Add the Play action to the play button 
+	// Add the play action to the play button
 	if (debug_level)
 	{
 		// If we're debugging, then generate debugging swf's too
@@ -1110,7 +1110,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFButton_addShape(finish_button, (SWFCharacter) finish_shape_over, SWFBUTTON_OVER);
 	SWFButton_addShape(finish_button, (SWFCharacter) finish_shape_down, SWFBUTTON_DOWN);
 
-	// Add the finish action to the finish button 
+	// Add the finish action to the finish button
 	if (debug_level)
 	{
 		// If we're debugging, then generate debugging swf's too
@@ -1201,7 +1201,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		SWFButton_addShape(info_button, (SWFCharacter) info_shape_over, SWFBUTTON_OVER);
 		SWFButton_addShape(info_button, (SWFCharacter) info_shape_down, SWFBUTTON_DOWN);
 
-		// Add the finish action to the finish button 
+		// Add the info action to the info button
 		if (debug_level)
 		{
 			// If we're debugging, then generate debugging swf's too
