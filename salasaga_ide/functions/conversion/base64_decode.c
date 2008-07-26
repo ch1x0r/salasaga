@@ -45,18 +45,17 @@ GString *base64_decode(GString *input_string, GString *output_string)
 	guint				counter;				// Counter of how many characters have been converted
 	guchar				holding_byte;			// Holds the byte being worked on
 	gdouble				max_loop;				// The maximum number of interations to run
+	GString				*message;					// Used to construct message strings
 
 	guchar				out_byte0;				// Used to hold the bytes being translated
 	guchar				out_byte1;				// Used to hold the bytes being translated
 	guchar				out_byte2;				// Used to hold the bytes being translated
 	gint				string_offset;			// Used as an offset pointer while parsing
 
-	GString				*tmp_gstring;			// Temporary GString
-
 
 	// Initialise various things
 	g_string_assign(output_string, "");
-	tmp_gstring = g_string_new(NULL);
+	message = g_string_new(NULL);
 
 	// Make a copy of the input string so we can work on it in place
 	copied_string = g_string_new(NULL);
@@ -132,8 +131,8 @@ GString *base64_decode(GString *input_string, GString *output_string)
 
 				default:
 					// Should never get here
-					g_string_printf(tmp_gstring, "Error ED64: Error in the Base64 decoding function, unrecognised input '%c'.", holding_byte);
-					display_warning(tmp_gstring->str);
+					g_string_printf(message, "%s ED64: %s '%c'.", _("Error"), _("Error in the Base64 decoding function, unrecognised input"), holding_byte);
+					display_warning(message->str);
 			}
 		}
 	}
@@ -183,12 +182,13 @@ GString *base64_decode(GString *input_string, GString *output_string)
 			break;
 
 		default:
-			display_warning("Error ED73: Unknown Base64 decoding remainder (shouldn't happen)\n");
+			g_string_printf(message, "%s ED73: %s", _("Error"), _("Unknown Base64 decoding remainder.  This should not happen."));
+			display_warning(message->str);
 	}
 
 	// Free the memory allocated in this function
-	g_string_free(tmp_gstring, TRUE);
 	g_string_free(copied_string, TRUE);
+	g_string_free(message, TRUE);
 
 	return output_string;
 }

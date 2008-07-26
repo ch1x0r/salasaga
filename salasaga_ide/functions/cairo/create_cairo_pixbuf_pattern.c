@@ -42,6 +42,7 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 	guchar				*dest_ptr;
 	cairo_pattern_t		*image_pattern;
 	cairo_surface_t		*image_surface;
+	GString				*message;					// Used to construct message strings
 	guint				num_channels;
 	guchar				*row_end;
 	guint				row_stride;
@@ -51,6 +52,9 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 	gint				source_width;
 	gint				y_counter;
 
+
+	// Initialisation
+	message = g_string_new(NULL);
 
 	// Get info about the source pixbuf
 	row_stride = gdk_pixbuf_get_rowstride(source_pixbuf);
@@ -63,7 +67,9 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 	dest_buffer = g_try_new0(guchar, source_width * source_height * 4);
 	if (NULL == dest_buffer)
 	{
-		display_warning("Error ED371: Unable to allocate memory for pixel buffer");
+		g_string_printf(message, "%s ED371: %s", _("Error"), _("Unable to allocate memory for pixel buffer."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return NULL;
 	}
 	dest_start = dest_buffer;
@@ -113,7 +119,8 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 	cairo_status = cairo_surface_status(image_surface);
 	if (CAIRO_STATUS_SUCCESS != cairo_status)
 	{
-		display_warning("Error ED385: Couldn't create image surface.");
+		g_string_printf(message, "%s ED385: %s", _("Error"), _("Couldn't create image surface."));
+		display_warning(message->str);
 	}
 
 	// Turn the surface into a cairo pattern
@@ -123,10 +130,12 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 	cairo_pattern_status(image_pattern);
 	if (CAIRO_STATUS_SUCCESS != cairo_status)
 	{
-		display_warning("Error ED386: Couldn't create surface pattern.");
+		g_string_printf(message, "%s ED386: %s", _("Error"), _("Couldn't create surface pattern."));
+		display_warning(message->str);
 	}
 
 	// Free the memory used in this function
+	g_string_free(message, TRUE);
 	cairo_surface_destroy(image_surface);
 
 	return image_pattern;

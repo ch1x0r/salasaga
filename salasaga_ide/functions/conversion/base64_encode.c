@@ -47,6 +47,7 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
 	guint				counter;				// Counter of how many characters have been converted
 	gchar				*input_buffer;
 	gdouble				max_loop;				// The maximum number of interations to run
+	GString				*message;					// Used to construct message strings
 	guint				offset;					// Either 0, 1, or 2.  Used to calculate the end few output bytes
 	gchar				*output_buffer;
 	gint				output_counter;			// Counter used for positioning inside the output buffer
@@ -61,9 +62,10 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
 
 
 	// Initialise some things
+	characters_out = 0;
 	input_buffer = data;
 	output_counter = 0;
-	characters_out = 0;
+	message = g_string_new(NULL);
 
 	// Calculate the length of the Base64 buffer
 	buffer_length = (guint) ((float) length * 1.5);  // Overestimate, to be on the safe side
@@ -174,8 +176,12 @@ gboolean base64_encode(gpointer data, guint length, gchar **output_string)
 			break;
 
 		default:
-			display_warning("Error ED79: Unknown remainder amount when Base64 encoding (shouldn't happen)\n");
+			g_string_printf(message, "%s ED79: %s", _("Error"), _("Unknown remainder amount when Base64 encoding.  This should not ever happen."));
+			display_warning(message->str);
 	}
+
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
 
 	// Put a NULL at the end of the Base64 encoded string
 	output_buffer[output_counter] = '\0';
