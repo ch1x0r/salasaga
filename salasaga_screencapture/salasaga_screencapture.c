@@ -46,12 +46,10 @@
 #include <png.h>
 
 // Add our functions
+#include "config.h"
 #include "salasaga_types.h"
 #include "display_warning.h"
 #include "validate_value.h"
-
-// Application constants
-#define	APP_VERSION 0.55
 
 
 #ifdef _WIN32
@@ -199,6 +197,11 @@ gint main(gint argc, gchar *argv[])
 	HWND				windows_win;				// Holds the Window ID we're screenshot-ing
 #endif
 
+
+	// Initialse i18n
+	setlocale(LC_ALL, "");
+	bindtextdomain(PACKAGE, LOCALEDIR);
+	textdomain(PACKAGE);
 
 	// Initialise GTK
 	gtk_init(&argc, &argv);
