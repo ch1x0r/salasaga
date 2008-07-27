@@ -131,7 +131,7 @@ GString *base64_decode(GString *input_string, GString *output_string)
 
 				default:
 					// Should never get here
-					g_string_printf(message, "%s ED64: %s '%c'.", _("Error"), _("Error in the Base64 decoding function, unrecognised input"), holding_byte);
+					g_string_printf(message, "%s ED64: %s '%c'.", _("Error"), _("Error in the Base64 decoding function, unrecognized input"), holding_byte);
 					display_warning(message->str);
 			}
 		}

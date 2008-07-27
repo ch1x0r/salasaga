@@ -361,7 +361,7 @@ gboolean project_read(gchar *filename)
 	validated_gfloat = validate_value(PROJECT_VERSION, V_CHAR, save_format_data);
 	if (NULL == validated_gfloat)
 	{
-		g_string_printf(message, "%s ED210: %s", _("Error"), _("The file format value in the project file is not recognised.  This project file can't be used."));
+		g_string_printf(message, "%s ED210: %s", _("Error"), _("The file format value in the project file is not recognized.  This project file can't be used."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
 		return FALSE;
@@ -491,7 +491,7 @@ gboolean project_read(gchar *filename)
 		validated_string = validate_value(START_BEHAVIOUR, V_CHAR, start_behaviour_data);
 		if (NULL == validated_string)
 		{
-			g_string_printf(message, "%s ED282: %s", _("Error"), _("There was something wrong with the start behaviour value in the project file."));
+			g_string_printf(message, "%s ED282: %s", _("Error"), _("There was something wrong with the start behavior value in the project file."));
 			display_warning(message->str);
 			useable_input = FALSE;
 		} else
@@ -519,7 +519,7 @@ gboolean project_read(gchar *filename)
 		validated_string = validate_value(END_BEHAVIOUR, V_CHAR, end_behaviour_data);
 		if (NULL == validated_string)
 		{
-			g_string_printf(message, "%s ED279: %s", _("Error"), _("There was something wrong with the end behaviour value in the project file."));
+			g_string_printf(message, "%s ED279: %s", _("Error"), _("There was something wrong with the end behavior value in the project file."));
 			display_warning(message->str);
 			useable_input = FALSE;
 		} else
@@ -702,7 +702,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED211: %s", _("Error"), _("There was something wrong with a red component colour value in the project file."));
+											g_string_printf(message, "%s ED211: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 											tmp_empty_ob->bg_color.red = 0;  // Fill in the value, just to be safe
@@ -718,7 +718,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED212: %s", _("Error"), _("There was something wrong with a green component colour value in the project file."));
+											g_string_printf(message, "%s ED212: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 											tmp_empty_ob->bg_color.green = 0;  // Fill in the value, just to be safe
@@ -734,7 +734,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED213: %s", _("Error"), _("There was something wrong with a blue component colour value in the project file."));
+											g_string_printf(message, "%s ED213: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 											tmp_empty_ob->bg_color.blue = 0;  // Fill in the value, just to be safe
@@ -1400,7 +1400,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED397: %s", _("Error"), _("There was something wrong with a red component colour value in the project file."));
+											g_string_printf(message, "%s ED397: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 										} else
@@ -1415,7 +1415,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED398: %s", _("Error"), _("There was something wrong with a green component colour value in the project file."));
+											g_string_printf(message, "%s ED398: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 										} else
@@ -1430,7 +1430,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED399: %s", _("Error"), _("There was something wrong with a blue component colour value in the project file."));
+											g_string_printf(message, "%s ED399: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 										} else
@@ -1460,7 +1460,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED401: %s", _("Error"), _("There was something wrong with a red component colour value in the project file."));
+											g_string_printf(message, "%s ED401: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 										} else
@@ -1475,7 +1475,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED402: %s", _("Error"), _("There was something wrong with a green component colour value in the project file."));
+											g_string_printf(message, "%s ED402: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 										} else
@@ -1490,7 +1490,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED403: %s", _("Error"), _("There was something wrong with a blue component colour value in the project file."));
+											g_string_printf(message, "%s ED403: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 										} else
@@ -2329,7 +2329,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED265: %s", _("Error"), _("There was something wrong with a red component colour value in the project file."));
+											g_string_printf(message, "%s ED265: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 											tmp_text_ob->text_color.red = 0;  // Fill in the value, just to be safe
@@ -2345,7 +2345,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED266: %s", _("Error"), _("There was something wrong with a green component colour value in the project file."));
+											g_string_printf(message, "%s ED266: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 											tmp_text_ob->text_color.green = 0;  // Fill in the value, just to be safe
@@ -2361,7 +2361,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED267: %s", _("Error"), _("There was something wrong with a blue component colour value in the project file."));
+											g_string_printf(message, "%s ED267: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 											tmp_text_ob->text_color.blue = 0;  // Fill in the value, just to be safe
@@ -2377,7 +2377,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED388: %s", _("Error"), _("There was something wrong with a red component colour value in the project file."));
+											g_string_printf(message, "%s ED388: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 											tmp_text_ob->bg_border_colour.red = 0;  // Fill in the value, just to be safe
@@ -2393,7 +2393,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED389: %s", _("Error"), _("There was something wrong with a green component colour value in the project file."));
+											g_string_printf(message, "%s ED389: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 											tmp_text_ob->bg_border_colour.green = 0;  // Fill in the value, just to be safe
@@ -2409,7 +2409,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED390: %s", _("Error"), _("There was something wrong with a blue component colour value in the project file."));
+											g_string_printf(message, "%s ED390: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 											tmp_text_ob->bg_border_colour.blue = 0;  // Fill in the value, just to be safe
@@ -2425,7 +2425,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED391: %s", _("Error"), _("There was something wrong with a red component colour value in the project file."));
+											g_string_printf(message, "%s ED391: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 											tmp_text_ob->bg_fill_colour.red = 0;  // Fill in the value, just to be safe
@@ -2441,7 +2441,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED392: %s", _("Error"), _("There was something wrong with a green component colour value in the project file."));
+											g_string_printf(message, "%s ED392: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 										} else
@@ -2456,7 +2456,7 @@ gboolean project_read(gchar *filename)
 										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
 										if (NULL == validated_guint)
 										{
-											g_string_printf(message, "%s ED393: %s", _("Error"), _("There was something wrong with a blue component colour value in the project file."));
+											g_string_printf(message, "%s ED393: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
 											display_warning(message->str);
 											useable_input = FALSE;
 										} else

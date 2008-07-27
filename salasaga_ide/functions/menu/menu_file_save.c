@@ -150,7 +150,7 @@ void menu_file_save(void)
 			break;
 
 		default:
-			g_string_printf(message, "%s ED281: %s", _("Error"), _("Error creating the start behaviour value."));
+			g_string_printf(message, "%s ED281: %s", _("Error"), _("Error creating the start behavior value."));
 			display_warning(message->str);
 			g_string_free(message, TRUE);
 			return;
@@ -170,7 +170,7 @@ void menu_file_save(void)
 			break;
 
 		default:
-			g_string_printf(message, "%s ED278: %s", _("Error"), _("Error creating the end behaviour value."));
+			g_string_printf(message, "%s ED278: %s", _("Error"), _("Error creating the end behavior value."));
 			display_warning(message->str);
 			g_string_free(message, TRUE);
 			return;

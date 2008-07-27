@@ -215,7 +215,7 @@ void menu_edit_preferences(void)
 	app_row_counter = app_row_counter + 1;
 
 	// Default Background Colour
-	label_default_bg_colour = gtk_label_new(_("Default Background Colour: "));
+	label_default_bg_colour = gtk_label_new(_("Default Background Color: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_bg_colour), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_bg_colour), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_default_bg_colour = gtk_color_button_new_with_color(&default_bg_colour);

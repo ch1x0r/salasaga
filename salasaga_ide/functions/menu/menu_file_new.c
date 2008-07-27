@@ -308,7 +308,7 @@ void menu_file_new(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Project initialised"));
+	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Project initialized"));
 	gdk_flush();
 
 	// Redraw the timeline

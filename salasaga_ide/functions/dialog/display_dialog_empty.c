@@ -77,7 +77,7 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 	gtk_box_pack_start(GTK_BOX(empty_dialog->vbox), GTK_WIDGET(empty_table), FALSE, FALSE, 10);
 
 	// Background Colour
-	label_bg_colour = gtk_label_new(_("Background Colour: "));
+	label_bg_colour = gtk_label_new(_("Background Color: "));
 	gtk_misc_set_alignment(GTK_MISC(label_bg_colour), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(label_bg_colour), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_bg_colour = gtk_color_button_new_with_color(&tmp_empty_ob->bg_color);

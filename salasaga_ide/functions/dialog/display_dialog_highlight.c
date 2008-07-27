@@ -160,7 +160,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the background fill colour selection label
-	fill_colour_label = gtk_label_new(_("Background fill colour: "));
+	fill_colour_label = gtk_label_new(_("Background fill color: "));
 	gtk_misc_set_alignment(GTK_MISC(fill_colour_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(fill_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -171,7 +171,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	row_counter = row_counter + 1;
 
 	// Create the background line colour selection label
-	border_colour_label = gtk_label_new(_("Background border colour: "));
+	border_colour_label = gtk_label_new(_("Background border color: "));
 	gtk_misc_set_alignment(GTK_MISC(border_colour_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(highlight_table), GTK_WIDGET(border_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 

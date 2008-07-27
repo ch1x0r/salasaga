@@ -188,7 +188,7 @@ void menu_project_properties(void)
 	proj_row_counter = proj_row_counter + 1;
 
 	// Start behaviour
-	label_start_behaviour = gtk_label_new(_("SWF start behaviour: "));
+	label_start_behaviour = gtk_label_new(_("SWF start behavior: "));
 	gtk_misc_set_alignment(GTK_MISC(label_start_behaviour), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_start_behaviour), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	selector_start_behaviour = gtk_combo_box_new_text();
@@ -207,7 +207,7 @@ void menu_project_properties(void)
 	proj_row_counter = proj_row_counter + 1;
 
 	// End behaviour
-	label_end_behaviour = gtk_label_new(_("SWF end behaviour: "));
+	label_end_behaviour = gtk_label_new(_("SWF end behavior: "));
 	gtk_misc_set_alignment(GTK_MISC(label_end_behaviour), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_end_behaviour), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	selector_end_behaviour = gtk_combo_box_new_text();
@@ -388,7 +388,7 @@ void menu_project_properties(void)
 		if (-1 == gint_val)
 		{
 			// A -1 return means no value was selected
-			g_string_printf(message, "%s ED280: %s", _("Error"), _("There was something wrong with the start behaviour value selected.  Please try again."));
+			g_string_printf(message, "%s ED280: %s", _("Error"), _("There was something wrong with the start behavior value selected.  Please try again."));
 			display_warning(message->str);
 			useable_input = FALSE;
 		} else
@@ -402,7 +402,7 @@ void menu_project_properties(void)
 		if (-1 == gint_val)
 		{
 			// A -1 return means no value was selected
-			g_string_printf(message, "%s ED277: %s", _("Error"), _("There was something wrong with the end behaviour value selected.  Please try again."));
+			g_string_printf(message, "%s ED277: %s", _("Error"), _("There was something wrong with the end behavior value selected.  Please try again."));
 			display_warning(message->str);
 			useable_input = FALSE;
 		} else
