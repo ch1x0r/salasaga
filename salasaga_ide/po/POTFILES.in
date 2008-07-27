@@ -1,4 +1,6 @@
 salasaga.c
+salasaga_types.h
+valid_fields.h
 functions/create_menu_bar.c
 functions/create_resolution_selector.c
 functions/create_time_line.c
