@@ -395,7 +395,7 @@ gint main(gint argc, gchar *argv[])
 	output_height = default_output_height;
 
 	// Set the application title
-	snprintf(wintitle, 40, "%s v%s", PACKAGE_NAME, PACKAGE_VERSION);
+	snprintf(wintitle, 40, "%s v%s", APP_NAME, APP_VERSION);
 
 	// Set the window title and border
 	gtk_window_set_title(GTK_WINDOW(main_window), wintitle);
