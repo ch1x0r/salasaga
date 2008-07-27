@@ -32,11 +32,31 @@ extern "C" {
 #endif // __cplusplus
 
 
+// * Set up i18n bits *
+
+#include <libintl.h>
+#include <locale.h>
+#ifndef _
+#define _(String) gettext(String)
+#endif
+#ifndef gettext_noop
+#define gettext_noop(String) (String)
+#endif
+#ifndef N_
+#define N_(String) gettext_noop(String)
+#endif
+
+// * Miscellanous bits *
+
 // Define a run time check that hasn't been added to GTK
 #define GTK_TYPE_TREE_ITER		(gtk_tree_iter_get_type ())
 #define GTK_TREE_ITER(obj)		(G_TYPE_CHECK_INSTANCE_CAST ((obj), GTK_TYPE_TREE_ITER, GtkTreeIter))
 
 // * Define values used in the application *
+
+// Basic application constants
+#define APP_NAME "Salasaga"
+#define	APP_VERSION PACKAGE_VERSION
 
 // Base types for the validate_value function
 #define V_CHAR				1

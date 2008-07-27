@@ -21,8 +21,8 @@
  *
  */
 
-#ifndef VALIDATE_FIELDS_H_
-#define VALIDATE_FIELDS_H_
+#ifndef VALID_FIELDS_H_
+#define VALID_FIELDS_H_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
@@ -32,16 +32,16 @@ extern "C" {
 // The validation entries for each input field in the application
 validatation_entry		valid_fields[] =
 {
-	{ FOLDER_PATH,			"Full path to a folder",				V_CHAR,				V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
-	{ PROJECT_NAME,			"Name of this project",					V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
-	{ SCREENSHOT_HEIGHT,	"Height for next screenshot",			V_INT_UNSIGNED,		V_NONE,		0,		4096 },
-	{ SCREENSHOT_WIDTH,		"Width for next screenshot",			V_INT_UNSIGNED,		V_NONE,		0,		4096 },
-	{ SCREENSHOT_X_OFFSET,	"X offset for next screenshot",			V_INT_UNSIGNED,		V_NONE,		0,		4096 },
-	{ SCREENSHOT_Y_OFFSET,	"Y offset for next screenshot",			V_INT_UNSIGNED,		V_NONE,		0,		4096 }
+	{ FOLDER_PATH,			N_("Full path to a folder"),			V_CHAR,				V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
+	{ PROJECT_NAME,			N_("Name of this project"),				V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
+	{ SCREENSHOT_HEIGHT,	N_("Height for next screenshot"),		V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ SCREENSHOT_WIDTH,		N_("Width for next screenshot"),		V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ SCREENSHOT_X_OFFSET,	N_("X offset for next screenshot"),		V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ SCREENSHOT_Y_OFFSET,	N_("Y offset for next screenshot"),		V_INT_UNSIGNED,		V_NONE,		0,		4096 }
 };
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /*VALIDATE_FIELDS_H_*/
+#endif /*VALID_FIELDS_H_*/
