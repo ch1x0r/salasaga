@@ -44,6 +44,6 @@ void menu_help_register(void)
 {
 #ifndef _WIN32  // Non-windows check
 	// Launch a browser window of the Salasaga registration page
-	gnome_url_show(_("http://www.salasaga.org/forum/index.php?action=login"), NULL);
+	gnome_url_show(_("http://www.salasaga.org/forum/index.php?action=register"), NULL);
 #endif
 }
