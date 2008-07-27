@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-26 20:24+1000\n"
+"POT-Creation-Date: 2008-07-27 17:11+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -336,6 +336,182 @@ msgstr ""
 
 #: salasaga.c:525
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
+msgstr ""
+
+#: valid_fields.h:35
+msgid "8 Bit Color Value Component"
+msgstr ""
+
+#: valid_fields.h:36
+msgid "16 Bit Color Value Component"
+msgstr ""
+
+#: valid_fields.h:37
+msgid "Animation behavior after playing"
+msgstr ""
+
+#: valid_fields.h:38
+msgid "External link"
+msgstr ""
+
+#: valid_fields.h:39
+msgid "Window target for an external link"
+msgstr ""
+
+#: valid_fields.h:40
+msgid "Full path to a file"
+msgstr ""
+
+#: valid_fields.h:41
+msgid "Full path to a folder"
+msgstr ""
+
+#: valid_fields.h:42
+msgid "Font size"
+msgstr ""
+
+#: valid_fields.h:43
+msgid "A frame number"
+msgstr ""
+
+#: valid_fields.h:44
+msgid "Height of a highlight layer"
+msgstr ""
+
+#: valid_fields.h:45
+msgid "Width of a highlight layer"
+msgstr ""
+
+#: valid_fields.h:46
+msgid "Height of the tool bar icons"
+msgstr ""
+
+#: valid_fields.h:47
+msgid "Base64 encoded image data"
+msgstr ""
+
+#: valid_fields.h:48
+msgid "Length in bytes of image data"
+msgstr ""
+
+#: valid_fields.h:49
+msgid "Layer background switch"
+msgstr ""
+
+#: valid_fields.h:50
+msgid "Layer duration in seconds"
+msgstr ""
+
+#: valid_fields.h:51
+msgid "Height of this layer"
+msgstr ""
+
+#: valid_fields.h:52
+msgid "Name of this layer"
+msgstr ""
+
+#: valid_fields.h:53
+msgid "Layer visibility switch"
+msgstr ""
+
+#: valid_fields.h:54
+msgid "Width of this layer"
+msgstr ""
+
+#: valid_fields.h:55
+msgid "Line width"
+msgstr ""
+
+#: valid_fields.h:56
+msgid "Mouse click"
+msgstr ""
+
+#: valid_fields.h:57
+msgid "Opacity level"
+msgstr ""
+
+#: valid_fields.h:58
+msgid "Width of film strip thumbnails"
+msgstr ""
+
+#: valid_fields.h:59
+msgid "Frames per Second for this project"
+msgstr ""
+
+#: valid_fields.h:60
+msgid "Height of this project"
+msgstr ""
+
+#: valid_fields.h:61
+msgid "Name of this project"
+msgstr ""
+
+#: valid_fields.h:62
+msgid "Version number of the project file"
+msgstr ""
+
+#: valid_fields.h:63
+msgid "Width of this project"
+msgstr ""
+
+#: valid_fields.h:64
+msgid "An X * Y resolution value"
+msgstr ""
+
+#: valid_fields.h:65
+msgid "Height for next screenshot"
+msgstr ""
+
+#: valid_fields.h:66
+msgid "Width for next screenshot"
+msgstr ""
+
+#: valid_fields.h:67
+msgid "Include control bar in exported swf"
+msgstr ""
+
+#: valid_fields.h:68
+msgid "Include info button in exported swf"
+msgstr ""
+
+#: valid_fields.h:69
+msgid "Show the background for text layers"
+msgstr ""
+
+#: valid_fields.h:70
+msgid "Number of frames per slide"
+msgstr ""
+
+#: valid_fields.h:71
+msgid "Number of seconds in a slide"
+msgstr ""
+
+#: valid_fields.h:72
+msgid "Name of this slide"
+msgstr ""
+
+#: valid_fields.h:73
+msgid "Animation behavior after loading"
+msgstr ""
+
+#: valid_fields.h:74
+msgid "Transition duration in seconds"
+msgstr ""
+
+#: valid_fields.h:75
+msgid "Type of transition"
+msgstr ""
+
+#: valid_fields.h:76
+msgid "X Offset"
+msgstr ""
+
+#: valid_fields.h:77
+msgid "Y Offset"
+msgstr ""
+
+#: valid_fields.h:78
+msgid "Magnification level of working area"
 msgstr ""
 
 #: functions/create_menu_bar.c:96
@@ -970,7 +1146,7 @@ msgstr ""
 
 #: functions/project_read.c:364
 msgid ""
-"The file format value in the project file is not recognised.  This project "
+"The file format value in the project file is not recognized.  This project "
 "file can't be used."
 msgstr ""
 
@@ -1007,12 +1183,12 @@ msgstr ""
 
 #: functions/project_read.c:494
 msgid ""
-"There was something wrong with the start behaviour value in the project file."
+"There was something wrong with the start behavior value in the project file."
 msgstr ""
 
 #: functions/project_read.c:522
 msgid ""
-"There was something wrong with the end behaviour value in the project file."
+"There was something wrong with the end behavior value in the project file."
 msgstr ""
 
 #: functions/project_read.c:556
@@ -1037,7 +1213,7 @@ msgstr ""
 #: functions/project_read.c:1463 functions/project_read.c:2332
 #: functions/project_read.c:2380 functions/project_read.c:2428
 msgid ""
-"There was something wrong with a red component colour value in the project "
+"There was something wrong with a red component color value in the project "
 "file."
 msgstr ""
 
@@ -1045,7 +1221,7 @@ msgstr ""
 #: functions/project_read.c:1478 functions/project_read.c:2348
 #: functions/project_read.c:2396 functions/project_read.c:2444
 msgid ""
-"There was something wrong with a green component colour value in the project "
+"There was something wrong with a green component color value in the project "
 "file."
 msgstr ""
 
@@ -1053,7 +1229,7 @@ msgstr ""
 #: functions/project_read.c:1493 functions/project_read.c:2364
 #: functions/project_read.c:2412 functions/project_read.c:2459
 msgid ""
-"There was something wrong with a blue component colour value in the project "
+"There was something wrong with a blue component color value in the project "
 "file."
 msgstr ""
 
@@ -1457,7 +1633,7 @@ msgid " Wrote capture settings file - %s"
 msgstr ""
 
 #: functions/conversion/base64_decode.c:134
-msgid "Error in the Base64 decoding function, unrecognised input"
+msgid "Error in the Base64 decoding function, unrecognized input"
 msgstr ""
 
 #: functions/conversion/base64_decode.c:185
@@ -1470,7 +1646,7 @@ msgid ""
 msgstr ""
 
 #: functions/dialog/display_dialog_empty.c:80
-msgid "Background Colour: "
+msgid "Background Color: "
 msgstr ""
 
 #: functions/dialog/display_dialog_empty.c:89
@@ -1512,12 +1688,12 @@ msgstr ""
 
 #: functions/dialog/display_dialog_highlight.c:163
 #: functions/dialog/display_dialog_text.c:226
-msgid "Background fill colour: "
+msgid "Background fill color: "
 msgstr ""
 
 #: functions/dialog/display_dialog_highlight.c:174
 #: functions/dialog/display_dialog_text.c:237
-msgid "Background border colour: "
+msgid "Background border color: "
 msgstr ""
 
 #: functions/dialog/display_dialog_highlight.c:185
@@ -1838,7 +2014,7 @@ msgid "Font size: "
 msgstr ""
 
 #: functions/dialog/display_dialog_text.c:215
-msgid "Text colour: "
+msgid "Text color: "
 msgstr ""
 
 #: functions/dialog/display_dialog_text.c:283
@@ -2501,7 +2677,7 @@ msgid "Default Zoom Level: "
 msgstr ""
 
 #: functions/menu/menu_edit_preferences.c:218
-msgid "Default Background Colour: "
+msgid "Default Background Color: "
 msgstr ""
 
 #: functions/menu/menu_edit_preferences.c:227
@@ -2663,7 +2839,7 @@ msgid ""
 msgstr ""
 
 #: functions/menu/menu_file_new.c:311
-msgid " Project initialised"
+msgid " Project initialized"
 msgstr ""
 
 #: functions/menu/menu_file_open.c:83
@@ -2699,11 +2875,11 @@ msgid "Error creating the preferences container."
 msgstr ""
 
 #: functions/menu/menu_file_save.c:153
-msgid "Error creating the start behaviour value."
+msgid "Error creating the start behavior value."
 msgstr ""
 
 #: functions/menu/menu_file_save.c:173
-msgid "Error creating the end behaviour value."
+msgid "Error creating the end behavior value."
 msgstr ""
 
 #: functions/menu/menu_file_save.c:201
@@ -2757,7 +2933,7 @@ msgid "http://www.salasaga.org/forum"
 msgstr ""
 
 #: functions/menu/menu_help_register.c:47
-msgid "http://www.salasaga.org/forum/index.php?action=login"
+msgid "http://www.salasaga.org/forum/index.php?action=register"
 msgstr ""
 
 #: functions/menu/menu_help_survey.c:47
@@ -2806,7 +2982,7 @@ msgid "Project Height: "
 msgstr ""
 
 #: functions/menu/menu_project_properties.c:191
-msgid "SWF start behaviour: "
+msgid "SWF start behavior: "
 msgstr ""
 
 #: functions/menu/menu_project_properties.c:195
@@ -2818,7 +2994,7 @@ msgid "Play"
 msgstr ""
 
 #: functions/menu/menu_project_properties.c:210
-msgid "SWF end behaviour: "
+msgid "SWF end behavior: "
 msgstr ""
 
 #: functions/menu/menu_project_properties.c:214
@@ -2860,13 +3036,13 @@ msgstr ""
 
 #: functions/menu/menu_project_properties.c:391
 msgid ""
-"There was something wrong with the start behaviour value selected.  Please "
+"There was something wrong with the start behavior value selected.  Please "
 "try again."
 msgstr ""
 
 #: functions/menu/menu_project_properties.c:405
 msgid ""
-"There was something wrong with the end behaviour value selected.  Please try "
+"There was something wrong with the end behavior value selected.  Please try "
 "again."
 msgstr ""
 
