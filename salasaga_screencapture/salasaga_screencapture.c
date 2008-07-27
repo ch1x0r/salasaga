@@ -65,15 +65,21 @@
 GdkPixbuf *non_win_take_screenshot(Window win, gint x_off, gint x_len, gint y_off, gint y_len)
 {
 	// Local variable(s)
-	GdkPixbuf	*screenshot;
-	GdkWindow	*window;
+	GString				*message;					// Used to construct message strings
+	GdkPixbuf			*screenshot;
+	GdkWindow			*window;
 
+
+	// Initialisation
+	message = g_string_new(NULL);
 
 	window = gdk_window_foreign_new(win);
 	if (NULL == window)
 	{
 		// Getting a GDKWindow identifier failed
-		display_warning("Error CA01: Something went wrong when getting the window identifier");
+		g_string_printf(message, "%s CA01: %s", _("Error"), _("Something went wrong when getting the window identifier."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return NULL;
 	}
 
@@ -81,12 +87,17 @@ GdkPixbuf *non_win_take_screenshot(Window win, gint x_off, gint x_len, gint y_of
 	if (NULL == screenshot)
 	{
 		// Getting the screenshot failed
-		display_warning("Error CA03: Something went wrong when getting the screenshot");
+		g_string_printf(message, "%s CA03: %s", _("Error"), _("Something went wrong when getting the screenshot."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return NULL;
 	}
 
 	// Generate a beep
 	gdk_beep();
+
+	// Free memory used in this function
+	g_string_free(message, TRUE);
 
 	return screenshot;
 }
@@ -95,52 +106,71 @@ GdkPixbuf *non_win_take_screenshot(Window win, gint x_off, gint x_len, gint y_of
 HBITMAP win_take_screenshot(HWND desktop_window_handle, gint x_off, gint x_len, gint y_off, gint y_len)
 {
 	// Local variables for error handling
+	GString				*message;					// Used to construct message strings
 	BOOL				return_code_bool;
 	HGDIOBJ				return_code_hgdiobj;
 
+
+	// Initialise other bits
+	message = g_string_new(NULL);
 
 	// Create bitmap of requested desktop area
 	desktop_device_context = GetDC(desktop_window_handle);
 	if (NULL == desktop_device_context)
 	{
 		// GetDC failed
-		display_warning("Error CA21: Screenshot GetDC failed");
+		g_string_printf(message, "%s CA21: %s", _("Error"), _("Screenshot GetDC failed."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		exit(19);
 	}
 	our_device_context = CreateCompatibleDC(desktop_device_context);
 	if (NULL == our_device_context)
 	{
 		// CreateCompatibleDC failed
-		display_warning("Error CA20: Screenshot CreateCompatibleDC failed");
+		g_string_printf(message, "%s CA20: %s", _("Error"), _("Screenshot CreateCompatibleDC failed."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		exit(18);
 	}
 	our_bitmap = CreateCompatibleBitmap(desktop_device_context, x_len, y_len);
 	if (NULL == our_bitmap)
 	{
 		// CreateCompatibleBitmap failed
-		display_warning("Error CA19: Screenshot CreateCompatibleBitmap failed");
+		g_string_printf(message, "%s CA19: %s", _("Error"), _("Screenshot CreateCompatibleBitmap failed."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		exit(17);
 	}
 	return_code_hgdiobj = SelectObject(our_device_context, our_bitmap);
 	if (NULL == return_code_hgdiobj)
 	{
 		// Selected object is not a region
-		display_warning("Error CA17: Screenshot SelectObject failed: selected object is not a region");
+		g_string_printf(message, "%s CA17: %s", _("Error"), _("Screenshot SelectObject failed: selected object is not a region."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		exit(15);
 	}
 	if (HGDI_ERROR == return_code_hgdiobj)
 	{
 		// SelectObject failed
-		display_warning("Error CA18: Screenshot SelectObject failed: unknown error");
+		g_string_printf(message, "%s CA18: %s", _("Error"), _("Screenshot SelectObject failed: unknown error."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		exit(16);
 	}
 	return_code_bool = BitBlt(our_device_context, 0, 0, x_len, y_len, desktop_device_context, x_off, y_off, SRCCOPY);
 	if (FALSE == return_code_bool)
 	{
 		// BitBlt failed
-		display_warning("Error CA14: Screenshot BitBlt failed");
+		g_string_printf(message, "%s CA14: %s", _("Error"), _("Screenshot BitBlt failed."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		exit(12);		
 	}
+
+	// Free memory used in this function
+	g_string_free(message, TRUE);
 
 	return our_bitmap;
 }
@@ -155,16 +185,16 @@ gint main(gint argc, gchar *argv[])
 	GDir				*dir_ptr;					// Pointer to the directory entry structure
 	GSList				*entries = NULL;			// Holds a list of screen shot file names
 	GError				*error = NULL;				// Pointer to error return structure
-	GString				*error_message;				// Used to dynamically create an error message
 	gchar				*full_file_name;			// Holds the fully worked out file name to save as
 	GKeyFile			*lock_file;					// Pointer to the lock file structure
+	GString				*message;					// Used to construct message strings
 	GString				*name, *directory;			// GStrings from the lock file
 	gboolean			screenshots_exist = FALSE;	// Switch to track if other screenshots already exist
 	GString				*short_file_name;			// Name of the file to save as
 	GString				*suffix;					// Holds the screenshot file suffix
 	gpointer			tmp_ptr;					// Temporary pointer
 	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
-	GString				*valid_project_name;			// Receives the project name once validated
+	GString				*valid_project_name;		// Receives the project name once validated
 	GString				*valid_screenshot_folder;	// Receives the screenshot folder once validated
 	guint				valid_height;				// Receives the screenshot height once validated
 	guint				valid_width = 0;			// Receives the screenshot width once validated
@@ -181,7 +211,7 @@ gint main(gint argc, gchar *argv[])
 	Window				win;						// Holds the Window ID we're screenshot-ing
 #else
 	// Windows only variables
-	png_text			salasaga_text;					// Pointer to structure holding Salasaga homepage URL
+	png_text			salasaga_text;				// Pointer to structure holding Salasaga homepage URL
 	gint				num_bytes;
 	FILE				*output_file_pointer;
 	png_infop			png_info_pointer;
@@ -208,6 +238,9 @@ gint main(gint argc, gchar *argv[])
 	valid_project_name = g_string_new(NULL);
 	valid_screenshot_folder = g_string_new(NULL);
 
+	// Initialise other bits
+	message = g_string_new(NULL);
+
 	// Construct the fullly qualified path name for ~/.salasaga-lock
 	tmp_ptr = (gchar *) g_get_home_dir();
 	full_file_name = g_build_filename(tmp_ptr, ".salasaga-lock", NULL);
@@ -233,7 +266,8 @@ gint main(gint argc, gchar *argv[])
 	validated_string = validate_value(PROJECT_NAME, V_CHAR, g_key_file_get_string(lock_file, "Project", "Name", NULL));
 	if (NULL == validated_string)
 	{
-		display_warning("Error CA22: There was something wrong with the project name value.  Aborting screenshot.");
+		g_string_printf(message, "%s CA22: %s", _("Error"), _("There was something wrong with the project name value.  Aborting screenshot."));
+		display_warning(message->str);
 		useable_input = FALSE;
 	} else
 	{
@@ -246,7 +280,8 @@ gint main(gint argc, gchar *argv[])
 	validated_string = validate_value(FOLDER_PATH, V_CHAR, g_key_file_get_string(lock_file, "Project", "Directory", NULL));
 	if (NULL == validated_string)
 	{
-		display_warning("Error CA23: There was something wrong with the screenshot folder value.  Aborting screenshot.");
+		g_string_printf(message, "%s CA23: %s", _("Error"), _("There was something wrong with the screenshot folder value.  Aborting screenshot."));
+		display_warning(message->str);
 		useable_input = FALSE;
 	} else
 	{
@@ -259,7 +294,8 @@ gint main(gint argc, gchar *argv[])
 	validated_guint = validate_value(SCREENSHOT_X_OFFSET, V_CHAR, g_key_file_get_string(lock_file, "Project", "X_Offset", NULL));
 	if (NULL == validated_guint)
 	{
-		display_warning("Error CA24: There was something wrong with the x offset start value.  Aborting screenshot.");
+		g_string_printf(message, "%s CA24: %s", _("Error"), _("There was something wrong with the x offset start value.  Aborting screenshot."));
+		display_warning(message->str);
 		useable_input = FALSE;
 	} else
 	{
@@ -271,7 +307,8 @@ gint main(gint argc, gchar *argv[])
 	validated_guint = validate_value(SCREENSHOT_Y_OFFSET, V_CHAR, g_key_file_get_string(lock_file, "Project", "Y_Offset", NULL));
 	if (NULL == validated_guint)
 	{
-		display_warning("Error CA25: There was something wrong with the y offset start value.  Aborting screenshot.");
+		g_string_printf(message, "%s CA25: %s", _("Error"), _("There was something wrong with the y offset start value.  Aborting screenshot."));
+		display_warning(message->str);
 		useable_input = FALSE;
 	} else
 	{
@@ -283,7 +320,8 @@ gint main(gint argc, gchar *argv[])
 	validated_guint = validate_value(SCREENSHOT_WIDTH, V_CHAR, g_key_file_get_string(lock_file, "Project", "X_Length", NULL));
 	if (NULL == validated_guint)
 	{
-		display_warning("Error CA26: There was something wrong with the width value.  Aborting screenshot.");
+		g_string_printf(message, "%s CA26: %s", _("Error"), _("There was something wrong with the width value.  Aborting screenshot."));
+		display_warning(message->str);
 		useable_input = FALSE;
 	} else
 	{
@@ -295,7 +333,8 @@ gint main(gint argc, gchar *argv[])
 	validated_guint = validate_value(SCREENSHOT_HEIGHT, V_CHAR, g_key_file_get_string(lock_file, "Project", "Y_Length", NULL));
 	if (NULL == validated_guint)
 	{
-		display_warning("Error CA27: There was something wrong with the height value.  Aborting screenshot.");
+		g_string_printf(message, "%s CA27: %s", _("Error"), _("There was something wrong with the height value.  Aborting screenshot."));
+		display_warning(message->str);
 		useable_input = FALSE;
 	} else
 	{
@@ -340,7 +379,9 @@ gint main(gint argc, gchar *argv[])
 	if (NULL == screenshot)
 	{
 		// Something went wrong getting the screenshot, so give an error and exit
-		display_warning("Error CA02: Something went wrong when getting the screenshot");
+		g_string_printf(message, "%s CA02: %s", _("Error"), _("Something went wrong when getting the screenshot."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		exit(2);
 	}
 
@@ -351,17 +392,18 @@ gint main(gint argc, gchar *argv[])
 		if (G_FILE_ERROR_NOENT != error->code)
 		{
 			// The error was something other than the folder not existing (which we can cope with)
-			error_message = g_string_new(NULL);
-			g_string_printf(error_message, "Error CA05: Something went wrong opening '%s': %s", directory->str, error->message);
-			display_warning(error_message->str);
-			g_string_free(error_message, TRUE);
+			g_string_printf(message, "%s CA05: %s '%s': %s", _("Error"), _("Something went wrong opening"), directory->str, error->message);
+			display_warning(message->str);
+			g_string_free(message, TRUE);
 			g_error_free(error);
 			exit(3);
 		}
 
 		// The directory doesn't exist
 		// fixme3: Add code to create the directory
-		display_warning("Error CA06: The target directory doesn't exist");
+		g_string_printf(message, "%s CA06: %s", _("Error"), _("The target directory doesn't exist."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		g_error_free(error);
 		exit(4);
 	}
@@ -445,7 +487,9 @@ gint main(gint argc, gchar *argv[])
 	if (FALSE == output_file_pointer)
 	{
 		// Something went wrong when opening the output file
-		display_warning("Error CA09: Something went wrong when opening the output screenshot file for writing");
+		g_string_printf(message, "%s CA09: %s", _("Error"), _("Something went wrong when opening the output screenshot file for writing."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		exit(7);
 	}
 
@@ -453,7 +497,9 @@ gint main(gint argc, gchar *argv[])
 	if (NULL == png_pointer)
 	{
 		// Something went wrong when creating the png write structure
-		display_warning("Error CA10: Something went wrong when creating the png write structure");
+		g_string_printf(message, "%s CA10: %s", _("Error"), _("Something went wrong when creating the png write structure."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		exit(8);
 	}
 
@@ -466,7 +512,9 @@ gint main(gint argc, gchar *argv[])
 		png_destroy_write_struct(&png_pointer, (png_infopp) NULL);
 
 		// Generate a warning then exit
-		display_warning("Error CA11: Something went wrong when creating the png info structure");
+		g_string_printf(message, "%s CA11: %s", _("Error"), _("Something went wrong when creating the png info structure."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		exit(9);
 	}
 
@@ -498,7 +546,9 @@ gint main(gint argc, gchar *argv[])
 		// Clean up
 		png_destroy_write_struct(&png_pointer, &png_info_pointer);
 
-		display_warning("Error CA12: Something went wrong when retrieving the screenshot metadata");
+		g_string_printf(message, "%s CA12: %s", _("Error"), _("Something went wrong when retrieving the screenshot metadata."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		exit(10);
 	}
 
@@ -513,7 +563,9 @@ gint main(gint argc, gchar *argv[])
 		// Clean up
 		png_destroy_write_struct(&png_pointer, &png_info_pointer);
 
-		display_warning("Error CA13: Something went wrong when copying the screenshot data");
+		g_string_printf(message, "%s CA13: %s", _("Error"), _("Something went wrong when copying the screenshot data."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		exit(11);
 	}
 
