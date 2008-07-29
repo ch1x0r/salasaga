@@ -541,7 +541,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 
 			// Unknown value type, we should never get here
 			error_string = g_string_new(NULL);
-			g_string_printf(error_string, _("Error CA28: Unknown value '%s' passed to validation function!"), valid_fields[value_id].name_string);
+			g_string_printf(error_string, "%s CA28: %s '%s'", _("Error"), _("Unknown value passed to validation function"), valid_fields[value_id].name_string);
 			display_warning(error_string->str);
 			g_string_free(error_string, TRUE);
 
