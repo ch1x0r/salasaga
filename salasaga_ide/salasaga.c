@@ -195,7 +195,7 @@ gint main(gint argc, gchar *argv[])
 	gint				format_counter;				// Used to determine if SVG images can be loaded
 	GdkPixbufFormat		*format_data;				// Used to determine if SVG images can be loaded
 	GValue				*handle_size;				// The size of the handle in the main area
-	char				*localereturn;				// Catches the return code when setting locale
+	char				*locale_return;				// Catches the return code when setting locale
 	GString				*message;					// Used to construct message strings
 	GString				*mouse_ptr_string;			// Full path to the mouse pointer graphic
 	gint				num_formats;				// Used to determine if SVG images can be loaded
@@ -229,8 +229,8 @@ gint main(gint argc, gchar *argv[])
 
 
 	// Initialse i18n
-	localereturn = setlocale(LC_ALL, "");
-	if (NULL == localereturn)
+	locale_return = setlocale(LC_ALL, "");
+	if (NULL == locale_return)
 	{
 		printf("setlocale() failed, unable to set system locale\n");
 	} else
