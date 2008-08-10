@@ -195,6 +195,7 @@ gint main(gint argc, gchar *argv[])
 	gint				format_counter;				// Used to determine if SVG images can be loaded
 	GdkPixbufFormat		*format_data;				// Used to determine if SVG images can be loaded
 	GValue				*handle_size;				// The size of the handle in the main area
+	char				*localereturn;				// Catches the return code when setting locale
 	GString				*message;					// Used to construct message strings
 	GString				*mouse_ptr_string;			// Full path to the mouse pointer graphic
 	gint				num_formats;				// Used to determine if SVG images can be loaded
@@ -226,10 +227,17 @@ gint main(gint argc, gchar *argv[])
 	unscaled_button_spacing = 5;
 	unscaled_button_width = 50;
 
+
 	// Initialse i18n
-	setlocale(LC_ALL, "");
-	bindtextdomain(PACKAGE, LOCALEDIR);
-	textdomain(PACKAGE);
+	localereturn = setlocale(LC_ALL, "");
+	if (NULL == localereturn)
+	{
+		printf("setlocale() failed, unable to set system locale\n");
+	} else
+	{
+		bindtextdomain(PACKAGE, LOCALEDIR);
+		textdomain(PACKAGE);
+	}
 
 	// Initialise various strings
 	default_output_folder = g_string_new(NULL);
