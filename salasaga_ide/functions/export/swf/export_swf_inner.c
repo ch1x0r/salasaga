@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Function to convert a slide structure into a Flash output file
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -69,9 +69,9 @@ gint export_swf_inner(gchar *output_filename)
 	gint				num_bytes_written;			// Receives the number of bytes written to disk for the swf output
 	guint				num_layers = 0;				// The number of layers in the slide
 	guint				num_slides;					// The number of slides in the movie
-	guint				out_res_index;				// Index into the array of output resolution entries 
+	guint				out_res_index;				// Index into the array of output resolution entries
 	gboolean			return_code_bool;			// Receives boolean return codes
-	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to 
+	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to
 	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
 	guint				slide_counter;				// Holds the number of slides
 	guint				slide_depth;				// Used in calculating the depth of layers in a slide
@@ -124,13 +124,13 @@ gint export_swf_inner(gchar *output_filename)
 	swf_movie = newSWFMovieWithVersion(7);
 	Ming_setSWFCompression(9);
 
-	// Set the output size of the swf movie 
+	// Set the output size of the swf movie
 	SWFMovie_setDimension(swf_movie, output_width, output_height);
 
 	// Set the frame rate for the movie
 	SWFMovie_setRate(swf_movie, frames_per_second);
 
-	// Set the background color for the animation
+	// Set the background colour for the animation
 	SWFMovie_setBackground(swf_movie, 0x00, 0x00, 0x00);  // RGB value - black
 
 	// Calculate the height and width scaling values needed for this swf output
@@ -387,7 +387,7 @@ gint export_swf_inner(gchar *output_filename)
 					" if (true == _root.reversing)"
 					" {"
 						" _root.reversing = false;"												// %s
-						
+
 						" trace(\"",															// %s
 						_("Slide counter unchanged, now at:"),									// %s
 						" \" + _root.this_slide + \".\");",										// %s
@@ -405,7 +405,7 @@ gint export_swf_inner(gchar *output_filename)
 					" {"
 						" _root.playing = false;",												// %s
 
-						
+
 						" trace(\"",															// %s
 						_("Last frame of movie reached, 'playing' variable has been set to:"),	// %s
 						" \" + _root.playing + \".\");", 										// %s

@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Determines the index into the output resolution table, from the global output height and width
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -37,7 +37,7 @@ gint export_swf_choose_resolution_index()
 	switch (output_width)
 	{
 		case 1920:
-			
+
 			if (1200 == output_height)
 			{
 				return 0;
@@ -61,7 +61,7 @@ gint export_swf_choose_resolution_index()
 			return -1;
 
 		case 1280:
-			
+
 			if (1024 == output_height)
 			{
 				return 3;
@@ -114,11 +114,31 @@ gint export_swf_choose_resolution_index()
 			// We're using an unknown output resolution
 			return -1;
 
+		case 528:
+
+			if (396 == output_height)
+			{
+				return 9;
+			}
+
+			// We're using an unknown output resolution
+			return -1;
+
+		case 480:
+
+			if (120 == output_height)
+			{
+				return 10;
+			}
+
+			// We're using an unknown output resolution
+			return -1;
+
 		case 352:
 
 			if (288 == output_height)
 			{
-				return 9;
+				return 11;
 			}
 
 			// We're using an unknown output resolution
@@ -128,7 +148,7 @@ gint export_swf_choose_resolution_index()
 
 			if (240 == output_height)
 			{
-				return 10;
+				return 12;
 			}
 
 			// We're using an unknown output resolution
@@ -138,7 +158,7 @@ gint export_swf_choose_resolution_index()
 
 			if (144 == output_height)
 			{
-				return 11;
+				return 13;
 			}
 
 			// We're using an unknown output resolution
@@ -148,7 +168,7 @@ gint export_swf_choose_resolution_index()
 
 			if (120 == output_height)
 			{
-				return 12;
+				return 14;
 			}
 
 			// We're using an unknown output resolution
@@ -158,7 +178,7 @@ gint export_swf_choose_resolution_index()
 
 			if (96 == output_height)
 			{
-				return 13;
+				return 15;
 			}
 
 			// We're using an unknown output resolution

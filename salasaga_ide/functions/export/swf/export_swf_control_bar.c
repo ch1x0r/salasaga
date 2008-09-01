@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Creates a swf control bar for the given swf movie 
- * 
+ * Salasaga: Creates a swf control bar for the given swf movie
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -260,7 +260,31 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			   154,		// control bar width
 			     8 },	// control bar curve
 
-		{ 352, 288,		// 352 x 288	=	9
+		{ 528, 396,		// 528 x 396	=	9
+				26,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				26,		// button width
+			   200,		// control bar start x
+			   356,		// control bar start y
+			    30,		// control bar height
+			   134,		// control bar width
+			     8 },	// control bar curve
+
+		{ 480, 120,		// 480 x 120	=	10
+				14,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				14,		// button width
+			   200,		// control bar start x
+			    98,		// control bar start y
+			    17,		// control bar height
+			    74,		// control bar width
+			     8 },	// control bar curve
+
+		{ 352, 288,		// 352 x 288	=	11
 				15,		// button height
 				 1,		// button spacing
 				 1,		// button start x
@@ -272,7 +296,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				82,		// control bar width
 			     4 },	// control bar curve
 
-		{ 320, 240,		// 320 x 240	=	10
+		{ 320, 240,		// 320 x 240	=	12
 				15,		// button height
 				 1,		// button spacing
 				 1,		// button start x
@@ -284,7 +308,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			    82,		// control bar width
 			     4 },	// control bar curve
 
-		{ 176, 144,		// 176 x 144	=	11
+		{ 176, 144,		// 176 x 144	=	13
 				11,		// button height
 				 0,		// button spacing
 				 1,		// button start x
@@ -296,7 +320,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			    57,		// control bar width
 			     2 },	// control bar curve
 
-		{ 160, 120,		// 160 x 120	=	12
+		{ 160, 120,		// 160 x 120	=	14
 				11,		// button height
 				 0,		// button spacing
 				 1,		// button start x
@@ -308,7 +332,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			    57,		// control bar width
 			     2 },	// control bar curve
 
-		{ 128,  96,		// 128 x 96		=	13
+		{ 128,  96,		// 128 x 96		=	15
 				11,		// button height
 				 0,		// button spacing
 				 1,		// button start x
@@ -355,7 +379,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	if (TRUE == info_display)
 	{
 		control_bar_width += button_width + button_spacing;
-		control_bar_x -= (button_width + button_spacing) / 2;		
+		control_bar_x -= (button_width + button_spacing) / 2;
 	}
 
 	// Ensure the swf output starts out in the correct play state and the play button is correct
@@ -874,7 +898,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				" cb_play._visible = false;"							// %s
 				" _root.reversing = false;"
 				" _root.playing = true;",
-				
+
 				" trace(\"",											// %s
 				_("Play button pressed. Slide counter equals:"),		// %s
 				" \" + _root.this_slide + \".\");",						// %s

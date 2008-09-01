@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function to create the output resolution selector 
- * 
+ * Salasaga: Function to create the output resolution selector
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -51,6 +51,8 @@ GtkWidget *create_resolution_selector(guint initial_width, guint initial_height)
 		{ 800, 600 },
 		{ 720, 480 },
 		{ 640, 480 },
+		{ 528, 396 },
+		{ 480, 120 },
 		{ 352, 288 },
 		{ 320, 240 },
 		{ 176, 144 },
