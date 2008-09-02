@@ -1318,12 +1318,12 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 
 			// Retrieve the text for the given line, and add it to the text object
 			visible_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
-			SWFText_addString(info_object, visible_string, NULL);
+			SWFText_addUTF8String(info_object, visible_string, NULL);
 
 			// * We need to know which of the strings is widest, so we can calculate the width of the text background box *
 
 			// If this is the widest string, we keep the value of this one
-			this_text_string_width = SWFText_getStringWidth(info_object, (guchar *) visible_string);
+			this_text_string_width = SWFText_getUTF8StringWidth(info_object, (guchar *) visible_string);
 			if (this_text_string_width > widest_text_string_width)
 				widest_text_string_width = this_text_string_width;
 

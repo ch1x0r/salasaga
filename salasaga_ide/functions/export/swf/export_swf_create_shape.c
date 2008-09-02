@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Creates a swf shape from a given layer
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -74,7 +74,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	GString				*message;					// Used to construct message strings
 	layer_mouse			*mouse_data;				// Points to the mouse object data inside the layer
 	SWFFillStyle		mouse_fill_style;			// Fill style used when constructing mouse pointers
-	SWFShape			mouse_shape = NULL;			// 
+	SWFShape			mouse_shape = NULL;			//
 	gint				num_text_lines;				// Number of text lines in a particular text layer
 	SWFBlock			our_shape;					// The swf shape before it gets added to a swf movie clip
 	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
@@ -201,14 +201,14 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			image_input = newSWFInput_buffer((guchar *) pixbuf_buffer, pixbuf_size);
 			image_bitmap = newSWFBitmap_fromInput(image_input);
 
-			// Turn the swf image into a swf shape 
+			// Turn the swf image into a swf shape
 			image_shape = newSWFShapeFromBitmap(image_bitmap, SWFFILL_CLIPPED_BITMAP);
 			if (NULL == image_shape)
 			{
 				// Something went wrong when encoding the image to required format
 				g_string_printf(message, "%s ED109: %s", _("Error"), _("Something went wrong converting an image to a swf shape object."));
 				display_warning(message->str);
-				
+
 				// Free the memory allocated in this function
 				g_string_free(message, TRUE);
 				g_error_free(error);
@@ -560,12 +560,12 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 				// Retrieve the text for the given line, and add it to the text object
 				visible_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
-				SWFText_addString(text_object, visible_string, NULL);
+				SWFText_addUTF8String(text_object, visible_string, NULL);
 
 				// * We need to know which of the strings is widest, so we can calculate the width of the text background box *
 
 				// If this is the widest string, we keep the value of this one
-				this_text_string_width = SWFText_getStringWidth(text_object, (guchar *) visible_string);
+				this_text_string_width = SWFText_getUTF8StringWidth(text_object, (guchar *) visible_string);
 				if (this_text_string_width > widest_text_string_width)
 					widest_text_string_width = this_text_string_width;
 
