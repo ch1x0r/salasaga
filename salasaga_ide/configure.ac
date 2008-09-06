@@ -129,6 +129,6 @@ AC_SUBST(MINOR_VERSION)
 AC_SUBST(MICRO_VERSION)
 AC_SUBST(SALASAGA_VERSION)
 
-AC_CONFIG_FILES(Makefile po/Makefile desktop/Makefile fonts/Makefile fonts/BitstreamVera/Makefile fonts/BitstreamVera/fdb/Makefile functions/Makefile images/Makefile images/control_bar/Makefile images/pointers/Makefile sounds/Makefile)
+AC_CONFIG_FILES(Makefile po/Makefile desktop/Makefile font_outline/Makefile functions/Makefile images/Makefile images/control_bar/Makefile images/pointers/Makefile sounds/Makefile)
 
 AC_OUTPUT(intl/Makefile po/Makefile.in)
