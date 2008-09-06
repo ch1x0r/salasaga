@@ -6,7 +6,7 @@
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -71,7 +71,7 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 			if (FALSE == mouse_click_single_added)
 			{
 				// Single click mouse sound
-				sound_pathname = g_build_path(SOUND_DIR, G_DIR_SEPARATOR_S, "mouse_single_click.mp3", NULL);
+				sound_pathname = g_build_path(G_DIR_SEPARATOR_S, SOUND_DIR, "mouse_single_click.mp3", NULL);
 
 				// Make sure we only add this click sound once
 				mouse_click_single_added = TRUE;
@@ -89,7 +89,7 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 			if (FALSE == mouse_click_double_added)
 			{
 				// Double click mouse sound
-				sound_pathname = g_build_path(SOUND_DIR, G_DIR_SEPARATOR_S, "mouse_double_click.mp3", NULL);
+				sound_pathname = g_build_path(G_DIR_SEPARATOR_S, SOUND_DIR, "mouse_double_click.mp3", NULL);
 
 				// Make sure we only add this click sound once
 				mouse_click_double_added = TRUE;
@@ -107,7 +107,7 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 			if (FALSE == mouse_click_triple_added)
 			{
 				// Triple click mouse sound
-				sound_pathname = g_build_path(SOUND_DIR, G_DIR_SEPARATOR_S, "mouse_triple_click.mp3", NULL);
+				sound_pathname = g_build_path(G_DIR_SEPARATOR_S, SOUND_DIR, "mouse_triple_click.mp3", NULL);
 
 				// Make sure we only add this click sound once
 				mouse_click_triple_added = TRUE;
