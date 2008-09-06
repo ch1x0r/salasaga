@@ -116,7 +116,7 @@ salasaga_SOURCES = create_menu_bar.c \
 salasaga_LDADD = $(DEPS_LIBS) $(GTK_LIBS) $(ZLIB) $(XLIB) $(MINGLIB)
 
 AM_CPPFLAGS = $(DEPS_CFLAGS) $(GTK_CFLAGS) \
-	-DFONT_DIR=\""$(DESTDIR)/$(datadir)/salasaga/fonts/BitstreamVera/fdb/"\" \
+	-DFONT_DIR=\""$(DESTDIR)/$(datadir)/salasaga/font_outline"\" \
 	-DIMAGES_PNG_DIR=\""$(DESTDIR)/$(datadir)/salasaga/icons/72x72"\" \
 	-DIMAGES_SVG_DIR=\""$(DESTDIR)/$(datadir)/salasaga/icons/scalable"\" \
 	-DLOCALEDIR=\""$(DESTDIR)/$(datadir)/locale"\" \
