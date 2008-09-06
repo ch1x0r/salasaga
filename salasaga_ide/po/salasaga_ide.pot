@@ -1,14 +1,14 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# Copyright (C) YEAR Justin Clift <justin@salasaga.org>
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2008-07-27 17:11+1000\n"
+"Project-Id-Version: salasaga_ide 0.8.0-alpha3\n"
+"Report-Msgid-Bugs-To: justin@salasaga.org\n"
+"POT-Creation-Date: 2008-08-10 16:59+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,44 +16,44 @@ msgstr ""
 "Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: salasaga.c:237 functions/validate_value.c:566
+#: salasaga.c:245 functions/validate_value.c:566
 msgid "Fit to width"
 msgstr ""
 
-#: salasaga.c:244 functions/menu/menu_file_new.c:190
+#: salasaga.c:252 functions/menu/menu_file_new.c:190
 msgid "New Project"
 msgstr ""
 
-#: salasaga.c:268
+#: salasaga.c:276
 #, c-format
 msgid "Debugging mode, errors will be shown on stdout.\n"
 msgstr ""
 
-#: salasaga.c:284
+#: salasaga.c:292
 #, c-format
 msgid "Program path: '%s'\n"
 msgstr ""
 
-#: salasaga.c:285
+#: salasaga.c:293
 #, c-format
 msgid "Directory base: '%s'\n"
 msgstr ""
 
-#: salasaga.c:295
+#: salasaga.c:303
 msgid "icons"
 msgstr ""
 
-#: salasaga.c:307
+#: salasaga.c:315
 #, c-format
 msgid "Icon path: %s\n"
 msgstr ""
 
-#: salasaga.c:333
+#: salasaga.c:341
 #, c-format
 msgid "Path to mouse pointer image: %s\n"
 msgstr ""
 
-#: salasaga.c:416 salasaga.c:427 salasaga.c:484 functions/draw_timeline.c:64
+#: salasaga.c:424 salasaga.c:435 salasaga.c:492 functions/draw_timeline.c:64
 #: functions/key_bind.c:64 functions/key_bind.c:80
 #: functions/preferences_load.c:107 functions/preferences_load.c:121
 #: functions/preferences_load.c:135 functions/preferences_load.c:151
@@ -306,35 +306,35 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: salasaga.c:416
+#: salasaga.c:424
 msgid "Something went wrong when creating the menu bar."
 msgstr ""
 
-#: salasaga.c:427
+#: salasaga.c:435
 msgid "Something went wrong when creating the toolbar."
 msgstr ""
 
-#: salasaga.c:456
+#: salasaga.c:464
 msgid "Zoom: "
 msgstr ""
 
-#: salasaga.c:468
+#: salasaga.c:476
 msgid "Output: "
 msgstr ""
 
-#: salasaga.c:484
+#: salasaga.c:492
 msgid "Something went wrong when creating the film strip."
 msgstr ""
 
-#: salasaga.c:500
+#: salasaga.c:508
 msgid "Status bar messages"
 msgstr ""
 
-#: salasaga.c:503
+#: salasaga.c:511
 msgid "Ready"
 msgstr ""
 
-#: salasaga.c:525
+#: salasaga.c:533
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
 msgstr ""
 
