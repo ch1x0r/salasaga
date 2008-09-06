@@ -364,7 +364,7 @@ gint export_swf_inner(gchar *output_filename)
 			// If we're debugging, then generate debugging swf's too
 			g_string_printf(message,
 					// Format string is grouped as per the string comments from one line below
-					"%s" "%s%s%s" "%s%s%s" "%s%s%s" "%s" "%s%s%s" "%s%s%s" "%s%s%s" "%s" "%s%s%s" "%s"
+					"%s" "%s%s%s" "%s%s%s" "%s%s" "%s" "%s" "%s%s%s" "%s%s%s" "%s%s" "%s" "%s" "%s%s" "%s",
 
 					// The grouped strings and comments
 					"if ((_root.this_slide <= (_root.num_slides - 1)) && (false == _root.reversing))"
@@ -377,16 +377,16 @@ gint export_swf_inner(gchar *output_filename)
 
 						" trace(\"",															// %s
 						_("'reversing' variable was false, and remains so."),					// %s
-						"\");"																	// %s
+						"\");",																	// %s
 
 						" trace(\"",															// %s
 						_("'playing' variable is unchanged, at:"),								// %s
-						" \" + _root.playing + \".\");",										// %s
+						" \" + _root.playing + \".\");"
+					" }",																		// %s
 
-					" }"
 					" if (true == _root.reversing)"
 					" {"
-						" _root.reversing = false;"												// %s
+						" _root.reversing = false;",											// %s
 
 						" trace(\"",															// %s
 						_("Slide counter unchanged, now at:"),									// %s
@@ -398,20 +398,20 @@ gint export_swf_inner(gchar *output_filename)
 
 						" trace(\"",															// %s
 						_("'playing' variable is unchanged, at:"),								// %s
-						" \" + _root.playing + \".\");", 										// %s
+						" \" + _root.playing + \".\");"
+					" };", 																		// %s
 
-					" };"
 					" if (_root.this_slide == _root.num_slides)"
 					" {"
 						" _root.playing = false;",												// %s
 
-
 						" trace(\"",															// %s
 						_("Last frame of movie reached, 'playing' variable has been set to:"),	// %s
-						" \" + _root.playing + \".\");", 										// %s
+						" \" + _root.playing + \".\");"
 
 					" }"																		// %s
 					);
+
 			inc_slide_counter_action = compileSWFActionCode(message->str);
 			g_string_free(message, TRUE);
 		} else
