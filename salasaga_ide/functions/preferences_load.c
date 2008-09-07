@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Retrieves saved application defaults if available
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -59,6 +59,7 @@ gboolean preferences_load()
 	GString				*message;					// Used to construct message strings
 	gboolean			should_maximise = FALSE;	// Briefly keeps track of whether the window should be maximised
 	gboolean			should_keybind_warn = TRUE;	// Receives the gboolean as to whether the non-metacity key bind warning should be displayed
+	gchar				*tmp_gchar;					// Used for temporary string retrieval
 	gboolean			useable_input;				// Used to control loop flow
 	GdkColor			valid_bg_colour = {0,0,0};	// Receives the new default background color for slides once validated
 	guint				valid_default_fps = 0;		// Receives the new default fps once validated
@@ -101,7 +102,9 @@ gboolean preferences_load()
 	useable_input = TRUE;
 
 	// Retrieve the new default project folder input
-	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/project_folder", NULL));
+	tmp_gchar = gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/project_folder", NULL);
+	validated_string = validate_value(FOLDER_PATH, V_CHAR, tmp_gchar);
+	g_free(tmp_gchar);
 	if (NULL == validated_string)
 	{
 		g_string_printf(message, "%s ED185: %s", _("Error"), _("There was something wrong with the project folder value stored in the preferences.  Using default preferences instead."));
@@ -115,7 +118,9 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new screenshots folder input
-	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/screenshots_folder", NULL));
+	tmp_gchar = gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/screenshots_folder", NULL);
+	validated_string = validate_value(FOLDER_PATH, V_CHAR, tmp_gchar);
+	g_free(tmp_gchar);
 	if (NULL == validated_string)
 	{
 		g_string_printf(message, "%s ED186: %s", _("Error"), _("There was something wrong with the screenshots folder value stored in the preferences.  Using default preferences instead."));
@@ -129,7 +134,9 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new default output folder input
-	validated_string = validate_value(FOLDER_PATH, V_CHAR, gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/output_folder", NULL));
+	tmp_gchar = gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/output_folder", NULL);
+	validated_string = validate_value(FOLDER_PATH, V_CHAR, tmp_gchar);
+	g_free(tmp_gchar);
 	if (NULL == validated_string)
 	{
 		g_string_printf(message, "%s ED187: %s", _("Error"), _("There was something wrong with the default output folder value stored in the preferences.  Using default preferences instead."));
@@ -143,9 +150,10 @@ gboolean preferences_load()
 	}
 
 	// Retrieve the new default zoom level input
-	if (NULL != gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/zoom_level", NULL))
+	tmp_gchar = gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/zoom_level", NULL);
+	if (NULL != tmp_gchar)
 	{
-		validated_string = validate_value(ZOOM_LEVEL, V_ZOOM, gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/zoom_level", NULL));
+		validated_string = validate_value(ZOOM_LEVEL, V_ZOOM, tmp_gchar);
 		if (NULL == validated_string)
 		{
 			g_string_printf(message, "%s ED188: %s", _("Error"), _("There was something wrong with the default zoom level value stored in the preferences.  Using default preferences instead."));
@@ -158,6 +166,7 @@ gboolean preferences_load()
 			validated_string = NULL;
 		}
 	}
+	g_free(tmp_gchar);
 
 	// Retrieve the new default project width input
 	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/project_width", NULL);
@@ -413,7 +422,7 @@ gboolean preferences_load()
 	// Set the icon height
 	icon_height = valid_icon_height;
 
-	// Set the non-metacity key bind warning 
+	// Set the non-metacity key bind warning
 	metacity_key_warning = should_keybind_warn;
 
 	// Free our GConf engine

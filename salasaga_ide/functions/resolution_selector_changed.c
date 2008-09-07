@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user chooses a new output resolution 
- * 
+ * Salasaga: Function called when the user chooses a new output resolution
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -43,12 +43,15 @@
 gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
 	// Temporary variables
-	GString		*tmp_string;
+	gchar		*tmp_gchar;
 	gchar		**strings;
+	GString		*tmp_string;
 
 	// Get the new output resolution
 	tmp_string = g_string_new(NULL);
-	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(resolution_selector)));
+	tmp_gchar = gtk_combo_box_get_active_text(GTK_COMBO_BOX(resolution_selector));
+	g_string_printf(tmp_string, "%s", tmp_gchar);
+	g_free(tmp_gchar);
 
 	// Parse and store the new project output size
 	tmp_string = g_string_truncate(tmp_string, tmp_string->len - 7);

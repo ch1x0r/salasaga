@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Setup the Control-Printscreen key combination to capture screenshots.  Non-windows only. 
- * 
+ * Salasaga: Setup the Control-Printscreen key combination to capture screenshots.  Non-windows only.
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -43,13 +43,14 @@ gint key_bind(void)
 {
 	// Local variables
 	GString				*command_key;				// Used to work out paths into the GConf structure
+	guint				command_num = 0;			// Used to work out which metacity run command to use
 	GConfEngine			*gconf_engine;				// GConf engine
-	gchar				*gconf_value;				//
+	gchar				*gconf_value = NULL;		//
 	gboolean			key_already_set = FALSE;	// Used to work out which metacity run command is unassigned
 	GString				*message;					// Used to construct message strings
 	gchar				*return_code_gchar;			// Catches string based return codes
+	gchar				*tmp_gchar;					// Temporary gchar
 	guint				tmp_guint;					// Temporary guint
-	guint				command_num = 0;			// Used to work out which metacity run command to use
 
 
 	// Initialisation
@@ -64,7 +65,7 @@ gint key_bind(void)
 			g_string_printf(message, "%s ED379: %s", _("Error"), _("Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, so not sure how to.)  You will need to do this yourself manually."));
 			display_warning(message->str);
 
-			// Ensure the the warning is only displayed once unless the user specifically requests otherwise 
+			// Ensure the the warning is only displayed once unless the user specifically requests otherwise
 			metacity_key_warning = FALSE;
 
 			// Enable screenshots, as the user should have set up the key binding themself
@@ -94,6 +95,8 @@ gint key_bind(void)
 		g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", tmp_guint);
 
 		// Get the value for the key
+		if (NULL != gconf_value)
+			g_free(gconf_value);
 		gconf_value = gconf_engine_get_string(gconf_engine, command_key->str, NULL);
 
 		// Check if the key is unused
@@ -104,7 +107,7 @@ gint key_bind(void)
 		} else
 		{
 			// * This command is being used *
-			
+
 			// Check if it's already assigned to salasaga_screencapture
 			if (TRUE == g_str_has_suffix(gconf_value, "salasaga_screencapture"))
 			{
@@ -143,6 +146,8 @@ gint key_bind(void)
 
 	// Free the memory used in this function
 	g_string_free(message, TRUE);
+	g_free(return_code_gchar);
+	g_free(gconf_value);
 
 	// Return the command number that was set, or -1 if it wasn't
 	if (0 != command_num)
