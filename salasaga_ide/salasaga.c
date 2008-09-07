@@ -160,7 +160,7 @@ GtkToolItem				*layer_toolbar_items[MAIN_TB_COUNT];		// Array of toolbar items
 gulong					layer_toolbar_signals[MAIN_TB_COUNT];		// Array of toolbar signals
 
 // Application default preferences
-GdkColor				default_bg_colour;			// Default background color for slides
+GdkColor				default_bg_colour;			// Default background colour for slides
 guint					default_fps;				// Default number of frames per second
 GString					*default_output_folder;		// Application default save path for exporting animations
 guint					default_output_height;		// Application default for how high to create project output
@@ -207,6 +207,7 @@ gint main(gint argc, gchar *argv[])
 	gchar				wintitle[40];				// Stores the window title
 	GtkLabel			*zoom_label;				// Widget for the zoom selector label
 
+	gchar				*tmp_gchar;					// Temporary gchar
 	GString				*tmp_gstring;				// Temporary GString
 	guint				tmp_int;					// Temporary guint
 	GtkWidget			*tmp_widget;				// Temporary widget
@@ -319,7 +320,8 @@ gint main(gint argc, gchar *argv[])
 	for (format_counter = 0; format_counter < num_formats; format_counter++)
 	{
 		format_data = g_slist_nth_data(supported_formats, format_counter);
-		if (0 == g_ascii_strncasecmp(gdk_pixbuf_format_get_name(format_data), "svg", 3))
+		tmp_gchar = gdk_pixbuf_format_get_name(format_data);
+		if (0 == g_ascii_strncasecmp(tmp_gchar, "svg", 3));
 		{
 			// SVG is supported
 			icon_extension = g_string_assign(icon_extension, "svg");
@@ -335,6 +337,7 @@ gint main(gint argc, gchar *argv[])
 			g_string_printf(mouse_ptr_string, "%s%c%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", icon_extension->str);
 #endif
 		}
+		g_free(tmp_gchar);
 	}
 
 	// Display debugging info if requested
