@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Main source file for the Salasaga IDE
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -119,7 +119,7 @@ GIOChannel				*output_file;				// The output file handle
 gboolean				project_active;				// Whether or not a project is active (i.e. something is loaded or has been created)
 gulong					resolution_callback;		// Holds the id of the resolution selector callback
 GtkComboBox				*resolution_selector;		// Widget for the resolution selector
-GdkRectangle			resize_handles_rect[8];		// Contains the onscreen offsets and size for the resize handles 
+GdkRectangle			resize_handles_rect[8];		// Contains the onscreen offsets and size for the resize handles
 guint					resize_handles_status;		// Are the layer resize handles active, in progress, etc
 guint					resize_handle_size = 6;		// Size of the resize handles
 GtkWidget				*right_side;				// Widget for the right side area
@@ -228,7 +228,7 @@ gint main(gint argc, gchar *argv[])
 	unscaled_button_width = 50;
 
 
-	// Initialse i18n
+	// Initialise i18n
 	locale_return = setlocale(LC_ALL, "");
 	if (NULL == locale_return)
 	{
@@ -253,10 +253,6 @@ gint main(gint argc, gchar *argv[])
 	screenshots_folder = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 
-	// Initialise the string holding the path of the most recent directory the user accessed 
-	last_folder = g_string_new(g_get_home_dir());
-	g_string_append(last_folder, G_DIR_SEPARATOR_S);  //  Add a trailing slash to the folder name
-
 	// Initialise the button event handlers on the toolbars to NULL
 	main_toolbar_signals[CROP_ALL] = 0;
 	main_toolbar_signals[EXPORT_FLASH] = 0;
@@ -267,6 +263,10 @@ gint main(gint argc, gchar *argv[])
 
 	// Initialise GTK
 	gtk_init(&argc, &argv);
+
+	// Initialise the string holding the path of the most recent directory the user accessed
+	last_folder = g_string_new(g_get_home_dir());
+	g_string_append(last_folder, G_DIR_SEPARATOR_S);  //  Add a trailing slash to the folder name
 
 	// Redirect log output so it doesn't pop open a console window
 	if ((2 == argc) && (0 == g_ascii_strncasecmp("-d", argv[1], 2)))
@@ -303,7 +303,7 @@ gint main(gint argc, gchar *argv[])
 	icon_path = g_string_assign(icon_path, _("icons"));
 
 	// Mouse pointer image file
-	g_string_printf(mouse_ptr_string, "%s%c%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", icon_extension->str);			
+	g_string_printf(mouse_ptr_string, "%s%c%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", icon_extension->str);
 
 #else
 	// Default to PNG images, in case an SVG loader isn't present
