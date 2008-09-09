@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Callback function that updates the workspace and timeline when a different slide in the film strip is selected 
- * 
+ * Salasaga: Callback function that updates the workspace and timeline when a different slide in the film strip is selected
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -70,7 +70,7 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		// Get a pointer to the clicked on slide's GList
 		slides = g_list_first(slides);
 		current_slide = g_list_nth(slides, atoi(selection_string));
-		
+
 		// Redraw the timeline
 		draw_timeline();
 
@@ -80,7 +80,8 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		// Redraw the layer handle box
 		draw_handle_box();
 
-		// Free the memory used to deterine the newly selected slide
+		// Free the memory used to determine the newly selected slide
+		gtk_tree_path_free(selected_path);
 		g_free(selection_string);
 
 		// Update the status bar

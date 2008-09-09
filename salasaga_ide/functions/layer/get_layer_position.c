@@ -6,7 +6,7 @@
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -88,14 +88,14 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 				// Yes.  The time position is during the transition in
 				time_diff = full_start_time - start_time;
 				*time_alpha = time_offset / time_diff;
-	
+
 				// We also reset the position to be at the start point
 				position->x = start_x;
 				position->y = start_y;
 			}
 		}
 
-		// If there's a transition out, check if the time point is during it 
+		// If there's a transition out, check if the time point is during it
 		if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
 		{
 			// There is a transition out, so work out if the time position is during it
@@ -105,7 +105,7 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 				time_diff = end_time - full_end_time;
 				time_offset = time_position - full_end_time;
 				*time_alpha = 1 - (time_offset / time_diff);
-	
+
 				// We also reset the position to be at the end point
 				position->x = finish_x;
 				position->y = finish_y;
@@ -196,6 +196,9 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 			g_string_free(message, TRUE);
 			return FALSE;
 	}
+
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
 
 	return TRUE;
 }

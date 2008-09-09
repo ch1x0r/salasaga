@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user selects File -> Open from the top menu 
- * 
+ * Salasaga: Function called when the user selects File -> Open from the top menu
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -60,6 +60,7 @@ void menu_file_open(void)
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	GtkWidget 			*open_dialog;
 	gboolean			return_code = FALSE;
+	gint				return_code_gint;			// Used to catch a return code
 	GtkFileFilter		*salasaga_filter;
 	gboolean			useable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
@@ -146,11 +147,13 @@ void menu_file_open(void)
 	do
 	{
 		// Run the dialog and wait for user input
-		if (gtk_dialog_run(GTK_DIALOG(open_dialog)) != GTK_RESPONSE_ACCEPT)
+		return_code_gint = gtk_dialog_run(GTK_DIALOG(open_dialog));
+		if (return_code_gint != GTK_RESPONSE_ACCEPT)
 		{
 			// The user didn't choose a file, so destroy the dialog box and return
 			gtk_widget_destroy(open_dialog);
-			return;		
+			g_string_free(message, TRUE);
+			return;
 		}
 
 		// Get the filename from the dialog box
@@ -176,6 +179,7 @@ void menu_file_open(void)
 				// The project file wasn't valid, so we abort the dialog and return
 				gtk_widget_destroy(open_dialog);
 				g_string_free(validated_string, TRUE);
+				g_string_free(message, TRUE);
 				g_free(filename);
 				return;
 			}

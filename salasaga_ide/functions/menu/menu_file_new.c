@@ -1,13 +1,13 @@
 /*
  * $Id$
  *
- * Salasaga: Opens a dialog box asking the user for the initial information for a new project. 
+ * Salasaga: Opens a dialog box asking the user for the initial information for a new project.
  *           Called when the user selects File -> New from the top menu.
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -67,7 +67,7 @@ void menu_file_new(void)
 	guint				valid_height = 0;			// Receives the new project height once validated
 	GString				*valid_proj_name;			// Receives the new project name once validated
 	guint				valid_width = 0;			// Receives the new project width once validated
-	guint				*validated_guint;			// Receives known good guint values from the validation function 
+	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
 	GtkWidget			*name_label;				// Label widget
@@ -175,6 +175,7 @@ void menu_file_new(void)
 			// The dialog was cancelled, so destroy it and return to the caller
 			g_string_free(valid_proj_name, TRUE);
 			gtk_widget_destroy(GTK_WIDGET(project_dialog));
+			g_string_free(message, TRUE);
 			return;
 		}
 
