@@ -550,8 +550,11 @@ gint main(gint argc, gchar *argv[])
 	// Free the memory use in this function
 	g_string_free(icon_extension, TRUE);
 	g_string_free(icon_path, TRUE);
+	g_string_free(mouse_ptr_string, TRUE);
 	g_string_free(message, TRUE);
+	g_string_free(tmp_gstring, TRUE);
 	g_slist_free(supported_formats);
+	g_free(handle_size);
 
 	// Exit
 	exit(0);
