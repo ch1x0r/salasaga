@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Creates a thumbnail for a given slide
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -40,7 +40,7 @@ void film_strip_create_thumbnail(slide *slide_data)
 	GdkPixbuf			*new_thumbnail;
 	GtkTreeIter			old_iter;					// Iter used to select the film strip thumbnail
 	GtkTreePath			*old_path;					// Path used to select the film strip thumbnail
-	GdkPixbuf			*tmp_pixbuf;				// Used to convert from a pixmap to a pixbuf 
+	GdkPixbuf			*tmp_pixbuf;				// Used to convert from a pixmap to a pixbuf
 
 
 	// If no project is loaded then don't run this function
@@ -63,6 +63,7 @@ void film_strip_create_thumbnail(slide *slide_data)
 		g_string_printf(message, "%s ED369: %s", _("Error"), _("Couldn't create film strip thumbnail."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
+		gtk_tree_path_free(old_path);
 		return;
 	}
 	new_thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, (guint) preview_width * 0.75, GDK_INTERP_TILES);
@@ -72,10 +73,14 @@ void film_strip_create_thumbnail(slide *slide_data)
 		g_string_printf(message, "%s ED370: %s", _("Error"), _("Couldn't allocate memory for a new film strip thumbnail."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
+		gtk_tree_path_free(old_path);
 		return;
 	}
 	g_object_unref(GDK_PIXBUF(tmp_pixbuf));
 
 	// Replace the old film strip thumbnail with the new thumbnail
 	gtk_list_store_set(film_strip_store, &old_iter, 0, new_thumbnail, -1);
+
+	// Free the memory used in this function
+	gtk_tree_path_free(old_path);
 }
