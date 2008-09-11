@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Displays a dialog box asking for the values required to make a new text layer
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -77,6 +77,8 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	tmp_text_ob->bg_fill_colour.red = 65535;
 	tmp_text_ob->bg_fill_colour.green = 65535;
 	tmp_text_ob->bg_fill_colour.blue = 52428;  // Sensible defaults
+	tmp_text_ob->rendered_width = 0;
+	tmp_text_ob->rendered_height = 0;
 
 	// Construct a new text layer
 	tmp_layer = g_new(layer, 1);
@@ -104,7 +106,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
 	slide_data->num_layers++;
 
-	// If the new layer end time is longer than the slide duration, then extend the slide duration 
+	// If the new layer end time is longer than the slide duration, then extend the slide duration
 	if (tmp_layer->duration > slide_data->duration)
 	{
 		// Change the slide duration

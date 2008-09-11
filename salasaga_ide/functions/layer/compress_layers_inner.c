@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function to process the data for a layer, adding it to the main image being built 
- * 
+ * Salasaga: Function to process the data for a layer, adding it to the main image being built
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -64,7 +64,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gint					pixmap_width;			// Receives the width of a given pixmap
 	gfloat					red_component;			// Red component of a colour
 	gboolean				return_code_gbool;		// Receives gboolean return codes
-	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio 
+	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio
 	gfloat					scaled_width_ratio;		// Used to calculate a horizontal scaling ratio
 	GdkColor				*selected_colour;		// Pointer to the foreground colour of the text
 	gfloat					start_time;				// Time in seconds of the layer objects start time
@@ -148,6 +148,9 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			// Restore the cairo state to the way it was
 			cairo_restore(cairo_context);
 
+			// The cairo drawing context is no longer needed, so free it
+			cairo_destroy(cairo_context);
+
 			return;
 
 		case TYPE_MOUSE_CURSOR:
@@ -156,7 +159,12 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// If the mouse pointer image hasn't been loaded then we skip this layer
 			if (NULL == mouse_ptr_pixbuf)
+			{
+				// The cairo drawing context is no longer needed, so free it
+				cairo_destroy(cairo_context);
+
 				return;
+			}
 
 			// Simplify pointers
 			width = ((layer_mouse *) this_layer_data->object_data)->width;
@@ -175,11 +183,18 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			// Restore the cairo state to the way it was
 			cairo_restore(cairo_context);
 
+			// The cairo drawing context is no longer needed, so free it
+			cairo_destroy(cairo_context);
+
 			return;
 
 		case TYPE_EMPTY:
 
-			// Empty layer, just return
+			// * Empty layer, just return *
+
+			// The cairo drawing context is no longer needed, so free it
+			cairo_destroy(cairo_context);
+
 			return;
 
 		case TYPE_TEXT:
@@ -205,6 +220,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 				gtk_text_buffer_get_iter_at_line(text_buffer, &text_start, line_counter);
 				text_end = text_start;
 				gtk_text_iter_forward_to_line_end(&text_end);
+				if (NULL != text_string)
+					g_free(text_string);
 				text_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
 				cairo_text_extents(cairo_context, text_string, &text_extents);
 				text_height += text_extents.height;
@@ -268,9 +285,11 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 				gtk_text_buffer_get_iter_at_line(text_buffer, &text_start, line_counter);
 				text_end = text_start;
 				gtk_text_iter_forward_to_line_end(&text_end);
+				if (NULL != text_string)
+					g_free(text_string);
 				text_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
 
-				// Move onscreen X and Y coordinates to correct position for the line of text 
+				// Move onscreen X and Y coordinates to correct position for the line of text
 				cairo_text_extents(cairo_context, text_string, &text_extents);
 				text_left = x_offset + text_extents.x_bearing + (TEXT_BORDER_PADDING_WIDTH * scaled_width_ratio);
 				text_top += text_extents.height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
@@ -283,6 +302,9 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// Restore the cairo state to the way it was
 			cairo_restore(cairo_context);
+
+			// Free the memory used in this function
+			g_free(text_string);
 
 			break;
 
@@ -343,7 +365,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			// Restore the cairo state to the way it was
 			cairo_restore(cairo_context);
 
-			break;		
+			break;
 
 		default:
 			message = g_string_new(NULL);

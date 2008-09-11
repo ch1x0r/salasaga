@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function that gets all of the layers for a slide, then creates a pixel buffer from them 
- * 
+ * Salasaga: Function that gets all of the layers for a slide, then creates a pixel buffer from them
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -94,7 +94,7 @@ GdkPixmap *compress_layers(GList *which_slide, gfloat time_position, guint width
 		{
 			// Point to the background image pixbuf for the source
 			bg_pixbuf = GDK_PIXBUF((GObject *) ((layer_image *) layer_data->object_data)->image_data);
-	
+
 			if ((width != gdk_pixbuf_get_width(bg_pixbuf)) || (height != gdk_pixbuf_get_height(bg_pixbuf)))
 			{
 				// Scale the background image pixbuf to the desired size
@@ -112,11 +112,11 @@ GdkPixmap *compress_layers(GList *which_slide, gfloat time_position, guint width
 			g_object_unref(GDK_PIXMAP(this_slide_data->scaled_cached_pixmap));
 		}
 
-		// Create a new backing pixmap 
+		// Create a new backing pixmap
 		backing_pixmap = gdk_pixmap_new(NULL, width, height, system_colourmap->visual->depth);
 		gdk_drawable_set_colormap(GDK_DRAWABLE(backing_pixmap), GDK_COLORMAP(system_colourmap));
 		gdk_draw_pixbuf(GDK_PIXMAP(backing_pixmap), NULL, GDK_PIXBUF(backing_pixbuf),
-				0, 0, 0, 0, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);		
+				0, 0, 0, 0, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);
 
 		// Cache the new backing pixmap
 		this_slide_data->scaled_cached_pixmap = gdk_pixmap_new(NULL, width, height, system_colourmap->visual->depth);
@@ -142,6 +142,9 @@ GdkPixmap *compress_layers(GList *which_slide, gfloat time_position, guint width
 		this_layer_data = g_list_nth_data(layer_pointer, layer_counter);
 		compress_layers_inner(this_layer_data, backing_pixmap, time_position);
 	}
+
+	// Free the memory used in this function
+	g_object_unref(pixmap_gc);
 
 	// Return the updated pixmap
 	return backing_pixmap;

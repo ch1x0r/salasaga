@@ -154,6 +154,7 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 			// This is an empty layer, so reset things and return
 			stored_x = -1;
 			stored_y = -1;
+			g_string_free(message, TRUE);
 			return FALSE;
 
 		case TYPE_HIGHLIGHT:
@@ -167,6 +168,7 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 			{
 				stored_x = -1;
 				stored_y = -1;
+				g_string_free(message, TRUE);
 				return FALSE;
 			}
 
