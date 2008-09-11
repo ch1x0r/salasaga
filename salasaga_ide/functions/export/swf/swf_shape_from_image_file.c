@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Loads a given image file and converts it to a SWF shape
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -44,8 +44,8 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 	SWFInput			image_input;				// Used to hold a swf input object
 	GdkPixbuf			*image_pixbuf;				// Temporary GDK Pixbuf
 	GString				*message;					// Used to construct message strings
-	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
-	gsize				pixbuf_size;				// Is given the size of a compressed png image
+	gchar				*pixbuf_buffer = NULL;		// Is given a pointer to a compressed png image
+	gsize				pixbuf_size = 0;			// Is given the size of a compressed png image
 	gboolean			return_code_bool;			// Receives boolean return codes
 	SWFShape			swf_shape;					// Holds the newly created swf shape
 
