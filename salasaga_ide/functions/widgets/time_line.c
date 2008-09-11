@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Functions for the time line widget
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -51,7 +51,7 @@
 #define ADJUSTMENTS_Y	2
 #define ADJUSTMENTS_SIZE	10
 
-// Definitions for the cursor head - the triangular part at the top of the time line cursor 
+// Definitions for the cursor head - the triangular part at the top of the time line cursor
 #define CURSOR_HEAD_TOP		1
 #define CURSOR_HEAD_WIDTH	10
 
@@ -374,7 +374,7 @@ static void time_line_realise(GtkWidget *widget)
 	// Set the widget state to "realized"
 	GTK_WIDGET_SET_FLAGS(widget, GTK_REALIZED);
 
-	// Set up the GdkWindow attributes 
+	// Set up the GdkWindow attributes
 	window_attributes.colormap = gtk_widget_get_colormap(widget);
 	window_attributes.event_mask = gtk_widget_get_events(widget);
 	window_attributes.event_mask |= GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_EXPOSURE_MASK;
@@ -610,7 +610,7 @@ gboolean time_line_internal_draw_cursor(GtkWidget *widget, gint pixel_num)
 	gdk_gc_set_rgb_fg_color(GDK_GC(this_gc), &colour_black);
 	gdk_draw_polygon(GDK_DRAWABLE(widget->window), GDK_GC(this_gc), FALSE, cursor_points, 3);
 
-	return TRUE;	
+	return TRUE;
 }
 
 // Function to draw a horizontal guide line directly on the time line widget
@@ -779,7 +779,7 @@ gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_nu
 {
 	// Local variables
 	const GdkColor		colour_black = {0, 0, 0, 0 };
-	static GdkColormap	*colourmap = NULL;			// Colormap used for drawing
+	static GdkColormap	*colourmap = NULL;			// Colourmap used for drawing
 	static GdkGC		*display_buffer_gc = NULL;
 	static PangoContext *font_context = NULL;
 	static PangoFontDescription  *font_description = NULL;
@@ -863,7 +863,7 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	const GdkColor		colour_main_second = {0, 65000, 65000, 65000 };
 	const GdkColor		colour_old_lace = {0, (253 << 8), (245 << 8), (230 << 8) };
 	const GdkColor		colour_white = {0, 65535, 65535, 65535 };
-	GdkColormap			*colourmap = NULL;			// Colormap used for drawing
+	GdkColormap			*colourmap = NULL;			// Colourmap used for drawing
 	gint8				dash_list[2] = { 3, 3 };
 	gint				existing_bg_height;			// Height in pixels of an existing pixmap
 	gint				existing_bg_width;			// Width in pixels of an existing pixmap
@@ -896,6 +896,8 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 		// If we have an existing cached background image of the correct height and width, we re-use it
 		if ((existing_bg_width == width) && (existing_bg_height == height))
 		{
+			g_string_free(seconds_number, TRUE);
+			g_object_unref(font_layout);
 			return TRUE;
 		}
 
@@ -915,6 +917,8 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 		g_string_printf(message, "%s ED358: %s", _("Error"), _("Couldn't create the time line background image."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
+		g_string_free(seconds_number, TRUE);
+		g_object_unref(font_layout);
 		return FALSE;
 	}
 
@@ -1014,6 +1018,8 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 						height);
 	}
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+	pango_font_description_free(font_description);
+	g_object_unref(font_layout);
 	g_string_free(seconds_number, TRUE);
 
 	// Draw the horizontal layer components
@@ -1152,7 +1158,7 @@ gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint 
 	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
 			GDK_PIXMAP(priv->cached_bg_image), x1, y1, x1, y1, width, height);
 
-	return TRUE;	
+	return TRUE;
 }
 
 // Function to refresh the area of the display buffer covered by a layer, from the cached background image
@@ -1292,7 +1298,7 @@ void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *even
 	} else
 	{
 		// This is a time line widget
-		this_time_line = TIME_LINE(widget);		
+		this_time_line = TIME_LINE(widget);
 	}
 
 	// Initialisation
@@ -1308,7 +1314,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 	// Local variables
 	GtkAllocation		area;						// Rectangular area
 	layer				*background_layer_data;		// Data for the background layer
-	gint				check_pixel;				// Used when calculating pixel positions 
+	gint				check_pixel;				// Used when calculating pixel positions
 	gint				current_row;				// The presently selected row
 	gint				distance_moved;				// Number of pixels the row has been scrolled by horizontally
 	gint				end_row;					// Number of the last layer in this slide
@@ -1538,7 +1544,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			switch (priv->resize_type)
 			{
 				case RESIZE_TRANS_IN_START:
-					
+
 					// We're adjusting the transition in start
 					if (this_layer_data->transition_in_duration < time_moved)
 					{
@@ -1738,7 +1744,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 						}
 					} else
 					{
-						this_layer_data->transition_out_duration -= time_moved;						
+						this_layer_data->transition_out_duration -= time_moved;
 					}
 					end_time -= time_moved;
 					break;
@@ -1967,7 +1973,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
 			}
 
-			// Ensure the background layer end is kept correct 
+			// Ensure the background layer end is kept correct
 			background_layer_data = g_list_nth_data(layer_pointer, end_row);
 			if (background_layer_data->duration != priv->stored_slide_duration)
 			{
@@ -2084,7 +2090,7 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 	} else
 	{
 		// This is a time line widget
-		this_time_line = TIME_LINE(widget);		
+		this_time_line = TIME_LINE(widget);
 	}
 
 	// Initialisation
@@ -2218,7 +2224,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 	} else
 	{
 		// This is a time line widget
-		this_time_line = TIME_LINE(widget);		
+		this_time_line = TIME_LINE(widget);
 	}
 
 	// Initialisation
@@ -2362,7 +2368,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 		gdk_flush();
 	}
 
-	// Check if this mouse release matches a drag 
+	// Check if this mouse release matches a drag
 	if (TRUE == priv->drag_active)
 	{
 		// Note that the drag has finished
