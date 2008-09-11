@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Function to calculate width and height of a text layer, prior to it ever having been rendered
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -42,7 +42,7 @@ gboolean calculate_text_object_size(layer_text *text_object)
 	gint					num_lines;
 	gint					pixmap_height;			// Receives the height of a given pixmap
 	gint					pixmap_width;			// Receives the width of a given pixmap
-	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio 
+	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio
 	gfloat					scaled_width_ratio;		// Used to calculate a horizontal scaling ratio
 	static GdkColormap		*system_colourmap = NULL;	// Colormap used for drawing
 	GtkTextBuffer			*text_buffer;			// Pointer to the text buffer we're using
@@ -108,6 +108,9 @@ gboolean calculate_text_object_size(layer_text *text_object)
 	// Store the rendered width of the text object with the layer itself, for use by bounding box code
 	text_object->rendered_width = width / scaled_width_ratio;
 	text_object->rendered_height = height / scaled_height_ratio;
+
+	// Free the memory allocated in this function
+	g_free(text_string);
 
 	// The cairo drawing context is no longer needed, so free it
 	cairo_destroy(cairo_context);
