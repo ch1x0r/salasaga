@@ -231,6 +231,8 @@ void menu_file_open(void)
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.0);
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
+	if (NULL != new_path)
+		gtk_tree_path_free(new_path);  // Free the new path
 
 	// Enable the project based menu items
 	menu_enable(_("/Project"), TRUE);
@@ -247,7 +249,6 @@ void menu_file_open(void)
 
 	// Use the status bar to communicate the successful loading of the project
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Project loaded"));
-	gdk_flush();
 
 	// Free the memory allocated in this function
 	// (note that salasaga_filter, flame_filter and the all_filter seem to be freed when the dialog is destroyed)
