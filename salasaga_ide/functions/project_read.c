@@ -70,6 +70,7 @@ gboolean project_read(gchar *filename)
 	xmlChar				*info_display_data = NULL;
 	xmlChar				*info_link_data = NULL;
 	xmlChar				*info_link_target_data = NULL;
+	gchar				*info_text_buffer = NULL;	// Temporary buffer
 	xmlChar				*info_text_data = NULL;
 	guint				layer_counter;				// Counter used in loops
 	xmlNodePtr			layer_ptr;					// Temporary pointer
@@ -157,6 +158,14 @@ gboolean project_read(gchar *filename)
 		g_string_printf(message, "%s ED43: %s", _("Error"), _("The selected project file was not loaded successfully.  Please choose a different project file."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
+		g_string_free(tmp_gstring, TRUE);
+		g_string_free(tmp_gstring2, TRUE);
+		g_string_free(error_string, TRUE);
+		g_string_free(valid_output_folder, TRUE);
+		g_string_free(valid_project_name, TRUE);
+		g_string_free(valid_info_link, TRUE);
+		g_string_free(valid_info_link_target, TRUE);
+		g_object_unref(valid_info_text);
 		return FALSE;
 	}
 
@@ -166,6 +175,14 @@ gboolean project_read(gchar *filename)
 		g_string_printf(message, "%s ED44: %s", _("Error"), _("Project file is empty.  Please choose a different project file."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
+		g_string_free(tmp_gstring, TRUE);
+		g_string_free(tmp_gstring2, TRUE);
+		g_string_free(error_string, TRUE);
+		g_string_free(valid_output_folder, TRUE);
+		g_string_free(valid_project_name, TRUE);
+		g_string_free(valid_info_link, TRUE);
+		g_string_free(valid_info_link_target, TRUE);
+		g_object_unref(valid_info_text);
 		xmlFreeDoc(document);
 		return FALSE;
 	}
@@ -214,6 +231,14 @@ gboolean project_read(gchar *filename)
 		g_string_printf(message, "%s ED63: %s", _("Error"), _("Project meta data missing, aborting load.  Please choose a different project file."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
+		g_string_free(tmp_gstring, TRUE);
+		g_string_free(tmp_gstring2, TRUE);
+		g_string_free(error_string, TRUE);
+		g_string_free(valid_output_folder, TRUE);
+		g_string_free(valid_project_name, TRUE);
+		g_string_free(valid_info_link, TRUE);
+		g_string_free(valid_info_link_target, TRUE);
+		g_object_unref(valid_info_text);
 		return FALSE;
 	}
 
@@ -223,6 +248,14 @@ gboolean project_read(gchar *filename)
 		g_string_printf(message, "%s ED45: %s", _("Error"), _("Project preferences missing, aborting load.  Please choose a different project file."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
+		g_string_free(tmp_gstring, TRUE);
+		g_string_free(tmp_gstring2, TRUE);
+		g_string_free(error_string, TRUE);
+		g_string_free(valid_output_folder, TRUE);
+		g_string_free(valid_project_name, TRUE);
+		g_string_free(valid_info_link, TRUE);
+		g_string_free(valid_info_link_target, TRUE);
+		g_object_unref(valid_info_text);
 		return FALSE;
 	}
 
@@ -232,6 +265,14 @@ gboolean project_read(gchar *filename)
 		g_string_printf(message, "%s ED46: %s", _("Error"), _("No slides in project, aborting load.  Please choose a different project file."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
+		g_string_free(tmp_gstring, TRUE);
+		g_string_free(tmp_gstring2, TRUE);
+		g_string_free(error_string, TRUE);
+		g_string_free(valid_output_folder, TRUE);
+		g_string_free(valid_project_name, TRUE);
+		g_string_free(valid_info_link, TRUE);
+		g_string_free(valid_info_link_target, TRUE);
+		g_object_unref(valid_info_text);
 		return FALSE;
 	}
 
@@ -341,6 +382,14 @@ gboolean project_read(gchar *filename)
 		g_string_printf(message, "%s ED47: %s", _("Error"), _("Project Name missing, aborting load.  Please choose a different project file."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
+		g_string_free(tmp_gstring, TRUE);
+		g_string_free(tmp_gstring2, TRUE);
+		g_string_free(error_string, TRUE);
+		g_string_free(valid_output_folder, TRUE);
+		g_string_free(valid_project_name, TRUE);
+		g_string_free(valid_info_link, TRUE);
+		g_string_free(valid_info_link_target, TRUE);
+		g_object_unref(valid_info_text);
 		return FALSE;
 	}
 	if (NULL == project_width_data)
@@ -348,6 +397,14 @@ gboolean project_read(gchar *filename)
 		g_string_printf(message, "%s ED48: %s", _("Error"), _("Project Width missing, aborting load.  Please choose a different project file."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
+		g_string_free(tmp_gstring, TRUE);
+		g_string_free(tmp_gstring2, TRUE);
+		g_string_free(error_string, TRUE);
+		g_string_free(valid_output_folder, TRUE);
+		g_string_free(valid_project_name, TRUE);
+		g_string_free(valid_info_link, TRUE);
+		g_string_free(valid_info_link_target, TRUE);
+		g_object_unref(valid_info_text);
 		return FALSE;
 	}
 	if (NULL == project_height_data)
@@ -355,6 +412,14 @@ gboolean project_read(gchar *filename)
 		g_string_printf(message, "%s ED49: %s", _("Error"), _("Project Height missing, aborting load.  Please choose a different project file."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
+		g_string_free(tmp_gstring, TRUE);
+		g_string_free(tmp_gstring2, TRUE);
+		g_string_free(error_string, TRUE);
+		g_string_free(valid_output_folder, TRUE);
+		g_string_free(valid_project_name, TRUE);
+		g_string_free(valid_info_link, TRUE);
+		g_string_free(valid_info_link_target, TRUE);
+		g_object_unref(valid_info_text);
 		return FALSE;
 	}
 
@@ -365,6 +430,14 @@ gboolean project_read(gchar *filename)
 		g_string_printf(message, "%s ED210: %s", _("Error"), _("The file format value in the project file is not recognized.  This project file can't be used."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
+		g_string_free(tmp_gstring, TRUE);
+		g_string_free(tmp_gstring2, TRUE);
+		g_string_free(error_string, TRUE);
+		g_string_free(valid_output_folder, TRUE);
+		g_string_free(valid_project_name, TRUE);
+		g_string_free(valid_info_link, TRUE);
+		g_string_free(valid_info_link_target, TRUE);
+		g_object_unref(valid_info_text);
 		return FALSE;
 	} else
 	{
@@ -640,6 +713,7 @@ gboolean project_read(gchar *filename)
 	if (NULL != info_text_data)
 	{
 		gtk_text_buffer_set_text(GTK_TEXT_BUFFER(valid_info_text), (const gchar *) info_text_data, -1);
+		xmlFree(info_text_data);
 	}
 
 	// * Preferences are loaded, so now load the slides *
@@ -700,7 +774,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "red")))
 									{
 										// Get the red value
-										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_guint)
 										{
 											g_string_printf(message, "%s ED211: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
@@ -716,7 +792,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "green")))
 									{
 										// Get the green value
-										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_guint)
 										{
 											g_string_printf(message, "%s ED212: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
@@ -732,7 +810,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "blue")))
 									{
 										// Get the blue value
-										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_guint = validate_value(COLOUR_COMP16, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_guint)
 										{
 											g_string_printf(message, "%s ED213: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
@@ -751,7 +831,9 @@ gboolean project_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 										{
 											// Get the start frame
-											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, tmp_xmlChar);
+											xmlFree(tmp_xmlChar);
 											if (NULL == validated_guint)
 											{
 												g_string_printf(message, "%s ED214: %s", _("Error"), _("There was something wrong with a start frame value in the project file."));
@@ -767,7 +849,9 @@ gboolean project_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
 										{
 											// Get the finish frame
-											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, tmp_xmlChar);
+											xmlFree(tmp_xmlChar);
 											if (NULL == validated_guint)
 											{
 												g_string_printf(message, "%s ED215: %s", _("Error"), _("There was something wrong with a finish frame value in the project file."));
@@ -785,7 +869,9 @@ gboolean project_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_time")))
 										{
 											// Get the start time
-											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, tmp_xmlChar);
+											xmlFree(tmp_xmlChar);
 											if (NULL == validated_gfloat)
 											{
 												g_string_printf(message, "%s ED336: %s", _("Error"), _("There was something wrong with a layer start time value in the project file."));
@@ -801,7 +887,9 @@ gboolean project_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "duration")))
 										{
 											// Get the finish frame
-											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, tmp_xmlChar);
+											xmlFree(tmp_xmlChar);
 											if (NULL == validated_gfloat)
 											{
 												g_string_printf(message, "%s ED337: %s", _("Error"), _("There was something wrong with a layer duration value in the project file."));
@@ -818,7 +906,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
 									{
 										// Get the visibility
-										validated_guint = validate_value(LAYER_VISIBLE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_guint = validate_value(LAYER_VISIBLE, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_guint)
 										{
 											g_string_printf(message, "%s ED216: %s", _("Error"), _("There was something wrong with a layer visibility value in the project file."));
@@ -834,7 +924,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
 										// Get the name of the layer
-										validated_string = validate_value(LAYER_NAME, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_string = validate_value(LAYER_NAME, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_string)
 										{
 											g_string_printf(message, "%s ED217: %s", _("Error"), _("There was something wrong with a layer name value in the project file."));
@@ -850,7 +942,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
 									{
 										// Get the URL associated with the layer
-										validated_string = validate_value(EXTERNAL_LINK, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_string = validate_value(EXTERNAL_LINK, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_string)
 										{
 											g_string_printf(message, "%s ED218: %s", _("Error"), _("There was something wrong with an external link value in the project file."));
@@ -866,7 +960,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link_window")))
 									{
 										// Get the window to open the URL associated with the layer
-										validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_string)
 										{
 											g_string_printf(message, "%s ED219: %s", _("Error"), _("There was something wrong with an external link target window value in the project file."));
@@ -926,7 +1022,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_start")))
 									{
 										// Get the starting x offset
-										validated_guint = validate_value(X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_guint = validate_value(X_OFFSET, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_guint)
 										{
 											g_string_printf(message, "%s ED220: %s", _("Error"), _("There was something wrong with an image x offset start value in the project file."));
@@ -942,7 +1040,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_start")))
 									{
 										// Get the starting y offset
-										validated_guint = validate_value(Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_guint = validate_value(Y_OFFSET, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_guint)
 										{
 											g_string_printf(message, "%s ED221: %s", _("Error"), _("There was something wrong with an image y offset start value in the project file."));
@@ -958,7 +1058,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "x_offset_finish")))
 									{
 										// Get the finishing x offset
-										validated_guint = validate_value(X_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_guint = validate_value(X_OFFSET, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_guint)
 										{
 											g_string_printf(message, "%s ED222: %s", _("Error"), _("There was something wrong with an image x offset finish value in the project file."));
@@ -974,7 +1076,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "y_offset_finish")))
 									{
 										// Get the finishing y offset
-										validated_guint = validate_value(Y_OFFSET, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_guint = validate_value(Y_OFFSET, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_guint)
 										{
 											g_string_printf(message, "%s ED223: %s", _("Error"), _("There was something wrong with an image y offset finish value in the project file."));
@@ -990,7 +1094,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "width")))
 									{
 										// Get the width
-										validated_guint = validate_value(LAYER_WIDTH, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_guint = validate_value(LAYER_WIDTH, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_guint)
 										{
 											g_string_printf(message, "%s ED224: %s", _("Error"), _("There was something wrong with an image layer width value in the project file."));
@@ -1006,7 +1112,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "height")))
 									{
 										// Get the height
-										validated_guint = validate_value(LAYER_HEIGHT, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_guint = validate_value(LAYER_HEIGHT, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_guint)
 										{
 											g_string_printf(message, "%s ED225: %s", _("Error"), _("There was something wrong with an image layer height value in the project file."));
@@ -1022,7 +1130,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "background")))
 									{
 										// Is this the background layer?
-										validated_guint = validate_value(LAYER_BACKGROUND, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_guint = validate_value(LAYER_BACKGROUND, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_guint)
 										{
 											g_string_printf(message, "%s ED226: %s", _("Error"), _("There was something wrong with an image layer background value in the project file."));
@@ -1040,7 +1150,9 @@ gboolean project_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_frame")))
 										{
 											// Get the start frame
-											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, tmp_xmlChar);
+											xmlFree(tmp_xmlChar);
 											if (NULL == validated_guint)
 											{
 												g_string_printf(message, "%s ED227: %s", _("Error"), _("There was something wrong with an image start frame value in the project file."));
@@ -1056,7 +1168,9 @@ gboolean project_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "finish_frame")))
 										{
 											// Get the finish frame
-											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+											validated_guint = validate_value(FRAME_NUMBER, V_CHAR, tmp_xmlChar);
+											xmlFree(tmp_xmlChar);
 											if (NULL == validated_guint)
 											{
 												g_string_printf(message, "%s ED228: %s", _("Error"), _("There was something wrong with an image finish frame value in the project file."));
@@ -1074,7 +1188,9 @@ gboolean project_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "start_time")))
 										{
 											// Get the start time
-											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, tmp_xmlChar);
+											xmlFree(tmp_xmlChar);
 											if (NULL == validated_gfloat)
 											{
 												g_string_printf(message, "%s ED340: %s", _("Error"), _("There was something wrong with an image layer start time value in the project file."));
@@ -1090,7 +1206,9 @@ gboolean project_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "duration")))
 										{
 											// Get the finish frame
-											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+											validated_gfloat = validate_value(LAYER_DURATION, V_CHAR, tmp_xmlChar);
+											xmlFree(tmp_xmlChar);
 											if (NULL == validated_gfloat)
 											{
 												g_string_printf(message, "%s ED341: %s", _("Error"), _("There was something wrong with an image layer duration value in the project file."));
@@ -1107,7 +1225,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "visible")))
 									{
 										// Get the visibility
-										validated_guint = validate_value(LAYER_VISIBLE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_guint = validate_value(LAYER_VISIBLE, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_guint)
 										{
 											g_string_printf(message, "%s ED229: %s", _("Error"), _("There was something wrong with an image layer visibility value in the project file."));
@@ -1123,7 +1243,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "name")))
 									{
 										// Get the name of the layer
-										validated_string = validate_value(LAYER_NAME, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_string = validate_value(LAYER_NAME, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_string)
 										{
 											g_string_printf(message, "%s ED230: %s", _("Error"), _("There was something wrong with an image layer name value in the project file."));
@@ -1139,7 +1261,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link")))
 									{
 										// Get the URL associated with the layer
-										validated_string = validate_value(EXTERNAL_LINK, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_string = validate_value(EXTERNAL_LINK, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_string)
 										{
 											g_string_printf(message, "%s ED231: %s", _("Error"), _("There was something wrong with an image layer external link value in the project file."));
@@ -1155,7 +1279,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "external_link_window")))
 									{
 										// Get the window to open the URL associated with the layer
-										validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_string = validate_value(EXTERNAL_LINK_WINDOW, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_string)
 										{
 											g_string_printf(message, "%s ED232: %s", _("Error"), _("There was something wrong with an image layer external link target window value in the project file."));
@@ -1175,7 +1301,9 @@ gboolean project_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "path")))
 										{
 											// Get the path to the image data
-											validated_string = validate_value(FILE_PATH, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+											validated_string = validate_value(FILE_PATH, V_CHAR, tmp_xmlChar);
+											xmlFree(tmp_xmlChar);
 											if (NULL == validated_string)
 											{
 												g_string_printf(message, "%s ED233: %s", _("Error"), _("There was something wrong with a file name path value in the project file."));
@@ -1193,7 +1321,9 @@ gboolean project_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "data")))
 										{
 											// Get the image data
-											validated_string = validate_value(IMAGE_DATA, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+											validated_string = validate_value(IMAGE_DATA, V_CHAR, tmp_xmlChar);
+											xmlFree(tmp_xmlChar);
 											if (NULL == validated_string)
 											{
 												g_string_printf(message, "%s ED234: %s", _("Error"), _("There was something wrong with image data in the project file."));
@@ -1209,7 +1339,9 @@ gboolean project_read(gchar *filename)
 										if ((!xmlStrcmp(this_node->name, (const xmlChar *) "data_length")))
 										{
 											// Get the number of bytes the image should hold
-											validated_guint = validate_value(IMAGE_DATA_LENGTH, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+											tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+											validated_guint = validate_value(IMAGE_DATA_LENGTH, V_CHAR, tmp_xmlChar);
+											xmlFree(tmp_xmlChar);
 											if (NULL == validated_guint)
 											{
 												g_string_printf(message, "%s ED235: %s", _("Error"), _("There was something wrong with an image data length value in the project file."));
@@ -1226,7 +1358,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_in_type")))
 									{
 										// Get the type of transition in
-										validated_string = validate_value(TRANSITION_TYPE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_string = validate_value(TRANSITION_TYPE, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_string)
 										{
 											g_string_printf(message, "%s ED313: %s", _("Error"), _("There was something wrong with an image transition in type value in the project file."));
@@ -1248,7 +1382,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_in_duration")))
 									{
 										// Get the transition in duration
-										validated_gfloat = validate_value(TRANSITION_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_gfloat = validate_value(TRANSITION_DURATION, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_gfloat)
 										{
 											g_string_printf(message, "%s ED314: %s", _("Error"), _("There was something wrong with an image transition in duration value in the project file."));
@@ -1264,7 +1400,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_out_type")))
 									{
 										// Get the type of transition out
-										validated_string = validate_value(TRANSITION_TYPE, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_string = validate_value(TRANSITION_TYPE, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_string)
 										{
 											g_string_printf(message, "%s ED315: %s", _("Error"), _("There was something wrong with an image transition out type value in the project file."));
@@ -1286,7 +1424,9 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "transition_out_duration")))
 									{
 										// Get the transition out duration
-										validated_gfloat = validate_value(TRANSITION_DURATION, V_CHAR, xmlNodeListGetString(document, this_node->xmlChildrenNode, 1));
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_gfloat = validate_value(TRANSITION_DURATION, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
 										if (NULL == validated_gfloat)
 										{
 											g_string_printf(message, "%s ED316: %s", _("Error"), _("There was something wrong with an image transition out duration value in the project file."));
@@ -1319,18 +1459,19 @@ gboolean project_read(gchar *filename)
 										display_warning(error_string->str);
 										g_string_free(error_string, TRUE);
 									}
+									tmp_image_ob->image_data = gdk_pixbuf_loader_get_pixbuf(image_loader);
+									if (NULL == tmp_image_ob->image_data)
+									{
+										g_string_printf(message, "%s ED65: %s", _("Error"), _("Error when loading image data"));
+										display_warning(message->str);
+									}
+//									g_object_ref(tmp_image_ob->image_data);
 									return_code = gdk_pixbuf_loader_close(image_loader, &error);
 									if (TRUE != return_code)
 									{
 										g_string_printf(error_string, "%s ED67: %s: '%s'", _("Error"), _("Image data loading failed"), error->message);
 										display_warning(error_string->str);
 										g_string_free(error_string, TRUE);
-									}
-									tmp_image_ob->image_data = gdk_pixbuf_loader_get_pixbuf(image_loader);
-									if (NULL == tmp_image_ob->image_data)
-									{
-										g_string_printf(message, "%s ED65: %s", _("Error"), _("Error when loading image data"));
-										display_warning(message->str);
 									}
 								}
 
@@ -2644,7 +2785,7 @@ gboolean project_read(gchar *filename)
 									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "text_value")))
 									{
 										// Get the text
-										// fixme5: Unsure if we should validate this or not... it's supposed to be free-form. (?)
+										// fixme5: Unsure how to validate this... it's supposed to be free-form. (?)
 										tmp_text_ob->text_buffer = gtk_text_buffer_new(NULL);
 										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
 										gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), (const gchar *) tmp_xmlChar, -1);
@@ -2974,6 +3115,15 @@ gboolean project_read(gchar *filename)
 	{
 		// At least one of the values in the project file is invalid, so abort the load
 		display_warning(_("Aborting load of project file."));  // Individual error messages will already have been displayed
+		g_string_free(message, TRUE);
+		g_string_free(tmp_gstring, TRUE);
+		g_string_free(tmp_gstring2, TRUE);
+		g_string_free(error_string, TRUE);
+		g_string_free(valid_output_folder, TRUE);
+		g_string_free(valid_project_name, TRUE);
+		g_string_free(valid_info_link, TRUE);
+		g_string_free(valid_info_link_target, TRUE);
+		g_object_unref(valid_info_text);
 
 		// fixme4: We should probably free the memory allocated for any slides thus far too
 
@@ -3049,8 +3199,11 @@ gboolean project_read(gchar *filename)
 	info_link_target = valid_info_link_target;
 	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(valid_info_text), &text_start, &text_end);
 	info_text = gtk_text_buffer_new(NULL);
-	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(valid_info_text), &text_start, &text_end, TRUE), -1);
+	info_text_buffer = gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(valid_info_text), &text_start, &text_end, TRUE);
+	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), info_text_buffer, -1);
 	info_display = valid_info_display;
+	g_free(info_text_buffer);
+	g_object_unref(valid_info_text);
 
 	// Make the new slides active, and update them to fill in their remaining pieces
 	slides = g_list_first(new_slides);
@@ -3096,7 +3249,9 @@ gboolean project_read(gchar *filename)
 
 	// Free the memory allocated in this function
 	g_string_free(message, TRUE);
+	g_string_free(tmp_gstring, TRUE);
 	g_string_free(tmp_gstring2, TRUE);
+	g_string_free(error_string, TRUE);
 
 	return TRUE;
 }
