@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function to save the application preferences and go required cleanup, prior to exiting
- * 
+ * Salasaga: Function to save the application preferences and do required cleanup, prior to exiting
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -293,6 +293,11 @@ void save_preferences_and_exit(void)
 	g_string_free(message, TRUE);
 
 #endif
+
+	// Free global variables
+	g_string_free(info_link, TRUE);
+	g_string_free(info_link_target, TRUE);
+	g_object_unref(info_text);
 
 	// Exit the application
 	gtk_main_quit();
