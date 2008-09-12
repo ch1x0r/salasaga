@@ -95,6 +95,8 @@ gboolean preferences_load()
 		g_string_free(valid_output_folder, TRUE);
 		g_string_free(valid_project_folder, TRUE);
 		g_string_free(valid_screenshot_folder, TRUE);
+		if (NULL != error)
+			g_error_free(error);
 		return FALSE;
 	}
 
@@ -366,6 +368,8 @@ gboolean preferences_load()
 		g_string_free(valid_output_folder, TRUE);
 		g_string_free(valid_project_folder, TRUE);
 		g_string_free(valid_screenshot_folder, TRUE);
+		if (NULL != error)
+			g_error_free(error);
 		return FALSE;
 	}
 
@@ -789,6 +793,8 @@ gboolean preferences_load()
 
 	// Free the memory used in this function
 	g_string_free(message, TRUE);
+	if (NULL != error)
+		g_error_free(error);
 
 	return TRUE;
 }
