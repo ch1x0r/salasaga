@@ -2124,6 +2124,7 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 
 		// Update the workspace area
 		draw_workspace();
+		g_list_free(tmp_glist);
 		return;
 	}
 
@@ -2132,6 +2133,7 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 	{
 		// Open an edit dialog
 		layer_edit();
+		g_list_free(tmp_glist);
 		return;
 	}
 
@@ -2140,9 +2142,17 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 
 	// Ensure the user clicked on a valid row
 	if (0 > new_row)
-		return;  // Too low, the user didn't click on a valid row
+	{
+		// Too low, the user didn't click on a valid row
+		g_list_free(tmp_glist);
+		return;
+	}
 	if (this_slide_data->num_layers <= new_row)
-		return;  // Too high, the user didn't click on a valid row
+	{
+		// Too high, the user didn't click on a valid row
+		g_list_free(tmp_glist);
+		return;
+	}
 
 	// The user clicked on a valid row, so update the selection
 	time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), new_row);
@@ -2168,6 +2178,9 @@ void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event
 
 	// Draw the start and end points for the layer
 	draw_layer_start_and_end_points();
+
+	// Free the memory allocated in this function
+	g_list_free(tmp_glist);
 }
 
 // Callback function for when the user releases the mouse button on the time line widget
@@ -2244,6 +2257,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 			{
 				// We're already at the acceptable scaling limit, so beep then return
 				gdk_beep();
+				g_list_free(tmp_glist);
 				return;
 			}
 
@@ -2259,6 +2273,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 				g_string_printf(message, "%s ED361: %s", _("Error"), _("Couldn't recreate time line background image."));
 				display_warning(message->str);
 				g_string_free(message, TRUE);
+				g_list_free(tmp_glist);
 				return;
 			}
 			return_code_gbool = time_line_internal_initialise_display_buffer(priv, widget->allocation.width, widget->allocation.height);
@@ -2267,6 +2282,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 				g_string_printf(message, "%s ED362: %s", _("Error"), _("Couldn't recreate time line display buffer."));
 				display_warning(message->str);
 				g_string_free(message, TRUE);
+				g_list_free(tmp_glist);
 				return;
 			}
 			return_code_gbool = time_line_internal_draw_layer_info(priv);
@@ -2275,6 +2291,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 				g_string_printf(message, "%s ED363: %s", _("Error"), _("Couldn't redraw the time line layer information."));
 				display_warning(message->str);
 				g_string_free(message, TRUE);
+				g_list_free(tmp_glist);
 				return;
 			}
 			area.x = 0;
@@ -2292,6 +2309,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 			{
 				// We're already at the acceptable scaling limit, so beep then return
 				gdk_beep();
+				g_list_free(tmp_glist);
 				return;
 			}
 
@@ -2307,6 +2325,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 				g_string_printf(message, "%s ED364: %s", _("Error"), _("Couldn't recreate time line background image."));
 				display_warning(message->str);
 				g_string_free(message, TRUE);
+				g_list_free(tmp_glist);
 				return;
 			}
 			return_code_gbool = time_line_internal_initialise_display_buffer(priv, widget->allocation.width, widget->allocation.height);
@@ -2315,6 +2334,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 				g_string_printf(message, "%s ED365: %s", _("Error"), _("Couldn't recreate time line display buffer."));
 				display_warning(message->str);
 				g_string_free(message, TRUE);
+				g_list_free(tmp_glist);
 				return;
 			}
 			return_code_gbool = time_line_internal_draw_layer_info(priv);
@@ -2323,6 +2343,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 				g_string_printf(message, "%s ED366: %s", _("Error"), _("Couldn't redraw the time line layer information."));
 				display_warning(message->str);
 				g_string_free(message, TRUE);
+				g_list_free(tmp_glist);
 				return;
 			}
 			area.x = 0;
@@ -2417,4 +2438,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 
 	// Draw the start and end points for the layer
 	draw_layer_start_and_end_points();
+
+	// Free the memory allocated in this function
+	g_list_free(tmp_glist);
 }
