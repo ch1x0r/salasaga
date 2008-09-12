@@ -74,6 +74,7 @@ void film_strip_create_thumbnail(slide *slide_data)
 		display_warning(message->str);
 		g_string_free(message, TRUE);
 		gtk_tree_path_free(old_path);
+		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
 		return;
 	}
 	g_object_unref(GDK_PIXBUF(tmp_pixbuf));
