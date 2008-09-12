@@ -301,6 +301,8 @@ void menu_file_new(void)
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
+	if (NULL != new_path)
+		gtk_tree_path_free(new_path);  // Free the old path
 
 	// Set the global toggle that a project is now active
 	project_active = TRUE;
