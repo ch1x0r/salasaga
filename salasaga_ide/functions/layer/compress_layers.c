@@ -117,6 +117,7 @@ GdkPixmap *compress_layers(GList *which_slide, gfloat time_position, guint width
 		gdk_drawable_set_colormap(GDK_DRAWABLE(backing_pixmap), GDK_COLORMAP(system_colourmap));
 		gdk_draw_pixbuf(GDK_PIXMAP(backing_pixmap), NULL, GDK_PIXBUF(backing_pixbuf),
 				0, 0, 0, 0, -1, -1, GDK_RGB_DITHER_NONE, 0, 0);
+		g_object_unref(backing_pixbuf);
 
 		// Cache the new backing pixmap
 		this_slide_data->scaled_cached_pixmap = gdk_pixmap_new(NULL, width, height, system_colourmap->visual->depth);
