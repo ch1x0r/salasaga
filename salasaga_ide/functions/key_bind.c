@@ -64,6 +64,7 @@ gint key_bind(void)
 			// Display the warning
 			g_string_printf(message, "%s ED379: %s", _("Error"), _("Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, so not sure how to.)  You will need to do this yourself manually."));
 			display_warning(message->str);
+			g_string_free(message, TRUE);
 
 			// Ensure the the warning is only displayed once unless the user specifically requests otherwise
 			metacity_key_warning = FALSE;
@@ -80,6 +81,7 @@ gint key_bind(void)
 	{
 		g_string_printf(message, "%s ED114: %s", _("Error"), _("'salasaga_screencapture' not found in the search path. Screenshot capturing is disabled."));
 		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return -1;
 	}
 

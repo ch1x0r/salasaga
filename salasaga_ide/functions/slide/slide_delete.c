@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user selects Slide -> Delete from the top menu 
- * 
+ * Salasaga: Function called when the user selects Slide -> Delete from the top menu
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -91,6 +91,8 @@ void slide_delete(void)
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
+	if (NULL != new_path)
+		gtk_tree_path_free(new_path);  // Free the new path
 
 	// Redraw the timeline
 	draw_timeline();
@@ -103,7 +105,6 @@ void slide_delete(void)
 
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Slide deleted"));
-	gdk_flush();
 
 	// Free the resources allocated to the deleted slide
 	slide_free(tmp_glist->data, NULL);
