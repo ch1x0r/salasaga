@@ -91,6 +91,8 @@ gboolean calculate_text_object_size(layer_text *text_object)
 		gtk_text_buffer_get_iter_at_line(text_buffer, &text_start, line_counter);
 		text_end = text_start;
 		gtk_text_iter_forward_to_line_end(&text_end);
+		if (NULL != text_string)
+			g_free(text_string);
 		text_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
 		cairo_text_extents(cairo_context, text_string, &text_extents);
 		text_height += text_extents.height;
