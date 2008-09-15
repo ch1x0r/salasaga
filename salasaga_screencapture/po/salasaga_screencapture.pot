@@ -1,0 +1,132 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Justin Clift <justin@salasaga.org>
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: salasaga_screencapture 0.8.0-alpha3\n"
+"Report-Msgid-Bugs-To: justin@salasaga.org\n"
+"POT-Creation-Date: 2008-07-27 19:25+1000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: validate_value.c:505
+msgid "Fit to width"
+msgstr ""
+
+#: validate_value.c:544
+#, c-format
+msgid "Error CA28: Unknown value '%s' passed to validation function!"
+msgstr ""
+
+#: salasaga_screencapture.c:80 salasaga_screencapture.c:90
+#: salasaga_screencapture.c:122 salasaga_screencapture.c:131
+#: salasaga_screencapture.c:140 salasaga_screencapture.c:149
+#: salasaga_screencapture.c:157 salasaga_screencapture.c:166
+#: salasaga_screencapture.c:269 salasaga_screencapture.c:283
+#: salasaga_screencapture.c:297 salasaga_screencapture.c:310
+#: salasaga_screencapture.c:323 salasaga_screencapture.c:336
+#: salasaga_screencapture.c:382 salasaga_screencapture.c:395
+#: salasaga_screencapture.c:404 salasaga_screencapture.c:490
+#: salasaga_screencapture.c:500 salasaga_screencapture.c:515
+#: salasaga_screencapture.c:549 salasaga_screencapture.c:566
+msgid "Error"
+msgstr ""
+
+#: salasaga_screencapture.c:80
+msgid "Something went wrong when getting the window identifier."
+msgstr ""
+
+#: salasaga_screencapture.c:90 salasaga_screencapture.c:382
+msgid "Something went wrong when getting the screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:122
+msgid "Screenshot GetDC failed."
+msgstr ""
+
+#: salasaga_screencapture.c:131
+msgid "Screenshot CreateCompatibleDC failed."
+msgstr ""
+
+#: salasaga_screencapture.c:140
+msgid "Screenshot CreateCompatibleBitmap failed."
+msgstr ""
+
+#: salasaga_screencapture.c:149
+msgid "Screenshot SelectObject failed: selected object is not a region."
+msgstr ""
+
+#: salasaga_screencapture.c:157
+msgid "Screenshot SelectObject failed: unknown error."
+msgstr ""
+
+#: salasaga_screencapture.c:166
+msgid "Screenshot BitBlt failed."
+msgstr ""
+
+#: salasaga_screencapture.c:269
+msgid ""
+"There was something wrong with the project name value.  Aborting screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:283
+msgid ""
+"There was something wrong with the screenshot folder value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:297
+msgid ""
+"There was something wrong with the x offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:310
+msgid ""
+"There was something wrong with the y offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:323
+msgid "There was something wrong with the width value.  Aborting screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:336
+msgid "There was something wrong with the height value.  Aborting screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:395
+msgid "Something went wrong opening"
+msgstr ""
+
+#: salasaga_screencapture.c:404
+msgid "The target directory doesn't exist."
+msgstr ""
+
+#: salasaga_screencapture.c:490
+msgid ""
+"Something went wrong when opening the output screenshot file for writing."
+msgstr ""
+
+#: salasaga_screencapture.c:500
+msgid "Something went wrong when creating the png write structure."
+msgstr ""
+
+#: salasaga_screencapture.c:515
+msgid "Something went wrong when creating the png info structure."
+msgstr ""
+
+#: salasaga_screencapture.c:549
+msgid "Something went wrong when retrieving the screenshot metadata."
+msgstr ""
+
+#: salasaga_screencapture.c:566
+msgid "Something went wrong when copying the screenshot data."
+msgstr ""
