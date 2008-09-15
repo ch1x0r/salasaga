@@ -37,10 +37,9 @@ void film_strip_create_thumbnail(slide *slide_data)
 {
 	// Local variables
 	GString				*message;					// Used to construct message strings
-	GdkPixbuf			*new_thumbnail;
+	GdkPixbuf			*new_thumbnail;				//
 	GtkTreeIter			old_iter;					// Iter used to select the film strip thumbnail
 	GtkTreePath			*old_path;					// Path used to select the film strip thumbnail
-	slide				*slide_pointer;				// Points to the presently processing slide
 	GdkPixbuf			*tmp_pixbuf;				// Used to convert from a pixmap to a pixbuf
 
 
@@ -82,13 +81,6 @@ void film_strip_create_thumbnail(slide *slide_data)
 
 	// Replace the old film strip thumbnail with the new thumbnail
 	gtk_list_store_set(film_strip_store, &old_iter, 0, new_thumbnail, -1);
-
-	// Free the old thumbnail's memory
-	slide_pointer = (slide *) current_slide->data;
-	g_object_unref(slide_pointer->thumbnail);
-
-	// Update the slide pointer to the new thumbnail
-	slide_pointer->thumbnail = new_thumbnail;
 
 	// Free the memory used in this function
 	gtk_tree_path_free(old_path);

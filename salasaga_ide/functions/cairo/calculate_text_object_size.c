@@ -37,9 +37,9 @@ gboolean calculate_text_object_size(layer_text *text_object)
 	// Local variables
 	cairo_t					*cairo_context;			// Cairo drawing context
 	gint					height;					//
-	gint					line_counter;
-	gfloat					max_line_width;
-	gint					num_lines;
+	gint					line_counter;			//
+	gfloat					max_line_width;			//
+	gint					num_lines;				//
 	gint					pixmap_height;			// Receives the height of a given pixmap
 	gint					pixmap_width;			// Receives the width of a given pixmap
 	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio
@@ -91,8 +91,6 @@ gboolean calculate_text_object_size(layer_text *text_object)
 		gtk_text_buffer_get_iter_at_line(text_buffer, &text_start, line_counter);
 		text_end = text_start;
 		gtk_text_iter_forward_to_line_end(&text_end);
-		if (NULL != text_string)
-			g_free(text_string);
 		text_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
 		cairo_text_extents(cairo_context, text_string, &text_extents);
 		text_height += text_extents.height;

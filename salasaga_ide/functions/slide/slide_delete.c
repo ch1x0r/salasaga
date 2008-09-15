@@ -48,8 +48,8 @@ void slide_delete(void)
 	gint				num_slides;					// Number of slides in the whole slide list
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	gint				slide_position;				// Which slide in the slide list we are deleting
-	GtkTreeSelection	*film_strip_selector;
-	GtkTreeIter			selection_iter;
+	GtkTreeSelection	*film_strip_selector;		//
+	GtkTreeIter			selection_iter;				//
 
 	GList				*tmp_glist;					// Temporary GList
 
@@ -91,8 +91,6 @@ void slide_delete(void)
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
-	if (NULL != new_path)
-		gtk_tree_path_free(new_path);  // Free the new path
 
 	// Redraw the timeline
 	draw_timeline();
@@ -105,6 +103,7 @@ void slide_delete(void)
 
 	// Update the status bar
 	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Slide deleted"));
+	gdk_flush();
 
 	// Free the resources allocated to the deleted slide
 	slide_free(tmp_glist->data, NULL);

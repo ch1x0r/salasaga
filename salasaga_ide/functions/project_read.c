@@ -59,7 +59,7 @@ gboolean project_read(gchar *filename)
 	xmlChar				*control_bar_data = NULL;	// Temporarily holds incoming data prior to validation
 	gint				data_length;				// Number of image data bytes a layer says it stores
 	xmlDocPtr			document;					// Holds a pointer to the XML document
-	xmlChar				*end_behaviour_data = NULL;
+	xmlChar				*end_behaviour_data = NULL;	//
 	gfloat				end_time;					// Used to calculate the end time in seconds of a layer
 	GError				*error = NULL;				// Pointer to error return structure
 	GString				*error_string;				// Used to create error strings
@@ -1328,13 +1328,10 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED234: %s", _("Error"), _("There was something wrong with image data in the project file."));
 												display_warning(message->str);
-												if (NULL != tmp_gstring2)
-													g_string_free(tmp_gstring2, TRUE);
+												tmp_gstring2 = NULL;
 												useable_input = FALSE;
 											} else
 											{
-												if (NULL != tmp_gstring2)
-													g_string_free(tmp_gstring2, TRUE);
 												tmp_gstring2 = validated_string;
 												validated_string = NULL;
 											}
@@ -1468,6 +1465,7 @@ gboolean project_read(gchar *filename)
 										g_string_printf(message, "%s ED65: %s", _("Error"), _("Error when loading image data"));
 										display_warning(message->str);
 									}
+//									g_object_ref(tmp_image_ob->image_data);
 									return_code = gdk_pixbuf_loader_close(image_loader, &error);
 									if (TRUE != return_code)
 									{
@@ -3047,7 +3045,6 @@ gboolean project_read(gchar *filename)
 								tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
 								tmp_slide->num_layers++;
 							}
-							xmlFree(tmp_char);
 						}
 						layer_ptr = layer_ptr->next;
 					}  // End of "We're in a layer" loop
@@ -3241,7 +3238,6 @@ gboolean project_read(gchar *filename)
 		tmp_glist = g_list_append(tmp_glist, tmp_slide);
 		tmp_pixmap = compress_layers(tmp_glist, 0, preview_width, (guint) preview_width * 0.75);
 		tmp_slide->thumbnail = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
-		g_list_free(tmp_glist);
 
 		// Add the thumbnail to the film strip
 		gtk_list_store_append(film_strip_store, &film_strip_iter);
@@ -3256,7 +3252,6 @@ gboolean project_read(gchar *filename)
 	g_string_free(tmp_gstring, TRUE);
 	g_string_free(tmp_gstring2, TRUE);
 	g_string_free(error_string, TRUE);
-	g_free(image_loader);
 
 	return TRUE;
 }

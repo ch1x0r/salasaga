@@ -52,7 +52,7 @@ gboolean preferences_load()
 #ifndef _WIN32  // Non-windows check
 
 	// Local variables
-	GError				*error = NULL;				// Pointer to error return structure
+	GError				*error = NULL;				// Pointer to a error return structure
 	GConfEngine			*gconf_engine;				// GConf engine
 	gfloat				gfloat_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
@@ -92,11 +92,9 @@ gboolean preferences_load()
 	if (FALSE == gconf_engine_dir_exists(gconf_engine, "/apps/salasaga", &error))
 	{
 		// We don't have a set of preferences available for loading
-		g_string_free(message, TRUE);
 		g_string_free(valid_output_folder, TRUE);
 		g_string_free(valid_project_folder, TRUE);
 		g_string_free(valid_screenshot_folder, TRUE);
-		g_string_free(valid_zoom_level, TRUE);
 		if (NULL != error)
 			g_error_free(error);
 		return FALSE;
@@ -367,11 +365,9 @@ gboolean preferences_load()
 	if (FALSE == useable_input)
 	{
 		// Some of the saved preferences were invalid, so we won't use any of them (might be a bit overkill)
-		g_string_free(message, TRUE);
 		g_string_free(valid_output_folder, TRUE);
 		g_string_free(valid_project_folder, TRUE);
 		g_string_free(valid_screenshot_folder, TRUE);
-		g_string_free(valid_zoom_level, TRUE);
 		if (NULL != error)
 			g_error_free(error);
 		return FALSE;
