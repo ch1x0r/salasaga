@@ -1,4 +1,4 @@
-AC_INIT(Salasaga_ide, [0.8.0-alpha4], [salasaga-devel@lists.sourceforge.net])
+AC_INIT(Salasaga, [0.8.0-alpha4], [salasaga-devel@lists.sourceforge.net])
 
 MAJOR_VERSION=0
 MINOR_VERSION=8
@@ -14,7 +14,7 @@ dnl config.h needs to be generated
 AC_CONFIG_HEADERS(config.h)
 
 dnl Specify the version of automake needed
-AM_INIT_AUTOMAKE(1.8)
+AM_INIT_AUTOMAKE(1.10)
 
 dnl GNU recommended way to determine host variables (OS, etc)
 AC_CANONICAL_HOST
@@ -129,6 +129,6 @@ AC_SUBST(MINOR_VERSION)
 AC_SUBST(MICRO_VERSION)
 AC_SUBST(SALASAGA_VERSION)
 
-AC_CONFIG_FILES(Makefile po/Makefile desktop/Makefile font_outline/Makefile functions/Makefile images/Makefile images/control_bar/Makefile images/pointers/Makefile sounds/Makefile)
+AC_CONFIG_FILES(Makefile po/Makefile ide/Makefile ide/desktop/Makefile ide/font_outline/Makefile ide/functions/Makefile ide/images/Makefile ide/images/control_bar/Makefile ide/images/pointers/Makefile ide/sounds/Makefile screen_capture/Makefile)
 
 AC_OUTPUT(intl/Makefile po/Makefile.in)
