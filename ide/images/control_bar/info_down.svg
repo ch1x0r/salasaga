@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   height="60.0000000"
+   id="svg1"
+   inkscape:version="0.46"
+   sodipodi:docbase="/home/jc/workspace3/flame-edit/images/control_bar"
+   sodipodi:docname="info_down.svg"
+   sodipodi:version="0.32"
+   version="1.0"
+   width="60.0000000"
+   x="0"
+   y="0"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <metadata
+     id="metadata3278">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:title>Part of the Flat Icon Collection (Wed Aug 25 23:29:46 2004)</dc:title>
+        <dc:description />
+        <dc:subject>
+          <rdf:Bag>
+            <rdf:li>hash</rdf:li>
+            <rdf:li />
+            <rdf:li>action</rdf:li>
+            <rdf:li>computer</rdf:li>
+            <rdf:li>icons</rdf:li>
+            <rdf:li>theme</rdf:li>
+          </rdf:Bag>
+        </dc:subject>
+        <dc:publisher>
+          <cc:Agent
+             rdf:about="http://www.openclipart.org">
+            <dc:title>Danny Allen</dc:title>
+          </cc:Agent>
+        </dc:publisher>
+        <dc:creator>
+          <cc:Agent>
+            <dc:title>Danny Allen</dc:title>
+          </cc:Agent>
+        </dc:creator>
+        <dc:rights>
+          <cc:Agent>
+            <dc:title>Danny Allen</dc:title>
+          </cc:Agent>
+        </dc:rights>
+        <dc:date />
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <cc:license
+           rdf:resource="http://web.resource.org/cc/PublicDomain" />
+        <dc:language>en</dc:language>
+      </cc:Work>
+      <cc:License
+         rdf:about="http://web.resource.org/cc/PublicDomain">
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Reproduction" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/Distribution" />
+        <cc:permits
+           rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+      </cc:License>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     bordercolor="#666666"
+     borderopacity="1.0"
+     id="base"
+     inkscape:cx="24.49137"
+     inkscape:cy="30.645152"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:window-height="685"
+     inkscape:window-width="1016"
+     inkscape:window-x="332"
+     inkscape:window-y="347"
+     inkscape:zoom="6.9465337"
+     pagecolor="#ffffff"
+     inkscape:current-layer="svg1"
+     showgrid="false" />
+  <defs
+     id="defs3">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 30 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="60 : 30 : 1"
+       inkscape:persp3d-origin="30 : 20 : 1"
+       id="perspective9" />
+  </defs>
+  <path
+     style="font-size:12px;fill:#3d3abe;fill-opacity:1;fill-rule:evenodd;stroke:#333333;stroke-width:3.12500000000000000;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:none;stroke-opacity:1"
+     d="M 29.799035,4.6195082 C 15.751641,4.6195082 4.3615345,16.009614 4.3615345,30.057008 C 4.3615345,44.104402 15.751641,55.494509 29.799035,55.494508 C 43.84643,55.494508 55.236536,44.104403 55.236535,30.057008 C 55.236535,16.009614 43.846431,4.6195082 29.799035,4.6195082 z"
+     id="path2160" />
+  <g
+     id="g2439"
+     transform="matrix(0.9,0,0,0.9,7.9167356,3.5335364)">
+    <path
+       id="path3285"
+       d="M 24.479439,8.1864665 C 25.805439,8.1864662 26.914499,8.6527729 27.854439,9.5927165 C 28.794389,10.53266 29.260689,11.656191 29.260689,12.998967 C 29.260689,14.392098 28.794389,15.575808 27.854439,16.498967 C 26.914499,17.422124 25.805439,17.873967 24.479439,17.873967 C 23.170239,17.873967 22.044389,17.407661 21.104439,16.467717 C 20.164499,15.527774 19.666939,14.358528 19.666939,12.998967 C 19.666939,11.68976 20.164499,10.580695 21.104439,9.6239665 C 22.044389,8.6672382 23.170239,8.1864665 24.479439,8.1864665 z"
+       style="fill:#333333;fill-opacity:1;fill-rule:evenodd;stroke:#333333;stroke-width:3.125;stroke-dasharray:none;stroke-opacity:1" />
+    <path
+       id="path838"
+       d="M 24.479439,22.655217 C 25.671159,22.655218 26.615909,23.0683 27.354439,23.873967 C 28.109739,24.662848 28.479439,25.651004 28.479439,26.842717 L 28.479439,46.748967 C 28.479439,47.940682 28.109739,48.926517 27.354439,49.748967 C 26.615909,50.554635 25.671159,50.967717 24.479439,50.967717 C 23.304519,50.967718 22.328489,50.554633 21.573189,49.748967 C 20.834659,48.926519 20.448189,47.94068 20.448189,46.748967 L 20.448189,26.842717 C 20.448189,25.651004 20.834659,24.662848 21.573189,23.873967 C 22.328489,23.0683 23.304519,22.655217 24.479439,22.655217 z"
+       style="fill:#333333;fill-opacity:1;fill-rule:evenodd;stroke:#333333;stroke-width:3.125;stroke-dasharray:none;stroke-opacity:1" />
+  </g>
+</svg>

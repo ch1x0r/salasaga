@@ -1,0 +1,14 @@
+2008-09-15 - JustinClift
+
+ Preparing the source for Alpha 4.
+
+
+2008-07-22 - JustinClift
+
+ Began updating project to properly use GNU gettext.
+
+
+2008-07-21 - JustinClift
+
+ Project converted to use automake. 
+
