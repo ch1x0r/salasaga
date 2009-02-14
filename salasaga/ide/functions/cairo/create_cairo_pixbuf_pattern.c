@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Creates a cairo (surface) pattern from a given GDK pixbuf
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -51,6 +51,7 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 	guchar				*source_start;
 	gint				source_width;
 	gint				y_counter;
+	gint				ind;
 
 
 	// Initialisation
@@ -62,8 +63,9 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 	source_height = gdk_pixbuf_get_height(source_pixbuf);
 	source_width = gdk_pixbuf_get_width(source_pixbuf);
 	source_start = gdk_pixbuf_get_pixels(source_pixbuf);
+	ind = (gdk_pixbuf_get_has_alpha(source_pixbuf)) ? 1 : 0;
 
-	// Create a memory buffer for re-formatting our pixbuf data 
+	// Create a memory buffer for re-formatting our pixbuf data
 	dest_buffer = g_try_new0(guchar, source_width * source_height * 4);
 	if (NULL == dest_buffer)
 	{
@@ -78,20 +80,28 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 	for (y_counter = 0; y_counter < source_height; y_counter++)
 	{
 		source_ptr = source_start;
-		row_end = source_ptr + (3 * source_width);
+		row_end = source_ptr + ((3+ind) * source_width);
 		dest_ptr = dest_start;
 
-		// Reformat a row of data 
+		// Reformat a row of data
 		while (source_ptr < row_end)
 		{
 			// * Native byte ordering is used, so we have to be careful *
 
-#if G_LITTLE_ENDIAN == G_BYTE_ORDER 
+#if G_LITTLE_ENDIAN == G_BYTE_ORDER
 
 			// Little endian (i.e. x86)
 			dest_ptr[2] = source_ptr[0];
 			dest_ptr[1] = source_ptr[1];
 			dest_ptr[0] = source_ptr[2];
+			// Point to the next source pixel
+			source_ptr += 3;
+			if (ind)
+			{
+				dest_ptr[3] = source_ptr[3];
+				// Point to the next source pixel
+				source_ptr += 1;
+			}
 
 #else
 
@@ -99,11 +109,16 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 			dest_ptr[1] = source_ptr[0];
 			dest_ptr[2] = source_ptr[1];
 			dest_ptr[3] = source_ptr[2];
+			source_ptr += 3;
+			if (ind)
+			{
+				dest_ptr[0] = source_prt[3];
+				source_ptr+=1;
+			}
 
 #endif
 
-			// Point to the next source and destination pixel
-			source_ptr += 3;
+			// Point to the next destination pixel
 			dest_ptr += 4;
 		}
 
@@ -115,7 +130,7 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 	// Turn the reformatted buffer into a cairo surface
 	image_surface = cairo_image_surface_create_for_data(dest_buffer, CAIRO_FORMAT_RGB24, source_width, source_height, source_width * 4);
 
-	// Check if an error occured when creating this image surface
+	// Check if an error occurred when creating this image surface
 	cairo_status = cairo_surface_status(image_surface);
 	if (CAIRO_STATUS_SUCCESS != cairo_status)
 	{
@@ -126,7 +141,7 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 	// Turn the surface into a cairo pattern
 	image_pattern = cairo_pattern_create_for_surface(image_surface);
 
-	// Check if an erorr occured when creating this pattern
+	// Check if an error occurred when creating this pattern
 	cairo_pattern_status(image_pattern);
 	if (CAIRO_STATUS_SUCCESS != cairo_status)
 	{
