@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user selects Screenshots -> Import from the top menu 
- * 
+ * Salasaga: Function called when the user selects Screenshots -> Import from the top menu
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -110,7 +110,7 @@ void menu_screenshots_import(void)
 			// * The error was something other than the folder not existing, which we could cope with *
 
 			// Display the warning message using our function
-			g_string_printf(message, "%s ED03: %s '%s': %", _("Error"), _("Something went wrong opening the screenshots folder."), screenshots_folder->str, error->message);
+			g_string_printf(message, "%s ED03: %s '%s': %s", _("Error"), _("Something went wrong opening the screenshots folder."), screenshots_folder->str, error->message);
 			display_warning(message->str);
 
 			// Free the memory allocated in this function
@@ -138,7 +138,7 @@ void menu_screenshots_import(void)
 			if (g_str_has_suffix(dir_entry, ".png"))
 			{
 				// * The directory entry has the correct file extension too, so it's very likely one of our screenshots *
-				g_string_printf(tmp_string, g_build_path(G_DIR_SEPARATOR_S, screenshots_folder->str, dir_entry, NULL));
+				g_string_printf(tmp_string, "%s", g_build_path(G_DIR_SEPARATOR_S, screenshots_folder->str, dir_entry, NULL));
 				file_format = gdk_pixbuf_get_file_info(tmp_string->str, &image_width, &image_height);
 				if (NULL != file_format)
 				{
@@ -174,14 +174,14 @@ void menu_screenshots_import(void)
 	{
 		if (TRUE == project_active)
 		{
-			g_string_printf(tmp_string, _("Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, they will be scaled to the same size as the project.  Do you want to proceed?"));
+			g_string_printf(tmp_string, "%s", _("Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, they will be scaled to the same size as the project.  Do you want to proceed?"));
 		} else
 		{
-			g_string_printf(tmp_string, _("Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, they will all be scaled to the size of the first one.  Do you want to proceed?"));
+			g_string_printf(tmp_string, "%s", _("Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, they will all be scaled to the size of the first one.  Do you want to proceed?"));
 		}
 
 		// Display the warning dialog
-		tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, tmp_string->str);
+		tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, "%s", tmp_string->str);
 		return_code_int = gtk_dialog_run(GTK_DIALOG(tmp_dialog));
 
 		// Was the NO button pressed?
@@ -191,7 +191,7 @@ void menu_screenshots_import(void)
 
 			// Destroy the dialog box and return
 			gtk_widget_destroy(tmp_dialog);
-			return;	
+			return;
 		}
 
 		// The user wants to proceed
