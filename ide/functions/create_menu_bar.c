@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function to create the top menu bar 
- * 
+ * Salasaga: Function to create the top menu bar
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -140,15 +140,15 @@ void create_menu_bar()
 		{_("/Export/_Slide as Image"),	NULL,					menu_export_slide,				0,	"<Item>"},
 		{_("/Export/_Image Layer"),		NULL,					menu_export_layer,				0,	"<Item>"},
 
-		{_("/_Help"),					NULL,					NULL,							0,	"<LastBranch>"},
-		{_("/_Help/_About"),			NULL,					menu_help_about,				0,	"<Item>"	},
-		{_("/_Help/_Main Website"),		NULL,					menu_help_website,				0,	"<Item>"	},
+		{_("/_Help"),					NULL,					NULL,							0,	"<Branch>"},
+		{_("/_Help/_About"),			NULL,					menu_help_about,				0,	"<Item>"},
+		{_("/_Help/_Main Website"),		NULL,					menu_help_website,				0,	"<Item>"},
 		{_("/_Help/Sep"),				NULL,					NULL,							0,	"<Separator>"},
-//		{"/_Help/_Survey",				NULL,					menu_help_survey,				0,	"<Item>"	},
-		{_("/_Help/_Forum"),			NULL,					menu_help_forum,				0,	"<Item>"	},
-		{_("/_Help/_Register"),			NULL,					menu_help_register,				0,	"<Item>"	},
-		{_("/_Help/_Support"),			NULL,					menu_help_support,				0,	"<Item>"	},
-		{_("/_Help/_Wiki"),				NULL,					menu_help_wiki,					0,	"<Item>"	}
+//		{"/_Help/_Survey",				NULL,					menu_help_survey,				0,	"<Item>"},
+		{_("/_Help/_Forum"),			NULL,					menu_help_forum,				0,	"<Item>"},
+		{_("/_Help/_Register"),			NULL,					menu_help_register,				0,	"<Item>"},
+		{_("/_Help/_Support"),			NULL,					menu_help_support,				0,	"<Item>"},
+		{_("/_Help/_Wiki"),				NULL,					menu_help_wiki,					0,	"<Item>"}
 	};  // The menu structure
 	static gint			num_items = sizeof(menu_items) / sizeof(menu_items[0]);	// The number of menu items
 
