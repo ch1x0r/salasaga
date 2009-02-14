@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Display a warning message to the user 
- * 
+ * Salasaga: Display a warning message to the user
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -43,12 +43,12 @@ gint display_warning(gchar *warning_string)
 	GtkWidget			*tmp_dialog;				// Temporary dialog box
 
 	// Display the warning dialog
-	tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, warning_string);
+	tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s", warning_string);
 	gtk_dialog_run(GTK_DIALOG(tmp_dialog));
 	gtk_widget_destroy(tmp_dialog);
 
 	// Send the warning to stdout as well
-	g_warning(warning_string);
+	g_warning("%s", warning_string);
 
 	return TRUE;
 }
