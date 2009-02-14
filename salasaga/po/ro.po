@@ -1,4 +1,4 @@
-# Brazilian Portuguese translation for salasaga
+# Romanian translation for salasaga
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the salasaga package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-07-27 17:11+1000\n"
-"PO-Revision-Date: 2008-07-24 14:11+0000\n"
-"Last-Translator: Rafael Porto Rodrigues <rafporto@gmail.com>\n"
-"Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
+"PO-Revision-Date: 2008-09-24 11:08+0000\n"
+"Last-Translator: Doru Horișco <DoruHushHush@gmail.com>\n"
+"Language-Team: Romanian <ro@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,21 +19,22 @@ msgstr ""
 
 #: salasaga.c:237 functions/validate_value.c:566
 msgid "Fit to width"
-msgstr ""
+msgstr "Încadrare pe toată lățimea"
 
 #: salasaga.c:244 functions/menu/menu_file_new.c:190
 msgid "New Project"
-msgstr "Novo Projeto"
+msgstr "Proiect nou"
 
 #: salasaga.c:268
 #, c-format
 msgid "Debugging mode, errors will be shown on stdout.\n"
 msgstr ""
+"Mod de lucru Depanare, erorile vor fi afișate la ieșirea standard (stdout).\n"
 
 #: salasaga.c:284
 #, c-format
 msgid "Program path: '%s'\n"
-msgstr ""
+msgstr "Calea programului: '%s'\n"
 
 #: salasaga.c:285
 #, c-format
@@ -42,17 +43,17 @@ msgstr ""
 
 #: salasaga.c:295
 msgid "icons"
-msgstr "ícones"
+msgstr "Pictograme"
 
 #: salasaga.c:307
 #, c-format
 msgid "Icon path: %s\n"
-msgstr ""
+msgstr "Cale pictograme: '%s'\n"
 
 #: salasaga.c:333
 #, c-format
 msgid "Path to mouse pointer image: %s\n"
-msgstr ""
+msgstr "Calea pictograme pentru indicatorul mausului: '%s'\n"
 
 #: salasaga.c:416 salasaga.c:427 salasaga.c:484 functions/draw_timeline.c:64
 #: functions/key_bind.c:64 functions/key_bind.c:80
@@ -305,23 +306,23 @@ msgstr ""
 #: functions/working_area/working_area_motion_notify_event.c:204
 #: functions/working_area/working_area_motion_notify_event.c:370
 msgid "Error"
-msgstr "Erro"
+msgstr "Eroare"
 
 #: salasaga.c:416
 msgid "Something went wrong when creating the menu bar."
-msgstr ""
+msgstr "Eroare la crearea barei de meniu."
 
 #: salasaga.c:427
 msgid "Something went wrong when creating the toolbar."
-msgstr ""
+msgstr "Eroare la crearea barei de unelte."
 
 #: salasaga.c:456
 msgid "Zoom: "
-msgstr "Ampliação: "
+msgstr "Zoom: "
 
 #: salasaga.c:468
 msgid "Output: "
-msgstr "Saída: "
+msgstr "Ieșire: "
 
 #: salasaga.c:484
 msgid "Something went wrong when creating the film strip."
@@ -333,7 +334,7 @@ msgstr ""
 
 #: salasaga.c:503
 msgid "Ready"
-msgstr "Pronto"
+msgstr "Pregătit"
 
 #: salasaga.c:525
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
@@ -349,11 +350,11 @@ msgstr ""
 
 #: valid_fields.h:37
 msgid "Animation behavior after playing"
-msgstr ""
+msgstr "Comportamentul animației după redare"
 
 #: valid_fields.h:38
 msgid "External link"
-msgstr ""
+msgstr "Legătură externă"
 
 #: valid_fields.h:39
 msgid "Window target for an external link"
@@ -361,19 +362,19 @@ msgstr ""
 
 #: valid_fields.h:40
 msgid "Full path to a file"
-msgstr ""
+msgstr "Calea absolută către un fișier"
 
 #: valid_fields.h:41
 msgid "Full path to a folder"
-msgstr ""
+msgstr "Calea absolută către un director"
 
 #: valid_fields.h:42
 msgid "Font size"
-msgstr ""
+msgstr "Dimensiune caracter"
 
 #: valid_fields.h:43
 msgid "A frame number"
-msgstr ""
+msgstr "Număr cadre"
 
 #: valid_fields.h:44
 msgid "Height of a highlight layer"
@@ -385,7 +386,7 @@ msgstr ""
 
 #: valid_fields.h:46
 msgid "Height of the tool bar icons"
-msgstr ""
+msgstr "Înălțimea pictogramelor barei de unelte"
 
 #: valid_fields.h:47
 msgid "Base64 encoded image data"
@@ -393,43 +394,43 @@ msgstr ""
 
 #: valid_fields.h:48
 msgid "Length in bytes of image data"
-msgstr ""
+msgstr "Lungimea în octeți a datelor imaginii"
 
 #: valid_fields.h:49
 msgid "Layer background switch"
-msgstr ""
+msgstr "Comutator pentru fond Layer"
 
 #: valid_fields.h:50
 msgid "Layer duration in seconds"
-msgstr ""
+msgstr "Durata în secunde pentru Layer"
 
 #: valid_fields.h:51
 msgid "Height of this layer"
-msgstr ""
+msgstr "Înălțimea pentru Layer"
 
 #: valid_fields.h:52
 msgid "Name of this layer"
-msgstr ""
+msgstr "Nume pentru Layer"
 
 #: valid_fields.h:53
 msgid "Layer visibility switch"
-msgstr ""
+msgstr "Comutator vizibilitate Layer"
 
 #: valid_fields.h:54
 msgid "Width of this layer"
-msgstr ""
+msgstr "Lățimea pentru Layer"
 
 #: valid_fields.h:55
 msgid "Line width"
-msgstr ""
+msgstr "Lățimea liniei"
 
 #: valid_fields.h:56
 msgid "Mouse click"
-msgstr ""
+msgstr "Clic maus"
 
 #: valid_fields.h:57
 msgid "Opacity level"
-msgstr ""
+msgstr "Nivel opacitate"
 
 #: valid_fields.h:58
 msgid "Width of film strip thumbnails"
@@ -437,79 +438,79 @@ msgstr ""
 
 #: valid_fields.h:59
 msgid "Frames per Second for this project"
-msgstr ""
+msgstr "Cadre pe secundă pentru acest proiect"
 
 #: valid_fields.h:60
 msgid "Height of this project"
-msgstr ""
+msgstr "Înălțimea pentru acest proiect"
 
 #: valid_fields.h:61
 msgid "Name of this project"
-msgstr ""
+msgstr "Numele proiectului"
 
 #: valid_fields.h:62
 msgid "Version number of the project file"
-msgstr ""
+msgstr "Numărul versiunii proiectului"
 
 #: valid_fields.h:63
 msgid "Width of this project"
-msgstr ""
+msgstr "Lățimea proiectului"
 
 #: valid_fields.h:64
 msgid "An X * Y resolution value"
-msgstr ""
+msgstr "Valoarea rezoluției în X*Y"
 
 #: valid_fields.h:65
 msgid "Height for next screenshot"
-msgstr ""
+msgstr "Înălțimea pentru captura de ecran următoare"
 
 #: valid_fields.h:66
 msgid "Width for next screenshot"
-msgstr ""
+msgstr "Lățimea pentru captura de ecran următoare"
 
 #: valid_fields.h:67
 msgid "Include control bar in exported swf"
-msgstr ""
+msgstr "Include bară de control fișierul swf exportat"
 
 #: valid_fields.h:68
 msgid "Include info button in exported swf"
-msgstr ""
+msgstr "Include buton info în fișierul swf exportat"
 
 #: valid_fields.h:69
 msgid "Show the background for text layers"
-msgstr ""
+msgstr "Afișează fondul pentru straturile text"
 
 #: valid_fields.h:70
 msgid "Number of frames per slide"
-msgstr ""
+msgstr "Număr de cadre per diapozitiv"
 
 #: valid_fields.h:71
 msgid "Number of seconds in a slide"
-msgstr ""
+msgstr "Numărul de secunde dintr-un diapozitiv"
 
 #: valid_fields.h:72
 msgid "Name of this slide"
-msgstr ""
+msgstr "Numele diapozitivului"
 
 #: valid_fields.h:73
 msgid "Animation behavior after loading"
-msgstr ""
+msgstr "Comportamentul animației după încărcare"
 
 #: valid_fields.h:74
 msgid "Transition duration in seconds"
-msgstr ""
+msgstr "Durata tranziției în secunde"
 
 #: valid_fields.h:75
 msgid "Type of transition"
-msgstr ""
+msgstr "Tipul tranziției"
 
 #: valid_fields.h:76
 msgid "X Offset"
-msgstr ""
+msgstr "Offset X"
 
 #: valid_fields.h:77
 msgid "Y Offset"
-msgstr ""
+msgstr "Offset Y"
 
 #: valid_fields.h:78
 msgid "Magnification level of working area"
@@ -517,39 +518,39 @@ msgstr ""
 
 #: functions/create_menu_bar.c:96
 msgid "/_File"
-msgstr "/_Arquivo"
+msgstr "/_Fișier"
 
 #: functions/create_menu_bar.c:97
 msgid "/File/_New Project"
-msgstr "/Arquivo/_Novo Projeto"
+msgstr "/Fișier/Proiect _nou"
 
 #: functions/create_menu_bar.c:97
 msgid "<control>N"
-msgstr ""
+msgstr "<control>N"
 
 #: functions/create_menu_bar.c:98
 msgid "/File/_Open Project"
-msgstr ""
+msgstr "/Fișier/_Deschidere Proiect"
 
 #: functions/create_menu_bar.c:98
 msgid "<control>O"
-msgstr ""
+msgstr "<control>O"
 
 #: functions/create_menu_bar.c:99
 msgid "/File/_Save Project"
-msgstr ""
+msgstr "/Fișier/_Salvare proiect"
 
 #: functions/create_menu_bar.c:99
 msgid "<control>S"
-msgstr ""
+msgstr "<control>S"
 
 #: functions/create_menu_bar.c:100
 msgid "/File/Save _As Project"
-msgstr ""
+msgstr "?Fișier/S_alvare proiect ca"
 
 #: functions/create_menu_bar.c:100
 msgid "<control><shift>S"
-msgstr ""
+msgstr "<control><shift>S"
 
 #: functions/create_menu_bar.c:101
 msgid "/File/_Close Project"
@@ -565,7 +566,7 @@ msgstr ""
 
 #: functions/create_menu_bar.c:103
 msgid "/File/_Quit"
-msgstr "/Arquivo/_Sair"
+msgstr ""
 
 #: functions/create_menu_bar.c:103
 msgid "<control>Q"
@@ -573,87 +574,87 @@ msgstr ""
 
 #: functions/create_menu_bar.c:105
 msgid "/_Edit"
-msgstr "/_Editar"
+msgstr ""
 
 #: functions/create_menu_bar.c:106
 msgid "/Edit/_Preferences"
-msgstr "/Editar/_Preferências"
+msgstr "/Editare/_Preferințe"
 
 #: functions/create_menu_bar.c:108
 msgid "/_Screenshots"
-msgstr ""
+msgstr "/_Capturi ecran"
 
 #: functions/create_menu_bar.c:109 functions/create_menu_bar.c:177
 msgid "/Screenshots/Capture _window"
-msgstr ""
+msgstr "/Capturi ecran/Captură _fereastră"
 
 #: functions/create_menu_bar.c:110 functions/create_menu_bar.c:178
 msgid "/Screenshots/Capture _full screen"
-msgstr ""
+msgstr "/Capturi ecran/Captură _ecran"
 
 #: functions/create_menu_bar.c:111
 msgid "/Screenshots/_Import"
-msgstr ""
+msgstr "/Capturi ecran/_Import"
 
 #: functions/create_menu_bar.c:113
 msgid "/_Project"
-msgstr "/_Projeto"
+msgstr "/_Proiect"
 
 #: functions/create_menu_bar.c:114
 msgid "/Project/P_roperties"
-msgstr "/Projeto/P_ropriedades"
+msgstr "/Proiect/P_roprietăți"
 
 #: functions/create_menu_bar.c:116
 msgid "/Sl_ide"
-msgstr ""
+msgstr "/D_iapozitiv"
 
 #: functions/create_menu_bar.c:117
 msgid "/Slide/_Insert"
-msgstr ""
+msgstr "/Diapozitiv/_Inserare"
 
 #: functions/create_menu_bar.c:118
 msgid "/Slide/_Delete"
-msgstr ""
+msgstr "/Diapozitiv/Ș_tergere"
 
 #: functions/create_menu_bar.c:119
 msgid "/Slide/Du_ration"
-msgstr ""
+msgstr "/Diapozitiv/D_urată"
 
 #: functions/create_menu_bar.c:120
 msgid "/Slide/Move _up"
-msgstr ""
+msgstr "/Diapozitiv/Mută _sus"
 
 #: functions/create_menu_bar.c:121
 msgid "/Slide/Move dow_n"
-msgstr ""
+msgstr "/Diapozitiv/Mută _jos"
 
 #: functions/create_menu_bar.c:122
 msgid "/Slide/Move to _top"
-msgstr ""
+msgstr "/Diapozitiv/Mută _deasupra"
 
 #: functions/create_menu_bar.c:123
 msgid "/Slide/Move to _bottom"
-msgstr ""
+msgstr "/Diapozitiv/_Mută dedesupt"
 
 #: functions/create_menu_bar.c:125
 msgid "/_Layer"
-msgstr ""
+msgstr "/_Strat"
 
 #: functions/create_menu_bar.c:127
 msgid "/Layer/_Copy"
-msgstr ""
+msgstr "/Strat/_Copiază"
 
 #: functions/create_menu_bar.c:128
 msgid "/Layer/_Paste"
-msgstr ""
+msgstr "/Strat/_Lipește"
 
 #: functions/create_menu_bar.c:129
 msgid "/Layer/_Edit"
-msgstr ""
+msgstr "/Strat/_Editează"
 
 #: functions/create_menu_bar.c:130
 msgid "/Layer/_Delete"
-msgstr ""
+msgstr "/Strat/Ș_terge"
 
 #: functions/create_menu_bar.c:131
 msgid "/Layer/Sep"
@@ -661,31 +662,31 @@ msgstr ""
 
 #: functions/create_menu_bar.c:132
 msgid "/Layer/Add _Text"
-msgstr ""
+msgstr "/Strat/Adaugă te_xt"
 
 #: functions/create_menu_bar.c:133
 msgid "/Layer/Add _Highlight"
-msgstr ""
+msgstr "/Strat/Adaugă e_vidențiere"
 
 #: functions/create_menu_bar.c:134
 msgid "/Layer/Add _Image"
-msgstr ""
+msgstr "/Strat/Adaugă ima_gine"
 
 #: functions/create_menu_bar.c:135
 msgid "/Layer/Add _Mouse"
-msgstr ""
+msgstr "/Strat/Adaugă _maus"
 
 #: functions/create_menu_bar.c:137
 msgid "/E_xport"
-msgstr ""
+msgstr "/E_xport"
 
 #: functions/create_menu_bar.c:138
 msgid "/Export/_Flash Animation"
-msgstr ""
+msgstr "/Export/Animație _flash"
 
 #: functions/create_menu_bar.c:138
 msgid "<control><shift>F"
-msgstr ""
+msgstr "<control><shift>F"
 
 #: functions/create_menu_bar.c:139
 msgid "/Export/_Html Wrapper"
@@ -693,23 +694,23 @@ msgstr ""
 
 #: functions/create_menu_bar.c:140
 msgid "/Export/_Slide as Image"
-msgstr ""
+msgstr "/Export/_Diapozitiv ca imagine"
 
 #: functions/create_menu_bar.c:141
 msgid "/Export/_Image Layer"
-msgstr ""
+msgstr "/Export/Strat _imagine"
 
 #: functions/create_menu_bar.c:143
 msgid "/_Help"
-msgstr ""
+msgstr "/_Ajutor"
 
 #: functions/create_menu_bar.c:144
 msgid "/_Help/_About"
-msgstr ""
+msgstr "/_Ajutor/_Despre"
 
 #: functions/create_menu_bar.c:145
 msgid "/_Help/_Main Website"
-msgstr ""
+msgstr "/_Ajutor/_Pagina oficială"
 
 #: functions/create_menu_bar.c:146
 msgid "/_Help/Sep"
@@ -717,162 +718,162 @@ msgstr ""
 
 #: functions/create_menu_bar.c:148
 msgid "/_Help/_Forum"
-msgstr ""
+msgstr "/_Ajutor/_Forum"
 
 #: functions/create_menu_bar.c:149
 msgid "/_Help/_Register"
-msgstr ""
+msgstr "/_Ajutor/În_registrare"
 
 #: functions/create_menu_bar.c:150
 msgid "/_Help/_Support"
-msgstr ""
+msgstr "/_Ajutor/_Suport"
 
 #: functions/create_menu_bar.c:151
 msgid "/_Help/_Wiki"
-msgstr ""
+msgstr "/_Ajutor/_Wiki"
 
 #: functions/create_menu_bar.c:169 functions/menu/menu_file_close.c:97
 #: functions/menu/menu_file_new.c:321 functions/menu/menu_file_open.c:232
 msgid "/Project"
-msgstr ""
+msgstr "/Proiect"
 
 #: functions/create_menu_bar.c:170 functions/menu/menu_file_close.c:98
 #: functions/menu/menu_file_new.c:322 functions/menu/menu_file_open.c:233
 msgid "/Slide"
-msgstr ""
+msgstr "/Diapozitiv"
 
 #: functions/create_menu_bar.c:171 functions/menu/menu_file_close.c:99
 #: functions/menu/menu_file_new.c:323 functions/menu/menu_file_open.c:234
 msgid "/Layer"
-msgstr ""
+msgstr "/Strat"
 
 #: functions/create_menu_bar.c:172 functions/menu/menu_file_close.c:100
 #: functions/menu/menu_file_new.c:324 functions/menu/menu_file_open.c:235
 msgid "/Export"
-msgstr ""
+msgstr "/Export"
 
 #: functions/create_time_line.c:117
 msgid "Edit"
-msgstr ""
+msgstr "Editare"
 
 #: functions/create_time_line.c:118
 #: functions/enable_layer_toolbar_buttons.c:56
 msgid "Edit layer"
-msgstr ""
+msgstr "Editare strat"
 
 #: functions/create_time_line.c:130
 msgid "Crop"
-msgstr ""
+msgstr "Decupare"
 
 #: functions/create_time_line.c:131
 #: functions/enable_layer_toolbar_buttons.c:65
 msgid "Crop image"
-msgstr ""
+msgstr "Decupare imagine"
 
 #: functions/create_time_line.c:143
 msgid "Delete"
-msgstr ""
+msgstr "Șterge"
 
 #: functions/create_time_line.c:144
 #: functions/enable_layer_toolbar_buttons.c:74
 msgid "Delete selected layer"
-msgstr ""
+msgstr "Șterge stratul selectat"
 
 #: functions/create_time_line.c:156
 msgid "Down"
-msgstr ""
+msgstr "Jos"
 
 #: functions/create_time_line.c:157
 #: functions/enable_layer_toolbar_buttons.c:83
 msgid "Move layer down"
-msgstr ""
+msgstr "Mută stratul în jos"
 
 #: functions/create_time_line.c:169
 msgid "Up"
-msgstr ""
+msgstr "Sus"
 
 #: functions/create_time_line.c:170
 #: functions/enable_layer_toolbar_buttons.c:92
 msgid "Move layer up"
-msgstr ""
+msgstr "Mută stratul în sus"
 
 #: functions/create_time_line.c:186
 msgid "Mouse"
-msgstr ""
+msgstr "Maus"
 
 #: functions/create_time_line.c:187
 #: functions/enable_layer_toolbar_buttons.c:101
 msgid "Add a mouse pointer"
-msgstr ""
+msgstr "Adaugă indicator de maus"
 
 #: functions/create_time_line.c:199
 msgid "Text"
-msgstr ""
+msgstr "Text"
 
 #: functions/create_time_line.c:200
 #: functions/enable_layer_toolbar_buttons.c:110
 msgid "Add a text layer"
-msgstr ""
+msgstr "Adaugă strat text"
 
 #: functions/create_time_line.c:212
 #: functions/layer/layer_new_highlight_inner.c:152
 msgid "Highlight"
-msgstr ""
+msgstr "Evidențiere"
 
 #: functions/create_time_line.c:213
 #: functions/enable_layer_toolbar_buttons.c:119
 msgid "Add a highlight layer"
-msgstr ""
+msgstr "Adaugă strat evidențiere"
 
 #: functions/create_time_line.c:225 functions/layer/layer_duplicate.c:92
 #: functions/layer/layer_new_image_inner.c:97
 msgid "Image"
-msgstr ""
+msgstr "Imagine"
 
 #: functions/create_time_line.c:226
 #: functions/enable_layer_toolbar_buttons.c:128
 msgid "Add an image layer"
-msgstr ""
+msgstr "Adaugă strat imagine"
 
 #: functions/create_toolbar.c:80
 msgid "New"
-msgstr ""
+msgstr "Nou"
 
 #: functions/create_toolbar.c:81
 msgid "Begin a new project"
-msgstr ""
+msgstr "Începe un proiect nou"
 
 #: functions/create_toolbar.c:87
 msgid "Open"
-msgstr ""
+msgstr "Deschide"
 
 #: functions/create_toolbar.c:88
 msgid "Open an existing project"
-msgstr ""
+msgstr "Deschide un proiect existent"
 
 #: functions/create_toolbar.c:94
 msgid "Save"
-msgstr ""
+msgstr "Salvează"
 
 #: functions/create_toolbar.c:95
 msgid "Save the project"
-msgstr ""
+msgstr "Salvare proiect"
 
 #: functions/create_toolbar.c:101 functions/menu/menu_file_save_as.c:69
 msgid "Save As"
-msgstr ""
+msgstr "Salvează ca"
 
 #: functions/create_toolbar.c:102
 msgid "Save the project with a different file name"
-msgstr ""
+msgstr "Salvarea proiectului sub un nume diferit"
 
 #: functions/create_toolbar.c:108
 msgid "Quit"
-msgstr ""
+msgstr "Ieșire"
 
 #: functions/create_toolbar.c:109
 msgid "Quit the application"
-msgstr ""
+msgstr "Închide aplicația"
 
 #: functions/create_toolbar.c:119
 msgid "Path to toolbar 'Capture Screenshots' icon"
@@ -880,7 +881,7 @@ msgstr ""
 
 #: functions/create_toolbar.c:126
 msgid "Capture"
-msgstr ""
+msgstr "Captură"
 
 #: functions/create_toolbar.c:127
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:132
@@ -890,27 +891,27 @@ msgstr ""
 
 #: functions/create_toolbar.c:139
 msgid "Import"
-msgstr ""
+msgstr "Importă"
 
 #: functions/create_toolbar.c:140
 msgid "Import screenshots"
-msgstr ""
+msgstr "Importă capturi"
 
 #: functions/create_toolbar.c:152
 msgid "Crop all"
-msgstr ""
+msgstr "Decupează tot"
 
 #: functions/create_toolbar.c:153 functions/enable_main_toolbar_buttons.c:49
 msgid "Crop all slides in the project"
-msgstr ""
+msgstr "Decupează toate diapozitivele din proiect"
 
 #: functions/create_toolbar.c:169
 msgid "Flash"
-msgstr ""
+msgstr "Flash"
 
 #: functions/create_toolbar.c:170 functions/enable_main_toolbar_buttons.c:58
 msgid "Export as a Flash animation"
-msgstr ""
+msgstr "Exportă ca animație flash"
 
 #: functions/disable_layer_toolbar_buttons.c:47
 msgid "Edit layer disabled: No project loaded"
@@ -1544,10 +1545,6 @@ msgstr ""
 #: functions/save_preferences_and_exit.c:168
 #: functions/save_preferences_and_exit.c:188
 msgid "Saving preferences in the registry failed."
-msgstr ""
-
-#: functions/validate_value.c:605
-msgid "Unknown value passed to validation function"
 msgstr ""
 
 #: functions/cairo/create_cairo_pixbuf_pattern.c:70
@@ -3308,3 +3305,106 @@ msgstr ""
 #: functions/working_area/working_area_button_release_event.c:423
 msgid " Layer moved"
 msgstr ""
+
+#: validate_value.c:544
+msgid "Unknown value passed to validation function"
+msgstr "Valoare necunoscută transmisă funcției de validare"
+
+#: salasaga_screencapture.c:80
+msgid "Something went wrong when getting the window identifier."
+msgstr ""
+
+#: salasaga_screencapture.c:90 salasaga_screencapture.c:382
+msgid "Something went wrong when getting the screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:122
+msgid "Screenshot GetDC failed."
+msgstr ""
+
+#: salasaga_screencapture.c:131
+msgid "Screenshot CreateCompatibleDC failed."
+msgstr ""
+
+#: salasaga_screencapture.c:140
+msgid "Screenshot CreateCompatibleBitmap failed."
+msgstr ""
+
+#: salasaga_screencapture.c:149
+msgid "Screenshot SelectObject failed: selected object is not a region."
+msgstr ""
+
+#: salasaga_screencapture.c:157
+msgid "Screenshot SelectObject failed: unknown error."
+msgstr ""
+
+#: salasaga_screencapture.c:166
+msgid "Screenshot BitBlt failed."
+msgstr ""
+
+#: salasaga_screencapture.c:269
+msgid ""
+"There was something wrong with the project name value.  Aborting screenshot."
+msgstr ""
+"Este ceva greșit cu valoarea numelui proiectului. Captura de ecran a fost "
+"abandonată."
+
+#: salasaga_screencapture.c:283
+msgid ""
+"There was something wrong with the screenshot folder value.  Aborting "
+"screenshot."
+msgstr ""
+"Este ceva geșit cu valoarea directoarului pentru capturi de ecran. Captura "
+"de ecran a fost abandonată."
+
+#: salasaga_screencapture.c:297
+msgid ""
+"There was something wrong with the x offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:310
+msgid ""
+"There was something wrong with the y offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:323
+msgid "There was something wrong with the width value.  Aborting screenshot."
+msgstr ""
+"Este ceva greșit la valoarea lățimii. Captura de ecran a fost abandonată."
+
+#: salasaga_screencapture.c:336
+msgid ""
+"There was something wrong with the height value.  Aborting screenshot."
+msgstr ""
+"Este ceva greșit la valoarea înălțimii. Captura de ecran a fost abandonată."
+
+#: salasaga_screencapture.c:395
+msgid "Something went wrong opening"
+msgstr ""
+
+#: salasaga_screencapture.c:404
+msgid "The target directory doesn't exist."
+msgstr "Directorul țintă nu există."
+
+#: salasaga_screencapture.c:490
+msgid ""
+"Something went wrong when opening the output screenshot file for writing."
+msgstr ""
+
+#: salasaga_screencapture.c:500
+msgid "Something went wrong when creating the png write structure."
+msgstr ""
+
+#: salasaga_screencapture.c:515
+msgid "Something went wrong when creating the png info structure."
+msgstr "S-a greșit ceva la crearea structurii info pentru fișierul png."
+
+#: salasaga_screencapture.c:549
+msgid "Something went wrong when retrieving the screenshot metadata."
+msgstr ""
+
+#: salasaga_screencapture.c:566
+msgid "Something went wrong when copying the screenshot data."
+msgstr "S-a greșit ceva la copierea datelor capturii de ecran."

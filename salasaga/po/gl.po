@@ -1,4 +1,4 @@
-# Brazilian Portuguese translation for salasaga
+# Galician translation for salasaga
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the salasaga package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-07-27 17:11+1000\n"
-"PO-Revision-Date: 2008-07-24 14:11+0000\n"
-"Last-Translator: Rafael Porto Rodrigues <rafporto@gmail.com>\n"
-"Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
+"PO-Revision-Date: 2008-11-16 00:43+0000\n"
+"Last-Translator: Manuel Meixide <taurozen@hotmail.com>\n"
+"Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,40 +19,40 @@ msgstr ""
 
 #: salasaga.c:237 functions/validate_value.c:566
 msgid "Fit to width"
-msgstr ""
+msgstr "Axustar ao ancho"
 
 #: salasaga.c:244 functions/menu/menu_file_new.c:190
 msgid "New Project"
-msgstr "Novo Projeto"
+msgstr "Novo proxecto"
 
 #: salasaga.c:268
 #, c-format
 msgid "Debugging mode, errors will be shown on stdout.\n"
-msgstr ""
+msgstr "Modo de depuración, os erros mostraranse en stdout\n"
 
 #: salasaga.c:284
 #, c-format
 msgid "Program path: '%s'\n"
-msgstr ""
+msgstr "Ruta ao programa: '%s'\n"
 
 #: salasaga.c:285
 #, c-format
 msgid "Directory base: '%s'\n"
-msgstr ""
+msgstr "Directorio base: '%s'\n"
 
 #: salasaga.c:295
 msgid "icons"
-msgstr "ícones"
+msgstr "iconas"
 
 #: salasaga.c:307
 #, c-format
 msgid "Icon path: %s\n"
-msgstr ""
+msgstr "Ruta á icona: %s\n"
 
 #: salasaga.c:333
 #, c-format
 msgid "Path to mouse pointer image: %s\n"
-msgstr ""
+msgstr "Ruta á imaxe do punteiro do rato: %s\n"
 
 #: salasaga.c:416 salasaga.c:427 salasaga.c:484 functions/draw_timeline.c:64
 #: functions/key_bind.c:64 functions/key_bind.c:80
@@ -309,15 +309,15 @@ msgstr "Erro"
 
 #: salasaga.c:416
 msgid "Something went wrong when creating the menu bar."
-msgstr ""
+msgstr "Algo saíu mal ao crear a barra de menús."
 
 #: salasaga.c:427
 msgid "Something went wrong when creating the toolbar."
-msgstr ""
+msgstr "Algo saíu mal ao crear a barra de ferramentas."
 
 #: salasaga.c:456
 msgid "Zoom: "
-msgstr "Ampliação: "
+msgstr "Ampliación: "
 
 #: salasaga.c:468
 msgid "Output: "
@@ -325,239 +325,241 @@ msgstr "Saída: "
 
 #: salasaga.c:484
 msgid "Something went wrong when creating the film strip."
-msgstr ""
+msgstr "Algo saíu mal ao crear a tira de película."
 
 #: salasaga.c:500
 msgid "Status bar messages"
-msgstr ""
+msgstr "Mensaxes da barra de estado"
 
 #: salasaga.c:503
 msgid "Ready"
-msgstr "Pronto"
+msgstr "Listo"
 
 #: salasaga.c:525
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
 msgstr ""
+"Captura de imaxes desactivada: salasaga_screencapture non se atopa na ruta "
+"de procura"
 
 #: valid_fields.h:35
 msgid "8 Bit Color Value Component"
-msgstr ""
+msgstr "Valor do compoñente de cor 8 bits"
 
 #: valid_fields.h:36
 msgid "16 Bit Color Value Component"
-msgstr ""
+msgstr "Valor do compoñente de cor 16 bits"
 
 #: valid_fields.h:37
 msgid "Animation behavior after playing"
-msgstr ""
+msgstr "Comportamento da animación logo de reproducila"
 
 #: valid_fields.h:38
 msgid "External link"
-msgstr ""
+msgstr "Ligazón externa"
 
 #: valid_fields.h:39
 msgid "Window target for an external link"
-msgstr ""
+msgstr "Fiestra obxectivo dun enlace externo"
 
 #: valid_fields.h:40
 msgid "Full path to a file"
-msgstr ""
+msgstr "Ruta completa a un arquivo"
 
 #: valid_fields.h:41
 msgid "Full path to a folder"
-msgstr ""
+msgstr "Ruta completa a un cartafol"
 
 #: valid_fields.h:42
 msgid "Font size"
-msgstr ""
+msgstr "Tamaño da fonte"
 
 #: valid_fields.h:43
 msgid "A frame number"
-msgstr ""
+msgstr "Un número de marcos"
 
 #: valid_fields.h:44
 msgid "Height of a highlight layer"
-msgstr ""
+msgstr "Altura dunha capa de destaque"
 
 #: valid_fields.h:45
 msgid "Width of a highlight layer"
-msgstr ""
+msgstr "Anchura dunha capa de destaque"
 
 #: valid_fields.h:46
 msgid "Height of the tool bar icons"
-msgstr ""
+msgstr "Altura das iconas da barra de ferramentas"
 
 #: valid_fields.h:47
 msgid "Base64 encoded image data"
-msgstr ""
+msgstr "Datos da imaxe codificados base64"
 
 #: valid_fields.h:48
 msgid "Length in bytes of image data"
-msgstr ""
+msgstr "Lonxitude en bytes dos datos da imaxe"
 
 #: valid_fields.h:49
 msgid "Layer background switch"
-msgstr ""
+msgstr "Cambiar á capa de fondo"
 
 #: valid_fields.h:50
 msgid "Layer duration in seconds"
-msgstr ""
+msgstr "Duración da capa en segundos"
 
 #: valid_fields.h:51
 msgid "Height of this layer"
-msgstr ""
+msgstr "Altura da capa"
 
 #: valid_fields.h:52
 msgid "Name of this layer"
-msgstr ""
+msgstr "Nome desta capa"
 
 #: valid_fields.h:53
 msgid "Layer visibility switch"
-msgstr ""
+msgstr "Cambiar a visibilidade da capa"
 
 #: valid_fields.h:54
 msgid "Width of this layer"
-msgstr ""
+msgstr "Ancho desta capa"
 
 #: valid_fields.h:55
 msgid "Line width"
-msgstr ""
+msgstr "Ancho de liña"
 
 #: valid_fields.h:56
 msgid "Mouse click"
-msgstr ""
+msgstr "Clic do rato"
 
 #: valid_fields.h:57
 msgid "Opacity level"
-msgstr ""
+msgstr "Nivel de opacidade"
 
 #: valid_fields.h:58
 msgid "Width of film strip thumbnails"
-msgstr ""
+msgstr "Ancho das miniaturas da tira de película"
 
 #: valid_fields.h:59
 msgid "Frames per Second for this project"
-msgstr ""
+msgstr "Fotogramas por segundo para este proxecto"
 
 #: valid_fields.h:60
 msgid "Height of this project"
-msgstr ""
+msgstr "Altura deste proxecto"
 
 #: valid_fields.h:61
 msgid "Name of this project"
-msgstr ""
+msgstr "Nome deste proxecto"
 
 #: valid_fields.h:62
 msgid "Version number of the project file"
-msgstr ""
+msgstr "Número de versión do arquivo de proxecto"
 
 #: valid_fields.h:63
 msgid "Width of this project"
-msgstr ""
+msgstr "Anchura deste proxecto"
 
 #: valid_fields.h:64
 msgid "An X * Y resolution value"
-msgstr ""
+msgstr "Un valor de resolución X * E"
 
 #: valid_fields.h:65
 msgid "Height for next screenshot"
-msgstr ""
+msgstr "Altura para a próxima captura de pantalla"
 
 #: valid_fields.h:66
 msgid "Width for next screenshot"
-msgstr ""
+msgstr "Anchura para a próxima captura de pantalla"
 
 #: valid_fields.h:67
 msgid "Include control bar in exported swf"
-msgstr ""
+msgstr "Incluír barra de control no swf exportado"
 
 #: valid_fields.h:68
 msgid "Include info button in exported swf"
-msgstr ""
+msgstr "Incluír botón de información no swf exportado"
 
 #: valid_fields.h:69
 msgid "Show the background for text layers"
-msgstr ""
+msgstr "Mostrar o fondo para as capas de texto"
 
 #: valid_fields.h:70
 msgid "Number of frames per slide"
-msgstr ""
+msgstr "Número de fotogramas por diapositiva"
 
 #: valid_fields.h:71
 msgid "Number of seconds in a slide"
-msgstr ""
+msgstr "Número de segundos nunha diapositiva"
 
 #: valid_fields.h:72
 msgid "Name of this slide"
-msgstr ""
+msgstr "Nome desta diapositiva"
 
 #: valid_fields.h:73
 msgid "Animation behavior after loading"
-msgstr ""
+msgstr "Comportamento da animación logo da carga"
 
 #: valid_fields.h:74
 msgid "Transition duration in seconds"
-msgstr ""
+msgstr "Duración da transición en segundos"
 
 #: valid_fields.h:75
 msgid "Type of transition"
-msgstr ""
+msgstr "Tipo de transición"
 
 #: valid_fields.h:76
 msgid "X Offset"
-msgstr ""
+msgstr "Desprazamento en X"
 
 #: valid_fields.h:77
 msgid "Y Offset"
-msgstr ""
+msgstr "Desprazamento en Y"
 
 #: valid_fields.h:78
 msgid "Magnification level of working area"
-msgstr ""
+msgstr "Nivel de ampliación da área de traballo"
 
 #: functions/create_menu_bar.c:96
 msgid "/_File"
-msgstr "/_Arquivo"
+msgstr "/_Ficheiro"
 
 #: functions/create_menu_bar.c:97
 msgid "/File/_New Project"
-msgstr "/Arquivo/_Novo Projeto"
+msgstr "/Ficheiro/_Proxecto Novo"
 
 #: functions/create_menu_bar.c:97
 msgid "<control>N"
-msgstr ""
+msgstr "<control>N"
 
 #: functions/create_menu_bar.c:98
 msgid "/File/_Open Project"
-msgstr ""
+msgstr "/Ficheiro/_Abrir Proxecto"
 
 #: functions/create_menu_bar.c:98
 msgid "<control>O"
-msgstr ""
+msgstr "<control>O"
 
 #: functions/create_menu_bar.c:99
 msgid "/File/_Save Project"
-msgstr ""
+msgstr "/Ficheiro/_Gravar Proxecto"
 
 #: functions/create_menu_bar.c:99
 msgid "<control>S"
-msgstr ""
+msgstr "<control>S"
 
 #: functions/create_menu_bar.c:100
 msgid "/File/Save _As Project"
-msgstr ""
+msgstr "/Ficheiro/_Gravar Proxecto Como..."
 
 #: functions/create_menu_bar.c:100
 msgid "<control><shift>S"
-msgstr ""
+msgstr "<control><shift>S"
 
 #: functions/create_menu_bar.c:101
 msgid "/File/_Close Project"
-msgstr ""
+msgstr "/Ficheiro/_Pechar Proxecto"
 
 #: functions/create_menu_bar.c:101
 msgid "<control>W"
-msgstr ""
+msgstr "<control>W"
 
 #: functions/create_menu_bar.c:102
 msgid "/File/Sep"
@@ -565,11 +567,11 @@ msgstr ""
 
 #: functions/create_menu_bar.c:103
 msgid "/File/_Quit"
-msgstr "/Arquivo/_Sair"
+msgstr "/Ficheiro/_Saír"
 
 #: functions/create_menu_bar.c:103
 msgid "<control>Q"
-msgstr ""
+msgstr "<control>Q"
 
 #: functions/create_menu_bar.c:105
 msgid "/_Edit"
@@ -577,115 +579,115 @@ msgstr "/_Editar"
 
 #: functions/create_menu_bar.c:106
 msgid "/Edit/_Preferences"
-msgstr "/Editar/_Preferências"
+msgstr "/Editar/_Preferencias"
 
 #: functions/create_menu_bar.c:108
 msgid "/_Screenshots"
-msgstr ""
+msgstr "/_Capturas de pantalla"
 
 #: functions/create_menu_bar.c:109 functions/create_menu_bar.c:177
 msgid "/Screenshots/Capture _window"
-msgstr ""
+msgstr "/Capturas/Capturar fiestra"
 
 #: functions/create_menu_bar.c:110 functions/create_menu_bar.c:178
 msgid "/Screenshots/Capture _full screen"
-msgstr ""
+msgstr "/Capturas/Capturar pantalla"
 
 #: functions/create_menu_bar.c:111
 msgid "/Screenshots/_Import"
-msgstr ""
+msgstr "/Capturas/_Importar"
 
 #: functions/create_menu_bar.c:113
 msgid "/_Project"
-msgstr "/_Projeto"
+msgstr "/_Proxecto"
 
 #: functions/create_menu_bar.c:114
 msgid "/Project/P_roperties"
-msgstr "/Projeto/P_ropriedades"
+msgstr "/Proxecto/P_ropiedades"
 
 #: functions/create_menu_bar.c:116
 msgid "/Sl_ide"
-msgstr ""
+msgstr "/_Diapositiva"
 
 #: functions/create_menu_bar.c:117
 msgid "/Slide/_Insert"
-msgstr ""
+msgstr "/Diapositiva/_Insertar"
 
 #: functions/create_menu_bar.c:118
 msgid "/Slide/_Delete"
-msgstr ""
+msgstr "/Diapositiva/Borra_r"
 
 #: functions/create_menu_bar.c:119
 msgid "/Slide/Du_ration"
-msgstr ""
+msgstr "/Diapositiva/D_uración"
 
 #: functions/create_menu_bar.c:120
 msgid "/Slide/Move _up"
-msgstr ""
+msgstr "/Diapositiva/_Subir"
 
 #: functions/create_menu_bar.c:121
 msgid "/Slide/Move dow_n"
-msgstr ""
+msgstr "/Diapositiva/_Baixar"
 
 #: functions/create_menu_bar.c:122
 msgid "/Slide/Move to _top"
-msgstr ""
+msgstr "/Diapositiva/_Traer á fronte"
 
 #: functions/create_menu_bar.c:123
 msgid "/Slide/Move to _bottom"
-msgstr ""
+msgstr "/Diapositiva/_Levar ao fondo"
 
 #: functions/create_menu_bar.c:125
 msgid "/_Layer"
-msgstr ""
+msgstr "/_Capa"
 
 #: functions/create_menu_bar.c:127
 msgid "/Layer/_Copy"
-msgstr ""
+msgstr "/Capa/_Copiar"
 
 #: functions/create_menu_bar.c:128
 msgid "/Layer/_Paste"
-msgstr ""
+msgstr "/Capa/_Pegar"
 
 #: functions/create_menu_bar.c:129
 msgid "/Layer/_Edit"
-msgstr ""
+msgstr "/Capa/_Editar"
 
 #: functions/create_menu_bar.c:130
 msgid "/Layer/_Delete"
-msgstr ""
+msgstr "/Capa/_Borrar"
 
 #: functions/create_menu_bar.c:131
 msgid "/Layer/Sep"
-msgstr ""
+msgstr "/Capa/Sep"
 
 #: functions/create_menu_bar.c:132
 msgid "/Layer/Add _Text"
-msgstr ""
+msgstr "/Capa/Engadir _Texto"
 
 #: functions/create_menu_bar.c:133
 msgid "/Layer/Add _Highlight"
-msgstr ""
+msgstr "/Capa/Engadir _Resalte"
 
 #: functions/create_menu_bar.c:134
 msgid "/Layer/Add _Image"
-msgstr ""
+msgstr "/Capa/Engadir _Imaxe"
 
 #: functions/create_menu_bar.c:135
 msgid "/Layer/Add _Mouse"
-msgstr ""
+msgstr "/Capa/Engadir P_unteiro"
 
 #: functions/create_menu_bar.c:137
 msgid "/E_xport"
-msgstr ""
+msgstr "/E_xportar"
 
 #: functions/create_menu_bar.c:138
 msgid "/Export/_Flash Animation"
-msgstr ""
+msgstr "/Exportar/Animación _Flash"
 
 #: functions/create_menu_bar.c:138
 msgid "<control><shift>F"
-msgstr ""
+msgstr "<control><shift>F"
 
 #: functions/create_menu_bar.c:139
 msgid "/Export/_Html Wrapper"
@@ -693,23 +695,23 @@ msgstr ""
 
 #: functions/create_menu_bar.c:140
 msgid "/Export/_Slide as Image"
-msgstr ""
+msgstr "/Exportar/_Diapositiva como imaxe"
 
 #: functions/create_menu_bar.c:141
 msgid "/Export/_Image Layer"
-msgstr ""
+msgstr "/Exportar/_Capa de Imaxe"
 
 #: functions/create_menu_bar.c:143
 msgid "/_Help"
-msgstr ""
+msgstr "/_Axuda"
 
 #: functions/create_menu_bar.c:144
 msgid "/_Help/_About"
-msgstr ""
+msgstr "/_Axuda/_Acerca de"
 
 #: functions/create_menu_bar.c:145
 msgid "/_Help/_Main Website"
-msgstr ""
+msgstr "/_Axuda/_Sitio do proxecto"
 
 #: functions/create_menu_bar.c:146
 msgid "/_Help/Sep"
@@ -717,162 +719,162 @@ msgstr ""
 
 #: functions/create_menu_bar.c:148
 msgid "/_Help/_Forum"
-msgstr ""
+msgstr "/_Axuda/_Foro"
 
 #: functions/create_menu_bar.c:149
 msgid "/_Help/_Register"
-msgstr ""
+msgstr "/_Axuda/_Rexistro"
 
 #: functions/create_menu_bar.c:150
 msgid "/_Help/_Support"
-msgstr ""
+msgstr "/_Axuda/_Soporte"
 
 #: functions/create_menu_bar.c:151
 msgid "/_Help/_Wiki"
-msgstr ""
+msgstr "/_Axuda/_Wiki"
 
 #: functions/create_menu_bar.c:169 functions/menu/menu_file_close.c:97
 #: functions/menu/menu_file_new.c:321 functions/menu/menu_file_open.c:232
 msgid "/Project"
-msgstr ""
+msgstr "/Proxecto"
 
 #: functions/create_menu_bar.c:170 functions/menu/menu_file_close.c:98
 #: functions/menu/menu_file_new.c:322 functions/menu/menu_file_open.c:233
 msgid "/Slide"
-msgstr ""
+msgstr "/Diapositiva"
 
 #: functions/create_menu_bar.c:171 functions/menu/menu_file_close.c:99
 #: functions/menu/menu_file_new.c:323 functions/menu/menu_file_open.c:234
 msgid "/Layer"
-msgstr ""
+msgstr "/Capa"
 
 #: functions/create_menu_bar.c:172 functions/menu/menu_file_close.c:100
 #: functions/menu/menu_file_new.c:324 functions/menu/menu_file_open.c:235
 msgid "/Export"
-msgstr ""
+msgstr "/Exportar"
 
 #: functions/create_time_line.c:117
 msgid "Edit"
-msgstr ""
+msgstr "Editar"
 
 #: functions/create_time_line.c:118
 #: functions/enable_layer_toolbar_buttons.c:56
 msgid "Edit layer"
-msgstr ""
+msgstr "Editar capa"
 
 #: functions/create_time_line.c:130
 msgid "Crop"
-msgstr ""
+msgstr "Recortar"
 
 #: functions/create_time_line.c:131
 #: functions/enable_layer_toolbar_buttons.c:65
 msgid "Crop image"
-msgstr ""
+msgstr "Recortar imaxe"
 
 #: functions/create_time_line.c:143
 msgid "Delete"
-msgstr ""
+msgstr "Eliminar"
 
 #: functions/create_time_line.c:144
 #: functions/enable_layer_toolbar_buttons.c:74
 msgid "Delete selected layer"
-msgstr ""
+msgstr "Borrar a capa seleccionada"
 
 #: functions/create_time_line.c:156
 msgid "Down"
-msgstr ""
+msgstr "Abaixo"
 
 #: functions/create_time_line.c:157
 #: functions/enable_layer_toolbar_buttons.c:83
 msgid "Move layer down"
-msgstr ""
+msgstr "Baixar a capa"
 
 #: functions/create_time_line.c:169
 msgid "Up"
-msgstr ""
+msgstr "Arriba"
 
 #: functions/create_time_line.c:170
 #: functions/enable_layer_toolbar_buttons.c:92
 msgid "Move layer up"
-msgstr ""
+msgstr "Subir a capa"
 
 #: functions/create_time_line.c:186
 msgid "Mouse"
-msgstr ""
+msgstr "Rato"
 
 #: functions/create_time_line.c:187
 #: functions/enable_layer_toolbar_buttons.c:101
 msgid "Add a mouse pointer"
-msgstr ""
+msgstr "Engadir punteiro"
 
 #: functions/create_time_line.c:199
 msgid "Text"
-msgstr ""
+msgstr "Texto"
 
 #: functions/create_time_line.c:200
 #: functions/enable_layer_toolbar_buttons.c:110
 msgid "Add a text layer"
-msgstr ""
+msgstr "Engadir  capa de texto"
 
 #: functions/create_time_line.c:212
 #: functions/layer/layer_new_highlight_inner.c:152
 msgid "Highlight"
-msgstr ""
+msgstr "Resaltar"
 
 #: functions/create_time_line.c:213
 #: functions/enable_layer_toolbar_buttons.c:119
 msgid "Add a highlight layer"
-msgstr ""
+msgstr "Engadir  capa de resalte"
 
 #: functions/create_time_line.c:225 functions/layer/layer_duplicate.c:92
 #: functions/layer/layer_new_image_inner.c:97
 msgid "Image"
-msgstr ""
+msgstr "Imaxe"
 
 #: functions/create_time_line.c:226
 #: functions/enable_layer_toolbar_buttons.c:128
 msgid "Add an image layer"
-msgstr ""
+msgstr "Engadir  capa de imaxe"
 
 #: functions/create_toolbar.c:80
 msgid "New"
-msgstr ""
+msgstr "Novo"
 
 #: functions/create_toolbar.c:81
 msgid "Begin a new project"
-msgstr ""
+msgstr "Comezar un novo proxecto"
 
 #: functions/create_toolbar.c:87
 msgid "Open"
-msgstr ""
+msgstr "Abrir"
 
 #: functions/create_toolbar.c:88
 msgid "Open an existing project"
-msgstr ""
+msgstr "Abrir un proxecto existente"
 
 #: functions/create_toolbar.c:94
 msgid "Save"
-msgstr ""
+msgstr "Gravar"
 
 #: functions/create_toolbar.c:95
 msgid "Save the project"
-msgstr ""
+msgstr "Gravar o proxecto"
 
 #: functions/create_toolbar.c:101 functions/menu/menu_file_save_as.c:69
 msgid "Save As"
-msgstr ""
+msgstr "Gravar Como"
 
 #: functions/create_toolbar.c:102
 msgid "Save the project with a different file name"
-msgstr ""
+msgstr "Gravar o proxecto cun nome diferente"
 
 #: functions/create_toolbar.c:108
 msgid "Quit"
-msgstr ""
+msgstr "Saír"
 
 #: functions/create_toolbar.c:109
 msgid "Quit the application"
-msgstr ""
+msgstr "Saír da aplicación"
 
 #: functions/create_toolbar.c:119
 msgid "Path to toolbar 'Capture Screenshots' icon"
@@ -880,7 +882,7 @@ msgstr ""
 
 #: functions/create_toolbar.c:126
 msgid "Capture"
-msgstr ""
+msgstr "Capturar"
 
 #: functions/create_toolbar.c:127
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:132
@@ -890,43 +892,43 @@ msgstr ""
 
 #: functions/create_toolbar.c:139
 msgid "Import"
-msgstr ""
+msgstr "Importar"
 
 #: functions/create_toolbar.c:140
 msgid "Import screenshots"
-msgstr ""
+msgstr "Importar capturas"
 
 #: functions/create_toolbar.c:152
 msgid "Crop all"
-msgstr ""
+msgstr "Recortar todo"
 
 #: functions/create_toolbar.c:153 functions/enable_main_toolbar_buttons.c:49
 msgid "Crop all slides in the project"
-msgstr ""
+msgstr "Recortar todas as diapositivas do proxecto"
 
 #: functions/create_toolbar.c:169
 msgid "Flash"
-msgstr ""
+msgstr "Flash"
 
 #: functions/create_toolbar.c:170 functions/enable_main_toolbar_buttons.c:58
 msgid "Export as a Flash animation"
-msgstr ""
+msgstr "Exportar como animación Flash"
 
 #: functions/disable_layer_toolbar_buttons.c:47
 msgid "Edit layer disabled: No project loaded"
-msgstr ""
+msgstr "Editar capa desactivado: ningún proxecto cargado"
 
 #: functions/disable_layer_toolbar_buttons.c:56
 msgid "Crop layer disabled: No project loaded"
-msgstr ""
+msgstr "Recortar capa desactivado: ningún proxecto cargado"
 
 #: functions/disable_layer_toolbar_buttons.c:65
 msgid "Delete layer disabled: No project loaded"
-msgstr ""
+msgstr "Borrar capa desactivado: ningún proxecto cargado"
 
 #: functions/disable_layer_toolbar_buttons.c:74
 msgid "Move layer down disabled: No project loaded"
-msgstr ""
+msgstr "Baixar capa desactivado: ningún proxecto cargado"
 
 #: functions/disable_layer_toolbar_buttons.c:83
 msgid "Move layer up disabled: No project loaded"
@@ -1544,10 +1546,6 @@ msgstr ""
 #: functions/save_preferences_and_exit.c:168
 #: functions/save_preferences_and_exit.c:188
 msgid "Saving preferences in the registry failed."
-msgstr ""
-
-#: functions/validate_value.c:605
-msgid "Unknown value passed to validation function"
 msgstr ""
 
 #: functions/cairo/create_cairo_pixbuf_pattern.c:70
@@ -3308,3 +3306,107 @@ msgstr ""
 #: functions/working_area/working_area_button_release_event.c:423
 msgid " Layer moved"
 msgstr ""
+
+#: validate_value.c:544
+msgid "Unknown value passed to validation function"
+msgstr "Valor descoñecido pasado á función de validación"
+
+#: salasaga_screencapture.c:80
+msgid "Something went wrong when getting the window identifier."
+msgstr "Algo fallou ao obter o identificador da fiestra."
+
+#: salasaga_screencapture.c:90 salasaga_screencapture.c:382
+msgid "Something went wrong when getting the screenshot."
+msgstr "Algo fallou ao conseguir a captura de pantalla."
+
+#: salasaga_screencapture.c:122
+msgid "Screenshot GetDC failed."
+msgstr "Fracasou a captura de pantalla GetDC."
+
+#: salasaga_screencapture.c:131
+msgid "Screenshot CreateCompatibleDC failed."
+msgstr "Fracasou a captura de pantalla CreateCompatibleDC"
+
+#: salasaga_screencapture.c:140
+msgid "Screenshot CreateCompatibleBitmap failed."
+msgstr "Fracasou a captura de pantalla CreateCompatibleBitmap"
+
+#: salasaga_screencapture.c:149
+msgid "Screenshot SelectObject failed: selected object is not a region."
+msgstr ""
+"Fracasou a captura de pantalla SelectObject: o obxecto seleccionado non é "
+"unha zona."
+
+#: salasaga_screencapture.c:157
+msgid "Screenshot SelectObject failed: unknown error."
+msgstr "Fracasou a captura de pantalla SelectObject: erro descoñecido."
+
+#: salasaga_screencapture.c:166
+msgid "Screenshot BitBlt failed."
+msgstr "Fracasou a captura de pantalla BitBlt"
+
+#: salasaga_screencapture.c:269
+msgid ""
+"There was something wrong with the project name value.  Aborting screenshot."
+msgstr "Había algo mal co nome do proxecto. Cancelando captura."
+
+#: salasaga_screencapture.c:283
+msgid ""
+"There was something wrong with the screenshot folder value.  Aborting "
+"screenshot."
+msgstr "Algo saíu mal co valor Directorio de captura. Abortando captura."
+
+#: salasaga_screencapture.c:297
+msgid ""
+"There was something wrong with the x offset start value.  Aborting "
+"screenshot."
+msgstr ""
+"Algo saíu mal ao compensar o valor de inicio x. Cancelando captura de "
+"pantalla."
+
+#: salasaga_screencapture.c:310
+msgid ""
+"There was something wrong with the y offset start value.  Aborting "
+"screenshot."
+msgstr ""
+"Algo saíu mal co valor de inicio offset y. Cancelando captura de pantalla."
+
+#: salasaga_screencapture.c:323
+msgid "There was something wrong with the width value.  Aborting screenshot."
+msgstr "Algo saíu mal co valor Ancho. Abortando captura."
+
+#: salasaga_screencapture.c:336
+msgid ""
+"There was something wrong with the height value.  Aborting screenshot."
+msgstr "Algo saíu mal co valor Alto. Abortando captura."
+
+#: salasaga_screencapture.c:395
+msgid "Something went wrong opening"
+msgstr "Algo saíu mal na apertura"
+
+#: salasaga_screencapture.c:404
+msgid "The target directory doesn't exist."
+msgstr "O directorio especificado non existe."
+
+#: salasaga_screencapture.c:490
+msgid ""
+"Something went wrong when opening the output screenshot file for writing."
+msgstr ""
+"Algo saíu mal ao abrir o arquivo de saída de captura de pantalla para "
+"escribir."
+
+#: salasaga_screencapture.c:500
+msgid "Something went wrong when creating the png write structure."
+msgstr "Algo fallou ao crear a estrutura de escritura png."
+
+#: salasaga_screencapture.c:515
+msgid "Something went wrong when creating the png info structure."
+msgstr "Algo fallou ao crear a estrutura de info png."
+
+#: salasaga_screencapture.c:549
+msgid "Something went wrong when retrieving the screenshot metadata."
+msgstr "Algo fallou na recuperación de metadatos da captura."
+
+#: salasaga_screencapture.c:566
+msgid "Something went wrong when copying the screenshot data."
+msgstr "Algo fallou ao copiar os datos da captura."

@@ -1,4 +1,4 @@
-# Brazilian Portuguese translation for salasaga
+# Greek translation for salasaga
 # Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
 # This file is distributed under the same license as the salasaga package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
@@ -8,9 +8,9 @@ msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-07-27 17:11+1000\n"
-"PO-Revision-Date: 2008-07-24 14:11+0000\n"
-"Last-Translator: Rafael Porto Rodrigues <rafporto@gmail.com>\n"
-"Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
+"PO-Revision-Date: 2008-12-15 15:44+0000\n"
+"Last-Translator: Yannis Kaskamanidis <ttnfy17@yahoo.gr>\n"
+"Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,40 +19,40 @@ msgstr ""
 
 #: salasaga.c:237 functions/validate_value.c:566
 msgid "Fit to width"
-msgstr ""
+msgstr "Προσαρμογή στο πλάτος"
 
 #: salasaga.c:244 functions/menu/menu_file_new.c:190
 msgid "New Project"
-msgstr "Novo Projeto"
+msgstr "Νέο έργο"
 
 #: salasaga.c:268
 #, c-format
 msgid "Debugging mode, errors will be shown on stdout.\n"
-msgstr ""
+msgstr "Λειτουργία αποσφαλμάτωσης. Τα σφάλματα θα εμφανιστούν ξεχωριστά.\n"
 
 #: salasaga.c:284
 #, c-format
 msgid "Program path: '%s'\n"
-msgstr ""
+msgstr "Διαδρομή προγράμματος: '%s'\n"
 
 #: salasaga.c:285
 #, c-format
 msgid "Directory base: '%s'\n"
-msgstr ""
+msgstr "Βάση φακέλου: '%s'\n"
 
 #: salasaga.c:295
 msgid "icons"
-msgstr "ícones"
+msgstr "Εικονίδια"
 
 #: salasaga.c:307
 #, c-format
 msgid "Icon path: %s\n"
-msgstr ""
+msgstr "Διαδρομή εικονιδίου: '%s'\n"
 
 #: salasaga.c:333
 #, c-format
 msgid "Path to mouse pointer image: %s\n"
-msgstr ""
+msgstr "Διαδρομή για την εικόνα δείκτη του ποντικού: '%s'\n"
 
 #: salasaga.c:416 salasaga.c:427 salasaga.c:484 functions/draw_timeline.c:64
 #: functions/key_bind.c:64 functions/key_bind.c:80
@@ -305,726 +305,762 @@ msgstr ""
 #: functions/working_area/working_area_motion_notify_event.c:204
 #: functions/working_area/working_area_motion_notify_event.c:370
 msgid "Error"
-msgstr "Erro"
+msgstr "Σφάλμα"
 
 #: salasaga.c:416
 msgid "Something went wrong when creating the menu bar."
-msgstr ""
+msgstr "Υπήρξε κάποιο πρόβλημα κατά τη δημιουργία της γραμμής μενού."
 
 #: salasaga.c:427
 msgid "Something went wrong when creating the toolbar."
-msgstr ""
+msgstr "Υπήρξε κάποιο πρόβλημα κατά τη δημιουργία της γραμμής εργασιών."
 
 #: salasaga.c:456
 msgid "Zoom: "
-msgstr "Ampliação: "
+msgstr "Εστίαση: "
 
 #: salasaga.c:468
 msgid "Output: "
-msgstr "Saída: "
+msgstr "Έξοδος: "
 
 #: salasaga.c:484
 msgid "Something went wrong when creating the film strip."
-msgstr ""
+msgstr "Υπήρξε κάποιο πρόβλημα κατά τη δημιουργία της ταινίας."
 
 #: salasaga.c:500
 msgid "Status bar messages"
-msgstr ""
+msgstr "Μηνύματα γραμμής κατάστασης"
 
 #: salasaga.c:503
 msgid "Ready"
-msgstr "Pronto"
+msgstr "Έτοιμο"
 
 #: salasaga.c:525
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
 msgstr ""
+"Τα στιγμιότυπα απενεργοποιήθηκαν: το salasaga_screencapture δεν βρέθηκε στη "
+"διαδρομή αναζήτησης."
 
 #: valid_fields.h:35
 msgid "8 Bit Color Value Component"
-msgstr ""
+msgstr "Βάθος χρώματος 8 bit"
 
 #: valid_fields.h:36
 msgid "16 Bit Color Value Component"
-msgstr ""
+msgstr "Βάθος χρώματος 16 bit."
 
 #: valid_fields.h:37
 msgid "Animation behavior after playing"
-msgstr ""
+msgstr "Συμπεριφορά κινούμενης απεικόνισης μετά την αναπαραγωγή."
 
 #: valid_fields.h:38
 msgid "External link"
-msgstr ""
+msgstr "Εξωτερικός σύνδεσμος"
 
 #: valid_fields.h:39
 msgid "Window target for an external link"
-msgstr ""
+msgstr "Παράθυρο προορισμού για έναν εξωτερικό σύνδεσμο."
 
 #: valid_fields.h:40
 msgid "Full path to a file"
-msgstr ""
+msgstr "Πλήρης διαδρομή για ένα αρχείο."
 
 #: valid_fields.h:41
 msgid "Full path to a folder"
-msgstr ""
+msgstr "Πλήρης διαδρομή για έναν φάκελο."
 
 #: valid_fields.h:42
 msgid "Font size"
-msgstr ""
+msgstr "Μέγεθος γραμματοσειράς"
 
 #: valid_fields.h:43
 msgid "A frame number"
-msgstr ""
+msgstr "Αριθμός πλαισίου."
 
 #: valid_fields.h:44
 msgid "Height of a highlight layer"
-msgstr ""
+msgstr "Ύψος στρώματος επισήμανσης."
 
 #: valid_fields.h:45
 msgid "Width of a highlight layer"
-msgstr ""
+msgstr "Πλάτος στρώματος επισήμανσης."
 
 #: valid_fields.h:46
 msgid "Height of the tool bar icons"
-msgstr ""
+msgstr "Ύψος εικονιδίων γραμμής εργαλείων."
 
 #: valid_fields.h:47
 msgid "Base64 encoded image data"
-msgstr ""
+msgstr "Κρυπτογραφημένα δεδομένα εικόνας Base64"
 
 #: valid_fields.h:48
 msgid "Length in bytes of image data"
-msgstr ""
+msgstr "Μήκος σε bytes των πληροφορίων εικόνας"
 
 #: valid_fields.h:49
 msgid "Layer background switch"
-msgstr ""
+msgstr "Διακόπτης στρώσης παρασκηνίου"
 
 #: valid_fields.h:50
 msgid "Layer duration in seconds"
-msgstr ""
+msgstr "Διάρκεια στρώσης σε δευτερόλεπτα"
 
 #: valid_fields.h:51
 msgid "Height of this layer"
-msgstr ""
+msgstr "Ύψος της στρώσης"
 
 #: valid_fields.h:52
 msgid "Name of this layer"
-msgstr ""
+msgstr "Όνομα της στρώσης"
 
 #: valid_fields.h:53
 msgid "Layer visibility switch"
-msgstr ""
+msgstr "Διακόπτης ορατότητας της στρώσης"
 
 #: valid_fields.h:54
 msgid "Width of this layer"
-msgstr ""
+msgstr "Πλάτος της στρώσης"
 
 #: valid_fields.h:55
 msgid "Line width"
-msgstr ""
+msgstr "Πλάτος γραμμής"
 
 #: valid_fields.h:56
 msgid "Mouse click"
-msgstr ""
+msgstr "Κλικ ποντικιού"
 
 #: valid_fields.h:57
 msgid "Opacity level"
-msgstr ""
+msgstr "Επίπεδο αδιαφάνειας"
 
 #: valid_fields.h:58
 msgid "Width of film strip thumbnails"
-msgstr ""
+msgstr "Πλάτος μικρογραφιών ταινίας"
 
 #: valid_fields.h:59
 msgid "Frames per Second for this project"
-msgstr ""
+msgstr "Πλαίσια ανά δευτερόλεπτο του έργου"
 
 #: valid_fields.h:60
 msgid "Height of this project"
-msgstr ""
+msgstr "Ύψος του έργου"
 
 #: valid_fields.h:61
 msgid "Name of this project"
-msgstr ""
+msgstr "Όνομα του έργου"
 
 #: valid_fields.h:62
 msgid "Version number of the project file"
-msgstr ""
+msgstr "Αριθμός έκδοσης του αρχείου του έργου"
 
 #: valid_fields.h:63
 msgid "Width of this project"
-msgstr ""
+msgstr "Πλάτος του έργου"
 
 #: valid_fields.h:64
 msgid "An X * Y resolution value"
-msgstr ""
+msgstr "Τιμή ανάλυσης X * Y"
 
 #: valid_fields.h:65
 msgid "Height for next screenshot"
-msgstr ""
+msgstr "Ύψος επόμενου στιγμιότυπου"
 
 #: valid_fields.h:66
 msgid "Width for next screenshot"
-msgstr ""
+msgstr "Πλάτος επόμενου στιγμιότυπου"
 
 #: valid_fields.h:67
 msgid "Include control bar in exported swf"
-msgstr ""
+msgstr "Συμπερίληψη γραμμής ελέγχου στο εξαγόμενο swf."
 
 #: valid_fields.h:68
 msgid "Include info button in exported swf"
-msgstr ""
+msgstr "Συμπερίληψη πλήκτρου πληροφοριών στο εξαγόμενο swf."
 
 #: valid_fields.h:69
 msgid "Show the background for text layers"
-msgstr ""
+msgstr "Εμφάνιση παρασκηνίου για τις στρώσεις κειμένου."
 
 #: valid_fields.h:70
 msgid "Number of frames per slide"
-msgstr ""
+msgstr "Αριθμός πλαισίων ανά διαφάνεια"
 
 #: valid_fields.h:71
 msgid "Number of seconds in a slide"
-msgstr ""
+msgstr "Αριθμός δευτερολέπτων σε μια διαφάνεια"
 
 #: valid_fields.h:72
 msgid "Name of this slide"
-msgstr ""
+msgstr "Όνομα της διαφάνειας"
 
 #: valid_fields.h:73
 msgid "Animation behavior after loading"
-msgstr ""
+msgstr "Συμπεριφορά κινούμενης απεικόνισης μετά τη φόρτωση"
 
 #: valid_fields.h:74
 msgid "Transition duration in seconds"
-msgstr ""
+msgstr "Διάρκεια μετάβασης σε δευτερόλεπτα"
 
 #: valid_fields.h:75
 msgid "Type of transition"
-msgstr ""
+msgstr "Τύπος μετάβασης"
 
 #: valid_fields.h:76
 msgid "X Offset"
-msgstr ""
+msgstr "Μετατόπιση Χ"
 
 #: valid_fields.h:77
 msgid "Y Offset"
-msgstr ""
+msgstr "Μετατόπιση Y"
 
 #: valid_fields.h:78
 msgid "Magnification level of working area"
-msgstr ""
+msgstr "Επίπεδο μεγέθυνσης περιοχής εργασίας"
 
 #: functions/create_menu_bar.c:96
 msgid "/_File"
-msgstr "/_Arquivo"
+msgstr "/_Αρχείο"
 
 #: functions/create_menu_bar.c:97
 msgid "/File/_New Project"
-msgstr "/Arquivo/_Novo Projeto"
+msgstr "/Αρχείο/_Νέο Έργο"
 
 #: functions/create_menu_bar.c:97
 msgid "<control>N"
-msgstr ""
+msgstr "<control>N"
 
 #: functions/create_menu_bar.c:98
 msgid "/File/_Open Project"
-msgstr ""
+msgstr "/Αρχείο/_Άνοιγμα έργου"
 
 #: functions/create_menu_bar.c:98
 msgid "<control>O"
-msgstr ""
+msgstr "<control>O"
 
 #: functions/create_menu_bar.c:99
 msgid "/File/_Save Project"
-msgstr ""
+msgstr "/Αρχείο/_Αποθήκευση έργου"
 
 #: functions/create_menu_bar.c:99
 msgid "<control>S"
-msgstr ""
+msgstr "<control>S"
 
 #: functions/create_menu_bar.c:100
 msgid "/File/Save _As Project"
-msgstr ""
+msgstr "/Αρχείο/Αποθήκευση _ως έργου"
 
 #: functions/create_menu_bar.c:100
 msgid "<control><shift>S"
-msgstr ""
+msgstr "<control><shift>S"
 
 #: functions/create_menu_bar.c:101
 msgid "/File/_Close Project"
-msgstr ""
+msgstr "/Αρχείο/_Κλείσιμο αρχείου"
 
 #: functions/create_menu_bar.c:101
 msgid "<control>W"
-msgstr ""
+msgstr "<control>W"
 
 #: functions/create_menu_bar.c:102
 msgid "/File/Sep"
-msgstr ""
+msgstr "/Αρχείο"
 
 #: functions/create_menu_bar.c:103
 msgid "/File/_Quit"
-msgstr "/Arquivo/_Sair"
+msgstr "/Αρχείο/_Έξοδος"
 
 #: functions/create_menu_bar.c:103
 msgid "<control>Q"
-msgstr ""
+msgstr "<control>Q"
 
 #: functions/create_menu_bar.c:105
 msgid "/_Edit"
-msgstr "/_Editar"
+msgstr "/_Επεξεργασία"
 
 #: functions/create_menu_bar.c:106
 msgid "/Edit/_Preferences"
-msgstr "/Editar/_Preferências"
+msgstr "/Επεξεργασία/_Προτιμήσεις"
 
 #: functions/create_menu_bar.c:108
 msgid "/_Screenshots"
-msgstr ""
+msgstr "/_Στιγμιότυπα"
 
 #: functions/create_menu_bar.c:109 functions/create_menu_bar.c:177
 msgid "/Screenshots/Capture _window"
-msgstr ""
+msgstr "/Στιγμιότυπα/Σύλληψη _παραθύρου"
 
 #: functions/create_menu_bar.c:110 functions/create_menu_bar.c:178
 msgid "/Screenshots/Capture _full screen"
-msgstr ""
+msgstr "/Στιγμιότυπα/Σύλληψη _πλήρους οθόνης"
 
 #: functions/create_menu_bar.c:111
 msgid "/Screenshots/_Import"
-msgstr ""
+msgstr "/Στιγμιότυπα/_Εισαγωγή"
 
 #: functions/create_menu_bar.c:113
 msgid "/_Project"
-msgstr "/_Projeto"
+msgstr "/_Έργο"
 
 #: functions/create_menu_bar.c:114
 msgid "/Project/P_roperties"
-msgstr "/Projeto/P_ropriedades"
+msgstr "/Έργο/Ι_διότητες"
 
 #: functions/create_menu_bar.c:116
 msgid "/Sl_ide"
-msgstr ""
+msgstr "/Δια_φάνεια"
 
 #: functions/create_menu_bar.c:117
 msgid "/Slide/_Insert"
-msgstr ""
+msgstr "/Διαφάνεια/_Εισαγωγή"
 
 #: functions/create_menu_bar.c:118
 msgid "/Slide/_Delete"
-msgstr ""
+msgstr "/Διαφάνεια/_Διαγραφή"
 
 #: functions/create_menu_bar.c:119
 msgid "/Slide/Du_ration"
-msgstr ""
+msgstr "/Διαφάνεια/Διά_ρκεια"
 
 #: functions/create_menu_bar.c:120
 msgid "/Slide/Move _up"
-msgstr ""
+msgstr "/Διαφάνεια/_Μετακίνηση _πάνω"
 
 #: functions/create_menu_bar.c:121
 msgid "/Slide/Move dow_n"
-msgstr ""
+msgstr "/Διαφάνεια/_Μετακίνηση _κάτω"
 
 #: functions/create_menu_bar.c:122
 msgid "/Slide/Move to _top"
-msgstr ""
+msgstr "/Διαφάνεια/Μετακίνηση στην _κορυφή"
 
 #: functions/create_menu_bar.c:123
 msgid "/Slide/Move to _bottom"
-msgstr ""
+msgstr "/Διαφάνεια/Μετακίνηση στο _κάτω μέρος"
 
 #: functions/create_menu_bar.c:125
 msgid "/_Layer"
-msgstr ""
+msgstr "/_Στρώση"
 
 #: functions/create_menu_bar.c:127
 msgid "/Layer/_Copy"
-msgstr ""
+msgstr "/Στρώση/_Αντιγραφή"
 
 #: functions/create_menu_bar.c:128
 msgid "/Layer/_Paste"
-msgstr ""
+msgstr "/Στρώση/_Επικόλληση"
 
 #: functions/create_menu_bar.c:129
 msgid "/Layer/_Edit"
-msgstr ""
+msgstr "/Στρώση/_Επεξεργασία"
 
 #: functions/create_menu_bar.c:130
 msgid "/Layer/_Delete"
-msgstr ""
+msgstr "/Στρώση/_Διαγραφή"
 
 #: functions/create_menu_bar.c:131
 msgid "/Layer/Sep"
-msgstr ""
+msgstr "/Στρώση"
 
 #: functions/create_menu_bar.c:132
 msgid "/Layer/Add _Text"
-msgstr ""
+msgstr "/Στρώση/Προσθήκη _κειμένου"
 
 #: functions/create_menu_bar.c:133
 msgid "/Layer/Add _Highlight"
-msgstr ""
+msgstr "/Στρώση/Προσθήκη _επισήμανσης"
 
 #: functions/create_menu_bar.c:134
 msgid "/Layer/Add _Image"
-msgstr ""
+msgstr "/Στρώση/Προσθήκη _εικόνας"
 
 #: functions/create_menu_bar.c:135
 msgid "/Layer/Add _Mouse"
-msgstr ""
+msgstr "/Στρώση/Προσθήκη _ποντικιού"
 
 #: functions/create_menu_bar.c:137
 msgid "/E_xport"
-msgstr ""
+msgstr "/Ε_ξαγωγή"
 
 #: functions/create_menu_bar.c:138
 msgid "/Export/_Flash Animation"
-msgstr ""
+msgstr "/Εξαγωγή/_Κινούμενης απεικόνισης (Flash)"
 
 #: functions/create_menu_bar.c:138
 msgid "<control><shift>F"
-msgstr ""
+msgstr "<control><shift>F"
 
 #: functions/create_menu_bar.c:139
 msgid "/Export/_Html Wrapper"
-msgstr ""
+msgstr "/Εξαγωγή/_Αρχείου Html"
 
 #: functions/create_menu_bar.c:140
 msgid "/Export/_Slide as Image"
-msgstr ""
+msgstr "/Εξαγωγή/_Διαφάνειας ως εικόνα"
 
 #: functions/create_menu_bar.c:141
 msgid "/Export/_Image Layer"
-msgstr ""
+msgstr "/Εξαγωγή/_Στρώσης εικόνας"
 
 #: functions/create_menu_bar.c:143
 msgid "/_Help"
-msgstr ""
+msgstr "/_Βοήθεια"
 
 #: functions/create_menu_bar.c:144
 msgid "/_Help/_About"
-msgstr ""
+msgstr "/_Βοήθεια/_Σχετικά"
 
 #: functions/create_menu_bar.c:145
 msgid "/_Help/_Main Website"
-msgstr ""
+msgstr "/_Βοήθεια/_Κύριος Ιστότοπος"
 
 #: functions/create_menu_bar.c:146
 msgid "/_Help/Sep"
-msgstr ""
+msgstr "/_Βοήθεια"
 
 #: functions/create_menu_bar.c:148
 msgid "/_Help/_Forum"
-msgstr ""
+msgstr "/_Βοήθεια/_Συζήτηση"
 
 #: functions/create_menu_bar.c:149
 msgid "/_Help/_Register"
-msgstr ""
+msgstr "/_Βοήθεια/_Εγγραφή"
 
 #: functions/create_menu_bar.c:150
 msgid "/_Help/_Support"
-msgstr ""
+msgstr "/_Βοήθεια/_Υποστήριξη"
 
 #: functions/create_menu_bar.c:151
 msgid "/_Help/_Wiki"
-msgstr ""
+msgstr "/_Βοήθεια/_Wiki"
 
 #: functions/create_menu_bar.c:169 functions/menu/menu_file_close.c:97
 #: functions/menu/menu_file_new.c:321 functions/menu/menu_file_open.c:232
 msgid "/Project"
-msgstr ""
+msgstr "/Έργο"
 
 #: functions/create_menu_bar.c:170 functions/menu/menu_file_close.c:98
 #: functions/menu/menu_file_new.c:322 functions/menu/menu_file_open.c:233
 msgid "/Slide"
-msgstr ""
+msgstr "/Διαφάνεια"
 
 #: functions/create_menu_bar.c:171 functions/menu/menu_file_close.c:99
 #: functions/menu/menu_file_new.c:323 functions/menu/menu_file_open.c:234
 msgid "/Layer"
-msgstr ""
+msgstr "/Στρώση"
 
 #: functions/create_menu_bar.c:172 functions/menu/menu_file_close.c:100
 #: functions/menu/menu_file_new.c:324 functions/menu/menu_file_open.c:235
 msgid "/Export"
-msgstr ""
+msgstr "/Εξαγωγή"
 
 #: functions/create_time_line.c:117
 msgid "Edit"
-msgstr ""
+msgstr "Επεξεργασία"
 
 #: functions/create_time_line.c:118
 #: functions/enable_layer_toolbar_buttons.c:56
 msgid "Edit layer"
-msgstr ""
+msgstr "Επεξεργασία στρώσης"
 
 #: functions/create_time_line.c:130
 msgid "Crop"
-msgstr ""
+msgstr "Ξάκρισμα"
 
 #: functions/create_time_line.c:131
 #: functions/enable_layer_toolbar_buttons.c:65
 msgid "Crop image"
-msgstr ""
+msgstr "Ξάκρισμα εικόνας"
 
 #: functions/create_time_line.c:143
 msgid "Delete"
-msgstr ""
+msgstr "Διαγραφή"
 
 #: functions/create_time_line.c:144
 #: functions/enable_layer_toolbar_buttons.c:74
 msgid "Delete selected layer"
-msgstr ""
+msgstr "Διαγραφή επιλεγμένης στρώσης"
 
 #: functions/create_time_line.c:156
 msgid "Down"
-msgstr ""
+msgstr "Κάτω"
 
 #: functions/create_time_line.c:157
 #: functions/enable_layer_toolbar_buttons.c:83
 msgid "Move layer down"
-msgstr ""
+msgstr "Μετακίνηση στρώσης κάτω"
 
 #: functions/create_time_line.c:169
 msgid "Up"
-msgstr ""
+msgstr "Πάνω"
 
 #: functions/create_time_line.c:170
 #: functions/enable_layer_toolbar_buttons.c:92
 msgid "Move layer up"
-msgstr ""
+msgstr "Μετακίνηση στρώσης επάνω"
 
 #: functions/create_time_line.c:186
 msgid "Mouse"
-msgstr ""
+msgstr "Ποντίκι"
 
 #: functions/create_time_line.c:187
 #: functions/enable_layer_toolbar_buttons.c:101
 msgid "Add a mouse pointer"
-msgstr ""
+msgstr "Προσθήκη δείκτη ποντικιού"
 
 #: functions/create_time_line.c:199
 msgid "Text"
-msgstr ""
+msgstr "Κείμενο"
 
 #: functions/create_time_line.c:200
 #: functions/enable_layer_toolbar_buttons.c:110
 msgid "Add a text layer"
-msgstr ""
+msgstr "Προσθήκη στρώσης κειμένου"
 
 #: functions/create_time_line.c:212
 #: functions/layer/layer_new_highlight_inner.c:152
 msgid "Highlight"
-msgstr ""
+msgstr "Επισήμανση"
 
 #: functions/create_time_line.c:213
 #: functions/enable_layer_toolbar_buttons.c:119
 msgid "Add a highlight layer"
-msgstr ""
+msgstr "Προσθήκη στρώσης επισήμανσης"
 
 #: functions/create_time_line.c:225 functions/layer/layer_duplicate.c:92
 #: functions/layer/layer_new_image_inner.c:97
 msgid "Image"
-msgstr ""
+msgstr "Εικόνα"
 
 #: functions/create_time_line.c:226
 #: functions/enable_layer_toolbar_buttons.c:128
 msgid "Add an image layer"
-msgstr ""
+msgstr "Προσθήκη στρώσης εικόνας"
 
 #: functions/create_toolbar.c:80
 msgid "New"
-msgstr ""
+msgstr "Νέο"
 
 #: functions/create_toolbar.c:81
 msgid "Begin a new project"
-msgstr ""
+msgstr "Έναρξη νέου έργου"
 
 #: functions/create_toolbar.c:87
 msgid "Open"
-msgstr ""
+msgstr "Άνοιγμα"
 
 #: functions/create_toolbar.c:88
 msgid "Open an existing project"
-msgstr ""
+msgstr "Άνοιγμα υπάρχοντος έργου"
 
 #: functions/create_toolbar.c:94
 msgid "Save"
-msgstr ""
+msgstr "Αποθήκευση"
 
 #: functions/create_toolbar.c:95
 msgid "Save the project"
-msgstr ""
+msgstr "Αποθήκευση έργου"
 
 #: functions/create_toolbar.c:101 functions/menu/menu_file_save_as.c:69
 msgid "Save As"
-msgstr ""
+msgstr "Αποθήκευση ως"
 
 #: functions/create_toolbar.c:102
 msgid "Save the project with a different file name"
-msgstr ""
+msgstr "Αποθήκευση έργου με διαφορετικό όνομα αρχείου"
 
 #: functions/create_toolbar.c:108
 msgid "Quit"
-msgstr ""
+msgstr "Έξοδος"
 
 #: functions/create_toolbar.c:109
 msgid "Quit the application"
-msgstr ""
+msgstr "Έξοδος από την εφαρμογή"
 
 #: functions/create_toolbar.c:119
 msgid "Path to toolbar 'Capture Screenshots' icon"
-msgstr ""
+msgstr "Διαδρομή εικονιδίου 'Σύλληψη στιγμιότυπων' στη γραμμή εργαλείων"
 
 #: functions/create_toolbar.c:126
 msgid "Capture"
-msgstr ""
+msgstr "Σύλληψη"
 
 #: functions/create_toolbar.c:127
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:132
 #: functions/menu/menu_screenshots_capture.c:255
 msgid "Capture screenshots"
-msgstr ""
+msgstr "Σύλληψη στιγμιότυπων"
 
 #: functions/create_toolbar.c:139
 msgid "Import"
-msgstr ""
+msgstr "Εισαγωγή"
 
 #: functions/create_toolbar.c:140
 msgid "Import screenshots"
-msgstr ""
+msgstr "Εισαγωγή στιγμιότυπων"
 
 #: functions/create_toolbar.c:152
 msgid "Crop all"
-msgstr ""
+msgstr "Ξάκρισμα όλων"
 
 #: functions/create_toolbar.c:153 functions/enable_main_toolbar_buttons.c:49
 msgid "Crop all slides in the project"
-msgstr ""
+msgstr "Ξάκρισμα όλων των διαφανειών του έργου"
 
 #: functions/create_toolbar.c:169
 msgid "Flash"
-msgstr ""
+msgstr "Flash"
 
 #: functions/create_toolbar.c:170 functions/enable_main_toolbar_buttons.c:58
 msgid "Export as a Flash animation"
-msgstr ""
+msgstr "Εξαγωγή ως κινούμενη απεικόνιση (Flash)"
 
 #: functions/disable_layer_toolbar_buttons.c:47
 msgid "Edit layer disabled: No project loaded"
-msgstr ""
+msgstr "Στρώση επεξεργασίας απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
 
 #: functions/disable_layer_toolbar_buttons.c:56
 msgid "Crop layer disabled: No project loaded"
-msgstr ""
+msgstr "Στρώση ξακρίσματος απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
 
 #: functions/disable_layer_toolbar_buttons.c:65
 msgid "Delete layer disabled: No project loaded"
-msgstr ""
+msgstr "Στρώση διαγραφής απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
 
 #: functions/disable_layer_toolbar_buttons.c:74
 msgid "Move layer down disabled: No project loaded"
-msgstr ""
+msgstr "Μετακίνηση στρώσης κάτω απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
 
 #: functions/disable_layer_toolbar_buttons.c:83
 msgid "Move layer up disabled: No project loaded"
-msgstr ""
+msgstr "Μετακίνηση στρώσης επάνω απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
 
 #: functions/disable_layer_toolbar_buttons.c:92
 msgid "Add mouse pointer disabled: No project loaded"
 msgstr ""
+"Προσθήκη δείκτη ποντικιού απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
 
 #: functions/disable_layer_toolbar_buttons.c:101
 msgid "Add text layer disabled: No project loaded"
 msgstr ""
+"Στρώση προσθήκης κειμένου απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
 
 #: functions/disable_layer_toolbar_buttons.c:110
 msgid "Add highlight layer disabled: No project loaded"
 msgstr ""
+"Στρώση προσθήκης επισήμανσης απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
 
 #: functions/disable_layer_toolbar_buttons.c:119
 msgid "Add image layer disabled: No project loaded"
-msgstr ""
+msgstr "Στρώση προσθήκης εικόνας απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
 
 #: functions/disable_main_toolbar_buttons.c:47
 msgid "Crop disabled: No project loaded"
-msgstr ""
+msgstr "Ξάκρισμα απενεργοποιημένο: Δεν φορτώθηκε κανένα έργο"
 
 #: functions/disable_main_toolbar_buttons.c:56
 msgid "Export to Flash disabled: No project loaded"
-msgstr ""
+msgstr "Εξαγωγή σε Flash απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
 
 #: functions/draw_timeline.c:64
 msgid "Could not regenerate the time line widget."
-msgstr ""
+msgstr "Αδυναμία ανάπλασης γραφικού αντικειμένου χρονογραμμής."
 
 #: functions/key_bind.c:64
 msgid ""
 "Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, "
 "so not sure how to.)  You will need to do this yourself manually."
 msgstr ""
+"Αδυναμία ορισμού κλειδιού στιγμιότυπου για το Control-Printscreen. (Δεν "
+"εκτελείται το Metacity, συνεπώς δεν μπορεί να βρεθεί τρόπος.) Πρέπει να το "
+"κάνετε μόνοι σας χειροκίνητα."
 
 #: functions/key_bind.c:80
 msgid ""
 "'salasaga_screencapture' not found in the search path. Screenshot capturing "
 "is disabled."
 msgstr ""
+"Το 'salasaga_screencapture' δεν βρέθηκε στη διαδρομή αναζήτησης. Η σύλληψη "
+"στιγμιότυπου είναι απενεργοποιημένη."
 
 #: functions/preferences_load.c:107
 msgid ""
 "There was something wrong with the project folder value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του φακέλου του έργου που αποθηκεύτηκε "
+"στις προτιμήσεις. Αντ' αυτού χρησιμοποιήστε τις προκαθορισμένες προτιμήσεις."
 
 #: functions/preferences_load.c:121
 msgid ""
 "There was something wrong with the screenshots folder value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του φακέλου των στιγμιότυπων που "
+"αποθηκεύτηκε στις προτιμήσεις. Αντ' αυτού χρησιμοποιήστε τις προκαθορισμένες "
+"προτιμήσεις."
 
 #: functions/preferences_load.c:135
 msgid ""
 "There was something wrong with the default output folder value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη τιμή του φακέλου εξαγωγής που "
+"αποθηκεύτηκε στις προτιμήσεις. Αντ' αυτού χρησιμοποιήστε τις προκαθορισμένες "
+"προτιμήσεις."
 
 #: functions/preferences_load.c:151
 msgid ""
 "There was something wrong with the default zoom level value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη τιμή της στρώσης εστίασης που "
+"αποθηκεύτηκε στις προτιμήσεις. Αντ' αυτού χρησιμοποιήστε τις προκαθορισμένες "
+"προτιμήσεις."
 
 #: functions/preferences_load.c:167 functions/preferences_load.c:182
 msgid ""
 "There was something wrong with the default project width value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη τιμή του πλάτους του έργου που "
+"αποθηκεύτηκε στις προτιμήσεις. Αντ' αυτού χρησιμοποιήστε τις προκαθορισμένες "
+"προτιμήσεις."
 
 #: functions/preferences_load.c:196
 msgid ""
 "There was something wrong with the default output width value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη τιμή του πλάτους εξαγωγής που "
+"αποθηκεύτηκε στις προτιμήσεις. Αντ' αυτού χρησιμοποιήστε τις προκαθορισμένες "
+"προτιμήσεις."
 
 #: functions/preferences_load.c:210
 msgid ""
 "There was something wrong with the default output height value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη τιμή του ύψους εξαγωγής που "
+"αποθηκεύτηκε στις προτιμήσεις. Αντ' αυτού χρησιμοποιήστε τις προκαθορισμένες "
+"προτιμήσεις."
 
 #: functions/preferences_load.c:224
 msgid ""
 "There was something wrong with the default slide duration value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη τιμή διάρκειας της διαφάνειας "
+"που αποθηκεύτηκε στις προτιμήσεις. Αντ' αυτού χρησιμοποιήστε τις "
+"προκαθορισμένες προτιμήσεις."
 
 #: functions/preferences_load.c:238
 msgid ""
 "There was something wrong with the default layer duration value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη τιμή διάρκειας της στρώσης που "
+"αποθηκεύτηκε στις προτιμήσεις. Αντ' αυτού χρησιμοποιήστε τις προκαθορισμένες "
+"προτιμήσεις."
 
 #: functions/preferences_load.c:252 functions/preferences_load.c:266
 #: functions/preferences_load.c:280
@@ -1032,183 +1068,229 @@ msgid ""
 "There was something wrong with the default background color value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη τιμή του χρώματος παρασκηνίου "
+"που αποθηκεύτηκε στις προτιμήσεις. Αντ' αυτού χρησιμοποιήστε τις "
+"προκαθορισμένες προτιμήσεις."
 
 #: functions/preferences_load.c:296
 msgid ""
 "There was something wrong with the film strip thumbnail width value stored "
 "in the preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη τιμή πλάτους μικρογραφίας της "
+"ταινίας που αποθηκεύτηκε στις προτιμήσεις. Αντ' αυτού χρησιμοποιήστε τις "
+"προκαθορισμένες προτιμήσεις."
 
 #: functions/preferences_load.c:316
 msgid ""
 "There was something wrong with the default frames per second value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη τιμή των πλαισίων ανά "
+"δευτερόλεπτο που αποθηκεύτηκε στις προτιμήσεις. Αντ' αυτού χρησιμοποιήστε "
+"τις προκαθορισμένες προτιμήσεις."
 
 #: functions/preferences_load.c:332
 msgid ""
 "There was something wrong with the icon height value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη τιμή ύψους του εικονιδίου που "
+"αποθηκεύτηκε στις προτιμήσεις. Αντ' αυτού χρησιμοποιήστε τις προκαθορισμένες "
+"προτιμήσεις."
 
 #: functions/preferences_load.c:764
 msgid "Some of the project default registry keys are missing\n"
-msgstr ""
+msgstr "Μερικά από τα προκαθορισμένα κλειδιά μητρώου του έργου λείπουν\n"
 
 #: functions/project_crop.c:96 functions/layer/image_crop.c:125
 msgid "Crop image layer"
-msgstr ""
+msgstr "Ξάκρισμα στρώσης εικόνας"
 
 #: functions/project_crop.c:101 functions/layer/image_crop.c:130
 msgid "Left crop: "
-msgstr ""
+msgstr "Αριστερό ξάκρισμα: "
 
 #: functions/project_crop.c:112 functions/layer/image_crop.c:141
 msgid "Right crop: "
-msgstr ""
+msgstr "Δεξί ξάκρισμα: "
 
 #: functions/project_crop.c:123 functions/layer/image_crop.c:152
 msgid "Top crop: "
-msgstr ""
+msgstr "Επάνω ξάκρισμα: "
 
 #: functions/project_crop.c:134 functions/layer/image_crop.c:163
 msgid "Bottom crop: "
-msgstr ""
+msgstr "Κάτω ξάκρισμα: "
 
 #: functions/project_crop.c:221 functions/layer/image_crop.c:215
 #: functions/layer/layer_duplicate.c:143
 #: functions/layer/layer_new_image_inner.c:167
 #: functions/menu/menu_screenshots_import.c:292
 msgid "Couldn't create an image pattern."
-msgstr ""
+msgstr "Αδυναμία δημιουργίας προτύπου εικόνας."
 
 #: functions/project_crop.c:250
 msgid "Project cropped"
-msgstr ""
+msgstr "Ξακρισμένο έργο"
 
 #: functions/project_read.c:145 functions/menu/menu_file_new.c:284
 #: functions/menu/menu_help_website.c:47
 msgid "http://www.salasaga.org"
-msgstr ""
+msgstr "http://www.salasaga.org"
 
 #: functions/project_read.c:146 functions/menu/menu_file_new.c:285
 #: functions/menu/menu_screenshots_import.c:95
 msgid "_blank"
-msgstr ""
+msgstr "_κενό"
 
 #: functions/project_read.c:148 functions/menu/menu_file_new.c:287
 #: functions/menu/menu_screenshots_import.c:97
 msgid "Created using Salasaga"
-msgstr ""
+msgstr "Δημιουργήθηκε με τη χρήση του Salasaga"
 
 #: functions/project_read.c:156
 msgid ""
 "The selected project file was not loaded successfully.  Please choose a "
 "different project file."
 msgstr ""
+"Το επιλεγμένο αρχείο έργου δεν φορτώθηκε με επιτυχία. Παρακαλώ, επιλέξτε ένα "
+"διαφορετικό αρχείο έργου."
 
 #: functions/project_read.c:165
 msgid "Project file is empty.  Please choose a different project file."
 msgstr ""
+"Το αρχείο έργου είναι άδειο. Παρακαλώ, επιλέξτε ένα διαφορετικό αρχείο έργου."
 
 #: functions/project_read.c:213
 msgid ""
 "Project meta data missing, aborting load.  Please choose a different project "
 "file."
 msgstr ""
+"Τα μεταδεδομένα του έργου λείπουν, ματαίωση φόρτωσης. Παρακαλώ, επιλέξτε ένα "
+"διαφορετικό αρχείο έργου."
 
 #: functions/project_read.c:222
 msgid ""
 "Project preferences missing, aborting load.  Please choose a different "
 "project file."
 msgstr ""
+"Οι προτιμήσεις του έργου λείπουν, ματαίωση φόρτωσης. Παρακαλώ, επιλέξτε ένα "
+"διαφορετικό αρχείο έργου."
 
 #: functions/project_read.c:231
 msgid ""
 "No slides in project, aborting load.  Please choose a different project file."
 msgstr ""
+"Δεν υπάρχουν διαφάνειες στο έργο, ματαίωση φόρτωσης. Παρακαλώ, επιλέξτε ένα "
+"διαφορετικό αρχείο έργου."
 
 #: functions/project_read.c:340
 msgid ""
 "Project Name missing, aborting load.  Please choose a different project file."
 msgstr ""
+"Το όνομα του έργου λείπει, ματαίωση φόρτωσης. Παρακαλώ, επιλέξτε ένα "
+"διαφορετικό αρχείο έργου."
 
 #: functions/project_read.c:347
 msgid ""
 "Project Width missing, aborting load.  Please choose a different project "
 "file."
 msgstr ""
+"Το πλάτος του έργου λείπει, ματαίωση φόρτωσης. Παρακαλώ, επιλέξτε ένα "
+"διαφορετικό αρχείο έργου."
 
 #: functions/project_read.c:354
 msgid ""
 "Project Height missing, aborting load.  Please choose a different project "
 "file."
 msgstr ""
+"Το ύψος του έργου λείπει, ματαίωση φόρτωσης. Παρακαλώ, επιλέξτε ένα "
+"διαφορετικό αρχείο έργου."
 
 #: functions/project_read.c:364
 msgid ""
 "The file format value in the project file is not recognized.  This project "
 "file can't be used."
 msgstr ""
+"Η τιμή της μορφής του αρχείου στο έργο δεν αναγνωρίστηκε. Το αρχείο έργου "
+"δεν μπορεί να χρησιμοποιηθεί."
 
 #: functions/project_read.c:384
 msgid ""
 "There was something wrong with the project name value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ονόματος του αρχείου στο αρχείο του έργου."
 
 #: functions/project_read.c:399
 msgid ""
 "There was something wrong with the output folder value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του φακέλου εξαγωγής στο αρχείο του έργου."
 
 #: functions/project_read.c:415
 msgid ""
 "There was something wrong with the output width value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του πλάτους εξαγωγής στο αρχείο του έργου."
 
 #: functions/project_read.c:430
 msgid ""
 "There was something wrong with the output height value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του ύψους εξαγωγής στο αρχείο του έργου."
 
 #: functions/project_read.c:445 functions/project_read.c:460
 msgid ""
 "There was something wrong with the project width value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του πλάτους του έργου στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:477
 msgid ""
 "There was something wrong with the frames per second value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή των στιγμιότυπων ανά δευτερόλεπτο στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:494
 msgid ""
 "There was something wrong with the start behavior value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή συμπεριφοράς εκκίνησης στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:522
 msgid ""
 "There was something wrong with the end behavior value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή συμπεριφοράς τέλους στο αρχείο του έργου."
 
 #: functions/project_read.c:556
 msgid ""
 "There was something wrong with the control bar display value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή εμφάνισης της γραμμής ελέγχου στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:584
 msgid ""
 "There was something wrong with the information button display value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή εμφάνισης του πλήκτρου πληροφοριών στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:608 functions/project_read.c:626
 msgid ""
 "There was something wrong with the information button link value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του συνδέσμου του πλήκτρου πληροφοριών "
+"στο αρχείο του έργου."
 
 #: functions/project_read.c:705 functions/project_read.c:1403
 #: functions/project_read.c:1463 functions/project_read.c:2332
@@ -1217,6 +1299,8 @@ msgid ""
 "There was something wrong with a red component color value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του στοιχείου κόκκινου χρώματος στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:721 functions/project_read.c:1418
 #: functions/project_read.c:1478 functions/project_read.c:2348
@@ -1225,6 +1309,8 @@ msgid ""
 "There was something wrong with a green component color value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του στοιχείου πράσινου χρώματος στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:737 functions/project_read.c:1433
 #: functions/project_read.c:1493 functions/project_read.c:2364
@@ -1233,48 +1319,62 @@ msgid ""
 "There was something wrong with a blue component color value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του στοιχείου μπλε χρώματος στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:756 functions/project_read.c:1622
 #: functions/project_read.c:2007 functions/project_read.c:2537
 msgid ""
 "There was something wrong with a start frame value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του πλαισίου εκκίνησης στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:772 functions/project_read.c:1638
 #: functions/project_read.c:2023 functions/project_read.c:2553
 msgid ""
 "There was something wrong with a finish frame value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του πλαισίου τέλους στο αρχείο του έργου."
 
 #: functions/project_read.c:790 functions/project_read.c:1656
 #: functions/project_read.c:2041 functions/project_read.c:2571
 msgid ""
 "There was something wrong with a layer start time value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή χρόνου εκκίνησης της στρώσης στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:806 functions/project_read.c:1672
 #: functions/project_read.c:2057 functions/project_read.c:2587
 msgid ""
 "There was something wrong with a layer duration value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή διάρκειας της στρώσης στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:823 functions/project_read.c:1689
 #: functions/project_read.c:2074 functions/project_read.c:2604
 msgid ""
 "There was something wrong with a layer visibility value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ορατότητας της στρώσης στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:839 functions/project_read.c:1705
 #: functions/project_read.c:2090 functions/project_read.c:2620
 msgid ""
 "There was something wrong with a layer name value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ονόματος της στρώσης στο αρχείο του έργου."
 
 #: functions/project_read.c:855 functions/project_read.c:1721
 #: functions/project_read.c:2106 functions/project_read.c:2636
 msgid ""
 "There was something wrong with an external link value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ενός εξωτερικού συνδέσμου στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:871 functions/project_read.c:1737
 #: functions/project_read.c:2122 functions/project_read.c:2652
@@ -1282,146 +1382,191 @@ msgid ""
 "There was something wrong with an external link target window value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του παράθυρου προορισμού ενός εξωτερικού "
+"συνδέσμου στο αρχείο του έργου."
 
 #: functions/project_read.c:931
 msgid ""
 "There was something wrong with an image x offset start value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή x έναρξης μετακίνησης εικόνας στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:947
 msgid ""
 "There was something wrong with an image y offset start value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή y έναρξης μετακίνησης εικόνας στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:963
 msgid ""
 "There was something wrong with an image x offset finish value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή x τέλους μετακίνησης εικόνας στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:979
 msgid ""
 "There was something wrong with an image y offset finish value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή y τέλους μετακίνησης εικόνας στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:995
 msgid ""
 "There was something wrong with an image layer width value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή πλάτους μιας στρώσης εικόνας στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:1011
 msgid ""
 "There was something wrong with an image layer height value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ύψους μιας στρώσης εικόνας στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:1027
 msgid ""
 "There was something wrong with an image layer background value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή παρασκηνίου μιας στρώσης εικόνας στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:1045
 msgid ""
 "There was something wrong with an image start frame value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή της εικόνας πλαισίου έναρξης στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:1061
 msgid ""
 "There was something wrong with an image finish frame value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή της εικόνας πλαισίου τέλους στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:1079
 msgid ""
 "There was something wrong with an image layer start time value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή της εικόνας του χρόνου έναρξης στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:1095
 msgid ""
 "There was something wrong with an image layer duration value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή της διάρκειας της εικόνας στρώσης στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:1112
 msgid ""
 "There was something wrong with an image layer visibility value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή της ορατότητας της εικόνας στρώσης στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:1128
 msgid ""
 "There was something wrong with an image layer name value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ονόματος της εικόνας στρώσης στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:1144
 msgid ""
 "There was something wrong with an image layer external link value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή εξωτερικού συνδέσμου της εικόνας στρώσης "
+"στο αρχείο του έργου."
 
 #: functions/project_read.c:1160
 msgid ""
 "There was something wrong with an image layer external link target window "
 "value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή εξωτερικού συνδέσμου του παράθυρου "
+"προορισμού της εικόνας στρώσης στο αρχείο του έργου."
 
 #: functions/project_read.c:1180
 msgid ""
 "There was something wrong with a file name path value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ονόματος της διαδρομής αρχείου, στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:1198
 msgid "There was something wrong with image data in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με τα δεδομένα της εικόνας στο αρχείο του έργου."
 
 #: functions/project_read.c:1214
 msgid ""
 "There was something wrong with an image data length value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του μήκους δεδομένων της εικόνας στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:1231
 msgid ""
 "There was something wrong with an image transition in type value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του τύπου της εικόνας μετάβασης στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:1253
 msgid ""
 "There was something wrong with an image transition in duration value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή της διάρκειας της εικόνας μετάβασης στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:1269
 msgid ""
 "There was something wrong with an image transition out type value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή τύπου της εικόνας μετάβασης εξόδου στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:1291
 msgid ""
 "There was something wrong with an image transition out duration value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή διάρκειας της εικόνας μετάβασης εξόδου "
+"στο αρχείο του έργου."
 
 #: functions/project_read.c:1317 functions/project_read.c:1324
 msgid "Image data loading failed"
-msgstr ""
+msgstr "Η φόρτωση δεδομένων της εικόνας απέτυχε"
 
 #: functions/project_read.c:1331
 msgid "Error when loading image data"
-msgstr ""
+msgstr "Σφάλμα κατά τη φόρτωση των δεδομένων της εικόνας"
 
 #: functions/project_read.c:1341
 msgid "Couldn't create an image pattern"
-msgstr ""
+msgstr "Αδυναμία δημιουργίας ενός προτύπου εικόνας"
 
 #: functions/project_read.c:1377 functions/project_read.c:2240
 #: functions/layer/layer_new_highlight_inner.c:154
@@ -1431,52 +1576,65 @@ msgstr ""
 #: functions/menu/menu_screenshots_import.c:332
 #: functions/slide/slide_insert.c:66
 msgid "_self"
-msgstr ""
+msgstr "_self"
 
 #: functions/project_read.c:1448
 msgid ""
 "There was something wrong with a highlight border width value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή πλάτους του περιγράμματος επισήμανσης στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:1508
 msgid ""
 "There was something wrong with a highlight opacity value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή αδιαφάνειας της επισήμανσης στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:1523 functions/project_read.c:1873
 #: functions/project_read.c:2268
 msgid ""
 "There was something wrong with an x offset start value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή x έναρξης μετακίνησης στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:1539 functions/project_read.c:1889
 #: functions/project_read.c:2284
 msgid ""
 "There was something wrong with a y offset start value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή y έναρξης μετακίνησης στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:1555 functions/project_read.c:1905
 #: functions/project_read.c:2300
 msgid ""
 "There was something wrong with an x offset finish value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή x τέλους μετακίνησης στο αρχείο του έργου."
 
 #: functions/project_read.c:1571 functions/project_read.c:1921
 #: functions/project_read.c:2316
 msgid ""
 "There was something wrong with a y offset finish value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή y τέλους μετακίνησης στο αρχείο του έργου."
 
 #: functions/project_read.c:1587 functions/project_read.c:1937
 msgid ""
 "There was something wrong with a layer width value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή πλάτους της διαφάνειας στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:1603 functions/project_read.c:1953
 msgid ""
 "There was something wrong with a layer height value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ύψους της διαφάνειας στο αρχείο του έργου."
 
 #: functions/project_read.c:1753 functions/project_read.c:2138
 #: functions/project_read.c:2668
@@ -1484,6 +1642,8 @@ msgid ""
 "There was something wrong with a transition in type value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή τύπου της μετάβασης έναρξης στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:1775 functions/project_read.c:2160
 #: functions/project_read.c:2690
@@ -1491,6 +1651,8 @@ msgid ""
 "There was something wrong with a transition in duration value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή διάρκειας της μετάβασης έναρξης στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:1791 functions/project_read.c:2176
 #: functions/project_read.c:2706
@@ -1498,6 +1660,8 @@ msgid ""
 "There was something wrong with a transition out type value in the project "
 "file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή τύπου της μετάβασης τέλους στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:1813 functions/project_read.c:2198
 #: functions/project_read.c:2728
@@ -1505,99 +1669,116 @@ msgid ""
 "There was something wrong with a transition out duration value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή διάρκειας της μετάβασης τέλους στο αρχείο "
+"του έργου."
 
 #: functions/project_read.c:1969
 msgid ""
 "There was something wrong with a mouse click value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή των κλικ του ποντικιού στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:2474
 msgid "There was something wrong with a font size value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή μεγέθους γραμματοσειράς στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:2490
 msgid ""
 "There was something wrong with a background border width value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή πλάτους του περιγράμματος παρασκηνίου στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:2505
 msgid ""
 "There was something wrong with a text background visibility value in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ορατότητας του κειμένου παρασκηνίου στο "
+"αρχείο του έργου."
 
 #: functions/project_read.c:2774
 msgid ""
 "There was something wrong with a slide name value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ονόματος της διαφάνειας στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:2793
 msgid ""
 "There was something wrong with a slide duration value in the project file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή διάρκειας της διαφάνειας στο αρχείο του "
+"έργου."
 
 #: functions/project_read.c:2827
 msgid "Aborting load of project file."
-msgstr ""
+msgstr "Ματαίωση φόρτωσης του αρχείου του έργου."
 
 #: functions/save_preferences_and_exit.c:168
 #: functions/save_preferences_and_exit.c:188
 msgid "Saving preferences in the registry failed."
-msgstr ""
+msgstr "Η αποθήκευση των προτιμήσεων στο μητρώο απέτυχε."
 
 #: functions/validate_value.c:605
 msgid "Unknown value passed to validation function"
-msgstr ""
+msgstr "Άγνωστη τιμή πέρασε τη λειτουργία επικύρωσης"
 
 #: functions/cairo/create_cairo_pixbuf_pattern.c:70
 msgid "Unable to allocate memory for pixel buffer."
-msgstr ""
+msgstr "Αδυναμία εκχώρησης μνήμης για τα εικονοστοιχεία προσωρινής μνήμης."
 
 #: functions/cairo/create_cairo_pixbuf_pattern.c:122
 msgid "Couldn't create image surface."
-msgstr ""
+msgstr "Αδυναμία δημιουργίας επιφάνειας εικόνας."
 
 #: functions/cairo/create_cairo_pixbuf_pattern.c:133
 msgid "Couldn't create surface pattern."
-msgstr ""
+msgstr "Αδυναμία δημιουργίας επιφάνειας προτύπου."
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:74
 msgid "Unable to retrieve details for the screen to capture."
-msgstr ""
+msgstr "Αδυναμία λήψης λεπτομερειών οθόνης για τη σύλληψη."
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:87
 #, c-format
 msgid "Window geometry retrieved. Width: %d\tHeight: %d\n"
-msgstr ""
+msgstr "Ανάκτηση γεωμετρίας παράθυρου. Πλάτος: %d\tΎψος: %d\n"
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:98
 msgid ""
 "Capture dimensions set to full screen.  Please use Control-Printscreen to "
 "take screenshots then Import when finished."
 msgstr ""
+"Οι διαστάσεις σύλληψης ορίστηκαν σε πλήρη οθόνη. Παρακαλώ, χρησιμοποιήστε "
+"τον συνδυασμό Control-Printscreen για να πάρετε στιγμιότυπα και κάντε "
+"Εισαγωγή όταν τελειώσετε."
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:137
 #: functions/menu/menu_screenshots_capture.c:260
 msgid "X Offset: "
-msgstr ""
+msgstr "X Μετακίνηση "
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:148
 #: functions/menu/menu_screenshots_capture.c:271
 msgid "Y Offset: "
-msgstr ""
+msgstr "Y Μετακίνηση: "
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:162
 #: functions/menu/menu_file_new.c:122
 #: functions/menu/menu_screenshots_capture.c:285
 msgid "Width: "
-msgstr ""
+msgstr "Πλάτος: "
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:173
 #: functions/menu/menu_file_new.c:133
 #: functions/menu/menu_screenshots_capture.c:296
 msgid "Height: "
-msgstr ""
+msgstr "Ύψος: "
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:184
 #: functions/menu/menu_screenshots_capture.c:307
@@ -1606,24 +1787,29 @@ msgid ""
 "combination to capture screenshots,\n"
 "then the Import button to import them."
 msgstr ""
+"Υπόδειξη: Χρησιμοποιήστε τον συνδυασμό πλήκτρων\n"
+"Control-Printscreen για τη σύλληψη στιγμιότυπων,\n"
+"κατόπιν το πλήκτρο Εισαγωγή για συμπερίληψή τους στο έργο."
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:295
 #: functions/menu/menu_screenshots_capture.c:425
 #, c-format
 msgid "Keyboard hook LoadLibrary failed with error %d: %s"
 msgstr ""
+"Το άγκιστρο πληκτρολογίου για το LoadLibrary απέτυχε με σφάλμα %d: %s"
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:306
 #: functions/menu/menu_screenshots_capture.c:436
 #, c-format
 msgid "Keyboard hook GetProcAddress failed with error %d: %s"
 msgstr ""
+"Το άγκιστρο πληκτρολογίου στο GetProcAddress απέτυχε με σφάλμα %d: %s"
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:318
 #: functions/menu/menu_screenshots_capture.c:448
 #, c-format
 msgid "Keyboard hooking failed with error %d: %s"
-msgstr ""
+msgstr "Η αγκίστρωση του πληκτρολογίου απέτυχε με σφάλμα %d: %s"
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:325
 #, c-format
@@ -1631,29 +1817,34 @@ msgid ""
 " Wrote capture settings file - %s - and installed Control-Printscreen "
 "keyboard hook"
 msgstr ""
+" Αρχείο εγγραφής ρυθμίσεων σύλληψης - %s - και εγκατεστημένο άγκιστρο "
+"πληκτρολογίου για το Control-Printscreen"
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:331
 #: functions/menu/menu_screenshots_capture.c:461
 #, c-format
 msgid " Wrote capture settings file - %s"
-msgstr ""
+msgstr " Αρχείο εγγραφής ρυθμίσεων σύλληψης - %s"
 
 #: functions/conversion/base64_decode.c:134
 msgid "Error in the Base64 decoding function, unrecognized input"
 msgstr ""
+"Σφάλμα στη λειτουργία αποκωδικοποίησης του Base64, μη αναγνωρίσιμη εισαγωγή"
 
 #: functions/conversion/base64_decode.c:185
 msgid "Unknown Base64 decoding remainder.  This should not happen."
-msgstr ""
+msgstr "Άγνωστο υπόλοιπο κωδικοποίησης Base64. Αυτό δεν πρέπει να συμβεί."
 
 #: functions/conversion/base64_encode.c:179
 msgid ""
 "Unknown remainder amount when Base64 encoding.  This should not ever happen."
 msgstr ""
+"Άγνωστη ποσότητα υπολοίπου κατά την κωδικοποίηση Base64. Αυτό δεν πρέπει να "
+"συμβεί ποτέ."
 
 #: functions/dialog/display_dialog_empty.c:80
 msgid "Background Color: "
-msgstr ""
+msgstr "Χρώμα παρασκηνίου: "
 
 #: functions/dialog/display_dialog_empty.c:89
 #: functions/dialog/display_dialog_highlight.c:377
@@ -1661,7 +1852,7 @@ msgstr ""
 #: functions/dialog/display_dialog_mouse.c:350
 #: functions/dialog/display_dialog_text.c:259
 msgid "External link: "
-msgstr ""
+msgstr "Εξωτερικός σύνδεσμος: "
 
 #: functions/dialog/display_dialog_empty.c:101
 #: functions/dialog/display_dialog_highlight.c:389
@@ -1669,7 +1860,7 @@ msgstr ""
 #: functions/dialog/display_dialog_mouse.c:362
 #: functions/dialog/display_dialog_text.c:271
 msgid "External link window: "
-msgstr ""
+msgstr "Παράθυρο εξωτερικού συνδέσμου: "
 
 #: functions/dialog/display_dialog_empty.c:136
 #: functions/dialog/display_dialog_highlight.c:578
@@ -1679,82 +1870,86 @@ msgstr ""
 msgid ""
 "There was something wrong with the external link value.  Please try again."
 msgstr ""
+"Υπήρξε ένα πρόβλημα με την τιμή του εξωτερικού συνδέσμου. Παρακαλώ "
+"προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_empty.c:150
 msgid ""
 "There was something wrong with the external link window target value.  "
 "Please try again."
 msgstr ""
+"Υπήρξε ένα πρόβλημα με την τιμή του παραθύρου προορισμού του εξωτερικού "
+"συνδέσμου. Παρακαλώ προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:151
 #: functions/dialog/display_dialog_image.c:132
 #: functions/dialog/display_dialog_mouse.c:133
 msgid "Layer Name: "
-msgstr ""
+msgstr "Όνομα Στρώσης: "
 
 #: functions/dialog/display_dialog_highlight.c:163
 #: functions/dialog/display_dialog_text.c:226
 msgid "Background fill color: "
-msgstr ""
+msgstr "Χρώμα γεμίσματος παρασκηνίου: "
 
 #: functions/dialog/display_dialog_highlight.c:174
 #: functions/dialog/display_dialog_text.c:237
 msgid "Background border color: "
-msgstr ""
+msgstr "Χρώμα περιγράμματος παρασκηνίου: "
 
 #: functions/dialog/display_dialog_highlight.c:185
 #: functions/dialog/display_dialog_text.c:248
 msgid "Background border width: "
-msgstr ""
+msgstr "Πλάτος περιγράμματος παρασκηνίου: "
 
 #: functions/dialog/display_dialog_highlight.c:196
 msgid "Opacity: "
-msgstr ""
+msgstr "Αδιαφάνεια: "
 
 #: functions/dialog/display_dialog_highlight.c:207
 msgid "Starting X Offset:"
-msgstr ""
+msgstr "Έναρξη X μετακίνησης:"
 
 #: functions/dialog/display_dialog_highlight.c:219
 msgid "Starting Y Offset:"
-msgstr ""
+msgstr "Έναρξη Y μετακίνησης:"
 
 #: functions/dialog/display_dialog_highlight.c:231
 msgid "Finishing X Offset:"
-msgstr ""
+msgstr "Λήξη X μετακίνησης:"
 
 #: functions/dialog/display_dialog_highlight.c:243
 msgid "Finishing Y Offset:"
-msgstr ""
+msgstr "Λήξη Y μετακίνησης:"
 
 #: functions/dialog/display_dialog_highlight.c:255
 msgid "Width:"
-msgstr ""
+msgstr "Πλάτος:"
 
 #: functions/dialog/display_dialog_highlight.c:267
 msgid "Height:"
-msgstr ""
+msgstr "Ύψος:"
 
 #: functions/dialog/display_dialog_highlight.c:279
 #: functions/dialog/display_dialog_image.c:188
 #: functions/dialog/display_dialog_mouse.c:189
 #: functions/dialog/display_dialog_text.c:294
 msgid "Is this layer visible?"
-msgstr ""
+msgstr "Είναι ορατή αυτή η στρώση;"
 
 #: functions/dialog/display_dialog_highlight.c:291
 #: functions/dialog/display_dialog_image.c:200
 #: functions/dialog/display_dialog_mouse.c:201
 #: functions/dialog/display_dialog_text.c:355
 msgid "Starting time (seconds): "
-msgstr ""
+msgstr "Χρόνος έναρξης (δευτερόλεπτα): "
 
 #: functions/dialog/display_dialog_highlight.c:303
 #: functions/dialog/display_dialog_image.c:212
 #: functions/dialog/display_dialog_mouse.c:213
 #: functions/dialog/display_dialog_text.c:367
 msgid "Start how: "
-msgstr ""
+msgstr "Τύπος έναρξης: "
 
 #: functions/dialog/display_dialog_highlight.c:307
 #: functions/dialog/display_dialog_highlight.c:350
@@ -1765,64 +1960,69 @@ msgstr ""
 #: functions/dialog/display_dialog_text.c:371
 #: functions/dialog/display_dialog_text.c:414
 msgid "Immediate"
-msgstr ""
+msgstr "Άμεσα"
 
 #: functions/dialog/display_dialog_highlight.c:308
 #: functions/dialog/display_dialog_image.c:217
 #: functions/dialog/display_dialog_mouse.c:218
 #: functions/dialog/display_dialog_text.c:372
 msgid "Fade in"
-msgstr ""
+msgstr "Βαθμιαία εμφάνιση"
 
 #: functions/dialog/display_dialog_highlight.c:322
 #: functions/dialog/display_dialog_image.c:231
 #: functions/dialog/display_dialog_mouse.c:232
 #: functions/dialog/display_dialog_text.c:386
 msgid "Start duration (seconds):"
-msgstr ""
+msgstr "Διάρκεια έναρξης (δευτερόλεπτα):"
 
 #: functions/dialog/display_dialog_highlight.c:334
 #: functions/dialog/display_dialog_image.c:243
 #: functions/dialog/display_dialog_mouse.c:244
 #: functions/dialog/display_dialog_text.c:398
 msgid "Display for (seconds): "
-msgstr ""
+msgstr "Εμφάνιση για (δευτερόλεπτα): "
 
 #: functions/dialog/display_dialog_highlight.c:346
 #: functions/dialog/display_dialog_image.c:255
 #: functions/dialog/display_dialog_mouse.c:256
 #: functions/dialog/display_dialog_text.c:410
 msgid "Exit how: "
-msgstr ""
+msgstr "Τύπος εξόδου: "
 
 #: functions/dialog/display_dialog_highlight.c:351
 #: functions/dialog/display_dialog_image.c:260
 #: functions/dialog/display_dialog_mouse.c:261
 #: functions/dialog/display_dialog_text.c:415
 msgid "Fade out"
-msgstr ""
+msgstr "Βαθμιαίο σβήσιμο"
 
 #: functions/dialog/display_dialog_highlight.c:365
 #: functions/dialog/display_dialog_image.c:274
 #: functions/dialog/display_dialog_mouse.c:275
 #: functions/dialog/display_dialog_text.c:429
 msgid "Exit duration (seconds):"
-msgstr ""
+msgstr "Διάρκεια εξόδου (δευτερόλεπτα):"
 
 #: functions/dialog/display_dialog_highlight.c:424
 #: functions/dialog/display_dialog_image.c:337
 #: functions/dialog/display_dialog_mouse.c:397
 msgid "There was something wrong with the new layer name.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με το όνομα της νέας διαφάνειας. Παρακαλώ προσπαθήστε "
+"πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:439
 msgid ""
 "There was something wrong with the border width value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή πλάτους του περιγράμματος. Παρακαλώ "
+"προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:453
 msgid "There was something wrong with the opacity value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή αδιαφάνειας. Παρακαλώ προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:467
 #: functions/dialog/display_dialog_image.c:352
@@ -1832,6 +2032,8 @@ msgid ""
 "There was something wrong with the starting frame X offset value.  Please "
 "try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή X του πλαισίου έναρξης μετακίνησης. "
+"Παρακαλώ προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:481
 #: functions/dialog/display_dialog_image.c:366
@@ -1841,6 +2043,8 @@ msgid ""
 "There was something wrong with the starting frame Y offset value.  Please "
 "try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή Y του πλαισίου έναρξης μετακίνησης. "
+"Παρακαλώ προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:495
 #: functions/dialog/display_dialog_highlight.c:509
@@ -1854,16 +2058,22 @@ msgid ""
 "There was something wrong with the finish frame X offset value.  Please try "
 "again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή X του πλαισίου τέλους μετακίνησης. "
+"Παρακαλώ προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:523
 msgid ""
 "There was something wrong with the highlight width value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή πλάτους της επισήμανσης. Παρακαλώ "
+"προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:537
 msgid ""
 "There was something wrong with the highlight height value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ύψους της επισήμανσης. Παρακαλώ "
+"προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:551
 #: functions/dialog/display_dialog_image.c:408
@@ -1872,6 +2082,8 @@ msgstr ""
 msgid ""
 "There was something wrong with the starting time value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του χρόνου έναρξης. Παρακαλώ προσπαθήστε "
+"πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:565
 #: functions/dialog/display_dialog_image.c:422
@@ -1879,6 +2091,7 @@ msgstr ""
 #: functions/dialog/display_dialog_text.c:578
 msgid "There was something wrong with the duration value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή της διάρκειας. Παρακαλώ προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:592
 #: functions/dialog/display_dialog_image.c:506
@@ -1888,6 +2101,8 @@ msgid ""
 "There was something wrong with the external link target window value.  "
 "Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή παράθυρου προορισμού του εξωτερικού "
+"συνδέσμου. Παρακαλώ προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:607
 #: functions/dialog/display_dialog_image.c:436
@@ -1897,6 +2112,8 @@ msgid ""
 "There was something wrong with the appearance transition type selected.  "
 "Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την εμφάνιση τύπου της επιλεγμένης μετάβασης. "
+"Παρακαλώ προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:621
 #: functions/dialog/display_dialog_image.c:450
@@ -1906,6 +2123,8 @@ msgid ""
 "There was something wrong with the appearance transition duration value.  "
 "Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή διάρκειας εμφάνισης της μετάβασης. "
+"Παρακαλώ προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:635
 #: functions/dialog/display_dialog_image.c:464
@@ -1915,6 +2134,8 @@ msgid ""
 "There was something wrong with the exit transition type selected.  Please "
 "try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με τον επιλεγμένο τύπο της μετάβασης εξόδου. Παρακαλώ "
+"προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_highlight.c:649
 #: functions/dialog/display_dialog_image.c:478
@@ -1924,139 +2145,149 @@ msgid ""
 "There was something wrong with the exit transition duration value.  Please "
 "try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή διάρκειας της μετάβασης εξόδου. Παρακαλώ "
+"προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_image.c:144
 #: functions/dialog/display_dialog_mouse.c:145
 #: functions/dialog/display_dialog_text.c:311
 msgid "Start X Offset: "
-msgstr ""
+msgstr "Έναρξη μετακίνησης X: "
 
 #: functions/dialog/display_dialog_image.c:155
 #: functions/dialog/display_dialog_mouse.c:156
 #: functions/dialog/display_dialog_text.c:322
 msgid "Start Y Offset: "
-msgstr ""
+msgstr "Έναρξη μετακίνησης Y: "
 
 #: functions/dialog/display_dialog_image.c:166
 #: functions/dialog/display_dialog_mouse.c:167
 #: functions/dialog/display_dialog_text.c:333
 msgid "Finish X Offset: "
-msgstr ""
+msgstr "Λήξη μετακίνησης X: "
 
 #: functions/dialog/display_dialog_image.c:177
 #: functions/dialog/display_dialog_mouse.c:178
 #: functions/dialog/display_dialog_text.c:344
 msgid "Finish Y Offset: "
-msgstr ""
+msgstr "Λήξη μετακίνησης Y: "
 
 #: functions/dialog/display_dialog_mouse.c:287
 msgid "Mouse click type: "
-msgstr ""
+msgstr "Τύπος κλικ ποντικιού: "
 
 #: functions/dialog/display_dialog_mouse.c:291
 msgid "No mouse click"
-msgstr ""
+msgstr "Χωρίς κλικ ποντικιού"
 
 #: functions/dialog/display_dialog_mouse.c:292
 msgid "Left single click"
-msgstr ""
+msgstr "Αριστερό απλό κλικ"
 
 #: functions/dialog/display_dialog_mouse.c:293
 msgid "Left double click"
-msgstr ""
+msgstr "Αριστερό διπλό κλικ"
 
 #: functions/dialog/display_dialog_mouse.c:294
 msgid "Left triple click"
-msgstr ""
+msgstr "Αριστερό τριπλό κλικ"
 
 #: functions/dialog/display_dialog_mouse.c:295
 msgid "Right single click"
-msgstr ""
+msgstr "Δεξί απλό κλικ"
 
 #: functions/dialog/display_dialog_mouse.c:296
 msgid "Right double click"
-msgstr ""
+msgstr "Δεξί διπλό κλικ"
 
 #: functions/dialog/display_dialog_mouse.c:297
 msgid "Right triple click"
-msgstr ""
+msgstr "Δεξί τριπλό κλικ"
 
 #: functions/dialog/display_dialog_mouse.c:298
 msgid "Middle single click"
-msgstr ""
+msgstr "Μεσαίο απλό κλικ"
 
 #: functions/dialog/display_dialog_mouse.c:299
 msgid "Middle double click"
-msgstr ""
+msgstr "Μεσαίο διπλό κλικ"
 
 #: functions/dialog/display_dialog_mouse.c:300
 msgid "Middle triple click"
-msgstr ""
+msgstr "Μεσαίο τριπλό κλικ"
 
 #: functions/dialog/display_dialog_mouse.c:580
 msgid ""
 "There was something wrong with the mouse click type selected.  Please try "
 "again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με τον επιλεγμένο τύπο κλικ του ποντικιού. Παρακαλώ "
+"προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_save_warning.c:44
 msgid "Project has been modified.  Save changes?"
-msgstr ""
+msgstr "Το έργο έχει τροποποιηθεί. Να γίνει ποθήκευση αλλαγών;"
 
 #: functions/dialog/display_dialog_text.c:163
 msgid "Appearance & Links"
-msgstr ""
+msgstr "Εμφάνιση & Σύνδεσμοι"
 
 #: functions/dialog/display_dialog_text.c:165
 msgid "Duration"
-msgstr ""
+msgstr "Διάρκεια"
 
 #: functions/dialog/display_dialog_text.c:191
 msgid "Layer name: "
-msgstr ""
+msgstr "Όνομα στρώσης: "
 
 #: functions/dialog/display_dialog_text.c:203
 msgid "Font size: "
-msgstr ""
+msgstr "Μέγεθος γραμματοσειράς "
 
 #: functions/dialog/display_dialog_text.c:215
 msgid "Text color: "
-msgstr ""
+msgstr "Χρώμα κειμένου: "
 
 #: functions/dialog/display_dialog_text.c:283
 msgid "Display the background?"
-msgstr ""
+msgstr "Εμφάνιση παρασκηνίου;"
 
 #: functions/dialog/display_dialog_text.c:465
 msgid ""
 "There was something wrong with the layer name value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ονόματος της διαφάνειας. Παρακαλώ "
+"προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_text.c:536
 msgid ""
 "There was something wrong with the font size value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή μεγέθους της γραμματοσειράς. Παρακαλώ, "
+"προσπαθήστε πάλι."
 
 #: functions/dialog/display_dialog_text.c:550
 msgid ""
 "There was something wrong with the background border width value.  Please "
 "try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή πλάτους του περιγράμματος παρασκηνίου. "
+"Παρακαλώ, προσπαθήστε πάλι."
 
 #: functions/export/html/export_html_wrapper.c:65
 msgid "Export Html"
-msgstr ""
+msgstr "Εξαγωγή Html"
 
 #: functions/export/html/export_html_wrapper.c:75
 msgid "HyperText Markup Language (*.html)"
-msgstr ""
+msgstr "HyperText Markup Language (*.html)"
 
 #: functions/export/html/export_html_wrapper.c:81
 #: functions/menu/menu_export_swf.c:90 functions/menu/menu_export_layer.c:99
 #: functions/menu/menu_export_slide.c:80 functions/menu/menu_file_open.c:105
 #: functions/menu/menu_file_save_as.c:85
 msgid "All files (*.*)"
-msgstr ""
+msgstr "Όλα τα αρχεία (*.*)"
 
 #: functions/export/html/export_html_wrapper.c:121
 #: functions/menu/menu_export_swf.c:130 functions/menu/menu_export_layer.c:139
@@ -2065,58 +2296,63 @@ msgstr ""
 msgid ""
 "There was something wrong with the file name given.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με το όνομα που δόθηκε στο αρχείο. Παρακαλώ, "
+"προσπαθήστε πάλι."
 
 #: functions/export/html/export_html_wrapper.c:133
 #: functions/menu/menu_export_swf.c:142 functions/menu/menu_export_layer.c:152
 #: functions/menu/menu_export_slide.c:132
 #: functions/menu/menu_file_save_as.c:153
 msgid "Overwrite existing file?"
-msgstr ""
+msgstr "Αντικατάσταση υπάρχοντος αρχείου;"
 
 #: functions/export/html/export_html_wrapper.c:167
 msgid "Couldn't create the output file."
-msgstr ""
+msgstr "Αδυνία δημιουργίας αρχείου εξαγωγής."
 
 #: functions/export/html/export_html_wrapper.c:201
 msgid "Wrote html wrapper"
-msgstr ""
+msgstr "Εγγραφή αρχείου Html"
 
 #: functions/export/swf/export_swf_control_bar.c:384
 #: functions/export/swf/export_swf_control_bar.c:398
 #: functions/film_strip/create_film_strip.c:79
 msgid "Slide"
-msgstr ""
+msgstr "Διαφάνεια"
 
 #: functions/export/swf/export_swf_control_bar.c:412
 #, c-format
 msgid "Slide name array Action Script: %s\n"
-msgstr ""
+msgstr "Διάταξη ονομασίας διαφάνειας Action Script: %s\n"
 
 #: functions/export/swf/export_swf_control_bar.c:523
 msgid "Restart button pressed, slide counter has been set to:"
 msgstr ""
+"Το πλήκτρο Επανεκκίνσηςη πατήθηκε, ο μετρητής διαφανειών ορίστηκε σε:"
 
 #: functions/export/swf/export_swf_control_bar.c:527
 #: functions/export/swf/export_swf_control_bar.c:674
 #: functions/export/swf/export_swf_control_bar.c:1011
 msgid "We should now jump to the slide named"
-msgstr ""
+msgstr "Θα μετακινηθούμε τώρα στη διαφάνεια με όνομα"
 
 #: functions/export/swf/export_swf_control_bar.c:617
 msgid ""
 "Rewind button pressed while in first slide, slide counter has been set to:"
 msgstr ""
+"Το πλήκτρο Επανέναρξης πατήθηκε ενώ βρισκόσασταν στην πρώτη διαφάνεια, ο "
+"μετρητής διαφανειών ορίστηκε σε :"
 
 #: functions/export/swf/export_swf_control_bar.c:621
 #: functions/export/swf/export_swf_control_bar.c:670
 #: functions/export/swf/export_swf_inner.c:383
 #: functions/export/swf/export_swf_inner.c:400
 msgid "'playing' variable is unchanged, at:"
-msgstr ""
+msgstr "η μεταβλητή 'παιχνίδι' είναι αμετάβλητη, σε:"
 
 #: functions/export/swf/export_swf_control_bar.c:625
 msgid "We should now jump to the first frame of the movie."
-msgstr ""
+msgstr "Θα μετακινηθούμε τώρα στο πρώτο πλαίσιο της ταινίας."
 
 #: functions/export/swf/export_swf_control_bar.c:632
 #: functions/export/swf/export_swf_control_bar.c:641
@@ -2125,357 +2361,393 @@ msgstr ""
 #: functions/export/swf/export_swf_control_bar.c:1018
 #: functions/export/swf/export_swf_control_bar.c:1027
 msgid "Using"
-msgstr ""
+msgstr "Χρήση"
 
 #: functions/export/swf/export_swf_control_bar.c:662
 msgid "Rewind button pressed, slide counter has been set to:"
-msgstr ""
+msgstr "Το πλήκτρο επανέναρξης πατήθηκε, ο μετρητής διαφανειών ορίστηκε σε:"
 
 #: functions/export/swf/export_swf_control_bar.c:666
 msgid "'_root.reversing' variable has been set to true."
-msgstr ""
+msgstr "η μεταβλητή '_root.reversing'  ορίστηκε ως αληθής."
 
 #: functions/export/swf/export_swf_control_bar.c:795
 msgid "Pause button pressed. Slide counter equals:"
-msgstr ""
+msgstr "Το πλήκτρο Παύσης πατήθηκε. Ο μετρητής διαφανειών ισούται:"
 
 #: functions/export/swf/export_swf_control_bar.c:799
 msgid "'_root.playing' variable set to false."
-msgstr ""
+msgstr "η μεταβλητή '_root.playing' ορίστηκε ως ψευδής."
 
 #: functions/export/swf/export_swf_control_bar.c:879
 msgid "Play button pressed. Slide counter equals:"
-msgstr ""
+msgstr "Το πλήκτρο Αναπαραγωγής πατήθηκε. Ο μετρητής διαφανειών ισούται:"
 
 #: functions/export/swf/export_swf_control_bar.c:883
 #: functions/export/swf/export_swf_control_bar.c:979
 #: functions/export/swf/export_swf_control_bar.c:1007
 #: functions/export/swf/export_swf_control_bar.c:1132
 msgid "'_root.reversing' variable has been set to false."
-msgstr ""
+msgstr "η μεταβλητή '_root.reversing' ορίστηκε ως ψευδής."
 
 #: functions/export/swf/export_swf_control_bar.c:887
 msgid "'_root.playing' variable set to true."
-msgstr ""
+msgstr "η μεταβλητή '_root.playing' ορίστηκε ως αληθής."
 
 #: functions/export/swf/export_swf_control_bar.c:891
 msgid "Slide name array is:"
-msgstr ""
+msgstr "Η διάταξη του ονόματος της διαφάνειας είναι:"
 
 #: functions/export/swf/export_swf_control_bar.c:975
 msgid "Fast forward button pressed while in last slide, slide counter is:"
 msgstr ""
+"Το πλήκτρο Μπροστά πατήθηκε ενώ βρισκόσασταν στην τελευταία διαφάνεια, ο "
+"μετρητής διαφανειών είναι:"
 
 #: functions/export/swf/export_swf_control_bar.c:983
 msgid "Now jumping to the last frame of the movie using gotoAndStop."
 msgstr ""
+"Μετακινηθείτε τώρα στο τελευταίο πλαίσιο της ταινίας  χρησιμοποιώντας το "
+"gotoAndStop."
 
 #: functions/export/swf/export_swf_control_bar.c:1003
 msgid "Fast forward button pressed, slide counter is:"
-msgstr ""
+msgstr "Το πλήκτρο Μπροστά πατήθηκε, ο μετρητής διαφανειών είναι:"
 
 #: functions/export/swf/export_swf_control_bar.c:1128
 msgid "Finish button pressed."
-msgstr ""
+msgstr "Το πλήκτρο Τέλος πατήθηκε."
 
 #: functions/export/swf/export_swf_control_bar.c:1136
 msgid "Now jumping to last frame of movie."
-msgstr ""
+msgstr "Μετακινηθείτε τώρα στο τελευταίο πλαίσιο της ταινίας."
 
 #: functions/export/swf/export_swf_control_bar.c:1218
 msgid "info_text visibility set to:"
-msgstr ""
+msgstr "η ορατότητα του info_text ορίστηκε σε:"
 
 #: functions/export/swf/export_swf_control_bar.c:1242
 #, c-format
 msgid "Font path: '%s'\n"
-msgstr ""
+msgstr "Διαδρομή γραμματοσειράς: '%s'\n"
 
 #: functions/export/swf/export_swf_control_bar.c:1249
 #: functions/export/swf/export_swf_create_shape.c:128
 msgid "Something went wrong when opening the font file."
-msgstr ""
+msgstr "Υπήρξε κάποιο σφάλμα κατά το άνοιγμα του αρχείου γραμματοσειράς."
 
 #: functions/export/swf/export_swf_control_bar.c:1262
 #: functions/export/swf/export_swf_create_shape.c:137
 msgid "Something went wrong when loading the font file."
-msgstr ""
+msgstr "Υπήρξε κάποιο σφάλμα κατά τη φόρτωση του αρχείου γραμματοσειράς."
 
 #: functions/export/swf/export_swf_control_bar.c:1323
 msgid ""
 "Something went wrong when creating the information button background shape."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα κατά τη δημιουργία του σχήματος του πλήκτρου "
+"πληροφοριών."
 
 #: functions/export/swf/export_swf_create_layer_elements.c:72
 msgid "Object"
-msgstr ""
+msgstr "Αντικείμενο"
 
 #: functions/export/swf/export_swf_create_shape.c:121
 #, c-format
 msgid "Full path name to font file is: %s\n"
-msgstr ""
+msgstr "Το πλήρες όνομα διαδρομής για το αρχείο γραμματοσειράς είναι: %s\n"
 
 #: functions/export/swf/export_swf_create_shape.c:162
 #, c-format
 msgid "Image width: %d\n"
-msgstr ""
+msgstr "Πλάτος εικόνας: %d\n"
 
 #: functions/export/swf/export_swf_create_shape.c:163
 #, c-format
 msgid "Scaled width: %d\n"
-msgstr ""
+msgstr "Διαβαθμισμένο πλάτος: %d\n"
 
 #: functions/export/swf/export_swf_create_shape.c:164
 #, c-format
 msgid "Image height: %d\n"
-msgstr ""
+msgstr "Ύψος εικόνας: %d\n"
 
 #: functions/export/swf/export_swf_create_shape.c:165
 #, c-format
 msgid "Scaled height: %d\n"
-msgstr ""
+msgstr "Διαβαθμισμένο ύψος: %d\n"
 
 #: functions/export/swf/export_swf_create_shape.c:173
 msgid ""
 "Something went wrong when creating the dictionary shape for an image layer."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα κατά τη δημιουργία του σχήματος του λεξικού για μια "
+"διαφάνεια εικόνας."
 
 #: functions/export/swf/export_swf_create_shape.c:189
 msgid "Something went wrong when encoding an image to required format."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα κατά την κωδικοποίηση μιας εικόνας για την απαιτούμενη "
+"μορφή."
 
 #: functions/export/swf/export_swf_create_shape.c:209
 #: functions/export/swf/swf_shape_from_image_file.c:131
 msgid "Something went wrong converting an image to a swf shape object."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα κατά την μετατροπή μιας εικόνας σε σχήμα αντικειμένου "
+"του swf."
 
 #: functions/export/swf/export_swf_create_shape.c:228
 #, c-format
 msgid "This image has an external link: '%s'\n"
-msgstr ""
+msgstr "Η εικόνα έχει έναν εξωτερικό σύνδεσμο: '%s'\n"
 
 #: functions/export/swf/export_swf_create_shape.c:272
 msgid "Something went wrong when creating an empty layer for swf output."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα κατά την δημιουργία μιας κενής διαφάνειας για το "
+"εξαγόμενο swf."
 
 #: functions/export/swf/export_swf_create_shape.c:302
 #, c-format
 msgid "This empty layer has an external link: '%s'\n"
-msgstr ""
+msgstr "Η κενή διαφάνεια έχει έναν εξωτερικό σύνδεσμο: '%s'\n"
 
 #: functions/export/swf/export_swf_create_shape.c:351
 msgid "Something went wrong when creating a highlight layer for swf output."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα κατά τη δημιουργία της στρώσης επισήμανσης για το "
+"εξαγόμενο swf."
 
 #: functions/export/swf/export_swf_create_shape.c:395
 #, c-format
 msgid "This highlight has an external link: '%s'\n"
-msgstr ""
+msgstr "Η επισήμανση έχει έναν εξωτερικό σύνδεσμο: '%s'\n"
 
 #: functions/export/swf/export_swf_create_shape.c:440
 msgid ""
 "Something went wrong when creating a mouse pointer shape for swf output."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα κατά τη δημιουργία σχήματος δείκτη του ποντικιού για το "
+"εξαγόμενο swf."
 
 #: functions/export/swf/export_swf_create_shape.c:477
 #, c-format
 msgid "This mouse cursor layer has an external link: '%s'\n"
-msgstr ""
+msgstr "H στρώση του δείκτη το ποντικού έχει έναν εξωτερικό σύνδεσμο: '%s'\n"
 
 #: functions/export/swf/export_swf_create_shape.c:586
 #, c-format
 msgid "Line %d of %d: %s\n"
-msgstr ""
+msgstr "Γραμμή %d of %d: %s\n"
 
 #: functions/export/swf/export_swf_create_shape.c:587
 #, c-format
 msgid "Width of this string: %.2f\n"
-msgstr ""
+msgstr "Πλάτος αυτής της γραμμής: %.2f\n"
 
 #: functions/export/swf/export_swf_create_shape.c:588
 #, c-format
 msgid "Width of widest string thus far: %.2f\n"
-msgstr ""
+msgstr "Πλάτος της ευρύτερης γραμμής μέχρι εδώ: %.2f\n"
 
 #: functions/export/swf/export_swf_create_shape.c:602
 msgid ""
 "Something went wrong when creating a text layer background for swf output."
 msgstr ""
+"Υπήρξε κάποιο πρόβληαμ κατά τη δημιουργία παρασκηνίου της στρώσης κειμένου "
+"για το εξαγόμενο swf."
 
 #: functions/export/swf/export_swf_create_shape.c:654
 #, c-format
 msgid "This text has an external link: '%s'\n"
-msgstr ""
+msgstr "Αυτό το κείμενο έχει έναν εξωτερικό σύνδεσμο: '%s'\n"
 
 #: functions/export/swf/export_swf_create_shape.c:700
 msgid "Unknown layer type in swf output."
-msgstr ""
+msgstr "Άγνωστος τύπος στρώσης στο παραγόμενο swf."
 
 #: functions/export/swf/export_swf_inner.c:107
 msgid ""
 "Unable to force locale to C.  Export in non-english locales may not work."
 msgstr ""
+"Αδυναμία αποθήκευσης τοπικών ρυθμίσεων στον δίσκο C. Η εξαγωγή σε μη "
+"αγγλικές ρυθμίσεις μπορεί να μην λειτουργήσει."
 
 #: functions/export/swf/export_swf_inner.c:117
 msgid "Unknown output resolution selected for swf export."
-msgstr ""
+msgstr "Επιλέχθηκε άγνωστη ανάλυση για την εξαγωγή του swf."
 
 #: functions/export/swf/export_swf_inner.c:143
 msgid "Scaled height ratio"
-msgstr ""
+msgstr "Λόγος κλιμάκωσης ύψους"
 
 #: functions/export/swf/export_swf_inner.c:144
 msgid "Scaled width ratio"
-msgstr ""
+msgstr "Λόγος κλιμάκωσης πλάτους"
 
 #: functions/export/swf/export_swf_inner.c:154
 msgid "Number of slides"
-msgstr ""
+msgstr "Αριθμός διαφανειών"
 
 #: functions/export/swf/export_swf_inner.c:173
 msgid "Total number of layers"
-msgstr ""
+msgstr "Συνολικός αριθμός στρώσεων"
 
 #: functions/export/swf/export_swf_inner.c:245
 #, c-format
 msgid "Number of layers in slide %u is %u\n"
-msgstr ""
+msgstr "Αριθμός στρώσεων στη διαφάνεια %u is %u\n"
 
 #: functions/export/swf/export_swf_inner.c:246
 #, c-format
 msgid "Maximum frame number in slide %u is %u\n"
-msgstr ""
+msgstr "Μέγιστος αριθμός πλαισίων στη διαφάνεια %u is %u\n"
 
 #: functions/export/swf/export_swf_inner.c:254
 msgid ""
 "We couldn't allocate enough memory to generate the swf.  Export aborted."
 msgstr ""
+"Δεν είναι δυνατή η εξεύρεση αρκετής μνήμης για τη δημιουργία του swf. Η "
+"εξαγωγή απορρίφθηκε."
 
 #: functions/export/swf/export_swf_inner.c:301
 #, c-format
 msgid "Frame number %u:\n"
-msgstr ""
+msgstr "Αριθμός πλαισίου %u:\n"
 
 #: functions/export/swf/export_swf_inner.c:304
 #, c-format
 msgid "Action frame:\tON\t"
-msgstr ""
+msgstr "Ενεργό πλαίσιο: \tON\t"
 
 #: functions/export/swf/export_swf_inner.c:306
 #, c-format
 msgid "Action frame:\tOFF\t"
-msgstr ""
+msgstr "Ενεργό πλαίσιο: \tOFF\t"
 
 #: functions/export/swf/export_swf_inner.c:309
 #, c-format
 msgid "Layer info:\tSET\t"
-msgstr ""
+msgstr "Πληροφορίες στρώσης: \tSET\t"
 
 #: functions/export/swf/export_swf_inner.c:311
 #, c-format
 msgid "Layer info:\tNULL\t"
-msgstr ""
+msgstr "Διαφάνεια πληροφοριών: \tΚΕΝΟ\t"
 
 #: functions/export/swf/export_swf_inner.c:314
 #, c-format
 msgid "Add frame:\tON\t"
-msgstr ""
+msgstr "Προσθήκη πλαισίου: \tΑΝΟΙΧΤΟ\t"
 
 #: functions/export/swf/export_swf_inner.c:316
 #, c-format
 msgid "Add frame:\tOFF\t"
-msgstr ""
+msgstr "Προσθήκη πλαισίου: \tΚΛΕΙΣΤΟ\t"
 
 #: functions/export/swf/export_swf_inner.c:319
 #, c-format
 msgid "Remove frame:\tON\t"
-msgstr ""
+msgstr "Αφαίρεση πλαισίου: \tΑΝΟΙΧΤΟ\t"
 
 #: functions/export/swf/export_swf_inner.c:321
 #, c-format
 msgid "Remove frame:\tOFF\t"
-msgstr ""
+msgstr "Αφαίρεση πλαισίου: \tΚΛΕΙΣΤΟ\t"
 
 #: functions/export/swf/export_swf_inner.c:325
 #, c-format
 msgid "Move frame:\tON\tX position:\t%.2f\tY position\t%.2f\t"
-msgstr ""
+msgstr "Μετακίνηση πλαισίου: \tΑΝΟΙΧΤΟ\tX θέση:\t%.2f\tY θέση\t%.2f\t"
 
 #: functions/export/swf/export_swf_inner.c:328
 #, c-format
 msgid "Move frame:\tOFF\t"
-msgstr ""
+msgstr "Μετακίνηση πλαισίου: \tΚΛΕΙΣΤΟ\t"
 
 #: functions/export/swf/export_swf_inner.c:375
 msgid "Slide counter incremented, now equals:"
-msgstr ""
+msgstr "Ο μετρητής διαφανειών προσαυξήθηκε, τώρα ισούται:"
 
 #: functions/export/swf/export_swf_inner.c:379
 msgid "'reversing' variable was false, and remains so."
-msgstr ""
+msgstr "Η μεταβλητή 'reversing' ήταν ψευδής και παραμένει έτσι."
 
 #: functions/export/swf/export_swf_inner.c:392
 msgid "Slide counter unchanged, now at:"
-msgstr ""
+msgstr "Ο μετρητής διαφανειών παρέμεινε αμετάβλητος, τώρα ισούται:"
 
 #: functions/export/swf/export_swf_inner.c:396
 msgid "'reversing' variable was false, has been set to true."
-msgstr ""
+msgstr "Η μεταβλητή 'reversing' ήταν ψευδής και ορίστηκε ως αληθής."
 
 #: functions/export/swf/export_swf_inner.c:410
 msgid "Last frame of movie reached, 'playing' variable has been set to:"
 msgstr ""
+"Το τελευταίο πλαίσιο της ταινίας πλησιάζει, η μεταβλητή 'playing' έχει "
+"οριστεί σε:"
 
 #: functions/export/swf/export_swf_inner.c:464
 #, c-format
 msgid "The animation is %u frames long\n"
-msgstr ""
+msgstr "Η κινούμενη απεικόνιση έχει μήκος %u πλαίσια\n"
 
 #: functions/export/swf/export_swf_inner.c:472
 msgid "Something went wrong when saving the swf file to disk."
-msgstr ""
+msgstr "Υπήρξε κάποιο πρόβλημα κατά την αποθήκευση του swf στον δίσκο."
 
 #: functions/export/swf/swf_add_mouse_click.c:124
 msgid "Full path name to sound file is"
-msgstr ""
+msgstr "Το όνομα της πλήρους διαδρομής για το αρχείο ήχου είναι"
 
 #: functions/export/swf/swf_add_mouse_click.c:132
 msgid "Something went wrong when opening a mouse click sound file."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα κατά το άνοιγμα του αρχείου ήχου για το κλικ του "
+"ποντικιού."
 
 #: functions/export/swf/swf_shape_from_image_file.c:60
 msgid ""
 "Something went wrong when loading the image for conversion to a swf shape"
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα κατά τη φόρτωση της εικόνας για τη μετατροπή σε μορφή "
+"swf."
 
 #: functions/export/swf/swf_shape_from_image_file.c:76
 msgid "Something went wrong when encoding an image to png format."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα κατά την κωδικοποίηση της εικόνας σε μορφή png."
 
 #: functions/export/swf/swf_shape_from_image_file.c:93
 msgid "Something went wrong converting an image to a swf input object."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα κατά τη μετατροπή μιας εικόνας σε αντικείμενο του "
+"αρχείου swf."
 
 #: functions/export/swf/swf_shape_from_image_file.c:111
 msgid "Something went wrong converting an image to a swf bitmap object."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα κατά τη μετατροπή μιας εικόνας σε αντικείμενο bitmap "
+"του αρχείου swf."
 
 #: functions/film_strip/film_strip_create_thumbnail.c:63
 msgid "Couldn't create film strip thumbnail."
-msgstr ""
+msgstr "Αδυναμία δημιουργίας μικρογραφίας της ταινίας."
 
 #: functions/film_strip/film_strip_create_thumbnail.c:72
 msgid "Couldn't allocate memory for a new film strip thumbnail."
-msgstr ""
+msgstr "Αδυναμία εκχώρησης μνήμης για τη μικρογραφία μιας νέας ταινίας."
 
 #: functions/film_strip/film_strip_slide_clicked.c:64
 #, c-format
 msgid "Invalid iter! No layer selected when changing slide!\n"
 msgstr ""
+"Μη έγκυρη επανάληψη! Δεν επιλέχθηκε στρώση κατά την αλλαγή της διαφάνειας!\n"
 
 #: functions/film_strip/film_strip_slide_clicked.c:87
 msgid " Ready"
-msgstr ""
+msgstr " Έτοιμο"
 
 #: functions/layer/compress_layers_inner.c:350
 #: functions/layer/get_layer_position.c:194 functions/layer/layer_edit.c:207
@@ -2484,44 +2756,46 @@ msgstr ""
 #: functions/working_area/working_area_button_release_event.c:382
 #: functions/working_area/working_area_motion_notify_event.c:370
 msgid "Unknown layer type."
-msgstr ""
+msgstr "Άγνωστος τύπος στρώσης."
 
 #: functions/layer/image_crop.c:105
 msgid "Only Image layers can be cropped."
-msgstr ""
+msgstr "Μόνο στρώσεις Εικόνας μπορούν να ξακριστούν."
 
 #: functions/layer/image_crop.c:116
 msgid "Background layers can not be cropped."
-msgstr ""
+msgstr "Οι στρώσεις Παρασκηνίου δεν μπορούν να ξακριστούν."
 
 #: functions/layer/image_crop.c:240
 msgid " Image cropped"
-msgstr ""
+msgstr " Η Εικόνα ξακρίστηκε"
 
 #: functions/layer/layer_copy.c:69
 msgid " Copy failed"
-msgstr ""
+msgstr " Αποτυχία Αντιγραφής"
 
 #: functions/layer/layer_copy.c:75
 msgid " Layer copied to buffer"
-msgstr ""
+msgstr " Η διαφάνεια αντιγράφηκε στην ενδιάμεση μνήμη"
 
 #: functions/layer/layer_delete.c:110
 msgid " Layer deleted"
-msgstr ""
+msgstr " Η Στρώση διαγράφηκε"
 
 #: functions/layer/layer_duplicate.c:58
 msgid "Unable to allocate memory for the copy buffer.  Copy failed."
 msgstr ""
+"Αδυναμία εκχώρησης μνήμης για την αντιγραφή στην ενδιάμεση μνήμη. Η "
+"αντιγραφή απέτυχε."
 
 #: functions/layer/layer_duplicate.c:88
 #: functions/menu/menu_screenshots_import.c:330
 msgid "Background"
-msgstr ""
+msgstr "Παρασκήνιο"
 
 #: functions/layer/layer_duplicate.c:95 functions/slide/slide_insert.c:64
 msgid "Empty"
-msgstr ""
+msgstr "Κενό"
 
 #: functions/layer/layer_duplicate.c:112 functions/layer/layer_duplicate.c:129
 #: functions/layer/layer_duplicate.c:155 functions/layer/layer_duplicate.c:180
@@ -2530,205 +2804,223 @@ msgid ""
 "Unable to allocate memory in the copy buffer for layer specific data.  Copy "
 "failed."
 msgstr ""
+"Αδυναμία εκχώρησης ενδιάμεσης μνήμης αντιγραφής για συγκεκριμένα δεδομένα "
+"της διαφάνειας. Η αντιγραφή απέτυχε."
 
 #: functions/layer/layer_duplicate.c:229
 msgid "Unknown layer type when duplicating layer."
-msgstr ""
+msgstr "Άγνωστος τύπος στρώσης κατά την ανατύπωσή της."
 
 #: functions/layer/layer_edit.c:93
 msgid "Edit background color"
-msgstr ""
+msgstr "Επεξεργασία χρώματος παρασκηνίου"
 
 #: functions/layer/layer_edit.c:110
 msgid "Edit image layer"
-msgstr ""
+msgstr "Επεξεργασία στρώσης εικόνας"
 
 #: functions/layer/layer_edit.c:134
 msgid "Edit mouse pointer"
-msgstr ""
+msgstr "Επεξεργασία δείκτη ποντικιού"
 
 #: functions/layer/layer_edit.c:159
 msgid "Edit text layer"
-msgstr ""
+msgstr "Επεξεργασία στρώσης κειμένου"
 
 #: functions/layer/layer_edit.c:184
 msgid "Edit highlight layer"
-msgstr ""
+msgstr "Επεξεργασία στρώσης επισήμανσης"
 
 #: functions/layer/layer_edit.c:223
 msgid " Layer edited"
-msgstr ""
+msgstr " Η διαφάνεια έχει υποστεί επεξεργασία"
 
 #: functions/layer/layer_free.c:87
 msgid "Unknown layer type when destroying a layer."
-msgstr ""
+msgstr "Άγνωστος τύπος διαφάνειας κατά την καταστροφή μιας διαφάνειας."
 
 #: functions/layer/layer_move_down.c:105
 msgid " Layer moved down"
-msgstr ""
+msgstr " Η Στρώση μετακινήθηκε κάτω"
 
 #: functions/layer/layer_move_up.c:111
 msgid " Layer moved up"
-msgstr ""
+msgstr " Η Στρώση μετακινήθηκε πάνω"
 
 #: functions/layer/layer_new_highlight.c:63
 msgid " Please draw the new layer"
-msgstr ""
+msgstr " Παρακαλώ δημιουργήστε τη νέα διαφάνεια"
 
 #: functions/layer/layer_new_highlight_inner.c:193
 msgid " Highlight layer added"
-msgstr ""
+msgstr " Προστέθηκε στρώση Επισήμανσης"
 
 #: functions/layer/layer_new_image.c:63 functions/layer/layer_new_mouse.c:63
 #: functions/layer/layer_new_text.c:63
 msgid " Please click the insertion point"
-msgstr ""
+msgstr " Παρακαλώ κάντε κλικ στο σημείο εισαγωγής"
 
 #: functions/layer/layer_new_image_inner.c:106
 msgid "Please choose an image file"
-msgstr ""
+msgstr "Παρακαλώ επιλέξτε ένα αρχείο εικόνας"
 
 #: functions/layer/layer_new_image_inner.c:137
 msgid ""
 "There was something wrong with the image path given.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με τη δοσμένη διαδρομή της εικόνας. Παρακαλώ, "
+"προσπαθήστε πάλι."
 
 #: functions/layer/layer_new_image_inner.c:146
 msgid ""
 "There was something wrong with the image file selected.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με το επιλεγμένο αρχείο εικόνας. Παρακαλώ, "
+"προσπαθήστε πάλι."
 
 #: functions/layer/layer_new_image_inner.c:218
 msgid " Image layer added"
-msgstr ""
+msgstr " Προστέθηκε στρώση Εικόνας"
 
 #: functions/layer/layer_new_mouse_inner.c:82
 msgid "Mouse Pointer"
-msgstr ""
+msgstr "Δείκτης Ποντικιού"
 
 #: functions/layer/layer_new_mouse_inner.c:123
 msgid " Mouse layer added"
-msgstr ""
+msgstr " Προστέθηκε στρώση Ποντικιού"
 
 #: functions/layer/layer_new_text_inner.c:71
 msgid "New text..."
-msgstr ""
+msgstr "Νέο κείμενο..."
 
 #: functions/layer/layer_new_text_inner.c:93
 msgid "Text layer"
-msgstr ""
+msgstr "Στρώση Κειμένου"
 
 #: functions/layer/layer_new_text_inner.c:134
 msgid " Text layer added"
-msgstr ""
+msgstr " Προστέθηκε Στρώση Κειμένου"
 
 #: functions/layer/layer_paste.c:112
 msgid " Layer pasted from buffer"
-msgstr ""
+msgstr " Διαφάνεια επικολλημένη από την ενδιάμεση μνήμη"
 
 #: functions/menu/menu_edit_preferences.c:123
 msgid "Application Preferences"
-msgstr ""
+msgstr "Προτιμήσεις Εφαρμογής"
 
 #: functions/menu/menu_edit_preferences.c:128
 msgid "Default Project Folder: "
-msgstr ""
+msgstr "Καθορισμένος φάκελος έργου: "
 
 #: functions/menu/menu_edit_preferences.c:131
 msgid "Select the Default Project Folder"
-msgstr ""
+msgstr "Επιλέξτε τον προκαθορισμένο φάκελο του έργου"
 
 #: functions/menu/menu_edit_preferences.c:137
 msgid "Screenshots Folder: "
-msgstr ""
+msgstr "Φάκελος στιγμιότυπων: "
 
 #: functions/menu/menu_edit_preferences.c:140
 msgid "Select the Screenshot Folder"
-msgstr ""
+msgstr "Επιλέξτε τον φάκελο στιγμιότυπων"
 
 #: functions/menu/menu_edit_preferences.c:146
 msgid "Default Output Folder: "
-msgstr ""
+msgstr "Καθορισμένος φάκελος εξαγωγών: "
 
 #: functions/menu/menu_edit_preferences.c:149
 msgid "Select the Default Output Folder"
-msgstr ""
+msgstr "Επιλέξτε τον καθορισμένο φάκελο εξαγωγών"
 
 #: functions/menu/menu_edit_preferences.c:155
 msgid "Default Output Resolution: "
-msgstr ""
+msgstr "Καθορισμένη ανάλυσης εξαγωγής: "
 
 #: functions/menu/menu_edit_preferences.c:163
 msgid ""
 "Default Slide Duration: \n"
 "(seconds)"
-msgstr ""
+msgstr "Καθορισμένη διάρκεια διαφάνειας:"
 
 #: functions/menu/menu_edit_preferences.c:173
 msgid ""
 "Default Layer Duration: \n"
 "(seconds)"
-msgstr ""
+msgstr "Καθορισμένη διάρκεια στρώσης:"
 
 #: functions/menu/menu_edit_preferences.c:183
 msgid "Default Frames Per Second: "
-msgstr ""
+msgstr "Καθορισμένα πλαίσια ανά δευτερόλεπτο: "
 
 #: functions/menu/menu_edit_preferences.c:192
 msgid "Film Strip Width: "
-msgstr ""
+msgstr "Πλάτος ταινίας: "
 
 #: functions/menu/menu_edit_preferences.c:201
 msgid "Icon Height: "
-msgstr ""
+msgstr "Ύψος εικονιδίου: "
 
 #: functions/menu/menu_edit_preferences.c:210
 msgid "Default Zoom Level: "
-msgstr ""
+msgstr "Καθορισμένο επίπεδο εστίασης: "
 
 #: functions/menu/menu_edit_preferences.c:218
 msgid "Default Background Color: "
-msgstr ""
+msgstr "Καθορισμένο χρώμα παρασκηνίου: "
 
 #: functions/menu/menu_edit_preferences.c:227
 msgid "Display non-metacity key bind warning?"
-msgstr ""
+msgstr "Η εμφάνιση ενός κλειδιού non-metacity δεσμεύει την προειδοποίηση;"
 
 #: functions/menu/menu_edit_preferences.c:266
 #: functions/menu/menu_project_properties.c:348
 msgid ""
 "There was something wrong with the project folder given.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με το όνομα που δόθηκε στον φάκελο του έργου. "
+"Παρακαλώ, προσπαθήστε πάλι."
 
 #: functions/menu/menu_edit_preferences.c:280
 msgid ""
 "There was something wrong with the screenshot folder given.  Please try "
 "again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με τον δοσμένο φάκελο στιγμιότυπων. Παρακαλώ, "
+"προσπαθήστε πάλι."
 
 #: functions/menu/menu_edit_preferences.c:294
 #: functions/menu/menu_project_properties.c:362
 msgid ""
 "There was something wrong with the output folder given.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με τον δοσμένο φάκελο εξαγόμενων. Παρακαλώ, "
+"προσπαθήστε πάλι."
 
 #: functions/menu/menu_edit_preferences.c:308
 msgid ""
 "There was something wrong with the default output resolution given.  Please "
 "try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με τη δοσμένη ανάλυση της προκαθορισμένης εξαγωγής. "
+"Παρακαλώ, προσπαθήστε πάλι."
 
 #: functions/menu/menu_edit_preferences.c:323
 msgid ""
 "There was something wrong with the default slide duration value.  Please try "
 "again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη τιμή διάρκειας της διαφάνειας. "
+"Παρακαλώ, προσπαθήστε πάλι."
 
 #: functions/menu/menu_edit_preferences.c:337
 msgid ""
 "There was something wrong with the default layer duration value.  Please try "
 "again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη τιμή διάρκειας της διαφάνειας. "
+"Παρακαλώ, προσπαθήστε πάλι."
 
 #: functions/menu/menu_edit_preferences.c:351
 #: functions/menu/menu_project_properties.c:377
@@ -2736,185 +3028,202 @@ msgid ""
 "There was something wrong with the default frames per second value.  Please "
 "try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την προκαθορισμένη πλαισίων ανά δευτερόλεπτο. "
+"Παρακαλώ, προσπαθήστε πάλι."
 
 #: functions/menu/menu_edit_preferences.c:365
 msgid ""
 "There was something wrong with the preview width value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του πλάτους προεπισκόπησης. Παρακαλώ, "
+"προσπαθήστε πάλι."
 
 #: functions/menu/menu_edit_preferences.c:379
 msgid ""
 "There was something wrong with the icon height value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα με την τιμή ύψους του εικονιδίου. Παρακαλώ, προσπαθήστε "
+"πάλι."
 
 #: functions/menu/menu_edit_preferences.c:392
 msgid ""
 "There was something wrong with the default zoom level given.  Please try "
 "again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με το προκαθορισμένο επίπεδο μεγέθυνσης. Παρακαλώ, "
+"προσπαθήστε πάλι."
 
 #: functions/menu/menu_edit_preferences.c:471
 msgid " Application preferences updated"
-msgstr ""
+msgstr " Οι προτιμήσεις της εφαρμογής ενημερώθηκαν"
 
 #: functions/menu/menu_export_swf.c:62
 msgid "There is no project loaded."
-msgstr ""
+msgstr "Δεν φορτώθηκε έργο."
 
 #: functions/menu/menu_export_swf.c:74
 msgid "Export as Flash"
-msgstr ""
+msgstr "Εξαγωγή ως Flash"
 
 #: functions/menu/menu_export_swf.c:84
 msgid "Adobe Flash (*.swf)"
-msgstr ""
+msgstr "Adobe Flash (*.swf)"
 
 #: functions/menu/menu_export_swf.c:167
 msgid "Something went wrong when creating the swf movie."
-msgstr ""
+msgstr "Υπήρξε κάποιο πρόβλημα κατά τη δημιουργία της ταινίας swf."
 
 #: functions/menu/menu_export_swf.c:172
 msgid "Exported"
-msgstr ""
+msgstr "Εξήχθη"
 
 #: functions/menu/menu_export_layer.c:74
 msgid "Only image layers can be exported to an image file."
-msgstr ""
+msgstr "Μόνον διαφάνειες εικόνας μπορούν να εξαχθούν σε ένα αρχείο εικόνας."
 
 #: functions/menu/menu_export_layer.c:83 functions/menu/menu_export_slide.c:64
 msgid "Export Slide as Image"
-msgstr ""
+msgstr "Εξαγωγή διαφάνειας ως εικόνα"
 
 #: functions/menu/menu_export_layer.c:93 functions/menu/menu_export_slide.c:74
 msgid "Portable Network Graphics (*.png)"
-msgstr ""
+msgstr "Portable Network Graphics (*.png)"
 
 #: functions/menu/menu_export_layer.c:174
 #: functions/menu/menu_export_slide.c:161
 msgid "Salasaga: http://www.salasaga.org"
-msgstr ""
+msgstr "Salasaga: http://www.salasaga.org"
 
 #: functions/menu/menu_export_layer.c:178
 #: functions/menu/menu_export_slide.c:165
 msgid "Something went wrong when saving the image file."
-msgstr ""
+msgstr "Υπήρξε κάποιο πρόβλημα κατά την αποθήκευση του αρχείου της εικόνας."
 
 #: functions/menu/menu_export_layer.c:184
 #: functions/menu/menu_export_slide.c:170
 msgid "Wrote image file"
-msgstr ""
+msgstr "Εγγεγραμμένο αρχείο εικόνας"
 
 #: functions/menu/menu_file_close.c:89
 msgid " Project closed"
-msgstr ""
+msgstr " Το Έργο έκλεισε"
 
 #: functions/menu/menu_file_new.c:105
 msgid "Create new Salasaga Project"
-msgstr ""
+msgstr "Δημιουργία νέου έργου Salasaga"
 
 #: functions/menu/menu_file_new.c:110
 #: functions/menu/menu_project_properties.c:130
 msgid "Project Name: "
-msgstr ""
+msgstr "Όνομα έργου: "
 
 #: functions/menu/menu_file_new.c:144
 #: functions/menu/menu_project_properties.c:158
 msgid "Frames per second: "
-msgstr ""
+msgstr "Πλαίσια ανά δευτερόλεπτο: "
 
 #: functions/menu/menu_file_new.c:155
 msgid "Background color: "
-msgstr ""
+msgstr "Χρώμα παρασκηνίου: "
 
 #: functions/menu/menu_file_new.c:188
 msgid ""
 "There was something wrong with the new project name.  Defaulting to 'New "
 "Project' instead."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με το όνομα του νέου έργου. Αντ' αυτού, "
+"προκαθορισμένο 'New project."
 
 #: functions/menu/menu_file_new.c:203
 msgid ""
 "There was something wrong with the project width value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή πλάτους του έργου. Παρακαλώ, προσπαθήστε "
+"πάλι."
 
 #: functions/menu/menu_file_new.c:217
 msgid ""
 "There was something wrong with the project height value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ύψους του έργου. Παρακαλώ, προσπαθήστε "
+"πάλι."
 
 #: functions/menu/menu_file_new.c:231
 msgid ""
 "There was something wrong with the project frames per second value.  Please "
 "try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή πλαισίων ανά δευτερόλεπτο του έργου. "
+"Παρακαλώ, προσπαθήστε πάλι."
 
 #: functions/menu/menu_file_new.c:311
 msgid " Project initialized"
-msgstr ""
+msgstr " Το Έργο αρχικοποιήθηκε"
 
 #: functions/menu/menu_file_open.c:83
 msgid "Open a Salasaga Project"
-msgstr ""
+msgstr "Άνοιγμα έργου του Salasaga"
 
 #: functions/menu/menu_file_open.c:93 functions/menu/menu_file_save_as.c:79
 msgid "Salasaga Project file (*.salasaga)"
-msgstr ""
+msgstr "Αρχείο έργου Salasaga (*.salasaga)"
 
 #: functions/menu/menu_file_open.c:99
 msgid "Flame Project file (*.flame)"
-msgstr ""
+msgstr "Αρχείο έργου Flame (*.flame)"
 
 #: functions/menu/menu_file_open.c:245
 msgid " Project loaded"
-msgstr ""
+msgstr " Το Έργο φορτώθηκε"
 
 #: functions/menu/menu_file_save.c:87
 msgid "Error creating the XML save document."
-msgstr ""
+msgstr "Σφάλμα κατά τη δημιουργία του εγγράφου XML."
 
 #: functions/menu/menu_file_save.c:97
 msgid "Error creating the root node."
-msgstr ""
+msgstr "Σφάλμα κατά τη δημιουργία του ριζικού κόμβου."
 
 #: functions/menu/menu_file_save.c:110
 msgid "Error creating the meta-data container."
-msgstr ""
+msgstr "Σφάλμα κατά τη δημιουργία αποδέκτη μεταδεδομένων."
 
 #: functions/menu/menu_file_save.c:123
 msgid "Error creating the preferences container."
-msgstr ""
+msgstr "Σφάλμα κατά τη δημιουργία αποδέκτη προτιμήσεων."
 
 #: functions/menu/menu_file_save.c:153
 msgid "Error creating the start behavior value."
-msgstr ""
+msgstr "Σφάλμα κατά τη δημιουργία τιμής της συμπεριφοράς έναρξης."
 
 #: functions/menu/menu_file_save.c:173
 msgid "Error creating the end behavior value."
-msgstr ""
+msgstr "Σφάλμα κατά τη δημιουργία τιμής της συμπεριφοράς λήξης."
 
 #: functions/menu/menu_file_save.c:201
 msgid "Error creating the slides container."
-msgstr ""
+msgstr "Σφάλμα δημιουργίας αποδέκτη διαφανειών."
 
 #: functions/menu/menu_file_save.c:224
 msgid "Project saved"
-msgstr ""
+msgstr "Το Έργο αποθηκεύτηκε."
 
 #: functions/menu/menu_file_save_layer.c:81
 msgid "Error creating the layer elements."
-msgstr ""
+msgstr "Αδυναμία δημιουργίας των στοιχείων της διαφάνειας."
 
 #: functions/menu/menu_file_save_layer.c:148
 msgid "Something went wrong when encoding a slide to png format."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα κατά την κωδικοποίηση μιας διαφάνειας σε μορφή png."
 
 #: functions/menu/menu_file_save_slide.c:67
 msgid "Error creating the slide node."
-msgstr ""
+msgstr "Σφάλμα δημιουργίας κόμβου διαφανειών."
 
 #: functions/menu/menu_help_about.c:56
 msgid "Copyright"
-msgstr ""
+msgstr "Πνευματικά δικαιώματα"
 
 #: functions/menu/menu_help_about.c:59
 msgid ""
@@ -2932,176 +3241,203 @@ msgid ""
 "License along with this program.  If not, see\n"
 "http://www.gnu.org/licenses/."
 msgstr ""
+"Αυτό το πρόγραμμα είναι Ελεύθερο Λογισμικό: μπορείτε να το αναδιανείμετε "
+"ή/και να το τροποποιήσετε υπό τους όρους της Γενικής Δημόσιας Άδειας GNU, "
+"όπως αυτή εκδόθηκε από το Free Software Foundation, είτε της έκδοσης 3.0 "
+"είτε (η επιλογή είναι δική σας) κάθε επόμενης έκδοσης.\n"
+"\n"
+"Το πρόγραμμα διανέμεται με την ελπίδα ότι θα είναι χρήσιμο, αλλά ΧΩΡΙΣ ΚΑΜΙΑ "
+"ΕΓΓΥΗΣΗ. Ακόμη, χωρίς εγγύηση ΕΜΠΟΡΕΥΣΙΜΟΤΗΤΑΣ ή ΚΑΤΑΛΛΗΛΟΤΗΤΑΣ ΓΙΑ "
+"ΣΥΓΚΕΚΡΙΜΕΝΟ ΣΚΟΠΟ. Διαβάστε την Γενική Δημόσια Άδεια GNU για περισσότερες "
+"λεπτομέρειες.\n"
+"\n"
+"Θα πρέπει να έχετε λάβει ένα αντίγραφο της Γενικής Δημόσιας Άδειας GNU μαζί "
+"με αυτό το πρόγραμμα. Εάν όχι, επισκεφθείτε τον ιστότοπο\n"
+"http://www.gnu.org/licenses/."
 
 #: functions/menu/menu_help_about.c:77
 #, c-format
 msgid "Built on: %s"
-msgstr ""
+msgstr "Δημιουργήθηκε σε: %s"
 
 #: functions/menu/menu_help_forum.c:47
 msgid "http://www.salasaga.org/forum"
-msgstr ""
+msgstr "http://www.salasaga.org/forum"
 
 #: functions/menu/menu_help_register.c:47
 msgid "http://www.salasaga.org/forum/index.php?action=register"
-msgstr ""
+msgstr "http://www.salasaga.org/forum/index.php?action=register"
 
 #: functions/menu/menu_help_survey.c:47
 msgid "http://www.salasaga.org/go/survey"
-msgstr ""
+msgstr "http://www.salasaga.org/go/survey"
 
 #: functions/menu/menu_help_support.c:47
 msgid "http://www.salasaga.org/index.php?page=support"
-msgstr ""
+msgstr "http://www.salasaga.org/index.php?page=support"
 
 #: functions/menu/menu_help_wiki.c:47
 msgid "http://www.salasaga.org/wiki"
-msgstr ""
+msgstr "http://www.salasaga.org/wiki"
 
 #: functions/menu/menu_project_properties.c:125
 msgid "Project Properties"
-msgstr ""
+msgstr "Ιδιότητες Έργου"
 
 #: functions/menu/menu_project_properties.c:140
 msgid "Project Folder: "
-msgstr ""
+msgstr "Φάκελος έργου: "
 
 #: functions/menu/menu_project_properties.c:143
 msgid "Select the Project Folder"
-msgstr ""
+msgstr "Επιλογή φακέλου του έργου"
 
 #: functions/menu/menu_project_properties.c:149
 msgid "Output Folder: "
-msgstr ""
+msgstr "Φάκελος εξαγωγής: "
 
 #: functions/menu/menu_project_properties.c:152
 msgid "Select the Output Folder"
-msgstr ""
+msgstr "Επιλογή φακέλου εξαγωγής:"
 
 #: functions/menu/menu_project_properties.c:167
 msgid "Project Width: "
-msgstr ""
+msgstr "Πλάτος έργου: "
 
 #: functions/menu/menu_project_properties.c:172
 #: functions/menu/menu_project_properties.c:184
 msgid "pixels"
-msgstr ""
+msgstr "εικονοστοιχεία"
 
 #: functions/menu/menu_project_properties.c:179
 msgid "Project Height: "
-msgstr ""
+msgstr "Ύψος έργου: "
 
 #: functions/menu/menu_project_properties.c:191
 msgid "SWF start behavior: "
-msgstr ""
+msgstr "Συμπεριφορά έναρξης SWF: "
 
 #: functions/menu/menu_project_properties.c:195
 msgid "Paused"
-msgstr ""
+msgstr "Σε παύση"
 
 #: functions/menu/menu_project_properties.c:196
 msgid "Play"
-msgstr ""
+msgstr "Αναπαραγωγή"
 
 #: functions/menu/menu_project_properties.c:210
 msgid "SWF end behavior: "
-msgstr ""
+msgstr "Συμπεριφορά λήξης SWF: "
 
 #: functions/menu/menu_project_properties.c:214
 msgid "Stop"
-msgstr ""
+msgstr "Διακοπή"
 
 #: functions/menu/menu_project_properties.c:215
 msgid "Loop and play"
-msgstr ""
+msgstr "Επαναφορά και αναπαραγωγή"
 
 #: functions/menu/menu_project_properties.c:216
 msgid "Loop and stop"
-msgstr ""
+msgstr "Επαναφορά και διακοπή"
 
 #: functions/menu/menu_project_properties.c:234
 msgid "Display SWF control bar: "
-msgstr ""
+msgstr "Εμφάνιση γραμμής ελέγχου SWF: "
 
 #: functions/menu/menu_project_properties.c:249
 msgid "Display SWF information button: "
-msgstr ""
+msgstr "Εμφάνιση πλήκτρου πληροφοριών SWF: "
 
 #: functions/menu/menu_project_properties.c:264
 msgid "Information button text"
-msgstr ""
+msgstr "Κείμενο πλήκτρου πληροφοριών:"
 
 #: functions/menu/menu_project_properties.c:287
 msgid "Information button link: "
-msgstr ""
+msgstr "Σύνδεσμος πλήκτρου πληροφοριών: "
 
 #: functions/menu/menu_project_properties.c:299
 msgid "Information button link window: "
-msgstr ""
+msgstr "Παράθυρο συνδέσμου πλήκτρου πληροφοριών: "
 
 #: functions/menu/menu_project_properties.c:334
 msgid ""
 "There was something wrong with the project name value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ονόματος του έργου. Παρακαλώ, προσπαθήστε "
+"πάλι."
 
 #: functions/menu/menu_project_properties.c:391
 msgid ""
 "There was something wrong with the start behavior value selected.  Please "
 "try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την επιλεγμένη τιμή της συμπεριφοράς έναρξης. "
+"Παρακαλώ, προσπαθήστε πάλι."
 
 #: functions/menu/menu_project_properties.c:405
 msgid ""
 "There was something wrong with the end behavior value selected.  Please try "
 "again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την επιλεγμένη τιμή της συμπεριφοράς λήξης. "
+"Παρακαλώ, προσπαθήστε πάλι."
 
 #: functions/menu/menu_project_properties.c:424
 msgid ""
 "There was something wrong with the information button link value.  Please "
 "try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του πλήκτρου πληροφοριών. Παρακαλώ, "
+"προσπαθήστε πάλι."
 
 #: functions/menu/menu_project_properties.c:438
 msgid ""
 "There was something wrong with the information button target window value.  "
 "Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του παράθυρου προορισμού του πλήκτρου "
+"πληροφοριών. Παρακαλώ, προσπαθήστε πάλι."
 
 #: functions/menu/menu_project_properties.c:492
 msgid " Project properties updated"
-msgstr ""
+msgstr " Οι ιδιότητες του έργου ενημερώθηκαν."
 
 #: functions/menu/menu_screenshots_capture.c:96
 msgid ""
 "Please click on the window you want to capture (after closing this dialog "
 "box)."
 msgstr ""
+"Παρακαλώ, κάντε κλικ στο παράθυρο που θέλετε να συλλάβετε (μετά το κλείσιμο "
+"του παράθυρου διαλόγου)."
 
 #: functions/menu/menu_screenshots_capture.c:114
 msgid "Unable to create alternative cursor."
-msgstr ""
+msgstr "Αδυναμία δημιουργίας εναλλακτικού κέρσορα."
 
 #: functions/menu/menu_screenshots_capture.c:133
 msgid ""
 "Unable to grab the mouse pointer for selected display.  Please report this "
 "error."
 msgstr ""
+"Αδυναμία λήψης δείκτη ποντικιού για την επιλεγμένη εμφάνιση. Παρακαλώ, "
+"αναφέρετε αυτό το σφάλμα."
 
 #: functions/menu/menu_screenshots_capture.c:142
 #, c-format
 msgid "Mouse pointer grabbed.\n"
-msgstr ""
+msgstr "Ο δείκτης ποντικιού έχει ληφθεί.\n"
 
 #: functions/menu/menu_screenshots_capture.c:164
 #, c-format
 msgid "Capture window set.\n"
-msgstr ""
+msgstr "Η σύλληψη του παράθυρου ορίστηκε.\n"
 
 #: functions/menu/menu_screenshots_capture.c:187
 #, c-format
 msgid "Mouse pointer grab released.\n"
-msgstr ""
+msgstr "Η λήψη δείκτη ποντικιού ελευθερώθηκε.\n"
 
 #: functions/menu/menu_screenshots_capture.c:207
 #, c-format
@@ -3109,27 +3445,32 @@ msgid ""
 "Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: "
 "%d\n"
 msgstr ""
+"Ανάκτηση γεωμετρίας παράθυρου. Μετακίνηση X: %d\tΜετακίνηση Y: %d\tΠλάτος: "
+"%d\tΎψος: %d\n"
 
 #: functions/menu/menu_screenshots_capture.c:218
 msgid ""
 "Window dimensions successfully retrieved.  Please use Control-Printscreen to "
 "take screenshots then Import when finished."
 msgstr ""
+"Οι διαστάσεις του παραθύρου ανακτήθηκαν επιτυχώς. Παρακαλώ χρησιμοποιήστε το "
+"Control-Printscreen για να πάρετε στιγμιότυπα και κάντε Εισαγωγή όταν "
+"τελειώσετε."
 
 #: functions/menu/menu_screenshots_capture.c:354
 #, c-format
 msgid "An error '%s' occured when opening '%s' for writing."
-msgstr ""
+msgstr "Συνέβη '%s' ένα σφάλμα κατά το άνοιγμα '%s' για εγγραφή."
 
 #: functions/menu/menu_screenshots_capture.c:373
 #, c-format
 msgid "An error '%s' occured when writing data to the file '%s'."
-msgstr ""
+msgstr "Συνέβη '%s' ένα σφάλμα κατά την εγγραφή δεδομένων στο αρχείο '%s'."
 
 #: functions/menu/menu_screenshots_capture.c:390
 #, c-format
 msgid "An error '%s' occured when closing the output file '%s'."
-msgstr ""
+msgstr "Συνέβη '%s' ένα σφάλμα κατά το κλείσιμο του αρχείου εξαγωγής '%s'."
 
 #: functions/menu/menu_screenshots_capture.c:455
 #, c-format
@@ -3137,23 +3478,27 @@ msgid ""
 " Wrote capture lock file - %s - and installed Control-Printscreen keyboard "
 "hook"
 msgstr ""
+" Εγγράφηκε αρχείο κλειδώματος της σύλληψης - %s - και εγκαταστάθηκε άγκιστρο "
+"πληκτρολογίου για το Control-Printscreen."
 
 #: functions/menu/menu_screenshots_import.c:113
 msgid "Something went wrong opening the screenshots folder."
-msgstr ""
+msgstr "Υπήρξε κάποιο πρόβλημα κατά το άνοιγμα του φακέλου στιγμιότυπων."
 
 #: functions/menu/menu_screenshots_import.c:124
 msgid ""
 "The screenshots folder doesn't exist.  Please update this in the project "
 "preferences and try again."
 msgstr ""
+"Ο φάκελος των στιγμιότυπων δεν υπάρχει. Παρακαλώ, κάντε την διόρθωση στις "
+"προτιμήσεις του έργου και προσπαθήστε πάλι."
 
 #: functions/menu/menu_screenshots_import.c:135
 #: functions/menu/menu_screenshots_import.c:209
 #: functions/menu/menu_screenshots_import.c:212
 #: functions/menu/menu_screenshots_import.c:213
 msgid "screenshot"
-msgstr ""
+msgstr "στιγμιότυπο"
 
 #: functions/menu/menu_screenshots_import.c:177
 msgid ""
@@ -3161,6 +3506,9 @@ msgid ""
 "size of the project.  If you proceed, they will be scaled to the same size "
 "as the project.  Do you want to proceed?"
 msgstr ""
+"Δεν έχουν όλα τα στιγμιότυπα το ίδιο μέγεθος, ή ορισμένα διαφέρουν από το "
+"μέγεθος του έργου. Εάν συνεχίσετε, θα αλλάξουν μέγεθος ώστε να ταιριάζουν με "
+"αυτό του έργου. Θέλετε να συνεχίσετε;"
 
 #: functions/menu/menu_screenshots_import.c:180
 msgid ""
@@ -3168,143 +3516,259 @@ msgid ""
 "size of the project.  If you proceed, they will all be scaled to the size of "
 "the first one.  Do you want to proceed?"
 msgstr ""
+"Δεν έχουν όλα τα στιγμιότυπα το ίδιο μέγεθος, ή ορισμένα διαφέρουν από το "
+"μέγεθος του έργου. Εάν συνεχίσετε, θα αλλάξουν μέγεθος ώστε να ταιριάζουν με "
+"αυτό του πρώτου στιγμιότυπου. Θέλετε να συνεχίσετε;"
 
 #: functions/menu/menu_screenshots_import.c:207
 msgid "No screenshots found in screenshot folder"
-msgstr ""
+msgstr "Δεν βρέθηκαν στιγμιότυπα στον φάκελο στιγμιότυπων."
 
 #: functions/menu/menu_screenshots_import.c:208
 msgid "They are case sensitive and must be named"
-msgstr ""
+msgstr "Πρέπει να ονομαστούν, είναι ευαίσθητη υπόθεση"
 
 #: functions/menu/menu_screenshots_import.c:210
 msgid "Sequential Number"
-msgstr ""
+msgstr "Διαδοχικός αριθμός"
 
 #: functions/menu/menu_screenshots_import.c:211
 msgid "For example"
-msgstr ""
+msgstr "Για παράδειγμα"
 
 #: functions/menu/menu_screenshots_import.c:225
 msgid "Screenshots found"
-msgstr ""
+msgstr "Βρέθηκαν στιγμιότυπα"
 
 #: functions/menu/menu_screenshots_import.c:306
 msgid "Something went wrong when loading the screenshot"
-msgstr ""
+msgstr "Υπήρξε κάποιο πρόβλημα κατά τη φόρτωση του στιγμιότυπου."
 
 #: functions/menu/menu_screenshots_import.c:357
 msgid "Something went wrong when deleting the screenshot file"
-msgstr ""
+msgstr "Υπήρξε κάποιο πρόβλημα κατά τη διαγραφή του αρχείου στιγμιότυπου."
 
 #: functions/menu/menu_screenshots_import.c:362
 msgid "Loaded image"
-msgstr ""
+msgstr "Η εικόνα φορτώθηκε"
 
 #: functions/menu/menu_screenshots_import.c:443
 msgid "screenshots imported"
-msgstr ""
+msgstr "τα στιγμιότυπα εισήχθησαν"
 
 #: functions/slide/slide_delete.c:63
 msgid "You must leave at least one slide in a project."
-msgstr ""
+msgstr "Πρέπει να αφήσετε το λιγότερο μια διαφάνεια στο έργο."
 
 #: functions/slide/slide_delete.c:105
 msgid " Slide deleted"
-msgstr ""
+msgstr " Η διαφάνεια διαγράφηκε"
 
 #: functions/slide/slide_duration.c:75
 msgid "Edit slide duration"
-msgstr ""
+msgstr "Επεξεργασία διάρκειας διαφάνειας"
 
 #: functions/slide/slide_duration.c:80
 msgid "Slide duration: "
-msgstr ""
+msgstr "Διάρκεια διαφάνειας: "
 
 #: functions/slide/slide_duration.c:115
 msgid ""
 "There was something wrong with the slide duration value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή διάρκειας της διαφάνειας. Παρακαλώ, "
+"προσπαθήστε πάλι."
 
 #: functions/slide/slide_duration.c:200
 msgid " Slide properties updated"
-msgstr ""
+msgstr " Οι ιδιότητες της διαφάνειας ενημερώθηκαν"
 
 #: functions/slide/slide_insert.c:111
 msgid " Slide added"
-msgstr ""
+msgstr " Η διαφάνεια προστέθηκε"
 
 #: functions/slide/slide_move_bottom.c:94
 msgid " Slide moved to bottom"
-msgstr ""
+msgstr " Η διαφάνεια μετακινήθηκε στο κάτω μέρος"
 
 #: functions/slide/slide_move_down.c:99
 msgid " Slide moved down"
-msgstr ""
+msgstr " Η διαφάνεια μετακινήθηκε κάτω"
 
 #: functions/slide/slide_move_top.c:92
 msgid " Slide moved to top"
-msgstr ""
+msgstr " Η διαφάνεια μετακινήθηκε στο επάνω μέρος"
 
 #: functions/slide/slide_move_up.c:97
 msgid " Slide moved up"
-msgstr ""
+msgstr " Η διαφάνεια μετακινήθηκε επάνω"
 
 #: functions/widgets/time_line.c:915
 msgid "Couldn't create the time line background image."
-msgstr ""
+msgstr "Αδυναμία δημιουργίας εικόνας χρονογραμμής του παρασκηνίου."
 
 #: functions/widgets/time_line.c:1104 functions/widgets/time_line.c:1118
 msgid "Couldn't create the time line display buffer image."
 msgstr ""
+"Αδυναμία δημιουργίας εικόνας χρονογραμμής για την εμφάνιση της ενδιάμεσης "
+"μνήμης."
 
 #: functions/widgets/time_line.c:1637 functions/widgets/time_line.c:1748
 #: functions/widgets/time_line.c:1817
 msgid "Unknown layer resize type."
-msgstr ""
+msgstr "Άγνωστος τύπος αλλαγής μεγέθους της στρώσης."
 
 #: functions/widgets/time_line.c:2253 functions/widgets/time_line.c:2301
 msgid "Couldn't recreate time line background image."
-msgstr ""
+msgstr "Αδυναμία αναδημιουργίας εικόνας χρονογραμμής του παρασκηνίου."
 
 #: functions/widgets/time_line.c:2261 functions/widgets/time_line.c:2309
 msgid "Couldn't recreate time line display buffer."
 msgstr ""
+"Αδυναμία αναδημιουργίας εικόνας χρονογραμμής για την εμφάνιση της ενδιάμεσης "
+"μνήμης."
 
 #: functions/widgets/time_line.c:2269 functions/widgets/time_line.c:2317
 msgid "Couldn't redraw the time line layer information."
-msgstr ""
+msgstr "Αδυναμία ανασχεδίασης χρονογραμμής πληροφοριών της στρώσης."
 
 #: functions/widgets/time_line.c:2361
 msgid " Resize completed"
-msgstr ""
+msgstr " Αλλαγή μεγέθους ολοκληρώθηκε"
 
 #: functions/widgets/time_line.c:2402
 msgid " Drag completed"
-msgstr ""
+msgstr " Η μεταφορά ολοκληρώθηκε"
 
 #: functions/working_area/draw_highlight_box.c:53
 #: functions/working_area/draw_highlight_box.c:92
 msgid "Not enough memory for pixbuf allocation."
-msgstr ""
+msgstr "Δεν υπάρχει αρκετή μνήμη για εκχώρηση pixbuf."
 
 #: functions/working_area/working_area_button_release_event.c:156
 msgid " Layer start point moved"
-msgstr ""
+msgstr " Το αρχικό σημείο της στρώσης μετακινήθηκε"
 
 #: functions/working_area/working_area_button_release_event.c:158
 msgid " Layer end point moved"
-msgstr ""
+msgstr " Το τελικό σημείο της στρώσης μετακινήθηκε"
 
 #: functions/working_area/working_area_button_release_event.c:262
 #: functions/working_area/working_area_motion_notify_event.c:204
 msgid "Unknown resizing direction."
-msgstr ""
+msgstr "Άγνωστη κατεύθυνση αλλαγής μεγέθους."
 
 #: functions/working_area/working_area_button_release_event.c:320
 msgid " Layer resized"
-msgstr ""
+msgstr " Η Στρώση άλλαξε μέγεθος"
 
 #: functions/working_area/working_area_button_release_event.c:423
 msgid " Layer moved"
+msgstr " Η Στρώση μετακινήθηκε"
+
+#: salasaga_screencapture.c:80
+msgid "Something went wrong when getting the window identifier."
+msgstr "Κάτι πήγε λάθος κατά τη λήψη του αναγνωριστικού του παραθύρου."
+
+#: salasaga_screencapture.c:90 salasaga_screencapture.c:382
+msgid "Something went wrong when getting the screenshot."
+msgstr "Κάτι πήγε λάθος κατά τη λήψη του στιγμιότυπου οθόνης."
+
+#: salasaga_screencapture.c:122
+msgid "Screenshot GetDC failed."
+msgstr "Το στιγμιότυπο  Λήψη DC απέτυχε."
+
+#: salasaga_screencapture.c:131
+msgid "Screenshot CreateCompatibleDC failed."
+msgstr "Το στιγμιότυπο Δημιουργία Συμβατού DC απέτυχε."
+
+#: salasaga_screencapture.c:140
+msgid "Screenshot CreateCompatibleBitmap failed."
+msgstr "Το στιγμιότυπο Δημιουργία Συμβατού Bitmap απέτυχε."
+
+#: salasaga_screencapture.c:149
+msgid "Screenshot SelectObject failed: selected object is not a region."
 msgstr ""
+"Το στιγμιότυπο Επιλογή Αντικειμένου απέτυχε: το επιλεγμένο αντικείμενο δεν "
+"είναι μια περιοχή."
+
+#: salasaga_screencapture.c:157
+msgid "Screenshot SelectObject failed: unknown error."
+msgstr "Το στιγμιότυπο Επιλογή Αντικειμένου απέτυχε: άγνωστο σφάλμα."
+
+#: salasaga_screencapture.c:166
+msgid "Screenshot BitBlt failed."
+msgstr "Το στιγμιότυπο BitBit απέτυχε."
+
+#: salasaga_screencapture.c:269
+msgid ""
+"There was something wrong with the project name value.  Aborting screenshot."
+msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή ονόματος του έργου. Το στιγμιότυπο "
+"ματαιώθηκε."
+
+#: salasaga_screencapture.c:283
+msgid ""
+"There was something wrong with the screenshot folder value.  Aborting "
+"screenshot."
+msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή φακέλου του στιγμιότυπου. Το στιγμιότυπο "
+"ματαιώθηκε."
+
+#: salasaga_screencapture.c:297
+msgid ""
+"There was something wrong with the x offset start value.  Aborting "
+"screenshot."
+msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή μετακίνησης x. Το στιγμιότυπο ματαιώθηκε."
+
+#: salasaga_screencapture.c:310
+msgid ""
+"There was something wrong with the y offset start value.  Aborting "
+"screenshot."
+msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή μετακίνησης y. Το στιγμιότυπο ματαιώθηκε."
+
+#: salasaga_screencapture.c:323
+msgid "There was something wrong with the width value.  Aborting screenshot."
+msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του πλάτους. Το στιγμιότυπο ματαιώθηκε."
+
+#: salasaga_screencapture.c:336
+msgid ""
+"There was something wrong with the height value.  Aborting screenshot."
+msgstr ""
+"Υπήρξε κάποιο πρόβλημα με την τιμή του ύψους. Το στιγμιότυπο ματαιώθηκε."
+
+#: salasaga_screencapture.c:395
+msgid "Something went wrong opening"
+msgstr "Υπήρξε κάποιο πρόβλημα με το άνοιγμα."
+
+#: salasaga_screencapture.c:404
+msgid "The target directory doesn't exist."
+msgstr "Ο φάκελος προορισμού δεν υπάρχει."
+
+#: salasaga_screencapture.c:490
+msgid ""
+"Something went wrong when opening the output screenshot file for writing."
+msgstr ""
+"Υπήρξε κάποιο πρόβλημα κατά το άνοιγμα του αρχείου εξόδου του στιγμιότυπου "
+"για εγγραφή."
+
+#: salasaga_screencapture.c:500
+msgid "Something went wrong when creating the png write structure."
+msgstr "Υπήρξε κάποιο πρόβλημα κατά τη δημιουργία της εγγράψιμης δομής png."
+
+#: salasaga_screencapture.c:515
+msgid "Something went wrong when creating the png info structure."
+msgstr "Υπήρξε κάποιο πρόβλημα κατά τη δημιουργία της δομής πληροφοριών png."
+
+#: salasaga_screencapture.c:549
+msgid "Something went wrong when retrieving the screenshot metadata."
+msgstr ""
+"Υπήρξε κάποιο πρόβλημα κατά τη παραλαβή των μεταδεδομένων του στιγμιότυπου."
+
+#: salasaga_screencapture.c:566
+msgid "Something went wrong when copying the screenshot data."
+msgstr ""
+"Υπήρξε κάποιο πρόβλημα κατά την αντιγραφή των δεδομένων του στιγμιότυπου."
