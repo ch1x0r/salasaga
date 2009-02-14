@@ -413,7 +413,7 @@ gint export_swf_inner(gchar *output_filename)
 					);
 
 			inc_slide_counter_action = compileSWFActionCode(message->str);
-			g_string_free(message, TRUE);
+			//g_string_free(message, TRUE);
 		} else
 		{
 			inc_slide_counter_action = compileSWFActionCode(
@@ -434,8 +434,7 @@ gint export_swf_inner(gchar *output_filename)
 		SWFMovie_add(swf_movie, (SWFBlock) inc_slide_counter_action);
 
 		// Free the memory allocated to the swf timing array, now that this slide is over
-		// fixme5: Commented out, as it seems to be causing a crash (sometimes)
-		//		g_free(swf_timing_array);
+		g_free(swf_timing_array);
 	}
 
 	// If the end behaviour is to loop, then do that

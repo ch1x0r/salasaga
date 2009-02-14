@@ -100,7 +100,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 
 		// Indicate on which frame the element should be displayed, at what display depth, and its starting co-ordinates
 		start_frame_rounded = roundf(start_frame);
-		finish_frame_rounded = roundf(finish_frame);
+		finish_frame_rounded = roundf(finish_frame) == 0 ? 0 : ((roundf(finish_frame)>=num_frames) ? num_frames-1 : roundf(finish_frame));
 		array_start[start_frame_rounded].add = TRUE;
 		array_start[start_frame_rounded].x_position = element_x_position_start;
 		array_start[start_frame_rounded].y_position = element_y_position_start;
@@ -145,7 +145,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 		fade_frame += this_layer_data->duration * frames_per_second;
 		finish_frame = fade_frame + (this_layer_data->transition_out_duration * frames_per_second);
 		start_frame_rounded = roundf(fade_frame);
-		finish_frame_rounded = roundf(finish_frame);
+		finish_frame_rounded = roundf(finish_frame) == 0 ? 0 : ((roundf(finish_frame)>=num_frames) ? num_frames-1 : roundf(finish_frame));
 
 		// Work out how much opacity to decrement each frame by
 		opacity_step = 100 / ((this_layer_data->transition_out_duration * frames_per_second));
@@ -226,7 +226,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 	}
 	
 	start_frame_rounded = roundf(start_frame);
-	finish_frame_rounded = roundf(finish_frame);
+	finish_frame_rounded = roundf(finish_frame) == 0 ? 0 : ((roundf(finish_frame)>=num_frames) ? num_frames-1 : roundf(finish_frame));
 	num_displayed_frames = finish_frame_rounded - start_frame_rounded;
 
 	// Skip layers with 0 full visibility duration
@@ -278,7 +278,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 	// Determine on which frame the element should be removed from display
 	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
 			finish_frame += (this_layer_data->transition_out_duration * frames_per_second);
-	finish_frame_rounded = roundf(finish_frame);
+	finish_frame_rounded = roundf(finish_frame) == 0 ? 0 : ((roundf(finish_frame)>=num_frames) ? num_frames-1 : roundf(finish_frame));
 	array_start[finish_frame_rounded].action_this = TRUE;
 	array_start[finish_frame_rounded].remove = TRUE;
 
