@@ -26,6 +26,7 @@
 
 // GTK includes
 #include <gtk/gtk.h>
+#include <assert.h>
 
 #ifdef _WIN32
 	// Windows only code
@@ -63,9 +64,13 @@ GdkPixmap *compress_layers(GList *which_slide, gfloat time_position, guint width
 	}
 
 	// Simplify various pointers
+	assert(which_slide != NULL);
 	this_slide_data = (slide *) which_slide->data;
+	assert(this_slide_data != NULL);
 	layer_pointer = g_list_last(this_slide_data->layers);  // The background layer is always the last (bottom) layer
+	assert(layer_pointer != NULL);
 	layer_data = layer_pointer->data;
+	assert(layer_data != NULL);
 
 	// Determine if we have a cached background pixmap we can reuse
 	use_cached_pixmap = FALSE;
@@ -102,6 +107,7 @@ GdkPixmap *compress_layers(GList *which_slide, gfloat time_position, guint width
 			} else
 			{
 				// The existing background image pixbuf is already the correct size
+				g_object_ref(bg_pixbuf);
 				backing_pixbuf = bg_pixbuf;
 			}
 		}
@@ -110,6 +116,7 @@ GdkPixmap *compress_layers(GList *which_slide, gfloat time_position, guint width
 		if (NULL != this_slide_data->scaled_cached_pixmap)
 		{
 			g_object_unref(GDK_PIXMAP(this_slide_data->scaled_cached_pixmap));
+			this_slide_data->scaled_cached_pixmap = NULL;
 		}
 
 		// Create a new backing pixmap
