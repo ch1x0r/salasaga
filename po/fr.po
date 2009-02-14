@@ -1,0 +1,134 @@
+# French translation for salasaga
+# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
+# This file is distributed under the same license as the salasaga package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2009.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: salasaga\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2008-07-29 21:46+1000\n"
+"PO-Revision-Date: 2009-01-20 20:53+0000\n"
+"Last-Translator: Arnaud Bonatti <arnaud.bonatti@gmail.com>\n"
+"Language-Team: French <fr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Launchpad-Export-Date: 2009-02-14 03:52+0000\n"
+"X-Generator: Launchpad (build Unknown)\n"
+
+#: validate_value.c:505
+msgid "Fit to width"
+msgstr "Ajuster à la largeur"
+
+#: validate_value.c:544 salasaga_screencapture.c:80
+#: salasaga_screencapture.c:90 salasaga_screencapture.c:122
+#: salasaga_screencapture.c:131 salasaga_screencapture.c:140
+#: salasaga_screencapture.c:149 salasaga_screencapture.c:157
+#: salasaga_screencapture.c:166 salasaga_screencapture.c:269
+#: salasaga_screencapture.c:283 salasaga_screencapture.c:297
+#: salasaga_screencapture.c:310 salasaga_screencapture.c:323
+#: salasaga_screencapture.c:336 salasaga_screencapture.c:382
+#: salasaga_screencapture.c:395 salasaga_screencapture.c:404
+#: salasaga_screencapture.c:490 salasaga_screencapture.c:500
+#: salasaga_screencapture.c:515 salasaga_screencapture.c:549
+#: salasaga_screencapture.c:566
+msgid "Error"
+msgstr "Erreur"
+
+#: validate_value.c:544
+msgid "Unknown value passed to validation function"
+msgstr ""
+
+#: salasaga_screencapture.c:80
+msgid "Something went wrong when getting the window identifier."
+msgstr ""
+
+#: salasaga_screencapture.c:90 salasaga_screencapture.c:382
+msgid "Something went wrong when getting the screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:122
+msgid "Screenshot GetDC failed."
+msgstr ""
+
+#: salasaga_screencapture.c:131
+msgid "Screenshot CreateCompatibleDC failed."
+msgstr ""
+
+#: salasaga_screencapture.c:140
+msgid "Screenshot CreateCompatibleBitmap failed."
+msgstr ""
+
+#: salasaga_screencapture.c:149
+msgid "Screenshot SelectObject failed: selected object is not a region."
+msgstr ""
+
+#: salasaga_screencapture.c:157
+msgid "Screenshot SelectObject failed: unknown error."
+msgstr ""
+
+#: salasaga_screencapture.c:166
+msgid "Screenshot BitBlt failed."
+msgstr ""
+
+#: salasaga_screencapture.c:269
+msgid ""
+"There was something wrong with the project name value.  Aborting screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:283
+msgid ""
+"There was something wrong with the screenshot folder value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:297
+msgid ""
+"There was something wrong with the x offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:310
+msgid ""
+"There was something wrong with the y offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:323
+msgid "There was something wrong with the width value.  Aborting screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:336
+msgid ""
+"There was something wrong with the height value.  Aborting screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:395
+msgid "Something went wrong opening"
+msgstr ""
+
+#: salasaga_screencapture.c:404
+msgid "The target directory doesn't exist."
+msgstr "Le dossier cible n'existe pas."
+
+#: salasaga_screencapture.c:490
+msgid ""
+"Something went wrong when opening the output screenshot file for writing."
+msgstr ""
+
+#: salasaga_screencapture.c:500
+msgid "Something went wrong when creating the png write structure."
+msgstr ""
+
+#: salasaga_screencapture.c:515
+msgid "Something went wrong when creating the png info structure."
+msgstr ""
+
+#: salasaga_screencapture.c:549
+msgid "Something went wrong when retrieving the screenshot metadata."
+msgstr ""
+
+#: salasaga_screencapture.c:566
+msgid "Something went wrong when copying the screenshot data."
+msgstr ""
