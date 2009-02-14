@@ -213,8 +213,6 @@ void menu_screenshots_import(void)
 							_("screenshot"));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
-		display_warning(tmp_string->str);
-
 		return;
 	}
 
