@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Include file for global variables
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -74,6 +74,7 @@ extern gboolean				mouse_click_single_added;
 extern gboolean				mouse_click_triple_added;
 extern gboolean				mouse_dragging;
 extern GdkPixbuf			*mouse_ptr_pixbuf;
+extern GString				*mouse_ptr_string;
 extern gboolean				new_layer_selected;
 extern GIOChannel			*output_file;
 extern gboolean				project_active;

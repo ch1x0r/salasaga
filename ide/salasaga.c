@@ -114,6 +114,7 @@ gboolean				mouse_click_single_added;	// Have we added a single mouse click to t
 gboolean				mouse_click_triple_added;	// Have we added a triple mouse click to the exported swf yet?
 gboolean				mouse_dragging = FALSE;		// Is the mouse being dragged?
 GdkPixbuf				*mouse_ptr_pixbuf;			// Temporary GDK Pixbuf
+GString					*mouse_ptr_string;			// Full path to the mouse pointer graphic
 gboolean				new_layer_selected = TYPE_NONE;	// Is a new layer being created?
 GIOChannel				*output_file;				// The output file handle
 gboolean				project_active;				// Whether or not a project is active (i.e. something is loaded or has been created)
@@ -197,7 +198,6 @@ gint main(gint argc, gchar *argv[])
 	GValue				*handle_size;				// The size of the handle in the main area
 	char				*locale_return;				// Catches the return code when setting locale
 	GString				*message;					// Used to construct message strings
-	GString				*mouse_ptr_string;			// Full path to the mouse pointer graphic
 	gint				num_formats;				// Used to determine if SVG images can be loaded
 	GtkWidget			*outer_box;					// Widget for the onscreen display
 	GtkLabel			*resolution_label;			// Widget for the resolution selector label
@@ -344,7 +344,7 @@ gint main(gint argc, gchar *argv[])
 	if (debug_level) printf(_("Path to mouse pointer image: %s\n"), mouse_ptr_string->str);
 
 	// Load initial mouse pointer graphic
-	mouse_ptr_pixbuf = gdk_pixbuf_new_from_file_at_size(mouse_ptr_string->str, -1, icon_height, NULL);
+	mouse_ptr_pixbuf = gdk_pixbuf_new_from_file_at_size(mouse_ptr_string->str, -1, -1, NULL);
 
 	// Start up the GUI part of things
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
