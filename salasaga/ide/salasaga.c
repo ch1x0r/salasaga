@@ -257,7 +257,7 @@ gint main(gint argc, gchar *argv[])
 	// Initialise the button event handlers on the toolbars to NULL
 	main_toolbar_signals[CROP_ALL] = 0;
 	main_toolbar_signals[EXPORT_FLASH] = 0;
-	for (tmp_int = 0; tmp_int < LAYER_TB_COUNT; tmp_int++)
+	for (tmp_int = 0; tmp_int < MAIN_TB_COUNT; tmp_int++)
 	{
 	    layer_toolbar_signals[tmp_int] = 0;
 	}
