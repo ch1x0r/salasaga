@@ -42,6 +42,7 @@
 #include "../../../externs.h"
 #include "../../dialog/display_warning.h"
 #include "swf_add_mouse_click.h"
+#include "swf_shape_from_image_file.h"
 
 
 gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
@@ -74,6 +75,8 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	GString				*message;					// Used to construct message strings
 	layer_mouse			*mouse_data;				// Points to the mouse object data inside the layer
 	SWFFillStyle		mouse_fill_style;			// Fill style used when constructing mouse pointers
+	gint				mouse_ptr_width;			// Holds the calculated width for a mouse pointer graphic
+	gint				mouse_ptr_height;			// Holds the calculated height for a mouse pointer graphic
 	SWFShape			mouse_shape = NULL;			//
 	gint				num_text_lines;				// Number of text lines in a particular text layer
 	SWFBlock			our_shape;					// The swf shape before it gets added to a swf movie clip
@@ -434,8 +437,10 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			// Create the swf movie clip object that holds the layer object
 			container_movie_clip = newSWFMovieClip();
 
-			// Create the initial empty shape
-			mouse_shape = newSWFShape();
+			// Load the mouse pointer graphic
+			mouse_ptr_width = 21 * scaled_width_ratio;
+			mouse_ptr_height = 30 * scaled_height_ratio;
+			mouse_shape = swf_shape_from_image_file(mouse_ptr_string->str, mouse_ptr_width, mouse_ptr_height);
 			if (NULL == mouse_shape)
 			{
 				// Something went wrong when creating the empty shape, so we skip this layer
@@ -444,22 +449,6 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				g_string_free(message, TRUE);
 				return FALSE;
 			}
-
-			// Set the fill for the mouse pointer
-			mouse_fill_style = SWFShape_addSolidFillStyle(mouse_shape, 0xff, 0xff, 0xff, 0xff);
-			SWFShape_setRightFillStyle(mouse_shape, mouse_fill_style);
-
-			// Set the border style
-			SWFShape_setLine(mouse_shape, 1, 0x00, 0x00, 0x00, 0xff);
-
-			// Create the mouse pointer
-			SWFShape_drawLine(mouse_shape, 22.0 * scaled_width_ratio, 17.0 * scaled_height_ratio);
-			SWFShape_drawLine(mouse_shape, -11.0 * scaled_width_ratio, 0.0);
-			SWFShape_drawLine(mouse_shape, 9.0 * scaled_width_ratio, 14.0 * scaled_height_ratio);
-			SWFShape_drawLine(mouse_shape, -6.0 * scaled_width_ratio, 0.0);
-			SWFShape_drawLine(mouse_shape, -8.0 * scaled_width_ratio, -13.0 * scaled_height_ratio);
-			SWFShape_drawLine(mouse_shape, -6.0 * scaled_width_ratio, 8.0 * scaled_height_ratio);
-			SWFShape_drawLineTo(mouse_shape, 0.0, 0.0);
 
 			// Add the mouse layer object to the movie clip
 			container_display_item = SWFMovieClip_add(container_movie_clip, (SWFBlock) mouse_shape);
