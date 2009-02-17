@@ -2,10 +2,9 @@
 Name=Salasaga
 GenericName=eLearning IDE
 Comment=Create eLearning for desktop applications
-Icon=@ICON_PNG_DIR@/salasaga-icon.png
+Icon=salasaga
 Exec=salasaga
 Type=Application
 Terminal=false
 StartupNotify=true
 Categories=Graphics;2DGraphics;VectorGraphics;GTK;
-Encoding=UTF-8
