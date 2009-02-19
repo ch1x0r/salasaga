@@ -112,7 +112,7 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 			source_ptr += 3;
 			if (ind)
 			{
-				dest_ptr[0] = source_prt[3];
+				dest_ptr[0] = source_ptr[3];
 				source_ptr+=1;
 			}
 
