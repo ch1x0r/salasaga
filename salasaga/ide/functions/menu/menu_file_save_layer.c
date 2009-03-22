@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Function that takes a layer structure pointer, and adds it's data to an in-memory XML document
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -157,7 +157,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			}
 
 			// Store the count of image data bytes in the file for read back verification
-			g_string_printf(tmp_gstring2, "%d", pixbuf_size);
+			g_string_printf(tmp_gstring2, "%lu", pixbuf_size);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "data_length", (const xmlChar *) tmp_gstring2->str);
 
 			// Base64 encode the image data
@@ -195,7 +195,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			g_string_printf(tmp_gstring, "%u", ((layer_empty *) layer_pointer->object_data)->bg_color.blue);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "blue", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", layer_pointer->background);
-			xmlNewChild(layer_node, NULL, (const xmlChar *) "background", (const xmlChar *) tmp_gstring->str);			
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "background", (const xmlChar *) tmp_gstring->str);
 			break;
 
 		case TYPE_MOUSE_CURSOR:
@@ -298,7 +298,7 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "bg_fill_colour_blue", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%f", ((layer_text *) layer_pointer->object_data)->bg_border_width);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "bg_border_width", (const xmlChar *) tmp_gstring->str);
-			
+
 			break;
 
 		case TYPE_HIGHLIGHT:
