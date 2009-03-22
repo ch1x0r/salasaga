@@ -8,3 +8,5 @@ salasaga_screencapture_LDADD = $(DEPS_LIBS) $(GTK_LIBS) $(ZLIB)
 
 AM_CPPFLAGS = $(DEPS_CFLAGS) $(GTK_CFLAGS) \
 	-DLOCALEDIR=\""$(DESTDIR)/$(datadir)/salasaga/locale"\"
+
+DISTCLEANFILES = Makefile.in
