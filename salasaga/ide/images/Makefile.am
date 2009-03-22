@@ -60,3 +60,5 @@ images_svg_DATA = \
 	up_arrow_grayed.svg
 
 SUBDIRS = control_bar pointers
+
+DISTCLEANFILES = Makefile.in
