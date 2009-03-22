@@ -63,3 +63,7 @@ images_control_bar_svg_DATA = \
 	player_stop_down.svg \
 	player_stop_over.svg \
 	player_stop_up.svg
+
+SUBDIRS = 128x96 160x120 176x144 320x240 352x288 480x120 528x396 640x480 720x480 800x600 1024x768 1280x720 1280x1024 1600x1200 1920x1080 1920x1200
+
+DISTCLEANFILES = Makefile.in
