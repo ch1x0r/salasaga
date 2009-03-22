@@ -11,3 +11,5 @@ do_subst = sed -e 's,[@]ICON_PNG_DIR[@],$(datadir)/pixmaps,g'
 
 salasaga.desktop: salasaga.desktop.in
 	$(do_subst) < $(srcdir)/salasaga.desktop.in > salasaga.desktop
+
+DISTCLEANFILES = Makefile.in
