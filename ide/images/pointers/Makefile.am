@@ -3,3 +3,5 @@ images_mouse_ptr_png_DATA = standard.png
 
 images_mouse_ptr_svgdir = $(datadir)/salasaga/icons/scalable/pointers
 images_mouse_ptr_svg_DATA = standard.svg
+
+DISTCLEANFILES = Makefile.in
