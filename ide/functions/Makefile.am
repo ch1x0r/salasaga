@@ -123,3 +123,5 @@ AM_CPPFLAGS = $(DEPS_CFLAGS) $(GTK_CFLAGS) \
 	-DMOUSE_PTR_PNG_DIR=\""$(DESTDIR)/$(datadir)/salasaga/icons/72x72/pointers"\" \
 	-DMOUSE_PTR_SVG_DIR=\""$(DESTDIR)/$(datadir)/salasaga/icons/scalable/pointers"\" \
 	-DSOUND_DIR=\""$(DESTDIR)/$(datadir)/salasaga/sounds/"\"
+
+DISTCLEANFILES = Makefile.in
