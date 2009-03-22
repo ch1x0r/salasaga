@@ -57,7 +57,7 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height)
 	if (NULL == image_pixbuf)
 	{
 		// Something went wrong when loading the Play button's UP stat image
-		g_string_printf(message, "%s ED104: %s - '%'", _("Error"), _("Something went wrong when loading the image for conversion to a swf shape"), filename);
+		g_string_printf(message, "%s ED104: %s - '%s'", _("Error"), _("Something went wrong when loading the image for conversion to a swf shape"), filename);
 		display_warning(message->str);
 		g_string_free(message, TRUE);
 		return NULL;
