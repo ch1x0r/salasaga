@@ -82,7 +82,6 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFFillStyle		cb_fill_style;				// Fill style used when constructing the control bar background
 
 	// Variables used in working out control bar dimensions
-	gfloat				control_bar_curve;
 	gfloat				control_bar_height;
 	gfloat				control_bar_width;
 	gfloat				control_bar_x;
@@ -160,9 +159,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				30,		// button width
 			   883,		// control bar start x
 			  1152,		// control bar start y
-			    35,		// control bar height
-			   154,		// control bar width
-			    10 },	// control bar curve
+			    34,		// control bar height
+			   184 },	// control bar width
 
 		{ 1920, 1080,	// 1920 x 1080	=	1
 				30,		// button height
@@ -172,9 +170,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				30,		// button width
 			   883,		// control bar start x
 			  1032,		// control bar start y
-			    35,		// control bar height
-			   154,		// control bar width
-			    10 },	// control bar curve
+			    34,		// control bar height
+			   184 },	// control bar width
 
 		{ 1600, 1200,	// 1600 x 1200	=	2
 				30,		// button height
@@ -184,9 +181,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				30,		// button width
 			   723,		// control bar start x
 			  1152,		// control bar start y
-			    36,		// control bar height
-			   154,		// control bar width
-			    10 },	// control bar curve
+			    34,		// control bar height
+			   184 },	// control bar width
 
 		{ 1280, 1024,	// 1280 x 1024	=	3
 				30,		// button height
@@ -196,9 +192,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				30,		// button width
 			   563,		// control bar start x
 			   976,		// control bar start y
-			    35,		// control bar height
-			   154,		// control bar width
-			    10 },	// control bar curve
+			    34,		// control bar height
+			   184 },	// control bar width
 
 		{ 1280, 720,	// 1280 x 720	=	4
 				30,		// button height
@@ -208,9 +203,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				30,		// button width
 			   563,		// control bar start x
 			   672,		// control bar start y
-			    33,		// control bar height
-			   154,		// control bar width
-			    10 },	// control bar curve
+			    34,		// control bar height
+			   184 },	// control bar width
 
 		{ 1024, 768,	// 1024 x 768	=	5
 				30,		// button height
@@ -220,21 +214,19 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				30,		// button width
 			   435,		// control bar start x
 			   720,		// control bar start y
-			    36,		// control bar height
-			   154,		// control bar width
-			    10 },	// control bar curve
+			    34,		// control bar height
+			   184 },	// control bar width
 
 		{ 800, 600,		// 800 x 600	=	6
 				30,		// button height
 				 0,		// button spacing
 				 2,		// button start x
-			   1.6,		// button start y
+				 2,		// button start y
 				30,		// button width
 			   323,		// control bar start x
 			   556,		// control bar start y
-			    33,		// control bar height
-			   154,		// control bar width
-			    10 },	// control bar curve
+			    34,		// control bar height
+			   184 },	// control bar width
 
 		{ 720, 480,		// 720 x 480	=	7
 				30,		// button height
@@ -244,9 +236,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				30,		// button width
 			   283,		// control bar start x
 			   430,		// control bar start y
-			    35,		// control bar height
-			   154,		// control bar width
-			     9 },	// control bar curve
+			    34,		// control bar height
+			   184 },	// control bar width
 
 		{ 640, 480,		// 640 x 480	=	8
 				30,		// button height
@@ -256,9 +247,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				30,		// button width
 			   243,		// control bar start x
 			   430,		// control bar start y
-			    35,		// control bar height
-			   154,		// control bar width
-			     8 },	// control bar curve
+			    34,		// control bar height
+			   184 },	// control bar width
 
 		{ 528, 396,		// 528 x 396	=	9
 				26,		// button height
@@ -269,8 +259,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			   200,		// control bar start x
 			   356,		// control bar start y
 			    30,		// control bar height
-			   134,		// control bar width
-			     8 },	// control bar curve
+			   160 },	// control bar width
 
 		{ 480, 120,		// 480 x 120	=	10
 				14,		// button height
@@ -280,9 +269,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				14,		// button width
 			   200,		// control bar start x
 			    98,		// control bar start y
-			    17,		// control bar height
-			    74,		// control bar width
-			     8 },	// control bar curve
+			    18,		// control bar height
+			    88 },	// control bar width
 
 		{ 352, 288,		// 352 x 288	=	11
 				15,		// button height
@@ -293,8 +281,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			   135,		// control bar start x
 			   260,		// control bar start y
 			    18,		// control bar height
-				82,		// control bar width
-			     4 },	// control bar curve
+				98 },	// control bar width
 
 		{ 320, 240,		// 320 x 240	=	12
 				15,		// button height
@@ -304,9 +291,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				15,		// button width
 			   119,		// control bar start x
 			   215,		// control bar start y
-			    18,		// control bar height
-			    82,		// control bar width
-			     4 },	// control bar curve
+			    17,		// control bar height
+			    98 },	// control bar width
 
 		{ 176, 144,		// 176 x 144	=	13
 				11,		// button height
@@ -316,9 +302,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				11,		// button width
 			  59.5,		// control bar start x
 			   129,		// control bar start y
-			    14,		// control bar height
-			    57,		// control bar width
-			     2 },	// control bar curve
+			    13,		// control bar height
+			    68 },	// control bar width
 
 		{ 160, 120,		// 160 x 120	=	14
 				11,		// button height
@@ -328,9 +313,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				11,		// button width
 			  51.5,		// control bar start x
 			   105,		// control bar start y
-			    14,		// control bar height
-			    57,		// control bar width
-			     2 },	// control bar curve
+			    13,		// control bar height
+			    68 },	// control bar width
 
 		{ 128,  96,		// 128 x 96		=	15
 				11,		// button height
@@ -340,9 +324,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 				11,		// button width
 			  35.5,		// control bar start x
 			    81,		// control bar start y
-			    14,		// control bar height
-			    57,		// control bar width
-			     2 }	// control bar curve
+			    13,		// control bar height
+			    68 }	// control bar width
 	};
 
 
@@ -362,7 +345,6 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	button_height = cb_size_array[cb_index].button_height;
 	button_spacing = cb_size_array[cb_index].button_spacing;
 	button_width = cb_size_array[cb_index].button_width;
-	control_bar_curve = cb_size_array[cb_index].cb_curve;
 	control_bar_height = cb_size_array[cb_index].cb_height;
 	control_bar_width = cb_size_array[cb_index].cb_width;
 	control_bar_x = cb_size_array[cb_index].cb_start_x;
@@ -427,7 +409,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		}
 	}
 
-	// Add the action script to keep the animation paused if that's whats requested
+	// Add the action script to keep the animation paused if that's what is requested
 	slide_names_gstring = g_string_append(slide_names_gstring, " if (false == _root.playing) { _root.stop(); };");
 
 	// Displaying debugging info if requested
@@ -440,46 +422,21 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	main_movie_action = compileSWFActionCode(slide_names_gstring->str);
 	SWFMovie_add(main_movie, (SWFBlock) main_movie_action);
 
+
 	// *** Create the control bar background ***
-	cb_background = newSWFShape();
+
+	g_string_printf(message, "%ux%u", output_width, output_height);  // We use the message variable here as a temporary variable, for efficiency
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", message->str, "background", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	g_free(image_path);
+	cb_background = swf_shape_from_image_file(file_name_full->str, control_bar_width, control_bar_height);
 	if (NULL == cb_background)
 	{
-		// Something went wrong when creating the empty shape, so we skip this layer
+		// Loading images isn't working.
+		g_string_printf(message, "%s. Couldn't load the control bar background: %s", _("Error"), file_name_full->str);
+		display_warning(message->str);
 		return FALSE;
 	}
-	cb_fill_style = SWFShape_addSolidFillStyle(cb_background, 0xff, 0xff, 0xe6, 0xff);
-	SWFShape_setRightFillStyle(cb_background, cb_fill_style);
-	SWFShape_setLine(cb_background, 1, 0x00, 0x00, 0x00, 0xff);
-
-	// Move pen to start of top straight
-	SWFShape_movePen(cb_background, control_bar_curve, 0.0);
-
-	// Draw top straight
-	SWFShape_drawLine(cb_background, control_bar_width - (control_bar_curve * 2) - 2, 0.0);
-
-	// Curve down to right
-	SWFShape_drawCurve(cb_background, control_bar_curve, 0, 2, control_bar_curve);
-
-	// Draw right
-	SWFShape_drawLine(cb_background, 0.0, control_bar_height - (control_bar_curve * 2) - 2);
-
-	// Curve down to bottom
-	SWFShape_drawCurve(cb_background, 0.0, control_bar_curve, -(control_bar_curve), 2);
-
-	// Draw bottom
-	SWFShape_drawLine(cb_background, -(control_bar_width - (control_bar_curve * 2) - 2), 0.0);
-
-	// Curve up to left
-	SWFShape_drawCurve(cb_background, -(control_bar_curve + 1), 0.5, -0.5, -(control_bar_curve));
-
-	// Draw left
-	SWFShape_drawLine(cb_background, 0.0, -(control_bar_height - (control_bar_curve * 2) - 1));
-
-	// Curve up to top
-	SWFShape_drawCurve(cb_background, 0.0, -(control_bar_curve + 2), control_bar_curve, 0.25);
-
-	// Manually close the shape
-	SWFShape_drawLineTo(cb_background, control_bar_curve, 0.0);
 
 
 	// *** Create the Restart button ***
@@ -1481,7 +1438,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		SWFDisplayItem_setName(info_bg_display_item, "info_text");
 		SWFDisplayItem_setDepth(info_bg_display_item, depth_number + 1);
 		SWFDisplayItem_moveTo(info_bg_display_item,
-				control_bar_x + (control_bar_width / 2) - (widest_text_string_width / 2) - (control_bar_curve / 3),
+				control_bar_x + (control_bar_width / 2) - (widest_text_string_width / 2),
 				control_bar_y - (info_real_font_size * num_text_lines) - 4);
 	}
 

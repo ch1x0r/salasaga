@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Include file for structures and similar used throughout the code
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -77,7 +77,7 @@ extern "C" {
 #define	RESIZE_HANDLES_RESIZING_LM	512
 #define RESIZE_HANDLES_RESIZING_ALL	1020
 
-// Text padding defines (in pixels) 
+// Text padding defines (in pixels)
 #define TEXT_BORDER_PADDING_WIDTH 4
 #define TEXT_BORDER_PADDING_HEIGHT 4
 
@@ -267,7 +267,6 @@ typedef struct
 	gfloat				cb_start_y;
 	gfloat				cb_height;
 	gfloat				cb_width;
-	gfloat				cb_curve;
 } control_bar_elements;
 
 // Defines the object and properties making up a layer
