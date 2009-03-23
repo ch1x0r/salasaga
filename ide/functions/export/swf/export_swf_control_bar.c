@@ -353,7 +353,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	// If there is only a single slide, the control bar background is not as wide
 	if (1 == num_slides)
 	{
-		control_bar_width -= (button_width * 2);
+		control_bar_width -= (button_width + button_spacing) * 2;
 		control_bar_x += button_width;
 	}
 
@@ -425,11 +425,28 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 
 	// *** Create the control bar background ***
 
+	// Work out which background image to use
+	g_string_printf(file_name_full, "background");  // We use the file_name_full variable here as a temporary variable, purely for efficiency
+	if (TRUE == info_display)  // Check if the background image should be wide enough for the info button
+	{
+		g_string_append(file_name_full, "_with_info");
+	} else
+	{
+		g_string_append(file_name_full, "_no_info");
+	}
+	if (1 == num_slides) // Check if the background image should be wide enough for the fast forward and reverse buttons
+	{
+		g_string_append(file_name_full, "_no_ffrv");
+	} else
+	{
+		g_string_append(file_name_full, "_with_ffrv");
+	}
+
 	g_string_printf(message, "%ux%u", output_width, output_height);  // We use the message variable here as a temporary variable, for efficiency
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", message->str, "background", NULL);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", message->str, file_name_full->str, NULL);
 	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
 	g_free(image_path);
-	cb_background = swf_shape_from_image_file(file_name_full->str, control_bar_width, control_bar_height);
+	cb_background = swf_shape_from_image_file(file_name_full->str, -1, -1);
 	if (NULL == cb_background)
 	{
 		// Loading images isn't working.
