@@ -125,7 +125,7 @@ void menu_file_new(void)
 
 	// Create the entry that accepts the project width
 	width_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_WIDTH].max_value, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(width_button), 1280);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(width_button), project_width);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
@@ -136,7 +136,7 @@ void menu_file_new(void)
 
 	// Create the entry that accepts the project height
 	height_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_HEIGHT].max_value, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(height_button), 1024);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(height_button), project_height);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
