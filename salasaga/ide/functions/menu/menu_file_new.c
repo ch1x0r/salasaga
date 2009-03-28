@@ -317,6 +317,20 @@ void menu_file_new(void)
 	// Redraw the timeline
 	draw_timeline();
 
+	// Calculate and set the display size of the working area
+	working_width = (project_width * zoom) / 100;
+	working_height = (project_height * zoom) / 100;
+
+	// Resize the drawing area so it draws properly
+	gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), working_width, working_height);
+
+	// Free the existing front store for the workspace
+	if (NULL != front_store)
+	{
+		g_object_unref(GDK_PIXMAP(front_store));
+		front_store = NULL;
+	}
+
 	// Redraw the workspace
 	draw_workspace();
 
