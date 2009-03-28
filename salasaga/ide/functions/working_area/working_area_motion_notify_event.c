@@ -375,8 +375,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		}
 
 		// Work out the bounding box boundaries (scaled)
-		new_x_val = CLAMP(stored_x_val + x_diff, 1, project_width - width - 2);
-		new_y_val = CLAMP(stored_y_val + y_diff, 1, project_height - height - 2);
+		new_x_val = stored_x_val + x_diff;
+		new_y_val = stored_y_val + y_diff;
 		onscreen_right = CLAMP(new_x_val + width, 1, project_width - 2);
 		onscreen_bottom = CLAMP(new_y_val + height, 1, project_height - 2);
 
@@ -385,12 +385,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		onscreen_top = new_y_val / scaled_height_ratio;
 		onscreen_right /= scaled_width_ratio;
 		onscreen_bottom /= scaled_height_ratio;
-
-		// Ensure the bounding box doesn't go out of bounds
-		onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - 2);
-		onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - 2);
-		onscreen_right = CLAMP(onscreen_right, 2, pixmap_width - 2);
-		onscreen_bottom = CLAMP(onscreen_bottom, 2, pixmap_height - 2);
 
 		// Update the layer object positions
 		if (END_POINTS_START_ACTIVE == end_point_status)
