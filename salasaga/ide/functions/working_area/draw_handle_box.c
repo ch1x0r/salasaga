@@ -57,7 +57,7 @@ gboolean draw_handle_box(void)
 	gint				onscreen_left;				// X coordinate of bounding box left
 	gint				onscreen_right;				// X coordinate of bounding box right
 	gint				onscreen_top;				// Y coordinate of bounding box top
-	gint				pixmap_height;				// Height of the front stoe
+	gint				pixmap_height;				// Height of the front store
 	gint				pixmap_width;				// Width of the front store
 	guint				required_size_for_handles;	// Minimum size we need in order to draw any resize handles
 	gboolean			return_code_gbool;			// Receives gboolean return codes

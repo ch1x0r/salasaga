@@ -61,7 +61,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gint				onscreen_left;				// New X coordinate of layer
 	gint				onscreen_right;				// New X coordinate of layer
 	gint				onscreen_top;				// New Y coordinate of layer
-	gint				pixmap_height;				// Height of the front stoe
+	gint				pixmap_height;				// Height of the front store
 	gint				pixmap_width;				// Width of the front store
 	gint				project_x_position;			// X position in the project image
 	gint				project_y_position;			// Y position in the project image
