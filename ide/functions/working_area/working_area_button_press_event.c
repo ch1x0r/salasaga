@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user presses the mouse button on the drawing area 
- * 
+ * Salasaga: Function called when the user presses the mouse button on the drawing area
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -55,7 +55,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	GList				*collision_list = NULL;
 	guint				count_int;
 	gint				finish_x;					// X position at the layer objects finish time
-	gint				finish_y;					// Y position at the layer objects finish time 
+	gint				finish_y;					// Y position at the layer objects finish time
 	GList				*layer_pointer;
 	GString				*message;					// Used to construct message strings
 	guint				num_collisions;
@@ -63,9 +63,9 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	gint				onscreen_left;				// X coordinate of bounding box left
 	gint				onscreen_right;				// X coordinate of bounding box right
 	gint				onscreen_top;				// Y coordinate of bounding box top
-	gint				pixmap_height;				// Height of the front stoe
+	gint				pixmap_height;				// Height of the front store
 	gint				pixmap_width;				// Width of the front store
-	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
+	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_row;				// Holds the number of the row that is selected
 	gint				start_x;					// X position at the layer objects start time
@@ -149,8 +149,8 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 
 		// Is the user clicking on an end point?
 		if (((event->x >= start_x)							// Start point
-			&& (event->x <= start_x + END_POINT_WIDTH)	
-			&& (event->y >= start_y)			
+			&& (event->x <= start_x + END_POINT_WIDTH)
+			&& (event->y >= start_y)
 			&& (event->y <= start_y + END_POINT_HEIGHT)) ||
 			((event->x >= finish_x)							// End point
 			&& (event->x <= finish_x + END_POINT_WIDTH)
@@ -229,10 +229,10 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 			}
 
 			// Ensure the bounding box doesn't go out of bounds
-			onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - (box_width / scaled_width_ratio) - 2);
-			onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - (box_height / scaled_height_ratio) - 2);
-			onscreen_right = CLAMP(onscreen_right, 2 + (box_width / scaled_width_ratio), pixmap_width - 2);
-			onscreen_bottom = CLAMP(onscreen_bottom, 2 + (box_height / scaled_height_ratio), pixmap_height - 2);
+			onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - 2);
+			onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - 2);
+			onscreen_right = CLAMP(onscreen_right, 2, pixmap_width - 2);
+			onscreen_bottom = CLAMP(onscreen_bottom, 2, pixmap_height - 2);
 
 			// Draw a bounding box onscreen
 			draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
