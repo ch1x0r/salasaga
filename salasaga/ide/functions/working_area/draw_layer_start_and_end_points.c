@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Draws the start and end points for a layer 
- * 
+ * Salasaga: Draws the start and end points for a layer
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -43,7 +43,7 @@ gboolean draw_layer_start_and_end_points()
 	gint				finish_mid_point_x;
 	gint				finish_mid_point_y;
 	gint				finish_x;					// X position at the layer objects finish time
-	gint				finish_y;					// Y position at the layer objects finish time 
+	gint				finish_y;					// Y position at the layer objects finish time
 	GList				*layer_pointer;
 	gint				old_start_x = 0;			// Value used in the previous run
 	gint				old_start_y = 0;			// Value used in the previous run
@@ -51,7 +51,7 @@ gboolean draw_layer_start_and_end_points()
 	gint				old_height = 0;				// Value used in the previous run
 	gint				pixmap_height;				// Receives the height of a given pixmap
 	gint				pixmap_width;				// Receives the width of a given pixmap
-	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
+	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_row;				// Number of the row selected in the time line
 	gint				start_mid_point_x;
@@ -120,20 +120,28 @@ gboolean draw_layer_start_and_end_points()
 			start_mid_point_x, start_mid_point_y, finish_mid_point_x, finish_mid_point_y);
 
 	// Draw end point
-	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_red);
-	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), TRUE,
-			finish_x, finish_y, END_POINT_WIDTH, END_POINT_HEIGHT);
-	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
-	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), FALSE,
-			finish_x, finish_y, END_POINT_WIDTH, END_POINT_HEIGHT);
+	if ((finish_x >= 1) && ((finish_x + END_POINT_WIDTH) < pixmap_width)
+		&& (finish_y >= 1) && (finish_y + END_POINT_HEIGHT) < pixmap_height)
+	{
+		gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_red);
+		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), TRUE,
+				finish_x, finish_y, END_POINT_WIDTH, END_POINT_HEIGHT);
+		gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
+		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), FALSE,
+				finish_x, finish_y, END_POINT_WIDTH, END_POINT_HEIGHT);
+	}
 
 	// Draw start point
-	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_green);
-	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), TRUE,
-			start_x, start_y, END_POINT_WIDTH, END_POINT_HEIGHT);
-	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
-	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), FALSE,
-			start_x, start_y, END_POINT_WIDTH, END_POINT_HEIGHT);
+	if ((start_x >= 1) && ((start_x + END_POINT_WIDTH) < pixmap_width)
+		&& (start_y >= 1) && (start_y + END_POINT_HEIGHT) < pixmap_height)
+	{
+		gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_green);
+		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), TRUE,
+				start_x, start_y, END_POINT_WIDTH, END_POINT_HEIGHT);
+		gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
+		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), FALSE,
+				start_x, start_y, END_POINT_WIDTH, END_POINT_HEIGHT);
+	}
 
 	return TRUE;
 }
