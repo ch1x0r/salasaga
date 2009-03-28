@@ -114,7 +114,7 @@ void menu_file_new(void)
 	// Create the entry that accepts the new project name
 	name_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(name_entry), valid_fields[PROJECT_NAME].max_value);
-	gtk_entry_set_text(GTK_ENTRY(name_entry), project_name->str);
+	gtk_entry_set_text(GTK_ENTRY(name_entry), "New Project");
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
