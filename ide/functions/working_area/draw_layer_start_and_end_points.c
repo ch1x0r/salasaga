@@ -45,6 +45,7 @@ gboolean draw_layer_start_and_end_points()
 	gint				finish_x;					// X position at the layer objects finish time
 	gint				finish_y;					// Y position at the layer objects finish time
 	GList				*layer_pointer;
+	GdkRectangle		line_clip_region;			// Used as a clipmask region
 	gint				old_start_x = 0;			// Value used in the previous run
 	gint				old_start_y = 0;			// Value used in the previous run
 	gint				old_width = 0;				// Value used in the previous run
@@ -114,8 +115,13 @@ gboolean draw_layer_start_and_end_points()
 	old_height = finish_y + END_POINT_HEIGHT;
 
 	// Draw a line joining the start and end points
+	line_clip_region.x = 0;
+	line_clip_region.y = 0;
+	line_clip_region.width = (gint) pixmap_width;
+	line_clip_region.height = (gint) pixmap_height;
 	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
 	gdk_gc_set_line_attributes(GDK_GC(widget_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+	gdk_gc_set_clip_rectangle(GDK_GC(widget_gc), &line_clip_region);
 	gdk_draw_line(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc),
 			start_mid_point_x, start_mid_point_y, finish_mid_point_x, finish_mid_point_y);
 
