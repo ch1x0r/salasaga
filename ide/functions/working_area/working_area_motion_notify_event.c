@@ -65,7 +65,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gint				onscreen_left;				// X coordinate of bounding box left
 	gint				onscreen_right;				// X coordinate of bounding box right
 	gint				onscreen_top;				// Y coordinate of bounding box top
-	gint				pixmap_height;				// Height of the front stoe
+	gint				pixmap_height;				// Height of the front store
 	gint				pixmap_width;				// Width of the front store
 	gboolean			return_code_gbool;			// Receives gboolean return codes
 	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio
@@ -387,10 +387,10 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		onscreen_bottom /= scaled_height_ratio;
 
 		// Ensure the bounding box doesn't go out of bounds
-		onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - (width / scaled_width_ratio) - 2);
-		onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - (height / scaled_height_ratio) - 2);
-		onscreen_right = CLAMP(onscreen_right, 2 + (width / scaled_width_ratio), pixmap_width - 2);
-		onscreen_bottom = CLAMP(onscreen_bottom, 2 + (height / scaled_height_ratio), pixmap_height - 2);
+		onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - 2);
+		onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - 2);
+		onscreen_right = CLAMP(onscreen_right, 2, pixmap_width - 2);
+		onscreen_bottom = CLAMP(onscreen_bottom, 2, pixmap_height - 2);
 
 		// Update the layer object positions
 		if (END_POINTS_START_ACTIVE == end_point_status)
