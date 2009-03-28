@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Draws a handle box (outline) on the workspace, around the selected layer 
- * 
+ * Salasaga: Draws a handle box (outline) on the workspace, around the selected layer
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -51,7 +51,7 @@ gboolean draw_handle_box(void)
 	// Local variables
 	slide				*current_slide_data;		// Alias to make things easier
 	gint				finish_x;					// X position at the layer objects finish time
-	gint				finish_y;					// Y position at the layer objects finish time 
+	gint				finish_y;					// Y position at the layer objects finish time
 	GtkAllocation		layer_positions;			// Offset and dimensions for a given layer object
 	gint				onscreen_bottom;			// Y coordinate of bounding box bottom
 	gint				onscreen_left;				// X coordinate of bounding box left
@@ -61,7 +61,7 @@ gboolean draw_handle_box(void)
 	gint				pixmap_width;				// Width of the front store
 	guint				required_size_for_handles;	// Minimum size we need in order to draw any resize handles
 	gboolean			return_code_gbool;			// Receives gboolean return codes
-	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
+	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_layer;				// Holds the number of the layer that is selected
 	gfloat				start_time;					// Time in seconds of the layer objects start time
@@ -137,11 +137,11 @@ gboolean draw_handle_box(void)
 	onscreen_right = (layer_positions.x + layer_positions.width) / scaled_width_ratio;
 	onscreen_bottom = (layer_positions.y + layer_positions.height) / scaled_height_ratio;
 
-	// Ensure the bounding box doesn't go out of bounds
-	onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - (layer_positions.width / scaled_width_ratio) - 2);
-	onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - (layer_positions.height / scaled_height_ratio) - 2);
-	onscreen_right = CLAMP(onscreen_right, 2 + (layer_positions.width / scaled_width_ratio), pixmap_width - 2);
-	onscreen_bottom = CLAMP(onscreen_bottom, 2 + (layer_positions.height / scaled_height_ratio), pixmap_height - 2);
+	// If the bounding box is completely offscreen, skip drawing it
+	if ((onscreen_left > pixmap_width) || (onscreen_right < 1) || (onscreen_top > pixmap_height) || (onscreen_bottom < 1))
+	{
+		return TRUE;
+	}
 
 	// Draw a bounding box onscreen
 	draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
