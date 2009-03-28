@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Detect when the user releases the mouse button on the drawing area 
- * 
+ * Salasaga: Detect when the user releases the mouse button on the drawing area
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -65,13 +65,13 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gint				pixmap_width;				// Width of the front store
 	gint				project_x_position;			// X position in the project image
 	gint				project_y_position;			// Y position in the project image
-	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
+	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_row;				// Holds the number of the row that is selected
 	guint				swap_value;					// Temporary value used when swapping border positions
 	slide				*this_slide_data;			// Alias to make things easier
 	gint				width;
-	gint				x_change;					// The X distance the layer object moves from start to finish 
+	gint				x_change;					// The X distance the layer object moves from start to finish
 	gint				y_change;					// The Y distance the layer object moves from start to finish
 	gfloat				x_diff;						// The X distance the object was dragged, after scaling
 	gfloat				y_diff;						// The Y distance the object was dragged, after scaling
@@ -391,16 +391,16 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			y_diff = (mouse_y - stored_y) * scaled_height_ratio;
 
 			// Bounds check the starting x offset, then update the object with the new value
-			layer_data->x_offset_start = CLAMP(layer_data->x_offset_start + x_diff, 1, project_width - width - 2);
+			layer_data->x_offset_start = layer_data->x_offset_start + x_diff;
 
 			// Bounds check the finishing x offset, then update the object with the new value
-			layer_data->x_offset_finish = CLAMP(layer_data->x_offset_finish + x_diff, 1, project_width - width - 2);
+			layer_data->x_offset_finish = layer_data->x_offset_finish + x_diff;
 
 			// Bounds check the starting y offset, then update the object with the new value
-			layer_data->y_offset_start = CLAMP(layer_data->y_offset_start + y_diff, 1, project_height - height - 2);
+			layer_data->y_offset_start = layer_data->y_offset_start + y_diff;
 
 			// Bounds check the finishing y offset, then update the object with the new value
-			layer_data->y_offset_finish = CLAMP(layer_data->y_offset_finish + y_diff, 1, project_height - height - 2);
+			layer_data->y_offset_finish = layer_data->y_offset_finish + y_diff;
 
 			// Redraw the workspace
 			draw_workspace();
