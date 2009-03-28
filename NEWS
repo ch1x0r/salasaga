@@ -1,3 +1,12 @@
+2009-??-?? - JustinClift
+
+ Alpha 6
+ *******
+ 
+ * The control bar in swf output is much better looking, now finally of acceptable quality.
+ * The default width and height for new projects is whatever width and height was last used.
+ * Minor bug fixes.
+
 2009-02-14 - JustinClift
 
  Preparation for Alpha 5.  Added critical bug fixes, plus new and
