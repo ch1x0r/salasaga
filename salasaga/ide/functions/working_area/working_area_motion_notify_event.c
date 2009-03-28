@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Called when the user is dragging the mouse on the drawing area 
- * 
+ * Salasaga: Called when the user is dragging the mouse on the drawing area
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -51,7 +51,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gfloat				cursor_movement_x;
 	gfloat				cursor_movement_y;
 	gint				finish_x;					// X position at the layer objects finish time
-	gint				finish_y;					// Y position at the layer objects finish time 
+	gint				finish_y;					// Y position at the layer objects finish time
 	gint				height;
 	layer				*layer_data;				// Data for the layer we're working on
 	GtkAllocation		layer_positions;			// Offset and dimensions for a given layer object
@@ -68,7 +68,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gint				pixmap_height;				// Height of the front stoe
 	gint				pixmap_width;				// Width of the front store
 	gboolean			return_code_gbool;			// Receives gboolean return codes
-	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
+	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_row;				// Holds the number of the row that is selected
 	gint				start_x;					// X position at the layer objects start time
@@ -250,8 +250,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		{
 			// Is the user clicking on a start or end point?
 			if (((event->x >= start_x)							// Start point
-				&& (event->x <= start_x + END_POINT_WIDTH)	
-				&& (event->y >= start_y)			
+				&& (event->x <= start_x + END_POINT_WIDTH)
+				&& (event->y >= start_y)
 				&& (event->y <= start_y + END_POINT_HEIGHT)) ||
 				((event->x >= finish_x)							// End point
 				&& (event->x <= finish_x + END_POINT_WIDTH)
@@ -450,10 +450,10 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		onscreen_bottom = ((layer_positions.y + layer_positions.height) / scaled_height_ratio) + y_diff;
 
 		// Ensure the bounding box doesn't go out of bounds
-		onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - (layer_positions.width / scaled_width_ratio) - 2);
-		onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - (layer_positions.height / scaled_height_ratio) - 2);
-		onscreen_right = CLAMP(onscreen_right, 2 + (layer_positions.width / scaled_width_ratio), pixmap_width - 2);
-		onscreen_bottom = CLAMP(onscreen_bottom, 2 + (layer_positions.height / scaled_height_ratio), pixmap_height - 2);
+		onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - 2);
+		onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - 2);
+		onscreen_right = CLAMP(onscreen_right, 2, pixmap_width - 2);
+		onscreen_bottom = CLAMP(onscreen_bottom, 2, pixmap_height - 2);
 
 		// Draw a bounding box onscreen
 		draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
@@ -469,7 +469,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// Create the mouse pointer rectangle
 		mouse_pointer_rect.x = event->x - 5;
 		mouse_pointer_rect.y = event->y - 5;
-		mouse_pointer_rect.width = 10;  // I think that the bigger this is, the more likely for the handle click to happen 
+		mouse_pointer_rect.width = 10;  // I think that the bigger this is, the more likely for the handle click to happen
 		mouse_pointer_rect.height = 10;  // I think that the bigger this is, the more likely for the handle click to happen
 
 		// * Check if the mouse is over a corner resize handle *
