@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function to create the working area 
- * 
+ * Salasaga: Function to create the working area
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -62,12 +62,11 @@ GtkWidget *create_working_area(GtkWidget *working_frame)
 	// Set the scroll bar settings
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(working_frame), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 
-	// Create an aspect frame inside the working area's scrolled window
-	working = gtk_aspect_frame_new(NULL, 0.5, 0.5, 1, TRUE);
-	gtk_frame_set_shadow_type(GTK_FRAME(working), GTK_SHADOW_NONE);
+	// Create an alignment widget, to center the slide in the working area
+	GtkWidget *working = gtk_alignment_new(0.5, 0.5, 0, 0);
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(working_frame), GTK_WIDGET(working));
 
-	// Create the drawing area inside the aspect frame
+	// Create the main drawing area widget
 	main_drawing_area = gtk_drawing_area_new();
 	gtk_container_add(GTK_CONTAINER(working), GTK_WIDGET(main_drawing_area));
 
