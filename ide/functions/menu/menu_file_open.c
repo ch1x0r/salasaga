@@ -219,6 +219,20 @@ void menu_file_open(void)
 	// Make the current slide point to the first slide
 	current_slide = slides;
 
+	// Calculate and set the display size of the working area
+	working_width = (project_width * zoom) / 100;
+	working_height = (project_height * zoom) / 100;
+
+	// Resize the drawing area so it draws properly
+	gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), working_width, working_height);
+
+	// Free the existing front store for the workspace
+	if (NULL != front_store)
+	{
+		g_object_unref(GDK_PIXMAP(front_store));
+		front_store = NULL;
+	}
+
 	// Draw the timeline area
 	draw_timeline();
 
