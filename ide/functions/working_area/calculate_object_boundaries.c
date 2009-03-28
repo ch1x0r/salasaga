@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Function to calculate collision detection boundaries
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -55,10 +55,10 @@ void calculate_object_boundaries(void)
 	GtkAllocation		layer_positions;			// Offset and dimensions for a given layer object
 	GString				*message;					// Used to construct message strings
 	guint				num_layers;					// The number of layers in the slide
-	gint				pixmap_height;				// Height of the front stoe
+	gint				pixmap_height;				// Height of the front store
 	gint				pixmap_width;				// Width of the front store
 	gboolean			return_code_gbool;			// Receives gboolean return codes
-	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio 
+	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	layer_highlight		*this_highlight;			// Pointer to the highlight layer data we're working on
 	layer_image			*this_image;				// Pointer to the image layer data we're working on
