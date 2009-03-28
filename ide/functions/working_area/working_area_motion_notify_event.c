@@ -48,8 +48,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 {
 	// Local variables
 	GdkModifierType		button_state;				// Mouse button states
-	gfloat				cursor_movement_x;
-	gfloat				cursor_movement_y;
+	gint				cursor_movement_x;
+	gint				cursor_movement_y;
 	gint				finish_x;					// X position at the layer objects finish time
 	gint				finish_y;					// Y position at the layer objects finish time
 	gint				height;
@@ -73,16 +73,16 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gint				selected_row;				// Holds the number of the row that is selected
 	gint				start_x;					// X position at the layer objects start time
 	gint				start_y;					// Y position at the layer objects start time
-	static gfloat 		stored_x_val;
-	static gfloat		stored_y_val;
+	static gint			stored_x_val;
+	static gint			stored_y_val;
 	slide				*this_slide_data;			// Alias to make things easier
 	gfloat				time_alpha = 1.0;			// Alpha value to use at our desired point in time (defaulting to 1.0 = fall opacity)
 	gint				time_x;						// Unscaled X position of the layer at our desired point in time
 	gint				time_y;						// Unscaled Y position of the layer at our desired point in time
 	gfloat				time_position;
 	gint				width;
-	gfloat				x_diff = 0;					// The X distance the object was dragged, after scaling
-	gfloat				y_diff = 0;					// The Y distance the object was dragged, after scaling
+	gint				x_diff = 0;					// The X distance the object was dragged, after scaling
+	gint				y_diff = 0;					// The Y distance the object was dragged, after scaling
 
 
 	// If the current slide hasn't been initialised, or there is no project active don't run this function
@@ -206,12 +206,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				g_string_free(message, TRUE);
 				return FALSE;
 		}
-
-		// Ensure the bounding box doesn't go out of bounds
-		onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - 2);
-		onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - 2);
-		onscreen_right = CLAMP(onscreen_right, 2, pixmap_width - 2);
-		onscreen_bottom = CLAMP(onscreen_bottom, 2, pixmap_height - 2);
 
 		// Draw a bounding box onscreen
 		draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
@@ -377,14 +371,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// Work out the bounding box boundaries (scaled)
 		new_x_val = stored_x_val + x_diff;
 		new_y_val = stored_y_val + y_diff;
-		onscreen_right = CLAMP(new_x_val + width, 1, project_width - 2);
-		onscreen_bottom = CLAMP(new_y_val + height, 1, project_height - 2);
-
-		// Scale the bounding box boundaries
-		onscreen_left = new_x_val / scaled_width_ratio;
-		onscreen_top = new_y_val / scaled_height_ratio;
-		onscreen_right /= scaled_width_ratio;
-		onscreen_bottom /= scaled_height_ratio;
+		onscreen_right = new_x_val + width;
+		onscreen_bottom = new_y_val + height;
 
 		// Update the layer object positions
 		if (END_POINTS_START_ACTIVE == end_point_status)
@@ -403,6 +391,12 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			// Bounds check the finishing y offset, then update the object with the new value
 			layer_data->y_offset_finish = new_y_val;
 		}
+
+		// Scale the bounding box boundaries
+		onscreen_left = new_x_val / scaled_width_ratio;
+		onscreen_top = new_y_val / scaled_height_ratio;
+		onscreen_right /= scaled_width_ratio;
+		onscreen_bottom /= scaled_height_ratio;
 
 		// Draw a bounding box onscreen
 		draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
@@ -442,12 +436,6 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		onscreen_top = (layer_positions.y / scaled_height_ratio) + y_diff;
 		onscreen_right = ((layer_positions.x + layer_positions.width) / scaled_width_ratio) + x_diff;
 		onscreen_bottom = ((layer_positions.y + layer_positions.height) / scaled_height_ratio) + y_diff;
-
-		// Ensure the bounding box doesn't go out of bounds
-		onscreen_left = CLAMP(onscreen_left, 2, pixmap_width - 2);
-		onscreen_top = CLAMP(onscreen_top, 2, pixmap_height - 2);
-		onscreen_right = CLAMP(onscreen_right, 2, pixmap_width - 2);
-		onscreen_bottom = CLAMP(onscreen_bottom, 2, pixmap_height - 2);
 
 		// Draw a bounding box onscreen
 		draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
