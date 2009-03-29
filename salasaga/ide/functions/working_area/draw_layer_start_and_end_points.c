@@ -45,7 +45,7 @@ gboolean draw_layer_start_and_end_points()
 	gint				finish_x;					// X position at the layer objects finish time
 	gint				finish_y;					// Y position at the layer objects finish time
 	GList				*layer_pointer;
-	GdkRectangle		line_clip_region;			// Used as a clipmask region
+	GdkRectangle		line_clip_region;			// Used as a clip mask region
 	gint				old_start_x = 0;			// Value used in the previous run
 	gint				old_start_y = 0;			// Value used in the previous run
 	gint				old_width = 0;				// Value used in the previous run
@@ -126,28 +126,20 @@ gboolean draw_layer_start_and_end_points()
 			start_mid_point_x, start_mid_point_y, finish_mid_point_x, finish_mid_point_y);
 
 	// Draw end point
-	if ((finish_x >= 1) && ((finish_x + END_POINT_WIDTH) < pixmap_width)
-		&& (finish_y >= 1) && (finish_y + END_POINT_HEIGHT) < pixmap_height)
-	{
-		gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_red);
-		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), TRUE,
-				finish_x, finish_y, END_POINT_WIDTH, END_POINT_HEIGHT);
-		gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
-		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), FALSE,
-				finish_x, finish_y, END_POINT_WIDTH, END_POINT_HEIGHT);
-	}
+	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_red);
+	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), TRUE,
+			finish_x, finish_y, END_POINT_WIDTH, END_POINT_HEIGHT);
+	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
+	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), FALSE,
+			finish_x, finish_y, END_POINT_WIDTH, END_POINT_HEIGHT);
 
 	// Draw start point
-	if ((start_x >= 1) && ((start_x + END_POINT_WIDTH) < pixmap_width)
-		&& (start_y >= 1) && (start_y + END_POINT_HEIGHT) < pixmap_height)
-	{
-		gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_green);
-		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), TRUE,
-				start_x, start_y, END_POINT_WIDTH, END_POINT_HEIGHT);
-		gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
-		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), FALSE,
-				start_x, start_y, END_POINT_WIDTH, END_POINT_HEIGHT);
-	}
+	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_green);
+	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), TRUE,
+			start_x, start_y, END_POINT_WIDTH, END_POINT_HEIGHT);
+	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
+	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), FALSE,
+			start_x, start_y, END_POINT_WIDTH, END_POINT_HEIGHT);
 
 	return TRUE;
 }
