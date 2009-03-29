@@ -115,10 +115,10 @@ gboolean draw_layer_start_and_end_points()
 	old_height = finish_y + END_POINT_HEIGHT;
 
 	// Draw a line joining the start and end points
-	line_clip_region.x = 0;
-	line_clip_region.y = 0;
-	line_clip_region.width = (gint) pixmap_width;
-	line_clip_region.height = (gint) pixmap_height;
+	line_clip_region.x = 1;
+	line_clip_region.y = 1;
+	line_clip_region.width = (gint) pixmap_width - 2;
+	line_clip_region.height = (gint) pixmap_height - 2;
 	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
 	gdk_gc_set_line_attributes(GDK_GC(widget_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	gdk_gc_set_clip_rectangle(GDK_GC(widget_gc), &line_clip_region);

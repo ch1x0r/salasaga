@@ -137,12 +137,6 @@ gboolean draw_handle_box(void)
 	onscreen_right = (layer_positions.x + layer_positions.width) / scaled_width_ratio;
 	onscreen_bottom = (layer_positions.y + layer_positions.height) / scaled_height_ratio;
 
-	// If the bounding box is completely offscreen, skip drawing it
-	if ((onscreen_left > pixmap_width) || (onscreen_right < 1) || (onscreen_top > pixmap_height) || (onscreen_bottom < 1))
-	{
-		return TRUE;
-	}
-
 	// Draw a bounding box onscreen
 	draw_bounding_box(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
 
