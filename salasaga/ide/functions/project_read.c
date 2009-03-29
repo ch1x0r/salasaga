@@ -130,6 +130,7 @@ gboolean project_read(gchar *filename)
 	layer				*tmp_layer;					// Temporary layer
 	layer_mouse			*tmp_mouse_ob;				// Temporary mouse layer object
 	GdkPixmap			*tmp_pixmap;				//
+	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
 	slide				*tmp_slide;					// Temporary slide
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 	xmlChar				*tmp_xmlChar;				// Temporary xmlChar pointer
@@ -149,6 +150,10 @@ gboolean project_read(gchar *filename)
 	valid_info_text = gtk_text_buffer_new(NULL);
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(valid_info_text), _("Created using Salasaga"), -1);
 	valid_info_display = TRUE;
+
+	// Update the status bar
+	g_string_printf(tmp_gstring, "Loading file - %s", filename);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
 
 	// Begin reading the file
 	document = xmlParseFile(filename);
@@ -3104,6 +3109,11 @@ gboolean project_read(gchar *filename)
 
 			// To get here, we must have finished loading the present slide, so we add it to the new project
 			new_slides = g_list_append(new_slides, tmp_slide);
+
+			// Update the status bar
+			gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
+			gtk_widget_draw(status_bar, &tmp_rect);
+			gdk_flush();
 
 		}  // End of "We're in a slide" loop
 

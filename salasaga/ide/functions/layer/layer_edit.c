@@ -220,7 +220,7 @@ void layer_edit(void)
 	film_strip_create_thumbnail(slide_data);
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Layer edited"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer edited"));
 	gdk_flush();
 
 	// Free the memory used in this function

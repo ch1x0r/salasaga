@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user clicks the Crop timeline toolbar button 
- * 
+ * Salasaga: Function called when the user clicks the Crop timeline toolbar button
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -225,6 +225,10 @@ void project_crop(void)
 
 		// Free the memory used by the old pixbuf
 		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
+
+		// Show movement on the progress bar
+		gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
+		gdk_flush();
 	}
 
 	// Free the memory used in this function
@@ -247,6 +251,7 @@ void project_crop(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _("Project cropped"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Project cropped"));
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
 	gdk_flush();
 }

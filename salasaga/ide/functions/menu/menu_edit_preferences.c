@@ -468,7 +468,7 @@ void menu_edit_preferences(void)
 	}
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Application preferences updated"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Application preferences updated"));
 	gdk_flush();
 
 	// Free up the memory allocated in this function

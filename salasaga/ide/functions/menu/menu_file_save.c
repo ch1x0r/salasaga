@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user selects File -> Save from the top menu 
- * 
+ * Salasaga: Function called when the user selects File -> Save from the top menu
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -79,6 +79,10 @@ void menu_file_save(void)
 	// Initialise some things
 	message = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
+
+	// Add a message to the status bar so the user gets visual feedback
+	g_string_printf(tmp_gstring, " %s - %s", _("Saving project"), file_name->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
 
 	// Create an empty document pointer
 	document_pointer = xmlNewDoc((const xmlChar *) "1.0");
@@ -204,6 +208,10 @@ void menu_file_save(void)
 		return;
 	}
 
+	// Update the status bar to indicate we're exporting the swf file
+	g_string_printf(tmp_gstring, " %s - %s", _("Saving project"), file_name->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
+
 	// Add the slide data to the XML structure
 	slides = g_list_first(slides);
 	g_list_foreach(slides, menu_file_save_slide, slide_root);
@@ -222,7 +230,8 @@ void menu_file_save(void)
 
 	// Add a message to the status bar so the user gets visual feedback
 	g_string_printf(tmp_gstring, " %s - %s", _("Project saved"), file_name->str);
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
 	gdk_flush();
 
 	// * Function clean up area *

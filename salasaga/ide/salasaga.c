@@ -130,7 +130,6 @@ gboolean				show_control_bar = TRUE;	// Toggle for whether to display the contro
 GList					*slides = NULL;				// Linked list holding the slide info
 guint					start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
 GtkWidget				*status_bar;				// Widget for the status bar
-guint					statusbar_context;			// Context id for the status bar messages
 gint					stored_x;					// X co-ordinate of the mouse last click
 gint					stored_y;					// Y co-ordinate of the mouse last click
 gint					table_x_padding;			// Number of pixels to pad table entries by
@@ -459,8 +458,10 @@ gint main(gint argc, gchar *argv[])
 	gtk_box_pack_start(GTK_BOX(outer_box), GTK_WIDGET(message_bar), FALSE, FALSE, 0);
 
 	// Create the status bar
-	status_bar = gtk_statusbar_new();
-	gtk_statusbar_set_has_resize_grip(GTK_STATUSBAR(status_bar), FALSE);
+	status_bar = gtk_progress_bar_new();
+	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(status_bar), GTK_PROGRESS_LEFT_TO_RIGHT);
+	gtk_progress_bar_set_ellipsize(GTK_PROGRESS_BAR(status_bar), PANGO_ELLIPSIZE_END);
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
 	gtk_table_attach(message_bar, GTK_WIDGET(status_bar), 0, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
 
 	// Create the zoom selector label
@@ -507,12 +508,9 @@ gint main(gint argc, gchar *argv[])
 	gtk_paned_set_position(GTK_PANED(right_side), 250);
 	gtk_paned_add2(GTK_PANED(main_area), GTK_WIDGET(right_side));
 
-	// Create the general global status bar context
-	statusbar_context = gtk_statusbar_get_context_id(GTK_STATUSBAR(status_bar), _("Status bar messages"));
-
 	// Display a "Ready" message in the status bar
 	g_string_printf(message, " %s", _("Ready"));
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, message->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), message->str);
 
 	// Calculate the zoom and drawing area, and initialise the project dimensions
 	zoom_selector_changed(GTK_WIDGET(zoom_selector), NULL, (gpointer) NULL);

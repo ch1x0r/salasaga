@@ -89,6 +89,6 @@ void slide_move_top(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Slide moved to top"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Slide moved to top"));
 	gdk_flush();
 }

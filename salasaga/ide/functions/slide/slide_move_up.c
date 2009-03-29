@@ -94,6 +94,6 @@ void slide_move_up(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Slide moved up"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Slide moved up"));
 	gdk_flush();
 }

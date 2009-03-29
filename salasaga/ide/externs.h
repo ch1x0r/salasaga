@@ -90,7 +90,6 @@ extern gboolean				show_control_bar;
 extern GList				*slides;
 extern guint				start_behaviour;
 extern GtkWidget			*status_bar;
-extern guint				statusbar_context;
 extern gint					stored_x;
 extern gint					stored_y;
 extern gint					table_x_padding;
