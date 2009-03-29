@@ -82,6 +82,7 @@ gint export_swf_inner(gchar *output_filename)
 	swf_frame_element 	*this_frame_ptr;			// Points to frame information when looping
 	layer				*this_layer_data;			// Points to the data in the present layer
 	slide				*this_slide_data;			// Points to the data in the present slide
+	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
 	GString				*message;					// Used to construct message strings
 	guint				total_frames;				// The total number of frames in the animation
 	guint				total_num_layers;			// The total number of layers in the animation
@@ -353,6 +354,11 @@ gint export_swf_inner(gchar *output_filename)
 				// fixme3: Our present approach using swf_elements doesn't work very well with removes. :(
 				export_swf_process_element(swf_movie, this_frame_ptr, FALSE);
 			}
+
+			// Show movement on the progress bar
+			gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
+			gtk_widget_draw(status_bar, &tmp_rect);
+			gdk_flush();
 
 			// Advance to the next frame
 			SWFMovie_nextFrame(swf_movie);

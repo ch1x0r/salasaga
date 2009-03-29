@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Function called when the user selects Screenshots -> Capture full screen from the top menu
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -276,7 +276,7 @@ void menu_screenshots_capture_full_screen(void)
 
 	// Local variables
 	HINSTANCE			dll_handle;
-	HOOKPROC			hook_address; 
+	HOOKPROC			hook_address;
 
 	// Variables for the error handler
 	DWORD				last_error;
@@ -292,7 +292,7 @@ void menu_screenshots_capture_full_screen(void)
 			last_error = GetLastError();
 			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, last_error,
 					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &message_buffer_pointer, 0, NULL);
-			wsprintf(text_buffer, _("Keyboard hook LoadLibrary failed with error %d: %s"), last_error, message_buffer_pointer); 
+			wsprintf(text_buffer, _("Keyboard hook LoadLibrary failed with error %d: %s"), last_error, message_buffer_pointer);
 			MessageBox(NULL, text_buffer, _("Error", MB_OK);
 			LocalFree(message_buffer_pointer);
 			exit(98);
@@ -303,7 +303,7 @@ void menu_screenshots_capture_full_screen(void)
 			last_error = GetLastError();
 			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, last_error,
 					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &message_buffer_pointer, 0, NULL);
-			wsprintf(text_buffer, _("Keyboard hook GetProcAddress failed with error %d: %s"), last_error, message_buffer_pointer); 
+			wsprintf(text_buffer, _("Keyboard hook GetProcAddress failed with error %d: %s"), last_error, message_buffer_pointer);
 			MessageBox(NULL, text_buffer, _("Error", MB_OK);
 			LocalFree(message_buffer_pointer);
 			exit(97);
@@ -315,21 +315,21 @@ void menu_screenshots_capture_full_screen(void)
 			last_error = GetLastError();
 			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, last_error,
 					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &message_buffer_pointer, 0, NULL);
-			wsprintf(text_buffer, _("Keyboard hooking failed with error %d: %s"), last_error, message_buffer_pointer); 
+			wsprintf(text_buffer, _("Keyboard hooking failed with error %d: %s"), last_error, message_buffer_pointer);
 			MessageBox(NULL, text_buffer, _("Error", MB_OK);
 			LocalFree(message_buffer_pointer);
-			exit(99);	    
+			exit(99);
 		}
 
 		// Add a message to the status bar so the user gets visual feedback
 		g_string_printf(message, _(" Wrote capture settings file - %s - and installed Control-Printscreen keyboard hook"), full_file_name);
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, message->str);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), message->str);
 		gdk_flush();
 	}
 #else
 	// Add a message to the status bar so the user gets visual feedback
 	g_string_printf(message, _(" Wrote capture settings file - %s"), full_file_name);
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, message->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), message->str);
 	gdk_flush();
 #endif
 

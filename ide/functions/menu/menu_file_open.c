@@ -233,6 +233,9 @@ void menu_file_open(void)
 		front_store = NULL;
 	}
 
+	// Redraw the workspace
+	draw_workspace();
+
 	// Draw the timeline area
 	draw_timeline();
 
@@ -262,7 +265,8 @@ void menu_file_open(void)
 	changes_made = FALSE;
 
 	// Use the status bar to communicate the successful loading of the project
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Project loaded"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Project loaded"));
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
 
 	// Free the memory allocated in this function
 	// (note that salasaga_filter, flame_filter and the all_filter seem to be freed when the dialog is destroyed)

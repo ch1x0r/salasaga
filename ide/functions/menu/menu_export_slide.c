@@ -168,7 +168,7 @@ void menu_export_slide(void)
 	{
 		// Image file was created successfully, so update the status bar to let the user know
 		g_string_printf(tmp_gstring, " %s - %s", _("Wrote image file"), validated_string->str);
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
 		gdk_flush();
 	}
 

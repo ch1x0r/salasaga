@@ -2385,7 +2385,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 		priv->guide_line_resize = 0;
 
 		// Use the status bar to communicate the resize has completed
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Resize completed"));
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Resize completed"));
 		gdk_flush();
 	}
 
@@ -2426,7 +2426,7 @@ void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *eve
 		}
 
 		// Use the status bar to communicate the drag has completed
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Drag completed"));
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Drag completed"));
 		gdk_flush();
 	}
 

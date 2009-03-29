@@ -190,6 +190,6 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Highlight layer added"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Highlight layer added"));
 	gdk_flush();
 }

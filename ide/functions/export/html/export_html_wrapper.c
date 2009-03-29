@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user selects Export -> Html wrapper from the top menu 
- * 
+ * Salasaga: Function called when the user selects Export -> Html wrapper from the top menu
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -191,7 +191,7 @@ void export_html_wrapper(void)
 			"\t\t\t<param name=\"movie\" value=\"%s\"></param>\n"
 			"\t\t\t<param name=\"quality\" value=\"high\"></param>\n"
 			"\t\t\t<embed src=\"%s\" quality=\"high\" pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" type=\"application/x-shockwave-flash\" align=\"middle\" width=\"%u\" height=\"%u\"></embed>\n"
-			"\t\t</object>\n", output_width, output_height, swf_file, swf_file, output_width, output_height); 
+			"\t\t</object>\n", output_width, output_height, swf_file, swf_file, output_width, output_height);
 	fprintf(output_file, "\t</body>\n</html>");
 
 	// Close the output file
@@ -199,7 +199,7 @@ void export_html_wrapper(void)
 
 	// Html wrapper file was created successfully, so update the status bar to let the user know
 	g_string_printf(tmp_gstring, " %s - %s", _("Wrote html wrapper"), validated_string->str);
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
 	gdk_flush();
 
 	// * Function clean up area *

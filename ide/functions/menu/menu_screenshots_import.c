@@ -67,7 +67,6 @@ void menu_screenshots_import(void)
 	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
 	gint				num_screenshots = 0;		// Switch to track if other screenshots already exist
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
-	guint				recent_message;				// Message identifier, for newest status bar message
 	gint				return_code = 0;			// Receives return code
 	gint				return_code_int;
 	gint				slide_position;				// Which slide in the slide list do we have selected?
@@ -221,7 +220,7 @@ void menu_screenshots_import(void)
 
 	// Use the status bar to communicate the number of screenshots found
 	g_string_printf(tmp_string, " %u %s", num_screenshots, _("Screenshots found"));
-	recent_message = gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_string->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_string->str);
 	gdk_flush();
 
 	// Redraw the main window
@@ -230,9 +229,6 @@ void menu_screenshots_import(void)
 	// * Load the screenshots *
 	for (tmp_int = 1; tmp_int <= num_screenshots; tmp_int++)
 	{
-		// Remove the previous status bar message
-		gtk_statusbar_remove(GTK_STATUSBAR(status_bar), statusbar_context, recent_message);
-
 		// * The loaded image file becomes a background layer image for a new slide *
 
 		// Allocate a new slide structure for use
@@ -358,7 +354,8 @@ void menu_screenshots_import(void)
 
 		// Update the status bar with a progress counter
 		g_string_printf(tmp_string, " %s %u of %u", _("Loaded image"), tmp_int, num_screenshots);
-		recent_message = gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_string->str);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_string->str);
+		gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
 		gdk_flush();
 
 		// Redraw the main window
@@ -411,6 +408,9 @@ void menu_screenshots_import(void)
 	working_width = (project_width * zoom) / 100;
 	working_height = (project_height * zoom) / 100;
 
+	// Resize the drawing area so it draws properly
+	gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), working_width, working_height);
+
 	// Free the existing front store for the workspace
 	if (NULL != front_store)
 	{
@@ -418,7 +418,7 @@ void menu_screenshots_import(void)
 		front_store = NULL;
 	}
 
-	// Draw the workspace area
+	// Redraw the workspace
 	draw_workspace();
 
 	// Draw the timeline area
@@ -439,7 +439,8 @@ void menu_screenshots_import(void)
 
 	// Update the status bar
 	g_string_printf(tmp_string, " %u %s", num_screenshots, _("screenshots imported"));
-	recent_message = gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_string->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_string->str);
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
 	gdk_flush();
 
 	// Free the memory allocated in this function

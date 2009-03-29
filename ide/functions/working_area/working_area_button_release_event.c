@@ -153,9 +153,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 		// Use the status bar to give further feedback to the user
 		if (END_POINTS_START_ACTIVE == end_point_status)
-			gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Layer start point moved"));
+			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer start point moved"));
 		if (END_POINTS_END_ACTIVE == end_point_status)
-			gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Layer end point moved"));
+			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer end point moved"));
 		gdk_flush();
 
 		// Reset the end point status switch and related info
@@ -317,7 +317,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		changes_made = TRUE;
 
 		// Use the status bar to give further feedback to the user
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Layer resized"));
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer resized"));
 		gdk_flush();
 
 		return TRUE;
@@ -420,7 +420,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			changes_made = TRUE;
 
 			// Use the status bar to give further feedback to the user
-			gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Layer moved"));
+			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer moved"));
 			gdk_flush();
 		}
 	}

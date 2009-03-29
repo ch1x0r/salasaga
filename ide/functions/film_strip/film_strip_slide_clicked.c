@@ -85,7 +85,7 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		g_free(selection_string);
 
 		// Update the status bar
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Ready"));
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Ready"));
 		gdk_flush();
 	}
 }

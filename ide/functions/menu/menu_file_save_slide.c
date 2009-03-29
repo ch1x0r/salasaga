@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Function that takes a slide structure pointer, and adds it's data to an in-memory XML document
- * 
+ *
  * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -45,13 +45,14 @@
 void menu_file_save_slide(gpointer element, gpointer user_data)
 {
 	// Local variables
-	slide			*slide_pointer;				// Points to the present slide
-	GList			*layer_pointer;				// Points to the presently processing layer
+	slide				*slide_pointer;			// Points to the present slide
+	GList				*layer_pointer;			// Points to the presently processing layer
 
-	xmlNodePtr		slide_root;					// Points to the root of the slide data
-	xmlNodePtr		slide_node;					// Pointer to the new slide node
+	xmlNodePtr			slide_root;				// Points to the root of the slide data
+	xmlNodePtr			slide_node;				// Pointer to the new slide node
 
-	GString			*tmp_gstring;				// Temporary GString
+	GString				*tmp_gstring;			// Temporary GString
+	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
 
 
 	// Initialise various things
@@ -86,6 +87,11 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 
 	// Free the memory allocated in this function
 	g_string_free(tmp_gstring, TRUE);
+
+	// Update the status bar to show progress
+	gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
+	gtk_widget_draw(status_bar, &tmp_rect);
+	gdk_flush();
 
 	return;
 }

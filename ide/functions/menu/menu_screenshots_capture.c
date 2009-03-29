@@ -453,13 +453,13 @@ void menu_screenshots_capture(void)
 
 		// Add a message to the status bar so the user gets visual feedback
 		g_string_printf(tmp_gstring, _(" Wrote capture lock file - %s - and installed Control-Printscreen keyboard hook"), full_file_name);
-		gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
 		gdk_flush();
 	}
 #else
 	// Add a message to the status bar so the user gets visual feedback
 	g_string_printf(tmp_gstring, _(" Wrote capture settings file - %s"), full_file_name);
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, tmp_gstring->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
 	gdk_flush();
 #endif
 

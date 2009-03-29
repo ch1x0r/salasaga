@@ -60,6 +60,6 @@ void layer_new_mouse(void)
 	new_layer_selected = TYPE_MOUSE_CURSOR;
 
 	// Update the status bar
-	gtk_statusbar_push(GTK_STATUSBAR(status_bar), statusbar_context, _(" Please click the insertion point"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Please click the insertion point"));
 	gdk_flush();
 }
