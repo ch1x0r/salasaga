@@ -3,7 +3,7 @@
  *
  * Salasaga: Function to parse the contents of a project file
  *
- * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *
