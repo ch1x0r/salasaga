@@ -5,6 +5,9 @@
  
  * The control bar in swf output is much better looking, now finally of acceptable quality.
  * The default width and height for new projects is whatever width and height was last used.
+ * Layers are no longer limited to being inside the slide area onscreen.  They can now be
+   moved both partially or completely off the visible slide area.
+ * The selected slide is now always centered in the workspace area.
  * Turned the status bar into a progress bar, plus updated functions to use it.
  * Minor bug fixes.
 
