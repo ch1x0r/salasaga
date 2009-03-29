@@ -5,6 +5,7 @@
  
  * The control bar in swf output is much better looking, now finally of acceptable quality.
  * The default width and height for new projects is whatever width and height was last used.
+ * Turned the status bar into a progress bar, plus updated functions to use it.
  * Minor bug fixes.
 
 2009-02-14 - JustinClift
