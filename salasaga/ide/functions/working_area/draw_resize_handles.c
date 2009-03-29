@@ -43,6 +43,7 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 	// Local variables
 	static GdkGC		*handle_gc = NULL;
 	guint				height;						// Height of the bounding box
+	GdkRectangle		line_clip_region;			// Used as a clip mask region
 	guint				mid_point_horizontal;
 	guint				mid_point_vertical;
 	gint				pixmap_height;				// Height of the front store
@@ -60,6 +61,14 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 		handle_gc = gdk_gc_new(GDK_DRAWABLE(main_drawing_area->window));
 	}
 	gdk_gc_set_function(GDK_GC(handle_gc), GDK_INVERT);
+
+	// Set a clip mask
+	line_clip_region.x = 1;
+	line_clip_region.y = 1;
+	line_clip_region.width = (gint) pixmap_width - 2;
+	line_clip_region.height = (gint) pixmap_height - 2;
+	gdk_gc_set_clip_rectangle(GDK_GC(handle_gc), &line_clip_region);
+
 
 	// * Generate the list of corner resize handle positions *
 
@@ -91,44 +100,24 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 	// * Draw the corner handles *
 
 	// Top left
-	if (((resize_handles_rect[0].x + resize_handle_size) < pixmap_width) && (resize_handles_rect[0].x >= 1)
-			&& (resize_handles_rect[0].y >= 1)
-			&& ((resize_handles_rect[0].y + resize_handle_size) < pixmap_height))
-	{
-		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
-			resize_handles_rect[0].x, resize_handles_rect[0].y,
-			resize_handles_rect[0].width, resize_handles_rect[0].height);
-	}
+	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+		resize_handles_rect[0].x, resize_handles_rect[0].y,
+		resize_handles_rect[0].width, resize_handles_rect[0].height);
 
 	// Top right
-	if (((resize_handles_rect[2].x + resize_handle_size) < pixmap_width) && (resize_handles_rect[2].x >= 1)
-			&& (resize_handles_rect[2].y >= 1)
-			&& ((resize_handles_rect[2].y + resize_handle_size) < pixmap_height))
-	{
-		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
-			resize_handles_rect[2].x, resize_handles_rect[2].y,
-			resize_handles_rect[2].width, resize_handles_rect[2].height);
-	}
+	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+		resize_handles_rect[2].x, resize_handles_rect[2].y,
+		resize_handles_rect[2].width, resize_handles_rect[2].height);
 
 	// Bottom right
-	if (((resize_handles_rect[4].x + resize_handle_size) < pixmap_width) && (resize_handles_rect[4].x >= 1)
-			&& (resize_handles_rect[4].y >= 1)
-			&& ((resize_handles_rect[4].y + resize_handle_size) < pixmap_height))
-	{
-		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
-			resize_handles_rect[4].x, resize_handles_rect[4].y,
-			resize_handles_rect[4].width, resize_handles_rect[4].height);
-	}
+	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+		resize_handles_rect[4].x, resize_handles_rect[4].y,
+		resize_handles_rect[4].width, resize_handles_rect[4].height);
 
 	// Bottom left
-	if (((resize_handles_rect[6].x + resize_handle_size) < pixmap_width) && (resize_handles_rect[6].x >= 1)
-			&& (resize_handles_rect[6].y >= 1)
-			&& ((resize_handles_rect[6].y + resize_handle_size) < pixmap_height))
-	{
-		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
-			resize_handles_rect[6].x, resize_handles_rect[6].y,
-			resize_handles_rect[6].width, resize_handles_rect[6].height);
-	}
+	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+		resize_handles_rect[6].x, resize_handles_rect[6].y,
+		resize_handles_rect[6].width, resize_handles_rect[6].height);
 
 	// * If there is enough room, draw the mid point handles *
 	required_size_mid_point = (resize_handle_size * 3) + 2;
@@ -153,24 +142,14 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 		resize_handles_rect[7].height = resize_handle_size;
 
 		// Right middle
-		if (((resize_handles_rect[3].x + resize_handle_size) < pixmap_width) && (resize_handles_rect[3].x >= 1)
-				&& (resize_handles_rect[3].y >= 1)
-				&& ((resize_handles_rect[3].y + resize_handle_size) < pixmap_height))
-		{
-			gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
-				resize_handles_rect[3].x, resize_handles_rect[3].y,
-				resize_handles_rect[3].width, resize_handles_rect[3].height);
-		}
+		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+			resize_handles_rect[3].x, resize_handles_rect[3].y,
+			resize_handles_rect[3].width, resize_handles_rect[3].height);
 
 		// Left middle
-		if (((resize_handles_rect[7].x + resize_handle_size) < pixmap_width) && (resize_handles_rect[7].x >= 1)
-				&& (resize_handles_rect[7].y >= 1)
-				&& ((resize_handles_rect[7].y + resize_handle_size) < pixmap_height))
-		{
-			gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
-				resize_handles_rect[7].x, resize_handles_rect[7].y,
-				resize_handles_rect[7].width, resize_handles_rect[7].height);
-		}
+		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+			resize_handles_rect[7].x, resize_handles_rect[7].y,
+			resize_handles_rect[7].width, resize_handles_rect[7].height);
 	} else
 	{
 		// Mark the mid point handle width's as 0, to indicate they're unused
@@ -198,24 +177,14 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 		resize_handles_rect[5].height = resize_handle_size - 1;
 
 		// Top middle
-		if (((resize_handles_rect[1].x + resize_handle_size) < pixmap_width) && (resize_handles_rect[1].x >= 1)
-				&& (resize_handles_rect[1].y >= 1)
-				&& ((resize_handles_rect[1].y + resize_handle_size) < pixmap_height))
-		{
-			gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
-				resize_handles_rect[1].x, resize_handles_rect[1].y,
-				resize_handles_rect[1].width, resize_handles_rect[1].height);
-		}
+		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+			resize_handles_rect[1].x, resize_handles_rect[1].y,
+			resize_handles_rect[1].width, resize_handles_rect[1].height);
 
 		// Bottom middle
-		if (((resize_handles_rect[5].x + resize_handle_size) < pixmap_width) && (resize_handles_rect[5].x >= 1)
-				&& (resize_handles_rect[5].y >= 1)
-				&& ((resize_handles_rect[5].y + resize_handle_size) < pixmap_height))
-		{
-			gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
-				resize_handles_rect[5].x, resize_handles_rect[5].y,
-				resize_handles_rect[5].width, resize_handles_rect[5].height);
-		}
+		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+			resize_handles_rect[5].x, resize_handles_rect[5].y,
+			resize_handles_rect[5].width, resize_handles_rect[5].height);
 	} else
 	{
 		// Mark the mid point handle width's as 0, to indicate they're unused
