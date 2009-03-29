@@ -3,7 +3,7 @@
  *
  * Salasaga: Prepares the swf frame elements for a given layer, so it can be converted to swf 
  * 
- * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  * 

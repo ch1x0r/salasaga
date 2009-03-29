@@ -3,7 +3,7 @@
  *
  * Salasaga: Function to regenerate the film strip thumbnails
  * 
- * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  * 

@@ -3,7 +3,7 @@
  *
  * Salasaga: Function called when the user presses the mouse button on the drawing area
  *
- * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *

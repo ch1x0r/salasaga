@@ -3,7 +3,7 @@
  *
  * Salasaga: Function called when the user clicks the Add Highlight Layer toolbar button 
  * 
- * Copyright (C) 2005-2008 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  * 
