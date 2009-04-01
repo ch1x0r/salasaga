@@ -33,6 +33,10 @@
 // GTK includes
 #include <gtk/gtk.h>
 
+// Freetype includes
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 #ifdef _WIN32
 	// Windows only code
 	#include <windows.h>
@@ -43,6 +47,7 @@
 #include "../../externs.h"
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../dialog/display_warning.h"
+#include "load_font.h"
 #include "get_layer_position.h"
 
 
@@ -52,6 +57,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gfloat					blue_component;			// Blue component of a colour
 	cairo_t					*cairo_context;			// Cairo drawing context
 	gfloat					end_time;				// Time in seconds of the layer objects finish time
+	gchar					*font_pathname;			// Full pathname to a font file to load is constructed in this
+	FT_Face					ft_font_face;			// FreeType font face
 	gfloat					green_component;		// Green component of a colour
 	gint					height;					//
 	cairo_matrix_t			image_matrix;			// Transformation matrix used to position a cairo pattern
@@ -207,6 +214,12 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			// Simplify pointers
 			text_object = (layer_text *) this_layer_data->object_data;
 			text_buffer = text_object->text_buffer;
+
+			// Create path to the font we want
+			font_pathname = g_build_path(G_DIR_SEPARATOR_S, FONT_TTF_DIR, "DejaVuSans.ttf", NULL);  // Hard code DejaVuSans initially
+
+			// Load the desired font face
+			ft_font_face = load_font(&ft_font_face, font_pathname);
 
 			// Set the desired font size
 			cairo_set_font_size(cairo_context, text_object->font_size * scaled_width_ratio);
