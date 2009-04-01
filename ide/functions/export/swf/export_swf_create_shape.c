@@ -120,7 +120,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	scaled_width_ratio = (gfloat) output_width / (gfloat) project_width;
 
 	// Create the font object we'll be using
-	font_pathname = g_build_path(G_DIR_SEPARATOR_S, FONT_DIR, "DejaVuSans.fdb", NULL);
+	font_pathname = g_build_path(G_DIR_SEPARATOR_S, FONT_OUTLINE_DIR, "DejaVuSans.fdb", NULL);
 
 	// Display debugging info if requested
 	if (debug_level) printf(_("Full path name to font file is: %s\n"), font_pathname);
