@@ -67,6 +67,7 @@ salasaga_SOURCES = create_menu_bar.c \
 	layer/layer_new_text.c \
 	layer/layer_new_text_inner.c \
 	layer/layer_paste.c \
+	layer/load_font.c \
 	menu/menu_edit_preferences.c \
 	menu/menu_enable.c \
 	menu/menu_export_swf.c \
@@ -116,7 +117,8 @@ salasaga_SOURCES = create_menu_bar.c \
 salasaga_LDADD = $(DEPS_LIBS) $(GTK_LIBS) $(ZLIB) $(XLIB) $(MINGLIB)
 
 AM_CPPFLAGS = $(DEPS_CFLAGS) $(GTK_CFLAGS) \
-	-DFONT_DIR=\""$(DESTDIR)/$(datadir)/salasaga/font_outline"\" \
+	-DFONT_OUTLINE_DIR=\""$(DESTDIR)/$(datadir)/salasaga/font_outline"\" \
+	-DFONT_TTF_DIR=\""$(DESTDIR)/$(datadir)/salasaga/ttf"\" \
 	-DIMAGES_PNG_DIR=\""$(DESTDIR)/$(datadir)/salasaga/icons/72x72"\" \
 	-DIMAGES_SVG_DIR=\""$(DESTDIR)/$(datadir)/salasaga/icons/scalable"\" \
 	-DLOCALEDIR=\""$(DESTDIR)/$(datadir)/locale"\" \
