@@ -82,7 +82,7 @@ gint export_swf_inner(gchar *output_filename)
 	swf_frame_element 	*this_frame_ptr;			// Points to frame information when looping
 	layer				*this_layer_data;			// Points to the data in the present layer
 	slide				*this_slide_data;			// Points to the data in the present slide
-	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
+	GdkRectangle		tmp_rect = {0, 0, main_window->allocation.width, main_window->allocation.height};  // Temporary rectangle covering the area of the whole Salasaga window
 	GString				*message;					// Used to construct message strings
 	guint				total_frames;				// The total number of frames in the animation
 	guint				total_num_layers;			// The total number of layers in the animation
@@ -101,7 +101,7 @@ gint export_swf_inner(gchar *output_filename)
 	message = g_string_new(NULL);
 	slide_name_tmp = g_string_new(NULL);
 
-	// Force the numeric collation for use full stops (for ming text output)
+	// Force the numeric collation to use full stops (for ming text output)
 	locale_return = setlocale(LC_NUMERIC, "C");
 	if (NULL == locale_return)
 	{
@@ -213,6 +213,14 @@ gint export_swf_inner(gchar *output_filename)
 	// For each slide, work out how many layers there are and how many frames the entire slide lasts for
 	for (slide_counter = 0; slide_counter <  num_slides; slide_counter++)
 	{
+		// Repaint where the dialog box was (apparently needs to be in the loop for it to be effective)
+		tmp_rect.width = main_window->allocation.width;  // Change to the area of the main window
+		tmp_rect.height = main_window->allocation.height;
+		gtk_widget_draw(main_window, &tmp_rect);
+		gdk_flush();
+		tmp_rect.width = status_bar->allocation.width;  // Change to the area of the status bar, for the next use of this
+		tmp_rect.height = status_bar->allocation.height;
+
 		// Initialise things for this slide
 		slides = g_list_first(slides);
 		this_slide_data = g_list_nth_data(slides, slide_counter);
