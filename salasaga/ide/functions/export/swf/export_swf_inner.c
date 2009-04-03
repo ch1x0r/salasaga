@@ -213,7 +213,7 @@ gint export_swf_inner(gchar *output_filename)
 	// For each slide, work out how many layers there are and how many frames the entire slide lasts for
 	for (slide_counter = 0; slide_counter <  num_slides; slide_counter++)
 	{
-		// Repaint where the dialog box was (apparently needs to be in the loop for it to be effective)
+		// Repaint the entire window (where the dialog box was, plus the status bar)
 		gtk_widget_draw(main_window, &tmp_rect);
 		gdk_flush();
 
