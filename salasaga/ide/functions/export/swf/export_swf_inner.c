@@ -214,12 +214,8 @@ gint export_swf_inner(gchar *output_filename)
 	for (slide_counter = 0; slide_counter <  num_slides; slide_counter++)
 	{
 		// Repaint where the dialog box was (apparently needs to be in the loop for it to be effective)
-		tmp_rect.width = main_window->allocation.width;  // Change to the area of the main window
-		tmp_rect.height = main_window->allocation.height;
 		gtk_widget_draw(main_window, &tmp_rect);
 		gdk_flush();
-		tmp_rect.width = status_bar->allocation.width;  // Change to the area of the status bar, for the next use of this
-		tmp_rect.height = status_bar->allocation.height;
 
 		// Initialise things for this slide
 		slides = g_list_first(slides);
@@ -365,8 +361,6 @@ gint export_swf_inner(gchar *output_filename)
 
 			// Show movement on the progress bar
 			gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
-			gtk_widget_draw(status_bar, &tmp_rect);
-			gdk_flush();
 
 			// Advance to the next frame
 			SWFMovie_nextFrame(swf_movie);
