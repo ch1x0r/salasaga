@@ -1,5 +1,6 @@
 fontsdir = $(datadir)/salasaga/ttf
 fonts_DATA = \
-	DejaVuSans.ttf
+	DejaVuSans.ttf \
+	DejaVuSerif.ttf
 
 DISTCLEANFILES = Makefile.in
