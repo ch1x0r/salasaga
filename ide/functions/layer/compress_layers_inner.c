@@ -38,7 +38,7 @@
 #include <gtk/gtk.h>
 
 // Cairo include
-//#include <cairo/cairo-ft.h>
+#include <cairo/cairo-ft.h>
 
 #ifdef _WIN32
 	// Windows only code
@@ -232,7 +232,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			}
 
 			// Create path to the font we want
-			font_pathname = g_build_path(G_DIR_SEPARATOR_S, FONT_TTF_DIR, "DejaVuSans.ttf", NULL);  // Hard code DejaVuSans initially
+			font_pathname = g_build_path(G_DIR_SEPARATOR_S, FONT_TTF_DIR, "DejaVuSerif.ttf", NULL);  // Hard code DejaVuSans initially
+//			font_pathname = g_build_path(G_DIR_SEPARATOR_S, FONT_TTF_DIR, "DejaVuSans.ttf", NULL);  // Hard code DejaVuSans initially
 
 			// Load the font face
 			ft_error = FT_New_Face(ft_library_handle, font_pathname, 0, &ft_font_face);
