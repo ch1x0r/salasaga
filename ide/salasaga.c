@@ -74,6 +74,7 @@
 
 // Global variables
 GList					*boundary_list = NULL;		// Stores a linked list of layer object boundaries
+cairo_font_face_t		*cairo_font_face[FONT_DEJAVU_SERIF_I + 1];  // The font face we use
 guint					capture_height;				// Height for screen captures
 guint					capture_width;				// Width for screen captures
 guint					capture_x;					// X offset for screen captures
