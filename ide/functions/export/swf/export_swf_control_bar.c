@@ -53,9 +53,6 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFDisplayItem		buttons_display_item;
 	gfloat				current_ming_scale;			// Used when creating text swf output
 	GString				*file_name_full;
-	FILE				*font_file;					// The file we load the font from
-	SWFFont				font_object;				// The font we use gets loaded into this
-	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
 	gchar				*image_path;
 	gint				i;
 	SWFAction			main_movie_action;
@@ -1233,42 +1230,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		// Create the text object we'll be using
 		info_object = newSWFText();
 
-		// Create the font object we'll be using
-		font_pathname = g_build_path(G_DIR_SEPARATOR_S, FONT_OUTLINE_DIR, "DejaVuSans.fdb", NULL);
-
-		// Display debugging info if requested
-		if (debug_level) printf(_("Full path name to font file is: %s\n"), font_pathname);
-
-		// Load the font file if needed
-		font_file = fopen(font_pathname, "r");
-		if (NULL == font_file)
-		{
-			// Something went wrong when loading the font file, so return
-			g_string_printf(message, "%s ED415: %s", _("Error"), _("Something went wrong when opening the font file."));
-			display_warning(message->str);
-
-			// Free the memory allocated in this function
-			g_string_free(message, TRUE);
-			g_free(font_pathname);
-
-			return FALSE;
-		}
-		font_object = loadSWFFontFromFile(font_file);
-		if (NULL == font_object)
-		{
-			// Something went wrong when loading the font file, so return
-			g_string_printf(message, "%s ED416: %s", _("Error"), _("Something went wrong when loading the font file."));
-			display_warning(message->str);
-
-			// Free the memory allocated in this function
-			g_string_free(message, TRUE);
-			g_free(font_pathname);
-
-			return FALSE;
-		}
-
 		// Assign a font to the text object
-		SWFText_setFont(info_object, font_object);
+		SWFText_setFont(info_object, fdb_font_object[FONT_DEJAVU_SANS]);  // Hard code DejaVu Sans for now.  Should be adjustable later on.
 
 		// Set the height we want for the text
 		scaled_font_size = scaled_height_ratio * 26;
