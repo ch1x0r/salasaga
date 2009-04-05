@@ -49,6 +49,7 @@
 gboolean load_fonts()
 {
 	// Local variables
+	cairo_status_t		cairo_status;				// Receives return status from cairo functions
 	gchar				*font_name;					// Points to a font name (string) we're about to use
 	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
 	guint				ft_error;					// Receives error codes from FreeType functions
@@ -175,6 +176,20 @@ gboolean load_fonts()
 		else if (ft_error)
 		{
 			g_string_printf(message, "%s ED423: %s '%s' %s", _("Error"), _("Font file"), font_pathname, _("could not be opened by FreeType."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
+			return FALSE;
+		}
+
+		// Load the font face into Cairo
+		cairo_font_face[loop_counter] = cairo_ft_font_face_create_for_ft_face(ft_font_face[loop_counter], 0);
+
+		// Check if the font face was successfully loaded
+		cairo_status = cairo_font_face_status(cairo_font_face[loop_counter]);
+		if (CAIRO_STATUS_SUCCESS != cairo_status)
+		{
+			message = g_string_new(NULL);
+			g_string_printf(message, "%s", "cairo_ft_font_face_create_for_ft_face() gave an error");
 			display_warning(message->str);
 			g_string_free(message, TRUE);
 			return FALSE;
