@@ -74,7 +74,7 @@
 
 // Global variables
 GList					*boundary_list = NULL;		// Stores a linked list of layer object boundaries
-cairo_font_face_t		*cairo_font_face[FONT_DEJAVU_SERIF_I + 1];  // The font face we use
+cairo_font_face_t		*cairo_font_face[FONT_DEJAVU_SERIF_I + 1];  // The ttf font faces we use get loaded into this
 guint					capture_height;				// Height for screen captures
 guint					capture_width;				// Width for screen captures
 guint					capture_x;					// X offset for screen captures
@@ -86,6 +86,7 @@ guint					debug_level = 0;			// Used to indicate debugging level
 guint					end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations
 guint					end_point_status = END_POINTS_INACTIVE;  // Is one of the layer end points being moved?
 gfloat					export_time_counter;		// Used when exporting, holds the number of seconds thus far
+SWFFont					fdb_font_object[FONT_DEJAVU_SERIF_I + 1];  // The fdb font faces we use get loaded into this
 GString					*file_name = NULL;			// Holds the file name the project is saved as
 gboolean				film_strip_being_resized;	// Toggle to indicate if the film strip is being resized
 GtkTreeViewColumn		*film_strip_column;			// Pointer to the film strip column
