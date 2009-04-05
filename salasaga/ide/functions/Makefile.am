@@ -10,6 +10,7 @@ salasaga_SOURCES = create_menu_bar.c \
 	enable_layer_toolbar_buttons.c \
 	enable_main_toolbar_buttons.c \
 	key_bind.c \
+	load_fonts.c \
 	logger_simple.c \
 	logger_with_domain.c \
 	preferences_load.c \
@@ -67,7 +68,6 @@ salasaga_SOURCES = create_menu_bar.c \
 	layer/layer_new_text.c \
 	layer/layer_new_text_inner.c \
 	layer/layer_paste.c \
-	layer/load_font.c \
 	menu/menu_edit_preferences.c \
 	menu/menu_enable.c \
 	menu/menu_export_swf.c \
