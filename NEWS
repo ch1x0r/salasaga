@@ -9,6 +9,7 @@
    moved both partially or completely off the visible slide area.
  * The selected slide is now always centered in the workspace area.
  * Turned the status bar into a progress bar, plus updated functions to use it.
+ * Text layers can now be any of the DejaVu fonts.
  * Minor bug fixes.
 
 2009-02-14 - JustinClift
