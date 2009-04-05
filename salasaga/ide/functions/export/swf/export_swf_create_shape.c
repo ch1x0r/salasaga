@@ -58,8 +58,6 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	SWFShape			empty_layer_shape;			// Temporary swf shape used when constructing empty layers
 	GError				*error = NULL;				// Pointer to error return structure
 	guint				final_opacity;				// Used when calculating the final opacity figure for a highlight layer
-	FILE				*font_file;					// The file we load the font from
-	SWFFont				font_object;				// The font we use gets loaded into this
 	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
 	guint16				green_component;			// Used when retrieving the foreground color of text
 	SWFShape			highlight_box = NULL;		// Temporary swf shape used when constructing highlight boxes
@@ -118,36 +116,6 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	// Calculate the height and width scaling values needed for this swf output
 	scaled_height_ratio = (gfloat) output_height / (gfloat) project_height;
 	scaled_width_ratio = (gfloat) output_width / (gfloat) project_width;
-
-	// Create the font object we'll be using
-	font_pathname = g_build_path(G_DIR_SEPARATOR_S, FONT_OUTLINE_DIR, "DejaVuSans.fdb", NULL);
-
-	// Display debugging info if requested
-	if (debug_level) printf(_("Full path name to font file is: %s\n"), font_pathname);
-
-	// Load the font file if needed
-	font_file = fopen(font_pathname, "r");
-	if (NULL == font_file)
-	{
-		// Something went wrong when loading the font file, so return
-		g_string_printf(message, "%s ED380: %s", _("Error"), _("Something went wrong when opening the font file."));
-		display_warning(message->str);
-		g_string_free(message, TRUE);
-		return FALSE;
-	}
-	font_object = loadSWFFontFromFile(font_file);
-	if (NULL == font_object)
-	{
-		// Something went wrong when loading the font file, so return
-		g_string_printf(message, "%s ED96: %s", _("Error"), _("Something went wrong when loading the font file."));
-		display_warning(message->str);
-
-		// Free the memory allocated in this function
-		g_string_free(message, TRUE);
-		g_free(font_pathname);
-
-		return FALSE;
-	}
 
 	// Create the dictionary shape for this layer
 	switch (this_layer_data->object_type)
@@ -524,7 +492,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			text_object = newSWFText();
 
 			// Assign a font to the text object
-			SWFText_setFont(text_object, font_object);
+			SWFText_setFont(text_object, fdb_font_object[text_data->font_face]);
 
 			// Set the height we want for the text
 			scaled_font_size = scaled_height_ratio * text_data->font_size;
