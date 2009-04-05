@@ -37,6 +37,7 @@ extern "C" {
 
 // Variables defined elsewhere
 extern GList				*boundary_list;
+extern cairo_font_face_t	*cairo_font_face[FONT_DEJAVU_SERIF_I + 1];
 extern guint				capture_height;
 extern guint				capture_width;
 extern guint				capture_x;
