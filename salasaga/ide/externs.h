@@ -30,6 +30,9 @@
 #include <ft2build.h>
 #include FT_FREETYPE_H
 
+// Ming include
+#include <ming.h>
+
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
@@ -49,6 +52,7 @@ extern guint				debug_level;
 extern guint				end_behaviour;
 extern guint				end_point_status;
 extern gfloat				export_time_counter;
+extern SWFFont				fdb_font_object[FONT_DEJAVU_SERIF_I + 1];
 extern GString				*file_name;
 extern gboolean				film_strip_being_resized;
 extern GtkTreeViewColumn	*film_strip_column;
