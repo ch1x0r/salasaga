@@ -26,6 +26,10 @@
 #ifndef __EXTERNS_H__
 #define __EXTERNS_H__
 
+// FreeType includes
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
@@ -50,6 +54,7 @@ extern GtkTreeViewColumn	*film_strip_column;
 extern GtkScrolledWindow	*film_strip_container;
 extern GtkListStore			*film_strip_store;
 extern GtkWidget			*film_strip_view;
+extern FT_Face				ft_font_face[FONT_DEJAVU_SERIF_I + 1];
 extern guint				frames_per_second;
 extern GdkPixmap			*front_store;
 extern GString				*icon_extension;

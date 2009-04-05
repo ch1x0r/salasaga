@@ -63,6 +63,29 @@ extern "C" {
 #define END_POINT_VERTICAL_OFFSET	15
 #define END_POINT_HORIZONTAL_OFFSET	15
 
+// Fonts that can be selected
+#define FONT_DEJAVU_SANS			0
+#define FONT_DEJAVU_SANS_B			1
+#define FONT_DEJAVU_SANS_B_O		2
+#define FONT_DEJAVU_SANS_C			3
+#define FONT_DEJAVU_SANS_C_B		4
+#define FONT_DEJAVU_SANS_C_B_O		5
+#define FONT_DEJAVU_SANS_C_O		6
+#define FONT_DEJAVU_SANS_EL			7
+#define FONT_DEJAVU_SANS_MONO		8
+#define FONT_DEJAVU_SANS_MONO_B		9
+#define FONT_DEJAVU_SANS_MONO_B_O	10
+#define FONT_DEJAVU_SANS_MONO_O		11
+#define FONT_DEJAVU_SANS_O			12
+#define FONT_DEJAVU_SERIF			13
+#define FONT_DEJAVU_SERIF_B			14
+#define FONT_DEJAVU_SERIF_B_I		15
+#define FONT_DEJAVU_SERIF_C			16
+#define FONT_DEJAVU_SERIF_C_B		17
+#define FONT_DEJAVU_SERIF_C_B_I		18
+#define FONT_DEJAVU_SERIF_C_I		19
+#define FONT_DEJAVU_SERIF_I			20
+
 // Statuses for the bounding box resize handles
 #define	RESIZE_HANDLES_INACTIVE		0
 #define	RESIZE_HANDLES_WAITING		1

@@ -64,6 +64,7 @@
 #include "functions/resolution_selector_changed.h"
 #include "functions/zoom_selector_changed.h"
 #include "functions/dialog/display_warning.h"
+#include "functions/layer/load_font.h"
 #include "functions/film_strip/create_film_strip.h"
 #include "functions/film_strip/film_strip_handle_changed.h"
 #include "functions/film_strip/film_strip_handle_released.h"
@@ -90,6 +91,7 @@ GtkTreeViewColumn		*film_strip_column;			// Pointer to the film strip column
 GtkScrolledWindow		*film_strip_container;		// Container for the film strip
 GtkListStore			*film_strip_store;			// Film strip list store
 GtkWidget				*film_strip_view;			// The view of the film strip list store
+FT_Face					ft_font_face[FONT_DEJAVU_SERIF_I + 1];  // Array of FreeType font face handles
 guint					frames_per_second;			// Number of frames per second
 GdkPixmap				*front_store;				// Front store for double buffering the workspace area
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
@@ -192,6 +194,7 @@ HHOOK					win32_keyboard_hook_handle = NULL;		// Handle used to keep track of th
 gint main(gint argc, gchar *argv[])
 {
 	// Local variables
+	gboolean			font_status;				// Receives a return code from our font loading function
 	gint				format_counter;				// Used to determine if SVG images can be loaded
 	GdkPixbufFormat		*format_data;				// Used to determine if SVG images can be loaded
 	GValue				*handle_size;				// The size of the handle in the main area
@@ -252,6 +255,9 @@ gint main(gint argc, gchar *argv[])
 	project_name = g_string_new(_("New Project"));
 	screenshots_folder = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
+
+	// Load the fonts we use for rendering display
+	font_status = load_fonts();
 
 	// Initialise the button event handlers on the toolbars to NULL
 	main_toolbar_signals[CROP_ALL] = 0;
