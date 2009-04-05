@@ -60,7 +60,7 @@ validatation_entry		valid_fields[] =
 	{ PROJECT_FPS,			N_("Frames per Second for this project"),	V_INT_UNSIGNED,		V_NONE,		1,		120 },
 	{ PROJECT_HEIGHT,		N_("Height of this project"),				V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ PROJECT_NAME,			N_("Name of this project"),					V_CHAR,				V_FULL_STOP | V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		120 },
-	{ PROJECT_VERSION,		N_("Version number of the project file"),	V_FLOAT_UNSIGNED,	V_NONE,		0,		4.2 },
+	{ PROJECT_VERSION,		N_("Version number of the project file"),	V_FLOAT_UNSIGNED,	V_NONE,		0,		4.3 },
 	{ PROJECT_WIDTH,		N_("Width of this project"),				V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ RESOLUTION,			N_("An X * Y resolution value"),			V_RESOLUTION,		V_NONE,		0,		16 },
 	{ SCREENSHOT_HEIGHT,	N_("Height for next screenshot"),			V_INT_UNSIGNED,		V_NONE,		1,		4096 },
