@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Creates a new layer, copied from the specified one
- * 
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -216,6 +216,7 @@ layer *layer_duplicate(layer *source_layer)
 			dest_text_data->bg_fill_colour.red = source_text_data->bg_fill_colour.red;
 			dest_text_data->bg_fill_colour.green = source_text_data->bg_fill_colour.green;
 			dest_text_data->bg_fill_colour.blue = source_text_data->bg_fill_colour.blue;
+			dest_text_data->font_face = source_text_data->font_face;
 
 			// Copy the existing text buffer
 			dest_text_data->text_buffer = gtk_text_buffer_new(NULL);

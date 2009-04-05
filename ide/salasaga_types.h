@@ -155,6 +155,7 @@ enum
 	EXTERNAL_LINK_WINDOW,
 	FILE_PATH,
 	FOLDER_PATH,
+	FONT_FACE,
 	FONT_SIZE,
 	FRAME_NUMBER,
 	HIGHLIGHT_HEIGHT,
@@ -363,6 +364,7 @@ typedef struct
 	GdkColor			bg_fill_colour;
 	GdkColor			bg_border_colour;
 	gfloat				bg_border_width;
+	guint				font_face;
 } layer_text;
 
 // Resolution storing structure

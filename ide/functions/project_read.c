@@ -2491,6 +2491,7 @@ gboolean project_read(gchar *filename)
 								tmp_text_ob->bg_fill_colour.red = 65535;
 								tmp_text_ob->bg_fill_colour.green = 65535;
 								tmp_text_ob->bg_fill_colour.blue = 52428;  // Sensible default
+								tmp_text_ob->font_face = FONT_DEJAVU_SANS;  // Default font
 
 								// Load the text layer values
 								this_node = this_layer->xmlChildrenNode;
@@ -3028,6 +3029,24 @@ gboolean project_read(gchar *filename)
 										{
 											tmp_layer->transition_out_duration = *validated_gfloat;
 											g_free(validated_gfloat);
+										}
+									}
+									if ((!xmlStrcmp(this_node->name, (const xmlChar *) "font_face")))
+									{
+										// Get the font face for the text
+										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+										validated_guint = validate_value(FONT_FACE, V_CHAR, tmp_xmlChar);
+										xmlFree(tmp_xmlChar);
+										if (NULL == validated_guint)
+										{
+											g_string_printf(message, "%s ED425: %s", _("Error"), _("There was something wrong with a font face value in the project file."));
+											display_warning(message->str);
+											useable_input = FALSE;
+											tmp_text_ob->font_face = FONT_DEJAVU_SANS;  // Fill in the value, just to be safe
+										} else
+										{
+											tmp_text_ob->font_face = *validated_guint;
+											g_free(validated_guint);
 										}
 									}
 									this_node = this_node->next;

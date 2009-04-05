@@ -4,7 +4,7 @@
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -39,6 +39,7 @@ validatation_entry		valid_fields[] =
 	{ EXTERNAL_LINK_WINDOW,	N_("Window target for an external link"),	V_CHAR,				V_UNDERSCORES,		0,		20 },
 	{ FILE_PATH,			N_("Full path to a file"),					V_CHAR,				V_FULL_STOP | V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
 	{ FOLDER_PATH,			N_("Full path to a folder"),				V_CHAR,				V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
+	{ FONT_FACE,			N_("Font face"),							V_INT_UNSIGNED,		V_NONE,		0,		FONT_DEJAVU_SERIF_I },
 	{ FONT_SIZE,			N_("Font size"),							V_FLOAT_UNSIGNED,	V_NONE,		0,		200 },
 	{ FRAME_NUMBER,			N_("A frame number"),						V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ HIGHLIGHT_HEIGHT,		N_("Height of a highlight layer"),			V_INT_UNSIGNED,		V_NONE,		5,		4096 },
