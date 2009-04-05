@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Display a dialog box asking for text layer settings 
- * 
+ * Salasaga: Display a dialog box asking for text layer settings
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -52,6 +52,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gfloat				valid_duration = 0;			// Receives the new finish frame once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
+	guint				valid_font_face;			// Receives the new font face once validated
 	gfloat				valid_font_size = 0;		// Receives the new font size once validated
 	GString				*valid_name;				// Receives the new layer name once validated
 	gfloat				valid_start_time = 0;		// Receives the new start time once validated
@@ -72,13 +73,13 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*appearance_tab_label;		//
 	GtkWidget			*appearance_table;			//
 	GtkWidget			*duration_tab_label;		//
-	GtkWidget			*duration_table;			// 
+	GtkWidget			*duration_table;			//
 	GtkWidget			*notebook_widget;			//
 	GtkDialog			*text_dialog;				// Widget for the text dialog
 
 	// * Appearance & Links tab fields *
 
-	GtkTextBuffer		*text_buffer;				// Temporary text buffer the user words with 
+	GtkTextBuffer		*text_buffer;				// Temporary text buffer the user words with
 	GtkTextIter			text_end;					// End position of text buffer
 	GtkWidget			*text_frame;				// Frame to go around the text widget
 	GString				*text_gstring;				// Temporary text buffer
@@ -88,8 +89,11 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*name_label;				// Label widget
 	GtkWidget			*name_entry;				//
 
-	GtkWidget			*font_label;				// Label widget
-	GtkWidget			*font_button;				//
+	GtkWidget			*font_face_label;			// Label widget
+	GtkWidget			*selector_font_face;		//
+
+	GtkWidget			*font_size_label;			// Label widget
+	GtkWidget			*font_size_button;			//
 
 	GtkWidget			*fg_colour_label;			// Label widget
 	GtkWidget			*fg_colour_button;			// Forground colour selection button
@@ -199,16 +203,48 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
+	// Create the label asking for the font face
+	font_face_label = gtk_label_new(_("Font face: "));
+	gtk_misc_set_alignment(GTK_MISC(font_face_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_face_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the drop down list of font faces
+	selector_font_face = gtk_combo_box_new_text();
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Bold"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Bold Oblique"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Condensed"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Condensed Bold"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Condensed Bold Oblique"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Condensed Oblique"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Extra Light"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Mono"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Mono Bold"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Mono Bold Oblique"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Mono Oblique"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Oblique"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Bold"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Bold Italic"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Condensed"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Condensed Bold"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Condensed Bold Italic"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Condensed Italic"));
+	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Italic"));
+	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_font_face), tmp_text_ob->font_face);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(selector_font_face), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
 	// Create the label asking for the font size
-	font_label = gtk_label_new(_("Font size: "));
-	gtk_misc_set_alignment(GTK_MISC(font_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	font_size_label = gtk_label_new(_("Font size: "));
+	gtk_misc_set_alignment(GTK_MISC(font_size_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_size_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the font size input
-	font_button = gtk_spin_button_new_with_range(valid_fields[FONT_SIZE].min_value, valid_fields[FONT_SIZE].max_value, 1);
-	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(font_button), 2);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(font_button), tmp_text_ob->font_size);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	font_size_button = gtk_spin_button_new_with_range(valid_fields[FONT_SIZE].min_value, valid_fields[FONT_SIZE].max_value, 1);
+	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(font_size_button), 2);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(font_size_button), tmp_text_ob->font_size);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_size_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the foreground colour selection label
@@ -528,8 +564,22 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			g_free(validated_guint);
 		}
 
+		// Retrieve the new font face
+		gint_val = gtk_combo_box_get_active(GTK_COMBO_BOX(selector_font_face));
+		if (-1 == gint_val)
+		{
+			// A -1 return means no value was selected
+			g_string_printf(message, "%s ED426: %s", _("Error"), _("There was something wrong with the font face selected.  Please try again."));
+			display_warning(message->str);
+			useable_input = FALSE;
+		} else
+		{
+			// A value was selected
+			valid_font_face = (guint) gint_val;
+		}
+
 		// Retrieve the new font size
-		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(font_button));
+		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(font_size_button));
 		validated_gfloat = validate_value(FONT_SIZE, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
@@ -676,6 +726,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	tmp_layer->y_offset_start = valid_y_offset_start;
 	tmp_layer->x_offset_finish = valid_x_offset_finish;
 	tmp_layer->y_offset_finish = valid_y_offset_finish;
+	tmp_text_ob->font_face = valid_font_face;
 	tmp_text_ob->font_size = valid_font_size;
 	tmp_layer->start_time = valid_start_time;
 	tmp_layer->duration = valid_duration;
