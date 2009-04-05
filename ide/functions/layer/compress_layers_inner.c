@@ -30,14 +30,10 @@
 // Standard include
 #include <math.h>
 
-// Freetype includes
-#include <ft2build.h>
-#include FT_FREETYPE_H
-
 // GTK includes
 #include <gtk/gtk.h>
 
-// Cairo include
+// Cairo FreeType include
 #include <cairo/cairo-ft.h>
 
 #ifdef _WIN32
@@ -50,7 +46,6 @@
 #include "../../externs.h"
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../dialog/display_warning.h"
-//#include "load_font.h"
 #include "get_layer_position.h"
 
 
@@ -62,10 +57,6 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	cairo_font_face_t		*cairo_font_face;		// The font face we use
 	cairo_status_t			cairo_status;			// Receives return status from cairo functions
 	gfloat					end_time;				// Time in seconds of the layer objects finish time
-	gchar					*font_pathname;			// Full pathname to a font file to load is constructed in this
-	guint					ft_error;				// Receives error codes from FreeType functions
-	FT_Library				ft_library_handle;		// FreeType library handle
-	FT_Face					ft_font_face;			// FreeType font face
 	gfloat					green_component;		// Green component of a colour
 	gint					height;					//
 	cairo_matrix_t			image_matrix;			// Transformation matrix used to position a cairo pattern
@@ -222,48 +213,15 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			text_object = (layer_text *) this_layer_data->object_data;
 			text_buffer = text_object->text_buffer;
 
-			// Initialise FreeType
-			ft_error = FT_Init_FreeType(&ft_library_handle);
-			if (ft_error)
-			{
-				g_string_printf(message, "%s ED421: %s", _("Error"), _("Failed to initialize FreeType."));
-				display_warning(message->str);
-				return;
-			}
-
-			// Create path to the font we want
-			font_pathname = g_build_path(G_DIR_SEPARATOR_S, FONT_TTF_DIR, "DejaVuSerif.ttf", NULL);  // Hard code DejaVuSans initially
-//			font_pathname = g_build_path(G_DIR_SEPARATOR_S, FONT_TTF_DIR, "DejaVuSans.ttf", NULL);  // Hard code DejaVuSans initially
-
-			// Load the font face
-			ft_error = FT_New_Face(ft_library_handle, font_pathname, 0, &ft_font_face);
-			if (FT_Err_Unknown_File_Format == ft_error)
-			{
-				g_string_printf(message, "%s ED422: %s '%s' %s", _("Error"), _("Font file"), font_pathname, _("is not in a format FreeType recognizes."));
-				display_warning(message->str);
-				return;
-			}
-			else if (ft_error)
-			{
-				g_string_printf(message, "%s ED423: %s '%s' %s", _("Error"), _("Font file"), font_pathname, _("could not be opened by FreeType."));
-				display_warning(message->str);
-				return;
-			}
-
-// Count the number of Glyphs
-//glong	num_glyphs;
-//		num_glyphs = ft_font_face->num_glyphs;
-//printf("There are %ld glyphs in the font face\n", num_glyphs);
-
 			// Load the desired font face into Cairo
-			cairo_font_face = cairo_ft_font_face_create_for_ft_face(ft_font_face, 0);
+			cairo_font_face = cairo_ft_font_face_create_for_ft_face(ft_font_face[1], 0);  // Hard coded to a specific face for the moment
 
 			// Check if the font face was successfully loaded
 			cairo_status = cairo_font_face_status(cairo_font_face);
 			if (CAIRO_STATUS_SUCCESS != cairo_status)
 			{
 				message = g_string_new(NULL);
-				g_string_printf(message, "%s", "cairo_ft_font_face_create_for_ft_face() errored");
+				g_string_printf(message, "%s", "cairo_ft_font_face_create_for_ft_face() gave an error");
 				display_warning(message->str);
 				g_string_free(message, TRUE);
 			}
