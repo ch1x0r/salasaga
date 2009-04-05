@@ -31,7 +31,7 @@
 extern "C" {
 #endif // __cplusplus
 
-FT_Face load_font(FT_Face *ft_font_face, gchar *font_pathname);
+gboolean load_fonts();
 
 #ifdef __cplusplus
 }
