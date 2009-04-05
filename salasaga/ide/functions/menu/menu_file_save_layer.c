@@ -299,6 +299,8 @@ void menu_file_save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "bg_fill_colour_blue", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%f", ((layer_text *) layer_pointer->object_data)->bg_border_width);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "bg_border_width", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->font_face);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "font_face", (const xmlChar *) tmp_gstring->str);
 
 			break;
 

@@ -79,6 +79,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	tmp_text_ob->bg_fill_colour.blue = 52428;  // Sensible defaults
 	tmp_text_ob->rendered_width = 0;
 	tmp_text_ob->rendered_height = 0;
+	tmp_text_ob->font_face = FONT_DEJAVU_SANS; // Default font to use
 
 	// Construct a new text layer
 	tmp_layer = g_new(layer, 1);

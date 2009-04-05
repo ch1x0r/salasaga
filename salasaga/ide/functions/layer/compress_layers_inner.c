@@ -212,7 +212,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			text_buffer = text_object->text_buffer;
 
 			// Set the font face for rendering this layer onscreen
-			cairo_set_font_face(cairo_context, cairo_font_face[0]);  // Still using a hard coded font for now
+			cairo_set_font_face(cairo_context, cairo_font_face[text_object->font_face]);
 
 			// Set the desired font size
 			cairo_set_font_size(cairo_context, text_object->font_size * scaled_width_ratio);
