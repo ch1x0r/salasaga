@@ -54,8 +54,6 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	// Local variables
 	gfloat					blue_component;			// Blue component of a colour
 	cairo_t					*cairo_context;			// Cairo drawing context
-	cairo_font_face_t		*cairo_font_face;		// The font face we use
-	cairo_status_t			cairo_status;			// Receives return status from cairo functions
 	gfloat					end_time;				// Time in seconds of the layer objects finish time
 	gfloat					green_component;		// Green component of a colour
 	gint					height;					//
@@ -213,21 +211,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			text_object = (layer_text *) this_layer_data->object_data;
 			text_buffer = text_object->text_buffer;
 
-			// Load the desired font face into Cairo
-			cairo_font_face = cairo_ft_font_face_create_for_ft_face(ft_font_face[1], 0);  // Hard coded to a specific face for the moment
-
-			// Check if the font face was successfully loaded
-			cairo_status = cairo_font_face_status(cairo_font_face);
-			if (CAIRO_STATUS_SUCCESS != cairo_status)
-			{
-				message = g_string_new(NULL);
-				g_string_printf(message, "%s", "cairo_ft_font_face_create_for_ft_face() gave an error");
-				display_warning(message->str);
-				g_string_free(message, TRUE);
-			}
-
 			// Set the font face for rendering this layer onscreen
-			cairo_set_font_face(cairo_context, cairo_font_face);
+			cairo_set_font_face(cairo_context, cairo_font_face[0]);  // Still using a hard coded font for now
 
 			// Set the desired font size
 			cairo_set_font_size(cairo_context, text_object->font_size * scaled_width_ratio);
