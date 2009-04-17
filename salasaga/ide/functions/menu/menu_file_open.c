@@ -46,6 +46,7 @@
 #include "../validate_value.h"
 #include "../dialog/display_dialog_save_warning.h"
 #include "../dialog/display_warning.h"
+#include "../working_area/draw_workspace.h"
 #include "menu_enable.h"
 
 
