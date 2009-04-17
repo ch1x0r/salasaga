@@ -4,15 +4,9 @@
 
 int main(void)
 {
-
-	
-	FILE			*sound_file;
-	int			sound_loop;
+	FILE				*sound_file;
 	SWFSoundStream 		sound_stream;
-	float			sound_start;
-	int			sound_start_frame;
-	char			*sound_pathname;
-	SWFMovie		swf_movie;
+	SWFMovie			swf_movie;
 
 	Ming_init();
 	swf_movie = newSWFMovieWithVersion(7);
