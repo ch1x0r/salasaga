@@ -76,7 +76,6 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 
 	// Variables used creating the control bar background
 	SWFShape			cb_background;
-	SWFFillStyle		cb_fill_style;				// Fill style used when constructing the control bar background
 
 	// Variables used in working out control bar dimensions
 	gfloat				control_bar_height;
