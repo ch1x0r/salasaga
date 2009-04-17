@@ -49,7 +49,6 @@ gint key_bind(void)
 	gboolean			key_already_set = FALSE;	// Used to work out which metacity run command is unassigned
 	GString				*message;					// Used to construct message strings
 	gchar				*return_code_gchar;			// Catches string based return codes
-	gchar				*tmp_gchar;					// Temporary gchar
 	guint				tmp_guint;					// Temporary guint
 
 
