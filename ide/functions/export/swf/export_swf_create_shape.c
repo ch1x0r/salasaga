@@ -58,7 +58,6 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	SWFShape			empty_layer_shape;			// Temporary swf shape used when constructing empty layers
 	GError				*error = NULL;				// Pointer to error return structure
 	guint				final_opacity;				// Used when calculating the final opacity figure for a highlight layer
-	gchar				*font_pathname;				// Full pathname to a font file to load is constructed in this
 	guint16				green_component;			// Used when retrieving the foreground color of text
 	SWFShape			highlight_box = NULL;		// Temporary swf shape used when constructing highlight boxes
 	gint				highlight_box_height;		// Used while generating swf output for highlight boxes
@@ -72,7 +71,6 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	gint				image_width;				// Temporarily used to store the width of an image
 	GString				*message;					// Used to construct message strings
 	layer_mouse			*mouse_data;				// Points to the mouse object data inside the layer
-	SWFFillStyle		mouse_fill_style;			// Fill style used when constructing mouse pointers
 	gint				mouse_ptr_width;			// Holds the calculated width for a mouse pointer graphic
 	gint				mouse_ptr_height;			// Holds the calculated height for a mouse pointer graphic
 	SWFShape			mouse_shape = NULL;			//
