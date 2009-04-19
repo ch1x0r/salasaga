@@ -21,18 +21,18 @@
  *
  */
 
-#ifndef TIMELINE_WIDGET_BUTTON_RELEASE_EVENT_H_
-#define TIMELINE_WIDGET_BUTTON_RELEASE_EVENT_H_
+#ifndef TIME_LINE_BUTTON_RELEASE_EVENT_H_
+#define TIME_LINE_BUTTON_RELEASE_EVENT_H_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
+void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /* TIMELINE_WIDGET_BUTTON_RELEASE_EVENT_H_ */
+#endif /* TIME_LINE_BUTTON_RELEASE_EVENT_H_ */

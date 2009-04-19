@@ -39,7 +39,7 @@
 #include "time_line.h"
 
 
-void timeline_widget_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
 	GtkAllocation		area;						// Rectangular area

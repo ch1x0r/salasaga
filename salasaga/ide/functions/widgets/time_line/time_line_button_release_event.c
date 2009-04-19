@@ -39,7 +39,7 @@
 #include "time_line.h"
 
 
-void timeline_widget_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
 	layer				*background_layer_data;		// Data for the background layer
