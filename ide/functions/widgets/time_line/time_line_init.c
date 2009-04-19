@@ -68,7 +68,7 @@ void time_line_init(TimeLine *time_line)
 	priv->stored_slide_duration = ((slide *) current_slide->data)->duration;
 
 	// fixme3: These would probably be good as properties
-	priv->cursor_position = 0.0;  // Value picked out of the air
+	priv->cursor_position = 0.0;
 	priv->left_border_width = 120;
 	priv->row_height = 20;
 	priv->top_border_height = 15;
