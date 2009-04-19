@@ -47,11 +47,14 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 	GtkAllocation		area;						// Rectangular area
 	gfloat				end_time;					// The end time in seconds of the presently selected layer
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	gint				left_border;
 	gint				new_row;					// Used to determine the row clicked upon
+	gint				pps;						// Holds the number of pixels per second used when drawing
 	TimeLinePrivate		*priv;
 	layer				*this_layer_data;			// Data for the presently selected layer
 	slide				*this_slide_data;			// Data for the presently selected slide
 	TimeLine			*this_time_line;
+	gfloat				tl_cursor_pos;				// Holds the position of the cursor in the time line (in seconds)
 	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
 
 
@@ -93,25 +96,29 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 	this_slide_data = ((slide *) current_slide->data);
 	layer_pointer = this_slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
+	left_border = priv->left_border_width;
+	pps = time_line_get_pixels_per_second();
+	tl_cursor_pos = time_line_get_cursor_position(GTK_WIDGET(this_time_line));
 
 	// Check if this button press is in time line cursor area
-	if ((ADJUSTMENTS_Y <= event->y) && ((ADJUSTMENTS_Y + ADJUSTMENTS_SIZE) >= event->y) && (priv->left_border_width < event->x))
+	if ((ADJUSTMENTS_Y <= event->y) && ((ADJUSTMENTS_Y + ADJUSTMENTS_SIZE) >= event->y) && (left_border < event->x))
 	{
 		// * Direct click in the cursor area *
 
 		// Remove the old cursor line
-		area.x = priv->left_border_width + (time_line_get_cursor_position(widget) * time_line_get_pixels_per_second()) - (CURSOR_HEAD_WIDTH / 2);
+		area.x = left_border + (tl_cursor_pos * pps) - (CURSOR_HEAD_WIDTH / 2);
 		area.y = 0;
 		area.height = GTK_WIDGET(this_time_line)->allocation.height;
 		area.width = CURSOR_HEAD_WIDTH;
 		gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 
-		// Reposition the cursor
-		time_line_set_cursor_position(widget, (event->x - priv->left_border_width) / time_line_get_pixels_per_second());
+		// Reposition the cursor to where the mouse button down occurred
+		tl_cursor_pos = round(event->x - left_border) / pps;
+		time_line_set_cursor_position(GTK_WIDGET(this_time_line), tl_cursor_pos);
 		priv->cursor_drag_active = FALSE;
 
 		// Draw the new cursor line
-		area.x = priv->left_border_width + (time_line_get_cursor_position(widget) * time_line_get_pixels_per_second()) - (CURSOR_HEAD_WIDTH / 2);
+		area.x = left_border + (tl_cursor_pos * pps) - (CURSOR_HEAD_WIDTH / 2);
 		area.y = 0;
 		area.height = GTK_WIDGET(this_time_line)->allocation.height;
 		area.width = CURSOR_HEAD_WIDTH;
@@ -161,8 +168,8 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 		end_time += this_layer_data->transition_out_duration;
 
 	// Store the guide line positions so we know where to refresh
-	priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * time_line_get_pixels_per_second());
-	priv->guide_line_end = priv->left_border_width + (end_time * time_line_get_pixels_per_second()) - 1;
+	priv->guide_line_start = left_border + (this_layer_data->start_time * pps);
+	priv->guide_line_end = left_border + (end_time * pps) - 1;
 
 	// Draw guide lines
 	time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
