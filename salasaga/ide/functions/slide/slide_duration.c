@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user selects Slide -> Duration from the top menu 
- * 
+ * Salasaga: Function called when the user selects Slide -> Duration from the top menu
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -36,9 +36,9 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
-#include "../validate_value.h"
-#include "../widgets/time_line.h"
+#include "../widgets/time_line/time_line_set_stored_slide_duration.h"
 #include "../draw_timeline.h"
+#include "../validate_value.h"
 
 
 void slide_duration(void)
@@ -141,7 +141,7 @@ void slide_duration(void)
 				this_layer_data->duration = valid_slide_duration;
 				continue;
 			}
-				
+
 			// Work out the end time for the layer
 			end_time = this_layer_data->start_time + this_layer_data->duration;
 			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)

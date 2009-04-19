@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user selects Export -> Image Layer from the top menu 
- * 
+ * Salasaga: Function called when the user selects Export -> Image Layer from the top menu
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -35,7 +35,7 @@
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
 #include "../validate_value.h"
-#include "../widgets/time_line.h"
+#include "../widgets/time_line/time_line_get_selected_layer_num.h"
 
 
 void menu_export_layer(void)

@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user clicks the Move Layer Up toolbar button 
- * 
+ * Salasaga: Function called when the user clicks the Move Layer Up toolbar button
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -41,7 +41,8 @@
 #include "../draw_timeline.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "../dialog/display_warning.h"
-#include "../widgets/time_line.h"
+#include "../widgets/time_line/time_line_get_selected_layer_num.h"
+#include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 
 

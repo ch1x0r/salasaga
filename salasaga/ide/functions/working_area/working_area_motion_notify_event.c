@@ -40,7 +40,8 @@
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
 #include "../layer/get_layer_position.h"
-#include "../widgets/time_line.h"
+#include "../widgets/time_line/time_line_get_cursor_position.h"
+#include "../widgets/time_line/time_line_get_selected_layer_num.h"
 #include "draw_bounding_box.h"
 
 

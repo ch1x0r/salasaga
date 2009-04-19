@@ -30,7 +30,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../widgets/time_line.h"
+#include "../widgets/time_line/time_line_get_selected_layer_num.h"
 
 
 gboolean draw_layer_start_and_end_points()

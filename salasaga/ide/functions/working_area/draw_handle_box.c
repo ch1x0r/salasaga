@@ -41,7 +41,8 @@
 #include "../dialog/display_warning.h"
 #include "../cairo/calculate_text_object_size.h"
 #include "../layer/get_layer_position.h"
-#include "../widgets/time_line.h"
+#include "../widgets/time_line/time_line_get_selected_layer_num.h"
+#include "../widgets/time_line/time_line_get_cursor_position.h"
 #include "draw_bounding_box.h"
 #include "draw_resize_handles.h"
 

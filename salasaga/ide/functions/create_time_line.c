@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function to create the time line area 
- * 
+ * Salasaga: Function to create the time line area
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -44,7 +44,9 @@
 #include "layer/layer_new_image.h"
 #include "layer/layer_new_mouse.h"
 #include "layer/layer_new_text.h"
-#include "widgets/time_line.h"
+#include "widgets/time_line/time_line_button_press_event.h"
+#include "widgets/time_line/time_line_button_release_event.h"
+#include "widgets/time_line/time_line_motion_notify_event.h"
 
 
 GtkWidget *create_time_line(void)
@@ -84,9 +86,9 @@ GtkWidget *create_time_line(void)
 	gtk_container_add(GTK_CONTAINER(time_line_scrolled_window), GTK_WIDGET(time_line_container));
 
 	// Add signal handlers to the time line area for receiving events (i.e. mouse clicks)
-	g_signal_connect(time_line_container, "button_release_event", G_CALLBACK(timeline_widget_button_release_event), NULL);
-	g_signal_connect(time_line_container, "button_press_event", G_CALLBACK(timeline_widget_button_press_event), NULL);
-	g_signal_connect(time_line_container, "motion_notify_event", G_CALLBACK(timeline_widget_motion_notify_event), NULL);
+	g_signal_connect(time_line_container, "button_release_event", G_CALLBACK(time_line_button_release_event), NULL);
+	g_signal_connect(time_line_container, "button_press_event", G_CALLBACK(time_line_button_press_event), NULL);
+	g_signal_connect(time_line_container, "motion_notify_event", G_CALLBACK(time_line_motion_notify_event), NULL);
 
 	// Ensure we get the signals we want
 	gtk_widget_set_events(time_line_container, gtk_widget_get_events(time_line_container)
