@@ -88,7 +88,7 @@ void time_line_init(TimeLine *time_line)
 	// Set a periodic time out, so we rate limit the calls to the motion notify (mouse drag) handler
 	priv->mouse_x = -1;
 	priv->mouse_y = -1;
-	priv->timeout_id = g_timeout_add(125,  // Timeout interval (1/1000ths of a second)
+	priv->timeout_id = g_timeout_add(50,  // Timeout interval (1/1000ths of a second)
 							(GSourceFunc) time_line_internal_widget_motion_notify_handler,  // Function to call
 							time_line);  // Pass the time line widget to the function
 }
