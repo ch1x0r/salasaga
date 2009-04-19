@@ -39,7 +39,7 @@
 #include "time_line.h"
 
 
-static void time_line_realise(GtkWidget *widget)
+void time_line_realise(GtkWidget *widget)
 {
 	// Local variables
 	guint				attribute_mask;

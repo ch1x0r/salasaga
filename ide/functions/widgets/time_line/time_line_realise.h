@@ -29,7 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
-static void time_line_realise(GtkWidget *widget);
+void time_line_realise(GtkWidget *widget);
 
 #ifdef __cplusplus
 }

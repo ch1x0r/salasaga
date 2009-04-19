@@ -39,7 +39,7 @@
 #include "time_line.h"
 
 
-static void time_line_size_request(GtkWidget *widget, GtkRequisition *requisition)
+void time_line_size_request(GtkWidget *widget, GtkRequisition *requisition)
 {
 	// Safety check
 	g_return_if_fail(requisition != NULL || widget != NULL);

@@ -29,7 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
-static void time_line_class_init(TimeLineClass *klass);
+void time_line_class_init(TimeLineClass *klass);
 
 #ifdef __cplusplus
 }
