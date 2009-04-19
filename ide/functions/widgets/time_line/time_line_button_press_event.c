@@ -37,6 +37,8 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "time_line.h"
+#include "time_line_get_cursor_position.h"
+#include "time_line_set_cursor_position.h"
 
 
 void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
@@ -98,18 +100,18 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 		// * Direct click in the cursor area *
 
 		// Remove the old cursor line
-		area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+		area.x = priv->left_border_width + (time_line_get_cursor_position(widget) * time_line_get_pixels_per_second()) - (CURSOR_HEAD_WIDTH / 2);
 		area.y = 0;
 		area.height = GTK_WIDGET(this_time_line)->allocation.height;
 		area.width = CURSOR_HEAD_WIDTH;
 		gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 
 		// Reposition the cursor
-		priv->cursor_position = (event->x - priv->left_border_width) / pixels_per_second;
+		time_line_set_cursor_position(widget, (event->x - priv->left_border_width) / time_line_get_pixels_per_second());
 		priv->cursor_drag_active = FALSE;
 
 		// Draw the new cursor line
-		area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+		area.x = priv->left_border_width + (time_line_get_cursor_position(widget) * time_line_get_pixels_per_second()) - (CURSOR_HEAD_WIDTH / 2);
 		area.y = 0;
 		area.height = GTK_WIDGET(this_time_line)->allocation.height;
 		area.width = CURSOR_HEAD_WIDTH;
@@ -159,8 +161,8 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 		end_time += this_layer_data->transition_out_duration;
 
 	// Store the guide line positions so we know where to refresh
-	priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
-	priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second) - 1;
+	priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * time_line_get_pixels_per_second());
+	priv->guide_line_end = priv->left_border_width + (end_time * time_line_get_pixels_per_second()) - 1;
 
 	// Draw guide lines
 	time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);
