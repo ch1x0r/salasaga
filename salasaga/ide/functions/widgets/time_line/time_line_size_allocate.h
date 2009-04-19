@@ -29,7 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
-static void time_line_size_allocate(GtkWidget *widget, GtkAllocation *allocation);
+void time_line_size_allocate(GtkWidget *widget, GtkAllocation *allocation);
 
 #ifdef __cplusplus
 }

@@ -44,14 +44,14 @@
 #include "time_line_internal_widget_motion_notify_handler.h"
 
 
-static void time_line_init(TimeLine *time_line)
+void time_line_init(TimeLine *time_line)
 {
 	// Local variables
 	TimeLinePrivate		*priv;
 
 
 	// Initialise variable defaults
-	pixels_per_second = 60;
+	time_line_set_pixels_per_second(60);
 	priv = TIME_LINE_GET_PRIVATE(time_line);
 	priv->cached_bg_valid = FALSE;
 	priv->cursor_drag_active = FALSE;

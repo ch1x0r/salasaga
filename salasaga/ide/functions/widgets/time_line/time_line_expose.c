@@ -37,9 +37,10 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "time_line.h"
+#include "time_line_get_cursor_position.h"
 
 
-static gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
+gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 {
 	// Local variables
 	gint				height;
@@ -100,7 +101,7 @@ static gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 		event->area.width, event->area.height);
 
 	// Draw the time line cursor
-	time_line_internal_draw_cursor(widget, priv->left_border_width + (priv->cursor_position * pixels_per_second));
+	time_line_internal_draw_cursor(widget, priv->left_border_width + (time_line_get_cursor_position(widget) * time_line_get_pixels_per_second()));
 
 	return TRUE;
 }

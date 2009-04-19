@@ -39,7 +39,7 @@
 #include "time_line.h"
 
 
-static void time_line_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
+void time_line_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
 {
 	// Local variables
 	gint				height;

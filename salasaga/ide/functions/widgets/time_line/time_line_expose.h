@@ -29,7 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
-static gint time_line_expose(GtkWidget *widget, GdkEventExpose *event);
+gint time_line_expose(GtkWidget *widget, GdkEventExpose *event);
 
 #ifdef __cplusplus
 }
