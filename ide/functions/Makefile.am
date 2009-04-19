@@ -98,7 +98,35 @@ salasaga_SOURCES = create_menu_bar.c \
 	slide/slide_move_down.c \
 	slide/slide_move_top.c \
 	slide/slide_move_up.c \
-	widgets/time_line.c \
+	widgets/time_line/time_line.c \
+	widgets/time_line/time_line_class_init.c \
+	widgets/time_line/time_line_expose.c \
+	widgets/time_line/time_line_get_cursor_position.c \
+	widgets/time_line/time_line_get_selected_layer_num.c \
+	widgets/time_line/time_line_get_type.c \
+	widgets/time_line/time_line_init.c \
+	widgets/time_line/time_line_internal_draw_cursor.c \
+	widgets/time_line/time_line_internal_draw_guide_line.c \
+	widgets/time_line/time_line_internal_draw_layer_duration.c \
+	widgets/time_line/time_line_internal_draw_layer_info.c \
+	widgets/time_line/time_line_internal_draw_layer_name.c \
+	widgets/time_line/time_line_internal_draw_selection_highlight.c \
+	widgets/time_line/time_line_internal_initialise_bg_image.c \
+	widgets/time_line/time_line_internal_initialise_display_buffer.c \
+	widgets/time_line/time_line_internal_invalidate_layer_area.c \
+	widgets/time_line/time_line_internal_redraw_bg_area.c \
+	widgets/time_line/time_line_internal_redraw_layer_bg.c \
+	widgets/time_line/time_line_internal_widget_motion_notify_handler.c \
+	widgets/time_line/time_line_new.c \
+	widgets/time_line/time_line_realise.c \
+	widgets/time_line/time_line_regenerate_widget.c \
+	widgets/time_line/time_line_set_selected_layer_num.c \
+	widgets/time_line/time_line_set_stored_slide_duration.c \
+	widgets/time_line/time_line_size_allocate.c \
+	widgets/time_line/time_line_size_request.c \
+	widgets/time_line/timeline_widget_button_press_event.c \
+	widgets/time_line/timeline_widget_button_release_event.c \
+	widgets/time_line/timeline_widget_motion_notify_event.c \
 	working_area/calculate_object_boundaries.c \
 	working_area/create_working_area.c \
 	working_area/detect_collisions.c \
