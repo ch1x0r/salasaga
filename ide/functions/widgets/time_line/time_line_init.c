@@ -67,7 +67,7 @@ void time_line_init(TimeLine *time_line)
 	// Store the slide duration
 	priv->stored_slide_duration = ((slide *) current_slide->data)->duration;
 
-	// fixme3: These would probably be good as properties
+	// fixme3: These may be better as widget properties
 	priv->cursor_position = 0.0;
 	priv->left_border_width = 120;
 	priv->row_height = 20;
