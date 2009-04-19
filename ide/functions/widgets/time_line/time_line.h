@@ -105,6 +105,10 @@ struct _TimeLinePrivate
 	gint				top_border_height;			// Number of pixels in the top border (cursor) area
 };
 
+// Functions to access time line variables
+gint time_line_get_pixels_per_second();
+void time_line_set_pixels_per_second(gint pps);
+
 
 #ifdef __cplusplus
 }
