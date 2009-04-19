@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user clicks the Edit Layer toolbar button 
- * 
+ * Salasaga: Function called when the user clicks the Edit Layer toolbar button
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -46,7 +46,7 @@
 #include "../dialog/display_dialog_text.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
-#include "../widgets/time_line.h"
+#include "../widgets/time_line/time_line_get_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 
 
@@ -113,7 +113,7 @@ void layer_edit(void)
 				// * The dialog box returned successfully *
 
 				// If the new layer end time is longer than the slide duration, then extend the duration of the slide and background image
-				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration; 
+				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 				if (layer_total_time > slide_data->duration)
 				{
 					// Change the slide duration
@@ -137,7 +137,7 @@ void layer_edit(void)
 				// * The dialog box returned successfully *
 
 				// If the new layer end time is longer than the slide duration, then extend the slide duration
-				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration; 
+				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 				if (layer_total_time > slide_data->duration)
 				{
 					// Change the slide duration
@@ -162,7 +162,7 @@ void layer_edit(void)
 				// * The dialog box returned successfully *
 
 				// If the new layer end time is longer than the slide duration, then extend the slide duration
-				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration; 
+				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 				if (layer_total_time > slide_data->duration)
 				{
 					// Change the slide duration
@@ -187,7 +187,7 @@ void layer_edit(void)
 				// * The dialog box returned successfully *
 
 				// If the new layer end time is longer than the slide duration, then extend the slide duration
-				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration; 
+				layer_total_time = tmp_layer->start_time + tmp_layer->duration + tmp_layer->transition_in_duration + tmp_layer->transition_out_duration;
 				if (layer_total_time > slide_data->duration)
 				{
 					// Change the slide duration

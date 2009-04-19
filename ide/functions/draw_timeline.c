@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function that redraws the timeline 
- * 
+ * Salasaga: Function that redraws the timeline
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -36,7 +36,8 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "dialog/display_warning.h"
-#include "widgets/time_line.h"
+#include "widgets/time_line/time_line_new.h"
+#include "widgets/time_line/time_line_regenerate_widget.h"
 
 
 void draw_timeline(void)

@@ -31,9 +31,9 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../draw_timeline.h"
-#include "../working_area/draw_workspace.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
-#include "../widgets/time_line.h"
+#include "../widgets/time_line/time_line_set_selected_layer_num.h"
+#include "../working_area/draw_workspace.h"
 
 
 void layer_new_text_inner(guint release_x, guint release_y)

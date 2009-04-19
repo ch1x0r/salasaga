@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user clicks the Crop Image toolbar button 
- * 
+ * Salasaga: Function called when the user clicks the Crop Image toolbar button
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -42,7 +42,7 @@
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
-#include "../widgets/time_line.h"
+#include "../widgets/time_line/time_line_get_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 
 
@@ -198,7 +198,7 @@ void image_crop(void)
 		(gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(top_button)),  // Top crop
 		new_width,  // Width
 		new_height,  // Height
-		new_pixbuf,  // The newly created pixbuf as the destination 
+		new_pixbuf,  // The newly created pixbuf as the destination
 		0, 0);
 
 	// Update the layer with the new cropped data

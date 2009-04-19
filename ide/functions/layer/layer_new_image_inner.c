@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Displays a dialog box asking for the values required to make a new image layer
- * 
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -35,7 +35,7 @@
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
-#include "../widgets/time_line.h"
+#include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 
 
@@ -74,7 +74,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	gdk_window_set_cursor(main_drawing_area->window, NULL);
 
 	// * Create a new image layer in memory using reasonable defaults *
-	
+
 	// Simplify pointing to the current slide structure in memory
 	slide_data = current_slide->data;
 
@@ -124,7 +124,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 			return;
 		}
 
-		// Grab the folder the user may have changed too  
+		// Grab the folder the user may have changed too
 		last_folder = g_string_assign(last_folder, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(path_widget)));
 
 		// Reset the useable input flag
@@ -145,7 +145,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 			{
 				g_string_printf(message, "%s ED331: %s", _("Error"), _("There was something wrong with the image file selected.  Please try again."));
 				display_warning(message->str);
-				useable_input = FALSE;					
+				useable_input = FALSE;
 			} else
 			{
 				// Retrieve the image dimensions
@@ -185,7 +185,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	layer_pointer = g_list_prepend(layer_pointer, tmp_layer);
 	slide_data->num_layers++;
 
-	// If the new layer end time is longer than the slide duration, then extend the slide duration 
+	// If the new layer end time is longer than the slide duration, then extend the slide duration
 	if (tmp_layer->duration > slide_data->duration)
 	{
 		// Change the slide duration

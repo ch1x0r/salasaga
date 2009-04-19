@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user selects Export -> Slide as Image from the top menu 
- * 
+ * Salasaga: Function called when the user selects Export -> Slide as Image from the top menu
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -33,7 +33,7 @@
 #include "../dialog/display_warning.h"
 #include "../layer/compress_layers.h"
 #include "../validate_value.h"
-#include "../widgets/time_line.h"
+#include "../widgets/time_line/time_line_get_cursor_position.h"
 
 
 void menu_export_slide(void)
@@ -180,5 +180,5 @@ void menu_export_slide(void)
 	// Free the temporary gstring
 	g_string_free(message, TRUE);
 	g_string_free(tmp_gstring, TRUE);
-	g_string_free(validated_string, TRUE);	
+	g_string_free(validated_string, TRUE);
 }
