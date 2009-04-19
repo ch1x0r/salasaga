@@ -47,8 +47,8 @@ gfloat time_line_get_cursor_position(GtkWidget *widget)
 
 
 	// Safety check
-	g_return_val_if_fail(widget != NULL, -1);
-	g_return_val_if_fail(IS_TIME_LINE(widget), -1);
+	g_return_val_if_fail(widget != NULL, 0.0);
+	g_return_val_if_fail(IS_TIME_LINE(widget), 0.0);
 
 	// Initialisation
 	this_time_line = TIME_LINE(widget);
