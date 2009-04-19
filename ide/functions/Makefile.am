@@ -123,6 +123,7 @@ salasaga_SOURCES = create_menu_bar.c \
 	widgets/time_line/time_line_new.c \
 	widgets/time_line/time_line_realise.c \
 	widgets/time_line/time_line_regenerate_widget.c \
+	widgets/time_line/time_line_set_cursor_position.c \
 	widgets/time_line/time_line_set_selected_layer_num.c \
 	widgets/time_line/time_line_set_stored_slide_duration.c \
 	widgets/time_line/time_line_size_allocate.c \
