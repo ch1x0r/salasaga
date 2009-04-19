@@ -99,6 +99,8 @@ salasaga_SOURCES = create_menu_bar.c \
 	slide/slide_move_top.c \
 	slide/slide_move_up.c \
 	widgets/time_line/time_line.c \
+	widgets/time_line/time_line_button_press_event.c \
+	widgets/time_line/time_line_button_release_event.c \
 	widgets/time_line/time_line_class_init.c \
 	widgets/time_line/time_line_expose.c \
 	widgets/time_line/time_line_get_cursor_position.c \
@@ -117,6 +119,7 @@ salasaga_SOURCES = create_menu_bar.c \
 	widgets/time_line/time_line_internal_redraw_bg_area.c \
 	widgets/time_line/time_line_internal_redraw_layer_bg.c \
 	widgets/time_line/time_line_internal_widget_motion_notify_handler.c \
+	widgets/time_line/time_line_motion_notify_event.c \
 	widgets/time_line/time_line_new.c \
 	widgets/time_line/time_line_realise.c \
 	widgets/time_line/time_line_regenerate_widget.c \
@@ -124,9 +127,6 @@ salasaga_SOURCES = create_menu_bar.c \
 	widgets/time_line/time_line_set_stored_slide_duration.c \
 	widgets/time_line/time_line_size_allocate.c \
 	widgets/time_line/time_line_size_request.c \
-	widgets/time_line/timeline_widget_button_press_event.c \
-	widgets/time_line/timeline_widget_button_release_event.c \
-	widgets/time_line/timeline_widget_motion_notify_event.c \
 	working_area/calculate_object_boundaries.c \
 	working_area/create_working_area.c \
 	working_area/detect_collisions.c \
