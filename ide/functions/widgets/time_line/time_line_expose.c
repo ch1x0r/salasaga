@@ -44,6 +44,7 @@ gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 {
 	// Local variables
 	gint				height;
+	gint				new_cursor_pos;
 	TimeLinePrivate		*priv;
 	static GdkGC		*this_gc = NULL;
 	TimeLine			*this_time_line;
@@ -101,7 +102,8 @@ gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 		event->area.width, event->area.height);
 
 	// Draw the time line cursor
-	time_line_internal_draw_cursor(widget, priv->left_border_width + (time_line_get_cursor_position(widget) * time_line_get_pixels_per_second()));
+	new_cursor_pos = round(time_line_get_cursor_position(widget) * time_line_get_pixels_per_second()) + priv->left_border_width;
+	time_line_internal_draw_cursor(widget, new_cursor_pos);
 
 	return TRUE;
 }
