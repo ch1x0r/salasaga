@@ -37,6 +37,8 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "time_line.h"
+#include "time_line_init.h"
+#include "time_line_class_init.h"
 
 
 GType time_line_get_type(void)
