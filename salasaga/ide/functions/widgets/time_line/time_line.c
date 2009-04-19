@@ -38,3 +38,16 @@
 
 // Library wide variables
 gint					pixels_per_second;			// Number of pixels used to display each second
+
+
+gint time_line_get_pixels_per_second()
+{
+	return pixels_per_second;
+}
+
+void time_line_set_pixels_per_second(gint pps)
+{
+	pixels_per_second = pps;
+
+	return;
+}
