@@ -38,7 +38,7 @@
 #include "time_line.h"
 
 
-void timeline_widget_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+void time_line_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
 	TimeLinePrivate		*priv;
