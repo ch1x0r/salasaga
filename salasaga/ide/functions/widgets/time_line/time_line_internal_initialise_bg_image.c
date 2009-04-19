@@ -175,16 +175,16 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	// Draw the seconds markings
 	font_description = pango_font_description_from_string("Sans, 10px");
 	pango_layout_set_font_description(font_layout, font_description);
-	loop_max = width / pixels_per_second;
+	loop_max = width / time_line_get_pixels_per_second();
 	for (loop_counter = 0; loop_counter <= loop_max; loop_counter++)
 	{
 		// In the top border area
 		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
 		gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 		gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
-						priv->left_border_width + (loop_counter * pixels_per_second),
+						priv->left_border_width + (loop_counter * time_line_get_pixels_per_second()),
 						priv->top_border_height - 5,
-						priv->left_border_width + (loop_counter * pixels_per_second),
+						priv->left_border_width + (loop_counter * time_line_get_pixels_per_second()),
 						priv->top_border_height - 1);
 
 		// The numbers themselves
@@ -193,16 +193,16 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 		pango_layout_get_size(font_layout, &font_width, NULL);
 		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
 		gdk_draw_layout(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
-				priv->left_border_width + (loop_counter * pixels_per_second) - ((font_width / PANGO_SCALE) / 2), -2, font_layout);
+				priv->left_border_width + (loop_counter * time_line_get_pixels_per_second()) - ((font_width / PANGO_SCALE) / 2), -2, font_layout);
 
 		// In the main time line area
 		gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_antique_white_2);
 		gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
 		gdk_gc_set_dashes(GDK_GC(bg_image_gc), 1, dash_list, 2);
 		gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
-						priv->left_border_width + (loop_counter * pixels_per_second),
+						priv->left_border_width + (loop_counter * time_line_get_pixels_per_second()),
 						priv->top_border_height + 1,
-						priv->left_border_width + (loop_counter * pixels_per_second),
+						priv->left_border_width + (loop_counter * time_line_get_pixels_per_second()),
 						height);
 	}
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
@@ -217,13 +217,13 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	for (loop_counter = 1; loop_counter <= loop_max; loop_counter++)
 	{
 		// The half second markings
-		loop_max2 = width / pixels_per_second;
+		loop_max2 = width / time_line_get_pixels_per_second();
 		for (loop_counter2 = 0; loop_counter2 <= loop_max2; loop_counter2++)
 		{
 			gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
-							priv->left_border_width + (pixels_per_second >> 1) + (loop_counter2 * pixels_per_second),
+							priv->left_border_width + (time_line_get_pixels_per_second() >> 1) + (loop_counter2 * time_line_get_pixels_per_second()),
 							priv->top_border_height + (loop_counter * priv->row_height) - 3,
-							priv->left_border_width + (pixels_per_second >> 1) + (loop_counter2 * pixels_per_second),
+							priv->left_border_width + (time_line_get_pixels_per_second() >> 1) + (loop_counter2 * time_line_get_pixels_per_second()),
 							priv->top_border_height + (loop_counter * priv->row_height));
 		}
 

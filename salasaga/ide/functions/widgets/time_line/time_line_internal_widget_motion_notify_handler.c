@@ -37,6 +37,8 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "time_line.h"
+#include "time_line_get_cursor_position.h"
+#include "time_line_set_cursor_position.h"
 
 
 gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_line)
@@ -101,24 +103,24 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		// Check if the drag is moving to the right
 		if (priv->stored_x < priv->mouse_x)
 		{
-			// Calculate the time and distance travelled
+			// Calculate the time and distance traveled
 			priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
 			distance_moved = priv->mouse_x - priv->stored_x;
-			time_moved = ((gfloat) distance_moved) / pixels_per_second;
+			time_moved = ((gfloat) distance_moved) / time_line_get_pixels_per_second();
 
 			// Invalidate the widget area where the cursor is presently
-			area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+			area.x = priv->left_border_width + (time_line_get_cursor_position(GTK_WIDGET(this_time_line)) * time_line_get_pixels_per_second()) - (CURSOR_HEAD_WIDTH / 2);
 			area.y = 0;
 			area.height = GTK_WIDGET(this_time_line)->allocation.height;
 			area.width = CURSOR_HEAD_WIDTH + 1;
 			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 
 			// Update the cursor position
-			priv->cursor_position += time_moved;
+			time_line_set_cursor_position(GTK_WIDGET(this_time_line), time_line_get_cursor_position(GTK_WIDGET(this_time_line)) + time_moved);
 			priv->stored_x = priv->mouse_x;
 
 			// Invalidate the widget area where the cursor has moved to
-			area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+			area.x = priv->left_border_width + (time_line_get_cursor_position(GTK_WIDGET(this_time_line)) * time_line_get_pixels_per_second()) - (CURSOR_HEAD_WIDTH / 2);
 			area.y = 0;
 			area.height = GTK_WIDGET(this_time_line)->allocation.height;
 			area.width = CURSOR_HEAD_WIDTH + 1;
@@ -128,24 +130,24 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		// Check if the drag is moving to the left
 		if (priv->stored_x > priv->mouse_x)
 		{
-			// Calculate the time and distance travelled
+			// Calculate the time and distance traveled
 			priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
 			distance_moved = priv->stored_x - priv->mouse_x;
-			time_moved = ((gfloat) distance_moved) / pixels_per_second;
+			time_moved = ((gfloat) distance_moved) / time_line_get_pixels_per_second();
 
 			// Invalidate the widget area where the cursor is presently
-			area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+			area.x = priv->left_border_width + (time_line_get_cursor_position(GTK_WIDGET(this_time_line)) * time_line_get_pixels_per_second()) - (CURSOR_HEAD_WIDTH / 2);
 			area.y = 0;
 			area.height = GTK_WIDGET(this_time_line)->allocation.height;
 			area.width = CURSOR_HEAD_WIDTH + 1;
 			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 
 			// Update the cursor position
-			priv->cursor_position -= time_moved;
+			time_line_set_cursor_position(GTK_WIDGET(this_time_line), time_line_get_cursor_position(GTK_WIDGET(this_time_line)) - time_moved);
 			priv->stored_x = priv->mouse_x;
 
 			// Invalidate the widget area where the cursor has moved to
-			area.x = priv->left_border_width + (priv->cursor_position * pixels_per_second) - (CURSOR_HEAD_WIDTH / 2);
+			area.x = priv->left_border_width + (time_line_get_cursor_position(GTK_WIDGET(this_time_line)) * time_line_get_pixels_per_second()) - (CURSOR_HEAD_WIDTH / 2);
 			area.y = 0;
 			area.height = GTK_WIDGET(this_time_line)->allocation.height;
 			area.width = CURSOR_HEAD_WIDTH + 1;
@@ -153,8 +155,8 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		}
 
 		// Safety check
-		if (0 > priv->cursor_position)
-			priv->cursor_position = 0;
+		if (0 > time_line_get_cursor_position(GTK_WIDGET(this_time_line)))
+			time_line_set_cursor_position(GTK_WIDGET(this_time_line), 0);
 
 		// Update the workspace area
 		draw_workspace();
@@ -193,7 +195,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		}
 
 		// Check if the user clicked on the start of the layer (i.e. wants to adjust the start time)
-		check_pixel = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
+		check_pixel = priv->left_border_width + (this_layer_data->start_time * time_line_get_pixels_per_second());
 		if (1 < check_pixel)
 			check_pixel -= 5;
 		if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 10))
@@ -217,7 +219,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		{
 			// Check if the user clicked on the end of a transition in
 			check_pixel = priv->left_border_width +
-							((this_layer_data->start_time + this_layer_data->transition_in_duration) * pixels_per_second);
+							((this_layer_data->start_time + this_layer_data->transition_in_duration) * time_line_get_pixels_per_second());
 			if (1 < check_pixel)
 				check_pixel -= 5;
 			if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 10))
@@ -229,9 +231,9 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		}
 
 		// Check if the user clicked on the end of the duration for the layer (i.e. wants to adjust the duration time)
-		check_pixel = priv->left_border_width + ((this_layer_data->start_time + this_layer_data->duration) * pixels_per_second);
+		check_pixel = priv->left_border_width + ((this_layer_data->start_time + this_layer_data->duration) * time_line_get_pixels_per_second());
 		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-			check_pixel += this_layer_data->transition_in_duration * pixels_per_second;
+			check_pixel += this_layer_data->transition_in_duration * time_line_get_pixels_per_second();
 		if (1 < check_pixel)
 			check_pixel -= 5;
 		if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 10))
@@ -245,9 +247,9 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
 		{
 			// Check if the user clicked on the end of a transition out
-			check_pixel = priv->left_border_width + ((this_layer_data->start_time + this_layer_data->duration + this_layer_data->transition_out_duration) * pixels_per_second);
+			check_pixel = priv->left_border_width + ((this_layer_data->start_time + this_layer_data->duration + this_layer_data->transition_out_duration) * time_line_get_pixels_per_second());
 			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-				check_pixel += this_layer_data->transition_in_duration * pixels_per_second;
+				check_pixel += this_layer_data->transition_in_duration * time_line_get_pixels_per_second();
 			if (1 < check_pixel)
 				check_pixel -= 5;
 			if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 10))
@@ -265,10 +267,10 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		// Check if the resize is moving to the right
 		if (priv->stored_x < priv->mouse_x)
 		{
-			// Calculate the time and distance travelled
+			// Calculate the time and distance traveled
 			priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
 			distance_moved = priv->mouse_x - priv->stored_x;
-			time_moved = ((gfloat) distance_moved) / pixels_per_second;
+			time_moved = ((gfloat) distance_moved) / time_line_get_pixels_per_second();
 
 			// Make the needed adjustments
 			switch (priv->resize_type)
@@ -379,10 +381,10 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		// Check if the resize is moving to the left
 		if (priv->stored_x > priv->mouse_x)
 		{
-			// Calculate the time and distance travelled
+			// Calculate the time and distance traveled
 			priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
 			distance_moved = priv->stored_x - priv->mouse_x;
-			time_moved = ((gfloat) distance_moved) / pixels_per_second;
+			time_moved = ((gfloat) distance_moved) / time_line_get_pixels_per_second();
 
 			// Make the needed adjustments
 			switch (priv->resize_type)
@@ -496,12 +498,12 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		// Update the stored position of the mouse in the widget
 		priv->stored_x = priv->mouse_x;
 
-		// Refresh the timeline display of the row
+		// Refresh the time line display of the row
 		time_line_internal_redraw_layer_bg(priv, current_row);
 		time_line_internal_draw_layer_name(priv, current_row);
 		time_line_internal_draw_layer_duration(priv, current_row);
 
-		// Tell the window system to update the current row area onscreen
+		// Tell the window system to update the current row area on screen
 		time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
 
 		// Wipe existing guide line if present
@@ -526,8 +528,8 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				// Draw guide line if needed
 				if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 				{
-					priv->guide_line_resize = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
-					priv->guide_line_resize += this_layer_data->transition_in_duration * pixels_per_second;
+					priv->guide_line_resize = priv->left_border_width + (this_layer_data->start_time * time_line_get_pixels_per_second());
+					priv->guide_line_resize += this_layer_data->transition_in_duration * time_line_get_pixels_per_second();
 					time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_resize);
 				}
 				break;
@@ -537,9 +539,9 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				// Draw guide line if needed
 				if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
 				{
-					priv->guide_line_resize = priv->left_border_width + ((this_layer_data->start_time + this_layer_data->duration) * pixels_per_second);
+					priv->guide_line_resize = priv->left_border_width + ((this_layer_data->start_time + this_layer_data->duration) * time_line_get_pixels_per_second());
 					if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-						priv->guide_line_resize += this_layer_data->transition_in_duration * pixels_per_second;
+						priv->guide_line_resize += this_layer_data->transition_in_duration * time_line_get_pixels_per_second();
 					time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_resize);
 				}
 				break;
@@ -661,10 +663,10 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				// Check if the layer is being moved to the right
 				if (priv->stored_x > priv->mouse_x)
 				{
-					// Calculate the time and distance travelled
+					// Calculate the time and distance traveled
 					priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
 					distance_moved = priv->stored_x - priv->mouse_x;
-					time_moved = ((gfloat) distance_moved) / pixels_per_second;
+					time_moved = ((gfloat) distance_moved) / time_line_get_pixels_per_second();
 
 					// Update the layer data with the new timing
 					if (0 > (this_layer_data->start_time - time_moved))
@@ -681,10 +683,10 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				// Check if the layer is being moved to the left
 				if (priv->stored_x < priv->mouse_x)
 				{
-					// Calculate the time and distance travelled
+					// Calculate the time and distance traveled
 					priv->mouse_x = CLAMP(priv->mouse_x, priv->left_border_width, GTK_WIDGET(this_time_line)->allocation.width);
 					distance_moved = priv->mouse_x - priv->stored_x;
-					time_moved = ((gfloat) distance_moved) / pixels_per_second;
+					time_moved = ((gfloat) distance_moved) / time_line_get_pixels_per_second();
 
 					// Update the layer data with the new timing
 					this_layer_data->start_time += time_moved;
@@ -710,7 +712,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				background_layer_data->duration = priv->stored_slide_duration;
 
 				// Refresh the timeline display of the background layer
-				area.x = priv->stored_slide_duration * pixels_per_second;
+				area.x = priv->stored_slide_duration * time_line_get_pixels_per_second();
 				area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
 				area.height = priv->row_height - 3;
 				area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
@@ -729,7 +731,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				background_layer_data->duration = end_time;
 
 				// Refresh the timeline display of the background layer
-				area.x = priv->stored_slide_duration * pixels_per_second;
+				area.x = priv->stored_slide_duration * time_line_get_pixels_per_second();
 				area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
 				area.height = priv->row_height - 3;
 				area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
@@ -759,8 +761,8 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		end_time += this_layer_data->transition_out_duration;
 
 	// Update the guide line positions so we know where to refresh
-	priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * pixels_per_second);
-	priv->guide_line_end = priv->left_border_width + (end_time * pixels_per_second) - 1;
+	priv->guide_line_start = priv->left_border_width + (this_layer_data->start_time * time_line_get_pixels_per_second());
+	priv->guide_line_end = priv->left_border_width + (end_time * time_line_get_pixels_per_second()) - 1;
 
 	// Draw the updated guide lines
 	time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_start);

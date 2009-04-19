@@ -108,7 +108,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		if ((ADJUSTMENTS_X <= mouse_x) && ((ADJUSTMENTS_X + ADJUSTMENTS_SIZE) >= mouse_x))
 		{
 			// Sanity check
-			if (pixels_per_second >= 96)
+			if (time_line_get_pixels_per_second() >= 96)
 			{
 				// We're already at the acceptable scaling limit, so beep then return
 				gdk_beep();
@@ -117,7 +117,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 			}
 
 			// Adjust the number of pixels per second
-			pixels_per_second = pixels_per_second * 2;
+			time_line_set_pixels_per_second(time_line_get_pixels_per_second() * 2);
 			g_object_unref(GDK_PIXMAP(priv->cached_bg_image));
 			priv->cached_bg_image = NULL;
 
@@ -160,7 +160,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		if ((ADJUSTMENTS_X + 15 <= mouse_x) && ((ADJUSTMENTS_X + 15 + ADJUSTMENTS_SIZE) >= mouse_x))
 		{
 			// Sanity check
-			if (pixels_per_second <= 24)
+			if (time_line_get_pixels_per_second() <= 24)
 			{
 				// We're already at the acceptable scaling limit, so beep then return
 				gdk_beep();
@@ -169,7 +169,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 			}
 
 			// Adjust the number of pixels per second
-			pixels_per_second = pixels_per_second / 2;
+			time_line_set_pixels_per_second(time_line_get_pixels_per_second() / 2);
 			g_object_unref(GDK_PIXMAP(priv->cached_bg_image));
 			priv->cached_bg_image = NULL;
 

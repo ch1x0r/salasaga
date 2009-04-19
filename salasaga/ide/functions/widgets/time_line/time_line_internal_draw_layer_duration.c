@@ -79,8 +79,8 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 	if (TRANS_LAYER_FADE == layer_data->transition_in_type)
 	{
 		// Draw the fade in
-		layer_x = priv->left_border_width + (layer_data->start_time * pixels_per_second) + 1;
-		layer_width = (layer_data->transition_in_duration * pixels_per_second);
+		layer_x = priv->left_border_width + (layer_data->start_time * time_line_get_pixels_per_second()) + 1;
+		layer_width = (layer_data->transition_in_duration * time_line_get_pixels_per_second());
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
 		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
 				layer_x, layer_y, layer_width, layer_height);
@@ -89,8 +89,8 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 				layer_x, layer_y, layer_width, layer_height - 1);
 
 		// Draw the fully visible duration
-		layer_x = priv->left_border_width + ((layer_data->start_time + layer_data->transition_in_duration) * pixels_per_second) + 1;
-		layer_width = (layer_data->duration * pixels_per_second);
+		layer_x = priv->left_border_width + ((layer_data->start_time + layer_data->transition_in_duration) * time_line_get_pixels_per_second()) + 1;
+		layer_width = (layer_data->duration * time_line_get_pixels_per_second());
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
 		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
 				layer_x, layer_y, layer_width, layer_height);
@@ -100,8 +100,8 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 	} else
 	{
 		// There's no fade in transition for this layer
-		layer_x = priv->left_border_width + (layer_data->start_time * pixels_per_second) + 1;
-		layer_width = (layer_data->duration * pixels_per_second);
+		layer_x = priv->left_border_width + (layer_data->start_time * time_line_get_pixels_per_second()) + 1;
+		layer_width = (layer_data->duration * time_line_get_pixels_per_second());
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
 		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
 				layer_x, layer_y, layer_width, layer_height);
@@ -114,8 +114,8 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 	if (TRANS_LAYER_FADE == layer_data->transition_out_type)
 	{
 		// Draw the fade out
-		layer_x += (layer_data->duration * pixels_per_second);
-		layer_width = (layer_data->transition_out_duration * pixels_per_second);
+		layer_x += (layer_data->duration * time_line_get_pixels_per_second());
+		layer_width = (layer_data->transition_out_duration * time_line_get_pixels_per_second());
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
 		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
 				layer_x, layer_y, layer_width, layer_height);
