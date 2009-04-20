@@ -104,6 +104,7 @@ salasaga_SOURCES = create_menu_bar.c \
 	widgets/time_line/time_line_class_init.c \
 	widgets/time_line/time_line_expose.c \
 	widgets/time_line/time_line_get_cursor_position.c \
+	widgets/time_line/time_line_get_left_border_width.c \
 	widgets/time_line/time_line_get_selected_layer_num.c \
 	widgets/time_line/time_line_get_type.c \
 	widgets/time_line/time_line_init.c \
