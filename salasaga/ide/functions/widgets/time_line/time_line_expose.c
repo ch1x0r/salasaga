@@ -38,6 +38,7 @@
 #include "../../../externs.h"
 #include "time_line.h"
 #include "time_line_get_cursor_position.h"
+#include "time_line_get_left_border_width.h"
 
 
 gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
@@ -102,7 +103,7 @@ gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 		event->area.width, event->area.height);
 
 	// Draw the time line cursor
-	new_cursor_pos = round(time_line_get_cursor_position(widget) * time_line_get_pixels_per_second()) + priv->left_border_width;
+	new_cursor_pos = round(time_line_get_cursor_position(widget) * time_line_get_pixels_per_second()) + time_line_get_left_border_width(priv);
 	time_line_internal_draw_cursor(widget, new_cursor_pos);
 
 	return TRUE;

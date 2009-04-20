@@ -38,6 +38,7 @@
 #include "../../../externs.h"
 #include "time_line.h"
 #include "time_line_get_cursor_position.h"
+#include "time_line_get_left_border_width.h"
 #include "time_line_set_cursor_position.h"
 
 
@@ -96,7 +97,7 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 	this_slide_data = ((slide *) current_slide->data);
 	layer_pointer = this_slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
-	left_border = priv->left_border_width;
+	left_border = time_line_get_left_border_width(priv);
 	pps = time_line_get_pixels_per_second();
 	tl_cursor_pos = time_line_get_cursor_position(GTK_WIDGET(this_time_line));
 
