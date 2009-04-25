@@ -179,8 +179,17 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 	// Draw a handle box around the newly selected row in the time line area
 	draw_handle_box();
 
-	// Draw the start and end points for the layer
-	draw_layer_start_and_end_points();
+	// If it's not the background layer that is selected then update things in the working area
+	if (this_slide_data->num_layers > (new_row + 1))
+	{
+		// Draw the start and end points for the layer
+		draw_layer_start_and_end_points();
+	} else
+	{
+		// Background layer was clicked, so clear any start and end points shown in the working area
+		gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
+				GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
+	}
 
 	// Free the memory allocated in this function
 	g_list_free(tmp_glist);
