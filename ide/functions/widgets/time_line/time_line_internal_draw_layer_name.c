@@ -42,6 +42,7 @@
 gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_number)
 {
 	// Local variables
+	GdkRectangle		clip_region;				// Used as a clip mask region
 	const GdkColor		colour_black = {0, 0, 0, 0 };
 	static GdkColormap	*colourmap = NULL;			// Colourmap used for drawing
 	static GdkGC		*display_buffer_gc = NULL;
@@ -82,7 +83,12 @@ gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_nu
 	layer_data = g_list_nth_data(layer_pointer, layer_number);
 	pango_layout_set_text(font_layout, layer_data->name->str, -1);
 
-	// fixme3: It would probably be a good idea to add a clip mask here
+	// Set a clip mask
+	clip_region.x = 0;
+	clip_region.y = priv->top_border_height + (layer_number * priv->row_height);
+	clip_region.width = priv->left_border_width - 1;
+	clip_region.height = priv->row_height;
+	gdk_gc_set_clip_rectangle(GDK_GC(display_buffer_gc), &clip_region);
 
 	// Draw the text string
 	gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
