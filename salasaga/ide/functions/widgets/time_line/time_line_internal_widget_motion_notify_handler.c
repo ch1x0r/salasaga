@@ -38,6 +38,10 @@
 #include "../../../externs.h"
 #include "time_line.h"
 #include "time_line_get_cursor_position.h"
+#include "time_line_internal_draw_layer_duration.h"
+#include "time_line_internal_draw_layer_name.h"
+#include "time_line_internal_invalidate_layer_area.h"
+#include "time_line_internal_redraw_layer_bg.h"
 #include "time_line_set_cursor_position.h"
 
 
@@ -258,7 +262,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				check_pixel -= 5;
 			if ((priv->mouse_x >= check_pixel) && (priv->mouse_x <= check_pixel + 10))
 			{
-				// We're adjusting the end time of the transition in
+				// We're adjusting the end time of the transition out
 				priv->resize_type = RESIZE_TRANS_OUT_DURATION;
 				priv->stored_x = priv->mouse_x;
 			}
@@ -372,6 +376,23 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 					// We're adjusting the transition out duration
 					this_layer_data->transition_out_duration += time_moved;
 					end_time += time_moved;
+
+					// Check if the new end time is longer than the slide duration
+					if (end_time > priv->stored_slide_duration)
+					{
+						// The new slide duration is longer than the old one, so update the slide and background layer to match
+						this_slide_data->duration = priv->stored_slide_duration = end_time;
+						end_row = this_slide_data->num_layers - 1;
+						background_layer_data = g_list_nth_data(layer_pointer, end_row);
+						background_layer_data->duration = priv->stored_slide_duration;
+
+						// Refresh the time line display of the background layer
+						time_line_internal_redraw_layer_bg(priv, end_row);
+						time_line_internal_draw_layer_name(priv, end_row);
+						time_line_internal_draw_layer_duration(priv, end_row);
+						time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), end_row);
+					}
+
 					break;
 
 				default:
