@@ -108,7 +108,7 @@ gboolean draw_handle_box(void)
 	if (FALSE == return_code_gbool)
 		return TRUE;
 
-	// If this is a layer that isn't selectable, then clear any existing handle box and return
+	// If this is a background layer, then clear any existing handle box shown in the working area and return
 	switch (this_layer_data->object_type)
 	{
 		case TYPE_EMPTY:
