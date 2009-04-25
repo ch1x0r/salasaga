@@ -37,6 +37,10 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "time_line.h"
+#include "time_line_internal_draw_layer_duration.h"
+#include "time_line_internal_draw_layer_name.h"
+#include "time_line_internal_invalidate_layer_area.h"
+#include "time_line_internal_redraw_layer_bg.h"
 
 
 void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
