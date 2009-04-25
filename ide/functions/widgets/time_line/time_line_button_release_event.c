@@ -239,6 +239,33 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 		priv->guide_line_resize = 0;
 
+		// Calculate the end time of the layer (in seconds)
+		this_slide_data = (slide *) current_slide->data;
+		layer_pointer = this_slide_data->layers;
+		layer_pointer = g_list_first(layer_pointer);
+		this_layer_data = g_list_nth_data(layer_pointer, priv->selected_layer_num);
+		end_time = this_layer_data->start_time + this_layer_data->duration;
+		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+			end_time += this_layer_data->transition_in_duration;
+		if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+			end_time += this_layer_data->transition_out_duration;
+
+		// Check if the new end time is longer than the slide duration
+		if (end_time > priv->stored_slide_duration)
+		{
+			// The new slide duration is longer than the old one, so update the slide and background layer to match
+			this_slide_data->duration = priv->stored_slide_duration = end_time;
+			end_row = this_slide_data->num_layers - 1;
+			background_layer_data = g_list_nth_data(layer_pointer, end_row);
+			background_layer_data->duration = priv->stored_slide_duration;
+
+			// Refresh the time line display of the background layer
+			time_line_internal_redraw_layer_bg(priv, end_row);
+			time_line_internal_draw_layer_name(priv, end_row);
+			time_line_internal_draw_layer_duration(priv, end_row);
+			time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), end_row);
+		}
+
 		// Use the status bar to communicate the resize has completed
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Resize completed"));
 		gdk_flush();
@@ -273,7 +300,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 			background_layer_data = g_list_nth_data(layer_pointer, end_row);
 			background_layer_data->duration = priv->stored_slide_duration;
 
-			// Refresh the timeline display of the background layer
+			// Refresh the time line display of the background layer
 			time_line_internal_redraw_layer_bg(priv, end_row);
 			time_line_internal_draw_layer_name(priv, end_row);
 			time_line_internal_draw_layer_duration(priv, end_row);
