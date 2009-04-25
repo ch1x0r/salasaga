@@ -376,23 +376,6 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 					// We're adjusting the transition out duration
 					this_layer_data->transition_out_duration += time_moved;
 					end_time += time_moved;
-
-					// Check if the new end time is longer than the slide duration
-					if (end_time > priv->stored_slide_duration)
-					{
-						// The new slide duration is longer than the old one, so update the slide and background layer to match
-						this_slide_data->duration = priv->stored_slide_duration = end_time;
-						end_row = this_slide_data->num_layers - 1;
-						background_layer_data = g_list_nth_data(layer_pointer, end_row);
-						background_layer_data->duration = priv->stored_slide_duration;
-
-						// Refresh the time line display of the background layer
-						time_line_internal_redraw_layer_bg(priv, end_row);
-						time_line_internal_draw_layer_name(priv, end_row);
-						time_line_internal_draw_layer_duration(priv, end_row);
-						time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), end_row);
-					}
-
 					break;
 
 				default:
@@ -512,6 +495,43 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 					display_warning(message->str);
 					g_string_free(message, TRUE);
 			}
+		}
+
+		// Ensure the background layer end is kept correct
+		background_layer_data = g_list_nth_data(layer_pointer, end_row);
+		if (background_layer_data->duration != priv->stored_slide_duration)
+		{
+			background_layer_data->duration = priv->stored_slide_duration;
+
+			// Refresh the timeline display of the background layer
+			area.x = priv->stored_slide_duration * pps;
+			area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
+			area.height = priv->row_height - 3;
+			area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
+			time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
+			time_line_internal_draw_layer_duration(priv, end_row);
+
+			// Refresh the newly drawn widget area
+			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+		}
+
+		// Check if the new end time is longer than the slide duration
+		if (end_time > priv->stored_slide_duration)
+		{
+			// The new end time is longer than the slide duration, so update the slide and background layer to match
+			this_slide_data->duration = end_time;
+			background_layer_data->duration = end_time;
+
+			// Refresh the timeline display of the background layer
+			area.x = priv->stored_slide_duration * pps;
+			area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
+			area.height = priv->row_height - 3;
+			area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
+			time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
+			time_line_internal_draw_layer_duration(priv, end_row);
+
+			// Refresh the newly drawn widget area
+			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 		}
 
 		// Safety check
@@ -685,7 +705,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			// * Check if the row should be moved horizontally *
 			if ((priv->stored_x != priv->mouse_x) && (priv->mouse_x > left_border))
 			{
-				// Check if the layer is being moved to the right
+				// Check if the layer is being moved to the left
 				if (priv->stored_x > priv->mouse_x)
 				{
 					// Calculate the time and distance traveled
@@ -705,7 +725,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 					}
 				}
 
-				// Check if the layer is being moved to the left
+				// Check if the layer is being moved to the right
 				if (priv->stored_x < priv->mouse_x)
 				{
 					// Calculate the time and distance traveled
