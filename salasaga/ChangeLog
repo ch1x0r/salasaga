@@ -1,3 +1,35 @@
+2009-??-?? - JustinClift
+
+ Alpha 6
+ *******
+ 
+ * The control bar in swf output is much better looking, now finally of acceptable quality.
+ * The default width and height for new projects is whatever width and height was last used.
+ * Layers are no longer limited to being inside the slide area onscreen.  They can now be
+   moved both partially or completely off the visible slide area.
+ * The selected slide is now always centered in the workspace area.
+ * Turned the status bar into a progress bar, plus updated functions to use it.
+ * Text layers can now be any of the DejaVu fonts.
+ * Several minor improvements for the time line area.
+ * Minor bug fixes.
+
+
+2009-02-14 - JustinClift
+
+ Preparation for Alpha 5.  Added critical bug fixes, plus new and
+ updated translations from LaunchPad contributors.
+
+
+2008-09-17 - JustinClift
+
+ Merged the three Salasaga modules into one.
+
+
+2008-09-15 - JustinClift
+
+ Preparing the source for Alpha 4.
+
+
 2008-07-22  gettextize  <bug-gnu-gettext@gnu.org>
 
 	* m4/gettext.m4: New file, from gettext-0.17.
