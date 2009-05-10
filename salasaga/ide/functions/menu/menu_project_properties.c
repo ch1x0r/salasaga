@@ -48,7 +48,7 @@ void menu_project_properties(void)
 	GString				*message;					// Used to construct message strings
 	GtkWidget			*proj_dialog_table;			// Table used for neat layout of the labels and fields in project preferences
 	gint				proj_row_counter;			// Used when building the project preferences dialog box
-	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	gboolean			valid_control_bar_behaviour;  // Receives the new control bar display behaviour
 	guint				valid_end_behaviour = 0;	// Receives the new end behaviour once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
@@ -324,8 +324,8 @@ void menu_project_properties(void)
 			return;
 		}
 
-		// Reset the useable input flag
-		useable_input = TRUE;
+		// Reset the usable input flag
+		usable_input = TRUE;
 
 		// Validate the project name input
 		validated_string = validate_value(PROJECT_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(entry_project_name)));
@@ -333,7 +333,7 @@ void menu_project_properties(void)
 		{
 			g_string_printf(message, "%s ED135: %s", _("Error"), _("There was something wrong with the project name value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_proj_name = g_string_assign(valid_proj_name, validated_string->str);
@@ -347,7 +347,7 @@ void menu_project_properties(void)
 		{
 			g_string_printf(message, "%s ED136: %s", _("Error"), _("There was something wrong with the project folder given.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_project_folder = g_string_assign(valid_project_folder, validated_string->str);
@@ -361,7 +361,7 @@ void menu_project_properties(void)
 		{
 			g_string_printf(message, "%s ED137: %s", _("Error"), _("There was something wrong with the output folder given.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_output_folder = g_string_assign(valid_output_folder, validated_string->str);
@@ -376,7 +376,7 @@ void menu_project_properties(void)
 		{
 			g_string_printf(message, "%s ED139: %s", _("Error"), _("There was something wrong with the default frames per second value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_fps = *validated_guint;
@@ -390,7 +390,7 @@ void menu_project_properties(void)
 			// A -1 return means no value was selected
 			g_string_printf(message, "%s ED280: %s", _("Error"), _("There was something wrong with the start behavior value selected.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			// A value was selected
@@ -404,7 +404,7 @@ void menu_project_properties(void)
 			// A -1 return means no value was selected
 			g_string_printf(message, "%s ED277: %s", _("Error"), _("There was something wrong with the end behavior value selected.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			// A value was selected
@@ -423,7 +423,7 @@ void menu_project_properties(void)
 		{
 			g_string_printf(message, "%s ED407: %s", _("Error"), _("There was something wrong with the information button link value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_ext_link = g_string_assign(valid_ext_link, validated_string->str);
@@ -437,14 +437,14 @@ void menu_project_properties(void)
 		{
 			g_string_printf(message, "%s ED408: %s", _("Error"), _("There was something wrong with the information button target window value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_ext_link_win = g_string_assign(valid_ext_link_win, validated_string->str);
 			g_string_free(validated_string, TRUE);
 			validated_string = NULL;
 		}
-	} while (FALSE == useable_input);
+	} while (FALSE == usable_input);
 
 	// * We only get here after all input is considered valid *
 

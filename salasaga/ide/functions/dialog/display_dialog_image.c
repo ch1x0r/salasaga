@@ -49,7 +49,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*image_table;				// Table used for neat layout of the dialog box
 	GString				*message;					// Used to construct message strings
 	guint				row_counter = 0;			// Used to count which row things are up to
-	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	gfloat				valid_duration = 0;			// Receives the new finish frame once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
@@ -324,8 +324,8 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 			return FALSE;
 		}
 
-		// Reset the useable input flag
-		useable_input = TRUE;
+		// Reset the usable input flag
+		usable_input = TRUE;
 
 		// Background images have some uneditable fields
 		if (FALSE == tmp_layer->background)
@@ -336,7 +336,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 			{
 				g_string_printf(message, "%s ED384: %s", _("Error"), _("There was something wrong with the new layer name.  Please try again."));
 				display_warning(message->str);
-				useable_input = FALSE;
+				usable_input = FALSE;
 			} else
 			{
 				g_string_assign(valid_name, validated_string->str);
@@ -351,7 +351,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 			{
 				g_string_printf(message, "%s ED156: %s", _("Error"), _("There was something wrong with the starting frame X offset value.  Please try again."));
 				display_warning(message->str);
-				useable_input = FALSE;
+				usable_input = FALSE;
 			} else
 			{
 				valid_x_offset_start = *validated_guint;
@@ -365,7 +365,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 			{
 				g_string_printf(message, "%s ED157: %s", _("Error"), _("There was something wrong with the starting frame Y offset value.  Please try again."));
 				display_warning(message->str);
-				useable_input = FALSE;
+				usable_input = FALSE;
 			} else
 			{
 				valid_y_offset_start = *validated_guint;
@@ -379,7 +379,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 			{
 				g_string_printf(message, "%s ED158: %s", _("Error"), _("There was something wrong with the finish frame X offset value.  Please try again."));
 				display_warning(message->str);
-				useable_input = FALSE;
+				usable_input = FALSE;
 			} else
 			{
 				valid_x_offset_finish = *validated_guint;
@@ -393,7 +393,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 			{
 				g_string_printf(message, "%s ED159: %s", _("Error"), _("There was something wrong with the finish frame X offset value.  Please try again."));
 				display_warning(message->str);
-				useable_input = FALSE;
+				usable_input = FALSE;
 			} else
 			{
 				valid_y_offset_finish = *validated_guint;
@@ -407,7 +407,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 			{
 				g_string_printf(message, "%s ED160: %s", _("Error"), _("There was something wrong with the starting time value.  Please try again."));
 				display_warning(message->str);
-				useable_input = FALSE;
+				usable_input = FALSE;
 			} else
 			{
 				valid_start_time = *validated_gfloat;
@@ -421,7 +421,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 			{
 				g_string_printf(message, "%s ED161: %s", _("Error"), _("There was something wrong with the duration value.  Please try again."));
 				display_warning(message->str);
-				useable_input = FALSE;
+				usable_input = FALSE;
 			} else
 			{
 				valid_duration = *validated_gfloat;
@@ -435,7 +435,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 				// A -1 return means no value was selected
 				g_string_printf(message, "%s ED301: %s", _("Error"), _("There was something wrong with the appearance transition type selected.  Please try again."));
 				display_warning(message->str);
-				useable_input = FALSE;
+				usable_input = FALSE;
 			} else
 			{
 				// A value was selected
@@ -449,7 +449,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 			{
 				g_string_printf(message, "%s ED302: %s", _("Error"), _("There was something wrong with the appearance transition duration value.  Please try again."));
 				display_warning(message->str);
-				useable_input = FALSE;
+				usable_input = FALSE;
 			} else
 			{
 				valid_trans_in_duration = *validated_gfloat;
@@ -463,7 +463,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 				// A -1 return means no value was selected
 				g_string_printf(message, "%s ED303: %s", _("Error"), _("There was something wrong with the exit transition type selected.  Please try again."));
 				display_warning(message->str);
-				useable_input = FALSE;
+				usable_input = FALSE;
 			} else
 			{
 				// A value was selected
@@ -477,7 +477,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 			{
 				g_string_printf(message, "%s ED304: %s", _("Error"), _("There was something wrong with the exit transition duration value.  Please try again."));
 				display_warning(message->str);
-				useable_input = FALSE;
+				usable_input = FALSE;
 			} else
 			{
 				valid_trans_out_duration = *validated_gfloat;
@@ -491,7 +491,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED162: %s", _("Error"), _("There was something wrong with the external link value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_ext_link = g_string_assign(valid_ext_link, validated_string->str);
@@ -505,14 +505,14 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED163: %s", _("Error"), _("There was something wrong with the external link target window value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_ext_link_win = g_string_assign(valid_ext_link_win, validated_string->str);
 			g_string_free(validated_string, TRUE);
 			validated_string = NULL;
 		}
-	} while (FALSE == useable_input);
+	} while (FALSE == usable_input);
 
 	// * We only get here after all input is considered valid, so fill out the temporary layer with the requested details
 

@@ -63,7 +63,7 @@ void menu_file_open(void)
 	gboolean			return_code = FALSE;
 	gint				return_code_gint;			// Used to catch a return code
 	GtkFileFilter		*salasaga_filter;
-	gboolean			useable_input;				// Used to control loop flow
+	gboolean			usable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
 
 
@@ -143,7 +143,7 @@ void menu_file_open(void)
 	}
 
 	// Loop around until we have a valid filename or the user cancels out
-	useable_input = FALSE;
+	usable_input = FALSE;
 	validated_string = NULL;
 	do
 	{
@@ -173,7 +173,7 @@ void menu_file_open(void)
 			if (TRUE == return_code)
 			{
 				// The file was read in fine, so we continue
-				useable_input = TRUE;
+				usable_input = TRUE;
 			}
 			else
 			{
@@ -185,7 +185,7 @@ void menu_file_open(void)
 				return;
 			}
 		}
-	} while (FALSE == useable_input);
+	} while (FALSE == usable_input);
 
 	// * We only get to here if a valid file was chosen *
 

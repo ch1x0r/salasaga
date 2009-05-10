@@ -193,7 +193,7 @@ gint main(gint argc, gchar *argv[])
 	GString				*short_file_name;			// Name of the file to save as
 	GString				*suffix;					// Holds the screenshot file suffix
 	gpointer			tmp_ptr;					// Temporary pointer
-	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	GString				*valid_project_name;		// Receives the project name once validated
 	GString				*valid_screenshot_folder;	// Receives the screenshot folder once validated
 	guint				valid_height;				// Receives the screenshot height once validated
@@ -259,8 +259,8 @@ gint main(gint argc, gchar *argv[])
 
 	// ** Read parameters from the lock file **
 	
-	// Reset the useable input flag
-	useable_input = TRUE;
+	// Reset the usable input flag
+	usable_input = TRUE;
 
 	// Validate the project name input
 	validated_string = validate_value(PROJECT_NAME, V_CHAR, g_key_file_get_string(lock_file, "Project", "Name", NULL));
@@ -268,7 +268,7 @@ gint main(gint argc, gchar *argv[])
 	{
 		g_string_printf(message, "%s CA22: %s", _("Error"), _("There was something wrong with the project name value.  Aborting screenshot."));
 		display_warning(message->str);
-		useable_input = FALSE;
+		usable_input = FALSE;
 	} else
 	{
 		valid_project_name = g_string_assign(valid_project_name, validated_string->str);
@@ -282,7 +282,7 @@ gint main(gint argc, gchar *argv[])
 	{
 		g_string_printf(message, "%s CA23: %s", _("Error"), _("There was something wrong with the screenshot folder value.  Aborting screenshot."));
 		display_warning(message->str);
-		useable_input = FALSE;
+		usable_input = FALSE;
 	} else
 	{
 		valid_screenshot_folder = g_string_assign(valid_screenshot_folder, validated_string->str);
@@ -296,7 +296,7 @@ gint main(gint argc, gchar *argv[])
 	{
 		g_string_printf(message, "%s CA24: %s", _("Error"), _("There was something wrong with the x offset start value.  Aborting screenshot."));
 		display_warning(message->str);
-		useable_input = FALSE;
+		usable_input = FALSE;
 	} else
 	{
 		valid_x_offset = *validated_guint;
@@ -309,7 +309,7 @@ gint main(gint argc, gchar *argv[])
 	{
 		g_string_printf(message, "%s CA25: %s", _("Error"), _("There was something wrong with the y offset start value.  Aborting screenshot."));
 		display_warning(message->str);
-		useable_input = FALSE;
+		usable_input = FALSE;
 	} else
 	{
 		valid_y_offset = *validated_guint;
@@ -322,7 +322,7 @@ gint main(gint argc, gchar *argv[])
 	{
 		g_string_printf(message, "%s CA26: %s", _("Error"), _("There was something wrong with the width value.  Aborting screenshot."));
 		display_warning(message->str);
-		useable_input = FALSE;
+		usable_input = FALSE;
 	} else
 	{
 		valid_width = *validated_guint;
@@ -335,7 +335,7 @@ gint main(gint argc, gchar *argv[])
 	{
 		g_string_printf(message, "%s CA27: %s", _("Error"), _("There was something wrong with the height value.  Aborting screenshot."));
 		display_warning(message->str);
-		useable_input = FALSE;
+		usable_input = FALSE;
 	} else
 	{
 		valid_height = *validated_guint;
@@ -343,7 +343,7 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// Abort if any of the input isn't valid
-	if (TRUE != useable_input)
+	if (TRUE != usable_input)
 	{
 		exit(20);
 	}

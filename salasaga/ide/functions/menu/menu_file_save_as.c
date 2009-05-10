@@ -54,7 +54,7 @@ void menu_file_save_as(void)
 	GString				*message;					// Used to construct message strings
 	GtkFileFilter		*salasaga_filter;			// Filter for *.salasaga
 	GtkWidget 			*save_dialog;				// Dialog widget
-	gboolean			useable_input;				// Used to control loop flow
+	gboolean			usable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
 	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
 
@@ -110,7 +110,7 @@ void menu_file_save_as(void)
 	}
 
 	// Loop around until we have a valid filename or the user cancels out
-	useable_input = FALSE;
+	usable_input = FALSE;
 	validated_string = NULL;
 	do
 	{
@@ -154,16 +154,16 @@ void menu_file_save_as(void)
 				if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
 				{
 					// We've been told to overwrite the existing file
-					useable_input = TRUE;
+					usable_input = TRUE;
 				}
 				gtk_widget_destroy(warn_dialog);
 			} else
 			{
 				// The indicated file name is unique, we're fine to save
-				useable_input = TRUE;
+				usable_input = TRUE;
 			}
 		}
-	} while (FALSE == useable_input);
+	} while (FALSE == usable_input);
 
 	// Destroy the dialog box, as it's not needed any more
 	gtk_widget_destroy(save_dialog);

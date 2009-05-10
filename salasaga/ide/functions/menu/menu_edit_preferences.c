@@ -57,7 +57,7 @@ void menu_edit_preferences(void)
 	GString				*message;					// Used to construct message strings
 	gchar				**strings;							// Text string are split apart with this
 	GString				*tmp_gstring;						// Text strings are constructed in this
-	gboolean			useable_input;						// Used to control loop flow
+	gboolean			usable_input;						// Used to control loop flow
 	guint				valid_default_fps = 0;				// Receives the new default fps once validated
 	guint				valid_icon_height = 0;				// Receives the new icon height once validated
 	gfloat				valid_layer_duration = 0;			// Receives the new default layer duration once validated
@@ -256,8 +256,8 @@ void menu_edit_preferences(void)
 			return;
 		}
 
-		// Reset the useable input flag
-		useable_input = TRUE;
+		// Reset the usable input flag
+		usable_input = TRUE;
 
 		// Retrieve the new default project folder input
 		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_default_project_folder)));
@@ -265,7 +265,7 @@ void menu_edit_preferences(void)
 		{
 			g_string_printf(message, "%s ED126: %s", _("Error"), _("There was something wrong with the project folder given.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_project_folder = g_string_assign(valid_project_folder, validated_string->str);
@@ -279,7 +279,7 @@ void menu_edit_preferences(void)
 		{
 			g_string_printf(message, "%s ED127: %s", _("Error"), _("There was something wrong with the screenshot folder given.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_screenshot_folder = g_string_assign(valid_screenshot_folder, validated_string->str);
@@ -293,7 +293,7 @@ void menu_edit_preferences(void)
 		{
 			g_string_printf(message, "%s ED128: %s", _("Error"), _("There was something wrong with the output folder given.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_output_folder = g_string_assign(valid_output_folder, validated_string->str);
@@ -307,7 +307,7 @@ void menu_edit_preferences(void)
 		{
 			g_string_printf(message, "%s ED129: %s", _("Error"), _("There was something wrong with the default output resolution given.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_output_resolution = g_string_assign(valid_output_resolution, validated_string->str);
@@ -322,7 +322,7 @@ void menu_edit_preferences(void)
 		{
 			g_string_printf(message, "%s ED130: %s", _("Error"), _("There was something wrong with the default slide duration value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_slide_duration = *validated_gfloat;
@@ -336,7 +336,7 @@ void menu_edit_preferences(void)
 		{
 			g_string_printf(message, "%s ED334: %s", _("Error"), _("There was something wrong with the default layer duration value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_layer_duration = *validated_gfloat;
@@ -350,7 +350,7 @@ void menu_edit_preferences(void)
 		{
 			g_string_printf(message, "%s ED134: %s", _("Error"), _("There was something wrong with the default frames per second value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_default_fps = *validated_guint;
@@ -364,7 +364,7 @@ void menu_edit_preferences(void)
 		{
 			g_string_printf(message, "%s ED131: %s", _("Error"), _("There was something wrong with the preview width value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_preview_width = *validated_guint;
@@ -378,7 +378,7 @@ void menu_edit_preferences(void)
 		{
 			g_string_printf(message, "%s ED132: %s", _("Error"), _("There was something wrong with the icon height value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_icon_height = *validated_guint;
@@ -391,14 +391,14 @@ void menu_edit_preferences(void)
 		{
 			g_string_printf(message, "%s ED133: %s", _("Error"), _("There was something wrong with the default zoom level given.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_zoom_level = g_string_assign(valid_zoom_level, validated_string->str);
 			g_string_free(validated_string, TRUE);
 			validated_string = NULL;
 		}
-	} while (FALSE == useable_input);
+	} while (FALSE == usable_input);
 
 	// * We only get here after all input is considered valid *
 

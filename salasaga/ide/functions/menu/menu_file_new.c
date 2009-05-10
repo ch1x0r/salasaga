@@ -62,7 +62,7 @@ void menu_file_new(void)
 	GtkWidget			*project_table;				// Table used for neat layout of the dialog box
 	gboolean			return_code_gbool;			// Catches gboolean return codes
 	guint				row_counter = 0;			// Used to count which row things are up to
-	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	guint				valid_fps;					// Receives the new project fps once validated
 	guint				valid_height = 0;			// Receives the new project height once validated
 	GString				*valid_proj_name;			// Receives the new project name once validated
@@ -179,8 +179,8 @@ void menu_file_new(void)
 			return;
 		}
 
-		// Reset the useable input flag
-		useable_input = TRUE;
+		// Reset the usable input flag
+		usable_input = TRUE;
 
 		// Validate the project name input
 		validated_string = validate_value(PROJECT_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
@@ -203,7 +203,7 @@ void menu_file_new(void)
 		{
 			g_string_printf(message, "%s ED120: %s", _("Error"), _("There was something wrong with the project width value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_width = *validated_guint;
@@ -217,7 +217,7 @@ void menu_file_new(void)
 		{
 			g_string_printf(message, "%s ED121: %s", _("Error"), _("There was something wrong with the project height value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_height = *validated_guint;
@@ -231,13 +231,13 @@ void menu_file_new(void)
 		{
 			g_string_printf(message, "%s ED122: %s", _("Error"), _("There was something wrong with the project frames per second value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_fps = *validated_guint;
 			g_free(validated_guint);
 		}
-	} while (FALSE == useable_input);
+	} while (FALSE == usable_input);
 
 	// * We only get here after all input is considered valid *
 
