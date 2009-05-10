@@ -51,7 +51,7 @@ void export_html_wrapper(void)
 	gchar				*suffix_start;
 	gchar				*swf_file;					// Name of the swf file we add to the html content
 	GString				*tmp_gstring;				// Temporary GString
-	gboolean			useable_input;				// Used to control loop flow
+	gboolean			usable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
 	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
 
@@ -90,7 +90,7 @@ void export_html_wrapper(void)
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), output_folder->str);
 
 	// Loop around until we have a valid filename or the user cancels out
-	useable_input = FALSE;
+	usable_input = FALSE;
 	validated_string = NULL;
 	do
 	{
@@ -134,16 +134,16 @@ void export_html_wrapper(void)
 				if (GTK_RESPONSE_YES == gtk_dialog_run(GTK_DIALOG(warn_dialog)))
 				{
 					// We've been told to overwrite the existing file
-					useable_input = TRUE;
+					usable_input = TRUE;
 				}
 				gtk_widget_destroy(warn_dialog);
 			} else
 			{
 				// The indicated file name is unique, we're fine to save
-				useable_input = TRUE;
+				usable_input = TRUE;
 			}
 		}
-	} while (FALSE == useable_input);
+	} while (FALSE == usable_input);
 
 	// * We only get to here if a file was chosen *
 

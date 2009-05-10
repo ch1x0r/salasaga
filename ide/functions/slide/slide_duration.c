@@ -56,7 +56,7 @@ void slide_duration(void)
 	GtkDialog			*slide_dialog;				// Widget for the dialog
 	layer				*this_layer_data = NULL;	// Pointer to individual layer data
 	slide				*this_slide;				// Points to the slide we're working with
-	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	gfloat				valid_slide_duration;		// Receives the new slide duration once validated
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
@@ -103,8 +103,8 @@ void slide_duration(void)
 			return;
 		}
 
-		// Reset the useable input flag
-		useable_input = TRUE;
+		// Reset the usable input flag
+		usable_input = TRUE;
 
 		// Retrieve the new slide duration input
 		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(duration_entry));
@@ -115,13 +115,13 @@ void slide_duration(void)
 			g_string_printf(message, "%s ED141: %s", _("Error"), _("There was something wrong with the slide duration value.  Please try again."));
 			display_warning(message->str);
 			g_string_free(message, TRUE);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_slide_duration = *validated_gfloat;
 			g_free(validated_gfloat);
 		}
-	} while (FALSE == useable_input);
+	} while (FALSE == usable_input);
 
 	// * We only get here after all input is considered valid *
 

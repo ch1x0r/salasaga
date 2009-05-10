@@ -49,7 +49,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	GtkDialog			*mouse_dialog;				// Widget for the dialog
 	GtkWidget			*mouse_table;				// Table used for neat layout of the dialog box
 	guint				row_counter = 0;			// Used to count which row things are up to
-	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	guint				valid_click_type = 0;		// Receives the new mouse click type once validated
 	gfloat				valid_duration = 0;			// Receives the new finish frame once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
@@ -387,8 +387,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 			return FALSE;
 		}
 
-		// Reset the useable input flag
-		useable_input = TRUE;
+		// Reset the usable input flag
+		usable_input = TRUE;
 
 		// Validate the layer name input
 		validated_string = validate_value(LAYER_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
@@ -396,7 +396,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		{
 			g_string_printf(message, "%s ED383: %s", _("Error"), _("There was something wrong with the new layer name.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			g_string_assign(valid_name, validated_string->str);
@@ -411,7 +411,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		{
 			g_string_printf(message, "%s ED164: %s", _("Error"), _("There was something wrong with the starting frame X offset value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_x_offset_start = *validated_guint;
@@ -425,7 +425,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		{
 			g_string_printf(message, "%s ED165: %s", _("Error"), _("There was something wrong with the starting frame Y offset value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_y_offset_start = *validated_guint;
@@ -439,7 +439,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		{
 			g_string_printf(message, "%s ED166: %s", _("Error"), _("There was something wrong with the finish frame X offset value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_x_offset_finish = *validated_guint;
@@ -453,7 +453,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		{
 			g_string_printf(message, "%s ED167: %s", _("Error"), _("There was something wrong with the finish frame X offset value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_y_offset_finish = *validated_guint;
@@ -467,7 +467,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		{
 			g_string_printf(message, "%s ED168: %s", _("Error"), _("There was something wrong with the starting time value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_start_time = *validated_gfloat;
@@ -481,7 +481,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		{
 			g_string_printf(message, "%s ED169: %s", _("Error"), _("There was something wrong with the duration value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_duration = *validated_gfloat;
@@ -494,7 +494,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		{
 			g_string_printf(message, "%s ED170: %s", _("Error"), _("There was something wrong with the external link value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_ext_link = g_string_assign(valid_ext_link, validated_string->str);
@@ -508,7 +508,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		{
 			g_string_printf(message, "%s ED171: %s", _("Error"), _("There was something wrong with the external link target window value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_ext_link_win = g_string_assign(valid_ext_link_win, validated_string->str);
@@ -523,7 +523,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 			// A -1 return means no value was selected
 			g_string_printf(message, "%s ED305: %s", _("Error"), _("There was something wrong with the appearance transition type selected.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			// A value was selected
@@ -537,7 +537,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		{
 			g_string_printf(message, "%s ED306: %s", _("Error"), _("There was something wrong with the appearance transition duration value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_trans_in_duration = *validated_gfloat;
@@ -551,7 +551,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 			// A -1 return means no value was selected
 			g_string_printf(message, "%s ED307: %s", _("Error"), _("There was something wrong with the exit transition type selected.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			// A value was selected
@@ -565,7 +565,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		{
 			g_string_printf(message, "%s ED308: %s", _("Error"), _("There was something wrong with the exit transition duration value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_trans_out_duration = *validated_gfloat;
@@ -579,13 +579,13 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 			// A -1 return means no value was selected
 			g_string_printf(message, "%s ED413: %s", _("Error"), _("There was something wrong with the mouse click type selected.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			// A value was selected
 			valid_click_type = gint_val;
 		}
-	} while (FALSE == useable_input);
+	} while (FALSE == usable_input);
 
 	// * We only get here after all input is considered valid *
 

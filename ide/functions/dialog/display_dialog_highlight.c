@@ -49,7 +49,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*highlight_table;			// Table used for neat layout of the dialog box
 	GString				*message;					// Used to construct message strings
 	guint				row_counter = 0;			// Used to count which row things are up to
-	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	gfloat				valid_border_width = 0;		// Receives the new border width once validated
 	gfloat				valid_duration = 0;			// Receives the new finish frame once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
@@ -414,8 +414,8 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 			return FALSE;
 		}
 
-		// Reset the useable input flag
-		useable_input = TRUE;
+		// Reset the usable input flag
+		usable_input = TRUE;
 
 		// Validate the layer name input
 		validated_string = validate_value(LAYER_NAME, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(name_entry)));
@@ -423,7 +423,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED382: %s", _("Error"), _("There was something wrong with the new layer name.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			g_string_assign(valid_name, validated_string->str);
@@ -438,7 +438,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED396: %s", _("Error"), _("There was something wrong with the border width value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_border_width = *validated_gfloat;
@@ -452,7 +452,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED405: %s", _("Error"), _("There was something wrong with the opacity value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_opacity = *validated_gfloat;
@@ -466,7 +466,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED144: %s", _("Error"), _("There was something wrong with the starting frame X offset value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_x_offset_start = *validated_guint;
@@ -480,7 +480,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED145: %s", _("Error"), _("There was something wrong with the starting frame Y offset value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_y_offset_start = *validated_guint;
@@ -494,7 +494,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED146: %s", _("Error"), _("There was something wrong with the finish frame X offset value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_x_offset_finish = *validated_guint;
@@ -508,7 +508,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED147: %s", _("Error"), _("There was something wrong with the finish frame X offset value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_y_offset_finish = *validated_guint;
@@ -522,7 +522,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED148: %s", _("Error"), _("There was something wrong with the highlight width value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_width = *validated_guint;
@@ -536,7 +536,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED149: %s", _("Error"), _("There was something wrong with the highlight height value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_height = *validated_guint;
@@ -550,7 +550,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED150: %s", _("Error"), _("There was something wrong with the starting time value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_start_time = *validated_gfloat;
@@ -564,7 +564,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED151: %s", _("Error"), _("There was something wrong with the duration value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_duration = *validated_gfloat;
@@ -577,7 +577,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED152: %s", _("Error"), _("There was something wrong with the external link value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_ext_link = g_string_assign(valid_ext_link, validated_string->str);
@@ -591,7 +591,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED153: %s", _("Error"), _("There was something wrong with the external link target window value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_ext_link_win = g_string_assign(valid_ext_link_win, validated_string->str);
@@ -606,7 +606,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 			// A -1 return means no value was selected
 			g_string_printf(message, "%s ED297: %s", _("Error"), _("There was something wrong with the appearance transition type selected.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			// A value was selected
@@ -620,7 +620,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED298: %s", _("Error"), _("There was something wrong with the appearance transition duration value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_trans_in_duration = *validated_gfloat;
@@ -634,7 +634,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 			// A -1 return means no value was selected
 			g_string_printf(message, "%s ED299: %s", _("Error"), _("There was something wrong with the exit transition type selected.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			// A value was selected
@@ -648,13 +648,13 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED300: %s", _("Error"), _("There was something wrong with the exit transition duration value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_trans_out_duration = *validated_gfloat;
 			g_free(validated_gfloat);
 		}
-	} while (FALSE == useable_input);
+	} while (FALSE == usable_input);
 
 	// * We only get here after all input is considered valid *
 

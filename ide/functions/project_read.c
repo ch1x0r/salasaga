@@ -100,7 +100,7 @@ gboolean project_read(gchar *filename)
 	layer				*this_layer_ptr;			// Pointer into a layer structure
 	xmlNodePtr			this_node;					// Temporary pointer
 	xmlNodePtr			this_slide;					// Temporary pointer
-	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	gboolean			valid_control_bar_behaviour = TRUE;// Receives the new control bar display behaviour
 	guint				valid_end_behaviour = 0;	// Receives the new end behaviour once validated
 	guint				valid_fps = 0;				// Receives the new fps once validated
@@ -451,8 +451,8 @@ gboolean project_read(gchar *filename)
 		xmlFree(save_format_data);
 	}
 
-	// Reset the useable input flag
-	useable_input = TRUE;
+	// Reset the usable input flag
+	usable_input = TRUE;
 
 	// * All of the required meta-data and preferences are present, so we proceed *
 
@@ -462,7 +462,7 @@ gboolean project_read(gchar *filename)
 	{
 		g_string_printf(message, "%s ED202: %s", _("Error"), _("There was something wrong with the project name value in the project file."));
 		display_warning(message->str);
-		useable_input = FALSE;
+		usable_input = FALSE;
 	} else
 	{
 		valid_project_name = g_string_assign(valid_project_name, validated_string->str);
@@ -477,7 +477,7 @@ gboolean project_read(gchar *filename)
 	{
 		g_string_printf(message, "%s ED203: %s", _("Error"), _("There was something wrong with the output folder value in the project file."));
 		display_warning(message->str);
-		useable_input = FALSE;
+		usable_input = FALSE;
 	} else
 	{
 		valid_output_folder = g_string_assign(valid_output_folder, validated_string->str);
@@ -493,7 +493,7 @@ gboolean project_read(gchar *filename)
 	{
 		g_string_printf(message, "%s ED204: %s", _("Error"), _("There was something wrong with the output width value in the project file."));
 		display_warning(message->str);
-		useable_input = FALSE;
+		usable_input = FALSE;
 	} else
 	{
 		valid_output_width = *validated_guint;
@@ -508,7 +508,7 @@ gboolean project_read(gchar *filename)
 	{
 		g_string_printf(message, "%s ED205: %s", _("Error"), _("There was something wrong with the output height value in the project file."));
 		display_warning(message->str);
-		useable_input = FALSE;
+		usable_input = FALSE;
 	} else
 	{
 		valid_output_height = *validated_guint;
@@ -523,7 +523,7 @@ gboolean project_read(gchar *filename)
 	{
 		g_string_printf(message, "%s ED206: %s", _("Error"), _("There was something wrong with the project width value in the project file."));
 		display_warning(message->str);
-		useable_input = FALSE;
+		usable_input = FALSE;
 	} else
 	{
 		valid_project_width = *validated_guint;
@@ -538,7 +538,7 @@ gboolean project_read(gchar *filename)
 	{
 		g_string_printf(message, "%s ED207: %s", _("Error"), _("There was something wrong with the project width value in the project file."));
 		display_warning(message->str);
-		useable_input = FALSE;
+		usable_input = FALSE;
 	} else
 	{
 		valid_project_height = *validated_guint;
@@ -555,7 +555,7 @@ gboolean project_read(gchar *filename)
 		{
 			g_string_printf(message, "%s ED209: %s", _("Error"), _("There was something wrong with the frames per second value in the project file."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_fps = *validated_guint;
@@ -572,7 +572,7 @@ gboolean project_read(gchar *filename)
 		{
 			g_string_printf(message, "%s ED282: %s", _("Error"), _("There was something wrong with the start behavior value in the project file."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			if (0 == g_ascii_strncasecmp(validated_string->str, "play", 4))
@@ -600,7 +600,7 @@ gboolean project_read(gchar *filename)
 		{
 			g_string_printf(message, "%s ED279: %s", _("Error"), _("There was something wrong with the end behavior value in the project file."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			if (0 == g_ascii_strncasecmp(validated_string->str, "loop_play", 9))
@@ -634,7 +634,7 @@ gboolean project_read(gchar *filename)
 		{
 			g_string_printf(message, "%s ED283: %s", _("Error"), _("There was something wrong with the control bar display value in the project file."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			if (0 == g_ascii_strncasecmp(validated_string->str, "true", 4))
@@ -662,7 +662,7 @@ gboolean project_read(gchar *filename)
 		{
 			g_string_printf(message, "%s ED409: %s", _("Error"), _("There was something wrong with the information button display value in the project file."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			if (0 == g_ascii_strncasecmp(validated_string->str, "true", 4))
@@ -686,7 +686,7 @@ gboolean project_read(gchar *filename)
 		{
 			g_string_printf(message, "%s ED410: %s", _("Error"), _("There was something wrong with the information button link value in the project file."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_info_link = g_string_assign(valid_info_link, validated_string->str);
@@ -704,7 +704,7 @@ gboolean project_read(gchar *filename)
 		{
 			g_string_printf(message, "%s ED411: %s", _("Error"), _("There was something wrong with the information button link value in the project file."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_info_link_target = g_string_assign(valid_info_link_target, validated_string->str);
@@ -786,7 +786,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED211: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_empty_ob->bg_color.red = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -804,7 +804,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED212: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_empty_ob->bg_color.green = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -822,7 +822,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED213: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_empty_ob->bg_color.blue = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -843,7 +843,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED214: %s", _("Error"), _("There was something wrong with a start frame value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -861,7 +861,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED215: %s", _("Error"), _("There was something wrong with a finish frame value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->duration = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -881,7 +881,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED336: %s", _("Error"), _("There was something wrong with a layer start time value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -899,7 +899,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED337: %s", _("Error"), _("There was something wrong with a layer duration value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->duration = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -918,7 +918,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED216: %s", _("Error"), _("There was something wrong with a layer visibility value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->visible = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -936,7 +936,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED217: %s", _("Error"), _("There was something wrong with a layer name value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->name = g_string_new("Empty");  // Fill in the value, just to be safe
 										} else
 										{
@@ -954,7 +954,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED218: %s", _("Error"), _("There was something wrong with an external link value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_layer->external_link = g_string_assign(tmp_layer->external_link, validated_string->str);
@@ -972,7 +972,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED219: %s", _("Error"), _("There was something wrong with an external link target window value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_layer->external_link_window = g_string_assign(tmp_layer->external_link_window, validated_string->str);
@@ -1034,7 +1034,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED220: %s", _("Error"), _("There was something wrong with an image x offset start value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->x_offset_start = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1052,7 +1052,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED221: %s", _("Error"), _("There was something wrong with an image y offset start value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->y_offset_start = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1070,7 +1070,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED222: %s", _("Error"), _("There was something wrong with an image x offset finish value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->x_offset_finish = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1088,7 +1088,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED223: %s", _("Error"), _("There was something wrong with an image y offset finish value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->y_offset_finish = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1106,7 +1106,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED224: %s", _("Error"), _("There was something wrong with an image layer width value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_image_ob->width = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1124,7 +1124,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED225: %s", _("Error"), _("There was something wrong with an image layer height value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_image_ob->height = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1142,7 +1142,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED226: %s", _("Error"), _("There was something wrong with an image layer background value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_layer->background = *validated_guint;
@@ -1162,7 +1162,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED227: %s", _("Error"), _("There was something wrong with an image start frame value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -1180,7 +1180,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED228: %s", _("Error"), _("There was something wrong with an image finish frame value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->duration = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -1200,7 +1200,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED340: %s", _("Error"), _("There was something wrong with an image layer start time value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -1218,7 +1218,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED341: %s", _("Error"), _("There was something wrong with an image layer duration value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->duration = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -1237,7 +1237,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED229: %s", _("Error"), _("There was something wrong with an image layer visibility value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->visible = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1255,7 +1255,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED230: %s", _("Error"), _("There was something wrong with an image layer name value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->name = g_string_new("Empty");  // Fill in the value, just to be safe
 										} else
 										{
@@ -1273,7 +1273,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED231: %s", _("Error"), _("There was something wrong with an image layer external link value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_layer->external_link = g_string_assign(tmp_layer->external_link, validated_string->str);
@@ -1291,7 +1291,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED232: %s", _("Error"), _("There was something wrong with an image layer external link target window value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_layer->external_link_window = g_string_assign(tmp_layer->external_link_window, validated_string->str);
@@ -1313,7 +1313,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED233: %s", _("Error"), _("There was something wrong with a file name path value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 											} else
 											{
 												// Load the image data
@@ -1334,7 +1334,7 @@ gboolean project_read(gchar *filename)
 												g_string_printf(message, "%s ED234: %s", _("Error"), _("There was something wrong with image data in the project file."));
 												display_warning(message->str);
 												tmp_gstring2 = NULL;
-												useable_input = FALSE;
+												usable_input = FALSE;
 											} else
 											{
 												tmp_gstring2 = validated_string;
@@ -1352,7 +1352,7 @@ gboolean project_read(gchar *filename)
 												g_string_printf(message, "%s ED235: %s", _("Error"), _("There was something wrong with an image data length value in the project file."));
 												display_warning(message->str);
 												data_length = 0;  // Fill in the value, just to be safe
-												useable_input = FALSE;
+												usable_input = FALSE;
 											} else
 											{
 												data_length = *validated_guint;
@@ -1370,7 +1370,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED313: %s", _("Error"), _("There was something wrong with an image transition in type value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
@@ -1394,7 +1394,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED314: %s", _("Error"), _("There was something wrong with an image transition in duration value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->transition_in_duration = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1412,7 +1412,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED315: %s", _("Error"), _("There was something wrong with an image transition out type value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
@@ -1436,7 +1436,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED316: %s", _("Error"), _("There was something wrong with an image transition out duration value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->transition_out_duration = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1448,7 +1448,7 @@ gboolean project_read(gchar *filename)
 								}
 
 								// Version 1.0 of the file format doesn't have embedded image data
-								if ((1.0 != valid_save_format) && (FALSE != useable_input))
+								if ((1.0 != valid_save_format) && (FALSE != usable_input))
 								{
 									// * We should have all of the image details by this stage, so can process the image data *
 
@@ -1551,7 +1551,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED397: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_highlight_ob->border_colour.red = *validated_guint;
@@ -1568,7 +1568,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED398: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_highlight_ob->border_colour.green = *validated_guint;
@@ -1585,7 +1585,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED399: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_highlight_ob->border_colour.blue = *validated_guint;
@@ -1602,7 +1602,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED400: %s", _("Error"), _("There was something wrong with a highlight border width value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_highlight_ob->border_width = *validated_gfloat;
@@ -1619,7 +1619,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED401: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_highlight_ob->fill_colour.red = *validated_guint;
@@ -1636,7 +1636,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED402: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_highlight_ob->fill_colour.green = *validated_guint;
@@ -1653,7 +1653,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED403: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_highlight_ob->fill_colour.blue = *validated_guint;
@@ -1670,7 +1670,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED404: %s", _("Error"), _("There was something wrong with a highlight opacity value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_highlight_ob->opacity = *validated_gfloat;
@@ -1687,7 +1687,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED236: %s", _("Error"), _("There was something wrong with an x offset start value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->x_offset_start = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1705,7 +1705,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED237: %s", _("Error"), _("There was something wrong with a y offset start value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->y_offset_start = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1723,7 +1723,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED238: %s", _("Error"), _("There was something wrong with an x offset finish value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->x_offset_finish = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1741,7 +1741,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED239: %s", _("Error"), _("There was something wrong with a y offset finish value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->y_offset_finish = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1759,7 +1759,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED240: %s", _("Error"), _("There was something wrong with a layer width value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_highlight_ob->width = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1777,7 +1777,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED241: %s", _("Error"), _("There was something wrong with a layer height value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_highlight_ob->height = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1798,7 +1798,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED242: %s", _("Error"), _("There was something wrong with a start frame value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -1816,7 +1816,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED243: %s", _("Error"), _("There was something wrong with a finish frame value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->duration = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -1836,7 +1836,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED342: %s", _("Error"), _("There was something wrong with a layer start time value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -1854,7 +1854,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED343: %s", _("Error"), _("There was something wrong with a layer duration value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->duration = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -1873,7 +1873,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED244: %s", _("Error"), _("There was something wrong with a layer visibility value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->visible = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1891,7 +1891,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED245: %s", _("Error"), _("There was something wrong with a layer name value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->name = g_string_new("Empty");  // Fill in the value, just to be safe
 										} else
 										{
@@ -1909,7 +1909,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED246: %s", _("Error"), _("There was something wrong with an external link value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_layer->external_link = g_string_assign(tmp_layer->external_link, validated_string->str);
@@ -1927,7 +1927,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED247: %s", _("Error"), _("There was something wrong with an external link target window value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_layer->external_link_window = g_string_assign(tmp_layer->external_link_window, validated_string->str);
@@ -1945,7 +1945,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED317: %s", _("Error"), _("There was something wrong with a transition in type value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
@@ -1969,7 +1969,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED318: %s", _("Error"), _("There was something wrong with a transition in duration value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->transition_in_duration = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -1987,7 +1987,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED319: %s", _("Error"), _("There was something wrong with a transition out type value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
@@ -2011,7 +2011,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED320: %s", _("Error"), _("There was something wrong with a transition out duration value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->transition_out_duration = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2073,7 +2073,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED248: %s", _("Error"), _("There was something wrong with an x offset start value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->x_offset_start = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2091,7 +2091,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED249: %s", _("Error"), _("There was something wrong with a y offset start value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->y_offset_start = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2109,7 +2109,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED250: %s", _("Error"), _("There was something wrong with an x offset finish value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->x_offset_finish = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2127,7 +2127,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED251: %s", _("Error"), _("There was something wrong with a y offset finish value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->y_offset_finish = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2145,7 +2145,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED252: %s", _("Error"), _("There was something wrong with a layer width value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_mouse_ob->width = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2163,7 +2163,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED253: %s", _("Error"), _("There was something wrong with a layer height value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_mouse_ob->height = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2181,7 +2181,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED254: %s", _("Error"), _("There was something wrong with a mouse click value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_mouse_ob->click = MOUSE_NONE;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2221,7 +2221,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED255: %s", _("Error"), _("There was something wrong with a start frame value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -2239,7 +2239,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED256: %s", _("Error"), _("There was something wrong with a finish frame value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->duration = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -2259,7 +2259,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED344: %s", _("Error"), _("There was something wrong with a layer start time value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -2277,7 +2277,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED345: %s", _("Error"), _("There was something wrong with a layer duration value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->duration = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -2296,7 +2296,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED257: %s", _("Error"), _("There was something wrong with a layer visibility value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->visible = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2314,7 +2314,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED258: %s", _("Error"), _("There was something wrong with a layer name value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->name = g_string_new("Empty");  // Fill in the value, just to be safe
 										} else
 										{
@@ -2332,7 +2332,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED259: %s", _("Error"), _("There was something wrong with an external link value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_layer->external_link = g_string_assign(tmp_layer->external_link, validated_string->str);
@@ -2350,7 +2350,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED260: %s", _("Error"), _("There was something wrong with an external link target window value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_layer->external_link_window = g_string_assign(tmp_layer->external_link_window, validated_string->str);
@@ -2368,7 +2368,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED321: %s", _("Error"), _("There was something wrong with a transition in type value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
@@ -2392,7 +2392,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED322: %s", _("Error"), _("There was something wrong with a transition in duration value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->transition_in_duration = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2410,7 +2410,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED323: %s", _("Error"), _("There was something wrong with a transition out type value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
@@ -2434,7 +2434,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED324: %s", _("Error"), _("There was something wrong with a transition out duration value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->transition_out_duration = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2507,7 +2507,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED261: %s", _("Error"), _("There was something wrong with an x offset start value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->x_offset_start = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2525,7 +2525,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED262: %s", _("Error"), _("There was something wrong with a y offset start value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->y_offset_start = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2543,7 +2543,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED263: %s", _("Error"), _("There was something wrong with an x offset finish value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->x_offset_finish = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2561,7 +2561,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED264: %s", _("Error"), _("There was something wrong with a y offset finish value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->y_offset_finish = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2579,7 +2579,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED265: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_text_ob->text_color.red = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2597,7 +2597,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED266: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_text_ob->text_color.green = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2615,7 +2615,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED267: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_text_ob->text_color.blue = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2633,7 +2633,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED388: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_text_ob->bg_border_colour.red = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2651,7 +2651,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED389: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_text_ob->bg_border_colour.green = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2669,7 +2669,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED390: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_text_ob->bg_border_colour.blue = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2687,7 +2687,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED391: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_text_ob->bg_fill_colour.red = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2705,7 +2705,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED392: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_text_ob->bg_fill_colour.green = *validated_guint;
@@ -2722,7 +2722,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED393: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_text_ob->bg_fill_colour.blue = *validated_guint;
@@ -2739,7 +2739,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED268: %s", _("Error"), _("There was something wrong with a font size value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_text_ob->font_size = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2757,7 +2757,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED394: %s", _("Error"), _("There was something wrong with a background border width value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_text_ob->bg_border_width = *validated_gfloat;
@@ -2774,7 +2774,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED395: %s", _("Error"), _("There was something wrong with a text background visibility value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											if (0 == g_ascii_strncasecmp(validated_string->str, "true", 4))
@@ -2810,7 +2810,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED269: %s", _("Error"), _("There was something wrong with a start frame value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -2828,7 +2828,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED270: %s", _("Error"), _("There was something wrong with a finish frame value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->duration = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -2848,7 +2848,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED346: %s", _("Error"), _("There was something wrong with a layer start time value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->start_time = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -2866,7 +2866,7 @@ gboolean project_read(gchar *filename)
 											{
 												g_string_printf(message, "%s ED347: %s", _("Error"), _("There was something wrong with a layer duration value in the project file."));
 												display_warning(message->str);
-												useable_input = FALSE;
+												usable_input = FALSE;
 												tmp_layer->duration = 0;  // Fill in the value, just to be safe
 											} else
 											{
@@ -2885,7 +2885,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED271: %s", _("Error"), _("There was something wrong with a layer visibility value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->visible = 0;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2903,7 +2903,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED272: %s", _("Error"), _("There was something wrong with a layer name value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->name = g_string_new("Empty");  // Fill in the value, just to be safe
 										} else
 										{
@@ -2921,7 +2921,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED273: %s", _("Error"), _("There was something wrong with an external link value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_layer->external_link = g_string_assign(tmp_layer->external_link, validated_string->str);
@@ -2939,7 +2939,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED274: %s", _("Error"), _("There was something wrong with an external link target window value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											tmp_layer->external_link_window = g_string_assign(tmp_layer->external_link_window, validated_string->str);
@@ -2957,7 +2957,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED325: %s", _("Error"), _("There was something wrong with a transition in type value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
@@ -2981,7 +2981,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED326: %s", _("Error"), _("There was something wrong with a transition in duration value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->transition_in_duration = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -2999,7 +2999,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED327: %s", _("Error"), _("There was something wrong with a transition out type value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 										} else
 										{
 											if (0 == g_ascii_strncasecmp(validated_string->str, "fade", 4))
@@ -3023,7 +3023,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED328: %s", _("Error"), _("There was something wrong with a transition out duration value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_layer->transition_out_duration = 1;  // Fill in the value, just to be safe
 										} else
 										{
@@ -3041,7 +3041,7 @@ gboolean project_read(gchar *filename)
 										{
 											g_string_printf(message, "%s ED425: %s", _("Error"), _("There was something wrong with a font face value in the project file."));
 											display_warning(message->str);
-											useable_input = FALSE;
+											usable_input = FALSE;
 											tmp_text_ob->font_face = FONT_DEJAVU_SANS;  // Fill in the value, just to be safe
 										} else
 										{
@@ -3087,7 +3087,7 @@ gboolean project_read(gchar *filename)
 				{
 					g_string_printf(message, "%s ED275: %s", _("Error"), _("There was something wrong with a slide name value in the project file."));
 					display_warning(message->str);
-					useable_input = FALSE;
+					usable_input = FALSE;
 				} else
 				{
 					tmp_slide->name = validated_string;
@@ -3106,7 +3106,7 @@ gboolean project_read(gchar *filename)
 				{
 					g_string_printf(message, "%s ED276: %s", _("Error"), _("There was something wrong with a slide duration value in the project file."));
 					display_warning(message->str);
-					useable_input = FALSE;
+					usable_input = FALSE;
 				} else
 				{
 					// If the file format is less the version 4.0, then it has slides with frame based input rather than time based input
@@ -3140,7 +3140,7 @@ gboolean project_read(gchar *filename)
 	}
 
 	// Abort if any of the input isn't valid
-	if (TRUE != useable_input)
+	if (TRUE != usable_input)
 	{
 		// At least one of the values in the project file is invalid, so abort the load
 		display_warning(_("Aborting load of project file."));  // Individual error messages will already have been displayed

@@ -52,7 +52,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	slide				*slide_data;				// Pointer to the data for the current slide
 	layer_image			*tmp_image_ob;				// Temporary image layer object
 	layer				*tmp_layer;					// Temporary layer
-	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	GString				*valid_image_path;			// Receives the new image path once validated
 	GString				*validated_string;			// Receives known good strings from the validation function
 
@@ -127,8 +127,8 @@ void layer_new_image_inner(guint release_x, guint release_y)
 		// Grab the folder the user may have changed too
 		last_folder = g_string_assign(last_folder, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(path_widget)));
 
-		// Reset the useable input flag
-		useable_input = TRUE;
+		// Reset the usable input flag
+		usable_input = TRUE;
 
 		// Retrieve the new image path
 		validated_string = validate_value(FILE_PATH, V_CHAR, (gchar *) gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(path_widget)));
@@ -136,7 +136,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 		{
 			g_string_printf(message, "%s ED330: %s", _("Error"), _("There was something wrong with the image path given.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			// Load the image
@@ -145,7 +145,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 			{
 				g_string_printf(message, "%s ED331: %s", _("Error"), _("There was something wrong with the image file selected.  Please try again."));
 				display_warning(message->str);
-				useable_input = FALSE;
+				usable_input = FALSE;
 			} else
 			{
 				// Retrieve the image dimensions
@@ -172,7 +172,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 			}
 		}
 
-	} while (FALSE == useable_input);
+	} while (FALSE == usable_input);
 
 	// Destroy the file selection dialog box
 	gtk_widget_destroy(GTK_WIDGET(path_widget));

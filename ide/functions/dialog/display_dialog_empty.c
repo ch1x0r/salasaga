@@ -46,7 +46,7 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*empty_table;				// Table used for neat layout of the dialog box
 	GString				*message;					// Used to construct message strings
 	guint				row_counter = 0;			// Used to count which row things are up to
-	gboolean			useable_input;				// Used as a flag to indicate if all validation was successful
+	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
 	GString				*validated_string;			// Receives known good strings from the validation function
@@ -126,8 +126,8 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 			return FALSE;
 		}
 
-		// Reset the useable input flag
-		useable_input = TRUE;
+		// Reset the usable input flag
+		usable_input = TRUE;
 
 		// Validate the external link input
 		validated_string = validate_value(EXTERNAL_LINK, V_CHAR, (gchar *) gtk_entry_get_text(GTK_ENTRY(external_link_entry)));
@@ -135,7 +135,7 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED142: %s", _("Error"), _("There was something wrong with the external link value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_ext_link = g_string_assign(valid_ext_link, validated_string->str);
@@ -149,14 +149,14 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 		{
 			g_string_printf(message, "%s ED143: %s", _("Error"), _("There was something wrong with the external link window target value.  Please try again."));
 			display_warning(message->str);
-			useable_input = FALSE;
+			usable_input = FALSE;
 		} else
 		{
 			valid_ext_link_win = g_string_assign(valid_ext_link_win, validated_string->str);
 			g_string_free(validated_string, TRUE);
 			validated_string = NULL;
 		}
-	} while (FALSE == useable_input);
+	} while (FALSE == usable_input);
 
 	// * We only get here after all input is considered valid *
 
