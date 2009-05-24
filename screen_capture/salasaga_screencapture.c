@@ -27,6 +27,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <unistd.h>
+#include <libnotify/notify.h>
 
 // GTK includes
 #include <gtk/gtk.h>
@@ -92,9 +93,6 @@ GdkPixbuf *non_win_take_screenshot(Window win, gint x_off, gint x_len, gint y_of
 		g_string_free(message, TRUE);
 		return NULL;
 	}
-
-	// Generate a beep
-	gdk_beep();
 
 	// Free memory used in this function
 	g_string_free(message, TRUE);
@@ -192,6 +190,7 @@ gint main(gint argc, gchar *argv[])
 	GString				*name, *directory;			// GStrings from the lock file
 	gboolean			screenshots_exist = FALSE;	// Switch to track if other screenshots already exist
 	GString				*short_file_name;			// Name of the file to save as
+	NotifyNotification	*status_notify;				// Status message
 	GString				*suffix;					// Holds the screenshot file suffix
 	gpointer			tmp_ptr;					// Temporary pointer
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
@@ -240,6 +239,9 @@ gint main(gint argc, gchar *argv[])
 	gtk_init(&argc, &argv);
 	valid_project_name = g_string_new(NULL);
 	valid_screenshot_folder = g_string_new(NULL);
+
+	// Initialise notification
+	notify_init("Salasaga");
 
 	// Initialise other bits
 	message = g_string_new(NULL);
@@ -394,6 +396,11 @@ gint main(gint argc, gchar *argv[])
 		g_string_free(message, TRUE);
 		exit(2);
 	}
+
+	// Visually let the user know the screenshot was taken
+	status_notify = notify_notification_new("Screenshot taken", NULL, NULL, NULL);
+	notify_notification_set_urgency(status_notify, NOTIFY_URGENCY_CRITICAL);
+	notify_notification_show(status_notify, &error);
 
 	// Check if the output folder exists
 	if (!(dir_ptr = g_dir_open(directory->str, 0, &error)))
