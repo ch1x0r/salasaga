@@ -14,7 +14,7 @@ dnl config.h needs to be generated
 AC_CONFIG_HEADERS(config.h)
 
 dnl Specify the version of automake needed
-AM_INIT_AUTOMAKE(1.10)
+AM_INIT_AUTOMAKE
 
 dnl GNU recommended way to determine host variables (OS, etc)
 AC_CANONICAL_HOST
