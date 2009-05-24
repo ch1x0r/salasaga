@@ -80,8 +80,8 @@ dnl Check for the GTK, GLib, GConf, Gnome, xml, and png libraries
 AC_CHECK_PROG(PKG_CONFIG, pkg-config, [yes])
 if test x$PKG_CONFIG = xyes;
 then
-	GTK_CFLAGS=`pkg-config glib-2.0 gdk-2.0 gdk-pixbuf-2.0 gtk+-2.0 gconf-2.0 libgnome-2.0 libpng libxml-2.0 --cflags`
-	GTK_LIBS=`pkg-config glib-2.0 gdk-2.0 gdk-pixbuf-2.0 gtk+-2.0 gconf-2.0 libgnome-2.0 libpng libxml-2.0 --libs`
+	GTK_CFLAGS=`pkg-config glib-2.0 gdk-2.0 gdk-pixbuf-2.0 gtk+-2.0 gconf-2.0 libgnome-2.0 libnotify libpng libxml-2.0 --cflags`
+	GTK_LIBS=`pkg-config glib-2.0 gdk-2.0 gdk-pixbuf-2.0 gtk+-2.0 gconf-2.0 libgnome-2.0 libnotify libpng libxml-2.0 --libs`
 fi
 
 case "${host_os}" in

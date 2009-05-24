@@ -12,6 +12,7 @@
  * Text layers can now be any of the DejaVu fonts.
  * Several minor improvements for the time line area.
  * Added a status icon.
+ * Updated the screen capture to display visual notification messages when screenshots are taken. 
  * Minor bug fixes.
 
 
