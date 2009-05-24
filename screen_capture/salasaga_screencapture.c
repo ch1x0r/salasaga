@@ -94,7 +94,7 @@ GdkPixbuf *non_win_take_screenshot(Window win, gint x_off, gint x_len, gint y_of
 	}
 
 	// Generate a beep
-	gdk_window_beep(window);
+	gdk_beep(window);
 
 	// Free memory used in this function
 	g_string_free(message, TRUE);
