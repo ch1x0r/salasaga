@@ -137,6 +137,7 @@ gboolean				show_control_bar = TRUE;	// Toggle for whether to display the contro
 GList					*slides = NULL;				// Linked list holding the slide info
 guint					start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
 GtkWidget				*status_bar;				// Widget for the status bar
+GtkStatusIcon			*status_icon;				// Pointer to the GtkStatusIcon object, used for StatusIcon communication
 gint					stored_x;					// X co-ordinate of the mouse last click
 gint					stored_y;					// Y co-ordinate of the mouse last click
 gint					table_x_padding;			// Number of pixels to pad table entries by
@@ -208,6 +209,7 @@ gint main(gint argc, gchar *argv[])
 	gint				num_formats;				// Used to determine if SVG images can be loaded
 	GtkWidget			*outer_box;					// Widget for the onscreen display
 	GtkLabel			*resolution_label;			// Widget for the resolution selector label
+	GString				*status_icon_path;			// Path to the status icon image
 	GSList				*supported_formats;			// Used to determine if SVG images can be loaded
 	GtkWidget			*toolbar;					// Widget for the toolbar
 	GdkScreen			*which_screen;				// Gets given the screen the monitor is on
@@ -360,6 +362,15 @@ gint main(gint argc, gchar *argv[])
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(main_window), 800, 600);
 	gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_CENTER);
+//	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(main_window), TRUE);  // Leave this commented out until the status bar can toggle Salasaga visible again
+
+	// Create the Salasaga status bar icon
+	status_icon_path = g_string_new(NULL);
+	g_string_printf(status_icon_path, "%s%c%s", STATUS_ICON_DIR, G_DIR_SEPARATOR, "salasaga-icon.png");
+	status_icon = gtk_status_icon_new_from_file(status_icon_path->str);
+	gtk_status_icon_set_tooltip_text(status_icon, "Salasaga - Not yet capturing");
+	gtk_status_icon_set_visible(status_icon, TRUE);
+	g_string_free(status_icon_path, TRUE);
 
 #ifndef _WIN32  // Non-windows check
 	// Initialise sound

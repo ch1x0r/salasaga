@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Function called when the user selects Screenshots -> Capture from the top menu
- * 
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -219,6 +219,9 @@ void menu_screenshots_capture(void)
 	gtk_dialog_run(GTK_DIALOG(message_dialog));
 	gtk_widget_destroy(message_dialog);
 
+	// Update the status icon
+	gtk_status_icon_set_tooltip_text(status_icon, "Salasaga - Capture active");
+
 	// Free the mouse cursor object
 	XFreeCursor(x_display, new_cursor);
 
@@ -406,7 +409,7 @@ void menu_screenshots_capture(void)
 
 	// Local variables
 	HINSTANCE			dll_handle;
-	HOOKPROC			hook_address; 
+	HOOKPROC			hook_address;
 
 	// Variables for the error handler
 	DWORD				last_error;
@@ -422,7 +425,7 @@ void menu_screenshots_capture(void)
 			last_error = GetLastError();
 			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, last_error,
 					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &message_buffer_pointer, 0, NULL);
-			wsprintf(text_buffer, _("Keyboard hook LoadLibrary failed with error %d: %s"), last_error, message_buffer_pointer); 
+			wsprintf(text_buffer, _("Keyboard hook LoadLibrary failed with error %d: %s"), last_error, message_buffer_pointer);
 			MessageBox(NULL, text_buffer, "Error", MB_OK);
 			LocalFree(message_buffer_pointer);
 			exit(98);
@@ -433,7 +436,7 @@ void menu_screenshots_capture(void)
 			last_error = GetLastError();
 			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, last_error,
 					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &message_buffer_pointer, 0, NULL);
-			wsprintf(text_buffer, _("Keyboard hook GetProcAddress failed with error %d: %s"), last_error, message_buffer_pointer); 
+			wsprintf(text_buffer, _("Keyboard hook GetProcAddress failed with error %d: %s"), last_error, message_buffer_pointer);
 			MessageBox(NULL, text_buffer, "Error", MB_OK);
 			LocalFree(message_buffer_pointer);
 			exit(97);
@@ -445,10 +448,10 @@ void menu_screenshots_capture(void)
 			last_error = GetLastError();
 			FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM, NULL, last_error,
 					MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), (LPTSTR) &message_buffer_pointer, 0, NULL);
-			wsprintf(text_buffer, _("Keyboard hooking failed with error %d: %s"), last_error, message_buffer_pointer); 
+			wsprintf(text_buffer, _("Keyboard hooking failed with error %d: %s"), last_error, message_buffer_pointer);
 			MessageBox(NULL, text_buffer, "Error", MB_OK);
 			LocalFree(message_buffer_pointer);
-			exit(99);	    
+			exit(99);
 		}
 
 		// Add a message to the status bar so the user gets visual feedback
