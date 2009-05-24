@@ -11,6 +11,7 @@
  * Turned the status bar into a progress bar, plus updated functions to use it.
  * Text layers can now be any of the DejaVu fonts.
  * Several minor improvements for the time line area.
+ * Added a status icon.
  * Minor bug fixes.
 
 
