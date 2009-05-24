@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Background screen capture process
- * 
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -94,7 +94,7 @@ GdkPixbuf *non_win_take_screenshot(Window win, gint x_off, gint x_len, gint y_of
 	}
 
 	// Generate a beep
-	gdk_beep();
+	gdk_window_beep(window);
 
 	// Free memory used in this function
 	g_string_free(message, TRUE);
@@ -166,7 +166,7 @@ HBITMAP win_take_screenshot(HWND desktop_window_handle, gint x_off, gint x_len, 
 		g_string_printf(message, "%s CA14: %s", _("Error"), _("Screenshot BitBlt failed."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
-		exit(12);		
+		exit(12);
 	}
 
 	// Free memory used in this function
@@ -181,6 +181,7 @@ HBITMAP win_take_screenshot(HWND desktop_window_handle, gint x_off, gint x_len, 
 gint main(gint argc, gchar *argv[])
 {
 	// Local variables
+	gint				delay_counter;				// Simple loop counter
 	const gchar			*dir_entry;					// Holds a file name
 	GDir				*dir_ptr;					// Pointer to the directory entry structure
 	GSList				*entries = NULL;			// Holds a list of screen shot file names
@@ -204,6 +205,8 @@ gint main(gint argc, gchar *argv[])
 	GString				*validated_string;			// Receives known good strings from the validation function
 	gint				x_offset, x_length;			// Values from the lock file
 	gint				y_offset, y_length;			// Values from the lock file
+
+	gint				delay_time = 5;				// The number of seconds to delay before triggering a screenshot
 
 #ifndef _WIN32
 	// Non-windows only variables
@@ -258,7 +261,7 @@ gint main(gint argc, gchar *argv[])
 	g_free(full_file_name);
 
 	// ** Read parameters from the lock file **
-	
+
 	// Reset the usable input flag
 	usable_input = TRUE;
 
@@ -366,6 +369,13 @@ gint main(gint argc, gchar *argv[])
 	// Close the lock file
 	g_key_file_free(lock_file);
 
+	// Delay for the requested number of seconds before the screenshot
+	for (delay_counter = 0; delay_counter < delay_time; delay_counter++)
+	{
+		// Delay for 1 second
+		g_usleep(1000000);
+	}
+
 	// Take screenshot
 #ifdef _WIN32
 	// Windows only code
@@ -443,7 +453,7 @@ gint main(gint argc, gchar *argv[])
 		gint		tmp_int;						// Temporary integer
 
 		entries = g_slist_sort(entries, (GCompareFunc) strcmp);
-		
+
 		// Get the highest numbered suffix (it's the last entry after sorting)
 		highest_entry = g_slist_last(entries);
 		suffix = g_string_assign(suffix, highest_entry->data);
@@ -455,7 +465,7 @@ gint main(gint argc, gchar *argv[])
 		tmp_int++;
 		g_string_printf(suffix, "%0*u", 4, tmp_int);
 
-		// Free the NULL terminated arrays of strings		
+		// Free the NULL terminated arrays of strings
 		g_strfreev(tmp_strings);
 		g_strfreev(tmp_strings2);
 	}
