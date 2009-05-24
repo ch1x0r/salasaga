@@ -28,6 +28,9 @@
 #include <gtk/gtk.h>
 
 #ifndef _WIN32
+	// libintl.h is required here
+	#include <libintl.h>
+
 	// Non-windows code
 	#include <gconf/gconf.h>
 	#include <libgnome/libgnome.h>
