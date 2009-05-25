@@ -386,11 +386,51 @@ gint main(gint argc, gchar *argv[])
 	// Close the lock file
 	g_key_file_free(lock_file);
 
+	// If there is a delay of greater than 1 second, then do a count down
+	if (1 < screenshot_delay)
+	{
+		g_string_printf(message, "Screenshot in %u seconds", screenshot_delay);
+		status_notify = notify_notification_new(message->str, NULL, NULL, NULL);
+	}
+
 	// Delay for the requested number of seconds before the screenshot
 	for (delay_counter = 0; delay_counter < screenshot_delay; delay_counter++)
 	{
-		// Delay for 1 second
-		g_usleep(1000000);
+		// If appropriate, update the notification time
+		if (1 < screenshot_delay)
+		{
+			// Display the updated count down time
+			notify_notification_show(status_notify, &error);
+
+			// Delay for 1/2 second
+			g_usleep(500000);
+
+			// Delay for another 1/2 second if this isn't the last update of the count down
+			if (delay_counter < screenshot_delay - 1)
+			{
+				g_usleep(500000);
+			}
+
+			// Update the notification time
+			g_string_printf(message, "Screenshot in %u seconds", screenshot_delay - delay_counter - 1);
+			notify_notification_update(status_notify, message->str, NULL, NULL);
+
+		} else
+		{
+			// Delay for 1 second
+			g_usleep(1000000);
+		}
+	}
+
+	// Remove the notification half a second before the screenshot is taken,
+	// so the notification message can be captured in the screenshot itself
+	if (1 < screenshot_delay)
+	{
+		// Remove the notification message
+		notify_notification_close(status_notify, &error);
+
+		// Delay for 1/2 second
+		g_usleep(500000);
 	}
 
 	// Take screenshot
@@ -412,10 +452,23 @@ gint main(gint argc, gchar *argv[])
 		exit(2);
 	}
 
-	// Visually let the user know the screenshot was taken
-	status_notify = notify_notification_new("Screenshot taken", NULL, NULL, NULL);
-	notify_notification_set_urgency(status_notify, NOTIFY_URGENCY_CRITICAL);
+	// * Visually let the user know the screenshot was taken *
+	if (1 < screenshot_delay)
+	{
+		// Update the existing status notification message
+		notify_notification_update(status_notify, "Screenshot taken", NULL, NULL);
+	} else
+	{
+		// Create a new status notification message
+		status_notify = notify_notification_new("Screenshot taken", NULL, NULL, NULL);
+	}
+
+	// Display the notification message
 	notify_notification_show(status_notify, &error);
+
+	// Delay for 2 seconds then remove the notification
+	g_usleep(2000000);
+	notify_notification_close(status_notify, &error);
 
 	// Check if the output folder exists
 	if (!(dir_ptr = g_dir_open(directory->str, 0, &error)))
