@@ -63,6 +63,7 @@ validatation_entry		valid_fields[] =
 	{ PROJECT_VERSION,		N_("Version number of the project file"),	V_FLOAT_UNSIGNED,	V_NONE,		0,		4.3 },
 	{ PROJECT_WIDTH,		N_("Width of this project"),				V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ RESOLUTION,			N_("An X * Y resolution value"),			V_RESOLUTION,		V_NONE,		0,		16 },
+	{ SCREENSHOT_DELAY,		N_("Number of seconds to delay a screenshot"),	V_INT_UNSIGNED,		V_NONE,		0,		60 },
 	{ SCREENSHOT_HEIGHT,	N_("Height for next screenshot"),			V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ SCREENSHOT_WIDTH,		N_("Width for next screenshot"),			V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ SHOW_CONTROL_BAR,		N_("Include control bar in exported swf"),	V_CHAR,				V_NONE,		0,		5 },
