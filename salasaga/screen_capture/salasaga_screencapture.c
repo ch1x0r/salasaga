@@ -389,7 +389,7 @@ gint main(gint argc, gchar *argv[])
 	// If there is a delay of greater than 1 second, then do a count down
 	if (1 < screenshot_delay)
 	{
-		g_string_printf(message, "Screenshot in %u seconds", screenshot_delay);
+		g_string_printf(message, _("Screenshot in %u seconds"), screenshot_delay);
 		status_notify = notify_notification_new(message->str, NULL, NULL, NULL);
 	}
 
@@ -412,7 +412,7 @@ gint main(gint argc, gchar *argv[])
 			}
 
 			// Update the notification time
-			g_string_printf(message, "Screenshot in %u seconds", screenshot_delay - delay_counter - 1);
+			g_string_printf(message, _("Screenshot in %u seconds"), screenshot_delay - delay_counter - 1);
 			notify_notification_update(status_notify, message->str, NULL, NULL);
 
 		} else
@@ -456,11 +456,11 @@ gint main(gint argc, gchar *argv[])
 	if (1 < screenshot_delay)
 	{
 		// Update the existing status notification message
-		notify_notification_update(status_notify, "Screenshot taken", NULL, NULL);
+		notify_notification_update(status_notify, _("Screenshot taken"), NULL, NULL);
 	} else
 	{
 		// Create a new status notification message
-		status_notify = notify_notification_new("Screenshot taken", NULL, NULL, NULL);
+		status_notify = notify_notification_new(_("Screenshot taken"), NULL, NULL, NULL);
 	}
 
 	// Display the notification message
