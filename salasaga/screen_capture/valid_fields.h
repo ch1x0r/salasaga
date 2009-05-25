@@ -32,13 +32,13 @@ extern "C" {
 // The validation entries for each input field in the application
 validatation_entry		valid_fields[] =
 {
-	{ FOLDER_PATH,			N_("Full path to a folder"),			V_CHAR,				V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
-	{ PROJECT_NAME,			N_("Name of this project"),				V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
+	{ FOLDER_PATH,			N_("Full path to a folder"),					V_CHAR,				V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
+	{ PROJECT_NAME,			N_("Name of this project"),						V_CHAR,				V_HYPENS | V_SPACES | V_UNDERSCORES,					0,		20 },
 	{ SCREENSHOT_DELAY,		N_("Number of seconds to delay a screenshot"),	V_INT_UNSIGNED,		V_NONE,		0,		60 },
-	{ SCREENSHOT_HEIGHT,	N_("Height for next screenshot"),		V_INT_UNSIGNED,		V_NONE,		0,		4096 },
-	{ SCREENSHOT_WIDTH,		N_("Width for next screenshot"),		V_INT_UNSIGNED,		V_NONE,		0,		4096 },
-	{ SCREENSHOT_X_OFFSET,	N_("X offset for next screenshot"),		V_INT_UNSIGNED,		V_NONE,		0,		4096 },
-	{ SCREENSHOT_Y_OFFSET,	N_("Y offset for next screenshot"),		V_INT_UNSIGNED,		V_NONE,		0,		4096 }
+	{ SCREENSHOT_HEIGHT,	N_("Height for next screenshot"),				V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ SCREENSHOT_WIDTH,		N_("Width for next screenshot"),				V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ SCREENSHOT_X_OFFSET,	N_("X offset for next screenshot"),				V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ SCREENSHOT_Y_OFFSET,	N_("Y offset for next screenshot"),				V_INT_UNSIGNED,		V_NONE,		0,		4096 }
 };
 
 #ifdef __cplusplus
