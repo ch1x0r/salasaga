@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user selects Edit -> Preferences from the top menu 
- * 
+ * Salasaga: Function called when the user selects Edit -> Preferences from the top menu
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -65,14 +65,15 @@ void menu_edit_preferences(void)
 	GString				*valid_output_resolution;			// Receives the new default output resolution once validated
 	guint				valid_preview_width = 0;			// Receives the new film strip thumbnail width once validated
 	GString				*valid_project_folder;				// Receives the new default project folder once validated
+	guint				valid_screenshot_delay = 0;			// Receives the new screenshot delay once validated
 	GString				*valid_screenshot_folder;			// Receives the new screenshot folder once validated
 	gfloat				valid_slide_duration = 0;			// Receives the new default slide duration once validated
 	GString				*valid_zoom_level;					// Receives the new default zoom level once validated
 	gfloat				*validated_gfloat;					// Receives known good gfloat values from the validation function
-	guint				*validated_guint;					// Receives known good guint values from the validation function 
+	guint				*validated_guint;					// Receives known good guint values from the validation function
 	GString				*validated_string;					// Receives known good strings from the validation function
 
-	
+
 	GtkWidget			*label_default_project_folder;		// Default Project Folder
 	GtkWidget			*button_default_project_folder;		//
 
@@ -105,6 +106,9 @@ void menu_edit_preferences(void)
 
 	GtkWidget			*label_default_bg_colour;			// Default background colour
 	GtkWidget			*button_default_bg_colour;			// Color button
+
+	GtkWidget			*label_screenshot_delay;			// Screenshot delay time
+	GtkWidget			*button_screenshot_delay;			//
 
 	GtkWidget			*check_metacity_key_bind;			// Label widget
 
@@ -221,6 +225,15 @@ void menu_edit_preferences(void)
 	button_default_bg_colour = gtk_color_button_new_with_color(&default_bg_colour);
 	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(button_default_bg_colour), TRUE);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_bg_colour), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	app_row_counter = app_row_counter + 1;
+
+	// Screenshot delay time
+	label_screenshot_delay = gtk_label_new(_("Number of seconds for screenshot delay: "));
+	gtk_misc_set_alignment(GTK_MISC(label_screenshot_delay), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_delay), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	button_screenshot_delay = gtk_spin_button_new_with_range(valid_fields[SCREENSHOT_DELAY].min_value, valid_fields[SCREENSHOT_DELAY].max_value, 1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_screenshot_delay), screenshot_delay_time);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_delay), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Non-metacity key bind warning
@@ -398,6 +411,20 @@ void menu_edit_preferences(void)
 			g_string_free(validated_string, TRUE);
 			validated_string = NULL;
 		}
+
+		// Retrieve the new screenshot delay input
+		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_screenshot_delay));
+		validated_guint = validate_value(SCREENSHOT_DELAY, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			g_string_printf(message, "%s ED427: %s", _("Error"), _("There was something wrong with the screenshot delay value.  Please try again."));
+			display_warning(message->str);
+			usable_input = FALSE;
+		} else
+		{
+			valid_screenshot_delay = *validated_guint;
+			g_free(validated_guint);
+		}
 	} while (FALSE == usable_input);
 
 	// * We only get here after all input is considered valid *
@@ -457,6 +484,9 @@ void menu_edit_preferences(void)
 
 	// Default Background Colour
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(button_default_bg_colour), &default_bg_colour);
+
+	// Screenshot delay
+	screenshot_delay_time = valid_screenshot_delay;
 
 	// Get the Metacity key bind warning value
 	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_metacity_key_bind)))

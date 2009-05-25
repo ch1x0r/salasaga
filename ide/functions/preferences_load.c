@@ -69,12 +69,13 @@ gboolean preferences_load()
 	guint				valid_output_height = 0;	// Receives the new default output height once validated
 	guint				valid_output_width = 0;		// Receives the new default output width once validated
 	guint				valid_preview_width = 0;	// Receives the new film strip thumbnail width once validated
+	GString				*valid_project_folder;		// Receives the new default project folder once validated
 	guint				valid_project_height = 0;	// Receives the new project height once validated
 	guint				valid_project_width = 0;	// Receives the new project width once validated
-	GString				*valid_project_folder;		// Receives the new default project folder once validated
+	guint				valid_screenshot_delay;		// Receives the new screenshot delay once validated
+	GString				*valid_screenshot_folder;	// Receives the new screenshot folder once validated
 	gfloat				valid_slide_duration = 0;	// Receives the new default slide duration once validated
 	GString				*valid_zoom_level;			// Receives the new default zoom level once validated
-	GString				*valid_screenshot_folder;	// Receives the new screenshot folder once validated
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
@@ -354,6 +355,28 @@ gboolean preferences_load()
 		valid_icon_height = 30;
 	}
 
+	// Retrieve the new screenshot delay input
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/screenshot_delay", NULL);
+	if (0 != guint_val)
+	{
+		validated_guint = validate_value(SCREENSHOT_DELAY, V_INT_UNSIGNED, &guint_val);
+		if (NULL == validated_guint)
+		{
+			g_string_printf(message, "%s ED428: %s", _("Error"), _("There was something wrong with the screenshot delay value stored in the preferences.  Using default preferences instead."));
+			display_warning(message->str);
+			usable_input = FALSE;
+		} else
+		{
+			valid_screenshot_delay = *validated_guint;
+			g_free(validated_guint);
+		}
+	}
+	else
+	{
+		// No screenshot delay value stored, so we use a reasonable default
+		valid_screenshot_delay = 5;
+	}
+
 	// Check if the application should start maximised or not
 	should_maximise = gconf_engine_get_bool(gconf_engine, "/apps/salasaga/defaults/window_maximised", NULL);
 
@@ -424,6 +447,9 @@ gboolean preferences_load()
 
 	// Set the icon height
 	icon_height = valid_icon_height;
+
+	// Set the screenshot delay
+	screenshot_delay_time = valid_screenshot_delay;
 
 	// Set the non-metacity key bind warning
 	metacity_key_warning = should_keybind_warn;
@@ -751,6 +777,26 @@ gboolean preferences_load()
 			RegCloseKey(hkey);
 		}
 
+		// Retrieve the value for the screenshot delay
+		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
+		{
+			// Value is missing, so warn the user and set a sensible default
+			missing_keys = TRUE;
+			screenshot_delay_time = 5;
+		} else
+		{
+			// Retrieve the value
+			buffer_size = sizeof(buffer_data);
+			return_code = RegQueryValueExA(hkey, "screenshot_delay", NULL, NULL, buffer_ptr, &buffer_size);
+			if (ERROR_SUCCESS == return_code)
+			{
+				screenshot_delay_value = atoi(buffer_ptr);
+			}
+
+			// Close the registry key
+			RegCloseKey(hkey);
+		}
+
 		// Retrieve the value for the initial window maximisation
 		if (RegOpenKeyExA(HKEY_CURRENT_USER, "Software\\Salasaga\\defaults", 0, KEY_QUERY_VALUE, &hkey))
 		{
@@ -773,7 +819,7 @@ gboolean preferences_load()
 		// If some of the registry keys were missing then alert the user
 		if (TRUE == missing_keys)
 		{
-			display_warning(_("Some of the project default registry keys are missing\n"));
+			display_warning(_("Some of the application preference registry keys are missing.  Using defaults."));
 		}
 	}
 	else

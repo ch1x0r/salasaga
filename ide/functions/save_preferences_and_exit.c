@@ -83,6 +83,7 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_green", default_bg_colour.green, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_blue", default_bg_colour.blue, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/icon_height", icon_height, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/screenshot_delay", screenshot_delay_time, NULL);
 	gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/metacity_key_warning", metacity_key_warning, NULL);
 
 	// * Save the present window maximised state (i.e. if we're maximised or not) *
@@ -276,6 +277,11 @@ void save_preferences_and_exit(void)
 	g_string_printf(tmp_gstring, "%d", icon_height);
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "icon_height", 0, REG_SZ, tmp_gstring->str, string_size);
+
+	// Set the value for the screenshot delay
+	g_string_printf(tmp_gstring, "%u", screenshot_delay);
+	string_size = (tmp_gstring->len) + 1;
+	return_code = RegSetValueEx(hkey, "screenshot_delay", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the window maximisation to TRUE (hard coded for now)
 	// fixme4: We should make this dynamic rather than hard coded on
