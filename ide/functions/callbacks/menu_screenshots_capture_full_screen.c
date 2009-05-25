@@ -219,6 +219,7 @@ void menu_screenshots_capture_full_screen(void)
 	g_key_file_set_integer(lock_file, "Project", "X_Length", capture_width);  // Width of screen area to grab
 	g_key_file_set_integer(lock_file, "Project", "Y_Offset", capture_y);  // Top left Y coordinate of screen area
 	g_key_file_set_integer(lock_file, "Project", "Y_Length", capture_height);  // Height of screen area to grab
+	g_key_file_set_integer(lock_file, "Project", "Screenshot_Delay", screenshot_delay_time);  // Number of seconds to delay the screenshot capture
 
 	// Create IO channel for writing to
 	output_file = g_io_channel_new_file(full_file_name, "w", &error);
