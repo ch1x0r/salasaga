@@ -131,8 +131,9 @@ GdkRectangle			resize_handles_rect[8];		// Contains the onscreen offsets and siz
 guint					resize_handles_status;		// Are the layer resize handles active, in progress, etc
 guint					resize_handle_size = 6;		// Size of the resize handles
 GtkWidget				*right_side;				// Widget for the right side area
-gboolean				screenshots_enabled = FALSE;  // Toggle for whether to enable screenshots
 gint					screenshot_command_num = -1;  // The metacity run command number used for the screenshot key
+guint					screenshot_delay_time = 5;	// The number of seconds the screenshot trigger is delayed
+gboolean				screenshots_enabled = FALSE;  // Toggle for whether to enable screenshots
 gboolean				show_control_bar = TRUE;	// Toggle for whether to display the control bar in swf output
 GList					*slides = NULL;				// Linked list holding the slide info
 guint					start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations

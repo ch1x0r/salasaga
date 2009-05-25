@@ -188,6 +188,7 @@ gint main(gint argc, gchar *argv[])
 	GKeyFile			*lock_file;					// Pointer to the lock file structure
 	GString				*message;					// Used to construct message strings
 	GString				*name, *directory;			// GStrings from the lock file
+	gint				screenshot_delay = 5;		// The number of seconds to delay before triggering a screenshot
 	gboolean			screenshots_exist = FALSE;	// Switch to track if other screenshots already exist
 	GString				*short_file_name;			// Name of the file to save as
 	NotifyNotification	*status_notify;				// Status message
@@ -198,6 +199,7 @@ gint main(gint argc, gchar *argv[])
 	GString				*valid_screenshot_folder;	// Receives the screenshot folder once validated
 	guint				valid_height;				// Receives the screenshot height once validated
 	guint				valid_width = 0;			// Receives the screenshot width once validated
+	guint				valid_screenshot_delay = 0;	// Receives the screenshot delay time once validated
 	guint				valid_x_offset = 0;			// Receives the screenshot x offset once validated
 	guint				valid_y_offset = 0;			// Receives the screenshot y offset once validated
 	guint				*validated_guint;			// Receives known good guint values from the validation function
@@ -205,7 +207,6 @@ gint main(gint argc, gchar *argv[])
 	gint				x_offset, x_length;			// Values from the lock file
 	gint				y_offset, y_length;			// Values from the lock file
 
-	gint				delay_time = 5;				// The number of seconds to delay before triggering a screenshot
 
 #ifndef _WIN32
 	// Non-windows only variables
@@ -347,6 +348,19 @@ gint main(gint argc, gchar *argv[])
 		g_free(validated_guint);
 	}
 
+	// Get the screenshot delay
+	validated_guint = validate_value(SCREENSHOT_DELAY, V_CHAR, g_key_file_get_string(lock_file, "Project", "Screenshot_Delay", NULL));
+	if (NULL == validated_guint)
+	{
+		g_string_printf(message, "%s CA29: %s", _("Error"), _("There was something wrong with the screenshot delay value.  Aborting screenshot."));
+		display_warning(message->str);
+		usable_input = FALSE;
+	} else
+	{
+		valid_screenshot_delay = *validated_guint;
+		g_free(validated_guint);
+	}
+
 	// Abort if any of the input isn't valid
 	if (TRUE != usable_input)
 	{
@@ -361,6 +375,7 @@ gint main(gint argc, gchar *argv[])
 	x_length = valid_width;  // Width of screen area to grab
 	y_offset = valid_y_offset;  // Top left Y coordinate of screen area
 	y_length = valid_height;  // Height of screen area to grab
+	screenshot_delay = valid_screenshot_delay;  // Number of seconds to delay the screenshot by
 
 	// * Other potentially useful things to include *
 	// Which displays to grab, for multi-monitor display
@@ -372,7 +387,7 @@ gint main(gint argc, gchar *argv[])
 	g_key_file_free(lock_file);
 
 	// Delay for the requested number of seconds before the screenshot
-	for (delay_counter = 0; delay_counter < delay_time; delay_counter++)
+	for (delay_counter = 0; delay_counter < screenshot_delay; delay_counter++)
 	{
 		// Delay for 1 second
 		g_usleep(1000000);

@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Include file for structures and similar used throughout the code
- * 
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -83,6 +83,7 @@ enum
 {
 	FOLDER_PATH,
 	PROJECT_NAME,
+	SCREENSHOT_DELAY,
 	SCREENSHOT_HEIGHT,
 	SCREENSHOT_WIDTH,
 	SCREENSHOT_X_OFFSET,
