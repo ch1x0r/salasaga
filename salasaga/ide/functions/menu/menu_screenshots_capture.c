@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user selects Screenshots -> Capture from the top menu
+ * Salasaga: Function called when the user selects Screenshots -> Capture window from the top menu
  *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
@@ -351,11 +351,11 @@ void menu_screenshots_capture(void)
 	output_file = g_io_channel_new_file(full_file_name, "w", &error);
 	if (NULL == output_file)
 	{
-		// An error occured when opening the file for writing, so alert the user, and return to the calling routine indicating failure
+		// An error occurred when opening the file for writing, so alert the user, and return to the calling routine indicating failure
 
 		// Display a warning message using our function
 		g_string_printf(message, "%s ED16: ", _("Error"));
-		g_string_append_printf(message, _("An error '%s' occured when opening '%s' for writing."), error->message, full_file_name);
+		g_string_append_printf(message, _("An error '%s' occurred when opening '%s' for writing."), error->message, full_file_name);
 		display_warning(message->str);
 
 		// Free the memory allocated in this function
@@ -371,10 +371,10 @@ void menu_screenshots_capture(void)
 	return_value = g_io_channel_write_chars(output_file, tmp_gchar, strlen(tmp_gchar), &tmp_gsize, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
-		// * An error occured when writing to the output file, so alert the user, and return to the calling routine indicating failure *
+		// * An error occurred when writing to the output file, so alert the user, and return to the calling routine indicating failure *
 		// Display a warning message using our function
 		g_string_printf(message, "%s ED17: ", _("Error"));
-		g_string_append_printf(message, _("An error '%s' occured when writing data to the file '%s'."), error->message, full_file_name);
+		g_string_append_printf(message, _("An error '%s' occurred when writing data to the file '%s'."), error->message, full_file_name);
 		display_warning(message->str);
 
 		// Free the memory allocated in this function
@@ -389,9 +389,9 @@ void menu_screenshots_capture(void)
 	return_value = g_io_channel_shutdown(output_file, TRUE, &error);
 	if (G_IO_STATUS_ERROR == return_value)
 	{
-		// * An error occured when closing the output file, so alert the user, and return to the calling routine indicating failure *
+		// * An error occurred when closing the output file, so alert the user, and return to the calling routine indicating failure *
 		g_string_printf(message, "%s ED18: ", _("Error"));
-		g_string_append_printf(message, _("An error '%s' occured when closing the output file '%s'."), error->message, full_file_name);
+		g_string_append_printf(message, _("An error '%s' occurred when closing the output file '%s'."), error->message, full_file_name);
 		display_warning(message->str);
 
 		// Free the memory allocated in this function
