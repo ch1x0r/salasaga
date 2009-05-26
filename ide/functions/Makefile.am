@@ -98,6 +98,7 @@ salasaga_SOURCES = create_menu_bar.c \
 	slide/slide_move_down.c \
 	slide/slide_move_top.c \
 	slide/slide_move_up.c \
+	status_icon/create_status_icon.c \
 	widgets/time_line/time_line.c \
 	widgets/time_line/time_line_button_press_event.c \
 	widgets/time_line/time_line_button_release_event.c \

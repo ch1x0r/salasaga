@@ -71,6 +71,7 @@
 #include "functions/film_strip/create_film_strip.h"
 #include "functions/film_strip/film_strip_handle_changed.h"
 #include "functions/film_strip/film_strip_handle_released.h"
+#include "functions/status_icon/create_status_icon.h"
 #include "functions/working_area/create_working_area.h"
 #include "functions/working_area/event_size_allocate_received.h"
 
@@ -210,7 +211,6 @@ gint main(gint argc, gchar *argv[])
 	gint				num_formats;				// Used to determine if SVG images can be loaded
 	GtkWidget			*outer_box;					// Widget for the onscreen display
 	GtkLabel			*resolution_label;			// Widget for the resolution selector label
-	GString				*status_icon_path;			// Path to the status icon image
 	GSList				*supported_formats;			// Used to determine if SVG images can be loaded
 	GtkWidget			*toolbar;					// Widget for the toolbar
 	GdkScreen			*which_screen;				// Gets given the screen the monitor is on
@@ -366,12 +366,7 @@ gint main(gint argc, gchar *argv[])
 //	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(main_window), TRUE);  // Leave this commented out until the status bar can toggle Salasaga visible again
 
 	// Create the Salasaga status bar icon
-	status_icon_path = g_string_new(NULL);
-	g_string_printf(status_icon_path, "%s%c%s", STATUS_ICON_DIR, G_DIR_SEPARATOR, "salasaga-icon.png");
-	status_icon = gtk_status_icon_new_from_file(status_icon_path->str);
-	gtk_status_icon_set_tooltip_text(status_icon, "Salasaga - Not yet capturing");
-	gtk_status_icon_set_visible(status_icon, TRUE);
-	g_string_free(status_icon_path, TRUE);
+	create_status_icon();
 
 #ifndef _WIN32  // Non-windows check
 	// Initialise sound
