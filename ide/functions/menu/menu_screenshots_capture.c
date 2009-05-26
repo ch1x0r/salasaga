@@ -100,6 +100,9 @@ void menu_screenshots_capture(void)
 	// Minimise the main window so the user can choose another application
 	gtk_window_iconify(GTK_WINDOW(main_window));
 
+	// Hide the application from the task bar
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(main_window), TRUE);
+
 	// * Determine the area of screen covered by the window that the user wants to capture *
 
 	// Get the default X11 display window and screen
