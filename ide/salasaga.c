@@ -363,7 +363,6 @@ gint main(gint argc, gchar *argv[])
 	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
 	gtk_window_set_default_size(GTK_WINDOW(main_window), 800, 600);
 	gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_CENTER);
-//	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(main_window), TRUE);  // Leave this commented out until the status bar can toggle Salasaga visible again
 
 	// Create the Salasaga status bar icon
 	create_status_icon();
