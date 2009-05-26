@@ -11,7 +11,7 @@
  * Turned the status bar into a progress bar, plus updated functions to use it.
  * Text layers can now be any of the DejaVu fonts.
  * Several minor improvements for the time line area.
- * Added a status icon.
+ * Added a status bar icon.
  * Added a "screenshot delay" preference, in seconds, which can range from 0 to 60.
  * Updated the screen capture to display visual notification messages when screenshots are
    taken.
