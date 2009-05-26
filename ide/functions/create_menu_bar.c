@@ -157,7 +157,7 @@ void create_menu_bar()
 	accel_group = gtk_accel_group_new();
 
 	// Attach the accelerator group to the main window
-	gtk_window_add_accel_group(GTK_WINDOW(main_window),accel_group);
+	gtk_window_add_accel_group(GTK_WINDOW(main_window), accel_group);
 
 	// Create the ItemFactory menu bar
 	menu_bar = gtk_item_factory_new(GTK_TYPE_MENU_BAR, "<main>", accel_group);
