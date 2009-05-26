@@ -35,19 +35,18 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "status_icon_activate.h"
+#include "status_icon_popup.h"
 
 
 void create_status_icon()
 {
 	// Local variables
-	GtkWidget			*status_icon_menu;					// Widget holding the status bar icon's menu
-	GtkWidget			*status_icon_menu_item_display;		// An item in the status bar icon menu
-	GtkWidget			*status_icon_menu_item_screenshot;	// An item in the status bar icon menu
-	GtkWidget			*status_icon_menu_item_quit;		// An item in the status bar icon menu
 	GString				*status_icon_path;					// Path to the status icon image
+	gulong				status_icon_signal_activate;		// Holds the signal handle for the status bar icon activation callback function
+	gulong				status_icon_signal_popup;			// Holds the signal handle for the status bar icon popup callback function
 
-
-	// Initialise stuff
+	// Initialisation
 	status_icon_path = g_string_new(NULL);
 
 	// Create the status bar icon
@@ -57,23 +56,7 @@ void create_status_icon()
 	gtk_status_icon_set_visible(status_icon, TRUE);
 	g_string_free(status_icon_path, TRUE);
 
-	// Create the right click pop-up menu for the status bar icon
-	status_icon_menu = gtk_menu_new();
-	gtk_menu_set_title(GTK_MENU(status_icon_menu), "Salasaga");
-
-	// Create the menu items
-	status_icon_menu_item_display = gtk_menu_item_new_with_mnemonic("Display");
-	status_icon_menu_item_screenshot = gtk_menu_item_new_with_mnemonic("Take Screenshot");
-	status_icon_menu_item_quit = gtk_menu_item_new_with_mnemonic("Quit");
-
-	// Add the menu items to the menu
-	gtk_menu_shell_append(GTK_MENU_SHELL(status_icon_menu), GTK_WIDGET(status_icon_menu_item_display));
-	gtk_menu_shell_append(GTK_MENU_SHELL(status_icon_menu), GTK_WIDGET(status_icon_menu_item_screenshot));
-	gtk_menu_shell_append(GTK_MENU_SHELL(status_icon_menu), GTK_WIDGET(status_icon_menu_item_quit));
-
-	// Make the menu pop up
-//	gtk_menu_popup(GTK_MENU(status_icon_menu), NULL, NULL, NULL, NULL, 0, GDK_CURRENT_TIME);
-
-	// Connect the status bar icon menu to the status bar icon
-//	gtk_status_icon_position_menu(GTK_MENU(status_icon_menu), 0, 0, FALSE, status_icon);
+	// Connect the signal handlers
+	status_icon_signal_activate = g_signal_connect(G_OBJECT(status_icon), "activate", G_CALLBACK(status_icon_activate), (gpointer) NULL);
+	status_icon_signal_popup = g_signal_connect(G_OBJECT(status_icon), "popup-menu", G_CALLBACK(status_icon_popup), (gpointer) NULL);
 }
