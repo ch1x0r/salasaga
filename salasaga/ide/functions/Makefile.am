@@ -24,6 +24,7 @@ salasaga_SOURCES = create_menu_bar.c \
 	cairo/calculate_text_object_size.c \
 	cairo/create_cairo_pixbuf_pattern.c \
 	callbacks/menu_screenshots_capture_full_screen.c \
+	callbacks/track_window_state.c \
 	conversion/base64_decode.c \
 	conversion/base64_encode.c \
 	dialog/display_dialog_empty.c \

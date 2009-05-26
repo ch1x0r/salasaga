@@ -35,16 +35,28 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../callbacks/track_window_state.h"
 #include "../quit_event.h"
-
 
 gint status_icon_activate(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
-	// Restore the window if it's minimised
-	gtk_window_deiconify(GTK_WINDOW(main_window));
+	// Check if the window is iconified or not
+	if (TRUE == is_window_iconified())
+	{
+		// De-iconify the window
+		gtk_window_deiconify(GTK_WINDOW(main_window));
 
-	// Add the application back to the task bar
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(main_window), FALSE);
+		// Display the application in the task bar
+		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(main_window), FALSE);
+
+	} else
+	{
+		// Iconify the window
+		gtk_window_iconify(GTK_WINDOW(main_window));
+
+		// Hide the application from the task bar
+		gtk_window_set_skip_taskbar_hint(GTK_WINDOW(main_window), TRUE);
+	}
 
 	return FALSE;
 }

@@ -67,6 +67,7 @@
 #include "functions/quit_event.h"
 #include "functions/resolution_selector_changed.h"
 #include "functions/zoom_selector_changed.h"
+#include "functions/callbacks/track_window_state.h"
 #include "functions/dialog/display_warning.h"
 #include "functions/film_strip/create_film_strip.h"
 #include "functions/film_strip/film_strip_handle_changed.h"
@@ -366,6 +367,9 @@ gint main(gint argc, gchar *argv[])
 
 	// Create the Salasaga status bar icon
 	create_status_icon();
+
+	// Attach a signal handler to the main window, so we can track when the window is iconified and deiconfied
+	g_signal_connect(G_OBJECT(main_window), "window-state-event", G_CALLBACK(window_state_changed), (gpointer) NULL);
 
 #ifndef _WIN32  // Non-windows check
 	// Initialise sound
