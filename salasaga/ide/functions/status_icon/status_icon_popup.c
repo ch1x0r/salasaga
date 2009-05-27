@@ -87,7 +87,7 @@ gint status_icon_popup(GtkWidget *widget, GdkEvent *event, gpointer data)
 	gtk_widget_show_all(GTK_WIDGET(status_icon_menu));
 
 	// Make the menu pop up
-	gtk_menu_popup(GTK_MENU(status_icon_menu), NULL, NULL, gtk_status_icon_position_menu, NULL, 0, gtk_get_current_event_time() - 1000);
+	gtk_menu_popup(GTK_MENU(status_icon_menu), NULL, NULL, gtk_status_icon_position_menu, NULL, 0, gtk_get_current_event_time());
 
 	return FALSE;
 }
