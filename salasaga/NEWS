@@ -16,6 +16,7 @@
  * Updated the screen capture to display visual notification messages when screenshots are
    taken.
  * Updated to work on Centos 5.3.
+ * Added a dependency on libnotify.
  * Minor bug fixes.
 
 
