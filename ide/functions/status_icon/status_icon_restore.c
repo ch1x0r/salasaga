@@ -41,8 +41,8 @@
 
 gint status_icon_restore(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
-	// De-iconify the window
-	gtk_window_deiconify(GTK_WINDOW(main_window));
+	// De-iconify the window and present it to the user
+	gtk_window_present(GTK_WINDOW(main_window));
 
 	// Display the application in the task bar
 	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(main_window), FALSE);
