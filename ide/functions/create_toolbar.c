@@ -146,13 +146,13 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
-		main_toolbar_icons[CROP_ALL] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+		main_toolbar_icons[DIMENSIONS] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 		g_object_unref(GDK_PIXBUF(tmp_gdk_pixbuf));
 	}
-	main_toolbar_items[CROP_ALL] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[CROP_ALL]), _("Dimensions"));
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CROP_ALL]), main_toolbar_tooltips, _("Adjust the dimensions of the project"), "Private");
-	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[CROP_ALL], CROP_ALL);
-	main_toolbar_signals[CROP_ALL] = g_signal_connect(G_OBJECT(main_toolbar_items[CROP_ALL]), "clicked", G_CALLBACK(project_adjust_dimensions), (gpointer) NULL);
+	main_toolbar_items[DIMENSIONS] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[DIMENSIONS]), _("Dimensions"));
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[DIMENSIONS]), main_toolbar_tooltips, _("Adjust the dimensions of the project"), "Private");
+	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[DIMENSIONS], DIMENSIONS);
+	main_toolbar_signals[DIMENSIONS] = g_signal_connect(G_OBJECT(main_toolbar_items[DIMENSIONS]), "clicked", G_CALLBACK(project_adjust_dimensions), (gpointer) NULL);
 
 	// Add a spacer to the toolbar
 	main_toolbar_items[SEPARATOR_2] = gtk_separator_tool_item_new();
@@ -182,12 +182,12 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 		g_object_unref(GDK_PIXBUF(tmp_gdk_pixbuf));
 	}
 
-	// Create the grayed out Crop All icon
+	// Create the grayed out Dimensions icon
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop_grayed", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
-		main_toolbar_icons_gray[CROP_ALL] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
+		main_toolbar_icons_gray[DIMENSIONS] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 		g_object_unref(GDK_PIXBUF(tmp_gdk_pixbuf));
 	}
 

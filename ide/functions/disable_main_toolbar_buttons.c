@@ -40,12 +40,12 @@
 void disable_main_toolbar_buttons(void)
 {
 	// Disable the Adjust Dimensions icon
-	if (NULL != main_toolbar_icons[CROP_ALL])
+	if (NULL != main_toolbar_icons[DIMENSIONS])
 	{
-		g_object_ref(main_toolbar_icons[CROP_ALL]);
-		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[CROP_ALL]), main_toolbar_icons_gray[CROP_ALL]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CROP_ALL]), main_toolbar_tooltips, _("Dimension adjustment disabled: No project loaded"), "Private");
-		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[CROP_ALL]));
+		g_object_ref(main_toolbar_icons[DIMENSIONS]);
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[DIMENSIONS]), main_toolbar_icons_gray[DIMENSIONS]);
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[DIMENSIONS]), main_toolbar_tooltips, _("Dimension adjustment disabled: No project loaded"), "Private");
+		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[DIMENSIONS]));
 	}
 
 	// Disable the Export Flash icon
@@ -58,12 +58,12 @@ void disable_main_toolbar_buttons(void)
 	}
 
 	// Disconnect the main toolbar signal handlers
-	if (0 != main_toolbar_signals[CROP_ALL])
+	if (0 != main_toolbar_signals[DIMENSIONS])
 	{
-		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[CROP_ALL]), main_toolbar_signals[CROP_ALL]);
+		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[DIMENSIONS]), main_toolbar_signals[DIMENSIONS]);
 		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[EXPORT_FLASH]), main_toolbar_signals[EXPORT_FLASH]);
 
 		// Flag the signal handlers as unused (used by enable_layer_toolbar_buttons())
-		main_toolbar_signals[CROP_ALL] = 0;
+		main_toolbar_signals[DIMENSIONS] = 0;
 	}
 }
