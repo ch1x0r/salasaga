@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user selects Project -> Properties from the top menu 
- * 
+ * Salasaga: Function called when the user selects Project -> Properties from the top menu
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -71,7 +71,7 @@ void menu_project_properties(void)
 	GtkWidget			*label_output_folder;		// Output folder
 	GtkWidget			*button_output_folder;		//
 
-	GtkWidget			*label_frames_per_second;	// Frames per second 
+	GtkWidget			*label_frames_per_second;	// Frames per second
 	GtkWidget			*button_frames_per_second;	//
 
 	GtkWidget			*label_project_width;		// Project width
@@ -95,7 +95,7 @@ void menu_project_properties(void)
 	// * Information button variables *
 
 	GtkWidget			*label_info_text;			// Label for the information text field
-	GtkTextBuffer		*text_buffer;				// Temporary text buffer the user words with 
+	GtkTextBuffer		*text_buffer;				// Temporary text buffer the user words with
 	GtkTextIter			text_end;					// End position of text buffer
 	GtkWidget			*text_frame;				// Frame to go around the text widget
 	GString				*text_gstring;				// Temporary text buffer
@@ -122,7 +122,7 @@ void menu_project_properties(void)
 	tmp_gstring = g_string_new(NULL);
 
 	// Create the main dialog window
-	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Project Properties"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Project Properties"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	proj_dialog_table = gtk_table_new(10, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(main_dialog->vbox), GTK_WIDGET(proj_dialog_table), FALSE, FALSE, 5);
 

@@ -18,6 +18,7 @@
  * Updated to work on Centos 5.3.
  * Added a dependency on libnotify.
  * Added a title bar icon.  Launchpad bug # 361019.
+ * Swapped the ordering of the Cancel and OK buttons.  Launchpad bug # 301070.
  * Minor bug fixes.
 
 

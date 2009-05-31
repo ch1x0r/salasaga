@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Display a dialog box asking for empty layer settings 
- * 
+ * Salasaga: Display a dialog box asking for empty layer settings
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -72,7 +72,7 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 	// * Pop open a dialog box asking the user for the details of the layer *
 
 	// Create the dialog window, and table to hold its children
-	empty_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(dialog_title, GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	empty_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(dialog_title, GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	empty_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(empty_dialog->vbox), GTK_WIDGET(empty_table), FALSE, FALSE, 10);
 

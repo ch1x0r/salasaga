@@ -72,7 +72,7 @@ void slide_duration(void)
 	// * Display a dialog box asking for the new name of the slide *
 
 	// Create the dialog window, and table to hold its children
-	slide_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Edit slide duration"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	slide_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Edit slide duration"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	dialog_table = gtk_table_new(8, 2, FALSE);
 	gtk_box_pack_start(GTK_BOX(slide_dialog->vbox), GTK_WIDGET(dialog_table), FALSE, FALSE, 0);
 
