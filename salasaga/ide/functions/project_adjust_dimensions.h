@@ -4,7 +4,7 @@
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -21,18 +21,18 @@
  *
  */
 
-#ifndef PROJECT_CROP_H_
-#define PROJECT_CROP_H_
+#ifndef PROJECT_ADJUST_DIMENSIONS_H_
+#define PROJECT_ADJUST_DIMENSIONS_H_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-void project_crop(void);
+void project_adjust_dimensions(void);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /*PROJECT_CROP_H_*/
+#endif /*PROJECT_ADJUST_DIMENSIONS_H_*/

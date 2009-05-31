@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user clicks the Crop timeline toolbar button
+ * Salasaga: Function called when the user chooses Project -> Adjust Dimensions from the top menu
  *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
@@ -42,7 +42,7 @@
 #include "working_area/draw_workspace.h"
 
 
-void project_crop(void)
+void project_adjust_dimensions(void)
 {
 	// Local variables
 	gint				bottom_value;
@@ -200,8 +200,8 @@ void project_crop(void)
 
 		// Create a new pixbuf, having just the adjusted image data in it
 		gdk_pixbuf_copy_area(tmp_image_ob->image_data, // Source pixbuf
-			left_value,  // Left crop
-			top_value,  // Top crop
+			left_value,  // Left adjustment
+			top_value,  // Top adjustment
 			new_width,  // Width
 			new_height,  // Height
 			new_pixbuf,  // Destination

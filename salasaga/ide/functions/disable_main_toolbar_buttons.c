@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Disables the main toolbar buttons that can only be used when a project is loaded 
- * 
+ * Salasaga: Disables the main toolbar buttons that can only be used when a project is loaded
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -39,12 +39,12 @@
 
 void disable_main_toolbar_buttons(void)
 {
-	// Disable the Crop All icon
+	// Disable the Adjust Dimensions icon
 	if (NULL != main_toolbar_icons[CROP_ALL])
 	{
 		g_object_ref(main_toolbar_icons[CROP_ALL]);
 		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[CROP_ALL]), main_toolbar_icons_gray[CROP_ALL]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CROP_ALL]), main_toolbar_tooltips, _("Crop disabled: No project loaded"), "Private");
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CROP_ALL]), main_toolbar_tooltips, _("Dimension adjustment disabled: No project loaded"), "Private");
 		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[CROP_ALL]));
 	}
 

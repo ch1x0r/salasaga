@@ -35,7 +35,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
-#include "project_crop.h"
+#include "project_adjust_dimensions.h"
 #include "save_preferences_and_exit.h"
 #include "callbacks/menu_screenshots_capture_full_screen.h"
 #include "export/html/export_html_wrapper.h"
@@ -115,7 +115,7 @@ void create_menu_bar()
 		{_("/_Project"),				NULL,					NULL,							0,	"<Branch>"},
 		{_("/Project/P_roperties"),		NULL,					menu_project_properties,		0,	"<Item>"},
 		{_("/Project/Sep"),				NULL,					NULL,							0,	"<Separator>"},
-		{_("/Project/_Adjust dimensions"),	NULL,				project_crop,					0,	"<Item>"},
+		{_("/Project/_Adjust dimensions"),	NULL,				project_adjust_dimensions,		0,	"<Item>"},
 
 		{_("/Sl_ide"),					NULL,					NULL,							0,	"<Branch>"},
 		{_("/Slide/_Insert"),			NULL,					slide_insert,					0,	"<Item>"},

@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function to create the main application toolbar 
- * 
+ * Salasaga: Function to create the main application toolbar
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -42,7 +42,7 @@
 #include "menu/menu_file_save_as.h"
 #include "menu/menu_screenshots_capture.h"
 #include "menu/menu_screenshots_import.h"
-#include "project_crop.h"
+#include "project_adjust_dimensions.h"
 #include "quit_event.h"
 
 
@@ -141,7 +141,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[IMPORT], IMPORT);
 	main_toolbar_signals[IMPORT] = g_signal_connect(G_OBJECT(main_toolbar_items[IMPORT]), "clicked", G_CALLBACK(menu_screenshots_import), (gpointer) NULL);
 
-	// Create the Crop button
+	// Create the Adjust Dimensions button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop", icon_extension->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	if (NULL != tmp_gdk_pixbuf)
@@ -149,10 +149,10 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 		main_toolbar_icons[CROP_ALL] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
 		g_object_unref(GDK_PIXBUF(tmp_gdk_pixbuf));
 	}
-	main_toolbar_items[CROP_ALL] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[CROP_ALL]), _("Crop all"));
-	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CROP_ALL]), main_toolbar_tooltips, _("Crop all slides in the project"), "Private");
+	main_toolbar_items[CROP_ALL] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[CROP_ALL]), _("Dimensions"));
+	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CROP_ALL]), main_toolbar_tooltips, _("Adjust the dimensions of the project"), "Private");
 	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[CROP_ALL], CROP_ALL);
-	main_toolbar_signals[CROP_ALL] = g_signal_connect(G_OBJECT(main_toolbar_items[CROP_ALL]), "clicked", G_CALLBACK(project_crop), (gpointer) NULL);
+	main_toolbar_signals[CROP_ALL] = g_signal_connect(G_OBJECT(main_toolbar_items[CROP_ALL]), "clicked", G_CALLBACK(project_adjust_dimensions), (gpointer) NULL);
 
 	// Add a spacer to the toolbar
 	main_toolbar_items[SEPARATOR_2] = gtk_separator_tool_item_new();
@@ -203,5 +203,5 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	// Free memory allocated in this function
 	g_string_free(tmp_gstring, TRUE);
 
-	return inner_toolbar;	
+	return inner_toolbar;
 }

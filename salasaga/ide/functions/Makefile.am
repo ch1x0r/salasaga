@@ -14,7 +14,7 @@ salasaga_SOURCES = create_menu_bar.c \
 	logger_simple.c \
 	logger_with_domain.c \
 	preferences_load.c \
-	project_crop.c \
+	project_adjust_dimensions.c \
 	project_read.c \
 	quit_event.c \
 	resolution_selector_changed.c \
