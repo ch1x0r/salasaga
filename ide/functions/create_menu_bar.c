@@ -35,9 +35,11 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "project_crop.h"
 #include "save_preferences_and_exit.h"
 #include "callbacks/menu_screenshots_capture_full_screen.h"
 #include "export/html/export_html_wrapper.h"
+#include "layer/image_crop.h"
 #include "layer/layer_copy.h"
 #include "layer/layer_delete.h"
 #include "layer/layer_edit.h"
@@ -112,6 +114,8 @@ void create_menu_bar()
 
 		{_("/_Project"),				NULL,					NULL,							0,	"<Branch>"},
 		{_("/Project/P_roperties"),		NULL,					menu_project_properties,		0,	"<Item>"},
+		{_("/Project/Sep"),				NULL,					NULL,							0,	"<Separator>"},
+		{_("/Project/_Adjust dimensions"),	NULL,				project_crop,					0,	"<Item>"},
 
 		{_("/Sl_ide"),					NULL,					NULL,							0,	"<Branch>"},
 		{_("/Slide/_Insert"),			NULL,					slide_insert,					0,	"<Item>"},
@@ -133,6 +137,8 @@ void create_menu_bar()
 		{_("/Layer/Add _Highlight"),	NULL,					layer_new_highlight,			0,	"<Item>"},
 		{_("/Layer/Add _Image"),		NULL,					layer_new_image,				0,	"<Item>"},
 		{_("/Layer/Add _Mouse"),		NULL,					layer_new_mouse,				0,	"<Item>"},
+		{_("/Layer/Sep"),				NULL,					NULL,							0,	"<Separator>"},
+		{_("/Layer/Image c_rop"),		NULL,					image_crop,						0,	"<Item>"},
 
 		{_("/E_xport"),					NULL,					NULL,							0,	"<Branch>"},
 		{_("/Export/_Flash Animation"),	_("<control><shift>F"),	menu_export_swf,				0,	"<Item>"},
