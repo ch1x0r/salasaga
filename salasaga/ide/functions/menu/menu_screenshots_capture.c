@@ -50,6 +50,7 @@ void menu_screenshots_capture(void)
 	// Local variables
 	GError				*error = NULL;				// Pointer to error return structure
 	gchar				*full_file_name;			// Holds the fully worked out file name to save as
+	GKeyFile			*lock_file;					// Pointer to the lock file structure
 	GString				*message;					// Used to construct message strings
 	GIOChannel			*output_file;				// The output file handle
 	GIOStatus			return_value;				// Return value used in most GIOChannel functions
@@ -58,8 +59,6 @@ void menu_screenshots_capture(void)
 	gsize				tmp_gsize;					// Temporary gsize
 	gpointer			tmp_ptr;					// Temporary pointer
 	GString				*tmp_gstring;				// Temporary string
-
-	GKeyFile			*lock_file;					// Pointer to the lock file structure
 
 
 	// Initialise various things
