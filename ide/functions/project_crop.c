@@ -90,52 +90,52 @@ void project_crop(void)
 	// Initialisation
 	message = g_string_new(NULL);
 
-	// * Pop open a dialog box asking the user how much to crop off each side of the image *
+	// * Pop open a dialog box asking the user how much to adjust the dimensions of the project by *
 
 	// Create the dialog window, and table to hold its children
-	crop_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Crop image layer"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
+	crop_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Adjust project dimensions"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	crop_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(crop_dialog->vbox), GTK_WIDGET(crop_table), FALSE, FALSE, 10);
 
-	// Create the label asking for the left side crop amount
-	left_label = gtk_label_new(_("Left crop: "));
+	// Create the label asking for the left margin adjustment amount
+	left_label = gtk_label_new(_("Left margin adjustment: "));
 	gtk_misc_set_alignment(GTK_MISC(left_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the left side crop amount
+	// Create the entry that accepts the left margin adjustment amount
 	left_button = gtk_spin_button_new_with_range(0, project_width, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(left_button), 0);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Create the label asking for the right side crop amount
-	right_label = gtk_label_new(_("Right crop: "));
+	// Create the label asking for the right margin adjustment amount
+	right_label = gtk_label_new(_("Right margin adjustment: "));
 	gtk_misc_set_alignment(GTK_MISC(right_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the right side crop amount
+	// Create the entry that accepts the right margin adjustment amount
 	right_button = gtk_spin_button_new_with_range(0, project_width, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(right_button), 0);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Create the label asking for the top crop amount
-	top_label = gtk_label_new(_("Top crop: "));
+	// Create the label asking for the top margin adjustment amount
+	top_label = gtk_label_new(_("Top margin adjustment: "));
 	gtk_misc_set_alignment(GTK_MISC(top_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the left side crop amount
+	// Create the entry that accepts the top margin adjustment amount
 	top_button = gtk_spin_button_new_with_range(0, project_height, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(top_button), 0);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Create the label asking for the right side crop amount
-	bottom_label = gtk_label_new(_("Bottom crop: "));
+	// Create the label asking for the bottom margin adjustment amount
+	bottom_label = gtk_label_new(_("Bottom margin adjustment: "));
 	gtk_misc_set_alignment(GTK_MISC(bottom_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the right side crop amount
+	// Create the entry that accepts the bottom margin adjustment amount
 	bottom_button = gtk_spin_button_new_with_range(0, project_height, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(bottom_button), 0);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
@@ -162,7 +162,7 @@ void project_crop(void)
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(crop_dialog));
 
-	// Loop through the slide structure, cropping the backgrounds
+	// Loop through the slide structure, adjusting the backgrounds
 	slides = g_list_first(slides);
 	num_slides = g_list_length(slides);
 	for (slide_counter = 0; slide_counter < num_slides; slide_counter++)
@@ -189,7 +189,7 @@ void project_crop(void)
 			continue;
 		}
 
-		// Create a new pixbuf, for storing the cropped image in
+		// Create a new pixbuf, for storing the adjusted image in
 		new_height = gdk_pixbuf_get_height(tmp_image_ob->image_data)
 			- top_value
 			- bottom_value;
@@ -198,7 +198,7 @@ void project_crop(void)
 			- right_value;
 		new_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, new_width, new_height);
 
-		// Create a new pixbuf, having just the cropped image data in it
+		// Create a new pixbuf, having just the adjusted image data in it
 		gdk_pixbuf_copy_area(tmp_image_ob->image_data, // Source pixbuf
 			left_value,  // Left crop
 			top_value,  // Top crop
@@ -207,7 +207,7 @@ void project_crop(void)
 			new_pixbuf,  // Destination
 			0, 0);
 
-		// Update the layer with the new cropped data
+		// Update the layer with the new adjusted data
 		tmp_pixbuf = tmp_image_ob->image_data;
 		tmp_image_ob->image_data = new_pixbuf;
 		tmp_image_ob->width = new_width;
@@ -251,7 +251,7 @@ void project_crop(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Project cropped"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Project dimensions adjusted"));
 	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
 	gdk_flush();
 }
