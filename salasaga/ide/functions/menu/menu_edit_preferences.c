@@ -50,13 +50,22 @@ void menu_edit_preferences(void)
 	// Local variables
 	GtkWidget			*app_dialog_table;					// Table used for neat layout of the labels and fields in application preferences
 	gint				app_row_counter;					// Used when building the application preferences dialog box
+	GError				*error = NULL;						// Pointer to error return structure
+	gchar				*full_file_name;					// Holds the fully worked out lock file name
 	gfloat				gfloat_val;							// Temporary gfloat value used for validation
 	guint				guint_val;							// Temporary guint value used for validation
 	GValue				*handle_size;						// The size of the dividing handle for the film strip
 	GtkDialog			*main_dialog;						// Widget for the main dialog
-	GString				*message;					// Used to construct message strings
+	GKeyFile			*lock_file;							// Pointer to the lock file structure
+	GString				*message;							// Used to construct message strings
+	GIOChannel			*output_file;						// The output output xlock file handle
+	GIOStatus			return_value;						// Return value used in most GIOChannel functions
+	gboolean			return_gbool;						// Receives the true/false return code when opening a lock file
 	gchar				**strings;							// Text string are split apart with this
+	gchar				*tmp_gchar;							// Temporary gchar
+	gsize				tmp_gsize;							// Temporary gsize
 	GString				*tmp_gstring;						// Text strings are constructed in this
+	gpointer			tmp_ptr;							// Temporary pointer
 	gboolean			usable_input;						// Used to control loop flow
 	guint				valid_default_fps = 0;				// Receives the new default fps once validated
 	guint				valid_icon_height = 0;				// Receives the new icon height once validated
@@ -487,6 +496,87 @@ void menu_edit_preferences(void)
 
 	// Screenshot delay
 	screenshot_delay_time = valid_screenshot_delay;
+
+	// * Update the screenshot delay time in the .lock file, if one exists *
+
+	// Construct the fully qualified path name to the lock file, to hold capture settings in
+	tmp_ptr = (gchar *) g_get_home_dir();
+	full_file_name = g_build_filename(tmp_ptr, ".salasaga-lock", NULL);
+
+	// Check if the ~/.salasaga-lock file exists
+	lock_file = g_key_file_new();
+	return_gbool = g_key_file_load_from_file(lock_file, full_file_name, G_KEY_FILE_NONE, &error);
+	if (TRUE == return_gbool)
+	{
+		// * The lock file exists, so we modify the existing contents *
+
+		// Set the new screenshot delay value
+		g_key_file_set_integer(lock_file, "Project", "Screenshot_Delay", screenshot_delay_time);  // Number of seconds to delay the screenshot capture
+
+		// Create IO channel for writing to
+		output_file = g_io_channel_new_file(full_file_name, "w", &error);
+		if (NULL == output_file)
+		{
+			// An error occurred when opening the file for writing, so alert the user, and return to the calling routine indicating failure
+
+			// Display a warning message
+			g_string_printf(message, "%s ED429: ", _("Error"));
+			g_string_append_printf(message, _("An error '%s' occurred when opening the lock file '%s' for writing."), error->message, full_file_name);
+			display_warning(message->str);
+
+			// Free the memory allocated in this function
+			g_string_free(message, TRUE);
+			g_string_free(tmp_gstring, TRUE);
+			g_error_free(error);
+
+			return;
+		}
+
+		// Write the ~/.salasaga-lock file to disk
+		tmp_gchar = g_key_file_to_data(lock_file, NULL, NULL);
+		return_value = g_io_channel_write_chars(output_file, tmp_gchar, strlen(tmp_gchar), &tmp_gsize, &error);
+		if (G_IO_STATUS_ERROR == return_value)
+		{
+			// * An error occurred when writing to the output file, so alert the user, and return to the calling routine indicating failure *
+
+			// Display a warning message
+			g_string_printf(message, "%s ED430: ", _("Error"));
+			g_string_append_printf(message, _("An error '%s' occurred when writing data to the lock file '%s'."), error->message, full_file_name);
+			display_warning(message->str);
+
+			// Free the memory allocated in this function
+			g_string_free(message, TRUE);
+			g_string_free(tmp_gstring, TRUE);
+			g_error_free(error);
+
+			return;
+		}
+
+		// Close the IO channel
+		return_value = g_io_channel_shutdown(output_file, TRUE, &error);
+		if (G_IO_STATUS_ERROR == return_value)
+		{
+			// * An error occurred when closing the output file, so alert the user, and return to the calling routine indicating failure *
+
+			// Display a warning message
+			g_string_printf(message, "%s ED431: ", _("Error"));
+			g_string_append_printf(message, _("An error '%s' occurred when closing the lock file '%s'."), error->message, full_file_name);
+			display_warning(message->str);
+
+			// Free the memory allocated in this function
+			g_string_free(message, TRUE);
+			display_warning(tmp_gstring->str);
+
+			// Free the memory allocated in this function
+			g_string_free(tmp_gstring, TRUE);
+			g_error_free(error);
+
+			return;
+		}
+
+		// Close the lock file
+		g_key_file_free(lock_file);
+	}
 
 	// Get the Metacity key bind warning value
 	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_metacity_key_bind)))
