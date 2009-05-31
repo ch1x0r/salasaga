@@ -213,6 +213,7 @@ gint main(gint argc, gchar *argv[])
 	GtkWidget			*outer_box;					// Widget for the onscreen display
 	GtkLabel			*resolution_label;			// Widget for the resolution selector label
 	GSList				*supported_formats;			// Used to determine if SVG images can be loaded
+	GString				*title_bar_icon_path;		// Path to the title bar icon image
 	GtkWidget			*toolbar;					// Widget for the toolbar
 	GdkScreen			*which_screen;				// Gets given the screen the monitor is on
 	gchar				wintitle[40];				// Stores the window title
@@ -263,6 +264,7 @@ gint main(gint argc, gchar *argv[])
 	project_folder = g_string_new(NULL);
 	project_name = g_string_new(_("New Project"));
 	screenshots_folder = g_string_new(NULL);
+	title_bar_icon_path = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 
 	// Load the fonts we use for rendering display
@@ -431,6 +433,11 @@ gint main(gint argc, gchar *argv[])
 	// Set the window title and border
 	gtk_window_set_title(GTK_WINDOW(main_window), wintitle);
 	gtk_container_set_border_width(GTK_CONTAINER (main_window), 0);
+
+	// Create the title bar icon
+	g_string_printf(title_bar_icon_path, "%s%c%s", STATUS_ICON_DIR, G_DIR_SEPARATOR, "salasaga-icon.png");
+	gtk_window_set_icon_from_file(GTK_WINDOW(main_window), title_bar_icon_path->str, NULL);
+	g_string_free(title_bar_icon_path, TRUE);
 
 	// Set a handler for destroy event to immediately exit GTK
 	g_signal_connect(G_OBJECT(main_window), "destroy", G_CALLBACK(quit_event), NULL);
