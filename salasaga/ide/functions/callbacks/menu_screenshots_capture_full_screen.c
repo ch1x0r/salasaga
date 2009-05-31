@@ -129,7 +129,7 @@ void menu_screenshots_capture_full_screen(void)
 
 
 	// Create the dialog window, and table to hold its children
-	capture_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Capture screenshots"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	capture_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Capture screenshots"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	capture_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(capture_dialog->vbox), GTK_WIDGET(capture_table), FALSE, FALSE, 10);
 

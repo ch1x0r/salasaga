@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Display a dialog box asking for image layer settings 
- * 
+ * Salasaga: Display a dialog box asking for image layer settings
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -64,7 +64,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	guint				valid_y_offset_finish = 0;	// Receives the new finish frame y offset once validated
 	guint				valid_y_offset_start = 0;	// Receives the new start frame y offset once validated
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
-	guint				*validated_guint;			// Receives known good guint values from the validation function 
+	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
 	GtkWidget			*name_label;				// Label widget
@@ -121,7 +121,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	// * Open a dialog box asking the user for the details of the layer *
 
 	// Create the dialog window, and table to hold its children
-	image_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(dialog_title, GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	image_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(dialog_title, GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	image_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(image_dialog->vbox), GTK_WIDGET(image_table), FALSE, FALSE, 10);
 
@@ -220,7 +220,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 			case TRANS_LAYER_FADE:
 				gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_FADE);
 				break;
-	
+
 			default:
 				gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_NONE);
 		}
@@ -263,7 +263,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 			case TRANS_LAYER_FADE:
 				gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_FADE);
 				break;
-	
+
 			default:
 				gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_NONE);
 		}

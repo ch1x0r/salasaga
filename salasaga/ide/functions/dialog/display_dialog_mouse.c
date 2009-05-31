@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Display a dialog box asking for mouse pointer settings 
- * 
+ * Salasaga: Display a dialog box asking for mouse pointer settings
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -117,7 +117,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 
 	// Initialise some things
 	tmp_mouse_ob = (layer_mouse *) tmp_layer->object_data;
-	message = g_string_new(NULL); 
+	message = g_string_new(NULL);
 	valid_ext_link = g_string_new(NULL);
 	valid_ext_link_win = g_string_new(NULL);
 	valid_name = g_string_new(NULL);
@@ -125,7 +125,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// * Open a dialog box asking the user for the details of the layer *
 
 	// Create the dialog window, and table to hold its children
-	mouse_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(dialog_title, GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	mouse_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(dialog_title, GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	mouse_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(mouse_dialog->vbox), GTK_WIDGET(mouse_table), FALSE, FALSE, 10);
 

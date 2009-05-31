@@ -133,7 +133,7 @@ void menu_edit_preferences(void)
 	valid_zoom_level = g_string_new(NULL);
 
 	// Create the main dialog window
-	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Application Preferences"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, NULL));
+	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Application Preferences"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	app_dialog_table = gtk_table_new(10, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(main_dialog->vbox), GTK_WIDGET(app_dialog_table), FALSE, FALSE, 5);
 
