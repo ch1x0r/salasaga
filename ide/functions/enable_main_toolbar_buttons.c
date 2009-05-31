@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Enables the main toolbar buttons that can only be used when a project is loaded 
- * 
+ * Salasaga: Enables the main toolbar buttons that can only be used when a project is loaded
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -36,17 +36,17 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "menu/menu_export_swf.h"
-#include "project_crop.h"
+#include "project_adjust_dimensions.h"
 
 
 void enable_main_toolbar_buttons(void)
 {
-	// Enable the Crop All icon
+	// Enable the Adjust Dimensions icon
 	if (NULL != main_toolbar_icons_gray[CROP_ALL])
 	{
 		g_object_ref(main_toolbar_icons_gray[CROP_ALL]);
 		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[CROP_ALL]), main_toolbar_icons[CROP_ALL]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CROP_ALL]), main_toolbar_tooltips, _("Crop all slides in the project"), "Private");
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CROP_ALL]), main_toolbar_tooltips, _("Adjust the dimensions of the project"), "Private");
 		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[CROP_ALL]));
 	}
 
@@ -62,7 +62,7 @@ void enable_main_toolbar_buttons(void)
 	// Set the event handlers for the main toolbar buttons
 	if (0 == main_toolbar_signals[CROP_ALL])
 	{
-		main_toolbar_signals[CROP_ALL] = g_signal_connect(G_OBJECT(main_toolbar_items[CROP_ALL]), "clicked", G_CALLBACK(project_crop), (gpointer) NULL);
+		main_toolbar_signals[CROP_ALL] = g_signal_connect(G_OBJECT(main_toolbar_items[CROP_ALL]), "clicked", G_CALLBACK(project_adjust_dimensions), (gpointer) NULL);
 		main_toolbar_signals[EXPORT_FLASH] = g_signal_connect(G_OBJECT(main_toolbar_items[EXPORT_FLASH]), "clicked", G_CALLBACK(menu_export_swf), (gpointer) NULL);
 	}
 }
