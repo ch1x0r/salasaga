@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Displays a dialog box warning the user of unsaved changes 
- * 
+ * Salasaga: Displays a dialog box warning the user of unsaved changes
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -56,7 +56,7 @@ gboolean display_dialog_save_warning(gboolean with_cancel)
 				GTK_STOCK_NO, GTK_RESPONSE_NO,
 				NULL);
 	}
-	
+
 	return_code_int = gtk_dialog_run(GTK_DIALOG(tmp_dialog));
 	gtk_widget_destroy(tmp_dialog);
 
