@@ -217,7 +217,7 @@ void menu_screenshots_capture(void)
 
 	// Let the user know that the window they selected has been successfully grabbed
 	message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-			_("Window dimensions successfully retrieved.  Please use Control-Printscreen to take screenshots then Import when finished."));
+			_("Window dimensions successfully retrieved.  Please use the right click menu in the status bar icon to take screenshots, then Import when finished."));
 	gtk_dialog_run(GTK_DIALOG(message_dialog));
 	gtk_widget_destroy(message_dialog);
 
