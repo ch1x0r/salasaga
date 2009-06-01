@@ -35,8 +35,6 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../callbacks/track_window_state.h"
-#include "../quit_event.h"
 
 
 gint status_icon_iconify(GtkWidget *widget, GdkEvent *event, gpointer data)
