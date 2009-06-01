@@ -86,7 +86,7 @@ gint status_icon_popup(GtkWidget *widget, GdkEvent *event, gpointer data)
 	// Ensure all of the menu items are displayed
 	gtk_widget_show_all(GTK_WIDGET(status_icon_menu));
 
-	// Make the menu pop up
+	// Make the menu appear
 	gtk_menu_popup(GTK_MENU(status_icon_menu), NULL, NULL, gtk_status_icon_position_menu, NULL, 0, gtk_get_current_event_time());
 
 	return FALSE;
