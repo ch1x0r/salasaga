@@ -89,7 +89,7 @@ void menu_file_new(void)
 	// If we have unsaved changes, warn the user
 	if (TRUE == changes_made)
 	{
-		return_code_gbool = display_dialog_save_warning(TRUE);
+		return_code_gbool = display_dialog_save_warning();
 		if (FALSE == return_code_gbool)
 		{
 			// The user pressed Cancel in the dialog

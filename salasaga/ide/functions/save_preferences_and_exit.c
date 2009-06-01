@@ -62,7 +62,14 @@ void save_preferences_and_exit(void)
 	// If we have unsaved changes, warn the user
 	if (TRUE == changes_made)
 	{
-		return_code_gbool = display_dialog_save_warning(FALSE);
+		// Display a warning dialog to the user, asking them if they want to save their changes before quitting, or cancel, etc
+		return_code_gbool = display_dialog_save_warning();
+
+		// If the user pressed cancel then don't run the rest of this function
+		if (FALSE == return_code_gbool)
+		{
+			return;
+		}
 	}
 
 	// Save the application preferences
