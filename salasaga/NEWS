@@ -19,6 +19,7 @@
  * Added a dependency on libnotify.
  * Added a title bar icon.  Launchpad bug # 361019.
  * Swapped the ordering of the Cancel and OK buttons.  Launchpad bug # 301070.
+ * The user is now always given the option to Cancel in the application quit dialog.
  * Minor bug fixes.
 
 
