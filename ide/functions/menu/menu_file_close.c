@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Called when the user chooses File -> Close from the top menu
- * 
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -53,7 +53,7 @@ void menu_file_close()
 	// If we have unsaved changes, warn the user
 	if (TRUE == changes_made)
 	{
-		return_code_gbool = display_dialog_save_warning(TRUE);
+		return_code_gbool = display_dialog_save_warning();
 		if (FALSE == return_code_gbool)
 		{
 			// The user pressed Cancel in the dialog

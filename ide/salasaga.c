@@ -439,8 +439,8 @@ gint main(gint argc, gchar *argv[])
 	gtk_window_set_icon_from_file(GTK_WINDOW(main_window), title_bar_icon_path->str, NULL);
 	g_string_free(title_bar_icon_path, TRUE);
 
-	// Set a handler for destroy event to immediately exit GTK
-	g_signal_connect(G_OBJECT(main_window), "destroy", G_CALLBACK(quit_event), NULL);
+	// Set signal handlers to catch user requests to quit
+	g_signal_connect(G_OBJECT(main_window), "delete-event", G_CALLBACK(quit_event), NULL);
 
 	// Create the outermost container that everything (menu, main, status bar) fits into
 	outer_box = gtk_vbox_new(FALSE, 0);
