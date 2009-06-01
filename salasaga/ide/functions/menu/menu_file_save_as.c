@@ -1,12 +1,12 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user selects File -> Save As from the top menu 
- * 
+ * Salasaga: Function called when the user selects File -> Save As from the top menu
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -61,6 +61,13 @@ void menu_file_save_as(void)
 	GString				*tmp_gstring;				// Temporary GString
 
 
+	// If there's no project active, we just beep and return
+	if (FALSE == project_active)
+	{
+		gdk_beep();
+		return;
+	}
+
 	// Initialise some things
 	message = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
@@ -92,7 +99,7 @@ void menu_file_save_as(void)
 		dir_name_part = g_path_get_dirname(file_name->str);
 		file_name_part = g_path_get_basename(file_name->str);
 
-		// Set the default directory and file name for the dialog		
+		// Set the default directory and file name for the dialog
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(save_dialog), dir_name_part);
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(save_dialog), file_name_part);
 
