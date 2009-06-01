@@ -35,13 +35,11 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../callbacks/track_window_state.h"
-#include "../quit_event.h"
 
 
 gint status_icon_restore(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
-	// De-iconify the window and present it to the user
+	// Make the window visible to the user, and bring it to the front
 	gtk_window_present(GTK_WINDOW(main_window));
 
 	// Display the application in the task bar
