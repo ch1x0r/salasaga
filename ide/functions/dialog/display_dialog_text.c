@@ -35,6 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../callbacks/text_layer_dialog_font_changed.h"
 #include "../validate_value.h"
 #include "display_warning.h"
 
@@ -234,6 +235,9 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_font_face), tmp_text_ob->font_face);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(selector_font_face), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
+
+	// Attach a signal handler to the font list, to be called when the user selects a different font
+	g_signal_connect(G_OBJECT(selector_font_face), "changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_view);  // Pass the text view for use in the signal handler
 
 	// Create the label asking for the font size
 	font_size_label = gtk_label_new(_("Font size: "));
