@@ -42,22 +42,30 @@ int text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_widget
 	// Local variables
 	GtkWidget				*combo_box;
 	PangoFontDescription	*font;
+	GtkWidget				*font_bg_colour_button;
+	GtkWidget				*font_fg_colour_button;
 	gfloat					font_size;
 	GtkWidget				*font_size_button;
 	gint					gint_val;
+	GdkColor				temp_bg_colour;
+	GdkColor				temp_fg_colour;
 	GString					*temp_gstring;
 	GtkWidget				*text_view;
 
 
 	// Initialisation
-	combo_box = text_widgets->font_style_combo_box;
+	combo_box = text_widgets->font_face_combo_box;
+	font_bg_colour_button = text_widgets->font_bg_colour_button;
+	font_fg_colour_button = text_widgets->font_fg_colour_button;
 	font_size_button = text_widgets->font_size_spin_button;
 	text_view = text_widgets->text_view;
 	temp_gstring = g_string_new(NULL);
 
-	// Figure out which values are selected in the combo box and font size box
+	// Figure out which values are selected in the widgets
 	gint_val = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_box));
 	font_size = gtk_spin_button_get_value(GTK_SPIN_BUTTON(font_size_button));
+	gtk_color_button_get_color(GTK_COLOR_BUTTON(font_bg_colour_button), &temp_bg_colour);
+	gtk_color_button_get_color(GTK_COLOR_BUTTON(font_fg_colour_button), &temp_fg_colour);
 
 	// Apply the font face to the text widget
 	switch (gint_val)
@@ -158,6 +166,10 @@ int text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_widget
 
 	// Apply the font face to the text view
 	gtk_widget_modify_font(text_view, font);
+
+	// Modify the background and foreground colours
+	gtk_widget_modify_text(text_view, GTK_STATE_NORMAL, &temp_fg_colour);
+	gtk_widget_modify_base(text_view, GTK_STATE_NORMAL, &temp_bg_colour);
 
 	// Free the memory allocated in this function
 	g_string_free(temp_gstring, TRUE);

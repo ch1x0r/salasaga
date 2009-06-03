@@ -44,7 +44,9 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 {
 	// Local variables
 	PangoFontDescription *font;						// Font used to display the text
+	gulong				font_bg_callback;			// ID of the callback handler for the font background colour widget
 	gulong				font_face_callback;			// ID of the callback handler for the font face combo box
+	gulong				font_fg_callback;			// ID of the callback handler for the font foreground colour widget
 	gulong				font_size_callback;			// ID of the callback handler for the font size spin button
 	gfloat				gfloat_val;					// Temporary gfloat value used for validation
 	gint				gint_val;					// Temporary gint value
@@ -252,21 +254,6 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_size_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Display the font in the text view at it's font face and size settings
-	g_string_printf(message, "%s %.2f", gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_font_face)), tmp_text_ob->font_size);
-	font = pango_font_description_from_string(message->str);
-	gtk_widget_modify_font(text_view, font);
-
-	// Set up pointers to the font face and font size widgets, for passing to the upcoming signal handler callbacks
-	text_widgets = g_slice_new0(text_dialog_widgets);
-	text_widgets->font_style_combo_box = selector_font_face;
-	text_widgets->font_size_spin_button = font_size_button;
-	text_widgets->text_view = text_view;
-
-	// Attach signal handlers to the font list and font size widgets, to be called when the user changes either of them
-	font_face_callback = g_signal_connect(G_OBJECT(selector_font_face), "changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
-	font_size_callback = g_signal_connect(G_OBJECT(font_size_button), "value-changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
-
 	// Create the foreground colour selection label
 	fg_colour_label = gtk_label_new(_("Text color: "));
 	gtk_misc_set_alignment(GTK_MISC(fg_colour_label), 0, 0.5);
@@ -288,6 +275,27 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
     gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(fill_colour_button), TRUE);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fill_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
+
+	// Display the font in the text view at it's font face and size settings
+	g_string_printf(message, "%s %.2f", gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_font_face)), tmp_text_ob->font_size);
+	font = pango_font_description_from_string(message->str);
+	gtk_widget_modify_font(text_view, font);
+	gtk_widget_modify_text(text_view, GTK_STATE_NORMAL, &(tmp_text_ob->text_color));
+	gtk_widget_modify_base(text_view, GTK_STATE_NORMAL, &(tmp_text_ob->bg_fill_colour));
+
+	// Set up pointers to the font face and font size widgets, for passing to the upcoming signal handler callbacks
+	text_widgets = g_slice_new0(text_dialog_widgets);
+	text_widgets->font_bg_colour_button = fill_colour_button;
+	text_widgets->font_face_combo_box = selector_font_face;
+	text_widgets->font_fg_colour_button = fg_colour_button;
+	text_widgets->font_size_spin_button = font_size_button;
+	text_widgets->text_view = text_view;
+
+	// Attach signal handlers to the font list and font size widgets, to be called when the user changes either of them
+	font_bg_callback = g_signal_connect(G_OBJECT(fill_colour_button), "color-set", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	font_face_callback = g_signal_connect(G_OBJECT(selector_font_face), "changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	font_fg_callback = g_signal_connect(G_OBJECT(fg_colour_button), "color-set", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	font_size_callback = g_signal_connect(G_OBJECT(font_size_button), "value-changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
 
 	// Create the background line colour selection label
 	border_colour_label = gtk_label_new(_("Background border color: "));
@@ -506,8 +514,10 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			// * The dialog was cancelled *
 
 			// Disconnect the signal handler callbacks
-			g_signal_handler_disconnect(G_OBJECT(resolution_selector), font_face_callback);
+			g_signal_handler_disconnect(G_OBJECT(fg_colour_button), font_fg_callback);
+			g_signal_handler_disconnect(G_OBJECT(fill_colour_button), font_bg_callback);
 			g_signal_handler_disconnect(G_OBJECT(font_size_button), font_size_callback);
+			g_signal_handler_disconnect(G_OBJECT(resolution_selector), font_face_callback);
 
 			// Destroy the dialog and return to the caller
 			gtk_widget_destroy(GTK_WIDGET(text_dialog));
@@ -790,8 +800,10 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), text_gstring->str, text_gstring->len);
 
 	// Disconnect the signal handler callbacks
-	g_signal_handler_disconnect(G_OBJECT(resolution_selector), font_face_callback);
+	g_signal_handler_disconnect(G_OBJECT(fg_colour_button), font_fg_callback);
+	g_signal_handler_disconnect(G_OBJECT(fill_colour_button), font_bg_callback);
 	g_signal_handler_disconnect(G_OBJECT(font_size_button), font_size_callback);
+	g_signal_handler_disconnect(G_OBJECT(resolution_selector), font_face_callback);
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(text_dialog));
