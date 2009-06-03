@@ -43,10 +43,14 @@
 gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 {
 	// Local variables
+	PangoFontDescription *font;						// Font used to display the text
+	gulong				font_face_callback;			// ID of the callback handler for the font face combo box
+	gulong				font_size_callback;			// ID of the callback handler for the font size spin button
 	gfloat				gfloat_val;					// Temporary gfloat value used for validation
 	gint				gint_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
 	GString				*message;					// Used to construct message strings
+	text_dialog_widgets	*text_widgets;				// Holds pointers to various widgets in this dialog, for passing to callbacks
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	gfloat				valid_border_width = 0;		// Receives the new border width once validated
@@ -236,9 +240,6 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(selector_font_face), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Attach a signal handler to the font list, to be called when the user selects a different font
-	g_signal_connect(G_OBJECT(selector_font_face), "changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_view);  // Pass the text view for use in the signal handler
-
 	// Create the label asking for the font size
 	font_size_label = gtk_label_new(_("Font size: "));
 	gtk_misc_set_alignment(GTK_MISC(font_size_label), 0, 0.5);
@@ -250,6 +251,21 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(font_size_button), tmp_text_ob->font_size);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_size_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
+
+	// Display the font in the text view at it's font face and size settings
+	g_string_printf(message, "%s %.2f", gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_font_face)), tmp_text_ob->font_size);
+	font = pango_font_description_from_string(message->str);
+	gtk_widget_modify_font(text_view, font);
+
+	// Set up pointers to the font face and font size widgets, for passing to the upcoming signal handler callbacks
+	text_widgets = g_slice_new0(text_dialog_widgets);
+	text_widgets->font_style_combo_box = selector_font_face;
+	text_widgets->font_size_spin_button = font_size_button;
+	text_widgets->text_view = text_view;
+
+	// Attach signal handlers to the font list and font size widgets, to be called when the user changes either of them
+	font_face_callback = g_signal_connect(G_OBJECT(selector_font_face), "changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	font_size_callback = g_signal_connect(G_OBJECT(font_size_button), "value-changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
 
 	// Create the foreground colour selection label
 	fg_colour_label = gtk_label_new(_("Text color: "));
@@ -487,7 +503,13 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		// Display the dialog
 		if (GTK_RESPONSE_ACCEPT != gtk_dialog_run(GTK_DIALOG(text_dialog)))
 		{
-			// The dialog was cancelled, so destroy it and return to the caller
+			// * The dialog was cancelled *
+
+			// Disconnect the signal handler callbacks
+			g_signal_handler_disconnect(G_OBJECT(resolution_selector), font_face_callback);
+			g_signal_handler_disconnect(G_OBJECT(font_size_button), font_size_callback);
+
+			// Destroy the dialog and return to the caller
 			gtk_widget_destroy(GTK_WIDGET(text_dialog));
 			g_string_free(valid_ext_link, TRUE);
 			g_string_free(valid_ext_link_win, TRUE);
@@ -766,6 +788,10 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_text_buffer_get_end_iter(text_buffer, &text_end);
 	text_gstring = g_string_new(gtk_text_buffer_get_slice(text_buffer, &text_start, &text_end, TRUE));
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), text_gstring->str, text_gstring->len);
+
+	// Disconnect the signal handler callbacks
+	g_signal_handler_disconnect(G_OBJECT(resolution_selector), font_face_callback);
+	g_signal_handler_disconnect(G_OBJECT(font_size_button), font_size_callback);
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(text_dialog));

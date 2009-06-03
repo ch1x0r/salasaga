@@ -405,6 +405,14 @@ typedef struct
 	guint				click_sound_to_play;		// Type of mouse click sound to play
 } swf_frame_element;
 
+// Structure that points to some of the widgets in a text entry dialog
+typedef struct
+{
+	GtkWidget			*font_size_spin_button;
+	GtkWidget			*font_style_combo_box;
+	GtkWidget			*text_view;
+} text_dialog_widgets;
+
 // Defines the structure of a validation field entry
 typedef struct
 {
