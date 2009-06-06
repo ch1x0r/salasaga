@@ -276,7 +276,7 @@ void save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "green", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.blue);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "blue", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%f", ((layer_text *) layer_pointer->object_data)->font_size);
+			g_string_printf(tmp_gstring, "%0.4f", ((layer_text *) layer_pointer->object_data)->font_size);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "font_size", (const xmlChar *) tmp_gstring->str);
 			if (TRUE == ((layer_text *) layer_pointer->object_data)->show_bg)
 			{
@@ -297,7 +297,7 @@ void save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "bg_fill_colour_green", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->bg_fill_colour.blue);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "bg_fill_colour_blue", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%f", ((layer_text *) layer_pointer->object_data)->bg_border_width);
+			g_string_printf(tmp_gstring, "%0.4f", ((layer_text *) layer_pointer->object_data)->bg_border_width);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "bg_border_width", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->font_face);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "font_face", (const xmlChar *) tmp_gstring->str);
@@ -325,7 +325,7 @@ void save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "border_colour_green", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->border_colour.blue);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "border_colour_blue", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%f", ((layer_highlight *) layer_pointer->object_data)->border_width);
+			g_string_printf(tmp_gstring, "%0.4f", ((layer_highlight *) layer_pointer->object_data)->border_width);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "border_width", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->fill_colour.red);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "fill_colour_red", (const xmlChar *) tmp_gstring->str);
@@ -333,7 +333,7 @@ void save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "fill_colour_green", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->fill_colour.blue);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "fill_colour_blue", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%f", ((layer_highlight *) layer_pointer->object_data)->opacity);
+			g_string_printf(tmp_gstring, "%0.4f", ((layer_highlight *) layer_pointer->object_data)->opacity);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "opacity", (const xmlChar *) tmp_gstring->str);
 			break;
 	}
