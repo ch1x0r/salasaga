@@ -23,7 +23,6 @@ salasaga_SOURCES = create_menu_bar.c \
 	zoom_selector_changed.c \
 	cairo/calculate_text_object_size.c \
 	cairo/create_cairo_pixbuf_pattern.c \
-	callbacks/menu_screenshots_capture_full_screen.c \
 	callbacks/text_layer_dialog_font_changed.c \
 	callbacks/track_window_state.c \
 	conversion/base64_decode.c \
@@ -91,6 +90,7 @@ salasaga_SOURCES = create_menu_bar.c \
 	menu/menu_help_wiki.c \
 	menu/menu_project_properties.c \
 	menu/menu_screenshots_capture.c \
+	menu/menu_screenshots_capture_full_screen.c \
 	menu/menu_screenshots_import.c \
 	slide/slide_delete.c \
 	slide/slide_duration.c \
