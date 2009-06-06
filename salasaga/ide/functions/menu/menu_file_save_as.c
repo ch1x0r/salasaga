@@ -39,9 +39,9 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
+#include "../save/save_slide.h"
 #include "../validate_value.h"
 #include "menu_file_save.h"
-#include "menu_file_save_slide.h"
 
 
 void menu_file_save_as(void)

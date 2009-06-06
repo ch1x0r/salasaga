@@ -39,10 +39,10 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
-#include "menu_file_save_layer.h"
+#include "../save/save_layer.h"
 
 
-void menu_file_save_slide(gpointer element, gpointer user_data)
+void save_slide(gpointer element, gpointer user_data)
 {
 	// Local variables
 	slide				*slide_pointer;			// Points to the present slide
@@ -87,7 +87,7 @@ void menu_file_save_slide(gpointer element, gpointer user_data)
 
 	// Add the layer data to the slide container
 	layer_pointer = g_list_first(layer_pointer);
-	g_list_foreach(layer_pointer, menu_file_save_layer, slide_node);
+	g_list_foreach(layer_pointer, save_layer, slide_node);
 
 	// Free the memory allocated in this function
 	g_string_free(tmp_gstring, TRUE);

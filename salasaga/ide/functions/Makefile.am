@@ -1,6 +1,5 @@
 bin_PROGRAMS = salasaga
-salasaga_SOURCES = create_menu_bar.c \
-	create_resolution_selector.c \
+salasaga_SOURCES = create_resolution_selector.c \
 	create_time_line.c \
 	create_toolbar.c \
 	create_zoom_selector.c \
@@ -69,6 +68,7 @@ salasaga_SOURCES = create_menu_bar.c \
 	layer/layer_new_text.c \
 	layer/layer_new_text_inner.c \
 	layer/layer_paste.c \
+	menu/create_menu_bar.c \
 	menu/menu_edit_preferences.c \
 	menu/menu_enable.c \
 	menu/menu_export_swf.c \
@@ -79,8 +79,6 @@ salasaga_SOURCES = create_menu_bar.c \
 	menu/menu_file_open.c \
 	menu/menu_file_save.c \
 	menu/menu_file_save_as.c \
-	menu/menu_file_save_layer.c \
-	menu/menu_file_save_slide.c \
 	menu/menu_help_about.c \
 	menu/menu_help_forum.c \
 	menu/menu_help_register.c \
@@ -92,6 +90,8 @@ salasaga_SOURCES = create_menu_bar.c \
 	menu/menu_screenshots_capture.c \
 	menu/menu_screenshots_capture_full_screen.c \
 	menu/menu_screenshots_import.c \
+	save/save_layer.c \
+	save/save_slide.c \
 	slide/slide_delete.c \
 	slide/slide_duration.c \
 	slide/slide_free.c \

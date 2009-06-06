@@ -40,8 +40,8 @@
 #include "../../externs.h"
 #include "../validate_value.h"
 #include "../dialog/display_warning.h"
+#include "../save/save_slide.h"
 #include "menu_file_save_as.h"
-#include "menu_file_save_slide.h"
 
 
 void menu_file_save(void)
@@ -214,7 +214,7 @@ void menu_file_save(void)
 
 	// Add the slide data to the XML structure
 	slides = g_list_first(slides);
-	g_list_foreach(slides, menu_file_save_slide, slide_root);
+	g_list_foreach(slides, save_slide, slide_root);
 
 	// Create a saving context
 	save_context = xmlSaveToFilename(file_name->str, "utf8", 1);  // XML_SAVE_FORMAT == 1
