@@ -4,7 +4,7 @@
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -21,18 +21,18 @@
  *
  */
 
-#ifndef MENU_FILE_SAVE_SLIDE_H_
-#define MENU_FILE_SAVE_SLIDE_H_
+#ifndef SAVE_SLIDE_H_
+#define SAVE_SLIDE_H_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-void menu_file_save_slide(gpointer element, gpointer user_data);
+void save_slide(gpointer element, gpointer user_data);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /*MENU_FILE_SAVE_SLIDE_H_*/
+#endif /* SAVE_SLIDE_H_ */

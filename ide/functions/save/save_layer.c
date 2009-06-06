@@ -42,7 +42,7 @@
 #include "../dialog/display_warning.h"
 
 
-void menu_file_save_layer(gpointer element, gpointer user_data)
+void save_layer(gpointer element, gpointer user_data)
 {
 	// Local variables
 	gchar				*base64_string;			// Pointer to an Base64 string
