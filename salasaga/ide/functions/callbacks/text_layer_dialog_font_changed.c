@@ -40,139 +40,39 @@
 int text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
 {
 	// Local variables
-	GtkWidget				*combo_box;
-	PangoFontDescription	*font;
-	GtkWidget				*font_bg_colour_button;
-	GtkWidget				*font_fg_colour_button;
-	gfloat					font_size;
-	GtkWidget				*font_size_button;
-	gint					gint_val;
-	GdkColor				temp_bg_colour;
-	GdkColor				temp_fg_colour;
-	GString					*temp_gstring;
+	gint					font_face_val;
+	GtkWidget				*font_face_widget;
+	gint					loop_counter;
+	GtkTextIter				selection_end;
+	GtkTextIter				selection_start;
+	GtkTextBuffer			*text_buffer;
+	gboolean				text_selected;
 	GtkWidget				*text_view;
 
 
 	// Initialisation
-	combo_box = text_widgets->font_face_combo_box;
-	font_bg_colour_button = text_widgets->font_bg_colour_button;
-	font_fg_colour_button = text_widgets->font_fg_colour_button;
-	font_size_button = text_widgets->font_size_spin_button;
+	font_face_widget = text_widgets->font_face_combo_box;
 	text_view = text_widgets->text_view;
-	temp_gstring = g_string_new(NULL);
+	text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
 
-	// Figure out which values are selected in the widgets
-	gint_val = gtk_combo_box_get_active(GTK_COMBO_BOX(combo_box));
-	font_size = gtk_spin_button_get_value(GTK_SPIN_BUTTON(font_size_button));
-	gtk_color_button_get_color(GTK_COLOR_BUTTON(font_bg_colour_button), &temp_bg_colour);
-	gtk_color_button_get_color(GTK_COLOR_BUTTON(font_fg_colour_button), &temp_fg_colour);
-
-	// Apply the font face to the text widget
-	switch (gint_val)
+	// If no text is selected then we skip the rest of the function
+	text_selected = gtk_text_buffer_get_selection_bounds(GTK_TEXT_BUFFER(text_buffer), &selection_start, &selection_end);
+	if (FALSE == text_selected)
 	{
-		case FONT_DEJAVU_SANS:
-			g_string_assign(temp_gstring, "DejaVu Sans");
-			break;
-
-		case FONT_DEJAVU_SANS_B:
-			g_string_assign(temp_gstring, "DejaVu Sans Bold");
-			break;
-
-		case FONT_DEJAVU_SANS_B_O:
-			g_string_assign(temp_gstring, "DejaVu Sans Bold Oblique");
-			break;
-
-		case FONT_DEJAVU_SANS_C:
-			g_string_assign(temp_gstring, "DejaVu Sans Condensed");
-			break;
-
-		case FONT_DEJAVU_SANS_C_B:
-			g_string_assign(temp_gstring, "DejaVu Sans Condensed Bold");
-			break;
-
-		case FONT_DEJAVU_SANS_C_B_O:
-			g_string_assign(temp_gstring, "DejaVu Sans Condensed Bold Oblique");
-			break;
-
-		case FONT_DEJAVU_SANS_C_O:
-			g_string_assign(temp_gstring, "DejaVu Sans Condensed Oblique");
-			break;
-
-		case FONT_DEJAVU_SANS_EL:
-			g_string_assign(temp_gstring, "DejaVu Sans Extra Light");
-			break;
-
-		case FONT_DEJAVU_SANS_MONO:
-			g_string_assign(temp_gstring, "DejaVu Sans Mono");
-			break;
-
-		case FONT_DEJAVU_SANS_MONO_B:
-			g_string_assign(temp_gstring, "DejaVu Sans Mono Bold");
-			break;
-
-		case FONT_DEJAVU_SANS_MONO_B_O:
-			g_string_assign(temp_gstring, "DejaVu Sans Mono Bold Oblique");
-			break;
-
-		case FONT_DEJAVU_SANS_MONO_O:
-			g_string_assign(temp_gstring, "DejaVu Sans Mono Oblique");
-			break;
-
-		case FONT_DEJAVU_SANS_O:
-			g_string_assign(temp_gstring, "DejaVu Sans Oblique");
-			break;
-
-		case FONT_DEJAVU_SERIF:
-			g_string_assign(temp_gstring, "DejaVu Serif");
-			break;
-
-		case FONT_DEJAVU_SERIF_B:
-			g_string_assign(temp_gstring, "DejaVu Serif Bold");
-			break;
-
-		case FONT_DEJAVU_SERIF_B_I:
-			g_string_assign(temp_gstring, "DejaVu Serif Bold Italic");
-			break;
-
-		case FONT_DEJAVU_SERIF_C:
-			g_string_assign(temp_gstring, "DejaVu Serif Condensed");
-			break;
-
-		case FONT_DEJAVU_SERIF_C_B:
-			g_string_assign(temp_gstring, "DejaVu Serif Condensed Bold");
-			break;
-
-		case FONT_DEJAVU_SERIF_C_B_I:
-			g_string_assign(temp_gstring, "DejaVu Serif Condensed Bold Italic");
-			break;
-
-		case FONT_DEJAVU_SERIF_C_I:
-			g_string_assign(temp_gstring, "DejaVu Serif Condensed Italic");
-			break;
-
-		case FONT_DEJAVU_SERIF_I:
-			g_string_assign(temp_gstring, "DejaVu Serif Italic");
-			break;
-
-		default:
-			// The default is just plain Sans
-			g_string_assign(temp_gstring, "DejaVu Sans");
-			break;
+		return FALSE;
 	}
 
-	// Apply the font face and size
-	g_string_append_printf(temp_gstring, " %.2f", font_size);
-	font = pango_font_description_from_string(temp_gstring->str);
+	// Remove any existing font face tags from the selected text
+	for (loop_counter = 0; loop_counter < FONT_COUNT; loop_counter++)
+	{
+		gtk_text_buffer_remove_tag(GTK_TEXT_BUFFER(text_buffer), text_tags_fonts[loop_counter], &selection_start, &selection_end);
+	}
 
-	// Apply the font face to the text view
-	gtk_widget_modify_font(text_view, font);
+	// Retrieve the value selected in the font face drop down
+	font_face_val = gtk_combo_box_get_active(GTK_COMBO_BOX(font_face_widget));
 
-	// Modify the background and foreground colours
-	gtk_widget_modify_text(text_view, GTK_STATE_NORMAL, &temp_fg_colour);
-	gtk_widget_modify_base(text_view, GTK_STATE_NORMAL, &temp_bg_colour);
-
-	// Free the memory allocated in this function
-	g_string_free(temp_gstring, TRUE);
+	// Apply the requested font face to the selected text
+	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(text_buffer), salasaga_font_names[font_face_val], &selection_start, &selection_end);
 
 	return FALSE;
 }

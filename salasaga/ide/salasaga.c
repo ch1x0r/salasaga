@@ -53,6 +53,7 @@
 #include "salasaga_types.h"
 #include "externs.h"
 #include "functions/create_resolution_selector.h"
+#include "functions/create_text_tags.h"
 #include "functions/create_time_line.h"
 #include "functions/create_toolbar.h"
 #include "functions/create_zoom_selector.h"
@@ -79,7 +80,7 @@
 
 // Global variables
 GList					*boundary_list = NULL;		// Stores a linked list of layer object boundaries
-cairo_font_face_t		*cairo_font_face[FONT_DEJAVU_SERIF_I + 1];  // The ttf font faces we use get loaded into this
+cairo_font_face_t		*cairo_font_face[FONT_COUNT];	// The ttf font faces we use get loaded into this
 guint					capture_height;				// Height for screen captures
 guint					capture_width;				// Width for screen captures
 guint					capture_x;					// X offset for screen captures
@@ -91,16 +92,16 @@ guint					debug_level = 0;			// Used to indicate debugging level
 guint					end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations
 guint					end_point_status = END_POINTS_INACTIVE;  // Is one of the layer end points being moved?
 gfloat					export_time_counter;		// Used when exporting, holds the number of seconds thus far
-SWFFont					fdb_font_object[FONT_DEJAVU_SERIF_I + 1];  // The fdb font faces we use get loaded into this
+SWFFont					fdb_font_object[FONT_COUNT];	// The fdb font faces we use get loaded into this
 GString					*file_name = NULL;			// Holds the file name the project is saved as
 gboolean				film_strip_being_resized;	// Toggle to indicate if the film strip is being resized
 GtkTreeViewColumn		*film_strip_column;			// Pointer to the film strip column
 GtkScrolledWindow		*film_strip_container;		// Container for the film strip
 GtkListStore			*film_strip_store;			// Film strip list store
 GtkWidget				*film_strip_view;			// The view of the film strip list store
-FT_Face					ft_font_face[FONT_DEJAVU_SERIF_I + 1];  // Array of FreeType font face handles
 guint					frames_per_second;			// Number of frames per second
 GdkPixmap				*front_store;				// Front store for double buffering the workspace area
+FT_Face					ft_font_face[FONT_COUNT];	// Array of FreeType font face handles
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
 GString					*icon_path;					// Points to the base location for Salasaga icon files
 gboolean				info_display = TRUE;		// Toggle for whether to display the information button in swf output
@@ -145,6 +146,10 @@ gint					stored_x;					// X co-ordinate of the mouse last click
 gint					stored_y;					// Y co-ordinate of the mouse last click
 gint					table_x_padding;			// Number of pixels to pad table entries by
 gint					table_y_padding;			// Number of pixels to pad table entries by
+GSList					*text_tags_fg_colour_slist = NULL;	// Text tags for text foreground colour, used for changing text colour in text layers
+GtkTextTag				*text_tags_fonts[FONT_COUNT];	// Text tags for font faces, used for applying font faces in text layers
+GSList					*text_tags_size_slist = NULL;	// Text tags for text sizes, used for changing text size in text layers
+GtkTextTagTable			*text_tags_table;			// The table of all text tags, used for applying text tags in text layers
 GtkWidget				*time_line_container;		// Scrolled window widget, to add scroll bars to the time line widget
 GtkWidget				*time_line_vbox;			// VBox widget holding all of the time line elements
 guint					unscaled_button_height;		// Height of buttons in swf output control bar
@@ -197,6 +202,32 @@ guint					project_width;				// The width of the project in pixels
 // Windows only variables
 HHOOK					win32_keyboard_hook_handle = NULL;		// Handle used to keep track of the Win32 keyboard hook
 #endif
+
+// Fonts available for use in text layers
+gchar	*salasaga_font_names[] =
+{
+	"DejaVu Sans",							// FONT_DEJAVU_SANS
+	"DejaVu Sans Bold",						// FONT_DEJAVU_SANS_B
+	"DejaVu Sans Bold Oblique",				// FONT_DEJAVU_SANS_B_O
+	"DejaVu Sans Condensed",				// FONT_DEJAVU_SANS_C
+	"DejaVu Sans Condensed Bold",			// FONT_DEJAVU_SANS_C_B
+	"DejaVu Sans Condensed Bold Oblique",	// FONT_DEJAVU_SANS_C_B_O
+	"DejaVu Sans Condensed Oblique",		// FONT_DEJAVU_SANS_C_O
+	"DejaVu Sans Extra Light",				// FONT_DEJAVU_SANS_EL
+	"DejaVu Sans Mono",						// FONT_DEJAVU_SANS_MONO
+	"DejaVu Sans Mono Bold",				// FONT_DEJAVU_SANS_MONO_B
+	"DejaVu Sans Mono Bold Oblique",		// FONT_DEJAVU_SANS_MONO_B_O
+	"DejaVu Sans Mono Oblique",				// FONT_DEJAVU_SANS_MONO_O
+	"DejaVu Sans Oblique",					// FONT_DEJAVU_SANS_O
+	"DejaVu Serif",							// FONT_DEJAVU_SERIF
+	"DejaVu Serif Bold",					// FONT_DEJAVU_SERIF_B
+	"DejaVu Serif Bold Italic",				// FONT_DEJAVU_SERIF_B_I
+	"DejaVu Serif Condensed",				// FONT_DEJAVU_SERIF_C
+	"DejaVu Serif Condensed Bold",			// FONT_DEJAVU_SERIF_C_B
+	"DejaVu Serif Condensed Bold Italic",	// FONT_DEJAVU_SERIF_C_B_I
+	"DejaVu Serif Condensed Italic",		// FONT_DEJAVU_SERIF_C_I
+	"DejaVu Serif Italic"					// FONT_DEJAVU_SERIF_I
+};
 
 
 // The main program loop
@@ -535,6 +566,9 @@ gint main(gint argc, gchar *argv[])
 	gtk_paned_add2(GTK_PANED(right_side), GTK_WIDGET(tmp_widget));
 	gtk_paned_set_position(GTK_PANED(right_side), 250);
 	gtk_paned_add2(GTK_PANED(main_area), GTK_WIDGET(right_side));
+
+	// Create the text tags used in text layers
+	create_text_tags();
 
 	// Display a "Ready" message in the status bar
 	g_string_printf(message, " %s", _("Ready"));

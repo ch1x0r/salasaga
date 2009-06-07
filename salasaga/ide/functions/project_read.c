@@ -147,7 +147,7 @@ gboolean project_read(gchar *filename)
 	// Set sensible defaults for the swf information button
 	valid_info_link = g_string_new(_("http://www.salasaga.org"));
 	valid_info_link_target = g_string_new(_("_blank"));
-	valid_info_text = gtk_text_buffer_new(NULL);
+	valid_info_text = gtk_text_buffer_new(text_tags_table);
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(valid_info_text), _("Created using Salasaga"), -1);
 	valid_info_display = TRUE;
 
@@ -2792,7 +2792,7 @@ gboolean project_read(gchar *filename)
 									{
 										// Get the text
 										// fixme5: Unsure how to validate this... it's supposed to be free-form. (?)
-										tmp_text_ob->text_buffer = gtk_text_buffer_new(NULL);
+										tmp_text_ob->text_buffer = gtk_text_buffer_new(text_tags_table);
 										tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
 										gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), (const gchar *) tmp_xmlChar, -1);
 										xmlFree(tmp_xmlChar);
@@ -3227,7 +3227,7 @@ gboolean project_read(gchar *filename)
 	info_link = valid_info_link;
 	info_link_target = valid_info_link_target;
 	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(valid_info_text), &text_start, &text_end);
-	info_text = gtk_text_buffer_new(NULL);
+	info_text = gtk_text_buffer_new(text_tags_table);
 	info_text_buffer = gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(valid_info_text), &text_start, &text_end, TRUE);
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), info_text_buffer, -1);
 	info_display = valid_info_display;

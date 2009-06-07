@@ -219,7 +219,7 @@ layer *layer_duplicate(layer *source_layer)
 			dest_text_data->font_face = source_text_data->font_face;
 
 			// Copy the existing text buffer
-			dest_text_data->text_buffer = gtk_text_buffer_new(NULL);
+			dest_text_data->text_buffer = gtk_text_buffer_new(text_tags_table);
 			gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(source_text_data->text_buffer), &text_start, &text_end);
 			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(dest_text_data->text_buffer), gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(source_text_data->text_buffer), &text_start, &text_end, TRUE), -1);
 			break;
