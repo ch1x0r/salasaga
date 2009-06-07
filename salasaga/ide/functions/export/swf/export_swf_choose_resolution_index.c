@@ -114,11 +114,21 @@ gint export_swf_choose_resolution_index()
 			// We're using an unknown output resolution
 			return -1;
 
+		case 600:
+
+			if (400 == output_height)
+			{
+				return 9;
+			}
+
+			// We're using an unknown output resolution
+			return -1;
+
 		case 528:
 
 			if (396 == output_height)
 			{
-				return 9;
+				return 10;
 			}
 
 			// We're using an unknown output resolution
@@ -128,7 +138,7 @@ gint export_swf_choose_resolution_index()
 
 			if (120 == output_height)
 			{
-				return 10;
+				return 11;
 			}
 
 			// We're using an unknown output resolution
@@ -138,7 +148,7 @@ gint export_swf_choose_resolution_index()
 
 			if (288 == output_height)
 			{
-				return 11;
+				return 12;
 			}
 
 			// We're using an unknown output resolution
@@ -148,7 +158,7 @@ gint export_swf_choose_resolution_index()
 
 			if (240 == output_height)
 			{
-				return 12;
+				return 13;
 			}
 
 			// We're using an unknown output resolution
@@ -158,7 +168,7 @@ gint export_swf_choose_resolution_index()
 
 			if (144 == output_height)
 			{
-				return 13;
+				return 14;
 			}
 
 			// We're using an unknown output resolution
@@ -168,7 +178,7 @@ gint export_swf_choose_resolution_index()
 
 			if (120 == output_height)
 			{
-				return 14;
+				return 15;
 			}
 
 			// We're using an unknown output resolution
@@ -178,7 +188,7 @@ gint export_swf_choose_resolution_index()
 
 			if (96 == output_height)
 			{
-				return 15;
+				return 16;
 			}
 
 			// We're using an unknown output resolution

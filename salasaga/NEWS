@@ -10,13 +10,14 @@
  * Added a "screenshot delay" preference, in seconds, which can range from 0 to 60.
  * Changed the status bar to a progress bar, updating many functions to use it.
  * Swapped the ordering of the Cancel and OK buttons.  Launchpad bug # 301070.
+ * Added an additional output resolution 600x400, requested by Guy Rageot.
  * Visual notification messages are now shown when screenshots are taken.
  * Added a status bar icon, with a right click menu for various actions.
  * Updated the text layer dialog to display with the chosen attributes.
  * Several minor improvements for the time line area.
  * Added a title bar icon.  Launchpad bug # 361019.
  * Text layers can now be any of the DejaVu fonts.
- * Centered selected slide in the workspace area. 
+ * Centered selected slide in the workspace area.
  * Added a dependency on libnotify.
  * Updated to work on Centos 5.3.
  * Minor bug fixes.

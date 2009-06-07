@@ -246,7 +246,18 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			    34,		// control bar height
 			   184 },	// control bar width
 
-		{ 528, 396,		// 528 x 396	=	9
+		{ 600, 400,		// 600 x 400	=	9
+				26,		// button height
+				 0,		// button spacing
+				 2,		// button start x
+				 2,		// button start y
+				26,		// button width
+			   236,		// control bar start x
+			   356,		// control bar start y
+				30,		// control bar height
+			   160 },	// control bar width
+
+		{ 528, 396,		// 528 x 396	=	10
 				26,		// button height
 				 0,		// button spacing
 				 2,		// button start x
@@ -257,7 +268,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			    30,		// control bar height
 			   160 },	// control bar width
 
-		{ 480, 120,		// 480 x 120	=	10
+		{ 480, 120,		// 480 x 120	=	11
 				14,		// button height
 				 0,		// button spacing
 				 2,		// button start x
@@ -268,7 +279,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			    18,		// control bar height
 			    88 },	// control bar width
 
-		{ 352, 288,		// 352 x 288	=	11
+		{ 352, 288,		// 352 x 288	=	12
 				15,		// button height
 				 1,		// button spacing
 				 1,		// button start x
@@ -279,7 +290,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			    18,		// control bar height
 				98 },	// control bar width
 
-		{ 320, 240,		// 320 x 240	=	12
+		{ 320, 240,		// 320 x 240	=	13
 				15,		// button height
 				 1,		// button spacing
 				 1,		// button start x
@@ -290,7 +301,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			    17,		// control bar height
 			    98 },	// control bar width
 
-		{ 176, 144,		// 176 x 144	=	13
+		{ 176, 144,		// 176 x 144	=	14
 				11,		// button height
 				 0,		// button spacing
 				 1,		// button start x
@@ -301,7 +312,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			    13,		// control bar height
 			    68 },	// control bar width
 
-		{ 160, 120,		// 160 x 120	=	14
+		{ 160, 120,		// 160 x 120	=	15
 				11,		// button height
 				 0,		// button spacing
 				 1,		// button start x
@@ -312,7 +323,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 			    13,		// control bar height
 			    68 },	// control bar width
 
-		{ 128,  96,		// 128 x 96		=	15
+		{ 128,  96,		// 128 x 96		=	16
 				11,		// button height
 				 0,		// button spacing
 				 1,		// button start x
