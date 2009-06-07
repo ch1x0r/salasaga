@@ -5,23 +5,20 @@
  
  * The control bar in swf output is much better looking, now finally of acceptable quality.
  * The default width and height for new projects is whatever width and height was last used.
- * Layers are no longer limited to being inside the slide area onscreen.  They can now be
-   moved both partially or completely off the visible slide area.
- * The selected slide is now always centered in the workspace area.
- * Turned the status bar into a progress bar, plus updated functions to use it.
- * Text layers can now be any of the DejaVu fonts.
- * Text is displayed in the text layer dialog in the colouring, font face, and font size
-   chosen.
- * Several minor improvements for the time line area.
- * Added a status bar icon, with a right click menu for various actions.
- * Added a "screenshot delay" preference, in seconds, which can range from 0 to 60.
- * Updated the screen capture to display visual notification messages when screenshots are
-   taken.
- * Updated to work on Centos 5.3.
- * Added a dependency on libnotify.
- * Added a title bar icon.  Launchpad bug # 361019.
- * Swapped the ordering of the Cancel and OK buttons.  Launchpad bug # 301070.
  * The user is now always given the option to Cancel in the application quit dialog.
+ * Layers can now be moved both partially or completely off the visible slide area.
+ * Added a "screenshot delay" preference, in seconds, which can range from 0 to 60.
+ * Changed the status bar to a progress bar, updating many functions to use it.
+ * Swapped the ordering of the Cancel and OK buttons.  Launchpad bug # 301070.
+ * Visual notification messages are now shown when screenshots are taken.
+ * Added a status bar icon, with a right click menu for various actions.
+ * Updated the text layer dialog to display with the chosen attributes.
+ * Several minor improvements for the time line area.
+ * Added a title bar icon.  Launchpad bug # 361019.
+ * Text layers can now be any of the DejaVu fonts.
+ * Centered selected slide in the workspace area. 
+ * Added a dependency on libnotify.
+ * Updated to work on Centos 5.3.
  * Minor bug fixes.
 
 
