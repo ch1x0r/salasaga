@@ -51,6 +51,7 @@ GtkWidget *create_resolution_selector(guint initial_width, guint initial_height)
 		{ 800, 600 },
 		{ 720, 480 },
 		{ 640, 480 },
+		{ 600, 400 },
 		{ 528, 396 },
 		{ 480, 120 },
 		{ 352, 288 },
