@@ -35,7 +35,10 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../callbacks/text_layer_dialog_bg_colour_changed.h"
+#include "../callbacks/text_layer_dialog_fg_colour_changed.h"
 #include "../callbacks/text_layer_dialog_font_changed.h"
+#include "../callbacks/text_layer_dialog_size_changed.h"
 #include "../validate_value.h"
 #include "display_warning.h"
 
@@ -184,17 +187,17 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	text_frame = gtk_frame_new(NULL);
 	gtk_container_set_border_width(GTK_CONTAINER(text_frame), 2);
 	gtk_frame_set_shadow_type(GTK_FRAME(text_frame), GTK_SHADOW_OUT);
-	text_view = gtk_text_view_new();
+	text_buffer = gtk_text_buffer_new(text_tags_table);  // Temporary text buffer
+	text_view = gtk_text_view_new_with_buffer(text_buffer);
 	gtk_widget_set_size_request(GTK_WIDGET(text_view), 0, 100);
 	gtk_container_add(GTK_CONTAINER(text_frame), text_view);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(text_frame), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Copy the text string from the existing text buffer to a new, temporary one
-	// (Note - this is so we don't work directly with the text buffer, which would keep edits even if the user hits the Cancel button)
+	// Copy the text string from the real text buffer to the new, temporary one
+	// This is so we don't work directly with the real text buffer, which would then keep edits even if the user clicks the Cancel button
 	gtk_text_buffer_get_start_iter(tmp_text_ob->text_buffer, &text_start);
 	gtk_text_buffer_get_end_iter(tmp_text_ob->text_buffer, &text_end);
-	text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
 	text_gstring = g_string_new(gtk_text_buffer_get_slice(tmp_text_ob->text_buffer, &text_start, &text_end, TRUE));
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(text_buffer), text_gstring->str, text_gstring->len);
 
@@ -283,7 +286,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_widget_modify_text(text_view, GTK_STATE_NORMAL, &(tmp_text_ob->text_color));
 	gtk_widget_modify_base(text_view, GTK_STATE_NORMAL, &(tmp_text_ob->bg_fill_colour));
 
-	// Set up pointers to the font face and font size widgets, for passing to the upcoming signal handler callbacks
+	// Set up pointers to the font face, font size, background colour and foreground colour widgets, for passing to signal handlers
 	text_widgets = g_slice_new0(text_dialog_widgets);
 	text_widgets->font_bg_colour_button = fill_colour_button;
 	text_widgets->font_face_combo_box = selector_font_face;
@@ -292,10 +295,10 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	text_widgets->text_view = text_view;
 
 	// Attach signal handlers to the font list and font size widgets, to be called when the user changes either of them
-	font_bg_callback = g_signal_connect(G_OBJECT(fill_colour_button), "color-set", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	font_bg_callback = g_signal_connect(G_OBJECT(fill_colour_button), "color-set", G_CALLBACK(text_layer_dialog_bg_colour_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
 	font_face_callback = g_signal_connect(G_OBJECT(selector_font_face), "changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
-	font_fg_callback = g_signal_connect(G_OBJECT(fg_colour_button), "color-set", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
-	font_size_callback = g_signal_connect(G_OBJECT(font_size_button), "value-changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	font_fg_callback = g_signal_connect(G_OBJECT(fg_colour_button), "color-set", G_CALLBACK(text_layer_dialog_fg_colour_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	font_size_callback = g_signal_connect(G_OBJECT(font_size_button), "value-changed", G_CALLBACK(text_layer_dialog_size_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
 
 	// Create the background line colour selection label
 	border_colour_label = gtk_label_new(_("Background border color: "));

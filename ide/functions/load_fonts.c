@@ -73,7 +73,7 @@ gboolean load_fonts()
 	}
 
 	// * Load the font faces *
-	for (loop_counter = 0; loop_counter <= FONT_DEJAVU_SERIF_I; loop_counter++)
+	for (loop_counter = 0; loop_counter < FONT_COUNT; loop_counter++)
 	{
 		switch (loop_counter)
 		{

@@ -1,5 +1,6 @@
 bin_PROGRAMS = salasaga
 salasaga_SOURCES = create_resolution_selector.c \
+	create_text_tags.c \
 	create_time_line.c \
 	create_toolbar.c \
 	create_zoom_selector.c \
@@ -22,7 +23,10 @@ salasaga_SOURCES = create_resolution_selector.c \
 	zoom_selector_changed.c \
 	cairo/calculate_text_object_size.c \
 	cairo/create_cairo_pixbuf_pattern.c \
+	callbacks/text_layer_dialog_bg_colour_changed.c \
+	callbacks/text_layer_dialog_fg_colour_changed.c \
 	callbacks/text_layer_dialog_font_changed.c \
+	callbacks/text_layer_dialog_size_changed.c \
 	callbacks/track_window_state.c \
 	conversion/base64_decode.c \
 	conversion/base64_encode.c \
