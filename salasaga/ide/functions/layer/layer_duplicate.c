@@ -32,6 +32,7 @@
 #include "../../externs.h"
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../dialog/display_warning.h"
+#include "../gtk_text_buffer_duplicate.h"
 
 
 layer *layer_duplicate(layer *source_layer)
@@ -43,8 +44,6 @@ layer *layer_duplicate(layer *source_layer)
 	layer				*new_layer;					// Pointer to the newly created layer
 	layer_highlight		*source_highlight_data;		// Pointer to the source highlight specific data
 	layer_text			*source_text_data;			// Pointer to the source text specific data
-	GtkTextIter			text_start;					// The start position of the text buffer
-	GtkTextIter			text_end;					// The end position of the text buffer
 
 
 	// Initialisation
@@ -219,9 +218,7 @@ layer *layer_duplicate(layer *source_layer)
 			dest_text_data->font_face = source_text_data->font_face;
 
 			// Copy the existing text buffer
-			dest_text_data->text_buffer = gtk_text_buffer_new(text_tags_table);
-			gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(source_text_data->text_buffer), &text_start, &text_end);
-			gtk_text_buffer_set_text(GTK_TEXT_BUFFER(dest_text_data->text_buffer), gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(source_text_data->text_buffer), &text_start, &text_end, TRUE), -1);
+			dest_text_data->text_buffer = gtk_text_buffer_duplicate(source_text_data->text_buffer);
 			break;
 
 		default:

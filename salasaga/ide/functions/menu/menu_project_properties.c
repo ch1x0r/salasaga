@@ -37,6 +37,7 @@
 #include "../../externs.h"
 #include "../validate_value.h"
 #include "../dialog/display_warning.h"
+#include "../gtk_text_buffer_duplicate.h"
 
 
 void menu_project_properties(void)
@@ -98,7 +99,6 @@ void menu_project_properties(void)
 	GtkTextBuffer		*text_buffer;				// Temporary text buffer the user words with
 	GtkTextIter			text_end;					// End position of text buffer
 	GtkWidget			*text_frame;				// Frame to go around the text widget
-	GString				*text_gstring;				// Temporary text buffer
 	GtkTextIter			text_start;					// Start position of text buffer
 	GtkWidget			*text_view;					// Widget for accepting the new text data
 
@@ -270,18 +270,12 @@ void menu_project_properties(void)
 	text_frame = gtk_frame_new(NULL);
 	gtk_container_set_border_width(GTK_CONTAINER(text_frame), 2);
 	gtk_frame_set_shadow_type(GTK_FRAME(text_frame), GTK_SHADOW_OUT);
-	text_buffer = gtk_text_buffer_new(text_tags_table);  // Temporary text buffer
+	text_buffer = gtk_text_buffer_duplicate(info_text);  // Temporary text buffer
 	text_view = gtk_text_view_new_with_buffer(text_buffer);
 	gtk_widget_set_size_request(GTK_WIDGET(text_view), 0, 100);
 	gtk_container_add(GTK_CONTAINER(text_frame), text_view);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(text_frame), 0, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
-
-	// Copy the text string from the real text buffer to the new, temporary one
-	// This is so we don't work directly with the real text buffer, which would then keep edits even if the user clicks the Cancel button
-	gtk_text_buffer_get_bounds(info_text, &text_start, &text_end);
-	text_gstring = g_string_new(gtk_text_buffer_get_slice(info_text, &text_start, &text_end, TRUE));
-	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(text_buffer), text_gstring->str, text_gstring->len);
 
 	// Create the label asking for an external link
 	external_link_label = gtk_label_new(_("Information button link: "));
@@ -321,6 +315,7 @@ void menu_project_properties(void)
 			g_string_free(valid_proj_name, TRUE);
 			g_string_free(valid_project_folder, TRUE);
 			g_string_free(valid_output_folder, TRUE);
+			g_object_unref(text_buffer);
 			return;
 		}
 
@@ -448,10 +443,9 @@ void menu_project_properties(void)
 
 	// * We only get here after all input is considered valid *
 
-	// Copy the text buffer from the onscreen widget to our existing text buffer
-	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(text_buffer), &text_start, &text_end);
-	text_gstring = g_string_assign(text_gstring, gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(text_buffer), &text_start, &text_end, TRUE));
-	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), text_gstring->str, text_gstring->len);
+	// Replace the info buffer with our new one
+	g_object_unref(info_text);
+	info_text = text_buffer;
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(main_dialog));
@@ -496,6 +490,5 @@ void menu_project_properties(void)
 	g_string_free(message, TRUE);
 	g_string_free(valid_ext_link, TRUE);
 	g_string_free(valid_ext_link_win, TRUE);
-	g_string_free(text_gstring, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 }

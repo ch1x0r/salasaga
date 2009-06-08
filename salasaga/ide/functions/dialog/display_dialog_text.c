@@ -39,6 +39,7 @@
 #include "../callbacks/text_layer_dialog_fg_colour_changed.h"
 #include "../callbacks/text_layer_dialog_font_changed.h"
 #include "../callbacks/text_layer_dialog_size_changed.h"
+#include "../gtk_text_buffer_duplicate.h"
 #include "../validate_value.h"
 #include "display_warning.h"
 
@@ -90,10 +91,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	// * Appearance & Links tab fields *
 
 	GtkTextBuffer		*text_buffer;				// Temporary text buffer the user words with
-	GtkTextIter			text_end;					// End position of text buffer
 	GtkWidget			*text_frame;				// Frame to go around the text widget
 	GString				*text_gstring;				// Temporary text buffer
-	GtkTextIter			text_start;					// Start position of text buffer
 	GtkWidget			*text_view;					// Widget for accepting the new text data
 
 	GtkWidget			*name_label;				// Label widget
@@ -183,23 +182,18 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 
 	// * Appearance & Links tab fields *
 
+	// Duplicate the existing text buffer, so we don't work directly with the real text buffer (which would then keep edits even if the user clicks the Cancel button)
+	text_buffer = gtk_text_buffer_duplicate(tmp_text_ob->text_buffer);
+
 	// Create the text view that accepts the new text data
 	text_frame = gtk_frame_new(NULL);
 	gtk_container_set_border_width(GTK_CONTAINER(text_frame), 2);
 	gtk_frame_set_shadow_type(GTK_FRAME(text_frame), GTK_SHADOW_OUT);
-	text_buffer = gtk_text_buffer_new(text_tags_table);  // Temporary text buffer
 	text_view = gtk_text_view_new_with_buffer(text_buffer);
 	gtk_widget_set_size_request(GTK_WIDGET(text_view), 0, 100);
 	gtk_container_add(GTK_CONTAINER(text_frame), text_view);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(text_frame), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
-
-	// Copy the text string from the real text buffer to the new, temporary one
-	// This is so we don't work directly with the real text buffer, which would then keep edits even if the user clicks the Cancel button
-	gtk_text_buffer_get_start_iter(tmp_text_ob->text_buffer, &text_start);
-	gtk_text_buffer_get_end_iter(tmp_text_ob->text_buffer, &text_end);
-	text_gstring = g_string_new(gtk_text_buffer_get_slice(tmp_text_ob->text_buffer, &text_start, &text_end, TRUE));
-	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(text_buffer), text_gstring->str, text_gstring->len);
 
 	// Create the label asking for the layer name
 	name_label = gtk_label_new(_("Layer name: "));
@@ -527,6 +521,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			g_string_free(valid_ext_link, TRUE);
 			g_string_free(valid_ext_link_win, TRUE);
 			g_string_free(valid_name, TRUE);
+			g_object_unref(text_buffer);
 			return FALSE;
 		}
 
@@ -796,11 +791,9 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(fill_colour_button), &(tmp_text_ob->bg_fill_colour));
 	tmp_text_ob->bg_border_width = valid_border_width;
 
-	// Copy the text buffer from the onscreen widget to our existing text buffer
-	gtk_text_buffer_get_start_iter(text_buffer, &text_start);
-	gtk_text_buffer_get_end_iter(text_buffer, &text_end);
-	text_gstring = g_string_new(gtk_text_buffer_get_slice(text_buffer, &text_start, &text_end, TRUE));
-	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), text_gstring->str, text_gstring->len);
+	// Replace old text buffer with the old one
+	g_object_unref(tmp_text_ob->text_buffer);
+	tmp_text_ob->text_buffer = text_buffer;
 
 	// Disconnect the signal handler callbacks
 	g_signal_handler_disconnect(G_OBJECT(fg_colour_button), font_fg_callback);

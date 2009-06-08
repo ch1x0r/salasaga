@@ -94,8 +94,6 @@ gboolean project_read(gchar *filename)
 	xmlChar				*slide_length_data = NULL;
 	xmlNodePtr			slides_node = NULL;			// Points to the slides structure
 	xmlChar				*start_behaviour_data = NULL;
-	GtkTextIter			text_end;					// End position of text buffer
-	GtkTextIter			text_start;					// Start position of text buffer
 	xmlNodePtr			this_layer;					// Temporary pointer
 	layer				*this_layer_ptr;			// Pointer into a layer structure
 	xmlNodePtr			this_node;					// Temporary pointer
@@ -3226,13 +3224,8 @@ gboolean project_read(gchar *filename)
 	// Information button variables
 	info_link = valid_info_link;
 	info_link_target = valid_info_link_target;
-	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(valid_info_text), &text_start, &text_end);
-	info_text = gtk_text_buffer_new(text_tags_table);
-	info_text_buffer = gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(valid_info_text), &text_start, &text_end, TRUE);
-	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), info_text_buffer, -1);
+	info_text = valid_info_text;
 	info_display = valid_info_display;
-	g_free(info_text_buffer);
-	g_object_unref(valid_info_text);
 
 	// Make the new slides active, and update them to fill in their remaining pieces
 	slides = g_list_first(new_slides);
