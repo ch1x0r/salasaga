@@ -78,6 +78,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	SWFBlock			our_shape;					// The swf shape before it gets added to a swf movie clip
 	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
 	gsize				pixbuf_size;				// Is given the size of a compressed png image
+	gfloat				radius = 8;					// Radius to use for rounded rectangles
 	guint16				red_component;				// Used when retrieving the foreground color of text
 	GdkPixbuf			*resized_pixbuf;			// Temporary pixbuf used while scaling images
 	gboolean			return_code_bool;			// Receives boolean return codes
@@ -580,11 +581,16 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				text_bg_box_height = (text_real_font_size * num_text_lines) * 1.02;
 				text_bg_box_width = widest_text_string_width + (text_leading * 2);
 
-				// Create the text background box
-				SWFShape_drawLine(text_bg, text_bg_box_width, 0.0);
-				SWFShape_drawLine(text_bg, 0.0, text_bg_box_height);
-				SWFShape_drawLine(text_bg, -(text_bg_box_width), 0.0);
-				SWFShape_drawLine(text_bg, 0.0, -(text_bg_box_height));
+				// Rounded rectangle method from http://www.cairographics.org/cookbook/roundedrectangles/
+				SWFShape_movePenTo(text_bg, radius, 0);
+				SWFShape_drawLineTo(text_bg, text_bg_box_width - radius, 0);
+				SWFShape_drawCubicTo(text_bg, text_bg_box_width, 0, text_bg_box_width, 0, text_bg_box_width, radius);
+				SWFShape_drawLineTo(text_bg, text_bg_box_width, text_bg_box_height - radius);
+				SWFShape_drawCubicTo(text_bg, text_bg_box_width, text_bg_box_height, text_bg_box_width, text_bg_box_height, text_bg_box_width - radius, text_bg_box_height);
+				SWFShape_drawLineTo(text_bg, radius, text_bg_box_height);
+				SWFShape_drawCubicTo(text_bg, 0, text_bg_box_height, 0, text_bg_box_height, 0, text_bg_box_height - radius);
+				SWFShape_drawLineTo(text_bg, 0, radius);
+				SWFShape_drawCubicTo(text_bg, 0, 0, 0, 0, radius, 0);
 
 				// Add the text background to the movie clip
 				text_bg_display_item = SWFMovieClip_add(text_movie_clip, (SWFBlock) text_bg);
