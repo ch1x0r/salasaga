@@ -65,6 +65,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gint					num_lines;
 	gint					pixmap_height;			// Receives the height of a given pixmap
 	gint					pixmap_width;			// Receives the width of a given pixmap
+	guint					radius = 10;			// Radius to use for rounded rectangles
 	gfloat					red_component;			// Red component of a colour
 	gboolean				return_code_gbool;		// Receives gboolean return codes
 	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio
@@ -248,18 +249,28 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			// * If required, draw the background for the text layer *
 			if (TRUE == text_object->show_bg)
 			{
-				// Create the background fill
+				// Create the solid background fill
 				cairo_set_operator(cairo_context, CAIRO_OPERATOR_SOURCE);
 				selected_colour = &((layer_text *) this_layer_data->object_data)->bg_fill_colour;
 				red_component = ((gfloat) selected_colour->red) / 65536;
 				green_component = ((gfloat) selected_colour->green) / 65536;
 				blue_component = ((gfloat) selected_colour->blue) / 65536;
 				cairo_set_source_rgb(cairo_context, red_component, green_component, blue_component);
-				cairo_rectangle(cairo_context, x_offset, y_offset, width, height);
+
+				// Rounded rectangle method from http://www.cairographics.org/cookbook/roundedrectangles/
+				cairo_move_to(cairo_context, x_offset + radius, y_offset);
+				cairo_line_to(cairo_context, x_offset + width - radius, y_offset);
+				cairo_curve_to(cairo_context, x_offset + width, y_offset, x_offset + width, y_offset, x_offset + width, y_offset + radius);
+				cairo_line_to(cairo_context, x_offset + width, y_offset + height - radius);
+				cairo_curve_to(cairo_context, x_offset + width, y_offset + height, x_offset + width, y_offset + height, x_offset + width - radius, y_offset + height);
+				cairo_line_to(cairo_context, x_offset + radius, y_offset + height);
+				cairo_curve_to(cairo_context, x_offset, y_offset + height, x_offset, y_offset + height, x_offset, y_offset + height - radius);
+				cairo_line_to(cairo_context, x_offset, y_offset + radius);
+				cairo_curve_to(cairo_context, x_offset, y_offset, x_offset, y_offset, x_offset + radius, y_offset);
 				cairo_clip(cairo_context);
 				cairo_paint_with_alpha(cairo_context, time_alpha);
 
-				// Create the background border
+				// Draw the rounded rectangle border
 				cairo_set_operator(cairo_context, CAIRO_OPERATOR_OVER);
 				selected_colour = &((layer_text *) this_layer_data->object_data)->bg_border_colour;
 				red_component = ((gfloat) selected_colour->red) / 65536;
@@ -269,7 +280,15 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 				cairo_set_line_width(cairo_context, ((layer_text *) this_layer_data->object_data)->bg_border_width);
 				cairo_set_line_join(cairo_context, CAIRO_LINE_JOIN_ROUND);
 				cairo_set_line_cap(cairo_context, CAIRO_LINE_CAP_ROUND);
-				cairo_rectangle(cairo_context, x_offset, y_offset, width, height);
+				cairo_move_to(cairo_context, x_offset + radius, y_offset);
+				cairo_line_to(cairo_context, x_offset + width - radius, y_offset);
+				cairo_curve_to(cairo_context, x_offset + width, y_offset, x_offset + width, y_offset, x_offset + width, y_offset + radius);
+				cairo_line_to(cairo_context, x_offset + width, y_offset + height - radius);
+				cairo_curve_to(cairo_context, x_offset + width, y_offset + height, x_offset + width, y_offset + height, x_offset + width - radius, y_offset + height);
+				cairo_line_to(cairo_context, x_offset + radius, y_offset + height);
+				cairo_curve_to(cairo_context, x_offset, y_offset + height, x_offset, y_offset + height, x_offset, y_offset + height - radius);
+				cairo_line_to(cairo_context, x_offset, y_offset + radius);
+				cairo_curve_to(cairo_context, x_offset, y_offset, x_offset, y_offset, x_offset + radius, y_offset);
 				cairo_stroke(cairo_context);
 			}
 
