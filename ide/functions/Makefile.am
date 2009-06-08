@@ -9,6 +9,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	draw_timeline.c \
 	enable_layer_toolbar_buttons.c \
 	enable_main_toolbar_buttons.c \
+	gtk_text_buffer_duplicate.c \
 	key_bind.c \
 	load_fonts.c \
 	logger_simple.c \
