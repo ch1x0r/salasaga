@@ -14,6 +14,7 @@
  * Visual notification messages are now shown when screenshots are taken.
  * Added a status bar icon, with a right click menu for various actions.
  * Updated the text layer dialog to display with the chosen attributes.
+ * Rounded the corners of text boxes, both onscreen and in swf output.
  * Several minor improvements for the time line area.
  * Added a title bar icon.  Launchpad bug # 361019.
  * Text layers can now be any of the DejaVu fonts.
