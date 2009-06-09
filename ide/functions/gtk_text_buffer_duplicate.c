@@ -1,5 +1,5 @@
 /*
- * $Id:$
+ * $Id$
  *
  * Salasaga: Creates a duplicate of a given text buffer, preserving tags and so forth
  *
@@ -68,7 +68,7 @@ GtkTextBuffer *gtk_text_buffer_duplicate(GtkTextBuffer *source_buffer)
 	g_free(serialised_buffer);
 
 	// Unregister the serialisation formats
-	gtk_text_buffer_unregister_deserialize_format(source_buffer, format_atom_source);
+	gtk_text_buffer_unregister_serialize_format(source_buffer, format_atom_source);
 	gtk_text_buffer_unregister_deserialize_format(new_text_buffer, format_atom_dest);
 
 	// Return the duplicated text buffer
