@@ -16,7 +16,6 @@ salasaga_SOURCES = create_resolution_selector.c \
 	logger_with_domain.c \
 	preferences_load.c \
 	project_adjust_dimensions.c \
-	project_read.c \
 	quit_event.c \
 	resolution_selector_changed.c \
 	save_preferences_and_exit.c \
@@ -95,6 +94,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	menu/menu_screenshots_capture.c \
 	menu/menu_screenshots_capture_full_screen.c \
 	menu/menu_screenshots_import.c \
+	read/project_read.c \
 	read/read_empty_layer.c \
 	read/read_highlight_layer.c \
 	read/read_image_layer.c \

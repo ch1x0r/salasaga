@@ -41,11 +41,11 @@
 #include "../draw_timeline.h"
 #include "../enable_layer_toolbar_buttons.h"
 #include "../enable_main_toolbar_buttons.h"
-#include "../project_read.h"
 #include "../resolution_selector_changed.h"
 #include "../validate_value.h"
 #include "../dialog/display_dialog_save_warning.h"
 #include "../dialog/display_warning.h"
+#include "../read/project_read.h"
 #include "../working_area/draw_workspace.h"
 #include "menu_enable.h"
 
