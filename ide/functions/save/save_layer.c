@@ -47,6 +47,7 @@ void save_layer(gpointer element, gpointer user_data)
 	// Local variables
 	gchar				*base64_string;			// Pointer to an Base64 string
 	GError				*error = NULL;			// Pointer to error return structure
+	GdkAtom				format_atom_source;
 	GString				*layer_name;			// Name of the layer
 	xmlNodePtr			layer_node;				// Pointer to the new layer node
 	layer				*layer_pointer;			// Points to the presently processing layer
@@ -54,7 +55,10 @@ void save_layer(gpointer element, gpointer user_data)
 	GString				*message;				// Used to construct message strings
 	gchar				*pixbuf_buffer;			// Gets given a pointer to a compressed jpeg image
 	gsize				pixbuf_size;			// Gets given the size of a compressed jpeg image
+	guint8				*serialised_buffer;
+	gsize				serialised_length;
 	xmlNodePtr			slide_node;				// Pointer to the slide node
+	GtkTextBuffer		*source_buffer;			// Simplified pointer, pointing to text layer text buffer contents
 	GtkTextIter			text_end;				// The end position of the text buffer
 	GtkTextIter			text_start;				// The start position of the text buffer
 
@@ -258,10 +262,13 @@ void save_layer(gpointer element, gpointer user_data)
 			break;
 
 		case TYPE_TEXT:
+
+			// Simplify pointers
+			source_buffer = ((layer_text *) layer_pointer->object_data)->text_buffer;
+			gtk_text_buffer_get_bounds(source_buffer, &text_start, &text_end);
+
 			// Add the layer data to the output project file
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "type", (const xmlChar *) "text");
-			gtk_text_buffer_get_bounds(((layer_text *) layer_pointer->object_data)->text_buffer, &text_start, &text_end);
-			xmlNewChild(layer_node, NULL, (const xmlChar *) "text_value", (const xmlChar *) gtk_text_buffer_get_text(((layer_text *) layer_pointer->object_data)->text_buffer, &text_start, &text_end, FALSE));
 			g_string_printf(tmp_gstring, "%u", layer_pointer->x_offset_start);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_start", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", layer_pointer->y_offset_start);
@@ -270,14 +277,6 @@ void save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_finish", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", layer_pointer->y_offset_finish);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_finish", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.red);
-			xmlNewChild(layer_node, NULL, (const xmlChar *) "red", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.green);
-			xmlNewChild(layer_node, NULL, (const xmlChar *) "green", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.blue);
-			xmlNewChild(layer_node, NULL, (const xmlChar *) "blue", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%0.4f", ((layer_text *) layer_pointer->object_data)->font_size);
-			xmlNewChild(layer_node, NULL, (const xmlChar *) "font_size", (const xmlChar *) tmp_gstring->str);
 			if (TRUE == ((layer_text *) layer_pointer->object_data)->show_bg)
 			{
 				xmlNewChild(layer_node, NULL, (const xmlChar *) "show_bg", (const xmlChar *) "true");
@@ -299,8 +298,32 @@ void save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "bg_fill_colour_blue", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%0.4f", ((layer_text *) layer_pointer->object_data)->bg_border_width);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "bg_border_width", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->font_face);
-			xmlNewChild(layer_node, NULL, (const xmlChar *) "font_face", (const xmlChar *) tmp_gstring->str);
+
+			// * Start of legacy values, to be removed Real Soon
+			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.red);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "red", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.green);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "green", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.blue);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "blue", (const xmlChar *) tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%0.4f", ((layer_text *) layer_pointer->object_data)->font_size);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "font_size", (const xmlChar *) tmp_gstring->str);
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "text_value", (const xmlChar *) gtk_text_buffer_get_text(source_buffer, &text_start, &text_end, FALSE));
+			// * End of legacy values, to be removed Real Soon
+
+			// Serialise the text buffer data
+			format_atom_source = gtk_text_buffer_register_serialize_tagset(source_buffer, NULL);
+			serialised_buffer = gtk_text_buffer_serialize(source_buffer, source_buffer, format_atom_source, &text_start, &text_end, &serialised_length);
+
+			// Base64 encode the serialised text buffer data
+			base64_encode(serialised_buffer, serialised_length, &base64_string);
+
+			// Save the base64 encoded text buffer data
+			xmlNewChild(layer_node, NULL, (const xmlChar *) "text_buffer", (const xmlChar *) base64_string);
+
+			// Clean up
+			g_free(serialised_buffer);
+			gtk_text_buffer_unregister_serialize_format(source_buffer, format_atom_source);
 
 			break;
 
