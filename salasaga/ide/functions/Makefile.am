@@ -94,7 +94,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	menu/menu_screenshots_capture.c \
 	menu/menu_screenshots_capture_full_screen.c \
 	menu/menu_screenshots_import.c \
-	read/project_read.c \
+	read/read_project.c \
 	read/read_empty_layer.c \
 	read/read_highlight_layer.c \
 	read/read_image_layer.c \

@@ -56,7 +56,7 @@
 #include "slide/slide_free.h"
 
 
-gboolean project_read(gchar *filename)
+gboolean read_project(gchar *filename)
 {
 	// Local variables
 	xmlChar				*control_bar_data = NULL;	// Temporarily holds incoming data prior to validation
