@@ -2,11 +2,11 @@
  * $Id$
  *
  * Salasaga: Function to decode a Base64 encoded string
- * 
+ *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -38,15 +38,15 @@
 #include "../dialog/display_warning.h"
 
 
-GString *base64_decode(GString *input_string, GString *output_string)
+GString *base64_decode(GString *input_string)
 {
 	// Local variables
 	GString				*copied_string;			// A copy of the input string
 	guint				counter;				// Counter of how many characters have been converted
 	guchar				holding_byte;			// Holds the byte being worked on
 	gdouble				max_loop;				// The maximum number of interations to run
-	GString				*message;					// Used to construct message strings
-
+	GString				*message;				// Used to construct message strings
+	GString				*output_string;			// The output string is constructed in this
 	guchar				out_byte0;				// Used to hold the bytes being translated
 	guchar				out_byte1;				// Used to hold the bytes being translated
 	guchar				out_byte2;				// Used to hold the bytes being translated
@@ -54,14 +54,14 @@ GString *base64_decode(GString *input_string, GString *output_string)
 
 
 	// Initialise various things
-	g_string_assign(output_string, "");
+	output_string = g_string_new("");
 	message = g_string_new(NULL);
 
 	// Make a copy of the input string so we can work on it in place
 	copied_string = g_string_new(NULL);
 
 	// Lookup each byte of the input string for it's numeric value
-	for (counter = 0; counter < input_string->len - 1; counter++)
+	for (counter = 0; counter < input_string->len; counter++)
 	{
 
 // Notes:
@@ -133,6 +133,13 @@ GString *base64_decode(GString *input_string, GString *output_string)
 					// Should never get here
 					g_string_printf(message, "%s ED64: %s '%c'.", _("Error"), _("Error in the Base64 decoding function, unrecognized input"), holding_byte);
 					display_warning(message->str);
+
+					// Free the memory allocated in this function
+					g_string_free(output_string, TRUE);
+					g_string_free(copied_string, TRUE);
+					g_string_free(message, TRUE);
+
+					return NULL;
 			}
 		}
 	}
@@ -184,6 +191,13 @@ GString *base64_decode(GString *input_string, GString *output_string)
 		default:
 			g_string_printf(message, "%s ED73: %s", _("Error"), _("Unknown Base64 decoding remainder.  This should not happen."));
 			display_warning(message->str);
+
+			// Free the memory allocated in this function
+			g_string_free(output_string, TRUE);
+			g_string_free(copied_string, TRUE);
+			g_string_free(message, TRUE);
+
+			return NULL;
 	}
 
 	// Free the memory allocated in this function
