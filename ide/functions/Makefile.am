@@ -95,6 +95,11 @@ salasaga_SOURCES = create_resolution_selector.c \
 	menu/menu_screenshots_capture.c \
 	menu/menu_screenshots_capture_full_screen.c \
 	menu/menu_screenshots_import.c \
+	read/read_empty_layer.c \
+	read/read_highlight_layer.c \
+	read/read_image_layer.c \
+	read/read_mouse_layer.c \
+	read/read_text_layer.c \
 	save/save_layer.c \
 	save/save_slide.c \
 	slide/slide_delete.c \
