@@ -45,7 +45,7 @@
 #include "../validate_value.h"
 #include "../dialog/display_dialog_save_warning.h"
 #include "../dialog/display_warning.h"
-#include "../read/project_read.h"
+#include "../read/read_project.h"
 #include "../working_area/draw_workspace.h"
 #include "menu_enable.h"
 
@@ -169,7 +169,7 @@ void menu_file_open(void)
 		} else
 		{
 			// Open and parse the selected file
-			return_code = project_read(validated_string->str);
+			return_code = read_project(validated_string->str);
 			if (TRUE == return_code)
 			{
 				// The file was read in fine, so we continue

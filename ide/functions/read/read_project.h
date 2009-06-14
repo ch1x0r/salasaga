@@ -4,7 +4,7 @@
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
- * 
+ *
  * Salasaga is free software: you can redistribute it and/or modify
  * it under the terms of the GNU Lesser General Public License as
  * published by the Free Software Foundation, either version 3 of
@@ -21,18 +21,18 @@
  *
  */
 
-#ifndef PROJECT_READ_H_
-#define PROJECT_READ_H_
+#ifndef READ_PROJECT_H_
+#define READ_PROJECT_H_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-gboolean project_read(gchar *filename);
+gboolean read_project(gchar *filename);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /*PROJECT_READ_H_*/
+#endif /* READ_PROJECT_H_ */
