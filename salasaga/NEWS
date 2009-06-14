@@ -12,6 +12,7 @@
  * Swapped the ordering of the Cancel and OK buttons.  Launchpad bug # 301070.
  * Added an additional output resolution 600x400, requested by Guy Rageot.
  * Visual notification messages are now shown when screenshots are taken.
+ * Removed support for loading extremely old project file formats (<4.0).
  * Added a status bar icon, with a right click menu for various actions.
  * Updated the text layer dialog to display with the chosen attributes.
  * Rounded the corners of text boxes, both onscreen and in swf output.
