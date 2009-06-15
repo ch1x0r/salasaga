@@ -40,9 +40,9 @@
 int text_layer_dialog_bg_colour_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
 {
 	// Local variables
-	GdkColor				bg_colour;
-	GtkWidget				*font_bg_colour_button;
-	GtkWidget				*text_view;
+	GdkColor			bg_colour;
+	GtkWidget			*font_bg_colour_button;
+	GtkWidget			*text_view;
 
 
 	// Initialisation

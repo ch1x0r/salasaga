@@ -40,14 +40,14 @@
 int text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
 {
 	// Local variables
-	gint					font_face_val;
-	GtkWidget				*font_face_widget;
-	gint					loop_counter;
-	GtkTextIter				selection_end;
-	GtkTextIter				selection_start;
-	GtkTextBuffer			*text_buffer;
-	gboolean				text_selected;
-	GtkWidget				*text_view;
+	gint				font_face_val;
+	GtkWidget			*font_face_widget;
+	gint				loop_counter;
+	GtkTextIter			selection_end;
+	GtkTextIter			selection_start;
+	GtkTextBuffer		*text_buffer;
+	gboolean			text_selected;
+	GtkWidget			*text_view;
 
 
 	// Initialisation

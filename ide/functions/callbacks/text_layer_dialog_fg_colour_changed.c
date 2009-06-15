@@ -40,17 +40,17 @@
 int text_layer_dialog_fg_colour_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
 {
 	// Local variables
-	GdkColor				*fg_colour;
-	GtkWidget				*fg_colour_button;
-	GtkTextTag				*fg_colour_tag;
-	GString					*fg_colour_tag_name;
-	guint					loop_counter;
-	guint					num_tags;
-	GtkTextIter				selection_end;
-	GtkTextIter				selection_start;
-	GtkTextBuffer			*text_buffer;
-	gboolean				text_selected;
-	GtkWidget				*text_view;
+	GdkColor			*fg_colour;
+	GtkWidget			*fg_colour_button;
+	GtkTextTag			*fg_colour_tag;
+	GString				*fg_colour_tag_name;
+	guint				loop_counter;
+	guint				num_tags;
+	GtkTextIter			selection_end;
+	GtkTextIter			selection_start;
+	GtkTextBuffer		*text_buffer;
+	gboolean			text_selected;
+	GtkWidget			*text_view;
 
 
 	// Initialisation
