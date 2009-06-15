@@ -54,7 +54,16 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	// Local variables
 	gfloat					blue_component;			// Blue component of a colour
 	cairo_t					*cairo_context;			// Cairo drawing context
+	gdouble					cairo_pos_x = 0;		// Used for positioning where cairo will draw, in text layers
+	gdouble					cairo_pos_y = 0;		// Used for positioning where cairo will draw, in text layers
+	gint					char_height;			// Receives the height a character in a text layer will be drawn
+	gint					char_width;				// Receives the width a character in a text layer will be drawn
+	GtkTextIter				cursor_iter;			// Used for positioning in a text buffer
 	gfloat					end_time;				// Time in seconds of the layer objects finish time
+	GdkColor				*fg_colour;				// Foreground colour to set a text layer character to
+	PangoFontDescription	*font_face;				// Text layer font face to use when drawing a character
+	gdouble					font_size;				// Used for retrieving the desired size of a character in a text layer
+	gint					font_size_int;			// Used for calculating the scaled font size to display a text layer character at
 	gfloat					green_component;		// Green component of a colour
 	gint					height;					//
 	cairo_matrix_t			image_matrix;			// Transformation matrix used to position a cairo pattern
@@ -62,25 +71,31 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 	gint					line_counter;
 	gfloat					max_line_width;
 	GString					*message;				// Used to construct message strings
+	gboolean				more_chars = TRUE;		// Simple boolean used when rendering a text layer
 	gint					num_lines;
+	PangoLayout				*pango_layout;			// Used when rendering a text layer
 	gint					pixmap_height;			// Receives the height of a given pixmap
 	gint					pixmap_width;			// Receives the width of a given pixmap
 	guint					radius = 10;			// Radius to use for rounded rectangles
 	gfloat					red_component;			// Red component of a colour
+	GString					*render_string;			// Used for rendering a text layer, one character at a time
 	gboolean				return_code_gbool;		// Receives gboolean return codes
 	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio
 	gfloat					scaled_width_ratio;		// Used to calculate a horizontal scaling ratio
 	GdkColor				*selected_colour;		// Pointer to the foreground colour of the text
 	gfloat					start_time;				// Time in seconds of the layer objects start time
 	gfloat					text_adjustment;		// Y offset for a specific line
+	GtkTextAppearance		*text_appearance;		// Used in text layer rendering, to determine some of the attributes needed
+	GtkTextAttributes		*text_attributes;		// Pointer to the attributes for a text layer character
 	GtkTextBuffer			*text_buffer;			// Pointer to the text buffer we're using
 	GtkTextIter				text_end;				// The end position of the text buffer
 	cairo_text_extents_t	text_extents;			// Meta information about an onscreen text string
 	gfloat					text_height;
 	gint					text_left;				// Pixel number onscreen for the left side of text
 	layer_text				*text_object;			// Pointer to our object text data
-	gint					text_top;				// Pixel number onscreen for the top of text
 	GtkTextIter				text_start;				// The start position of the text buffer
+	gint					text_top;				// Pixel number onscreen for the top of text
+	GtkWidget				*text_view;				// Pointer to a temporary text view
 	gchar					*text_string = NULL;	// The text string to be displayed
 	layer_image				*this_image_data;		// Pointer to image layer data
 	gfloat					time_alpha = 1.0;		// Alpha value to use at our desired point in time (defaulting to 1.0 = fall opacity)
@@ -205,13 +220,71 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// * Draw the text layer *
 
-			// Save the existing cairo state before making changes (i.e. clip region)
-			cairo_save(cairo_context);
-
 			// Simplify pointers
 			text_object = (layer_text *) this_layer_data->object_data;
 			text_buffer = text_object->text_buffer;
 
+			// Save the existing cairo state before making changes (i.e. clip region)
+			cairo_save(cairo_context);
+
+			// Set things up
+			render_string = g_string_new(NULL);
+			pango_layout = pango_cairo_create_layout(cairo_context);
+			cairo_pos_x = layer_positions.x * scaled_width_ratio;
+			cairo_pos_y = layer_positions.y * scaled_height_ratio;
+
+			// Create a text view, not for display, but instead to retrieve attribute information from the layer's text buffer
+			text_view = gtk_text_view_new_with_buffer(GTK_TEXT_BUFFER(text_buffer));
+
+			// Retrieve the default attributes for the text view
+			text_attributes = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(text_view));
+
+			// Position the text iter at the start of the text buffer
+			gtk_text_buffer_get_start_iter(text_buffer, &cursor_iter);
+
+			// Loop around, displaying all the characters in the text buffer
+			while (more_chars)
+			{
+				// Retrieve the attributes at this cursor position
+				gtk_text_iter_get_attributes(&cursor_iter, text_attributes);
+
+				// Simplify pointers
+				text_appearance = &(text_attributes->appearance);
+				font_face = text_attributes->font;
+				fg_colour = &(text_appearance->fg_color);
+
+				// Set the colour for this character
+				cairo_set_source_rgb(cairo_context, fg_colour->red / 65535.0, fg_colour->green / 65535.0, fg_colour->blue / 65535.0);
+
+				// Set the character to be written
+				g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
+				pango_layout_set_text(pango_layout, render_string->str, render_string->len);
+
+				// Calculate the size the character should be displayed at
+				font_size_int = pango_font_description_get_size(font_face);
+				font_size = rint(scaled_height_ratio * font_size_int);
+//				font_size = rint(scaled_width_ratio * font_size_int);
+				pango_font_description_set_size(font_face, font_size);
+
+				// Set the font
+				pango_layout_set_font_description(pango_layout, font_face);  // Includes font face and font size
+
+				// Position the character onscreen
+				pango_layout_get_pixel_size(pango_layout, &char_width, &char_height);
+				cairo_move_to(cairo_context, cairo_pos_x, cairo_pos_y);
+				cairo_pos_x += char_width;
+
+				// Display the character
+				pango_cairo_show_layout(cairo_context, pango_layout);
+
+				// Move to the next character in the text buffer
+				more_chars = gtk_text_iter_forward_cursor_position(&cursor_iter);
+			}
+
+//			pango_layout_get_size(pango_layout, &width, &height);
+
+
+/*
 			// Set the font face for rendering this layer onscreen
 			cairo_set_font_face(cairo_context, cairo_font_face[text_object->font_face]);
 
@@ -294,7 +367,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// * Draw the text string itself *
 
-			// Set the desired font foreground color
+			// Set the desired font foreground colour
 			selected_colour = &((layer_text *) this_layer_data->object_data)->text_color;
 			red_component = ((gfloat) selected_colour->red) / 65536;
 			green_component = ((gfloat) selected_colour->green) / 65536;
@@ -324,10 +397,15 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 				cairo_show_text(cairo_context, text_string);
 			}
 
+*/
+
 			// Restore the cairo state to the way it was
 			cairo_restore(cairo_context);
 
 			// Free the memory used in this function
+			g_object_unref(text_view);
+			g_object_unref(pango_layout);
+			g_string_free(render_string, TRUE);
 			g_free(text_string);
 
 			break;
