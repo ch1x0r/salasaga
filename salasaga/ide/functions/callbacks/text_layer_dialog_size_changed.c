@@ -40,17 +40,17 @@
 int text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
 {
 	// Local variables
-	gfloat					font_size;
-	GtkWidget				*font_size_button;
-	guint					loop_counter;
-	guint					num_tags;
-	GtkTextIter				selection_end;
-	GtkTextIter				selection_start;
-	GString					*tag_name_text_size;
-	GtkTextBuffer			*text_buffer;
-	gboolean				text_selected;
-	GtkTextTag				*text_size_text_tag;
-	GtkWidget				*text_view;
+	gfloat				font_size;
+	GtkWidget			*font_size_button;
+	guint				loop_counter;
+	guint				num_tags;
+	GtkTextIter			selection_end;
+	GtkTextIter			selection_start;
+	GString				*tag_name_text_size;
+	GtkTextBuffer		*text_buffer;
+	gboolean			text_selected;
+	GtkTextTag			*text_size_text_tag;
+	GtkWidget			*text_view;
 
 
 	// Initialisation
