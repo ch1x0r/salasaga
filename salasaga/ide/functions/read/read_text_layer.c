@@ -49,10 +49,16 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 {
 	// Local variables
 	GError				*error = NULL;				// Pointer to error return structure
+	GdkColor			*fg_colour;					// Text foreground colour values, used when converting old project files to the newer (v5.0+) format
+	GtkTextTag			*fg_colour_tag;				// Text tag used when converting old project files to the newer (v5.0+) format
+	GString				*fg_colour_tag_name;		// Temporary GString, used to construct a text tag name
 	GdkAtom				format_atom_dest;			// Used when deserialising the gtk buffer string
 	GString				*message;					// Used to construct message strings
 	gboolean			return_code;				// Boolean return code
+	GString				*tag_name_text_size;		// Temporary GString, used to construct a text tag name
 	GString				*text_buffer_decode_gstring;  // Temporary GString used for base64 decoding
+	GtkTextIter			text_end;					// End position of text buffer
+	GtkTextTag			*text_size_text_tag;		// Text tag used when converting old project files to the newer (v5.0+) format
 	GtkTextIter			text_start;					// Start position of text buffer
 	layer				*tmp_layer;					// Temporary layer
 	layer_text			*tmp_text_ob;				// Temporary text layer object
@@ -63,7 +69,9 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 	GString				*validated_string;			// Receives known good strings from the validation function
 
 	// Initialisation
+	fg_colour_tag_name = g_string_new(NULL);
 	message = g_string_new(NULL);
+	tag_name_text_size = g_string_new(NULL);
 	text_buffer_decode_gstring = g_string_new(NULL);
 
 	// Construct a new text layer
@@ -660,9 +668,61 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 		// The text buffer already has the (straight text) in it, so we just need to apply the foreground colour, size, and font face information to it,
 		// then get rid of these separate definitions from the layer_text object in the header file
 
-// Needs doing still
-// tmp_text_ob->text_color.red
-// tmp_text_ob->font_size
+		// Retrieve the start and end points for the entire text buffer
+		gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), &text_start, &text_end);
+
+		// Apply the font face (via a tag) to the entire text buffer
+		gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), salasaga_font_names[tmp_text_ob->font_face], &text_start, &text_end);
+
+		// * Apply the font size (via a tag) to the entire text buffer *
+
+		// Create the name of a text tag to match the required size
+		g_string_printf(tag_name_text_size, "text size %.2f", tmp_text_ob->font_size);
+		text_size_text_tag = gtk_text_tag_table_lookup(GTK_TEXT_TAG_TABLE(text_tags_table), tag_name_text_size->str);
+		if (NULL == text_size_text_tag)
+		{
+			// No text tag with the requested size already exists in the tag table, so we create one
+			text_size_text_tag = gtk_text_tag_new(tag_name_text_size->str);
+			g_object_set(GTK_TEXT_TAG(text_size_text_tag), "size-points", tmp_text_ob->font_size, NULL);
+
+			// Add the new tag to the global text table
+			gtk_text_tag_table_add(GTK_TEXT_TAG_TABLE(text_tags_table), GTK_TEXT_TAG(text_size_text_tag));
+
+			// Add the new size tag to the linked list
+			text_tags_size_slist = g_slist_prepend(text_tags_size_slist, GTK_TEXT_TAG(text_size_text_tag));
+		}
+
+		// Apply the font size to the selected text
+		gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), GTK_TEXT_TAG(text_size_text_tag), &text_start, &text_end);
+
+		// * Apply the font foreground colour (via a tag) to the entire text buffer *
+
+		// Create the name of a text tag to match the desired colour
+		fg_colour = g_slice_new0(GdkColor);
+		fg_colour->red = tmp_text_ob->text_color.red;
+		fg_colour->green = tmp_text_ob->text_color.green;
+		fg_colour->blue = tmp_text_ob->text_color.blue;
+		g_string_printf(fg_colour_tag_name, "text fg colour #%u%u%u", fg_colour->red, fg_colour->green, fg_colour->blue);
+		fg_colour_tag = gtk_text_tag_table_lookup(GTK_TEXT_TAG_TABLE(text_tags_table), fg_colour_tag_name->str);
+		if (NULL == fg_colour_tag)
+		{
+			// No text tag with the requested colour already exists in the tag table, so we create one
+			fg_colour_tag = gtk_text_tag_new(fg_colour_tag_name->str);
+			g_object_set(GTK_TEXT_TAG(fg_colour_tag), "foreground-gdk", fg_colour, NULL);
+
+			// Add the new tag to the global text table
+			gtk_text_tag_table_add(GTK_TEXT_TAG_TABLE(text_tags_table), GTK_TEXT_TAG(fg_colour_tag));
+
+			// Add the new colour tag to the linked list
+			text_tags_fg_colour_slist = g_slist_prepend(text_tags_fg_colour_slist, GTK_TEXT_TAG(fg_colour_tag));
+		}
+
+		// Apply the foreground colour to the selected text
+		gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), GTK_TEXT_TAG(fg_colour_tag), &text_start, &text_end);
+
+		// Free the memory allocated in this part of the function
+		g_string_free(tag_name_text_size, TRUE);
+		g_string_free(fg_colour_tag_name, TRUE);
 	}
 
 	// Free memory allocated in this function
