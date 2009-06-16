@@ -263,8 +263,16 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 				// Calculate the size the character should be displayed at
 				font_size_int = pango_font_description_get_size(font_face);
 				font_size = rint(scaled_height_ratio * font_size_int);
-//				font_size = rint(scaled_width_ratio * font_size_int);
-				pango_font_description_set_size(font_face, font_size);
+				return_code_gbool = pango_font_description_get_size_is_absolute(font_face);
+				if (TRUE == return_code_gbool)
+				{
+					// Font size is in device units
+					pango_font_description_set_absolute_size(font_face, font_size);
+				} else
+				{
+					// Font size is in points
+					pango_font_description_set_size(font_face, font_size);
+				}
 
 				// Set the font
 				pango_layout_set_font_description(pango_layout, font_face);  // Includes font face and font size
