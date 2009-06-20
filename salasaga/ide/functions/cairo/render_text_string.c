@@ -46,19 +46,26 @@
 #include "../../externs.h"
 
 
-int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object, gfloat scaled_height_ratio, gdouble cairo_pos_x, gdouble cairo_pos_y, gfloat time_alpha, gboolean display_onscreen)
+int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object, gfloat scaled_height_ratio, gdouble incoming_cairo_pos_x, gdouble incoming_cairo_pos_y, gfloat time_alpha, gboolean display_onscreen)
 {
 	// Local variables
 	GSList					*applied_tags;			// Receives a list of text tags applied at a position in a text buffer
 	cairo_t					*cairo_context;			// Cairo drawing context
+	gdouble					cairo_pos_x = 0;		// Used for positioning where cairo will draw, in text layers
+	gdouble					cairo_pos_y = 0;		// Used for positioning where cairo will draw, in text layers
 	GtkTextIter				cursor_iter;			// Used for positioning in a text buffer
 	cairo_font_face_t		*font_array_face = NULL;  // Gets pointed to a cairo font face for each character when creating the text layer
 	GdkColor				*fg_colour;				// Foreground colour to set a text layer character to
 	PangoFontDescription	*font_face;				// Text layer font face to use when drawing a character
 	gdouble					font_size;				// Used for retrieving the desired size of a character in a text layer
 	gint					font_size_int;			// Used for calculating the scaled font size to display a text layer character at
+	gint					line_counter;
+	gfloat					line_height;
+	gfloat					line_width;
 	gint					loop_counter;			// Simple counter used in loops
-	gboolean				more_chars = TRUE;		// Simple boolean used when rendering a text layer
+	gfloat					max_line_width;
+	gboolean				more_chars;				// Simple boolean used when rendering a text layer
+	gint					num_lines;
 	gint					num_tags;				// Receives the total number of tags applied to a text character
 	GString					*render_string;			// Used for rendering a text layer, one character at a time
 	GtkTextAppearance		*text_appearance;		// Used in text layer rendering, to determine some of the attributes needed
@@ -66,8 +73,10 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	GtkTextBuffer			*text_buffer;			// Pointer to the text buffer we're using
 	GtkTextIter				text_end;				// The end position of the text buffer
 	cairo_text_extents_t	text_extents;			// Meta information about an onscreen text string
+	gfloat					text_height;
 	GtkWidget				*text_view;				// Pointer to a temporary text view
 	GtkTextTag				*this_tag = NULL;		// Used in a loop for pointing to individual text tags
+	gfloat					total_text_height;
 
 
 	// If we are given an existing cairo context, then reuse that, else create a new one
@@ -80,8 +89,13 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	}
 
 	// Set things up
+	cairo_pos_x = incoming_cairo_pos_x;
+	cairo_pos_y = incoming_cairo_pos_y;
+	max_line_width = 0;
 	render_string = g_string_new(NULL);
 	text_buffer = text_object->text_buffer;
+	text_height = 0;
+	total_text_height = 0;
 
 	// Create a text view, not for display, but instead to retrieve attribute information from the layer's text buffer
 	text_view = gtk_text_view_new_with_buffer(GTK_TEXT_BUFFER(text_buffer));
@@ -89,67 +103,139 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	// Retrieve the default attributes for the text view
 	text_attributes = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(text_view));
 
-	// Position the text iter at the start of the text buffer
-	gtk_text_buffer_get_start_iter(text_buffer, &cursor_iter);
-
-	// Loop around, processing all the characters in the text buffer
-	while (more_chars)
+	// Determine how many lines are in the text buffer, so we can loop through them
+	num_lines = gtk_text_buffer_get_line_count(text_buffer);
+	for (line_counter = 0; line_counter < num_lines; line_counter++)
 	{
-		// Retrieve the attributes at this cursor position
-		gtk_text_iter_get_attributes(&cursor_iter, text_attributes);
+		// Position the text iter at the start of the line
+		gtk_text_buffer_get_iter_at_line(text_buffer, &cursor_iter, line_counter);
 
-		// Simplify pointers
-		text_appearance = &(text_attributes->appearance);
-		font_face = text_attributes->font;
-		fg_colour = &(text_appearance->fg_color);
-
-		// Set the colour for this character
-		cairo_set_source_rgba(cairo_context, fg_colour->red / 65535.0, fg_colour->green / 65535.0, fg_colour->blue / 65535.0, time_alpha);
-
-		// Set the character to be written
-		g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
-
-		// Calculate the size the character should be displayed at
-		font_size_int = pango_font_description_get_size(font_face);
-		font_size = rint(scaled_height_ratio * font_size_int / PANGO_SCALE);
-
-		// Get the text tags that apply to this iter
-		applied_tags = gtk_text_iter_get_tags(&cursor_iter);
-
-		// Run through the list of tags and extract the info that tells us which font face to use in the cairo font face array
-		num_tags = g_slist_length(applied_tags);
-		for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
+		// Loop around, processing all the characters in the text buffer
+		line_height = 0;
+		line_width = 0;
+		more_chars = TRUE;
+		while (more_chars)
 		{
-			this_tag = g_slist_nth_data(applied_tags, loop_counter);
-			font_array_face = g_object_get_data(G_OBJECT(this_tag), "array-font");
-			if (NULL != font_array_face)
+			// Retrieve the attributes at this cursor position
+			gtk_text_iter_get_attributes(&cursor_iter, text_attributes);
+
+			// Simplify pointers
+			text_appearance = &(text_attributes->appearance);
+			font_face = text_attributes->font;
+			fg_colour = &(text_appearance->fg_color);
+
+			// Get the character to be written
+			g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
+
+			// Calculate the size the character should be displayed at
+			font_size_int = pango_font_description_get_size(font_face);
+			font_size = rint(scaled_height_ratio * font_size_int / PANGO_SCALE);
+
+			// Get the text tags that apply to this iter
+			applied_tags = gtk_text_iter_get_tags(&cursor_iter);
+
+			// Run through the list of tags and extract the info that tells us which font face to use in the cairo font face array
+			num_tags = g_slist_length(applied_tags);
+			for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
 			{
-				// Found the required font face info, so set the font face with it
-				cairo_set_font_face(cairo_context, font_array_face);
+				this_tag = g_slist_nth_data(applied_tags, loop_counter);
+				font_array_face = g_object_get_data(G_OBJECT(this_tag), "array-font");
+				if (NULL != font_array_face)
+				{
+					// Found the required font face info, so set the font face with it
+					cairo_set_font_face(cairo_context, font_array_face);
+				}
+			}
+
+			// Free the list of tags, as they're no longer needed
+			g_slist_free(applied_tags);
+
+			// Set the font size
+			cairo_set_font_size(cairo_context, font_size);
+
+			// Retrieve and store the on screen dimensions of this character
+			cairo_text_extents(cairo_context, render_string->str, &text_extents);
+			if (text_extents.height > line_height)
+			{
+				// Keep the largest character height for this line
+				line_height = text_extents.height;
+			}
+			line_width += text_extents.x_advance;
+
+			// Move to the next character in the text buffer
+			gtk_text_iter_forward_cursor_position(&cursor_iter);
+
+			// If we're at the end of the line, then break out of this loop
+			if (TRUE == gtk_text_iter_ends_line(&cursor_iter))
+			{
+				more_chars = FALSE;
 			}
 		}
 
-		// Free the list of tags, as they're no longer needed
-		g_slist_free(applied_tags);
+		// * At this point we've worked out the height and width of this line
+		total_text_height += line_height;
+		cairo_pos_x = incoming_cairo_pos_x + (TEXT_BORDER_PADDING_WIDTH * scaled_height_ratio);
+		cairo_pos_y += line_height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
 
-		// Set the font
-		cairo_set_font_size(cairo_context, font_size);
-
-		// Retrieve the on screen dimensions of this character
-		cairo_text_extents(cairo_context, render_string->str, &text_extents);
-
-		// Position the character on screen
-		cairo_move_to(cairo_context, cairo_pos_x, cairo_pos_y + text_extents.height);
-		cairo_pos_x += text_extents.x_advance;
-
-		// Display the character if requested
+		// If we've been requested to display the text on screen, then do so
 		if (TRUE == display_onscreen)
 		{
-			cairo_show_text(cairo_context, render_string->str);
-		}
+			// Reposition to the start of the line
+			gtk_text_buffer_get_iter_at_line(text_buffer, &cursor_iter, line_counter);
 
-		// Move to the next character in the text buffer
-		more_chars = gtk_text_iter_forward_cursor_position(&cursor_iter);
+			more_chars = TRUE;
+			while (more_chars)
+			{
+				// Set the foreground colour for this character
+				cairo_set_source_rgba(cairo_context, fg_colour->red / 65535.0, fg_colour->green / 65535.0, fg_colour->blue / 65535.0, time_alpha);
+
+				// Get the character to be written
+				g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
+
+				// Calculate the size the character should be displayed at
+				font_size_int = pango_font_description_get_size(font_face);
+				font_size = rint(scaled_height_ratio * font_size_int / PANGO_SCALE);
+
+				// Get the text tags that apply to this iter
+				applied_tags = gtk_text_iter_get_tags(&cursor_iter);
+
+				// Run through the list of tags and extract the info that tells us which font face to use in the cairo font face array
+				num_tags = g_slist_length(applied_tags);
+				for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
+				{
+					this_tag = g_slist_nth_data(applied_tags, loop_counter);
+					font_array_face = g_object_get_data(G_OBJECT(this_tag), "array-font");
+					if (NULL != font_array_face)
+					{
+						// Found the required font face info, so set the font face with it
+						cairo_set_font_face(cairo_context, font_array_face);
+					}
+				}
+
+				// Free the list of tags, as they're no longer needed
+				g_slist_free(applied_tags);
+
+				// Set the font size
+				cairo_set_font_size(cairo_context, font_size);
+
+				// Position the character on screen
+				cairo_text_extents(cairo_context, render_string->str, &text_extents);
+				cairo_move_to(cairo_context, cairo_pos_x, cairo_pos_y);
+				cairo_pos_x += text_extents.x_advance;
+
+				// Display the character on screen
+				cairo_show_text(cairo_context, render_string->str);
+
+				// Move to the next character in the text buffer
+				gtk_text_iter_forward_cursor_position(&cursor_iter);
+
+				// If we're at the end of the line, then break out of this loop
+				if (TRUE == gtk_text_iter_ends_line(&cursor_iter))
+				{
+					more_chars = FALSE;
+				}
+			}
+		}
 	}
 
 /*
