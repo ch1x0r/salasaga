@@ -498,7 +498,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			SWFText_setHeight(text_object, scaled_font_size);
 			text_real_font_size = SWFText_getAscent(text_object) + SWFText_getDescent(text_object);
 
-			// Set the foreground color for the text
+			// Set the foreground colour for the text
 			red_component = roundf(text_data->text_color.red / 256);
 			green_component = roundf(text_data->text_color.green / 256);
 			blue_component = roundf(text_data->text_color.blue / 256);
