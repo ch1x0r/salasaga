@@ -55,6 +55,9 @@ gboolean create_text_tags(void)
 		// Add properties to the text tag.  In this case, we add the font to be applied when the tag is applied
 		g_object_set(text_tags_fonts[loop_counter], "font", salasaga_font_names[loop_counter], NULL);
 
+		// Add a matching data item to this tag, pointing to the equivalent font in our loaded cairo font face array
+		g_object_set_data(G_OBJECT(text_tags_fonts[loop_counter]), "array-font", cairo_font_face[loop_counter]);
+
 		// Add the font tag to the global text table
 		gtk_text_tag_table_add(text_tags_table, text_tags_fonts[loop_counter]);
 	}
