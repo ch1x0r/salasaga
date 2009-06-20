@@ -29,7 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
-int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object, gfloat scaled_height_ratio, gdouble cairo_pos_x, gdouble cairo_pos_y, gfloat time_alpha, gboolean display_onscreen);
+int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object, gfloat scaled_width_ratio, gfloat scaled_height_ratio, gdouble incoming_cairo_pos_x, gdouble incoming_cairo_pos_y, gfloat time_alpha, gboolean display_onscreen);
 
 #ifdef __cplusplus
 }

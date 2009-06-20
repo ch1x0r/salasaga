@@ -46,7 +46,7 @@
 #include "../../externs.h"
 
 
-int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object, gfloat scaled_height_ratio, gdouble incoming_cairo_pos_x, gdouble incoming_cairo_pos_y, gfloat time_alpha, gboolean display_onscreen)
+int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object, gfloat scaled_width_ratio, gfloat scaled_height_ratio, gdouble incoming_cairo_pos_x, gdouble incoming_cairo_pos_y, gfloat time_alpha, gboolean display_onscreen)
 {
 	// Local variables
 	GSList					*applied_tags;			// Receives a list of text tags applied at a position in a text buffer
@@ -62,6 +62,8 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	gint					line_counter;
 	gfloat					line_height;
 	gfloat					line_width;
+	gfloat					line_x_bearing;
+	gboolean				line_x_bearing_known;	// Simple boolean to track if we know the x_bearing for line yet
 	gint					loop_counter;			// Simple counter used in loops
 	gfloat					max_line_width;
 	gboolean				more_chars;				// Simple boolean used when rendering a text layer
@@ -113,6 +115,8 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 		// Loop around, processing all the characters in the text buffer
 		line_height = 0;
 		line_width = 0;
+		line_x_bearing = 0;
+		line_x_bearing_known = FALSE;
 		more_chars = TRUE;
 		while (more_chars)
 		{
@@ -160,6 +164,14 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 				// Keep the largest character height for this line
 				line_height = text_extents.height;
 			}
+			if (FALSE == line_x_bearing_known)
+			{
+				// We add the x_bearing for the very first character of a line, so
+				// the display of text starts that little bit further to the right
+				line_x_bearing = text_extents.x_bearing;
+				line_width += line_x_bearing;
+				line_x_bearing_known = TRUE;
+			}
 			line_width += text_extents.x_advance;
 
 			// Move to the next character in the text buffer
@@ -174,8 +186,14 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 
 		// * At this point we've worked out the height and width of this line
 		total_text_height += line_height;
-		cairo_pos_x = incoming_cairo_pos_x + (TEXT_BORDER_PADDING_WIDTH * scaled_height_ratio);
-		cairo_pos_y += line_height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
+		cairo_pos_x = incoming_cairo_pos_x + line_x_bearing;
+		cairo_pos_y += line_height;
+
+		// Keep the largest line width known
+		if (line_width > max_line_width)
+		{
+			max_line_width = line_width;
+		}
 
 		// If we've been requested to display the text on screen, then do so
 		if (TRUE == display_onscreen)
@@ -183,6 +201,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 			// Reposition to the start of the line
 			gtk_text_buffer_get_iter_at_line(text_buffer, &cursor_iter, line_counter);
 
+			// Loop around displaying the characters
 			more_chars = TRUE;
 			while (more_chars)
 			{
@@ -219,8 +238,8 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 				cairo_set_font_size(cairo_context, font_size);
 
 				// Position the character on screen
-				cairo_text_extents(cairo_context, render_string->str, &text_extents);
 				cairo_move_to(cairo_context, cairo_pos_x, cairo_pos_y);
+				cairo_text_extents(cairo_context, render_string->str, &text_extents);
 				cairo_pos_x += text_extents.x_advance;
 
 				// Display the character on screen
@@ -237,6 +256,13 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 			}
 		}
 	}
+
+	// * At this point we have processed all the lines of text, and should therefore know the dimensions *
+
+	// Store the text dimensions for use by other functions
+//fixme1: This isn't including any of the text layer background just yet
+	text_object->rendered_width = max_line_width / scaled_width_ratio;
+	text_object->rendered_height = total_text_height / scaled_height_ratio;
 
 /*
 
