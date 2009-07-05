@@ -53,53 +53,26 @@
 void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, gfloat time_position)
 {
 	// Local variables
-	GSList					*applied_tags;			// Receives a list of text tags applied at a position in a text buffer
 	gfloat					blue_component;			// Blue component of a colour
 	cairo_t					*cairo_context;			// Cairo drawing context
 	gdouble					cairo_pos_x = 0;		// Used for positioning where cairo will draw, in text layers
 	gdouble					cairo_pos_y = 0;		// Used for positioning where cairo will draw, in text layers
-	GtkTextIter				cursor_iter;			// Used for positioning in a text buffer
 	gfloat					end_time;				// Time in seconds of the layer objects finish time
-	cairo_font_face_t		*font_array_face = NULL;  // Gets pointed to a cairo font face for each character when creating the text layer
-	GdkColor				*fg_colour;				// Foreground colour to set a text layer character to
-	PangoFontDescription	*font_face;				// Text layer font face to use when drawing a character
-	gdouble					font_size;				// Used for retrieving the desired size of a character in a text layer
-	gint					font_size_int;			// Used for calculating the scaled font size to display a text layer character at
 	gfloat					green_component;		// Green component of a colour
 	gint					height;					//
 	cairo_matrix_t			image_matrix;			// Transformation matrix used to position a cairo pattern
 	GtkAllocation			layer_positions;		// Offset and dimensions for a given layer object
-	gint					line_counter;
-	gint					loop_counter;			// Simple counter used in loops
-	gfloat					max_line_width;
 	GString					*message;				// Used to construct message strings
-	gboolean				more_chars = TRUE;		// Simple boolean used when rendering a text layer
-	gint					num_lines;
-	gint					num_tags;				// Receives the total number of tags applied to a text character
 	gint					pixmap_height;			// Receives the height of a given pixmap
 	gint					pixmap_width;			// Receives the width of a given pixmap
-	guint					radius = 10;			// Radius to use for rounded rectangles
 	gfloat					red_component;			// Red component of a colour
-	GString					*render_string;			// Used for rendering a text layer, one character at a time
 	gboolean				return_code_gbool;		// Receives gboolean return codes
 	gfloat					scaled_height_ratio;	// Used to calculate a vertical scaling ratio
 	gfloat					scaled_width_ratio;		// Used to calculate a horizontal scaling ratio
-	GdkColor				*selected_colour;		// Pointer to the foreground colour of the text
+	GdkColor				*selected_colour;		// Pointer to a foreground colour
 	gfloat					start_time;				// Time in seconds of the layer objects start time
-	gfloat					text_adjustment;		// Y offset for a specific line
-	GtkTextAppearance		*text_appearance;		// Used in text layer rendering, to determine some of the attributes needed
-	GtkTextAttributes		*text_attributes;		// Pointer to the attributes for a text layer character
-	GtkTextBuffer			*text_buffer;			// Pointer to the text buffer we're using
-	GtkTextIter				text_end;				// The end position of the text buffer
-	cairo_text_extents_t	text_extents;			// Meta information about an onscreen text string
-	gfloat					text_height;
-	gint					text_left;				// Pixel number onscreen for the left side of text
 	layer_text				*text_object;			// Pointer to our object text data
-	GtkTextIter				text_start;				// The start position of the text buffer
-	gint					text_top;				// Pixel number onscreen for the top of text
-	GtkWidget				*text_view;				// Pointer to a temporary text view
 	layer_image				*this_image_data;		// Pointer to image layer data
-	GtkTextTag				*this_tag = NULL;		// Used in a loop for pointing to individual text tags
 	gfloat					time_alpha = 1.0;		// Alpha value to use at our desired point in time (defaulting to 1.0 = full opacity)
 	gint					width;					//
 	gint					x_offset;				// X coordinate of the object at the desired point in time
@@ -231,7 +204,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			// Render the text layer on screen
 			cairo_pos_x = layer_positions.x * scaled_width_ratio;
 			cairo_pos_y = layer_positions.y * scaled_height_ratio;
-			render_text_string(cairo_context, text_object, scaled_height_ratio, cairo_pos_x, cairo_pos_y, time_alpha, TRUE);
+			render_text_string(cairo_context, text_object, scaled_width_ratio, scaled_height_ratio, cairo_pos_x, cairo_pos_y, time_alpha, TRUE);
 
 			// Restore the cairo state to the way it was
 			cairo_restore(cairo_context);
