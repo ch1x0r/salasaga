@@ -50,6 +50,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 {
 	// Local variables
 	GSList					*applied_tags;			// Receives a list of text tags applied at a position in a text buffer
+	gfloat					blue_component;			// Blue component of a colour
 	cairo_t					*cairo_context;			// Cairo drawing context
 	gdouble					cairo_pos_x = 0;		// Used for positioning where cairo will draw, in text layers
 	gdouble					cairo_pos_y = 0;		// Used for positioning where cairo will draw, in text layers
@@ -59,6 +60,8 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	PangoFontDescription	*font_face;				// Text layer font face to use when drawing a character
 	gdouble					font_size;				// Used for retrieving the desired size of a character in a text layer
 	gint					font_size_int;			// Used for calculating the scaled font size to display a text layer character at
+	gfloat					green_component;		// Green component of a colour
+	gint					height;					//
 	gint					line_counter;
 	gfloat					line_height;
 	gfloat					line_width;
@@ -69,6 +72,9 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	gboolean				more_chars;				// Simple boolean used when rendering a text layer
 	gint					num_lines;
 	gint					num_tags;				// Receives the total number of tags applied to a text character
+	guint					radius = 10;			// Radius to use for rounded rectangles
+	gfloat					red_component;			// Red component of a colour
+	GdkColor				*selected_colour;		// Pointer to a foreground colour
 	GString					*render_string;			// Used for rendering a text layer, one character at a time
 	GtkTextAppearance		*text_appearance;		// Used in text layer rendering, to determine some of the attributes needed
 	GtkTextAttributes		*text_attributes;		// Pointer to the attributes for a text layer character
@@ -79,6 +85,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	GtkWidget				*text_view;				// Pointer to a temporary text view
 	GtkTextTag				*this_tag = NULL;		// Used in a loop for pointing to individual text tags
 	gfloat					total_text_height;
+	gint					width;					//
 
 
 	// If we are given an existing cairo context, then reuse that, else create a new one
@@ -185,26 +192,167 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 		}
 
 		// * At this point we've worked out the height and width of this line
-		total_text_height += line_height;
+		total_text_height += line_height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
 		cairo_pos_x = incoming_cairo_pos_x + line_x_bearing;
-		cairo_pos_y += line_height;
+		cairo_pos_y += line_height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
 
 		// Keep the largest line width known
 		if (line_width > max_line_width)
 		{
 			max_line_width = line_width;
 		}
+	}
 
-		// If we've been requested to display the text on screen, then do so
-		if (TRUE == display_onscreen)
+	// * At this point we have processed all the lines of text, and should therefore know the dimensions minus the background area *
+
+	// Calculate the size of the text layer when including the background part
+	width = max_line_width + (TEXT_BORDER_PADDING_WIDTH * 4 * scaled_width_ratio);
+	height = total_text_height + (TEXT_BORDER_PADDING_HEIGHT * 4 * scaled_height_ratio);
+
+	// Store the text dimensions for use by other functions
+	text_object->rendered_width = width / scaled_width_ratio;
+	text_object->rendered_height = height / scaled_height_ratio;
+
+	// If requested, actually do the drawing
+	if (TRUE == display_onscreen)
+	{
+		// * If required, draw the background for the text layer *
+		if (TRUE == text_object->show_bg)
 		{
+			// Create the solid background fill
+			cairo_set_operator(cairo_context, CAIRO_OPERATOR_SOURCE);
+			selected_colour = &text_object->bg_fill_colour;
+			red_component = ((gfloat) selected_colour->red) / 65536;
+			green_component = ((gfloat) selected_colour->green) / 65536;
+			blue_component = ((gfloat) selected_colour->blue) / 65536;
+			cairo_set_source_rgb(cairo_context, red_component, green_component, blue_component);
+
+			// Rounded rectangle method from http://www.cairographics.org/cookbook/roundedrectangles/
+			cairo_move_to(cairo_context, incoming_cairo_pos_x + radius, incoming_cairo_pos_y);
+			cairo_line_to(cairo_context, incoming_cairo_pos_x + width - radius, incoming_cairo_pos_y);
+			cairo_curve_to(cairo_context, incoming_cairo_pos_x + width, incoming_cairo_pos_y, incoming_cairo_pos_x + width, incoming_cairo_pos_y, incoming_cairo_pos_x + width, incoming_cairo_pos_y + radius);
+			cairo_line_to(cairo_context, incoming_cairo_pos_x + width, incoming_cairo_pos_y + height - radius);
+			cairo_curve_to(cairo_context, incoming_cairo_pos_x + width, incoming_cairo_pos_y + height, incoming_cairo_pos_x + width, incoming_cairo_pos_y + height, incoming_cairo_pos_x + width - radius, incoming_cairo_pos_y + height);
+			cairo_line_to(cairo_context, incoming_cairo_pos_x + radius, incoming_cairo_pos_y + height);
+			cairo_curve_to(cairo_context, incoming_cairo_pos_x, incoming_cairo_pos_y + height, incoming_cairo_pos_x, incoming_cairo_pos_y + height, incoming_cairo_pos_x, incoming_cairo_pos_y + height - radius);
+			cairo_line_to(cairo_context, incoming_cairo_pos_x, incoming_cairo_pos_y + radius);
+			cairo_curve_to(cairo_context, incoming_cairo_pos_x, incoming_cairo_pos_y, incoming_cairo_pos_x, incoming_cairo_pos_y, incoming_cairo_pos_x + radius, incoming_cairo_pos_y);
+			cairo_clip(cairo_context);
+			cairo_paint_with_alpha(cairo_context, time_alpha);
+
+			// Draw the rounded rectangle border
+			cairo_set_operator(cairo_context, CAIRO_OPERATOR_OVER);
+			selected_colour = &text_object->bg_border_colour;
+			red_component = ((gfloat) selected_colour->red) / 65536;
+			green_component = ((gfloat) selected_colour->green) / 65536;
+			blue_component = ((gfloat) selected_colour->blue) / 65536;
+			cairo_set_source_rgba(cairo_context, red_component, green_component, blue_component, time_alpha);
+			cairo_set_line_width(cairo_context, text_object->bg_border_width);
+			cairo_set_line_join(cairo_context, CAIRO_LINE_JOIN_ROUND);
+			cairo_set_line_cap(cairo_context, CAIRO_LINE_CAP_ROUND);
+			cairo_move_to(cairo_context, incoming_cairo_pos_x + radius, incoming_cairo_pos_y);
+			cairo_line_to(cairo_context, incoming_cairo_pos_x + width - radius, incoming_cairo_pos_y);
+			cairo_curve_to(cairo_context, incoming_cairo_pos_x + width, incoming_cairo_pos_y, incoming_cairo_pos_x + width, incoming_cairo_pos_y, incoming_cairo_pos_x + width, incoming_cairo_pos_y + radius);
+			cairo_line_to(cairo_context, incoming_cairo_pos_x + width, incoming_cairo_pos_y + height - radius);
+			cairo_curve_to(cairo_context, incoming_cairo_pos_x + width, incoming_cairo_pos_y + height, incoming_cairo_pos_x + width, incoming_cairo_pos_y + height, incoming_cairo_pos_x + width - radius, incoming_cairo_pos_y + height);
+			cairo_line_to(cairo_context, incoming_cairo_pos_x + radius, incoming_cairo_pos_y + height);
+			cairo_curve_to(cairo_context, incoming_cairo_pos_x, incoming_cairo_pos_y + height, incoming_cairo_pos_x, incoming_cairo_pos_y + height, incoming_cairo_pos_x, incoming_cairo_pos_y + height - radius);
+			cairo_line_to(cairo_context, incoming_cairo_pos_x, incoming_cairo_pos_y + radius);
+			cairo_curve_to(cairo_context, incoming_cairo_pos_x, incoming_cairo_pos_y, incoming_cairo_pos_x, incoming_cairo_pos_y, incoming_cairo_pos_x + radius, incoming_cairo_pos_y);
+			cairo_stroke(cairo_context);
+		}
+
+		// Render the text
+		cairo_pos_y = incoming_cairo_pos_y + (TEXT_BORDER_PADDING_HEIGHT * 2 * scaled_height_ratio);
+		for (line_counter = 0; line_counter < num_lines; line_counter++)
+		{
+			// Position the text iter at the start of the line
+			gtk_text_buffer_get_iter_at_line(text_buffer, &cursor_iter, line_counter);
+
+			// Loop around, processing all the characters in the text buffer
+			line_height = 0;
+			more_chars = TRUE;
+			cairo_pos_x = incoming_cairo_pos_x + (TEXT_BORDER_PADDING_WIDTH * 2 * scaled_width_ratio);
+
+			while (more_chars)
+			{
+				// Retrieve the attributes at this cursor position
+				gtk_text_iter_get_attributes(&cursor_iter, text_attributes);
+
+				// Simplify pointers
+				text_appearance = &(text_attributes->appearance);
+				font_face = text_attributes->font;
+				fg_colour = &(text_appearance->fg_color);
+
+				// Get the character to be written
+				g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
+
+				// Calculate the size the character should be displayed at
+				font_size_int = pango_font_description_get_size(font_face);
+				font_size = rint(scaled_height_ratio * font_size_int / PANGO_SCALE);
+
+				// Get the text tags that apply to this iter
+				applied_tags = gtk_text_iter_get_tags(&cursor_iter);
+
+				// Run through the list of tags and extract the info that tells us which font face to use in the cairo font face array
+				num_tags = g_slist_length(applied_tags);
+				for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
+				{
+					this_tag = g_slist_nth_data(applied_tags, loop_counter);
+					font_array_face = g_object_get_data(G_OBJECT(this_tag), "array-font");
+					if (NULL != font_array_face)
+					{
+						// Found the required font face info, so set the font face with it
+						cairo_set_font_face(cairo_context, font_array_face);
+					}
+				}
+
+				// Free the list of tags, as they're no longer needed
+				g_slist_free(applied_tags);
+
+				// Set the font size
+				cairo_set_font_size(cairo_context, font_size);
+
+				// Retrieve and store the on screen dimensions of this character
+				cairo_text_extents(cairo_context, render_string->str, &text_extents);
+
+				// Keep the largest character height for this line, so we know how far to move down by
+				if (text_extents.height > line_height)
+				{
+					line_height = text_extents.height;
+				}
+
+				// Move to the next character in the text buffer
+				gtk_text_iter_forward_cursor_position(&cursor_iter);
+
+				// If we're at the end of the line, then break out of this loop
+				if (TRUE == gtk_text_iter_ends_line(&cursor_iter))
+				{
+					more_chars = FALSE;
+				}
+			}
+
+			// * We've worked out the line height now, so we position the y height for the entire line then *
+			// * run through the characters again, this time displaying them at the required x and y offset *
+
 			// Reposition to the start of the line
 			gtk_text_buffer_get_iter_at_line(text_buffer, &cursor_iter, line_counter);
 
-			// Loop around displaying the characters
+			line_x_bearing = 0;
+			line_x_bearing_known = FALSE;
 			more_chars = TRUE;
+			cairo_pos_x = incoming_cairo_pos_x + (TEXT_BORDER_PADDING_WIDTH * 2 * scaled_width_ratio);
+			cairo_pos_y += line_height;
 			while (more_chars)
 			{
+				// Retrieve the attributes at this cursor position
+				gtk_text_iter_get_attributes(&cursor_iter, text_attributes);
+
+				// Simplify pointers
+				text_appearance = &(text_attributes->appearance);
+				font_face = text_attributes->font;
+				fg_colour = &(text_appearance->fg_color);
+
 				// Set the foreground colour for this character
 				cairo_set_source_rgba(cairo_context, fg_colour->red / 65535.0, fg_colour->green / 65535.0, fg_colour->blue / 65535.0, time_alpha);
 
@@ -237,9 +385,21 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 				// Set the font size
 				cairo_set_font_size(cairo_context, font_size);
 
+				// Retrieve and store the on screen dimensions of this character
+				cairo_text_extents(cairo_context, render_string->str, &text_extents);
+
+				// If this is the first character on the line, we possibly need to position a bit differently
+				if (FALSE == line_x_bearing_known)
+				{
+					// We add the x_bearing for the very first character of a line, so
+					// the display of text starts that little bit further to the right
+					line_x_bearing = text_extents.x_bearing;
+					cairo_pos_x += line_x_bearing;
+					line_x_bearing_known = TRUE;
+				}
+
 				// Position the character on screen
 				cairo_move_to(cairo_context, cairo_pos_x, cairo_pos_y);
-				cairo_text_extents(cairo_context, render_string->str, &text_extents);
 				cairo_pos_x += text_extents.x_advance;
 
 				// Display the character on screen
@@ -254,124 +414,11 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 					more_chars = FALSE;
 				}
 			}
+
+			// We've reached the end of the line, so add the vertical padding between text lines
+			cairo_pos_y += TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio;
 		}
 	}
-
-	// * At this point we have processed all the lines of text, and should therefore know the dimensions *
-
-	// Store the text dimensions for use by other functions
-//fixme1: This isn't including any of the text layer background just yet
-	text_object->rendered_width = max_line_width / scaled_width_ratio;
-	text_object->rendered_height = total_text_height / scaled_height_ratio;
-
-/*
-
-	// Determine the on screen size of the text object
-	max_line_width = 0;
-	text_height = 0;
-	num_lines = gtk_text_buffer_get_line_count(text_buffer);
-	for (line_counter = 0; line_counter < num_lines; line_counter++)
-	{
-		gtk_text_buffer_get_iter_at_line(text_buffer, &text_start, line_counter);
-		text_end = text_start;
-		gtk_text_iter_forward_to_line_end(&text_end);
-		if (NULL != text_string)
-			g_free(text_string);
-		text_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
-		cairo_text_extents(cairo_context, text_string, &text_extents);
-		text_height += text_extents.height;
-		if ((text_extents.width + text_extents.x_bearing) > max_line_width)
-			max_line_width = text_extents.width + text_extents.x_bearing;
-	}
-	// Calculate the text object (including background) offsets and sizing
-	cairo_text_extents(cairo_context, text_string, &text_extents);
-	x_offset = layer_positions.x * scaled_width_ratio;
-	y_offset = layer_positions.y * scaled_height_ratio;
-	width = max_line_width + (TEXT_BORDER_PADDING_WIDTH * 4 * scaled_width_ratio);
-	height = text_height + (TEXT_BORDER_PADDING_HEIGHT * (num_lines + 2) * scaled_height_ratio);
-
-	// Store the rendered width of the text object with the layer itself, for use by bounding box code
-	text_object->rendered_width = width / scaled_width_ratio;
-	text_object->rendered_height = height / scaled_height_ratio;
-
-	// * If required, draw the background for the text layer *
-	if (TRUE == text_object->show_bg)
-	{
-		// Create the solid background fill
-		cairo_set_operator(cairo_context, CAIRO_OPERATOR_SOURCE);
-		selected_colour = &((layer_text *) this_layer_data->object_data)->bg_fill_colour;
-		red_component = ((gfloat) selected_colour->red) / 65536;
-		green_component = ((gfloat) selected_colour->green) / 65536;
-		blue_component = ((gfloat) selected_colour->blue) / 65536;
-		cairo_set_source_rgb(cairo_context, red_component, green_component, blue_component);
-
-		// Rounded rectangle method from http://www.cairographics.org/cookbook/roundedrectangles/
-		cairo_move_to(cairo_context, x_offset + radius, y_offset);
-		cairo_line_to(cairo_context, x_offset + width - radius, y_offset);
-		cairo_curve_to(cairo_context, x_offset + width, y_offset, x_offset + width, y_offset, x_offset + width, y_offset + radius);
-		cairo_line_to(cairo_context, x_offset + width, y_offset + height - radius);
-		cairo_curve_to(cairo_context, x_offset + width, y_offset + height, x_offset + width, y_offset + height, x_offset + width - radius, y_offset + height);
-		cairo_line_to(cairo_context, x_offset + radius, y_offset + height);
-		cairo_curve_to(cairo_context, x_offset, y_offset + height, x_offset, y_offset + height, x_offset, y_offset + height - radius);
-		cairo_line_to(cairo_context, x_offset, y_offset + radius);
-		cairo_curve_to(cairo_context, x_offset, y_offset, x_offset, y_offset, x_offset + radius, y_offset);
-		cairo_clip(cairo_context);
-		cairo_paint_with_alpha(cairo_context, time_alpha);
-
-		// Draw the rounded rectangle border
-		cairo_set_operator(cairo_context, CAIRO_OPERATOR_OVER);
-		selected_colour = &((layer_text *) this_layer_data->object_data)->bg_border_colour;
-		red_component = ((gfloat) selected_colour->red) / 65536;
-		green_component = ((gfloat) selected_colour->green) / 65536;
-		blue_component = ((gfloat) selected_colour->blue) / 65536;
-		cairo_set_source_rgba(cairo_context, red_component, green_component, blue_component, time_alpha);
-		cairo_set_line_width(cairo_context, ((layer_text *) this_layer_data->object_data)->bg_border_width);
-		cairo_set_line_join(cairo_context, CAIRO_LINE_JOIN_ROUND);
-		cairo_set_line_cap(cairo_context, CAIRO_LINE_CAP_ROUND);
-		cairo_move_to(cairo_context, x_offset + radius, y_offset);
-		cairo_line_to(cairo_context, x_offset + width - radius, y_offset);
-		cairo_curve_to(cairo_context, x_offset + width, y_offset, x_offset + width, y_offset, x_offset + width, y_offset + radius);
-		cairo_line_to(cairo_context, x_offset + width, y_offset + height - radius);
-		cairo_curve_to(cairo_context, x_offset + width, y_offset + height, x_offset + width, y_offset + height, x_offset + width - radius, y_offset + height);
-		cairo_line_to(cairo_context, x_offset + radius, y_offset + height);
-		cairo_curve_to(cairo_context, x_offset, y_offset + height, x_offset, y_offset + height, x_offset, y_offset + height - radius);
-		cairo_line_to(cairo_context, x_offset, y_offset + radius);
-		cairo_curve_to(cairo_context, x_offset, y_offset, x_offset, y_offset, x_offset + radius, y_offset);
-		cairo_stroke(cairo_context);
-	}
-
-	// * Draw the text string itself *
-
-	// Set the desired font foreground colour
-	selected_colour = &((layer_text *) this_layer_data->object_data)->text_color;
-	red_component = ((gfloat) selected_colour->red) / 65536;
-	green_component = ((gfloat) selected_colour->green) / 65536;
-	blue_component = ((gfloat) selected_colour->blue) / 65536;
-	cairo_set_source_rgba(cairo_context, red_component, green_component, blue_component, time_alpha);
-
-	// Loop around, drawing lines of text
-	text_top = y_offset + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
-	for (line_counter = 0; line_counter < num_lines; line_counter++)
-	{
-		// Retrieve a line of text
-		gtk_text_buffer_get_iter_at_line(text_buffer, &text_start, line_counter);
-		text_end = text_start;
-		gtk_text_iter_forward_to_line_end(&text_end);
-		if (NULL != text_string)
-			g_free(text_string);
-		text_string = gtk_text_iter_get_visible_text(&text_start, &text_end);
-
-		// Move onscreen X and Y coordinates to correct position for the line of text
-		cairo_text_extents(cairo_context, text_string, &text_extents);
-		text_left = x_offset + text_extents.x_bearing + (TEXT_BORDER_PADDING_WIDTH * scaled_width_ratio);
-		text_top += text_extents.height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
-		text_adjustment = text_extents.height + text_extents.y_bearing;
-		cairo_move_to(cairo_context, text_left, text_top -(text_adjustment));
-
-		// Draw the line of text
-		cairo_show_text(cairo_context, text_string);
-	}
-*/
 
 	// If we created a new cairo context, then destroy it
 	if (NULL == existing_cairo_context)
