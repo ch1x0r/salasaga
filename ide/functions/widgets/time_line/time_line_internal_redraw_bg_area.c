@@ -37,6 +37,7 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "time_line.h"
+#include "time_line_internal_initialise_bg_image.h"
 
 
 gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint y1, gint width, gint height)

@@ -36,7 +36,9 @@
 // Salasaga includes
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
+#include "../../dialog/display_warning.h"
 #include "time_line.h"
+#include "time_line_internal_redraw_bg_area.h"
 
 
 gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gint new_width, gint new_height)
