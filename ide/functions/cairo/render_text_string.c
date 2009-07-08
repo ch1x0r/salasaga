@@ -75,11 +75,11 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	guint					radius = 10;			// Radius to use for rounded rectangles
 	gfloat					red_component;			// Red component of a colour
 	GdkColor				*selected_colour;		// Pointer to a foreground colour
+	static GdkColormap		*system_colourmap = NULL;	// Colormap used for drawing
 	GString					*render_string;			// Used for rendering a text layer, one character at a time
 	GtkTextAppearance		*text_appearance;		// Used in text layer rendering, to determine some of the attributes needed
 	GtkTextAttributes		*text_attributes;		// Pointer to the attributes for a text layer character
 	GtkTextBuffer			*text_buffer;			// Pointer to the text buffer we're using
-	GtkTextIter				text_end;				// The end position of the text buffer
 	cairo_text_extents_t	text_extents;			// Meta information about an onscreen text string
 	gfloat					text_height;
 	GtkWidget				*text_view;				// Pointer to a temporary text view
@@ -94,6 +94,18 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 		cairo_context = existing_cairo_context;
 	} else
 	{
+		// Create the front store if it doesn't already exist
+		if (NULL == front_store)
+		{
+			if (NULL == system_colourmap)
+			{
+				system_colourmap = gdk_colormap_get_system();
+			}
+			front_store = gdk_pixmap_new(NULL, project_width, project_height, system_colourmap->visual->depth);
+			gdk_drawable_set_colormap(GDK_DRAWABLE(front_store), GDK_COLORMAP(system_colourmap));
+		}
+
+		// Create a cairo context, as one wasn't supplied
 		cairo_context = gdk_cairo_create(GDK_PIXMAP(front_store));
 	}
 
