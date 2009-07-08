@@ -37,6 +37,8 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "time_line.h"
+#include "time_line_internal_draw_layer_duration.h"
+#include "time_line_internal_draw_layer_name.h"
 
 
 gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv)

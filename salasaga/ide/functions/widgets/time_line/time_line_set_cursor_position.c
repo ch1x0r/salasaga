@@ -37,6 +37,7 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "time_line.h"
+#include "time_line_get_type.h"
 
 
 void time_line_set_cursor_position(GtkWidget *widget, gfloat new_cursor_position)

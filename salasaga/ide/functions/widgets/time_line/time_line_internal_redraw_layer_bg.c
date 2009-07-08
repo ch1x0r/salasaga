@@ -37,6 +37,7 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "time_line.h"
+#include "time_line_internal_redraw_bg_area.h"
 
 
 gboolean time_line_internal_redraw_layer_bg(TimeLinePrivate *priv, gint layer_number)

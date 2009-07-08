@@ -37,6 +37,9 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "time_line.h"
+#include "time_line_get_type.h"
+#include "time_line_internal_draw_selection_highlight.h"
+#include "time_line_internal_redraw_bg_area.h"
 
 
 // fixme3: Should this be done as a property instead?

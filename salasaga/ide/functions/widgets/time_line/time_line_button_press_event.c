@@ -36,10 +36,17 @@
 // Salasaga includes
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
+#include "../../layer/layer_edit.h"
+#include "../../working_area/draw_handle_box.h"
+#include "../../working_area/draw_layer_start_and_end_points.h"
+#include "../../working_area/draw_workspace.h"
 #include "time_line.h"
 #include "time_line_get_cursor_position.h"
 #include "time_line_get_left_border_width.h"
+#include "time_line_get_type.h"
+#include "time_line_internal_draw_guide_line.h"
 #include "time_line_set_cursor_position.h"
+#include "time_line_set_selected_layer_num.h"
 
 
 void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)

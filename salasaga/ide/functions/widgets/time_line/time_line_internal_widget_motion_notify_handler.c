@@ -36,13 +36,22 @@
 // Salasaga includes
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
+#include "../../dialog/display_warning.h"
+#include "../../working_area/draw_workspace.h"
 #include "time_line.h"
 #include "time_line_get_cursor_position.h"
+#include "time_line_get_left_border_width.h"
+#include "time_line_get_type.h"
+#include "time_line_internal_draw_guide_line.h"
 #include "time_line_internal_draw_layer_duration.h"
+#include "time_line_internal_draw_layer_info.h"
 #include "time_line_internal_draw_layer_name.h"
+#include "time_line_internal_initialise_display_buffer.h"
 #include "time_line_internal_invalidate_layer_area.h"
+#include "time_line_internal_redraw_bg_area.h"
 #include "time_line_internal_redraw_layer_bg.h"
 #include "time_line_set_cursor_position.h"
+#include "time_line_set_selected_layer_num.h"
 
 
 gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_line)

@@ -36,9 +36,16 @@
 // Salasaga includes
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
+#include "../../film_strip/film_strip_create_thumbnail.h"
+#include "../../dialog/display_warning.h"
+#include "../../working_area/draw_layer_start_and_end_points.h"
 #include "time_line.h"
+#include "time_line_get_type.h"
 #include "time_line_internal_draw_layer_duration.h"
+#include "time_line_internal_draw_layer_info.h"
 #include "time_line_internal_draw_layer_name.h"
+#include "time_line_internal_initialise_bg_image.h"
+#include "time_line_internal_initialise_display_buffer.h"
 #include "time_line_internal_invalidate_layer_area.h"
 #include "time_line_internal_redraw_layer_bg.h"
 

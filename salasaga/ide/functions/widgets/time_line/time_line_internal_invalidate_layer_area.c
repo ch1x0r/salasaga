@@ -37,6 +37,7 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "time_line.h"
+#include "time_line_get_type.h"
 
 
 gboolean time_line_internal_invalidate_layer_area(GtkWidget *widget, gint layer_number)
