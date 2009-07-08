@@ -30,7 +30,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../cairo/calculate_text_object_size.h"
+#include "../cairo/render_text_string.h"
 #include "../dialog/display_warning.h"
 
 
@@ -43,6 +43,10 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 	gfloat				full_end_time;				// Time in seconds when the layer finishes being fully visible
 	gfloat				full_start_time;			// Time in seconds when the layer starts being fully visible
 	GString				*message;					// Used to construct message strings
+	gint				pixmap_height;				// Receives the height of a given pixmap
+	gint				pixmap_width;				// Receives the width of a given pixmap
+	gfloat				scaled_height_ratio;		// Used to calculate a vertical scaling ratio
+	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gfloat				start_time;					// Time in seconds of the layer objects start time
 	gint				start_x;					// X position at the layer objects start time
 	gint				start_y;					// Y position at the layer objects start time
@@ -186,7 +190,13 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 			// If the text hasn't ever been rendered, we'll have to work out the size ourselves now
 			if (0 == ((layer_text *) this_layer_data->object_data)->rendered_width)
 			{
-				calculate_text_object_size((layer_text *) this_layer_data->object_data);
+				// Calculate the height and width scaling values for the front pixmap
+				gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+				scaled_height_ratio = (gfloat) pixmap_height / (gfloat) project_height;
+				scaled_width_ratio = (gfloat) pixmap_width / (gfloat) project_width;
+
+				// Calculate the rendered size of the text layer
+				render_text_string(NULL, (layer_text *) this_layer_data->object_data, scaled_width_ratio, scaled_height_ratio, 0, 0, *time_alpha, FALSE);
 			}
 			position->width = ((layer_text *) this_layer_data->object_data)->rendered_width;
 			position->height = ((layer_text *) this_layer_data->object_data)->rendered_height;

@@ -54,7 +54,6 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 	GString				*fg_colour_tag_name;		// Temporary GString, used to construct a text tag name
 	GdkAtom				format_atom_dest;			// Used when deserialising the gtk buffer string
 	GString				*message;					// Used to construct message strings
-	gboolean			return_code;				// Boolean return code
 	GString				*tag_name_text_size;		// Temporary GString, used to construct a text tag name
 	GString				*text_buffer_decode_gstring;  // Temporary GString used for base64 decoding
 	GtkTextIter			text_end;					// End position of text buffer
@@ -658,7 +657,7 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 
 		// Base64 decode the text data back into text buffer format
 		message = base64_decode(text_buffer_decode_gstring);
-		gtk_text_buffer_deserialize(tmp_text_ob->text_buffer, tmp_text_ob->text_buffer, format_atom_dest, &text_start, message->str, message->len, &error);
+		gtk_text_buffer_deserialize(tmp_text_ob->text_buffer, tmp_text_ob->text_buffer, format_atom_dest, &text_start, (const guint8 *) message->str, message->len, &error);
 		g_string_free(text_buffer_decode_gstring, TRUE);
 
 	} else
