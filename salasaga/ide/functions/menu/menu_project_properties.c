@@ -35,8 +35,8 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../validate_value.h"
 #include "../dialog/display_warning.h"
+#include "../validate_value.h"
 #include "../gtk_text_buffer_duplicate.h"
 
 
@@ -97,9 +97,7 @@ void menu_project_properties(void)
 
 	GtkWidget			*label_info_text;			// Label for the information text field
 	GtkTextBuffer		*text_buffer;				// Temporary text buffer the user words with
-	GtkTextIter			text_end;					// End position of text buffer
 	GtkWidget			*text_frame;				// Frame to go around the text widget
-	GtkTextIter			text_start;					// Start position of text buffer
 	GtkWidget			*text_view;					// Widget for accepting the new text data
 
 	GtkWidget			*external_link_label;		// Label widget
