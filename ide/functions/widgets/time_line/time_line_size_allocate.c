@@ -37,6 +37,11 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "time_line.h"
+#include "time_line_get_type.h"
+#include "time_line_internal_draw_layer_info.h"
+#include "time_line_internal_draw_selection_highlight.h"
+#include "time_line_internal_initialise_bg_image.h"
+#include "time_line_internal_initialise_display_buffer.h"
 
 
 void time_line_size_allocate(GtkWidget *widget, GtkAllocation *allocation)

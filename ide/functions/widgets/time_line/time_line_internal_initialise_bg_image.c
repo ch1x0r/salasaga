@@ -37,6 +37,8 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "time_line.h"
+#include "time_line_get_left_border_width.h"
+#include "../../dialog/display_warning.h"
 
 
 gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint width, gint height)
