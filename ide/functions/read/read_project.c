@@ -63,7 +63,6 @@ gboolean read_project(gchar *filename)
 	xmlDocPtr			document;					// Holds a pointer to the XML document
 	xmlChar				*end_behaviour_data = NULL;	//
 	gfloat				end_time;					// Used to calculate the end time in seconds of a layer
-	GError				*error = NULL;				// Pointer to error return structure
 	GString				*error_string;				// Used to create error strings
 	GtkTreeIter			film_strip_iter;
 	xmlChar				*fps_data = NULL;
@@ -71,7 +70,6 @@ gboolean read_project(gchar *filename)
 	xmlChar				*info_display_data = NULL;
 	xmlChar				*info_link_data = NULL;
 	xmlChar				*info_link_target_data = NULL;
-	gchar				*info_text_buffer = NULL;	// Temporary buffer
 	xmlChar				*info_text_data = NULL;
 	guint				layer_counter;				// Counter used in loops
 	xmlNodePtr			layer_ptr;					// Temporary pointer
@@ -88,7 +86,6 @@ gboolean read_project(gchar *filename)
 	xmlChar				*output_height_data = NULL;
 	xmlChar				*project_width_data = NULL;
 	xmlChar				*project_height_data = NULL;
-	gboolean			return_code;				// Boolean return code
 	xmlChar				*save_format_data = NULL;
 	guint				slide_counter;				// Counter used for looping
 	xmlChar				*slide_duration_data = NULL;
@@ -126,7 +123,6 @@ gboolean read_project(gchar *filename)
 	GdkPixmap			*tmp_pixmap;				//
 	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
 	slide				*tmp_slide;					// Temporary slide
-	xmlChar				*tmp_xmlChar;				// Temporary xmlChar pointer
 
 
 	// Initialise various things
