@@ -35,6 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "text_layer_create_font_size_tag.h"
 
 
 int text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
@@ -46,7 +47,6 @@ int text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_widget
 	guint				num_tags;
 	GtkTextIter			selection_end;
 	GtkTextIter			selection_start;
-	GString				*tag_name_text_size;
 	GtkTextBuffer		*text_buffer;
 	gboolean			text_selected;
 	GtkTextTag			*text_size_text_tag;
@@ -56,7 +56,6 @@ int text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_widget
 	// Initialisation
 	font_size_button = text_widgets->font_size_spin_button;
 	text_view = text_widgets->text_view;
-	tag_name_text_size = g_string_new(NULL);
 	text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
 
 	// If no text is selected then we skip the rest of the function
@@ -77,26 +76,10 @@ int text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_widget
 	font_size = gtk_spin_button_get_value(GTK_SPIN_BUTTON(font_size_button));
 
 	// Create the name of a text tag to match the desired size
-	g_string_printf(tag_name_text_size, "text size %.2f", font_size);
-	text_size_text_tag = gtk_text_tag_table_lookup(GTK_TEXT_TAG_TABLE(text_tags_table), tag_name_text_size->str);
-	if (NULL == text_size_text_tag)
-	{
-		// No text tag with the requested size already exists in the tag table, so we create one
-		text_size_text_tag = gtk_text_tag_new(tag_name_text_size->str);
-		g_object_set(GTK_TEXT_TAG(text_size_text_tag), "size-points", font_size, NULL);
-
-		// Add the new tag to the global text table
-		gtk_text_tag_table_add(GTK_TEXT_TAG_TABLE(text_tags_table), GTK_TEXT_TAG(text_size_text_tag));
-
-		// Add the new size tag to the linked list
-		text_tags_size_slist = g_slist_prepend(text_tags_size_slist, GTK_TEXT_TAG(text_size_text_tag));
-	}
+	text_size_text_tag = text_layer_create_font_size_tag(font_size);
 
 	// Apply the font size to the selected text
 	gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(text_buffer), GTK_TEXT_TAG(text_size_text_tag), &selection_start, &selection_end);
-
-	// Free the memory allocated in this function
-	g_string_free(tag_name_text_size, TRUE);
 
 	return FALSE;
 }

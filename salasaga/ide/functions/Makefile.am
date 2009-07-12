@@ -24,6 +24,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	cairo/create_cairo_pixbuf_pattern.c \
 	cairo/render_text_string.c \
 	callbacks/text_layer_create_colour_tag.c \
+	callbacks/text_layer_create_font_size_tag.c \
 	callbacks/text_layer_dialog_bg_colour_changed.c \
 	callbacks/text_layer_dialog_fg_colour_changed.c \
 	callbacks/text_layer_dialog_font_changed.c \
