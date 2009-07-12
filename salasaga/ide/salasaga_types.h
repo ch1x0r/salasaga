@@ -371,6 +371,7 @@ typedef struct
 	GdkColor			bg_border_colour;
 	gfloat				bg_border_width;
 	guint				font_face;
+	gint				*rendered_line_heights;
 } layer_text;
 
 // Resolution storing structure
