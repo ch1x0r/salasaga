@@ -126,6 +126,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 
 	// Determine how many lines are in the text buffer, so we can loop through them
 	num_lines = gtk_text_buffer_get_line_count(text_buffer);
+	text_object->rendered_line_heights = g_new0(gint, num_lines);
 	for (line_counter = 0; line_counter < num_lines; line_counter++)
 	{
 		// Position the text iter at the start of the line
@@ -204,6 +205,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 		}
 
 		// * At this point we've worked out the height and width of this line
+		text_object->rendered_line_heights[line_counter] = line_height;  // Cache the value
 		total_text_height += line_height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
 		cairo_pos_x = incoming_cairo_pos_x + line_x_bearing;
 		cairo_pos_y += line_height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
@@ -281,80 +283,22 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 			// Position the text iter at the start of the line
 			gtk_text_buffer_get_iter_at_line(text_buffer, &cursor_iter, line_counter);
 
-			// Loop around, processing all the characters in the text buffer
-			line_height = 0;
-			more_chars = TRUE;
-			cairo_pos_x = incoming_cairo_pos_x + (TEXT_BORDER_PADDING_WIDTH * 2 * scaled_width_ratio);
-
-			while (more_chars)
-			{
-				// Retrieve the attributes at this cursor position
-				gtk_text_iter_get_attributes(&cursor_iter, text_attributes);
-
-				// Simplify pointers
-				text_appearance = &(text_attributes->appearance);
-				font_face = text_attributes->font;
-				fg_colour = &(text_appearance->fg_color);
-
-				// Get the character to be written
-				g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
-
-				// Calculate the size the character should be displayed at
-				font_size_int = pango_font_description_get_size(font_face);
-				font_size = rint(scaled_height_ratio * font_size_int / PANGO_SCALE);
-
-				// Get the text tags that apply to this iter
-				applied_tags = gtk_text_iter_get_tags(&cursor_iter);
-
-				// Run through the list of tags and extract the info that tells us which font face to use in the cairo font face array
-				num_tags = g_slist_length(applied_tags);
-				for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
-				{
-					this_tag = g_slist_nth_data(applied_tags, loop_counter);
-					font_array_face = g_object_get_data(G_OBJECT(this_tag), "array-font");
-					if (NULL != font_array_face)
-					{
-						// Found the required font face info, so set the font face with it
-						cairo_set_font_face(cairo_context, font_array_face);
-					}
-				}
-
-				// Free the list of tags, as they're no longer needed
-				g_slist_free(applied_tags);
-
-				// Set the font size
-				cairo_set_font_size(cairo_context, font_size);
-
-				// Retrieve and store the on screen dimensions of this character
-				cairo_text_extents(cairo_context, render_string->str, &text_extents);
-
-				// Keep the largest character height for this line, so we know how far to move down by
-				if (text_extents.height > line_height)
-				{
-					line_height = text_extents.height;
-				}
-
-				// Move to the next character in the text buffer
-				gtk_text_iter_forward_cursor_position(&cursor_iter);
-
-				// If we're at the end of the line, then break out of this loop
-				if (TRUE == gtk_text_iter_ends_line(&cursor_iter))
-				{
-					more_chars = FALSE;
-				}
-			}
-
-			// * We've worked out the line height now, so we position the y height for the entire line then *
-			// * run through the characters again, this time displaying them at the required x and y offset *
-
 			// Reposition to the start of the line
 			gtk_text_buffer_get_iter_at_line(text_buffer, &cursor_iter, line_counter);
 
 			line_x_bearing = 0;
 			line_x_bearing_known = FALSE;
+
+			// If there are no characters on this line then skip the loop and just move the y position down
 			more_chars = TRUE;
+			if (TRUE == gtk_text_iter_ends_line(&cursor_iter))
+			{
+				more_chars = FALSE;
+			}
+
 			cairo_pos_x = incoming_cairo_pos_x + (TEXT_BORDER_PADDING_WIDTH * 2 * scaled_width_ratio);
-			cairo_pos_y += line_height;
+			cairo_pos_y += text_object->rendered_line_heights[line_counter];  // Uses the cached line height
+
 			while (more_chars)
 			{
 				// Retrieve the attributes at this cursor position
@@ -439,6 +383,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	}
 
 	// Free the memory used in this function
+	g_free(text_object->rendered_line_heights);
 	g_object_unref(text_view);
 	g_string_free(render_string, TRUE);
 
