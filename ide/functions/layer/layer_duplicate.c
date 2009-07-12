@@ -202,11 +202,6 @@ layer *layer_duplicate(layer *source_layer)
 			source_text_data = (layer_text *) source_layer->object_data;
 			dest_text_data->rendered_width = source_text_data->rendered_width;
 			dest_text_data->rendered_height = source_text_data->rendered_height;
-			dest_text_data->text_color.pixel = source_text_data->text_color.pixel;
-			dest_text_data->text_color.red = source_text_data->text_color.red;
-			dest_text_data->text_color.green = source_text_data->text_color.green;
-			dest_text_data->text_color.blue = source_text_data->text_color.blue;
-			dest_text_data->font_size = source_text_data->font_size;
 			dest_text_data->show_bg = source_text_data->show_bg;
 			dest_text_data->bg_border_width = source_text_data->bg_border_width;
 			dest_text_data->bg_border_colour.red = source_text_data->bg_border_colour.red;
@@ -215,7 +210,6 @@ layer *layer_duplicate(layer *source_layer)
 			dest_text_data->bg_fill_colour.red = source_text_data->bg_fill_colour.red;
 			dest_text_data->bg_fill_colour.green = source_text_data->bg_fill_colour.green;
 			dest_text_data->bg_fill_colour.blue = source_text_data->bg_fill_colour.blue;
-			dest_text_data->font_face = source_text_data->font_face;
 
 			// Copy the existing text buffer
 			dest_text_data->text_buffer = gtk_text_buffer_duplicate(source_text_data->text_buffer);
