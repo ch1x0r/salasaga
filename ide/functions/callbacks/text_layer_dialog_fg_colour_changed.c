@@ -35,6 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "text_layer_create_colour_tag.h"
 
 
 int text_layer_dialog_fg_colour_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
@@ -43,7 +44,6 @@ int text_layer_dialog_fg_colour_changed(GtkWidget *calling_widget, text_dialog_w
 	GdkColor			*fg_colour;
 	GtkWidget			*fg_colour_button;
 	GtkTextTag			*fg_colour_tag;
-	GString				*fg_colour_tag_name;
 	guint				loop_counter;
 	guint				num_tags;
 	GtkTextIter			selection_end;
@@ -56,7 +56,6 @@ int text_layer_dialog_fg_colour_changed(GtkWidget *calling_widget, text_dialog_w
 	// Initialisation
 	fg_colour_button = text_widgets->font_fg_colour_button;
 	text_view = text_widgets->text_view;
-	fg_colour_tag_name = g_string_new(NULL);
 	text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
 
 	// If no text is selected then we skip the rest of the function
@@ -77,27 +76,11 @@ int text_layer_dialog_fg_colour_changed(GtkWidget *calling_widget, text_dialog_w
 	fg_colour = g_slice_new0(GdkColor);
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(fg_colour_button), fg_colour);
 
-	// Create the name of a text tag to match the desired colour
-	g_string_printf(fg_colour_tag_name, "text fg colour #%u%u%u", fg_colour->red, fg_colour->green, fg_colour->blue);
-	fg_colour_tag = gtk_text_tag_table_lookup(GTK_TEXT_TAG_TABLE(text_tags_table), fg_colour_tag_name->str);
-	if (NULL == fg_colour_tag)
-	{
-		// No text tag with the requested colour already exists in the tag table, so we create one
-		fg_colour_tag = gtk_text_tag_new(fg_colour_tag_name->str);
-		g_object_set(GTK_TEXT_TAG(fg_colour_tag), "foreground-gdk", fg_colour, NULL);
-
-		// Add the new tag to the global text table
-		gtk_text_tag_table_add(GTK_TEXT_TAG_TABLE(text_tags_table), GTK_TEXT_TAG(fg_colour_tag));
-
-		// Add the new colour tag to the linked list
-		text_tags_fg_colour_slist = g_slist_prepend(text_tags_fg_colour_slist, GTK_TEXT_TAG(fg_colour_tag));
-	}
+	// Create the text tag for this foreground colour
+	fg_colour_tag = text_layer_create_colour_tag(fg_colour);
 
 	// Apply the foreground colour to the selected text
 	gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(text_buffer), GTK_TEXT_TAG(fg_colour_tag), &selection_start, &selection_end);
-
-	// Free the memory allocated in this function
-	g_string_free(fg_colour_tag_name, TRUE);
 
 	return FALSE;
 }
