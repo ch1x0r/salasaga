@@ -299,18 +299,6 @@ void save_layer(gpointer element, gpointer user_data)
 			g_string_printf(tmp_gstring, "%0.4f", ((layer_text *) layer_pointer->object_data)->bg_border_width);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "bg_border_width", (const xmlChar *) tmp_gstring->str);
 
-			// * Start of legacy values, to be removed Real Soon
-			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.red);
-			xmlNewChild(layer_node, NULL, (const xmlChar *) "red", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.green);
-			xmlNewChild(layer_node, NULL, (const xmlChar *) "green", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", ((layer_text *) layer_pointer->object_data)->text_color.blue);
-			xmlNewChild(layer_node, NULL, (const xmlChar *) "blue", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%0.4f", ((layer_text *) layer_pointer->object_data)->font_size);
-			xmlNewChild(layer_node, NULL, (const xmlChar *) "font_size", (const xmlChar *) tmp_gstring->str);
-			xmlNewChild(layer_node, NULL, (const xmlChar *) "text_value", (const xmlChar *) gtk_text_buffer_get_text(source_buffer, &text_start, &text_end, FALSE));
-			// * End of legacy values, to be removed Real Soon
-
 			// Serialise the text buffer data
 			format_atom_source = gtk_text_buffer_register_serialize_tagset(source_buffer, NULL);
 			serialised_buffer = gtk_text_buffer_serialize(source_buffer, source_buffer, format_atom_source, &text_start, &text_end, &serialised_length);
