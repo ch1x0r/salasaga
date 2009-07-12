@@ -40,6 +40,8 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../validate_value.h"
+#include "../callbacks/text_layer_create_colour_tag.h"
+#include "../callbacks/text_layer_create_font_size_tag.h"
 #include "../conversion/base64_decode.h"
 #include "../dialog/display_warning.h"
 #include "../layer/layer_free.h"
@@ -49,12 +51,12 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 {
 	// Local variables
 	GError				*error = NULL;				// Pointer to error return structure
-	GdkColor			*fg_colour;					// Text foreground colour values, used when converting old project files to the newer (v5.0+) format
+	GdkColor			fg_colour;					// Text foreground colour values, used when converting old project files to the newer (v5.0+) format
 	GtkTextTag			*fg_colour_tag;				// Text tag used when converting old project files to the newer (v5.0+) format
-	GString				*fg_colour_tag_name;		// Temporary GString, used to construct a text tag name
+	guint				font_face;					// Used for loading old format project files
+	gfloat				font_size;					// Used for loading old format project files
 	GdkAtom				format_atom_dest;			// Used when deserialising the gtk buffer string
 	GString				*message;					// Used to construct message strings
-	GString				*tag_name_text_size;		// Temporary GString, used to construct a text tag name
 	GString				*text_buffer_decode_gstring;  // Temporary GString used for base64 decoding
 	GtkTextIter			text_end;					// End position of text buffer
 	GtkTextTag			*text_size_text_tag;		// Text tag used when converting old project files to the newer (v5.0+) format
@@ -68,9 +70,12 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 	GString				*validated_string;			// Receives known good strings from the validation function
 
 	// Initialisation
-	fg_colour_tag_name = g_string_new(NULL);
+	font_face = FONT_DEJAVU_SANS;  // Default font
+	font_size = 10.0;  // Default font size
+	fg_colour.red = 0;    // Default foreground colour of black
+	fg_colour.green = 0;  //
+	fg_colour.blue = 0;   //
 	message = g_string_new(NULL);
-	tag_name_text_size = g_string_new(NULL);
 	text_buffer_decode_gstring = g_string_new(NULL);
 
 	// Construct a new text layer
@@ -98,7 +103,6 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 	tmp_text_ob->bg_fill_colour.red = 65535;
 	tmp_text_ob->bg_fill_colour.green = 65535;
 	tmp_text_ob->bg_fill_colour.blue = 52428;  // Sensible default
-	tmp_text_ob->font_face = FONT_DEJAVU_SANS;  // Default font
 
 	// Load the text layer values
 	while (NULL != this_node)
@@ -371,10 +375,11 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 					g_string_printf(message, "%s ED425: %s", _("Error"), _("There was something wrong with a font face value in the project file."));
 					display_warning(message->str);
 					usable_input = FALSE;
-					tmp_text_ob->font_face = FONT_DEJAVU_SANS;  // Fill in the value, just to be safe
+					font_face = FONT_DEJAVU_SANS;  // Safe default
 				} else
 				{
-					tmp_text_ob->font_face = *validated_guint;
+					// Store the requested font face in a temporary variable, so we can apply it to the whole text buffer later on
+					font_face = *validated_guint;
 					g_free(validated_guint);
 				}
 			}
@@ -389,10 +394,11 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 					g_string_printf(message, "%s ED268: %s", _("Error"), _("There was something wrong with a font size value in the project file."));
 					display_warning(message->str);
 					usable_input = FALSE;
-					tmp_text_ob->font_size = 1;  // Fill in the value, just to be safe
+					font_size = 10.0;  // Safe default
 				} else
 				{
-					tmp_text_ob->font_size = *validated_gfloat;
+					// Store the requested font size in a temporary variable, so we can apply it to the whole text buffer later on
+					font_size = *validated_gfloat;
 					g_free(validated_gfloat);
 				}
 			}
@@ -407,10 +413,11 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 					g_string_printf(message, "%s ED265: %s", _("Error"), _("There was something wrong with a red component color value in the project file."));
 					display_warning(message->str);
 					usable_input = FALSE;
-					tmp_text_ob->text_color.red = 0;  // Fill in the value, just to be safe
+					fg_colour.red = 0;  // Safe default
 				} else
 				{
-					tmp_text_ob->text_color.red = *validated_guint;
+					// Store this colour component in a temporary GdkColor, so we can apply it to the whole text buffer later on
+					fg_colour.red = *validated_guint;
 					g_free(validated_guint);
 				}
 			}
@@ -425,10 +432,11 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 					g_string_printf(message, "%s ED266: %s", _("Error"), _("There was something wrong with a green component color value in the project file."));
 					display_warning(message->str);
 					usable_input = FALSE;
-					tmp_text_ob->text_color.green = 0;  // Fill in the value, just to be safe
+					fg_colour.green = 0;  // Safe default
 				} else
 				{
-					tmp_text_ob->text_color.green = *validated_guint;
+					// Store this colour component in a temporary GdkColor, so we can apply it to the whole text buffer later on
+					fg_colour.green = *validated_guint;
 					g_free(validated_guint);
 				}
 			}
@@ -443,10 +451,11 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 					g_string_printf(message, "%s ED267: %s", _("Error"), _("There was something wrong with a blue component color value in the project file."));
 					display_warning(message->str);
 					usable_input = FALSE;
-					tmp_text_ob->text_color.blue = 0;  // Fill in the value, just to be safe
+					fg_colour.blue = 0;  // Safe default
 				} else
 				{
-					tmp_text_ob->text_color.blue = *validated_guint;
+					// Store this colour component in a temporary GdkColor, so we can apply it to the whole text buffer later on
+					fg_colour.blue = *validated_guint;
 					g_free(validated_guint);
 				}
 			}
@@ -664,64 +673,22 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 	{
 		// * Old style project file, with text data in multiple values *
 
-		// The text buffer already has the (straight text) in it, so we just need to apply the foreground colour, size, and font face information to it,
-		// then get rid of these separate definitions from the layer_text object in the header file
+		// The text buffer already has the text layer strings loaded into it, so we just apply
+		// the foreground colour, size, and font face information to the entire text buffer
 
 		// Retrieve the start and end points for the entire text buffer
 		gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), &text_start, &text_end);
 
 		// Apply the font face (via a tag) to the entire text buffer
-		gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), salasaga_font_names[tmp_text_ob->font_face], &text_start, &text_end);
+		gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), salasaga_font_names[font_face], &text_start, &text_end);
 
-		// * Apply the font size (via a tag) to the entire text buffer *
-
-		// Create the name of a text tag to match the required size
-		g_string_printf(tag_name_text_size, "text size %.2f", tmp_text_ob->font_size);
-		text_size_text_tag = gtk_text_tag_table_lookup(GTK_TEXT_TAG_TABLE(text_tags_table), tag_name_text_size->str);
-		if (NULL == text_size_text_tag)
-		{
-			// No text tag with the requested size already exists in the tag table, so we create one
-			text_size_text_tag = gtk_text_tag_new(tag_name_text_size->str);
-			g_object_set(GTK_TEXT_TAG(text_size_text_tag), "size-points", tmp_text_ob->font_size, NULL);
-
-			// Add the new tag to the global text table
-			gtk_text_tag_table_add(GTK_TEXT_TAG_TABLE(text_tags_table), GTK_TEXT_TAG(text_size_text_tag));
-
-			// Add the new size tag to the linked list
-			text_tags_size_slist = g_slist_prepend(text_tags_size_slist, GTK_TEXT_TAG(text_size_text_tag));
-		}
-
-		// Apply the font size to the selected text
+		// Apply the font size (via a tag) to the entire text buffer
+		text_size_text_tag = text_layer_create_font_size_tag(font_size);
 		gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), GTK_TEXT_TAG(text_size_text_tag), &text_start, &text_end);
 
-		// * Apply the font foreground colour (via a tag) to the entire text buffer *
-
-		// Create the name of a text tag to match the desired colour
-		fg_colour = g_slice_new0(GdkColor);
-		fg_colour->red = tmp_text_ob->text_color.red;
-		fg_colour->green = tmp_text_ob->text_color.green;
-		fg_colour->blue = tmp_text_ob->text_color.blue;
-		g_string_printf(fg_colour_tag_name, "text fg colour #%u%u%u", fg_colour->red, fg_colour->green, fg_colour->blue);
-		fg_colour_tag = gtk_text_tag_table_lookup(GTK_TEXT_TAG_TABLE(text_tags_table), fg_colour_tag_name->str);
-		if (NULL == fg_colour_tag)
-		{
-			// No text tag with the requested colour already exists in the tag table, so we create one
-			fg_colour_tag = gtk_text_tag_new(fg_colour_tag_name->str);
-			g_object_set(GTK_TEXT_TAG(fg_colour_tag), "foreground-gdk", fg_colour, NULL);
-
-			// Add the new tag to the global text table
-			gtk_text_tag_table_add(GTK_TEXT_TAG_TABLE(text_tags_table), GTK_TEXT_TAG(fg_colour_tag));
-
-			// Add the new colour tag to the linked list
-			text_tags_fg_colour_slist = g_slist_prepend(text_tags_fg_colour_slist, GTK_TEXT_TAG(fg_colour_tag));
-		}
-
-		// Apply the foreground colour to the selected text
+		// Apply the font foreground colour (via a tag) to the entire text buffer
+		fg_colour_tag = text_layer_create_colour_tag(&fg_colour);
 		gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), GTK_TEXT_TAG(fg_colour_tag), &text_start, &text_end);
-
-		// Free the memory allocated in this part of the function
-		g_string_free(tag_name_text_size, TRUE);
-		g_string_free(fg_colour_tag_name, TRUE);
 	}
 
 	// Free memory allocated in this function
