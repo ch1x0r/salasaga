@@ -92,7 +92,6 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 
 	GtkTextBuffer		*text_buffer;				// Temporary text buffer the user words with
 	GtkWidget			*text_frame;				// Frame to go around the text widget
-	GString				*text_gstring;				// Temporary text buffer
 	GtkWidget			*text_view;					// Widget for accepting the new text data
 
 	GtkWidget			*name_label;				// Label widget
@@ -806,7 +805,6 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 
 	// Free the memory allocated in this function
 	g_string_free(message, TRUE);
-	g_string_free(text_gstring, TRUE);
 	g_string_free(valid_ext_link, TRUE);
 	g_string_free(valid_ext_link_win, TRUE);
 	g_string_free(valid_name, TRUE);
