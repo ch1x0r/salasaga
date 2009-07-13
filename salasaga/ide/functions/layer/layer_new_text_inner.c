@@ -73,7 +73,8 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), _("New text..."), -1);
 
 	// Apply default font of DejaVu Sans
-	gtk_text_buffer_get_selection_bounds(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), &selection_start, &selection_end);
+	gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), &selection_start);
+	gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), &selection_end);
 	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), salasaga_font_names[FONT_DEJAVU_SANS], &selection_start, &selection_end);
 
 	// Apply default 40 point text size
