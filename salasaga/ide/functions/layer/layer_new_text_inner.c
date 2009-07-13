@@ -31,6 +31,8 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../draw_timeline.h"
+#include "../callbacks/text_layer_create_colour_tag.h"
+#include "../callbacks/text_layer_create_font_size_tag.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
@@ -40,7 +42,11 @@ void layer_new_text_inner(guint release_x, guint release_y)
 {
 	// Local variables
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	GtkTextIter			selection_end;
+	GtkTextIter			selection_start;
 	slide				*slide_data;				// Pointer to the data for the current slide
+	GdkColor			text_colour;				// Used to set the default colour of the text
+	GtkTextTag			*text_tag;					// Used for the default text tags
 	layer				*tmp_layer;					// Temporary layer
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 
@@ -63,12 +69,24 @@ void layer_new_text_inner(guint release_x, guint release_y)
 
 	// Create the text layer data
 	tmp_text_ob = g_new(layer_text, 1);
-	tmp_text_ob->text_color.red = 0;
-	tmp_text_ob->text_color.green = 0;
-	tmp_text_ob->text_color.blue = 0;
-	tmp_text_ob->font_size = 40;
 	tmp_text_ob->text_buffer = gtk_text_buffer_new(text_tags_table);
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), _("New text..."), -1);
+
+	// Apply default font of DejaVu Sans
+	gtk_text_buffer_get_selection_bounds(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), &selection_start, &selection_end);
+	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), salasaga_font_names[FONT_DEJAVU_SANS], &selection_start, &selection_end);
+
+	// Apply default 40 point text size
+	text_tag = text_layer_create_font_size_tag(40.0);
+	gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), GTK_TEXT_TAG(text_tag), &selection_start, &selection_end);
+
+	// Apply default black foreground colour
+	text_colour.red = 0;
+	text_colour.green = 0;
+	text_colour.blue = 0;
+	text_tag = text_layer_create_colour_tag(&text_colour);
+	gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), GTK_TEXT_TAG(text_tag), &selection_start, &selection_end);
+
 	tmp_text_ob->show_bg = TRUE;
 	tmp_text_ob->bg_border_width = 1.0;
 	tmp_text_ob->bg_border_colour.red = 0;
@@ -79,7 +97,6 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	tmp_text_ob->bg_fill_colour.blue = 52428;  // Sensible defaults
 	tmp_text_ob->rendered_width = 0;
 	tmp_text_ob->rendered_height = 0;
-	tmp_text_ob->font_face = FONT_DEJAVU_SANS; // Default font to use
 
 	// Construct a new text layer
 	tmp_layer = g_new(layer, 1);
@@ -118,7 +135,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 		tmp_layer->duration = slide_data->duration;
 	}
 
-	// Regenerate the timeline
+	// Regenerate the time line
 	draw_timeline();
 
 	// Redraw the workspace
@@ -127,7 +144,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	// Recreate the slide thumbnail
 	film_strip_create_thumbnail(slide_data);
 
-	// Select the new layer in the timeline widget
+	// Select the new layer in the time line widget
 	time_line_set_selected_layer_num(slide_data->timeline_widget, 0);
 
 	// Set the changes made variable
