@@ -35,7 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "text_layer_create_colour_tag.h"
+#include "../text_tags/text_layer_create_colour_tag.h"
 
 
 int text_layer_dialog_fg_colour_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)

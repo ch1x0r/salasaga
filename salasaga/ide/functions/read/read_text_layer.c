@@ -40,11 +40,11 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../validate_value.h"
-#include "../callbacks/text_layer_create_colour_tag.h"
-#include "../callbacks/text_layer_create_font_size_tag.h"
 #include "../conversion/base64_decode.h"
 #include "../dialog/display_warning.h"
 #include "../layer/layer_free.h"
+#include "../text_tags/text_layer_create_colour_tag.h"
+#include "../text_tags/text_layer_create_font_size_tag.h"
 
 
 layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_save_format)
