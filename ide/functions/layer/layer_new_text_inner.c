@@ -31,9 +31,9 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../draw_timeline.h"
-#include "../callbacks/text_layer_create_colour_tag.h"
-#include "../callbacks/text_layer_create_font_size_tag.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
+#include "../text_tags/text_layer_create_colour_tag.h"
+#include "../text_tags/text_layer_create_font_size_tag.h"
 #include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 

@@ -1,6 +1,5 @@
 bin_PROGRAMS = salasaga
 salasaga_SOURCES = create_resolution_selector.c \
-	create_text_tags.c \
 	create_time_line.c \
 	create_toolbar.c \
 	create_zoom_selector.c \
@@ -23,8 +22,6 @@ salasaga_SOURCES = create_resolution_selector.c \
 	zoom_selector_changed.c \
 	cairo/create_cairo_pixbuf_pattern.c \
 	cairo/render_text_string.c \
-	callbacks/text_layer_create_colour_tag.c \
-	callbacks/text_layer_create_font_size_tag.c \
 	callbacks/text_layer_dialog_bg_colour_changed.c \
 	callbacks/text_layer_dialog_fg_colour_changed.c \
 	callbacks/text_layer_dialog_font_changed.c \
@@ -118,6 +115,9 @@ salasaga_SOURCES = create_resolution_selector.c \
 	status_icon/status_icon_popup.c \
 	status_icon/status_icon_restore.c \
 	status_icon/status_icon_take_screenshot.c \
+	text_tags/create_text_tags.c \
+	text_tags/text_layer_create_colour_tag.c \
+	text_tags/text_layer_create_font_size_tag.c \
 	widgets/time_line/time_line.c \
 	widgets/time_line/time_line_button_press_event.c \
 	widgets/time_line/time_line_button_release_event.c \

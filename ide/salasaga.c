@@ -53,7 +53,6 @@
 #include "salasaga_types.h"
 #include "externs.h"
 #include "functions/create_resolution_selector.h"
-#include "functions/create_text_tags.h"
 #include "functions/create_time_line.h"
 #include "functions/create_toolbar.h"
 #include "functions/create_zoom_selector.h"
@@ -74,6 +73,7 @@
 #include "functions/film_strip/film_strip_handle_released.h"
 #include "functions/menu/create_menu_bar.h"
 #include "functions/status_icon/create_status_icon.h"
+#include "functions/text_tags/create_text_tags.h"
 #include "functions/working_area/create_working_area.h"
 #include "functions/working_area/event_size_allocate_received.h"
 
