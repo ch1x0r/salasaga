@@ -489,7 +489,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 			// Create the text object we'll be using
 			text_object = newSWFText();
-
+/*
 			// Assign a font to the text object
 			SWFText_setFont(text_object, fdb_font_object[text_data->font_face]);
 
@@ -598,7 +598,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				// Position the background
 				SWFDisplayItem_moveTo(text_bg_display_item, 0.0, 0.0);
 			}
-
+*/
 			// Add the text object to the movie clip
 			text_display_item = SWFMovieClip_add(text_movie_clip, (SWFBlock) text_object);
 
