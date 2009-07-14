@@ -39,6 +39,7 @@
 #include "../callbacks/text_layer_dialog_fg_colour_changed.h"
 #include "../callbacks/text_layer_dialog_font_changed.h"
 #include "../callbacks/text_layer_dialog_size_changed.h"
+#include "../text_tags/get_selection_fg_colour.h"
 #include "../gtk_text_buffer_duplicate.h"
 #include "../validate_value.h"
 #include "display_warning.h"
@@ -47,7 +48,7 @@
 gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 {
 	// Local variables
-	PangoFontDescription *font;						// Font used to display the text
+	GdkColor			*fg_colour;					// Colour to use the in foreground colour button
 	gulong				font_bg_callback;			// ID of the callback handler for the font background colour widget
 	gulong				font_face_callback;			// ID of the callback handler for the font face combo box
 	gulong				font_fg_callback;			// ID of the callback handler for the font foreground colour widget
@@ -56,6 +57,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gint				gint_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
 	GString				*message;					// Used to construct message strings
+	GtkTextIter			selection_end;
+	GtkTextIter			selection_start;
 	text_dialog_widgets	*text_widgets;				// Holds pointers to various widgets in this dialog, for passing to callbacks
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
@@ -63,8 +66,6 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gfloat				valid_duration = 0;			// Receives the new finish frame once validated
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
-	guint				valid_font_face;			// Receives the new font face once validated
-	gfloat				valid_font_size = 0;		// Receives the new font size once validated
 	GString				*valid_name;				// Receives the new layer name once validated
 	gfloat				valid_start_time = 0;		// Receives the new start time once validated
 	gfloat				valid_trans_in_duration = 0;// Receives the new appearance transition duration once validated
@@ -104,7 +105,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*font_size_button;			//
 
 	GtkWidget			*fg_colour_label;			// Label widget
-	GtkWidget			*fg_colour_button;			// Forground colour selection button
+	GtkWidget			*fg_colour_button;			// Foreground colour selection button
 
 	GtkWidget			*fill_colour_label;			// Label widget
 	GtkWidget			*fill_colour_button;		// Colour selection button
@@ -189,10 +190,15 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_container_set_border_width(GTK_CONTAINER(text_frame), 2);
 	gtk_frame_set_shadow_type(GTK_FRAME(text_frame), GTK_SHADOW_OUT);
 	text_view = gtk_text_view_new_with_buffer(text_buffer);
+	gtk_widget_modify_base(text_view, GTK_STATE_NORMAL, &(tmp_text_ob->bg_fill_colour));  // Set the bg colour of the text area
 	gtk_widget_set_size_request(GTK_WIDGET(text_view), 0, 100);
 	gtk_container_add(GTK_CONTAINER(text_frame), text_view);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(text_frame), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
+
+	// "Select" all of the text in the buffer
+	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(text_buffer), &selection_start, &selection_end);
+	gtk_text_buffer_select_range(GTK_TEXT_BUFFER(text_buffer), &selection_start, &selection_end);
 
 	// Create the label asking for the layer name
 	name_label = gtk_label_new(_("Layer name: "));
@@ -234,7 +240,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Condensed Bold Italic"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Condensed Italic"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Italic"));
-	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_font_face), tmp_text_ob->font_face);
+// *** Update code to retrieve the font face across the text buffer selection
+//	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_font_face), tmp_text_ob->font_face);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(selector_font_face), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
@@ -246,7 +253,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	// Create the entry that accepts the font size input
 	font_size_button = gtk_spin_button_new_with_range(valid_fields[FONT_SIZE].min_value, valid_fields[FONT_SIZE].max_value, 1);
 	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(font_size_button), 2);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(font_size_button), tmp_text_ob->font_size);
+// *** Update code to retrieve the font size across the text buffer selection
+//	gtk_spin_button_set_value(GTK_SPIN_BUTTON(font_size_button), tmp_text_ob->font_size);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_size_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
@@ -256,7 +264,9 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fg_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the foreground colour selection button
-    fg_colour_button = gtk_color_button_new_with_color(&(tmp_text_ob->text_color));
+	fg_colour = get_selection_fg_colour(GTK_TEXT_BUFFER(text_buffer), GTK_TEXT_VIEW(text_view));
+	fg_colour_button = gtk_color_button_new_with_color(fg_colour);
+	g_slice_free(GdkColor, fg_colour);  // We no longer need the colour value
     gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(fg_colour_button), TRUE);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fg_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
@@ -271,13 +281,6 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
     gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(fill_colour_button), TRUE);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fill_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
-
-	// Display the font in the text view at it's font face and size settings
-	g_string_printf(message, "%s %.2f", gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_font_face)), tmp_text_ob->font_size);
-	font = pango_font_description_from_string(message->str);
-	gtk_widget_modify_font(text_view, font);
-	gtk_widget_modify_text(text_view, GTK_STATE_NORMAL, &(tmp_text_ob->text_color));
-	gtk_widget_modify_base(text_view, GTK_STATE_NORMAL, &(tmp_text_ob->bg_fill_colour));
 
 	// Set up pointers to the font face, font size, background colour and foreground colour widgets, for passing to signal handlers
 	text_widgets = g_slice_new0(text_dialog_widgets);
@@ -597,34 +600,6 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			g_free(validated_guint);
 		}
 
-		// Retrieve the new font face
-		gint_val = gtk_combo_box_get_active(GTK_COMBO_BOX(selector_font_face));
-		if (-1 == gint_val)
-		{
-			// A -1 return means no value was selected
-			g_string_printf(message, "%s ED426: %s", _("Error"), _("There was something wrong with the font face selected.  Please try again."));
-			display_warning(message->str);
-			usable_input = FALSE;
-		} else
-		{
-			// A value was selected
-			valid_font_face = (guint) gint_val;
-		}
-
-		// Retrieve the new font size
-		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(font_size_button));
-		validated_gfloat = validate_value(FONT_SIZE, V_FLOAT_UNSIGNED, &gfloat_val);
-		if (NULL == validated_gfloat)
-		{
-			g_string_printf(message, "%s ED176: %s", _("Error"), _("There was something wrong with the font size value.  Please try again."));
-			display_warning(message->str);
-			usable_input = FALSE;
-		} else
-		{
-			valid_font_size = *validated_gfloat;
-			g_free(validated_gfloat);
-		}
-
 		// Retrieve the new background border width
 		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(border_width_button));
 		validated_gfloat = validate_value(LINE_WIDTH, V_FLOAT_UNSIGNED, &gfloat_val);
@@ -759,8 +734,6 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	tmp_layer->y_offset_start = valid_y_offset_start;
 	tmp_layer->x_offset_finish = valid_x_offset_finish;
 	tmp_layer->y_offset_finish = valid_y_offset_finish;
-	tmp_text_ob->font_face = valid_font_face;
-	tmp_text_ob->font_size = valid_font_size;
 	tmp_layer->start_time = valid_start_time;
 	tmp_layer->duration = valid_duration;
 	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(display_bg_checkbox)))
@@ -785,7 +758,6 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	tmp_layer->transition_in_duration = valid_trans_in_duration;
 	tmp_layer->transition_out_type = valid_trans_out_type;
 	tmp_layer->transition_out_duration = valid_trans_out_duration;
-	gtk_color_button_get_color(GTK_COLOR_BUTTON(fg_colour_button), &(tmp_text_ob->text_color));
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(border_colour_button), &(tmp_text_ob->bg_border_colour));
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(fill_colour_button), &(tmp_text_ob->bg_fill_colour));
 	tmp_text_ob->bg_border_width = valid_border_width;
