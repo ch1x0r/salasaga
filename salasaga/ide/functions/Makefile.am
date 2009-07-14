@@ -116,6 +116,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	status_icon/status_icon_restore.c \
 	status_icon/status_icon_take_screenshot.c \
 	text_tags/create_text_tags.c \
+	text_tags/get_selection_fg_colour.c \
 	text_tags/text_layer_create_colour_tag.c \
 	text_tags/text_layer_create_font_size_tag.c \
 	widgets/time_line/time_line.c \
