@@ -363,14 +363,11 @@ typedef struct
 {
 	guint				rendered_width;
 	guint				rendered_height;
-	GdkColor			text_color;
-	gfloat				font_size;
 	GtkTextBuffer		*text_buffer;
 	gboolean			show_bg;
 	GdkColor			bg_fill_colour;
 	GdkColor			bg_border_colour;
 	gfloat				bg_border_width;
-	guint				font_face;
 	gint				*rendered_line_heights;
 } layer_text;
 
