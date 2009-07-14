@@ -78,6 +78,7 @@ int text_layer_dialog_fg_colour_changed(GtkWidget *calling_widget, text_dialog_w
 
 	// Create the text tag for this foreground colour
 	fg_colour_tag = text_layer_create_colour_tag(fg_colour);
+	g_slice_free(GdkColor, fg_colour);  // Free the colour as it's no longer needed
 
 	// Apply the foreground colour to the selected text
 	gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(text_buffer), GTK_TEXT_TAG(fg_colour_tag), &selection_start, &selection_end);
