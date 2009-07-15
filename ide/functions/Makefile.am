@@ -117,6 +117,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	status_icon/status_icon_take_screenshot.c \
 	text_tags/create_text_tags.c \
 	text_tags/get_selection_fg_colour.c \
+	text_tags/get_selection_font_face.c \
 	text_tags/get_selection_font_size.c \
 	text_tags/text_layer_create_colour_tag.c \
 	text_tags/text_layer_create_font_size_tag.c \

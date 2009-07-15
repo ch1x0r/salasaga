@@ -40,6 +40,7 @@
 #include "../callbacks/text_layer_dialog_font_changed.h"
 #include "../callbacks/text_layer_dialog_size_changed.h"
 #include "../text_tags/get_selection_fg_colour.h"
+#include "../text_tags/get_selection_font_face.h"
 #include "../text_tags/get_selection_font_size.h"
 #include "../gtk_text_buffer_duplicate.h"
 #include "../validate_value.h"
@@ -241,8 +242,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Condensed Bold Italic"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Condensed Italic"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Italic"));
-// *** Update code to retrieve the font face across the text buffer selection
-//	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_font_face), tmp_text_ob->font_face);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_font_face), get_selection_font_face(GTK_TEXT_BUFFER(text_buffer)));
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(selector_font_face), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 

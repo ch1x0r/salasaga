@@ -41,6 +41,7 @@ gboolean create_text_tags(void)
 {
 	// Local variables
 	gint			loop_counter;
+	gint			*int_ptr;
 
 
 	// Create a global text tag table
@@ -57,6 +58,11 @@ gboolean create_text_tags(void)
 
 		// Add a matching data item to this tag, pointing to the equivalent font in our loaded cairo font face array
 		g_object_set_data(G_OBJECT(text_tags_fonts[loop_counter]), "array-font", cairo_font_face[loop_counter]);
+
+		// Add a data item to this tag, indicating which font number in our list of fonts it is
+		int_ptr = g_slice_new0(gint);
+		*int_ptr = loop_counter;
+		g_object_set_data(G_OBJECT(text_tags_fonts[loop_counter]), "font-num", int_ptr);
 
 		// Add the font tag to the global text table
 		gtk_text_tag_table_add(text_tags_table, text_tags_fonts[loop_counter]);
