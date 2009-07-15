@@ -2,7 +2,7 @@
  * $Id$
  *
  * Salasaga: Returns the foreground colour of the selected text in a text buffer,
- *           or black if there are multiple foreground colours in the selection
+ *           or grey if there are multiple foreground colours in the selection
  *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
@@ -78,14 +78,14 @@ GdkColor *get_selection_fg_colour(GtkTextBuffer *text_buffer, GtkTextView *text_
 		iter_colour = &(text_appearance->fg_color);
 
 		// If any of the colour component values are different to the
-		// original colour, then we short circuit the loop and return black
+		// original colour, then we short circuit the loop and return grey
 		if ((fg_colour->red != iter_colour->red) ||
 		   (fg_colour->green != iter_colour->green) ||
 		   (fg_colour->blue != iter_colour->blue))
 		{
-			fg_colour->red = 0;
-			fg_colour->green = 0;
-			fg_colour->blue = 0;
+			fg_colour->red = 60000;
+			fg_colour->green = 60000;
+			fg_colour->blue = 60000;
 			return fg_colour;
 		}
 	}
