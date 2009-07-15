@@ -40,6 +40,7 @@
 #include "../callbacks/text_layer_dialog_font_changed.h"
 #include "../callbacks/text_layer_dialog_size_changed.h"
 #include "../text_tags/get_selection_fg_colour.h"
+#include "../text_tags/get_selection_font_size.h"
 #include "../gtk_text_buffer_duplicate.h"
 #include "../validate_value.h"
 #include "display_warning.h"
@@ -253,8 +254,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	// Create the entry that accepts the font size input
 	font_size_button = gtk_spin_button_new_with_range(valid_fields[FONT_SIZE].min_value, valid_fields[FONT_SIZE].max_value, 1);
 	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(font_size_button), 2);
-// *** Update code to retrieve the font size across the text buffer selection
-//	gtk_spin_button_set_value(GTK_SPIN_BUTTON(font_size_button), tmp_text_ob->font_size);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(font_size_button), get_selection_font_size(GTK_TEXT_BUFFER(text_buffer), GTK_TEXT_VIEW(text_view)));
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_size_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
