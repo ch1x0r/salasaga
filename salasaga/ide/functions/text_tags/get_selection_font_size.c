@@ -2,7 +2,7 @@
  * $Id$
  *
  * Salasaga: Returns the font size of the selected text in a text buffer,
- *           or 40.0 if there are multiple font sizes in the selection
+ *           or -1.0 if there are multiple font sizes in the selection
  *
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
@@ -77,10 +77,10 @@ gfloat get_selection_font_size(GtkTextBuffer *text_buffer, GtkTextView *text_vie
 		iter_size = rint(font_size_int / PANGO_SCALE);
 
 		// If the font size value is different to the original size,
-		// then we short circuit the loop and return 40.0
+		// then we short circuit the loop and return -1.0
 		if (font_size != iter_size)
 		{
-			return 40.0;
+			return -1.0;
 		}
 	}
 
