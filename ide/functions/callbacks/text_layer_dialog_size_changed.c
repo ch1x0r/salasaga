@@ -38,7 +38,7 @@
 #include "../text_tags/text_layer_create_font_size_tag.h"
 
 
-int text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
+gboolean text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
 {
 	// Local variables
 	gfloat				font_size;
@@ -65,15 +65,21 @@ int text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_widget
 		return FALSE;
 	}
 
+	// Retrieve the requested font size from the size widget
+	font_size = gtk_spin_button_get_value(GTK_SPIN_BUTTON(font_size_button));
+
+	// If no font size is selected, we skip the rest of this function
+	if (-1.0 == font_size)
+	{
+		return FALSE;
+	}
+
 	// Remove all of the existing size tags for the selected text
 	num_tags = g_slist_length(text_tags_size_slist);
 	for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
 	{
 		gtk_text_buffer_remove_tag(GTK_TEXT_BUFFER(text_buffer), g_slist_nth_data(text_tags_size_slist, loop_counter), &selection_start, &selection_end);
 	}
-
-	// Retrieve the requested font size from the size widget
-	font_size = gtk_spin_button_get_value(GTK_SPIN_BUTTON(font_size_button));
 
 	// Create the name of a text tag to match the desired size
 	text_size_text_tag = text_layer_create_font_size_tag(font_size);
