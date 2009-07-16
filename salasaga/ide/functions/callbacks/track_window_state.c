@@ -42,7 +42,7 @@ gboolean	window_state_iconified = FALSE;
 
 
 // Function that keeps track of whether the main window is iconified or not
-gint window_state_changed(GtkWidget *widget, GdkEventWindowState *event, gpointer data)
+gboolean window_state_changed(GtkWidget *widget, GdkEventWindowState *event, gpointer data)
 {
 	// Double check if this was triggered by a window state event
 	if (GDK_WINDOW_STATE == event->type)
