@@ -38,7 +38,7 @@
 #include "../text_tags/text_layer_create_colour_tag.h"
 
 
-int text_layer_dialog_fg_colour_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
+gboolean text_layer_dialog_fg_colour_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
 {
 	// Local variables
 	GdkColor			*fg_colour;
