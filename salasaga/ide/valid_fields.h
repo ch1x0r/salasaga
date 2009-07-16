@@ -40,7 +40,7 @@ validatation_entry		valid_fields[] =
 	{ FILE_PATH,			N_("Full path to a file"),						V_CHAR,				V_FULL_STOP | V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
 	{ FOLDER_PATH,			N_("Full path to a folder"),					V_CHAR,				V_HYPENS | V_PATH_SEP | V_SPACES | V_UNDERSCORES,		0,		-1 },
 	{ FONT_FACE,			N_("Font face"),								V_INT_UNSIGNED,		V_NONE,		0,		FONT_COUNT - 1 },
-	{ FONT_SIZE,			N_("Font size"),								V_FLOAT_UNSIGNED,	V_NONE,		0,		200 },
+	{ FONT_SIZE,			N_("Font size"),								V_FLOAT_UNSIGNED,	V_NONE,		-1.0,	200 },
 	{ FRAME_NUMBER,			N_("A frame number"),							V_INT_UNSIGNED,		V_NONE,		0,		4096 },
 	{ HIGHLIGHT_HEIGHT,		N_("Height of a highlight layer"),				V_INT_UNSIGNED,		V_NONE,		5,		4096 },
 	{ HIGHLIGHT_WIDTH,		N_("Width of a highlight layer"),				V_INT_UNSIGNED,		V_NONE,		5,		4096 },
