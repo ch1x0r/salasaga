@@ -29,7 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
-gint window_state_changed(GtkWidget *widget, GdkEvent *event, gpointer data);
+gboolean window_state_changed(GtkWidget *widget, GdkEvent *event, gpointer data);
 gboolean is_window_iconified(void);
 
 #ifdef __cplusplus
