@@ -38,6 +38,7 @@
 #include "../callbacks/text_layer_dialog_bg_colour_changed.h"
 #include "../callbacks/text_layer_dialog_fg_colour_changed.h"
 #include "../callbacks/text_layer_dialog_font_changed.h"
+#include "../callbacks/text_layer_dialog_selection_changed.h"
 #include "../callbacks/text_layer_dialog_size_changed.h"
 #include "../text_tags/get_selection_fg_colour.h"
 #include "../text_tags/get_selection_font_face.h"
@@ -59,6 +60,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gint				gint_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
 	GString				*message;					// Used to construct message strings
+	gulong				selection_callback;			// ID of the callback handler for text selection change
 	GtkTextIter			selection_end;
 	GtkTextIter			selection_start;
 	text_dialog_widgets	*text_widgets;				// Holds pointers to various widgets in this dialog, for passing to callbacks
@@ -296,6 +298,9 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	font_fg_callback = g_signal_connect(G_OBJECT(fg_colour_button), "color-set", G_CALLBACK(text_layer_dialog_fg_colour_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
 	font_size_callback = g_signal_connect(G_OBJECT(font_size_button), "value-changed", G_CALLBACK(text_layer_dialog_size_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
 
+	// Add a signal handler to the text widget, to be called when the user changes the text selection
+	selection_callback = g_signal_connect(G_OBJECT(text_buffer), "mark-set", G_CALLBACK(text_layer_dialog_selection_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+
 	// Create the background line colour selection label
 	border_colour_label = gtk_label_new(_("Background border color: "));
 	gtk_misc_set_alignment(GTK_MISC(border_colour_label), 0, 0.5);
@@ -517,6 +522,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			g_signal_handler_disconnect(G_OBJECT(fill_colour_button), font_bg_callback);
 			g_signal_handler_disconnect(G_OBJECT(font_size_button), font_size_callback);
 			g_signal_handler_disconnect(G_OBJECT(resolution_selector), font_face_callback);
+			g_signal_handler_disconnect(G_OBJECT(text_view), selection_callback);
 
 			// Destroy the dialog and return to the caller
 			gtk_widget_destroy(GTK_WIDGET(text_dialog));
@@ -771,6 +777,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	g_signal_handler_disconnect(G_OBJECT(fill_colour_button), font_bg_callback);
 	g_signal_handler_disconnect(G_OBJECT(font_size_button), font_size_callback);
 	g_signal_handler_disconnect(G_OBJECT(resolution_selector), font_face_callback);
+	g_signal_handler_disconnect(G_OBJECT(text_view), selection_callback);
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(text_dialog));
