@@ -29,7 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
-int text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets);
+gboolean text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets);
 
 #ifdef __cplusplus
 }

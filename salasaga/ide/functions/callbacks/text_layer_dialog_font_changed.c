@@ -37,7 +37,7 @@
 #include "../../externs.h"
 
 
-int text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
+gboolean text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
 {
 	// Local variables
 	gint				font_face_val;
@@ -62,14 +62,20 @@ int text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_widget
 		return FALSE;
 	}
 
+	// Retrieve the value selected in the font face drop down
+	font_face_val = gtk_combo_box_get_active(GTK_COMBO_BOX(font_face_widget));
+
+	// If no specific font is selected, we skip the rest of this function
+	if (-1 == font_face_val)
+	{
+		return FALSE;
+	}
+
 	// Remove any existing font face tags from the selected text
 	for (loop_counter = 0; loop_counter < FONT_COUNT; loop_counter++)
 	{
 		gtk_text_buffer_remove_tag(GTK_TEXT_BUFFER(text_buffer), text_tags_fonts[loop_counter], &selection_start, &selection_end);
 	}
-
-	// Retrieve the value selected in the font face drop down
-	font_face_val = gtk_combo_box_get_active(GTK_COMBO_BOX(font_face_widget));
 
 	// Apply the requested font face to the selected text
 	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(text_buffer), salasaga_font_names[font_face_val], &selection_start, &selection_end);
