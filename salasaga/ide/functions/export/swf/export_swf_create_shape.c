@@ -53,11 +53,14 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	SWFDisplayItem		container_display_item;
 	SWFMovieClip		container_movie_clip;		// The movie clip that contains the layer object
 	gfloat				current_ming_scale;			// Used when creating text swf output
+	GtkTextIter			cursor_iter;				// Used for positioning in a text layer's text buffer
 	layer_empty			*empty_data;				// Points to the empty object data inside the layer
 	SWFFillStyle		empty_layer_fill;			// Fill style used when constructing empty layer shapes
 	SWFShape			empty_layer_shape;			// Temporary swf shape used when constructing empty layers
 	GError				*error = NULL;				// Pointer to error return structure
+	GdkColor			*fg_colour;					// Foreground colour to set a text layer character to
 	guint				final_opacity;				// Used when calculating the final opacity figure for a highlight layer
+	PangoFontDescription	*font_face;				// Text layer font face to use when drawing a character
 	guint16				green_component;			// Used when retrieving the foreground color of text
 	SWFShape			highlight_box = NULL;		// Temporary swf shape used when constructing highlight boxes
 	gint				highlight_box_height;		// Used while generating swf output for highlight boxes
@@ -69,17 +72,22 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	SWFInput			image_input;				// Used to hold a swf input object
 	SWFShape			image_shape;				// Used to hold a swf shape object
 	gint				image_width;				// Temporarily used to store the width of an image
+	gint				line_counter;				// Simple loop counter variable
 	GString				*message;					// Used to construct message strings
 	layer_mouse			*mouse_data;				// Points to the mouse object data inside the layer
 	gint				mouse_ptr_width;			// Holds the calculated width for a mouse pointer graphic
 	gint				mouse_ptr_height;			// Holds the calculated height for a mouse pointer graphic
 	SWFShape			mouse_shape = NULL;			//
+	gint				num_lines;
+	gint				num_tags;					// Receives the total number of tags applied to a text character
 	gint				num_text_lines;				// Number of text lines in a particular text layer
 	SWFBlock			our_shape;					// The swf shape before it gets added to a swf movie clip
 	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
 	gsize				pixbuf_size;				// Is given the size of a compressed png image
 	gfloat				radius = 8;					// Radius to use for rounded rectangles
-	guint16				red_component;				// Used when retrieving the foreground color of text
+	guint16				red_component;				// Used when retrieving the foreground colour of text
+	GString				*render_string;				// Used for rendering a text layer, one character at a time
+	gint				*rendered_line_heights;		// Temporary variable used to hold the height of text lines
 	GdkPixbuf			*resized_pixbuf;			// Temporary pixbuf used while scaling images
 	gboolean			return_code_bool;			// Receives boolean return codes
 	gfloat				scaled_font_size;			// Display height of a font in swf, when scaled to the desired output size
@@ -89,11 +97,14 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
 	SWFAction			swf_action;					// Used when constructing action script
 	SWFButton			swf_button;					// Holds a swf button
+	GtkTextAppearance	*text_appearance;			// Used in text layer rendering, to determine some of the attributes needed
+	GtkTextAttributes	*text_attributes;			// Pointer to the attributes for a text layer character
 	SWFShape			text_bg = NULL;				// The text background shape goes in this
 	gfloat				text_bg_box_height;			// Used while generating swf output for text boxes
 	gfloat				text_bg_box_width;			// Used while generating swf output for text boxes
 	SWFDisplayItem		text_bg_display_item;
 	SWFFillStyle		text_bg_fill_style;			// Fill style used when constructing text background shape
+	GtkTextBuffer		*text_buffer;				// Pointer to the text buffer we're using
 	layer_text			*text_data;					// Points to the text object data inside the layer
 	SWFDisplayItem		text_display_item;
 	GtkTextIter			text_end;					// End position of text buffer
@@ -103,6 +114,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	SWFText				text_object;				// The text object we're working on goes in this
 	gfloat				text_real_font_size;
 	GtkTextIter			text_start;					// Start position of text buffer
+	GtkWidget			*text_view;					// Pointer to a temporary text view
 	gfloat				this_text_string_width;		// Used when calculating how wide to draw the text background box
 	gchar				*visible_string;			// Text string is retrieved into this
 	gfloat				widest_text_string_width;	// Used when calculating how wide to draw the text background box
@@ -111,6 +123,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	// Initialisation
 	as_gstring = g_string_new(NULL);
 	message = g_string_new(NULL);
+	render_string = g_string_new(NULL);
 
 	// Calculate the height and width scaling values needed for this swf output
 	scaled_height_ratio = (gfloat) output_height / (gfloat) project_height;
@@ -247,7 +260,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				return FALSE;
 			}
 
-			// Create the required fill color for the empty layer
+			// Create the required fill colour for the empty layer
 			red_component = roundf(empty_data->bg_color.red / 256);
 			green_component = roundf(empty_data->bg_color.green / 256);
 			blue_component = roundf(empty_data->bg_color.blue / 256);
@@ -486,9 +499,37 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 			// Simplify pointers and work out element positioning info
 			text_data = (layer_text *) this_layer_data->object_data;
+			text_buffer = text_data->text_buffer;
 
 			// Create the text object we'll be using
 			text_object = newSWFText();
+
+			// Create a text view, not for display, but instead to retrieve attribute information from the layer's text buffer
+			text_view = gtk_text_view_new_with_buffer(GTK_TEXT_BUFFER(text_buffer));
+
+			// Retrieve the default attributes for the text view
+			text_attributes = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(text_view));
+
+			// Determine how many lines are in the text buffer, so we can loop through them
+			num_lines = gtk_text_buffer_get_line_count(text_buffer);
+			rendered_line_heights = g_new0(gint, num_lines);
+
+			for (line_counter = 0; line_counter < num_lines; line_counter++)
+			{
+				// Position the text iter at the start of the line
+				gtk_text_buffer_get_iter_at_line(text_buffer, &cursor_iter, line_counter);
+
+				// Simplify pointers
+				text_appearance = &(text_attributes->appearance);
+				font_face = text_attributes->font;
+				fg_colour = &(text_appearance->fg_color);
+
+				// Get the character to be written
+				g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
+
+// more code needs to be put here
+
+			}
 /*
 			// Assign a font to the text object
 			SWFText_setFont(text_object, fdb_font_object[text_data->font_face]);
