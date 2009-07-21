@@ -49,8 +49,8 @@ gint get_selection_font_face(GtkTextBuffer *text_buffer)
 	// Local variables
 	GSList					*applied_tags;		// Receives a list of text tags applied at a position in a text buffer
 	GtkTextIter				end_iter;			// Character iter pointing to the last character in the selection
-	gint					*font_ptr;			// Used for calculating the font face of a character
 	gint					font_face = -1;		// Used for calculating the font face of a character
+	gint					*font_ptr;			// Used for calculating the font face of a character
 	gint					loop_counter;		// Simple counter used in loops
 	gint					num_tags;			// Receives the total number of tags applied to a text character
 	gint					starting_font_face = -1;  // Used for calculating the font face of a character
