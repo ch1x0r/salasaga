@@ -585,6 +585,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 					SWFText_setColor(char_object, red_component, green_component, blue_component, 0xff);
 					SWFText_addUTF8String(char_object, render_string->str, NULL);
 					char_height = SWFText_getAscent(char_object) + SWFText_getDescent(char_object);
+					destroySWFText(char_object);
 
 					// Keep the largest character height for this line
 					if (char_height > line_height)
