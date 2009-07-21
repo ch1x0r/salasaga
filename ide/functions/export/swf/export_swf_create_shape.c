@@ -48,8 +48,11 @@
 gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 {
 	// Local variables
+	GSList				*applied_tags;				// Receives a list of text tags applied at a position in a text buffer
 	GString				*as_gstring = NULL;			// Used for constructing action script statements
 	guint16				blue_component;				// Used when retrieving the foreground color of text
+	gint				char_font_face = -1;		// Used for calculating the font face of a character
+	gint				*char_font_ptr;				// Used for calculating the font face of a character
 	SWFDisplayItem		container_display_item;
 	SWFMovieClip		container_movie_clip;		// The movie clip that contains the layer object
 	gfloat				current_ming_scale;			// Used when creating text swf output
@@ -60,7 +63,8 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	GError				*error = NULL;				// Pointer to error return structure
 	GdkColor			*fg_colour;					// Foreground colour to set a text layer character to
 	guint				final_opacity;				// Used when calculating the final opacity figure for a highlight layer
-	PangoFontDescription	*font_face;				// Text layer font face to use when drawing a character
+	gdouble				font_size;					// Used for retrieving the desired size of a character in a text layer
+	gint				font_size_int;				// Used for calculating the scaled font size to display a text layer character at
 	guint16				green_component;			// Used when retrieving the foreground color of text
 	SWFShape			highlight_box = NULL;		// Temporary swf shape used when constructing highlight boxes
 	gint				highlight_box_height;		// Used while generating swf output for highlight boxes
@@ -73,7 +77,14 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	SWFShape			image_shape;				// Used to hold a swf shape object
 	gint				image_width;				// Temporarily used to store the width of an image
 	gint				line_counter;				// Simple loop counter variable
+	gfloat				line_height;
+	gfloat				line_width;
+	gfloat				line_x_bearing;
+	gboolean			line_x_bearing_known;		// Simple boolean to track if we know the x_bearing for line yet
+	gint				loop_counter;				// Simple counter used in loops
+	gfloat				max_line_width;
 	GString				*message;					// Used to construct message strings
+	gboolean			more_chars;					// Simple boolean used when rendering a text layer
 	layer_mouse			*mouse_data;				// Points to the mouse object data inside the layer
 	gint				mouse_ptr_width;			// Holds the calculated width for a mouse pointer graphic
 	gint				mouse_ptr_height;			// Holds the calculated height for a mouse pointer graphic
@@ -82,6 +93,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	gint				num_tags;					// Receives the total number of tags applied to a text character
 	gint				num_text_lines;				// Number of text lines in a particular text layer
 	SWFBlock			our_shape;					// The swf shape before it gets added to a swf movie clip
+	PangoFontDescription	*pango_font_face;		// Text layer font face to use when drawing a character
 	gchar				*pixbuf_buffer;				// Is given a pointer to a compressed png image
 	gsize				pixbuf_size;				// Is given the size of a compressed png image
 	gfloat				radius = 8;					// Radius to use for rounded rectangles
@@ -112,10 +124,14 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	gint				text_lines_counter;			// Counter used when processing text
 	SWFMovieClip		text_movie_clip;			// The movie clip that contains the text background and text
 	SWFText				text_object;				// The text object we're working on goes in this
+	gdouble				text_pos_x = 0;				// Used for positioning where swf text will be drawn
+	gdouble				text_pos_y = 0;				// Used for positioning where swf text will be drawn
 	gfloat				text_real_font_size;
 	GtkTextIter			text_start;					// Start position of text buffer
 	GtkWidget			*text_view;					// Pointer to a temporary text view
+	GtkTextTag			*this_tag = NULL;			// Used in a loop for pointing to individual text tags
 	gfloat				this_text_string_width;		// Used when calculating how wide to draw the text background box
+	gfloat				total_text_height;
 	gchar				*visible_string;			// Text string is retrieved into this
 	gfloat				widest_text_string_width;	// Used when calculating how wide to draw the text background box
 
@@ -519,17 +535,92 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				// Position the text iter at the start of the line
 				gtk_text_buffer_get_iter_at_line(text_buffer, &cursor_iter, line_counter);
 
-				// Simplify pointers
-				text_appearance = &(text_attributes->appearance);
-				font_face = text_attributes->font;
-				fg_colour = &(text_appearance->fg_color);
+				// Loop around, processing all the characters in the text buffer
+				line_height = 0;
+				line_width = 0;
+				line_x_bearing = 0;
+				line_x_bearing_known = FALSE;
+				more_chars = TRUE;
+				while (more_chars)
+				{
+					// Simplify pointers
+					text_appearance = &(text_attributes->appearance);
+					pango_font_face = text_attributes->font;
+					fg_colour = &(text_appearance->fg_color);
 
-				// Get the character to be written
-				g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
+					// Get the character to be written
+					g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
+					SWFText_addUTF8String(text_object, render_string->str, NULL);
 
-// more code needs to be put here
+					// Calculate the size the character should be displayed at
+					font_size_int = pango_font_description_get_size(pango_font_face);
+					font_size = rint(scaled_height_ratio * font_size_int / PANGO_SCALE);
 
+					// Get the text tags that apply to this iter
+					applied_tags = gtk_text_iter_get_tags(&cursor_iter);
+
+					// Run through the list of tags and extract the info that tells us which font face to use
+					num_tags = g_slist_length(applied_tags);
+					for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
+					{
+						this_tag = g_slist_nth_data(applied_tags, loop_counter);
+						char_font_ptr = g_object_get_data(G_OBJECT(this_tag), "font-num");
+						if (NULL != char_font_ptr)
+						{
+							// Found the required font face info, so set the font face with it
+							char_font_face = *char_font_ptr;
+							SWFText_setFont(text_object, fdb_font_object[char_font_face]);
+						}
+					}
+
+					// Free the list of tags, as they're no longer needed
+					g_slist_free(applied_tags);
+
+					// Set the font size
+					scaled_font_size = scaled_height_ratio * font_size;
+					SWFText_setHeight(text_object, scaled_font_size);
+
+					// Retrieve and store the on screen dimensions of this character
+					text_real_font_size = SWFText_getAscent(text_object) + SWFText_getDescent(text_object);
+					if (text_real_font_size > line_height)
+					{
+						// Keep the largest character height for this line
+						line_height = text_real_font_size;
+					}
+
+					if (FALSE == line_x_bearing_known)
+					{
+						// We add the x_bearing for the very first character of a line, so
+						// the display of text starts that little bit further to the right
+						line_x_bearing = SWFText_getLeading(text_object);
+						line_width += line_x_bearing;
+						line_x_bearing_known = TRUE;
+					}
+					line_width += SWFText_getUTF8StringWidth(text_object, (guchar *) render_string->str);
+
+					// Move to the next character in the text buffer
+					gtk_text_iter_forward_cursor_position(&cursor_iter);
+
+					// If we're at the end of the line, then break out of this loop
+					if (TRUE == gtk_text_iter_ends_line(&cursor_iter))
+					{
+						more_chars = FALSE;
+					}
+				}
+
+				// * At this point we've worked out the height of this line
+				rendered_line_heights[line_counter] = line_height;  // Cache the value
+				total_text_height += line_height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
+				text_pos_x = line_x_bearing;
+				text_pos_y += line_height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
+
+				// Keep the largest line width known
+				if (line_width > max_line_width)
+				{
+					max_line_width = line_width;
+				}
 			}
+
 /*
 			// Assign a font to the text object
 			SWFText_setFont(text_object, fdb_font_object[text_data->font_face]);
