@@ -74,13 +74,13 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	SWFBitmap			image_bitmap;				// Used to hold a scaled bitmap object
 	gint				image_height;				// Temporarily used to store the height of an image
 	SWFInput			image_input;				// Used to hold a swf input object
+	gfloat				line_leading;
+	gboolean			line_leading_known;			// Simple boolean to track if we know the "leading" for a line yet
 	SWFShape			image_shape;				// Used to hold a swf shape object
 	gint				image_width;				// Temporarily used to store the width of an image
 	gint				line_counter;				// Simple loop counter variable
 	gfloat				line_height;
 	gfloat				line_width;
-	gfloat				line_x_bearing;
-	gboolean			line_x_bearing_known;		// Simple boolean to track if we know the x_bearing for line yet
 	gint				loop_counter;				// Simple counter used in loops
 	gfloat				max_line_width;
 	GString				*message;					// Used to construct message strings
@@ -538,19 +538,18 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				// Loop around, processing all the characters in the text buffer
 				line_height = 0;
 				line_width = 0;
-				line_x_bearing = 0;
-				line_x_bearing_known = FALSE;
+				line_leading = 0;
+				line_leading_known = FALSE;
 				more_chars = TRUE;
 				while (more_chars)
 				{
+					// Retrieve the attributes at this cursor position
+					gtk_text_iter_get_attributes(&cursor_iter, text_attributes);
+
 					// Simplify pointers
 					text_appearance = &(text_attributes->appearance);
 					pango_font_face = text_attributes->font;
 					fg_colour = &(text_appearance->fg_color);
-
-					// Get the character to be written
-					g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
-					SWFText_addUTF8String(text_object, render_string->str, NULL);
 
 					// Calculate the size the character should be displayed at
 					font_size_int = pango_font_description_get_size(pango_font_face);
@@ -580,7 +579,17 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 					scaled_font_size = scaled_height_ratio * font_size;
 					SWFText_setHeight(text_object, scaled_font_size);
 
-					// Retrieve and store the on screen dimensions of this character
+					// Set the foreground colour for the text
+					red_component = roundf(fg_colour->red / 256);
+					green_component = roundf(fg_colour->green / 256);
+					blue_component = roundf(fg_colour->blue / 256);
+					SWFText_setColor(text_object, red_component, green_component, blue_component, 0xff);
+
+					// Set the character to be written
+					g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
+					SWFText_addUTF8String(text_object, render_string->str, NULL);
+
+					// Retrieve and store the swf dimensions of this character
 					text_real_font_size = SWFText_getAscent(text_object) + SWFText_getDescent(text_object);
 					if (text_real_font_size > line_height)
 					{
@@ -588,13 +597,13 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 						line_height = text_real_font_size;
 					}
 
-					if (FALSE == line_x_bearing_known)
+					if (FALSE == line_leading_known)
 					{
-						// We add the x_bearing for the very first character of a line, so
+						// We add the "leading" for the very first character of a line, so
 						// the display of text starts that little bit further to the right
-						line_x_bearing = SWFText_getLeading(text_object);
-						line_width += line_x_bearing;
-						line_x_bearing_known = TRUE;
+						line_leading = SWFText_getLeading(text_object);
+						line_width += line_leading;
+						line_leading_known = TRUE;
 					}
 					line_width += SWFText_getUTF8StringWidth(text_object, (guchar *) render_string->str);
 
@@ -611,8 +620,19 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				// * At this point we've worked out the height of this line
 				rendered_line_heights[line_counter] = line_height;  // Cache the value
 				total_text_height += line_height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
-				text_pos_x = line_x_bearing;
+				text_pos_x = line_leading;
 				text_pos_y += line_height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
+
+				// * Move the pen down to the start of the next line *
+
+				// Move to the appropriate Y position
+				SWFText_moveTo(text_object, 0, total_text_height);
+
+				// Try and move X as close as possible to 0.  We can't use 0 in SWFText_moveTo() due to a bug in Ming
+				current_ming_scale = Ming_getScale();
+				Ming_setScale(1);
+				SWFText_moveTo(text_object, 1, 0);
+				Ming_setScale(current_ming_scale);
 
 				// Keep the largest line width known
 				if (line_width > max_line_width)
@@ -678,9 +698,10 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 					printf(_("Width of widest string thus far: %.2f\n"), widest_text_string_width);
 				}
 			}
-
+*/
 			// * Create the swf movie clip object that holds the text background and text *
 			text_movie_clip = newSWFMovieClip();
+
 
 			// * Create the background for the text object *
 			if (TRUE == text_data->show_bg)
@@ -709,9 +730,8 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				SWFShape_setLine(text_bg, text_data->bg_border_width, red_component, green_component, blue_component, 0xff); // Alpha of 0xff is full opacity
 
 				// Work out the scaled dimensions of the text background box
-				text_leading = SWFText_getLeading(text_object);
-				text_bg_box_height = (text_real_font_size * num_text_lines) * 1.02;
-				text_bg_box_width = widest_text_string_width + (text_leading * 2);
+				text_bg_box_height = total_text_height + (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT * 2);
+				text_bg_box_width = max_line_width + (scaled_width_ratio * TEXT_BORDER_PADDING_WIDTH * 2);
 
 				// Rounded rectangle method from http://www.cairographics.org/cookbook/roundedrectangles/
 				SWFShape_movePenTo(text_bg, radius, 0);
@@ -730,12 +750,13 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				// Position the background
 				SWFDisplayItem_moveTo(text_bg_display_item, 0.0, 0.0);
 			}
-*/
+
 			// Add the text object to the movie clip
 			text_display_item = SWFMovieClip_add(text_movie_clip, (SWFBlock) text_object);
 
 			// Position the text elements
-			SWFDisplayItem_moveTo(text_display_item, text_leading, SWFText_getAscent(text_object));
+			SWFDisplayItem_moveTo(text_display_item, scaled_width_ratio * TEXT_BORDER_PADDING_WIDTH, (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT) + total_text_height);
+//			SWFDisplayItem_moveTo(text_display_item, text_leading, SWFText_getAscent(text_object));
 
 			// Advance the movie clip one frame, else it won't be displayed
 			SWFMovieClip_nextFrame(text_movie_clip);
@@ -786,6 +807,10 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				// Advance the movie clip one frame, else it doesn't get displayed
 				SWFMovieClip_nextFrame(this_layer_data->dictionary_shape);
 			}
+
+			// Free the memory used in this function
+			g_free(rendered_line_heights);
+			g_string_free(render_string, TRUE);
 
 			// Indicate that the dictionary shape for this layer was created ok
 			return TRUE;
