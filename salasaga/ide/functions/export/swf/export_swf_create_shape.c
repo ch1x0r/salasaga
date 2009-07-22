@@ -84,7 +84,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	gfloat				line_height;
 	gfloat				line_width;
 	gint				loop_counter;				// Simple counter used in loops
-	gfloat				max_line_width;
+	gfloat				max_line_width = 0;
 	GString				*message;					// Used to construct message strings
 	gboolean			more_chars;					// Simple boolean used when rendering a text layer
 	layer_mouse			*mouse_data;				// Points to the mouse object data inside the layer
@@ -574,11 +574,8 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 					blue_component = roundf(fg_colour->blue / 256);
 					SWFText_setColor(text_object, red_component, green_component, blue_component, 0xff);
 
-					// Set the character to be written
-					g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
-					SWFText_addUTF8String(text_object, render_string->str, NULL);
-
 					// Create a temporary copy of just this character, so we can retrieve it's height
+					g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
 					char_object = newSWFText();
 					SWFText_setFont(char_object, fdb_font_object[char_font_face]);
 					SWFText_setHeight(char_object, scaled_font_size);
@@ -591,6 +588,21 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 					if (char_height > line_height)
 					{
 						line_height = char_height;
+					}
+
+					// If there is a character to be displayed, then add it to the text object
+					if (FALSE == gtk_text_iter_ends_line(&cursor_iter))
+					{
+						// Set the character to be written
+						SWFText_addUTF8String(text_object, render_string->str, NULL);
+					} else
+					{
+						// We're at the end of a line, lets also check if we're at the start of a line (ie it's blank)
+						// and then skip to the next one if so
+						if (TRUE == gtk_text_iter_starts_line(&cursor_iter))
+						{
+							break;
+						}
 					}
 
 					if (FALSE == line_leading_known)
@@ -616,7 +628,10 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				// * At this point we've worked out the height of this line *
 
 				// Move the swf pen to the start of the next line
-				text_pos_x = line_leading;
+				if (TRUE == line_leading_known)
+				{
+					text_pos_x = line_leading;
+				}
 				text_pos_y += line_height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
 				SWFText_moveTo(text_object, text_pos_x, text_pos_y);
 
