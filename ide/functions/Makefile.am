@@ -102,6 +102,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	read/read_text_layer.c \
 	save/save_layer.c \
 	save/save_slide.c \
+	save/save_text_tags.c \
 	slide/slide_delete.c \
 	slide/slide_duration.c \
 	slide/slide_free.c \
