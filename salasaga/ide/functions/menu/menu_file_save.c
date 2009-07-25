@@ -41,6 +41,7 @@
 #include "../validate_value.h"
 #include "../dialog/display_warning.h"
 #include "../save/save_slide.h"
+#include "../save/save_text_tags.h"
 #include "menu_file_save_as.h"
 
 
@@ -54,6 +55,7 @@ void menu_file_save(void)
 	xmlNodePtr			root_node;					// Points to the root node
 	xmlSaveCtxt			*save_context;				// Points to the save context
 	xmlNodePtr			slide_root;					// Points to the root of the slide data
+	xmlNodePtr			tag_root;					// Points to the root of the text tag data
 	GtkTextIter			text_end;					// End position of text buffer
 	GtkTextIter			text_start;					// Start position of text buffer
 	GString				*tmp_gstring;				// Temporary GString
@@ -198,6 +200,19 @@ void menu_file_save(void)
 	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(info_text), &text_start, &text_end);
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_text", (const xmlChar *) gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(info_text), &text_start, &text_end, TRUE));
 
+    // Create a container for all of the text tags
+	tag_root = xmlNewChild(root_node, NULL, (const xmlChar *) "text tags", NULL);
+	if (NULL == tag_root)
+	{
+		g_string_printf(message, "%s ED434: %s", _("Error"), _("Error creating the text tag container."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
+		return;
+	}
+
+	// Add the text tags to the project file
+	save_text_tags(tag_root);
+
     // Create a container for the slides
 	slide_root = xmlNewChild(root_node, NULL, (const xmlChar *) "slides", NULL);
 	if (NULL == slide_root)
@@ -237,8 +252,6 @@ void menu_file_save(void)
 	// * Function clean up area *
 
 	// Free the memory allocated in this function
-//	g_free(filename);
-//	g_string_free(validated_string, TRUE);
 	g_string_free(message, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 }
