@@ -48,7 +48,7 @@ GtkTextTag *text_layer_create_colour_tag(GdkColor *fg_colour)
 	fg_colour_tag_name = g_string_new(NULL);
 
 	// Create the name of a text tag to match the desired colour
-	g_string_printf(fg_colour_tag_name, "text fg colour #%u%u%u", fg_colour->red, fg_colour->green, fg_colour->blue);
+	g_string_printf(fg_colour_tag_name, "text fg colour #%u-%u-%u", fg_colour->red, fg_colour->green, fg_colour->blue);
 	fg_colour_tag = gtk_text_tag_table_lookup(GTK_TEXT_TAG_TABLE(text_tags_table), fg_colour_tag_name->str);
 	if (NULL == fg_colour_tag)
 	{
