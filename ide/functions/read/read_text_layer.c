@@ -57,6 +57,7 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 	gfloat				font_size;					// Used for loading old format project files
 	GdkAtom				format_atom_dest;			// Used when deserialising the gtk buffer string
 	GString				*message;					// Used to construct message strings
+	gboolean			return_code_gbool;			// Boolean return code
 	GString				*text_buffer_decode_gstring;  // Temporary GString used for base64 decoding
 	GtkTextIter			text_end;					// End position of text buffer
 	GtkTextTag			*text_size_text_tag;		// Text tag used when converting old project files to the newer (v5.0+) format
@@ -661,12 +662,18 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 
 		// Create the new buffer and deserialise the text data into it
 		tmp_text_ob->text_buffer = gtk_text_buffer_new(text_tags_table);
-		format_atom_dest = gtk_text_buffer_register_deserialize_tagset(tmp_text_ob->text_buffer, NULL);
+		format_atom_dest = gtk_text_buffer_register_deserialize_tagset(tmp_text_ob->text_buffer, "salasaga_project");
 		gtk_text_buffer_get_start_iter(tmp_text_ob->text_buffer, &text_start);
 
 		// Base64 decode the text data back into text buffer format
 		message = base64_decode(text_buffer_decode_gstring);
-		gtk_text_buffer_deserialize(tmp_text_ob->text_buffer, tmp_text_ob->text_buffer, format_atom_dest, &text_start, (const guint8 *) message->str, message->len, &error);
+		return_code_gbool = gtk_text_buffer_deserialize(tmp_text_ob->text_buffer, tmp_text_ob->text_buffer, format_atom_dest, &text_start, (const guint8 *) message->str, message->len, &error);
+		if (FALSE == return_code_gbool)
+		{
+			// Deserialization failed.  Inform the user
+			g_string_printf(message, "%s ED433: %s: '%s'", _("Error"), _("Loading a text layer text buffer failed.  Error given was"), error->message);
+			display_warning(message->str);
+		}
 		g_string_free(text_buffer_decode_gstring, TRUE);
 
 	} else
