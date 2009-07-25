@@ -29,7 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
-gfloat get_selection_font_size(GtkTextBuffer *text_buffer, GtkTextView *text_view);
+gdouble get_selection_font_size(GtkTextBuffer *text_buffer, GtkTextView *text_view);
 
 #ifdef __cplusplus
 }

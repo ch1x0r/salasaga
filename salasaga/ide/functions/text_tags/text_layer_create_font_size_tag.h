@@ -29,7 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
-GtkTextTag *text_layer_create_font_size_tag(gfloat font_size);
+GtkTextTag *text_layer_create_font_size_tag(gdouble font_size);
 
 #ifdef __cplusplus
 }

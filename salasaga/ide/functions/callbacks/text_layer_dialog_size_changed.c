@@ -41,7 +41,7 @@
 gboolean text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
 {
 	// Local variables
-	gfloat				font_size;
+	gdouble				font_size;
 	GtkWidget			*font_size_button;
 	guint				loop_counter;
 	guint				num_tags;

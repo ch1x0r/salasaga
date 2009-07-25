@@ -44,7 +44,7 @@
 #include "../externs.h"
 
 
-gfloat get_selection_font_size(GtkTextBuffer *text_buffer, GtkTextView *text_view)
+gdouble get_selection_font_size(GtkTextBuffer *text_buffer, GtkTextView *text_view)
 {
 	// Local variables
 	GtkTextIter				end_iter;

@@ -46,7 +46,7 @@ gboolean text_layer_dialog_selection_changed(GtkWidget *calling_widget, GtkTextI
 	GdkColor			*fg_colour;
 	GtkWidget			*fg_colour_button;
 	GtkWidget			*font_face_widget;		// Points to the font face selection widget
-	gfloat				font_size;				// Get selection font size
+	gdouble				font_size;				// Get selection font size
 	GtkWidget			*font_size_button;
 	const gchar			*mark_name;				// Name of the GtkTextMark that was set
 	GtkTextBuffer		*text_buffer;
