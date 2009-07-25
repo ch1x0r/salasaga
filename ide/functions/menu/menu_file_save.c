@@ -201,7 +201,7 @@ void menu_file_save(void)
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_text", (const xmlChar *) gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(info_text), &text_start, &text_end, TRUE));
 
     // Create a container for all of the text tags
-	tag_root = xmlNewChild(root_node, NULL, (const xmlChar *) "text tags", NULL);
+	tag_root = xmlNewChild(root_node, NULL, (const xmlChar *) "text-tags", NULL);
 	if (NULL == tag_root)
 	{
 		g_string_printf(message, "%s ED434: %s", _("Error"), _("Error creating the text tag container."));
