@@ -300,7 +300,7 @@ void save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "bg_border_width", (const xmlChar *) tmp_gstring->str);
 
 			// Serialise the text buffer data
-			format_atom_source = gtk_text_buffer_register_serialize_tagset(source_buffer, NULL);
+			format_atom_source = gtk_text_buffer_register_serialize_tagset(source_buffer, "salasaga_project");
 			serialised_buffer = gtk_text_buffer_serialize(source_buffer, source_buffer, format_atom_source, &text_start, &text_end, &serialised_length);
 
 			// Base64 encode the serialised text buffer data
