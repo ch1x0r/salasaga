@@ -55,17 +55,21 @@
 #include "read/read_text_layer.h"
 #include "slide/slide_free.h"
 #include "text_tags/reset_global_text_tags_table.h"
+#include "text_tags/text_layer_create_colour_tag.h"
+#include "text_tags/text_layer_create_font_size_tag.h"
 
 
 gboolean read_project(gchar *filename)
 {
 	// Local variables
+	GdkColor			fg_colour;					// Foreground colours are constructed into this
 	xmlChar				*control_bar_data = NULL;	// Temporarily holds incoming data prior to validation
 	xmlDocPtr			document;					// Holds a pointer to the XML document
 	xmlChar				*end_behaviour_data = NULL;	//
 	gfloat				end_time;					// Used to calculate the end time in seconds of a layer
 	GString				*error_string;				// Used to create error strings
 	GtkTreeIter			film_strip_iter;
+	gdouble				font_size;					// Font size
 	xmlChar				*fps_data = NULL;
 	guint				guint_val;					// Temporary guint value used for validation
 	xmlChar				*info_display_data = NULL;
@@ -93,6 +97,9 @@ gboolean read_project(gchar *filename)
 	xmlChar				*slide_length_data = NULL;
 	xmlNodePtr			slides_node = NULL;			// Points to the slides structure
 	xmlChar				*start_behaviour_data = NULL;
+	xmlNodePtr			tag_node = NULL;			// Temporary pointer
+	xmlNodePtr			tags_node = NULL;			// Points to the text tags structure
+	xmlNodePtr			tags_structure = NULL;		// Temporary pointer
 	xmlNodePtr			this_layer;					// Temporary pointer
 	layer				*this_layer_ptr;			// Pointer into a layer structure
 	xmlNodePtr			this_node;					// Temporary pointer
@@ -204,6 +211,19 @@ gboolean read_project(gchar *filename)
 		this_node = this_node->next;
 	}
 
+	// Scan for the "text tags" node
+	this_node = xmlDocGetRootElement(document);
+	this_node = this_node->xmlChildrenNode;
+	while (NULL != this_node)
+	{
+		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "text-tags")))
+		{
+			// Text tags node found
+			tags_node = this_node;
+		}
+		this_node = this_node->next;
+	}
+
 	// Scan for the "slides" node
 	this_node = xmlDocGetRootElement(document);
 	this_node = this_node->xmlChildrenNode;
@@ -211,7 +231,7 @@ gboolean read_project(gchar *filename)
 	{
 		if ((!xmlStrcmp(this_node->name, (const xmlChar *) "slides")))
 		{
-			// slides node found
+			// Slides node found
 			slides_node = this_node;
 		}
 		this_node = this_node->next;
@@ -434,12 +454,84 @@ gboolean read_project(gchar *filename)
 	// Reset the usable input flag
 	usable_input = TRUE;
 
+	// * All of the required meta-data and preferences are present, so we proceed *
+
 	// Reset the global text tag table
 	// fixme4: We should update this to make a copy of the text table first,
 	//         in case we need to abort the load of the project file later on
 	reset_global_text_tags_table();
 
-	// * All of the required meta-data and preferences are present, so we proceed *
+	// Load the text tags from the project file if they're present
+	if (NULL != tags_node)
+	{
+		// Descend into the text tags structure
+		tags_structure = tags_node->xmlChildrenNode;
+		while (NULL != tags_structure)
+		{
+			// Check if this structure holds font size tags
+			if ((!xmlStrcmp(tags_structure->name, (const xmlChar *) "size-tags")))
+			{
+				// Yes, this holds foreground colour tags
+				tag_node = tags_structure->xmlChildrenNode;
+				while (NULL != tag_node)
+				{
+					// If this is an element node, we process it
+					if (XML_ELEMENT_NODE == tag_node->type)
+					{
+						// Extract the tag name
+						tmp_char = xmlGetProp(tag_node, (const xmlChar *) "label");
+
+						// Extract the font size component value
+						tmp_char = xmlGetProp(tag_node, (const xmlChar *) "size");
+						font_size = atof((const char *) tmp_char);
+
+						// Create the new font size tag
+						text_layer_create_font_size_tag(font_size);
+					}
+					// Move to the next tag
+					tag_node = tag_node->next;
+				}
+			}
+
+			// Check if this structure holds foreground colour tags
+			if ((!xmlStrcmp(tags_structure->name, (const xmlChar *) "fg-colour-tags")))
+			{
+				// Yes, this holds foreground colour tags, so we process them and create the tags
+				tag_node = tags_structure->xmlChildrenNode;
+				while (NULL != tag_node)
+				{
+					// If this is an element node, we process it
+					if (XML_ELEMENT_NODE == tag_node->type)
+					{
+						// Reset the temporary colour
+						fg_colour.red = 0;
+						fg_colour.green = 0;
+						fg_colour.blue = 0;
+
+						// Extract the colour values
+						tmp_char = xmlGetProp(tag_node, (const xmlChar *) "red");
+						fg_colour.red = atoi((const char *) tmp_char);
+						tmp_char = xmlGetProp(tag_node, (const xmlChar *) "green");
+						fg_colour.green = atoi((const char *) tmp_char);
+						tmp_char = xmlGetProp(tag_node, (const xmlChar *) "blue");
+						fg_colour.blue = atoi((const char *) tmp_char);
+
+						// Extract the tag name
+						tmp_char = xmlGetProp(tag_node, (const xmlChar *) "label");
+
+						// Create the new font foreground colour tag
+						text_layer_create_colour_tag(&fg_colour);
+					}
+
+					// Move to the next tag
+					tag_node = tag_node->next;
+				}
+			}
+
+			// Point to the next structure
+			tags_structure = tags_structure->next;
+		}
+	}
 
 	// Validate the project name input
 	validated_string = validate_value(PROJECT_NAME, V_CHAR, project_name_data);
