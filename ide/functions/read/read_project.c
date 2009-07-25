@@ -54,6 +54,7 @@
 #include "read/read_mouse_layer.h"
 #include "read/read_text_layer.h"
 #include "slide/slide_free.h"
+#include "text_tags/reset_global_text_tags_table.h"
 
 
 gboolean read_project(gchar *filename)
@@ -432,6 +433,11 @@ gboolean read_project(gchar *filename)
 
 	// Reset the usable input flag
 	usable_input = TRUE;
+
+	// Reset the global text tag table
+	// fixme4: We should update this to make a copy of the text table first,
+	//         in case we need to abort the load of the project file later on
+	reset_global_text_tags_table();
 
 	// * All of the required meta-data and preferences are present, so we proceed *
 

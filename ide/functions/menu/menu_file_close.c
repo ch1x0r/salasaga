@@ -34,6 +34,7 @@
 #include "../disable_main_toolbar_buttons.h"
 #include "../dialog/display_dialog_save_warning.h"
 #include "../slide/slide_free.h"
+#include "../text_tags/reset_global_text_tags_table.h"
 #include "menu_enable.h"
 
 
@@ -84,6 +85,9 @@ void menu_file_close()
 		g_string_free(file_name, TRUE);
 		file_name = NULL;
 	}
+
+	// Reset the global text tag table
+	reset_global_text_tags_table();
 
 	// Update the status bar
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Project closed"));

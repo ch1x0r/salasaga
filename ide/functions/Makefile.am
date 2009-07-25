@@ -120,6 +120,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	text_tags/get_selection_fg_colour.c \
 	text_tags/get_selection_font_face.c \
 	text_tags/get_selection_font_size.c \
+	text_tags/reset_global_text_tags_table.c \
 	text_tags/text_layer_create_colour_tag.c \
 	text_tags/text_layer_create_font_size_tag.c \
 	widgets/time_line/time_line.c \
