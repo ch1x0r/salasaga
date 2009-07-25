@@ -54,7 +54,7 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 	GdkColor			fg_colour;					// Text foreground colour values, used when converting old project files to the newer (v5.0+) format
 	GtkTextTag			*fg_colour_tag;				// Text tag used when converting old project files to the newer (v5.0+) format
 	guint				font_face;					// Used for loading old format project files
-	gfloat				font_size;					// Used for loading old format project files
+	gdouble				font_size;					// Used for loading old format project files
 	GdkAtom				format_atom_dest;			// Used when deserialising the gtk buffer string
 	GString				*message;					// Used to construct message strings
 	gboolean			return_code_gbool;			// Boolean return code
