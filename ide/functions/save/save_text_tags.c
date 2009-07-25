@@ -60,7 +60,7 @@ void save_text_tags(xmlNodePtr tag_root)
 	message = g_string_new(NULL);
 
     // Create a container for the text size tags
-	size_root = xmlNewChild(tag_root, NULL, (const xmlChar *) "size tags", NULL);
+	size_root = xmlNewChild(tag_root, NULL, (const xmlChar *) "size-tags", NULL);
 	if (NULL == size_root)
 	{
 		g_string_printf(message, "%s ED436: %s", _("Error"), _("Error creating the size tags container."));
@@ -88,7 +88,7 @@ void save_text_tags(xmlNodePtr tag_root)
 		g_object_get(G_OBJECT(text_tag), "name", &tag_name, "size-points", &font_size, NULL);
 
 		// Add the tag name to the tag container attributes
-		xmlNewProp(tag_node, (const xmlChar *) "name", (const xmlChar *) tag_name);
+		xmlNewProp(tag_node, (const xmlChar *) "label", (const xmlChar *) tag_name);
 
 		// Add the tag size to the tag container attributes
 		g_string_printf(message, "%0.4f", font_size);
@@ -99,7 +99,7 @@ void save_text_tags(xmlNodePtr tag_root)
 	}
 
     // Create a container for the text foreground colour tags
-	colour_root = xmlNewChild(tag_root, NULL, (const xmlChar *) "fg colour tags", NULL);
+	colour_root = xmlNewChild(tag_root, NULL, (const xmlChar *) "fg-colour-tags", NULL);
 	if (NULL == colour_root)
 	{
 		g_string_printf(message, "%s ED437: %s", _("Error"), _("Error creating the foreground colour tags container."));
@@ -127,7 +127,7 @@ void save_text_tags(xmlNodePtr tag_root)
 		g_object_get(G_OBJECT(text_tag), "name", &tag_name, "foreground-gdk", &fg_colour, NULL);
 
 		// Add the tag name to the tag container attributes
-		xmlNewProp(tag_node, (const xmlChar *) "name", (const xmlChar *) tag_name);
+		xmlNewProp(tag_node, (const xmlChar *) "label", (const xmlChar *) tag_name);
 
 		// Add the foreground colour to the tag container attributes
 		g_string_printf(message, "%u", fg_colour->red);
