@@ -56,8 +56,8 @@ XGETTEXT_ = @XGETTEXT@
 XGETTEXT_no = @XGETTEXT@
 XGETTEXT_yes = @XGETTEXT_015@
 XGETTEXT = $(XGETTEXT_$(USE_MSGCTXT))
-MSGMERGE = "msgmerge -N"
-MSGMERGE_UPDATE = @MSGMERGE@ --update
+MSGMERGE = msgmerge -N --backup=off
+MSGMERGE_UPDATE = msgmerge --update -N --backup=off
 MSGINIT = msginit
 MSGCONV = msgconv
 MSGFILTER = msgfilter
