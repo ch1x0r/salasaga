@@ -6,55 +6,55 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: salasaga\n"
-"Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2008-08-10 16:59+1000\n"
+"Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
+"POT-Creation-Date: 2008-07-27 17:11+1000\n"
 "PO-Revision-Date: 2008-08-03 15:16+0000\n"
 "Last-Translator: Justin Clift <Unknown>\n"
 "Language-Team: English (United Kingdom) <en_GB@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2008-08-10 06:20+0000\n"
+"X-Launchpad-Export-Date: 2009-08-02 02:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
-#: salasaga.c:245 functions/validate_value.c:566
+#: salasaga.c:237 functions/validate_value.c:566
 msgid "Fit to width"
 msgstr "Fit to width"
 
-#: salasaga.c:252 functions/menu/menu_file_new.c:190
+#: salasaga.c:244 functions/menu/menu_file_new.c:190
 msgid "New Project"
 msgstr "New Project"
 
-#: salasaga.c:276
+#: salasaga.c:268
 #, c-format
 msgid "Debugging mode, errors will be shown on stdout.\n"
 msgstr "Debugging mode, errors will be shown on stdout.\n"
 
-#: salasaga.c:292
+#: salasaga.c:284
 #, c-format
 msgid "Program path: '%s'\n"
 msgstr "Program path: '%s'\n"
 
-#: salasaga.c:293
+#: salasaga.c:285
 #, c-format
 msgid "Directory base: '%s'\n"
 msgstr "Directory base: '%s'\n"
 
-#: salasaga.c:303
+#: salasaga.c:295
 msgid "icons"
 msgstr "icons"
 
-#: salasaga.c:315
+#: salasaga.c:307
 #, c-format
 msgid "Icon path: %s\n"
 msgstr "Icon path: %s\n"
 
-#: salasaga.c:341
+#: salasaga.c:333
 #, c-format
 msgid "Path to mouse pointer image: %s\n"
 msgstr "Path to mouse pointer image: %s\n"
 
-#: salasaga.c:424 salasaga.c:435 salasaga.c:492 functions/draw_timeline.c:64
+#: salasaga.c:416 salasaga.c:427 salasaga.c:484 functions/draw_timeline.c:64
 #: functions/key_bind.c:64 functions/key_bind.c:80
 #: functions/preferences_load.c:107 functions/preferences_load.c:121
 #: functions/preferences_load.c:135 functions/preferences_load.c:151
@@ -307,37 +307,38 @@ msgstr "Path to mouse pointer image: %s\n"
 msgid "Error"
 msgstr "Error"
 
-#: salasaga.c:424
+#: salasaga.c:416
 msgid "Something went wrong when creating the menu bar."
 msgstr "Something went wrong when creating the menu bar."
 
-#: salasaga.c:435
+#: salasaga.c:427
 msgid "Something went wrong when creating the toolbar."
 msgstr "Something went wrong when creating the toolbar."
 
-#: salasaga.c:464
+#: salasaga.c:456
 msgid "Zoom: "
 msgstr "Zoom: "
 
-#: salasaga.c:476
+#: salasaga.c:468
 msgid "Output: "
 msgstr "Output: "
 
-#: salasaga.c:492
+#: salasaga.c:484
 msgid "Something went wrong when creating the film strip."
 msgstr "Something went wrong when creating the film strip."
 
-#: salasaga.c:508
+#: salasaga.c:500
 msgid "Status bar messages"
 msgstr "Status bar messages"
 
-#: salasaga.c:511
+#: salasaga.c:503
 msgid "Ready"
 msgstr "Ready"
 
-#: salasaga.c:533
+#: salasaga.c:525
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
-msgstr "Screenshots disabled: salasaga_screencapture not found in search path"
+msgstr ""
+"Screenshots disabled: salasaga_screencapture not found in search path"
 
 #: valid_fields.h:35
 msgid "8 Bit Color Value Component"
@@ -1301,7 +1302,8 @@ msgstr ""
 
 #: functions/project_read.c:756 functions/project_read.c:1622
 #: functions/project_read.c:2007 functions/project_read.c:2537
-msgid "There was something wrong with a start frame value in the project file."
+msgid ""
+"There was something wrong with a start frame value in the project file."
 msgstr ""
 "There was something wrong with a start frame value in the project file."
 
@@ -1335,8 +1337,10 @@ msgstr ""
 
 #: functions/project_read.c:839 functions/project_read.c:1705
 #: functions/project_read.c:2090 functions/project_read.c:2620
-msgid "There was something wrong with a layer name value in the project file."
-msgstr "There was something wrong with a layer name value in the project file."
+msgid ""
+"There was something wrong with a layer name value in the project file."
+msgstr ""
+"There was something wrong with a layer name value in the project file."
 
 #: functions/project_read.c:855 functions/project_read.c:1721
 #: functions/project_read.c:2106 functions/project_read.c:2636
@@ -1587,7 +1591,8 @@ msgstr ""
 "There was something wrong with a y offset finish value in the project file."
 
 #: functions/project_read.c:1587 functions/project_read.c:1937
-msgid "There was something wrong with a layer width value in the project file."
+msgid ""
+"There was something wrong with a layer width value in the project file."
 msgstr ""
 "There was something wrong with a layer width value in the project file."
 
@@ -1634,13 +1639,15 @@ msgstr ""
 "project file."
 
 #: functions/project_read.c:1969
-msgid "There was something wrong with a mouse click value in the project file."
+msgid ""
+"There was something wrong with a mouse click value in the project file."
 msgstr ""
 "There was something wrong with a mouse click value in the project file."
 
 #: functions/project_read.c:2474
 msgid "There was something wrong with a font size value in the project file."
-msgstr "There was something wrong with a font size value in the project file."
+msgstr ""
+"There was something wrong with a font size value in the project file."
 
 #: functions/project_read.c:2490
 msgid ""
@@ -1659,8 +1666,10 @@ msgstr ""
 "project file."
 
 #: functions/project_read.c:2774
-msgid "There was something wrong with a slide name value in the project file."
-msgstr "There was something wrong with a slide name value in the project file."
+msgid ""
+"There was something wrong with a slide name value in the project file."
+msgstr ""
+"There was something wrong with a slide name value in the project file."
 
 #: functions/project_read.c:2793
 msgid ""
@@ -1955,7 +1964,8 @@ msgstr "Exit duration (seconds):"
 #: functions/dialog/display_dialog_image.c:337
 #: functions/dialog/display_dialog_mouse.c:397
 msgid "There was something wrong with the new layer name.  Please try again."
-msgstr "There was something wrong with the new layer name.  Please try again."
+msgstr ""
+"There was something wrong with the new layer name.  Please try again."
 
 #: functions/dialog/display_dialog_highlight.c:439
 msgid ""
@@ -2030,7 +2040,8 @@ msgstr ""
 #: functions/dialog/display_dialog_mouse.c:482
 #: functions/dialog/display_dialog_text.c:578
 msgid "There was something wrong with the duration value.  Please try again."
-msgstr "There was something wrong with the duration value.  Please try again."
+msgstr ""
+"There was something wrong with the duration value.  Please try again."
 
 #: functions/dialog/display_dialog_highlight.c:592
 #: functions/dialog/display_dialog_image.c:506
@@ -2192,13 +2203,16 @@ msgid "Display the background?"
 msgstr "Display the background?"
 
 #: functions/dialog/display_dialog_text.c:465
-msgid "There was something wrong with the layer name value.  Please try again."
+msgid ""
+"There was something wrong with the layer name value.  Please try again."
 msgstr ""
 "There was something wrong with the layer name value.  Please try again."
 
 #: functions/dialog/display_dialog_text.c:536
-msgid "There was something wrong with the font size value.  Please try again."
-msgstr "There was something wrong with the font size value.  Please try again."
+msgid ""
+"There was something wrong with the font size value.  Please try again."
+msgstr ""
+"There was something wrong with the font size value.  Please try again."
 
 #: functions/dialog/display_dialog_text.c:550
 msgid ""
@@ -2227,8 +2241,10 @@ msgstr "All files (*.*)"
 #: functions/menu/menu_export_swf.c:130 functions/menu/menu_export_layer.c:139
 #: functions/menu/menu_export_slide.c:120 functions/menu/menu_file_open.c:163
 #: functions/menu/menu_file_save_as.c:141
-msgid "There was something wrong with the file name given.  Please try again."
-msgstr "There was something wrong with the file name given.  Please try again."
+msgid ""
+"There was something wrong with the file name given.  Please try again."
+msgstr ""
+"There was something wrong with the file name given.  Please try again."
 
 #: functions/export/html/export_html_wrapper.c:133
 #: functions/menu/menu_export_swf.c:142 functions/menu/menu_export_layer.c:152
@@ -2763,7 +2779,8 @@ msgid "Please choose an image file"
 msgstr "Please choose an image file"
 
 #: functions/layer/layer_new_image_inner.c:137
-msgid "There was something wrong with the image path given.  Please try again."
+msgid ""
+"There was something wrong with the image path given.  Please try again."
 msgstr ""
 "There was something wrong with the image path given.  Please try again."
 
@@ -3333,11 +3350,11 @@ msgstr "Mouse pointer grab released.\n"
 #: functions/menu/menu_screenshots_capture.c:207
 #, c-format
 msgid ""
-"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: %"
-"d\n"
+"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: "
+"%d\n"
 msgstr ""
-"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: %"
-"d\n"
+"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: "
+"%d\n"
 
 #: functions/menu/menu_screenshots_capture.c:218
 msgid ""

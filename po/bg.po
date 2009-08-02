@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-07-27 17:11+1000\n"
-"PO-Revision-Date: 2009-02-02 21:03+0000\n"
-"Last-Translator: Dilomo <ankere@gmail.com>\n"
+"PO-Revision-Date: 2009-04-06 08:32+0000\n"
+"Last-Translator: Svetoslav Stefanov <svetlisashkov@yahoo.com>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-02-14 03:52+0000\n"
+"X-Launchpad-Export-Date: 2009-08-02 02:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: salasaga.c:237 functions/validate_value.c:566
@@ -29,16 +29,17 @@ msgstr "Нов проект"
 #, c-format
 msgid "Debugging mode, errors will be shown on stdout.\n"
 msgstr ""
+"Режим за премахване на грешки. Съобщенията ще бъдат показвани на stdout.\n"
 
 #: salasaga.c:284
 #, c-format
 msgid "Program path: '%s'\n"
-msgstr ""
+msgstr "Път на програмата: '%s'\n"
 
 #: salasaga.c:285
 #, c-format
 msgid "Directory base: '%s'\n"
-msgstr ""
+msgstr "Основна директория: '%s'\n"
 
 #: salasaga.c:295
 msgid "icons"
@@ -47,12 +48,12 @@ msgstr "икони"
 #: salasaga.c:307
 #, c-format
 msgid "Icon path: %s\n"
-msgstr ""
+msgstr "Път до икона %s\n"
 
 #: salasaga.c:333
 #, c-format
 msgid "Path to mouse pointer image: %s\n"
-msgstr ""
+msgstr "Път до изображението с показалеца: %s\n"
 
 #: salasaga.c:416 salasaga.c:427 salasaga.c:484 functions/draw_timeline.c:64
 #: functions/key_bind.c:64 functions/key_bind.c:80
@@ -321,7 +322,7 @@ msgstr "Мащаб: "
 
 #: salasaga.c:468
 msgid "Output: "
-msgstr ""
+msgstr "Резултат: "
 
 #: salasaga.c:484
 msgid "Something went wrong when creating the film strip."
@@ -329,7 +330,7 @@ msgstr "Нещо се обърка при създаване на филмова
 
 #: salasaga.c:500
 msgid "Status bar messages"
-msgstr ""
+msgstr "Съобщения на статус лентата"
 
 #: salasaga.c:503
 msgid "Ready"
@@ -338,6 +339,8 @@ msgstr "Готово"
 #: salasaga.c:525
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
 msgstr ""
+"Прихващането на екрана е изключено: salasaga_screencapture не е намерена в "
+"пътя за търсене."
 
 #: valid_fields.h:35
 msgid "8 Bit Color Value Component"
@@ -357,7 +360,7 @@ msgstr "Външна връзка"
 
 #: valid_fields.h:39
 msgid "Window target for an external link"
-msgstr ""
+msgstr "Прозорец за външна връзка"
 
 #: valid_fields.h:40
 msgid "Full path to a file"
@@ -387,17 +390,13 @@ msgstr "Ширина на активния слой"
 msgid "Height of the tool bar icons"
 msgstr "Височина на иконите в лентата с инструменти"
 
-#: valid_fields.h:47
-msgid "Base64 encoded image data"
-msgstr ""
-
 #: valid_fields.h:48
 msgid "Length in bytes of image data"
-msgstr ""
+msgstr "Дължина в байтове на данните от изображението."
 
 #: valid_fields.h:49
 msgid "Layer background switch"
-msgstr ""
+msgstr "Фонов превключвател на слоя"
 
 #: valid_fields.h:50
 msgid "Layer duration in seconds"
@@ -413,7 +412,7 @@ msgstr "Име на слоя"
 
 #: valid_fields.h:53
 msgid "Layer visibility switch"
-msgstr ""
+msgstr "Превключвател за видимост на слоя"
 
 #: valid_fields.h:54
 msgid "Width of this layer"
@@ -425,7 +424,7 @@ msgstr "Ширина на линия"
 
 #: valid_fields.h:56
 msgid "Mouse click"
-msgstr "Цъкане с мишка"
+msgstr "Щтракване с мишката"
 
 #: valid_fields.h:57
 msgid "Opacity level"
@@ -465,11 +464,11 @@ msgstr "Височина на следващия прихванат екран"
 
 #: valid_fields.h:66
 msgid "Width for next screenshot"
-msgstr ""
+msgstr "Ширина на следващия прихванат екран"
 
 #: valid_fields.h:67
 msgid "Include control bar in exported swf"
-msgstr "Включване на контролната лента в изнесения swf"
+msgstr "Включване на лента за контрол в изнесения swf"
 
 #: valid_fields.h:68
 msgid "Include info button in exported swf"
@@ -477,7 +476,7 @@ msgstr "Включи бутон за информация в изнесения 
 
 #: valid_fields.h:69
 msgid "Show the background for text layers"
-msgstr "Показване на заден фон за текстовите слоеве"
+msgstr "Показване на фон за текстовите слоеве"
 
 #: valid_fields.h:70
 msgid "Number of frames per slide"
@@ -561,7 +560,7 @@ msgstr "<control>W"
 
 #: functions/create_menu_bar.c:102
 msgid "/File/Sep"
-msgstr ""
+msgstr "/Файл/раздрелител"
 
 #: functions/create_menu_bar.c:103
 msgid "/File/_Quit"
@@ -589,11 +588,11 @@ msgstr "/Прихванати екрани/Прихващане на _прозо
 
 #: functions/create_menu_bar.c:110 functions/create_menu_bar.c:178
 msgid "/Screenshots/Capture _full screen"
-msgstr "/Прихванати екрани/Прихващане на _екран"
+msgstr "/Прихванати екрани/Прихващане на целия _екран"
 
 #: functions/create_menu_bar.c:111
 msgid "/Screenshots/_Import"
-msgstr "Прихванати екрани/_Внасяне"
+msgstr "/Прихванати екрани/_Внасяне"
 
 #: functions/create_menu_bar.c:113
 msgid "/_Project"
@@ -653,11 +652,11 @@ msgstr "/Слой/_Редактиране"
 
 #: functions/create_menu_bar.c:130
 msgid "/Layer/_Delete"
-msgstr "Слой/_Изтриване"
+msgstr "/Слой/_Изтриване"
 
 #: functions/create_menu_bar.c:131
 msgid "/Layer/Sep"
-msgstr ""
+msgstr "/Слой/раздрелител"
 
 #: functions/create_menu_bar.c:132
 msgid "/Layer/Add _Text"
@@ -677,7 +676,7 @@ msgstr "/Слой/Добавяне на _показалец"
 
 #: functions/create_menu_bar.c:137
 msgid "/E_xport"
-msgstr "И_знеси"
+msgstr "/И_знеси"
 
 #: functions/create_menu_bar.c:138
 msgid "/Export/_Flash Animation"
@@ -697,7 +696,7 @@ msgstr "/Изнеси/_Слайд като изображение"
 
 #: functions/create_menu_bar.c:141
 msgid "/Export/_Image Layer"
-msgstr "/Изнеси/Слоя с _изображението"
+msgstr "/Изнеси/Слоя като _изображението"
 
 #: functions/create_menu_bar.c:143
 msgid "/_Help"
@@ -713,7 +712,7 @@ msgstr "/_Помощ/_Уеб Сайт"
 
 #: functions/create_menu_bar.c:146
 msgid "/_Help/Sep"
-msgstr ""
+msgstr "/_Помощ/раздрелител"
 
 #: functions/create_menu_bar.c:148
 msgid "/_Help/_Forum"
@@ -856,7 +855,7 @@ msgstr "Запазване"
 
 #: functions/create_toolbar.c:95
 msgid "Save the project"
-msgstr "Запазване на проект"
+msgstr "Запазване на проекта"
 
 #: functions/create_toolbar.c:101 functions/menu/menu_file_save_as.c:69
 msgid "Save As"
@@ -864,7 +863,7 @@ msgstr "Запиши като"
 
 #: functions/create_toolbar.c:102
 msgid "Save the project with a different file name"
-msgstr "Запиши проекта като"
+msgstr "Запиши проекта с различно име"
 
 #: functions/create_toolbar.c:108
 msgid "Quit"
@@ -876,7 +875,7 @@ msgstr "Спиране на програмата"
 
 #: functions/create_toolbar.c:119
 msgid "Path to toolbar 'Capture Screenshots' icon"
-msgstr ""
+msgstr "Път до иконата 'Прихващане на екрани' на лентата с инструменти"
 
 #: functions/create_toolbar.c:126
 msgid "Capture"
@@ -914,47 +913,47 @@ msgstr "Изнасяне като Flash анимация"
 
 #: functions/disable_layer_toolbar_buttons.c:47
 msgid "Edit layer disabled: No project loaded"
-msgstr ""
+msgstr "Редактирането на слоя е изключено: Не е отворен проект"
 
 #: functions/disable_layer_toolbar_buttons.c:56
 msgid "Crop layer disabled: No project loaded"
-msgstr ""
+msgstr "Изрязването на слоя е изключено: Не е отворен проект"
 
 #: functions/disable_layer_toolbar_buttons.c:65
 msgid "Delete layer disabled: No project loaded"
-msgstr ""
+msgstr "Изтриването на слоя е изключено: Не е отворен проект"
 
 #: functions/disable_layer_toolbar_buttons.c:74
 msgid "Move layer down disabled: No project loaded"
-msgstr ""
+msgstr "Преместването надолу на слоя е изключено: Не е отворен проект"
 
 #: functions/disable_layer_toolbar_buttons.c:83
 msgid "Move layer up disabled: No project loaded"
-msgstr ""
+msgstr "Преместването нагоре на слоя е изключено: Не е отворен проект"
 
 #: functions/disable_layer_toolbar_buttons.c:92
 msgid "Add mouse pointer disabled: No project loaded"
-msgstr ""
+msgstr "Добавянето на показалец е изключено: Не е отворен проект"
 
 #: functions/disable_layer_toolbar_buttons.c:101
 msgid "Add text layer disabled: No project loaded"
-msgstr ""
+msgstr "Добавянето на текстов слой е изключено: Не е отворен проект"
 
 #: functions/disable_layer_toolbar_buttons.c:110
 msgid "Add highlight layer disabled: No project loaded"
-msgstr ""
+msgstr "Добавянето на слой с акцент е изключено: Не е отворен проект"
 
 #: functions/disable_layer_toolbar_buttons.c:119
 msgid "Add image layer disabled: No project loaded"
-msgstr ""
+msgstr "Добавянето на слой с изображение е изключено: Не е отворен проект"
 
 #: functions/disable_main_toolbar_buttons.c:47
 msgid "Crop disabled: No project loaded"
-msgstr ""
+msgstr "Изрязването е изключено: Не е отворен проект"
 
 #: functions/disable_main_toolbar_buttons.c:56
 msgid "Export to Flash disabled: No project loaded"
-msgstr ""
+msgstr "Изнасянето към Flash е изключено: Не е отворен проект"
 
 #: functions/draw_timeline.c:64
 msgid "Could not regenerate the time line widget."
@@ -966,8 +965,8 @@ msgid ""
 "so not sure how to.)  You will need to do this yourself manually."
 msgstr ""
 "Неуспех при задаването на клавишна комбинация Control-Printscreen за "
-"прихващане на екрана. (Не използвате Metacity като декоратор, за това не "
-"знам как да го направя). Ще трябва да я зададете ръчно."
+"прихващане на екрана. (Не използвате Metacity като декоратор на прозорци, за "
+"това не знам как да го направя). Ще трябва да я зададете ръчно."
 
 #: functions/key_bind.c:80
 msgid ""
@@ -982,54 +981,72 @@ msgid ""
 "There was something wrong with the project folder value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Нещо се обърка със стойноста на полето 'папка на проекта' в настройките. "
+"Вместо това се използват настройките по подразбиране."
 
 #: functions/preferences_load.c:121
 msgid ""
 "There was something wrong with the screenshots folder value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Нещо се обърка със стойноста на полето 'папка на прихванатите екрани' в "
+"настройките. Вместо това се използват настройките по подразбиране."
 
 #: functions/preferences_load.c:135
 msgid ""
 "There was something wrong with the default output folder value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Нещо се обърка със стойноста на полето 'изходна папка' в настройките. Вместо "
+"това се използват настройките по подразбиране."
 
 #: functions/preferences_load.c:151
 msgid ""
 "There was something wrong with the default zoom level value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Нещо се обърка със стойноста на полето 'ниво на приближение' в настройките. "
+"Вместо това се използват настройките по подразбиране."
 
 #: functions/preferences_load.c:167 functions/preferences_load.c:182
 msgid ""
 "There was something wrong with the default project width value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Нещо се обърка със стойноста на полето 'ширина на проекта' в настройките. "
+"Вместо това се използват настройките по подразбиране."
 
 #: functions/preferences_load.c:196
 msgid ""
 "There was something wrong with the default output width value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Нещо се обърка със стойноста на полето 'изходна ширина' в настройките. "
+"Вместо това се използват настройките по подразбиране."
 
 #: functions/preferences_load.c:210
 msgid ""
 "There was something wrong with the default output height value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Нещо се обърка със стойноста на полето 'изходна височина' в настройките. "
+"Вместо това се използват настройките по подразбиране."
 
 #: functions/preferences_load.c:224
 msgid ""
 "There was something wrong with the default slide duration value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
+"Нещо се обърка със стойноста на полето 'продължителност на слад' в "
+"настройките. Вместо това се използват настройките по подразбиране."
 
 #: functions/preferences_load.c:238
 msgid ""
 "There was something wrong with the default layer duration value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
+"Нещо се обърка със стойноста на полето 'продължителност на слой' в "
+"настройките. Вместо това се използват настройките по подразбиране."
 
 #: functions/preferences_load.c:252 functions/preferences_load.c:266
 #: functions/preferences_load.c:280
@@ -1037,28 +1054,36 @@ msgid ""
 "There was something wrong with the default background color value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
+"Нещо се обърка със стойноста на полето 'фонов цвят' в настройките. Вместо "
+"това се използват настройките по подразбиране."
 
 #: functions/preferences_load.c:296
 msgid ""
 "There was something wrong with the film strip thumbnail width value stored "
 "in the preferences.  Using default preferences instead."
 msgstr ""
+"Нещо се обърка със стойноста на полето 'ширина на филмовата лента' в "
+"настройките. Вместо това се използват настройките по подразбиране."
 
 #: functions/preferences_load.c:316
 msgid ""
 "There was something wrong with the default frames per second value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
+"Нещо се обърка със стойноста на полето 'кадъра в секунда' в настройките. "
+"Вместо това се използват настройките по подразбиране."
 
 #: functions/preferences_load.c:332
 msgid ""
 "There was something wrong with the icon height value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Нещо се обърка със стойноста на полето 'височина на икона' в настройките. "
+"Вместо това се използват настройките по подразбиране."
 
 #: functions/preferences_load.c:764
 msgid "Some of the project default registry keys are missing\n"
-msgstr ""
+msgstr "Някои от ключовете на проекта липсват в регистъра\n"
 
 #: functions/project_crop.c:96 functions/layer/image_crop.c:125
 msgid "Crop image layer"
@@ -1085,7 +1110,7 @@ msgstr "Изрязване отдолу: "
 #: functions/layer/layer_new_image_inner.c:167
 #: functions/menu/menu_screenshots_import.c:292
 msgid "Couldn't create an image pattern."
-msgstr ""
+msgstr "Не може да създаде шарка на изображението."
 
 #: functions/project_crop.c:250
 msgid "Project cropped"
@@ -1114,106 +1139,127 @@ msgstr "Избрания проект не беше зареден успешн�
 
 #: functions/project_read.c:165
 msgid "Project file is empty.  Please choose a different project file."
-msgstr ""
+msgstr "Избрания файл е празен. Моля, изберете друг."
 
 #: functions/project_read.c:213
 msgid ""
 "Project meta data missing, aborting load.  Please choose a different project "
 "file."
 msgstr ""
+"Мета данните на проекта липсват, прекратяване на зареждането. Моля, изберете "
+"друг файл."
 
 #: functions/project_read.c:222
 msgid ""
 "Project preferences missing, aborting load.  Please choose a different "
 "project file."
 msgstr ""
+"Настройките на проекта липсват, прекратяване на зареждането. Моля, изберете "
+"друг файл."
 
 #: functions/project_read.c:231
 msgid ""
 "No slides in project, aborting load.  Please choose a different project file."
 msgstr ""
+"Няма слайдове в проекта, прекратяване на зареждането. Моля, изберете друг "
+"файл."
 
 #: functions/project_read.c:340
 msgid ""
 "Project Name missing, aborting load.  Please choose a different project file."
 msgstr ""
+"Липсва име на проекта, прекратяване на зареждането. Моля, изберете друг файл."
 
 #: functions/project_read.c:347
 msgid ""
 "Project Width missing, aborting load.  Please choose a different project "
 "file."
 msgstr ""
+"Липсва ширина на проекта, прекратяване на зареждането. Моля, изберете друг "
+"файл."
 
 #: functions/project_read.c:354
 msgid ""
 "Project Height missing, aborting load.  Please choose a different project "
 "file."
 msgstr ""
+"Липсва височина на проекта, прекратяване на зареждането. Моля, изберете друг "
+"файл."
 
 #: functions/project_read.c:364
 msgid ""
 "The file format value in the project file is not recognized.  This project "
 "file can't be used."
-msgstr ""
+msgstr "Файловия формат не е разпознат. Моля, изберете друг файл."
 
 #: functions/project_read.c:384
 msgid ""
 "There was something wrong with the project name value in the project file."
-msgstr ""
+msgstr "Нещо се обърка с името на проекта във файла с проекта."
 
 #: functions/project_read.c:399
 msgid ""
 "There was something wrong with the output folder value in the project file."
 msgstr ""
+"Нещо се обърка със стойността на изходната папка във файла с проекта."
 
 #: functions/project_read.c:415
 msgid ""
 "There was something wrong with the output width value in the project file."
 msgstr ""
+"Нещо се обърка със стойността на изходната ширина във файла с проекта."
 
 #: functions/project_read.c:430
 msgid ""
 "There was something wrong with the output height value in the project file."
 msgstr ""
+"Нещо се обърка със стойността на изходната височина във файла с проекта."
 
 #: functions/project_read.c:445 functions/project_read.c:460
 msgid ""
 "There was something wrong with the project width value in the project file."
-msgstr ""
+msgstr "Нещо се обърка с ширината на проекта във файла с проекта."
 
 #: functions/project_read.c:477
 msgid ""
 "There was something wrong with the frames per second value in the project "
 "file."
 msgstr ""
+"Нещо се обърка със стойността на кадри в секунда във файла с проекта."
 
 #: functions/project_read.c:494
 msgid ""
 "There was something wrong with the start behavior value in the project file."
 msgstr ""
+"Нещо се обърка със стойността на начално поведение във файла с проекта."
 
 #: functions/project_read.c:522
 msgid ""
 "There was something wrong with the end behavior value in the project file."
 msgstr ""
+"Нещо се обърка със стойността на поведението за край във файла с проекта."
 
 #: functions/project_read.c:556
 msgid ""
 "There was something wrong with the control bar display value in the project "
 "file."
 msgstr ""
+"Нещо се обърка със стойността на контролната лента във файла с проекта."
 
 #: functions/project_read.c:584
 msgid ""
 "There was something wrong with the information button display value in the "
 "project file."
 msgstr ""
+"Нещо се обърка със стойността на бутона за информация във файла с проекта."
 
 #: functions/project_read.c:608 functions/project_read.c:626
 msgid ""
 "There was something wrong with the information button link value in the "
 "project file."
 msgstr ""
+"Нещо се обърка със стойността на връзката на бутона за информация във файла "
+"с проекта."
 
 #: functions/project_read.c:705 functions/project_read.c:1403
 #: functions/project_read.c:1463 functions/project_read.c:2332
@@ -1221,7 +1267,7 @@ msgstr ""
 msgid ""
 "There was something wrong with a red component color value in the project "
 "file."
-msgstr ""
+msgstr "Нещо се обърка със стойноста на червения цвят в проекта."
 
 #: functions/project_read.c:721 functions/project_read.c:1418
 #: functions/project_read.c:1478 functions/project_read.c:2348
@@ -1229,7 +1275,7 @@ msgstr ""
 msgid ""
 "There was something wrong with a green component color value in the project "
 "file."
-msgstr ""
+msgstr "Нещо се обърка със стойноста на зеления цвят в проекта."
 
 #: functions/project_read.c:737 functions/project_read.c:1433
 #: functions/project_read.c:1493 functions/project_read.c:2364
@@ -1237,49 +1283,52 @@ msgstr ""
 msgid ""
 "There was something wrong with a blue component color value in the project "
 "file."
-msgstr ""
+msgstr "Нещо се обърка със стойноста на синия цвят в проекта."
 
 #: functions/project_read.c:756 functions/project_read.c:1622
 #: functions/project_read.c:2007 functions/project_read.c:2537
 msgid ""
 "There was something wrong with a start frame value in the project file."
-msgstr ""
+msgstr "Нещо се обърка със стойноста на началния кадър в проекта."
 
 #: functions/project_read.c:772 functions/project_read.c:1638
 #: functions/project_read.c:2023 functions/project_read.c:2553
 msgid ""
 "There was something wrong with a finish frame value in the project file."
-msgstr ""
+msgstr "Нещо се обърка със стойноста на крайния кадър в проекта."
 
 #: functions/project_read.c:790 functions/project_read.c:1656
 #: functions/project_read.c:2041 functions/project_read.c:2571
 msgid ""
 "There was something wrong with a layer start time value in the project file."
-msgstr ""
+msgstr "Нещо се обърка със стойноста на началното времето в проекта."
 
 #: functions/project_read.c:806 functions/project_read.c:1672
 #: functions/project_read.c:2057 functions/project_read.c:2587
 msgid ""
 "There was something wrong with a layer duration value in the project file."
 msgstr ""
+"Нещо се обърка със стойността за продължителност на слоя във файла с проекта."
 
 #: functions/project_read.c:823 functions/project_read.c:1689
 #: functions/project_read.c:2074 functions/project_read.c:2604
 msgid ""
 "There was something wrong with a layer visibility value in the project file."
 msgstr ""
+"Нещо се обърка със стойността за видимост на слоя във файла с проекта."
 
 #: functions/project_read.c:839 functions/project_read.c:1705
 #: functions/project_read.c:2090 functions/project_read.c:2620
 msgid ""
 "There was something wrong with a layer name value in the project file."
-msgstr ""
+msgstr "Нещо се обърка със стойността за име на слоя във файла с проекта."
 
 #: functions/project_read.c:855 functions/project_read.c:1721
 #: functions/project_read.c:2106 functions/project_read.c:2636
 msgid ""
 "There was something wrong with an external link value in the project file."
 msgstr ""
+"Нещо се обърка със стойността на външната връзка във файла с проекта."
 
 #: functions/project_read.c:871 functions/project_read.c:1737
 #: functions/project_read.c:2122 functions/project_read.c:2652
@@ -1287,146 +1336,176 @@ msgid ""
 "There was something wrong with an external link target window value in the "
 "project file."
 msgstr ""
+"Нещо се обърка със стойността на целта на външната връзка във файла с "
+"проекта."
 
 #: functions/project_read.c:931
 msgid ""
 "There was something wrong with an image x offset start value in the project "
 "file."
 msgstr ""
+"Нещо се обърка със стойността на началното отместването по X във файла с "
+"проекта."
 
 #: functions/project_read.c:947
 msgid ""
 "There was something wrong with an image y offset start value in the project "
 "file."
 msgstr ""
+"Нещо се обърка със стойността на началното отместването по Y във файла с "
+"проекта."
 
 #: functions/project_read.c:963
 msgid ""
 "There was something wrong with an image x offset finish value in the project "
 "file."
 msgstr ""
+"Нещо се обърка със стойността на крайното отместването по X във файла с "
+"проекта."
 
 #: functions/project_read.c:979
 msgid ""
 "There was something wrong with an image y offset finish value in the project "
 "file."
 msgstr ""
+"Нещо се обърка със стойността на крайното отместването по Y във файла с "
+"проекта."
 
 #: functions/project_read.c:995
 msgid ""
 "There was something wrong with an image layer width value in the project "
 "file."
-msgstr ""
+msgstr "Нещо се обърка със стойността за ширина на слоя във файла с проекта."
 
 #: functions/project_read.c:1011
 msgid ""
 "There was something wrong with an image layer height value in the project "
 "file."
 msgstr ""
+"Нещо се обърка със стойността за височина на слоя във файла с проекта."
 
 #: functions/project_read.c:1027
 msgid ""
 "There was something wrong with an image layer background value in the "
 "project file."
-msgstr ""
+msgstr "Нещо се обърка със стойноста за фон на слоя с изображение в проекта."
 
 #: functions/project_read.c:1045
 msgid ""
 "There was something wrong with an image start frame value in the project "
 "file."
 msgstr ""
+"Нещо се обърка със стойността на стартовия кадър на изображението в проекта."
 
 #: functions/project_read.c:1061
 msgid ""
 "There was something wrong with an image finish frame value in the project "
 "file."
 msgstr ""
+"Нещо се обърка със стойността на крайния кадър на изображението в проекта."
 
 #: functions/project_read.c:1079
 msgid ""
 "There was something wrong with an image layer start time value in the "
 "project file."
 msgstr ""
+"Нещо се обърка със стойността на началното време на слоя на изображението в "
+"проекта."
 
 #: functions/project_read.c:1095
 msgid ""
 "There was something wrong with an image layer duration value in the project "
 "file."
 msgstr ""
+"Нещо се обърка със стойността на продължителност на слоя за изображението в "
+"проекта."
 
 #: functions/project_read.c:1112
 msgid ""
 "There was something wrong with an image layer visibility value in the "
 "project file."
 msgstr ""
+"Нещо се обърка със стойността на видимост на слоя на изображението в проекта."
 
 #: functions/project_read.c:1128
 msgid ""
 "There was something wrong with an image layer name value in the project file."
 msgstr ""
+"Нещо се обърка със стойността за име на слой на изображението в проекта."
 
 #: functions/project_read.c:1144
 msgid ""
 "There was something wrong with an image layer external link value in the "
 "project file."
 msgstr ""
+"Нещо се обърка със стойността на външната връзка на слоя на изображението в "
+"проекта."
 
 #: functions/project_read.c:1160
 msgid ""
 "There was something wrong with an image layer external link target window "
 "value in the project file."
 msgstr ""
+"Нещо се обърка със стойността на целта на външната връзка на слоя с "
+"изображението в проекта."
 
 #: functions/project_read.c:1180
 msgid ""
 "There was something wrong with a file name path value in the project file."
-msgstr ""
+msgstr "Нещо се обърка със стойността за път до файла във файла с проекта."
 
 #: functions/project_read.c:1198
 msgid "There was something wrong with image data in the project file."
 msgstr ""
+"Нещо се обърка със стойността за данните на изображение във файла с проекта."
 
 #: functions/project_read.c:1214
 msgid ""
 "There was something wrong with an image data length value in the project "
 "file."
 msgstr ""
+"Нещо се обърка със стойността на големината на изображението в проекта."
 
 #: functions/project_read.c:1231
 msgid ""
 "There was something wrong with an image transition in type value in the "
 "project file."
-msgstr ""
+msgstr "Нещо се обърка със стойността на прехода на изображението в проекта."
 
 #: functions/project_read.c:1253
 msgid ""
 "There was something wrong with an image transition in duration value in the "
 "project file."
 msgstr ""
+"Нещо се обърка със стойността за продължителност на прехода на изображението "
+"в проекта."
 
 #: functions/project_read.c:1269
 msgid ""
 "There was something wrong with an image transition out type value in the "
 "project file."
 msgstr ""
+"Нещо се обърка със стойността за изход на прехода на изображението в проекта."
 
 #: functions/project_read.c:1291
 msgid ""
 "There was something wrong with an image transition out duration value in the "
 "project file."
 msgstr ""
+"Нещо се обърка със стойността на времето за изход на прехода на "
+"изображението в проекта."
 
 #: functions/project_read.c:1317 functions/project_read.c:1324
 msgid "Image data loading failed"
-msgstr ""
+msgstr "Зареждането на данни за изображението пропадна"
 
 #: functions/project_read.c:1331
 msgid "Error when loading image data"
-msgstr ""
+msgstr "Грешка при зареждането на данни за изображението"
 
 #: functions/project_read.c:1341
 msgid "Couldn't create an image pattern"
-msgstr ""
+msgstr "Не може да създаде шарка на изображението"
 
 #: functions/project_read.c:1377 functions/project_read.c:2240
 #: functions/layer/layer_new_highlight_inner.c:154
@@ -1442,105 +1521,26 @@ msgstr "_self"
 msgid ""
 "There was something wrong with a highlight border width value in the project "
 "file."
-msgstr ""
+msgstr "Нещо се обърка със стойността за рамка на акцента в проекта."
 
 #: functions/project_read.c:1508
 msgid ""
 "There was something wrong with a highlight opacity value in the project file."
-msgstr ""
+msgstr "Нещо се обърка със стойността за плътност на акцента в проекта."
 
 #: functions/project_read.c:1523 functions/project_read.c:1873
 #: functions/project_read.c:2268
 msgid ""
 "There was something wrong with an x offset start value in the project file."
 msgstr ""
+"Нещо се обърка със стойността за начало на отместване по X в проекта."
 
 #: functions/project_read.c:1539 functions/project_read.c:1889
 #: functions/project_read.c:2284
 msgid ""
 "There was something wrong with a y offset start value in the project file."
 msgstr ""
-
-#: functions/project_read.c:1555 functions/project_read.c:1905
-#: functions/project_read.c:2300
-msgid ""
-"There was something wrong with an x offset finish value in the project file."
-msgstr ""
-
-#: functions/project_read.c:1571 functions/project_read.c:1921
-#: functions/project_read.c:2316
-msgid ""
-"There was something wrong with a y offset finish value in the project file."
-msgstr ""
-
-#: functions/project_read.c:1587 functions/project_read.c:1937
-msgid ""
-"There was something wrong with a layer width value in the project file."
-msgstr ""
-
-#: functions/project_read.c:1603 functions/project_read.c:1953
-msgid ""
-"There was something wrong with a layer height value in the project file."
-msgstr ""
-
-#: functions/project_read.c:1753 functions/project_read.c:2138
-#: functions/project_read.c:2668
-msgid ""
-"There was something wrong with a transition in type value in the project "
-"file."
-msgstr ""
-
-#: functions/project_read.c:1775 functions/project_read.c:2160
-#: functions/project_read.c:2690
-msgid ""
-"There was something wrong with a transition in duration value in the project "
-"file."
-msgstr ""
-
-#: functions/project_read.c:1791 functions/project_read.c:2176
-#: functions/project_read.c:2706
-msgid ""
-"There was something wrong with a transition out type value in the project "
-"file."
-msgstr ""
-
-#: functions/project_read.c:1813 functions/project_read.c:2198
-#: functions/project_read.c:2728
-msgid ""
-"There was something wrong with a transition out duration value in the "
-"project file."
-msgstr ""
-
-#: functions/project_read.c:1969
-msgid ""
-"There was something wrong with a mouse click value in the project file."
-msgstr ""
-
-#: functions/project_read.c:2474
-msgid "There was something wrong with a font size value in the project file."
-msgstr ""
-
-#: functions/project_read.c:2490
-msgid ""
-"There was something wrong with a background border width value in the "
-"project file."
-msgstr ""
-
-#: functions/project_read.c:2505
-msgid ""
-"There was something wrong with a text background visibility value in the "
-"project file."
-msgstr ""
-
-#: functions/project_read.c:2774
-msgid ""
-"There was something wrong with a slide name value in the project file."
-msgstr ""
-
-#: functions/project_read.c:2793
-msgid ""
-"There was something wrong with a slide duration value in the project file."
-msgstr ""
+"Нещо се обърка със стойността за начало на отместване по Y в проекта."
 
 #: functions/project_read.c:2827
 msgid "Aborting load of project file."
@@ -1553,19 +1553,19 @@ msgstr "Запазванто на настройките в регистъра �
 
 #: functions/validate_value.c:605
 msgid "Unknown value passed to validation function"
-msgstr ""
+msgstr "Неизвестна стойност е подадена към функцията"
 
 #: functions/cairo/create_cairo_pixbuf_pattern.c:70
 msgid "Unable to allocate memory for pixel buffer."
-msgstr ""
+msgstr "Неуспех при опита за отделяне на памет за пикселния буфер."
 
 #: functions/cairo/create_cairo_pixbuf_pattern.c:122
 msgid "Couldn't create image surface."
-msgstr ""
+msgstr "Не можа да създаде повърхност с изображение."
 
 #: functions/cairo/create_cairo_pixbuf_pattern.c:133
 msgid "Couldn't create surface pattern."
-msgstr ""
+msgstr "Не можа да създаде шарка на повърхността."
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:74
 msgid "Unable to retrieve details for the screen to capture."
@@ -1622,19 +1622,19 @@ msgstr ""
 #: functions/menu/menu_screenshots_capture.c:425
 #, c-format
 msgid "Keyboard hook LoadLibrary failed with error %d: %s"
-msgstr ""
+msgstr "Клавиатурното прихващане  'LoadLibrary' се провали с гешка %d: %s"
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:306
 #: functions/menu/menu_screenshots_capture.c:436
 #, c-format
 msgid "Keyboard hook GetProcAddress failed with error %d: %s"
-msgstr ""
+msgstr "Клавиатурното прихващане  'GetProcAddress' се провали с гешка %d: %s"
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:318
 #: functions/menu/menu_screenshots_capture.c:448
 #, c-format
 msgid "Keyboard hooking failed with error %d: %s"
-msgstr ""
+msgstr "Клавиатурното прихващане се провали с гешка %d: %s"
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:325
 #, c-format
@@ -1642,25 +1642,14 @@ msgid ""
 " Wrote capture settings file - %s - and installed Control-Printscreen "
 "keyboard hook"
 msgstr ""
+" Написа файла с настройките за прихващане - %s - и активира клавиатурното "
+"прихващане Control-Printscreen"
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:331
 #: functions/menu/menu_screenshots_capture.c:461
 #, c-format
 msgid " Wrote capture settings file - %s"
-msgstr ""
-
-#: functions/conversion/base64_decode.c:134
-msgid "Error in the Base64 decoding function, unrecognized input"
-msgstr ""
-
-#: functions/conversion/base64_decode.c:185
-msgid "Unknown Base64 decoding remainder.  This should not happen."
-msgstr ""
-
-#: functions/conversion/base64_encode.c:179
-msgid ""
-"Unknown remainder amount when Base64 encoding.  This should not ever happen."
-msgstr ""
+msgstr " Написа файла с настройките за прихващане - %s"
 
 #: functions/dialog/display_dialog_empty.c:80
 msgid "Background Color: "
@@ -1672,7 +1661,7 @@ msgstr "Фонов цвят: "
 #: functions/dialog/display_dialog_mouse.c:350
 #: functions/dialog/display_dialog_text.c:259
 msgid "External link: "
-msgstr ""
+msgstr "Външна връзка: "
 
 #: functions/dialog/display_dialog_empty.c:101
 #: functions/dialog/display_dialog_highlight.c:389
@@ -1680,22 +1669,7 @@ msgstr ""
 #: functions/dialog/display_dialog_mouse.c:362
 #: functions/dialog/display_dialog_text.c:271
 msgid "External link window: "
-msgstr ""
-
-#: functions/dialog/display_dialog_empty.c:136
-#: functions/dialog/display_dialog_highlight.c:578
-#: functions/dialog/display_dialog_image.c:492
-#: functions/dialog/display_dialog_mouse.c:495
-#: functions/dialog/display_dialog_text.c:591
-msgid ""
-"There was something wrong with the external link value.  Please try again."
-msgstr ""
-
-#: functions/dialog/display_dialog_empty.c:150
-msgid ""
-"There was something wrong with the external link window target value.  "
-"Please try again."
-msgstr ""
+msgstr "Прозорец на външната връзка: "
 
 #: functions/dialog/display_dialog_highlight.c:151
 #: functions/dialog/display_dialog_image.c:132
@@ -1829,10 +1803,1012 @@ msgstr "Нещо не е наред в новото име на слоя. Мол
 #: functions/dialog/display_dialog_highlight.c:439
 msgid ""
 "There was something wrong with the border width value.  Please try again."
-msgstr ""
+msgstr "Нещо не е наред с ширината на рамката. Моля опитайте отново."
 
 #: functions/dialog/display_dialog_highlight.c:453
 msgid "There was something wrong with the opacity value.  Please try again."
+msgstr ""
+"Нещо не е наред със стойността на непрозрачност. Моля опитайте отново."
+
+#: functions/dialog/display_dialog_image.c:144
+#: functions/dialog/display_dialog_mouse.c:145
+#: functions/dialog/display_dialog_text.c:311
+msgid "Start X Offset: "
+msgstr "Начално отместване по X "
+
+#: functions/dialog/display_dialog_image.c:155
+#: functions/dialog/display_dialog_mouse.c:156
+#: functions/dialog/display_dialog_text.c:322
+msgid "Start Y Offset: "
+msgstr "Начално отместване по Y "
+
+#: functions/dialog/display_dialog_image.c:166
+#: functions/dialog/display_dialog_mouse.c:167
+#: functions/dialog/display_dialog_text.c:333
+msgid "Finish X Offset: "
+msgstr "Крайно отместване по X "
+
+#: functions/dialog/display_dialog_image.c:177
+#: functions/dialog/display_dialog_mouse.c:178
+#: functions/dialog/display_dialog_text.c:344
+msgid "Finish Y Offset: "
+msgstr "Крайно отместване по Y "
+
+#: functions/dialog/display_dialog_mouse.c:287
+msgid "Mouse click type: "
+msgstr "Тип щракване с мишката: "
+
+#: functions/dialog/display_dialog_mouse.c:291
+msgid "No mouse click"
+msgstr "Без щтракване"
+
+#: functions/dialog/display_dialog_mouse.c:292
+msgid "Left single click"
+msgstr "Единично с ляв бутон"
+
+#: functions/dialog/display_dialog_mouse.c:293
+msgid "Left double click"
+msgstr "Двойно с ляв бутон"
+
+#: functions/dialog/display_dialog_mouse.c:294
+msgid "Left triple click"
+msgstr "Тройно с ляв бутон"
+
+#: functions/dialog/display_dialog_mouse.c:295
+msgid "Right single click"
+msgstr "Единично с десен бутон"
+
+#: functions/dialog/display_dialog_mouse.c:296
+msgid "Right double click"
+msgstr "Двойно с десен бутон"
+
+#: functions/dialog/display_dialog_mouse.c:297
+msgid "Right triple click"
+msgstr "Тройно с десен бутон"
+
+#: functions/dialog/display_dialog_mouse.c:298
+msgid "Middle single click"
+msgstr "Единично със среден бутон"
+
+#: functions/dialog/display_dialog_mouse.c:299
+msgid "Middle double click"
+msgstr "Двойно със среден бутон"
+
+#: functions/dialog/display_dialog_mouse.c:300
+msgid "Middle triple click"
+msgstr "Тройно със среден бутон"
+
+#: functions/dialog/display_dialog_save_warning.c:44
+msgid "Project has been modified.  Save changes?"
+msgstr "Проектът беше променен. Да се запазят ли промените?"
+
+#: functions/dialog/display_dialog_text.c:163
+msgid "Appearance & Links"
+msgstr "Външен вид и връзки"
+
+#: functions/dialog/display_dialog_text.c:165
+msgid "Duration"
+msgstr "Продължителност"
+
+#: functions/dialog/display_dialog_text.c:191
+msgid "Layer name: "
+msgstr "Име на слой: "
+
+#: functions/dialog/display_dialog_text.c:203
+msgid "Font size: "
+msgstr "Големина на шрифта: "
+
+#: functions/dialog/display_dialog_text.c:215
+msgid "Text color: "
+msgstr "Цвят на текста: "
+
+#: functions/dialog/display_dialog_text.c:283
+msgid "Display the background?"
+msgstr "Показване на фон?"
+
+#: functions/export/html/export_html_wrapper.c:65
+msgid "Export Html"
+msgstr "Изнеси Html"
+
+#: functions/export/html/export_html_wrapper.c:75
+msgid "HyperText Markup Language (*.html)"
+msgstr "HyperText Markup Language (*.html)"
+
+#: functions/export/html/export_html_wrapper.c:81
+#: functions/menu/menu_export_swf.c:90 functions/menu/menu_export_layer.c:99
+#: functions/menu/menu_export_slide.c:80 functions/menu/menu_file_open.c:105
+#: functions/menu/menu_file_save_as.c:85
+msgid "All files (*.*)"
+msgstr "Всички файлове (*.*)"
+
+#: functions/export/html/export_html_wrapper.c:121
+#: functions/menu/menu_export_swf.c:130 functions/menu/menu_export_layer.c:139
+#: functions/menu/menu_export_slide.c:120 functions/menu/menu_file_open.c:163
+#: functions/menu/menu_file_save_as.c:141
+msgid ""
+"There was something wrong with the file name given.  Please try again."
+msgstr "Има нещо неправилно в даденото име за файл. Моля опитайте отново."
+
+#: functions/export/html/export_html_wrapper.c:133
+#: functions/menu/menu_export_swf.c:142 functions/menu/menu_export_layer.c:152
+#: functions/menu/menu_export_slide.c:132
+#: functions/menu/menu_file_save_as.c:153
+msgid "Overwrite existing file?"
+msgstr "Презапис на съществуващия файл?"
+
+#: functions/export/html/export_html_wrapper.c:167
+msgid "Couldn't create the output file."
+msgstr "Не можа да създаде изходен файл."
+
+#: functions/export/html/export_html_wrapper.c:201
+msgid "Wrote html wrapper"
+msgstr "Html обвивката е написана"
+
+#: functions/export/swf/export_swf_control_bar.c:384
+#: functions/export/swf/export_swf_control_bar.c:398
+#: functions/film_strip/create_film_strip.c:79
+msgid "Slide"
+msgstr "Слайд"
+
+#: functions/export/swf/export_swf_control_bar.c:523
+msgid "Restart button pressed, slide counter has been set to:"
+msgstr "Бутона за рестарт е натиснат, броячът на слайдове е настроен на:"
+
+#: functions/export/swf/export_swf_control_bar.c:527
+#: functions/export/swf/export_swf_control_bar.c:674
+#: functions/export/swf/export_swf_control_bar.c:1011
+msgid "We should now jump to the slide named"
+msgstr "Сега трябва да прескочим до слайда именован"
+
+#: functions/export/swf/export_swf_control_bar.c:625
+msgid "We should now jump to the first frame of the movie."
+msgstr "Трябва да отидем до първия кадър на филма."
+
+#: functions/export/swf/export_swf_control_bar.c:632
+#: functions/export/swf/export_swf_control_bar.c:641
+#: functions/export/swf/export_swf_control_bar.c:681
+#: functions/export/swf/export_swf_control_bar.c:690
+#: functions/export/swf/export_swf_control_bar.c:1018
+#: functions/export/swf/export_swf_control_bar.c:1027
+msgid "Using"
+msgstr "Използвайки"
+
+#: functions/export/swf/export_swf_control_bar.c:1242
+#, c-format
+msgid "Font path: '%s'\n"
+msgstr "Път за Шрифтове: '%s'\n"
+
+#: functions/export/swf/export_swf_create_layer_elements.c:72
+msgid "Object"
+msgstr "Обект"
+
+#: functions/export/swf/export_swf_create_shape.c:162
+#, c-format
+msgid "Image width: %d\n"
+msgstr "Ширина на изображението: %d\n"
+
+#: functions/export/swf/export_swf_create_shape.c:163
+#, c-format
+msgid "Scaled width: %d\n"
+msgstr "Намалена ширина: %d\n"
+
+#: functions/export/swf/export_swf_create_shape.c:164
+#, c-format
+msgid "Image height: %d\n"
+msgstr "Височина на изображението: %d\n"
+
+#: functions/export/swf/export_swf_create_shape.c:165
+#, c-format
+msgid "Scaled height: %d\n"
+msgstr "Намалена височина: %d\n"
+
+#: functions/export/swf/export_swf_create_shape.c:228
+#, c-format
+msgid "This image has an external link: '%s'\n"
+msgstr "Това изображение има външна връзка: '%s'\n"
+
+#: functions/export/swf/export_swf_create_shape.c:654
+#, c-format
+msgid "This text has an external link: '%s'\n"
+msgstr "Този текст има външна връзка: '%s'\n"
+
+#: functions/export/swf/export_swf_inner.c:173
+msgid "Total number of layers"
+msgstr "Общ брой слоеве"
+
+#: functions/export/swf/export_swf_inner.c:254
+msgid ""
+"We couldn't allocate enough memory to generate the swf.  Export aborted."
+msgstr ""
+"Неуспех при заделяне на памет за създаване на swf. Експортирането е отменено."
+
+#: functions/film_strip/film_strip_create_thumbnail.c:63
+msgid "Couldn't create film strip thumbnail."
+msgstr "Неуспех при създаването на мини изображение за филмовата лента"
+
+#: functions/film_strip/film_strip_create_thumbnail.c:72
+msgid "Couldn't allocate memory for a new film strip thumbnail."
+msgstr ""
+"Неуспех при заделянето на памет за мини изображение на филмовата лента"
+
+#: functions/film_strip/film_strip_slide_clicked.c:87
+msgid " Ready"
+msgstr " Готово"
+
+#: functions/layer/compress_layers_inner.c:350
+#: functions/layer/get_layer_position.c:194 functions/layer/layer_edit.c:207
+#: functions/working_area/calculate_object_boundaries.c:182
+#: functions/working_area/working_area_button_press_event.c:204
+#: functions/working_area/working_area_button_release_event.c:382
+#: functions/working_area/working_area_motion_notify_event.c:370
+msgid "Unknown layer type."
+msgstr "Неизвестен тип слой."
+
+#: functions/layer/image_crop.c:105
+msgid "Only Image layers can be cropped."
+msgstr "Само слоеве с изображания могат да се отрязват."
+
+#: functions/layer/image_crop.c:116
+msgid "Background layers can not be cropped."
+msgstr "Фоновите слоеве не могат да се отрязват."
+
+#: functions/layer/image_crop.c:240
+msgid " Image cropped"
+msgstr " Изображението е отрязано"
+
+#: functions/layer/layer_copy.c:69
+msgid " Copy failed"
+msgstr " Копирането пропадна"
+
+#: functions/layer/layer_copy.c:75
+msgid " Layer copied to buffer"
+msgstr " Слоят е копиран в буфера"
+
+#: functions/layer/layer_delete.c:110
+msgid " Layer deleted"
+msgstr " Слоят е изтрит"
+
+#: functions/layer/layer_duplicate.c:58
+msgid "Unable to allocate memory for the copy buffer.  Copy failed."
+msgstr ""
+"Неуспех при заделянето на памет за буфера за копиране. Прекъсване на "
+"копирането."
+
+#: functions/layer/layer_duplicate.c:88
+#: functions/menu/menu_screenshots_import.c:330
+msgid "Background"
+msgstr "Фон"
+
+#: functions/layer/layer_duplicate.c:95 functions/slide/slide_insert.c:64
+msgid "Empty"
+msgstr "Празен"
+
+#: functions/layer/layer_duplicate.c:112 functions/layer/layer_duplicate.c:129
+#: functions/layer/layer_duplicate.c:155 functions/layer/layer_duplicate.c:180
+#: functions/layer/layer_duplicate.c:196
+msgid ""
+"Unable to allocate memory in the copy buffer for layer specific data.  Copy "
+"failed."
+msgstr ""
+"Неуспех при заделянето на памет за буфера за копиране за специфична "
+"информация на слоя. Прекъсване на копирането."
+
+#: functions/layer/layer_duplicate.c:229
+msgid "Unknown layer type when duplicating layer."
+msgstr "Неизвестен тип слой при дублирането."
+
+#: functions/layer/layer_edit.c:93
+msgid "Edit background color"
+msgstr "Редактирай фоновия цвят"
+
+#: functions/layer/layer_edit.c:110
+msgid "Edit image layer"
+msgstr "Редактирай слоя с изображение"
+
+#: functions/layer/layer_edit.c:134
+msgid "Edit mouse pointer"
+msgstr "Редактирай показалеца"
+
+#: functions/layer/layer_edit.c:159
+msgid "Edit text layer"
+msgstr "Редактирай слоя с текст"
+
+#: functions/layer/layer_edit.c:184
+msgid "Edit highlight layer"
+msgstr "Редактирай слоя с акцент"
+
+#: functions/layer/layer_edit.c:223
+msgid " Layer edited"
+msgstr " Слоят редактиран"
+
+#: functions/layer/layer_free.c:87
+msgid "Unknown layer type when destroying a layer."
+msgstr "Неизвестен тип слой при унищожаването."
+
+#: functions/layer/layer_move_down.c:105
+msgid " Layer moved down"
+msgstr " Слоят е преместен надолу"
+
+#: functions/layer/layer_move_up.c:111
+msgid " Layer moved up"
+msgstr " Слоят е преместен нагоре"
+
+#: functions/layer/layer_new_highlight.c:63
+msgid " Please draw the new layer"
+msgstr " Моля нарисувайте новия слой"
+
+#: functions/layer/layer_new_highlight_inner.c:193
+msgid " Highlight layer added"
+msgstr " Слоя с акцент е добавен"
+
+#: functions/layer/layer_new_image.c:63 functions/layer/layer_new_mouse.c:63
+#: functions/layer/layer_new_text.c:63
+msgid " Please click the insertion point"
+msgstr " Моля натиснете в точката за вмъкване"
+
+#: functions/layer/layer_new_image_inner.c:106
+msgid "Please choose an image file"
+msgstr "Моля изберете изображение"
+
+#: functions/layer/layer_new_image_inner.c:137
+msgid ""
+"There was something wrong with the image path given.  Please try again."
+msgstr "Нещо се обърка с пътя до избранато изображение. Опитайте отново."
+
+#: functions/layer/layer_new_image_inner.c:146
+msgid ""
+"There was something wrong with the image file selected.  Please try again."
+msgstr "Нещо се обърка с избранато изображение. Опитайте отново."
+
+#: functions/layer/layer_new_image_inner.c:218
+msgid " Image layer added"
+msgstr " Слой с изображение е добавен"
+
+#: functions/layer/layer_new_mouse_inner.c:82
+msgid "Mouse Pointer"
+msgstr "Показалец"
+
+#: functions/layer/layer_new_mouse_inner.c:123
+msgid " Mouse layer added"
+msgstr " Слой с показалец добавен"
+
+#: functions/layer/layer_new_text_inner.c:71
+msgid "New text..."
+msgstr "Нов текст..."
+
+#: functions/layer/layer_new_text_inner.c:93
+msgid "Text layer"
+msgstr "Текстов слой"
+
+#: functions/layer/layer_new_text_inner.c:134
+msgid " Text layer added"
+msgstr " Текстов слой добавен"
+
+#: functions/layer/layer_paste.c:112
+msgid " Layer pasted from buffer"
+msgstr " Слоя е поставен от буфера"
+
+#: functions/menu/menu_edit_preferences.c:123
+msgid "Application Preferences"
+msgstr "Настройки"
+
+#: functions/menu/menu_edit_preferences.c:128
+msgid "Default Project Folder: "
+msgstr "Папка за проекта по подразбиране: "
+
+#: functions/menu/menu_edit_preferences.c:131
+msgid "Select the Default Project Folder"
+msgstr "Изберете папка по подразбиране"
+
+#: functions/menu/menu_edit_preferences.c:137
+msgid "Screenshots Folder: "
+msgstr "Папка за изображения: "
+
+#: functions/menu/menu_edit_preferences.c:140
+msgid "Select the Screenshot Folder"
+msgstr "Изберете папка за изображения"
+
+#: functions/menu/menu_edit_preferences.c:146
+msgid "Default Output Folder: "
+msgstr "Изходна папка по подразбиране: "
+
+#: functions/menu/menu_edit_preferences.c:149
+msgid "Select the Default Output Folder"
+msgstr "Изберете изходна папка по подразбиране:"
+
+#: functions/menu/menu_edit_preferences.c:155
+msgid "Default Output Resolution: "
+msgstr "Изходна резолюция по подразбиране: "
+
+#: functions/menu/menu_edit_preferences.c:163
+msgid ""
+"Default Slide Duration: \n"
+"(seconds)"
+msgstr "Времетраене на слайд по подразбиране:"
+
+#: functions/menu/menu_edit_preferences.c:173
+msgid ""
+"Default Layer Duration: \n"
+"(seconds)"
+msgstr "Времетраене на слой по подразбиране:"
+
+#: functions/menu/menu_edit_preferences.c:183
+msgid "Default Frames Per Second: "
+msgstr "Кадъра в секунда по подразбиране: "
+
+#: functions/menu/menu_edit_preferences.c:192
+msgid "Film Strip Width: "
+msgstr "Ширина на филмовата лента: "
+
+#: functions/menu/menu_edit_preferences.c:201
+msgid "Icon Height: "
+msgstr "Височина на иконата: "
+
+#: functions/menu/menu_edit_preferences.c:210
+msgid "Default Zoom Level: "
+msgstr "Ниво на приближение по подразбиране: "
+
+#: functions/menu/menu_edit_preferences.c:218
+msgid "Default Background Color: "
+msgstr "Фонов цвят по подразбиране: "
+
+#: functions/menu/menu_edit_preferences.c:227
+msgid "Display non-metacity key bind warning?"
+msgstr "Покажи предупреждение при неизползване на Metacity?"
+
+#: functions/menu/menu_edit_preferences.c:266
+#: functions/menu/menu_project_properties.c:348
+msgid ""
+"There was something wrong with the project folder given.  Please try again."
+msgstr "Нещо се обърка с избраната папка за проекта. Опитайте отново."
+
+#: functions/menu/menu_edit_preferences.c:294
+#: functions/menu/menu_project_properties.c:362
+msgid ""
+"There was something wrong with the output folder given.  Please try again."
+msgstr "Нещо се обърка със зададената изходната папка. Опитайте отново."
+
+#: functions/menu/menu_edit_preferences.c:308
+msgid ""
+"There was something wrong with the default output resolution given.  Please "
+"try again."
+msgstr "Нещо се обърка със зададената изходната резолюция. Опитайте отново."
+
+#: functions/menu/menu_edit_preferences.c:323
+msgid ""
+"There was something wrong with the default slide duration value.  Please try "
+"again."
+msgstr ""
+"Нещо се обърка със зададената продължителност на слайд. Опитайте отново."
+
+#: functions/menu/menu_edit_preferences.c:337
+msgid ""
+"There was something wrong with the default layer duration value.  Please try "
+"again."
+msgstr ""
+"Нещо се обърка със зададената продължителност на слой. Опитайте отново."
+
+#: functions/menu/menu_edit_preferences.c:351
+#: functions/menu/menu_project_properties.c:377
+msgid ""
+"There was something wrong with the default frames per second value.  Please "
+"try again."
+msgstr ""
+"Нещо се обърка със зададената стойност за кадри в секунда. Опитайте отново."
+
+#: functions/menu/menu_edit_preferences.c:392
+msgid ""
+"There was something wrong with the default zoom level given.  Please try "
+"again."
+msgstr ""
+"Нещо се обърка със зададеното приближение по подразбиране. Опитайте отново."
+
+#: functions/menu/menu_edit_preferences.c:471
+msgid " Application preferences updated"
+msgstr " Настройките на програмата са обновени"
+
+#: functions/menu/menu_export_swf.c:62
+msgid "There is no project loaded."
+msgstr "Няма зареден проект."
+
+#: functions/menu/menu_export_swf.c:74
+msgid "Export as Flash"
+msgstr "Изнасяне като Flash"
+
+#: functions/menu/menu_export_swf.c:84
+msgid "Adobe Flash (*.swf)"
+msgstr "Adobe Flash (*.swf)"
+
+#: functions/menu/menu_export_swf.c:172
+msgid "Exported"
+msgstr "Изнесено успешно"
+
+#: functions/menu/menu_export_layer.c:74
+msgid "Only image layers can be exported to an image file."
+msgstr ""
+"Само слоеве с изображения могат да се изнасят към файл с изображение."
+
+#: functions/menu/menu_export_layer.c:83 functions/menu/menu_export_slide.c:64
+msgid "Export Slide as Image"
+msgstr "Изнасяне на Слайд като Изображение"
+
+#: functions/menu/menu_export_layer.c:93 functions/menu/menu_export_slide.c:74
+msgid "Portable Network Graphics (*.png)"
+msgstr "Portable Network Graphics (*.png)"
+
+#: functions/menu/menu_export_layer.c:174
+#: functions/menu/menu_export_slide.c:161
+msgid "Salasaga: http://www.salasaga.org"
+msgstr "Salasaga: http://www.salasaga.org"
+
+#: functions/menu/menu_export_layer.c:178
+#: functions/menu/menu_export_slide.c:165
+msgid "Something went wrong when saving the image file."
+msgstr "Нещо се обърка при засписа на изображението."
+
+#: functions/menu/menu_file_close.c:89
+msgid " Project closed"
+msgstr " Проекта е затворен"
+
+#: functions/menu/menu_file_new.c:105
+msgid "Create new Salasaga Project"
+msgstr "Създай нов Salasaga проект"
+
+#: functions/menu/menu_file_new.c:110
+#: functions/menu/menu_project_properties.c:130
+msgid "Project Name: "
+msgstr "Име на проекта: "
+
+#: functions/menu/menu_file_new.c:144
+#: functions/menu/menu_project_properties.c:158
+msgid "Frames per second: "
+msgstr "Кадъра в секунда: "
+
+#: functions/menu/menu_file_new.c:155
+msgid "Background color: "
+msgstr "Цвят на фона: "
+
+#: functions/menu/menu_file_new.c:188
+msgid ""
+"There was something wrong with the new project name.  Defaulting to 'New "
+"Project' instead."
+msgstr ""
+"Нещо не е наред с новото име на проекта. Вместо това се използва 'New "
+"Project' по подразбиране."
+
+#: functions/menu/menu_file_new.c:203
+msgid ""
+"There was something wrong with the project width value.  Please try again."
+msgstr ""
+"Нещо не е наред със стойността за ширина в проекта. Моля, опитайте отново."
+
+#: functions/menu/menu_file_new.c:217
+msgid ""
+"There was something wrong with the project height value.  Please try again."
+msgstr ""
+"Нещо не е наред със стойността за височина в проекта. Моля, опитайте отново."
+
+#: functions/menu/menu_file_new.c:231
+msgid ""
+"There was something wrong with the project frames per second value.  Please "
+"try again."
+msgstr ""
+"Нещо не е наред със стойността за кадри в секунда в проекта. Моля, опитайте "
+"отново."
+
+#: functions/menu/menu_file_new.c:311
+msgid " Project initialized"
+msgstr " Поректа е инициализиран"
+
+#: functions/menu/menu_file_open.c:83
+msgid "Open a Salasaga Project"
+msgstr "Отоври Salasaga проект"
+
+#: functions/menu/menu_file_open.c:93 functions/menu/menu_file_save_as.c:79
+msgid "Salasaga Project file (*.salasaga)"
+msgstr "Файл-проект Salasaga (*.salasaga)"
+
+#: functions/menu/menu_file_open.c:99
+msgid "Flame Project file (*.flame)"
+msgstr "Файл-проект Flame (*.flame)"
+
+#: functions/menu/menu_file_open.c:245
+msgid " Project loaded"
+msgstr " Проектът е зареден"
+
+#: functions/menu/menu_file_save.c:224
+msgid "Project saved"
+msgstr "Проектът е запазен"
+
+#: functions/menu/menu_help_about.c:56
+msgid "Copyright"
+msgstr "Аворско право"
+
+#: functions/menu/menu_help_about.c:77
+#, c-format
+msgid "Built on: %s"
+msgstr "Компилирано на: %s"
+
+#: functions/menu/menu_help_forum.c:47
+msgid "http://www.salasaga.org/forum"
+msgstr "http://www.salasaga.org/forum"
+
+#: functions/menu/menu_help_register.c:47
+msgid "http://www.salasaga.org/forum/index.php?action=register"
+msgstr "http://www.salasaga.org/forum/index.php?action=register"
+
+#: functions/menu/menu_help_survey.c:47
+msgid "http://www.salasaga.org/go/survey"
+msgstr "http://www.salasaga.org/go/survey"
+
+#: functions/menu/menu_help_support.c:47
+msgid "http://www.salasaga.org/index.php?page=support"
+msgstr "http://www.salasaga.org/index.php?page=support"
+
+#: functions/menu/menu_help_wiki.c:47
+msgid "http://www.salasaga.org/wiki"
+msgstr "http://www.salasaga.org/wiki"
+
+#: functions/menu/menu_project_properties.c:125
+msgid "Project Properties"
+msgstr "Свойства на проекта"
+
+#: functions/menu/menu_project_properties.c:140
+msgid "Project Folder: "
+msgstr "Папка за съхранение: "
+
+#: functions/menu/menu_project_properties.c:143
+msgid "Select the Project Folder"
+msgstr "Изберете папката за проекта"
+
+#: functions/menu/menu_project_properties.c:149
+msgid "Output Folder: "
+msgstr "Папка за резултати (изходна): "
+
+#: functions/menu/menu_project_properties.c:152
+msgid "Select the Output Folder"
+msgstr "Изберете изходната папка"
+
+#: functions/menu/menu_project_properties.c:167
+msgid "Project Width: "
+msgstr "Ширина на проекта: "
+
+#: functions/menu/menu_project_properties.c:172
+#: functions/menu/menu_project_properties.c:184
+msgid "pixels"
+msgstr "пиксела"
+
+#: functions/menu/menu_project_properties.c:179
+msgid "Project Height: "
+msgstr "Височина на проекта: "
+
+#: functions/menu/menu_project_properties.c:191
+msgid "SWF start behavior: "
+msgstr "SWF поведение в началото: "
+
+#: functions/menu/menu_project_properties.c:195
+msgid "Paused"
+msgstr "Паузирано"
+
+#: functions/menu/menu_project_properties.c:196
+msgid "Play"
+msgstr "Стартирай"
+
+#: functions/menu/menu_project_properties.c:210
+msgid "SWF end behavior: "
+msgstr "SWF поведение в края: "
+
+#: functions/menu/menu_project_properties.c:214
+msgid "Stop"
+msgstr "Стоп"
+
+#: functions/menu/menu_project_properties.c:215
+msgid "Loop and play"
+msgstr "Стартирай и повтаряй"
+
+#: functions/menu/menu_project_properties.c:216
+msgid "Loop and stop"
+msgstr "Стартирай и спри накрая"
+
+#: functions/menu/menu_project_properties.c:234
+msgid "Display SWF control bar: "
+msgstr "Покажи SWF контролна лента: "
+
+#: functions/menu/menu_project_properties.c:249
+msgid "Display SWF information button: "
+msgstr "Покажи SWF бутон за инфо.: "
+
+#: functions/menu/menu_project_properties.c:264
+msgid "Information button text"
+msgstr "Текст на бутона за информация"
+
+#: functions/menu/menu_project_properties.c:287
+msgid "Information button link: "
+msgstr "Връзка на бутона за информация: "
+
+#: functions/menu/menu_project_properties.c:299
+msgid "Information button link window: "
+msgstr "Прозорец на връзката за бутона за информация: "
+
+#: functions/menu/menu_project_properties.c:492
+msgid " Project properties updated"
+msgstr " Свойства на проекта са обновени"
+
+#: functions/menu/menu_screenshots_capture.c:96
+msgid ""
+"Please click on the window you want to capture (after closing this dialog "
+"box)."
+msgstr ""
+"Моля, щракнете върху прозореца, който искате да прихванте (след като "
+"затворите този диалогов прозорец)"
+
+#: functions/menu/menu_screenshots_capture.c:133
+msgid ""
+"Unable to grab the mouse pointer for selected display.  Please report this "
+"error."
+msgstr ""
+"Неуспех при опита за взимане на показалеца за избрания екран. Моля "
+"докладвайте тази грешка."
+
+#: functions/menu/menu_screenshots_capture.c:142
+#, c-format
+msgid "Mouse pointer grabbed.\n"
+msgstr "Показалеца е прихванат.\n"
+
+#: functions/menu/menu_screenshots_capture.c:164
+#, c-format
+msgid "Capture window set.\n"
+msgstr "Прозореза за прихващане е зададен.\n"
+
+#: functions/menu/menu_screenshots_capture.c:187
+#, c-format
+msgid "Mouse pointer grab released.\n"
+msgstr "Показалеца е пуснат от прихващането.\n"
+
+#: functions/menu/menu_screenshots_capture.c:207
+#, c-format
+msgid ""
+"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: "
+"%d\n"
+msgstr ""
+"Геометрията на прозореца е получена. Отместване по X: %d\t, отместване по Y: "
+"%d\t. Ширина: %d\t, височина: %d\n"
+
+#: functions/menu/menu_screenshots_capture.c:218
+msgid ""
+"Window dimensions successfully retrieved.  Please use Control-Printscreen to "
+"take screenshots then Import when finished."
+msgstr ""
+"Размерът на прозореца е взет успешно. Натиснете Control-Printscreen за да "
+"прихванете екрана и после натиснете Внеси когато сте готови."
+
+#: functions/menu/menu_screenshots_import.c:124
+msgid ""
+"The screenshots folder doesn't exist.  Please update this in the project "
+"preferences and try again."
+msgstr ""
+"Папката за прихванати екрани не съществува. Моля, обновете свойствата на "
+"проекта и опитайте отново."
+
+#: functions/menu/menu_screenshots_import.c:135
+#: functions/menu/menu_screenshots_import.c:209
+#: functions/menu/menu_screenshots_import.c:212
+#: functions/menu/menu_screenshots_import.c:213
+msgid "screenshot"
+msgstr "screenshot"
+
+#: functions/menu/menu_screenshots_import.c:177
+msgid ""
+"Not all of the screenshots are of the same size, or some differ from the "
+"size of the project.  If you proceed, they will be scaled to the same size "
+"as the project.  Do you want to proceed?"
+msgstr ""
+"Не всички прихванати екрани са един размер или някои се различават от "
+"размера зададен за проекта. Ако продължите те ще бъдат преоразмерени до "
+"размера за проекта. Продължавате ли?"
+
+#: functions/menu/menu_screenshots_import.c:180
+msgid ""
+"Not all of the screenshots are of the same size, or some differ from the "
+"size of the project.  If you proceed, they will all be scaled to the size of "
+"the first one.  Do you want to proceed?"
+msgstr ""
+"Не всички прихванати екрани са един размер или някои се различават от "
+"размера зададен за проекта. Ако продължите те ще бъдат преоразмерени до "
+"размера за проекта. Продължавате ли?"
+
+#: functions/menu/menu_screenshots_import.c:207
+msgid "No screenshots found in screenshot folder"
+msgstr "Няма прихванати екрани в папката за изображения"
+
+#: functions/menu/menu_screenshots_import.c:208
+msgid "They are case sensitive and must be named"
+msgstr "Размерът на буквите е от значение и трябва да се именоват"
+
+#: functions/menu/menu_screenshots_import.c:210
+msgid "Sequential Number"
+msgstr "Последователен Номер"
+
+#: functions/menu/menu_screenshots_import.c:211
+msgid "For example"
+msgstr "Например"
+
+#: functions/menu/menu_screenshots_import.c:225
+msgid "Screenshots found"
+msgstr "Прихванатите екрани са намерени"
+
+#: functions/menu/menu_screenshots_import.c:306
+msgid "Something went wrong when loading the screenshot"
+msgstr "Нещо се обърка при внасянето на прихванатия екран"
+
+#: functions/menu/menu_screenshots_import.c:362
+msgid "Loaded image"
+msgstr "Изображението е заредено"
+
+#: functions/menu/menu_screenshots_import.c:443
+msgid "screenshots imported"
+msgstr "прихванатите екрани са внесени"
+
+#: functions/slide/slide_delete.c:63
+msgid "You must leave at least one slide in a project."
+msgstr "Трябва да оставите поне един слайд в проекта."
+
+#: functions/slide/slide_duration.c:75
+msgid "Edit slide duration"
+msgstr "Редактиране на продължителността"
+
+#: functions/slide/slide_duration.c:80
+msgid "Slide duration: "
+msgstr "Продължителност на слайда: "
+
+#: functions/slide/slide_duration.c:200
+msgid " Slide properties updated"
+msgstr " Свойствата на слайда са обновени"
+
+#: functions/slide/slide_insert.c:111
+msgid " Slide added"
+msgstr " Слайда е добавен"
+
+#: functions/slide/slide_move_bottom.c:94
+msgid " Slide moved to bottom"
+msgstr " Слайда е изместен най-отдолу"
+
+#: functions/slide/slide_move_down.c:99
+msgid " Slide moved down"
+msgstr " Слайда е изместен надолу"
+
+#: functions/slide/slide_move_top.c:92
+msgid " Slide moved to top"
+msgstr " Слайда е изместен най-отгоре"
+
+#: functions/slide/slide_move_up.c:97
+msgid " Slide moved up"
+msgstr " Слайда е изместен нагоре"
+
+#: functions/working_area/working_area_button_release_event.c:262
+#: functions/working_area/working_area_motion_notify_event.c:204
+msgid "Unknown resizing direction."
+msgstr "Неизвестна посока на преоразмеряване"
+
+#: functions/working_area/working_area_button_release_event.c:320
+msgid " Layer resized"
+msgstr " Слоят е преоразмерен"
+
+#: functions/working_area/working_area_button_release_event.c:423
+msgid " Layer moved"
+msgstr " Слоят е преместен"
+
+#: valid_fields.h:47
+msgid "Base64 encoded image data"
+msgstr ""
+
+#: functions/project_read.c:1555 functions/project_read.c:1905
+#: functions/project_read.c:2300
+msgid ""
+"There was something wrong with an x offset finish value in the project file."
+msgstr ""
+
+#: functions/project_read.c:1571 functions/project_read.c:1921
+#: functions/project_read.c:2316
+msgid ""
+"There was something wrong with a y offset finish value in the project file."
+msgstr ""
+
+#: functions/project_read.c:1587 functions/project_read.c:1937
+msgid ""
+"There was something wrong with a layer width value in the project file."
+msgstr ""
+
+#: functions/project_read.c:1603 functions/project_read.c:1953
+msgid ""
+"There was something wrong with a layer height value in the project file."
+msgstr ""
+
+#: functions/project_read.c:1753 functions/project_read.c:2138
+#: functions/project_read.c:2668
+msgid ""
+"There was something wrong with a transition in type value in the project "
+"file."
+msgstr ""
+
+#: functions/project_read.c:1775 functions/project_read.c:2160
+#: functions/project_read.c:2690
+msgid ""
+"There was something wrong with a transition in duration value in the project "
+"file."
+msgstr ""
+
+#: functions/project_read.c:1791 functions/project_read.c:2176
+#: functions/project_read.c:2706
+msgid ""
+"There was something wrong with a transition out type value in the project "
+"file."
+msgstr ""
+
+#: functions/project_read.c:1813 functions/project_read.c:2198
+#: functions/project_read.c:2728
+msgid ""
+"There was something wrong with a transition out duration value in the "
+"project file."
+msgstr ""
+
+#: functions/project_read.c:1969
+msgid ""
+"There was something wrong with a mouse click value in the project file."
+msgstr ""
+
+#: functions/project_read.c:2474
+msgid "There was something wrong with a font size value in the project file."
+msgstr ""
+
+#: functions/project_read.c:2490
+msgid ""
+"There was something wrong with a background border width value in the "
+"project file."
+msgstr ""
+
+#: functions/project_read.c:2505
+msgid ""
+"There was something wrong with a text background visibility value in the "
+"project file."
+msgstr ""
+
+#: functions/project_read.c:2774
+msgid ""
+"There was something wrong with a slide name value in the project file."
+msgstr ""
+
+#: functions/project_read.c:2793
+msgid ""
+"There was something wrong with a slide duration value in the project file."
+msgstr ""
+
+#: functions/conversion/base64_decode.c:134
+msgid "Error in the Base64 decoding function, unrecognized input"
+msgstr ""
+
+#: functions/conversion/base64_decode.c:185
+msgid "Unknown Base64 decoding remainder.  This should not happen."
+msgstr ""
+
+#: functions/conversion/base64_encode.c:179
+msgid ""
+"Unknown remainder amount when Base64 encoding.  This should not ever happen."
+msgstr ""
+
+#: functions/dialog/display_dialog_empty.c:136
+#: functions/dialog/display_dialog_highlight.c:578
+#: functions/dialog/display_dialog_image.c:492
+#: functions/dialog/display_dialog_mouse.c:495
+#: functions/dialog/display_dialog_text.c:591
+msgid ""
+"There was something wrong with the external link value.  Please try again."
+msgstr ""
+
+#: functions/dialog/display_dialog_empty.c:150
+msgid ""
+"There was something wrong with the external link window target value.  "
+"Please try again."
 msgstr ""
 
 #: functions/dialog/display_dialog_highlight.c:467
@@ -1936,107 +2912,11 @@ msgid ""
 "try again."
 msgstr ""
 
-#: functions/dialog/display_dialog_image.c:144
-#: functions/dialog/display_dialog_mouse.c:145
-#: functions/dialog/display_dialog_text.c:311
-msgid "Start X Offset: "
-msgstr "Начално отместване по X "
-
-#: functions/dialog/display_dialog_image.c:155
-#: functions/dialog/display_dialog_mouse.c:156
-#: functions/dialog/display_dialog_text.c:322
-msgid "Start Y Offset: "
-msgstr "Начално отместване по Y "
-
-#: functions/dialog/display_dialog_image.c:166
-#: functions/dialog/display_dialog_mouse.c:167
-#: functions/dialog/display_dialog_text.c:333
-msgid "Finish X Offset: "
-msgstr "Крайно отместване по X "
-
-#: functions/dialog/display_dialog_image.c:177
-#: functions/dialog/display_dialog_mouse.c:178
-#: functions/dialog/display_dialog_text.c:344
-msgid "Finish Y Offset: "
-msgstr "Крайно отместване по Y "
-
-#: functions/dialog/display_dialog_mouse.c:287
-msgid "Mouse click type: "
-msgstr "Тип щракване с мишката: "
-
-#: functions/dialog/display_dialog_mouse.c:291
-msgid "No mouse click"
-msgstr "Без щтракване"
-
-#: functions/dialog/display_dialog_mouse.c:292
-msgid "Left single click"
-msgstr "Единично с ляв бутон"
-
-#: functions/dialog/display_dialog_mouse.c:293
-msgid "Left double click"
-msgstr "Двойно с ляв бутон"
-
-#: functions/dialog/display_dialog_mouse.c:294
-msgid "Left triple click"
-msgstr "Тройно с ляв бутон"
-
-#: functions/dialog/display_dialog_mouse.c:295
-msgid "Right single click"
-msgstr "Единично с десен бутон"
-
-#: functions/dialog/display_dialog_mouse.c:296
-msgid "Right double click"
-msgstr "Двойно с десен бутон"
-
-#: functions/dialog/display_dialog_mouse.c:297
-msgid "Right triple click"
-msgstr "Тройно с десен бутон"
-
-#: functions/dialog/display_dialog_mouse.c:298
-msgid "Middle single click"
-msgstr "Единично със среден бутон"
-
-#: functions/dialog/display_dialog_mouse.c:299
-msgid "Middle double click"
-msgstr "Двойно със среден бутон"
-
-#: functions/dialog/display_dialog_mouse.c:300
-msgid "Middle triple click"
-msgstr "Тройно със среден бутон"
-
 #: functions/dialog/display_dialog_mouse.c:580
 msgid ""
 "There was something wrong with the mouse click type selected.  Please try "
 "again."
 msgstr ""
-
-#: functions/dialog/display_dialog_save_warning.c:44
-msgid "Project has been modified.  Save changes?"
-msgstr "Проектът беше променен. Да се запазят ли промените?"
-
-#: functions/dialog/display_dialog_text.c:163
-msgid "Appearance & Links"
-msgstr ""
-
-#: functions/dialog/display_dialog_text.c:165
-msgid "Duration"
-msgstr "Продължителност"
-
-#: functions/dialog/display_dialog_text.c:191
-msgid "Layer name: "
-msgstr "Име на слой: "
-
-#: functions/dialog/display_dialog_text.c:203
-msgid "Font size: "
-msgstr "Големина на шрифта: "
-
-#: functions/dialog/display_dialog_text.c:215
-msgid "Text color: "
-msgstr "Цвят на текста: "
-
-#: functions/dialog/display_dialog_text.c:283
-msgid "Display the background?"
-msgstr "Показване на фон?"
 
 #: functions/dialog/display_dialog_text.c:465
 msgid ""
@@ -2054,63 +2934,9 @@ msgid ""
 "try again."
 msgstr ""
 
-#: functions/export/html/export_html_wrapper.c:65
-msgid "Export Html"
-msgstr "Изнеси Html"
-
-#: functions/export/html/export_html_wrapper.c:75
-msgid "HyperText Markup Language (*.html)"
-msgstr "HyperText Markup Language (*.html)"
-
-#: functions/export/html/export_html_wrapper.c:81
-#: functions/menu/menu_export_swf.c:90 functions/menu/menu_export_layer.c:99
-#: functions/menu/menu_export_slide.c:80 functions/menu/menu_file_open.c:105
-#: functions/menu/menu_file_save_as.c:85
-msgid "All files (*.*)"
-msgstr "Всички файлове (*.*)"
-
-#: functions/export/html/export_html_wrapper.c:121
-#: functions/menu/menu_export_swf.c:130 functions/menu/menu_export_layer.c:139
-#: functions/menu/menu_export_slide.c:120 functions/menu/menu_file_open.c:163
-#: functions/menu/menu_file_save_as.c:141
-msgid ""
-"There was something wrong with the file name given.  Please try again."
-msgstr "Има нещо неправилно в даденото име за файл. Моля опитайте отново."
-
-#: functions/export/html/export_html_wrapper.c:133
-#: functions/menu/menu_export_swf.c:142 functions/menu/menu_export_layer.c:152
-#: functions/menu/menu_export_slide.c:132
-#: functions/menu/menu_file_save_as.c:153
-msgid "Overwrite existing file?"
-msgstr "Презапис на съществуващия файл?"
-
-#: functions/export/html/export_html_wrapper.c:167
-msgid "Couldn't create the output file."
-msgstr ""
-
-#: functions/export/html/export_html_wrapper.c:201
-msgid "Wrote html wrapper"
-msgstr ""
-
-#: functions/export/swf/export_swf_control_bar.c:384
-#: functions/export/swf/export_swf_control_bar.c:398
-#: functions/film_strip/create_film_strip.c:79
-msgid "Slide"
-msgstr "Слайд"
-
 #: functions/export/swf/export_swf_control_bar.c:412
 #, c-format
 msgid "Slide name array Action Script: %s\n"
-msgstr ""
-
-#: functions/export/swf/export_swf_control_bar.c:523
-msgid "Restart button pressed, slide counter has been set to:"
-msgstr ""
-
-#: functions/export/swf/export_swf_control_bar.c:527
-#: functions/export/swf/export_swf_control_bar.c:674
-#: functions/export/swf/export_swf_control_bar.c:1011
-msgid "We should now jump to the slide named"
 msgstr ""
 
 #: functions/export/swf/export_swf_control_bar.c:617
@@ -2123,19 +2949,6 @@ msgstr ""
 #: functions/export/swf/export_swf_inner.c:383
 #: functions/export/swf/export_swf_inner.c:400
 msgid "'playing' variable is unchanged, at:"
-msgstr ""
-
-#: functions/export/swf/export_swf_control_bar.c:625
-msgid "We should now jump to the first frame of the movie."
-msgstr ""
-
-#: functions/export/swf/export_swf_control_bar.c:632
-#: functions/export/swf/export_swf_control_bar.c:641
-#: functions/export/swf/export_swf_control_bar.c:681
-#: functions/export/swf/export_swf_control_bar.c:690
-#: functions/export/swf/export_swf_control_bar.c:1018
-#: functions/export/swf/export_swf_control_bar.c:1027
-msgid "Using"
 msgstr ""
 
 #: functions/export/swf/export_swf_control_bar.c:662
@@ -2197,11 +3010,6 @@ msgstr ""
 msgid "info_text visibility set to:"
 msgstr ""
 
-#: functions/export/swf/export_swf_control_bar.c:1242
-#, c-format
-msgid "Font path: '%s'\n"
-msgstr ""
-
 #: functions/export/swf/export_swf_control_bar.c:1249
 #: functions/export/swf/export_swf_create_shape.c:128
 msgid "Something went wrong when opening the font file."
@@ -2217,33 +3025,9 @@ msgid ""
 "Something went wrong when creating the information button background shape."
 msgstr ""
 
-#: functions/export/swf/export_swf_create_layer_elements.c:72
-msgid "Object"
-msgstr "Обект"
-
 #: functions/export/swf/export_swf_create_shape.c:121
 #, c-format
 msgid "Full path name to font file is: %s\n"
-msgstr ""
-
-#: functions/export/swf/export_swf_create_shape.c:162
-#, c-format
-msgid "Image width: %d\n"
-msgstr ""
-
-#: functions/export/swf/export_swf_create_shape.c:163
-#, c-format
-msgid "Scaled width: %d\n"
-msgstr ""
-
-#: functions/export/swf/export_swf_create_shape.c:164
-#, c-format
-msgid "Image height: %d\n"
-msgstr ""
-
-#: functions/export/swf/export_swf_create_shape.c:165
-#, c-format
-msgid "Scaled height: %d\n"
 msgstr ""
 
 #: functions/export/swf/export_swf_create_shape.c:173
@@ -2258,11 +3042,6 @@ msgstr ""
 #: functions/export/swf/export_swf_create_shape.c:209
 #: functions/export/swf/swf_shape_from_image_file.c:131
 msgid "Something went wrong converting an image to a swf shape object."
-msgstr ""
-
-#: functions/export/swf/export_swf_create_shape.c:228
-#, c-format
-msgid "This image has an external link: '%s'\n"
 msgstr ""
 
 #: functions/export/swf/export_swf_create_shape.c:272
@@ -2313,11 +3092,6 @@ msgid ""
 "Something went wrong when creating a text layer background for swf output."
 msgstr ""
 
-#: functions/export/swf/export_swf_create_shape.c:654
-#, c-format
-msgid "This text has an external link: '%s'\n"
-msgstr ""
-
 #: functions/export/swf/export_swf_create_shape.c:700
 msgid "Unknown layer type in swf output."
 msgstr ""
@@ -2343,10 +3117,6 @@ msgstr ""
 msgid "Number of slides"
 msgstr ""
 
-#: functions/export/swf/export_swf_inner.c:173
-msgid "Total number of layers"
-msgstr ""
-
 #: functions/export/swf/export_swf_inner.c:245
 #, c-format
 msgid "Number of layers in slide %u is %u\n"
@@ -2355,11 +3125,6 @@ msgstr ""
 #: functions/export/swf/export_swf_inner.c:246
 #, c-format
 msgid "Maximum frame number in slide %u is %u\n"
-msgstr ""
-
-#: functions/export/swf/export_swf_inner.c:254
-msgid ""
-"We couldn't allocate enough memory to generate the swf.  Export aborted."
 msgstr ""
 
 #: functions/export/swf/export_swf_inner.c:301
@@ -2471,281 +3236,15 @@ msgstr ""
 msgid "Something went wrong converting an image to a swf bitmap object."
 msgstr ""
 
-#: functions/film_strip/film_strip_create_thumbnail.c:63
-msgid "Couldn't create film strip thumbnail."
-msgstr ""
-
-#: functions/film_strip/film_strip_create_thumbnail.c:72
-msgid "Couldn't allocate memory for a new film strip thumbnail."
-msgstr ""
-
 #: functions/film_strip/film_strip_slide_clicked.c:64
 #, c-format
 msgid "Invalid iter! No layer selected when changing slide!\n"
-msgstr ""
-
-#: functions/film_strip/film_strip_slide_clicked.c:87
-msgid " Ready"
-msgstr " Готово"
-
-#: functions/layer/compress_layers_inner.c:350
-#: functions/layer/get_layer_position.c:194 functions/layer/layer_edit.c:207
-#: functions/working_area/calculate_object_boundaries.c:182
-#: functions/working_area/working_area_button_press_event.c:204
-#: functions/working_area/working_area_button_release_event.c:382
-#: functions/working_area/working_area_motion_notify_event.c:370
-msgid "Unknown layer type."
-msgstr ""
-
-#: functions/layer/image_crop.c:105
-msgid "Only Image layers can be cropped."
-msgstr "Само слоеве с изображания могат да се отрязват."
-
-#: functions/layer/image_crop.c:116
-msgid "Background layers can not be cropped."
-msgstr "Фоновите слоеве не могат да се отрязват."
-
-#: functions/layer/image_crop.c:240
-msgid " Image cropped"
-msgstr " Изображението е отрязано"
-
-#: functions/layer/layer_copy.c:69
-msgid " Copy failed"
-msgstr " Копирането пропадна"
-
-#: functions/layer/layer_copy.c:75
-msgid " Layer copied to buffer"
-msgstr " Слоят е копиран в буфера"
-
-#: functions/layer/layer_delete.c:110
-msgid " Layer deleted"
-msgstr " Слоят е изтрит"
-
-#: functions/layer/layer_duplicate.c:58
-msgid "Unable to allocate memory for the copy buffer.  Copy failed."
-msgstr ""
-
-#: functions/layer/layer_duplicate.c:88
-#: functions/menu/menu_screenshots_import.c:330
-msgid "Background"
-msgstr "Фон"
-
-#: functions/layer/layer_duplicate.c:95 functions/slide/slide_insert.c:64
-msgid "Empty"
-msgstr "Празен"
-
-#: functions/layer/layer_duplicate.c:112 functions/layer/layer_duplicate.c:129
-#: functions/layer/layer_duplicate.c:155 functions/layer/layer_duplicate.c:180
-#: functions/layer/layer_duplicate.c:196
-msgid ""
-"Unable to allocate memory in the copy buffer for layer specific data.  Copy "
-"failed."
-msgstr ""
-
-#: functions/layer/layer_duplicate.c:229
-msgid "Unknown layer type when duplicating layer."
-msgstr ""
-
-#: functions/layer/layer_edit.c:93
-msgid "Edit background color"
-msgstr "Редактирай фоновия цвят"
-
-#: functions/layer/layer_edit.c:110
-msgid "Edit image layer"
-msgstr "Редактирай слоя с изображение"
-
-#: functions/layer/layer_edit.c:134
-msgid "Edit mouse pointer"
-msgstr "Редактирай показалеца"
-
-#: functions/layer/layer_edit.c:159
-msgid "Edit text layer"
-msgstr "Редактирай слоя с текст"
-
-#: functions/layer/layer_edit.c:184
-msgid "Edit highlight layer"
-msgstr "Редактирай слоя с акцент"
-
-#: functions/layer/layer_edit.c:223
-msgid " Layer edited"
-msgstr " Слоят редактиран"
-
-#: functions/layer/layer_free.c:87
-msgid "Unknown layer type when destroying a layer."
-msgstr ""
-
-#: functions/layer/layer_move_down.c:105
-msgid " Layer moved down"
-msgstr " Слоят е преместен надолу"
-
-#: functions/layer/layer_move_up.c:111
-msgid " Layer moved up"
-msgstr " Слоят е преместен нагоре"
-
-#: functions/layer/layer_new_highlight.c:63
-msgid " Please draw the new layer"
-msgstr ""
-
-#: functions/layer/layer_new_highlight_inner.c:193
-msgid " Highlight layer added"
-msgstr ""
-
-#: functions/layer/layer_new_image.c:63 functions/layer/layer_new_mouse.c:63
-#: functions/layer/layer_new_text.c:63
-msgid " Please click the insertion point"
-msgstr ""
-
-#: functions/layer/layer_new_image_inner.c:106
-msgid "Please choose an image file"
-msgstr "Моля изберете изображение"
-
-#: functions/layer/layer_new_image_inner.c:137
-msgid ""
-"There was something wrong with the image path given.  Please try again."
-msgstr ""
-
-#: functions/layer/layer_new_image_inner.c:146
-msgid ""
-"There was something wrong with the image file selected.  Please try again."
-msgstr ""
-
-#: functions/layer/layer_new_image_inner.c:218
-msgid " Image layer added"
-msgstr " Слой с изображение е добавен"
-
-#: functions/layer/layer_new_mouse_inner.c:82
-msgid "Mouse Pointer"
-msgstr "Показалец"
-
-#: functions/layer/layer_new_mouse_inner.c:123
-msgid " Mouse layer added"
-msgstr " Слой с показалец добавен"
-
-#: functions/layer/layer_new_text_inner.c:71
-msgid "New text..."
-msgstr "Нов текст..."
-
-#: functions/layer/layer_new_text_inner.c:93
-msgid "Text layer"
-msgstr "Текстов слой"
-
-#: functions/layer/layer_new_text_inner.c:134
-msgid " Text layer added"
-msgstr " Текстов слой добавен"
-
-#: functions/layer/layer_paste.c:112
-msgid " Layer pasted from buffer"
-msgstr " Слоя е поставен от буфера"
-
-#: functions/menu/menu_edit_preferences.c:123
-msgid "Application Preferences"
-msgstr "Настройки"
-
-#: functions/menu/menu_edit_preferences.c:128
-msgid "Default Project Folder: "
-msgstr "Папка за проекта по подразбиране: "
-
-#: functions/menu/menu_edit_preferences.c:131
-msgid "Select the Default Project Folder"
-msgstr "Изберете папка по подразбиране"
-
-#: functions/menu/menu_edit_preferences.c:137
-msgid "Screenshots Folder: "
-msgstr "Папка за изображения: "
-
-#: functions/menu/menu_edit_preferences.c:140
-msgid "Select the Screenshot Folder"
-msgstr "Изберете папка за изображения"
-
-#: functions/menu/menu_edit_preferences.c:146
-msgid "Default Output Folder: "
-msgstr "Изходна папка по подразбиране: "
-
-#: functions/menu/menu_edit_preferences.c:149
-msgid "Select the Default Output Folder"
-msgstr "Изберете изходна папка по подразбиране:"
-
-#: functions/menu/menu_edit_preferences.c:155
-msgid "Default Output Resolution: "
-msgstr "Изходна резолюция по подразбиране: "
-
-#: functions/menu/menu_edit_preferences.c:163
-msgid ""
-"Default Slide Duration: \n"
-"(seconds)"
-msgstr "Времетраене на слайд по подразбиране:"
-
-#: functions/menu/menu_edit_preferences.c:173
-msgid ""
-"Default Layer Duration: \n"
-"(seconds)"
-msgstr "Времетраене на слой по подразбиране:"
-
-#: functions/menu/menu_edit_preferences.c:183
-msgid "Default Frames Per Second: "
-msgstr "Кадъра в секунда по подразбиране: "
-
-#: functions/menu/menu_edit_preferences.c:192
-msgid "Film Strip Width: "
-msgstr "Ширина на филмовата лента: "
-
-#: functions/menu/menu_edit_preferences.c:201
-msgid "Icon Height: "
-msgstr "Височина на иконата: "
-
-#: functions/menu/menu_edit_preferences.c:210
-msgid "Default Zoom Level: "
-msgstr "Ниво на приближение по подразбиране: "
-
-#: functions/menu/menu_edit_preferences.c:218
-msgid "Default Background Color: "
-msgstr "Фонов цвят по подразбиране: "
-
-#: functions/menu/menu_edit_preferences.c:227
-msgid "Display non-metacity key bind warning?"
-msgstr ""
-
-#: functions/menu/menu_edit_preferences.c:266
-#: functions/menu/menu_project_properties.c:348
-msgid ""
-"There was something wrong with the project folder given.  Please try again."
 msgstr ""
 
 #: functions/menu/menu_edit_preferences.c:280
 msgid ""
 "There was something wrong with the screenshot folder given.  Please try "
 "again."
-msgstr ""
-
-#: functions/menu/menu_edit_preferences.c:294
-#: functions/menu/menu_project_properties.c:362
-msgid ""
-"There was something wrong with the output folder given.  Please try again."
-msgstr ""
-
-#: functions/menu/menu_edit_preferences.c:308
-msgid ""
-"There was something wrong with the default output resolution given.  Please "
-"try again."
-msgstr ""
-
-#: functions/menu/menu_edit_preferences.c:323
-msgid ""
-"There was something wrong with the default slide duration value.  Please try "
-"again."
-msgstr ""
-
-#: functions/menu/menu_edit_preferences.c:337
-msgid ""
-"There was something wrong with the default layer duration value.  Please try "
-"again."
-msgstr ""
-
-#: functions/menu/menu_edit_preferences.c:351
-#: functions/menu/menu_project_properties.c:377
-msgid ""
-"There was something wrong with the default frames per second value.  Please "
-"try again."
 msgstr ""
 
 #: functions/menu/menu_edit_preferences.c:365
@@ -2758,125 +3257,13 @@ msgid ""
 "There was something wrong with the icon height value.  Please try again."
 msgstr ""
 
-#: functions/menu/menu_edit_preferences.c:392
-msgid ""
-"There was something wrong with the default zoom level given.  Please try "
-"again."
-msgstr ""
-
-#: functions/menu/menu_edit_preferences.c:471
-msgid " Application preferences updated"
-msgstr ""
-
-#: functions/menu/menu_export_swf.c:62
-msgid "There is no project loaded."
-msgstr ""
-
-#: functions/menu/menu_export_swf.c:74
-msgid "Export as Flash"
-msgstr "Изнасяне като Flash"
-
-#: functions/menu/menu_export_swf.c:84
-msgid "Adobe Flash (*.swf)"
-msgstr "Adobe Flash (*.swf)"
-
 #: functions/menu/menu_export_swf.c:167
 msgid "Something went wrong when creating the swf movie."
-msgstr ""
-
-#: functions/menu/menu_export_swf.c:172
-msgid "Exported"
-msgstr "Изнесено успешно"
-
-#: functions/menu/menu_export_layer.c:74
-msgid "Only image layers can be exported to an image file."
-msgstr ""
-
-#: functions/menu/menu_export_layer.c:83 functions/menu/menu_export_slide.c:64
-msgid "Export Slide as Image"
-msgstr "Изнасяне на Слайд като Изображение"
-
-#: functions/menu/menu_export_layer.c:93 functions/menu/menu_export_slide.c:74
-msgid "Portable Network Graphics (*.png)"
-msgstr ""
-
-#: functions/menu/menu_export_layer.c:174
-#: functions/menu/menu_export_slide.c:161
-msgid "Salasaga: http://www.salasaga.org"
-msgstr "Salasaga: http://www.salasaga.org"
-
-#: functions/menu/menu_export_layer.c:178
-#: functions/menu/menu_export_slide.c:165
-msgid "Something went wrong when saving the image file."
 msgstr ""
 
 #: functions/menu/menu_export_layer.c:184
 #: functions/menu/menu_export_slide.c:170
 msgid "Wrote image file"
-msgstr ""
-
-#: functions/menu/menu_file_close.c:89
-msgid " Project closed"
-msgstr ""
-
-#: functions/menu/menu_file_new.c:105
-msgid "Create new Salasaga Project"
-msgstr ""
-
-#: functions/menu/menu_file_new.c:110
-#: functions/menu/menu_project_properties.c:130
-msgid "Project Name: "
-msgstr ""
-
-#: functions/menu/menu_file_new.c:144
-#: functions/menu/menu_project_properties.c:158
-msgid "Frames per second: "
-msgstr "Кадъра в секунда: "
-
-#: functions/menu/menu_file_new.c:155
-msgid "Background color: "
-msgstr "Цвят на фона: "
-
-#: functions/menu/menu_file_new.c:188
-msgid ""
-"There was something wrong with the new project name.  Defaulting to 'New "
-"Project' instead."
-msgstr ""
-
-#: functions/menu/menu_file_new.c:203
-msgid ""
-"There was something wrong with the project width value.  Please try again."
-msgstr ""
-
-#: functions/menu/menu_file_new.c:217
-msgid ""
-"There was something wrong with the project height value.  Please try again."
-msgstr ""
-
-#: functions/menu/menu_file_new.c:231
-msgid ""
-"There was something wrong with the project frames per second value.  Please "
-"try again."
-msgstr ""
-
-#: functions/menu/menu_file_new.c:311
-msgid " Project initialized"
-msgstr ""
-
-#: functions/menu/menu_file_open.c:83
-msgid "Open a Salasaga Project"
-msgstr ""
-
-#: functions/menu/menu_file_open.c:93 functions/menu/menu_file_save_as.c:79
-msgid "Salasaga Project file (*.salasaga)"
-msgstr ""
-
-#: functions/menu/menu_file_open.c:99
-msgid "Flame Project file (*.flame)"
-msgstr ""
-
-#: functions/menu/menu_file_open.c:245
-msgid " Project loaded"
 msgstr ""
 
 #: functions/menu/menu_file_save.c:87
@@ -2907,10 +3294,6 @@ msgstr ""
 msgid "Error creating the slides container."
 msgstr ""
 
-#: functions/menu/menu_file_save.c:224
-msgid "Project saved"
-msgstr ""
-
 #: functions/menu/menu_file_save_layer.c:81
 msgid "Error creating the layer elements."
 msgstr ""
@@ -2921,10 +3304,6 @@ msgstr ""
 
 #: functions/menu/menu_file_save_slide.c:67
 msgid "Error creating the slide node."
-msgstr ""
-
-#: functions/menu/menu_help_about.c:56
-msgid "Copyright"
 msgstr ""
 
 #: functions/menu/menu_help_about.c:59
@@ -2942,112 +3321,6 @@ msgid ""
 "You should have received a copy of the GNU Lesser General Public\n"
 "License along with this program.  If not, see\n"
 "http://www.gnu.org/licenses/."
-msgstr ""
-
-#: functions/menu/menu_help_about.c:77
-#, c-format
-msgid "Built on: %s"
-msgstr ""
-
-#: functions/menu/menu_help_forum.c:47
-msgid "http://www.salasaga.org/forum"
-msgstr ""
-
-#: functions/menu/menu_help_register.c:47
-msgid "http://www.salasaga.org/forum/index.php?action=register"
-msgstr ""
-
-#: functions/menu/menu_help_survey.c:47
-msgid "http://www.salasaga.org/go/survey"
-msgstr ""
-
-#: functions/menu/menu_help_support.c:47
-msgid "http://www.salasaga.org/index.php?page=support"
-msgstr ""
-
-#: functions/menu/menu_help_wiki.c:47
-msgid "http://www.salasaga.org/wiki"
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:125
-msgid "Project Properties"
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:140
-msgid "Project Folder: "
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:143
-msgid "Select the Project Folder"
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:149
-msgid "Output Folder: "
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:152
-msgid "Select the Output Folder"
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:167
-msgid "Project Width: "
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:172
-#: functions/menu/menu_project_properties.c:184
-msgid "pixels"
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:179
-msgid "Project Height: "
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:191
-msgid "SWF start behavior: "
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:195
-msgid "Paused"
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:196
-msgid "Play"
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:210
-msgid "SWF end behavior: "
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:214
-msgid "Stop"
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:215
-msgid "Loop and play"
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:216
-msgid "Loop and stop"
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:234
-msgid "Display SWF control bar: "
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:249
-msgid "Display SWF information button: "
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:264
-msgid "Information button text"
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:287
-msgid "Information button link: "
-msgstr ""
-
-#: functions/menu/menu_project_properties.c:299
-msgid "Information button link window: "
 msgstr ""
 
 #: functions/menu/menu_project_properties.c:334
@@ -3079,52 +3352,8 @@ msgid ""
 "Please try again."
 msgstr ""
 
-#: functions/menu/menu_project_properties.c:492
-msgid " Project properties updated"
-msgstr ""
-
-#: functions/menu/menu_screenshots_capture.c:96
-msgid ""
-"Please click on the window you want to capture (after closing this dialog "
-"box)."
-msgstr ""
-
 #: functions/menu/menu_screenshots_capture.c:114
 msgid "Unable to create alternative cursor."
-msgstr ""
-
-#: functions/menu/menu_screenshots_capture.c:133
-msgid ""
-"Unable to grab the mouse pointer for selected display.  Please report this "
-"error."
-msgstr ""
-
-#: functions/menu/menu_screenshots_capture.c:142
-#, c-format
-msgid "Mouse pointer grabbed.\n"
-msgstr ""
-
-#: functions/menu/menu_screenshots_capture.c:164
-#, c-format
-msgid "Capture window set.\n"
-msgstr ""
-
-#: functions/menu/menu_screenshots_capture.c:187
-#, c-format
-msgid "Mouse pointer grab released.\n"
-msgstr ""
-
-#: functions/menu/menu_screenshots_capture.c:207
-#, c-format
-msgid ""
-"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: "
-"%d\n"
-msgstr ""
-
-#: functions/menu/menu_screenshots_capture.c:218
-msgid ""
-"Window dimensions successfully retrieved.  Please use Control-Printscreen to "
-"take screenshots then Import when finished."
 msgstr ""
 
 #: functions/menu/menu_screenshots_capture.c:354
@@ -3153,112 +3382,17 @@ msgstr ""
 msgid "Something went wrong opening the screenshots folder."
 msgstr ""
 
-#: functions/menu/menu_screenshots_import.c:124
-msgid ""
-"The screenshots folder doesn't exist.  Please update this in the project "
-"preferences and try again."
-msgstr ""
-
-#: functions/menu/menu_screenshots_import.c:135
-#: functions/menu/menu_screenshots_import.c:209
-#: functions/menu/menu_screenshots_import.c:212
-#: functions/menu/menu_screenshots_import.c:213
-msgid "screenshot"
-msgstr ""
-
-#: functions/menu/menu_screenshots_import.c:177
-msgid ""
-"Not all of the screenshots are of the same size, or some differ from the "
-"size of the project.  If you proceed, they will be scaled to the same size "
-"as the project.  Do you want to proceed?"
-msgstr ""
-
-#: functions/menu/menu_screenshots_import.c:180
-msgid ""
-"Not all of the screenshots are of the same size, or some differ from the "
-"size of the project.  If you proceed, they will all be scaled to the size of "
-"the first one.  Do you want to proceed?"
-msgstr ""
-
-#: functions/menu/menu_screenshots_import.c:207
-msgid "No screenshots found in screenshot folder"
-msgstr ""
-
-#: functions/menu/menu_screenshots_import.c:208
-msgid "They are case sensitive and must be named"
-msgstr ""
-
-#: functions/menu/menu_screenshots_import.c:210
-msgid "Sequential Number"
-msgstr ""
-
-#: functions/menu/menu_screenshots_import.c:211
-msgid "For example"
-msgstr ""
-
-#: functions/menu/menu_screenshots_import.c:225
-msgid "Screenshots found"
-msgstr ""
-
-#: functions/menu/menu_screenshots_import.c:306
-msgid "Something went wrong when loading the screenshot"
-msgstr ""
-
 #: functions/menu/menu_screenshots_import.c:357
 msgid "Something went wrong when deleting the screenshot file"
-msgstr ""
-
-#: functions/menu/menu_screenshots_import.c:362
-msgid "Loaded image"
-msgstr ""
-
-#: functions/menu/menu_screenshots_import.c:443
-msgid "screenshots imported"
-msgstr ""
-
-#: functions/slide/slide_delete.c:63
-msgid "You must leave at least one slide in a project."
 msgstr ""
 
 #: functions/slide/slide_delete.c:105
 msgid " Slide deleted"
 msgstr ""
 
-#: functions/slide/slide_duration.c:75
-msgid "Edit slide duration"
-msgstr ""
-
-#: functions/slide/slide_duration.c:80
-msgid "Slide duration: "
-msgstr ""
-
 #: functions/slide/slide_duration.c:115
 msgid ""
 "There was something wrong with the slide duration value.  Please try again."
-msgstr ""
-
-#: functions/slide/slide_duration.c:200
-msgid " Slide properties updated"
-msgstr ""
-
-#: functions/slide/slide_insert.c:111
-msgid " Slide added"
-msgstr ""
-
-#: functions/slide/slide_move_bottom.c:94
-msgid " Slide moved to bottom"
-msgstr ""
-
-#: functions/slide/slide_move_down.c:99
-msgid " Slide moved down"
-msgstr ""
-
-#: functions/slide/slide_move_top.c:92
-msgid " Slide moved to top"
-msgstr ""
-
-#: functions/slide/slide_move_up.c:97
-msgid " Slide moved up"
 msgstr ""
 
 #: functions/widgets/time_line.c:915
@@ -3307,26 +3441,29 @@ msgstr ""
 msgid " Layer end point moved"
 msgstr ""
 
-#: functions/working_area/working_area_button_release_event.c:262
-#: functions/working_area/working_area_motion_notify_event.c:204
-msgid "Unknown resizing direction."
-msgstr ""
-
-#: functions/working_area/working_area_button_release_event.c:320
-msgid " Layer resized"
-msgstr ""
-
-#: functions/working_area/working_area_button_release_event.c:423
-msgid " Layer moved"
-msgstr ""
-
 #: salasaga_screencapture.c:80
 msgid "Something went wrong when getting the window identifier."
-msgstr ""
+msgstr "Нещо се обърка при прихващане на ID на прозореца."
 
 #: salasaga_screencapture.c:90 salasaga_screencapture.c:382
 msgid "Something went wrong when getting the screenshot."
+msgstr "Нещо се обърка при прихващането на екрана."
+
+#: salasaga_screencapture.c:269
+msgid ""
+"There was something wrong with the project name value.  Aborting screenshot."
+msgstr "Нещо не е наред с името на проекта. Прекратяване на снимането."
+
+#: salasaga_screencapture.c:283
+msgid ""
+"There was something wrong with the screenshot folder value.  Aborting "
+"screenshot."
 msgstr ""
+"Нещо не е наред с папката за снимки на проекта. Прекратяване на снимането."
+
+#: salasaga_screencapture.c:395
+msgid "Something went wrong opening"
+msgstr "Нещо не е наред с отварянето"
 
 #: salasaga_screencapture.c:122
 msgid "Screenshot GetDC failed."
@@ -3352,17 +3489,6 @@ msgstr ""
 msgid "Screenshot BitBlt failed."
 msgstr ""
 
-#: salasaga_screencapture.c:269
-msgid ""
-"There was something wrong with the project name value.  Aborting screenshot."
-msgstr ""
-
-#: salasaga_screencapture.c:283
-msgid ""
-"There was something wrong with the screenshot folder value.  Aborting "
-"screenshot."
-msgstr ""
-
 #: salasaga_screencapture.c:297
 msgid ""
 "There was something wrong with the x offset start value.  Aborting "
@@ -3382,10 +3508,6 @@ msgstr ""
 #: salasaga_screencapture.c:336
 msgid ""
 "There was something wrong with the height value.  Aborting screenshot."
-msgstr ""
-
-#: salasaga_screencapture.c:395
-msgid "Something went wrong opening"
 msgstr ""
 
 #: salasaga_screencapture.c:404

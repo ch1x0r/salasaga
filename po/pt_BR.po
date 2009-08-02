@@ -14,45 +14,16 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-02-14 03:52+0000\n"
+"X-Launchpad-Export-Date: 2009-08-02 02:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
-
-#: salasaga.c:237 functions/validate_value.c:566
-msgid "Fit to width"
-msgstr ""
 
 #: salasaga.c:244 functions/menu/menu_file_new.c:190
 msgid "New Project"
 msgstr "Novo Projeto"
 
-#: salasaga.c:268
-#, c-format
-msgid "Debugging mode, errors will be shown on stdout.\n"
-msgstr ""
-
-#: salasaga.c:284
-#, c-format
-msgid "Program path: '%s'\n"
-msgstr ""
-
-#: salasaga.c:285
-#, c-format
-msgid "Directory base: '%s'\n"
-msgstr ""
-
 #: salasaga.c:295
 msgid "icons"
 msgstr "ícones"
-
-#: salasaga.c:307
-#, c-format
-msgid "Icon path: %s\n"
-msgstr ""
-
-#: salasaga.c:333
-#, c-format
-msgid "Path to mouse pointer image: %s\n"
-msgstr ""
 
 #: salasaga.c:416 salasaga.c:427 salasaga.c:484 functions/draw_timeline.c:64
 #: functions/key_bind.c:64 functions/key_bind.c:80
@@ -307,14 +278,6 @@ msgstr ""
 msgid "Error"
 msgstr "Erro"
 
-#: salasaga.c:416
-msgid "Something went wrong when creating the menu bar."
-msgstr ""
-
-#: salasaga.c:427
-msgid "Something went wrong when creating the toolbar."
-msgstr ""
-
 #: salasaga.c:456
 msgid "Zoom: "
 msgstr "Ampliação: "
@@ -323,6 +286,75 @@ msgstr "Ampliação: "
 msgid "Output: "
 msgstr "Saída: "
 
+#: salasaga.c:503
+msgid "Ready"
+msgstr "Pronto"
+
+#: functions/create_menu_bar.c:96
+msgid "/_File"
+msgstr "/_Arquivo"
+
+#: functions/create_menu_bar.c:97
+msgid "/File/_New Project"
+msgstr "/Arquivo/_Novo Projeto"
+
+#: functions/create_menu_bar.c:103
+msgid "/File/_Quit"
+msgstr "/Arquivo/_Sair"
+
+#: functions/create_menu_bar.c:105
+msgid "/_Edit"
+msgstr "/_Editar"
+
+#: functions/create_menu_bar.c:106
+msgid "/Edit/_Preferences"
+msgstr "/Editar/_Preferências"
+
+#: functions/create_menu_bar.c:113
+msgid "/_Project"
+msgstr "/_Projeto"
+
+#: functions/create_menu_bar.c:114
+msgid "/Project/P_roperties"
+msgstr "/Projeto/P_ropriedades"
+
+#: salasaga.c:237 functions/validate_value.c:566
+msgid "Fit to width"
+msgstr ""
+
+#: salasaga.c:268
+#, c-format
+msgid "Debugging mode, errors will be shown on stdout.\n"
+msgstr ""
+
+#: salasaga.c:284
+#, c-format
+msgid "Program path: '%s'\n"
+msgstr ""
+
+#: salasaga.c:285
+#, c-format
+msgid "Directory base: '%s'\n"
+msgstr ""
+
+#: salasaga.c:307
+#, c-format
+msgid "Icon path: %s\n"
+msgstr ""
+
+#: salasaga.c:333
+#, c-format
+msgid "Path to mouse pointer image: %s\n"
+msgstr ""
+
+#: salasaga.c:416
+msgid "Something went wrong when creating the menu bar."
+msgstr ""
+
+#: salasaga.c:427
+msgid "Something went wrong when creating the toolbar."
+msgstr ""
+
 #: salasaga.c:484
 msgid "Something went wrong when creating the film strip."
 msgstr ""
@@ -330,10 +362,6 @@ msgstr ""
 #: salasaga.c:500
 msgid "Status bar messages"
 msgstr ""
-
-#: salasaga.c:503
-msgid "Ready"
-msgstr "Pronto"
 
 #: salasaga.c:525
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
@@ -515,14 +543,6 @@ msgstr ""
 msgid "Magnification level of working area"
 msgstr ""
 
-#: functions/create_menu_bar.c:96
-msgid "/_File"
-msgstr "/_Arquivo"
-
-#: functions/create_menu_bar.c:97
-msgid "/File/_New Project"
-msgstr "/Arquivo/_Novo Projeto"
-
 #: functions/create_menu_bar.c:97
 msgid "<control>N"
 msgstr ""
@@ -564,20 +584,8 @@ msgid "/File/Sep"
 msgstr ""
 
 #: functions/create_menu_bar.c:103
-msgid "/File/_Quit"
-msgstr "/Arquivo/_Sair"
-
-#: functions/create_menu_bar.c:103
 msgid "<control>Q"
 msgstr ""
-
-#: functions/create_menu_bar.c:105
-msgid "/_Edit"
-msgstr "/_Editar"
-
-#: functions/create_menu_bar.c:106
-msgid "/Edit/_Preferences"
-msgstr "/Editar/_Preferências"
 
 #: functions/create_menu_bar.c:108
 msgid "/_Screenshots"
@@ -594,14 +602,6 @@ msgstr ""
 #: functions/create_menu_bar.c:111
 msgid "/Screenshots/_Import"
 msgstr ""
-
-#: functions/create_menu_bar.c:113
-msgid "/_Project"
-msgstr "/_Projeto"
-
-#: functions/create_menu_bar.c:114
-msgid "/Project/P_roperties"
-msgstr "/Projeto/P_ropriedades"
 
 #: functions/create_menu_bar.c:116
 msgid "/Sl_ide"

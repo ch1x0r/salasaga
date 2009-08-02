@@ -9,12 +9,12 @@ msgstr ""
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-07-27 17:11+1000\n"
 "PO-Revision-Date: 2008-10-22 04:12+0000\n"
-"Last-Translator: ChenMing <Unknown>\n"
+"Last-Translator: Chen Ming <Unknown>\n"
 "Language-Team: Simplified Chinese <zh_CN@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-02-14 03:52+0000\n"
+"X-Launchpad-Export-Date: 2009-08-02 02:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: salasaga.c:237 functions/validate_value.c:566
@@ -48,11 +48,6 @@ msgstr "图标"
 #, c-format
 msgid "Icon path: %s\n"
 msgstr "图标路径：%s\n"
-
-#: salasaga.c:333
-#, c-format
-msgid "Path to mouse pointer image: %s\n"
-msgstr ""
 
 #: salasaga.c:416 salasaga.c:427 salasaga.c:484 functions/draw_timeline.c:64
 #: functions/key_bind.c:64 functions/key_bind.c:80
@@ -323,10 +318,6 @@ msgstr "缩放： "
 msgid "Output: "
 msgstr "输出： "
 
-#: salasaga.c:484
-msgid "Something went wrong when creating the film strip."
-msgstr ""
-
 #: salasaga.c:500
 msgid "Status bar messages"
 msgstr "状态栏信息"
@@ -334,6 +325,79 @@ msgstr "状态栏信息"
 #: salasaga.c:503
 msgid "Ready"
 msgstr "准备就绪"
+
+#: valid_fields.h:38
+msgid "External link"
+msgstr "外部链接"
+
+#: valid_fields.h:40
+msgid "Full path to a file"
+msgstr "到一个文件的全路径"
+
+#: valid_fields.h:41
+msgid "Full path to a folder"
+msgstr "到一个目录的全路径"
+
+#: valid_fields.h:42
+msgid "Font size"
+msgstr "字体大小"
+
+#: valid_fields.h:55
+msgid "Line width"
+msgstr "线条宽度"
+
+#: valid_fields.h:76
+msgid "X Offset"
+msgstr "X 偏移"
+
+#: valid_fields.h:77
+msgid "Y Offset"
+msgstr "Y 偏移"
+
+#: functions/create_menu_bar.c:96
+msgid "/_File"
+msgstr "/_File"
+
+#: functions/create_menu_bar.c:97
+msgid "/File/_New Project"
+msgstr "/File/_New Project"
+
+#: functions/create_menu_bar.c:97
+msgid "<control>N"
+msgstr "<control>N"
+
+#: functions/create_menu_bar.c:98
+msgid "/File/_Open Project"
+msgstr "/File/_Open Project"
+
+#: functions/create_menu_bar.c:98
+msgid "<control>O"
+msgstr "<control>O"
+
+#: functions/create_menu_bar.c:99
+msgid "/File/_Save Project"
+msgstr "/File/_Save Project"
+
+#: functions/create_menu_bar.c:99
+msgid "<control>S"
+msgstr "<control>S"
+
+#: functions/create_menu_bar.c:100
+msgid "/File/Save _As Project"
+msgstr "/File/Save _As Project"
+
+#: functions/create_menu_bar.c:100
+msgid "<control><shift>S"
+msgstr "<control><shift>S"
+
+#: salasaga.c:333
+#, c-format
+msgid "Path to mouse pointer image: %s\n"
+msgstr ""
+
+#: salasaga.c:484
+msgid "Something went wrong when creating the film strip."
+msgstr ""
 
 #: salasaga.c:525
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
@@ -351,25 +415,9 @@ msgstr ""
 msgid "Animation behavior after playing"
 msgstr ""
 
-#: valid_fields.h:38
-msgid "External link"
-msgstr "外部链接"
-
 #: valid_fields.h:39
 msgid "Window target for an external link"
 msgstr ""
-
-#: valid_fields.h:40
-msgid "Full path to a file"
-msgstr "到一个文件的全路径"
-
-#: valid_fields.h:41
-msgid "Full path to a folder"
-msgstr "到一个目录的全路径"
-
-#: valid_fields.h:42
-msgid "Font size"
-msgstr "字体大小"
 
 #: valid_fields.h:43
 msgid "A frame number"
@@ -418,10 +466,6 @@ msgstr ""
 #: valid_fields.h:54
 msgid "Width of this layer"
 msgstr ""
-
-#: valid_fields.h:55
-msgid "Line width"
-msgstr "线条宽度"
 
 #: valid_fields.h:56
 msgid "Mouse click"
@@ -503,53 +547,9 @@ msgstr ""
 msgid "Type of transition"
 msgstr ""
 
-#: valid_fields.h:76
-msgid "X Offset"
-msgstr "X 偏移"
-
-#: valid_fields.h:77
-msgid "Y Offset"
-msgstr "Y 偏移"
-
 #: valid_fields.h:78
 msgid "Magnification level of working area"
 msgstr ""
-
-#: functions/create_menu_bar.c:96
-msgid "/_File"
-msgstr "/_File"
-
-#: functions/create_menu_bar.c:97
-msgid "/File/_New Project"
-msgstr "/File/_New Project"
-
-#: functions/create_menu_bar.c:97
-msgid "<control>N"
-msgstr "<control>N"
-
-#: functions/create_menu_bar.c:98
-msgid "/File/_Open Project"
-msgstr "/File/_Open Project"
-
-#: functions/create_menu_bar.c:98
-msgid "<control>O"
-msgstr "<control>O"
-
-#: functions/create_menu_bar.c:99
-msgid "/File/_Save Project"
-msgstr "/File/_Save Project"
-
-#: functions/create_menu_bar.c:99
-msgid "<control>S"
-msgstr "<control>S"
-
-#: functions/create_menu_bar.c:100
-msgid "/File/Save _As Project"
-msgstr "/File/Save _As Project"
-
-#: functions/create_menu_bar.c:100
-msgid "<control><shift>S"
-msgstr "<control><shift>S"
 
 #: functions/create_menu_bar.c:101
 msgid "/File/_Close Project"
@@ -1545,6 +1545,10 @@ msgstr ""
 #: functions/save_preferences_and_exit.c:188
 msgid "Saving preferences in the registry failed."
 msgstr ""
+
+#: functions/validate_value.c:605
+msgid "Unknown value passed to validation function"
+msgstr "传递了未知的值给合法性验证函数"
 
 #: functions/cairo/create_cairo_pixbuf_pattern.c:70
 msgid "Unable to allocate memory for pixel buffer."
@@ -3304,10 +3308,6 @@ msgstr ""
 #: functions/working_area/working_area_button_release_event.c:423
 msgid " Layer moved"
 msgstr ""
-
-#: validate_value.c:544
-msgid "Unknown value passed to validation function"
-msgstr "传递了未知的值给合法性验证函数"
 
 #: salasaga_screencapture.c:80
 msgid "Something went wrong when getting the window identifier."

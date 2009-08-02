@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-02-14 03:52+0000\n"
+"X-Launchpad-Export-Date: 2009-08-02 02:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: salasaga.c:237 functions/validate_value.c:566
@@ -341,14 +341,6 @@ msgstr ""
 "Capturas desactivadas: no se encontró salsaga_screencapture en la ruta "
 "especificada"
 
-#: valid_fields.h:35
-msgid "8 Bit Color Value Component"
-msgstr ""
-
-#: valid_fields.h:36
-msgid "16 Bit Color Value Component"
-msgstr ""
-
 #: valid_fields.h:37
 msgid "Animation behavior after playing"
 msgstr "Comportamiento de la animación tras la ejecución"
@@ -356,10 +348,6 @@ msgstr "Comportamiento de la animación tras la ejecución"
 #: valid_fields.h:38
 msgid "External link"
 msgstr "Enlace externo"
-
-#: valid_fields.h:39
-msgid "Window target for an external link"
-msgstr ""
 
 #: valid_fields.h:40
 msgid "Full path to a file"
@@ -377,29 +365,13 @@ msgstr "Tamaño de la fuente"
 msgid "A frame number"
 msgstr "Número de fotograma"
 
-#: valid_fields.h:44
-msgid "Height of a highlight layer"
-msgstr ""
-
-#: valid_fields.h:45
-msgid "Width of a highlight layer"
-msgstr ""
-
 #: valid_fields.h:46
 msgid "Height of the tool bar icons"
 msgstr "Altura de la barra de iconos"
 
-#: valid_fields.h:47
-msgid "Base64 encoded image data"
-msgstr ""
-
 #: valid_fields.h:48
 msgid "Length in bytes of image data"
 msgstr "Longitud en bytes de los datos de imagen"
-
-#: valid_fields.h:49
-msgid "Layer background switch"
-msgstr ""
 
 #: valid_fields.h:50
 msgid "Layer duration in seconds"
@@ -457,10 +429,6 @@ msgstr "Versión del proyecto"
 msgid "Width of this project"
 msgstr "Ancho de este proyecto"
 
-#: valid_fields.h:64
-msgid "An X * Y resolution value"
-msgstr ""
-
 #: valid_fields.h:65
 msgid "Height for next screenshot"
 msgstr "Altura para la próxima captura"
@@ -476,10 +444,6 @@ msgstr "Incluir barra de control en la exportación swf"
 #: valid_fields.h:68
 msgid "Include info button in exported swf"
 msgstr "Incluir botón de información en la exportación swf"
-
-#: valid_fields.h:69
-msgid "Show the background for text layers"
-msgstr ""
 
 #: valid_fields.h:70
 msgid "Number of frames per slide"
@@ -512,10 +476,6 @@ msgstr "Desplazamiento en el eje X"
 #: valid_fields.h:77
 msgid "Y Offset"
 msgstr "Desplazamiento en el eje Y"
-
-#: valid_fields.h:78
-msgid "Magnification level of working area"
-msgstr ""
 
 #: functions/create_menu_bar.c:96
 msgid "/_File"
@@ -560,10 +520,6 @@ msgstr "/Archivo/_Cerrar Proyecto"
 #: functions/create_menu_bar.c:101
 msgid "<control>W"
 msgstr "<control>W"
-
-#: functions/create_menu_bar.c:102
-msgid "/File/Sep"
-msgstr ""
 
 #: functions/create_menu_bar.c:103
 msgid "/File/_Quit"
@@ -657,10 +613,6 @@ msgstr "/Capa/_Editar"
 msgid "/Layer/_Delete"
 msgstr "/Capa/_Borrar"
 
-#: functions/create_menu_bar.c:131
-msgid "/Layer/Sep"
-msgstr ""
-
 #: functions/create_menu_bar.c:132
 msgid "/Layer/Add _Text"
 msgstr "/Capa/Añadir _Texto"
@@ -689,10 +641,6 @@ msgstr "/Exportar/Animación _Flash"
 msgid "<control><shift>F"
 msgstr "<control><mays.>F"
 
-#: functions/create_menu_bar.c:139
-msgid "/Export/_Html Wrapper"
-msgstr ""
-
 #: functions/create_menu_bar.c:140
 msgid "/Export/_Slide as Image"
 msgstr "/Exportar/_Diapositiva como imagen"
@@ -712,10 +660,6 @@ msgstr "/Ayuda/Acerca de"
 #: functions/create_menu_bar.c:145
 msgid "/_Help/_Main Website"
 msgstr "/Ayuda/Sitio del proyecto"
-
-#: functions/create_menu_bar.c:146
-msgid "/_Help/Sep"
-msgstr ""
 
 #: functions/create_menu_bar.c:148
 msgid "/_Help/_Forum"
@@ -876,19 +820,9 @@ msgstr "Salir"
 msgid "Quit the application"
 msgstr "Salir de la aplicación"
 
-#: functions/create_toolbar.c:119
-msgid "Path to toolbar 'Capture Screenshots' icon"
-msgstr ""
-
 #: functions/create_toolbar.c:126
 msgid "Capture"
 msgstr "Capturar"
-
-#: functions/create_toolbar.c:127
-#: functions/callbacks/menu_screenshots_capture_full_screen.c:132
-#: functions/menu/menu_screenshots_capture.c:255
-msgid "Capture screenshots"
-msgstr ""
 
 #: functions/create_toolbar.c:139
 msgid "Import"
@@ -929,6 +863,72 @@ msgstr "Borrar capa desactivado: ningún proyecto cargado"
 #: functions/disable_layer_toolbar_buttons.c:74
 msgid "Move layer down disabled: No project loaded"
 msgstr "Bajar capa desactivado: ningún proyecto cargado"
+
+#: valid_fields.h:35
+msgid "8 Bit Color Value Component"
+msgstr ""
+
+#: valid_fields.h:36
+msgid "16 Bit Color Value Component"
+msgstr ""
+
+#: valid_fields.h:39
+msgid "Window target for an external link"
+msgstr ""
+
+#: valid_fields.h:44
+msgid "Height of a highlight layer"
+msgstr ""
+
+#: valid_fields.h:45
+msgid "Width of a highlight layer"
+msgstr ""
+
+#: valid_fields.h:47
+msgid "Base64 encoded image data"
+msgstr ""
+
+#: valid_fields.h:49
+msgid "Layer background switch"
+msgstr ""
+
+#: valid_fields.h:64
+msgid "An X * Y resolution value"
+msgstr ""
+
+#: valid_fields.h:69
+msgid "Show the background for text layers"
+msgstr ""
+
+#: valid_fields.h:78
+msgid "Magnification level of working area"
+msgstr ""
+
+#: functions/create_menu_bar.c:102
+msgid "/File/Sep"
+msgstr ""
+
+#: functions/create_menu_bar.c:131
+msgid "/Layer/Sep"
+msgstr ""
+
+#: functions/create_menu_bar.c:139
+msgid "/Export/_Html Wrapper"
+msgstr ""
+
+#: functions/create_menu_bar.c:146
+msgid "/_Help/Sep"
+msgstr ""
+
+#: functions/create_toolbar.c:119
+msgid "Path to toolbar 'Capture Screenshots' icon"
+msgstr ""
+
+#: functions/create_toolbar.c:127
+#: functions/callbacks/menu_screenshots_capture_full_screen.c:132
+#: functions/menu/menu_screenshots_capture.c:255
+msgid "Capture screenshots"
+msgstr ""
 
 #: functions/disable_layer_toolbar_buttons.c:83
 msgid "Move layer up disabled: No project loaded"
@@ -3319,6 +3319,44 @@ msgstr "Se produjo un error al obtener el identificación de la ventana."
 msgid "Something went wrong when getting the screenshot."
 msgstr "Se produjo un error al tomar la captura."
 
+#: salasaga_screencapture.c:269
+msgid ""
+"There was something wrong with the project name value.  Aborting screenshot."
+msgstr ""
+"Se produjo un error por el valor Nombre del proyecto. Abortando captura."
+
+#: salasaga_screencapture.c:283
+msgid ""
+"There was something wrong with the screenshot folder value.  Aborting "
+"screenshot."
+msgstr ""
+"Se produjo un error por el valor Directorio de captura. Abortando captura."
+
+#: salasaga_screencapture.c:323
+msgid "There was something wrong with the width value.  Aborting screenshot."
+msgstr "Se produjo un error por el valor Ancho. Abortando captura."
+
+#: salasaga_screencapture.c:336
+msgid ""
+"There was something wrong with the height value.  Aborting screenshot."
+msgstr "Se produjo un error por el valor Alto. Abortando captura."
+
+#: salasaga_screencapture.c:395
+msgid "Something went wrong opening"
+msgstr "Se produjo un error en la apertura"
+
+#: salasaga_screencapture.c:404
+msgid "The target directory doesn't exist."
+msgstr "El directorio especificado no existe."
+
+#: salasaga_screencapture.c:549
+msgid "Something went wrong when retrieving the screenshot metadata."
+msgstr "Se produjo un error al recuperar los metadatos de la captura."
+
+#: salasaga_screencapture.c:566
+msgid "Something went wrong when copying the screenshot data."
+msgstr "Se produjo un error al copiar la información de la captura."
+
 #: salasaga_screencapture.c:122
 msgid "Screenshot GetDC failed."
 msgstr ""
@@ -3343,19 +3381,6 @@ msgstr ""
 msgid "Screenshot BitBlt failed."
 msgstr ""
 
-#: salasaga_screencapture.c:269
-msgid ""
-"There was something wrong with the project name value.  Aborting screenshot."
-msgstr ""
-"Se produjo un error por el valor Nombre del proyecto. Abortando captura."
-
-#: salasaga_screencapture.c:283
-msgid ""
-"There was something wrong with the screenshot folder value.  Aborting "
-"screenshot."
-msgstr ""
-"Se produjo un error por el valor Directorio de captura. Abortando captura."
-
 #: salasaga_screencapture.c:297
 msgid ""
 "There was something wrong with the x offset start value.  Aborting "
@@ -3367,23 +3392,6 @@ msgid ""
 "There was something wrong with the y offset start value.  Aborting "
 "screenshot."
 msgstr ""
-
-#: salasaga_screencapture.c:323
-msgid "There was something wrong with the width value.  Aborting screenshot."
-msgstr "Se produjo un error por el valor Ancho. Abortando captura."
-
-#: salasaga_screencapture.c:336
-msgid ""
-"There was something wrong with the height value.  Aborting screenshot."
-msgstr "Se produjo un error por el valor Alto. Abortando captura."
-
-#: salasaga_screencapture.c:395
-msgid "Something went wrong opening"
-msgstr "Se produjo un error en la apertura"
-
-#: salasaga_screencapture.c:404
-msgid "The target directory doesn't exist."
-msgstr "El directorio especificado no existe."
 
 #: salasaga_screencapture.c:490
 msgid ""
@@ -3397,11 +3405,3 @@ msgstr ""
 #: salasaga_screencapture.c:515
 msgid "Something went wrong when creating the png info structure."
 msgstr ""
-
-#: salasaga_screencapture.c:549
-msgid "Something went wrong when retrieving the screenshot metadata."
-msgstr "Se produjo un error al recuperar los metadatos de la captura."
-
-#: salasaga_screencapture.c:566
-msgid "Something went wrong when copying the screenshot data."
-msgstr "Se produjo un error al copiar la información de la captura."
