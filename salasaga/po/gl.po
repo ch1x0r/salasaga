@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-02-14 03:52+0000\n"
+"X-Launchpad-Export-Date: 2009-08-02 02:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: salasaga.c:237 functions/validate_value.c:566
@@ -561,10 +561,6 @@ msgstr "/Ficheiro/_Pechar Proxecto"
 msgid "<control>W"
 msgstr "<control>W"
 
-#: functions/create_menu_bar.c:102
-msgid "/File/Sep"
-msgstr ""
-
 #: functions/create_menu_bar.c:103
 msgid "/File/_Quit"
 msgstr "/Ficheiro/_Saír"
@@ -689,10 +685,6 @@ msgstr "/Exportar/Animación _Flash"
 msgid "<control><shift>F"
 msgstr "<control><shift>F"
 
-#: functions/create_menu_bar.c:139
-msgid "/Export/_Html Wrapper"
-msgstr ""
-
 #: functions/create_menu_bar.c:140
 msgid "/Export/_Slide as Image"
 msgstr "/Exportar/_Diapositiva como imaxe"
@@ -712,10 +704,6 @@ msgstr "/_Axuda/_Acerca de"
 #: functions/create_menu_bar.c:145
 msgid "/_Help/_Main Website"
 msgstr "/_Axuda/_Sitio do proxecto"
-
-#: functions/create_menu_bar.c:146
-msgid "/_Help/Sep"
-msgstr ""
 
 #: functions/create_menu_bar.c:148
 msgid "/_Help/_Forum"
@@ -876,19 +864,9 @@ msgstr "Saír"
 msgid "Quit the application"
 msgstr "Saír da aplicación"
 
-#: functions/create_toolbar.c:119
-msgid "Path to toolbar 'Capture Screenshots' icon"
-msgstr ""
-
 #: functions/create_toolbar.c:126
 msgid "Capture"
 msgstr "Capturar"
-
-#: functions/create_toolbar.c:127
-#: functions/callbacks/menu_screenshots_capture_full_screen.c:132
-#: functions/menu/menu_screenshots_capture.c:255
-msgid "Capture screenshots"
-msgstr ""
 
 #: functions/create_toolbar.c:139
 msgid "Import"
@@ -929,6 +907,28 @@ msgstr "Borrar capa desactivado: ningún proxecto cargado"
 #: functions/disable_layer_toolbar_buttons.c:74
 msgid "Move layer down disabled: No project loaded"
 msgstr "Baixar capa desactivado: ningún proxecto cargado"
+
+#: functions/create_menu_bar.c:102
+msgid "/File/Sep"
+msgstr ""
+
+#: functions/create_menu_bar.c:139
+msgid "/Export/_Html Wrapper"
+msgstr ""
+
+#: functions/create_menu_bar.c:146
+msgid "/_Help/Sep"
+msgstr ""
+
+#: functions/create_toolbar.c:119
+msgid "Path to toolbar 'Capture Screenshots' icon"
+msgstr ""
+
+#: functions/create_toolbar.c:127
+#: functions/callbacks/menu_screenshots_capture_full_screen.c:132
+#: functions/menu/menu_screenshots_capture.c:255
+msgid "Capture screenshots"
+msgstr ""
 
 #: functions/disable_layer_toolbar_buttons.c:83
 msgid "Move layer up disabled: No project loaded"
@@ -1547,6 +1547,10 @@ msgstr ""
 #: functions/save_preferences_and_exit.c:188
 msgid "Saving preferences in the registry failed."
 msgstr ""
+
+#: functions/validate_value.c:605
+msgid "Unknown value passed to validation function"
+msgstr "Valor descoñecido pasado á función de validación"
 
 #: functions/cairo/create_cairo_pixbuf_pattern.c:70
 msgid "Unable to allocate memory for pixel buffer."
@@ -3306,10 +3310,6 @@ msgstr ""
 #: functions/working_area/working_area_button_release_event.c:423
 msgid " Layer moved"
 msgstr ""
-
-#: validate_value.c:544
-msgid "Unknown value passed to validation function"
-msgstr "Valor descoñecido pasado á función de validación"
 
 #: salasaga_screencapture.c:80
 msgid "Something went wrong when getting the window identifier."

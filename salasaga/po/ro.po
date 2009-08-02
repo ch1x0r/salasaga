@@ -14,7 +14,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-02-14 03:52+0000\n"
+"X-Launchpad-Export-Date: 2009-08-02 02:20+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: salasaga.c:237 functions/validate_value.c:566
@@ -35,11 +35,6 @@ msgstr ""
 #, c-format
 msgid "Program path: '%s'\n"
 msgstr "Calea programului: '%s'\n"
-
-#: salasaga.c:285
-#, c-format
-msgid "Directory base: '%s'\n"
-msgstr ""
 
 #: salasaga.c:295
 msgid "icons"
@@ -324,29 +319,9 @@ msgstr "Zoom: "
 msgid "Output: "
 msgstr "Ieșire: "
 
-#: salasaga.c:484
-msgid "Something went wrong when creating the film strip."
-msgstr ""
-
-#: salasaga.c:500
-msgid "Status bar messages"
-msgstr ""
-
 #: salasaga.c:503
 msgid "Ready"
 msgstr "Pregătit"
-
-#: salasaga.c:525
-msgid "Screenshots disabled: salasaga_screencapture not found in search path"
-msgstr ""
-
-#: valid_fields.h:35
-msgid "8 Bit Color Value Component"
-msgstr ""
-
-#: valid_fields.h:36
-msgid "16 Bit Color Value Component"
-msgstr ""
 
 #: valid_fields.h:37
 msgid "Animation behavior after playing"
@@ -355,10 +330,6 @@ msgstr "Comportamentul animației după redare"
 #: valid_fields.h:38
 msgid "External link"
 msgstr "Legătură externă"
-
-#: valid_fields.h:39
-msgid "Window target for an external link"
-msgstr ""
 
 #: valid_fields.h:40
 msgid "Full path to a file"
@@ -376,21 +347,9 @@ msgstr "Dimensiune caracter"
 msgid "A frame number"
 msgstr "Număr cadre"
 
-#: valid_fields.h:44
-msgid "Height of a highlight layer"
-msgstr ""
-
-#: valid_fields.h:45
-msgid "Width of a highlight layer"
-msgstr ""
-
 #: valid_fields.h:46
 msgid "Height of the tool bar icons"
 msgstr "Înălțimea pictogramelor barei de unelte"
-
-#: valid_fields.h:47
-msgid "Base64 encoded image data"
-msgstr ""
 
 #: valid_fields.h:48
 msgid "Length in bytes of image data"
@@ -431,10 +390,6 @@ msgstr "Clic maus"
 #: valid_fields.h:57
 msgid "Opacity level"
 msgstr "Nivel opacitate"
-
-#: valid_fields.h:58
-msgid "Width of film strip thumbnails"
-msgstr ""
 
 #: valid_fields.h:59
 msgid "Frames per Second for this project"
@@ -512,10 +467,6 @@ msgstr "Offset X"
 msgid "Y Offset"
 msgstr "Offset Y"
 
-#: valid_fields.h:78
-msgid "Magnification level of working area"
-msgstr ""
-
 #: functions/create_menu_bar.c:96
 msgid "/_File"
 msgstr "/_Fișier"
@@ -551,30 +502,6 @@ msgstr "?Fișier/S_alvare proiect ca"
 #: functions/create_menu_bar.c:100
 msgid "<control><shift>S"
 msgstr "<control><shift>S"
-
-#: functions/create_menu_bar.c:101
-msgid "/File/_Close Project"
-msgstr ""
-
-#: functions/create_menu_bar.c:101
-msgid "<control>W"
-msgstr ""
-
-#: functions/create_menu_bar.c:102
-msgid "/File/Sep"
-msgstr ""
-
-#: functions/create_menu_bar.c:103
-msgid "/File/_Quit"
-msgstr ""
-
-#: functions/create_menu_bar.c:103
-msgid "<control>Q"
-msgstr ""
-
-#: functions/create_menu_bar.c:105
-msgid "/_Edit"
-msgstr ""
 
 #: functions/create_menu_bar.c:106
 msgid "/Edit/_Preferences"
@@ -656,10 +583,6 @@ msgstr "/Strat/_Editează"
 msgid "/Layer/_Delete"
 msgstr "/Strat/Ș_terge"
 
-#: functions/create_menu_bar.c:131
-msgid "/Layer/Sep"
-msgstr ""
-
 #: functions/create_menu_bar.c:132
 msgid "/Layer/Add _Text"
 msgstr "/Strat/Adaugă te_xt"
@@ -688,10 +611,6 @@ msgstr "/Export/Animație _flash"
 msgid "<control><shift>F"
 msgstr "<control><shift>F"
 
-#: functions/create_menu_bar.c:139
-msgid "/Export/_Html Wrapper"
-msgstr ""
-
 #: functions/create_menu_bar.c:140
 msgid "/Export/_Slide as Image"
 msgstr "/Export/_Diapozitiv ca imagine"
@@ -711,10 +630,6 @@ msgstr "/_Ajutor/_Despre"
 #: functions/create_menu_bar.c:145
 msgid "/_Help/_Main Website"
 msgstr "/_Ajutor/_Pagina oficială"
-
-#: functions/create_menu_bar.c:146
-msgid "/_Help/Sep"
-msgstr ""
 
 #: functions/create_menu_bar.c:148
 msgid "/_Help/_Forum"
@@ -875,19 +790,9 @@ msgstr "Ieșire"
 msgid "Quit the application"
 msgstr "Închide aplicația"
 
-#: functions/create_toolbar.c:119
-msgid "Path to toolbar 'Capture Screenshots' icon"
-msgstr ""
-
 #: functions/create_toolbar.c:126
 msgid "Capture"
 msgstr "Captură"
-
-#: functions/create_toolbar.c:127
-#: functions/callbacks/menu_screenshots_capture_full_screen.c:132
-#: functions/menu/menu_screenshots_capture.c:255
-msgid "Capture screenshots"
-msgstr ""
 
 #: functions/create_toolbar.c:139
 msgid "Import"
@@ -912,6 +817,101 @@ msgstr "Flash"
 #: functions/create_toolbar.c:170 functions/enable_main_toolbar_buttons.c:58
 msgid "Export as a Flash animation"
 msgstr "Exportă ca animație flash"
+
+#: salasaga.c:285
+#, c-format
+msgid "Directory base: '%s'\n"
+msgstr ""
+
+#: salasaga.c:484
+msgid "Something went wrong when creating the film strip."
+msgstr ""
+
+#: salasaga.c:500
+msgid "Status bar messages"
+msgstr ""
+
+#: salasaga.c:525
+msgid "Screenshots disabled: salasaga_screencapture not found in search path"
+msgstr ""
+
+#: valid_fields.h:35
+msgid "8 Bit Color Value Component"
+msgstr ""
+
+#: valid_fields.h:36
+msgid "16 Bit Color Value Component"
+msgstr ""
+
+#: valid_fields.h:39
+msgid "Window target for an external link"
+msgstr ""
+
+#: valid_fields.h:44
+msgid "Height of a highlight layer"
+msgstr ""
+
+#: valid_fields.h:45
+msgid "Width of a highlight layer"
+msgstr ""
+
+#: valid_fields.h:47
+msgid "Base64 encoded image data"
+msgstr ""
+
+#: valid_fields.h:58
+msgid "Width of film strip thumbnails"
+msgstr ""
+
+#: valid_fields.h:78
+msgid "Magnification level of working area"
+msgstr ""
+
+#: functions/create_menu_bar.c:101
+msgid "/File/_Close Project"
+msgstr ""
+
+#: functions/create_menu_bar.c:101
+msgid "<control>W"
+msgstr ""
+
+#: functions/create_menu_bar.c:102
+msgid "/File/Sep"
+msgstr ""
+
+#: functions/create_menu_bar.c:103
+msgid "/File/_Quit"
+msgstr ""
+
+#: functions/create_menu_bar.c:103
+msgid "<control>Q"
+msgstr ""
+
+#: functions/create_menu_bar.c:105
+msgid "/_Edit"
+msgstr ""
+
+#: functions/create_menu_bar.c:131
+msgid "/Layer/Sep"
+msgstr ""
+
+#: functions/create_menu_bar.c:139
+msgid "/Export/_Html Wrapper"
+msgstr ""
+
+#: functions/create_menu_bar.c:146
+msgid "/_Help/Sep"
+msgstr ""
+
+#: functions/create_toolbar.c:119
+msgid "Path to toolbar 'Capture Screenshots' icon"
+msgstr ""
+
+#: functions/create_toolbar.c:127
+#: functions/callbacks/menu_screenshots_capture_full_screen.c:132
+#: functions/menu/menu_screenshots_capture.c:255
+msgid "Capture screenshots"
+msgstr ""
 
 #: functions/disable_layer_toolbar_buttons.c:47
 msgid "Edit layer disabled: No project loaded"
@@ -1546,6 +1546,10 @@ msgstr ""
 #: functions/save_preferences_and_exit.c:188
 msgid "Saving preferences in the registry failed."
 msgstr ""
+
+#: functions/validate_value.c:605
+msgid "Unknown value passed to validation function"
+msgstr "Valoare necunoscută transmisă funcției de validare"
 
 #: functions/cairo/create_cairo_pixbuf_pattern.c:70
 msgid "Unable to allocate memory for pixel buffer."
@@ -3306,9 +3310,43 @@ msgstr ""
 msgid " Layer moved"
 msgstr ""
 
-#: validate_value.c:544
-msgid "Unknown value passed to validation function"
-msgstr "Valoare necunoscută transmisă funcției de validare"
+#: salasaga_screencapture.c:269
+msgid ""
+"There was something wrong with the project name value.  Aborting screenshot."
+msgstr ""
+"Este ceva greșit cu valoarea numelui proiectului. Captura de ecran a fost "
+"abandonată."
+
+#: salasaga_screencapture.c:283
+msgid ""
+"There was something wrong with the screenshot folder value.  Aborting "
+"screenshot."
+msgstr ""
+"Este ceva geșit cu valoarea directoarului pentru capturi de ecran. Captura "
+"de ecran a fost abandonată."
+
+#: salasaga_screencapture.c:323
+msgid "There was something wrong with the width value.  Aborting screenshot."
+msgstr ""
+"Este ceva greșit la valoarea lățimii. Captura de ecran a fost abandonată."
+
+#: salasaga_screencapture.c:336
+msgid ""
+"There was something wrong with the height value.  Aborting screenshot."
+msgstr ""
+"Este ceva greșit la valoarea înălțimii. Captura de ecran a fost abandonată."
+
+#: salasaga_screencapture.c:404
+msgid "The target directory doesn't exist."
+msgstr "Directorul țintă nu există."
+
+#: salasaga_screencapture.c:515
+msgid "Something went wrong when creating the png info structure."
+msgstr "S-a greșit ceva la crearea structurii info pentru fișierul png."
+
+#: salasaga_screencapture.c:566
+msgid "Something went wrong when copying the screenshot data."
+msgstr "S-a greșit ceva la copierea datelor capturii de ecran."
 
 #: salasaga_screencapture.c:80
 msgid "Something went wrong when getting the window identifier."
@@ -3342,21 +3380,6 @@ msgstr ""
 msgid "Screenshot BitBlt failed."
 msgstr ""
 
-#: salasaga_screencapture.c:269
-msgid ""
-"There was something wrong with the project name value.  Aborting screenshot."
-msgstr ""
-"Este ceva greșit cu valoarea numelui proiectului. Captura de ecran a fost "
-"abandonată."
-
-#: salasaga_screencapture.c:283
-msgid ""
-"There was something wrong with the screenshot folder value.  Aborting "
-"screenshot."
-msgstr ""
-"Este ceva geșit cu valoarea directoarului pentru capturi de ecran. Captura "
-"de ecran a fost abandonată."
-
 #: salasaga_screencapture.c:297
 msgid ""
 "There was something wrong with the x offset start value.  Aborting "
@@ -3369,24 +3392,9 @@ msgid ""
 "screenshot."
 msgstr ""
 
-#: salasaga_screencapture.c:323
-msgid "There was something wrong with the width value.  Aborting screenshot."
-msgstr ""
-"Este ceva greșit la valoarea lățimii. Captura de ecran a fost abandonată."
-
-#: salasaga_screencapture.c:336
-msgid ""
-"There was something wrong with the height value.  Aborting screenshot."
-msgstr ""
-"Este ceva greșit la valoarea înălțimii. Captura de ecran a fost abandonată."
-
 #: salasaga_screencapture.c:395
 msgid "Something went wrong opening"
 msgstr ""
-
-#: salasaga_screencapture.c:404
-msgid "The target directory doesn't exist."
-msgstr "Directorul țintă nu există."
 
 #: salasaga_screencapture.c:490
 msgid ""
@@ -3397,14 +3405,6 @@ msgstr ""
 msgid "Something went wrong when creating the png write structure."
 msgstr ""
 
-#: salasaga_screencapture.c:515
-msgid "Something went wrong when creating the png info structure."
-msgstr "S-a greșit ceva la crearea structurii info pentru fișierul png."
-
 #: salasaga_screencapture.c:549
 msgid "Something went wrong when retrieving the screenshot metadata."
 msgstr ""
-
-#: salasaga_screencapture.c:566
-msgid "Something went wrong when copying the screenshot data."
-msgstr "S-a greșit ceva la copierea datelor capturii de ecran."

@@ -1,16 +1,16 @@
-# English (Australia) translation for salasaga
-# Copyright (c) 2008 Rosetta Contributors and Canonical Ltd 2008
+# Portuguese translation for salasaga
+# Copyright (c) 2009 Rosetta Contributors and Canonical Ltd 2009
 # This file is distributed under the same license as the salasaga package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2008.
+# Carlos Fernando Martins <ninhodigital@gmail.com>, 2009.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: FULL NAME <EMAIL@ADDRESS>\n"
 "POT-Creation-Date: 2008-07-27 17:11+1000\n"
-"PO-Revision-Date: 2008-07-23 10:55+0000\n"
-"Last-Translator: Justin Clift <Unknown>\n"
-"Language-Team: English (Australia) <en_AU@li.org>\n"
+"PO-Revision-Date: 2009-03-01 12:46+0000\n"
+"Last-Translator: Carlos Fernando Martins <Unknown>\n"
+"Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -19,40 +19,40 @@ msgstr ""
 
 #: salasaga.c:237 functions/validate_value.c:566
 msgid "Fit to width"
-msgstr "Fit to width"
+msgstr "Ajustar à largura"
 
 #: salasaga.c:244 functions/menu/menu_file_new.c:190
 msgid "New Project"
-msgstr "New Project"
+msgstr "Novo Projecto"
 
 #: salasaga.c:268
 #, c-format
 msgid "Debugging mode, errors will be shown on stdout.\n"
-msgstr "Debugging mode, errors will be shown on stdout.\n"
+msgstr "Em modo de debug, os erros serão apresentados em stdout.\n"
 
 #: salasaga.c:284
 #, c-format
 msgid "Program path: '%s'\n"
-msgstr "Program path: '%s'\n"
+msgstr "Caminho do programa: '%s'\n"
 
 #: salasaga.c:285
 #, c-format
 msgid "Directory base: '%s'\n"
-msgstr "Directory base: '%s'\n"
+msgstr "Directório base: '%s'\n"
 
 #: salasaga.c:295
 msgid "icons"
-msgstr "icons"
+msgstr "ícones"
 
 #: salasaga.c:307
 #, c-format
 msgid "Icon path: %s\n"
-msgstr "Icon path: %s\n"
+msgstr "Caminho para ícones: %s'\n"
 
 #: salasaga.c:333
 #, c-format
 msgid "Path to mouse pointer image: %s\n"
-msgstr "Path to mouse pointer image: %s\n"
+msgstr "Caminho para ponteiro de rato: %s'\n"
 
 #: salasaga.c:416 salasaga.c:427 salasaga.c:484 functions/draw_timeline.c:64
 #: functions/key_bind.c:64 functions/key_bind.c:80
@@ -305,48 +305,224 @@ msgstr "Path to mouse pointer image: %s\n"
 #: functions/working_area/working_area_motion_notify_event.c:204
 #: functions/working_area/working_area_motion_notify_event.c:370
 msgid "Error"
-msgstr "Error"
+msgstr "Erro"
 
 #: salasaga.c:416
 msgid "Something went wrong when creating the menu bar."
-msgstr "Something went wrong when creating the menu bar."
+msgstr "Ocorreu um erro na criação na barra de menu."
 
 #: salasaga.c:427
 msgid "Something went wrong when creating the toolbar."
-msgstr "Something went wrong when creating the toolbar."
+msgstr "Ocorreu um erro na criação da barra de ferramentas"
 
 #: salasaga.c:456
 msgid "Zoom: "
-msgstr "Zoom: "
+msgstr "Ampliação: "
 
 #: salasaga.c:468
 msgid "Output: "
-msgstr "Output: "
+msgstr "Saída: "
 
 #: salasaga.c:484
 msgid "Something went wrong when creating the film strip."
-msgstr "Something went wrong when creating the film strip."
+msgstr "Ocorreu um erro na criação do filme."
 
 #: salasaga.c:500
 msgid "Status bar messages"
-msgstr "Status bar messages"
+msgstr "Mensagens da barra de estado"
 
 #: salasaga.c:503
 msgid "Ready"
-msgstr "Ready"
+msgstr "Pronto"
 
 #: salasaga.c:525
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
 msgstr ""
-"Screenshots disabled: salasaga_screencapture not found in search path"
+"Capturas desactivadas: caminho para salasaga_screencapture não encontrado"
+
+#: valid_fields.h:35
+msgid "8 Bit Color Value Component"
+msgstr "Componente 8 Bit"
+
+#: valid_fields.h:36
+msgid "16 Bit Color Value Component"
+msgstr "Componente 16 Bit"
+
+#: valid_fields.h:37
+msgid "Animation behavior after playing"
+msgstr "Comportamento da animação após reprodução"
+
+#: valid_fields.h:38
+msgid "External link"
+msgstr "Link externo"
+
+#: valid_fields.h:39
+msgid "Window target for an external link"
+msgstr "Janela de destino para link externo"
+
+#: valid_fields.h:40
+msgid "Full path to a file"
+msgstr "Caminho completo para ficheiro"
+
+#: valid_fields.h:41
+msgid "Full path to a folder"
+msgstr "Caminho completo para directório"
+
+#: valid_fields.h:42
+msgid "Font size"
+msgstr "Tamanho da fonte"
+
+#: valid_fields.h:43
+msgid "A frame number"
+msgstr "Número da frame"
+
+#: valid_fields.h:44
+msgid "Height of a highlight layer"
+msgstr "Altura de camada de destaque"
+
+#: valid_fields.h:45
+msgid "Width of a highlight layer"
+msgstr "Largura de camada de destaque"
+
+#: valid_fields.h:46
+msgid "Height of the tool bar icons"
+msgstr "Altura dos ícones da barra de ferramentas"
+
+#: valid_fields.h:47
+msgid "Base64 encoded image data"
+msgstr "Imagem com encoding a Base64"
+
+#: valid_fields.h:48
+msgid "Length in bytes of image data"
+msgstr "Tamanho em bytes da imagem"
+
+#: valid_fields.h:49
+msgid "Layer background switch"
+msgstr "Trocar camada de fundo"
+
+#: valid_fields.h:50
+msgid "Layer duration in seconds"
+msgstr "Duração da camada em segundos"
+
+#: valid_fields.h:51
+msgid "Height of this layer"
+msgstr "Altura desta camada"
+
+#: valid_fields.h:52
+msgid "Name of this layer"
+msgstr "Nome desta camada"
+
+#: valid_fields.h:53
+msgid "Layer visibility switch"
+msgstr "Alterar visibilidade da camada"
+
+#: valid_fields.h:54
+msgid "Width of this layer"
+msgstr "Largura desta camada"
+
+#: valid_fields.h:55
+msgid "Line width"
+msgstr "Espessura da linha"
+
+#: valid_fields.h:56
+msgid "Mouse click"
+msgstr "Clique do rato"
+
+#: valid_fields.h:57
+msgid "Opacity level"
+msgstr "Nível de opacidade"
+
+#: valid_fields.h:58
+msgid "Width of film strip thumbnails"
+msgstr "Largura das miniaturas do filme"
+
+#: valid_fields.h:59
+msgid "Frames per Second for this project"
+msgstr "Número de frames por segundo (fps) para este projecto"
+
+#: valid_fields.h:60
+msgid "Height of this project"
+msgstr "Altura deste projecto"
+
+#: valid_fields.h:61
+msgid "Name of this project"
+msgstr "Nome para o projecto"
+
+#: valid_fields.h:62
+msgid "Version number of the project file"
+msgstr "Número da versão para o projecto"
+
+#: valid_fields.h:63
+msgid "Width of this project"
+msgstr "Largura para este projecto"
+
+#: valid_fields.h:64
+msgid "An X * Y resolution value"
+msgstr "Valor X * Y para resolução"
+
+#: valid_fields.h:65
+msgid "Height for next screenshot"
+msgstr "Altura para próxima captura"
+
+#: valid_fields.h:66
+msgid "Width for next screenshot"
+msgstr "Largura para próxima captura"
+
+#: valid_fields.h:67
+msgid "Include control bar in exported swf"
+msgstr "Incluir barra de controlo no ficheiro swf de exportação"
+
+#: valid_fields.h:68
+msgid "Include info button in exported swf"
+msgstr "Incluir botão de info no ficheiro swf de exportação"
+
+#: valid_fields.h:69
+msgid "Show the background for text layers"
+msgstr "Mostrar fundo para camadas de texto"
+
+#: valid_fields.h:70
+msgid "Number of frames per slide"
+msgstr "Número de frames por slide"
+
+#: valid_fields.h:71
+msgid "Number of seconds in a slide"
+msgstr "Número de segundos por slide"
+
+#: valid_fields.h:72
+msgid "Name of this slide"
+msgstr "Nome deste slide"
+
+#: valid_fields.h:73
+msgid "Animation behavior after loading"
+msgstr "Comportamento da animaçãoo após carregamento"
+
+#: valid_fields.h:74
+msgid "Transition duration in seconds"
+msgstr "Duração da transição em segundos"
+
+#: valid_fields.h:75
+msgid "Type of transition"
+msgstr "Tipo de transição"
+
+#: valid_fields.h:76
+msgid "X Offset"
+msgstr "Deslocamento em X"
+
+#: valid_fields.h:77
+msgid "Y Offset"
+msgstr "Deslocamento em Y"
+
+#: valid_fields.h:78
+msgid "Magnification level of working area"
+msgstr "Aumento da área de trabalho"
 
 #: functions/create_menu_bar.c:96
 msgid "/_File"
-msgstr "/_File"
+msgstr "/_Arquivo"
 
 #: functions/create_menu_bar.c:97
 msgid "/File/_New Project"
-msgstr "/File/_New Project"
+msgstr "/Arquivo/_Novo Projeto"
 
 #: functions/create_menu_bar.c:97
 msgid "<control>N"
@@ -354,7 +530,7 @@ msgstr "<control>N"
 
 #: functions/create_menu_bar.c:98
 msgid "/File/_Open Project"
-msgstr "/File/_Open Project"
+msgstr "/Ficheiro/_Abrir Projecto"
 
 #: functions/create_menu_bar.c:98
 msgid "<control>O"
@@ -362,7 +538,7 @@ msgstr "<control>O"
 
 #: functions/create_menu_bar.c:99
 msgid "/File/_Save Project"
-msgstr "/File/_Save Project"
+msgstr "/Ficheiro/_Guardar Projecto"
 
 #: functions/create_menu_bar.c:99
 msgid "<control>S"
@@ -370,63 +546,63 @@ msgstr "<control>S"
 
 #: functions/create_menu_bar.c:100
 msgid "/File/Save _As Project"
-msgstr "/File/Save _As Project"
+msgstr "/Ficheiro/_Guardar Como..."
 
 #: functions/create_menu_bar.c:100
 msgid "<control><shift>S"
-msgstr "<control><shift>S"
+msgstr "<control><shift>G"
 
 #: functions/create_menu_bar.c:101
 msgid "/File/_Close Project"
-msgstr "/File/_Close Project"
+msgstr "/Ficheiro/_Fechar Projecto"
 
 #: functions/create_menu_bar.c:101
 msgid "<control>W"
-msgstr "<control>W"
+msgstr "<control>F"
 
 #: functions/create_menu_bar.c:102
 msgid "/File/Sep"
-msgstr "/File/Sep"
+msgstr "/Ficheiro/Sep"
 
 #: functions/create_menu_bar.c:103
 msgid "/File/_Quit"
-msgstr "/File/_Quit"
+msgstr "/Ficheiro/_Sair"
 
 #: functions/create_menu_bar.c:103
 msgid "<control>Q"
-msgstr "<control>Q"
+msgstr "<control>S"
 
 #: functions/create_menu_bar.c:105
 msgid "/_Edit"
-msgstr "/_Edit"
+msgstr "/_Editar"
 
 #: functions/create_menu_bar.c:106
 msgid "/Edit/_Preferences"
-msgstr "/Edit/_Preferences"
+msgstr "/Editar/_Preferências"
 
 #: functions/create_menu_bar.c:108
 msgid "/_Screenshots"
-msgstr "/_Screenshots"
+msgstr "/_Capturas"
 
 #: functions/create_menu_bar.c:109 functions/create_menu_bar.c:177
 msgid "/Screenshots/Capture _window"
-msgstr "/Screenshots/Capture _window"
+msgstr "/Capturas/Capturar _janela"
 
 #: functions/create_menu_bar.c:110 functions/create_menu_bar.c:178
 msgid "/Screenshots/Capture _full screen"
-msgstr "/Screenshots/Capture _full screen"
+msgstr "/Capturas/Capturar _Ecran Completo"
 
 #: functions/create_menu_bar.c:111
 msgid "/Screenshots/_Import"
-msgstr "/Screenshots/_Import"
+msgstr "/Capturas/_Importar"
 
 #: functions/create_menu_bar.c:113
 msgid "/_Project"
-msgstr "/_Project"
+msgstr "/_Projeto"
 
 #: functions/create_menu_bar.c:114
 msgid "/Project/P_roperties"
-msgstr "/Project/P_roperties"
+msgstr "/Projeto/P_ropriedades"
 
 #: functions/create_menu_bar.c:116
 msgid "/Sl_ide"
@@ -434,79 +610,79 @@ msgstr "/Sl_ide"
 
 #: functions/create_menu_bar.c:117
 msgid "/Slide/_Insert"
-msgstr "/Slide/_Insert"
+msgstr "/Slide/_Inserir"
 
 #: functions/create_menu_bar.c:118
 msgid "/Slide/_Delete"
-msgstr "/Slide/_Delete"
+msgstr "/Slide/_Eliminar"
 
 #: functions/create_menu_bar.c:119
 msgid "/Slide/Du_ration"
-msgstr "/Slide/Du_ration"
+msgstr "/Slide/_Duração"
 
 #: functions/create_menu_bar.c:120
 msgid "/Slide/Move _up"
-msgstr "/Slide/Move _up"
+msgstr "/Slide/Mover para cima"
 
 #: functions/create_menu_bar.c:121
 msgid "/Slide/Move dow_n"
-msgstr "/Slide/Move dow_n"
+msgstr "/Slide/Mover para baixo"
 
 #: functions/create_menu_bar.c:122
 msgid "/Slide/Move to _top"
-msgstr "/Slide/Move to _top"
+msgstr "/Slide/Mover para topo"
 
 #: functions/create_menu_bar.c:123
 msgid "/Slide/Move to _bottom"
-msgstr "/Slide/Move to _bottom"
+msgstr "/Slide/Mover para fundo"
 
 #: functions/create_menu_bar.c:125
 msgid "/_Layer"
-msgstr "/_Layer"
+msgstr "/Camada"
 
 #: functions/create_menu_bar.c:127
 msgid "/Layer/_Copy"
-msgstr "/Layer/_Copy"
+msgstr "/Camada/Copiar"
 
 #: functions/create_menu_bar.c:128
 msgid "/Layer/_Paste"
-msgstr "/Layer/_Paste"
+msgstr "/Camada/Colar"
 
 #: functions/create_menu_bar.c:129
 msgid "/Layer/_Edit"
-msgstr "/Layer/_Edit"
+msgstr "/Camada/Editar"
 
 #: functions/create_menu_bar.c:130
 msgid "/Layer/_Delete"
-msgstr "/Layer/_Delete"
+msgstr "/Camada/Eliminar"
 
 #: functions/create_menu_bar.c:131
 msgid "/Layer/Sep"
-msgstr "/Layer/Sep"
+msgstr "/Camada/Sep"
 
 #: functions/create_menu_bar.c:132
 msgid "/Layer/Add _Text"
-msgstr "/Layer/Add _Text"
+msgstr "/Layer/Adicionar Texto"
 
 #: functions/create_menu_bar.c:133
 msgid "/Layer/Add _Highlight"
-msgstr "/Layer/Add _Highlight"
+msgstr "/Layer/Adicionar Destaque"
 
 #: functions/create_menu_bar.c:134
 msgid "/Layer/Add _Image"
-msgstr "/Layer/Add _Image"
+msgstr "/Camada/Adicionar Imagem"
 
 #: functions/create_menu_bar.c:135
 msgid "/Layer/Add _Mouse"
-msgstr "/Layer/Add _Mouse"
+msgstr "/Camada/Adicionar rato"
 
 #: functions/create_menu_bar.c:137
 msgid "/E_xport"
-msgstr "/E_xport"
+msgstr "/Exportar"
 
 #: functions/create_menu_bar.c:138
 msgid "/Export/_Flash Animation"
-msgstr "/Export/_Flash Animation"
+msgstr "/Exportar/Animação Flash"
 
 #: functions/create_menu_bar.c:138
 msgid "<control><shift>F"
@@ -514,52 +690,52 @@ msgstr "<control><shift>F"
 
 #: functions/create_menu_bar.c:139
 msgid "/Export/_Html Wrapper"
-msgstr "/Export/_Html Wrapper"
+msgstr "/Exportar/Html Warapper"
 
 #: functions/create_menu_bar.c:140
 msgid "/Export/_Slide as Image"
-msgstr "/Export/_Slide as Image"
+msgstr "/Exportar/Slide como imagem"
 
 #: functions/create_menu_bar.c:141
 msgid "/Export/_Image Layer"
-msgstr "/Export/_Image Layer"
+msgstr "/Exportar/Imagem de camada"
 
 #: functions/create_menu_bar.c:143
 msgid "/_Help"
-msgstr "/_Help"
+msgstr "/Ajuda"
 
 #: functions/create_menu_bar.c:144
 msgid "/_Help/_About"
-msgstr "/_Help/_About"
+msgstr "/Ajuda/Sobre"
 
 #: functions/create_menu_bar.c:145
 msgid "/_Help/_Main Website"
-msgstr "/_Help/_Main Website"
+msgstr "/Ajuda/Homepage"
 
 #: functions/create_menu_bar.c:146
 msgid "/_Help/Sep"
-msgstr "/_Help/Sep"
+msgstr "/_Ajuda/Sep"
 
 #: functions/create_menu_bar.c:148
 msgid "/_Help/_Forum"
-msgstr "/_Help/_Forum"
+msgstr "/Ajuda/Forum"
 
 #: functions/create_menu_bar.c:149
 msgid "/_Help/_Register"
-msgstr "/_Help/_Register"
+msgstr "/Ajuda/Registar"
 
 #: functions/create_menu_bar.c:150
 msgid "/_Help/_Support"
-msgstr "/_Help/_Support"
+msgstr "/Ajuda/Suporte"
 
 #: functions/create_menu_bar.c:151
 msgid "/_Help/_Wiki"
-msgstr "/_Help/_Wiki"
+msgstr "/Ajuda/Wiki"
 
 #: functions/create_menu_bar.c:169 functions/menu/menu_file_close.c:97
 #: functions/menu/menu_file_new.c:321 functions/menu/menu_file_open.c:232
 msgid "/Project"
-msgstr "/Project"
+msgstr "/Projecto"
 
 #: functions/create_menu_bar.c:170 functions/menu/menu_file_close.c:98
 #: functions/menu/menu_file_new.c:322 functions/menu/menu_file_open.c:233
@@ -574,160 +750,160 @@ msgstr "/Layer"
 #: functions/create_menu_bar.c:172 functions/menu/menu_file_close.c:100
 #: functions/menu/menu_file_new.c:324 functions/menu/menu_file_open.c:235
 msgid "/Export"
-msgstr "/Export"
+msgstr "/Exportar"
 
 #: functions/create_time_line.c:117
 msgid "Edit"
-msgstr "Edit"
+msgstr "Editar"
 
 #: functions/create_time_line.c:118
 #: functions/enable_layer_toolbar_buttons.c:56
 msgid "Edit layer"
-msgstr "Edit layer"
+msgstr "Editar camada"
 
 #: functions/create_time_line.c:130
 msgid "Crop"
-msgstr "Crop"
+msgstr "Recortar"
 
 #: functions/create_time_line.c:131
 #: functions/enable_layer_toolbar_buttons.c:65
 msgid "Crop image"
-msgstr "Crop image"
+msgstr "Recortar imagem"
 
 #: functions/create_time_line.c:143
 msgid "Delete"
-msgstr "Delete"
+msgstr "Apagar"
 
 #: functions/create_time_line.c:144
 #: functions/enable_layer_toolbar_buttons.c:74
 msgid "Delete selected layer"
-msgstr "Delete selected layer"
+msgstr "Apagar camada seleccionada"
 
 #: functions/create_time_line.c:156
 msgid "Down"
-msgstr "Down"
+msgstr "Para baixo"
 
 #: functions/create_time_line.c:157
 #: functions/enable_layer_toolbar_buttons.c:83
 msgid "Move layer down"
-msgstr "Move layer down"
+msgstr "Mover camada para baixo"
 
 #: functions/create_time_line.c:169
 msgid "Up"
-msgstr "Up"
+msgstr "Para cima"
 
 #: functions/create_time_line.c:170
 #: functions/enable_layer_toolbar_buttons.c:92
 msgid "Move layer up"
-msgstr "Move layer up"
+msgstr "Mover camada para cima"
 
 #: functions/create_time_line.c:186
 msgid "Mouse"
-msgstr "Mouse"
+msgstr "Rato"
 
 #: functions/create_time_line.c:187
 #: functions/enable_layer_toolbar_buttons.c:101
 msgid "Add a mouse pointer"
-msgstr "Add a mouse pointer"
+msgstr "Adicionar ponteiro de rato"
 
 #: functions/create_time_line.c:199
 msgid "Text"
-msgstr "Text"
+msgstr "Texto"
 
 #: functions/create_time_line.c:200
 #: functions/enable_layer_toolbar_buttons.c:110
 msgid "Add a text layer"
-msgstr "Add a text layer"
+msgstr "Adicionar camada de texto"
 
 #: functions/create_time_line.c:212
 #: functions/layer/layer_new_highlight_inner.c:152
 msgid "Highlight"
-msgstr "Highlight"
+msgstr "Destacar"
 
 #: functions/create_time_line.c:213
 #: functions/enable_layer_toolbar_buttons.c:119
 msgid "Add a highlight layer"
-msgstr "Add a highlight layer"
+msgstr "Adicionar camada de destaque"
 
 #: functions/create_time_line.c:225 functions/layer/layer_duplicate.c:92
 #: functions/layer/layer_new_image_inner.c:97
 msgid "Image"
-msgstr "Image"
+msgstr "Imagem"
 
 #: functions/create_time_line.c:226
 #: functions/enable_layer_toolbar_buttons.c:128
 msgid "Add an image layer"
-msgstr "Add an image layer"
+msgstr "Adicionar camada de imagem"
 
 #: functions/create_toolbar.c:80
 msgid "New"
-msgstr "New"
+msgstr "Novo"
 
 #: functions/create_toolbar.c:81
 msgid "Begin a new project"
-msgstr "Begin a new project"
+msgstr "Iniciar novo projecto"
 
 #: functions/create_toolbar.c:87
 msgid "Open"
-msgstr "Open"
+msgstr "Abrir"
 
 #: functions/create_toolbar.c:88
 msgid "Open an existing project"
-msgstr "Open an existing project"
+msgstr "Abrir projecto existente"
 
 #: functions/create_toolbar.c:94
 msgid "Save"
-msgstr "Save"
+msgstr "Guardar"
 
 #: functions/create_toolbar.c:95
 msgid "Save the project"
-msgstr "Save the project"
+msgstr "Guardar projecto"
 
 #: functions/create_toolbar.c:101 functions/menu/menu_file_save_as.c:69
 msgid "Save As"
-msgstr "Save As"
+msgstr "Guardar como"
 
 #: functions/create_toolbar.c:102
 msgid "Save the project with a different file name"
-msgstr "Save the project with a different file name"
+msgstr "Guardar o projecto com nome diferente"
 
 #: functions/create_toolbar.c:108
 msgid "Quit"
-msgstr "Quit"
+msgstr "Sair"
 
 #: functions/create_toolbar.c:109
 msgid "Quit the application"
-msgstr "Quit the application"
+msgstr "Sair da aplicação"
 
 #: functions/create_toolbar.c:119
 msgid "Path to toolbar 'Capture Screenshots' icon"
-msgstr "Path to toolbar 'Capture Screenshots' icon"
+msgstr "Caminho para icone de barra de ferramentas 'Capturas'"
 
 #: functions/create_toolbar.c:126
 msgid "Capture"
-msgstr "Capture"
+msgstr "Capturar"
 
 #: functions/create_toolbar.c:127
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:132
 #: functions/menu/menu_screenshots_capture.c:255
 msgid "Capture screenshots"
-msgstr "Capture screenshots"
+msgstr "Capturas"
 
 #: functions/create_toolbar.c:139
 msgid "Import"
-msgstr "Import"
+msgstr "Importar"
 
 #: functions/create_toolbar.c:140
 msgid "Import screenshots"
-msgstr "Import screenshots"
+msgstr "Importar capturas"
 
 #: functions/create_toolbar.c:152
 msgid "Crop all"
-msgstr "Crop all"
+msgstr "Recortar todos"
 
 #: functions/create_toolbar.c:153 functions/enable_main_toolbar_buttons.c:49
 msgid "Crop all slides in the project"
-msgstr "Crop all slides in the project"
+msgstr "Recortar todos os slides do projecto"
 
 #: functions/create_toolbar.c:169
 msgid "Flash"
@@ -735,143 +911,143 @@ msgstr "Flash"
 
 #: functions/create_toolbar.c:170 functions/enable_main_toolbar_buttons.c:58
 msgid "Export as a Flash animation"
-msgstr "Export as a Flash animation"
+msgstr "Exportar como animação flash"
 
 #: functions/disable_layer_toolbar_buttons.c:47
 msgid "Edit layer disabled: No project loaded"
-msgstr "Edit layer disabled: No project loaded"
+msgstr "Editar camada inactiva: Sem projecto carregado"
 
 #: functions/disable_layer_toolbar_buttons.c:56
 msgid "Crop layer disabled: No project loaded"
-msgstr "Crop layer disabled: No project loaded"
+msgstr "Recortar camada inactiva: Sem projecto carregado"
 
 #: functions/disable_layer_toolbar_buttons.c:65
 msgid "Delete layer disabled: No project loaded"
-msgstr "Delete layer disabled: No project loaded"
+msgstr "Eliminar camada inactiva: Sem projecto carregado"
 
 #: functions/disable_layer_toolbar_buttons.c:74
 msgid "Move layer down disabled: No project loaded"
-msgstr "Move layer down disabled: No project loaded"
+msgstr "Mover camada abaixo inactiva: Sem projecto carregado"
 
 #: functions/disable_layer_toolbar_buttons.c:83
 msgid "Move layer up disabled: No project loaded"
-msgstr "Move layer up disabled: No project loaded"
+msgstr "Mover camada acima inactiva: Sem projecto carregado"
 
 #: functions/disable_layer_toolbar_buttons.c:92
 msgid "Add mouse pointer disabled: No project loaded"
-msgstr "Add mouse pointer disabled: No project loaded"
+msgstr "Adicionar ponteiro de rato inactivo: Sem projecto carregado"
 
 #: functions/disable_layer_toolbar_buttons.c:101
 msgid "Add text layer disabled: No project loaded"
-msgstr "Add text layer disabled: No project loaded"
+msgstr "Adicionar camada de texto inactiva: Sem projecto carregado"
 
 #: functions/disable_layer_toolbar_buttons.c:110
 msgid "Add highlight layer disabled: No project loaded"
-msgstr "Add highlight layer disabled: No project loaded"
+msgstr "Adicionar camada de destaque inactiva: Sem projecto carregado"
 
 #: functions/disable_layer_toolbar_buttons.c:119
 msgid "Add image layer disabled: No project loaded"
-msgstr "Add image layer disabled: No project loaded"
+msgstr "Adicionar camada de imagem inactiva: Sem projecto carregado"
 
 #: functions/disable_main_toolbar_buttons.c:47
 msgid "Crop disabled: No project loaded"
-msgstr "Crop disabled: No project loaded"
+msgstr "Recortar inactivo: Sem projecto carregado"
 
 #: functions/disable_main_toolbar_buttons.c:56
 msgid "Export to Flash disabled: No project loaded"
-msgstr "Export to Flash disabled: No project loaded"
+msgstr "Exportação para Flash inactiva: Sem projecto carregado"
 
 #: functions/draw_timeline.c:64
 msgid "Could not regenerate the time line widget."
-msgstr "Could not regenerate the time line widget."
+msgstr "Incapaz de regenerar o widget da linha temporal"
 
 #: functions/key_bind.c:64
 msgid ""
 "Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, "
 "so not sure how to.)  You will need to do this yourself manually."
 msgstr ""
-"Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, "
-"so not sure how to.)  You will need to do this yourself manually."
+"Incapaz de definir Ctrl-PrtSc como tecla de captura. (Metacity não está a "
+"ser executado)"
 
 #: functions/key_bind.c:80
 msgid ""
 "'salasaga_screencapture' not found in the search path. Screenshot capturing "
 "is disabled."
 msgstr ""
-"'salasaga_screencapture' not found in the search path. Screenshot capturing "
-"is disabled."
+"'salasaga_screencapture' não encontrado no caminho de pesquisa "
+"indicado.Capturas inactivas"
 
 #: functions/preferences_load.c:107
 msgid ""
 "There was something wrong with the project folder value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
-"There was something wrong with the project folder value stored in the "
-"preferences.  Using default preferences instead."
+"Erro com o valor indicado nas preferências do directório de projecto.A usar "
+"as definições standard."
 
 #: functions/preferences_load.c:121
 msgid ""
 "There was something wrong with the screenshots folder value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
-"There was something wrong with the screenshots folder value stored in the "
-"preferences.  Using default preferences instead."
+"Erro com o valor indicado no directório das capturas nas preferências.A usar "
+"as definições de origem."
 
 #: functions/preferences_load.c:135
 msgid ""
 "There was something wrong with the default output folder value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
-"There was something wrong with the default output folder value stored in the "
-"preferences.  Using default preferences instead."
+"Erro no valor indicado no directório de saída indicado nas preferências.A "
+"usar as definições de origem."
 
 #: functions/preferences_load.c:151
 msgid ""
 "There was something wrong with the default zoom level value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
-"There was something wrong with the default zoom level value stored in the "
-"preferences.  Using default preferences instead."
+"Ocorreu um erro com o nível de zoom indicado nas Preferências.A usar as "
+"definições de origem."
 
 #: functions/preferences_load.c:167 functions/preferences_load.c:182
 msgid ""
 "There was something wrong with the default project width value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
-"There was something wrong with the default project width value stored in the "
-"preferences.  Using default preferences instead."
+"Ocorreu um erro com o valor de largura do projecto indicado nas "
+"Preferências.A usar as definições de origem."
 
 #: functions/preferences_load.c:196
 msgid ""
 "There was something wrong with the default output width value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
-"There was something wrong with the default output width value stored in the "
-"preferences.  Using default preferences instead."
+"Ocorreu um erro com o valor de saída indicado nas Preferências.A usar as "
+"definições de origem."
 
 #: functions/preferences_load.c:210
 msgid ""
 "There was something wrong with the default output height value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
-"There was something wrong with the default output height value stored in the "
-"preferences.  Using default preferences instead."
+"Ocorreu um erro com o valor de altura indicado nas Preferências.A usar as "
+"definições de origem."
 
 #: functions/preferences_load.c:224
 msgid ""
 "There was something wrong with the default slide duration value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
-"There was something wrong with the default slide duration value stored in "
-"the preferences.  Using default preferences instead."
+"Ocorreu um erro com o valor da duração do Slide indicado nas Preferências.A "
+"usar as definições de origem."
 
 #: functions/preferences_load.c:238
 msgid ""
 "There was something wrong with the default layer duration value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
-"There was something wrong with the default layer duration value stored in "
-"the preferences.  Using default preferences instead."
+"Ocorreu um erro com o valor da duração da camada indicado nas Preferências.A "
+"usar as definições de origem."
 
 #: functions/preferences_load.c:252 functions/preferences_load.c:266
 #: functions/preferences_load.c:280
@@ -879,67 +1055,67 @@ msgid ""
 "There was something wrong with the default background color value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
-"There was something wrong with the default background colour value stored in "
-"the preferences.  Using default preferences instead."
+"Ocorreu um erro com o valor de cor de fundo indicada nas Preferências.A usar "
+"as definições de origem."
 
 #: functions/preferences_load.c:296
 msgid ""
 "There was something wrong with the film strip thumbnail width value stored "
 "in the preferences.  Using default preferences instead."
 msgstr ""
-"There was something wrong with the film strip thumbnail width value stored "
-"in the preferences.  Using default preferences instead."
+"Ocorreu um erro com o valor da largura da miniatura filme indicada nas "
+"Prefererências.A usar as definições de origem."
 
 #: functions/preferences_load.c:316
 msgid ""
 "There was something wrong with the default frames per second value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
-"There was something wrong with the default frames per second value stored in "
-"the preferences.  Using default preferences instead."
+"Ocorreu um erro com o valor das FPS indicadas nas Preferências.A usar as "
+"definições de origem."
 
 #: functions/preferences_load.c:332
 msgid ""
 "There was something wrong with the icon height value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
-"There was something wrong with the icon height value stored in the "
-"preferences.  Using default preferences instead."
+"Ocorreu um erro com o valor da altura de ìcone indicada nas Preferências.A "
+"usar as definições de origem."
 
 #: functions/preferences_load.c:764
 msgid "Some of the project default registry keys are missing\n"
-msgstr "Some of the project default registry keys are missing\n"
+msgstr "Algumas das chaves de registo do projecto estão em falta\n"
 
 #: functions/project_crop.c:96 functions/layer/image_crop.c:125
 msgid "Crop image layer"
-msgstr "Crop image layer"
+msgstr "Recortar camada de imagem"
 
 #: functions/project_crop.c:101 functions/layer/image_crop.c:130
 msgid "Left crop: "
-msgstr "Left crop: "
+msgstr "Recorte esquerdo: "
 
 #: functions/project_crop.c:112 functions/layer/image_crop.c:141
 msgid "Right crop: "
-msgstr "Right crop: "
+msgstr "Recorte direito: "
 
 #: functions/project_crop.c:123 functions/layer/image_crop.c:152
 msgid "Top crop: "
-msgstr "Top crop: "
+msgstr "Recorte de topo: "
 
 #: functions/project_crop.c:134 functions/layer/image_crop.c:163
 msgid "Bottom crop: "
-msgstr "Bottom crop: "
+msgstr "Recorte de fundo: "
 
 #: functions/project_crop.c:221 functions/layer/image_crop.c:215
 #: functions/layer/layer_duplicate.c:143
 #: functions/layer/layer_new_image_inner.c:167
 #: functions/menu/menu_screenshots_import.c:292
 msgid "Couldn't create an image pattern."
-msgstr "Couldn't create an image pattern."
+msgstr "Incapaz de criar padrão de imagem."
 
 #: functions/project_crop.c:250
 msgid "Project cropped"
-msgstr "Project cropped"
+msgstr "Projecto recortado"
 
 #: functions/project_read.c:145 functions/menu/menu_file_new.c:284
 #: functions/menu/menu_help_website.c:47
@@ -954,607 +1130,127 @@ msgstr "_blank"
 #: functions/project_read.c:148 functions/menu/menu_file_new.c:287
 #: functions/menu/menu_screenshots_import.c:97
 msgid "Created using Salasaga"
-msgstr "Created using Salasaga"
-
-#: functions/project_read.c:1377 functions/project_read.c:2240
-#: functions/layer/layer_new_highlight_inner.c:154
-#: functions/layer/layer_new_image_inner.c:99
-#: functions/layer/layer_new_mouse_inner.c:84
-#: functions/layer/layer_new_text_inner.c:95
-#: functions/menu/menu_screenshots_import.c:332
-#: functions/slide/slide_insert.c:66
-msgid "_self"
-msgstr "_self"
-
-#: functions/project_read.c:2827
-msgid "Aborting load of project file."
-msgstr "Aborting load of project file."
-
-#: functions/save_preferences_and_exit.c:168
-#: functions/save_preferences_and_exit.c:188
-msgid "Saving preferences in the registry failed."
-msgstr "Saving preferences in the registry failed."
-
-#: functions/validate_value.c:605
-msgid "Unknown value passed to validation function"
-msgstr "Unknown value passed to validation function"
-
-#: functions/callbacks/menu_screenshots_capture_full_screen.c:137
-#: functions/menu/menu_screenshots_capture.c:260
-msgid "X Offset: "
-msgstr "X Offset: "
-
-#: functions/callbacks/menu_screenshots_capture_full_screen.c:148
-#: functions/menu/menu_screenshots_capture.c:271
-msgid "Y Offset: "
-msgstr "Y Offset: "
-
-#: functions/callbacks/menu_screenshots_capture_full_screen.c:162
-#: functions/menu/menu_file_new.c:122
-#: functions/menu/menu_screenshots_capture.c:285
-msgid "Width: "
-msgstr "Width: "
-
-#: functions/callbacks/menu_screenshots_capture_full_screen.c:173
-#: functions/menu/menu_file_new.c:133
-#: functions/menu/menu_screenshots_capture.c:296
-msgid "Height: "
-msgstr "Height: "
-
-#: functions/callbacks/menu_screenshots_capture_full_screen.c:184
-#: functions/menu/menu_screenshots_capture.c:307
-msgid ""
-"Hint: Use the Control-Printscreen key\n"
-"combination to capture screenshots,\n"
-"then the Import button to import them."
-msgstr ""
-"Hint: Use the Control-Printscreen key\n"
-"combination to capture screenshots,\n"
-"then the Import button to import them."
-
-#: functions/callbacks/menu_screenshots_capture_full_screen.c:295
-#: functions/menu/menu_screenshots_capture.c:425
-#, c-format
-msgid "Keyboard hook LoadLibrary failed with error %d: %s"
-msgstr "Keyboard hook LoadLibrary failed with error %d: %s"
-
-#: functions/callbacks/menu_screenshots_capture_full_screen.c:306
-#: functions/menu/menu_screenshots_capture.c:436
-#, c-format
-msgid "Keyboard hook GetProcAddress failed with error %d: %s"
-msgstr "Keyboard hook GetProcAddress failed with error %d: %s"
-
-#: functions/callbacks/menu_screenshots_capture_full_screen.c:318
-#: functions/menu/menu_screenshots_capture.c:448
-#, c-format
-msgid "Keyboard hooking failed with error %d: %s"
-msgstr "Keyboard hooking failed with error %d: %s"
-
-#: functions/callbacks/menu_screenshots_capture_full_screen.c:331
-#: functions/menu/menu_screenshots_capture.c:461
-#, c-format
-msgid " Wrote capture settings file - %s"
-msgstr " Wrote capture settings file - %s"
-
-#: functions/layer/compress_layers_inner.c:350
-#: functions/layer/get_layer_position.c:194 functions/layer/layer_edit.c:207
-#: functions/working_area/calculate_object_boundaries.c:182
-#: functions/working_area/working_area_button_press_event.c:204
-#: functions/working_area/working_area_button_release_event.c:382
-#: functions/working_area/working_area_motion_notify_event.c:370
-msgid "Unknown layer type."
-msgstr "Unknown layer type."
-
-#: functions/layer/layer_duplicate.c:88
-#: functions/menu/menu_screenshots_import.c:330
-msgid "Background"
-msgstr "Background"
-
-#: functions/layer/layer_duplicate.c:95 functions/slide/slide_insert.c:64
-msgid "Empty"
-msgstr "Empty"
-
-#: functions/menu/menu_screenshots_capture.c:96
-msgid ""
-"Please click on the window you want to capture (after closing this dialog "
-"box)."
-msgstr ""
-"Please click on the window you want to capture (after closing this dialog "
-"box)."
-
-#: functions/menu/menu_screenshots_capture.c:142
-#, c-format
-msgid "Mouse pointer grabbed.\n"
-msgstr "Mouse pointer grabbed.\n"
-
-#: functions/menu/menu_screenshots_capture.c:164
-#, c-format
-msgid "Capture window set.\n"
-msgstr "Capture window set.\n"
-
-#: functions/menu/menu_screenshots_capture.c:187
-#, c-format
-msgid "Mouse pointer grab released.\n"
-msgstr "Mouse pointer grab released.\n"
-
-#: functions/menu/menu_screenshots_capture.c:207
-#, c-format
-msgid ""
-"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: "
-"%d\n"
-msgstr ""
-"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: "
-"%d\n"
-
-#: functions/menu/menu_screenshots_capture.c:218
-msgid ""
-"Window dimensions successfully retrieved.  Please use Control-Printscreen to "
-"take screenshots then Import when finished."
-msgstr ""
-"Window dimensions successfully retrieved.  Please use Control-Printscreen to "
-"take screenshots then Import when finished."
-
-#: functions/menu/menu_screenshots_capture.c:455
-#, c-format
-msgid ""
-" Wrote capture lock file - %s - and installed Control-Printscreen keyboard "
-"hook"
-msgstr ""
-" Wrote capture lock file - %s - and installed Control-Printscreen keyboard "
-"hook"
-
-#: functions/menu/menu_screenshots_import.c:113
-msgid "Something went wrong opening the screenshots folder."
-msgstr "Something went wrong opening the screenshots folder."
-
-#: functions/menu/menu_screenshots_import.c:124
-msgid ""
-"The screenshots folder doesn't exist.  Please update this in the project "
-"preferences and try again."
-msgstr ""
-"The screenshots folder doesn't exist.  Please update this in the project "
-"preferences and try again."
-
-#: functions/menu/menu_screenshots_import.c:135
-#: functions/menu/menu_screenshots_import.c:209
-#: functions/menu/menu_screenshots_import.c:212
-#: functions/menu/menu_screenshots_import.c:213
-msgid "screenshot"
-msgstr "screenshot"
-
-#: functions/menu/menu_screenshots_import.c:177
-msgid ""
-"Not all of the screenshots are of the same size, or some differ from the "
-"size of the project.  If you proceed, they will be scaled to the same size "
-"as the project.  Do you want to proceed?"
-msgstr ""
-"Not all of the screenshots are of the same size, or some differ from the "
-"size of the project.  If you proceed, they will be scaled to the same size "
-"as the project.  Do you want to proceed?"
-
-#: functions/menu/menu_screenshots_import.c:180
-msgid ""
-"Not all of the screenshots are of the same size, or some differ from the "
-"size of the project.  If you proceed, they will all be scaled to the size of "
-"the first one.  Do you want to proceed?"
-msgstr ""
-"Not all of the screenshots are of the same size, or some differ from the "
-"size of the project.  If you proceed, they will all be scaled to the size of "
-"the first one.  Do you want to proceed?"
-
-#: functions/menu/menu_screenshots_import.c:207
-msgid "No screenshots found in screenshot folder"
-msgstr "No screenshots found in screenshot folder"
-
-#: functions/menu/menu_screenshots_import.c:208
-msgid "They are case sensitive and must be named"
-msgstr "They are case sensitive and must be named"
-
-#: functions/menu/menu_screenshots_import.c:210
-msgid "Sequential Number"
-msgstr "Sequential Number"
-
-#: functions/menu/menu_screenshots_import.c:211
-msgid "For example"
-msgstr "For example"
-
-#: functions/menu/menu_screenshots_import.c:225
-msgid "Screenshots found"
-msgstr "Screenshots found"
-
-#: functions/menu/menu_screenshots_import.c:306
-msgid "Something went wrong when loading the screenshot"
-msgstr "Something went wrong when loading the screenshot"
-
-#: functions/menu/menu_screenshots_import.c:357
-msgid "Something went wrong when deleting the screenshot file"
-msgstr "Something went wrong when deleting the screenshot file"
-
-#: functions/menu/menu_screenshots_import.c:362
-msgid "Loaded image"
-msgstr "Loaded image"
-
-#: functions/menu/menu_screenshots_import.c:443
-msgid "screenshots imported"
-msgstr "screenshots imported"
-
-#: functions/slide/slide_delete.c:63
-msgid "You must leave at least one slide in a project."
-msgstr "You must leave at least one slide in a project."
-
-#: functions/slide/slide_delete.c:105
-msgid " Slide deleted"
-msgstr " Slide deleted"
-
-#: functions/slide/slide_duration.c:75
-msgid "Edit slide duration"
-msgstr "Edit slide duration"
-
-#: functions/slide/slide_duration.c:80
-msgid "Slide duration: "
-msgstr "Slide duration: "
-
-#: functions/slide/slide_duration.c:115
-msgid ""
-"There was something wrong with the slide duration value.  Please try again."
-msgstr ""
-"There was something wrong with the slide duration value.  Please try again."
-
-#: functions/slide/slide_duration.c:200
-msgid " Slide properties updated"
-msgstr " Slide properties updated"
-
-#: functions/slide/slide_insert.c:111
-msgid " Slide added"
-msgstr " Slide added"
-
-#: functions/slide/slide_move_bottom.c:94
-msgid " Slide moved to bottom"
-msgstr " Slide moved to bottom"
-
-#: functions/slide/slide_move_down.c:99
-msgid " Slide moved down"
-msgstr " Slide moved down"
-
-#: functions/slide/slide_move_top.c:92
-msgid " Slide moved to top"
-msgstr " Slide moved to top"
-
-#: functions/slide/slide_move_up.c:97
-msgid " Slide moved up"
-msgstr " Slide moved up"
-
-#: functions/widgets/time_line.c:915
-msgid "Couldn't create the time line background image."
-msgstr "Couldn't create the time line background image."
-
-#: functions/widgets/time_line.c:1104 functions/widgets/time_line.c:1118
-msgid "Couldn't create the time line display buffer image."
-msgstr "Couldn't create the time line display buffer image."
-
-#: functions/widgets/time_line.c:1637 functions/widgets/time_line.c:1748
-#: functions/widgets/time_line.c:1817
-msgid "Unknown layer resize type."
-msgstr "Unknown layer resize type."
-
-#: functions/widgets/time_line.c:2253 functions/widgets/time_line.c:2301
-msgid "Couldn't recreate time line background image."
-msgstr "Couldn't recreate time line background image."
-
-#: functions/widgets/time_line.c:2261 functions/widgets/time_line.c:2309
-msgid "Couldn't recreate time line display buffer."
-msgstr "Couldn't recreate time line display buffer."
-
-#: functions/widgets/time_line.c:2269 functions/widgets/time_line.c:2317
-msgid "Couldn't redraw the time line layer information."
-msgstr "Couldn't redraw the time line layer information."
-
-#: functions/widgets/time_line.c:2361
-msgid " Resize completed"
-msgstr " Resize completed"
-
-#: functions/widgets/time_line.c:2402
-msgid " Drag completed"
-msgstr " Drag completed"
-
-#: functions/working_area/draw_highlight_box.c:53
-#: functions/working_area/draw_highlight_box.c:92
-msgid "Not enough memory for pixbuf allocation."
-msgstr "Not enough memory for pixbuf allocation."
-
-#: functions/working_area/working_area_button_release_event.c:156
-msgid " Layer start point moved"
-msgstr " Layer start point moved"
-
-#: functions/working_area/working_area_button_release_event.c:158
-msgid " Layer end point moved"
-msgstr " Layer end point moved"
-
-#: functions/working_area/working_area_button_release_event.c:262
-#: functions/working_area/working_area_motion_notify_event.c:204
-msgid "Unknown resizing direction."
-msgstr "Unknown resizing direction."
-
-#: functions/working_area/working_area_button_release_event.c:320
-msgid " Layer resized"
-msgstr " Layer resized"
-
-#: functions/working_area/working_area_button_release_event.c:423
-msgid " Layer moved"
-msgstr " Layer moved"
-
-#: valid_fields.h:35
-msgid "8 Bit Color Value Component"
-msgstr ""
-
-#: valid_fields.h:36
-msgid "16 Bit Color Value Component"
-msgstr ""
-
-#: valid_fields.h:37
-msgid "Animation behavior after playing"
-msgstr ""
-
-#: valid_fields.h:38
-msgid "External link"
-msgstr ""
-
-#: valid_fields.h:39
-msgid "Window target for an external link"
-msgstr ""
-
-#: valid_fields.h:40
-msgid "Full path to a file"
-msgstr ""
-
-#: valid_fields.h:41
-msgid "Full path to a folder"
-msgstr ""
-
-#: valid_fields.h:42
-msgid "Font size"
-msgstr ""
-
-#: valid_fields.h:43
-msgid "A frame number"
-msgstr ""
-
-#: valid_fields.h:44
-msgid "Height of a highlight layer"
-msgstr ""
-
-#: valid_fields.h:45
-msgid "Width of a highlight layer"
-msgstr ""
-
-#: valid_fields.h:46
-msgid "Height of the tool bar icons"
-msgstr ""
-
-#: valid_fields.h:47
-msgid "Base64 encoded image data"
-msgstr ""
-
-#: valid_fields.h:48
-msgid "Length in bytes of image data"
-msgstr ""
-
-#: valid_fields.h:49
-msgid "Layer background switch"
-msgstr ""
-
-#: valid_fields.h:50
-msgid "Layer duration in seconds"
-msgstr ""
-
-#: valid_fields.h:51
-msgid "Height of this layer"
-msgstr ""
-
-#: valid_fields.h:52
-msgid "Name of this layer"
-msgstr ""
-
-#: valid_fields.h:53
-msgid "Layer visibility switch"
-msgstr ""
-
-#: valid_fields.h:54
-msgid "Width of this layer"
-msgstr ""
-
-#: valid_fields.h:55
-msgid "Line width"
-msgstr ""
-
-#: valid_fields.h:56
-msgid "Mouse click"
-msgstr ""
-
-#: valid_fields.h:57
-msgid "Opacity level"
-msgstr ""
-
-#: valid_fields.h:58
-msgid "Width of film strip thumbnails"
-msgstr ""
-
-#: valid_fields.h:59
-msgid "Frames per Second for this project"
-msgstr ""
-
-#: valid_fields.h:60
-msgid "Height of this project"
-msgstr ""
-
-#: valid_fields.h:61
-msgid "Name of this project"
-msgstr ""
-
-#: valid_fields.h:62
-msgid "Version number of the project file"
-msgstr ""
-
-#: valid_fields.h:63
-msgid "Width of this project"
-msgstr ""
-
-#: valid_fields.h:64
-msgid "An X * Y resolution value"
-msgstr ""
-
-#: valid_fields.h:65
-msgid "Height for next screenshot"
-msgstr ""
-
-#: valid_fields.h:66
-msgid "Width for next screenshot"
-msgstr ""
-
-#: valid_fields.h:67
-msgid "Include control bar in exported swf"
-msgstr ""
-
-#: valid_fields.h:68
-msgid "Include info button in exported swf"
-msgstr ""
-
-#: valid_fields.h:69
-msgid "Show the background for text layers"
-msgstr ""
-
-#: valid_fields.h:70
-msgid "Number of frames per slide"
-msgstr ""
-
-#: valid_fields.h:71
-msgid "Number of seconds in a slide"
-msgstr ""
-
-#: valid_fields.h:72
-msgid "Name of this slide"
-msgstr ""
-
-#: valid_fields.h:73
-msgid "Animation behavior after loading"
-msgstr ""
-
-#: valid_fields.h:74
-msgid "Transition duration in seconds"
-msgstr ""
-
-#: valid_fields.h:75
-msgid "Type of transition"
-msgstr ""
-
-#: valid_fields.h:76
-msgid "X Offset"
-msgstr ""
-
-#: valid_fields.h:77
-msgid "Y Offset"
-msgstr ""
-
-#: valid_fields.h:78
-msgid "Magnification level of working area"
-msgstr ""
+msgstr "Criado com Salasaga"
 
 #: functions/project_read.c:156
 msgid ""
 "The selected project file was not loaded successfully.  Please choose a "
 "different project file."
 msgstr ""
+"O projecto seleccionado não pode ser carregado com sucesso.Seleccione outro "
+"ficheiro."
 
 #: functions/project_read.c:165
 msgid "Project file is empty.  Please choose a different project file."
-msgstr ""
+msgstr "O ficheiro de Projecto está vazio. Seleccione outro ficheiro."
 
 #: functions/project_read.c:213
 msgid ""
 "Project meta data missing, aborting load.  Please choose a different project "
 "file."
 msgstr ""
+"Meta data do Projecto em falta, a abortar carregamento.Seleccione outro "
+"ficheiro."
 
 #: functions/project_read.c:222
 msgid ""
 "Project preferences missing, aborting load.  Please choose a different "
 "project file."
 msgstr ""
+"Preferências do Projecto em falta, a abortar carregamento.Seleccione outro "
+"ficheiro."
 
 #: functions/project_read.c:231
 msgid ""
 "No slides in project, aborting load.  Please choose a different project file."
 msgstr ""
+"O Projecto não contém Slides, a abortar carregamento.Seleccione outro "
+"ficheiro."
 
 #: functions/project_read.c:340
 msgid ""
 "Project Name missing, aborting load.  Please choose a different project file."
 msgstr ""
+"Nome do Projecto em falta, a abortar carregamento.Seleccione outro ficheiro."
 
 #: functions/project_read.c:347
 msgid ""
 "Project Width missing, aborting load.  Please choose a different project "
 "file."
 msgstr ""
+"Largura do Projecto em falta, a abortar carregamento.Seleccione outro "
+"ficheiro."
 
 #: functions/project_read.c:354
 msgid ""
 "Project Height missing, aborting load.  Please choose a different project "
 "file."
 msgstr ""
+"Altura do Projecto em falta, a abortar carregamento.Seleccione outro "
+"ficheiro."
 
 #: functions/project_read.c:364
 msgid ""
 "The file format value in the project file is not recognized.  This project "
 "file can't be used."
 msgstr ""
+"Formato do ficheiro não reconhecido.Este ficheiro não pode ser usado."
 
 #: functions/project_read.c:384
 msgid ""
 "There was something wrong with the project name value in the project file."
-msgstr ""
+msgstr "Ocorreu um erro com nome do projecto no ficheiro do projecto."
 
 #: functions/project_read.c:399
 msgid ""
 "There was something wrong with the output folder value in the project file."
 msgstr ""
+"Ocorreu um erro com o valor indicado na directoria de saída do ficheiro do "
+"projecto."
 
 #: functions/project_read.c:415
 msgid ""
 "There was something wrong with the output width value in the project file."
 msgstr ""
+"Ocorreu um erro no valor de largura indicado no ficheiro do projecto."
 
 #: functions/project_read.c:430
 msgid ""
 "There was something wrong with the output height value in the project file."
 msgstr ""
+"Ocorreu um erro com o valor de altura indicado no ficheiro do projecto."
 
 #: functions/project_read.c:445 functions/project_read.c:460
 msgid ""
 "There was something wrong with the project width value in the project file."
 msgstr ""
+"Ocorreu um erro com o valor de largura indicado no ficheiro do projecto."
 
 #: functions/project_read.c:477
 msgid ""
 "There was something wrong with the frames per second value in the project "
 "file."
-msgstr ""
+msgstr "Ocorreu um erro com o valor de FPS indicado no ficheiro do projecto."
 
 #: functions/project_read.c:494
 msgid ""
 "There was something wrong with the start behavior value in the project file."
 msgstr ""
+"Ocorreu um erro com o valor de comportamento de início no ficheirodo "
+"projecto."
 
 #: functions/project_read.c:522
 msgid ""
 "There was something wrong with the end behavior value in the project file."
-msgstr ""
+msgstr "Ocorreu um erro com o comportamento de fim no ficheiro do projecto."
 
 #: functions/project_read.c:556
 msgid ""
 "There was something wrong with the control bar display value in the project "
 "file."
 msgstr ""
+"Ocorreu um erro com o valor de apresentação da barra de controlono ficheiro "
+"do projecto."
 
 #: functions/project_read.c:584
 msgid ""
@@ -1575,6 +1271,7 @@ msgid ""
 "There was something wrong with a red component color value in the project "
 "file."
 msgstr ""
+"Ocorreu um erro com o valor do componente vermelho no ficheiro do projecto."
 
 #: functions/project_read.c:721 functions/project_read.c:1418
 #: functions/project_read.c:1478 functions/project_read.c:2348
@@ -1583,6 +1280,7 @@ msgid ""
 "There was something wrong with a green component color value in the project "
 "file."
 msgstr ""
+"Ocorreu um erro com o valor do componente verde no ficheiro do projecto."
 
 #: functions/project_read.c:737 functions/project_read.c:1433
 #: functions/project_read.c:1493 functions/project_read.c:2364
@@ -1591,18 +1289,20 @@ msgid ""
 "There was something wrong with a blue component color value in the project "
 "file."
 msgstr ""
+"Ocorreu um erro com o valor do componente azul no ficheiro do projecto."
 
 #: functions/project_read.c:756 functions/project_read.c:1622
 #: functions/project_read.c:2007 functions/project_read.c:2537
 msgid ""
 "There was something wrong with a start frame value in the project file."
 msgstr ""
+"Ocorreu um erro com o valor da frame de início no ficheiro do projecto."
 
 #: functions/project_read.c:772 functions/project_read.c:1638
 #: functions/project_read.c:2023 functions/project_read.c:2553
 msgid ""
 "There was something wrong with a finish frame value in the project file."
-msgstr ""
+msgstr "Ocorreu um erro com o valor da frame de fim do ficheiro do projecto."
 
 #: functions/project_read.c:790 functions/project_read.c:1656
 #: functions/project_read.c:2041 functions/project_read.c:2571
@@ -1615,24 +1315,29 @@ msgstr ""
 msgid ""
 "There was something wrong with a layer duration value in the project file."
 msgstr ""
+"Ocorreu um erro com o valor da duração da camada no ficheiro do projecto."
 
 #: functions/project_read.c:823 functions/project_read.c:1689
 #: functions/project_read.c:2074 functions/project_read.c:2604
 msgid ""
 "There was something wrong with a layer visibility value in the project file."
 msgstr ""
+"Ocorreu um erro com o valor da visibilidade da camada no ficheiro do "
+"projecto."
 
 #: functions/project_read.c:839 functions/project_read.c:1705
 #: functions/project_read.c:2090 functions/project_read.c:2620
 msgid ""
 "There was something wrong with a layer name value in the project file."
 msgstr ""
+"Ocorreu um erro com o valor do nome da camada no ficheiro do projecto."
 
 #: functions/project_read.c:855 functions/project_read.c:1721
 #: functions/project_read.c:2106 functions/project_read.c:2636
 msgid ""
 "There was something wrong with an external link value in the project file."
 msgstr ""
+"Ocorreu um erro com o valor de um link externo no ficheiro do projecto."
 
 #: functions/project_read.c:871 functions/project_read.c:1737
 #: functions/project_read.c:2122 functions/project_read.c:2652
@@ -1640,6 +1345,8 @@ msgid ""
 "There was something wrong with an external link target window value in the "
 "project file."
 msgstr ""
+"Ocorreu um erro com o valor de um link externo para uma janelade destino no "
+"ficheiro do projecto."
 
 #: functions/project_read.c:931
 msgid ""
@@ -1670,18 +1377,24 @@ msgid ""
 "There was something wrong with an image layer width value in the project "
 "file."
 msgstr ""
+"Ocorreu um erro com o valor da largura de uma camada de imagem no ficheirodo "
+"projecto"
 
 #: functions/project_read.c:1011
 msgid ""
 "There was something wrong with an image layer height value in the project "
 "file."
 msgstr ""
+"Ocorreu um erro com o valor de largura de uma camada de imagem nno "
+"ficheirodo projecto."
 
 #: functions/project_read.c:1027
 msgid ""
 "There was something wrong with an image layer background value in the "
 "project file."
 msgstr ""
+"Ocorreu um erro com o valor de fundo de uma camda de imagem no ficheirodo "
+"projecto."
 
 #: functions/project_read.c:1045
 msgid ""
@@ -1723,6 +1436,8 @@ msgid ""
 "There was something wrong with an image layer external link value in the "
 "project file."
 msgstr ""
+"Ocorreu um erro com o valor de um link externo numa camada de imagem do "
+"projecto."
 
 #: functions/project_read.c:1160
 msgid ""
@@ -1756,41 +1471,58 @@ msgid ""
 "There was something wrong with an image transition in duration value in the "
 "project file."
 msgstr ""
+"Ocorreu um erro com o valor de duração de entrada da transição de uma "
+"imagemno ficheiro do projecto."
 
 #: functions/project_read.c:1269
 msgid ""
 "There was something wrong with an image transition out type value in the "
 "project file."
 msgstr ""
+"Ocorreu um erro com o tipo de valor de duração de saída de transição de uma "
+"imagemno ficheiro do projecto."
 
 #: functions/project_read.c:1291
 msgid ""
 "There was something wrong with an image transition out duration value in the "
 "project file."
 msgstr ""
+"Ocorreu um erro com o valor de duração de saída da transição de uma imagemno "
+"ficheiro do projecto."
 
 #: functions/project_read.c:1317 functions/project_read.c:1324
 msgid "Image data loading failed"
-msgstr ""
+msgstr "O carregamento dos dados da imagem falhou"
 
 #: functions/project_read.c:1331
 msgid "Error when loading image data"
-msgstr ""
+msgstr "Erro ao carregar dados da imagem"
 
 #: functions/project_read.c:1341
 msgid "Couldn't create an image pattern"
-msgstr ""
+msgstr "Incapaz de criar padrão de imagem."
+
+#: functions/project_read.c:1377 functions/project_read.c:2240
+#: functions/layer/layer_new_highlight_inner.c:154
+#: functions/layer/layer_new_image_inner.c:99
+#: functions/layer/layer_new_mouse_inner.c:84
+#: functions/layer/layer_new_text_inner.c:95
+#: functions/menu/menu_screenshots_import.c:332
+#: functions/slide/slide_insert.c:66
+msgid "_self"
+msgstr "_self"
 
 #: functions/project_read.c:1448
 msgid ""
 "There was something wrong with a highlight border width value in the project "
 "file."
 msgstr ""
+"Ocorreu um erro com o valor da espessura de linha de um destaque no projecto."
 
 #: functions/project_read.c:1508
 msgid ""
 "There was something wrong with a highlight opacity value in the project file."
-msgstr ""
+msgstr "Ocorreu um erro com o valor da opacidade de um destaque no projecto."
 
 #: functions/project_read.c:1523 functions/project_read.c:1873
 #: functions/project_read.c:2268
@@ -1824,14 +1556,14 @@ msgstr ""
 #: functions/project_read.c:1603 functions/project_read.c:1953
 msgid ""
 "There was something wrong with a layer height value in the project file."
-msgstr ""
+msgstr "Ocorreu um erro com o valor da altura da camada do projecto."
 
 #: functions/project_read.c:1753 functions/project_read.c:2138
 #: functions/project_read.c:2668
 msgid ""
 "There was something wrong with a transition in type value in the project "
 "file."
-msgstr ""
+msgstr "Ocorreu um erro com um valor de tipo de transição no projecto."
 
 #: functions/project_read.c:1775 functions/project_read.c:2160
 #: functions/project_read.c:2690
@@ -1839,13 +1571,14 @@ msgid ""
 "There was something wrong with a transition in duration value in the project "
 "file."
 msgstr ""
+"Ocorreu um erro com um valor de duração de uma transição no projecto."
 
 #: functions/project_read.c:1791 functions/project_read.c:2176
 #: functions/project_read.c:2706
 msgid ""
 "There was something wrong with a transition out type value in the project "
 "file."
-msgstr ""
+msgstr "Ocorreu um erro com um valor de transição de saída no projecto."
 
 #: functions/project_read.c:1813 functions/project_read.c:2198
 #: functions/project_read.c:2728
@@ -1885,6 +1618,19 @@ msgid ""
 "There was something wrong with a slide duration value in the project file."
 msgstr ""
 
+#: functions/project_read.c:2827
+msgid "Aborting load of project file."
+msgstr "A abortar carregamento de ficheiro de projecto."
+
+#: functions/save_preferences_and_exit.c:168
+#: functions/save_preferences_and_exit.c:188
+msgid "Saving preferences in the registry failed."
+msgstr ""
+
+#: functions/validate_value.c:605
+msgid "Unknown value passed to validation function"
+msgstr "Valor desconhecido na função de validação"
+
 #: functions/cairo/create_cairo_pixbuf_pattern.c:70
 msgid "Unable to allocate memory for pixel buffer."
 msgstr ""
@@ -1904,12 +1650,65 @@ msgstr ""
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:87
 #, c-format
 msgid "Window geometry retrieved. Width: %d\tHeight: %d\n"
-msgstr ""
+msgstr "Geometria da janela adquirida. Largura: %d\tAltura: %d\n"
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:98
 msgid ""
 "Capture dimensions set to full screen.  Please use Control-Printscreen to "
 "take screenshots then Import when finished."
+msgstr ""
+"Dimensões da captura definidas para ecrân completo. Use Ctrl-PrtSc paracriar "
+"Capturas e Importar."
+
+#: functions/callbacks/menu_screenshots_capture_full_screen.c:137
+#: functions/menu/menu_screenshots_capture.c:260
+msgid "X Offset: "
+msgstr ""
+
+#: functions/callbacks/menu_screenshots_capture_full_screen.c:148
+#: functions/menu/menu_screenshots_capture.c:271
+msgid "Y Offset: "
+msgstr ""
+
+#: functions/callbacks/menu_screenshots_capture_full_screen.c:162
+#: functions/menu/menu_file_new.c:122
+#: functions/menu/menu_screenshots_capture.c:285
+msgid "Width: "
+msgstr "Largura: "
+
+#: functions/callbacks/menu_screenshots_capture_full_screen.c:173
+#: functions/menu/menu_file_new.c:133
+#: functions/menu/menu_screenshots_capture.c:296
+msgid "Height: "
+msgstr "Altura: "
+
+#: functions/callbacks/menu_screenshots_capture_full_screen.c:184
+#: functions/menu/menu_screenshots_capture.c:307
+msgid ""
+"Hint: Use the Control-Printscreen key\n"
+"combination to capture screenshots,\n"
+"then the Import button to import them."
+msgstr ""
+"Dica: Use a tecla Ctrl-PrtSc\n"
+"para realizar capturas, depois\n"
+"use o botão Importar."
+
+#: functions/callbacks/menu_screenshots_capture_full_screen.c:295
+#: functions/menu/menu_screenshots_capture.c:425
+#, c-format
+msgid "Keyboard hook LoadLibrary failed with error %d: %s"
+msgstr ""
+
+#: functions/callbacks/menu_screenshots_capture_full_screen.c:306
+#: functions/menu/menu_screenshots_capture.c:436
+#, c-format
+msgid "Keyboard hook GetProcAddress failed with error %d: %s"
+msgstr ""
+
+#: functions/callbacks/menu_screenshots_capture_full_screen.c:318
+#: functions/menu/menu_screenshots_capture.c:448
+#, c-format
+msgid "Keyboard hooking failed with error %d: %s"
 msgstr ""
 
 #: functions/callbacks/menu_screenshots_capture_full_screen.c:325
@@ -1917,6 +1716,12 @@ msgstr ""
 msgid ""
 " Wrote capture settings file - %s - and installed Control-Printscreen "
 "keyboard hook"
+msgstr ""
+
+#: functions/callbacks/menu_screenshots_capture_full_screen.c:331
+#: functions/menu/menu_screenshots_capture.c:461
+#, c-format
+msgid " Wrote capture settings file - %s"
 msgstr ""
 
 #: functions/conversion/base64_decode.c:134
@@ -1934,7 +1739,7 @@ msgstr ""
 
 #: functions/dialog/display_dialog_empty.c:80
 msgid "Background Color: "
-msgstr ""
+msgstr "Cor de Fundo: "
 
 #: functions/dialog/display_dialog_empty.c:89
 #: functions/dialog/display_dialog_highlight.c:377
@@ -1942,7 +1747,7 @@ msgstr ""
 #: functions/dialog/display_dialog_mouse.c:350
 #: functions/dialog/display_dialog_text.c:259
 msgid "External link: "
-msgstr ""
+msgstr "Link externo: "
 
 #: functions/dialog/display_dialog_empty.c:101
 #: functions/dialog/display_dialog_highlight.c:389
@@ -1950,7 +1755,7 @@ msgstr ""
 #: functions/dialog/display_dialog_mouse.c:362
 #: functions/dialog/display_dialog_text.c:271
 msgid "External link window: "
-msgstr ""
+msgstr "Link para janela externa: "
 
 #: functions/dialog/display_dialog_empty.c:136
 #: functions/dialog/display_dialog_highlight.c:578
@@ -1960,37 +1765,39 @@ msgstr ""
 msgid ""
 "There was something wrong with the external link value.  Please try again."
 msgstr ""
+"Ocorreu um erro com o valor do link para janela externa. Tente novamente."
 
 #: functions/dialog/display_dialog_empty.c:150
 msgid ""
 "There was something wrong with the external link window target value.  "
 "Please try again."
 msgstr ""
+"Ocorreu um erro com o valor do link para janela externa.Tente novamente."
 
 #: functions/dialog/display_dialog_highlight.c:151
 #: functions/dialog/display_dialog_image.c:132
 #: functions/dialog/display_dialog_mouse.c:133
 msgid "Layer Name: "
-msgstr ""
+msgstr "Nome da camda: "
 
 #: functions/dialog/display_dialog_highlight.c:163
 #: functions/dialog/display_dialog_text.c:226
 msgid "Background fill color: "
-msgstr ""
+msgstr "Cor de preenchimento do Fundo: "
 
 #: functions/dialog/display_dialog_highlight.c:174
 #: functions/dialog/display_dialog_text.c:237
 msgid "Background border color: "
-msgstr ""
+msgstr "Cor de contorno do Fundo: "
 
 #: functions/dialog/display_dialog_highlight.c:185
 #: functions/dialog/display_dialog_text.c:248
 msgid "Background border width: "
-msgstr ""
+msgstr "Espessura do contorno de Fundo: "
 
 #: functions/dialog/display_dialog_highlight.c:196
 msgid "Opacity: "
-msgstr ""
+msgstr "Opacidade: "
 
 #: functions/dialog/display_dialog_highlight.c:207
 msgid "Starting X Offset:"
@@ -2010,32 +1817,32 @@ msgstr ""
 
 #: functions/dialog/display_dialog_highlight.c:255
 msgid "Width:"
-msgstr ""
+msgstr "Largura:"
 
 #: functions/dialog/display_dialog_highlight.c:267
 msgid "Height:"
-msgstr ""
+msgstr "Altura:"
 
 #: functions/dialog/display_dialog_highlight.c:279
 #: functions/dialog/display_dialog_image.c:188
 #: functions/dialog/display_dialog_mouse.c:189
 #: functions/dialog/display_dialog_text.c:294
 msgid "Is this layer visible?"
-msgstr ""
+msgstr "Esta camada é visível?"
 
 #: functions/dialog/display_dialog_highlight.c:291
 #: functions/dialog/display_dialog_image.c:200
 #: functions/dialog/display_dialog_mouse.c:201
 #: functions/dialog/display_dialog_text.c:355
 msgid "Starting time (seconds): "
-msgstr ""
+msgstr "Tempo de início (segundos): "
 
 #: functions/dialog/display_dialog_highlight.c:303
 #: functions/dialog/display_dialog_image.c:212
 #: functions/dialog/display_dialog_mouse.c:213
 #: functions/dialog/display_dialog_text.c:367
 msgid "Start how: "
-msgstr ""
+msgstr "Começar como: "
 
 #: functions/dialog/display_dialog_highlight.c:307
 #: functions/dialog/display_dialog_highlight.c:350
@@ -2046,7 +1853,7 @@ msgstr ""
 #: functions/dialog/display_dialog_text.c:371
 #: functions/dialog/display_dialog_text.c:414
 msgid "Immediate"
-msgstr ""
+msgstr "Imediato"
 
 #: functions/dialog/display_dialog_highlight.c:308
 #: functions/dialog/display_dialog_image.c:217
@@ -2060,21 +1867,21 @@ msgstr ""
 #: functions/dialog/display_dialog_mouse.c:232
 #: functions/dialog/display_dialog_text.c:386
 msgid "Start duration (seconds):"
-msgstr ""
+msgstr "Diração de início (segundos):"
 
 #: functions/dialog/display_dialog_highlight.c:334
 #: functions/dialog/display_dialog_image.c:243
 #: functions/dialog/display_dialog_mouse.c:244
 #: functions/dialog/display_dialog_text.c:398
 msgid "Display for (seconds): "
-msgstr ""
+msgstr "Mostrar por (segundos): "
 
 #: functions/dialog/display_dialog_highlight.c:346
 #: functions/dialog/display_dialog_image.c:255
 #: functions/dialog/display_dialog_mouse.c:256
 #: functions/dialog/display_dialog_text.c:410
 msgid "Exit how: "
-msgstr ""
+msgstr "Sair como: "
 
 #: functions/dialog/display_dialog_highlight.c:351
 #: functions/dialog/display_dialog_image.c:260
@@ -2088,22 +1895,22 @@ msgstr ""
 #: functions/dialog/display_dialog_mouse.c:275
 #: functions/dialog/display_dialog_text.c:429
 msgid "Exit duration (seconds):"
-msgstr ""
+msgstr "Duração de saída (segundos):"
 
 #: functions/dialog/display_dialog_highlight.c:424
 #: functions/dialog/display_dialog_image.c:337
 #: functions/dialog/display_dialog_mouse.c:397
 msgid "There was something wrong with the new layer name.  Please try again."
-msgstr ""
+msgstr "Ocorreu um erro com o novo nome da camada. Tente novamente,"
 
 #: functions/dialog/display_dialog_highlight.c:439
 msgid ""
 "There was something wrong with the border width value.  Please try again."
-msgstr ""
+msgstr "Ocorreu um erro com o valor da largura do contorno. Tente novamente."
 
 #: functions/dialog/display_dialog_highlight.c:453
 msgid "There was something wrong with the opacity value.  Please try again."
-msgstr ""
+msgstr "Ocorreu um erro com o valor da opacidade. Tente novamente."
 
 #: functions/dialog/display_dialog_highlight.c:467
 #: functions/dialog/display_dialog_image.c:352
@@ -2144,7 +1951,7 @@ msgstr ""
 #: functions/dialog/display_dialog_highlight.c:537
 msgid ""
 "There was something wrong with the highlight height value.  Please try again."
-msgstr ""
+msgstr "Ocorreu um erro com o valor da altura do destaque. Tente novamente."
 
 #: functions/dialog/display_dialog_highlight.c:551
 #: functions/dialog/display_dialog_image.c:408
@@ -2152,14 +1959,14 @@ msgstr ""
 #: functions/dialog/display_dialog_text.c:564
 msgid ""
 "There was something wrong with the starting time value.  Please try again."
-msgstr ""
+msgstr "Ocorreu um erro com o valor do tempo de início. Tente novamente."
 
 #: functions/dialog/display_dialog_highlight.c:565
 #: functions/dialog/display_dialog_image.c:422
 #: functions/dialog/display_dialog_mouse.c:482
 #: functions/dialog/display_dialog_text.c:578
 msgid "There was something wrong with the duration value.  Please try again."
-msgstr ""
+msgstr "Ocorreu um erro com o valor da duração. Tente novamente."
 
 #: functions/dialog/display_dialog_highlight.c:592
 #: functions/dialog/display_dialog_image.c:506
@@ -2232,35 +2039,35 @@ msgstr ""
 
 #: functions/dialog/display_dialog_mouse.c:287
 msgid "Mouse click type: "
-msgstr ""
+msgstr "Tipo de clique de rato: "
 
 #: functions/dialog/display_dialog_mouse.c:291
 msgid "No mouse click"
-msgstr ""
+msgstr "Sem clique de rato"
 
 #: functions/dialog/display_dialog_mouse.c:292
 msgid "Left single click"
-msgstr ""
+msgstr "Clique esquerdo"
 
 #: functions/dialog/display_dialog_mouse.c:293
 msgid "Left double click"
-msgstr ""
+msgstr "Clique esquerdo duplo"
 
 #: functions/dialog/display_dialog_mouse.c:294
 msgid "Left triple click"
-msgstr ""
+msgstr "Clique esquerdo triplo"
 
 #: functions/dialog/display_dialog_mouse.c:295
 msgid "Right single click"
-msgstr ""
+msgstr "Clique direito"
 
 #: functions/dialog/display_dialog_mouse.c:296
 msgid "Right double click"
-msgstr ""
+msgstr "Clique direito duplo"
 
 #: functions/dialog/display_dialog_mouse.c:297
 msgid "Right triple click"
-msgstr ""
+msgstr "Clique direito triplo"
 
 #: functions/dialog/display_dialog_mouse.c:298
 msgid "Middle single click"
@@ -2279,54 +2086,56 @@ msgid ""
 "There was something wrong with the mouse click type selected.  Please try "
 "again."
 msgstr ""
+"Ocorreu um erro com o tipo de clique de rato seleccionado. Tente novamente."
 
 #: functions/dialog/display_dialog_save_warning.c:44
 msgid "Project has been modified.  Save changes?"
-msgstr ""
+msgstr "O Projecto foi alterado. Guardar alterações?"
 
 #: functions/dialog/display_dialog_text.c:163
 msgid "Appearance & Links"
-msgstr ""
+msgstr "Aparência e Links"
 
 #: functions/dialog/display_dialog_text.c:165
 msgid "Duration"
-msgstr ""
+msgstr "Duração"
 
 #: functions/dialog/display_dialog_text.c:191
 msgid "Layer name: "
-msgstr ""
+msgstr "Nome da camada: "
 
 #: functions/dialog/display_dialog_text.c:203
 msgid "Font size: "
-msgstr ""
+msgstr "Tamanho da fonte: "
 
 #: functions/dialog/display_dialog_text.c:215
 msgid "Text color: "
-msgstr ""
+msgstr "Cor do texto: "
 
 #: functions/dialog/display_dialog_text.c:283
 msgid "Display the background?"
-msgstr ""
+msgstr "Mostrar o Fundo?"
 
 #: functions/dialog/display_dialog_text.c:465
 msgid ""
 "There was something wrong with the layer name value.  Please try again."
-msgstr ""
+msgstr "Ocorreu um erro com o valor do nome da camada. Tente novamente."
 
 #: functions/dialog/display_dialog_text.c:536
 msgid ""
 "There was something wrong with the font size value.  Please try again."
-msgstr ""
+msgstr "Ocorreu um erro com o valor do tamanho da fonte. Tente novamente."
 
 #: functions/dialog/display_dialog_text.c:550
 msgid ""
 "There was something wrong with the background border width value.  Please "
 "try again."
 msgstr ""
+"Ocorreu um erro com o valor da largura do contorno do Fundo.Tente novamente."
 
 #: functions/export/html/export_html_wrapper.c:65
 msgid "Export Html"
-msgstr ""
+msgstr "Exportar Html"
 
 #: functions/export/html/export_html_wrapper.c:75
 msgid "HyperText Markup Language (*.html)"
@@ -2337,7 +2146,7 @@ msgstr ""
 #: functions/menu/menu_export_slide.c:80 functions/menu/menu_file_open.c:105
 #: functions/menu/menu_file_save_as.c:85
 msgid "All files (*.*)"
-msgstr ""
+msgstr "Todos os ficheiros (*.*)"
 
 #: functions/export/html/export_html_wrapper.c:121
 #: functions/menu/menu_export_swf.c:130 functions/menu/menu_export_layer.c:139
@@ -2345,18 +2154,18 @@ msgstr ""
 #: functions/menu/menu_file_save_as.c:141
 msgid ""
 "There was something wrong with the file name given.  Please try again."
-msgstr ""
+msgstr "Ocorreu um erro com o nome de ficheiro atribuído. Tente novamente."
 
 #: functions/export/html/export_html_wrapper.c:133
 #: functions/menu/menu_export_swf.c:142 functions/menu/menu_export_layer.c:152
 #: functions/menu/menu_export_slide.c:132
 #: functions/menu/menu_file_save_as.c:153
 msgid "Overwrite existing file?"
-msgstr ""
+msgstr "Substituir ficheiro existente?"
 
 #: functions/export/html/export_html_wrapper.c:167
 msgid "Couldn't create the output file."
-msgstr ""
+msgstr "Incapaz de criar ficheiro de saída."
 
 #: functions/export/html/export_html_wrapper.c:201
 msgid "Wrote html wrapper"
@@ -2376,17 +2185,20 @@ msgstr ""
 #: functions/export/swf/export_swf_control_bar.c:523
 msgid "Restart button pressed, slide counter has been set to:"
 msgstr ""
+"Botão de reiníciar pressionado, contador de slides foi alterado para:"
 
 #: functions/export/swf/export_swf_control_bar.c:527
 #: functions/export/swf/export_swf_control_bar.c:674
 #: functions/export/swf/export_swf_control_bar.c:1011
 msgid "We should now jump to the slide named"
-msgstr ""
+msgstr "Devemos saltar para o slide com o nome"
 
 #: functions/export/swf/export_swf_control_bar.c:617
 msgid ""
 "Rewind button pressed while in first slide, slide counter has been set to:"
 msgstr ""
+"Botão de Retroceder pressionado no primeiro slide, contador de slides foi "
+"alterado para:"
 
 #: functions/export/swf/export_swf_control_bar.c:621
 #: functions/export/swf/export_swf_control_bar.c:670
@@ -2397,7 +2209,7 @@ msgstr ""
 
 #: functions/export/swf/export_swf_control_bar.c:625
 msgid "We should now jump to the first frame of the movie."
-msgstr ""
+msgstr "Devemos saltar para a primeira frame do filme."
 
 #: functions/export/swf/export_swf_control_bar.c:632
 #: functions/export/swf/export_swf_control_bar.c:641
@@ -2406,11 +2218,11 @@ msgstr ""
 #: functions/export/swf/export_swf_control_bar.c:1018
 #: functions/export/swf/export_swf_control_bar.c:1027
 msgid "Using"
-msgstr ""
+msgstr "A usar"
 
 #: functions/export/swf/export_swf_control_bar.c:662
 msgid "Rewind button pressed, slide counter has been set to:"
-msgstr ""
+msgstr "Botão Retroceder pressionado, contador de slides alterado para:"
 
 #: functions/export/swf/export_swf_control_bar.c:666
 msgid "'_root.reversing' variable has been set to true."
@@ -2449,7 +2261,7 @@ msgstr ""
 
 #: functions/export/swf/export_swf_control_bar.c:983
 msgid "Now jumping to the last frame of the movie using gotoAndStop."
-msgstr ""
+msgstr "A saltar para a última frame do filme usando gotoAndStop."
 
 #: functions/export/swf/export_swf_control_bar.c:1003
 msgid "Fast forward button pressed, slide counter is:"
@@ -2457,11 +2269,11 @@ msgstr ""
 
 #: functions/export/swf/export_swf_control_bar.c:1128
 msgid "Finish button pressed."
-msgstr ""
+msgstr "Botão Terminar pressionado."
 
 #: functions/export/swf/export_swf_control_bar.c:1136
 msgid "Now jumping to last frame of movie."
-msgstr ""
+msgstr "A saltar para a última frame do filme."
 
 #: functions/export/swf/export_swf_control_bar.c:1218
 msgid "info_text visibility set to:"
@@ -2470,7 +2282,7 @@ msgstr ""
 #: functions/export/swf/export_swf_control_bar.c:1242
 #, c-format
 msgid "Font path: '%s'\n"
-msgstr ""
+msgstr "Caminho das fontes: '%s'\n"
 
 #: functions/export/swf/export_swf_control_bar.c:1249
 #: functions/export/swf/export_swf_create_shape.c:128
@@ -2489,7 +2301,7 @@ msgstr ""
 
 #: functions/export/swf/export_swf_create_layer_elements.c:72
 msgid "Object"
-msgstr ""
+msgstr "Objecto"
 
 #: functions/export/swf/export_swf_create_shape.c:121
 #, c-format
@@ -2499,7 +2311,7 @@ msgstr ""
 #: functions/export/swf/export_swf_create_shape.c:162
 #, c-format
 msgid "Image width: %d\n"
-msgstr ""
+msgstr "Largura da imagem: %d\n"
 
 #: functions/export/swf/export_swf_create_shape.c:163
 #, c-format
@@ -2509,7 +2321,7 @@ msgstr ""
 #: functions/export/swf/export_swf_create_shape.c:164
 #, c-format
 msgid "Image height: %d\n"
-msgstr ""
+msgstr "Altura da imagemm: %d\n"
 
 #: functions/export/swf/export_swf_create_shape.c:165
 #, c-format
@@ -2533,45 +2345,45 @@ msgstr ""
 #: functions/export/swf/export_swf_create_shape.c:228
 #, c-format
 msgid "This image has an external link: '%s'\n"
-msgstr ""
+msgstr "Esta imagem tem um link externo: '%s'\n"
 
 #: functions/export/swf/export_swf_create_shape.c:272
 msgid "Something went wrong when creating an empty layer for swf output."
-msgstr ""
+msgstr "Ocorreu um erro ao criar uma camada vazia para o SWF."
 
 #: functions/export/swf/export_swf_create_shape.c:302
 #, c-format
 msgid "This empty layer has an external link: '%s'\n"
-msgstr ""
+msgstr "Esta camada vazia tem um link externo: '%s'\n"
 
 #: functions/export/swf/export_swf_create_shape.c:351
 msgid "Something went wrong when creating a highlight layer for swf output."
-msgstr ""
+msgstr "Ocorreu um erro ao criar camada de destaque para SWF."
 
 #: functions/export/swf/export_swf_create_shape.c:395
 #, c-format
 msgid "This highlight has an external link: '%s'\n"
-msgstr ""
+msgstr "Este destaque tem um link externo: '%s'\n"
 
 #: functions/export/swf/export_swf_create_shape.c:440
 msgid ""
 "Something went wrong when creating a mouse pointer shape for swf output."
-msgstr ""
+msgstr "Ocorreu um erro co criar o ponteiro de rato para SWF."
 
 #: functions/export/swf/export_swf_create_shape.c:477
 #, c-format
 msgid "This mouse cursor layer has an external link: '%s'\n"
-msgstr ""
+msgstr "Esta camada de cursor de rato tem um link externo: '%s'\n"
 
 #: functions/export/swf/export_swf_create_shape.c:586
 #, c-format
 msgid "Line %d of %d: %s\n"
-msgstr ""
+msgstr "Linha %d de %d: %s\n"
 
 #: functions/export/swf/export_swf_create_shape.c:587
 #, c-format
 msgid "Width of this string: %.2f\n"
-msgstr ""
+msgstr "Largura desta string: %.2f\n"
 
 #: functions/export/swf/export_swf_create_shape.c:588
 #, c-format
@@ -2586,11 +2398,11 @@ msgstr ""
 #: functions/export/swf/export_swf_create_shape.c:654
 #, c-format
 msgid "This text has an external link: '%s'\n"
-msgstr ""
+msgstr "Este texto tem um link externo: '%s'\n"
 
 #: functions/export/swf/export_swf_create_shape.c:700
 msgid "Unknown layer type in swf output."
-msgstr ""
+msgstr "Tipo de camda desconhecida no SWF."
 
 #: functions/export/swf/export_swf_inner.c:107
 msgid ""
@@ -2611,16 +2423,16 @@ msgstr ""
 
 #: functions/export/swf/export_swf_inner.c:154
 msgid "Number of slides"
-msgstr ""
+msgstr "Número de slides"
 
 #: functions/export/swf/export_swf_inner.c:173
 msgid "Total number of layers"
-msgstr ""
+msgstr "Número total de camadas"
 
 #: functions/export/swf/export_swf_inner.c:245
 #, c-format
 msgid "Number of layers in slide %u is %u\n"
-msgstr ""
+msgstr "Número de camadas no slide %u é %u\n"
 
 #: functions/export/swf/export_swf_inner.c:246
 #, c-format
@@ -2631,11 +2443,12 @@ msgstr ""
 msgid ""
 "We couldn't allocate enough memory to generate the swf.  Export aborted."
 msgstr ""
+"Incapaz de alocar memória suficiente para gerar SWF. Exportação abortada."
 
 #: functions/export/swf/export_swf_inner.c:301
 #, c-format
 msgid "Frame number %u:\n"
-msgstr ""
+msgstr "Frame número %u:\n"
 
 #: functions/export/swf/export_swf_inner.c:304
 #, c-format
@@ -2660,22 +2473,22 @@ msgstr ""
 #: functions/export/swf/export_swf_inner.c:314
 #, c-format
 msgid "Add frame:\tON\t"
-msgstr ""
+msgstr "Adicionar frame:\tON\t"
 
 #: functions/export/swf/export_swf_inner.c:316
 #, c-format
 msgid "Add frame:\tOFF\t"
-msgstr ""
+msgstr "Adicionar frame:\tOFF\t"
 
 #: functions/export/swf/export_swf_inner.c:319
 #, c-format
 msgid "Remove frame:\tON\t"
-msgstr ""
+msgstr "Remover frame:\tON\t"
 
 #: functions/export/swf/export_swf_inner.c:321
 #, c-format
 msgid "Remove frame:\tOFF\t"
-msgstr ""
+msgstr "Remover frame:\tOFF\t"
 
 #: functions/export/swf/export_swf_inner.c:325
 #, c-format
@@ -2685,7 +2498,7 @@ msgstr ""
 #: functions/export/swf/export_swf_inner.c:328
 #, c-format
 msgid "Move frame:\tOFF\t"
-msgstr ""
+msgstr "Mover frame:\tOFF\t"
 
 #: functions/export/swf/export_swf_inner.c:375
 msgid "Slide counter incremented, now equals:"
@@ -2710,19 +2523,19 @@ msgstr ""
 #: functions/export/swf/export_swf_inner.c:464
 #, c-format
 msgid "The animation is %u frames long\n"
-msgstr ""
+msgstr "A animação tem %u de comprimento\n"
 
 #: functions/export/swf/export_swf_inner.c:472
 msgid "Something went wrong when saving the swf file to disk."
-msgstr ""
+msgstr "Ocorreu um erro ao guardar o ficheiro SWF no disco."
 
 #: functions/export/swf/swf_add_mouse_click.c:124
 msgid "Full path name to sound file is"
-msgstr ""
+msgstr "O caminho completo para o ficheiro de audio é"
 
 #: functions/export/swf/swf_add_mouse_click.c:132
 msgid "Something went wrong when opening a mouse click sound file."
-msgstr ""
+msgstr "Ocorreu um erro ao abrir o ficheiro de audio para o clique de rato."
 
 #: functions/export/swf/swf_shape_from_image_file.c:60
 msgid ""
@@ -2731,11 +2544,11 @@ msgstr ""
 
 #: functions/export/swf/swf_shape_from_image_file.c:76
 msgid "Something went wrong when encoding an image to png format."
-msgstr ""
+msgstr "Ocorreu um erro ao converter uma imagem para o formato PNG."
 
 #: functions/export/swf/swf_shape_from_image_file.c:93
 msgid "Something went wrong converting an image to a swf input object."
-msgstr ""
+msgstr "Ocorreu um erro ao converter uma imagem para objecto em formato SWF"
 
 #: functions/export/swf/swf_shape_from_image_file.c:111
 msgid "Something went wrong converting an image to a swf bitmap object."
@@ -2756,35 +2569,53 @@ msgstr ""
 
 #: functions/film_strip/film_strip_slide_clicked.c:87
 msgid " Ready"
-msgstr ""
+msgstr " Pronto"
+
+#: functions/layer/compress_layers_inner.c:350
+#: functions/layer/get_layer_position.c:194 functions/layer/layer_edit.c:207
+#: functions/working_area/calculate_object_boundaries.c:182
+#: functions/working_area/working_area_button_press_event.c:204
+#: functions/working_area/working_area_button_release_event.c:382
+#: functions/working_area/working_area_motion_notify_event.c:370
+msgid "Unknown layer type."
+msgstr "Tipo de camada desconhecido"
 
 #: functions/layer/image_crop.c:105
 msgid "Only Image layers can be cropped."
-msgstr ""
+msgstr "Apenas camadas de imagem podem ser recortadas."
 
 #: functions/layer/image_crop.c:116
 msgid "Background layers can not be cropped."
-msgstr ""
+msgstr "Camadas de fundo não podem ser recortadas."
 
 #: functions/layer/image_crop.c:240
 msgid " Image cropped"
-msgstr ""
+msgstr " Imagem recortada"
 
 #: functions/layer/layer_copy.c:69
 msgid " Copy failed"
-msgstr ""
+msgstr " Cópia falhada"
 
 #: functions/layer/layer_copy.c:75
 msgid " Layer copied to buffer"
-msgstr ""
+msgstr " Camada copiada para o buffer"
 
 #: functions/layer/layer_delete.c:110
 msgid " Layer deleted"
-msgstr ""
+msgstr " Camada eliminada"
 
 #: functions/layer/layer_duplicate.c:58
 msgid "Unable to allocate memory for the copy buffer.  Copy failed."
-msgstr ""
+msgstr "Incapaz de alocar memória para cópia de buffer. Cópia falhada."
+
+#: functions/layer/layer_duplicate.c:88
+#: functions/menu/menu_screenshots_import.c:330
+msgid "Background"
+msgstr "Fundo"
+
+#: functions/layer/layer_duplicate.c:95 functions/slide/slide_insert.c:64
+msgid "Empty"
+msgstr "Vazio"
 
 #: functions/layer/layer_duplicate.c:112 functions/layer/layer_duplicate.c:129
 #: functions/layer/layer_duplicate.c:155 functions/layer/layer_duplicate.c:180
@@ -2796,146 +2627,151 @@ msgstr ""
 
 #: functions/layer/layer_duplicate.c:229
 msgid "Unknown layer type when duplicating layer."
-msgstr ""
+msgstr "Tipo de camada desconhecido ao duplicar camada."
 
 #: functions/layer/layer_edit.c:93
 msgid "Edit background color"
-msgstr ""
+msgstr "Editar cor de fundo"
 
 #: functions/layer/layer_edit.c:110
 msgid "Edit image layer"
-msgstr ""
+msgstr "Editar camada de imagem"
 
 #: functions/layer/layer_edit.c:134
 msgid "Edit mouse pointer"
-msgstr ""
+msgstr "Editar ponteiro do rato"
 
 #: functions/layer/layer_edit.c:159
 msgid "Edit text layer"
-msgstr ""
+msgstr "Editar camada de texto"
 
 #: functions/layer/layer_edit.c:184
 msgid "Edit highlight layer"
-msgstr ""
+msgstr "Editar camada de destaque"
 
 #: functions/layer/layer_edit.c:223
 msgid " Layer edited"
-msgstr ""
+msgstr " Camada editada"
 
 #: functions/layer/layer_free.c:87
 msgid "Unknown layer type when destroying a layer."
-msgstr ""
+msgstr "Tipo de camada desconhecida"
 
 #: functions/layer/layer_move_down.c:105
 msgid " Layer moved down"
-msgstr ""
+msgstr " Camada movida para baixo"
 
 #: functions/layer/layer_move_up.c:111
 msgid " Layer moved up"
-msgstr ""
+msgstr " Camada movida para cima"
 
 #: functions/layer/layer_new_highlight.c:63
 msgid " Please draw the new layer"
-msgstr ""
+msgstr " Crie uma nova camada"
 
 #: functions/layer/layer_new_highlight_inner.c:193
 msgid " Highlight layer added"
-msgstr ""
+msgstr " Camada de destaque criada"
 
 #: functions/layer/layer_new_image.c:63 functions/layer/layer_new_mouse.c:63
 #: functions/layer/layer_new_text.c:63
 msgid " Please click the insertion point"
-msgstr ""
+msgstr " Clique no ponto de inserção"
 
 #: functions/layer/layer_new_image_inner.c:106
 msgid "Please choose an image file"
-msgstr ""
+msgstr "Seleccione um ficheiro de imagem"
 
 #: functions/layer/layer_new_image_inner.c:137
 msgid ""
 "There was something wrong with the image path given.  Please try again."
-msgstr ""
+msgstr "Ocorreu um erro com o caminho da imagem indicado. Tente novamente."
 
 #: functions/layer/layer_new_image_inner.c:146
 msgid ""
 "There was something wrong with the image file selected.  Please try again."
 msgstr ""
+"Ocorreu um erro com o ficheiro de imagem seleccionado. Tente novamente"
 
 #: functions/layer/layer_new_image_inner.c:218
 msgid " Image layer added"
-msgstr ""
+msgstr " Camada de imagem adicionada"
 
 #: functions/layer/layer_new_mouse_inner.c:82
 msgid "Mouse Pointer"
-msgstr ""
+msgstr "Ponteiro de rato"
 
 #: functions/layer/layer_new_mouse_inner.c:123
 msgid " Mouse layer added"
-msgstr ""
+msgstr " Camada de ponteiro de rato adicionada"
 
 #: functions/layer/layer_new_text_inner.c:71
 msgid "New text..."
-msgstr ""
+msgstr "Novo texto..."
 
 #: functions/layer/layer_new_text_inner.c:93
 msgid "Text layer"
-msgstr ""
+msgstr "Camada de texto"
 
 #: functions/layer/layer_new_text_inner.c:134
 msgid " Text layer added"
-msgstr ""
+msgstr " Camada de texto adicionada"
 
 #: functions/layer/layer_paste.c:112
 msgid " Layer pasted from buffer"
-msgstr ""
+msgstr " Camada colada do buffer"
 
 #: functions/menu/menu_edit_preferences.c:123
 msgid "Application Preferences"
-msgstr ""
+msgstr "Preferências da Aplicação"
 
 #: functions/menu/menu_edit_preferences.c:128
 msgid "Default Project Folder: "
-msgstr ""
+msgstr "Directoria standard para Projecto: "
 
 #: functions/menu/menu_edit_preferences.c:131
 msgid "Select the Default Project Folder"
-msgstr ""
+msgstr "Seleccione a directoria standard para Projecto"
 
 #: functions/menu/menu_edit_preferences.c:137
 msgid "Screenshots Folder: "
-msgstr ""
+msgstr "Directoria de Capturas: "
 
 #: functions/menu/menu_edit_preferences.c:140
 msgid "Select the Screenshot Folder"
-msgstr ""
+msgstr "Seleccione a directoria de Capturas"
 
 #: functions/menu/menu_edit_preferences.c:146
 msgid "Default Output Folder: "
-msgstr ""
+msgstr "Directoria standard para saída: "
 
 #: functions/menu/menu_edit_preferences.c:149
 msgid "Select the Default Output Folder"
-msgstr ""
+msgstr "Seleccione a directoria standard de saída"
 
 #: functions/menu/menu_edit_preferences.c:155
 msgid "Default Output Resolution: "
-msgstr ""
+msgstr "Resolução standard de saída: "
 
 #: functions/menu/menu_edit_preferences.c:163
 msgid ""
 "Default Slide Duration: \n"
 "(seconds)"
 msgstr ""
+"Duração standard do Slide: \n"
+"(segundos)"
 
 #: functions/menu/menu_edit_preferences.c:173
 msgid ""
 "Default Layer Duration: \n"
 "(seconds)"
 msgstr ""
+"Duração standar de Camada: \n"
+"(segundos)"
 
 #: functions/menu/menu_edit_preferences.c:183
 msgid "Default Frames Per Second: "
-msgstr ""
+msgstr "Frames por Segundo (FPS) standard: "
 
 #: functions/menu/menu_edit_preferences.c:192
 msgid "Film Strip Width: "
@@ -2943,31 +2779,33 @@ msgstr ""
 
 #: functions/menu/menu_edit_preferences.c:201
 msgid "Icon Height: "
-msgstr ""
+msgstr "Altura de Icones: "
 
 #: functions/menu/menu_edit_preferences.c:210
 msgid "Default Zoom Level: "
-msgstr ""
+msgstr "Nível de Zoom standard: "
 
 #: functions/menu/menu_edit_preferences.c:218
 msgid "Default Background Color: "
-msgstr ""
+msgstr "Cor de fundo standard: "
 
 #: functions/menu/menu_edit_preferences.c:227
 msgid "Display non-metacity key bind warning?"
-msgstr ""
+msgstr "Apresentar aviso non-metacity?"
 
 #: functions/menu/menu_edit_preferences.c:266
 #: functions/menu/menu_project_properties.c:348
 msgid ""
 "There was something wrong with the project folder given.  Please try again."
 msgstr ""
+"Ocorreu um erro com a directoria indicada para o projecto. Tente novamente."
 
 #: functions/menu/menu_edit_preferences.c:280
 msgid ""
 "There was something wrong with the screenshot folder given.  Please try "
 "again."
 msgstr ""
+"Ocorreu um erro com a directoria indicada para a captura. Tente novamente."
 
 #: functions/menu/menu_edit_preferences.c:294
 #: functions/menu/menu_project_properties.c:362
@@ -3223,56 +3061,56 @@ msgstr ""
 
 #: functions/menu/menu_project_properties.c:125
 msgid "Project Properties"
-msgstr ""
+msgstr "propriedades do projecto"
 
 #: functions/menu/menu_project_properties.c:140
 msgid "Project Folder: "
-msgstr ""
+msgstr "Directoria do Projecto "
 
 #: functions/menu/menu_project_properties.c:143
 msgid "Select the Project Folder"
-msgstr ""
+msgstr "Seleccione a directoria do Projecto"
 
 #: functions/menu/menu_project_properties.c:149
 msgid "Output Folder: "
-msgstr ""
+msgstr "Directoria de saída "
 
 #: functions/menu/menu_project_properties.c:152
 msgid "Select the Output Folder"
-msgstr ""
+msgstr "Seleccione a directoria de saída"
 
 #: functions/menu/menu_project_properties.c:167
 msgid "Project Width: "
-msgstr ""
+msgstr "Largura do Projecto: "
 
 #: functions/menu/menu_project_properties.c:172
 #: functions/menu/menu_project_properties.c:184
 msgid "pixels"
-msgstr ""
+msgstr "Pixeis"
 
 #: functions/menu/menu_project_properties.c:179
 msgid "Project Height: "
-msgstr ""
+msgstr "Altura do Projecto: "
 
 #: functions/menu/menu_project_properties.c:191
 msgid "SWF start behavior: "
-msgstr ""
+msgstr "Comportamento inicial do SWF: "
 
 #: functions/menu/menu_project_properties.c:195
 msgid "Paused"
-msgstr ""
+msgstr "Em Pausa"
 
 #: functions/menu/menu_project_properties.c:196
 msgid "Play"
-msgstr ""
+msgstr "Reproduzir"
 
 #: functions/menu/menu_project_properties.c:210
 msgid "SWF end behavior: "
-msgstr ""
+msgstr "Comportamento final do SWF: "
 
 #: functions/menu/menu_project_properties.c:214
 msgid "Stop"
-msgstr ""
+msgstr "Parar"
 
 #: functions/menu/menu_project_properties.c:215
 msgid "Loop and play"
@@ -3284,7 +3122,7 @@ msgstr ""
 
 #: functions/menu/menu_project_properties.c:234
 msgid "Display SWF control bar: "
-msgstr ""
+msgstr "Mostar barra de controlo SWF: "
 
 #: functions/menu/menu_project_properties.c:249
 msgid "Display SWF information button: "
@@ -3305,19 +3143,19 @@ msgstr ""
 #: functions/menu/menu_project_properties.c:334
 msgid ""
 "There was something wrong with the project name value.  Please try again."
-msgstr ""
+msgstr "Ocorreu um erro com o valor do nome do projecto. Tente novamente."
 
 #: functions/menu/menu_project_properties.c:391
 msgid ""
 "There was something wrong with the start behavior value selected.  Please "
 "try again."
-msgstr ""
+msgstr "Ocorreu um erro no valor de início seleccionado. Tente novamente."
 
 #: functions/menu/menu_project_properties.c:405
 msgid ""
 "There was something wrong with the end behavior value selected.  Please try "
 "again."
-msgstr ""
+msgstr "Ocorreu um erro no valor de final seleccionado. Tente novamente."
 
 #: functions/menu/menu_project_properties.c:424
 msgid ""
@@ -3333,22 +3171,59 @@ msgstr ""
 
 #: functions/menu/menu_project_properties.c:492
 msgid " Project properties updated"
+msgstr " Propriedades do projecto actualizadas"
+
+#: functions/menu/menu_screenshots_capture.c:96
+msgid ""
+"Please click on the window you want to capture (after closing this dialog "
+"box)."
 msgstr ""
+"Clique na janela que deseja capturar (após fechar esa caixa de diálogo"
 
 #: functions/menu/menu_screenshots_capture.c:114
 msgid "Unable to create alternative cursor."
-msgstr ""
+msgstr "Incapaz de criar cursor alternativo."
 
 #: functions/menu/menu_screenshots_capture.c:133
 msgid ""
 "Unable to grab the mouse pointer for selected display.  Please report this "
 "error."
+msgstr "Incapaz de capturar o ponteiro do rato. Reporte este erro."
+
+#: functions/menu/menu_screenshots_capture.c:142
+#, c-format
+msgid "Mouse pointer grabbed.\n"
+msgstr "Ponteiro do rato capturado.\n"
+
+#: functions/menu/menu_screenshots_capture.c:164
+#, c-format
+msgid "Capture window set.\n"
+msgstr "Janela de captura definida.\n"
+
+#: functions/menu/menu_screenshots_capture.c:187
+#, c-format
+msgid "Mouse pointer grab released.\n"
+msgstr "Captura de ponteiro de rato terminada.\n"
+
+#: functions/menu/menu_screenshots_capture.c:207
+#, c-format
+msgid ""
+"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: "
+"%d\n"
 msgstr ""
+
+#: functions/menu/menu_screenshots_capture.c:218
+msgid ""
+"Window dimensions successfully retrieved.  Please use Control-Printscreen to "
+"take screenshots then Import when finished."
+msgstr ""
+"Dimensões da janela identificadas com sucesso. Use Ctrl-PrtScpara fazer "
+"Capturas e Importar."
 
 #: functions/menu/menu_screenshots_capture.c:354
 #, c-format
 msgid "An error '%s' occured when opening '%s' for writing."
-msgstr ""
+msgstr "Um erro '%s' ocorreu na abertura de '%s' para escrita."
 
 #: functions/menu/menu_screenshots_capture.c:373
 #, c-format
@@ -3358,4 +3233,279 @@ msgstr ""
 #: functions/menu/menu_screenshots_capture.c:390
 #, c-format
 msgid "An error '%s' occured when closing the output file '%s'."
+msgstr ""
+
+#: functions/menu/menu_screenshots_capture.c:455
+#, c-format
+msgid ""
+" Wrote capture lock file - %s - and installed Control-Printscreen keyboard "
+"hook"
+msgstr ""
+
+#: functions/menu/menu_screenshots_import.c:113
+msgid "Something went wrong opening the screenshots folder."
+msgstr "Ocorreu um erro ao abrir a directoria das capturas."
+
+#: functions/menu/menu_screenshots_import.c:124
+msgid ""
+"The screenshots folder doesn't exist.  Please update this in the project "
+"preferences and try again."
+msgstr ""
+
+#: functions/menu/menu_screenshots_import.c:135
+#: functions/menu/menu_screenshots_import.c:209
+#: functions/menu/menu_screenshots_import.c:212
+#: functions/menu/menu_screenshots_import.c:213
+msgid "screenshot"
+msgstr "captura"
+
+#: functions/menu/menu_screenshots_import.c:177
+msgid ""
+"Not all of the screenshots are of the same size, or some differ from the "
+"size of the project.  If you proceed, they will be scaled to the same size "
+"as the project.  Do you want to proceed?"
+msgstr ""
+
+#: functions/menu/menu_screenshots_import.c:180
+msgid ""
+"Not all of the screenshots are of the same size, or some differ from the "
+"size of the project.  If you proceed, they will all be scaled to the size of "
+"the first one.  Do you want to proceed?"
+msgstr ""
+
+#: functions/menu/menu_screenshots_import.c:207
+msgid "No screenshots found in screenshot folder"
+msgstr "Sem capturas na directoria de Capturas"
+
+#: functions/menu/menu_screenshots_import.c:208
+msgid "They are case sensitive and must be named"
+msgstr ""
+
+#: functions/menu/menu_screenshots_import.c:210
+msgid "Sequential Number"
+msgstr "Número sequencial"
+
+#: functions/menu/menu_screenshots_import.c:211
+msgid "For example"
+msgstr "Por exemplo"
+
+#: functions/menu/menu_screenshots_import.c:225
+msgid "Screenshots found"
+msgstr "Capturas encontradas"
+
+#: functions/menu/menu_screenshots_import.c:306
+msgid "Something went wrong when loading the screenshot"
+msgstr "Ocorreu um erro ao carregar a capturas"
+
+#: functions/menu/menu_screenshots_import.c:357
+msgid "Something went wrong when deleting the screenshot file"
+msgstr "Ocorreu um erro ao eliminar o ficheiro da captura"
+
+#: functions/menu/menu_screenshots_import.c:362
+msgid "Loaded image"
+msgstr "Imagem carregada"
+
+#: functions/menu/menu_screenshots_import.c:443
+msgid "screenshots imported"
+msgstr "capturas importadas"
+
+#: functions/slide/slide_delete.c:63
+msgid "You must leave at least one slide in a project."
+msgstr "Deve deixar no mínimo 1 slide no projecto"
+
+#: functions/slide/slide_delete.c:105
+msgid " Slide deleted"
+msgstr " Slide eliminado"
+
+#: functions/slide/slide_duration.c:75
+msgid "Edit slide duration"
+msgstr "Editar duração do slide"
+
+#: functions/slide/slide_duration.c:80
+msgid "Slide duration: "
+msgstr "Duração do slide: "
+
+#: functions/slide/slide_duration.c:115
+msgid ""
+"There was something wrong with the slide duration value.  Please try again."
+msgstr ""
+"Ocorreu um erro durante a inserção do valor do slide. Tente novamente"
+
+#: functions/slide/slide_duration.c:200
+msgid " Slide properties updated"
+msgstr " Propriedades do slide actualizadas"
+
+#: functions/slide/slide_insert.c:111
+msgid " Slide added"
+msgstr " Slide adicionado"
+
+#: functions/slide/slide_move_bottom.c:94
+msgid " Slide moved to bottom"
+msgstr " Slide movido para o fundo"
+
+#: functions/slide/slide_move_down.c:99
+msgid " Slide moved down"
+msgstr " Slide movido para baixo"
+
+#: functions/slide/slide_move_top.c:92
+msgid " Slide moved to top"
+msgstr " Slide movido para o topo"
+
+#: functions/slide/slide_move_up.c:97
+msgid " Slide moved up"
+msgstr " Slide movido para cima"
+
+#: functions/widgets/time_line.c:915
+msgid "Couldn't create the time line background image."
+msgstr "Incapaz de criar imagem de fundo para a timeline"
+
+#: functions/widgets/time_line.c:1104 functions/widgets/time_line.c:1118
+msgid "Couldn't create the time line display buffer image."
+msgstr ""
+
+#: functions/widgets/time_line.c:1637 functions/widgets/time_line.c:1748
+#: functions/widgets/time_line.c:1817
+msgid "Unknown layer resize type."
+msgstr "Tipo de redimensionamento de camada desconhecido"
+
+#: functions/widgets/time_line.c:2253 functions/widgets/time_line.c:2301
+msgid "Couldn't recreate time line background image."
+msgstr "Incapaz de recriar imagem de fundo para a timeline"
+
+#: functions/widgets/time_line.c:2261 functions/widgets/time_line.c:2309
+msgid "Couldn't recreate time line display buffer."
+msgstr ""
+
+#: functions/widgets/time_line.c:2269 functions/widgets/time_line.c:2317
+msgid "Couldn't redraw the time line layer information."
+msgstr ""
+
+#: functions/widgets/time_line.c:2361
+msgid " Resize completed"
+msgstr " Redimensionamento concluído"
+
+#: functions/widgets/time_line.c:2402
+msgid " Drag completed"
+msgstr " Arrastamento concluído"
+
+#: functions/working_area/draw_highlight_box.c:53
+#: functions/working_area/draw_highlight_box.c:92
+msgid "Not enough memory for pixbuf allocation."
+msgstr "Não existe memória suficiente para alocação pixbuf"
+
+#: functions/working_area/working_area_button_release_event.c:156
+msgid " Layer start point moved"
+msgstr " Ponto de início de camada movido"
+
+#: functions/working_area/working_area_button_release_event.c:158
+msgid " Layer end point moved"
+msgstr " Ponto de fim de camada movido"
+
+#: functions/working_area/working_area_button_release_event.c:262
+#: functions/working_area/working_area_motion_notify_event.c:204
+msgid "Unknown resizing direction."
+msgstr "Redimensionamento desconhecido"
+
+#: functions/working_area/working_area_button_release_event.c:320
+msgid " Layer resized"
+msgstr " Camada redimensionada"
+
+#: functions/working_area/working_area_button_release_event.c:423
+msgid " Layer moved"
+msgstr " Camada movida"
+
+#: salasaga_screencapture.c:80
+msgid "Something went wrong when getting the window identifier."
+msgstr "Ocorreu um erro ao detectar identificador da janela."
+
+#: salasaga_screencapture.c:90 salasaga_screencapture.c:382
+msgid "Something went wrong when getting the screenshot."
+msgstr "Ocorreu um erro ao realizar a captura."
+
+#: salasaga_screencapture.c:122
+msgid "Screenshot GetDC failed."
+msgstr "A captura GetDC falhou."
+
+#: salasaga_screencapture.c:131
+msgid "Screenshot CreateCompatibleDC failed."
+msgstr "A captura  CreateCompatibleDC falhou."
+
+#: salasaga_screencapture.c:140
+msgid "Screenshot CreateCompatibleBitmap failed."
+msgstr "A captura CreateCompatibleBitmap falhou."
+
+#: salasaga_screencapture.c:149
+msgid "Screenshot SelectObject failed: selected object is not a region."
+msgstr ""
+"A captura SelectObject falhou: o objecto seleccionado não é uma região."
+
+#: salasaga_screencapture.c:157
+msgid "Screenshot SelectObject failed: unknown error."
+msgstr "A captura SelectObject falhou: erro desconhecido."
+
+#: salasaga_screencapture.c:269
+msgid ""
+"There was something wrong with the project name value.  Aborting screenshot."
+msgstr ""
+"Ocorreu um erro com o valor do nome do projecto. A abortar a captura."
+
+#: salasaga_screencapture.c:283
+msgid ""
+"There was something wrong with the screenshot folder value.  Aborting "
+"screenshot."
+msgstr ""
+"Ocorreu um erro com o valor da directoria de captura. A abortar captura."
+
+#: salasaga_screencapture.c:323
+msgid "There was something wrong with the width value.  Aborting screenshot."
+msgstr "Ocorreu um erro com o valor da largura. A abortar captura."
+
+#: salasaga_screencapture.c:336
+msgid ""
+"There was something wrong with the height value.  Aborting screenshot."
+msgstr "Ocorreu um erro com o valor de altura. A abortar captura."
+
+#: salasaga_screencapture.c:395
+msgid "Something went wrong opening"
+msgstr "Ocorreu um erro ao abrir."
+
+#: salasaga_screencapture.c:404
+msgid "The target directory doesn't exist."
+msgstr "O directorio de destino não existe."
+
+#: salasaga_screencapture.c:490
+msgid ""
+"Something went wrong when opening the output screenshot file for writing."
+msgstr "Ocorreu um erro ao abrir o ficheiro de captura para escrita."
+
+#: salasaga_screencapture.c:515
+msgid "Something went wrong when creating the png info structure."
+msgstr "Ocorreu um erro ao criar a informação PNG para escrita."
+
+#: salasaga_screencapture.c:549
+msgid "Something went wrong when retrieving the screenshot metadata."
+msgstr "Ocorreu um erro ao adquirir metadados da captura."
+
+#: salasaga_screencapture.c:566
+msgid "Something went wrong when copying the screenshot data."
+msgstr "Ocorrreu um erro ao copiar os dados da captura."
+
+#: salasaga_screencapture.c:166
+msgid "Screenshot BitBlt failed."
+msgstr ""
+
+#: salasaga_screencapture.c:297
+msgid ""
+"There was something wrong with the x offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:310
+msgid ""
+"There was something wrong with the y offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: salasaga_screencapture.c:500
+msgid "Something went wrong when creating the png write structure."
 msgstr ""
