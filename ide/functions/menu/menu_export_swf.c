@@ -54,6 +54,9 @@ void menu_export_swf(void)
 	GString				*tmp_gstring;				// Temporary GString
 
 
+	// Initialisation
+	message = g_string_new(NULL);
+
 	// Check if there is an active project
 	if (NULL == slides)
 	{
@@ -64,9 +67,6 @@ void menu_export_swf(void)
 		g_string_free(message, TRUE);
 		return;
 	}
-
-	// Initialisation
-	message = g_string_new(NULL);
 
 	// * Pop open a dialog asking the user for their desired filename *
 

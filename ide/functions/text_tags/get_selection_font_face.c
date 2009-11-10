@@ -40,8 +40,8 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
 
 
 gint get_selection_font_face(GtkTextBuffer *text_buffer)

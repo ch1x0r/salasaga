@@ -49,7 +49,7 @@
 #include <ming.h>
 
 // Salasaga includes
-#include "config.h"
+#include "../config.h"
 #include "salasaga_types.h"
 #include "externs.h"
 #include "functions/create_resolution_selector.h"
