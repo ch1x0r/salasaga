@@ -66,8 +66,9 @@ layer *read_image_layer(xmlDocPtr document, xmlNodePtr this_node)
 
 
 	// Initialisation
-	message = g_string_new(NULL);
+	error_string = g_string_new(NULL);
 	image_decode_gstring = g_string_new(NULL);
+	message = g_string_new(NULL);
 
 	// Construct a new image layer
 	tmp_image_ob = g_new0(layer_image, 1);
@@ -458,7 +459,6 @@ layer *read_image_layer(xmlDocPtr document, xmlNodePtr this_node)
 	{
 		g_string_printf(error_string, "%s ED66: %s: '%s'", _("Error"), _("Image data loading failed"), error->message);
 		display_warning(error_string->str);
-		g_string_free(error_string, TRUE);
 	}
 	tmp_image_ob->image_data = gdk_pixbuf_loader_get_pixbuf(image_loader);
 	if (NULL == tmp_image_ob->image_data)
@@ -472,7 +472,6 @@ layer *read_image_layer(xmlDocPtr document, xmlNodePtr this_node)
 	{
 		g_string_printf(error_string, "%s ED67: %s: '%s'", _("Error"), _("Image data loading failed"), error->message);
 		display_warning(error_string->str);
-		g_string_free(error_string, TRUE);
 	}
 
 	// Create a cairo pattern from the image data
@@ -488,6 +487,8 @@ layer *read_image_layer(xmlDocPtr document, xmlNodePtr this_node)
 	tmp_image_ob->modified = FALSE;
 
 	// Free memory allocated in this function
+	g_string_free(error_string, TRUE);
+	g_string_free(image_decode_gstring, TRUE);
 	g_string_free(message, TRUE);
 
 	// Return the validated mouse layer, or an indicator of failure
