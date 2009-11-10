@@ -33,7 +33,7 @@
 #endif
 
 // Salasaga includes
-#include "../../config.h"
+#include "../../../config.h"
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "menu_help_website.h"

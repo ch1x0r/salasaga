@@ -34,8 +34,8 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
 
 
 GdkColor *get_selection_fg_colour(GtkTextBuffer *text_buffer, GtkTextView *text_view)

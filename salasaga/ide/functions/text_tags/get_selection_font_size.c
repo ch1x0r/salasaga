@@ -40,8 +40,8 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
 
 
 gdouble get_selection_font_size(GtkTextBuffer *text_buffer, GtkTextView *text_view)

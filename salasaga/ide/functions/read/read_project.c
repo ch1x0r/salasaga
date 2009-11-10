@@ -43,20 +43,20 @@
 #include <libxml/parser.h>
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "validate_value.h"
-#include "dialog/display_warning.h"
-#include "layer/compress_layers.h"
-#include "read/read_empty_layer.h"
-#include "read/read_highlight_layer.h"
-#include "read/read_image_layer.h"
-#include "read/read_mouse_layer.h"
-#include "read/read_text_layer.h"
-#include "slide/slide_free.h"
-#include "text_tags/reset_global_text_tags_table.h"
-#include "text_tags/text_layer_create_colour_tag.h"
-#include "text_tags/text_layer_create_font_size_tag.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../validate_value.h"
+#include "../dialog/display_warning.h"
+#include "../layer/compress_layers.h"
+#include "../read/read_empty_layer.h"
+#include "../read/read_highlight_layer.h"
+#include "../read/read_image_layer.h"
+#include "../read/read_mouse_layer.h"
+#include "../read/read_text_layer.h"
+#include "../slide/slide_free.h"
+#include "../text_tags/reset_global_text_tags_table.h"
+#include "../text_tags/text_layer_create_colour_tag.h"
+#include "../text_tags/text_layer_create_font_size_tag.h"
 
 
 gboolean read_project(gchar *filename)
