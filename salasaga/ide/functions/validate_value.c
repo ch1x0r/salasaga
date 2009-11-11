@@ -341,7 +341,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 						if (0 == g_ascii_strncasecmp(",", &input_char, 1))
 						{
 							// Yes, this is a comma character
-							output_gstring = g_string_append_c(output_gstring, '.');
+							output_gstring = g_string_append_c(output_gstring, ',');
 							match_found = TRUE;
 							continue;
 						}
@@ -356,7 +356,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 				}
 
 				// Convert the string to a float
-				output_gfloat = (gfloat) atof(output_gstring->str);
+				output_gfloat = (gfloat) g_strtod(output_gstring->str, NULL);
 			}
 			else
 			{
