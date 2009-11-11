@@ -483,7 +483,7 @@ gboolean read_project(gchar *filename)
 
 						// Extract the font size component value
 						tmp_char = xmlGetProp(tag_node, (const xmlChar *) "size");
-						font_size = atof((const char *) tmp_char);
+						font_size = g_strtod((const char *) tmp_char, NULL);
 
 						// Create the new font size tag
 						text_layer_create_font_size_tag(font_size);
