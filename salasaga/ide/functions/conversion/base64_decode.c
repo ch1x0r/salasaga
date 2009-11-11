@@ -170,10 +170,10 @@ GString *base64_decode(GString *input_string)
 
 		case 2:
 			// We only need to process two bytes, producing one char
-			out_byte0 = copied_string->str[copied_string->len - 3];
+			out_byte0 = copied_string->str[copied_string->len - 2];
 			out_byte0 = out_byte0 << 2;
 
-			out_byte1 = copied_string->str[copied_string->len - 2];
+			out_byte1 = copied_string->str[copied_string->len - 1];
 			out_byte1 = out_byte1 >> 4;
 
 			out_byte2 = out_byte0 | out_byte1;
