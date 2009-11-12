@@ -414,7 +414,7 @@ typedef struct
 	GtkWidget			*font_bg_colour_button;
 	GtkWidget			*font_face_combo_box;
 	GtkWidget			*font_fg_colour_button;
-	GtkWidget			*font_size_spin_button;
+	GtkWidget			*font_size_scale;
 	GtkWidget			*text_view;
 } text_dialog_widgets;
 

@@ -47,16 +47,18 @@ gboolean text_layer_dialog_selection_changed(GtkWidget *calling_widget, GtkTextI
 	GtkWidget			*fg_colour_button;
 	GtkWidget			*font_face_widget;		// Points to the font face selection widget
 	gdouble				font_size;				// Get selection font size
-	GtkWidget			*font_size_button;
+	GtkWidget			*font_size_scale;
 	const gchar			*mark_name;				// Name of the GtkTextMark that was set
+	GdkColor			temp_colour;			// Used to set the colour of the font size slider's text value
 	GtkTextBuffer		*text_buffer;
 	GtkWidget			*text_view;
+	GtkStyle			*widget_style;			// Used to retrieve the colour properties for a widget
 
 
 	// Initialisation
 	fg_colour_button = text_widgets->font_fg_colour_button;
 	font_face_widget = text_widgets->font_face_combo_box;
-	font_size_button = text_widgets->font_size_spin_button;
+	font_size_scale = text_widgets->font_size_scale;
 	text_view = text_widgets->text_view;
 	text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
 
@@ -78,12 +80,22 @@ gboolean text_layer_dialog_selection_changed(GtkWidget *calling_widget, GtkTextI
 
 	// Update the font size widget with the selection font size
 	font_size = get_selection_font_size(GTK_TEXT_BUFFER(text_buffer), GTK_TEXT_VIEW(text_view));
-	if (-1 != font_size)
+	if (-1.0 != font_size)  // -1.0 in the return value is a flag to indicate mixed sizes
 	{
-		gtk_spin_button_set_value(GTK_SPIN_BUTTON(font_size_button), font_size);
-	} else
+		// Reset the colour scheme for the text value part of the font size slider
+		gtk_widget_modify_fg(GTK_WIDGET(font_size_scale), GTK_STATE_NORMAL, NULL);
+
+		// Set the value on the slider to the font size of the selected text
+		gtk_range_set_value(GTK_RANGE(font_size_scale), font_size);
+	}
+	else
 	{
-		gtk_entry_set_text(GTK_ENTRY(font_size_button), "");
+		// Work out what the colour should be for greying out the font size slider
+		widget_style = gtk_rc_get_style(GTK_WIDGET(font_size_scale));
+		temp_colour = widget_style->mid[GTK_STATE_INSENSITIVE];
+
+		// Grey out the text value part of the font size slider
+		gtk_widget_modify_fg(GTK_WIDGET(font_size_scale), GTK_STATE_NORMAL, &temp_colour);
 	}
 
 	// Update the colour button with the selection colour
