@@ -61,6 +61,13 @@ gint get_selection_font_face(GtkTextBuffer *text_buffer)
 	// Retrieve the selection start and end iters
 	gtk_text_buffer_get_selection_bounds(GTK_TEXT_BUFFER(text_buffer), &this_iter, &end_iter);
 
+	// Unless the start and end iters are at the same place, move the end iter back one so we
+	// get an accurate value
+	if (FALSE == gtk_text_iter_equal(&this_iter, &end_iter))
+	{
+		gtk_text_iter_backward_char(&end_iter);
+	}
+
 	// Run through the tags at the first iter to determine which font face is applied
 	applied_tags = gtk_text_iter_get_tags(&this_iter);
 	num_tags = g_slist_length(applied_tags);
