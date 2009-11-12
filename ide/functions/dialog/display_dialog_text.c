@@ -56,13 +56,16 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gulong				font_face_callback;			// ID of the callback handler for the font face combo box
 	gulong				font_fg_callback;			// ID of the callback handler for the font foreground colour widget
 	gulong				font_size_callback;			// ID of the callback handler for the font size spin button
+	gdouble				font_size;					// Font size of the selected text
 	gfloat				gfloat_val;					// Temporary gfloat value used for validation
 	gint				gint_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
 	GString				*message;					// Used to construct message strings
+	gdouble				scale_mark_counter;			// Simple counter used when constructing scale marks for sliders
 	gulong				selection_callback;			// ID of the callback handler for text selection change
 	GtkTextIter			selection_end;
 	GtkTextIter			selection_start;
+	GdkColor			temp_colour;				// Used to set the colour of the font size slider's text value
 	text_dialog_widgets	*text_widgets;				// Holds pointers to various widgets in this dialog, for passing to callbacks
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
@@ -83,6 +86,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
+	GtkStyle			*widget_style;				// Used to retrieve the colour properties for a widget
 
 	// * Dialog widgets *
 	guint				row_counter = 0;			// Used to count which row things are up to
@@ -106,7 +110,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*selector_font_face;		//
 
 	GtkWidget			*font_size_label;			// Label widget
-	GtkWidget			*font_size_button;			//
+	GtkWidget			*font_size_scale;			//
 
 	GtkWidget			*fg_colour_label;			// Label widget
 	GtkWidget			*fg_colour_button;			// Foreground colour selection button
@@ -118,7 +122,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*border_colour_button;		// Colour selection button
 
 	GtkWidget			*border_width_label;		// Label widget
-	GtkWidget			*border_width_button;		//
+	GtkWidget			*border_width_scale;		//
 
 	GtkWidget			*external_link_label;		// Label widget
 	GtkWidget			*external_link_entry;		// Widget for accepting an external link for clicking on
@@ -254,11 +258,36 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_size_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the font size input
-	font_size_button = gtk_spin_button_new_with_range(valid_fields[FONT_SIZE].min_value, valid_fields[FONT_SIZE].max_value, 1);
-	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(font_size_button), 2);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(font_size_button), get_selection_font_size(GTK_TEXT_BUFFER(text_buffer), GTK_TEXT_VIEW(text_view)));
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_size_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	font_size_scale = gtk_hscale_new_with_range(valid_fields[FONT_SIZE].min_value, valid_fields[FONT_SIZE].max_value, 0.1);
+	gtk_scale_set_digits(GTK_SCALE(font_size_scale), 1);
+	gtk_scale_set_draw_value(GTK_SCALE(font_size_scale), TRUE);
+	for (scale_mark_counter = 10.0; scale_mark_counter <= valid_fields[FONT_SIZE].max_value; scale_mark_counter += 10.0)
+	{
+		// Add scale marks every 10.0 along
+		gtk_scale_add_mark(GTK_SCALE(font_size_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_size_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
+
+	// Update the font size widget with the selection font size
+	font_size = get_selection_font_size(GTK_TEXT_BUFFER(text_buffer), GTK_TEXT_VIEW(text_view));
+	if (-1.0 != font_size)  // -1.0 in the return value is a flag to indicate mixed sizes
+	{
+		// Reset the colour scheme for the text value part of the font size slider
+		gtk_widget_modify_fg(GTK_WIDGET(font_size_scale), GTK_STATE_NORMAL, NULL);
+
+		// Set the value on the slider to the font size of the selected text
+		gtk_range_set_value(GTK_RANGE(font_size_scale), font_size);
+	}
+	else
+	{
+		// Work out what the colour should be for greying out the font size slider
+		widget_style = gtk_rc_get_style(GTK_WIDGET(font_size_scale));
+		temp_colour = widget_style->mid[GTK_STATE_INSENSITIVE];
+
+		// Grey out the text value part of the font size slider
+		gtk_widget_modify_fg(GTK_WIDGET(font_size_scale), GTK_STATE_NORMAL, &temp_colour);
+	}
 
 	// Create the foreground colour selection label
 	fg_colour_label = gtk_label_new(_("Text color: "));
@@ -289,17 +318,17 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	text_widgets->font_bg_colour_button = fill_colour_button;
 	text_widgets->font_face_combo_box = selector_font_face;
 	text_widgets->font_fg_colour_button = fg_colour_button;
-	text_widgets->font_size_spin_button = font_size_button;
+	text_widgets->font_size_scale = font_size_scale;
 	text_widgets->text_view = text_view;
-
-	// Attach signal handlers to the font list and font size widgets, to be called when the user changes either of them
-	font_bg_callback = g_signal_connect(G_OBJECT(fill_colour_button), "color-set", G_CALLBACK(text_layer_dialog_bg_colour_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
-	font_face_callback = g_signal_connect(G_OBJECT(selector_font_face), "changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
-	font_fg_callback = g_signal_connect(G_OBJECT(fg_colour_button), "color-set", G_CALLBACK(text_layer_dialog_fg_colour_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
-	font_size_callback = g_signal_connect(G_OBJECT(font_size_button), "value-changed", G_CALLBACK(text_layer_dialog_size_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
 
 	// Add a signal handler to the text widget, to be called when the user changes the text selection
 	selection_callback = g_signal_connect(G_OBJECT(text_buffer), "mark-set", G_CALLBACK(text_layer_dialog_selection_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+
+	// Attach signal handlers to the font list, size, and colour widgets, to be called when the user changes any of them
+	font_bg_callback = g_signal_connect(G_OBJECT(fill_colour_button), "color-set", G_CALLBACK(text_layer_dialog_bg_colour_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	font_face_callback = g_signal_connect(G_OBJECT(selector_font_face), "changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	font_fg_callback = g_signal_connect(G_OBJECT(fg_colour_button), "color-set", G_CALLBACK(text_layer_dialog_fg_colour_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	font_size_callback = g_signal_connect(G_OBJECT(font_size_scale), "value-changed", G_CALLBACK(text_layer_dialog_size_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
 
 	// Create the background line colour selection label
 	border_colour_label = gtk_label_new(_("Background border color: "));
@@ -318,9 +347,14 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the background border width input
-	border_width_button = gtk_spin_button_new_with_range(valid_fields[LINE_WIDTH].min_value, valid_fields[LINE_WIDTH].max_value, 0.1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(border_width_button), tmp_text_ob->bg_border_width);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	border_width_scale = gtk_hscale_new_with_range(valid_fields[LINE_WIDTH].min_value, valid_fields[LINE_WIDTH].max_value, 0.1);
+	gtk_range_set_value(GTK_RANGE(border_width_scale), tmp_text_ob->bg_border_width);
+	for (scale_mark_counter = valid_fields[LINE_WIDTH].min_value; scale_mark_counter <= valid_fields[LINE_WIDTH].max_value; scale_mark_counter++)
+	{
+		// Add scale marks every 1.0 along
+		gtk_scale_add_mark(GTK_SCALE(border_width_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_width_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for an external link
@@ -520,8 +554,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			// Disconnect the signal handler callbacks
 			g_signal_handler_disconnect(G_OBJECT(fg_colour_button), font_fg_callback);
 			g_signal_handler_disconnect(G_OBJECT(fill_colour_button), font_bg_callback);
-			g_signal_handler_disconnect(G_OBJECT(font_size_button), font_size_callback);
-			g_signal_handler_disconnect(G_OBJECT(resolution_selector), font_face_callback);
+			g_signal_handler_disconnect(G_OBJECT(font_size_scale), font_size_callback);
 			g_signal_handler_disconnect(G_OBJECT(text_view), selection_callback);
 
 			// Destroy the dialog and return to the caller
@@ -607,7 +640,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		}
 
 		// Retrieve the new background border width
-		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(border_width_button));
+		gfloat_val = gtk_range_get_value(GTK_RANGE(border_width_scale));
 		validated_gfloat = validate_value(LINE_WIDTH, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
@@ -775,8 +808,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	// Disconnect the signal handler callbacks
 	g_signal_handler_disconnect(G_OBJECT(fg_colour_button), font_fg_callback);
 	g_signal_handler_disconnect(G_OBJECT(fill_colour_button), font_bg_callback);
-	g_signal_handler_disconnect(G_OBJECT(font_size_button), font_size_callback);
-	g_signal_handler_disconnect(G_OBJECT(resolution_selector), font_face_callback);
+	g_signal_handler_disconnect(G_OBJECT(font_size_scale), font_size_callback);
 	g_signal_handler_disconnect(G_OBJECT(text_view), selection_callback);
 
 	// Destroy the dialog box

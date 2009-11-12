@@ -42,7 +42,7 @@ gboolean text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_w
 {
 	// Local variables
 	gdouble				font_size;
-	GtkWidget			*font_size_button;
+	GtkWidget			*font_size_scale;
 	guint				loop_counter;
 	guint				num_tags;
 	GtkTextIter			selection_end;
@@ -54,7 +54,7 @@ gboolean text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_w
 
 
 	// Initialisation
-	font_size_button = text_widgets->font_size_spin_button;
+	font_size_scale = text_widgets->font_size_scale;
 	text_view = text_widgets->text_view;
 	text_buffer = gtk_text_view_get_buffer(GTK_TEXT_VIEW(text_view));
 
@@ -66,7 +66,7 @@ gboolean text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_w
 	}
 
 	// Retrieve the requested font size from the size widget
-	font_size = gtk_spin_button_get_value(GTK_SPIN_BUTTON(font_size_button));
+	font_size = gtk_range_get_value(GTK_RANGE(font_size_scale));
 
 	// If no font size is selected, we skip the rest of this function
 	if (-1.0 == font_size)
@@ -86,6 +86,9 @@ gboolean text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_w
 
 	// Apply the font size to the selected text
 	gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(text_buffer), GTK_TEXT_TAG(text_size_text_tag), &selection_start, &selection_end);
+
+	// Reset the colour scheme for the widget
+	gtk_widget_modify_fg(GTK_WIDGET(font_size_scale), GTK_STATE_NORMAL, NULL);
 
 	return FALSE;
 }
