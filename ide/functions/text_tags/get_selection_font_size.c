@@ -79,6 +79,7 @@ gdouble get_selection_font_size(GtkTextBuffer *text_buffer, GtkTextView *text_vi
 		gtk_text_iter_forward_char(&this_iter);
 
 		// Get the font size at this new iter
+		text_attributes = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(text_view));
 		gtk_text_iter_get_attributes(&this_iter, text_attributes);
 		font_size_int = pango_font_description_get_size(text_attributes->font);
 		iter_size = rint(font_size_int / PANGO_SCALE);
