@@ -555,7 +555,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			g_signal_handler_disconnect(G_OBJECT(fg_colour_button), font_fg_callback);
 			g_signal_handler_disconnect(G_OBJECT(fill_colour_button), font_bg_callback);
 			g_signal_handler_disconnect(G_OBJECT(font_size_scale), font_size_callback);
-			g_signal_handler_disconnect(G_OBJECT(text_view), selection_callback);
+			g_signal_handler_disconnect(G_OBJECT(selector_font_face), font_face_callback);
+			g_signal_handler_disconnect(G_OBJECT(text_buffer), selection_callback);
 
 			// Destroy the dialog and return to the caller
 			gtk_widget_destroy(GTK_WIDGET(text_dialog));
@@ -809,7 +810,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	g_signal_handler_disconnect(G_OBJECT(fg_colour_button), font_fg_callback);
 	g_signal_handler_disconnect(G_OBJECT(fill_colour_button), font_bg_callback);
 	g_signal_handler_disconnect(G_OBJECT(font_size_scale), font_size_callback);
-	g_signal_handler_disconnect(G_OBJECT(text_view), selection_callback);
+	g_signal_handler_disconnect(G_OBJECT(selector_font_face), font_face_callback);
+	g_signal_handler_disconnect(G_OBJECT(text_buffer), selection_callback);
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(text_dialog));
