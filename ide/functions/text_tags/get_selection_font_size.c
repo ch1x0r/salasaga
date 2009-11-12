@@ -64,6 +64,13 @@ gdouble get_selection_font_size(GtkTextBuffer *text_buffer, GtkTextView *text_vi
 	font_size_int = pango_font_description_get_size(text_attributes->font);
 	font_size = rint(font_size_int / PANGO_SCALE);
 
+	// Unless the start and end iters are at the same place, move the end iter back one so we
+	// get an accurate value
+	if (FALSE == gtk_text_iter_equal(&this_iter, &end_iter))
+	{
+		gtk_text_iter_backward_char(&end_iter);
+	}
+
 	// Step through the text buffer character by character,
 	// checking if the font size has changed
 	while (FALSE == gtk_text_iter_equal(&this_iter, &end_iter))
