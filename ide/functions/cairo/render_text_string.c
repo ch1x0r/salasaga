@@ -141,6 +141,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 		while (more_chars)
 		{
 			// Retrieve the attributes at this cursor position
+			text_attributes = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(text_view));
 			gtk_text_iter_get_attributes(&cursor_iter, text_attributes);
 
 			// Simplify pointers
