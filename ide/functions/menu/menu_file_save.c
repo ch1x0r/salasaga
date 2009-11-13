@@ -36,6 +36,7 @@
 #endif
 
 // Salasaga includes
+#include "../../../config.h"
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../validate_value.h"
@@ -248,6 +249,10 @@ void menu_file_save(void)
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
 	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
 	gdk_flush();
+
+	// Change the title bar to include the file name
+	g_string_printf(message, "%s v%s - %s", APP_NAME, APP_VERSION, g_path_get_basename(file_name->str));
+	gtk_window_set_title(GTK_WINDOW(main_window), message->str);
 
 	// * Function clean up area *
 

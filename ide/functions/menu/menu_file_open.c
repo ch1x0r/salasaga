@@ -33,6 +33,7 @@
 #endif
 
 // Salasaga includes
+#include "../../../config.h"
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../create_resolution_selector.h"
@@ -203,6 +204,10 @@ void menu_file_open(void)
 		file_name = g_string_new(NULL);
 	}
 	file_name = g_string_assign(file_name, validated_string->str);
+
+	// Change the title bar to include the project name
+	g_string_printf(message, "%s v%s - %s", APP_NAME, APP_VERSION, g_path_get_basename(file_name->str));
+	gtk_window_set_title(GTK_WINDOW(main_window), message->str);
 
 	// Destroy the existing output resolution selector
 	g_signal_handler_disconnect(G_OBJECT(resolution_selector), resolution_callback);
