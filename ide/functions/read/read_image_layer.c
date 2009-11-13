@@ -41,7 +41,6 @@
 #include "../../externs.h"
 #include "../validate_value.h"
 #include "../cairo/create_cairo_pixbuf_pattern.h"
-#include "../conversion/base64_decode.h"
 #include "../dialog/display_warning.h"
 #include "../layer/layer_free.h"
 
@@ -56,6 +55,8 @@ layer *read_image_layer(xmlDocPtr document, xmlNodePtr this_node)
 	GdkPixbufLoader		*image_loader;				// Used for loading images embedded in project files
 	GString				*message;					// Used to construct message strings
 	gboolean			return_code;				// Boolean return code
+	guchar				*decoded_string;			// Used for holding a decoded base64 strings
+	gsize				decoded_string_length;		// Holds the length of a decoded base64 string
 	layer				*tmp_layer;					// Temporary layer
 	layer_image			*tmp_image_ob;				// Temporary image layer object
 	xmlChar				*tmp_xmlChar;				// Temporary xmlChar pointer
@@ -448,13 +449,12 @@ layer *read_image_layer(xmlDocPtr document, xmlNodePtr this_node)
 	// * We should have all of the image details by this stage, so can process the image data *
 
 	// Base64 decode the image data back into png format
-	g_string_free(message, TRUE);
-	message = base64_decode(image_decode_gstring);
+	decoded_string = g_base64_decode(image_decode_gstring->str, &decoded_string_length);
 	image_decode_gstring = g_string_set_size(image_decode_gstring, 0);  // Remove the data now that it's been used
 
 	// Convert the png data into a GdxPixbuf we can use
 	image_loader = gdk_pixbuf_loader_new();
-	return_code = gdk_pixbuf_loader_write(image_loader, (const guchar *) message->str, message->len, &error);
+	return_code = gdk_pixbuf_loader_write(image_loader, decoded_string, decoded_string_length, &error);
 	if (TRUE != return_code)
 	{
 		g_string_printf(error_string, "%s ED66: %s: '%s'", _("Error"), _("Image data loading failed"), error->message);
@@ -466,7 +466,6 @@ layer *read_image_layer(xmlDocPtr document, xmlNodePtr this_node)
 		g_string_printf(message, "%s ED65: %s", _("Error"), _("Error when loading image data"));
 		display_warning(message->str);
 	}
-//	g_object_ref(tmp_image_ob->image_data);
 	return_code = gdk_pixbuf_loader_close(image_loader, &error);
 	if (TRUE != return_code)
 	{
