@@ -28,6 +28,7 @@
 #include <gtk/gtk.h>
 
 // Salasaga includes
+#include "../../../config.h"
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../disable_layer_toolbar_buttons.h"
@@ -44,6 +45,7 @@ void menu_file_close()
 	gint				pixmap_height;				// Height of the front stoe
 	gint				pixmap_width;				// Width of the front store
 	gboolean			return_code_gbool;			// Catches gboolean return codes
+	GString				*title_bar;					// Used to update the title bar
 	GdkRectangle		tmp_rectangle;
 
 
@@ -85,6 +87,12 @@ void menu_file_close()
 		g_string_free(file_name, TRUE);
 		file_name = NULL;
 	}
+
+	// Change the title bar
+	title_bar = g_string_new(NULL);
+	g_string_printf(title_bar, "%s v%s", APP_NAME, APP_VERSION);
+	gtk_window_set_title(GTK_WINDOW(main_window), title_bar->str);
+	g_string_free(title_bar, TRUE);
 
 	// Reset the global text tag table
 	reset_global_text_tags_table();
