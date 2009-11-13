@@ -35,41 +35,70 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "callbacks/text_layer_dialog_validate_buffer_tag_quantity.h"
 
 
 GtkTextBuffer *gtk_text_buffer_duplicate(GtkTextBuffer *source_buffer)
 {
 	// Local variables
-	GdkAtom				format_atom_dest;
-	GdkAtom				format_atom_source;
+	GtkTextIter			end_iter;
+	GtkTextIter			end_iter_minus_one;
+	gint				end_offset;
+	gint				i;
+	guint				loop_counter;
+	GtkTextIter 		loop_iter;
 	GtkTextBuffer		*new_text_buffer;
-	guint8				*serialised_buffer;
-	gsize				serialised_length;
-	GtkTextIter			text_end;					// End position of text buffer
-	GtkTextIter			text_start;					// Start position of text buffer
+	guint				num_tags;
+	GtkTextIter			source_buffer_end;
+	GtkTextIter			source_buffer_start;
+	gint				start_offset;
+	GSList				*tag_list;
+	GtkTextTag			*tag_ptr;
+	gunichar			temp_char;
+	GString				*temp_gstring;
 
+
+	// Validate the tags in the source buffer
+	text_layer_dialog_validate_buffer_tag_quantity(GTK_TEXT_BUFFER(source_buffer));
+
+	// Initialise various things
+	temp_gstring = g_string_new(NULL);
 
 	// Create a new text buffer
 	new_text_buffer = gtk_text_buffer_new(text_tags_table);
 
-	// Register text buffers for gtk's internal rich text tagset format
-	format_atom_source = gtk_text_buffer_register_serialize_tagset(source_buffer, "salasaga_text");
-	format_atom_dest = gtk_text_buffer_register_deserialize_tagset(new_text_buffer, "salasaga_text");
+	// Get the bounds of the source buffer
+	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(source_buffer), &source_buffer_start, &source_buffer_end);
+	gtk_text_iter_order(&source_buffer_start, &source_buffer_end);
 
-	// Duplicate the contents of the existing text buffer into the new one
-	gtk_text_buffer_get_bounds(source_buffer, &text_start, &text_end);
-	serialised_buffer = gtk_text_buffer_serialize(source_buffer, source_buffer, format_atom_source, &text_start, &text_end, &serialised_length);
+	// Scan through the source text buffer one character at a time, getting the character and the tags that apply to it
+	start_offset = gtk_text_iter_get_offset(&source_buffer_start);
+	end_offset = gtk_text_iter_get_offset(&source_buffer_end);
+	for (i = 0; i < end_offset; i++)
+	{
+		// Copy one character from the source text buffer to the new destination text buffer
+		gtk_text_buffer_get_iter_at_offset(GTK_TEXT_BUFFER(source_buffer), &loop_iter, i);
+		temp_char = gtk_text_iter_get_char(&loop_iter);
+		g_string_printf(temp_gstring, "%c", temp_char);
+		gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(new_text_buffer), temp_gstring->str, temp_gstring->len);
 
-	// Deserialise the data into the new buffer
-	gtk_text_buffer_get_start_iter(new_text_buffer, &text_start);
-	gtk_text_buffer_deserialize(new_text_buffer, new_text_buffer, format_atom_dest, &text_start, serialised_buffer, serialised_length, NULL);
+		// Copy the tags from the character in the source buffer to the new character in the destination buffer
+		tag_list = gtk_text_iter_get_tags(&loop_iter);
+		num_tags = g_slist_length(tag_list);
+		gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(new_text_buffer), &end_iter);
+		end_iter_minus_one = end_iter;
+		gtk_text_iter_backward_char(&end_iter_minus_one);
+		for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
+		{
+			// Copy each tag from the source text buffer to the destination one
+			tag_ptr = g_slist_nth_data(tag_list, loop_counter);
+			gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(new_text_buffer), tag_ptr, &end_iter_minus_one, &end_iter);
+		}
+		g_slist_free(tag_list);
+	}
 
-	// Free the serialised buffer
-	g_free(serialised_buffer);
-
-	// Unregister the serialisation formats
-	gtk_text_buffer_unregister_serialize_format(source_buffer, format_atom_source);
-	gtk_text_buffer_unregister_deserialize_format(new_text_buffer, format_atom_dest);
+	// Validate the tags in the duplicated buffer
+	text_layer_dialog_validate_buffer_tag_quantity(GTK_TEXT_BUFFER(new_text_buffer));
 
 	// Return the duplicated text buffer
 	return new_text_buffer;
