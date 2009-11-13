@@ -35,4 +35,4 @@ void function_declaration_here();
 }
 #endif // __cplusplus
 
-#endif /*TEMPLATE_H_*/
+#endif /* TEMPLATE_H_ */
