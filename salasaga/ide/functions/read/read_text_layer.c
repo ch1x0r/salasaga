@@ -40,7 +40,6 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../validate_value.h"
-#include "../conversion/base64_decode.h"
 #include "../dialog/display_warning.h"
 #include "../layer/layer_free.h"
 #include "../text_tags/text_layer_create_colour_tag.h"
@@ -50,16 +49,19 @@
 layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_save_format)
 {
 	// Local variables
-	GError				*error = NULL;				// Pointer to error return structure
+	xmlNodePtr			character_node;				// Used for pointing at the start of the character nodes
+	gchar				*conversion_buffer;			// Used for converting from UTF-32 to UTF-8
 	GdkColor			fg_colour;					// Text foreground colour values, used when converting old project files to the newer (v5.0+) format
 	GtkTextTag			*fg_colour_tag;				// Text tag used when converting old project files to the newer (v5.0+) format
 	guint				font_face;					// Used for loading old format project files
 	gdouble				font_size;					// Used for loading old format project files
-	GdkAtom				format_atom_dest;			// Used when deserialising the gtk buffer string
+	guint				loop_counter;				// Simple counter used for loops
+	guint				max_chars;					// Max characters
 	GString				*message;					// Used to construct message strings
-	gboolean			return_code_gbool;			// Boolean return code
+	gunichar			temp_char;					// Used when converting between character sets
 	GString				*text_buffer_decode_gstring;  // Temporary GString used for base64 decoding
 	GtkTextIter			text_end;					// End position of text buffer
+	xmlNodePtr			text_node;					// Used for pointing at the top of a text layer branch
 	GtkTextTag			*text_size_text_tag;		// Text tag used when converting old project files to the newer (v5.0+) format
 	GtkTextIter			text_start;					// Start position of text buffer
 	layer				*tmp_layer;					// Temporary layer
@@ -69,6 +71,7 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
+
 
 	// Initialisation
 	font_face = FONT_DEJAVU_SANS;  // Default font
@@ -328,27 +331,67 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 			}
 		}
 
-		// Determine if we're using a project file version that stores the text as a serialised text buffer (v5.0+),
+		// Determine if we're using a project file version that stores the text here in XML (v5.0+),
 		// or an older version ( < v5.0)
 		if (5.0 <= valid_save_format)
 		{
-			// We're using a project file that stores the text as a serialised text buffer
+			// We're using a project file that stores the text here in XML
 			if ((!xmlStrcmp(this_node->name, (const xmlChar *) "text_buffer")))
 			{
-				// Get the text buffer data
-				tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
-				validated_string = validate_value(TEXT_DATA, V_CHAR, tmp_xmlChar);
+				// Store this pointer for later, and move into the XML child node for now
+				text_node = this_node;
+
+				// Create a new text buffer for putting text in
+				tmp_text_ob->text_buffer = gtk_text_buffer_new(text_tags_table);
+				gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), &text_start);
+
+				// Get the number of characters to process
+				tmp_xmlChar = xmlGetProp(this_node, (const xmlChar *) "num_characters");
+
+				validated_guint = validate_value(NUM_TEXT_CHARS, V_CHAR, tmp_xmlChar);
 				xmlFree(tmp_xmlChar);
-				if (NULL == validated_string)
+				if (NULL == validated_guint)
 				{
-					g_string_printf(message, "%s ED432: %s", _("Error"), _("There was something wrong with text buffer data in the project file."));
+					g_string_printf(message, "%s ED446: %s", _("Error"), _("There was something wrong with the count of text layer values given in the project file."));
 					display_warning(message->str);
-					text_buffer_decode_gstring = NULL;
 					usable_input = FALSE;
+					max_chars = 0;  // Fill in the value, just to be safe
 				} else
 				{
-					text_buffer_decode_gstring = validated_string;
-					validated_string = NULL;
+					max_chars = *validated_guint;
+					g_free(validated_guint);
+				}
+
+				// Search for the required characters one by one
+				character_node = this_node->xmlChildrenNode;
+				for (loop_counter = 0; loop_counter < max_chars; loop_counter++)
+				{
+					// Move to the required character node
+					g_string_printf(message, "character_%u", loop_counter);
+					this_node = character_node;
+					while (0 != xmlStrcmp(this_node->name, (const xmlChar *) message->str))
+					{
+						// Move to the next node
+						this_node = this_node->next;
+					}
+
+					// Retrieve the character value
+					tmp_xmlChar = xmlGetProp(this_node, (const xmlChar *) "character");
+					temp_char = g_utf8_get_char_validated((const gchar *) tmp_xmlChar, -1);
+
+					// Validate the retrieved character
+					if (TRUE != g_unichar_validate(temp_char))
+					{
+						// Something other than a unicode character was retrieved
+						g_string_printf(message, "%s ED445: %s", _("Error"), _("Invalid unicode character found in text layer input."));
+						display_warning(message->str);
+						continue;
+					}
+
+					// Insert the text character into the gtk text buffer
+					conversion_buffer = g_ucs4_to_utf8(&temp_char, 1, NULL, NULL, NULL);
+					gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), conversion_buffer, -1);
+					xmlFree(tmp_xmlChar);
 				}
 			}
 		} else
@@ -656,27 +699,7 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 		this_node = this_node->next;
 	}
 
-	if (5.0 <= valid_save_format)
-	{
-		// * New style project file, with text in an encoded gtk text buffer *
-
-		// Create the new buffer and deserialise the text data into it
-		tmp_text_ob->text_buffer = gtk_text_buffer_new(text_tags_table);
-		format_atom_dest = gtk_text_buffer_register_deserialize_tagset(tmp_text_ob->text_buffer, "salasaga_project");
-		gtk_text_buffer_get_start_iter(tmp_text_ob->text_buffer, &text_start);
-
-		// Base64 decode the text data back into text buffer format
-		message = base64_decode(text_buffer_decode_gstring);
-		return_code_gbool = gtk_text_buffer_deserialize(tmp_text_ob->text_buffer, tmp_text_ob->text_buffer, format_atom_dest, &text_start, (const guint8 *) message->str, message->len, &error);
-		if (FALSE == return_code_gbool)
-		{
-			// Deserialization failed.  Inform the user
-			g_string_printf(message, "%s ED433: %s: '%s'", _("Error"), _("Loading a text layer text buffer failed.  Error given was"), error->message);
-			display_warning(message->str);
-		}
-		g_string_free(text_buffer_decode_gstring, TRUE);
-
-	} else
+	if (5.0 > valid_save_format)
 	{
 		// * Old style project file, with text data in multiple values *
 
