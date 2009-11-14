@@ -51,6 +51,8 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 	// Local variables
 	xmlNodePtr			character_node;				// Used for pointing at the start of the character nodes
 	gchar				*conversion_buffer;			// Used for converting from UTF-32 to UTF-8
+	GtkTextIter			end_iter;					// Used to point to the end of a Gtk text buffer
+	GtkTextIter			end_iter_minus_one;			// Used to point to the character right before the end of a Gtk text buffer
 	GdkColor			fg_colour;					// Text foreground colour values, used when converting old project files to the newer (v5.0+) format
 	GtkTextTag			*fg_colour_tag;				// Text tag used when converting old project files to the newer (v5.0+) format
 	guint				font_face;					// Used for loading old format project files
@@ -97,6 +99,7 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 	tmp_layer->duration = default_layer_duration;
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_out_duration = 0.0;
+	tmp_text_ob->text_buffer = NULL;
 	tmp_text_ob->rendered_height = 0;
 	tmp_text_ob->rendered_width = 0;
 	tmp_text_ob->show_bg = TRUE;
@@ -336,7 +339,7 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 		if (5.0 <= valid_save_format)
 		{
 			// We're using a project file that stores the text here in XML
-			if ((!xmlStrcmp(this_node->name, (const xmlChar *) "text_buffer")))
+			if ((NULL == tmp_text_ob->text_buffer) && (!xmlStrcmp(this_node->name, (const xmlChar *) "text_buffer")))
 			{
 				// Store this pointer for later, and move into the XML child node for now
 				text_node = this_node;
@@ -388,12 +391,42 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 						continue;
 					}
 
-					// Insert the text character into the gtk text buffer
+					// Insert the text character into the Gtk text buffer
 					conversion_buffer = g_ucs4_to_utf8(&temp_char, 1, NULL, NULL, NULL);
 					gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), conversion_buffer, -1);
 					xmlFree(tmp_xmlChar);
+
+					// Set up the TextIter pointers for the Gtk text buffer
+					gtk_text_buffer_get_end_iter(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), &end_iter);
+					end_iter_minus_one = end_iter;
+					gtk_text_iter_backward_char(&end_iter_minus_one);
+
+					// Process the text tags from the XML and apply them to this character in the Gtk text buffer
+					this_node = this_node->xmlChildrenNode;
+					while (NULL != this_node)
+					{
+						if ((!xmlStrcmp(this_node->name, (const xmlChar *) "tag")))
+						{
+							// Retrieve the tag string value
+							// fixme3: Should probably add validation of the tag names at some point, to be on the safe side
+							tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
+
+							// Apply the tag to this character in the Gtk text buffer
+							gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), (const gchar *) tmp_xmlChar, &end_iter_minus_one, &end_iter);
+							xmlFree(tmp_xmlChar);
+						}
+
+						// Move to the next node
+						this_node = this_node->next;
+					}
+
+					// End of the loop that retrieves characters
 				}
+
+				// Let the program continue on it's merry way
+				this_node = text_node;
 			}
+
 		} else
 		{
 			// * We're using an older project file version, that has text stored in multiple fields *
