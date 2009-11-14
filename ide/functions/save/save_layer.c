@@ -326,7 +326,7 @@ void save_layer(gpointer element, gpointer user_data)
 			gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(source_buffer), &source_buffer_start, &source_buffer_end);
 			gtk_text_iter_order(&source_buffer_start, &source_buffer_end);
 
-			// Write the number of characters to the node
+			// Write the number of characters as a property
 			start_offset = gtk_text_iter_get_offset(&source_buffer_start);
 			end_offset = gtk_text_iter_get_offset(&source_buffer_end);
 			g_string_printf(tmp_gstring, "%u", end_offset);
@@ -346,7 +346,7 @@ void save_layer(gpointer element, gpointer user_data)
 					return;
 				}
 
-				// Save each character of the text buffer into a new node
+				// Save each character of the text buffer as a property
 				gtk_text_buffer_get_iter_at_offset(GTK_TEXT_BUFFER(source_buffer), &loop_iter, character_counter);
 				temp_char = gtk_text_iter_get_char(&loop_iter);
 				conversion_buffer = g_ucs4_to_utf8(&temp_char, 1, NULL, NULL, NULL);
@@ -368,13 +368,9 @@ void save_layer(gpointer element, gpointer user_data)
 				xmlNewProp(character_node, (const xmlChar *) "character", (const xmlChar *) conversion_buffer);
 				g_free(conversion_buffer);
 
-				// Save the number of tags for the character as a node
+				// Save the tags names to nodes
 				tag_list = gtk_text_iter_get_tags(&loop_iter);
 				num_tags = g_slist_length(tag_list);
-				g_string_printf(tmp_gstring, "%u", num_tags);
-				xmlNewChild(character_node, NULL, (const xmlChar *) "num_tags", (const xmlChar *) tmp_gstring->str);
-
-				// Save the tags names to nodes
 				for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
 				{
 					// Turn each tag into a named representation
