@@ -330,7 +330,7 @@ void save_layer(gpointer element, gpointer user_data)
 			start_offset = gtk_text_iter_get_offset(&source_buffer_start);
 			end_offset = gtk_text_iter_get_offset(&source_buffer_end);
 			g_string_printf(tmp_gstring, "%u", end_offset);
-			xmlNewChild(text_buffer_node, NULL, (const xmlChar *) "num_characters", (const xmlChar *) tmp_gstring->str);
+			xmlNewProp(text_buffer_node, (const xmlChar *) "num_characters", (const xmlChar *) tmp_gstring->str);
 
 			// Scan through the source text buffer one character at a time, getting the character and the tags that apply to it
 			for (character_counter = 0; character_counter < end_offset; character_counter++)
@@ -365,7 +365,7 @@ void save_layer(gpointer element, gpointer user_data)
 					display_warning(tmp_gstring->str);
 					continue;
 				}
-				xmlNewChild(character_node, NULL, (const xmlChar *) "character", (const xmlChar *) conversion_buffer);
+				xmlNewProp(character_node, (const xmlChar *) "character", (const xmlChar *) conversion_buffer);
 				g_free(conversion_buffer);
 
 				// Save the number of tags for the character as a node
