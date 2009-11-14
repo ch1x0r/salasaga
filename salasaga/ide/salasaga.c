@@ -463,7 +463,7 @@ gint main(gint argc, gchar *argv[])
 
 	// Set the window title and border
 	gtk_window_set_title(GTK_WINDOW(main_window), wintitle);
-	gtk_container_set_border_width(GTK_CONTAINER (main_window), 0);
+	gtk_container_set_border_width(GTK_CONTAINER(main_window), 0);
 
 	// Create the title bar icon
 	g_string_printf(title_bar_icon_path, "%s%c%s", STATUS_ICON_DIR, G_DIR_SEPARATOR, "salasaga-icon.png");
