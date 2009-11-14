@@ -38,30 +38,40 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../conversion/base64_encode.h"
 #include "../dialog/display_warning.h"
 
 
 void save_layer(gpointer element, gpointer user_data)
 {
 	// Local variables
+
 	gchar				*base64_string;			// Pointer to an Base64 string
+	guint				character_counter;		// Counts how many characters have been written
+	xmlNodePtr			character_node;			// Pointer to a character node
+	gchar				*conversion_buffer;		// Used for converting from UTF-32 to UTF-8
+	gint				end_offset;				// Used when calculating text buffer character offsets
 	GError				*error = NULL;			// Pointer to error return structure
-	GdkAtom				format_atom_source;
 	GString				*layer_name;			// Name of the layer
 	xmlNodePtr			layer_node;				// Pointer to the new layer node
 	layer				*layer_pointer;			// Points to the presently processing layer
 	guint				layer_type;				// The type of layer
+	guint				loop_counter;
+	GtkTextIter 		loop_iter;
 	GString				*message;				// Used to construct message strings
+	guint				num_tags;
 	gchar				*pixbuf_buffer;			// Gets given a pointer to a compressed jpeg image
 	gsize				pixbuf_size;			// Gets given the size of a compressed jpeg image
-	guint8				*serialised_buffer;
-	gsize				serialised_length;
 	xmlNodePtr			slide_node;				// Pointer to the slide node
 	GtkTextBuffer		*source_buffer;			// Simplified pointer, pointing to text layer text buffer contents
+	GtkTextIter			source_buffer_end;		// Used when calculating text buffer character offsets
+	GtkTextIter			source_buffer_start;	// Used when calculating text buffer character offsets
+	gint				start_offset;			// Used when calculating text buffer character offsets
+	GSList				*tag_list;
+	GtkTextTag			*tag_ptr;
+	gunichar			temp_char;				// Used for converting from UTF-32 to UTF-8
+	xmlNodePtr			text_buffer_node;		// Pointer to a text buffer node
 	GtkTextIter			text_end;				// The end position of the text buffer
 	GtkTextIter			text_start;				// The start position of the text buffer
-
 	gboolean			tmp_bool;				// Temporary boolean value
 	GString				*tmp_gstring;			// Temporary GString
 	GString				*tmp_gstring2;			// Temporary GString
@@ -166,7 +176,8 @@ void save_layer(gpointer element, gpointer user_data)
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "data_length", (const xmlChar *) tmp_gstring2->str);
 
 			// Base64 encode the image data
-			base64_encode(pixbuf_buffer, pixbuf_size, &base64_string);
+			base64_string = g_base64_encode((const guchar *) pixbuf_buffer, pixbuf_size);
+			g_free(pixbuf_buffer);
 
 			// Create a string to write to the output file
 			g_string_printf(tmp_gstring, "%s", base64_string);
@@ -299,19 +310,79 @@ void save_layer(gpointer element, gpointer user_data)
 			g_string_printf(tmp_gstring, "%0.4f", ((layer_text *) layer_pointer->object_data)->bg_border_width);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "bg_border_width", (const xmlChar *) tmp_gstring->str);
 
-			// Serialise the text buffer data
-			format_atom_source = gtk_text_buffer_register_serialize_tagset(source_buffer, "salasaga_project");
-			serialised_buffer = gtk_text_buffer_serialize(source_buffer, source_buffer, format_atom_source, &text_start, &text_end, &serialised_length);
+			// * Each text layer buffer becomes a branch with nodes *
 
-			// Base64 encode the serialised text buffer data
-			base64_encode(serialised_buffer, serialised_length, &base64_string);
+			// Create a new text buffer container node
+			text_buffer_node = xmlNewChild(layer_node, NULL, (const xmlChar *) "text_buffer", NULL);
+			if (NULL == text_buffer_node)
+			{
+				g_string_printf(tmp_gstring, "%s ED439: %s", _("Error"), _("Error saving a text data node in the project file."));
+				display_warning(tmp_gstring->str);
+				g_string_free(tmp_gstring, TRUE);
+				return;
+			}
 
-			// Save the base64 encoded text buffer data
-			xmlNewChild(layer_node, NULL, (const xmlChar *) "text_buffer", (const xmlChar *) base64_string);
+			// Get the bounds of the source gtk text buffer
+			gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(source_buffer), &source_buffer_start, &source_buffer_end);
+			gtk_text_iter_order(&source_buffer_start, &source_buffer_end);
 
-			// Clean up
-			g_free(serialised_buffer);
-			gtk_text_buffer_unregister_serialize_format(source_buffer, format_atom_source);
+			// Write the number of characters to the node
+			start_offset = gtk_text_iter_get_offset(&source_buffer_start);
+			end_offset = gtk_text_iter_get_offset(&source_buffer_end);
+			g_string_printf(tmp_gstring, "%u", end_offset);
+			xmlNewChild(text_buffer_node, NULL, (const xmlChar *) "num_characters", (const xmlChar *) tmp_gstring->str);
+
+			// Scan through the source text buffer one character at a time, getting the character and the tags that apply to it
+			for (character_counter = 0; character_counter < end_offset; character_counter++)
+			{
+				// Create a new character container node
+				g_string_printf(tmp_gstring, "character_%u", character_counter);
+				character_node = xmlNewChild(text_buffer_node, NULL, (const xmlChar *) tmp_gstring->str, NULL);
+				if (NULL == character_node)
+				{
+					g_string_printf(tmp_gstring, "%s ED440: %s", _("Error"), _("Error saving character data to the project file."));
+					display_warning(tmp_gstring->str);
+					g_string_free(tmp_gstring, TRUE);
+					return;
+				}
+
+				// Save each character of the text buffer into a new node
+				gtk_text_buffer_get_iter_at_offset(GTK_TEXT_BUFFER(source_buffer), &loop_iter, character_counter);
+				temp_char = gtk_text_iter_get_char(&loop_iter);
+				conversion_buffer = g_ucs4_to_utf8(&temp_char, 1, NULL, NULL, NULL);
+				if (NULL == conversion_buffer)
+				{
+					g_string_printf(tmp_gstring, "%s ED443: %s", _("Error"), _("Could not convert unicode character from ucs4 to utf8."));
+					display_warning(tmp_gstring->str);
+					continue;
+				}
+
+				// Validate the retrieved character
+				if (TRUE != g_unichar_validate(temp_char))
+				{
+					// Something other than a unicode character was retrieved
+					g_string_printf(tmp_gstring, "%s ED444: %s", _("Error"), _("Invalid unicode character found in text."));
+					display_warning(tmp_gstring->str);
+					continue;
+				}
+				xmlNewChild(character_node, NULL, (const xmlChar *) "character", (const xmlChar *) conversion_buffer);
+				g_free(conversion_buffer);
+
+				// Save the number of tags for the character as a node
+				tag_list = gtk_text_iter_get_tags(&loop_iter);
+				num_tags = g_slist_length(tag_list);
+				g_string_printf(tmp_gstring, "%u", num_tags);
+				xmlNewChild(character_node, NULL, (const xmlChar *) "num_tags", (const xmlChar *) tmp_gstring->str);
+
+				// Save the tags names to nodes
+				for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
+				{
+					// Turn each tag into a named representation
+					tag_ptr = g_slist_nth_data(tag_list, loop_counter);
+					xmlNewChild(character_node, NULL, (const xmlChar *) "tag", (const xmlChar *) tag_ptr->name);
+				}
+				g_slist_free(tag_list);
+			}
 
 			break;
 
