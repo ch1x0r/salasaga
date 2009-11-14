@@ -22,14 +22,14 @@ salasaga_SOURCES = create_resolution_selector.c \
 	zoom_selector_changed.c \
 	cairo/create_cairo_pixbuf_pattern.c \
 	cairo/render_text_string.c \
+	callbacks/dump_selection_info.c \
 	callbacks/text_layer_dialog_bg_colour_changed.c \
 	callbacks/text_layer_dialog_fg_colour_changed.c \
 	callbacks/text_layer_dialog_font_changed.c \
 	callbacks/text_layer_dialog_selection_changed.c \
 	callbacks/text_layer_dialog_size_changed.c \
+	callbacks/text_layer_dialog_validate_buffer_tag_quantity.c \
 	callbacks/track_window_state.c \
-	conversion/base64_decode.c \
-	conversion/base64_encode.c \
 	dialog/display_dialog_empty.c \
 	dialog/display_dialog_highlight.c \
 	dialog/display_dialog_image.c \
