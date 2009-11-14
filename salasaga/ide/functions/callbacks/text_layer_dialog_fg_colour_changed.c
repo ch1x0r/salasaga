@@ -36,6 +36,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../text_tags/text_layer_create_colour_tag.h"
+#include "text_layer_dialog_validate_buffer_tag_quantity.h"
 
 
 gboolean text_layer_dialog_fg_colour_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
@@ -82,6 +83,9 @@ gboolean text_layer_dialog_fg_colour_changed(GtkWidget *calling_widget, text_dia
 
 	// Apply the foreground colour to the selected text
 	gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(text_buffer), GTK_TEXT_TAG(fg_colour_tag), &selection_start, &selection_end);
+
+	// Validate the correct # of tags are in place for all characters in the buffer
+	text_layer_dialog_validate_buffer_tag_quantity(GTK_TEXT_BUFFER(text_buffer));
 
 	return FALSE;
 }
