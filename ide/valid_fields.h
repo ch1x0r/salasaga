@@ -55,6 +55,7 @@ validatation_entry		valid_fields[] =
 	{ LAYER_WIDTH,			N_("Width of this layer"),						V_INT_UNSIGNED,		V_NONE,		1,		4096 },
 	{ LINE_WIDTH,			N_("Line width"),								V_FLOAT_UNSIGNED,	V_NONE,		0.00,	20 },
 	{ MOUSE_CLICK,			N_("Mouse click"),								V_CHAR,				V_UNDERSCORES,		0,		13 },
+	{ NUM_TEXT_CHARS,		N_("Characters in a text layer"),				V_INT_UNSIGNED,		V_NONE,		0,		2000 },
 	{ OPACITY,				N_("Opacity level"),							V_FLOAT_UNSIGNED,	V_NONE,		0,		100 },
 	{ PREVIEW_WIDTH,		N_("Width of film strip thumbnails"),			V_INT_UNSIGNED,		V_NONE,		20,		800 },
 	{ PROJECT_FPS,			N_("Frames per Second for this project"),		V_INT_UNSIGNED,		V_NONE,		1,		120 },
