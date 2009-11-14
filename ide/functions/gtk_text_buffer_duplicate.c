@@ -96,6 +96,7 @@ GtkTextBuffer *gtk_text_buffer_duplicate(GtkTextBuffer *source_buffer)
 		}
 		g_slist_free(tag_list);
 	}
+	g_string_free(temp_gstring, TRUE);
 
 	// Validate the tags in the duplicated buffer
 	text_layer_dialog_validate_buffer_tag_quantity(GTK_TEXT_BUFFER(new_text_buffer));
