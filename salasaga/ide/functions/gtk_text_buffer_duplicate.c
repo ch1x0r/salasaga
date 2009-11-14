@@ -36,11 +36,13 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "callbacks/text_layer_dialog_validate_buffer_tag_quantity.h"
+#include "dialog/display_warning.h"
 
 
 GtkTextBuffer *gtk_text_buffer_duplicate(GtkTextBuffer *source_buffer)
 {
 	// Local variables
+	gchar				*conversion_buffer;			// Used when converting between unicode character types
 	GtkTextIter			end_iter;
 	GtkTextIter			end_iter_minus_one;
 	gint				end_offset;
@@ -79,8 +81,23 @@ GtkTextBuffer *gtk_text_buffer_duplicate(GtkTextBuffer *source_buffer)
 		// Copy one character from the source text buffer to the new destination text buffer
 		gtk_text_buffer_get_iter_at_offset(GTK_TEXT_BUFFER(source_buffer), &loop_iter, i);
 		temp_char = gtk_text_iter_get_char(&loop_iter);
-		g_string_printf(temp_gstring, "%c", temp_char);
-		gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(new_text_buffer), temp_gstring->str, temp_gstring->len);
+		conversion_buffer = g_ucs4_to_utf8(&temp_char, 1, NULL, NULL, NULL);
+		if (NULL == conversion_buffer)
+		{
+			g_string_printf(temp_gstring, "%s ED441: %s", _("Error"), _("Could not convert unicode character from ucs4 to utf8."));
+			display_warning(temp_gstring->str);
+			continue;
+		}
+
+		// Validate the retrieved character
+		if (TRUE != g_unichar_validate(temp_char))
+		{
+			// Something other than a unicode character was retrieved
+			g_string_printf(temp_gstring, "%s ED442: %s", _("Error"), _("Invalid unicode character found in text."));
+			display_warning(temp_gstring->str);
+			continue;
+		}
+		gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(new_text_buffer), conversion_buffer, -1);
 
 		// Copy the tags from the character in the source buffer to the new character in the destination buffer
 		tag_list = gtk_text_iter_get_tags(&loop_iter);
