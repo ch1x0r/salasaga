@@ -36,6 +36,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../text_tags/text_layer_create_font_size_tag.h"
+#include "text_layer_dialog_validate_buffer_tag_quantity.h"
 
 
 gboolean text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
@@ -64,6 +65,7 @@ gboolean text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_w
 	{
 		return FALSE;
 	}
+	gtk_text_iter_order(&selection_start, &selection_end);
 
 	// Retrieve the requested font size from the size widget
 	font_size = gtk_range_get_value(GTK_RANGE(font_size_scale));
@@ -89,6 +91,9 @@ gboolean text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_w
 
 	// Reset the colour scheme for the widget
 	gtk_widget_modify_fg(GTK_WIDGET(font_size_scale), GTK_STATE_NORMAL, NULL);
+
+	// Validate the correct # of tags are in place for all characters in the buffer
+	text_layer_dialog_validate_buffer_tag_quantity(GTK_TEXT_BUFFER(text_buffer));
 
 	return FALSE;
 }

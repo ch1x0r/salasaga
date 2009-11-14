@@ -35,6 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "text_layer_dialog_validate_buffer_tag_quantity.h"
 
 
 gboolean text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
@@ -61,6 +62,7 @@ gboolean text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_w
 	{
 		return FALSE;
 	}
+	gtk_text_iter_order(&selection_start, &selection_end);
 
 	// Retrieve the value selected in the font face drop down
 	font_face_val = gtk_combo_box_get_active(GTK_COMBO_BOX(font_face_widget));
@@ -79,6 +81,9 @@ gboolean text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_w
 
 	// Apply the requested font face to the selected text
 	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(text_buffer), salasaga_font_names[font_face_val], &selection_start, &selection_end);
+
+	// Validate the correct # of tags are in place for all characters in the buffer
+	text_layer_dialog_validate_buffer_tag_quantity(GTK_TEXT_BUFFER(text_buffer));
 
 	return FALSE;
 }
