@@ -35,6 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../callbacks/dump_selection_info.h"
 #include "../callbacks/text_layer_dialog_bg_colour_changed.h"
 #include "../callbacks/text_layer_dialog_fg_colour_changed.h"
 #include "../callbacks/text_layer_dialog_font_changed.h"
@@ -51,6 +52,7 @@
 gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 {
 	// Local variables
+	gulong				dump_button_callback;		// ID of the callback handler for dump text layer button
 	GdkColor			*fg_colour;					// Colour to use the in foreground colour button
 	gulong				font_bg_callback;			// ID of the callback handler for the font background colour widget
 	gulong				font_face_callback;			// ID of the callback handler for the font face combo box
@@ -133,6 +135,9 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*display_bg_checkbox;		// Background visibility check box widget
 
 	GtkWidget			*visibility_checkbox;		// Layer visibility check box widget
+
+	GtkWidget			*dump_buffer_label;			// Label widget
+	GtkWidget			*dump_buffer_button;	//
 
 	// * Duration tab fields *
 
@@ -404,6 +409,25 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(visibility_checkbox), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
+	// * Should only display while debugging *
+
+	// If the debug flag is set, we display a button that allows dumping the text layer to stdout when pressed
+	if (0 != debug_level)
+	{
+		// Create the label for the debugging button to dump the text layer to stdout
+		dump_buffer_label = gtk_label_new(_("Dump text layer to stdout: "));
+		gtk_misc_set_alignment(GTK_MISC(dump_buffer_label), 0, 0.5);
+		gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(dump_buffer_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+
+		// Create the button to dump the text layer to stdout
+		dump_buffer_button = gtk_button_new_with_label("Press to dump");
+		gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(dump_buffer_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+		row_counter = row_counter + 1;
+
+		// Add a signal handler to button, to be called when the user presses it
+		dump_button_callback = g_signal_connect(G_OBJECT(dump_buffer_button), "clicked", G_CALLBACK(dump_selection_info), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	}
+
 	// * Duration tab fields *
 
 	// Reset the row counter
@@ -557,6 +581,10 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			g_signal_handler_disconnect(G_OBJECT(font_size_scale), font_size_callback);
 			g_signal_handler_disconnect(G_OBJECT(selector_font_face), font_face_callback);
 			g_signal_handler_disconnect(G_OBJECT(text_buffer), selection_callback);
+			if (0 != debug_level)
+			{
+				g_signal_handler_disconnect(G_OBJECT(dump_buffer_button), dump_button_callback);
+			}
 
 			// Destroy the dialog and return to the caller
 			gtk_widget_destroy(GTK_WIDGET(text_dialog));
@@ -812,6 +840,10 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	g_signal_handler_disconnect(G_OBJECT(font_size_scale), font_size_callback);
 	g_signal_handler_disconnect(G_OBJECT(selector_font_face), font_face_callback);
 	g_signal_handler_disconnect(G_OBJECT(text_buffer), selection_callback);
+	if (0 != debug_level)
+	{
+		g_signal_handler_disconnect(G_OBJECT(dump_buffer_button), dump_button_callback);
+	}
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(text_dialog));
