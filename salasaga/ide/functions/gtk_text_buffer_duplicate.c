@@ -98,6 +98,7 @@ GtkTextBuffer *gtk_text_buffer_duplicate(GtkTextBuffer *source_buffer)
 			continue;
 		}
 		gtk_text_buffer_insert_at_cursor(GTK_TEXT_BUFFER(new_text_buffer), conversion_buffer, -1);
+		g_free(conversion_buffer);
 
 		// Copy the tags from the character in the source buffer to the new character in the destination buffer
 		tag_list = gtk_text_iter_get_tags(&loop_iter);
