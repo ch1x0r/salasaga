@@ -27,6 +27,7 @@
 // Standard includes
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 // GTK includes
 #include <gtk/gtk.h>
@@ -47,9 +48,11 @@ void *validate_value(gint value_id, gint input_type, void *value)
 	// Local variables
 	guint				capabilities;
 	gboolean			capability_check;
+	gchar				*decimal_point;
 	guint				base_type;
 	GString				*error_string;
 	gchar				input_char;
+	struct lconv		*locale_info;
 	gboolean			match_found;
 	gfloat				output_gfloat;
 	gfloat				*output_gfloat_ptr;
@@ -68,6 +71,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 	base_type = valid_fields[value_id].base_type;
 	capabilities = valid_fields[value_id].capabilities;
 	output_gstring = g_string_new(NULL);
+	locale_info = localeconv();
+	decimal_point = locale_info->decimal_point;
 
 	switch (base_type)
 	{
@@ -332,7 +337,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 						if (0 == g_ascii_strncasecmp(".", &input_char, 1))
 						{
 							// Yes, this is a full stop character
-							output_gstring = g_string_append_c(output_gstring, '.');
+							output_gstring = g_string_append_c(output_gstring, *decimal_point);
 							match_found = TRUE;
 							continue;
 						}
@@ -341,7 +346,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 						if (0 == g_ascii_strncasecmp(",", &input_char, 1))
 						{
 							// Yes, this is a comma character
-							output_gstring = g_string_append_c(output_gstring, ',');
+							output_gstring = g_string_append_c(output_gstring, *decimal_point);
 							match_found = TRUE;
 							continue;
 						}
