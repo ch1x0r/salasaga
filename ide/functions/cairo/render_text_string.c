@@ -54,6 +54,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	cairo_t					*cairo_context;			// Cairo drawing context
 	gdouble					cairo_pos_x = 0;		// Used for positioning where cairo will draw, in text layers
 	gdouble					cairo_pos_y = 0;		// Used for positioning where cairo will draw, in text layers
+	gchar					*conversion_buffer;		// Used when converting between unicode character types
 	GtkTextIter				cursor_iter;			// Used for positioning in a text buffer
 	cairo_font_face_t		*font_array_face = NULL;  // Gets pointed to a cairo font face for each character when creating the text layer
 	GdkColor				*fg_colour;				// Foreground colour to set a text layer character to
@@ -77,6 +78,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	GdkColor				*selected_colour;		// Pointer to a foreground colour
 	static GdkColormap		*system_colourmap = NULL;	// Colormap used for drawing
 	GString					*render_string;			// Used for rendering a text layer, one character at a time
+	gunichar				temp_char;				// Used when converting between unicode character types
 	GtkTextAppearance		*text_appearance;		// Used in text layer rendering, to determine some of the attributes needed
 	GtkTextAttributes		*text_attributes;		// Pointer to the attributes for a text layer character
 	GtkTextBuffer			*text_buffer;			// Pointer to the text buffer we're using
@@ -112,6 +114,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	// Set things up
 	cairo_pos_x = incoming_cairo_pos_x;
 	cairo_pos_y = incoming_cairo_pos_y;
+	conversion_buffer = NULL;
 	max_line_width = 0;
 	render_string = g_string_new(NULL);
 	text_buffer = text_object->text_buffer;
@@ -150,7 +153,9 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 			fg_colour = &(text_appearance->fg_color);
 
 			// Get the character to be written
-			g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
+			temp_char = gtk_text_iter_get_char(&cursor_iter);
+			conversion_buffer = g_ucs4_to_utf8(&temp_char, 1, NULL, NULL, NULL);
+			g_string_printf(render_string, "%s", conversion_buffer);
 
 			// Calculate the size the character should be displayed at
 			font_size_int = pango_font_description_get_size(font_face);
@@ -314,7 +319,13 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 				cairo_set_source_rgba(cairo_context, fg_colour->red / 65535.0, fg_colour->green / 65535.0, fg_colour->blue / 65535.0, time_alpha);
 
 				// Get the character to be written
-				g_string_printf(render_string, "%c", gtk_text_iter_get_char(&cursor_iter));
+				if (NULL != conversion_buffer)
+				{
+					g_free(conversion_buffer);
+				}
+				temp_char = gtk_text_iter_get_char(&cursor_iter);
+				conversion_buffer = g_ucs4_to_utf8(&temp_char, 1, NULL, NULL, NULL);
+				g_string_printf(render_string, "%s", conversion_buffer);
 
 				// Calculate the size the character should be displayed at
 				font_size_int = pango_font_description_get_size(font_face);
@@ -387,6 +398,10 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	g_free(text_object->rendered_line_heights);
 	g_object_unref(text_view);
 	g_string_free(render_string, TRUE);
+	if (NULL != conversion_buffer)
+	{
+		g_free(conversion_buffer);
+	}
 
 	return TRUE;
 }
