@@ -27,6 +27,7 @@
 // Standard includes
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 // GTK includes
 #include <gtk/gtk.h>
@@ -46,9 +47,11 @@ void *validate_value(gint value_id, gint input_type, void *value)
 	// Local variables
 	guint				capabilities;
 	gboolean			capability_check;
+	gchar				*decimal_point;
 	guint				base_type;
 	GString				*error_string;
 	gchar				input_char;
+	struct lconv		*locale_info;
 	gboolean			match_found;
 	gfloat				output_gfloat;
 	gfloat				*output_gfloat_ptr;
@@ -67,6 +70,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 	base_type = valid_fields[value_id].base_type;
 	capabilities = valid_fields[value_id].capabilities;
 	output_gstring = g_string_new(NULL);
+	locale_info = localeconv();
+	decimal_point = locale_info->decimal_point;
 
 	switch (base_type)
 	{
@@ -107,7 +112,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					capability_check = V_SPACES & capabilities;
 					if (FALSE != capability_check)
 					{
-						// This field is allowed to have spaces.  Is this character a space?
+						// This field is allowed to have spaces
 						if (0 == g_ascii_strncasecmp(" ", &input_char, 1))
 						{
 							// Yes, this is a space character
@@ -119,7 +124,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					capability_check = V_FULL_STOP & capabilities;
 					if (FALSE != capability_check)
 					{
-						// This field is allowed to have full stops.  Is this character a full stop?
+						// This field is allowed to have full stops
 						if (0 == g_ascii_strncasecmp(".", &input_char, 1))
 						{
 							// Yes, this is a full stop character
@@ -131,7 +136,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					capability_check = V_HYPENS & capabilities;
 					if (FALSE != capability_check)
 					{
-						// This field is allowed to have hypens.  Is this character a hyphen?
+						// This field is allowed to have hypens
 						if (0 == g_ascii_strncasecmp("-", &input_char, 1))
 						{
 							// Yes, this is a hypen character
@@ -143,7 +148,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					capability_check = V_UNDERSCORES & capabilities;
 					if (FALSE != capability_check)
 					{
-						// This field is allowed to have underscores.  Is this character an underscore?
+						// This field is allowed to have underscores
 						if (0 == g_ascii_strncasecmp("_", &input_char, 1))
 						{
 							// Yes, this is an underscore character
@@ -155,7 +160,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					capability_check = V_PATH_SEP & capabilities;
 					if (FALSE != capability_check)
 					{
-						// This field is allowed to have path seperator characters ('/', '\') .  Is this character one of those?
+						// This field is allowed to have path seperator characters ('/', '\')
 						if ((0 == g_ascii_strncasecmp("/", &input_char, 1)) || (0 == g_ascii_strncasecmp("\\", &input_char, 1)))
 						{
 							// Yes, this is a path separator character
@@ -167,7 +172,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					capability_check = V_EQUALS & capabilities;
 					if (FALSE != capability_check)
 					{
-						// This field is allowed to have equals signs.  Is this character an equals sign?
+						// This field is allowed to have equals signs
 						if (0 == g_ascii_strncasecmp("=", &input_char, 1))
 						{
 							// Yes, this is an equals sign character
@@ -179,7 +184,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					capability_check = V_FORWARD_SLASHES & capabilities;
 					if (FALSE != capability_check)
 					{
-						// This field is allowed to have forward slashes.  Is this character a forward slash?
+						// This field is allowed to have forward slashes
 						if (0 == g_ascii_strncasecmp("/", &input_char, 1))
 						{
 							// Yes, this is a forward slash character
@@ -191,7 +196,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					capability_check = V_NEW_LINES & capabilities;
 					if (FALSE != capability_check)
 					{
-						// This field is allowed to have new line characters.  Is this character a new line?
+						// This field is allowed to have new line characters
 						if (0 == g_ascii_strncasecmp("\n", &input_char, 1))
 						{
 							// Yes, this is a new line character
@@ -203,7 +208,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					capability_check = V_PLUSES & capabilities;
 					if (FALSE != capability_check)
 					{
-						// This field is allowed to have pluses.  Is this character a plus?
+						// This field is allowed to have pluses
 						if (0 == g_ascii_strncasecmp("+", &input_char, 1))
 						{
 							// Yes, this is a plus character
@@ -271,7 +276,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 						if (0 == g_ascii_strncasecmp(".", &input_char, 1))
 						{
 							// Yes, this is a full stop character
-							output_gstring = g_string_append_c(output_gstring, '.');
+							output_gstring = g_string_append_c(output_gstring, *decimal_point);
 							match_found = TRUE;
 							continue;
 						}
@@ -280,7 +285,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 						if (0 == g_ascii_strncasecmp(",", &input_char, 1))
 						{
 							// Yes, this is a comma character
-							output_gstring = g_string_append_c(output_gstring, ',');
+							output_gstring = g_string_append_c(output_gstring, *decimal_point);
 							match_found = TRUE;
 							continue;
 						}
