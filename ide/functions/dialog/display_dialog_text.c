@@ -41,6 +41,7 @@
 #include "../callbacks/text_layer_dialog_font_changed.h"
 #include "../callbacks/text_layer_dialog_selection_changed.h"
 #include "../callbacks/text_layer_dialog_size_changed.h"
+#include "../callbacks/transition_type_changed.h"
 #include "../text_tags/get_selection_fg_colour.h"
 #include "../text_tags/get_selection_font_face.h"
 #include "../text_tags/get_selection_font_size.h"
@@ -52,7 +53,12 @@
 gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 {
 	// Local variables
+	gint				active_type;				// Used to tell which type of transition is active
 	gulong				dump_button_callback;		// ID of the callback handler for dump text layer button
+	gulong				entry_duration_callback;	// ID of the callback handler for the entry_duration_widgets
+	gulong				exit_duration_callback;		// ID of the callback handler for the exit_duration_widgets
+	transition_widgets	*entry_duration_widgets;	// Holds points to the entry duration widgets
+	transition_widgets	*exit_duration_widgets;		// Holds points to the exit duration widgets
 	GdkColor			*fg_colour;					// Colour to use the in foreground colour button
 	gulong				font_bg_callback;			// ID of the callback handler for the font background colour widget
 	gulong				font_face_callback;			// ID of the callback handler for the font face combo box
@@ -548,6 +554,27 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_in_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
+	// Enable or disable the entry transition widgets
+	active_type = gtk_combo_box_get_active(GTK_COMBO_BOX(selector_trans_in_type));
+	if (0 == active_type)
+	{
+		// The transition is Immediate, so we disable the slider
+		gtk_widget_set_sensitive(GTK_WIDGET(label_trans_in_duration), FALSE);
+		gtk_widget_set_sensitive(GTK_WIDGET(scale_trans_in_duration), FALSE);
+	} else
+	{
+		// The transition is not Immediate, so we enable the slider
+		gtk_widget_set_sensitive(GTK_WIDGET(label_trans_in_duration), TRUE);
+		gtk_widget_set_sensitive(GTK_WIDGET(scale_trans_in_duration), TRUE);
+	}
+
+	// Set up a callback to make the appearance transition duration slider sensitive to user input or not
+	entry_duration_widgets = g_slice_new0(transition_widgets);
+	entry_duration_widgets->transition_type = selector_trans_in_type;
+	entry_duration_widgets->transition_duration_label = label_trans_in_duration;
+	entry_duration_widgets->transition_duration_widget = scale_trans_in_duration;
+	entry_duration_callback = g_signal_connect(G_OBJECT(selector_trans_in_type), "changed", G_CALLBACK(transition_type_changed), (gpointer) entry_duration_widgets);
+
 	// Create the label asking for the layer duration
 	duration_label = gtk_label_new(_("Display for (seconds): "));
 	gtk_misc_set_alignment(GTK_MISC(duration_label), 0, 0.5);
@@ -599,6 +626,27 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
+	// Enable or disable the exit transition widgets
+	active_type = gtk_combo_box_get_active(GTK_COMBO_BOX(selector_trans_out_type));
+	if (0 == active_type)
+	{
+		// The transition is Immediate, so we disable the slider
+		gtk_widget_set_sensitive(GTK_WIDGET(label_trans_out_duration), FALSE);
+		gtk_widget_set_sensitive(GTK_WIDGET(scale_trans_out_duration), FALSE);
+	} else
+	{
+		// The transition is not Immediate, so we enable the slider
+		gtk_widget_set_sensitive(GTK_WIDGET(label_trans_out_duration), TRUE);
+		gtk_widget_set_sensitive(GTK_WIDGET(scale_trans_out_duration), TRUE);
+	}
+
+	// Set up a callback to make the exit transition duration slider sensitive to user input or not
+	exit_duration_widgets = g_slice_new0(transition_widgets);
+	exit_duration_widgets->transition_type = selector_trans_out_type;
+	exit_duration_widgets->transition_duration_label = label_trans_out_duration;
+	exit_duration_widgets->transition_duration_widget = scale_trans_out_duration;
+	exit_duration_callback = g_signal_connect(G_OBJECT(selector_trans_out_type), "changed", G_CALLBACK(transition_type_changed), (gpointer) exit_duration_widgets);
+
 	// Ensure everything will show
 	gtk_widget_show_all(GTK_WIDGET(text_dialog));
 
@@ -621,6 +669,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			{
 				g_signal_handler_disconnect(G_OBJECT(dump_buffer_button), dump_button_callback);
 			}
+			g_signal_handler_disconnect(G_OBJECT(selector_trans_in_type), entry_duration_callback);
+			g_signal_handler_disconnect(G_OBJECT(selector_trans_out_type), exit_duration_callback);
 
 			// Destroy the dialog and return to the caller
 			gtk_widget_destroy(GTK_WIDGET(text_dialog));
@@ -880,6 +930,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	{
 		g_signal_handler_disconnect(G_OBJECT(dump_buffer_button), dump_button_callback);
 	}
+	g_signal_handler_disconnect(G_OBJECT(selector_trans_in_type), entry_duration_callback);
+	g_signal_handler_disconnect(G_OBJECT(selector_trans_out_type), exit_duration_callback);
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(text_dialog));

@@ -419,6 +419,14 @@ typedef struct
 	GtkWidget			*text_view;
 } text_dialog_widgets;
 
+// Structure that points to a pair of transition type and duration widgets
+typedef struct
+{
+	GtkWidget			*transition_type;
+	GtkWidget			*transition_duration_label;
+	GtkWidget			*transition_duration_widget;
+} transition_widgets;
+
 // Defines the structure of a validation field entry
 typedef struct
 {

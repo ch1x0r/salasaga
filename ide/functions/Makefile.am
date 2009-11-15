@@ -30,6 +30,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	callbacks/text_layer_dialog_size_changed.c \
 	callbacks/text_layer_dialog_validate_buffer_tag_quantity.c \
 	callbacks/track_window_state.c \
+	callbacks/transition_type_changed.c \
 	dialog/display_dialog_empty.c \
 	dialog/display_dialog_highlight.c \
 	dialog/display_dialog_image.c \
