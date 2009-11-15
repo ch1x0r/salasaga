@@ -142,34 +142,34 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	// * Duration tab fields *
 
 	GtkWidget			*x_off_label_start;			// Label widget
-	GtkWidget			*x_off_button_start;		//
+	GtkWidget			*x_off_scale_start;			//
 
 	GtkWidget			*y_off_label_start;			// Label widget
-	GtkWidget			*y_off_button_start;		//
+	GtkWidget			*y_off_scale_start;			//
 
 	GtkWidget			*x_off_label_finish;		// Label widget
-	GtkWidget			*x_off_button_finish;		//
+	GtkWidget			*x_off_scale_finish;		//
 
 	GtkWidget			*y_off_label_finish;		// Label widget
-	GtkWidget			*y_off_button_finish;		//
+	GtkWidget			*y_off_scale_finish;		//
 
 	GtkWidget			*start_label;				// Label widget
-	GtkWidget			*start_button;				//
+	GtkWidget			*start_scale;				//
 
 	GtkWidget			*duration_label;			// Label widget
-	GtkWidget			*duration_button;			//
+	GtkWidget			*duration_scale;			//
 
 	GtkWidget			*label_trans_in_type;		// Transition in type
 	GtkWidget			*selector_trans_in_type;	//
 
 	GtkWidget			*label_trans_in_duration;	// Transition in duration (seconds)
-	GtkWidget			*button_trans_in_duration;	//
+	GtkWidget			*scale_trans_in_duration;	//
 
 	GtkWidget			*label_trans_out_type;		// Transition out type
 	GtkWidget			*selector_trans_out_type;	//
 
 	GtkWidget			*label_trans_out_duration;	// Transition out duration (seconds)
-	GtkWidget			*button_trans_out_duration;	//
+	GtkWidget			*scale_trans_out_duration;	//
 
 
 	// Initialise some things
@@ -439,9 +439,14 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the starting X Offset input
-	x_off_button_start = gtk_spin_button_new_with_range(0, project_width, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_off_button_start), tmp_layer->x_offset_start);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_button_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	x_off_scale_start = gtk_hscale_new_with_range(0, project_width, 1);
+	gtk_range_set_value(GTK_RANGE(x_off_scale_start), tmp_layer->x_offset_start);
+	for (scale_mark_counter = 0; scale_mark_counter <= project_width; scale_mark_counter += 100)
+	{
+		// Add scale marks every 100 along
+		gtk_scale_add_mark(GTK_SCALE(x_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_scale_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting Y Offset
@@ -450,9 +455,14 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the starting Y Offset input
-	y_off_button_start = gtk_spin_button_new_with_range(0, project_height, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_off_button_start), tmp_layer->y_offset_start);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_button_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	y_off_scale_start = gtk_hscale_new_with_range(0, project_height, 1);
+	gtk_range_set_value(GTK_RANGE(y_off_scale_start), tmp_layer->y_offset_start);
+	for (scale_mark_counter = 0; scale_mark_counter <= project_height; scale_mark_counter += 100)
+	{
+		// Add scale marks every 100 along
+		gtk_scale_add_mark(GTK_SCALE(y_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_scale_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the finishing X Offset
@@ -461,9 +471,14 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the finishing X Offset input
-	x_off_button_finish = gtk_spin_button_new_with_range(0, project_width, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_off_button_finish), tmp_layer->x_offset_finish);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_button_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	x_off_scale_finish = gtk_hscale_new_with_range(0, project_width, 1);
+	gtk_range_set_value(GTK_RANGE(x_off_scale_finish), tmp_layer->x_offset_finish);
+	for (scale_mark_counter = 0; scale_mark_counter <= project_width; scale_mark_counter += 100)
+	{
+		// Add scale marks every 100 along
+		gtk_scale_add_mark(GTK_SCALE(x_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_scale_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the finishing Y Offset
@@ -472,9 +487,14 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the finishing Y Offset input
-	y_off_button_finish = gtk_spin_button_new_with_range(0, project_height, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_off_button_finish), tmp_layer->y_offset_finish);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_button_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	y_off_scale_finish = gtk_hscale_new_with_range(0, project_height, 1);
+	gtk_range_set_value(GTK_RANGE(y_off_scale_finish), tmp_layer->y_offset_finish);
+	for (scale_mark_counter = 0; scale_mark_counter <= project_width; scale_mark_counter += 100)
+	{
+		// Add scale marks every 100 along
+		gtk_scale_add_mark(GTK_SCALE(y_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_scale_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting time
@@ -483,10 +503,14 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(start_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the starting time input
-	start_button = gtk_spin_button_new_with_range(valid_fields[FRAME_NUMBER].min_value, valid_fields[FRAME_NUMBER].max_value, 0.1);
-	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(start_button), 2);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(start_button), tmp_layer->start_time);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(start_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	start_scale = gtk_hscale_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 0.1);
+	gtk_range_set_value(GTK_RANGE(start_scale), tmp_layer->start_time);
+	for (scale_mark_counter = 0; scale_mark_counter <= project_width; scale_mark_counter += 10.0)
+	{
+		// Add scale marks every 10.0 along
+		gtk_scale_add_mark(GTK_SCALE(start_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(start_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Appearance transition type
@@ -514,10 +538,14 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_in_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Appearance transition duration entry
-	button_trans_in_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
-	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(button_trans_in_duration), 2);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_in_duration), tmp_layer->transition_in_duration);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(button_trans_in_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	scale_trans_in_duration = gtk_hscale_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.01);
+	gtk_range_set_value(GTK_RANGE(scale_trans_in_duration), tmp_layer->transition_in_duration);
+	for (scale_mark_counter = 0; scale_mark_counter <= project_width; scale_mark_counter += 0.5)
+	{
+		// Add scale marks every 0.5 along
+		gtk_scale_add_mark(GTK_SCALE(scale_trans_in_duration), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_in_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the layer duration
@@ -526,10 +554,14 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the duration input
-	duration_button = gtk_spin_button_new_with_range(valid_fields[FRAME_NUMBER].min_value, valid_fields[FRAME_NUMBER].max_value, 0.1);
-	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(duration_button), 2);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(duration_button), tmp_layer->duration);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(duration_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	duration_scale = gtk_hscale_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 0.1);
+	gtk_range_set_value(GTK_RANGE(duration_scale), tmp_layer->duration);
+	for (scale_mark_counter = 0; scale_mark_counter <= project_width; scale_mark_counter += 10.0)
+	{
+		// Add scale marks every 10.0 along
+		gtk_scale_add_mark(GTK_SCALE(duration_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(duration_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Exit Transition type
@@ -557,10 +589,14 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_out_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Exit transition duration entry
-	button_trans_out_duration = gtk_spin_button_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.1);
-	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(button_trans_out_duration), 2);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_trans_out_duration), tmp_layer->transition_out_duration);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(button_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	scale_trans_out_duration = gtk_hscale_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.01);
+	gtk_range_set_value(GTK_RANGE(scale_trans_out_duration), tmp_layer->transition_out_duration);
+	for (scale_mark_counter = 0; scale_mark_counter <= project_width; scale_mark_counter += 0.5)
+	{
+		// Add scale marks every 0.5 along
+		gtk_scale_add_mark(GTK_SCALE(scale_trans_out_duration), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Ensure everything will show
@@ -613,7 +649,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		}
 
 		// Retrieve the new starting frame x offset
-		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_off_button_start));
+		guint_val = gtk_range_get_value(GTK_RANGE(x_off_scale_start));
 		validated_guint = validate_value(X_OFFSET, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
@@ -627,7 +663,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		}
 
 		// Retrieve the new starting frame y offset
-		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_off_button_start));
+		guint_val = gtk_range_get_value(GTK_RANGE(y_off_scale_start));
 		validated_guint = validate_value(Y_OFFSET, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
@@ -641,7 +677,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		}
 
 		// Retrieve the new finish frame x offset
-		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(x_off_button_finish));
+		guint_val = gtk_range_get_value(GTK_RANGE(x_off_scale_finish));
 		validated_guint = validate_value(X_OFFSET, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
@@ -655,7 +691,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		}
 
 		// Retrieve the new finish frame y offset
-		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(y_off_button_finish));
+		guint_val = gtk_range_get_value(GTK_RANGE(y_off_scale_finish));
 		validated_guint = validate_value(Y_OFFSET, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
@@ -683,7 +719,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		}
 
 		// Retrieve the new starting time
-		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(start_button));
+		gfloat_val = gtk_range_get_value(GTK_RANGE(start_scale));
 		validated_gfloat = validate_value(LAYER_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
@@ -697,7 +733,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		}
 
 		// Retrieve the new duration
-		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(duration_button));
+		gfloat_val = gtk_range_get_value(GTK_RANGE(duration_scale));
 		validated_gfloat = validate_value(LAYER_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
@@ -753,7 +789,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		}
 
 		// Retrieve the transition in duration
-		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_trans_in_duration));
+		gfloat_val = gtk_range_get_value(GTK_RANGE(scale_trans_in_duration));
 		validated_gfloat = validate_value(TRANSITION_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
@@ -781,7 +817,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		}
 
 		// Retrieve the transition out duration
-		gfloat_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_trans_out_duration));
+		gfloat_val = gtk_range_get_value(GTK_RANGE(scale_trans_out_duration));
 		validated_gfloat = validate_value(TRANSITION_DURATION, V_FLOAT_UNSIGNED, &gfloat_val);
 		if (NULL == validated_gfloat)
 		{
