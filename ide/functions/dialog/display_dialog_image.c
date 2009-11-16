@@ -44,8 +44,8 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 {
 	// Local variables
 	gint				active_type;				// Used to tell which type of transition is active
-	gulong				entry_duration_callback;	// ID of the callback handler for the entry_duration_widgets
-	gulong				exit_duration_callback;		// ID of the callback handler for the exit_duration_widgets
+	gulong				entry_duration_callback = 0;  // ID of the callback handler for the entry_duration_widgets
+	gulong				exit_duration_callback = 0;	// ID of the callback handler for the exit_duration_widgets
 	transition_widgets	*entry_duration_widgets;	// Holds points to the entry duration widgets
 	transition_widgets	*exit_duration_widgets;		// Holds points to the exit duration widgets
 	gfloat				gfloat_val;					// Temporary gfloat value
@@ -437,8 +437,11 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 			// * The dialog was cancelled *
 
 			// Disconnect the signal handler callbacks
-			g_signal_handler_disconnect(G_OBJECT(selector_trans_in_type), entry_duration_callback);
-			g_signal_handler_disconnect(G_OBJECT(selector_trans_out_type), exit_duration_callback);
+			if (FALSE == tmp_layer->background)
+			{
+				g_signal_handler_disconnect(G_OBJECT(selector_trans_in_type), entry_duration_callback);
+				g_signal_handler_disconnect(G_OBJECT(selector_trans_out_type), exit_duration_callback);
+			}
 
 			// Destroy the dialog and return to the caller
 			gtk_widget_destroy(GTK_WIDGET(image_dialog));
@@ -676,8 +679,11 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	g_string_printf(tmp_layer->external_link_window, "%s", valid_ext_link_win->str);
 
 	// Disconnect the signal handler callbacks
-	g_signal_handler_disconnect(G_OBJECT(selector_trans_in_type), entry_duration_callback);
-	g_signal_handler_disconnect(G_OBJECT(selector_trans_out_type), exit_duration_callback);
+	if (FALSE == tmp_layer->background)
+	{
+		g_signal_handler_disconnect(G_OBJECT(selector_trans_in_type), entry_duration_callback);
+		g_signal_handler_disconnect(G_OBJECT(selector_trans_out_type), exit_duration_callback);
+	}
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(image_dialog));
