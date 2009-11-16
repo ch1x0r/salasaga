@@ -434,7 +434,13 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		// Display the dialog
 		if (GTK_RESPONSE_ACCEPT != gtk_dialog_run(GTK_DIALOG(image_dialog)))
 		{
-			// The dialog was cancelled, so destroy it and return to the caller
+			// * The dialog was cancelled *
+
+			// Disconnect the signal handler callbacks
+			g_signal_handler_disconnect(G_OBJECT(selector_trans_in_type), entry_duration_callback);
+			g_signal_handler_disconnect(G_OBJECT(selector_trans_out_type), exit_duration_callback);
+
+			// Destroy the dialog and return to the caller
 			gtk_widget_destroy(GTK_WIDGET(image_dialog));
 			g_string_free(valid_ext_link, TRUE);
 			g_string_free(valid_ext_link_win, TRUE);
@@ -668,6 +674,10 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	}
 	g_string_printf(tmp_layer->external_link, "%s", valid_ext_link->str);
 	g_string_printf(tmp_layer->external_link_window, "%s", valid_ext_link_win->str);
+
+	// Disconnect the signal handler callbacks
+	g_signal_handler_disconnect(G_OBJECT(selector_trans_in_type), entry_duration_callback);
+	g_signal_handler_disconnect(G_OBJECT(selector_trans_out_type), exit_duration_callback);
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(image_dialog));
