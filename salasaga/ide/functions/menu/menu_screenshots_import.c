@@ -391,7 +391,7 @@ void menu_screenshots_import(void)
 	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(zoom_selector)));
 
 	// Parse and store the zoom level
-	tmp_int = g_ascii_strncasecmp(tmp_string->str, "F", 1);
+	tmp_int = g_strcmp0(tmp_string->str, _("Fit to width"));
 	if (0 == tmp_int)
 	{
 		// "Fit to width" is selected, so work out the zoom level by figuring out how much space the widget really has
