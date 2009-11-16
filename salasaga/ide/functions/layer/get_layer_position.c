@@ -50,6 +50,7 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 	gfloat				start_time;					// Time in seconds of the layer objects start time
 	gint				start_x;					// X position at the layer objects start time
 	gint				start_y;					// Y position at the layer objects start time
+	static GdkColormap	*system_colourmap = NULL;	// Colormap used for drawing
 	gfloat				time_offset;
 	gfloat				time_diff;					// Used when calculating the object position at the desired point in time
 	gfloat				x_diff;						// The X distance the object was dragged, after scaling
@@ -190,6 +191,17 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 			// If the text hasn't ever been rendered, we'll have to work out the size ourselves now
 			if (0 == ((layer_text *) this_layer_data->object_data)->rendered_width)
 			{
+				// Create the front store if it doesn't already exist
+				if (NULL == front_store)
+				{
+					if (NULL == system_colourmap)
+					{
+						system_colourmap = gdk_colormap_get_system();
+					}
+					front_store = gdk_pixmap_new(NULL, project_width, project_height, system_colourmap->visual->depth);
+					gdk_drawable_set_colormap(GDK_DRAWABLE(front_store), GDK_COLORMAP(system_colourmap));
+				}
+
 				// Calculate the height and width scaling values for the front pixmap
 				gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
 				scaled_height_ratio = (gfloat) pixmap_height / (gfloat) project_height;
