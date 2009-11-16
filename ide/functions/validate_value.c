@@ -46,12 +46,15 @@
 void *validate_value(gint value_id, gint input_type, void *value)
 {
 	// Local variables
+	guint				base_type;
 	guint				capabilities;
 	gboolean			capability_check;
+	gchar				*conversion_buffer;			// Used when converting between unicode character types
 	gchar				*decimal_point;
-	guint				base_type;
 	GString				*error_string;
 	gchar				input_char;
+	gunichar			input_char_unicode;
+	gchar				*input_ptr;
 	struct lconv		*locale_info;
 	gboolean			match_found;
 	gfloat				output_gfloat;
@@ -70,6 +73,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 	// Initialise various things
 	base_type = valid_fields[value_id].base_type;
 	capabilities = valid_fields[value_id].capabilities;
+	input_ptr = (gchar *) value;
 	output_gstring = g_string_new(NULL);
 	locale_info = localeconv();
 	decimal_point = locale_info->decimal_point;
@@ -89,7 +93,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			// Get the length of the input string
 			string_max = valid_fields[value_id].max_value;
 			string_min = valid_fields[value_id].min_value;
-			string_length = strlen((gchar *) value);
+			string_length = g_utf8_strlen(input_ptr, -1);
 
 			// If the length of the string isn't in the acceptable range, return NULL
 			if (string_length < string_min)
@@ -100,25 +104,44 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			// Sanitise each character of the input string
 			for (string_counter = 0; string_counter < string_length; string_counter++)
 			{
-				input_char = ((gchar *) value)[string_counter]; 
-				if (TRUE == g_ascii_isalnum(input_char))
+				// Get the next character
+				input_char_unicode = g_utf8_get_char_validated(input_ptr, -1);
+				if ((gunichar)-1 == input_char_unicode)
 				{
-					output_gstring = g_string_append_c(output_gstring, input_char);
+					// The returned character was not a valid unicode character, so we indicate failure
+					return NULL;
+				}
+				if ((gunichar)-2 == input_char_unicode)
+				{
+					// The returned character was not a valid unicode character, so we indicate failure
+					return NULL;
+				}
+
+				// Convert the character to UTF-8 so we can process it
+				conversion_buffer = g_ucs4_to_utf8(&input_char_unicode, 1, NULL, NULL, NULL);
+
+				// Determine which character we're examining
+				if (TRUE == g_unichar_isalnum(input_char_unicode))
+				{
+					// It's a standard unicode alphanumeric character, so we accept it as is
+					g_string_append_printf(output_gstring, "%s", conversion_buffer);
+					input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 				}
 				else
 				{
 					// * The input wasn't a standard alphanumic character, so check if it *
-					// * is one of the characters in the capabilites list for this field *
+					// * is one of the characters in the capabilities list for this field *
 					match_found = FALSE;
 					capability_check = V_SPACES & capabilities;
 					if (FALSE != capability_check)
 					{
 						// This field is allowed to have spaces
-						if (0 == g_ascii_strncasecmp(" ", &input_char, 1))
+						if (0 == g_strcmp0(" ", conversion_buffer))
 						{
 							// Yes, this is a space character
-							output_gstring = g_string_append_c(output_gstring, input_char);
 							match_found = TRUE;
+							g_string_append_printf(output_gstring, "%s", conversion_buffer);
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
@@ -126,11 +149,12 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					if (FALSE != capability_check)
 					{
 						// This field is allowed to have full stops
-						if (0 == g_ascii_strncasecmp(".", &input_char, 1))
+						if (0 == g_strcmp0(".", conversion_buffer))
 						{
 							// Yes, this is a full stop character
-							output_gstring = g_string_append_c(output_gstring, input_char);
 							match_found = TRUE;
+							g_string_append_printf(output_gstring, "%s", conversion_buffer);
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
@@ -138,11 +162,12 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					if (FALSE != capability_check)
 					{
 						// This field is allowed to have hypens
-						if (0 == g_ascii_strncasecmp("-", &input_char, 1))
+						if (0 == g_strcmp0("-", conversion_buffer))
 						{
 							// Yes, this is a hypen character
-							output_gstring = g_string_append_c(output_gstring, input_char);
 							match_found = TRUE;
+							g_string_append_printf(output_gstring, "%s", conversion_buffer);
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
@@ -150,23 +175,25 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					if (FALSE != capability_check)
 					{
 						// This field is allowed to have underscores
-						if (0 == g_ascii_strncasecmp("_", &input_char, 1))
+						if (0 == g_strcmp0("_", conversion_buffer))
 						{
 							// Yes, this is an underscore character
-							output_gstring = g_string_append_c(output_gstring, input_char);
 							match_found = TRUE;
+							g_string_append_printf(output_gstring, "%s", conversion_buffer);
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
 					capability_check = V_PATH_SEP & capabilities;
 					if (FALSE != capability_check)
 					{
-						// This field is allowed to have path seperator characters ('/', '\')
-						if ((0 == g_ascii_strncasecmp("/", &input_char, 1)) || (0 == g_ascii_strncasecmp("\\", &input_char, 1)))
+						// This field is allowed to have path separator characters ('/', '\')
+						if ((0 == g_strcmp0("/", conversion_buffer)) || (0 == g_strcmp0("\\", conversion_buffer)))
 						{
 							// Yes, this is a path separator character
-							output_gstring = g_string_append_c(output_gstring, G_DIR_SEPARATOR);  // Output the OS correct version
 							match_found = TRUE;
+							output_gstring = g_string_append_c(output_gstring, G_DIR_SEPARATOR);  // Output the OS correct version
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
@@ -174,11 +201,12 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					if (FALSE != capability_check)
 					{
 						// This field is allowed to have equals signs
-						if (0 == g_ascii_strncasecmp("=", &input_char, 1))
+						if (0 == g_strcmp0("=", conversion_buffer))
 						{
 							// Yes, this is an equals sign character
-							output_gstring = g_string_append_c(output_gstring, '=');
 							match_found = TRUE;
+							g_string_append_printf(output_gstring, "%s", conversion_buffer);
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
@@ -186,11 +214,12 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					if (FALSE != capability_check)
 					{
 						// This field is allowed to have forward slashes
-						if (0 == g_ascii_strncasecmp("/", &input_char, 1))
+						if (0 == g_strcmp0("/", conversion_buffer))
 						{
 							// Yes, this is a forward slash character
-							output_gstring = g_string_append_c(output_gstring, '/');
 							match_found = TRUE;
+							g_string_append_printf(output_gstring, "%s", conversion_buffer);
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
@@ -198,11 +227,12 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					if (FALSE != capability_check)
 					{
 						// This field is allowed to have new line characters
-						if (0 == g_ascii_strncasecmp("\n", &input_char, 1))
+						if (0 == g_strcmp0("\n", conversion_buffer))
 						{
 							// Yes, this is a new line character
-							output_gstring = g_string_append_c(output_gstring, '\n');
 							match_found = TRUE;
+							output_gstring = g_string_append_c(output_gstring, '\n');
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
@@ -210,11 +240,12 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					if (FALSE != capability_check)
 					{
 						// This field is allowed to have pluses
-						if (0 == g_ascii_strncasecmp("+", &input_char, 1))
+						if (0 == g_strcmp0("+", conversion_buffer))
 						{
 							// Yes, this is a plus character
-							output_gstring = g_string_append_c(output_gstring, '+');
 							match_found = TRUE;
+							g_string_append_printf(output_gstring, "%s", conversion_buffer);
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
@@ -222,11 +253,12 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					if (FALSE != capability_check)
 					{
 						// This field is allowed to have the percent sign
-						if (0 == g_ascii_strncasecmp("%", &input_char, 1))
+						if (0 == g_strcmp0("%", conversion_buffer))
 						{
 							// Yes, this is a percent sign
-							output_gstring = g_string_append_c(output_gstring, '%');
 							match_found = TRUE;
+							g_string_append_printf(output_gstring, "%s", conversion_buffer);
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
@@ -234,11 +266,12 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					if (FALSE != capability_check)
 					{
 						// This field is allowed to have colons
-						if (0 == g_ascii_strncasecmp(":", &input_char, 1))
+						if (0 == g_strcmp0(":", conversion_buffer))
 						{
 							// Yes, this is a colon character
-							output_gstring = g_string_append_c(output_gstring, ':');
 							match_found = TRUE;
+							g_string_append_printf(output_gstring, "%s", conversion_buffer);
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
@@ -246,11 +279,12 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					if (FALSE != capability_check)
 					{
 						// This field is allowed to have the at symbol
-						if (0 == g_ascii_strncasecmp("@", &input_char, 1))
+						if (0 == g_strcmp0("@", conversion_buffer))
 						{
 							// Yes, this is an at character
-							output_gstring = g_string_append_c(output_gstring, '@');
 							match_found = TRUE;
+							g_string_append_printf(output_gstring, "%s", conversion_buffer);
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
@@ -258,11 +292,12 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					if (FALSE != capability_check)
 					{
 						// This field is allowed to have the question mark
-						if (0 == g_ascii_strncasecmp("?", &input_char, 1))
+						if (0 == g_strcmp0("?", conversion_buffer))
 						{
 							// Yes, this is a question mark character
-							output_gstring = g_string_append_c(output_gstring, '?');
 							match_found = TRUE;
+							g_string_append_printf(output_gstring, "%s", conversion_buffer);
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
@@ -270,11 +305,12 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					if (FALSE != capability_check)
 					{
 						// This field is allowed to have the ampersand character
-						if (0 == g_ascii_strncasecmp("&", &input_char, 1))
+						if (0 == g_strcmp0("&", conversion_buffer))
 						{
 							// Yes, this is an ampersand character
-							output_gstring = g_string_append_c(output_gstring, '&');
 							match_found = TRUE;
+							g_string_append_printf(output_gstring, "%s", conversion_buffer);
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
 							continue;
 						}
 					}
@@ -282,6 +318,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					// The character we are checking is not in the list of valid inputs for this field
 					if (FALSE == match_found)
 					{
+						g_free(conversion_buffer);
 						g_string_free(output_gstring, TRUE);
 						return NULL;
 					}
@@ -295,14 +332,19 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			// Recheck the length of the output string
 			if (output_gstring->len < string_min)
 			{
+				g_free(conversion_buffer);
 				g_string_free(output_gstring, TRUE);
 				return NULL;
 			}
 			if ((output_gstring->len > string_max) && (-1 != string_max))  // -1 for string_max means "no maximum limit"
 			{
+				g_free(conversion_buffer);
 				g_string_free(output_gstring, TRUE);
 				return NULL;
 			}
+
+			// Free the memory used so far
+			g_free(conversion_buffer);
 
 			// The string seems to be valid, so return it for use
 			return output_gstring;
@@ -559,7 +601,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			// * We're working with a zoom level.  i.e. "100%" or "Fit to width" *
 
 			// Get the length of the input string
-			string_length = strlen((gchar *) value);
+			string_length = g_utf8_strlen((gchar *) value, -1);
 			string_max = valid_fields[value_id].max_value;
 			string_min = valid_fields[value_id].min_value;
 
@@ -567,8 +609,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			if ((string_length < string_min) || (string_length > string_max))
 				return NULL;
 
-			// If the length of the string is exactly 12, then check if the string is "Fit to width"
-			if ((12 == string_length) && (0 == g_ascii_strncasecmp(_("Fit to width"), (gchar *) value, 12)))
+			// If the string is "Fit to width" or a localised version of it
+			if (0 == g_strcmp0(_("Fit to width"), (gchar *) value))
 			{
 				// Yes, this is the "Fit to width" value
 				output_gstring = g_string_assign(output_gstring, value);
