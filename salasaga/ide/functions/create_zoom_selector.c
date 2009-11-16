@@ -44,7 +44,7 @@ GtkWidget *create_zoom_selector(gchar *initial_zoom)
 	gint				match_at;					// If a zoom match was found, this contains where
 	gint				num_zoom_items;				// The number of zoom options available
 	guint				zoom_counter;				// Used as a simple counter
-	gchar				*zoom_selector_array[] = { "400%", "300%", "200%", "150%", "100%", "75%", "50%", "25%", "10%", "Fit to width" };  // The zoom options
+	gchar				*zoom_selector_array[] = { "400%", "300%", "200%", "150%", "100%", "75%", "50%", "25%", "10%", _("Fit to width") };  // The zoom options
 	GtkWidget			*zoom_widget;				// ComboBox widget that gets returned
 
 
