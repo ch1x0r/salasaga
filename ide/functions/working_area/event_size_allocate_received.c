@@ -59,7 +59,7 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
 		g_free(tmp_gchar);
 
 		// Parse and store the new zoom level
-		tmp_int = g_ascii_strncasecmp(tmp_string->str, "F", 1);
+		tmp_int = g_strcmp0(tmp_string->str, _("Fit to width"));
 		if (0 == tmp_int)
 		{
 			zoom_selector_changed(GTK_WIDGET(zoom_selector), NULL, (gpointer) NULL);
