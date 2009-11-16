@@ -99,6 +99,11 @@ void *validate_value(gint value_id, gint input_type, void *value)
 				return NULL;
 			if ((string_length > string_max) && (-1 != string_max))  // -1 for string_max means "no maximum limit"
 				return NULL;
+			if (0 == string_length)
+			{
+				// 0 length string, so we just return it
+				return output_gstring;
+			}
 
 			// Sanitise each character of the input string
 			for (string_counter = 0; string_counter < string_length; string_counter++)
@@ -291,7 +296,10 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			}
 
 			// Free the memory used so far
-			g_free(conversion_buffer);
+			if (0 != string_length)
+			{
+				g_free(conversion_buffer);
+			}
 
 			// The string seems to be valid, so return it for use
 			return output_gstring;
