@@ -44,9 +44,10 @@
 gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
 	// Temporary variables
-	gchar		*tmp_gchar;
-	gint32		tmp_int;
-	GString		*tmp_string;
+	gchar				*tmp_gchar;
+	gint32				tmp_int;
+	GString				*tmp_string;
+
 
 	// Get the new zoom level
 	tmp_string = g_string_new(NULL);
@@ -55,7 +56,7 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 	g_free(tmp_gchar);
 
 	// Parse and store the new zoom level
-	tmp_int = g_ascii_strncasecmp(tmp_string->str, "F", 1);
+	tmp_int = g_strcmp0(tmp_string->str, _("Fit to width"));
 	if (0 == tmp_int)
 	{
 		// "Fit to width" is selected, so work out a new zoom level by figuring out how much space the widget really has
