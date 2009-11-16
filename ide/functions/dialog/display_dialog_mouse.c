@@ -279,7 +279,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// Create the entry that accepts the starting X Offset input
 	x_off_scale_start = gtk_hscale_new_with_range(0, project_width, 1);
 	gtk_range_set_value(GTK_RANGE(x_off_scale_start), tmp_layer->x_offset_start);
-	for (scale_mark_counter = 0; scale_mark_counter <= project_width; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= project_width; scale_mark_counter += 100)
 	{
 		// Add scale marks every 100 along
 		gtk_scale_add_mark(GTK_SCALE(x_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -295,7 +295,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// Create the entry that accepts the starting Y Offset input
 	y_off_scale_start = gtk_hscale_new_with_range(0, project_height, 1);
 	gtk_range_set_value(GTK_RANGE(y_off_scale_start), tmp_layer->y_offset_start);
-	for (scale_mark_counter = 0; scale_mark_counter <= project_height; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= project_height; scale_mark_counter += 100)
 	{
 		// Add scale marks every 100 along
 		gtk_scale_add_mark(GTK_SCALE(y_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -311,7 +311,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// Create the entry that accepts the finishing X Offset input
 	x_off_scale_finish = gtk_hscale_new_with_range(0, project_width, 1);
 	gtk_range_set_value(GTK_RANGE(x_off_scale_finish), tmp_layer->x_offset_finish);
-	for (scale_mark_counter = 0; scale_mark_counter <= project_width; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= project_width; scale_mark_counter += 100)
 	{
 		// Add scale marks every 100 along
 		gtk_scale_add_mark(GTK_SCALE(x_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -327,7 +327,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// Create the entry that accepts the finishing Y Offset input
 	y_off_scale_finish = gtk_hscale_new_with_range(0, project_height, 1);
 	gtk_range_set_value(GTK_RANGE(y_off_scale_finish), tmp_layer->y_offset_finish);
-	for (scale_mark_counter = 0; scale_mark_counter <= project_height; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= project_height; scale_mark_counter += 100)
 	{
 		// Add scale marks every 100 along
 		gtk_scale_add_mark(GTK_SCALE(y_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -343,7 +343,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// Create the entry that accepts the starting time input
 	start_scale = gtk_hscale_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 0.1);
 	gtk_range_set_value(GTK_RANGE(start_scale), tmp_layer->start_time);
-	for (scale_mark_counter = 0; scale_mark_counter <= valid_fields[LAYER_DURATION].max_value; scale_mark_counter += 10.0)
+	for (scale_mark_counter = 10; scale_mark_counter <= valid_fields[LAYER_DURATION].max_value; scale_mark_counter += 10.0)
 	{
 		// Add scale marks every 10.0 along
 		gtk_scale_add_mark(GTK_SCALE(start_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -378,7 +378,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// Appearance transition duration entry
 	scale_trans_in_duration = gtk_hscale_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.01);
 	gtk_range_set_value(GTK_RANGE(scale_trans_in_duration), tmp_layer->transition_in_duration);
-	for (scale_mark_counter = 0; scale_mark_counter <= valid_fields[TRANSITION_DURATION].max_value; scale_mark_counter += 0.5)
+	for (scale_mark_counter = 0.5; scale_mark_counter <= valid_fields[TRANSITION_DURATION].max_value; scale_mark_counter += 0.5)
 	{
 		// Add scale marks every 0.5 along
 		gtk_scale_add_mark(GTK_SCALE(scale_trans_in_duration), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -415,7 +415,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// Create the entry that accepts the duration input
 	duration_scale = gtk_hscale_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 0.1);
 	gtk_range_set_value(GTK_RANGE(duration_scale), tmp_layer->duration);
-	for (scale_mark_counter = 0; scale_mark_counter <= valid_fields[LAYER_DURATION].max_value; scale_mark_counter += 10.0)
+	for (scale_mark_counter = 10; scale_mark_counter <= valid_fields[LAYER_DURATION].max_value; scale_mark_counter += 10.0)
 	{
 		// Add scale marks every 10.0 along
 		gtk_scale_add_mark(GTK_SCALE(duration_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -450,7 +450,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// Exit transition duration entry
 	scale_trans_out_duration = gtk_hscale_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.01);
 	gtk_range_set_value(GTK_RANGE(scale_trans_out_duration), tmp_layer->transition_out_duration);
-	for (scale_mark_counter = 0; scale_mark_counter <= valid_fields[TRANSITION_DURATION].max_value; scale_mark_counter += 0.5)
+	for (scale_mark_counter = 0.5; scale_mark_counter <= valid_fields[TRANSITION_DURATION].max_value; scale_mark_counter += 0.5)
 	{
 		// Add scale marks every 0.5 along
 		gtk_scale_add_mark(GTK_SCALE(scale_trans_out_duration), scale_mark_counter, GTK_POS_BOTTOM, NULL);
