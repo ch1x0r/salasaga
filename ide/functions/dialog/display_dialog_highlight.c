@@ -176,35 +176,35 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	// Create the label asking for the layer name
 	name_label = gtk_label_new(_("Layer Name: "));
 	gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the new layer name
 	name_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(name_entry), valid_fields[LAYER_NAME].max_value);
 	gtk_entry_set_text(GTK_ENTRY(name_entry), tmp_layer->name->str);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the background fill colour selection label
 	fill_colour_label = gtk_label_new(_("Background fill color: "));
 	gtk_misc_set_alignment(GTK_MISC(fill_colour_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fill_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fill_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the background fill colour selection button
     fill_colour_button = gtk_color_button_new_with_color(&(tmp_highlight_ob->fill_colour));
     gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(fill_colour_button), TRUE);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fill_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fill_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the background line colour selection label
 	border_colour_label = gtk_label_new(_("Background border color: "));
 	gtk_misc_set_alignment(GTK_MISC(border_colour_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the background line colour selection button
     border_colour_button = gtk_color_button_new_with_color(&(tmp_highlight_ob->border_colour));
     gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(border_colour_button), TRUE);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the background border width
@@ -226,12 +226,12 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	// Create the label asking for the opacity
 	opacity_label = gtk_label_new(_("Opacity: "));
 	gtk_misc_set_alignment(GTK_MISC(opacity_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(opacity_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(opacity_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the opacity input
 	opacity_scale = gtk_hscale_new_with_range(valid_fields[OPACITY].min_value, valid_fields[OPACITY].max_value, 0.1);
 	gtk_range_set_value(GTK_RANGE(opacity_scale), tmp_highlight_ob->opacity);
-	for (scale_mark_counter = 0; scale_mark_counter <= valid_fields[OPACITY].max_value; scale_mark_counter += 10)
+	for (scale_mark_counter = 10; scale_mark_counter <= valid_fields[OPACITY].max_value; scale_mark_counter += 10)
 	{
 		// Add scale marks every 10 along
 		gtk_scale_add_mark(GTK_SCALE(opacity_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -242,57 +242,57 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	// Create the label asking for the width
 	width_label = gtk_label_new(_("Width:"));
 	gtk_misc_set_alignment(GTK_MISC(width_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the width input
 	width_scale = gtk_hscale_new_with_range(valid_fields[HIGHLIGHT_WIDTH].min_value, project_width, 1);
 	gtk_range_set_value(GTK_RANGE(width_scale), tmp_highlight_ob->width);
-	for (scale_mark_counter = 0; scale_mark_counter <= project_width; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= project_width; scale_mark_counter += 100)
 	{
 		// Add scale marks every 100 along
 		gtk_scale_add_mark(GTK_SCALE(width_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(width_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(width_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the height
 	height_label = gtk_label_new(_("Height:"));
 	gtk_misc_set_alignment(GTK_MISC(height_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the height input
 	height_scale = gtk_hscale_new_with_range(valid_fields[HIGHLIGHT_HEIGHT].min_value, project_height, 1);
 	gtk_range_set_value(GTK_RANGE(height_scale), tmp_highlight_ob->height);
-	for (scale_mark_counter = 0; scale_mark_counter <= project_height; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= project_height; scale_mark_counter += 100)
 	{
 		// Add scale marks every 100 along
 		gtk_scale_add_mark(GTK_SCALE(height_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(height_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(height_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for an external link
 	external_link_label = gtk_label_new(_("External link: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts an external link
 	external_link_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), valid_fields[EXTERNAL_LINK].max_value);
 	gtk_entry_set_text(GTK_ENTRY(external_link_entry), tmp_layer->external_link->str);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the window to open the external link in
 	external_link_win_label = gtk_label_new(_("External link window: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts a text string for the window to open the external link in
 	external_link_win_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), valid_fields[EXTERNAL_LINK_WINDOW].max_value);
 	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), tmp_layer->external_link_window->str);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the check box asking if the layer should be visible
@@ -304,7 +304,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(visibility_checkbox), TRUE);
 	}
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(visibility_checkbox), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(visibility_checkbox), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// * Duration tab fields *
@@ -320,7 +320,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	// Create the entry that accepts the starting X Offset input
 	x_off_scale_start = gtk_hscale_new_with_range(0, project_width, 1);
 	gtk_range_set_value(GTK_RANGE(x_off_scale_start), tmp_layer->x_offset_start);
-	for (scale_mark_counter = 0; scale_mark_counter <= project_width; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= project_width; scale_mark_counter += 100)
 	{
 		// Add scale marks every 100 along
 		gtk_scale_add_mark(GTK_SCALE(x_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -336,7 +336,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	// Create the entry that accepts the starting Y Offset input
 	y_off_scale_start = gtk_hscale_new_with_range(0, project_height, 1);
 	gtk_range_set_value(GTK_RANGE(y_off_scale_start), tmp_layer->y_offset_start);
-	for (scale_mark_counter = 0; scale_mark_counter <= project_height; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= project_height; scale_mark_counter += 100)
 	{
 		// Add scale marks every 100 along
 		gtk_scale_add_mark(GTK_SCALE(y_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -352,7 +352,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	// Create the entry that accepts the finishing X Offset input
 	x_off_scale_finish = gtk_hscale_new_with_range(0, project_width, 1);
 	gtk_range_set_value(GTK_RANGE(x_off_scale_finish), tmp_layer->x_offset_finish);
-	for (scale_mark_counter = 0; scale_mark_counter <= project_width; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= project_width; scale_mark_counter += 100)
 	{
 		// Add scale marks every 100 along
 		gtk_scale_add_mark(GTK_SCALE(x_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -368,7 +368,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	// Create the entry that accepts the finishing Y Offset input
 	y_off_scale_finish = gtk_hscale_new_with_range(0, project_height, 1);
 	gtk_range_set_value(GTK_RANGE(y_off_scale_finish), tmp_layer->y_offset_finish);
-	for (scale_mark_counter = 0; scale_mark_counter <= project_height; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= project_height; scale_mark_counter += 100)
 	{
 		// Add scale marks every 100 along
 		gtk_scale_add_mark(GTK_SCALE(y_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -384,7 +384,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	// Create the entry that accepts the starting time input
 	start_scale = gtk_hscale_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 0.1);
 	gtk_range_set_value(GTK_RANGE(start_scale), tmp_layer->start_time);
-	for (scale_mark_counter = 0; scale_mark_counter <= valid_fields[LAYER_DURATION].max_value; scale_mark_counter += 10.0)
+	for (scale_mark_counter = 10; scale_mark_counter <= valid_fields[LAYER_DURATION].max_value; scale_mark_counter += 10.0)
 	{
 		// Add scale marks every 10.0 along
 		gtk_scale_add_mark(GTK_SCALE(start_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -419,7 +419,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	// Appearance transition duration entry
 	scale_trans_in_duration = gtk_hscale_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.01);
 	gtk_range_set_value(GTK_RANGE(scale_trans_in_duration), tmp_layer->transition_in_duration);
-	for (scale_mark_counter = 0; scale_mark_counter <= valid_fields[TRANSITION_DURATION].max_value; scale_mark_counter += 0.5)
+	for (scale_mark_counter = 0.5; scale_mark_counter <= valid_fields[TRANSITION_DURATION].max_value; scale_mark_counter += 0.5)
 	{
 		// Add scale marks every 0.5 along
 		gtk_scale_add_mark(GTK_SCALE(scale_trans_in_duration), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -456,7 +456,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	// Create the entry that accepts the duration input
 	duration_scale = gtk_hscale_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 0.1);
 	gtk_range_set_value(GTK_RANGE(duration_scale), tmp_layer->duration);
-	for (scale_mark_counter = 0; scale_mark_counter <= valid_fields[LAYER_DURATION].max_value; scale_mark_counter += 10.0)
+	for (scale_mark_counter = 10; scale_mark_counter <= valid_fields[LAYER_DURATION].max_value; scale_mark_counter += 10.0)
 	{
 		// Add scale marks every 10.0 along
 		gtk_scale_add_mark(GTK_SCALE(duration_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -491,7 +491,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	// Exit transition duration entry
 	scale_trans_out_duration = gtk_hscale_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.01);
 	gtk_range_set_value(GTK_RANGE(scale_trans_out_duration), tmp_layer->transition_out_duration);
-	for (scale_mark_counter = 0; scale_mark_counter <= valid_fields[TRANSITION_DURATION].max_value; scale_mark_counter += 0.5)
+	for (scale_mark_counter = 0.5; scale_mark_counter <= valid_fields[TRANSITION_DURATION].max_value; scale_mark_counter += 0.5)
 	{
 		// Add scale marks every 0.5 along
 		gtk_scale_add_mark(GTK_SCALE(scale_trans_out_duration), scale_mark_counter, GTK_POS_BOTTOM, NULL);
