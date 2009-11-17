@@ -77,7 +77,6 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/project_folder", default_project_folder->str, NULL);
 	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/screenshots_folder", screenshots_folder->str, NULL);
 	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/output_folder", default_output_folder->str, NULL);
-	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/zoom_level", default_zoom_level->str, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/project_width", project_width, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/project_height", project_height, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_width", default_output_width, NULL);
@@ -92,6 +91,18 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/icon_height", icon_height, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/screenshot_delay", screenshot_delay_time, NULL);
 	gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/metacity_key_warning", metacity_key_warning, NULL);
+
+	// Treat the zoom level specially.  If the zoom level is the equivalent of "Fit to width" we store the English
+	// version of the string in gconf.  This allows people (ie developers) to change between languages and still
+	// have the "Fit to width" option work, but still display properly in a localised way
+	if ((0 == g_strcmp0("Fit to width", default_zoom_level->str)) || (0 == g_strcmp0(_("Fit to width"), default_zoom_level->str)))
+	{
+		gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/zoom_level", "Fit to width", NULL);
+	}
+	else
+	{
+		gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/zoom_level", default_zoom_level->str, NULL);
+	}
 
 	// * Save the present window maximised state (i.e. if we're maximised or not) *
 
@@ -217,10 +228,6 @@ void save_preferences_and_exit(void)
 	string_size = (default_output_folder->len) + 1;
 	return_code = RegSetValueEx(hkey, "output_folder", 0, REG_SZ, default_output_folder->str, string_size);
 
-	// Set the value for the zoom level
-	string_size = (default_zoom_level->len) + 1;
-	return_code = RegSetValueEx(hkey, "zoom_level", 0, REG_SZ, default_zoom_level->str, string_size);
-
 	// Set the value for the project name
 	string_size = (project_name->len) + 1;
 	return_code = RegSetValueEx(hkey, "project_name", 0, REG_SZ, project_name->str, string_size);
@@ -295,6 +302,22 @@ void save_preferences_and_exit(void)
 	g_string_printf(tmp_gstring, "%d", TRUE);
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "window_maximised", 0, REG_SZ, tmp_gstring->str, string_size);
+
+	// Treat the zoom level specially.  If the zoom level is the equivalent of "Fit to width" we store the English
+	// version of the string in gconf.  This allows people (ie developers) to change between languages and still
+	// have the "Fit to width" option work, but still display properly in a localised way
+	if ((0 == g_strcmp0("Fit to width", default_zoom_level->str)) || (0 == g_strcmp0(_("Fit to width"), default_zoom_level->str)))
+	{
+		// Set the value for the zoom level
+		return_code = RegSetValueEx(hkey, "zoom_level", 0, REG_SZ, "Fit to width", strlen("Fit to width"));
+	}
+	else
+	{
+		// Set the value for the zoom level
+		string_size = (default_zoom_level->len) + 1;
+		return_code = RegSetValueEx(hkey, "zoom_level", 0, REG_SZ, default_zoom_level->str, string_size);
+	}
+
 
 	// All values saved in the windows registry
 	RegCloseKey(hkey);

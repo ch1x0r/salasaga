@@ -565,7 +565,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 				return NULL;
 
 			// If the string is "Fit to width" or a localised version of it
-			if (0 == g_strcmp0(_("Fit to width"), (gchar *) value))
+			if ((0 == g_strcmp0("Fit to width", (gchar *) value)) || (0 == g_strcmp0(_("Fit to width"), (gchar *) value)))
 			{
 				// Yes, this is the "Fit to width" value
 				output_gstring = g_string_assign(output_gstring, value);
