@@ -93,14 +93,14 @@ GtkWidget *create_resolution_selector(guint initial_width, guint initial_height)
 	// Construct the GtkComboBox from the supplied list of resolutions
 	for (res_counter = 0; res_counter < num_resolutions; res_counter++)
 	{
-		g_string_printf(res_string, "%ux%u pixels", (res_array + res_counter)->width, (res_array + res_counter)->height);
+		g_string_printf(res_string, "%ux%u %s", (res_array + res_counter)->width, (res_array + res_counter)->height, _("pixels"));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(res_widget), res_string->str);
 	}
 
 	// If no match was found we add the requested resolution on to the end of the list
 	if (TRUE != match_found)
 	{
-		g_string_printf(res_string, "%ux%u pixels", initial_width, initial_height);
+		g_string_printf(res_string, "%ux%u %s", initial_width, initial_height, _("pixels"));
 		gtk_combo_box_append_text(GTK_COMBO_BOX(res_widget), res_string->str);
 		match_at = num_resolutions;  // Point to the new entry
 	}
