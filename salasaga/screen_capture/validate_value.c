@@ -288,12 +288,6 @@ void *validate_value(gint value_id, gint input_type, void *value)
 				g_string_free(output_gstring, TRUE);
 				return NULL;
 			}
-			if ((output_gstring->len > string_max) && (-1 != string_max))  // -1 for string_max means "no maximum limit"
-			{
-				g_free(conversion_buffer);
-				g_string_free(output_gstring, TRUE);
-				return NULL;
-			}
 
 			// Free the memory used so far
 			if (0 != string_length)
