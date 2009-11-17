@@ -69,7 +69,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 
 	// Initialisation
 	layer_name = g_string_new(NULL);
-	g_string_printf(layer_name, "%s%d", _("Object"), layer_depth);
+	g_string_printf(layer_name, "%s%d", "Object", layer_depth);
 
 	// Set some basic properties for the layer, across all of its frames
 	for (frame_counter = 0; frame_counter < num_frames; frame_counter++)
