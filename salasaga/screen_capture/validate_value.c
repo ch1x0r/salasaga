@@ -481,53 +481,28 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					else
 					{
 						match_found = FALSE;
-						// This field is allowed to have the ' ', 'p', 'i', 'x', 'e', 'l', 's' characters .  Is this character one of those?
+
+						// This field is allowed to have the ' ' and 'x' characters .  Is this character one of those?
 						if (0 == g_ascii_strncasecmp(" ", &input_char, 1))
 						{
-							// Yes, this is a space character
-							output_gstring = g_string_append_c(output_gstring, input_char);
-							match_found = TRUE;
-							continue;
-						}
-						if (0 == g_ascii_strncasecmp("p", &input_char, 1))
-						{
-							// Yes, this is a 'p' character
-							output_gstring = g_string_append_c(output_gstring, 'p');
-							match_found = TRUE;
-							continue;
-						}
-						if (0 == g_ascii_strncasecmp("i", &input_char, 1))
-						{
-							// Yes, this is a 'i' character
-							output_gstring = g_string_append_c(output_gstring, 'i');
-							match_found = TRUE;
-							continue;
+							// Yes, this is a space character, so we've already collected the required resolution
+							// info and we can just return the resolution part of the string so far
+
+							// Remove any leading and/or trailing white space
+							output_gstring->str = g_strstrip(output_gstring->str);
+							output_gstring->len = strlen(output_gstring->str);
+
+							// Recheck the length of the output string
+							if ((string_length < string_min) || (string_length > string_max))
+								return NULL;
+
+							// The string seems to be valid, so return it for use
+							return output_gstring;
 						}
 						if (0 == g_ascii_strncasecmp("x", &input_char, 1))
 						{
 							// Yes, this is a 'x' character
 							output_gstring = g_string_append_c(output_gstring, 'x');
-							match_found = TRUE;
-							continue;
-						}
-						if (0 == g_ascii_strncasecmp("e", &input_char, 1))
-						{
-							// Yes, this is a 'e' character
-							output_gstring = g_string_append_c(output_gstring, 'e');
-							match_found = TRUE;
-							continue;
-						}
-						if (0 == g_ascii_strncasecmp("l", &input_char, 1))
-						{
-							// Yes, this is a 'l' character
-							output_gstring = g_string_append_c(output_gstring, 'l');
-							match_found = TRUE;
-							continue;
-						}
-						if (0 == g_ascii_strncasecmp("s", &input_char, 1))
-						{
-							// Yes, this is a 's' character
-							output_gstring = g_string_append_c(output_gstring, 's');
 							match_found = TRUE;
 							continue;
 						}
