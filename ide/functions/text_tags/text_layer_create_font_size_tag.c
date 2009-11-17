@@ -49,6 +49,11 @@ GtkTextTag *text_layer_create_font_size_tag(gdouble font_size)
 
 	// Create the name of a text tag to match the desired size
 	g_string_printf(tag_name_text_size, "text size %.2f", font_size);
+
+	// We replace any comma characters in the generated string with full stop characters, so
+	// that transporting project files between users with different numeric locales works
+	g_strcanon(tag_name_text_size->str, "tex siz0123456789", '.');
+
 	text_size_text_tag = gtk_text_tag_table_lookup(GTK_TEXT_TAG_TABLE(text_tags_table), tag_name_text_size->str);
 	if (NULL == text_size_text_tag)
 	{
