@@ -396,6 +396,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 
 	// Free the memory used in this function
 	g_free(text_object->rendered_line_heights);
+	g_object_ref_sink(text_view);
 	g_object_unref(text_view);
 	g_string_free(render_string, TRUE);
 	if (NULL != conversion_buffer)
