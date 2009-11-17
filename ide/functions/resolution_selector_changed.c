@@ -43,25 +43,23 @@
 gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
 	// Temporary variables
+	gchar		**main_strings;
 	gchar		*tmp_gchar;
-	gchar		**strings;
-	GString		*tmp_string;
+	gchar		**resolution_strings;
 
 	// Get the new output resolution
-	tmp_string = g_string_new(NULL);
 	tmp_gchar = gtk_combo_box_get_active_text(GTK_COMBO_BOX(resolution_selector));
-	g_string_printf(tmp_string, "%s", tmp_gchar);
-	g_free(tmp_gchar);
 
 	// Parse and store the new project output size
-	tmp_string = g_string_truncate(tmp_string, tmp_string->len - 7);
-	strings = g_strsplit(tmp_string->str, "x", 2);
-	output_width = atoi(strings[0]);
-	output_height = atoi(strings[1]);
+	main_strings = g_strsplit(tmp_gchar, " ", 2);
+	resolution_strings = g_strsplit(main_strings[0], "x", 2);
+	output_width = atoi(resolution_strings[0]);
+	output_height = atoi(resolution_strings[1]);
 
 	// Free the memory allocated in this function
-	g_strfreev(strings);
-	g_string_free(tmp_string, TRUE);
+	g_strfreev(main_strings);
+	g_strfreev(resolution_strings);
+	g_free(tmp_gchar);
 
 	// Indicate to the calling routine that this function finished fine
 	return TRUE;

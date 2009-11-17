@@ -451,7 +451,6 @@ void menu_edit_preferences(void)
 	g_string_free(valid_output_folder, TRUE);
 
 	// Default Output Resolution
-	valid_output_resolution = g_string_truncate(valid_output_resolution, valid_output_resolution->len - 7);
 	strings = g_strsplit(valid_output_resolution->str, "x", 2);
 	default_output_width = atoi(strings[0]);
 	default_output_height = atoi(strings[1]);
