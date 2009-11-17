@@ -37,6 +37,7 @@
 #include "../../externs.h"
 #include "../layer/compress_layers.h"
 #include "../widgets/time_line/time_line_get_cursor_position.h"
+#include "../widgets/time_line/time_line_new.h"
 
 
 void draw_workspace(void)
@@ -48,6 +49,7 @@ void draw_workspace(void)
 	const GdkColor		line_fg_colour = { 0, 0x00, 0x00, 0x00 };
 	static GdkGC		*line_gc = NULL;
 	GdkSegment			lines[4];
+	slide				*current_slide_data;
 	GdkRectangle		tmp_rectangle;
 
 
@@ -57,12 +59,20 @@ void draw_workspace(void)
 		return;
 	}
 
+	// If the slide doesn't have a timeline widget constructed for it yet, then make one
+	current_slide_data = current_slide->data;
+	if (NULL == current_slide_data->timeline_widget)
+	{
+		// Construct the widget used to display the slide in the timeline
+		current_slide_data->timeline_widget = time_line_new();
+	}
+
 	// Recalculate the size of the working area
 	front_store_height = working_height;
 	front_store_width = working_width;
 
 	// Get the current time line cursor position
-	cursor_position = time_line_get_cursor_position(((slide *) current_slide->data)->timeline_widget);
+	cursor_position = time_line_get_cursor_position(current_slide_data->timeline_widget);
 
 	// Create a new front store from the current slide
 	if (NULL != front_store)
