@@ -245,15 +245,14 @@ gint main(gint argc, gchar *argv[])
 	GtkLabel			*resolution_label;			// Widget for the resolution selector label
 	GSList				*supported_formats;			// Used to determine if SVG images can be loaded
 	GString				*title_bar_icon_path;		// Path to the title bar icon image
+	gchar				*tmp_gchar;					// Temporary gchar
+	guint				tmp_int;					// Temporary guint
+	GString				*tmp_gstring;				// Temporary GString
+	GtkWidget			*tmp_widget;				// Temporary widget
 	GtkWidget			*toolbar;					// Widget for the toolbar
 	GdkScreen			*which_screen;				// Gets given the screen the monitor is on
 	gchar				wintitle[40];				// Stores the window title
 	GtkLabel			*zoom_label;				// Widget for the zoom selector label
-
-	gchar				*tmp_gchar;					// Temporary gchar
-	GString				*tmp_gstring;				// Temporary GString
-	guint				tmp_int;					// Temporary guint
-	GtkWidget			*tmp_widget;				// Temporary widget
 
 
 	// Set defaults
@@ -271,7 +270,6 @@ gint main(gint argc, gchar *argv[])
 	unscaled_button_spacing = 5;
 	unscaled_button_width = 50;
 
-
 	// Initialise i18n
 	locale_return = setlocale(LC_ALL, "");
 	if (NULL == locale_return)
@@ -282,6 +280,9 @@ gint main(gint argc, gchar *argv[])
 		bindtextdomain(PACKAGE, LOCALEDIR);
 		textdomain(PACKAGE);
 	}
+
+	// Initialise GTK
+	gtk_init(&argc, &argv);
 
 	// Initialise various strings
 	default_output_folder = g_string_new(NULL);
@@ -308,9 +309,6 @@ gint main(gint argc, gchar *argv[])
 	{
 	    layer_toolbar_signals[tmp_int] = 0;
 	}
-
-	// Initialise GTK
-	gtk_init(&argc, &argv);
 
 	// Initialise the string holding the path of the most recent directory the user accessed
 	last_folder = g_string_new(g_get_home_dir());
