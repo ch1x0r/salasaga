@@ -411,6 +411,12 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 							// fixme3: Should probably add validation of the tag names at some point, to be on the safe side
 							tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
 
+							// If the tag is a text size tag, we replace any comma characters ',' with a full stop '.'
+							if (0 == xmlStrncmp(tmp_xmlChar, (const xmlChar *) "text size", 9))
+							{
+								g_strcanon((gchar *) tmp_xmlChar, "tex siz0123456789", '.');
+							}
+
 							// Apply the tag to this character in the Gtk text buffer
 							gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), (const gchar *) tmp_xmlChar, &end_iter_minus_one, &end_iter);
 							xmlFree(tmp_xmlChar);
