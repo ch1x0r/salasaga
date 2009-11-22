@@ -26,6 +26,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	callbacks/text_layer_dialog_bg_colour_changed.c \
 	callbacks/text_layer_dialog_fg_colour_changed.c \
 	callbacks/text_layer_dialog_font_changed.c \
+	callbacks/text_layer_dialog_insert_text_signal_triggered.c \
 	callbacks/text_layer_dialog_selection_changed.c \
 	callbacks/text_layer_dialog_size_changed.c \
 	callbacks/text_layer_dialog_validate_buffer_tag_quantity.c \
