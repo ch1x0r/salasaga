@@ -55,6 +55,20 @@ GdkColor *get_selection_fg_colour(GtkTextBuffer *text_buffer, GtkTextView *text_
 
 	// Retrieve the selection start and end iters
 	gtk_text_buffer_get_selection_bounds(GTK_TEXT_BUFFER(text_buffer), &this_iter, &end_iter);
+	gtk_text_iter_order(&this_iter, &end_iter);
+
+	// If the start iter is not at the start of the text buffer, we move it back one character to get an accurate value
+	if (FALSE == gtk_text_iter_is_start(&this_iter))
+	{
+		gtk_text_iter_backward_char(&this_iter);
+	}
+
+	// Unless the start and end iters are at the same place, move the end iter back one so we
+	// get an accurate value
+	if (FALSE == gtk_text_iter_equal(&this_iter, &end_iter))
+	{
+		gtk_text_iter_backward_char(&end_iter);
+	}
 
 	// Determine the foreground colour at the selection start iter
 	text_attributes = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(text_view));
