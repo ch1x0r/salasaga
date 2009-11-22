@@ -52,35 +52,41 @@ gdouble get_selection_font_size(GtkTextBuffer *text_buffer, GtkTextView *text_vi
 	gint					font_size_int;		// Used for retrieving the size of a character in a text layer
 	gfloat					iter_size;			// The size of the present character
 	GtkTextAttributes		*text_attributes;	// Pointer to the attributes for a text layer character
-	GtkTextIter				this_iter;
+	GtkTextIter				first_iter;
 
 
 	// Retrieve the selection start and end iters
-	gtk_text_buffer_get_selection_bounds(GTK_TEXT_BUFFER(text_buffer), &this_iter, &end_iter);
+	gtk_text_buffer_get_selection_bounds(GTK_TEXT_BUFFER(text_buffer), &first_iter, &end_iter);
 
-	// Determine the font size at the selection start iter
-	text_attributes = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(text_view));
-	gtk_text_iter_get_attributes(&this_iter, text_attributes);
-	font_size_int = pango_font_description_get_size(text_attributes->font);
-	font_size = rint(font_size_int / PANGO_SCALE);
+	// If the start iter is not at the start of the text buffer, we move it back one character to get an accurate value
+	if (FALSE == gtk_text_iter_is_start(&first_iter))
+	{
+		gtk_text_iter_backward_char(&first_iter);
+	}
 
 	// Unless the start and end iters are at the same place, move the end iter back one so we
 	// get an accurate value
-	if (FALSE == gtk_text_iter_equal(&this_iter, &end_iter))
+	if (FALSE == gtk_text_iter_equal(&first_iter, &end_iter))
 	{
 		gtk_text_iter_backward_char(&end_iter);
 	}
 
+	// Determine the font size at the selection start iter
+	text_attributes = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(text_view));
+	gtk_text_iter_get_attributes(&first_iter, text_attributes);
+	font_size_int = pango_font_description_get_size(text_attributes->font);
+	font_size = rint(font_size_int / PANGO_SCALE);
+
 	// Step through the text buffer character by character,
 	// checking if the font size has changed
-	while (FALSE == gtk_text_iter_equal(&this_iter, &end_iter))
+	while (FALSE == gtk_text_iter_equal(&first_iter, &end_iter))
 	{
 		// Move forward one iter
-		gtk_text_iter_forward_char(&this_iter);
+		gtk_text_iter_forward_char(&first_iter);
 
 		// Get the font size at this new iter
 		text_attributes = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(text_view));
-		gtk_text_iter_get_attributes(&this_iter, text_attributes);
+		gtk_text_iter_get_attributes(&first_iter, text_attributes);
 		font_size_int = pango_font_description_get_size(text_attributes->font);
 		iter_size = rint(font_size_int / PANGO_SCALE);
 

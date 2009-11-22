@@ -54,22 +54,29 @@ gint get_selection_font_face(GtkTextBuffer *text_buffer)
 	gint					loop_counter;		// Simple counter used in loops
 	gint					num_tags;			// Receives the total number of tags applied to a text character
 	gint					starting_font_face = -1;  // Used for calculating the font face of a character
-	GtkTextIter				this_iter;			// Character iter used when looping through the selection
+	GtkTextIter				first_iter;			// Character iter used when looping through the selection
 	GtkTextTag				*this_tag = NULL;	// Used in a loop for pointing to individual text tags
 
 
 	// Retrieve the selection start and end iters
-	gtk_text_buffer_get_selection_bounds(GTK_TEXT_BUFFER(text_buffer), &this_iter, &end_iter);
+	gtk_text_buffer_get_selection_bounds(GTK_TEXT_BUFFER(text_buffer), &first_iter, &end_iter);
+	gtk_text_iter_order(&first_iter, &end_iter);
+
+	// If the start iter is not at the start of the text buffer, we move it back one character to get an accurate value
+	if (FALSE == gtk_text_iter_is_start(&first_iter))
+	{
+		gtk_text_iter_backward_char(&first_iter);
+	}
 
 	// Unless the start and end iters are at the same place, move the end iter back one so we
 	// get an accurate value
-	if (FALSE == gtk_text_iter_equal(&this_iter, &end_iter))
+	if (FALSE == gtk_text_iter_equal(&first_iter, &end_iter))
 	{
 		gtk_text_iter_backward_char(&end_iter);
 	}
 
 	// Run through the tags at the first iter to determine which font face is applied
-	applied_tags = gtk_text_iter_get_tags(&this_iter);
+	applied_tags = gtk_text_iter_get_tags(&first_iter);
 	num_tags = g_slist_length(applied_tags);
 	for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
 	{
@@ -86,13 +93,13 @@ gint get_selection_font_face(GtkTextBuffer *text_buffer)
 	g_slist_free(applied_tags);
 
 	// Step through the text buffer character by character, checking if the font face has changed
-	while (FALSE == gtk_text_iter_equal(&this_iter, &end_iter))
+	while (FALSE == gtk_text_iter_equal(&first_iter, &end_iter))
 	{
 		// Move forward one iter
-		gtk_text_iter_forward_char(&this_iter);
+		gtk_text_iter_forward_char(&first_iter);
 
 		// Get the font face at this new iter
-		applied_tags = gtk_text_iter_get_tags(&this_iter);
+		applied_tags = gtk_text_iter_get_tags(&first_iter);
 		num_tags = g_slist_length(applied_tags);
 		for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
 		{
