@@ -471,7 +471,7 @@ gboolean read_project(gchar *filename)
 			// Check if this structure holds font size tags
 			if ((!xmlStrcmp(tags_structure->name, (const xmlChar *) "size-tags")))
 			{
-				// Yes, this holds foreground colour tags
+				// Yes, this holds font size tags
 				tag_node = tags_structure->xmlChildrenNode;
 				while (NULL != tag_node)
 				{
