@@ -25,7 +25,7 @@
  */
 
 
-// Turn on C99 compatibility - needed for roundf() to work
+// Turn on C99 compatibility
 #define _ISOC99_SOURCE
 
 // Standard include
