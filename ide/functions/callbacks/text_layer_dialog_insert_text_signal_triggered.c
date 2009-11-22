@@ -41,49 +41,78 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../text_tags/text_layer_create_colour_tag.h"
 #include "../text_tags/text_layer_create_font_size_tag.h"
 
 
 // Variables shared between both functions in this source file
-static gfloat our_font_size = 0.0;
+static GdkColor			our_fg_colour;
+static gint				our_font_face = -1;
+static gfloat			our_font_size = 0.0;
 
 
 // This callback function determines the desired font characteristics to be applied to newly inserted text
 gboolean text_layer_dialog_insert_text_before(GtkTextBuffer *text_buffer, GtkTextIter *cursor_location, gchar *new_text, gint num_chars, text_dialog_widgets *text_widgets)
 {
 	// Local variables
+	GSList					*applied_tags;		// Receives a list of text tags applied at a position in a text buffer
 	GtkTextIter				cursor_iter;
 	GtkWidget				*fg_colour_button;
 	GtkWidget				*font_face_widget;	// Points to the font face selection widget
+	gint					*font_ptr;			// Used for calculating the font face of a character
 	gint					font_size_int;		// Used for retrieving the size of a character in a text layer
 	GtkWidget				*font_size_scale;
+	gint					loop_counter;		// Simple counter used in loops
+	gint					num_tags;			// Receives the total number of tags applied to a text character
+	GdkColor				*start_colour;		// Points to the foreground colour for a text iter
+	GtkTextAppearance		*text_appearance;	// Pointers to the text appearance attributes we're reading from
 	GtkTextAttributes		*text_attributes;	// Pointer to the attributes for a text layer character
 	GtkWidget				*text_view;
+	GtkTextTag				*this_tag = NULL;	// Used in a loop for pointing to individual text tags
 
 
 	// Initialisation
+	cursor_iter = *cursor_location;
 	fg_colour_button = text_widgets->font_fg_colour_button;
 	font_face_widget = text_widgets->font_face_combo_box;
 	font_size_scale = text_widgets->font_size_scale;
 	text_view = text_widgets->text_view;
 
-	// If the present cursor location is not at the end of the text buffer, we don't need to run the rest of the function
-	if (TRUE == gtk_text_iter_is_end(cursor_location))
+	// If the start iter is not at the start of the text buffer, we move it back one character to get an accurate value
+	if (FALSE == gtk_text_iter_is_start(cursor_location))
 	{
 		// Move the cursor back to just before the newly inserted text character
-		cursor_iter = *cursor_location;
 		gtk_text_iter_backward_chars(&cursor_iter, num_chars);
-
-		// Determine the font foreground colour we should apply to the new text, and save it for the "after" function to use
-
-		// Determine the font size we should apply to the new text, and save it for the "after" function to use
-
-		// Determine the font size we should apply to the new text, and save it for the "after" function to use
-		text_attributes = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(text_view));
-		gtk_text_iter_get_attributes(&cursor_iter, text_attributes);
-		font_size_int = pango_font_description_get_size(text_attributes->font);
-		our_font_size = rint(font_size_int / PANGO_SCALE);
 	}
+
+	// Determine the font foreground colour we should apply to the new text, and save it for the "after" function to use
+	text_attributes = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(text_view));
+	gtk_text_iter_get_attributes(&cursor_iter, text_attributes);
+
+	text_appearance = &(text_attributes->appearance);
+	start_colour = &(text_appearance->fg_color);
+	our_fg_colour.red = start_colour->red;
+	our_fg_colour.green = start_colour->green;
+	our_fg_colour.blue = start_colour->blue;
+
+	// Determine the font face we should apply to the new text, and save it for the "after" function to use
+	applied_tags = gtk_text_iter_get_tags(&cursor_iter);
+	num_tags = g_slist_length(applied_tags);
+	for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
+	{
+		this_tag = g_slist_nth_data(applied_tags, loop_counter);
+		font_ptr = g_object_get_data(G_OBJECT(this_tag), "font-num");
+		if (NULL != font_ptr)
+		{
+			// * Only font face tags have the "font-num" property, so this is a font face tag *
+			our_font_face = *font_ptr;
+		}
+	}
+	g_slist_free(applied_tags);
+
+	// Determine the font size we should apply to the new text, and save it for the "after" function to use
+	font_size_int = pango_font_description_get_size(text_attributes->font);
+	our_font_size = rint(font_size_int / PANGO_SCALE);
 
 	return FALSE;
 }
@@ -93,6 +122,7 @@ gboolean text_layer_dialog_insert_text_before(GtkTextBuffer *text_buffer, GtkTex
 gboolean text_layer_dialog_insert_text_after(GtkTextBuffer *text_buffer, GtkTextIter *cursor_location, gchar *new_text, gint num_chars, text_dialog_widgets *text_widgets)
 {
 	// Local variables
+	GtkTextTag				*fg_colour_tag;
 	GtkTextIter				selection_start;
 	GtkTextTag				*text_size_text_tag;
 
@@ -101,14 +131,16 @@ gboolean text_layer_dialog_insert_text_after(GtkTextBuffer *text_buffer, GtkText
 	selection_start = *cursor_location;
 	gtk_text_iter_backward_chars(&selection_start, num_chars);
 
+	// * Apply the desired foreground colour to the selected text *
+	fg_colour_tag = text_layer_create_colour_tag(&our_fg_colour);
+	gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(text_buffer), GTK_TEXT_TAG(fg_colour_tag), &selection_start, cursor_location);
+
+	// * Apply the desired font face to the new text *
+	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(text_buffer), salasaga_font_names[our_font_face], &selection_start, cursor_location);
+
 	// * Apply the desired font size to the new text *
-
-	// Create the name of a text tag to match the desired size
 	text_size_text_tag = text_layer_create_font_size_tag(our_font_size);
-
-	// Apply the font size to the selected text
 	gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(text_buffer), GTK_TEXT_TAG(text_size_text_tag), &selection_start, cursor_location);
-
 
 	return FALSE;
 }
