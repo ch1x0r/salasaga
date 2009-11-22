@@ -334,9 +334,12 @@ void save_preferences_and_exit(void)
 #endif
 
 	// Free global variables
-	g_string_free(info_link, TRUE);
-	g_string_free(info_link_target, TRUE);
-	g_object_unref(info_text);
+	if (NULL != info_link)
+		g_string_free(info_link, TRUE);
+	if (NULL != info_link_target)
+		g_string_free(info_link_target, TRUE);
+	if (NULL != info_text)
+		g_object_unref(info_text);
 
 	// Exit the application
 	gtk_main_quit();
