@@ -41,6 +41,7 @@
 #include "../callbacks/text_layer_dialog_font_changed.h"
 #include "../callbacks/text_layer_dialog_selection_changed.h"
 #include "../callbacks/text_layer_dialog_size_changed.h"
+#include "../callbacks/text_layer_dialog_insert_text_signal_triggered.h"
 #include "../callbacks/transition_type_changed.h"
 #include "../text_tags/get_selection_fg_colour.h"
 #include "../text_tags/get_selection_font_face.h"
@@ -68,6 +69,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gfloat				gfloat_val;					// Temporary gfloat value used for validation
 	gint				gint_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
+	gulong				insert_text_after_callback;  // ID of the callback handler for the "after" insert text signal handler
+	gulong				insert_text_before_callback;  // ID of the callback handler for the "before" insert text signal handler
 	GString				*message;					// Used to construct message strings
 	gdouble				scale_mark_counter;			// Simple counter used when constructing scale marks for sliders
 	gulong				selection_callback;			// ID of the callback handler for text selection change
@@ -334,6 +337,10 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 
 	// Add a signal handler to the text widget, to be called when the user changes the text selection
 	selection_callback = g_signal_connect(G_OBJECT(text_buffer), "mark-set", G_CALLBACK(text_layer_dialog_selection_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+
+	// Add signal handlers to the text widget for setting the attributes of new text to their desired characteristics
+	insert_text_before_callback = g_signal_connect(G_OBJECT(text_buffer), "insert-text", G_CALLBACK(text_layer_dialog_insert_text_before), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	insert_text_after_callback = g_signal_connect_after(G_OBJECT(text_buffer), "insert-text", G_CALLBACK(text_layer_dialog_insert_text_after), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
 
 	// Attach signal handlers to the font list, size, and colour widgets, to be called when the user changes any of them
 	font_bg_callback = g_signal_connect(G_OBJECT(fill_colour_button), "color-set", G_CALLBACK(text_layer_dialog_bg_colour_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
@@ -664,6 +671,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			g_signal_handler_disconnect(G_OBJECT(fill_colour_button), font_bg_callback);
 			g_signal_handler_disconnect(G_OBJECT(font_size_scale), font_size_callback);
 			g_signal_handler_disconnect(G_OBJECT(selector_font_face), font_face_callback);
+			g_signal_handler_disconnect(G_OBJECT(text_buffer), insert_text_after_callback);
+			g_signal_handler_disconnect(G_OBJECT(text_buffer), insert_text_before_callback);
 			g_signal_handler_disconnect(G_OBJECT(text_buffer), selection_callback);
 			if (0 != debug_level)
 			{
@@ -925,6 +934,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	g_signal_handler_disconnect(G_OBJECT(fill_colour_button), font_bg_callback);
 	g_signal_handler_disconnect(G_OBJECT(font_size_scale), font_size_callback);
 	g_signal_handler_disconnect(G_OBJECT(selector_font_face), font_face_callback);
+	g_signal_handler_disconnect(G_OBJECT(text_buffer), insert_text_after_callback);
+	g_signal_handler_disconnect(G_OBJECT(text_buffer), insert_text_before_callback);
 	g_signal_handler_disconnect(G_OBJECT(text_buffer), selection_callback);
 	if (0 != debug_level)
 	{
