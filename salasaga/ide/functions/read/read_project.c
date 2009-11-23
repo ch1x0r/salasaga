@@ -106,6 +106,14 @@ gboolean read_project(gchar *filename)
 	layer				*this_layer_ptr;			// Pointer into a layer structure
 	xmlNodePtr			this_node;					// Temporary pointer
 	xmlNodePtr			this_slide;					// Temporary pointer
+	xmlChar				*tmp_char;					// Temporary string pointer
+	GList				*tmp_glist;					//
+	GString				*tmp_gstring;				// Temporary GString
+	layer				*tmp_layer;					// Temporary layer
+	GdkPixbuf			*tmp_pixbuf;				// Used to convert from a pixmap to a pixbuf
+	GdkPixmap			*tmp_pixmap;				//
+	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
+	slide				*tmp_slide;					// Temporary slide
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	gboolean			valid_control_bar_behaviour = TRUE;// Receives the new control bar display behaviour
 	guint				valid_end_behaviour = 0;	// Receives the new end behaviour once validated
@@ -125,14 +133,6 @@ gboolean read_project(gchar *filename)
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
-
-	xmlChar				*tmp_char;					// Temporary string pointer
-	GList				*tmp_glist;					//
-	GString				*tmp_gstring;				// Temporary GString
-	layer				*tmp_layer;					// Temporary layer
-	GdkPixmap			*tmp_pixmap;				//
-	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
-	slide				*tmp_slide;					// Temporary slide
 
 
 	// Initialise various things
@@ -1081,8 +1081,10 @@ gboolean read_project(gchar *filename)
 		// Create the thumbnail for the slide
 		tmp_glist = NULL;
 		tmp_glist = g_list_append(tmp_glist, tmp_slide);
-		tmp_pixmap = compress_layers(tmp_glist, 0, preview_width, preview_height);
-		tmp_slide->thumbnail = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
+		tmp_pixmap = compress_layers(tmp_glist, 0, project_width, project_height);
+		tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
+		tmp_slide->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
+		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
 
 		// Add the thumbnail to the film strip
 		gtk_list_store_append(film_strip_store, &film_strip_iter);

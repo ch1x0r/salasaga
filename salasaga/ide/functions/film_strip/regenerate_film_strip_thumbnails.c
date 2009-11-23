@@ -53,6 +53,7 @@ void regenerate_film_strip_thumbnails()
 	gint				slide_counter, slide_position;
 	slide				*slide_pointer;				// Points to the presently processing slide
 	GList				*this_slide;
+	GdkPixbuf			*tmp_pixbuf;				// Used to convert from a pixmap to a pixbuf
 	GdkPixmap			*tmp_pixmap;				// Used when converting from a pixmap to a pixbuf
 
 
@@ -93,8 +94,10 @@ void regenerate_film_strip_thumbnails()
 		preview_height = preview_width * project_ratio;
 
 		// Create the thumbnail for the slide
-		tmp_pixmap = compress_layers(this_slide, cursor_position, preview_width, preview_height);
-		((slide *) this_slide->data)->thumbnail = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
+		tmp_pixmap = compress_layers(this_slide, cursor_position, project_width, project_height);
+		tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
+		((slide *) this_slide->data)->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
+		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
 
 		// Add the thumbnail to the film strip
 		gtk_list_store_append(film_strip_store, &film_strip_iter);
