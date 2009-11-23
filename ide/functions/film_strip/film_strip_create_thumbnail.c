@@ -40,6 +40,8 @@ void film_strip_create_thumbnail(slide *slide_data)
 	GdkPixbuf			*new_thumbnail;				//
 	GtkTreeIter			old_iter;					// Iter used to select the film strip thumbnail
 	GtkTreePath			*old_path;					// Path used to select the film strip thumbnail
+	guint				preview_height;				// The height we calculate a film strip thumbnail should be
+	gfloat				project_ratio;				// Ratio of project height to width
 	GdkPixbuf			*tmp_pixbuf;				// Used to convert from a pixmap to a pixbuf
 
 
@@ -55,6 +57,10 @@ void film_strip_create_thumbnail(slide *slide_data)
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &old_path, NULL);
 	gtk_tree_model_get_iter(GTK_TREE_MODEL(film_strip_store), &old_iter, old_path);
 
+	// Determine the proper thumbnail height
+	project_ratio = (gfloat) project_height / (gfloat) project_width;
+	preview_height = preview_width * project_ratio;
+
 	// Create the thumbnail for the slide from the working space pixmap
 	tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(front_store), NULL, 0, 0, 0, 0, -1, -1);
 	if (NULL == tmp_pixbuf)
@@ -66,7 +72,7 @@ void film_strip_create_thumbnail(slide *slide_data)
 		gtk_tree_path_free(old_path);
 		return;
 	}
-	new_thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, (guint) preview_width * 0.75, GDK_INTERP_TILES);
+	new_thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
 	if (NULL == new_thumbnail)
 	{
 		message = g_string_new(NULL);

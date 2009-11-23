@@ -85,7 +85,9 @@ gboolean read_project(gchar *filename)
 	guint				num_slides;					// Holds the number of slides we've processed
 	gfloat				potential_duration;			// Receives a slide duration from the project file that we may or may not use
 	xmlNodePtr			preferences_node = NULL;	// Points to the preferences structure
+	guint				preview_height;				// The height we calculate a film strip thumbnail should be
 	xmlChar				*project_name_data = NULL;
+	gfloat				project_ratio;				// Ratio of project height to width
 	xmlChar				*output_folder_data = NULL;
 	xmlChar				*output_width_data = NULL;
 	xmlChar				*output_height_data = NULL;
@@ -1072,10 +1074,14 @@ gboolean read_project(gchar *filename)
 		// Set the timeline widget for the slide to NULL, so we know to create it later on
 		tmp_slide->timeline_widget = NULL;
 
+		// Determine the proper thumbnail height
+		project_ratio = (gfloat) project_height / (gfloat) project_width;
+		preview_height = preview_width * project_ratio;
+
 		// Create the thumbnail for the slide
 		tmp_glist = NULL;
 		tmp_glist = g_list_append(tmp_glist, tmp_slide);
-		tmp_pixmap = compress_layers(tmp_glist, 0, preview_width, (guint) preview_width * 0.75);
+		tmp_pixmap = compress_layers(tmp_glist, 0, preview_width, preview_height);
 		tmp_slide->thumbnail = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
 
 		// Add the thumbnail to the film strip

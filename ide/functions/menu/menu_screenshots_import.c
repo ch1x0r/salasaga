@@ -67,11 +67,11 @@ void menu_screenshots_import(void)
 	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
 	gint				num_screenshots = 0;		// Switch to track if other screenshots already exist
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
+	guint				preview_height;				// The height we calculate a film strip thumbnail should be
+	gfloat				project_ratio;				// Ratio of project height to width
 	gint				return_code = 0;			// Receives return code
 	gint				return_code_int;
 	gint				slide_position;				// Which slide in the slide list do we have selected?
-	gboolean			using_first_screenshot;		// Used to indicate there's no project active, so we're using the dimensions of the first screenshot
-
 	GtkWidget			*tmp_dialog;
 	layer_image			*tmp_image_ob;				// Temporary image layer
 	gint				tmp_int = 0;				// Temporary integer
@@ -79,6 +79,7 @@ void menu_screenshots_import(void)
 	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
 	slide				*tmp_slide;					// Temporary slide
 	GString				*tmp_string;				// Temporary string
+	gboolean			using_first_screenshot;		// Used to indicate there's no project active, so we're using the dimensions of the first screenshot
 
 
 	// Initialise various things
@@ -292,8 +293,12 @@ void menu_screenshots_import(void)
 			return;
 		}
 
+		// Determine the proper thumbnail height
+		project_ratio = (gfloat) project_height / (gfloat) project_width;
+		preview_height = preview_width * project_ratio;
+
 		// Load the image file(s) into a thumbnail sized pixel buffer, then add it to the new slide structure
-		tmp_slide->thumbnail = gdk_pixbuf_scale_simple(tmp_image_ob->image_data, preview_width, (guint) preview_width * 0.75, GDK_INTERP_TILES);
+		tmp_slide->thumbnail = gdk_pixbuf_scale_simple(tmp_image_ob->image_data, preview_width, preview_height, GDK_INTERP_TILES);
 		if (NULL == tmp_slide->thumbnail)
 		{
 			// Something went wrong when loading the screenshot

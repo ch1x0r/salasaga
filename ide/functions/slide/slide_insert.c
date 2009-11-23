@@ -41,6 +41,8 @@ void slide_insert(void)
 {
 	// Local variables
 	GtkTreeIter			film_strip_iter;
+	guint				preview_height;				// The height we calculate a film strip thumbnail should be
+	gfloat				project_ratio;				// Ratio of project height to width
 	layer				*tmp_layer;					// Temporary layer
 	slide				*tmp_slide;					// Temporary slide
 
@@ -77,8 +79,12 @@ void slide_insert(void)
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_out_duration = 0.0;
 
+	// Determine the proper thumbnail height
+	project_ratio = (gfloat) project_height / (gfloat) project_width;
+	preview_height = preview_width * project_ratio;
+
 	// Create a blank thumbnail using the default background color, then add it to the new slide structure
-	tmp_slide->thumbnail = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, (guint) preview_width * 0.75);
+	tmp_slide->thumbnail = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, preview_height);
 	gdk_pixbuf_fill(tmp_slide->thumbnail, ((default_bg_colour.red / 256) << 24)
 		+ ((default_bg_colour.green / 256) << 16)
 		+ ((default_bg_colour.blue / 256) << 8) + 0xff);
