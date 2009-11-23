@@ -37,6 +37,7 @@
 #include "../../externs.h"
 #include "../layer/compress_layers.h"
 #include "../widgets/time_line/time_line_get_cursor_position.h"
+#include "../widgets/time_line/time_line_new.h"
 
 
 void regenerate_film_strip_thumbnails()
@@ -47,7 +48,10 @@ void regenerate_film_strip_thumbnails()
 	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
 	gint				num_slides;
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
+	guint				preview_height;				// The height we calculate a film strip thumbnail should be
+	gfloat				project_ratio;				// Ratio of project height to width
 	gint				slide_counter, slide_position;
+	slide				*slide_pointer;				// Points to the presently processing slide
 	GList				*this_slide;
 	GdkPixmap			*tmp_pixmap;				// Used when converting from a pixmap to a pixbuf
 
@@ -72,12 +76,24 @@ void regenerate_film_strip_thumbnails()
 	{
 		// Point to the desired slide data
 		this_slide = g_list_nth(slides, slide_counter);
+		slide_pointer = (slide *) this_slide->data;
+
+		// If the present slide doesn't have a time line widget, then create one
+		if (NULL == slide_pointer->timeline_widget)
+		{
+			// Construct the widget used to display the slide in the timeline
+			slide_pointer->timeline_widget = time_line_new();
+		}
 
 		// Get the current time line cursor position
-		cursor_position = time_line_get_cursor_position(((slide *) this_slide->data)->timeline_widget);
+		cursor_position = time_line_get_cursor_position(slide_pointer->timeline_widget);
+
+		// Determine the proper thumbnail height
+		project_ratio = (gfloat) project_height / (gfloat) project_width;
+		preview_height = preview_width * project_ratio;
 
 		// Create the thumbnail for the slide
-		tmp_pixmap = compress_layers(this_slide, cursor_position, preview_width, (guint) preview_width * 0.75);
+		tmp_pixmap = compress_layers(this_slide, cursor_position, preview_width, preview_height);
 		((slide *) this_slide->data)->thumbnail = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
 
 		// Add the thumbnail to the film strip
