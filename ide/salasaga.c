@@ -572,10 +572,6 @@ gint main(gint argc, gchar *argv[])
 	g_string_printf(message, " %s", _("Ready"));
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), message->str);
 
-	// Calculate the zoom and drawing area, and initialise the project dimensions
-	zoom_selector_changed(GTK_WIDGET(zoom_selector), NULL, (gpointer) NULL);
-	resolution_selector_changed(GTK_WIDGET(resolution_selector), NULL, (gpointer) NULL);
-
 	// Catch when the window is resized, to automatically recalculate the zoom and redraw the drawing area
 	g_signal_connect(G_OBJECT(right_side), "size-allocate", G_CALLBACK(event_size_allocate_received), (gpointer) NULL);
 
@@ -601,6 +597,10 @@ gint main(gint argc, gchar *argv[])
 
 	// Display the main window
 	gtk_widget_show_all(main_window);
+
+	// Calculate the zoom and drawing area, and initialise the project dimensions
+	zoom_selector_changed(GTK_WIDGET(zoom_selector), NULL, (gpointer) NULL);
+	resolution_selector_changed(GTK_WIDGET(resolution_selector), NULL, (gpointer) NULL);
 
 	// Start the main event loop
 	gtk_main();
