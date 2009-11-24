@@ -62,7 +62,7 @@ GtkWidget *create_zoom_selector(gchar *initial_zoom)
 		gtk_combo_box_append_text(GTK_COMBO_BOX(zoom_widget), zoom_selector_array[zoom_counter]);
 
 		// Check if this zoom option is a match for the requested initial zoom
-		if ((0 == g_strcmp0("Fit to width", zoom_selector_array[zoom_counter])) || (0 == g_strcmp0(_("Fit to width"), zoom_selector_array[zoom_counter])))
+		if (0 == g_strcmp0(initial_zoom, zoom_selector_array[zoom_counter]))
 		{
 			match_found = TRUE;
 			match_at = zoom_counter;
