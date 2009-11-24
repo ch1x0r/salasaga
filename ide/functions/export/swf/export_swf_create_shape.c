@@ -51,6 +51,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	GSList				*applied_tags;				// Receives a list of text tags applied at a position in a text buffer
 	GString				*as_gstring = NULL;			// Used for constructing action script statements
 	guint16				blue_component;				// Used when retrieving the foreground color of text
+	gfloat				char_descent;				// Used for calculating the descent of a line
 	gint				char_font_face = -1;		// Used for calculating the font face of a character
 	gint				*char_font_ptr;				// Used for calculating the font face of a character
 	SWFDisplayItem		container_display_item;
@@ -85,6 +86,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	gboolean			line_leading_known;			// Simple boolean to track if we know the "leading" for a line yet
 	gfloat				line_width;
 	gint				loop_counter;				// Simple counter used in loops
+	gfloat				max_char_descent;			// Used for calculating the descent of a line
 	gfloat				max_line_width = 0;
 	GString				*message;					// Used to construct message strings
 	gboolean			more_chars;					// Simple boolean used when rendering a text layer
@@ -512,7 +514,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			text_data = (layer_text *) this_layer_data->object_data;
 			text_buffer = text_data->text_buffer;
 
-			// Create the text object we'll be using
+			// Create the text objects we'll be using
 			text_object = newSWFText();
 			temp_text_object = newSWFText();
 
@@ -533,6 +535,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 				// Loop around, processing all the characters in the text buffer
 				line_height = 0;
+				max_char_descent = 0.0;
 				more_chars = TRUE;
 				while (more_chars)
 				{
@@ -571,6 +574,13 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 					scaled_font_size = scaled_height_ratio * font_size;
 					SWFText_setHeight(temp_text_object, scaled_font_size);
 
+					// Keep track of the largest descent size for this line
+					char_descent = SWFText_getDescent(temp_text_object);
+					if (char_descent > max_char_descent)
+					{
+						max_char_descent = char_descent;
+					}
+
 					// Keep track of the largest font size for this line
 					if (scaled_font_size > line_height)
 					{
@@ -602,7 +612,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 				// Save the height and descent of this line
 				line_heights[line_counter] = line_height;
-				line_descents[line_counter] = SWFText_getDescent(temp_text_object);
+				line_descents[line_counter] = max_char_descent;
 
 				// Add this line height to the total height of the text
 				text_height += line_height;
