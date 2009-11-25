@@ -54,6 +54,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	cairo_t					*cairo_context;			// Cairo drawing context
 	gdouble					cairo_pos_x = 0;		// Used for positioning where cairo will draw, in text layers
 	gdouble					cairo_pos_y = 0;		// Used for positioning where cairo will draw, in text layers
+	gfloat					char_height_diff;
 	gchar					*conversion_buffer;		// Used when converting between unicode character types
 	GtkTextIter				cursor_iter;			// Used for positioning in a text buffer
 	cairo_font_face_t		*font_array_face = NULL;  // Gets pointed to a cairo font face for each character when creating the text layer
@@ -64,11 +65,13 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	gfloat					green_component;		// Green component of a colour
 	gint					height;					//
 	gint					line_counter;
+	gfloat					*line_height_diffs = NULL;  // Used for calculating line heights
 	gfloat					line_height;
 	gfloat					line_width;
 	gfloat					line_x_bearing;
 	gboolean				line_x_bearing_known;	// Simple boolean to track if we know the x_bearing for line yet
 	gint					loop_counter;			// Simple counter used in loops
+	gfloat					max_line_height_diff;	// Used for calculating line heights
 	gfloat					max_line_width;
 	gboolean				more_chars;				// Simple boolean used when rendering a text layer
 	gint					num_lines;
@@ -129,17 +132,20 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 
 	// Determine how many lines are in the text buffer, so we can loop through them
 	num_lines = gtk_text_buffer_get_line_count(text_buffer);
+	line_height_diffs = g_new0(gfloat, num_lines);
 	text_object->rendered_line_heights = g_new0(gint, num_lines);
 	for (line_counter = 0; line_counter < num_lines; line_counter++)
 	{
 		// Position the text iter at the start of the line
 		gtk_text_buffer_get_iter_at_line(text_buffer, &cursor_iter, line_counter);
 
-		// Loop around, processing all the characters in the text buffer
+		// Loop around, processing all the characters in this line of the text buffer
+		char_height_diff = 0.0;
 		line_height = 0;
 		line_width = 0;
 		line_x_bearing = 0;
 		line_x_bearing_known = FALSE;
+		max_line_height_diff = 0.0;
 		more_chars = TRUE;
 		while (more_chars)
 		{
@@ -190,6 +196,11 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 				// Keep the largest character height for this line
 				line_height = text_extents.height;
 			}
+			char_height_diff = text_extents.height + text_extents.y_bearing;
+			if (char_height_diff > max_line_height_diff)
+			{
+				max_line_height_diff = char_height_diff;
+			}
 			if (FALSE == line_x_bearing_known)
 			{
 				// We add the x_bearing for the very first character of a line, so
@@ -212,6 +223,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 
 		// * At this point we've worked out the height and width of this line
 		text_object->rendered_line_heights[line_counter] = line_height;  // Cache the value
+		line_height_diffs[line_counter] = max_line_height_diff;
 		total_text_height += line_height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
 		cairo_pos_x = incoming_cairo_pos_x + line_x_bearing;
 		cairo_pos_y += line_height + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio);
@@ -286,10 +298,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 		cairo_pos_y = incoming_cairo_pos_y + (TEXT_BORDER_PADDING_HEIGHT * 2 * scaled_height_ratio);
 		for (line_counter = 0; line_counter < num_lines; line_counter++)
 		{
-			// Position the text iter at the start of the line
-			gtk_text_buffer_get_iter_at_line(text_buffer, &cursor_iter, line_counter);
-
-			// Reposition to the start of the line
+			// Position the text iter at the start of the text buffer line
 			gtk_text_buffer_get_iter_at_line(text_buffer, &cursor_iter, line_counter);
 
 			line_x_bearing = 0;
@@ -367,7 +376,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 				}
 
 				// Position the character on screen
-				cairo_move_to(cairo_context, cairo_pos_x, cairo_pos_y);
+				cairo_move_to(cairo_context, cairo_pos_x, cairo_pos_y - line_height_diffs[line_counter] + (TEXT_BORDER_PADDING_HEIGHT * scaled_height_ratio));
 				cairo_pos_x += text_extents.x_advance;
 
 				// Display the character on screen
