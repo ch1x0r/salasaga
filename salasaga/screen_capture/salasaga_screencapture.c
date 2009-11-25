@@ -474,6 +474,13 @@ gint main(gint argc, gchar *argv[])
 			notify_notification_set_hint_string(status_notify, "x-canonical-private-synchronous", "");
 			notify_notification_show(status_notify, &error);
 		}
+
+		// Delay for the requested number of seconds before the screenshot
+		for (delay_counter = 0; delay_counter < screenshot_delay; delay_counter++)
+		{
+			// Delay for 1 second
+			g_usleep(1000000);
+		}
 	}
 
 	// Take screenshot
@@ -496,15 +503,6 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// * Visually let the user know the screenshot was taken *
-
-	// Yet again, Notify-OSD shows it has been badly thought out and needs special treatment
-	// In this case, we have to stick around in the background and delay for a while
-	// before sending the next notification message, otherwise the user never gets the message
-	if (TRUE == libnotify_is_notify_osd)
-	{
-		// Delay for 3 seconds
-		g_usleep(3000000);
-	}
 
 	// Create a new status notification message
 	status_notify = notify_notification_new(_("Screenshot taken"), NULL, NULL, NULL);
