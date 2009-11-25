@@ -400,7 +400,7 @@ gint main(gint argc, gchar *argv[])
 	return_code_gboolean = notify_get_server_info(&notify_server_name, &notify_server_vendor, &notify_server_version, &notify_server_spec_version);
 	if (TRUE == return_code_gboolean)
 	{
-		if (0 == g_strcmp0(notify_server_name, "Notification Daemon"))
+		if (0 != g_strcmp0(notify_server_name, "notify-osd"))
 		{
 			libnotify_does_timeouts = TRUE;
 		}
