@@ -47,7 +47,7 @@
 #include <png.h>
 
 // Add our functions
-#include "config.h"
+#include "../config.h"
 #include "salasaga_types.h"
 #include "display_warning.h"
 #include "validate_value.h"
@@ -185,9 +185,15 @@ gint main(gint argc, gchar *argv[])
 	GSList				*entries = NULL;			// Holds a list of screen shot file names
 	GError				*error = NULL;				// Pointer to error return structure
 	gchar				*full_file_name;			// Holds the fully worked out file name to save as
+	gboolean			libnotify_does_timeouts = FALSE;  // Indicates whether the libnotify server respects message timeout values
 	GKeyFile			*lock_file;					// Pointer to the lock file structure
 	GString				*message;					// Used to construct message strings
 	GString				*name, *directory;			// GStrings from the lock file
+	gchar				*notify_server_name;		// Receives the name of the libnotify server
+	gchar				*notify_server_vendor;		// Receives the vendor name of the libnotify server
+	gchar				*notify_server_version;		// Receives the version string of the libnotify server
+	gchar				*notify_server_spec_version;  // Receives the libnotify spec of the libnotify server
+	gboolean			return_code_gboolean;		// Receives a boolean return code from the libnotify server
 	gint				screenshot_delay = 5;		// The number of seconds to delay before triggering a screenshot
 	gboolean			screenshots_exist = FALSE;	// Switch to track if other screenshots already exist
 	GString				*short_file_name;			// Name of the file to save as
@@ -386,51 +392,77 @@ gint main(gint argc, gchar *argv[])
 	// Close the lock file
 	g_key_file_free(lock_file);
 
-	// If there is a delay of greater than 1 second, then do a count down
-	if (1 < screenshot_delay)
+	// Find out if we're running Notify-OSD or not
+	// Note: Notify-OSD is a reduced functionality notify daemon that (unfortunately) Ubuntu
+	// are strong arming people into using.  Instead of point blank refusing to use it, it's
+	// probably better to just operate in a reduced functionality mode for notifications if
+	// it's detected to be running
+	return_code_gboolean = notify_get_server_info(&notify_server_name, &notify_server_vendor, &notify_server_version, &notify_server_spec_version);
+	if (TRUE == return_code_gboolean)
 	{
-		g_string_printf(message, _("Screenshot in %u seconds"), screenshot_delay);
-		status_notify = notify_notification_new(message->str, NULL, NULL, NULL);
+		if (0 == g_strcmp0(notify_server_name, "Notification Daemon"))
+		{
+			libnotify_does_timeouts = TRUE;
+		}
+	}
+	else
+	{
+		// We weren't able to retrieve the libnotify server info.  For now we just assume the libnotify server has the
+		// capabilities we need
+		libnotify_does_timeouts = TRUE;
 	}
 
-	// Delay for the requested number of seconds before the screenshot
-	for (delay_counter = 0; delay_counter < screenshot_delay; delay_counter++)
+	// We only do the onscreen notification if the libnotify daemon supports timeout values,
+	// because if it doesn't, the notification bubble remains onscreen and can be captured in
+	// the screenshot
+	if (TRUE == libnotify_does_timeouts)
 	{
-		// If appropriate, update the notification time
+		// If there is a delay of greater than 1 second, then do a count down
 		if (1 < screenshot_delay)
 		{
-			// Display the updated count down time
-			notify_notification_show(status_notify, &error);
+			g_string_printf(message, _("Screenshot in %u seconds"), screenshot_delay);
+			status_notify = notify_notification_new(message->str, NULL, NULL, NULL);
+		}
+
+		// Delay for the requested number of seconds before the screenshot
+		for (delay_counter = 0; delay_counter < screenshot_delay; delay_counter++)
+		{
+			// If appropriate, update the notification time
+			if (1 < screenshot_delay)
+			{
+				// Display the updated count down time
+				notify_notification_show(status_notify, &error);
+
+				// Delay for 1/2 second
+				g_usleep(500000);
+
+				// Delay for another 1/2 second if this isn't the last update of the count down
+				if (delay_counter < screenshot_delay - 1)
+				{
+					g_usleep(500000);
+				}
+
+				// Update the notification time
+				g_string_printf(message, _("Screenshot in %u seconds"), screenshot_delay - delay_counter - 1);
+				notify_notification_update(status_notify, message->str, NULL, NULL);
+
+			} else
+			{
+				// Delay for 1 second
+				g_usleep(1000000);
+			}
+		}
+
+		// Remove the notification half a second before the screenshot is taken,
+		// so the notification message can be captured in the screenshot itself
+		if (1 < screenshot_delay)
+		{
+			// Remove the notification message
+			notify_notification_close(status_notify, &error);
 
 			// Delay for 1/2 second
 			g_usleep(500000);
-
-			// Delay for another 1/2 second if this isn't the last update of the count down
-			if (delay_counter < screenshot_delay - 1)
-			{
-				g_usleep(500000);
-			}
-
-			// Update the notification time
-			g_string_printf(message, _("Screenshot in %u seconds"), screenshot_delay - delay_counter - 1);
-			notify_notification_update(status_notify, message->str, NULL, NULL);
-
-		} else
-		{
-			// Delay for 1 second
-			g_usleep(1000000);
 		}
-	}
-
-	// Remove the notification half a second before the screenshot is taken,
-	// so the notification message can be captured in the screenshot itself
-	if (1 < screenshot_delay)
-	{
-		// Remove the notification message
-		notify_notification_close(status_notify, &error);
-
-		// Delay for 1/2 second
-		g_usleep(500000);
 	}
 
 	// Take screenshot
@@ -453,22 +485,17 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// * Visually let the user know the screenshot was taken *
-	if (1 < screenshot_delay)
-	{
-		// Update the existing status notification message
-		notify_notification_update(status_notify, _("Screenshot taken"), NULL, NULL);
-	} else
+	if (TRUE == libnotify_does_timeouts)
 	{
 		// Create a new status notification message
 		status_notify = notify_notification_new(_("Screenshot taken"), NULL, NULL, NULL);
+
+		// Set the timeout for the notification message
+		notify_notification_set_timeout(status_notify, 2000);
+
+		// Display the notification message
+		notify_notification_show(status_notify, &error);
 	}
-
-	// Display the notification message
-	notify_notification_show(status_notify, &error);
-
-	// Delay for 2 seconds then remove the notification
-	g_usleep(2000000);
-	notify_notification_close(status_notify, &error);
 
 	// Check if the output folder exists
 	if (!(dir_ptr = g_dir_open(directory->str, 0, &error)))
