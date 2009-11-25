@@ -185,7 +185,7 @@ gint main(gint argc, gchar *argv[])
 	GSList				*entries = NULL;			// Holds a list of screen shot file names
 	GError				*error = NULL;				// Pointer to error return structure
 	gchar				*full_file_name;			// Holds the fully worked out file name to save as
-	gboolean			libnotify_does_timeouts = FALSE;  // Indicates whether the libnotify server respects message timeout values
+	gboolean			libnotify_is_notify_osd = FALSE;  // Indicates whether the libnotify server is Notify-OSD
 	GKeyFile			*lock_file;					// Pointer to the lock file structure
 	GString				*message;					// Used to construct message strings
 	GString				*name, *directory;			// GStrings from the lock file
@@ -400,22 +400,22 @@ gint main(gint argc, gchar *argv[])
 	return_code_gboolean = notify_get_server_info(&notify_server_name, &notify_server_vendor, &notify_server_version, &notify_server_spec_version);
 	if (TRUE == return_code_gboolean)
 	{
-		if (0 != g_strcmp0(notify_server_name, "notify-osd"))
+		if (0 == g_strcmp0(notify_server_name, "notify-osd"))
 		{
-			libnotify_does_timeouts = TRUE;
+			libnotify_is_notify_osd = TRUE;
 		}
 	}
 	else
 	{
 		// We weren't able to retrieve the libnotify server info.  For now we just assume the libnotify server has the
 		// capabilities we need
-		libnotify_does_timeouts = TRUE;
+		libnotify_is_notify_osd = FALSE;
 	}
 
-	// We only do the onscreen notification if the libnotify daemon supports timeout values,
-	// because if it doesn't, the notification bubble remains onscreen and can be captured in
-	// the screenshot
-	if (TRUE == libnotify_does_timeouts)
+	// We only do full onscreen notifications if the libnotify daemon supports timeout values,
+	// because if it doesn't, the notification bubble itself remains onscreen is captured in
+	// the screenshot (not what we want)
+	if (FALSE == libnotify_is_notify_osd)
 	{
 		// If there is a delay of greater than 1 second, then do a count down
 		if (1 < screenshot_delay)
@@ -464,6 +464,17 @@ gint main(gint argc, gchar *argv[])
 			g_usleep(500000);
 		}
 	}
+	else
+	{
+		// Notify-OSD is running, so we do a very quick notification bubble ("confirmation bubble") if there's sufficient time
+		if (2 < screenshot_delay)
+		{
+			g_string_printf(message, _("Screenshot in %u seconds"), screenshot_delay);
+			status_notify = notify_notification_new(message->str, NULL, NULL, NULL);
+			notify_notification_set_hint_string(status_notify, "x-canonical-private-synchronous", "");
+			notify_notification_show(status_notify, &error);
+		}
+	}
 
 	// Take screenshot
 #ifdef _WIN32
@@ -485,17 +496,32 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// * Visually let the user know the screenshot was taken *
-	if (TRUE == libnotify_does_timeouts)
-	{
-		// Create a new status notification message
-		status_notify = notify_notification_new(_("Screenshot taken"), NULL, NULL, NULL);
 
+	// Yet again, Notify-OSD shows it has been badly thought out and needs special treatment
+	// In this case, we have to stick around in the background and delay for a while
+	// before sending the next notification message, otherwise the user never gets the message
+	if (TRUE == libnotify_is_notify_osd)
+	{
+		// Delay for 3 seconds
+		g_usleep(3000000);
+	}
+
+	// Create a new status notification message
+	status_notify = notify_notification_new(_("Screenshot taken"), NULL, NULL, NULL);
+	if (TRUE == libnotify_is_notify_osd)
+	{
+		// Notify-OSD needs special treatment in order to display a notify message for only
+		// a short duration
+		notify_notification_set_hint_string(status_notify, "x-canonical-private-synchronous", "");
+	}
+	else
+	{
 		// Set the timeout for the notification message
 		notify_notification_set_timeout(status_notify, 2000);
-
-		// Display the notification message
-		notify_notification_show(status_notify, &error);
 	}
+
+	// Display the notification message
+	notify_notification_show(status_notify, &error);
 
 	// Check if the output folder exists
 	if (!(dir_ptr = g_dir_open(directory->str, 0, &error)))
