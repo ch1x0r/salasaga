@@ -23,6 +23,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	cairo/create_cairo_pixbuf_pattern.c \
 	cairo/render_text_string.c \
 	callbacks/dump_selection_info.c \
+	callbacks/film_strip_drag_motion.c \
 	callbacks/text_layer_dialog_bg_colour_changed.c \
 	callbacks/text_layer_dialog_fg_colour_changed.c \
 	callbacks/text_layer_dialog_font_changed.c \
