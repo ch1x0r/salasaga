@@ -35,6 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../callbacks/film_strip_drag_motion.h"
 #include "film_strip_slide_clicked.h"
 
 
@@ -61,6 +62,7 @@ void create_film_strip()
 	// Local variables
 	GtkCellRenderer			*renderer;
 	GtkTreeSelection		*selector;
+	static GtkTargetEntry	target_entry = {"film_strip_drag_and_drop", GTK_TARGET_SAME_WIDGET, 0};
 
 
 	// Create the film strip top widget
@@ -90,4 +92,21 @@ void create_film_strip()
 	// Connect a signal handler to the film strip, which gets called whenever a selection is made
 	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);
 	g_signal_connect(G_OBJECT(selector), "changed", G_CALLBACK(film_strip_slide_clicked), NULL);
+
+	// Make the film strip a Drag and Drop (DnD) destination
+	gtk_drag_dest_set(GTK_WIDGET(film_strip_view),	// The widget
+		GTK_DEST_DEFAULT_DROP,						// Flags
+		&target_entry,								// Pointer to the target list
+		1,											// Number of targets in the target list
+		GDK_ACTION_COPY);							// The type(s) of Drag and Drop actions
+
+	// Make the film strip a Drag and Drop (DnD) source
+	gtk_drag_source_set(GTK_WIDGET(film_strip_view),  // The widget
+		GDK_BUTTON1_MASK,							// Only primary mouse button clicks are accepted
+		&target_entry,								// Pointer to the target list
+		1,											// Number of targets in the target list
+		GDK_ACTION_COPY);							// The type(s) of Drag and Drop actions
+
+	// Add the DnD callback to capture drag motion
+	g_signal_connect(GTK_WIDGET(film_strip_view), "drag-motion", G_CALLBACK(film_strip_drag_motion), NULL);
 }
