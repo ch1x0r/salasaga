@@ -59,6 +59,7 @@ void menu_file_open(void)
 	GtkFileFilter		*flame_filter;
 	GString				*message;					// Used to construct message strings
 	GtkTreePath			*new_path;					// Temporary path
+	guint				num_slides = 0;				// Receives the number of slides loaded from a project
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	GtkWidget 			*open_dialog;
 	gboolean			return_code = FALSE;
@@ -170,7 +171,7 @@ void menu_file_open(void)
 		} else
 		{
 			// Open and parse the selected file
-			return_code = read_project(validated_string->str);
+			return_code = read_project(validated_string->str, &num_slides);
 			if (TRUE == return_code)
 			{
 				// The file was read in fine, so we continue
@@ -271,7 +272,8 @@ void menu_file_open(void)
 	changes_made = FALSE;
 
 	// Use the status bar to communicate the successful loading of the project
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Project loaded"));
+	g_string_printf(message, " %s - %u %s", _("Project loaded"), num_slides, _("slides"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), message->str);
 	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
 
 	// Free the memory allocated in this function

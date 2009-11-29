@@ -29,7 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
-gboolean read_project(gchar *filename);
+gboolean read_project(gchar *filename, guint *total_num_slides);
 
 #ifdef __cplusplus
 }
