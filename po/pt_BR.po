@@ -1811,11 +1811,11 @@ msgstr "/Projeto/P_ropriedades"
 
 #: ide/functions/menu/create_menu_bar.c:117
 msgid "/Project/Sep"
-msgstr ""
+msgstr "/Projeto/Sep"
 
 #: ide/functions/menu/create_menu_bar.c:118
 msgid "/Project/_Adjust dimensions"
-msgstr ""
+msgstr "/Projeto/Ajuste as dimensões"
 
 #: ide/functions/menu/create_menu_bar.c:120
 msgid "/Sl_ide"
@@ -1851,48 +1851,48 @@ msgstr ""
 
 #: ide/functions/menu/create_menu_bar.c:129
 msgid "/_Layer"
-msgstr ""
+msgstr "/Camada"
 
 #: ide/functions/menu/create_menu_bar.c:131
 msgid "/Layer/_Copy"
-msgstr ""
+msgstr "/Camada/_Copiar"
 
 #: ide/functions/menu/create_menu_bar.c:132
 msgid "/Layer/_Paste"
-msgstr ""
+msgstr "/Camada/Co_lar"
 
 #: ide/functions/menu/create_menu_bar.c:133
 msgid "/Layer/_Edit"
-msgstr ""
+msgstr "/Camada/_Editar"
 
 #: ide/functions/menu/create_menu_bar.c:134
 msgid "/Layer/_Delete"
-msgstr ""
+msgstr "/Camada/_Apagar"
 
 #: ide/functions/menu/create_menu_bar.c:135
 #: ide/functions/menu/create_menu_bar.c:140
 msgid "/Layer/Sep"
-msgstr ""
+msgstr "/Camada/Sep"
 
 #: ide/functions/menu/create_menu_bar.c:136
 msgid "/Layer/Add _Text"
-msgstr ""
+msgstr "/Camada/_Adicionar _Texto"
 
 #: ide/functions/menu/create_menu_bar.c:137
 msgid "/Layer/Add _Highlight"
-msgstr ""
+msgstr "/Camada/Adicionar _Destaque"
 
 #: ide/functions/menu/create_menu_bar.c:138
 msgid "/Layer/Add _Image"
-msgstr ""
+msgstr "/Camada/_Adicionar _Imagem"
 
 #: ide/functions/menu/create_menu_bar.c:139
 msgid "/Layer/Add _Mouse"
-msgstr ""
+msgstr "/Camada/Adicionar _Mouse"
 
 #: ide/functions/menu/create_menu_bar.c:141
 msgid "/Layer/Image c_rop"
-msgstr ""
+msgstr "/Camada/Cortar imagem"
 
 #: ide/functions/menu/create_menu_bar.c:143
 msgid "/E_xport"
@@ -1955,7 +1955,7 @@ msgstr ""
 #: ide/functions/menu/menu_file_new.c:338
 #: ide/functions/menu/menu_file_open.c:256
 msgid "/Project"
-msgstr ""
+msgstr "/Projeto"
 
 #: ide/functions/menu/create_menu_bar.c:176
 #: ide/functions/menu/menu_file_close.c:102
