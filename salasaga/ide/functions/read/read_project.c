@@ -59,7 +59,7 @@
 #include "../text_tags/text_layer_create_font_size_tag.h"
 
 
-gboolean read_project(gchar *filename)
+gboolean read_project(gchar *filename, guint *total_num_slides)
 {
 	// Local variables
 	GdkColor			fg_colour;					// Foreground colours are constructed into this
@@ -808,6 +808,9 @@ gboolean read_project(gchar *filename)
 		if ((!xmlStrcmp(this_slide->name, (const xmlChar *) "slide")))
 		{
 			// * We're in a slide *
+
+			// Increment the slide counter
+			*total_num_slides = *total_num_slides + 1;
 
 			// Create a new slide in memory
 			tmp_slide = g_new0(slide, 1);
