@@ -217,12 +217,12 @@ void menu_screenshots_capture(void)
 
 	// Let the user know that the window they selected has been successfully grabbed
 	message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-			_("Window dimensions successfully retrieved.  Please use the right click menu from the status bar icon to take screenshots, then Import when finished."));
+			_("Screenshot window set.  Right click on the status bar icon to take screenshots, then Import when finished."));
 	gtk_dialog_run(GTK_DIALOG(message_dialog));
 	gtk_widget_destroy(message_dialog);
 
 	// Update the status icon
-	gtk_status_icon_set_tooltip_text(status_icon, "Salasaga - Capture active");
+	gtk_status_icon_set_tooltip_text(status_icon, _("Salasaga - Capture active"));
 
 	// Free the mouse cursor object
 	XFreeCursor(x_display, new_cursor);
@@ -458,13 +458,13 @@ void menu_screenshots_capture(void)
 		}
 
 		// Add a message to the status bar so the user gets visual feedback
-		g_string_printf(tmp_gstring, _(" Wrote capture lock file - %s - and installed Control-Printscreen keyboard hook"), full_file_name);
+		g_string_printf(tmp_gstring, " %s", _("Installed Control-Printscreen screenshot key"));
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
 		gdk_flush();
 	}
 #else
 	// Add a message to the status bar so the user gets visual feedback
-	g_string_printf(tmp_gstring, _(" Wrote capture settings file - %s"), full_file_name);
+	g_string_printf(tmp_gstring, " %s - %s", _("Wrote screenshot settings file"), full_file_name);
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
 	gdk_flush();
 #endif
