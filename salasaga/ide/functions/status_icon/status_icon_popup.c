@@ -59,13 +59,13 @@ gint status_icon_popup(GtkWidget *widget, GdkEvent *event, gpointer data)
 	if (TRUE == is_window_iconified())
 	{
 		// Create a menu option to restore the window
-		status_icon_menu_item_iconify = gtk_menu_item_new_with_label("Restore window");
+		status_icon_menu_item_iconify = gtk_menu_item_new_with_label(_("Restore window"));
 		gtk_menu_shell_append(GTK_MENU_SHELL(status_icon_menu), GTK_WIDGET(status_icon_menu_item_iconify));
 		g_signal_connect(G_OBJECT(status_icon_menu_item_iconify), "activate", G_CALLBACK(status_icon_restore), (gpointer) NULL);
 	} else
 	{
 		// Create a menu option to iconify the window
-		status_icon_menu_item_iconify = gtk_menu_item_new_with_label("Minimise window");
+		status_icon_menu_item_iconify = gtk_menu_item_new_with_label(_("Minimise window"));
 		gtk_menu_shell_append(GTK_MENU_SHELL(status_icon_menu), GTK_WIDGET(status_icon_menu_item_iconify));
 		g_signal_connect(G_OBJECT(status_icon_menu_item_iconify), "activate", G_CALLBACK(status_icon_iconify), (gpointer) NULL);
 	}
@@ -73,13 +73,13 @@ gint status_icon_popup(GtkWidget *widget, GdkEvent *event, gpointer data)
 	// Add the Take Screenshot menu item if screenshots are enabled
 	if (TRUE == screenshots_enabled)
 	{
-		status_icon_menu_item_screenshot = gtk_menu_item_new_with_label("Take Screenshot");
+		status_icon_menu_item_screenshot = gtk_menu_item_new_with_label(_("Take Screenshot"));
 		gtk_menu_shell_append(GTK_MENU_SHELL(status_icon_menu), GTK_WIDGET(status_icon_menu_item_screenshot));
 		g_signal_connect(G_OBJECT(status_icon_menu_item_screenshot), "activate", G_CALLBACK(status_icon_take_screenshot), (gpointer) NULL);
 	}
 
 	// Add the Quit menu item
-	status_icon_menu_item_quit = gtk_menu_item_new_with_label("Quit");
+	status_icon_menu_item_quit = gtk_menu_item_new_with_label(_("Quit"));
 	gtk_menu_shell_append(GTK_MENU_SHELL(status_icon_menu), GTK_WIDGET(status_icon_menu_item_quit));
 	g_signal_connect(G_OBJECT(status_icon_menu_item_quit), "activate", G_CALLBACK(quit_event), (gpointer) NULL);
 
