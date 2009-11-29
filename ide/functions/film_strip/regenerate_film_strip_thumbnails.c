@@ -98,6 +98,7 @@ void regenerate_film_strip_thumbnails()
 		tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
 		((slide *) this_slide->data)->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
 		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
+		g_object_unref(GDK_PIXMAP(tmp_pixmap));
 
 		// Add the thumbnail to the film strip
 		gtk_list_store_append(film_strip_store, &film_strip_iter);
