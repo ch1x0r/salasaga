@@ -429,10 +429,10 @@ void menu_screenshots_import(void)
 	draw_timeline();
 
 	// Enable the project based menu items
-	menu_enable("/Project", TRUE);
-	menu_enable("/Slide", TRUE);
-	menu_enable("/Layer", TRUE);
-	menu_enable("/Export", TRUE);
+	menu_enable(_("/Project"), TRUE);
+	menu_enable(_("/Slide"), TRUE);
+	menu_enable(_("/Layer"), TRUE);
+	menu_enable(_("/Export"), TRUE);
 
 	// Enable the toolbar buttons
 	enable_layer_toolbar_buttons();
