@@ -66,6 +66,16 @@ GtkWidget *create_zoom_selector(gchar *initial_zoom)
 		{
 			match_found = TRUE;
 			match_at = zoom_counter;
+		} else {
+			// Check if the zoom option is a match for the "Fit to width" string and it's localised version
+			if ((0 == g_strcmp0("Fit to width", zoom_selector_array[zoom_counter])) || (0 == g_strcmp0(_("Fit to width"), zoom_selector_array[zoom_counter])))
+			{
+				if ((0 == g_strcmp0("Fit to width", initial_zoom)) || (0 == g_strcmp0(_("Fit to width"), initial_zoom)))
+				{
+					match_found = TRUE;
+					match_at = zoom_counter;
+				}
+			}
 		}
 	}
 
