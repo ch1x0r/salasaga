@@ -44,6 +44,7 @@
 #include "../enable_layer_toolbar_buttons.h"
 #include "../enable_main_toolbar_buttons.h"
 #include "../cairo/create_cairo_pixbuf_pattern.h"
+#include "../layer/compress_layers.h"
 #include "../dialog/display_warning.h"
 #include "../working_area/draw_workspace.h"
 #include "menu_enable.h"
@@ -61,8 +62,6 @@ void menu_screenshots_import(void)
 	gboolean			image_differences;			// Used to indicate that screenshots have differing sizes
 	gint				image_height;
 	gint				image_width;
-	guint				largest_height = 0;			// Holds the height of the largest screenshot thus far
-	guint				largest_width = 0;			// Holds the width of the largest screenshot thus far
 	GString				*message;					// Used to construct message strings
 	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
 	gint				num_screenshots = 0;		// Switch to track if other screenshots already exist
@@ -72,10 +71,14 @@ void menu_screenshots_import(void)
 	gint				return_code = 0;			// Receives return code
 	gint				return_code_int;
 	gint				slide_position;				// Which slide in the slide list do we have selected?
+	GList				*this_slide = NULL;			// Temporary Glist
 	GtkWidget			*tmp_dialog;
+	layer_empty			*tmp_empty_ob;				// Temporary empty layer
 	layer_image			*tmp_image_ob;				// Temporary image layer
 	gint				tmp_int = 0;				// Temporary integer
 	layer				*tmp_layer;					// Temporary layer
+	GdkPixbuf			*tmp_pixbuf;				// Used to convert from a pixmap to a pixbuf
+	GdkPixmap			*tmp_pixmap;				// Used when converting from a pixmap to a pixbuf
 	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
 	slide				*tmp_slide;					// Temporary slide
 	GString				*tmp_string;				// Temporary string
@@ -174,10 +177,10 @@ void menu_screenshots_import(void)
 	{
 		if (TRUE == project_active)
 		{
-			g_string_printf(tmp_string, "%s", _("Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, they will be scaled to the same size as the project.  Do you want to proceed?"));
+			g_string_printf(tmp_string, "%s", _("Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, all screenshots different to the project size will become image layers.  Do you want to proceed?"));
 		} else
 		{
-			g_string_printf(tmp_string, "%s", _("Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, they will all be scaled to the size of the first one.  Do you want to proceed?"));
+			g_string_printf(tmp_string, "%s", _("Not all of the screenshots are of the same size.  If you proceed, the project size will be set to the size of the first screenshot.  All screenshots of a different size to that will become image layers.  Do you want to proceed?"));
 		}
 
 		// Display the warning dialog
@@ -230,53 +233,44 @@ void menu_screenshots_import(void)
 	// * Load the screenshots *
 	for (tmp_int = 1; tmp_int <= num_screenshots; tmp_int++)
 	{
-		// * The loaded image file becomes a background layer image for a new slide *
-
-		// Allocate a new slide structure for use
-		tmp_slide = g_new(slide, 1);
-		tmp_slide->layers = NULL;
-		tmp_slide->duration = default_slide_duration;
-		tmp_slide->scaled_cached_pixmap = NULL;
-		tmp_slide->cached_pixmap_valid = FALSE;
-		tmp_slide->num_layers = 1;
-
-		// Allocate a new layer structure for use in the slide
-		tmp_layer = g_new(layer, 1);
-		tmp_layer->x_offset_start = 0;
-		tmp_layer->y_offset_start = 0;
-		tmp_layer->x_offset_finish = 0;
-		tmp_layer->y_offset_finish = 0;
-		tmp_layer->start_time = 0.0;
-		tmp_layer->transition_in_type = TRANS_LAYER_NONE;
-		tmp_layer->transition_in_duration = 0.0;
-		tmp_layer->duration = default_slide_duration;  // Slide duration rather than layer duration, because these become slides
-		tmp_layer->transition_out_type = TRANS_LAYER_NONE;
-		tmp_layer->transition_out_duration = 0.0;
+		// Local loop initialisation
+		image_differences = FALSE;
 
 		// Work out the full path to the image file
 		g_string_printf(tmp_string, "%s%c", screenshots_folder->str, G_DIR_SEPARATOR);
 		tmp_string = g_string_append(tmp_string, g_slist_nth(entries, tmp_int - 1)->data);
 
-		// * Create the new background layer *
+		// Get the size of the image
+		gdk_pixbuf_get_file_info(tmp_string->str, &image_width, &image_height);
 
-		// Construct a new image object
-		tmp_image_ob = g_new(layer_image, 1);
+		// Is there a project already loaded?
 		if (FALSE == project_active)
 		{
 			// This is the first screenshot, so we make the project size the same dimensions as it
-			tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_string->str, NULL);  // Load the image again, at full size.  It's the background layer
-			project_width = gdk_pixbuf_get_width(tmp_image_ob->image_data);
-			project_height = gdk_pixbuf_get_height(tmp_image_ob->image_data);
+			project_width = image_width;
+			project_height = image_height;
 
 			// Set the global toggle that a project is now active
 			project_active = TRUE;
 		} else
 		{
-			// This is not the first screenshot, so it will be loaded and scaled to the size of the existing project dimensions
-			tmp_image_ob->image_data = gdk_pixbuf_new_from_file_at_size(tmp_string->str, project_width, project_height, NULL);
+			// The project size is already known, so if the size of this screenshot is different we make it a separate image layer instead
+			if ((image_width != project_width) || (image_height != project_height))
+			{
+				// The image size is different from the project size, so we make a note of this
+				image_differences = TRUE;
+			}
 		}
-		tmp_image_ob->width = project_width;
-		tmp_image_ob->height = project_height;
+
+		// Determine the proper thumbnail height
+		project_ratio = (gfloat) project_height / (gfloat) project_width;
+		preview_height = preview_width * project_ratio;
+
+		// Construct a new image object and load the image data
+		tmp_image_ob = g_new(layer_image, 1);
+		tmp_image_ob->image_data = gdk_pixbuf_new_from_file(tmp_string->str, NULL);
+		tmp_image_ob->width = gdk_pixbuf_get_width(tmp_image_ob->image_data);
+		tmp_image_ob->height = gdk_pixbuf_get_height(tmp_image_ob->image_data);
 		tmp_image_ob->modified = FALSE;
 
 		// Create a cairo pattern from the image data
@@ -293,45 +287,108 @@ void menu_screenshots_import(void)
 			return;
 		}
 
-		// Determine the proper thumbnail height
-		project_ratio = (gfloat) project_height / (gfloat) project_width;
-		preview_height = preview_width * project_ratio;
+		// Allocate a new slide structure for use
+		tmp_slide = g_new(slide, 1);
+		tmp_slide->layers = NULL;
+		tmp_slide->duration = default_slide_duration;
+		tmp_slide->scaled_cached_pixmap = NULL;
+		tmp_slide->cached_pixmap_valid = FALSE;
+		tmp_slide->num_layers = 1;
 
-		// Load the image file(s) into a thumbnail sized pixel buffer, then add it to the new slide structure
-		tmp_slide->thumbnail = gdk_pixbuf_scale_simple(tmp_image_ob->image_data, preview_width, preview_height, GDK_INTERP_TILES);
-		if (NULL == tmp_slide->thumbnail)
-		{
-			// Something went wrong when loading the screenshot
-			g_string_printf(message, "%s ED06: %s '%s'", _("Error"), _("Something went wrong when loading the screenshot"), tmp_string->str);
-			display_warning(message->str);
-
-			// Free the memory used in this function
-			g_string_free(message, TRUE);
-			g_string_free(tmp_string, TRUE);
-			return;
-		}
-
-		// If the new image is larger than the others loaded, we keep the new dimensions
-		if (tmp_image_ob->height > largest_height)
-		{
-			largest_height = tmp_image_ob->height;
-		}
-		if (tmp_image_ob->width > largest_width)
-		{
-			largest_width = tmp_image_ob->width;
-		}
-
-		// Wrap the background layer info around it
-		tmp_layer->object_data = (GObject *) tmp_image_ob;
-		tmp_layer->object_type = TYPE_GDK_PIXBUF;
+		// Allocate a new layer structure for use in the slide
+		tmp_layer = g_new(layer, 1);
+		tmp_layer->name = g_string_new(_("Background"));
+		tmp_layer->start_time = 0.0;
+		tmp_layer->duration = default_slide_duration;  // Slide duration rather than layer duration, because these become slides
+		tmp_layer->x_offset_start = 0;
+		tmp_layer->y_offset_start = 0;
+		tmp_layer->x_offset_finish = 0;
+		tmp_layer->y_offset_finish = 0;
 		tmp_layer->visible = TRUE;
 		tmp_layer->background = TRUE;
-		tmp_layer->name = g_string_new(_("Background"));
+		tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+		tmp_layer->transition_in_duration = 0.0;
+		tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+		tmp_layer->transition_out_duration = 0.0;
 		tmp_layer->external_link = g_string_new(NULL);
 		tmp_layer->external_link_window = g_string_new(_("_self"));
 
-		// Add the background layer to the new slide being created
-		tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+		// Should the background layer be the image itself, or an empty layer?
+		if (FALSE == image_differences)
+		{
+			// * The background layer is the image itself *
+
+			// Set the details of the layer
+			tmp_layer->object_type = TYPE_GDK_PIXBUF;
+			tmp_layer->object_data = (GObject *) tmp_image_ob;
+
+			// Create the film strip thumbnail and add it to the new slide structure
+			tmp_slide->thumbnail = gdk_pixbuf_scale_simple(tmp_image_ob->image_data, preview_width, preview_height, GDK_INTERP_TILES);
+			if (NULL == tmp_slide->thumbnail)
+			{
+				// Something went wrong when loading the screenshot
+				g_string_printf(message, "%s ED06: %s '%s'", _("Error"), _("Something went wrong when loading the screenshot"), tmp_string->str);
+				display_warning(message->str);
+
+				// Free the memory used in this function
+				g_string_free(message, TRUE);
+				g_string_free(tmp_string, TRUE);
+				return;
+			}
+
+			// Add the background layer to the new slide being created
+			tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+		}
+		else
+		{
+			// * The image should be in it's own layer, with an empty background layer instead *
+
+			// * Create the empty background layer *
+			tmp_empty_ob = g_new(layer_empty, 1);
+			tmp_layer->object_type = TYPE_EMPTY;
+			tmp_layer->object_data = (GObject *) tmp_empty_ob;
+			tmp_empty_ob->bg_color.pixel = default_bg_colour.pixel;
+			tmp_empty_ob->bg_color.blue = default_bg_colour.blue;
+			tmp_empty_ob->bg_color.green = default_bg_colour.green;
+			tmp_empty_ob->bg_color.red = default_bg_colour.red;
+
+			// Add the empty background layer to the new slide being created
+			tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
+
+			// * Create the image layer *
+			tmp_layer = g_new(layer, 1);
+			tmp_layer->object_type = TYPE_GDK_PIXBUF;
+			tmp_layer->object_data = (GObject *) tmp_image_ob;
+			tmp_layer->name = g_string_new(_("Image"));
+			tmp_layer->start_time = 0.0;
+			tmp_layer->duration = default_slide_duration;
+			tmp_layer->x_offset_start = 0;
+			tmp_layer->y_offset_start = 0;
+			tmp_layer->x_offset_finish = 0;
+			tmp_layer->y_offset_finish = 0;
+			tmp_layer->visible = TRUE;
+			tmp_layer->background = FALSE;  // This is not a background layer
+			tmp_layer->transition_in_type = TRANS_LAYER_NONE;
+			tmp_layer->transition_in_duration = 0.0;
+			tmp_layer->transition_out_type = TRANS_LAYER_NONE;
+			tmp_layer->transition_out_duration = 0.0;
+			tmp_layer->external_link = g_string_new(NULL);
+			tmp_layer->external_link_window = g_string_new(_("_self"));
+
+			// Add the image layer to the new slide being created
+			tmp_slide->layers = g_list_prepend(tmp_slide->layers, tmp_layer);
+			tmp_slide->num_layers = 2;
+
+			// Create the thumbnail for the slide
+			this_slide = g_list_append(this_slide, tmp_slide);
+			tmp_pixmap = compress_layers(this_slide, 0.0, project_width, project_height);
+			tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
+			tmp_slide->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
+			g_list_free(this_slide);
+			this_slide = NULL;
+			g_object_unref(GDK_PIXBUF(tmp_pixbuf));
+			g_object_unref(GDK_PIXMAP(tmp_pixmap));
+		}
 
 		// Mark the name for the slide as unset
 		tmp_slide->name = NULL;
@@ -367,10 +424,6 @@ void menu_screenshots_import(void)
 		gtk_widget_draw(status_bar, &tmp_rect);
 	}
 
-	// Update the project with the new height and width
-	project_height = largest_height;
-	project_width = largest_width;
-
 	// If not presently set, make the first imported slide the present slide
 	if (NULL == current_slide)
 	{
@@ -399,7 +452,7 @@ void menu_screenshots_import(void)
 	if ((0 == g_strcmp0("Fit to width", tmp_string->str)) || (0 == g_strcmp0(_("Fit to width"), tmp_string->str)))
 	{
 		// "Fit to width" is selected, so work out the zoom level by figuring out how much space the widget really has
-		//  (Look at the alloation of it's parent widget)
+		//  (Look at the allocation of it's parent widget)
 		//  Reduce the width calculated by 24 pixels (guessed) to give space for widget borders and such
 		zoom = (guint) (((float) (right_side->allocation.width - 24) / (float) project_width) * 100);
 	} else
@@ -424,9 +477,6 @@ void menu_screenshots_import(void)
 
 	// Redraw the workspace
 	draw_workspace();
-
-	// Draw the timeline area
-	draw_timeline();
 
 	// Enable the project based menu items
 	menu_enable(_("/Project"), TRUE);
