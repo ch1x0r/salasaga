@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
 "POT-Creation-Date: 2009-08-02 13:37+1000\n"
-"PO-Revision-Date: 2009-04-18 11:14+0000\n"
+"PO-Revision-Date: 2009-10-19 07:05+0000\n"
 "Last-Translator: Stemby <carlo.stemberger@gmail.com>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-08-02 02:20+0000\n"
+"X-Launchpad-Export-Date: 2009-11-29 16:52+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
@@ -372,7 +372,7 @@ msgstr "Errore"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
 msgid "Unable to allocate memory for pixel buffer."
-msgstr ""
+msgstr "Impossibile allocare memoria per il pixel buffer"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:137
 msgid "Couldn't create image surface."
@@ -380,11 +380,11 @@ msgstr ""
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:148
 msgid "Couldn't create surface pattern."
-msgstr ""
+msgstr "Non posso creare un modello di superfice."
 
 #: ide/functions/conversion/base64_decode.c:134
 msgid "Error in the Base64 decoding function, unrecognized input"
-msgstr ""
+msgstr "Errore nella funzione di decodifica Base64, input non ricoosciuto"
 
 #: ide/functions/conversion/base64_decode.c:192
 msgid "Unknown Base64 decoding remainder.  This should not happen."
@@ -397,172 +397,172 @@ msgstr ""
 
 #: ide/functions/create_time_line.c:119
 msgid "Edit"
-msgstr ""
+msgstr "Modifica..."
 
 #: ide/functions/create_time_line.c:120
 #: ide/functions/enable_layer_toolbar_buttons.c:56
 msgid "Edit layer"
-msgstr ""
+msgstr "Modifica livello"
 
 #: ide/functions/create_time_line.c:132
 msgid "Crop"
-msgstr ""
+msgstr "Taglia"
 
 #: ide/functions/create_time_line.c:133
 #: ide/functions/enable_layer_toolbar_buttons.c:65
 msgid "Crop image"
-msgstr ""
+msgstr "Ritaglia immagine"
 
 #: ide/functions/create_time_line.c:145
 msgid "Delete"
-msgstr ""
+msgstr "Cancella"
 
 #: ide/functions/create_time_line.c:146
 #: ide/functions/enable_layer_toolbar_buttons.c:74
 msgid "Delete selected layer"
-msgstr ""
+msgstr "Cancella il livello selezionato"
 
 #: ide/functions/create_time_line.c:158
 msgid "Down"
-msgstr ""
+msgstr "Giù"
 
 #: ide/functions/create_time_line.c:159
 #: ide/functions/enable_layer_toolbar_buttons.c:83
 msgid "Move layer down"
-msgstr ""
+msgstr "Sposta livello in basso"
 
 #: ide/functions/create_time_line.c:171
 msgid "Up"
-msgstr ""
+msgstr "Su"
 
 #: ide/functions/create_time_line.c:172
 #: ide/functions/enable_layer_toolbar_buttons.c:92
 msgid "Move layer up"
-msgstr ""
+msgstr "Sposta livello in alto"
 
 #: ide/functions/create_time_line.c:188
 msgid "Mouse"
-msgstr ""
+msgstr "Mouse"
 
 #: ide/functions/create_time_line.c:189
 #: ide/functions/enable_layer_toolbar_buttons.c:101
 msgid "Add a mouse pointer"
-msgstr ""
+msgstr "Inserisci puntatore del mouse"
 
 #: ide/functions/create_time_line.c:201
 msgid "Text"
-msgstr ""
+msgstr "Testo"
 
 #: ide/functions/create_time_line.c:202
 #: ide/functions/enable_layer_toolbar_buttons.c:110
 msgid "Add a text layer"
-msgstr ""
+msgstr "Inserisci un livello di testo"
 
 #: ide/functions/create_time_line.c:214
 #: ide/functions/layer/layer_new_highlight_inner.c:152
 msgid "Highlight"
-msgstr ""
+msgstr "Evidenzia"
 
 #: ide/functions/create_time_line.c:215
 #: ide/functions/enable_layer_toolbar_buttons.c:119
 msgid "Add a highlight layer"
-msgstr ""
+msgstr "Inserire livello evidenziato"
 
 #: ide/functions/create_time_line.c:227
 #: ide/functions/layer/layer_duplicate.c:91
 #: ide/functions/layer/layer_new_image_inner.c:97
 msgid "Image"
-msgstr ""
+msgstr "Immagine"
 
 #: ide/functions/create_time_line.c:228
 #: ide/functions/enable_layer_toolbar_buttons.c:128
 msgid "Add an image layer"
-msgstr ""
+msgstr "Aggiungi livello immagine"
 
 #: ide/functions/create_toolbar.c:80
 msgid "New"
-msgstr ""
+msgstr "Nuovo"
 
 #: ide/functions/create_toolbar.c:81
 msgid "Begin a new project"
-msgstr ""
+msgstr "Nuovo progetto"
 
 #: ide/functions/create_toolbar.c:87
 msgid "Open"
-msgstr ""
+msgstr "Apri"
 
 #: ide/functions/create_toolbar.c:88
 msgid "Open an existing project"
-msgstr ""
+msgstr "Apri un progetto esistente"
 
 #: ide/functions/create_toolbar.c:94
 msgid "Save"
-msgstr ""
+msgstr "Salva"
 
 #: ide/functions/create_toolbar.c:95
 msgid "Save the project"
-msgstr ""
+msgstr "Salva il progetto"
 
 #: ide/functions/create_toolbar.c:101
 #: ide/functions/menu/menu_file_save_as.c:76
 msgid "Save As"
-msgstr ""
+msgstr "Salva come"
 
 #: ide/functions/create_toolbar.c:102
 msgid "Save the project with a different file name"
-msgstr ""
+msgstr "Salva il progetto con un diverso nome del file"
 
 #: ide/functions/create_toolbar.c:108
 msgid "Quit"
-msgstr ""
+msgstr "Esci"
 
 #: ide/functions/create_toolbar.c:109
 msgid "Quit the application"
-msgstr ""
+msgstr "Esci dal programma"
 
 #: ide/functions/create_toolbar.c:119
 msgid "Path to toolbar 'Capture Screenshots' icon"
-msgstr ""
+msgstr "Percorso per l'icona della toolbar 'Capture Screenshots'"
 
 #: ide/functions/create_toolbar.c:126
 msgid "Capture"
-msgstr ""
+msgstr "Cattura"
 
 #: ide/functions/create_toolbar.c:127
 #: ide/functions/menu/menu_screenshots_capture.c:260
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:132
 msgid "Capture screenshots"
-msgstr ""
+msgstr "Cattura immagine video"
 
 #: ide/functions/create_toolbar.c:139
 msgid "Import"
-msgstr ""
+msgstr "Importa"
 
 #: ide/functions/create_toolbar.c:140
 msgid "Import screenshots"
-msgstr ""
+msgstr "Importa immagine video"
 
 #: ide/functions/create_toolbar.c:152
 msgid "Dimensions"
-msgstr ""
+msgstr "Dimensioni"
 
 #: ide/functions/create_toolbar.c:153
 #: ide/functions/enable_main_toolbar_buttons.c:49
 msgid "Adjust the dimensions of the project"
-msgstr ""
+msgstr "Modifica le dimensioni del progetto"
 
 #: ide/functions/create_toolbar.c:169
 msgid "Flash"
-msgstr ""
+msgstr "Flash"
 
 #: ide/functions/create_toolbar.c:170
 #: ide/functions/enable_main_toolbar_buttons.c:58
 msgid "Export as a Flash animation"
-msgstr ""
+msgstr "Esporta come animazione Flash"
 
 #: ide/functions/dialog/display_dialog_empty.c:80
 msgid "Background Color: "
-msgstr ""
+msgstr "Colore di sfondo: "
 
 #: ide/functions/dialog/display_dialog_empty.c:89
 #: ide/functions/dialog/display_dialog_highlight.c:377
@@ -570,7 +570,7 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_mouse.c:350
 #: ide/functions/dialog/display_dialog_text.c:327
 msgid "External link: "
-msgstr ""
+msgstr "Collegamento esterno: "
 
 #: ide/functions/dialog/display_dialog_empty.c:101
 #: ide/functions/dialog/display_dialog_highlight.c:389
@@ -578,7 +578,7 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_mouse.c:362
 #: ide/functions/dialog/display_dialog_text.c:339
 msgid "External link window: "
-msgstr ""
+msgstr "Collegamento a finestra esterna: "
 
 #: ide/functions/dialog/display_dialog_empty.c:136
 #: ide/functions/dialog/display_dialog_highlight.c:578
@@ -587,38 +587,40 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_text.c:655
 msgid ""
 "There was something wrong with the external link value.  Please try again."
-msgstr ""
+msgstr "Errore nel collegamento esterno. Per piacere riprova."
 
 #: ide/functions/dialog/display_dialog_empty.c:150
 msgid ""
 "There was something wrong with the external link window target value.  "
 "Please try again."
 msgstr ""
+"Errore nel valore di target per il link a finestra esterna. Per piaere "
+"riprova."
 
 #: ide/functions/dialog/display_dialog_highlight.c:151
 #: ide/functions/dialog/display_dialog_image.c:132
 #: ide/functions/dialog/display_dialog_mouse.c:133
 msgid "Layer Name: "
-msgstr ""
+msgstr "Nome livello: "
 
 #: ide/functions/dialog/display_dialog_highlight.c:163
 #: ide/functions/dialog/display_dialog_text.c:277
 msgid "Background fill color: "
-msgstr ""
+msgstr "Colore di riempimento dello sfondo: "
 
 #: ide/functions/dialog/display_dialog_highlight.c:174
 #: ide/functions/dialog/display_dialog_text.c:305
 msgid "Background border color: "
-msgstr ""
+msgstr "Colore dei bordi dello sfondo: "
 
 #: ide/functions/dialog/display_dialog_highlight.c:185
 #: ide/functions/dialog/display_dialog_text.c:316
 msgid "Background border width: "
-msgstr ""
+msgstr "Spessore dei bordi dello sfondo: "
 
 #: ide/functions/dialog/display_dialog_highlight.c:196
 msgid "Opacity: "
-msgstr ""
+msgstr "Opacità: "
 
 #: ide/functions/dialog/display_dialog_highlight.c:207
 msgid "Starting X Offset:"
@@ -638,32 +640,32 @@ msgstr ""
 
 #: ide/functions/dialog/display_dialog_highlight.c:255
 msgid "Width:"
-msgstr ""
+msgstr "Larghezza:"
 
 #: ide/functions/dialog/display_dialog_highlight.c:267
 msgid "Height:"
-msgstr ""
+msgstr "Altezza:"
 
 #: ide/functions/dialog/display_dialog_highlight.c:279
 #: ide/functions/dialog/display_dialog_image.c:188
 #: ide/functions/dialog/display_dialog_mouse.c:189
 #: ide/functions/dialog/display_dialog_text.c:362
 msgid "Is this layer visible?"
-msgstr ""
+msgstr "Questo livello è visibile?"
 
 #: ide/functions/dialog/display_dialog_highlight.c:291
 #: ide/functions/dialog/display_dialog_image.c:200
 #: ide/functions/dialog/display_dialog_mouse.c:201
 #: ide/functions/dialog/display_dialog_text.c:423
 msgid "Starting time (seconds): "
-msgstr ""
+msgstr "Tempo di inizio (secondi): "
 
 #: ide/functions/dialog/display_dialog_highlight.c:303
 #: ide/functions/dialog/display_dialog_image.c:212
 #: ide/functions/dialog/display_dialog_mouse.c:213
 #: ide/functions/dialog/display_dialog_text.c:435
 msgid "Start how: "
-msgstr ""
+msgstr "Comincia come: "
 
 #: ide/functions/dialog/display_dialog_highlight.c:307
 #: ide/functions/dialog/display_dialog_highlight.c:350
@@ -674,7 +676,7 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_text.c:439
 #: ide/functions/dialog/display_dialog_text.c:482
 msgid "Immediate"
-msgstr ""
+msgstr "Immediato"
 
 #: ide/functions/dialog/display_dialog_highlight.c:308
 #: ide/functions/dialog/display_dialog_image.c:217
@@ -688,50 +690,50 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_mouse.c:232
 #: ide/functions/dialog/display_dialog_text.c:454
 msgid "Start duration (seconds):"
-msgstr ""
+msgstr "Durata ingresso (secondi):"
 
 #: ide/functions/dialog/display_dialog_highlight.c:334
 #: ide/functions/dialog/display_dialog_image.c:243
 #: ide/functions/dialog/display_dialog_mouse.c:244
 #: ide/functions/dialog/display_dialog_text.c:466
 msgid "Display for (seconds): "
-msgstr ""
+msgstr "Mostra per (secondi): "
 
 #: ide/functions/dialog/display_dialog_highlight.c:346
 #: ide/functions/dialog/display_dialog_image.c:255
 #: ide/functions/dialog/display_dialog_mouse.c:256
 #: ide/functions/dialog/display_dialog_text.c:478
 msgid "Exit how: "
-msgstr ""
+msgstr "Esci come: "
 
 #: ide/functions/dialog/display_dialog_highlight.c:351
 #: ide/functions/dialog/display_dialog_image.c:260
 #: ide/functions/dialog/display_dialog_mouse.c:261
 #: ide/functions/dialog/display_dialog_text.c:483
 msgid "Fade out"
-msgstr ""
+msgstr "Fade out"
 
 #: ide/functions/dialog/display_dialog_highlight.c:365
 #: ide/functions/dialog/display_dialog_image.c:274
 #: ide/functions/dialog/display_dialog_mouse.c:275
 #: ide/functions/dialog/display_dialog_text.c:497
 msgid "Exit duration (seconds):"
-msgstr ""
+msgstr "Durata uscita (secondi):"
 
 #: ide/functions/dialog/display_dialog_highlight.c:424
 #: ide/functions/dialog/display_dialog_image.c:337
 #: ide/functions/dialog/display_dialog_mouse.c:397
 msgid "There was something wrong with the new layer name.  Please try again."
-msgstr ""
+msgstr "Errore nel nome del nuovo livello. Per piacere riprova."
 
 #: ide/functions/dialog/display_dialog_highlight.c:439
 msgid ""
 "There was something wrong with the border width value.  Please try again."
-msgstr ""
+msgstr "Errore nel valore dello spessore dei bordi. Per piacere riprova."
 
 #: ide/functions/dialog/display_dialog_highlight.c:453
 msgid "There was something wrong with the opacity value.  Please try again."
-msgstr ""
+msgstr "Errore nel valore di opacità. Per piacere riprova."
 
 #: ide/functions/dialog/display_dialog_highlight.c:467
 #: ide/functions/dialog/display_dialog_image.c:352
@@ -767,12 +769,12 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_highlight.c:523
 msgid ""
 "There was something wrong with the highlight width value.  Please try again."
-msgstr ""
+msgstr "Errore nella larghezza dell'evidenziazione. Per piacere riprova."
 
 #: ide/functions/dialog/display_dialog_highlight.c:537
 msgid ""
 "There was something wrong with the highlight height value.  Please try again."
-msgstr ""
+msgstr "Errore nella altezza della evidenziazione. Per piacere riprova."
 
 #: ide/functions/dialog/display_dialog_highlight.c:551
 #: ide/functions/dialog/display_dialog_image.c:408
@@ -780,14 +782,14 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_text.c:628
 msgid ""
 "There was something wrong with the starting time value.  Please try again."
-msgstr ""
+msgstr "Errore nel valore dell'tempo di avvio. Per piacere riprova."
 
 #: ide/functions/dialog/display_dialog_highlight.c:565
 #: ide/functions/dialog/display_dialog_image.c:422
 #: ide/functions/dialog/display_dialog_mouse.c:482
 #: ide/functions/dialog/display_dialog_text.c:642
 msgid "There was something wrong with the duration value.  Please try again."
-msgstr ""
+msgstr "Errore nel valore della durata. Per piacere riprova."
 
 #: ide/functions/dialog/display_dialog_highlight.c:592
 #: ide/functions/dialog/display_dialog_image.c:506
@@ -805,7 +807,7 @@ msgstr ""
 msgid ""
 "There was something wrong with the appearance transition type selected.  "
 "Please try again."
-msgstr ""
+msgstr "Errore nel tipo di transizione scelto. Per piacere riprova."
 
 #: ide/functions/dialog/display_dialog_highlight.c:621
 #: ide/functions/dialog/display_dialog_image.c:450
@@ -814,7 +816,7 @@ msgstr ""
 msgid ""
 "There was something wrong with the appearance transition duration value.  "
 "Please try again."
-msgstr ""
+msgstr "Errore nella durata della transizione. Per piacere riprova."
 
 #: ide/functions/dialog/display_dialog_highlight.c:635
 #: ide/functions/dialog/display_dialog_image.c:464
@@ -824,6 +826,7 @@ msgid ""
 "There was something wrong with the exit transition type selected.  Please "
 "try again."
 msgstr ""
+"Errore nel tipo di transizione di uscita scelto. Per piacere riprova."
 
 #: ide/functions/dialog/display_dialog_highlight.c:649
 #: ide/functions/dialog/display_dialog_image.c:478
@@ -833,6 +836,8 @@ msgid ""
 "There was something wrong with the exit transition duration value.  Please "
 "try again."
 msgstr ""
+"Errore nel valore della durata della transizione di uscita. Per piacere "
+"riprova."
 
 #: ide/functions/dialog/display_dialog_image.c:144
 #: ide/functions/dialog/display_dialog_mouse.c:145
@@ -860,57 +865,57 @@ msgstr ""
 
 #: ide/functions/dialog/display_dialog_mouse.c:287
 msgid "Mouse click type: "
-msgstr ""
+msgstr "Tipo di click del mouse: "
 
 #: ide/functions/dialog/display_dialog_mouse.c:291
 msgid "No mouse click"
-msgstr ""
+msgstr "Nessun click del mouse"
 
 #: ide/functions/dialog/display_dialog_mouse.c:292
 msgid "Left single click"
-msgstr ""
+msgstr "Singolo click sinistro del mouse"
 
 #: ide/functions/dialog/display_dialog_mouse.c:293
 msgid "Left double click"
-msgstr ""
+msgstr "Doppio click sinistro del mouse"
 
 #: ide/functions/dialog/display_dialog_mouse.c:294
 msgid "Left triple click"
-msgstr ""
+msgstr "Triplo click sinistro del mouse"
 
 #: ide/functions/dialog/display_dialog_mouse.c:295
 msgid "Right single click"
-msgstr ""
+msgstr "Singolo click destro del mouse"
 
 #: ide/functions/dialog/display_dialog_mouse.c:296
 msgid "Right double click"
-msgstr ""
+msgstr "Doppio click destro del mouse"
 
 #: ide/functions/dialog/display_dialog_mouse.c:297
 msgid "Right triple click"
-msgstr ""
+msgstr "Triplo click destro del mouse"
 
 #: ide/functions/dialog/display_dialog_mouse.c:298
 msgid "Middle single click"
-msgstr ""
+msgstr "Singolo click bottone centrale del mouse"
 
 #: ide/functions/dialog/display_dialog_mouse.c:299
 msgid "Middle double click"
-msgstr ""
+msgstr "Doppio click bottone centrale del mouse"
 
 #: ide/functions/dialog/display_dialog_mouse.c:300
 msgid "Middle triple click"
-msgstr ""
+msgstr "Triplo click bottone centrale del mouse"
 
 #: ide/functions/dialog/display_dialog_mouse.c:580
 msgid ""
 "There was something wrong with the mouse click type selected.  Please try "
 "again."
-msgstr ""
+msgstr "Errore nel tipo di click del mouse scelto. Per piacere riprova."
 
 #: ide/functions/dialog/display_dialog_save_warning.c:44
 msgid "Project has been modified.  Save changes?"
-msgstr ""
+msgstr "Progetto modificato. Salvare i cambiamenti?"
 
 #: ide/functions/dialog/display_dialog_text.c:180
 msgid "Appearance & Links"
@@ -918,11 +923,11 @@ msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:182
 msgid "Duration"
-msgstr ""
+msgstr "Durata"
 
 #: ide/functions/dialog/display_dialog_text.c:208
 msgid "Layer name: "
-msgstr ""
+msgstr "Nome livello: "
 
 #: ide/functions/dialog/display_dialog_text.c:220
 msgid "Font face: "
@@ -930,153 +935,155 @@ msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:226
 msgid "DejaVu Sans"
-msgstr ""
+msgstr "DejaVu Sans"
 
 #: ide/functions/dialog/display_dialog_text.c:227
 msgid "DejaVu Sans Bold"
-msgstr ""
+msgstr "DejaVu Sans Grassetto"
 
 #: ide/functions/dialog/display_dialog_text.c:228
 msgid "DejaVu Sans Bold Oblique"
-msgstr ""
+msgstr "DejaVu Sans Grassetto Obliquo"
 
 #: ide/functions/dialog/display_dialog_text.c:229
 msgid "DejaVu Sans Condensed"
-msgstr ""
+msgstr "DejaVu Sans Condensato"
 
 #: ide/functions/dialog/display_dialog_text.c:230
 msgid "DejaVu Sans Condensed Bold"
-msgstr ""
+msgstr "DejaVu Sans Condensato Grassetto"
 
 #: ide/functions/dialog/display_dialog_text.c:231
 msgid "DejaVu Sans Condensed Bold Oblique"
-msgstr ""
+msgstr "DejaVu Sans Condensato Grassetto Obliquo"
 
 #: ide/functions/dialog/display_dialog_text.c:232
 msgid "DejaVu Sans Condensed Oblique"
-msgstr ""
+msgstr "DejaVu Sans Condensato Obliquo"
 
 #: ide/functions/dialog/display_dialog_text.c:233
 msgid "DejaVu Sans Extra Light"
-msgstr ""
+msgstr "DejaVu Sans Extra Luminoso"
 
 #: ide/functions/dialog/display_dialog_text.c:234
 msgid "DejaVu Sans Mono"
-msgstr ""
+msgstr "DejaVu Sans Mono"
 
 #: ide/functions/dialog/display_dialog_text.c:235
 msgid "DejaVu Sans Mono Bold"
-msgstr ""
+msgstr "DejaVu Sans Mono Grassetto"
 
 #: ide/functions/dialog/display_dialog_text.c:236
 msgid "DejaVu Sans Mono Bold Oblique"
-msgstr ""
+msgstr "DejaVu Sans Mono Grassetto Obliquo"
 
 #: ide/functions/dialog/display_dialog_text.c:237
 msgid "DejaVu Sans Mono Oblique"
-msgstr ""
+msgstr "DejaVu Sans Mono Obliquo"
 
 #: ide/functions/dialog/display_dialog_text.c:238
 msgid "DejaVu Sans Oblique"
-msgstr ""
+msgstr "DejaVu Sans Obliquo"
 
 #: ide/functions/dialog/display_dialog_text.c:239
 msgid "DejaVu Serif"
-msgstr ""
+msgstr "DejaVu Serif"
 
 #: ide/functions/dialog/display_dialog_text.c:240
 msgid "DejaVu Serif Bold"
-msgstr ""
+msgstr "DejaVu Serif Grassetto"
 
 #: ide/functions/dialog/display_dialog_text.c:241
 msgid "DejaVu Serif Bold Italic"
-msgstr ""
+msgstr "DejaVu Serif Bold Corsivo"
 
 #: ide/functions/dialog/display_dialog_text.c:242
 msgid "DejaVu Serif Condensed"
-msgstr ""
+msgstr "DejaVu Serif Condensato"
 
 #: ide/functions/dialog/display_dialog_text.c:243
 msgid "DejaVu Serif Condensed Bold"
-msgstr ""
+msgstr "DejaVu Serif Condensato Grassetto"
 
 #: ide/functions/dialog/display_dialog_text.c:244
 msgid "DejaVu Serif Condensed Bold Italic"
-msgstr ""
+msgstr "DejaVu Serif Condensato Grassetto Corsivo"
 
 #: ide/functions/dialog/display_dialog_text.c:245
 msgid "DejaVu Serif Condensed Italic"
-msgstr ""
+msgstr "DejaVu Serif Condensato Corsivo"
 
 #: ide/functions/dialog/display_dialog_text.c:246
 msgid "DejaVu Serif Italic"
-msgstr ""
+msgstr "DejaVu Serif Corsivo"
 
 #: ide/functions/dialog/display_dialog_text.c:252
 msgid "Font size: "
-msgstr ""
+msgstr "Dimensione font: "
 
 #: ide/functions/dialog/display_dialog_text.c:264
 msgid "Text color: "
-msgstr ""
+msgstr "Colore testo: "
 
 #: ide/functions/dialog/display_dialog_text.c:351
 msgid "Display the background?"
-msgstr ""
+msgstr "Mostrare lo sfondo?"
 
 #: ide/functions/dialog/display_dialog_text.c:543
-msgid "There was something wrong with the layer name value.  Please try again."
-msgstr ""
+msgid ""
+"There was something wrong with the layer name value.  Please try again."
+msgstr "Errore nel nome del livello. Per piacere riprova."
 
 #: ide/functions/dialog/display_dialog_text.c:614
 msgid ""
 "There was something wrong with the background border width value.  Please "
 "try again."
-msgstr ""
+msgstr "Errore nello spessore del bordo dello sfondo. Per piacere riprova."
 
 #: ide/functions/disable_layer_toolbar_buttons.c:47
 msgid "Edit layer disabled: No project loaded"
-msgstr ""
+msgstr "Modifica livello disabilitata: Nessun progetto caricato"
 
 #: ide/functions/disable_layer_toolbar_buttons.c:56
 msgid "Crop layer disabled: No project loaded"
-msgstr ""
+msgstr "Ritaglio livello disabilitato: Nessun progetto caricato"
 
 #: ide/functions/disable_layer_toolbar_buttons.c:65
 msgid "Delete layer disabled: No project loaded"
-msgstr ""
+msgstr "Cancellazione livello disabilitata: Nessun progetto caricato"
 
 #: ide/functions/disable_layer_toolbar_buttons.c:74
 msgid "Move layer down disabled: No project loaded"
-msgstr ""
+msgstr "Spostamento livello in basso disabilitato: Nessun progetto caricato"
 
 #: ide/functions/disable_layer_toolbar_buttons.c:83
 msgid "Move layer up disabled: No project loaded"
-msgstr ""
+msgstr "Spostamento livello in alto disabilitato: Nessun progetto caricato"
 
 #: ide/functions/disable_layer_toolbar_buttons.c:92
 msgid "Add mouse pointer disabled: No project loaded"
 msgstr ""
+"Aggiunta di puntatore del mouse disabilitato: Nessun progetto caricato"
 
 #: ide/functions/disable_layer_toolbar_buttons.c:101
 msgid "Add text layer disabled: No project loaded"
-msgstr ""
+msgstr "Aggiunta livello testuale disabilitata: Nessun progetto caricato"
 
 #: ide/functions/disable_layer_toolbar_buttons.c:110
 msgid "Add highlight layer disabled: No project loaded"
-msgstr ""
+msgstr "Aggiunta livello evidenziato disabilitata: Nessun progetto caricato"
 
 #: ide/functions/disable_layer_toolbar_buttons.c:119
 msgid "Add image layer disabled: No project loaded"
-msgstr ""
+msgstr "Aggiunta livello immagine disabilitata: Nessun progetto caricato"
 
 #: ide/functions/disable_main_toolbar_buttons.c:47
 msgid "Dimension adjustment disabled: No project loaded"
-msgstr ""
+msgstr "Modifica dimensioni disabilitata: Nessun progetto caricato"
 
 #: ide/functions/disable_main_toolbar_buttons.c:56
 msgid "Export to Flash disabled: No project loaded"
-msgstr ""
+msgstr "Esportazione in Flash disabilitata: Nessun progetto caricato"
 
 #: ide/functions/draw_timeline.c:65
 msgid "Could not regenerate the time line widget."
@@ -1084,11 +1091,11 @@ msgstr ""
 
 #: ide/functions/export/html/export_html_wrapper.c:65
 msgid "Export Html"
-msgstr ""
+msgstr "Esportazione in Html"
 
 #: ide/functions/export/html/export_html_wrapper.c:75
 msgid "HyperText Markup Language (*.html)"
-msgstr ""
+msgstr "HyperText Markup Language (*.html)"
 
 #: ide/functions/export/html/export_html_wrapper.c:81
 #: ide/functions/menu/menu_export_layer.c:99
@@ -1097,7 +1104,7 @@ msgstr ""
 #: ide/functions/menu/menu_file_open.c:107
 #: ide/functions/menu/menu_file_save_as.c:92
 msgid "All files (*.*)"
-msgstr ""
+msgstr "Tutti i file (*.*)"
 
 #: ide/functions/export/html/export_html_wrapper.c:121
 #: ide/functions/menu/menu_export_layer.c:139
@@ -1105,8 +1112,9 @@ msgstr ""
 #: ide/functions/menu/menu_export_swf.c:130
 #: ide/functions/menu/menu_file_open.c:167
 #: ide/functions/menu/menu_file_save_as.c:148
-msgid "There was something wrong with the file name given.  Please try again."
-msgstr ""
+msgid ""
+"There was something wrong with the file name given.  Please try again."
+msgstr "Errore nel nome del file inserito. Per piacere riprova."
 
 #: ide/functions/export/html/export_html_wrapper.c:133
 #: ide/functions/menu/menu_export_layer.c:152
@@ -1114,11 +1122,11 @@ msgstr ""
 #: ide/functions/menu/menu_export_swf.c:142
 #: ide/functions/menu/menu_file_save_as.c:160
 msgid "Overwrite existing file?"
-msgstr ""
+msgstr "Sovrascrivere il file esistente?"
 
 #: ide/functions/export/html/export_html_wrapper.c:167
 msgid "Couldn't create the output file."
-msgstr ""
+msgstr "Non posso creare il file di destinazione."
 
 #: ide/functions/export/html/export_html_wrapper.c:201
 msgid "Wrote html wrapper"
@@ -1128,7 +1136,7 @@ msgstr ""
 #: ide/functions/export/swf/export_swf_control_bar.c:411
 #: ide/functions/film_strip/create_film_strip.c:79
 msgid "Slide"
-msgstr ""
+msgstr "Diapositiva"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:425
 #, c-format
@@ -1138,28 +1146,31 @@ msgstr ""
 #: ide/functions/export/swf/export_swf_control_bar.c:528
 msgid "Restart button pressed, slide counter has been set to:"
 msgstr ""
+"Pulsante riavvio premuto, il contatore diapositive è stato impostato a:"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:532
 #: ide/functions/export/swf/export_swf_control_bar.c:679
 #: ide/functions/export/swf/export_swf_control_bar.c:1016
 msgid "We should now jump to the slide named"
-msgstr ""
+msgstr "Saltare alla diapositiva chiamata"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:622
 msgid ""
 "Rewind button pressed while in first slide, slide counter has been set to:"
 msgstr ""
+"Pulsante riavvolgimento premuto mentre si era sulla prima diapositiva, il "
+"contatore diapositive è stato impostato a:"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:626
 #: ide/functions/export/swf/export_swf_control_bar.c:675
 #: ide/functions/export/swf/export_swf_inner.c:391
 #: ide/functions/export/swf/export_swf_inner.c:408
 msgid "'playing' variable is unchanged, at:"
-msgstr ""
+msgstr "La variabile 'playing' è invariata, valore corrente:"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:630
 msgid "We should now jump to the first frame of the movie."
-msgstr ""
+msgstr "Saltare al primo frame del video."
 
 #: ide/functions/export/swf/export_swf_control_bar.c:637
 #: ide/functions/export/swf/export_swf_control_bar.c:646
@@ -1168,38 +1179,40 @@ msgstr ""
 #: ide/functions/export/swf/export_swf_control_bar.c:1023
 #: ide/functions/export/swf/export_swf_control_bar.c:1032
 msgid "Using"
-msgstr ""
+msgstr "In uso"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:667
 msgid "Rewind button pressed, slide counter has been set to:"
 msgstr ""
+"Pulsante riavvolgimento premuto, il contatore diapositive è stato impostato "
+"a:"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:671
 msgid "'_root.reversing' variable has been set to true."
-msgstr ""
+msgstr "La variabile '_root.reversing' è impostata a vero ."
 
 #: ide/functions/export/swf/export_swf_control_bar.c:800
 msgid "Pause button pressed. Slide counter equals:"
-msgstr ""
+msgstr "Pulsante pausa premuto, il valore del contatore diapositive è:"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:804
 msgid "'_root.playing' variable set to false."
-msgstr ""
+msgstr "La variabile '_root.playing' è impostata a falso."
 
 #: ide/functions/export/swf/export_swf_control_bar.c:884
 msgid "Play button pressed. Slide counter equals:"
-msgstr ""
+msgstr "Pulsante play premuto, il valore del contatore diapositive è:"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:888
 #: ide/functions/export/swf/export_swf_control_bar.c:984
 #: ide/functions/export/swf/export_swf_control_bar.c:1012
 #: ide/functions/export/swf/export_swf_control_bar.c:1137
 msgid "'_root.reversing' variable has been set to false."
-msgstr ""
+msgstr "La variabile '_root.reversing'  è impostata a falso."
 
 #: ide/functions/export/swf/export_swf_control_bar.c:892
 msgid "'_root.playing' variable set to true."
-msgstr ""
+msgstr "La variabile '_root.playing'  è impostata a vero."
 
 #: ide/functions/export/swf/export_swf_control_bar.c:896
 msgid "Slide name array is:"
@@ -1208,26 +1221,29 @@ msgstr ""
 #: ide/functions/export/swf/export_swf_control_bar.c:980
 msgid "Fast forward button pressed while in last slide, slide counter is:"
 msgstr ""
+"Premuto il pulsante avanzamento veloce mentre si era sull'ultima "
+"diapositiva, il valore contatore di diapositive è:"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:988
 msgid "Now jumping to the last frame of the movie using gotoAndStop."
-msgstr ""
+msgstr "Ora saltare all'ultimo frame del video utilizzando gotoAndStop."
 
 #: ide/functions/export/swf/export_swf_control_bar.c:1008
 msgid "Fast forward button pressed, slide counter is:"
 msgstr ""
+"Premuto il pulsante avanzamento veloce, il valore contatore di diapositive è:"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:1133
 msgid "Finish button pressed."
-msgstr ""
+msgstr "Premuto il pulsante finito."
 
 #: ide/functions/export/swf/export_swf_control_bar.c:1141
 msgid "Now jumping to last frame of movie."
-msgstr ""
+msgstr "Ora saltare all'ultimo frame del video."
 
 #: ide/functions/export/swf/export_swf_control_bar.c:1223
 msgid "info_text visibility set to:"
-msgstr ""
+msgstr "Visibilità di info_text  impostata a:"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:1294
 msgid ""
@@ -1236,27 +1252,27 @@ msgstr ""
 
 #: ide/functions/export/swf/export_swf_create_layer_elements.c:72
 msgid "Object"
-msgstr ""
+msgstr "Oggetto"
 
 #: ide/functions/export/swf/export_swf_create_shape.c:154
 #, c-format
 msgid "Image width: %d\n"
-msgstr ""
+msgstr "Larghezza immagine: %d\n"
 
 #: ide/functions/export/swf/export_swf_create_shape.c:155
 #, c-format
 msgid "Scaled width: %d\n"
-msgstr ""
+msgstr "Larghezza scalata: %d\n"
 
 #: ide/functions/export/swf/export_swf_create_shape.c:156
 #, c-format
 msgid "Image height: %d\n"
-msgstr ""
+msgstr "Altezza immagine: %d\n"
 
 #: ide/functions/export/swf/export_swf_create_shape.c:157
 #, c-format
 msgid "Scaled height: %d\n"
-msgstr ""
+msgstr "Riduzione altezza: %d\n"
 
 #: ide/functions/export/swf/export_swf_create_shape.c:165
 msgid ""
@@ -1265,35 +1281,36 @@ msgstr ""
 
 #: ide/functions/export/swf/export_swf_create_shape.c:181
 msgid "Something went wrong when encoding an image to required format."
-msgstr ""
+msgstr "Errore nella codifica dell'immagine nel formato richiesto."
 
 #: ide/functions/export/swf/export_swf_create_shape.c:201
 #: ide/functions/export/swf/swf_shape_from_image_file.c:131
 msgid "Something went wrong converting an image to a swf shape object."
-msgstr ""
+msgstr "Errore nella conversione di un'immagine in oggetto forma swf."
 
 #: ide/functions/export/swf/export_swf_create_shape.c:220
 #, c-format
 msgid "This image has an external link: '%s'\n"
-msgstr ""
+msgstr "Questa immagine ha un link esterno: '%s'\n"
 
 #: ide/functions/export/swf/export_swf_create_shape.c:264
 msgid "Something went wrong when creating an empty layer for swf output."
-msgstr ""
+msgstr "Errore nella creazione di un livello vuoto per l'output swf."
 
 #: ide/functions/export/swf/export_swf_create_shape.c:294
 #, c-format
 msgid "This empty layer has an external link: '%s'\n"
-msgstr ""
+msgstr "Questa livello vuoto ha un link esterno: '%s'\n"
 
 #: ide/functions/export/swf/export_swf_create_shape.c:343
 msgid "Something went wrong when creating a highlight layer for swf output."
 msgstr ""
+"Errore nella creazione di un livello di evidenziazione per l'output swf."
 
 #: ide/functions/export/swf/export_swf_create_shape.c:387
 #, c-format
 msgid "This highlight has an external link: '%s'\n"
-msgstr ""
+msgstr "Questo livello di evidenziazione ha un collegamento esterno: '%s'\n"
 
 #: ide/functions/export/swf/export_swf_create_shape.c:434
 msgid ""
@@ -1313,11 +1330,11 @@ msgstr ""
 #: ide/functions/export/swf/export_swf_create_shape.c:721
 #, c-format
 msgid "This text has an external link: '%s'\n"
-msgstr ""
+msgstr "Questo testo ha un link esterno: '%s'\n"
 
 #: ide/functions/export/swf/export_swf_create_shape.c:770
 msgid "Unknown layer type in swf output."
-msgstr ""
+msgstr "Tipo di livello non conosciuto nell'output swf."
 
 #: ide/functions/export/swf/export_swf_inner.c:108
 msgid ""
@@ -1326,7 +1343,7 @@ msgstr ""
 
 #: ide/functions/export/swf/export_swf_inner.c:118
 msgid "Unknown output resolution selected for swf export."
-msgstr ""
+msgstr "Risoluzione per l'esportazione swf sconosciuta."
 
 #: ide/functions/export/swf/export_swf_inner.c:144
 msgid "Scaled height ratio"
@@ -1338,118 +1355,123 @@ msgstr ""
 
 #: ide/functions/export/swf/export_swf_inner.c:155
 msgid "Number of slides"
-msgstr ""
+msgstr "Numero di diapositive"
 
 #: ide/functions/export/swf/export_swf_inner.c:174
 msgid "Total number of layers"
-msgstr ""
+msgstr "Numero totale di livelli"
 
 #: ide/functions/export/swf/export_swf_inner.c:250
 #, c-format
 msgid "Number of layers in slide %u is %u\n"
-msgstr ""
+msgstr "Numero di livelli nella diapositiva %u is %u\n"
 
 #: ide/functions/export/swf/export_swf_inner.c:251
 #, c-format
 msgid "Maximum frame number in slide %u is %u\n"
-msgstr ""
+msgstr "Massimo numero di frame nella diapositiva %u is %u\n"
 
 #: ide/functions/export/swf/export_swf_inner.c:259
 msgid ""
 "We couldn't allocate enough memory to generate the swf.  Export aborted."
 msgstr ""
+"Impossibile allocare  memoria sufficiente per la generazione dell'swf. "
+"Esportazione annullata."
 
 #: ide/functions/export/swf/export_swf_inner.c:306
 #, c-format
 msgid "Frame number %u:\n"
-msgstr ""
+msgstr "Numero di frame %u\n"
 
 #: ide/functions/export/swf/export_swf_inner.c:309
 #, c-format
 msgid "Action frame:\tON\t"
-msgstr ""
+msgstr "Frame azione:\tON\t"
 
 #: ide/functions/export/swf/export_swf_inner.c:311
 #, c-format
 msgid "Action frame:\tOFF\t"
-msgstr ""
+msgstr "Frame azione:\tOFF\t"
 
 #: ide/functions/export/swf/export_swf_inner.c:314
 #, c-format
 msgid "Layer info:\tSET\t"
-msgstr ""
+msgstr "Informazioni livello:\tSET\t"
 
 #: ide/functions/export/swf/export_swf_inner.c:316
 #, c-format
 msgid "Layer info:\tNULL\t"
-msgstr ""
+msgstr "Informazioni livello:\tNULL\t"
 
 #: ide/functions/export/swf/export_swf_inner.c:319
 #, c-format
 msgid "Add frame:\tON\t"
-msgstr ""
+msgstr "Aggiungi frame:\tON\t"
 
 #: ide/functions/export/swf/export_swf_inner.c:321
 #, c-format
 msgid "Add frame:\tOFF\t"
-msgstr ""
+msgstr "Aggiungi frame:\tOFF\t"
 
 #: ide/functions/export/swf/export_swf_inner.c:324
 #, c-format
 msgid "Remove frame:\tON\t"
-msgstr ""
+msgstr "Rimuovi frame:\tON\t"
 
 #: ide/functions/export/swf/export_swf_inner.c:326
 #, c-format
 msgid "Remove frame:\tOFF\t"
-msgstr ""
+msgstr "Rimuovi frame:\tOFF\t"
 
 #: ide/functions/export/swf/export_swf_inner.c:330
 #, c-format
 msgid "Move frame:\tON\tX position:\t%.2f\tY position\t%.2f\t"
-msgstr ""
+msgstr "Muovi frame:\tON\t posizione X:\t%.2f\t posizione Y\t%.2f\t"
 
 #: ide/functions/export/swf/export_swf_inner.c:333
 #, c-format
 msgid "Move frame:\tOFF\t"
-msgstr ""
+msgstr "Muovi frame:\tOFF\t"
 
 #: ide/functions/export/swf/export_swf_inner.c:383
 msgid "Slide counter incremented, now equals:"
-msgstr ""
+msgstr "Contatore diapositive incrementato, valore aggiornato:"
 
 #: ide/functions/export/swf/export_swf_inner.c:387
 msgid "'reversing' variable was false, and remains so."
 msgstr ""
+"variabile 'reversing' era impostata su false, e non è stata modificata."
 
 #: ide/functions/export/swf/export_swf_inner.c:400
 msgid "Slide counter unchanged, now at:"
-msgstr ""
+msgstr "Contatore diapositive non cambiato, valore corrente:"
 
 #: ide/functions/export/swf/export_swf_inner.c:404
 msgid "'reversing' variable was false, has been set to true."
 msgstr ""
+"variabile 'reversing' era impostata su false, è stata impostata a true."
 
 #: ide/functions/export/swf/export_swf_inner.c:417
 msgid "Last frame of movie reached, 'playing' variable has been set to:"
 msgstr ""
+"Raggiunto ultimo frame del video, la variabile 'playing' è stata impostata a:"
 
 #: ide/functions/export/swf/export_swf_inner.c:471
 #, c-format
 msgid "The animation is %u frames long\n"
-msgstr ""
+msgstr "La animazione è costituita da %u frames\n"
 
 #: ide/functions/export/swf/export_swf_inner.c:479
 msgid "Something went wrong when saving the swf file to disk."
-msgstr ""
+msgstr "Errore nel salvataggio su disco dell'swf"
 
 #: ide/functions/export/swf/swf_add_mouse_click.c:124
 msgid "Full path name to sound file is"
-msgstr ""
+msgstr "Il percorso completo per il file audio è"
 
 #: ide/functions/export/swf/swf_add_mouse_click.c:132
 msgid "Something went wrong when opening a mouse click sound file."
-msgstr ""
+msgstr "Errore nell'apertura del file audio di mouse click."
 
 #: ide/functions/export/swf/swf_shape_from_image_file.c:60
 msgid ""
@@ -1458,15 +1480,18 @@ msgstr ""
 
 #: ide/functions/export/swf/swf_shape_from_image_file.c:76
 msgid "Something went wrong when encoding an image to png format."
-msgstr ""
+msgstr "Errore durante la codifica di un'immagine nel formato png."
 
 #: ide/functions/export/swf/swf_shape_from_image_file.c:93
 msgid "Something went wrong converting an image to a swf input object."
 msgstr ""
+"Errore nella conversione di un'immagine in un oggetto di input di tipo swf."
 
 #: ide/functions/export/swf/swf_shape_from_image_file.c:111
 msgid "Something went wrong converting an image to a swf bitmap object."
 msgstr ""
+"Errore nella conversione di un'immagine in un oggetto di input di tipo "
+"bitmap."
 
 #: ide/functions/film_strip/film_strip_create_thumbnail.c:63
 msgid "Couldn't create film strip thumbnail."
@@ -1474,16 +1499,18 @@ msgstr ""
 
 #: ide/functions/film_strip/film_strip_create_thumbnail.c:73
 msgid "Couldn't allocate memory for a new film strip thumbnail."
-msgstr ""
+msgstr "Non posso allocare memoria per una nuova sequenza di anteprime."
 
 #: ide/functions/film_strip/film_strip_slide_clicked.c:64
 #, c-format
 msgid "Invalid iter! No layer selected when changing slide!\n"
 msgstr ""
+"Iter non valido! Nessun livello selezionato durante il cambiamento della "
+"diapositiva!\n"
 
 #: ide/functions/film_strip/film_strip_slide_clicked.c:88
 msgid " Ready"
-msgstr ""
+msgstr " Pronto"
 
 #: ide/functions/key_bind.c:64
 msgid ""
@@ -1496,6 +1523,8 @@ msgid ""
 "'salasaga_screencapture' not found in the search path. Screenshot capturing "
 "is disabled."
 msgstr ""
+"'salasaga_screencapture' non trovato nel percorso di ricerca. Cattura di "
+"screenshot disabilitata."
 
 #: ide/functions/layer/compress_layers_inner.c:274
 #: ide/functions/layer/get_layer_position.c:206
@@ -1505,19 +1534,19 @@ msgstr ""
 #: ide/functions/working_area/working_area_button_release_event.c:382
 #: ide/functions/working_area/working_area_motion_notify_event.c:365
 msgid "Unknown layer type."
-msgstr ""
+msgstr "Tipo livello sconosciuto"
 
 #: ide/functions/layer/image_crop.c:105
 msgid "Only Image layers can be cropped."
-msgstr ""
+msgstr "Solo i livelli immagine possono essere ritagliati."
 
 #: ide/functions/layer/image_crop.c:116
 msgid "Background layers can not be cropped."
-msgstr ""
+msgstr "I livelli di background non possono essere ritagliati."
 
 #: ide/functions/layer/image_crop.c:125
 msgid "Crop image layer"
-msgstr ""
+msgstr "Ritaglia livello immagine"
 
 #: ide/functions/layer/image_crop.c:130
 msgid "Left crop: "
@@ -1541,37 +1570,37 @@ msgstr ""
 #: ide/functions/menu/menu_screenshots_import.c:286
 #: ide/functions/project_adjust_dimensions.c:221
 msgid "Couldn't create an image pattern."
-msgstr ""
+msgstr "Non posso creare un modello immagine."
 
 #: ide/functions/layer/image_crop.c:240
 msgid " Image cropped"
-msgstr ""
+msgstr " Immagine ritagliata"
 
 #: ide/functions/layer/layer_copy.c:69
 msgid " Copy failed"
-msgstr ""
+msgstr " Copia fallita"
 
 #: ide/functions/layer/layer_copy.c:75
 msgid " Layer copied to buffer"
-msgstr ""
+msgstr " Livello copiato sul buffer"
 
 #: ide/functions/layer/layer_delete.c:110
 msgid " Layer deleted"
-msgstr ""
+msgstr " Livello cancellato"
 
 #: ide/functions/layer/layer_duplicate.c:57
 msgid "Unable to allocate memory for the copy buffer.  Copy failed."
-msgstr ""
+msgstr "Impossibile allocare memoria per il buffer di copia. Copia fallita."
 
 #: ide/functions/layer/layer_duplicate.c:87
 #: ide/functions/menu/menu_screenshots_import.c:324
 msgid "Background"
-msgstr ""
+msgstr "Sfondo"
 
 #: ide/functions/layer/layer_duplicate.c:94
 #: ide/functions/slide/slide_insert.c:64
 msgid "Empty"
-msgstr ""
+msgstr "Vuoto"
 
 #: ide/functions/layer/layer_duplicate.c:111
 #: ide/functions/layer/layer_duplicate.c:128
@@ -1582,50 +1611,52 @@ msgid ""
 "Unable to allocate memory in the copy buffer for layer specific data.  Copy "
 "failed."
 msgstr ""
+"Impossibile allocare memoria per il buffer di copia per i dati del livello. "
+"Copia fallita."
 
 #: ide/functions/layer/layer_duplicate.c:221
 msgid "Unknown layer type when duplicating layer."
-msgstr ""
+msgstr "Tipo livello sconosciuto durante la duplicazione dei livelli."
 
 #: ide/functions/layer/layer_edit.c:93
 msgid "Edit background color"
-msgstr ""
+msgstr "Modifica il colore di sfondo"
 
 #: ide/functions/layer/layer_edit.c:110
 msgid "Edit image layer"
-msgstr ""
+msgstr "Modifica livello immagine"
 
 #: ide/functions/layer/layer_edit.c:134
 msgid "Edit mouse pointer"
-msgstr ""
+msgstr "Modifica puntatore del mouse"
 
 #: ide/functions/layer/layer_edit.c:159
 msgid "Edit text layer"
-msgstr ""
+msgstr "Modifica livello testo"
 
 #: ide/functions/layer/layer_edit.c:184
 msgid "Edit highlight layer"
-msgstr ""
+msgstr "Modifica livello evidenziazione"
 
 #: ide/functions/layer/layer_edit.c:223
 msgid " Layer edited"
-msgstr ""
+msgstr " Livello modificato"
 
 #: ide/functions/layer/layer_free.c:87
 msgid "Unknown layer type when destroying a layer."
-msgstr ""
+msgstr "Tipo livello sconosciuto durante la distruzione di un livello."
 
 #: ide/functions/layer/layer_move_down.c:106
 msgid " Layer moved down"
-msgstr ""
+msgstr " Livello spostato in basso"
 
 #: ide/functions/layer/layer_move_up.c:112
 msgid " Layer moved up"
-msgstr ""
+msgstr " Livello spostato in alto"
 
 #: ide/functions/layer/layer_new_highlight.c:63
 msgid " Please draw the new layer"
-msgstr ""
+msgstr " Per piacere disegna il nuovo livello"
 
 #: ide/functions/layer/layer_new_highlight_inner.c:154
 #: ide/functions/layer/layer_new_image_inner.c:99
@@ -1636,11 +1667,11 @@ msgstr ""
 #: ide/functions/read/read_text_layer.c:90
 #: ide/functions/slide/slide_insert.c:66
 msgid "_self"
-msgstr ""
+msgstr "_self"
 
 #: ide/functions/layer/layer_new_highlight_inner.c:193
 msgid " Highlight layer added"
-msgstr ""
+msgstr " Livello evidenziazione aggiunto"
 
 #: ide/functions/layer/layer_new_image.c:63
 #: ide/functions/layer/layer_new_mouse.c:63
@@ -1650,52 +1681,53 @@ msgstr ""
 
 #: ide/functions/layer/layer_new_image_inner.c:106
 msgid "Please choose an image file"
-msgstr ""
+msgstr "Per piacere scegli un file immagine"
 
 #: ide/functions/layer/layer_new_image_inner.c:137
-msgid "There was something wrong with the image path given.  Please try again."
-msgstr ""
+msgid ""
+"There was something wrong with the image path given.  Please try again."
+msgstr "Errore nel percorso immagine inserito. Per piacere riprova."
 
 #: ide/functions/layer/layer_new_image_inner.c:146
 msgid ""
 "There was something wrong with the image file selected.  Please try again."
-msgstr ""
+msgstr "Errore immagine selezionata. Per piacere riprova."
 
 #: ide/functions/layer/layer_new_image_inner.c:218
 msgid " Image layer added"
-msgstr ""
+msgstr " Livello immagine aggiunto"
 
 #: ide/functions/layer/layer_new_mouse_inner.c:82
 msgid "Mouse Pointer"
-msgstr ""
+msgstr "Puntatore del mouse"
 
 #: ide/functions/layer/layer_new_mouse_inner.c:123
 msgid " Mouse layer added"
-msgstr ""
+msgstr " Livello mouse aggiunto"
 
 #: ide/functions/layer/layer_new_text_inner.c:73
 msgid "New text..."
-msgstr ""
+msgstr "Nuovo testo..."
 
 #: ide/functions/layer/layer_new_text_inner.c:113
 msgid "Text layer"
-msgstr ""
+msgstr "Livello testo"
 
 #: ide/functions/layer/layer_new_text_inner.c:154
 msgid " Text layer added"
-msgstr ""
+msgstr " Livello testo aggiunto"
 
 #: ide/functions/layer/layer_paste.c:112
 msgid " Layer pasted from buffer"
-msgstr ""
+msgstr " Livello incollato dal buffer"
 
 #: ide/functions/load_fonts.c:69
 msgid "Failed to initialize FreeType."
-msgstr ""
+msgstr "Errore inizializzazione di FreeType."
 
 #: ide/functions/load_fonts.c:173 ide/functions/load_fonts.c:180
 msgid "Font file"
-msgstr ""
+msgstr "Font file"
 
 #: ide/functions/load_fonts.c:173
 msgid "is not in a format FreeType recognizes."
@@ -1703,178 +1735,178 @@ msgstr ""
 
 #: ide/functions/load_fonts.c:180
 msgid "could not be opened by FreeType."
-msgstr ""
+msgstr "Non può essere aperto da FreeType."
 
 #: ide/functions/load_fonts.c:209
 msgid "Something went wrong when opening the font file"
-msgstr ""
+msgstr "Errore nell'apretura del file di font"
 
 #: ide/functions/load_fonts.c:219
 msgid "Something went wrong when loading the font file"
-msgstr ""
+msgstr "Errore nel caricamento del file di font"
 
 #: ide/functions/menu/create_menu_bar.c:98
 msgid "/_File"
-msgstr ""
+msgstr "/_File"
 
 #: ide/functions/menu/create_menu_bar.c:99
 msgid "/File/_New Project"
-msgstr ""
+msgstr "/File/_New Project"
 
 #: ide/functions/menu/create_menu_bar.c:99
 msgid "<control>N"
-msgstr ""
+msgstr "<control>N"
 
 #: ide/functions/menu/create_menu_bar.c:100
 msgid "/File/_Open Project"
-msgstr ""
+msgstr "/File/_Open Project"
 
 #: ide/functions/menu/create_menu_bar.c:100
 msgid "<control>O"
-msgstr ""
+msgstr "<control>O"
 
 #: ide/functions/menu/create_menu_bar.c:101
 msgid "/File/_Save Project"
-msgstr ""
+msgstr "/File/_Save Project"
 
 #: ide/functions/menu/create_menu_bar.c:101
 msgid "<control>S"
-msgstr ""
+msgstr "<control>S"
 
 #: ide/functions/menu/create_menu_bar.c:102
 msgid "/File/Save _As Project"
-msgstr ""
+msgstr "/File/Save _As Project"
 
 #: ide/functions/menu/create_menu_bar.c:102
 msgid "<control><shift>S"
-msgstr ""
+msgstr "<control><shift>S"
 
 #: ide/functions/menu/create_menu_bar.c:103
 msgid "/File/_Close Project"
-msgstr ""
+msgstr "/File/_Close Project"
 
 #: ide/functions/menu/create_menu_bar.c:103
 msgid "<control>W"
-msgstr ""
+msgstr "<control>W"
 
 #: ide/functions/menu/create_menu_bar.c:104
 msgid "/File/Sep"
-msgstr ""
+msgstr "/File/Sep"
 
 #: ide/functions/menu/create_menu_bar.c:105
 msgid "/File/_Quit"
-msgstr ""
+msgstr "/File/_Quit"
 
 #: ide/functions/menu/create_menu_bar.c:105
 msgid "<control>Q"
-msgstr ""
+msgstr "<control>Q"
 
 #: ide/functions/menu/create_menu_bar.c:107
 msgid "/_Edit"
-msgstr ""
+msgstr "/_Modifica"
 
 #: ide/functions/menu/create_menu_bar.c:108
 msgid "/Edit/_Preferences"
-msgstr ""
+msgstr "/Modifica/_Preferenze"
 
 #: ide/functions/menu/create_menu_bar.c:110
 msgid "/_Screenshots"
-msgstr ""
+msgstr "/_Screenshots"
 
 #: ide/functions/menu/create_menu_bar.c:111
 #: ide/functions/menu/create_menu_bar.c:183
 msgid "/Screenshots/Capture _window"
-msgstr ""
+msgstr "/Screenshots/Cattura _finestra"
 
 #: ide/functions/menu/create_menu_bar.c:112
 #: ide/functions/menu/create_menu_bar.c:184
 msgid "/Screenshots/Capture _full screen"
-msgstr ""
+msgstr "/Screenshots/Cattura_schermo intero"
 
 #: ide/functions/menu/create_menu_bar.c:113
 msgid "/Screenshots/_Import"
-msgstr ""
+msgstr "/Screenshots/_Importa"
 
 #: ide/functions/menu/create_menu_bar.c:115
 msgid "/_Project"
-msgstr ""
+msgstr "/_Progetto"
 
 #: ide/functions/menu/create_menu_bar.c:116
 msgid "/Project/P_roperties"
-msgstr ""
+msgstr "/Progetto/P_ropietà"
 
 #: ide/functions/menu/create_menu_bar.c:117
 msgid "/Project/Sep"
-msgstr ""
+msgstr "/Project/Sep"
 
 #: ide/functions/menu/create_menu_bar.c:118
 msgid "/Project/_Adjust dimensions"
-msgstr ""
+msgstr "/Progetto/_Modifica dimensioni"
 
 #: ide/functions/menu/create_menu_bar.c:120
 msgid "/Sl_ide"
-msgstr ""
+msgstr "/Sl_ide"
 
 #: ide/functions/menu/create_menu_bar.c:121
 msgid "/Slide/_Insert"
-msgstr ""
+msgstr "/Diapositiva/_Inserisci"
 
 #: ide/functions/menu/create_menu_bar.c:122
 msgid "/Slide/_Delete"
-msgstr ""
+msgstr "/Diapositiva/_Cancella"
 
 #: ide/functions/menu/create_menu_bar.c:123
 msgid "/Slide/Du_ration"
-msgstr ""
+msgstr "/Diapositiva/Du_rata"
 
 #: ide/functions/menu/create_menu_bar.c:124
 msgid "/Slide/Move _up"
-msgstr ""
+msgstr "/Diapositiva/Muovi _su"
 
 #: ide/functions/menu/create_menu_bar.c:125
 msgid "/Slide/Move dow_n"
-msgstr ""
+msgstr "/Diapositiva/Muovi in _basso"
 
 #: ide/functions/menu/create_menu_bar.c:126
 msgid "/Slide/Move to _top"
-msgstr ""
+msgstr "/Diapositiva/Muovi in _cima"
 
 #: ide/functions/menu/create_menu_bar.c:127
 msgid "/Slide/Move to _bottom"
-msgstr ""
+msgstr "/Diapositiva/Muovi sul _fondo"
 
 #: ide/functions/menu/create_menu_bar.c:129
 msgid "/_Layer"
-msgstr ""
+msgstr "/_Livello"
 
 #: ide/functions/menu/create_menu_bar.c:131
 msgid "/Layer/_Copy"
-msgstr ""
+msgstr "/Livello/_Copia"
 
 #: ide/functions/menu/create_menu_bar.c:132
 msgid "/Layer/_Paste"
-msgstr ""
+msgstr "/Livello/_Incolla"
 
 #: ide/functions/menu/create_menu_bar.c:133
 msgid "/Layer/_Edit"
-msgstr ""
+msgstr "/Livello/_Modifica"
 
 #: ide/functions/menu/create_menu_bar.c:134
 msgid "/Layer/_Delete"
-msgstr ""
+msgstr "/Livello/_Cancella"
 
 #: ide/functions/menu/create_menu_bar.c:135
 #: ide/functions/menu/create_menu_bar.c:140
 msgid "/Layer/Sep"
-msgstr ""
+msgstr "/Layer/Sep"
 
 #: ide/functions/menu/create_menu_bar.c:136
 msgid "/Layer/Add _Text"
-msgstr ""
+msgstr "/Livello/Aggiungi _Testo"
 
 #: ide/functions/menu/create_menu_bar.c:137
 msgid "/Layer/Add _Highlight"
-msgstr ""
+msgstr "/Livello/Agiungi _Evidenziazione"
 
 #: ide/functions/menu/create_menu_bar.c:138
 msgid "/Layer/Add _Image"
@@ -1882,23 +1914,23 @@ msgstr ""
 
 #: ide/functions/menu/create_menu_bar.c:139
 msgid "/Layer/Add _Mouse"
-msgstr ""
+msgstr "/Livello/Agiungi _Mouse"
 
 #: ide/functions/menu/create_menu_bar.c:141
 msgid "/Layer/Image c_rop"
-msgstr ""
+msgstr "/Livello/_Ritaglia Immagine"
 
 #: ide/functions/menu/create_menu_bar.c:143
 msgid "/E_xport"
-msgstr ""
+msgstr "/E_sporta"
 
 #: ide/functions/menu/create_menu_bar.c:144
 msgid "/Export/_Flash Animation"
-msgstr ""
+msgstr "/Esporta/Animazione _Flash"
 
 #: ide/functions/menu/create_menu_bar.c:144
 msgid "<control><shift>F"
-msgstr ""
+msgstr "<control><shift>F"
 
 #: ide/functions/menu/create_menu_bar.c:145
 msgid "/Export/_Html Wrapper"
@@ -1906,7 +1938,7 @@ msgstr ""
 
 #: ide/functions/menu/create_menu_bar.c:146
 msgid "/Export/_Slide as Image"
-msgstr ""
+msgstr "/Esporta/_Diapositiva come Immagine"
 
 #: ide/functions/menu/create_menu_bar.c:147
 msgid "/Export/_Image Layer"
@@ -1914,111 +1946,111 @@ msgstr ""
 
 #: ide/functions/menu/create_menu_bar.c:149
 msgid "/_Help"
-msgstr ""
+msgstr "/_Aiuto"
 
 #: ide/functions/menu/create_menu_bar.c:150
 msgid "/_Help/_About"
-msgstr ""
+msgstr "/_Aiuto/_Informazioni"
 
 #: ide/functions/menu/create_menu_bar.c:151
 msgid "/_Help/_Main Website"
-msgstr ""
+msgstr "/_Aiuto/Sito _Web"
 
 #: ide/functions/menu/create_menu_bar.c:152
 msgid "/_Help/Sep"
-msgstr ""
+msgstr "/_Aiuto/Sep"
 
 #: ide/functions/menu/create_menu_bar.c:154
 msgid "/_Help/_Forum"
-msgstr ""
+msgstr "/_Aiuto/_Forum"
 
 #: ide/functions/menu/create_menu_bar.c:155
 msgid "/_Help/_Register"
-msgstr ""
+msgstr "/_Aiuto/_Registrazione"
 
 #: ide/functions/menu/create_menu_bar.c:156
 msgid "/_Help/_Support"
-msgstr ""
+msgstr "/_Aiuto/_Supporto"
 
 #: ide/functions/menu/create_menu_bar.c:157
 msgid "/_Help/_Wiki"
-msgstr ""
+msgstr "/_Aiuto/_Wiki"
 
 #: ide/functions/menu/create_menu_bar.c:175
 #: ide/functions/menu/menu_file_close.c:101
 #: ide/functions/menu/menu_file_new.c:338
 #: ide/functions/menu/menu_file_open.c:256
 msgid "/Project"
-msgstr ""
+msgstr "/Progetto"
 
 #: ide/functions/menu/create_menu_bar.c:176
 #: ide/functions/menu/menu_file_close.c:102
 #: ide/functions/menu/menu_file_new.c:339
 #: ide/functions/menu/menu_file_open.c:257
 msgid "/Slide"
-msgstr ""
+msgstr "/Diapositiva"
 
 #: ide/functions/menu/create_menu_bar.c:177
 #: ide/functions/menu/menu_file_close.c:103
 #: ide/functions/menu/menu_file_new.c:340
 #: ide/functions/menu/menu_file_open.c:258
 msgid "/Layer"
-msgstr ""
+msgstr "/Livello"
 
 #: ide/functions/menu/create_menu_bar.c:178
 #: ide/functions/menu/menu_file_close.c:104
 #: ide/functions/menu/menu_file_new.c:341
 #: ide/functions/menu/menu_file_open.c:259
 msgid "/Export"
-msgstr ""
+msgstr "/Esporta"
 
 #: ide/functions/menu/menu_edit_preferences.c:136
 msgid "Application Preferences"
-msgstr ""
+msgstr "Preferenze"
 
 #: ide/functions/menu/menu_edit_preferences.c:141
 msgid "Default Project Folder: "
-msgstr ""
+msgstr "Cartella di progetto predefinita: "
 
 #: ide/functions/menu/menu_edit_preferences.c:144
 msgid "Select the Default Project Folder"
-msgstr ""
+msgstr "Scegliere la cartella dei progetto predefinita"
 
 #: ide/functions/menu/menu_edit_preferences.c:150
 msgid "Screenshots Folder: "
-msgstr ""
+msgstr "Cartella degli screenshot: "
 
 #: ide/functions/menu/menu_edit_preferences.c:153
 msgid "Select the Screenshot Folder"
-msgstr ""
+msgstr "Scegli la cartella degli screenshot"
 
 #: ide/functions/menu/menu_edit_preferences.c:159
 msgid "Default Output Folder: "
-msgstr ""
+msgstr "Cartella di uscita predefinita: "
 
 #: ide/functions/menu/menu_edit_preferences.c:162
 msgid "Select the Default Output Folder"
-msgstr ""
+msgstr "Imposta la cartella di uscita predefinita"
 
 #: ide/functions/menu/menu_edit_preferences.c:168
 msgid "Default Output Resolution: "
-msgstr ""
+msgstr "Risoluzione di uscita predefinita: "
 
 #: ide/functions/menu/menu_edit_preferences.c:176
 msgid ""
 "Default Slide Duration: \n"
 "(seconds)"
-msgstr ""
+msgstr "Durata predefinita della diapositiva:"
 
 #: ide/functions/menu/menu_edit_preferences.c:186
 msgid ""
 "Default Layer Duration: \n"
 "(seconds)"
-msgstr ""
+msgstr "Durata predefinita del livello:"
 
 #: ide/functions/menu/menu_edit_preferences.c:196
 msgid "Default Frames Per Second: "
-msgstr ""
+msgstr "Numero predefinito di frames per secondo: "
 
 #: ide/functions/menu/menu_edit_preferences.c:205
 msgid "Film Strip Width: "
@@ -2026,19 +2058,19 @@ msgstr ""
 
 #: ide/functions/menu/menu_edit_preferences.c:214
 msgid "Icon Height: "
-msgstr ""
+msgstr "Altezza icona: "
 
 #: ide/functions/menu/menu_edit_preferences.c:223
 msgid "Default Zoom Level: "
-msgstr ""
+msgstr "Livello di zoom predefinito: "
 
 #: ide/functions/menu/menu_edit_preferences.c:231
 msgid "Default Background Color: "
-msgstr ""
+msgstr "Colore di sfondo predefinito: "
 
 #: ide/functions/menu/menu_edit_preferences.c:240
 msgid "Number of seconds for screenshot delay: "
-msgstr ""
+msgstr "Numero di secondi per ritardo screenshot: "
 
 #: ide/functions/menu/menu_edit_preferences.c:249
 msgid "Display non-metacity key bind warning?"
@@ -2048,37 +2080,39 @@ msgstr ""
 #: ide/functions/menu/menu_project_properties.c:341
 msgid ""
 "There was something wrong with the project folder given.  Please try again."
-msgstr ""
+msgstr "Errore con la cartella di progetto fornita. Per piacere riprova."
 
 #: ide/functions/menu/menu_edit_preferences.c:302
 msgid ""
 "There was something wrong with the screenshot folder given.  Please try "
 "again."
-msgstr ""
+msgstr "Errore con la cartella di screenshot fornita. Per piacere riprova."
 
 #: ide/functions/menu/menu_edit_preferences.c:316
 #: ide/functions/menu/menu_project_properties.c:355
 msgid ""
 "There was something wrong with the output folder given.  Please try again."
-msgstr ""
+msgstr "Errore con la cartella di output fornita. Per piacere riprova."
 
 #: ide/functions/menu/menu_edit_preferences.c:330
 msgid ""
 "There was something wrong with the default output resolution given.  Please "
 "try again."
 msgstr ""
+"Errore con la risoluzione di output predefinita fornita. Per piacere riprova."
 
 #: ide/functions/menu/menu_edit_preferences.c:345
 msgid ""
 "There was something wrong with the default slide duration value.  Please try "
 "again."
 msgstr ""
+"Errore con la durata predefinita della diapositiva. Per piacere riprova."
 
 #: ide/functions/menu/menu_edit_preferences.c:359
 msgid ""
 "There was something wrong with the default layer duration value.  Please try "
 "again."
-msgstr ""
+msgstr "Errore con la durata predefinita dei livelli. Per piacere riprova."
 
 #: ide/functions/menu/menu_edit_preferences.c:373
 #: ide/functions/menu/menu_project_properties.c:370
@@ -2086,27 +2120,32 @@ msgid ""
 "There was something wrong with the default frames per second value.  Please "
 "try again."
 msgstr ""
+"Errore con il valore predefinito di frames per secondi. Per piacere riprova."
 
 #: ide/functions/menu/menu_edit_preferences.c:387
 msgid ""
 "There was something wrong with the preview width value.  Please try again."
 msgstr ""
+"Errore con il valore della larghezza dell'anteprima. Per piacere riprova."
 
 #: ide/functions/menu/menu_edit_preferences.c:401
 msgid ""
 "There was something wrong with the icon height value.  Please try again."
 msgstr ""
+"Errore con il valore dell'altezza dell'anteprima. Per piacere riprova."
 
 #: ide/functions/menu/menu_edit_preferences.c:414
 msgid ""
 "There was something wrong with the default zoom level given.  Please try "
 "again."
 msgstr ""
+"Errore con il valore predefinito di zoom fornito. Per piacere riprova."
 
 #: ide/functions/menu/menu_edit_preferences.c:429
 msgid ""
 "There was something wrong with the screenshot delay value.  Please try again."
 msgstr ""
+"Errore con il valore del ritardo dello screenshot. Per piacere riprova."
 
 #: ide/functions/menu/menu_edit_preferences.c:524
 #, c-format
@@ -2125,100 +2164,103 @@ msgstr ""
 
 #: ide/functions/menu/menu_edit_preferences.c:591
 msgid " Application preferences updated"
-msgstr ""
+msgstr " Preferenze dell'applicazione aggiornate"
 
 #: ide/functions/menu/menu_export_layer.c:74
 msgid "Only image layers can be exported to an image file."
 msgstr ""
+"Solamente i livelli di immagine possono essere esportati in un file immagine."
 
 #: ide/functions/menu/menu_export_layer.c:83
 #: ide/functions/menu/menu_export_slide.c:64
 msgid "Export Slide as Image"
-msgstr ""
+msgstr "Esportazione diapositiva come immagine"
 
 #: ide/functions/menu/menu_export_layer.c:93
 #: ide/functions/menu/menu_export_slide.c:74
 msgid "Portable Network Graphics (*.png)"
-msgstr ""
+msgstr "Portable Network Graphics (*.png)"
 
 #: ide/functions/menu/menu_export_layer.c:174
 #: ide/functions/menu/menu_export_slide.c:161
 msgid "Salasaga: http://www.salasaga.org"
-msgstr ""
+msgstr "Salasaga: http://www.salasaga.org"
 
 #: ide/functions/menu/menu_export_layer.c:178
 #: ide/functions/menu/menu_export_slide.c:165
 msgid "Something went wrong when saving the image file."
-msgstr ""
+msgstr "Errore nel salvataggio immagine."
 
 #: ide/functions/menu/menu_export_layer.c:184
 #: ide/functions/menu/menu_export_slide.c:170
 msgid "Wrote image file"
-msgstr ""
+msgstr "Errore file immagine"
 
 #: ide/functions/menu/menu_export_swf.c:62
 msgid "There is no project loaded."
-msgstr ""
+msgstr "Nessun progetto caricato."
 
 #: ide/functions/menu/menu_export_swf.c:74
 msgid "Export as Flash"
-msgstr ""
+msgstr "Esportazione in Flash"
 
 #: ide/functions/menu/menu_export_swf.c:84
 msgid "Adobe Flash (*.swf)"
-msgstr ""
+msgstr "Adobe Flash (*.swf)"
 
 #: ide/functions/menu/menu_export_swf.c:163
 msgid "Exporting"
-msgstr ""
+msgstr "Esportazione"
 
 #: ide/functions/menu/menu_export_swf.c:171
 msgid "Something went wrong when creating the swf movie."
-msgstr ""
+msgstr "Errore nella creazione del filmato swf"
 
 #: ide/functions/menu/menu_export_swf.c:176
 msgid "Exported"
-msgstr ""
+msgstr "Esportato"
 
 #: ide/functions/menu/menu_file_close.c:93
 msgid " Project closed"
-msgstr ""
+msgstr " Progetto chiuso"
 
 #: ide/functions/menu/menu_file_new.c:105
 msgid "Create new Salasaga Project"
-msgstr ""
+msgstr "Crea nuovo progetto"
 
 #: ide/functions/menu/menu_file_new.c:110
 #: ide/functions/menu/menu_project_properties.c:128
 msgid "Project Name: "
-msgstr ""
+msgstr "Nome progetto: "
 
 #: ide/functions/menu/menu_file_new.c:122
 #: ide/functions/menu/menu_screenshots_capture.c:290
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:162
 msgid "Width: "
-msgstr ""
+msgstr "Larghezza: "
 
 #: ide/functions/menu/menu_file_new.c:133
 #: ide/functions/menu/menu_screenshots_capture.c:301
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:173
 msgid "Height: "
-msgstr ""
+msgstr "Altezza: "
 
 #: ide/functions/menu/menu_file_new.c:144
 #: ide/functions/menu/menu_project_properties.c:156
 msgid "Frames per second: "
-msgstr ""
+msgstr "Frames per secondo: "
 
 #: ide/functions/menu/menu_file_new.c:155
 msgid "Background color: "
-msgstr ""
+msgstr "Colore di sfondo: "
 
 #: ide/functions/menu/menu_file_new.c:189
 msgid ""
 "There was something wrong with the new project name.  Defaulting to 'New "
 "Project' instead."
 msgstr ""
+"Errore con il nome del nuovo progetto. Rimane il nome predefinito 'Nuovo "
+"Progetto'."
 
 #: ide/functions/menu/menu_file_new.c:191 ide/salasaga.c:296
 msgid "New Project"
@@ -2227,78 +2269,78 @@ msgstr "Nuovo progetto"
 #: ide/functions/menu/menu_file_new.c:204
 msgid ""
 "There was something wrong with the project width value.  Please try again."
-msgstr ""
+msgstr "Errore nel valore dell' larghezza del progetto. Per piacere riprova."
 
 #: ide/functions/menu/menu_file_new.c:218
 msgid ""
 "There was something wrong with the project height value.  Please try again."
-msgstr ""
+msgstr "Errore nel valore dell'altezza del progetto. Per piacere riprova."
 
 #: ide/functions/menu/menu_file_new.c:232
 msgid ""
 "There was something wrong with the project frames per second value.  Please "
 "try again."
-msgstr ""
+msgstr "Errore nel valore di frame per secondo. Per piacere riprova."
 
 #: ide/functions/menu/menu_file_new.c:285
 #: ide/functions/menu/menu_help_website.c:47
 #: ide/functions/read/read_project.c:144
 msgid "http://www.salasaga.org"
-msgstr ""
+msgstr "http://www.salasaga.org"
 
 #: ide/functions/menu/menu_file_new.c:286
 #: ide/functions/menu/menu_screenshots_import.c:94
 #: ide/functions/read/read_project.c:145
 msgid "_blank"
-msgstr ""
+msgstr "_blank"
 
 #: ide/functions/menu/menu_file_new.c:288
 #: ide/functions/menu/menu_screenshots_import.c:96
 #: ide/functions/read/read_project.c:147
 msgid "Created using Salasaga"
-msgstr ""
+msgstr "Creato usando Salasaga"
 
 #: ide/functions/menu/menu_file_new.c:314
 msgid " Project initialized"
-msgstr ""
+msgstr " Progetto inizializzato"
 
 #: ide/functions/menu/menu_file_open.c:85
 msgid "Open a Salasaga Project"
-msgstr ""
+msgstr "Apri un progetto Salasaga"
 
 #: ide/functions/menu/menu_file_open.c:95
 #: ide/functions/menu/menu_file_save_as.c:86
 msgid "Salasaga Project file (*.salasaga)"
-msgstr ""
+msgstr "Progetto Salasaga (*.salasaga)"
 
 #: ide/functions/menu/menu_file_open.c:101
 msgid "Flame Project file (*.flame)"
-msgstr ""
+msgstr "Progetto Flame (*.flame)"
 
 #: ide/functions/menu/menu_file_open.c:269
 msgid " Project loaded"
-msgstr ""
+msgstr " Progetto caricato"
 
 #: ide/functions/menu/menu_file_save.c:86
 #: ide/functions/menu/menu_file_save.c:227
 msgid "Saving project"
-msgstr ""
+msgstr "Salvataggio progetto"
 
 #: ide/functions/menu/menu_file_save.c:93
 msgid "Error creating the XML save document."
-msgstr ""
+msgstr "Errore nella creazione del documento XML."
 
 #: ide/functions/menu/menu_file_save.c:103
 msgid "Error creating the root node."
-msgstr ""
+msgstr "Errore nella creazione del nodo di root (nodo principale)."
 
 #: ide/functions/menu/menu_file_save.c:116
 msgid "Error creating the meta-data container."
-msgstr ""
+msgstr "Erore nella creazione del container dei meta-data."
 
 #: ide/functions/menu/menu_file_save.c:129
 msgid "Error creating the preferences container."
-msgstr ""
+msgstr "Errore nella creazione del container delle preferenze."
 
 #: ide/functions/menu/menu_file_save.c:159
 msgid "Error creating the start behavior value."
@@ -2310,19 +2352,19 @@ msgstr ""
 
 #: ide/functions/menu/menu_file_save.c:207
 msgid "Error creating the text tag container."
-msgstr ""
+msgstr "Errore nella creazione del container dei tag di testo."
 
 #: ide/functions/menu/menu_file_save.c:220
 msgid "Error creating the slides container."
-msgstr ""
+msgstr "Errore nella creazione del container delle diapositive."
 
 #: ide/functions/menu/menu_file_save.c:247
 msgid "Project saved"
-msgstr ""
+msgstr "Progetto salvato"
 
 #: ide/functions/menu/menu_help_about.c:56
 msgid "Copyright"
-msgstr ""
+msgstr "Copyright"
 
 #: ide/functions/menu/menu_help_about.c:59
 msgid ""
@@ -2344,60 +2386,60 @@ msgstr ""
 #: ide/functions/menu/menu_help_about.c:77
 #, c-format
 msgid "Built on: %s"
-msgstr ""
+msgstr "Realizzato da: %s"
 
 #: ide/functions/menu/menu_help_forum.c:47
 msgid "http://www.salasaga.org/forum"
-msgstr ""
+msgstr "http://www.salasaga.org/forum"
 
 #: ide/functions/menu/menu_help_register.c:47
 msgid "http://www.salasaga.org/forum/index.php?action=register"
-msgstr ""
+msgstr "http://www.salasaga.org/forum/index.php?action=register"
 
 #: ide/functions/menu/menu_help_support.c:47
 msgid "http://www.salasaga.org/index.php?page=support"
-msgstr ""
+msgstr "http://www.salasaga.org/index.php?page=support"
 
 #: ide/functions/menu/menu_help_survey.c:47
 msgid "http://www.salasaga.org/go/survey"
-msgstr ""
+msgstr "http://www.salasaga.org/go/survey"
 
 #: ide/functions/menu/menu_help_wiki.c:47
 msgid "http://www.salasaga.org/wiki"
-msgstr ""
+msgstr "http://www.salasaga.org/wiki"
 
 #: ide/functions/menu/menu_project_properties.c:123
 msgid "Project Properties"
-msgstr ""
+msgstr "Proprietà Progetto"
 
 #: ide/functions/menu/menu_project_properties.c:138
 msgid "Project Folder: "
-msgstr ""
+msgstr "Cartella del progetto: "
 
 #: ide/functions/menu/menu_project_properties.c:141
 msgid "Select the Project Folder"
-msgstr ""
+msgstr "Scegli la cartella del progetto"
 
 #: ide/functions/menu/menu_project_properties.c:147
 msgid "Output Folder: "
-msgstr ""
+msgstr "Cartella di destinazione: "
 
 #: ide/functions/menu/menu_project_properties.c:150
 msgid "Select the Output Folder"
-msgstr ""
+msgstr "Scegli la cartella di uscita"
 
 #: ide/functions/menu/menu_project_properties.c:165
 msgid "Project Width: "
-msgstr ""
+msgstr "Larghezza progetto: "
 
 #: ide/functions/menu/menu_project_properties.c:170
 #: ide/functions/menu/menu_project_properties.c:182
 msgid "pixels"
-msgstr ""
+msgstr "pixels"
 
 #: ide/functions/menu/menu_project_properties.c:177
 msgid "Project Height: "
-msgstr ""
+msgstr "Altezza progetto: "
 
 #: ide/functions/menu/menu_project_properties.c:189
 msgid "SWF start behavior: "
@@ -2405,19 +2447,19 @@ msgstr ""
 
 #: ide/functions/menu/menu_project_properties.c:193
 msgid "Paused"
-msgstr ""
+msgstr "In pausa"
 
 #: ide/functions/menu/menu_project_properties.c:194
 msgid "Play"
-msgstr ""
+msgstr "Play"
 
 #: ide/functions/menu/menu_project_properties.c:208
 msgid "SWF end behavior: "
-msgstr ""
+msgstr "Comportamento finale di SWF: "
 
 #: ide/functions/menu/menu_project_properties.c:212
 msgid "Stop"
-msgstr ""
+msgstr "Stop"
 
 #: ide/functions/menu/menu_project_properties.c:213
 msgid "Loop and play"
@@ -2441,16 +2483,16 @@ msgstr ""
 
 #: ide/functions/menu/menu_project_properties.c:279
 msgid "Information button link: "
-msgstr ""
+msgstr "Collegamento del bottone delle informazioni: "
 
 #: ide/functions/menu/menu_project_properties.c:291
 msgid "Information button link window: "
-msgstr ""
+msgstr "Finestra per il collegamento del bottone delle informazioni: "
 
 #: ide/functions/menu/menu_project_properties.c:327
 msgid ""
 "There was something wrong with the project name value.  Please try again."
-msgstr ""
+msgstr "Errore nel nome del progetto. Per piacere riprova."
 
 #: ide/functions/menu/menu_project_properties.c:384
 msgid ""
@@ -2478,13 +2520,15 @@ msgstr ""
 
 #: ide/functions/menu/menu_project_properties.c:484
 msgid " Project properties updated"
-msgstr ""
+msgstr " Proprietà del progetto aggiornate"
 
 #: ide/functions/menu/menu_screenshots_capture.c:95
 msgid ""
 "Please click on the window you want to capture (after closing this dialog "
 "box)."
 msgstr ""
+"Per piacere clicca sulla finestra che vuoi catturare (dopo la chiusura di "
+"questa box di dialogo)."
 
 #: ide/functions/menu/menu_screenshots_capture.c:116
 msgid "Unable to create alternative cursor."
@@ -2499,7 +2543,7 @@ msgstr ""
 #: ide/functions/menu/menu_screenshots_capture.c:144
 #, c-format
 msgid "Mouse pointer grabbed.\n"
-msgstr ""
+msgstr "Puntatore del mouse intercettato.\n"
 
 #: ide/functions/menu/menu_screenshots_capture.c:166
 #, c-format
@@ -2509,13 +2553,13 @@ msgstr ""
 #: ide/functions/menu/menu_screenshots_capture.c:189
 #, c-format
 msgid "Mouse pointer grab released.\n"
-msgstr ""
+msgstr "Puntatore del mouse rilasciato.\n"
 
 #: ide/functions/menu/menu_screenshots_capture.c:209
 #, c-format
 msgid ""
-"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: %"
-"d\n"
+"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: "
+"%d\n"
 msgstr ""
 
 #: ide/functions/menu/menu_screenshots_capture.c:220
@@ -2542,16 +2586,19 @@ msgid ""
 "combination to capture screenshots,\n"
 "then the Import button to import them."
 msgstr ""
+"Suggerimento: Usa la compbinazione \n"
+"di tasi CTRL-Printscreen per catturare la pagina,\n"
+"quindi il bottone import per importarla."
 
 #: ide/functions/menu/menu_screenshots_capture.c:360
 #, c-format
 msgid "An error '%s' occurred when opening '%s' for writing."
-msgstr ""
+msgstr "Errore '%s' nella apertura di '%s' in scrittura."
 
 #: ide/functions/menu/menu_screenshots_capture.c:379
 #, c-format
 msgid "An error '%s' occurred when writing data to the file '%s'."
-msgstr ""
+msgstr "Errore '%s' nella scrittura dei dati sul file '%s'."
 
 #: ide/functions/menu/menu_screenshots_capture.c:396
 #, c-format
@@ -2562,19 +2609,19 @@ msgstr ""
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:296
 #, c-format
 msgid "Keyboard hook LoadLibrary failed with error %d: %s"
-msgstr ""
+msgstr "Agganciamento tastiera LoadLibrary  fallito con errore  %d: %s"
 
 #: ide/functions/menu/menu_screenshots_capture.c:442
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:307
 #, c-format
 msgid "Keyboard hook GetProcAddress failed with error %d: %s"
-msgstr ""
+msgstr "Agganciamento tastiera GetProcAddress  fallito con errore  %d: %s"
 
 #: ide/functions/menu/menu_screenshots_capture.c:454
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:319
 #, c-format
 msgid "Keyboard hooking failed with error %d: %s"
-msgstr ""
+msgstr "Agganciamento tastiera fallito con errore  %d: %s"
 
 #: ide/functions/menu/menu_screenshots_capture.c:461
 #, c-format
@@ -2607,7 +2654,7 @@ msgstr ""
 
 #: ide/functions/menu/menu_screenshots_import.c:112
 msgid "Something went wrong opening the screenshots folder."
-msgstr ""
+msgstr "Errore nell'apertura della cartella delle screenshot."
 
 #: ide/functions/menu/menu_screenshots_import.c:123
 msgid ""
@@ -2628,6 +2675,9 @@ msgid ""
 "size of the project.  If you proceed, they will be scaled to the same size "
 "as the project.  Do you want to proceed?"
 msgstr ""
+"Non tutte le screenshot hanno le stesse dimensioni, o alcune differiscono "
+"della dimensioni del progetto. Se continui saranno ridimensionate "
+"automaticamente alle dimensioni del progetto. Vuoi procedere?"
 
 #: ide/functions/menu/menu_screenshots_import.c:179
 msgid ""
@@ -2848,7 +2898,8 @@ msgstr ""
 #: ide/functions/read/read_highlight_layer.c:396
 #: ide/functions/read/read_mouse_layer.c:289
 #: ide/functions/read/read_text_layer.c:526
-msgid "There was something wrong with a layer name value in the project file."
+msgid ""
+"There was something wrong with a layer name value in the project file."
 msgstr ""
 
 #: ide/functions/read/read_empty_layer.c:216
@@ -2909,7 +2960,8 @@ msgstr ""
 
 #: ide/functions/read/read_highlight_layer.c:306
 #: ide/functions/read/read_mouse_layer.c:162
-msgid "There was something wrong with a layer width value in the project file."
+msgid ""
+"There was something wrong with a layer width value in the project file."
 msgstr ""
 
 #: ide/functions/read/read_highlight_layer.c:324
@@ -3075,7 +3127,8 @@ msgid "Couldn't create an image pattern"
 msgstr ""
 
 #: ide/functions/read/read_mouse_layer.c:198
-msgid "There was something wrong with a mouse click value in the project file."
+msgid ""
+"There was something wrong with a mouse click value in the project file."
 msgstr ""
 
 #: ide/functions/read/read_project.c:159
@@ -3188,7 +3241,8 @@ msgid ""
 msgstr ""
 
 #: ide/functions/read/read_project.c:904
-msgid "There was something wrong with a slide name value in the project file."
+msgid ""
+"There was something wrong with a slide name value in the project file."
 msgstr ""
 
 #: ide/functions/read/read_project.c:923
@@ -3392,7 +3446,7 @@ msgstr ""
 #: ide/salasaga.c:341
 #, c-format
 msgid "Directory base: '%s'\n"
-msgstr ""
+msgstr "Directory base: '%s'\n"
 
 #: ide/salasaga.c:351
 msgid "icons"
@@ -3401,20 +3455,20 @@ msgstr "icone"
 #: ide/salasaga.c:363
 #, c-format
 msgid "Icon path: %s\n"
-msgstr ""
+msgstr "Path icone: %s\n"
 
 #: ide/salasaga.c:391
 #, c-format
 msgid "Path to mouse pointer image: %s\n"
-msgstr ""
+msgstr "Path dell'immagine del puntatore del mouse: %s\n"
 
 #: ide/salasaga.c:485
 msgid "Something went wrong when creating the menu bar."
-msgstr ""
+msgstr "Errore nella creazione della barra del menu."
 
 #: ide/salasaga.c:496
 msgid "Something went wrong when creating the toolbar."
-msgstr ""
+msgstr "Errore nella creazione della toolbar."
 
 #: ide/salasaga.c:527
 msgid "Zoom: "
@@ -3435,18 +3489,20 @@ msgstr "Pronto"
 #: ide/salasaga.c:596
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
 msgstr ""
+"Screenshot disabilitato: salasaga_screencapture non trovato nel path di "
+"ricerca"
 
 #: ide/valid_fields.h:35
 msgid "8 Bit Color Value Component"
-msgstr ""
+msgstr "Componente con valore di colore a 8 bit"
 
 #: ide/valid_fields.h:36
 msgid "16 Bit Color Value Component"
-msgstr ""
+msgstr "Componente con valore di colore a 16 bit"
 
 #: ide/valid_fields.h:37
 msgid "Animation behavior after playing"
-msgstr ""
+msgstr "Comportamento della animazione dopo la esecuzione"
 
 #: ide/valid_fields.h:38
 msgid "External link"
@@ -3454,15 +3510,15 @@ msgstr "Collegamento esterno"
 
 #: ide/valid_fields.h:39
 msgid "Window target for an external link"
-msgstr ""
+msgstr "Finestra di destinazione per un link esterno"
 
 #: ide/valid_fields.h:40
 msgid "Full path to a file"
-msgstr ""
+msgstr "Path completo per un file"
 
 #: ide/valid_fields.h:41 screen_capture/valid_fields.h:35
 msgid "Full path to a folder"
-msgstr ""
+msgstr "Path completo per una cartella"
 
 #: ide/valid_fields.h:42
 msgid "Font face"
@@ -3474,7 +3530,7 @@ msgstr "Dimensione font"
 
 #: ide/valid_fields.h:44
 msgid "A frame number"
-msgstr ""
+msgstr "Numero frame"
 
 #: ide/valid_fields.h:45
 msgid "Height of a highlight layer"
@@ -3482,19 +3538,19 @@ msgstr ""
 
 #: ide/valid_fields.h:46
 msgid "Width of a highlight layer"
-msgstr ""
+msgstr "Altezza di un livello evidenziato"
 
 #: ide/valid_fields.h:47
 msgid "Height of the tool bar icons"
-msgstr ""
+msgstr "Altezza icone del toolbar"
 
 #: ide/valid_fields.h:48
 msgid "Base64 encoded image data"
-msgstr ""
+msgstr "Dati immagine codificati in base64"
 
 #: ide/valid_fields.h:49
 msgid "Length in bytes of image data"
-msgstr ""
+msgstr "Lunghezza in bytes dei dati della immagine"
 
 #: ide/valid_fields.h:50
 msgid "Layer background switch"
@@ -3502,15 +3558,15 @@ msgstr ""
 
 #: ide/valid_fields.h:51
 msgid "Layer duration in seconds"
-msgstr ""
+msgstr "Durata in secondi di questo livello"
 
 #: ide/valid_fields.h:52
 msgid "Height of this layer"
-msgstr ""
+msgstr "Altezza di questo livello"
 
 #: ide/valid_fields.h:53
 msgid "Name of this layer"
-msgstr ""
+msgstr "Nome di questo livello"
 
 #: ide/valid_fields.h:54
 msgid "Layer visibility switch"
@@ -3538,67 +3594,67 @@ msgstr ""
 
 #: ide/valid_fields.h:60
 msgid "Frames per Second for this project"
-msgstr ""
+msgstr "Frames per Secondo in questo progetto"
 
 #: ide/valid_fields.h:61
 msgid "Height of this project"
-msgstr ""
+msgstr "Altezza per questo progetto"
 
 #: ide/valid_fields.h:62 screen_capture/valid_fields.h:36
 msgid "Name of this project"
-msgstr ""
+msgstr "Nome del progetto"
 
 #: ide/valid_fields.h:63
 msgid "Version number of the project file"
-msgstr ""
+msgstr "Numero versione del file di progetto"
 
 #: ide/valid_fields.h:64
 msgid "Width of this project"
-msgstr ""
+msgstr "Larghezza per questo progetto"
 
 #: ide/valid_fields.h:65
 msgid "An X * Y resolution value"
-msgstr ""
+msgstr "Un valore di risoluzione X * Y"
 
 #: ide/valid_fields.h:66 screen_capture/valid_fields.h:37
 msgid "Number of seconds to delay a screenshot"
-msgstr ""
+msgstr "Numero di secondi di ritardo per uno screenshot"
 
 #: ide/valid_fields.h:67 screen_capture/valid_fields.h:38
 msgid "Height for next screenshot"
-msgstr ""
+msgstr "Altezza nuovo screenshot"
 
 #: ide/valid_fields.h:68 screen_capture/valid_fields.h:39
 msgid "Width for next screenshot"
-msgstr ""
+msgstr "Larghezza  nuovo screenshot"
 
 #: ide/valid_fields.h:69
 msgid "Include control bar in exported swf"
-msgstr ""
+msgstr "Inserimento barra di controllo nel swf esportato"
 
 #: ide/valid_fields.h:70
 msgid "Include info button in exported swf"
-msgstr ""
+msgstr "Includi bottone di informazioni nel swf esportato"
 
 #: ide/valid_fields.h:71
 msgid "Show the background for text layers"
-msgstr ""
+msgstr "Mostra lo sfondo dei livelli di testo"
 
 #: ide/valid_fields.h:72
 msgid "Number of frames per slide"
-msgstr ""
+msgstr "Numero di frames per diapositiva"
 
 #: ide/valid_fields.h:73
 msgid "Number of seconds in a slide"
-msgstr ""
+msgstr "Numero di secondi in una diapositiva"
 
 #: ide/valid_fields.h:74
 msgid "Name of this slide"
-msgstr ""
+msgstr "Nome di questa diapositiva"
 
 #: ide/valid_fields.h:75
 msgid "Animation behavior after loading"
-msgstr ""
+msgstr "Comportamento della animazione dopo caricamento"
 
 #: ide/valid_fields.h:76
 msgid "Base64 encoded text buffer data"
@@ -3606,11 +3662,11 @@ msgstr ""
 
 #: ide/valid_fields.h:77
 msgid "Transition duration in seconds"
-msgstr ""
+msgstr "Durata transizione in secondi"
 
 #: ide/valid_fields.h:78
 msgid "Type of transition"
-msgstr ""
+msgstr "Tipologia di transizione"
 
 #: ide/valid_fields.h:79
 msgid "X Offset"
@@ -3688,36 +3744,37 @@ msgstr ""
 
 #: screen_capture/salasaga_screencapture.c:329
 msgid "There was something wrong with the width value.  Aborting screenshot."
-msgstr ""
+msgstr "Errore nel valore della altezza. Schermata annullata."
 
 #: screen_capture/salasaga_screencapture.c:342
-msgid "There was something wrong with the height value.  Aborting screenshot."
-msgstr ""
+msgid ""
+"There was something wrong with the height value.  Aborting screenshot."
+msgstr "Errore nel valore della altezza. Schermata annullata."
 
 #: screen_capture/salasaga_screencapture.c:355
 msgid ""
 "There was something wrong with the screenshot delay value.  Aborting "
 "screenshot."
-msgstr ""
+msgstr "Errore nel valore di ritardo della schermata. Schermata annullata."
 
 #: screen_capture/salasaga_screencapture.c:392
 #: screen_capture/salasaga_screencapture.c:415
 #, c-format
 msgid "Screenshot in %u seconds"
-msgstr ""
+msgstr "Schermata in %u secondi"
 
 #: screen_capture/salasaga_screencapture.c:459
 #: screen_capture/salasaga_screencapture.c:463
 msgid "Screenshot taken"
-msgstr ""
+msgstr "Schermata catturata"
 
 #: screen_capture/salasaga_screencapture.c:480
 msgid "Something went wrong opening"
-msgstr ""
+msgstr "Errore apertura"
 
 #: screen_capture/salasaga_screencapture.c:489
 msgid "The target directory doesn't exist."
-msgstr ""
+msgstr "La directory di destinazione non esiste."
 
 #: screen_capture/salasaga_screencapture.c:575
 msgid ""
@@ -3738,11 +3795,11 @@ msgstr ""
 
 #: screen_capture/salasaga_screencapture.c:634
 msgid "Something went wrong when retrieving the screenshot metadata."
-msgstr ""
+msgstr "Errore nel recupero dei metadata dello screenshot."
 
 #: screen_capture/salasaga_screencapture.c:651
 msgid "Something went wrong when copying the screenshot data."
-msgstr ""
+msgstr "Errore durante la copia dei dati di screenshot."
 
 #: screen_capture/valid_fields.h:40
 msgid "X offset for next screenshot"
