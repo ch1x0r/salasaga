@@ -95,9 +95,12 @@ void menu_screenshots_capture_full_screen(void)
 
 	// Let the user know that the window they selected has been successfully grabbed
 	message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-			_("Window dimensions successfully retrieved.  Please use the right click menu from the status bar icon to take screenshots, then Import when finished."));
+			_("Full screen capture set.  Right click on the status bar icon to take screenshots, then Import when finished."));
 	gtk_dialog_run(GTK_DIALOG(message_dialog));
 	gtk_widget_destroy(message_dialog);
+
+	// Update the status icon
+	gtk_status_icon_set_tooltip_text(status_icon, _("Salasaga - Capture active"));
 
 #else
 	// * Pop open a dialog box asking the user for the offset and size of capture area *
@@ -229,7 +232,7 @@ void menu_screenshots_capture_full_screen(void)
 
 		// Display a warning message using our function
 		g_string_printf(message, "%s ED16: ", _("Error"));
-		g_string_append_printf(message, "An error '%s' occured when opening '%s' for writing.", error->message, full_file_name);
+		g_string_append_printf(message, _("An error '%s' occurred when opening '%s' for writing."), error->message, full_file_name);
 		display_warning(message->str);
 
 		// Free the memory allocated in this function
@@ -246,7 +249,7 @@ void menu_screenshots_capture_full_screen(void)
 	{
 		// * An error occured when writing to the output file, so alert the user, and return to the calling routine indicating failure *
 		g_string_printf(message, "%s ED17: ", _("Error"));
-		g_string_append_printf(message, "An error '%s' occured when writing data to the '%s' file.", error->message, full_file_name);
+		g_string_append_printf(message, _("An error '%s' occurred when writing data to the '%s' file."), error->message, full_file_name);
 		display_warning(message->str);
 
 		// Free the memory allocated in this function
@@ -262,7 +265,7 @@ void menu_screenshots_capture_full_screen(void)
 	{
 		// * An error occured when closing the output file, so alert the user, and return to the calling routine indicating failure *
 		g_string_printf(message, "%s ED18: ", _("Error"));
-		g_string_append_printf(message, "An error '%s' occured when closing the output file '%s'.", error->message, full_file_name);
+		g_string_append_printf(message, _("An error '%s' occurred when closing the output file '%s'."), error->message, full_file_name);
 		display_warning(message->str);
 
 		// Free the memory allocated in this function
@@ -329,7 +332,7 @@ void menu_screenshots_capture_full_screen(void)
 	}
 #else
 	// Add a message to the status bar so the user gets visual feedback
-	g_string_printf(message, _(" Wrote capture settings file - %s"), full_file_name);
+	g_string_printf(message, " %s - %s", _("Wrote screenshot settings file"), full_file_name);
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), message->str);
 	gdk_flush();
 #endif
