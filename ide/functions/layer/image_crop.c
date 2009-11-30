@@ -65,15 +65,19 @@ void image_crop(void)
 
 	GtkWidget			*left_label;				// Label widget
 	GtkWidget			*left_button;				//
+	GtkWidget			*left_pixels_label;			// Label widget
 
 	GtkWidget			*right_label;				// Label widget
 	GtkWidget			*right_button;				//
+	GtkWidget			*right_pixels_label;		// Label widget
 
 	GtkWidget			*top_label;					// Label widget
 	GtkWidget			*top_button;				//
+	GtkWidget			*top_pixels_label;			// Label widget
 
 	GtkWidget			*bottom_label;				// Label widget
 	GtkWidget			*bottom_button;				//
+	GtkWidget			*bottom_pixels_label;		// Label widget
 
 
 
@@ -135,6 +139,11 @@ void image_crop(void)
 	left_button = gtk_spin_button_new_with_range(0, project_width, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(left_button), 0);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the left crop "pixels" string
+	left_pixels_label = gtk_label_new(_("pixels"));
+	gtk_misc_set_alignment(GTK_MISC(left_pixels_label), 0.0, 0.5);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the right side crop amount
@@ -146,6 +155,11 @@ void image_crop(void)
 	right_button = gtk_spin_button_new_with_range(0, project_width, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(right_button), 0);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the right crop "pixels" string
+	right_pixels_label = gtk_label_new(_("pixels"));
+	gtk_misc_set_alignment(GTK_MISC(right_pixels_label), 0.0, 0.5);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the top crop amount
@@ -157,6 +171,11 @@ void image_crop(void)
 	top_button = gtk_spin_button_new_with_range(0, project_height, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(top_button), 0);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the top crop "pixels" string
+	top_pixels_label = gtk_label_new(_("pixels"));
+	gtk_misc_set_alignment(GTK_MISC(top_pixels_label), 0.0, 0.5);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the right side crop amount
@@ -168,6 +187,11 @@ void image_crop(void)
 	bottom_button = gtk_spin_button_new_with_range(0, project_height, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(bottom_button), 0);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the bottom crop "pixels" string
+	bottom_pixels_label = gtk_label_new(_("pixels"));
+	gtk_misc_set_alignment(GTK_MISC(bottom_pixels_label), 0.0, 0.5);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Run the dialog
