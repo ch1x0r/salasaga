@@ -185,13 +185,13 @@ void save_layer(gpointer element, gpointer user_data)
 			// Add the layer data to the output project file
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "type", (const xmlChar *) "image");
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "data", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", layer_pointer->x_offset_start);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->x_offset_start);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_start", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", layer_pointer->y_offset_start);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->y_offset_start);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_start", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", layer_pointer->x_offset_finish);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->x_offset_finish);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_finish", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", layer_pointer->y_offset_finish);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->y_offset_finish);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_finish", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", layer_pointer->background);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "background", (const xmlChar *) tmp_gstring->str);
@@ -217,13 +217,13 @@ void save_layer(gpointer element, gpointer user_data)
 		case TYPE_MOUSE_CURSOR:
 			// Add the layer data to the output project file
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "type", (const xmlChar *) "mouse");
-			g_string_printf(tmp_gstring, "%u", layer_pointer->x_offset_start);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->x_offset_start);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_start", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", layer_pointer->y_offset_start);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->y_offset_start);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_start", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", layer_pointer->x_offset_finish);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->x_offset_finish);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_finish", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", layer_pointer->y_offset_finish);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->y_offset_finish);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_finish", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_mouse *) layer_pointer->object_data)->width);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "width", (const xmlChar *) tmp_gstring->str);
@@ -280,13 +280,13 @@ void save_layer(gpointer element, gpointer user_data)
 
 			// Add the layer data to the output project file
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "type", (const xmlChar *) "text");
-			g_string_printf(tmp_gstring, "%u", layer_pointer->x_offset_start);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->x_offset_start);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_start", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", layer_pointer->y_offset_start);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->y_offset_start);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_start", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", layer_pointer->x_offset_finish);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->x_offset_finish);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_finish", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", layer_pointer->y_offset_finish);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->y_offset_finish);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_finish", (const xmlChar *) tmp_gstring->str);
 			if (TRUE == ((layer_text *) layer_pointer->object_data)->show_bg)
 			{
@@ -385,13 +385,13 @@ void save_layer(gpointer element, gpointer user_data)
 		case TYPE_HIGHLIGHT:
 			// Add the layer data to the output project file
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "type", (const xmlChar *) "highlight");
-			g_string_printf(tmp_gstring, "%u", layer_pointer->x_offset_start);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->x_offset_start);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_start", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", layer_pointer->y_offset_start);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->y_offset_start);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_start", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", layer_pointer->x_offset_finish);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->x_offset_finish);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "x_offset_finish", (const xmlChar *) tmp_gstring->str);
-			g_string_printf(tmp_gstring, "%u", layer_pointer->y_offset_finish);
+			g_string_printf(tmp_gstring, "%d", layer_pointer->y_offset_finish);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "y_offset_finish", (const xmlChar *) tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", ((layer_highlight *) layer_pointer->object_data)->width);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "width", (const xmlChar *) tmp_gstring->str);

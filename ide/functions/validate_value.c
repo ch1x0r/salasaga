@@ -57,6 +57,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 	gchar				*input_ptr;
 	struct lconv		*locale_info;
 	gboolean			match_found;
+	gint				output_gint;
+	gint				*output_gint_ptr;
 	gfloat				output_gfloat;
 	gfloat				*output_gfloat_ptr;
 	GString				*output_gstring;
@@ -501,6 +503,88 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			g_string_free(output_gstring, TRUE);
 
 			return output_guint_ptr;
+
+		case V_INT_SIGNED:
+
+			// * We're validating a signed integer *
+
+			// If we're working with string input, we need to convert it to an integer first
+			if (V_CHAR == input_type)
+			{
+				// * We're working with string input *
+
+				// Get the length of the input string
+				string_length = strlen((gchar *) value);
+
+				// Sanitise each character of the input string
+				for (string_counter = 0; string_counter < string_length; string_counter++)
+				{
+					input_char = ((gchar *) value)[string_counter];
+
+					// Check for decimal digits
+					if (TRUE == g_ascii_isdigit(input_char))
+					{
+						output_gstring = g_string_append_c(output_gstring, input_char);
+					}
+					else
+					{
+						// * The input wasn't a standard digit character, so check if it *
+						// * is one of the characters in the capabilities list for this field *
+						match_found = FALSE;
+						capability_check = V_HYPENS & capabilities;
+						if (FALSE != capability_check)
+						{
+							// This field is allowed to have hypens
+							if (0 == g_ascii_strncasecmp("-", &input_char, 1))
+							{
+								// Yes, this is a hypen character
+								match_found = TRUE;
+								g_string_append_printf(output_gstring, "%s", "-");
+							}
+						}
+
+						// The character we are checking is not in the list of valid inputs for this field
+						if (FALSE == match_found)
+						{
+							g_string_free(output_gstring, TRUE);
+							return NULL;
+						}
+					}
+				}
+
+				// Convert the string to an integer
+				output_gint = atoi(output_gstring->str);
+			}
+			else
+			{
+				// We're working with integer input, so just copy the value directly
+				output_gint = *((gint *) value);
+			}
+
+			// Is the integer value within the defined bounds?
+			value_max = valid_fields[value_id].max_value;
+			value_min = valid_fields[value_id].min_value;
+			if ((output_gint < value_min) || (output_gint > value_max))
+			{
+				// Value is out of bounds, so fail
+				g_string_free(output_gstring, TRUE);
+				return NULL;
+			}
+
+			// The value looks ok, so we copy it to newly allocated memory, to pass it back
+			output_gint_ptr = g_try_new0(gint, 1);
+			if (NULL == output_gint_ptr)
+			{
+				// Unable to allocate memory for the new value, so fail
+				g_string_free(output_gstring, TRUE);
+				return NULL;
+			}
+			*output_gint_ptr = output_gint;
+
+			// Free the string memory allocated in this function
+			g_string_free(output_gstring, TRUE);
+
+			return output_gint_ptr;
 
 		case V_RESOLUTION:
 
