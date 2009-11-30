@@ -49,6 +49,7 @@ extern gboolean				changes_made;
 extern layer				*copy_layer;
 extern GList				*current_slide;
 extern guint				debug_level;
+extern gboolean				display_help_text;
 extern guint				end_behaviour;
 extern guint				end_point_status;
 extern gfloat				export_time_counter;

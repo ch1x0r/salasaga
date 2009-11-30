@@ -56,7 +56,9 @@ gboolean preferences_load()
 	GConfEngine			*gconf_engine;				// GConf engine
 	gfloat				gfloat_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
+	GConfValue*         help_text_key_data;			// Receives a raw key value, to help determine whether it exists already
 	GString				*message;					// Used to construct message strings
+	gboolean			should_display_help_text = TRUE;	// Receives the gboolean as to whether help text should be displayed
 	gboolean			should_maximise = FALSE;	// Briefly keeps track of whether the window should be maximised
 	gboolean			should_keybind_warn = TRUE;	// Receives the gboolean as to whether the non-metacity key bind warning should be displayed
 	gchar				*tmp_gchar;					// Used for temporary string retrieval
@@ -380,6 +382,17 @@ gboolean preferences_load()
 	// Check if the application should start maximised or not
 	should_maximise = gconf_engine_get_bool(gconf_engine, "/apps/salasaga/defaults/window_maximised", NULL);
 
+	// Check if the help test should be displayed or not
+	help_text_key_data = gconf_engine_get(gconf_engine, "/apps/salasaga/defaults/display_help_text", NULL);
+	if (NULL != help_text_key_data)
+	{
+		should_display_help_text = gconf_engine_get_bool(gconf_engine, "/apps/salasaga/defaults/display_help_text", NULL);
+		gconf_value_free(help_text_key_data);
+	} else
+	{
+		should_display_help_text = TRUE;
+	}
+
 	// Check if the Metacity key bind warning should be displayed or not
 	should_keybind_warn = gconf_engine_get_bool(gconf_engine, "/apps/salasaga/defaults/metacity_key_warning", NULL);
 
@@ -450,6 +463,9 @@ gboolean preferences_load()
 
 	// Set the screenshot delay
 	screenshot_delay_time = valid_screenshot_delay;
+
+	// Set whether help text and dialogs should be displayed or not
+	display_help_text = should_display_help_text;
 
 	// Set the non-metacity key bind warning
 	metacity_key_warning = should_keybind_warn;

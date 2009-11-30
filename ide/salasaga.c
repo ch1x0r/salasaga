@@ -89,6 +89,7 @@ gboolean				changes_made = FALSE;		// Have there been changes to the project sin
 layer					*copy_layer = NULL;			// The copy buffer for layers
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
 guint					debug_level = 0;			// Used to indicate debugging level
+gboolean				display_help_text = TRUE;	// Should we display help text and dialogs?
 guint					end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations
 guint					end_point_status = END_POINTS_INACTIVE;  // Is one of the layer end points being moved?
 gfloat					export_time_counter;		// Used when exporting, holds the number of seconds thus far
