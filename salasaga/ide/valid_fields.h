@@ -77,8 +77,8 @@ validatation_entry		valid_fields[] =
 	{ TEXT_DATA,			N_("Base64 encoded text buffer data"),			V_CHAR,				V_EQUALS | V_FORWARD_SLASHES | V_NEW_LINES | V_PLUSES,		0,		-1 },
 	{ TRANSITION_DURATION,	N_("Transition duration in seconds"),			V_FLOAT_UNSIGNED,	V_NONE,		0,		5 },
 	{ TRANSITION_TYPE, 		N_("Type of transition"),						V_CHAR,				V_UNDERSCORES,		0,		4 },
-	{ X_OFFSET,				N_("X Offset"),									V_INT_UNSIGNED,		V_NONE,		0,		4096 },
-	{ Y_OFFSET,				N_("Y Offset"),									V_INT_UNSIGNED,		V_NONE,		0,		4096 },
+	{ X_OFFSET,				N_("X Offset"),									V_INT_SIGNED,		V_HYPENS,	-4096,	4096 },
+	{ Y_OFFSET,				N_("Y Offset"),									V_INT_SIGNED,		V_HYPENS,	-4096,	4096 },
 	{ ZOOM_LEVEL,			N_("Magnification level of working area"),		V_ZOOM,				V_NONE,		0,		30 }
 };
 

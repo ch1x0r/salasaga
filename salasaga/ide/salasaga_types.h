@@ -87,6 +87,7 @@ extern "C" {
 #define V_INT_UNSIGNED		4
 #define V_RESOLUTION		8
 #define V_ZOOM				16
+#define V_INT_SIGNED		32
 
 // Capabilities for the validate_value function
 #define V_NONE				0
