@@ -119,6 +119,8 @@ void menu_edit_preferences(void)
 	GtkWidget			*label_screenshot_delay;			// Screenshot delay time
 	GtkWidget			*button_screenshot_delay;			//
 
+	GtkWidget			*check_help_text;					// Whether to display help text or not
+
 	GtkWidget			*check_metacity_key_bind;			// Label widget
 
 
@@ -245,8 +247,20 @@ void menu_edit_preferences(void)
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_delay), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
+	// Whether to display help text or not
+	check_help_text = gtk_check_button_new_with_label(_("Display help text?"));
+	if (FALSE == display_help_text)
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_help_text), FALSE);
+	} else
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_help_text), TRUE);
+	}
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_help_text), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	app_row_counter = app_row_counter + 1;
+
 	// Non-metacity key bind warning
-	check_metacity_key_bind = gtk_check_button_new_with_label(_("Display non-metacity key bind warning?"));
+	check_metacity_key_bind = gtk_check_button_new_with_label(_("Display warning when screenshot key isn't enabled?"));
 	if (FALSE == metacity_key_warning)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_metacity_key_bind), FALSE);
@@ -575,6 +589,15 @@ void menu_edit_preferences(void)
 
 		// Close the lock file
 		g_key_file_free(lock_file);
+	}
+
+	// Find out if we should display help text or not
+	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_help_text)))
+	{
+		display_help_text = TRUE;
+	} else
+	{
+		display_help_text = FALSE;
 	}
 
 	// Get the Metacity key bind warning value

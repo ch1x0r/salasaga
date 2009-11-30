@@ -90,11 +90,14 @@ void menu_screenshots_capture(void)
 	capture_window = None;
 	mouse_buttons_pressed = 0;
 
-	// Display a message to the user, asking them to click on the window they want to capture
-	message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-											_("Please click on the window you want to capture (after closing this dialog box)."));
-	gtk_dialog_run(GTK_DIALOG(message_dialog));
-	gtk_widget_destroy(message_dialog);
+	if (TRUE == display_help_text)
+	{
+		// Display a message to the user, asking them to click on the window they want to capture
+		message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s\n\n%s",
+												_("Please click on the window you want to capture, after closing this dialog."), _("You can turn this help text off in Edit -> Preferences"));
+		gtk_dialog_run(GTK_DIALOG(message_dialog));
+		gtk_widget_destroy(message_dialog);
+	}
 
 	// Minimise the main window so the user can choose another application
 	gtk_window_iconify(GTK_WINDOW(main_window));
@@ -215,11 +218,14 @@ void menu_screenshots_capture(void)
 	capture_width = (guint) win_width;
 	capture_height = (guint) win_height;
 
-	// Let the user know that the window they selected has been successfully grabbed
-	message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
-			_("Screenshot window set.  Right click on the status bar icon to take screenshots, then Import when finished."));
-	gtk_dialog_run(GTK_DIALOG(message_dialog));
-	gtk_widget_destroy(message_dialog);
+	if (TRUE == display_help_text)
+	{
+		// Let the user know that the window they selected has been successfully grabbed
+		message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+				_("Screenshot window set.  Right click on the status bar icon to take screenshots, then Import when finished."));
+		gtk_dialog_run(GTK_DIALOG(message_dialog));
+		gtk_widget_destroy(message_dialog);
+	}
 
 	// Update the status icon
 	gtk_status_icon_set_tooltip_text(status_icon, _("Salasaga - Capture active"));

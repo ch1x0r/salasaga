@@ -90,6 +90,7 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_blue", default_bg_colour.blue, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/icon_height", icon_height, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/screenshot_delay", screenshot_delay_time, NULL);
+	gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/display_help_text", display_help_text, NULL);
 	gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/metacity_key_warning", metacity_key_warning, NULL);
 
 	// Treat the zoom level specially.  If the zoom level is the equivalent of "Fit to width" we store the English
