@@ -47,6 +47,7 @@
 #include "../dialog/display_dialog_save_warning.h"
 #include "../dialog/display_warning.h"
 #include "../read/read_project.h"
+#include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 #include "menu_enable.h"
 
@@ -245,6 +246,7 @@ void menu_file_open(void)
 
 	// Draw the timeline area
 	draw_timeline();
+	time_line_set_selected_layer_num(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget), 0);
 
 	// Scroll the film strip to show the new thumbnail position
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);

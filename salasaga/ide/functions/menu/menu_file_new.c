@@ -36,17 +36,18 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../dialog/display_dialog_save_warning.h"
+#include "../dialog/display_warning.h"
+#include "../slide/slide_free.h"
+#include "../slide/slide_insert.h"
+#include "../widgets/time_line/time_line_set_selected_layer_num.h"
+#include "../working_area/draw_workspace.h"
 #include "../disable_layer_toolbar_buttons.h"
 #include "../disable_main_toolbar_buttons.h"
 #include "../draw_timeline.h"
 #include "../enable_layer_toolbar_buttons.h"
 #include "../enable_main_toolbar_buttons.h"
-#include "../dialog/display_dialog_save_warning.h"
-#include "../dialog/display_warning.h"
-#include "../slide/slide_free.h"
-#include "../slide/slide_insert.h"
 #include "../validate_value.h"
-#include "../working_area/draw_workspace.h"
 #include "menu_enable.h"
 
 
@@ -316,6 +317,7 @@ void menu_file_new(void)
 
 	// Redraw the timeline
 	draw_timeline();
+	time_line_set_selected_layer_num(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget), 0);
 
 	// Calculate and set the display size of the working area
 	working_width = (project_width * zoom) / 100;

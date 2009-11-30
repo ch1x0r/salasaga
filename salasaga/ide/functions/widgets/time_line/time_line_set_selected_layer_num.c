@@ -36,6 +36,7 @@
 // Salasaga includes
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
+#include "../../menu/menu_enable.h"
 #include "time_line.h"
 #include "time_line_get_type.h"
 #include "time_line_internal_draw_selection_highlight.h"
@@ -47,9 +48,12 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 {
 	// Local variables
 	gint				height;
+	GList				*layer_pointer;				// Points to the layers in the selected slide
 	GtkAllocation		new_allocation;
 	GtkAllocation		old_allocation;
 	TimeLinePrivate		*priv;
+	layer				*this_layer_data;			// Data for the presently selected layer
+	slide				*this_slide_data;			// Data for the presently selected slide
 	TimeLine			*this_time_line;
 	gint				width;
 	gint				x1;
@@ -146,6 +150,19 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	// Refresh right line segment
 	new_allocation.x = width - 1;
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
+
+	// If the newly selected layer is an image layer, then enable the "Layer -> Image crop" menu selection
+	this_slide_data = ((slide *) current_slide->data);
+	layer_pointer = this_slide_data->layers;
+	layer_pointer = g_list_first(layer_pointer);
+	this_layer_data = g_list_nth_data(layer_pointer, selected_row);
+	if ((TYPE_GDK_PIXBUF == this_layer_data->object_type) && (FALSE == this_layer_data->background))
+	{
+		menu_enable(_("/Layer/Image crop"), TRUE);
+	} else
+	{
+		menu_enable(_("/Layer/Image crop"), FALSE);
+	}
 
 	return TRUE;
 }
