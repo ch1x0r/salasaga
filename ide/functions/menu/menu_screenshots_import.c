@@ -46,6 +46,7 @@
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../layer/compress_layers.h"
 #include "../dialog/display_warning.h"
+#include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 #include "menu_enable.h"
 
@@ -444,6 +445,7 @@ void menu_screenshots_import(void)
 
 	// Regenerate the timeline
 	draw_timeline();
+	time_line_set_selected_layer_num(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget), 0);
 
 	// Get the presently selected zoom level
 	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(zoom_selector)));
