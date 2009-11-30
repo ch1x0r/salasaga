@@ -61,7 +61,7 @@ gint key_bind(void)
 		if (TRUE == metacity_key_warning)
 		{
 			// Display the warning
-			g_string_printf(message, "%s ED379: %s", _("Error"), _("Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, so not sure how to.)  You will need to do this yourself manually."));
+			g_string_printf(message, "%s ED379: %s\n\n%s", _("Error"), _("Setting Control-Printscreen as the screenshot key didn't work."), _("You'll have to trigger screenshots from the status bar icon."));
 			display_warning(message->str);
 
 			// Ensure the the warning is only displayed once unless the user specifically requests otherwise
