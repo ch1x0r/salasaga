@@ -49,6 +49,7 @@
 void image_crop(void)
 {
 	// Local variables
+	gboolean			acceptable_result = FALSE;	// Toggle to determine if we've received valid crop values from the user
 	GtkDialog			*crop_dialog;				// Widget for the dialog
 	GtkWidget			*crop_table;				// Table used for neat layout of the dialog box
 	gint				dialog_result;				// Receives the return code from the dialog box
@@ -136,7 +137,7 @@ void image_crop(void)
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the left side crop amount
-	left_button = gtk_spin_button_new_with_range(0, project_width, 10);
+	left_button = gtk_spin_button_new_with_range(0, tmp_image_ob->width, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(left_button), 0);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -152,7 +153,7 @@ void image_crop(void)
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the right side crop amount
-	right_button = gtk_spin_button_new_with_range(0, project_width, 10);
+	right_button = gtk_spin_button_new_with_range(0, tmp_image_ob->width, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(right_button), 0);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -168,7 +169,7 @@ void image_crop(void)
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the left side crop amount
-	top_button = gtk_spin_button_new_with_range(0, project_height, 10);
+	top_button = gtk_spin_button_new_with_range(0, tmp_image_ob->height, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(top_button), 0);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -184,7 +185,7 @@ void image_crop(void)
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the right side crop amount
-	bottom_button = gtk_spin_button_new_with_range(0, project_height, 10);
+	bottom_button = gtk_spin_button_new_with_range(0, tmp_image_ob->height, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(bottom_button), 0);
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -196,23 +197,38 @@ void image_crop(void)
 
 	// Run the dialog
 	gtk_widget_show_all(GTK_WIDGET(crop_dialog));
-	dialog_result = gtk_dialog_run(GTK_DIALOG(crop_dialog));
-
-	// Was the OK button pressed?
-	if (GTK_RESPONSE_ACCEPT != dialog_result)
+	while (FALSE == acceptable_result)
 	{
-		// The dialog was cancelled, so destroy the dialog box and return
-		gtk_widget_destroy(GTK_WIDGET(crop_dialog));
-		return;
+		dialog_result = gtk_dialog_run(GTK_DIALOG(crop_dialog));
+
+		// Was the OK button pressed?
+		if (GTK_RESPONSE_ACCEPT != dialog_result)
+		{
+			// The dialog was cancelled, so destroy the dialog box and return
+			gtk_widget_destroy(GTK_WIDGET(crop_dialog));
+			return;
+		}
+
+		// Determine the new dimensions of the image
+		new_height = gdk_pixbuf_get_height(tmp_image_ob->image_data)
+			- (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(top_button))
+			- (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(bottom_button));
+		new_width = gdk_pixbuf_get_width(tmp_image_ob->image_data)
+			- (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(left_button))
+			- (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(right_button));
+
+		// If the user is cropping too much, warn them and loop again
+		if ((0 < new_height) && (0 < new_width))
+		{
+			acceptable_result = TRUE;
+		} else
+		{
+			g_string_printf(message, "%s ED447: %s\n\n%s", _("Error"), _("Those crop values will remove the entire image."), _("Please try again."));
+			display_warning(message->str);
+		}
 	}
 
 	// Create a new pixbuf, for storing the cropped image in
-	new_height = gdk_pixbuf_get_height(tmp_image_ob->image_data)
-		- (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(top_button))
-		- (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(bottom_button));
-	new_width = gdk_pixbuf_get_width(tmp_image_ob->image_data)
-		- (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(left_button))
-		- (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(right_button));
 	new_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, new_width, new_height);
 
 	// Copy the cropped image data to it
