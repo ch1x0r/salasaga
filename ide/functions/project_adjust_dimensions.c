@@ -47,13 +47,11 @@ void project_adjust_dimensions(void)
 {
 	// Local variables
 	gboolean			acceptable_result = FALSE;	// Toggle to determine if we've received valid adjustment values from the user
-	gint				bottom_value;
 	GtkDialog			*adjustment_dialog;			// Widget for the dialog
 	GtkWidget			*adjustment_table;			// Table used for neat layout of the dialog box
 	gint				dialog_result;				// Catches the return code from the dialog box
 	layer				*last_layer = NULL;			// Temporary layer
 	GList				*layer_pointer;				// Points to the layers in the selected slide
-	gint				left_value;
 	GString				*message;					// Used to construct message strings
 	gint				new_height;					// Hold the height of the adjusted area
 	GdkPixbuf			*new_pixbuf;				// Holds the adjusted image data
@@ -61,27 +59,23 @@ void project_adjust_dimensions(void)
 	gint				num_slides;					// Total number of layers
 	guint				present_slide_num;			// Holds the number of the currently selected slide in the user interface
 	guint				row_counter = 0;			// Used to count which row things are up to
-	gint				right_value;
 	gint				slide_counter;
 	slide				*slide_data;
 	layer_image			*tmp_image_ob;				// Points to the image data in the selected layer
-	gint				top_value;
 
-	GtkWidget			*left_label;				// Label widget
-	GtkWidget			*left_button;				//
-	GtkWidget			*left_pixels_label;			// Label widget
+	GtkWidget			*present_width_label;		// Label widget
+	GtkWidget			*present_width_value_label;  // Label widget
 
-	GtkWidget			*right_label;				// Label widget
-	GtkWidget			*right_button;				//
-	GtkWidget			*right_pixels_label;		// Label widget
+	GtkWidget			*present_height_label;		// Label widget
+	GtkWidget			*present_height_value_label;  // Label widget
 
-	GtkWidget			*top_label;					// Label widget
-	GtkWidget			*top_button;				//
-	GtkWidget			*top_pixels_label;			// Label widget
+	GtkWidget			*new_width_label;			// Label widget
+	GtkWidget			*new_width_button;			//
+	GtkWidget			*new_width_pixels_label;	// Label widget
 
-	GtkWidget			*bottom_label;				// Label widget
-	GtkWidget			*bottom_button;				//
-	GtkWidget			*bottom_pixels_label;		// Label widget
+	GtkWidget			*new_height_label;			// Label widget
+	GtkWidget			*new_height_button;			//
+	GtkWidget			*new_height_pixels_label;	// Label widget
 
 
 	// If no project is loaded then don't run this function
@@ -102,68 +96,60 @@ void project_adjust_dimensions(void)
 	adjustment_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(adjustment_dialog->vbox), GTK_WIDGET(adjustment_table), FALSE, FALSE, 10);
 
-	// Create the label asking for the left margin adjustment amount
-	left_label = gtk_label_new(_("Left margin adjustment: "));
-	gtk_misc_set_alignment(GTK_MISC(left_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(left_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the label about showing the present project width
+	present_width_label = gtk_label_new(_("Present project width:"));
+	gtk_misc_set_alignment(GTK_MISC(present_width_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(present_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the left margin adjustment amount
-	left_button = gtk_spin_button_new_with_range((valid_fields[PROJECT_WIDTH].min_value - project_width), (valid_fields[PROJECT_WIDTH].max_value - project_width - 1), 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(left_button), 0);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(left_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-	// Create the left adjustment "pixels" string
-	left_pixels_label = gtk_label_new(_("pixels"));
-	gtk_misc_set_alignment(GTK_MISC(left_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(left_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create and display the present project width
+	g_string_printf(message, "%u %s", project_width, _("pixels"));
+	present_width_value_label = gtk_label_new(message->str);
+	gtk_misc_set_alignment(GTK_MISC(present_width_value_label), 0.0, 0.5);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(present_width_value_label), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Create the label asking for the right margin adjustment amount
-	right_label = gtk_label_new(_("Right margin adjustment: "));
-	gtk_misc_set_alignment(GTK_MISC(right_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(right_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the label about showing the present project height
+	present_height_label = gtk_label_new(_("Present project height:"));
+	gtk_misc_set_alignment(GTK_MISC(present_height_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(present_height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the right margin adjustment amount
-	right_button = gtk_spin_button_new_with_range((valid_fields[PROJECT_WIDTH].min_value - project_width), (valid_fields[PROJECT_WIDTH].max_value - project_width - 1), 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(right_button), 0);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(right_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-	// Create the right adjustment "pixels" string
-	right_pixels_label = gtk_label_new(_("pixels"));
-	gtk_misc_set_alignment(GTK_MISC(right_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(right_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create and display the present project height
+	g_string_printf(message, "%u %s", project_height, _("pixels"));
+	present_height_value_label = gtk_label_new(message->str);
+	gtk_misc_set_alignment(GTK_MISC(present_height_value_label), 0.0, 0.5);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(present_height_value_label), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Create the label asking for the top margin adjustment amount
-	top_label = gtk_label_new(_("Top margin adjustment: "));
-	gtk_misc_set_alignment(GTK_MISC(top_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(top_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the label asking for the new project width
+	new_width_label = gtk_label_new(_("New project width:"));
+	gtk_misc_set_alignment(GTK_MISC(new_width_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the top margin adjustment amount
-	top_button = gtk_spin_button_new_with_range((valid_fields[PROJECT_HEIGHT].min_value - project_height), (valid_fields[PROJECT_HEIGHT].max_value - project_height - 1), 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(top_button), 0);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(top_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the entry that accepts the new project width
+	new_width_button = gtk_spin_button_new_with_range(valid_fields[PROJECT_WIDTH].min_value, valid_fields[PROJECT_WIDTH].max_value, 10);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(new_width_button), project_width);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the top adjustment "pixels" string
-	top_pixels_label = gtk_label_new(_("pixels"));
-	gtk_misc_set_alignment(GTK_MISC(top_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(top_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the new project width "pixels" string
+	new_width_pixels_label = gtk_label_new(_("pixels"));
+	gtk_misc_set_alignment(GTK_MISC(new_width_pixels_label), 0.0, 0.5);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Create the label asking for the bottom margin adjustment amount
-	bottom_label = gtk_label_new(_("Bottom margin adjustment: "));
-	gtk_misc_set_alignment(GTK_MISC(bottom_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(bottom_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the label asking for the new project height
+	new_height_label = gtk_label_new(_("New project height:"));
+	gtk_misc_set_alignment(GTK_MISC(new_height_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the bottom margin adjustment amount
-	bottom_button = gtk_spin_button_new_with_range((valid_fields[PROJECT_HEIGHT].min_value - project_height), (valid_fields[PROJECT_HEIGHT].max_value - project_height - 1), 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(bottom_button), 0);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(bottom_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the entry that accepts the new project height
+	new_height_button = gtk_spin_button_new_with_range(valid_fields[PROJECT_HEIGHT].min_value, valid_fields[PROJECT_HEIGHT].max_value, 10);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(new_height_button), project_height);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the bottom adjustment "pixels" string
-	bottom_pixels_label = gtk_label_new(_("pixels"));
-	gtk_misc_set_alignment(GTK_MISC(bottom_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(bottom_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the new project height "pixels" string
+	new_height_pixels_label = gtk_label_new(_("pixels"));
+	gtk_misc_set_alignment(GTK_MISC(new_height_pixels_label), 0.0, 0.5);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Run the dialog
@@ -181,14 +167,8 @@ void project_adjust_dimensions(void)
 		}
 
 		// Get the values from the dialog
-		left_value = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(left_button));
-		right_value = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(right_button));
-		top_value = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(top_button));
-		bottom_value = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(bottom_button));
-
-		// Determine the new dimensions of the project
-		new_height = project_height + top_value + bottom_value;
-		new_width = project_width + left_value + right_value;
+		new_width = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(new_width_button));
+		new_height = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(new_height_button));
 
 		// If the user is adjusting the size out of acceptable limits, warn them and loop again
 		if ((valid_fields[PROJECT_HEIGHT].min_value <= new_height) && (valid_fields[PROJECT_HEIGHT].max_value >= new_height) && (valid_fields[PROJECT_WIDTH].min_value <= new_width) && (valid_fields[PROJECT_WIDTH].max_value >= new_width))
