@@ -494,7 +494,13 @@ void menu_screenshots_import(void)
 	changes_made = TRUE;
 
 	// Update the status bar
-	g_string_printf(tmp_string, " %u %s", num_screenshots, _("screenshots imported"));
+	if (1 == num_screenshots)
+	{
+		g_string_printf(tmp_string, " %u %s", num_screenshots, _("screenshot imported"));
+	} else
+	{
+		g_string_printf(tmp_string, " %u %s", num_screenshots, _("screenshots imported"));
+	}
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_string->str);
 	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
 	gdk_flush();
