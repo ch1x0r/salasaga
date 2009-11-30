@@ -36,6 +36,7 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "draw_timeline.h"
+#include "zoom_selector_changed.h"
 #include "cairo/create_cairo_pixbuf_pattern.h"
 #include "dialog/display_warning.h"
 #include "film_strip/regenerate_film_strip_thumbnails.h"
@@ -45,18 +46,20 @@
 void project_adjust_dimensions(void)
 {
 	// Local variables
+	gboolean			acceptable_result = FALSE;	// Toggle to determine if we've received valid adjustment values from the user
 	gint				bottom_value;
-	GtkDialog			*crop_dialog;				// Widget for the dialog
-	GtkWidget			*crop_table;				// Table used for neat layout of the dialog box
+	GtkDialog			*adjustment_dialog;			// Widget for the dialog
+	GtkWidget			*adjustment_table;			// Table used for neat layout of the dialog box
 	gint				dialog_result;				// Catches the return code from the dialog box
 	layer				*last_layer = NULL;			// Temporary layer
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				left_value;
 	GString				*message;					// Used to construct message strings
-	gint				new_height;					// Hold the height of the cropped area
-	GdkPixbuf			*new_pixbuf;				// Holds the cropped image data
-	gint				new_width;					// Hold the width of the cropped area
+	gint				new_height;					// Hold the height of the adjusted area
+	GdkPixbuf			*new_pixbuf;				// Holds the adjusted image data
+	gint				new_width;					// Hold the width of the adjusted area
 	gint				num_slides;					// Total number of layers
+	guint				present_slide_num;			// Holds the number of the currently selected slide in the user interface
 	guint				row_counter = 0;			// Used to count which row things are up to
 	gint				right_value;
 	gint				slide_counter;
@@ -80,8 +83,6 @@ void project_adjust_dimensions(void)
 	GtkWidget			*bottom_button;				//
 	GtkWidget			*bottom_pixels_label;		// Label widget
 
-	GdkPixbuf			*tmp_pixbuf;				// Temporary pixbuf
-
 
 	// If no project is loaded then don't run this function
 	if (NULL == current_slide)
@@ -97,107 +98,142 @@ void project_adjust_dimensions(void)
 	// * Pop open a dialog box asking the user how much to adjust the dimensions of the project by *
 
 	// Create the dialog window, and table to hold its children
-	crop_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Adjust project dimensions"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
-	crop_table = gtk_table_new(3, 3, FALSE);
-	gtk_box_pack_start(GTK_BOX(crop_dialog->vbox), GTK_WIDGET(crop_table), FALSE, FALSE, 10);
+	adjustment_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Adjust project dimensions"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
+	adjustment_table = gtk_table_new(3, 3, FALSE);
+	gtk_box_pack_start(GTK_BOX(adjustment_dialog->vbox), GTK_WIDGET(adjustment_table), FALSE, FALSE, 10);
 
 	// Create the label asking for the left margin adjustment amount
 	left_label = gtk_label_new(_("Left margin adjustment: "));
 	gtk_misc_set_alignment(GTK_MISC(left_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(left_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the left margin adjustment amount
-	left_button = gtk_spin_button_new_with_range(0, project_width, 10);
+	left_button = gtk_spin_button_new_with_range((valid_fields[PROJECT_WIDTH].min_value - project_width), (valid_fields[PROJECT_WIDTH].max_value - project_width - 1), 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(left_button), 0);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(left_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the left crop "pixels" string
+	// Create the left adjustment "pixels" string
 	left_pixels_label = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(left_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(left_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the right margin adjustment amount
 	right_label = gtk_label_new(_("Right margin adjustment: "));
 	gtk_misc_set_alignment(GTK_MISC(right_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(right_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the right margin adjustment amount
-	right_button = gtk_spin_button_new_with_range(0, project_width, 10);
+	right_button = gtk_spin_button_new_with_range((valid_fields[PROJECT_WIDTH].min_value - project_width), (valid_fields[PROJECT_WIDTH].max_value - project_width - 1), 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(right_button), 0);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(right_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the right crop "pixels" string
+	// Create the right adjustment "pixels" string
 	right_pixels_label = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(right_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(right_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the top margin adjustment amount
 	top_label = gtk_label_new(_("Top margin adjustment: "));
 	gtk_misc_set_alignment(GTK_MISC(top_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(top_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the top margin adjustment amount
-	top_button = gtk_spin_button_new_with_range(0, project_height, 10);
+	top_button = gtk_spin_button_new_with_range((valid_fields[PROJECT_HEIGHT].min_value - project_height), (valid_fields[PROJECT_HEIGHT].max_value - project_height - 1), 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(top_button), 0);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(top_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the top crop "pixels" string
+	// Create the top adjustment "pixels" string
 	top_pixels_label = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(top_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(top_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the bottom margin adjustment amount
 	bottom_label = gtk_label_new(_("Bottom margin adjustment: "));
 	gtk_misc_set_alignment(GTK_MISC(bottom_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(bottom_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the entry that accepts the bottom margin adjustment amount
-	bottom_button = gtk_spin_button_new_with_range(0, project_height, 10);
+	bottom_button = gtk_spin_button_new_with_range((valid_fields[PROJECT_HEIGHT].min_value - project_height), (valid_fields[PROJECT_HEIGHT].max_value - project_height - 1), 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(bottom_button), 0);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(bottom_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the bottom crop "pixels" string
+	// Create the bottom adjustment "pixels" string
 	bottom_pixels_label = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(bottom_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(bottom_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Run the dialog
-	gtk_widget_show_all(GTK_WIDGET(crop_dialog));
-	dialog_result = gtk_dialog_run(GTK_DIALOG(crop_dialog));
-
-	// Was the OK button pressed?
-	if (GTK_RESPONSE_ACCEPT != dialog_result)
+	gtk_widget_show_all(GTK_WIDGET(adjustment_dialog));
+	while (FALSE == acceptable_result)
 	{
-		// The dialog was cancelled, so destroy the dialog box and return
-		gtk_widget_destroy(GTK_WIDGET(crop_dialog));
-		return;
+		dialog_result = gtk_dialog_run(GTK_DIALOG(adjustment_dialog));
+
+		// Was the OK button pressed?
+		if (GTK_RESPONSE_ACCEPT != dialog_result)
+		{
+			// The dialog was cancelled, so destroy the dialog box and return
+			gtk_widget_destroy(GTK_WIDGET(adjustment_dialog));
+			return;
+		}
+
+		// Get the values from the dialog
+		left_value = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(left_button));
+		right_value = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(right_button));
+		top_value = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(top_button));
+		bottom_value = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(bottom_button));
+
+		// Determine the new dimensions of the project
+		new_height = project_height + top_value + bottom_value;
+		new_width = project_width + left_value + right_value;
+
+		// If the user is adjusting the size out of acceptable limits, warn them and loop again
+		if ((valid_fields[PROJECT_HEIGHT].min_value <= new_height) && (valid_fields[PROJECT_HEIGHT].max_value >= new_height) && (valid_fields[PROJECT_WIDTH].min_value <= new_width) && (valid_fields[PROJECT_WIDTH].max_value >= new_width))
+		{
+			acceptable_result = TRUE;
+		} else
+		{
+			if ((valid_fields[PROJECT_HEIGHT].min_value > new_height) || (valid_fields[PROJECT_WIDTH].min_value > new_width))
+			{
+				g_string_printf(message, "%s ED448: %s\n\n%s", _("Error"), _("Those adjustment values would make the project smaller than the minimum allowed."), _("Please try again."));
+				display_warning(message->str);
+			} else
+			{
+				g_string_printf(message, "%s ED449: %s\n\n%s", _("Error"), _("Those adjustment values would make the project larger than the maximum allowed."), _("Please try again."));
+				display_warning(message->str);
+			}
+		}
 	}
 
-	// Get the values from the dialog
-	left_value = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(left_button));
-	right_value = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(right_button));
-	top_value = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(top_button));
-	bottom_value = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(bottom_button));
-
 	// Destroy the dialog box
-	gtk_widget_destroy(GTK_WIDGET(crop_dialog));
+	gtk_widget_destroy(GTK_WIDGET(adjustment_dialog));
+
+	// Get the present slide, so we can select it again layer
+	present_slide_num = g_list_position(slides, current_slide);
 
 	// Loop through the slide structure, adjusting the backgrounds
 	slides = g_list_first(slides);
 	num_slides = g_list_length(slides);
 	for (slide_counter = 0; slide_counter < num_slides; slide_counter++)
 	{
-		slide_data = g_list_nth_data(slides, slide_counter);
+		slides = g_list_first(slides);
+		current_slide = g_list_nth(slides, slide_counter);
+		slide_data = current_slide->data;
 		layer_pointer = slide_data->layers;
 		layer_pointer = g_list_last(layer_pointer);
-		tmp_image_ob = (layer_image *) last_layer->object_data;
 
-		// * Check if this slide has a background image *
+		// * Check if this slide has a background image or if it's an empty layer *
 		last_layer = layer_pointer->data;
+
+		// Is this layer an empty layer?
+		if (TYPE_EMPTY != last_layer->object_type)
+		{
+			// Yes, it's an empty layer, so we don't need to change anything
+			continue;
+		}
 
 		// Is this layer an image?
 		if (TYPE_GDK_PIXBUF != last_layer->object_type)
@@ -213,26 +249,14 @@ void project_adjust_dimensions(void)
 			continue;
 		}
 
-		// Create a new pixbuf, for storing the adjusted image in
-		new_height = gdk_pixbuf_get_height(tmp_image_ob->image_data)
-			- top_value
-			- bottom_value;
-		new_width = gdk_pixbuf_get_width(tmp_image_ob->image_data)
-			- left_value
-			- right_value;
-		new_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, new_width, new_height);
+		// * This layer is a background image layer *
 
-		// Create a new pixbuf, having just the adjusted image data in it
-		gdk_pixbuf_copy_area(tmp_image_ob->image_data, // Source pixbuf
-			left_value,  // Left adjustment
-			top_value,  // Top adjustment
-			new_width,  // Width
-			new_height,  // Height
-			new_pixbuf,  // Destination
-			0, 0);
+		// Scale the existing background image layer to the new dimensions
+		tmp_image_ob = (layer_image *) last_layer->object_data;
+		new_pixbuf = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_image_ob->image_data), new_width, new_height, GDK_INTERP_TILES);
 
 		// Update the layer with the new adjusted data
-		tmp_pixbuf = tmp_image_ob->image_data;
+		g_object_unref(GDK_PIXBUF(tmp_image_ob->image_data));  // Free the memory used by the old pixbuf
 		tmp_image_ob->image_data = new_pixbuf;
 		tmp_image_ob->width = new_width;
 		tmp_image_ob->height = new_height;
@@ -247,8 +271,8 @@ void project_adjust_dimensions(void)
 			return;
 		}
 
-		// Free the memory used by the old pixbuf
-		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
+		// Redraw the workspace
+		draw_workspace();
 
 		// Show movement on the progress bar
 		gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
@@ -259,14 +283,15 @@ void project_adjust_dimensions(void)
 	g_string_free(message, TRUE);
 
 	// Update project width and height global variables
-	project_height = project_height - top_value - bottom_value;
-	project_width = project_width - left_value - right_value;
+	project_height = new_height;
+	project_width = new_width;
 
-	// Redraw the timeline
-	draw_timeline();
+	// Select the appropriate slide again
+	slides = g_list_first(slides);
+	current_slide = g_list_nth(slides, present_slide_num);
 
-	// Redraw the workspace
-	draw_workspace();
+	// Recalculate the size of the working area
+	zoom_selector_changed(GTK_WIDGET(zoom_selector), NULL, (gpointer) NULL);
 
 	// Recreate the film strip thumbnails
 	regenerate_film_strip_thumbnails();
