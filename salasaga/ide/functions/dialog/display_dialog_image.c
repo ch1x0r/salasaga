@@ -87,6 +87,12 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*name_label;				// Label widget
 	GtkWidget			*name_entry = 0;			//
 
+	GtkWidget			*width_title_label;			// Label widget
+	GtkWidget			*width_value_label;			// Label widget
+
+	GtkWidget			*height_title_label;		// Label widget
+	GtkWidget			*height_value_label;		// Label widget
+
 	GtkWidget			*visibility_checkbox = 0;	// Visibility widget
 
 	GtkWidget			*external_link_label;		// Label widget
@@ -158,7 +164,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 
 	// * Appearance & Links tab fields *
 
-	// Background images don't have offsets, nor changeable duration
+	// Background images don't have a changeable layer name
 	if (FALSE == tmp_layer->background)
 	{
 		// Create the label asking for the layer name
@@ -172,7 +178,31 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		gtk_entry_set_text(GTK_ENTRY(name_entry), tmp_layer->name->str);
 		gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_entry), 1, 2, appearance_row_counter, appearance_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 		appearance_row_counter++;
+	}
 
+	// Create the fields displaying the image width
+	width_title_label = gtk_label_new(_("Layer width: "));
+	gtk_misc_set_alignment(GTK_MISC(width_title_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(width_title_label), 0, 1, appearance_row_counter, appearance_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	g_string_printf(message, "%u %s", ((layer_image *) tmp_layer->object_data)->width, _("pixels"));
+	width_value_label = gtk_label_new(message->str);
+	gtk_misc_set_alignment(GTK_MISC(width_value_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(width_value_label), 1, 2, appearance_row_counter, appearance_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	appearance_row_counter++;
+
+	// Create the fields displaying the image height
+	height_title_label = gtk_label_new(_("Layer height: "));
+	gtk_misc_set_alignment(GTK_MISC(height_title_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(height_title_label), 0, 1, appearance_row_counter, appearance_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	g_string_printf(message, "%u %s", ((layer_image *) tmp_layer->object_data)->height, _("pixels"));
+	height_value_label = gtk_label_new(message->str);
+	gtk_misc_set_alignment(GTK_MISC(height_value_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(height_value_label), 1, 2, appearance_row_counter, appearance_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	appearance_row_counter++;
+
+	// Background images don't have offsets, nor changeable duration
+	if (FALSE == tmp_layer->background)
+	{
 		// * Duration tab fields *
 
 		// Create the label asking for the starting X Offset
