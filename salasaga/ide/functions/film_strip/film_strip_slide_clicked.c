@@ -39,6 +39,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../draw_timeline.h"
+#include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_handle_box.h"
 #include "../working_area/draw_workspace.h"
 
@@ -73,6 +74,7 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 
 		// Redraw the timeline
 		draw_timeline();
+		time_line_set_selected_layer_num(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget), 0);
 
 		// Redraw the workspace
 		draw_workspace();
