@@ -181,7 +181,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	}
 
 	// Create the fields displaying the image width
-	width_title_label = gtk_label_new(_("Layer width: "));
+	width_title_label = gtk_label_new(_("Layer width:"));
 	gtk_misc_set_alignment(GTK_MISC(width_title_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(width_title_label), 0, 1, appearance_row_counter, appearance_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	g_string_printf(message, "%u %s", ((layer_image *) tmp_layer->object_data)->width, _("pixels"));
@@ -191,7 +191,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	appearance_row_counter++;
 
 	// Create the fields displaying the image height
-	height_title_label = gtk_label_new(_("Layer height: "));
+	height_title_label = gtk_label_new(_("Layer height:"));
 	gtk_misc_set_alignment(GTK_MISC(height_title_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(height_title_label), 0, 1, appearance_row_counter, appearance_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	g_string_printf(message, "%u %s", ((layer_image *) tmp_layer->object_data)->height, _("pixels"));
