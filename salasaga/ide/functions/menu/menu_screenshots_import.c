@@ -206,15 +206,7 @@ void menu_screenshots_import(void)
 	if (0 == num_screenshots)
 	{
 		// Display the warning message using our function
-		g_string_printf(message, "%s ED05: %s '%s'\n\n%s:\n\n  %s<%s>.png\n\n%s:\n\n\t%s0001.png\n\t%s0002.png",
-							_("Error"),
-							_("No screenshots found in screenshot folder"), screenshots_folder->str,
-							_("They are case sensitive and must be named"),
-							_("screenshot"),
-							_("Sequential Number"),
-							_("For example"),
-							_("screenshot"),
-							_("screenshot"));
+		g_string_printf(message, "%s ED05: %s", _("Error"), _("No screenshots found.  You need to take some screenshots before using Import."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
 		return;
