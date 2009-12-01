@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-01 02:39+1100\n"
+"POT-Creation-Date: 2009-12-01 09:14+1100\n"
 "PO-Revision-Date: 2009-10-19 07:55+0000\n"
 "Last-Translator: Pierre Couillard <pcouillard@solinfpc.net>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-11-30 17:24+0000\n"
+"X-Launchpad-Export-Date: 2009-12-01 05:48+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
@@ -184,10 +184,10 @@ msgstr ""
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:323
 #: ide/functions/menu/menu_screenshots_import.c:117
 #: ide/functions/menu/menu_screenshots_import.c:128
-#: ide/functions/menu/menu_screenshots_import.c:210
-#: ide/functions/menu/menu_screenshots_import.c:282
-#: ide/functions/menu/menu_screenshots_import.c:331
-#: ide/functions/menu/menu_screenshots_import.c:414
+#: ide/functions/menu/menu_screenshots_import.c:209
+#: ide/functions/menu/menu_screenshots_import.c:274
+#: ide/functions/menu/menu_screenshots_import.c:323
+#: ide/functions/menu/menu_screenshots_import.c:406
 #: ide/functions/preferences_load.c:115 ide/functions/preferences_load.c:131
 #: ide/functions/preferences_load.c:147 ide/functions/preferences_load.c:164
 #: ide/functions/preferences_load.c:181 ide/functions/preferences_load.c:195
@@ -323,7 +323,7 @@ msgstr ""
 #: ide/functions/save/save_text_tags.c:80
 #: ide/functions/save/save_text_tags.c:105
 #: ide/functions/save/save_text_tags.c:119
-#: ide/functions/slide/slide_duration.c:115 ide/functions/validate_value.c:629
+#: ide/functions/slide/slide_duration.c:115 ide/functions/validate_value.c:713
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:139
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:148
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:157
@@ -475,7 +475,7 @@ msgstr "Ajouter un calque surbrillance"
 #: ide/functions/create_time_line.c:227
 #: ide/functions/layer/layer_duplicate.c:91
 #: ide/functions/layer/layer_new_image_inner.c:97
-#: ide/functions/menu/menu_screenshots_import.c:363
+#: ide/functions/menu/menu_screenshots_import.c:355
 msgid "Image"
 msgstr "Image"
 
@@ -569,10 +569,10 @@ msgstr "Exporter au format d'animation Flash"
 #: ide/functions/create_zoom_selector.c:47
 #: ide/functions/create_zoom_selector.c:71
 #: ide/functions/create_zoom_selector.c:73
-#: ide/functions/menu/menu_screenshots_import.c:454
+#: ide/functions/menu/menu_screenshots_import.c:446
 #: ide/functions/save_preferences_and_exit.c:99
 #: ide/functions/save_preferences_and_exit.c:310
-#: ide/functions/validate_value.c:590
+#: ide/functions/validate_value.c:674
 #: ide/functions/working_area/event_size_allocate_received.c:61
 #: ide/functions/zoom_selector_changed.c:58 ide/salasaga.c:291
 #: screen_capture/validate_value.c:537
@@ -1580,14 +1580,14 @@ msgid "Couldn't allocate memory for a new film strip thumbnail."
 msgstr ""
 "Impossible d'allouer de la mémoire pour une nouvelle vignette de film."
 
-#: ide/functions/film_strip/film_strip_slide_clicked.c:64
+#: ide/functions/film_strip/film_strip_slide_clicked.c:65
 #, c-format
 msgid "Invalid iter! No layer selected when changing slide!\n"
 msgstr ""
 "Itérateur invalide! Aucun calque sélectionné lors du changement de "
 "diapositives!\n"
 
-#: ide/functions/film_strip/film_strip_slide_clicked.c:88
+#: ide/functions/film_strip/film_strip_slide_clicked.c:90
 msgid " Ready"
 msgstr " Prêt"
 
@@ -1668,7 +1668,7 @@ msgstr ""
 #: ide/functions/layer/image_crop.c:255
 #: ide/functions/layer/layer_duplicate.c:142
 #: ide/functions/layer/layer_new_image_inner.c:167
-#: ide/functions/menu/menu_screenshots_import.c:282
+#: ide/functions/menu/menu_screenshots_import.c:274
 #: ide/functions/project_adjust_dimensions.c:249
 msgid "Couldn't create an image pattern."
 msgstr "Impossible de créer une forme d'image"
@@ -1696,7 +1696,7 @@ msgstr ""
 "échoué."
 
 #: ide/functions/layer/layer_duplicate.c:87
-#: ide/functions/menu/menu_screenshots_import.c:301
+#: ide/functions/menu/menu_screenshots_import.c:293
 msgid "Background"
 msgstr "Arrière-plan"
 
@@ -1765,8 +1765,8 @@ msgstr " Veuillez dessiner le nouveau calque"
 #: ide/functions/layer/layer_new_image_inner.c:99
 #: ide/functions/layer/layer_new_mouse_inner.c:84
 #: ide/functions/layer/layer_new_text_inner.c:115
-#: ide/functions/menu/menu_screenshots_import.c:315
-#: ide/functions/menu/menu_screenshots_import.c:377
+#: ide/functions/menu/menu_screenshots_import.c:307
+#: ide/functions/menu/menu_screenshots_import.c:369
 #: ide/functions/read/read_highlight_layer.c:71
 #: ide/functions/read/read_text_layer.c:95
 #: ide/functions/slide/slide_insert.c:68
@@ -2088,7 +2088,7 @@ msgstr "/_Aide/_Wiki"
 #: ide/functions/menu/menu_file_close.c:109
 #: ide/functions/menu/menu_file_new.c:340
 #: ide/functions/menu/menu_file_open.c:264
-#: ide/functions/menu/menu_screenshots_import.c:484
+#: ide/functions/menu/menu_screenshots_import.c:476
 msgid "/Project"
 msgstr "/Projet"
 
@@ -2096,7 +2096,7 @@ msgstr "/Projet"
 #: ide/functions/menu/menu_file_close.c:110
 #: ide/functions/menu/menu_file_new.c:341
 #: ide/functions/menu/menu_file_open.c:265
-#: ide/functions/menu/menu_screenshots_import.c:485
+#: ide/functions/menu/menu_screenshots_import.c:477
 msgid "/Slide"
 msgstr "/Diapositive"
 
@@ -2104,7 +2104,7 @@ msgstr "/Diapositive"
 #: ide/functions/menu/menu_file_close.c:111
 #: ide/functions/menu/menu_file_new.c:342
 #: ide/functions/menu/menu_file_open.c:266
-#: ide/functions/menu/menu_screenshots_import.c:486
+#: ide/functions/menu/menu_screenshots_import.c:478
 msgid "/Layer"
 msgstr "/Calque"
 
@@ -2112,7 +2112,7 @@ msgstr "/Calque"
 #: ide/functions/menu/menu_file_close.c:112
 #: ide/functions/menu/menu_file_new.c:343
 #: ide/functions/menu/menu_file_open.c:267
-#: ide/functions/menu/menu_screenshots_import.c:487
+#: ide/functions/menu/menu_screenshots_import.c:479
 msgid "/Export"
 msgstr "/Exporter"
 
@@ -2842,9 +2842,6 @@ msgstr ""
 "préférences du projet et essayer de nouveau."
 
 #: ide/functions/menu/menu_screenshots_import.c:139
-#: ide/functions/menu/menu_screenshots_import.c:213
-#: ide/functions/menu/menu_screenshots_import.c:216
-#: ide/functions/menu/menu_screenshots_import.c:217
 msgid "screenshot"
 msgstr "capture d'écran"
 
@@ -2863,44 +2860,33 @@ msgid ""
 "want to proceed?"
 msgstr ""
 
-#: ide/functions/menu/menu_screenshots_import.c:211
-msgid "No screenshots found in screenshot folder"
-msgstr "Aucune capture d'écran trouvée dans le dossier de capture"
+#: ide/functions/menu/menu_screenshots_import.c:209
+msgid ""
+"No screenshots found.  You need to take some screenshots before using Import."
+msgstr ""
 
-#: ide/functions/menu/menu_screenshots_import.c:212
-msgid "They are case sensitive and must be named"
-msgstr "Elles sont sensibles à la casse et doivent être renommées"
-
-#: ide/functions/menu/menu_screenshots_import.c:214
-msgid "Sequential Number"
-msgstr "Numéro séquentiel"
-
-#: ide/functions/menu/menu_screenshots_import.c:215
-msgid "For example"
-msgstr "Par exemple"
-
-#: ide/functions/menu/menu_screenshots_import.c:227
+#: ide/functions/menu/menu_screenshots_import.c:219
 msgid "Screenshots found"
 msgstr "Captures d'écran trouvées"
 
-#: ide/functions/menu/menu_screenshots_import.c:331
+#: ide/functions/menu/menu_screenshots_import.c:323
 msgid "Something went wrong when loading the screenshot"
 msgstr "Une erreur est survenue lors du chargement de la capture d'écran"
 
-#: ide/functions/menu/menu_screenshots_import.c:414
+#: ide/functions/menu/menu_screenshots_import.c:406
 msgid "Something went wrong when deleting the screenshot file"
 msgstr ""
 "Une erreur est survenue lors de la suppression du fichier de capture d'écran"
 
-#: ide/functions/menu/menu_screenshots_import.c:419
+#: ide/functions/menu/menu_screenshots_import.c:411
 msgid "Loaded image"
 msgstr "Image chargée"
 
-#: ide/functions/menu/menu_screenshots_import.c:499
+#: ide/functions/menu/menu_screenshots_import.c:491
 msgid "screenshot imported"
 msgstr ""
 
-#: ide/functions/menu/menu_screenshots_import.c:502
+#: ide/functions/menu/menu_screenshots_import.c:494
 msgid "screenshots imported"
 msgstr "captures d'écran importées"
 
@@ -3740,7 +3726,7 @@ msgstr ""
 msgid "Take Screenshot"
 msgstr ""
 
-#: ide/functions/validate_value.c:629 screen_capture/validate_value.c:576
+#: ide/functions/validate_value.c:713 screen_capture/validate_value.c:576
 msgid "Unknown value passed to validation function"
 msgstr "Valeur inconnue passée à la fonction de validation."
 
@@ -4283,6 +4269,18 @@ msgstr ""
 #~ "Les captures d'écran n'ont pas toutes la même taille, ou sont différentes de "
 #~ "la taille du projet. Si vous continuez, elles seront mises à la même taille "
 #~ "que la première. Voulez-vous continuer?"
+
+#~ msgid "No screenshots found in screenshot folder"
+#~ msgstr "Aucune capture d'écran trouvée dans le dossier de capture"
+
+#~ msgid "They are case sensitive and must be named"
+#~ msgstr "Elles sont sensibles à la casse et doivent être renommées"
+
+#~ msgid "Sequential Number"
+#~ msgstr "Numéro séquentiel"
+
+#~ msgid "For example"
+#~ msgstr "Par exemple"
 
 #~ msgid "Status bar messages"
 #~ msgstr "Barre d'état des messages"
