@@ -191,7 +191,7 @@ void project_adjust_dimensions(void)
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(adjustment_dialog));
 
-	// Get the present slide, so we can select it again layer
+	// Get the present slide, so we can select it again later
 	present_slide_num = g_list_position(slides, current_slide);
 
 	// Loop through the slide structure, adjusting the backgrounds
