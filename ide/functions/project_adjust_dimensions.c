@@ -246,7 +246,7 @@ void project_adjust_dimensions(void)
 		if (NULL == tmp_image_ob->cairo_pattern)
 		{
 			// Something went wrong when creating the image pattern
-			g_string_printf(message, "%s ED374: %s", _("Error"), _("Couldn't create an image pattern."));
+			g_string_printf(message, "%s ED453: %s", _("Error"), _("Couldn't create an image pattern."));
 			display_warning(message->str);
 			return;
 		}
