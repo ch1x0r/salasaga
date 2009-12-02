@@ -39,6 +39,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../draw_timeline.h"
+#include "../widgets/time_line/time_line_get_selected_layer_num.h"
 #include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_handle_box.h"
 #include "../working_area/draw_workspace.h"
@@ -49,8 +50,9 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 	// Local variables
 	GtkTreePath			*selected_path;
 	GtkTreeIter			selected_iter;
+	gint				selected_layer;
 	gchar				*selection_string;
-
+	slide				*this_slide_data;			// Data for the presently selected slide
 
 	// Determine if a row has been selected
 	if (TRUE == gtk_tree_selection_get_selected(selection, NULL, NULL))
@@ -68,13 +70,15 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		selected_path = gtk_tree_model_get_path(GTK_TREE_MODEL(film_strip_store), &selected_iter);
 		selection_string = gtk_tree_path_to_string(selected_path);
 
-		// Get a pointer to the clicked on slide's GList
+		// Get a pointer to the clicked on slide's data
 		slides = g_list_first(slides);
 		current_slide = g_list_nth(slides, atoi(selection_string));
+		this_slide_data = (slide *) current_slide->data;
 
 		// Redraw the timeline
+		selected_layer = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
 		draw_timeline();
-		time_line_set_selected_layer_num(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget), 0);
+		time_line_set_selected_layer_num(this_slide_data->timeline_widget, selected_layer);
 
 		// Redraw the workspace
 		draw_workspace();
