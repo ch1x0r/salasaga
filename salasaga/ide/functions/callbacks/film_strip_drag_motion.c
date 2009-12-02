@@ -47,6 +47,7 @@ gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context,
 	gint				current_slide_position;		// Points to the currently selected slide
 	slide				*current_slide_data;		// Pointer to the data for the currently selected slide
 	gdouble				film_strip_adjustment_present_value;
+	gint				num_slides;					// The number of slides in the project
 	gint				slide_height;
 	GList				*target_slide;				// Pointer to the target slide
 	GtkTreeIter			target_slide_iter;
@@ -69,8 +70,15 @@ gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context,
 
 	// Work out which slide in the film strip the actual y position points to
 	slides = g_list_first(slides);
+	num_slides = g_list_length(slides);
 	current_slide_position = g_list_position(slides, current_slide);
 	target_slide_position = roundf(actual_y_pos / slide_height);
+
+	// Make sure the target slide position isn't pointing past the last slide
+	if ((num_slides - 1) < target_slide_position)
+	{
+		target_slide_position = num_slides - 1;
+	}
 
 	// Do we need to move the selected slide to a new position?
 	if (current_slide_position != target_slide_position)
