@@ -61,10 +61,14 @@ void draw_timeline(void)
 		return_code_gbool = time_line_regenerate_widget(slide_pointer->timeline_widget);
 		if (FALSE == return_code_gbool)
 		{
+			// For some unknown reason, this time widget isn't able to be regenerated
 			message = g_string_new(NULL);
 			g_string_printf(message, "%s ED359: %s", _("Error"), _("Could not regenerate the time line widget."));
 			display_warning(message->str);
 			g_string_free(message, TRUE);
+
+			// Return hopefully without doing more damage
+			return;
 		}
 	}
 
