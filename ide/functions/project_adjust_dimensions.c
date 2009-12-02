@@ -24,6 +24,12 @@
  */
 
 
+// Turn on C99 compatibility - needed for roundf() to work
+#define _ISOC99_SOURCE
+
+// Math include
+#include <math.h>
+
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -49,7 +55,9 @@ void project_adjust_dimensions(void)
 	gboolean			acceptable_result = FALSE;	// Toggle to determine if we've received valid adjustment values from the user
 	GtkDialog			*adjustment_dialog;			// Widget for the dialog
 	GtkWidget			*adjustment_table;			// Table used for neat layout of the dialog box
+	gint				dialog_height;				// Height of the dialog in pixels
 	gint				dialog_result;				// Catches the return code from the dialog box
+	gint				dialog_width;				// Width of the dialog in pixels
 	layer				*last_layer = NULL;			// Temporary layer
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	GString				*message;					// Used to construct message strings
@@ -59,6 +67,7 @@ void project_adjust_dimensions(void)
 	gint				num_slides;					// Total number of layers
 	guint				present_slide_num;			// Holds the number of the currently selected slide in the user interface
 	guint				row_counter = 0;			// Used to count which row things are up to
+	gdouble				scale_mark_counter;			// Simple counter used when constructing scale marks for sliders
 	gint				slide_counter;
 	slide				*slide_data;
 	layer_image			*tmp_image_ob;				// Points to the image data in the selected layer
@@ -70,11 +79,11 @@ void project_adjust_dimensions(void)
 	GtkWidget			*present_height_value_label;  // Label widget
 
 	GtkWidget			*new_width_label;			// Label widget
-	GtkWidget			*new_width_button;			//
+	GtkWidget			*new_width_slider;			//
 	GtkWidget			*new_width_pixels_label;	// Label widget
 
 	GtkWidget			*new_height_label;			// Label widget
-	GtkWidget			*new_height_button;			//
+	GtkWidget			*new_height_slider;			//
 	GtkWidget			*new_height_pixels_label;	// Label widget
 
 
@@ -93,8 +102,52 @@ void project_adjust_dimensions(void)
 
 	// Create the dialog window, and table to hold its children
 	adjustment_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Adjust project dimensions"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
-	adjustment_table = gtk_table_new(3, 3, FALSE);
+	adjustment_table = gtk_table_new(4, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(adjustment_dialog->vbox), GTK_WIDGET(adjustment_table), FALSE, FALSE, 10);
+
+	// Create the label asking for the new project width
+	new_width_label = gtk_label_new(_("New project width:"));
+	gtk_misc_set_alignment(GTK_MISC(new_width_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the slider that accepts the new project width
+	new_width_slider = gtk_hscale_new_with_range(valid_fields[PROJECT_WIDTH].min_value, valid_fields[PROJECT_WIDTH].max_value, 1);
+	gtk_range_set_value(GTK_RANGE(new_width_slider), project_width);
+	gtk_scale_add_mark(GTK_SCALE(new_width_slider), project_width, GTK_POS_BOTTOM, NULL);
+	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[PROJECT_WIDTH].max_value; scale_mark_counter += 1024)
+	{
+		// Add scale marks
+		gtk_scale_add_mark(GTK_SCALE(new_width_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_slider), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the new project width "pixels" string
+	new_width_pixels_label = gtk_label_new(_("pixels"));
+	gtk_misc_set_alignment(GTK_MISC(new_width_pixels_label), 0.0, 0.5);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
+
+	// Create the label asking for the new project height
+	new_height_label = gtk_label_new(_("New project height:"));
+	gtk_misc_set_alignment(GTK_MISC(new_height_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the slider that accepts the new project height
+	new_height_slider = gtk_hscale_new_with_range(valid_fields[PROJECT_HEIGHT].min_value, valid_fields[PROJECT_HEIGHT].max_value, 1);
+	gtk_range_set_value(GTK_RANGE(new_height_slider), project_height);
+	gtk_scale_add_mark(GTK_SCALE(new_height_slider), project_height, GTK_POS_BOTTOM, NULL);
+	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[PROJECT_HEIGHT].max_value; scale_mark_counter += 1024)
+	{
+		// Add scale marks
+		gtk_scale_add_mark(GTK_SCALE(new_height_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_slider), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the new project height "pixels" string
+	new_height_pixels_label = gtk_label_new(_("pixels"));
+	gtk_misc_set_alignment(GTK_MISC(new_height_pixels_label), 0.0, 0.5);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	row_counter = row_counter + 1;
 
 	// Create the label about showing the present project width
 	present_width_label = gtk_label_new(_("Present project width:"));
@@ -120,37 +173,9 @@ void project_adjust_dimensions(void)
 	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(present_height_value_label), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
-	// Create the label asking for the new project width
-	new_width_label = gtk_label_new(_("New project width:"));
-	gtk_misc_set_alignment(GTK_MISC(new_width_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-	// Create the entry that accepts the new project width
-	new_width_button = gtk_spin_button_new_with_range(valid_fields[PROJECT_WIDTH].min_value, valid_fields[PROJECT_WIDTH].max_value, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(new_width_button), project_width);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-	// Create the new project width "pixels" string
-	new_width_pixels_label = gtk_label_new(_("pixels"));
-	gtk_misc_set_alignment(GTK_MISC(new_width_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	row_counter = row_counter + 1;
-
-	// Create the label asking for the new project height
-	new_height_label = gtk_label_new(_("New project height:"));
-	gtk_misc_set_alignment(GTK_MISC(new_height_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-	// Create the entry that accepts the new project height
-	new_height_button = gtk_spin_button_new_with_range(valid_fields[PROJECT_HEIGHT].min_value, valid_fields[PROJECT_HEIGHT].max_value, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(new_height_button), project_height);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-	// Create the new project height "pixels" string
-	new_height_pixels_label = gtk_label_new(_("pixels"));
-	gtk_misc_set_alignment(GTK_MISC(new_height_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	row_counter = row_counter + 1;
+	// Make the dialog wider than it's defaults, so the slider marks are useful rather than annoying
+	gtk_window_get_size(GTK_WINDOW(adjustment_dialog), &dialog_width, &dialog_height);
+	gtk_window_resize(GTK_WINDOW(adjustment_dialog), (gint) roundf(dialog_width * 2.5), dialog_height);
 
 	// Run the dialog
 	gtk_widget_show_all(GTK_WIDGET(adjustment_dialog));
@@ -167,8 +192,8 @@ void project_adjust_dimensions(void)
 		}
 
 		// Get the values from the dialog
-		new_width = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(new_width_button));
-		new_height = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(new_height_button));
+		new_width = (gint) gtk_range_get_value(GTK_RANGE(new_width_slider));
+		new_height = (gint) gtk_range_get_value(GTK_RANGE(new_height_slider));
 
 		// If the user is adjusting the size out of acceptable limits, warn them and loop again
 		if ((valid_fields[PROJECT_HEIGHT].min_value <= new_height) && (valid_fields[PROJECT_HEIGHT].max_value >= new_height) && (valid_fields[PROJECT_WIDTH].min_value <= new_width) && (valid_fields[PROJECT_WIDTH].max_value >= new_width))
