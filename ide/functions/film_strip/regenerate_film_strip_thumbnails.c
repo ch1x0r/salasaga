@@ -50,9 +50,10 @@ void regenerate_film_strip_thumbnails()
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	guint				preview_height;				// The height we calculate a film strip thumbnail should be
 	gfloat				project_ratio;				// Ratio of project height to width
-	gint				slide_counter, slide_position;
-	slide				*slide_pointer;				// Points to the presently processing slide
+	gint				slide_counter;
+	gint				slide_position;
 	GList				*this_slide;
+	slide				*this_slide_data;			// Points to the presently processing slide
 	GdkPixbuf			*tmp_pixbuf;				// Used to convert from a pixmap to a pixbuf
 	GdkPixmap			*tmp_pixmap;				// Used when converting from a pixmap to a pixbuf
 
@@ -77,17 +78,17 @@ void regenerate_film_strip_thumbnails()
 	{
 		// Point to the desired slide data
 		this_slide = g_list_nth(slides, slide_counter);
-		slide_pointer = (slide *) this_slide->data;
+		this_slide_data = (slide *) this_slide->data;
 
 		// If the present slide doesn't have a time line widget, then create one
-		if (NULL == slide_pointer->timeline_widget)
+		if (NULL == this_slide_data->timeline_widget)
 		{
 			// Construct the widget used to display the slide in the timeline
-			slide_pointer->timeline_widget = time_line_new();
+			this_slide_data->timeline_widget = time_line_new();
 		}
 
 		// Get the current time line cursor position
-		cursor_position = time_line_get_cursor_position(slide_pointer->timeline_widget);
+		cursor_position = time_line_get_cursor_position(this_slide_data->timeline_widget);
 
 		// Determine the proper thumbnail height
 		project_ratio = (gfloat) project_height / (gfloat) project_width;
@@ -96,13 +97,13 @@ void regenerate_film_strip_thumbnails()
 		// Create the thumbnail for the slide
 		tmp_pixmap = compress_layers(this_slide, cursor_position, project_width, project_height);
 		tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
-		((slide *) this_slide->data)->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
+		this_slide_data->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
 		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
 		g_object_unref(GDK_PIXMAP(tmp_pixmap));
 
 		// Add the thumbnail to the film strip
 		gtk_list_store_append(film_strip_store, &film_strip_iter);
-		gtk_list_store_set(film_strip_store, &film_strip_iter, 0, ((slide *) this_slide->data)->thumbnail, -1);
+		gtk_list_store_set(film_strip_store, &film_strip_iter, 0, this_slide_data->thumbnail, -1);
 	}
 
 	// Reselect the thumbnail that was previously selected
