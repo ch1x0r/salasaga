@@ -24,6 +24,12 @@
  */
 
 
+// Turn on C99 compatibility - needed for roundf() to work
+#define _ISOC99_SOURCE
+
+// Math include
+#include <math.h>
+
 // GTK includes
 #include <gtk/gtk.h>
 
@@ -44,6 +50,8 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 {
 	// Local variables
 	gint				active_type;				// Used to tell which type of transition is active
+	gint				dialog_height;				// Height of the dialog in pixels
+	gint				dialog_width;				// Width of the dialog in pixels
 	gulong				entry_duration_callback = 0;  // ID of the callback handler for the entry_duration_widgets
 	gulong				exit_duration_callback = 0;	// ID of the callback handler for the exit_duration_widgets
 	transition_widgets	*entry_duration_widgets;	// Holds points to the entry duration widgets
@@ -215,7 +223,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		gtk_range_set_value(GTK_RANGE(x_off_scale_start), tmp_layer->x_offset_start);
 		for (scale_mark_counter = 100; scale_mark_counter <= project_width; scale_mark_counter += 100)
 		{
-			// Add scale marks every 100 along
+			// Add scale marks
 			gtk_scale_add_mark(GTK_SCALE(x_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 		}
 		gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_scale_start), 1, 2, duration_row_counter, duration_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
@@ -231,7 +239,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		gtk_range_set_value(GTK_RANGE(y_off_scale_start), tmp_layer->y_offset_start);
 		for (scale_mark_counter = 100; scale_mark_counter <= project_height; scale_mark_counter += 100)
 		{
-			// Add scale marks every 100 along
+			// Add scale marks
 			gtk_scale_add_mark(GTK_SCALE(y_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 		}
 		gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_scale_start), 1, 2, duration_row_counter, duration_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
@@ -247,7 +255,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		gtk_range_set_value(GTK_RANGE(x_off_scale_finish), tmp_layer->x_offset_finish);
 		for (scale_mark_counter = 100; scale_mark_counter <= project_width; scale_mark_counter += 100)
 		{
-			// Add scale marks every 100 along
+			// Add scale marks
 			gtk_scale_add_mark(GTK_SCALE(x_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 		}
 		gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_scale_finish), 1, 2, duration_row_counter, duration_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
@@ -263,7 +271,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		gtk_range_set_value(GTK_RANGE(y_off_scale_finish), tmp_layer->y_offset_finish);
 		for (scale_mark_counter = 100; scale_mark_counter <= project_height; scale_mark_counter += 100)
 		{
-			// Add scale marks every 100 along
+			// Add scale marks
 			gtk_scale_add_mark(GTK_SCALE(y_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 		}
 		gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_scale_finish), 1, 2, duration_row_counter, duration_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
@@ -279,7 +287,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		gtk_range_set_value(GTK_RANGE(start_scale), tmp_layer->start_time);
 		for (scale_mark_counter = 10; scale_mark_counter <= valid_fields[LAYER_DURATION].max_value; scale_mark_counter += 10.0)
 		{
-			// Add scale marks every 10.0 along
+			// Add scale marks
 			gtk_scale_add_mark(GTK_SCALE(start_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 		}
 		gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(start_scale), 1, 2, duration_row_counter, duration_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
@@ -314,7 +322,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		gtk_range_set_value(GTK_RANGE(scale_trans_in_duration), tmp_layer->transition_in_duration);
 		for (scale_mark_counter = 0.5; scale_mark_counter <= valid_fields[TRANSITION_DURATION].max_value; scale_mark_counter += 0.5)
 		{
-			// Add scale marks every 0.5 along
+			// Add scale marks
 			gtk_scale_add_mark(GTK_SCALE(scale_trans_in_duration), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 		}
 		gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_in_duration), 1, 2, duration_row_counter, duration_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
@@ -351,7 +359,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		gtk_range_set_value(GTK_RANGE(duration_scale), tmp_layer->duration);
 		for (scale_mark_counter = 10; scale_mark_counter <= valid_fields[LAYER_DURATION].max_value; scale_mark_counter += 10.0)
 		{
-			// Add scale marks every 10.0 along
+			// Add scale marks
 			gtk_scale_add_mark(GTK_SCALE(duration_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 		}
 		gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(duration_scale), 1, 2, duration_row_counter, duration_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
@@ -386,7 +394,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		gtk_range_set_value(GTK_RANGE(scale_trans_out_duration), tmp_layer->transition_out_duration);
 		for (scale_mark_counter = 0.5; scale_mark_counter <= valid_fields[TRANSITION_DURATION].max_value; scale_mark_counter += 0.5)
 		{
-			// Add scale marks every 0.5 along
+			// Add scale marks
 			gtk_scale_add_mark(GTK_SCALE(scale_trans_out_duration), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 		}
 		gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_out_duration), 1, 2, duration_row_counter, duration_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
@@ -453,6 +461,10 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(visibility_checkbox), 0, 2, appearance_row_counter, appearance_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 		appearance_row_counter++;
 	}
+
+	// Make the dialog wider than it's defaults, so the slider marks are useful rather than annoying
+	gtk_window_get_size(GTK_WINDOW(image_dialog), &dialog_width, &dialog_height);
+	gtk_window_resize(GTK_WINDOW(image_dialog), (gint) roundf(dialog_width * 2.2), dialog_height);
 
 	// Ensure everything will show
 	gtk_widget_show_all(GTK_WIDGET(image_dialog));
