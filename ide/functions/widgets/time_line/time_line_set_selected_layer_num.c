@@ -69,6 +69,12 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	this_time_line = TIME_LINE(widget);
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
+	// If we haven't been given a valid selected row to set, we exit
+	if (0 > selected_row)
+	{
+		return FALSE;
+	}
+
 	// Ensure we have at least the minimum required widget size
 	if (WIDGET_MINIMUM_HEIGHT > GTK_WIDGET(widget)->allocation.height)
 	{
@@ -84,6 +90,9 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	{
 		width = GTK_WIDGET(widget)->allocation.width;
 	}
+
+	// Set the internal variable, as requested
+	priv->selected_layer_num = selected_row;
 
 	// * Restore the background underneath the existing selection box *
 
@@ -121,9 +130,6 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 		time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
 		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
 	}
-
-	// Set the internal variable, as requested
-	priv->selected_layer_num = selected_row;
 
 	// Draw a selection box around the newly selected layer
 	time_line_internal_draw_selection_highlight(priv, width);

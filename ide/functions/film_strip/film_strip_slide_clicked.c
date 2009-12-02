@@ -54,6 +54,13 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 	gchar				*selection_string;
 	slide				*this_slide_data;			// Data for the presently selected slide
 
+
+	// Only do this function if we have a front store available and a project loaded
+	if ((NULL == front_store) || (FALSE == project_active))
+	{
+		return;
+	}
+
 	// Determine if a row has been selected
 	if (TRUE == gtk_tree_selection_get_selected(selection, NULL, NULL))
 	{
