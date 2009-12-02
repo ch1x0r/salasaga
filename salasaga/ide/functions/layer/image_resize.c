@@ -60,6 +60,7 @@ void image_resize(void)
 	gint				new_width;					// Hold the width of the adjusted area
 	gint				resize_type;				// Receives the type of scaling algorithm to be applied to the image
 	guint				row_counter = 0;			// Used to count which row things are up to
+	gdouble				scale_mark_counter;			// Simple counter used when constructing scale marks for sliders
 	guint				selected_row;				// Holds the row that is selected
 	slide				*slide_data;				// Pointer to current slide data
 	layer				*this_layer = NULL;			// Temporary layer
@@ -72,11 +73,11 @@ void image_resize(void)
 	GtkWidget			*present_height_value_label;  // Label widget
 
 	GtkWidget			*new_width_label;			// Label widget
-	GtkWidget			*new_width_button;			//
+	GtkWidget			*new_width_scale;			//
 	GtkWidget			*new_width_pixels_label;	// Label widget
 
 	GtkWidget			*new_height_label;			// Label widget
-	GtkWidget			*new_height_button;			//
+	GtkWidget			*new_height_scale;			//
 	GtkWidget			*new_height_pixels_label;	// Label widget
 
 	GtkWidget			*resize_type_label;			// Label widget
@@ -156,10 +157,16 @@ void image_resize(void)
 	gtk_misc_set_alignment(GTK_MISC(new_width_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the new image width
-	new_width_button = gtk_spin_button_new_with_range(valid_fields[LAYER_WIDTH].min_value, valid_fields[LAYER_WIDTH].max_value, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(new_width_button), image_width);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the slider asking for the new image width
+	new_width_scale = gtk_hscale_new_with_range(valid_fields[LAYER_WIDTH].min_value, valid_fields[LAYER_WIDTH].max_value, 1);
+	gtk_range_set_value(GTK_RANGE(new_width_scale), image_width);
+	gtk_scale_add_mark(GTK_SCALE(new_width_scale), image_width, GTK_POS_BOTTOM, NULL);
+	for (scale_mark_counter = 512; scale_mark_counter <= valid_fields[LAYER_WIDTH].max_value; scale_mark_counter += 512)
+	{
+		// Add scale marks every 100 along
+		gtk_scale_add_mark(GTK_SCALE(new_width_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the new image width "pixels" string
 	new_width_pixels_label = gtk_label_new(_("pixels"));
@@ -172,10 +179,16 @@ void image_resize(void)
 	gtk_misc_set_alignment(GTK_MISC(new_height_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the new image height
-	new_height_button = gtk_spin_button_new_with_range(valid_fields[LAYER_HEIGHT].min_value, valid_fields[LAYER_HEIGHT].max_value, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(new_height_button), image_height);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the slider asking for the new image height
+	new_height_scale = gtk_hscale_new_with_range(valid_fields[LAYER_HEIGHT].min_value, valid_fields[LAYER_HEIGHT].max_value, 1);
+	gtk_range_set_value(GTK_RANGE(new_height_scale), image_height);
+	gtk_scale_add_mark(GTK_SCALE(new_height_scale), image_height, GTK_POS_BOTTOM, NULL);
+	for (scale_mark_counter = 512; scale_mark_counter <= valid_fields[LAYER_HEIGHT].max_value; scale_mark_counter += 512)
+	{
+		// Add scale marks every 100 along
+		gtk_scale_add_mark(GTK_SCALE(new_height_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the new image height "pixels" string
 	new_height_pixels_label = gtk_label_new(_("pixels"));
@@ -213,8 +226,8 @@ void image_resize(void)
 		}
 
 		// Get the values from the dialog
-		new_width = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(new_width_button));
-		new_height = (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(new_height_button));
+		new_width = (gint) gtk_range_get_value(GTK_RANGE(new_width_scale));
+		new_height = (gint) gtk_range_get_value(GTK_RANGE(new_height_scale));
 
 		// If the user is adjusting the size out of acceptable limits, warn them and loop again
 		if ((valid_fields[PROJECT_HEIGHT].min_value <= new_height) && (valid_fields[PROJECT_HEIGHT].max_value >= new_height) && (valid_fields[PROJECT_WIDTH].min_value <= new_width) && (valid_fields[PROJECT_WIDTH].max_value >= new_width))
@@ -239,6 +252,20 @@ void image_resize(void)
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(adjustment_dialog));
+
+	// If the new image size is the same as the old image size, we skip the rest of the function
+	if ((new_height == image_height) && (new_width == image_width))
+	{
+		// Free the memory used in this function
+		g_string_free(message, TRUE);
+
+		// Update the status bar
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Image layer resize skipped"));
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
+		gdk_flush();
+
+		return;
+	}
 
 	// Scale the existing image layer to the new dimensions
 	new_pixbuf = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_image_ob->image_data), new_width, new_height, GDK_INTERP_TILES);
