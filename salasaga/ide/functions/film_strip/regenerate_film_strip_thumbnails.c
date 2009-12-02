@@ -77,6 +77,7 @@ void regenerate_film_strip_thumbnails()
 	for (slide_counter = 0; slide_counter < num_slides; slide_counter++)
 	{
 		// Point to the desired slide data
+		slides = g_list_first(slides);
 		this_slide = g_list_nth(slides, slide_counter);
 		this_slide_data = (slide *) this_slide->data;
 
