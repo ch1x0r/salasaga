@@ -39,6 +39,7 @@
 #include "../save_preferences_and_exit.h"
 #include "../export/html/export_html_wrapper.h"
 #include "../layer/image_crop.h"
+#include "../layer/image_resize.h"
 #include "../layer/layer_copy.h"
 #include "../layer/layer_delete.h"
 #include "../layer/layer_edit.h"
@@ -139,6 +140,7 @@ void create_menu_bar()
 		{_("/Layer/Add _Mouse"),		NULL,					layer_new_mouse,				0,	"<Item>"},
 		{_("/Layer/Sep"),				NULL,					NULL,							0,	"<Separator>"},
 		{_("/Layer/Image c_rop"),		NULL,					image_crop,						0,	"<Item>"},
+		{_("/Layer/Image resi_ze"),		NULL,					image_resize,					0,	"<Item>"},
 
 		{_("/E_xport"),					NULL,					NULL,							0,	"<Branch>"},
 		{_("/Export/_Flash Animation"),	_("<control><shift>F"),	menu_export_swf,				0,	"<Item>"},

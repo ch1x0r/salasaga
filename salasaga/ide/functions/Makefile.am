@@ -59,6 +59,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	layer/compress_layers_inner.c \
 	layer/get_layer_position.c \
 	layer/image_crop.c \
+	layer/image_resize.c \
 	layer/layer_copy.c \
 	layer/layer_delete.c \
 	layer/layer_duplicate.c \
