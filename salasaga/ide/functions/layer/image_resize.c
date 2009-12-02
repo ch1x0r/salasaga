@@ -35,8 +35,6 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../draw_timeline.h"
-#include "../zoom_selector_changed.h"
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/regenerate_film_strip_thumbnails.h"
@@ -65,12 +63,6 @@ void image_resize(void)
 	slide				*slide_data;				// Pointer to current slide data
 	layer				*this_layer = NULL;			// Temporary layer
 	layer_image			*tmp_image_ob;				// Points to the image data in the selected layer
-
-	GtkWidget			*present_width_label;		// Label widget
-	GtkWidget			*present_width_value_label;  // Label widget
-
-	GtkWidget			*present_height_label;		// Label widget
-	GtkWidget			*present_height_value_label;  // Label widget
 
 	GtkWidget			*new_width_label;			// Label widget
 	GtkWidget			*new_width_scale;			//
@@ -128,32 +120,8 @@ void image_resize(void)
 	adjustment_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(adjustment_dialog->vbox), GTK_WIDGET(adjustment_table), FALSE, FALSE, 10);
 
-	// Create the label about showing the present image width
-	present_width_label = gtk_label_new(_("Present image width:"));
-	gtk_misc_set_alignment(GTK_MISC(present_width_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(present_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-	// Create and display the present image width
-	g_string_printf(message, "%u %s", image_width, _("pixels"));
-	present_width_value_label = gtk_label_new(message->str);
-	gtk_misc_set_alignment(GTK_MISC(present_width_value_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(present_width_value_label), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	row_counter = row_counter + 1;
-
-	// Create the label about showing the present image height
-	present_height_label = gtk_label_new(_("Present image height:"));
-	gtk_misc_set_alignment(GTK_MISC(present_height_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(present_height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-
-	// Create and display the present image height
-	g_string_printf(message, "%u %s", image_height, _("pixels"));
-	present_height_value_label = gtk_label_new(message->str);
-	gtk_misc_set_alignment(GTK_MISC(present_height_value_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(present_height_value_label), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
-	row_counter = row_counter + 1;
-
 	// Create the label asking for the new image width
-	new_width_label = gtk_label_new(_("New image width:"));
+	new_width_label = gtk_label_new(_("Image width:"));
 	gtk_misc_set_alignment(GTK_MISC(new_width_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -163,7 +131,7 @@ void image_resize(void)
 	gtk_scale_add_mark(GTK_SCALE(new_width_scale), image_width, GTK_POS_BOTTOM, NULL);
 	for (scale_mark_counter = 512; scale_mark_counter <= valid_fields[LAYER_WIDTH].max_value; scale_mark_counter += 512)
 	{
-		// Add scale marks every 100 along
+		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(new_width_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
 	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
@@ -171,11 +139,11 @@ void image_resize(void)
 	// Create the new image width "pixels" string
 	new_width_pixels_label = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(new_width_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_pixels_label), 2, 3, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the new image height
-	new_height_label = gtk_label_new(_("New image height:"));
+	new_height_label = gtk_label_new(_("Image height:"));
 	gtk_misc_set_alignment(GTK_MISC(new_height_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
@@ -185,7 +153,7 @@ void image_resize(void)
 	gtk_scale_add_mark(GTK_SCALE(new_height_scale), image_height, GTK_POS_BOTTOM, NULL);
 	for (scale_mark_counter = 512; scale_mark_counter <= valid_fields[LAYER_HEIGHT].max_value; scale_mark_counter += 512)
 	{
-		// Add scale marks every 100 along
+		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(new_height_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
 	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
@@ -193,13 +161,13 @@ void image_resize(void)
 	// Create the new image height "pixels" string
 	new_height_pixels_label = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(new_height_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_pixels_label), 2, 3, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the image resize type
 	resize_type_label = gtk_label_new(_("Resize image using:"));
 	gtk_misc_set_alignment(GTK_MISC(resize_type_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(resize_type_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(resize_type_label), 0, 1, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the selector for the image resize type
 	selector_resize_type = gtk_combo_box_new_text();
@@ -208,7 +176,7 @@ void image_resize(void)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_resize_type), _("Bilinear (default)"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_resize_type), _("Hyperbolic (best quality for photos)"));
 	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_resize_type), 2);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(selector_resize_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(selector_resize_type), 1, 3, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Run the dialog
@@ -268,7 +236,7 @@ void image_resize(void)
 	}
 
 	// Scale the existing image layer to the new dimensions
-	new_pixbuf = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_image_ob->image_data), new_width, new_height, GDK_INTERP_TILES);
+	new_pixbuf = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_image_ob->image_data), new_width, new_height, resize_type);
 
 	// Update the layer with the new adjusted data
 	g_object_unref(GDK_PIXBUF(tmp_image_ob->image_data));  // Free the memory used by the old pixbuf
@@ -286,24 +254,24 @@ void image_resize(void)
 		return;
 	}
 
+	// Recreate the film strip thumbnails
+	regenerate_film_strip_thumbnails();
+
 	// Redraw the workspace
 	draw_workspace();
+
+	// Set the changes made variable
+	changes_made = TRUE;
 
 	// Show movement on the progress bar
 	gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
 	gdk_flush();
 
-	// Free the memory used in this function
-	g_string_free(message, TRUE);
-
-	// Recreate the film strip thumbnails
-	regenerate_film_strip_thumbnails();
-
-	// Set the changes made variable
-	changes_made = TRUE;
-
 	// Update the status bar
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Image layer resized"));
 	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
 	gdk_flush();
+
+	// Free the memory used in this function
+	g_string_free(message, TRUE);
 }
