@@ -159,9 +159,11 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	if ((TYPE_GDK_PIXBUF == this_layer_data->object_type) && (FALSE == this_layer_data->background))
 	{
 		menu_enable(_("/Layer/Image crop"), TRUE);
+		menu_enable(_("/Layer/Image resize"), TRUE);
 	} else
 	{
 		menu_enable(_("/Layer/Image crop"), FALSE);
+		menu_enable(_("/Layer/Image resize"), FALSE);
 	}
 
 	return TRUE;
