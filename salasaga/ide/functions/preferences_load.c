@@ -393,8 +393,8 @@ gboolean preferences_load()
 		should_display_help_text = TRUE;
 	}
 
-	// Check if the Metacity key bind warning should be displayed or not
-	should_keybind_warn = gconf_engine_get_bool(gconf_engine, "/apps/salasaga/defaults/metacity_key_warning", NULL);
+	// Find out if the warning about not being able to set the screenshot key should be displayed
+	should_keybind_warn = gconf_engine_get_bool(gconf_engine, "/apps/salasaga/defaults/screenshot_key_warning", NULL);
 
 	// Check if all the values were validated ok
 	if (FALSE == usable_input)
@@ -467,8 +467,8 @@ gboolean preferences_load()
 	// Set whether help text and dialogs should be displayed or not
 	display_help_text = should_display_help_text;
 
-	// Set the non-metacity key bind warning
-	metacity_key_warning = should_keybind_warn;
+	// Set the screenshot key bind warning
+	screenshot_key_warning = should_keybind_warn;
 
 	// Free our GConf engine
 	gconf_engine_unref(gconf_engine);
