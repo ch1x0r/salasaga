@@ -106,6 +106,11 @@ extern "C" {
 #define V_SPACES			4096
 #define V_UNDERSCORES		8192
 
+// Window managers
+#define WM_UNKNOWN			0
+#define WM_METACITY			1
+#define WM_COMPIZ			2
+
 // Fonts that can be selected in text layers
 enum
 {

@@ -50,27 +50,45 @@ gint key_bind(void)
 	GString				*message;					// Used to construct message strings
 	gchar				*return_code_gchar;			// Catches string based return codes
 	guint				tmp_guint;					// Temporary guint
+	guint				window_manager = WM_UNKNOWN;  // The window manager that's running
+	const gchar			*window_manager_name;		// The name of the window manager currently running
 
 
 	// Initialisation
 	message = g_string_new(NULL);
 
-	// If we're not running Metacity as our window manager, then display a warning to the user
-	if (0 != g_ascii_strncasecmp(gdk_x11_screen_get_window_manager_name(gdk_screen_get_default()), "Metacity", 8))
+	// Determine the window manager that's running
+	window_manager_name = gdk_x11_screen_get_window_manager_name(gdk_screen_get_default());
+	if (0 == g_ascii_strcasecmp("Metacity", window_manager_name))
 	{
-		if (TRUE == metacity_key_warning)
+		// Metacity is running
+		window_manager = WM_METACITY;
+	}
+	if (0 == g_ascii_strcasecmp("compiz", window_manager_name))
+	{
+		// Metacity is running
+		window_manager = WM_COMPIZ;
+	}
+
+	// Are we running a window manager we know how to set key bindings for
+	if (WM_UNKNOWN == window_manager)
+	{
+		// Should we display a warning?
+		if (TRUE == screenshot_key_warning)
 		{
 			// Display the warning
 			g_string_printf(message, "%s ED379: %s\n\n%s", _("Error"), _("Setting Control-Printscreen as the screenshot key didn't work."), _("You'll have to trigger screenshots from the status bar icon."));
 			display_warning(message->str);
 
 			// Ensure the the warning is only displayed once unless the user specifically requests otherwise
-			metacity_key_warning = FALSE;
+			screenshot_key_warning = FALSE;
 
 			// Enable screenshots, as the user should have set up the key binding themselves
 			screenshots_enabled = TRUE;
-			return -1;
 		}
+
+		// Return, as we don't need to run the rest of this function
+		return -1;
 	}
 
 	// Check if the "salasaga_screencapture" program is in the OS search path
@@ -91,15 +109,27 @@ gint key_bind(void)
 	for (tmp_guint = 12; tmp_guint >= 1; tmp_guint--)
 	{
 		// Create the name of the key to check
-		g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", tmp_guint);
+		switch (window_manager)
+		{
+			case WM_METACITY:
+			case WM_COMPIZ:
+				g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", tmp_guint);
+				break;
+
+			default:
+				return -1;
+		}
 
 		// Get the value for the key
 		if (NULL != gconf_value)
+		{
 			g_free(gconf_value);
+			gconf_value = NULL;
+		}
 		gconf_value = gconf_engine_get_string(gconf_engine, command_key->str, NULL);
 
 		// Check if the key is unused
-		if (0 == g_ascii_strncasecmp(gconf_value, "", 1))
+		if ((NULL == gconf_value) || (0 == g_ascii_strncasecmp(gconf_value, "", 1)))
 		{
 			// Yes it's unused, so make a note of it
 			command_num = tmp_guint;
@@ -132,10 +162,19 @@ gint key_bind(void)
 	{
 		if (0 != command_num)
 		{
-			g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", command_num);
-			gconf_engine_set_string(gconf_engine, command_key->str, return_code_gchar, NULL);
-			g_string_printf(command_key, "%s%u", "/apps/metacity/global_keybindings/run_command_", command_num);
-			gconf_engine_set_string(gconf_engine, command_key->str, "<Control>Print", NULL);
+			switch (window_manager)
+			{
+				case WM_METACITY:
+				case WM_COMPIZ:
+					g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", command_num);
+					gconf_engine_set_string(gconf_engine, command_key->str, return_code_gchar, NULL);
+					g_string_printf(command_key, "%s%u", "/apps/metacity/global_keybindings/run_command_", command_num);
+					gconf_engine_set_string(gconf_engine, command_key->str, "<Control>Print", NULL);
+					break;
+
+				default:
+					return -1;
+			}
 		}
 	}
 	g_string_free(command_key, TRUE);

@@ -121,7 +121,7 @@ void menu_edit_preferences(void)
 
 	GtkWidget			*check_help_text;					// Whether to display help text or not
 
-	GtkWidget			*check_metacity_key_bind;			// Label widget
+	GtkWidget			*check_screenshot_key_bind;			// Label widget
 
 
 	// Initialise various things
@@ -259,16 +259,16 @@ void menu_edit_preferences(void)
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_help_text), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
-	// Non-metacity key bind warning
-	check_metacity_key_bind = gtk_check_button_new_with_label(_("Display warning when screenshot key isn't enabled?"));
-	if (FALSE == metacity_key_warning)
+	// Whether to display warning when screenshot key bind fails
+	check_screenshot_key_bind = gtk_check_button_new_with_label(_("Display warning when screenshot key isn't enabled?"));
+	if (FALSE == screenshot_key_warning)
 	{
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_metacity_key_bind), FALSE);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_screenshot_key_bind), FALSE);
 	} else
 	{
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_metacity_key_bind), TRUE);
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_screenshot_key_bind), TRUE);
 	}
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_metacity_key_bind), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_screenshot_key_bind), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Ensure everything will show
@@ -600,13 +600,13 @@ void menu_edit_preferences(void)
 		display_help_text = FALSE;
 	}
 
-	// Get the Metacity key bind warning value
-	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_metacity_key_bind)))
+	// Find out if we should display a warning when the screenshot key isn't bound
+	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_screenshot_key_bind)))
 	{
-		metacity_key_warning = TRUE;
+		screenshot_key_warning = TRUE;
 	} else
 	{
-		metacity_key_warning = FALSE;
+		screenshot_key_warning = FALSE;
 	}
 
 	// Update the status bar

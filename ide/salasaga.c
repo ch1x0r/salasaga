@@ -119,7 +119,6 @@ GtkWidget				*main_drawing_area;			// Widget for the drawing area
 GtkWidget				*main_window;				// Widget for the main window
 GtkItemFactory			*menu_bar = NULL;			// Widget for the menu bar
 GtkTable				*message_bar;				// Widget for message bar
-gboolean				metacity_key_warning;		// Should the metacity key bind warning be displayed?
 gboolean				mouse_click_double_added;	// Have we added a double mouse click to the exported swf yet?
 gboolean				mouse_click_single_added;	// Have we added a single mouse click to the exported swf yet?
 gboolean				mouse_click_triple_added;	// Have we added a triple mouse click to the exported swf yet?
@@ -137,6 +136,7 @@ guint					resize_handle_size = 6;		// Size of the resize handles
 GtkWidget				*right_side;				// Widget for the right side area
 gint					screenshot_command_num = -1;  // The metacity run command number used for the screenshot key
 guint					screenshot_delay_time = 5;	// The number of seconds the screenshot trigger is delayed
+gboolean				screenshot_key_warning;		// Should the warning about not being able to set the screenshot key be displayed?
 gboolean				screenshots_enabled = FALSE;  // Toggle for whether to enable screenshots
 gboolean				show_control_bar = TRUE;	// Toggle for whether to display the control bar in swf output
 GList					*slides = NULL;				// Linked list holding the slide info
@@ -435,7 +435,7 @@ gint main(gint argc, gchar *argv[])
 		default_slide_duration = 5;  // Default number of seconds to use for new slides
 		default_layer_duration = 5;  // Default number of seconds to use for new layers
 		default_fps = 12;
-		metacity_key_warning = TRUE;
+		screenshot_key_warning = TRUE;
 	}
 
 	// Set various required defaults that will be overwritten by the first project loaded
