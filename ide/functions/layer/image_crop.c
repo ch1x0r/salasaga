@@ -24,6 +24,12 @@
  */
 
 
+// Turn on C99 compatibility - needed for roundf() to work
+#define _ISOC99_SOURCE
+
+// Math include
+#include <math.h>
+
 // Standard includes
 #include <stdlib.h>
 
@@ -52,7 +58,9 @@ void image_crop(void)
 	gboolean			acceptable_result = FALSE;	// Toggle to determine if we've received valid crop values from the user
 	GtkDialog			*crop_dialog;				// Widget for the dialog
 	GtkWidget			*crop_table;				// Table used for neat layout of the dialog box
-	gint				dialog_result;				// Receives the return code from the dialog box
+	gint				dialog_height;				// Height of the dialog in pixels
+	gint				dialog_result;				// Catches the return code from the dialog box
+	gint				dialog_width;				// Width of the dialog in pixels
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	GString				*message;					// Used to construct message strings
 	GdkPixbuf			*old_pixbuf;				// Pointer to the full size (old) pixbuf
@@ -60,26 +68,26 @@ void image_crop(void)
 	GdkPixbuf			*new_pixbuf;				// Holds the cropped image data
 	gint				new_width;					// Hold the width of the cropped area
 	guint				row_counter = 0;			// Used to count which row things are up to
+	gdouble				scale_mark_counter;			// Simple counter used when constructing scale marks for sliders
 	guint				selected_row;				// Holds the number of the row that is selected
 	layer				*this_layer;				// Temporary layer
 	layer_image			*tmp_image_ob;				// Points to the image data in the selected layer
 
 	GtkWidget			*left_label;				// Label widget
-	GtkWidget			*left_button;				//
+	GtkWidget			*left_slider;				//
 	GtkWidget			*left_pixels_label;			// Label widget
 
 	GtkWidget			*right_label;				// Label widget
-	GtkWidget			*right_button;				//
+	GtkWidget			*right_slider;				//
 	GtkWidget			*right_pixels_label;		// Label widget
 
 	GtkWidget			*top_label;					// Label widget
-	GtkWidget			*top_button;				//
+	GtkWidget			*top_slider;				//
 	GtkWidget			*top_pixels_label;			// Label widget
 
 	GtkWidget			*bottom_label;				// Label widget
-	GtkWidget			*bottom_button;				//
+	GtkWidget			*bottom_slider;				//
 	GtkWidget			*bottom_pixels_label;		// Label widget
-
 
 
 	// If no project is loaded then don't run this function
@@ -128,72 +136,96 @@ void image_crop(void)
 
 	// Create the dialog window, and table to hold its children
 	crop_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Crop image layer"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
-	crop_table = gtk_table_new(3, 3, FALSE);
+	crop_table = gtk_table_new(4, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(crop_dialog->vbox), GTK_WIDGET(crop_table), FALSE, FALSE, 10);
 
 	// Create the label asking for the left side crop amount
 	left_label = gtk_label_new(_("Left crop: "));
 	gtk_misc_set_alignment(GTK_MISC(left_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_label), 0, 1, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the left side crop amount
-	left_button = gtk_spin_button_new_with_range(0, tmp_image_ob->width, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(left_button), 0);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the slider that accepts the left side crop amount
+	left_slider = gtk_hscale_new_with_range(0, valid_fields[LAYER_WIDTH].max_value, 1);
+	gtk_range_set_value(GTK_RANGE(left_slider), 0);
+	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[LAYER_WIDTH].max_value; scale_mark_counter += 1024)
+	{
+		// Add scale marks
+		gtk_scale_add_mark(GTK_SCALE(left_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_slider), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the left crop "pixels" string
 	left_pixels_label = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(left_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_pixels_label), 2, 3, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the right side crop amount
 	right_label = gtk_label_new(_("Right crop: "));
 	gtk_misc_set_alignment(GTK_MISC(right_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_label), 0, 1, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the right side crop amount
-	right_button = gtk_spin_button_new_with_range(0, tmp_image_ob->width, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(right_button), 0);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the slider that accepts the right side crop amount
+	right_slider = gtk_hscale_new_with_range(0, valid_fields[LAYER_WIDTH].max_value, 1);
+	gtk_range_set_value(GTK_RANGE(right_slider), 0);
+	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[LAYER_WIDTH].max_value; scale_mark_counter += 1024)
+	{
+		// Add scale marks
+		gtk_scale_add_mark(GTK_SCALE(right_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_slider), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the right crop "pixels" string
 	right_pixels_label = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(right_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_pixels_label), 2, 3, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the top crop amount
 	top_label = gtk_label_new(_("Top crop: "));
 	gtk_misc_set_alignment(GTK_MISC(top_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_label), 0, 1, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the left side crop amount
-	top_button = gtk_spin_button_new_with_range(0, tmp_image_ob->height, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(top_button), 0);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the slider that accepts the top crop amount
+	top_slider = gtk_hscale_new_with_range(0, valid_fields[LAYER_HEIGHT].max_value, 1);
+	gtk_range_set_value(GTK_RANGE(top_slider), 0);
+	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[LAYER_HEIGHT].max_value; scale_mark_counter += 1024)
+	{
+		// Add scale marks
+		gtk_scale_add_mark(GTK_SCALE(top_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_slider), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the top crop "pixels" string
 	top_pixels_label = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(top_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_pixels_label), 2, 3, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the right side crop amount
 	bottom_label = gtk_label_new(_("Bottom crop: "));
 	gtk_misc_set_alignment(GTK_MISC(bottom_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_label), 0, 1, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the entry that accepts the right side crop amount
-	bottom_button = gtk_spin_button_new_with_range(0, tmp_image_ob->height, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(bottom_button), 0);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the slider that accepts the bottom crop amount
+	bottom_slider = gtk_hscale_new_with_range(0, valid_fields[LAYER_HEIGHT].max_value, 1);
+	gtk_range_set_value(GTK_RANGE(bottom_slider), 0);
+	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[LAYER_HEIGHT].max_value; scale_mark_counter += 1024)
+	{
+		// Add scale marks
+		gtk_scale_add_mark(GTK_SCALE(bottom_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
+	}
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_slider), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the bottom crop "pixels" string
 	bottom_pixels_label = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(bottom_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_pixels_label), 2, 3, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_pixels_label), 2, 3, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
+
+	// Make the dialog wider than it's defaults, so the slider marks are useful rather than annoying
+	gtk_window_get_size(GTK_WINDOW(crop_dialog), &dialog_width, &dialog_height);
+	gtk_window_resize(GTK_WINDOW(crop_dialog), (gint) roundf(dialog_width * 2.0), dialog_height);
 
 	// Run the dialog
 	gtk_widget_show_all(GTK_WIDGET(crop_dialog));
@@ -211,11 +243,11 @@ void image_crop(void)
 
 		// Determine the new dimensions of the image
 		new_height = gdk_pixbuf_get_height(tmp_image_ob->image_data)
-			- (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(top_button))
-			- (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(bottom_button));
+			- (gint) gtk_range_get_value(GTK_RANGE(top_slider))
+			- (gint) gtk_range_get_value(GTK_RANGE(bottom_slider));
 		new_width = gdk_pixbuf_get_width(tmp_image_ob->image_data)
-			- (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(left_button))
-			- (gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(right_button));
+			- (gint) gtk_range_get_value(GTK_RANGE(left_slider))
+			- (gint) gtk_range_get_value(GTK_RANGE(right_slider));
 
 		// If the user is cropping too much, warn them and loop again
 		if ((0 < new_height) && (0 < new_width))
@@ -234,8 +266,8 @@ void image_crop(void)
 	// Copy the cropped image data to it
 	old_pixbuf = tmp_image_ob->image_data;
 	gdk_pixbuf_copy_area(old_pixbuf, // Source pixbuf
-		(gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(left_button)),  // Left crop
-		(gint) gtk_spin_button_get_value(GTK_SPIN_BUTTON(top_button)),  // Top crop
+		(gint) gtk_range_get_value(GTK_RANGE(left_slider)),  // Left crop
+		(gint) gtk_range_get_value(GTK_RANGE(top_slider)),  // Top crop
 		new_width,  // Width
 		new_height,  // Height
 		new_pixbuf,  // The newly created pixbuf as the destination
