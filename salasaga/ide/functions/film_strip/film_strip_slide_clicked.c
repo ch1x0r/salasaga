@@ -39,6 +39,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../draw_timeline.h"
+#include "../widgets/time_line/time_line_new.h"
 #include "../widgets/time_line/time_line_get_selected_layer_num.h"
 #include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_handle_box.h"
@@ -48,11 +49,11 @@
 void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 {
 	// Local variables
+	GString				*message;
 	GtkTreePath			*selected_path;
 	GtkTreeIter			selected_iter;
 	gint				selected_layer;
 	gchar				*selection_string;
-	slide				*this_slide_data;			// Data for the presently selected slide
 
 
 	// Only do this function if we have a front store available and a project loaded
@@ -80,12 +81,18 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		// Get a pointer to the clicked on slide's data
 		slides = g_list_first(slides);
 		current_slide = g_list_nth(slides, atoi(selection_string));
-		this_slide_data = (slide *) current_slide->data;
+
+		// If the slide doesn't have a timeline widget constructed for it yet, then make one
+		if (NULL == ((slide *) current_slide->data)->timeline_widget)
+		{
+			// Construct the widget used to display the slide in the timeline
+			((slide *) current_slide->data)->timeline_widget = time_line_new();
+		}
 
 		// Redraw the timeline
-		selected_layer = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
+		selected_layer = time_line_get_selected_layer_num(((slide *) current_slide->data)->timeline_widget);
 		draw_timeline();
-		time_line_set_selected_layer_num(this_slide_data->timeline_widget, selected_layer);
+		time_line_set_selected_layer_num(((slide *) current_slide->data)->timeline_widget, selected_layer);
 
 		// Redraw the workspace
 		draw_workspace();
@@ -98,7 +105,10 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		g_free(selection_string);
 
 		// Update the status bar
-		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Ready"));
+		message = g_string_new(NULL);
+		g_string_printf(message, " %s", _("Ready"));
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), message->str);
+		g_string_free(message, TRUE);
 		gdk_flush();
 	}
 }
