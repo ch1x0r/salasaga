@@ -150,7 +150,7 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 	valid_info_display = TRUE;
 
 	// Update the status bar
-	g_string_printf(tmp_gstring, "Loading file - %s", filename);
+	g_string_printf(tmp_gstring, "%s - %s", _("Loading file"), filename);
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
 
 	// Begin reading the file
