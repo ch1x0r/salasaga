@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga 0.8.0-alpha6\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-03 08:19+1100\n"
+"POT-Creation-Date: 2009-12-04 07:05+1100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3143,6 +3143,10 @@ msgstr ""
 
 #: ide/functions/read/read_mouse_layer.c:198
 msgid "There was something wrong with a mouse click value in the project file."
+msgstr ""
+
+#: ide/functions/read/read_project.c:153
+msgid "Loading file"
 msgstr ""
 
 #: ide/functions/read/read_project.c:161
