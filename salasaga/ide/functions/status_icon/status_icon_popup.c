@@ -65,7 +65,7 @@ gint status_icon_popup(GtkWidget *widget, GdkEvent *event, gpointer data)
 	} else
 	{
 		// Create a menu option to iconify the window
-		status_icon_menu_item_iconify = gtk_menu_item_new_with_label(_("Minimise window"));
+		status_icon_menu_item_iconify = gtk_menu_item_new_with_label(_("Minimize window"));
 		gtk_menu_shell_append(GTK_MENU_SHELL(status_icon_menu), GTK_WIDGET(status_icon_menu_item_iconify));
 		g_signal_connect(G_OBJECT(status_icon_menu_item_iconify), "activate", G_CALLBACK(status_icon_iconify), (gpointer) NULL);
 	}
