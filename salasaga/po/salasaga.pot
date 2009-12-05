@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga 0.8.0-alpha6\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-04 07:05+1100\n"
+"POT-Creation-Date: 2009-12-05 17:38+1100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3335,11 +3335,11 @@ msgid "Error creating a text tag node."
 msgstr ""
 
 #: ide/functions/save/save_text_tags.c:105
-msgid "Error creating the foreground colour tags container."
+msgid "Error creating the foreground color tags container."
 msgstr ""
 
 #: ide/functions/save/save_text_tags.c:119
-msgid "Error creating a foreground colour tag node."
+msgid "Error creating a foreground color tag node."
 msgstr ""
 
 #: ide/functions/slide/slide_delete.c:63
@@ -3396,7 +3396,7 @@ msgid "Restore window"
 msgstr ""
 
 #: ide/functions/status_icon/status_icon_popup.c:68
-msgid "Minimise window"
+msgid "Minimize window"
 msgstr ""
 
 #: ide/functions/status_icon/status_icon_popup.c:76
