@@ -128,7 +128,7 @@ void image_resize(void)
 	// Create the slider asking for the new image width
 	new_width_scale = gtk_hscale_new_with_range(valid_fields[LAYER_WIDTH].min_value, valid_fields[LAYER_WIDTH].max_value, 1);
 	gtk_range_set_value(GTK_RANGE(new_width_scale), image_width);
-	gtk_scale_add_mark(GTK_SCALE(new_width_scale), image_width, GTK_POS_BOTTOM, NULL);
+	gtk_scale_add_mark(GTK_SCALE(new_width_scale), image_width, GTK_POS_TOP, NULL);
 	for (scale_mark_counter = 512; scale_mark_counter <= valid_fields[LAYER_WIDTH].max_value; scale_mark_counter += 512)
 	{
 		// Add scale marks
@@ -150,7 +150,7 @@ void image_resize(void)
 	// Create the slider asking for the new image height
 	new_height_scale = gtk_hscale_new_with_range(valid_fields[LAYER_HEIGHT].min_value, valid_fields[LAYER_HEIGHT].max_value, 1);
 	gtk_range_set_value(GTK_RANGE(new_height_scale), image_height);
-	gtk_scale_add_mark(GTK_SCALE(new_height_scale), image_height, GTK_POS_BOTTOM, NULL);
+	gtk_scale_add_mark(GTK_SCALE(new_height_scale), image_height, GTK_POS_TOP, NULL);
 	for (scale_mark_counter = 512; scale_mark_counter <= valid_fields[LAYER_HEIGHT].max_value; scale_mark_counter += 512)
 	{
 		// Add scale marks
