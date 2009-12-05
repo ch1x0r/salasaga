@@ -1,4 +1,4 @@
-# SOME DESCRIPTIVE TITLE.
+# Translation template file for Salasaga
 # Copyright (C) 2009 Justin Clift <justin@salasaga.org>
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga 0.8.0-alpha6\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-05 17:38+1100\n"
+"POT-Creation-Date: 2009-12-05 21:23+1100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -125,20 +125,20 @@ msgstr ""
 #: ide/functions/load_fonts.c:69 ide/functions/load_fonts.c:173
 #: ide/functions/load_fonts.c:180 ide/functions/load_fonts.c:209
 #: ide/functions/load_fonts.c:219
-#: ide/functions/menu/menu_edit_preferences.c:302
-#: ide/functions/menu/menu_edit_preferences.c:316
-#: ide/functions/menu/menu_edit_preferences.c:330
-#: ide/functions/menu/menu_edit_preferences.c:344
-#: ide/functions/menu/menu_edit_preferences.c:359
 #: ide/functions/menu/menu_edit_preferences.c:373
 #: ide/functions/menu/menu_edit_preferences.c:387
 #: ide/functions/menu/menu_edit_preferences.c:401
 #: ide/functions/menu/menu_edit_preferences.c:415
-#: ide/functions/menu/menu_edit_preferences.c:428
-#: ide/functions/menu/menu_edit_preferences.c:443
-#: ide/functions/menu/menu_edit_preferences.c:536
-#: ide/functions/menu/menu_edit_preferences.c:556
-#: ide/functions/menu/menu_edit_preferences.c:575
+#: ide/functions/menu/menu_edit_preferences.c:430
+#: ide/functions/menu/menu_edit_preferences.c:444
+#: ide/functions/menu/menu_edit_preferences.c:458
+#: ide/functions/menu/menu_edit_preferences.c:472
+#: ide/functions/menu/menu_edit_preferences.c:486
+#: ide/functions/menu/menu_edit_preferences.c:499
+#: ide/functions/menu/menu_edit_preferences.c:514
+#: ide/functions/menu/menu_edit_preferences.c:616
+#: ide/functions/menu/menu_edit_preferences.c:636
+#: ide/functions/menu/menu_edit_preferences.c:655
 #: ide/functions/menu/menu_export_layer.c:74
 #: ide/functions/menu/menu_export_layer.c:139
 #: ide/functions/menu/menu_export_layer.c:178
@@ -187,15 +187,17 @@ msgstr ""
 #: ide/functions/menu/menu_screenshots_import.c:274
 #: ide/functions/menu/menu_screenshots_import.c:323
 #: ide/functions/menu/menu_screenshots_import.c:406
-#: ide/functions/preferences_load.c:115 ide/functions/preferences_load.c:131
-#: ide/functions/preferences_load.c:147 ide/functions/preferences_load.c:164
-#: ide/functions/preferences_load.c:181 ide/functions/preferences_load.c:195
-#: ide/functions/preferences_load.c:209 ide/functions/preferences_load.c:223
-#: ide/functions/preferences_load.c:237 ide/functions/preferences_load.c:251
-#: ide/functions/preferences_load.c:265 ide/functions/preferences_load.c:279
-#: ide/functions/preferences_load.c:293 ide/functions/preferences_load.c:309
-#: ide/functions/preferences_load.c:329 ide/functions/preferences_load.c:345
-#: ide/functions/preferences_load.c:367
+#: ide/functions/preferences_load.c:118 ide/functions/preferences_load.c:134
+#: ide/functions/preferences_load.c:150 ide/functions/preferences_load.c:167
+#: ide/functions/preferences_load.c:184 ide/functions/preferences_load.c:198
+#: ide/functions/preferences_load.c:212 ide/functions/preferences_load.c:226
+#: ide/functions/preferences_load.c:240 ide/functions/preferences_load.c:254
+#: ide/functions/preferences_load.c:268 ide/functions/preferences_load.c:282
+#: ide/functions/preferences_load.c:296 ide/functions/preferences_load.c:312
+#: ide/functions/preferences_load.c:332 ide/functions/preferences_load.c:348
+#: ide/functions/preferences_load.c:370 ide/functions/preferences_load.c:390
+#: ide/functions/preferences_load.c:404 ide/functions/preferences_load.c:418
+#: ide/functions/preferences_load.c:435 ide/functions/preferences_load.c:454
 #: ide/functions/project_adjust_dimensions.c:175
 #: ide/functions/project_adjust_dimensions.c:179
 #: ide/functions/project_adjust_dimensions.c:243
@@ -313,8 +315,8 @@ msgstr ""
 #: ide/functions/read/read_text_layer.c:686
 #: ide/functions/read/read_text_layer.c:704
 #: ide/functions/read/read_text_layer.c:728
-#: ide/functions/save_preferences_and_exit.c:191
-#: ide/functions/save_preferences_and_exit.c:211
+#: ide/functions/save_preferences_and_exit.c:196
+#: ide/functions/save_preferences_and_exit.c:216
 #: ide/functions/save/save_layer.c:96 ide/functions/save/save_layer.c:163
 #: ide/functions/save/save_layer.c:319 ide/functions/save/save_layer.c:343
 #: ide/functions/save/save_layer.c:355 ide/functions/save/save_layer.c:364
@@ -343,7 +345,7 @@ msgstr ""
 #: ide/functions/working_area/working_area_button_release_event.c:382
 #: ide/functions/working_area/working_area_motion_notify_event.c:205
 #: ide/functions/working_area/working_area_motion_notify_event.c:365
-#: ide/salasaga.c:484 ide/salasaga.c:495 ide/salasaga.c:554
+#: ide/salasaga.c:492 ide/salasaga.c:503 ide/salasaga.c:562
 #: screen_capture/salasaga_screencapture.c:81
 #: screen_capture/salasaga_screencapture.c:91
 #: screen_capture/salasaga_screencapture.c:120
@@ -567,11 +569,11 @@ msgstr ""
 #: ide/functions/create_zoom_selector.c:71
 #: ide/functions/create_zoom_selector.c:73
 #: ide/functions/menu/menu_screenshots_import.c:446
-#: ide/functions/save_preferences_and_exit.c:99
-#: ide/functions/save_preferences_and_exit.c:310
+#: ide/functions/save_preferences_and_exit.c:104
+#: ide/functions/save_preferences_and_exit.c:315
 #: ide/functions/validate_value.c:674
 #: ide/functions/working_area/event_size_allocate_received.c:61
-#: ide/functions/zoom_selector_changed.c:58 ide/salasaga.c:291
+#: ide/functions/zoom_selector_changed.c:58 ide/salasaga.c:294
 #: screen_capture/validate_value.c:537
 msgid "Fit to width"
 msgstr ""
@@ -951,86 +953,107 @@ msgid "Font face: "
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:252
+#: ide/functions/menu/menu_edit_preferences.c:194
 msgid "DejaVu Sans"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:253
+#: ide/functions/menu/menu_edit_preferences.c:195
 msgid "DejaVu Sans Bold"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:254
+#: ide/functions/menu/menu_edit_preferences.c:196
 msgid "DejaVu Sans Bold Oblique"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:255
+#: ide/functions/menu/menu_edit_preferences.c:197
 msgid "DejaVu Sans Condensed"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:256
+#: ide/functions/menu/menu_edit_preferences.c:198
 msgid "DejaVu Sans Condensed Bold"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:257
+#: ide/functions/menu/menu_edit_preferences.c:199
 msgid "DejaVu Sans Condensed Bold Oblique"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:258
+#: ide/functions/menu/menu_edit_preferences.c:200
 msgid "DejaVu Sans Condensed Oblique"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:259
+#: ide/functions/menu/menu_edit_preferences.c:201
 msgid "DejaVu Sans Extra Light"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:260
+#: ide/functions/menu/menu_edit_preferences.c:202
 msgid "DejaVu Sans Mono"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:261
+#: ide/functions/menu/menu_edit_preferences.c:203
 msgid "DejaVu Sans Mono Bold"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:262
+#: ide/functions/menu/menu_edit_preferences.c:204
 msgid "DejaVu Sans Mono Bold Oblique"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:263
+#: ide/functions/menu/menu_edit_preferences.c:205
 msgid "DejaVu Sans Mono Oblique"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:264
+#: ide/functions/menu/menu_edit_preferences.c:206
 msgid "DejaVu Sans Oblique"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:265
+#: ide/functions/menu/menu_edit_preferences.c:207
 msgid "DejaVu Serif"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:266
+#: ide/functions/menu/menu_edit_preferences.c:208
 msgid "DejaVu Serif Bold"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:267
+#: ide/functions/menu/menu_edit_preferences.c:209
 msgid "DejaVu Serif Bold Italic"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:268
+#: ide/functions/menu/menu_edit_preferences.c:210
 msgid "DejaVu Serif Condensed"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:269
+#: ide/functions/menu/menu_edit_preferences.c:211
 msgid "DejaVu Serif Condensed Bold"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:270
+#: ide/functions/menu/menu_edit_preferences.c:212
 msgid "DejaVu Serif Condensed Bold Italic"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:271
+#: ide/functions/menu/menu_edit_preferences.c:213
 msgid "DejaVu Serif Condensed Italic"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:272
+#: ide/functions/menu/menu_edit_preferences.c:214
 msgid "DejaVu Serif Italic"
 msgstr ""
 
@@ -1503,7 +1526,7 @@ msgstr ""
 msgid "Invalid iter! No layer selected when changing slide!\n"
 msgstr ""
 
-#: ide/functions/film_strip/film_strip_slide_clicked.c:109 ide/salasaga.c:573
+#: ide/functions/film_strip/film_strip_slide_clicked.c:109 ide/salasaga.c:581
 msgid "Ready"
 msgstr ""
 
@@ -2025,162 +2048,174 @@ msgstr ""
 msgid "/Export"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:138
+#: ide/functions/menu/menu_edit_preferences.c:148
 msgid "Application Preferences"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:143
+#: ide/functions/menu/menu_edit_preferences.c:153
 msgid "Default Project Folder: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:146
+#: ide/functions/menu/menu_edit_preferences.c:156
 msgid "Select the Default Project Folder"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:152
+#: ide/functions/menu/menu_edit_preferences.c:162
 msgid "Screenshots Folder: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:155
+#: ide/functions/menu/menu_edit_preferences.c:165
 msgid "Select the Screenshot Folder"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:161
+#: ide/functions/menu/menu_edit_preferences.c:171
 msgid "Default Output Folder: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:164
+#: ide/functions/menu/menu_edit_preferences.c:174
 msgid "Select the Default Output Folder"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:170
+#: ide/functions/menu/menu_edit_preferences.c:180
 msgid "Default Output Resolution: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:178
+#: ide/functions/menu/menu_edit_preferences.c:188
+msgid "Default text layer font face:"
+msgstr ""
+
+#: ide/functions/menu/menu_edit_preferences.c:220
+msgid "Default text layer font size: "
+msgstr ""
+
+#: ide/functions/menu/menu_edit_preferences.c:238
+msgid "Default text layer text foreground color: "
+msgstr ""
+
+#: ide/functions/menu/menu_edit_preferences.c:249
 msgid ""
 "Default Slide Duration: \n"
 "(seconds)"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:188
+#: ide/functions/menu/menu_edit_preferences.c:259
 msgid ""
 "Default Layer Duration: \n"
 "(seconds)"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:198
+#: ide/functions/menu/menu_edit_preferences.c:269
 msgid "Default Frames Per Second: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:207
+#: ide/functions/menu/menu_edit_preferences.c:278
 msgid "Film Strip Width: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:216
+#: ide/functions/menu/menu_edit_preferences.c:287
 msgid "Icon Height: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:225
+#: ide/functions/menu/menu_edit_preferences.c:296
 msgid "Default Zoom Level: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:233
+#: ide/functions/menu/menu_edit_preferences.c:304
 msgid "Default Background Color: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:242
+#: ide/functions/menu/menu_edit_preferences.c:313
 msgid "Number of seconds for screenshot delay: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:251
+#: ide/functions/menu/menu_edit_preferences.c:322
 msgid "Display help text?"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:263
+#: ide/functions/menu/menu_edit_preferences.c:334
 msgid "Display warning when screenshot key isn't enabled?"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:302
+#: ide/functions/menu/menu_edit_preferences.c:373
 #: ide/functions/menu/menu_project_properties.c:341
 msgid ""
 "There was something wrong with the project folder given.  Please try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:316
+#: ide/functions/menu/menu_edit_preferences.c:387
 msgid ""
 "There was something wrong with the screenshot folder given.  Please try "
 "again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:330
+#: ide/functions/menu/menu_edit_preferences.c:401
 #: ide/functions/menu/menu_project_properties.c:355
 msgid ""
 "There was something wrong with the output folder given.  Please try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:344
+#: ide/functions/menu/menu_edit_preferences.c:415
 msgid ""
 "There was something wrong with the default output resolution given.  Please "
 "try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:359
+#: ide/functions/menu/menu_edit_preferences.c:430
 msgid ""
 "There was something wrong with the default slide duration value.  Please try "
 "again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:373
+#: ide/functions/menu/menu_edit_preferences.c:444
 msgid ""
 "There was something wrong with the default layer duration value.  Please try "
 "again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:387
+#: ide/functions/menu/menu_edit_preferences.c:458
 #: ide/functions/menu/menu_project_properties.c:370
 msgid ""
 "There was something wrong with the default frames per second value.  Please "
 "try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:401
+#: ide/functions/menu/menu_edit_preferences.c:472
 msgid ""
 "There was something wrong with the preview width value.  Please try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:415
+#: ide/functions/menu/menu_edit_preferences.c:486
 msgid ""
 "There was something wrong with the icon height value.  Please try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:428
+#: ide/functions/menu/menu_edit_preferences.c:499
 msgid ""
 "There was something wrong with the default zoom level given.  Please try "
 "again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:443
+#: ide/functions/menu/menu_edit_preferences.c:514
 msgid ""
 "There was something wrong with the screenshot delay value.  Please try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:537
+#: ide/functions/menu/menu_edit_preferences.c:617
 #, c-format
 msgid "An error '%s' occurred when opening the lock file '%s' for writing."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:557
+#: ide/functions/menu/menu_edit_preferences.c:637
 #, c-format
 msgid "An error '%s' occurred when writing data to the lock file '%s'."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:576
+#: ide/functions/menu/menu_edit_preferences.c:656
 #, c-format
 msgid "An error '%s' occurred when closing the lock file '%s'."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:613
+#: ide/functions/menu/menu_edit_preferences.c:693
 msgid " Application preferences updated"
 msgstr ""
 
@@ -2277,7 +2312,7 @@ msgid ""
 "Project' instead."
 msgstr ""
 
-#: ide/functions/menu/menu_file_new.c:211 ide/salasaga.c:298
+#: ide/functions/menu/menu_file_new.c:211 ide/salasaga.c:301
 msgid "New Project"
 msgstr ""
 
@@ -2735,92 +2770,117 @@ msgstr ""
 msgid "screenshots imported"
 msgstr ""
 
-#: ide/functions/preferences_load.c:115
+#: ide/functions/preferences_load.c:118
 msgid ""
 "There was something wrong with the project folder value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:131
+#: ide/functions/preferences_load.c:134
 msgid ""
 "There was something wrong with the screenshots folder value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:147
+#: ide/functions/preferences_load.c:150
 msgid ""
 "There was something wrong with the default output folder value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:164
+#: ide/functions/preferences_load.c:167
 msgid ""
 "There was something wrong with the default zoom level value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:181 ide/functions/preferences_load.c:195
+#: ide/functions/preferences_load.c:184 ide/functions/preferences_load.c:198
 msgid ""
 "There was something wrong with the default project width value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:209
+#: ide/functions/preferences_load.c:212
 msgid ""
 "There was something wrong with the default output width value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:223
+#: ide/functions/preferences_load.c:226
 msgid ""
 "There was something wrong with the default output height value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:237
+#: ide/functions/preferences_load.c:240
 msgid ""
 "There was something wrong with the default slide duration value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:251
+#: ide/functions/preferences_load.c:254
 msgid ""
 "There was something wrong with the default layer duration value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:265 ide/functions/preferences_load.c:279
-#: ide/functions/preferences_load.c:293
+#: ide/functions/preferences_load.c:268 ide/functions/preferences_load.c:282
+#: ide/functions/preferences_load.c:296
 msgid ""
 "There was something wrong with the default background color value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:309
+#: ide/functions/preferences_load.c:312
 msgid ""
 "There was something wrong with the film strip thumbnail width value stored "
 "in the preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:329
+#: ide/functions/preferences_load.c:332
 msgid ""
 "There was something wrong with the default frames per second value stored in "
 "the preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:345
+#: ide/functions/preferences_load.c:348
 msgid ""
 "There was something wrong with the icon height value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:367
+#: ide/functions/preferences_load.c:370
 msgid ""
 "There was something wrong with the screenshot delay value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
 
-#: ide/functions/preferences_load.c:838
+#: ide/functions/preferences_load.c:390 ide/functions/preferences_load.c:404
+#: ide/functions/preferences_load.c:418
+msgid ""
+"There was something wrong with the default text foreground color value "
+"stored in the preferences."
+msgstr ""
+
+#: ide/functions/preferences_load.c:390 ide/functions/preferences_load.c:404
+#: ide/functions/preferences_load.c:418 ide/functions/preferences_load.c:435
+#: ide/functions/preferences_load.c:454
+msgid "Using default preferences instead."
+msgstr ""
+
+#: ide/functions/preferences_load.c:435
+msgid ""
+"There was something wrong with the default text layer font size value stored "
+"in the preferences."
+msgstr ""
+
+#: ide/functions/preferences_load.c:454
+msgid ""
+"There was something wrong with the default text layer font face value stored "
+"in the preferences."
+msgstr ""
+
+#: ide/functions/preferences_load.c:930
 msgid ""
 "Some of the application preference registry keys are missing.  Using "
 "defaults."
@@ -3301,8 +3361,8 @@ msgstr ""
 msgid "There was something wrong with a font size value in the project file."
 msgstr ""
 
-#: ide/functions/save_preferences_and_exit.c:191
-#: ide/functions/save_preferences_and_exit.c:211
+#: ide/functions/save_preferences_and_exit.c:196
+#: ide/functions/save_preferences_and_exit.c:216
 msgid "Saving preferences in the registry failed."
 msgstr ""
 
@@ -3481,56 +3541,56 @@ msgstr ""
 msgid " Layer moved"
 msgstr ""
 
-#: ide/salasaga.c:323
+#: ide/salasaga.c:326
 #, c-format
 msgid "Debugging mode, errors will be shown on stdout.\n"
 msgstr ""
 
-#: ide/salasaga.c:339
+#: ide/salasaga.c:342
 #, c-format
 msgid "Program path: '%s'\n"
 msgstr ""
 
-#: ide/salasaga.c:340
+#: ide/salasaga.c:343
 #, c-format
 msgid "Directory base: '%s'\n"
 msgstr ""
 
-#: ide/salasaga.c:350
+#: ide/salasaga.c:353
 msgid "icons"
 msgstr ""
 
-#: ide/salasaga.c:362
+#: ide/salasaga.c:365
 #, c-format
 msgid "Icon path: %s\n"
 msgstr ""
 
-#: ide/salasaga.c:390
+#: ide/salasaga.c:393
 #, c-format
 msgid "Path to mouse pointer image: %s\n"
 msgstr ""
 
-#: ide/salasaga.c:484
+#: ide/salasaga.c:492
 msgid "Something went wrong when creating the menu bar."
 msgstr ""
 
-#: ide/salasaga.c:495
+#: ide/salasaga.c:503
 msgid "Something went wrong when creating the toolbar."
 msgstr ""
 
-#: ide/salasaga.c:526
+#: ide/salasaga.c:534
 msgid "Zoom: "
 msgstr ""
 
-#: ide/salasaga.c:538
+#: ide/salasaga.c:546
 msgid "Output: "
 msgstr ""
 
-#: ide/salasaga.c:554
+#: ide/salasaga.c:562
 msgid "Something went wrong when creating the film strip."
 msgstr ""
 
-#: ide/salasaga.c:591
+#: ide/salasaga.c:599
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
 msgstr ""
 
