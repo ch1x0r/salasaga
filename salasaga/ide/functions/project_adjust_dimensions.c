@@ -106,7 +106,7 @@ void project_adjust_dimensions(void)
 	// Create the slider that accepts the new project width
 	new_width_slider = gtk_hscale_new_with_range(valid_fields[PROJECT_WIDTH].min_value, valid_fields[PROJECT_WIDTH].max_value, 1);
 	gtk_range_set_value(GTK_RANGE(new_width_slider), project_width);
-	gtk_scale_add_mark(GTK_SCALE(new_width_slider), project_width, GTK_POS_BOTTOM, NULL);
+	gtk_scale_add_mark(GTK_SCALE(new_width_slider), project_width, GTK_POS_TOP, NULL);
 	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[PROJECT_WIDTH].max_value; scale_mark_counter += 1024)
 	{
 		// Add scale marks
@@ -128,7 +128,7 @@ void project_adjust_dimensions(void)
 	// Create the slider that accepts the new project height
 	new_height_slider = gtk_hscale_new_with_range(valid_fields[PROJECT_HEIGHT].min_value, valid_fields[PROJECT_HEIGHT].max_value, 1);
 	gtk_range_set_value(GTK_RANGE(new_height_slider), project_height);
-	gtk_scale_add_mark(GTK_SCALE(new_height_slider), project_height, GTK_POS_BOTTOM, NULL);
+	gtk_scale_add_mark(GTK_SCALE(new_height_slider), project_height, GTK_POS_TOP, NULL);
 	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[PROJECT_HEIGHT].max_value; scale_mark_counter += 1024)
 	{
 		// Add scale marks
