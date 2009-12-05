@@ -63,8 +63,11 @@ gboolean preferences_load()
 	gboolean			should_keybind_warn = TRUE;	// Receives the gboolean as to whether the non-metacity key bind warning should be displayed
 	gchar				*tmp_gchar;					// Used for temporary string retrieval
 	gboolean			usable_input;				// Used to control loop flow
-	GdkColor			valid_bg_colour = {0,0,0};	// Receives the new default background color for slides once validated
+	GdkColor			valid_bg_colour = {0,0,0};	// Receives the new default background colour for slides once validated
 	guint				valid_default_fps = 0;		// Receives the new default fps once validated
+	GdkColor			valid_default_text_fg_colour = {0, 0, 0};  // Receives the new default text layer foreground colour once validated
+	gint				valid_default_text_font_face = 0;  // Receives the new default text layer font face once validated
+	gdouble				valid_default_text_font_size;  // Receives the new default text layer font size once validated
 	guint				valid_icon_height;			// Receives the new icon height once validated
 	gfloat				valid_layer_duration = 0;	// Receives the new default layer duration once validated
 	GString				*valid_output_folder;		// Receives the new output folder once validated
@@ -379,6 +382,84 @@ gboolean preferences_load()
 		valid_screenshot_delay = 5;
 	}
 
+	// Retrieve the default text foreground colour, red component
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/default_text_fg_colour_red", NULL);
+	validated_guint = validate_value(COLOUR_COMP16, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		g_string_printf(message, "%s ED454: %s  %s", _("Error"), _("There was something wrong with the default text foreground color value stored in the preferences."), _("Using default preferences instead."));
+		display_warning(message->str);
+		usable_input = FALSE;
+	} else
+	{
+		valid_default_text_fg_colour.red = *validated_guint;
+		g_free(validated_guint);
+	}
+
+	// Retrieve the default text foreground colour, green component
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/default_text_fg_colour_green", NULL);
+	validated_guint = validate_value(COLOUR_COMP16, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		g_string_printf(message, "%s ED455: %s  %s", _("Error"), _("There was something wrong with the default text foreground color value stored in the preferences."), _("Using default preferences instead."));
+		display_warning(message->str);
+		usable_input = FALSE;
+	} else
+	{
+		valid_default_text_fg_colour.green = *validated_guint;
+		g_free(validated_guint);
+	}
+
+	// Retrieve the default text foreground colour, blue component
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/default_text_fg_colour_blue", NULL);
+	validated_guint = validate_value(COLOUR_COMP16, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		g_string_printf(message, "%s ED456: %s  %s", _("Error"), _("There was something wrong with the default text foreground color value stored in the preferences."), _("Using default preferences instead."));
+		display_warning(message->str);
+		usable_input = FALSE;
+	} else
+	{
+		valid_default_text_fg_colour.blue = *validated_guint;
+		g_free(validated_guint);
+	}
+
+	// Retrieve the new default text layer font size
+	gfloat_val = gconf_engine_get_float(gconf_engine, "/apps/salasaga/defaults/default_text_font_size", NULL);
+	if (0.0 != gfloat_val)
+	{
+		// A value was returned
+		validated_gfloat = validate_value(FONT_SIZE, V_FLOAT_UNSIGNED, &gfloat_val);
+		if (NULL == validated_gfloat)
+		{
+			g_string_printf(message, "%s ED457: %s  %s", _("Error"), _("There was something wrong with the default text layer font size value stored in the preferences."), _("Using default preferences instead."));
+			display_warning(message->str);
+			usable_input = FALSE;
+		} else
+		{
+			valid_default_text_font_size = *validated_gfloat;
+			g_free(validated_gfloat);
+		}
+	} else
+	{
+		// No value is set in the saved preferences, so we go with a sensible default
+		valid_default_text_font_size = 10.0;
+	}
+
+	// Retrieve the new default text layer font face
+	guint_val = gconf_engine_get_int(gconf_engine, "/apps/salasaga/defaults/default_text_font_face", NULL);
+	validated_guint = validate_value(FONT_FACE, V_INT_UNSIGNED, &guint_val);
+	if (NULL == validated_guint)
+	{
+		g_string_printf(message, "%s ED458: %s  %s", _("Error"), _("There was something wrong with the default text layer font face value stored in the preferences."), _("Using default preferences instead."));
+		display_warning(message->str);
+		usable_input = FALSE;
+	} else
+	{
+		valid_default_text_font_face = *validated_guint;
+		g_free(validated_guint);
+	}
+
 	// Check if the application should start maximised or not
 	should_maximise = gconf_engine_get_bool(gconf_engine, "/apps/salasaga/defaults/window_maximised", NULL);
 
@@ -451,6 +532,17 @@ gboolean preferences_load()
 	default_bg_colour.red = valid_bg_colour.red;
 	default_bg_colour.green = valid_bg_colour.green;
 	default_bg_colour.blue = valid_bg_colour.blue;
+
+	// Set the default text layer foreground colour
+	default_text_fg_colour.red = valid_default_text_fg_colour.red;
+	default_text_fg_colour.green = valid_default_text_fg_colour.green;
+	default_text_fg_colour.blue = valid_default_text_fg_colour.blue;
+
+	// Set the default text layer font size
+	default_text_font_size = valid_default_text_font_size;
+
+	// Set the default text layer font face
+	default_text_font_face = valid_default_text_font_face;
 
 	// Set the default film strip thumbnail width
 	preview_width = valid_preview_width;
