@@ -89,6 +89,9 @@ gboolean				changes_made = FALSE;		// Have there been changes to the project sin
 layer					*copy_layer = NULL;			// The copy buffer for layers
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
 guint					debug_level = 0;			// Used to indicate debugging level
+GdkColor				default_text_fg_colour;		// Default foreground colour for text layer text
+gint					default_text_font_face;		// Default font face in text layers
+gdouble					default_text_font_size;		// Default font size in text layers
 gboolean				display_help_text = TRUE;	// Should we display help text and dialogs?
 guint					end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations
 guint					end_point_status = END_POINTS_INACTIVE;  // Is one of the layer end points being moved?
@@ -436,6 +439,11 @@ gint main(gint argc, gchar *argv[])
 		default_layer_duration = 5;  // Default number of seconds to use for new layers
 		default_fps = 12;
 		screenshot_key_warning = TRUE;
+		default_text_fg_colour.red = 0;
+		default_text_fg_colour.green = 0;
+		default_text_fg_colour.blue = 0;
+		default_text_font_size = 10.0;
+		default_text_font_face = 0;  // Set the default text layer font face to DejaVu Sans
 	}
 
 	// Set various required defaults that will be overwritten by the first project loaded
