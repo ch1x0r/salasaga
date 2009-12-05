@@ -102,7 +102,7 @@ void save_text_tags(xmlNodePtr tag_root)
 	colour_root = xmlNewChild(tag_root, NULL, (const xmlChar *) "fg-colour-tags", NULL);
 	if (NULL == colour_root)
 	{
-		g_string_printf(message, "%s ED437: %s", _("Error"), _("Error creating the foreground colour tags container."));
+		g_string_printf(message, "%s ED437: %s", _("Error"), _("Error creating the foreground color tags container."));
 		display_warning(message->str);
 		g_string_free(message, TRUE);
 		return;
@@ -116,7 +116,7 @@ void save_text_tags(xmlNodePtr tag_root)
 		tag_node = xmlNewChild(colour_root, NULL, (const xmlChar *) "tag", NULL);
 		if (NULL == tag_node)
 		{
-			g_string_printf(message, "%s ED438: %s", _("Error"), _("Error creating a foreground colour tag node."));
+			g_string_printf(message, "%s ED438: %s", _("Error"), _("Error creating a foreground color tag node."));
 			display_warning(message->str);
 			g_string_free(message, TRUE);
 			return;
