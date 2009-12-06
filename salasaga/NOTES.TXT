@@ -23,7 +23,8 @@ I18n notes
 
  "gettextize" version 0.17 was used to prepare the m4, po and intl directories.
 
- Strings initially extracted with:
+ Text strings are extracted with:
 
-  xgettext -L C -k_ -kN_ -f po/POTFILES.in -o po/salasaga.pot
+  xgettext -L C -k_ -kN_ --copyright-holder="Justin Clift" --package-name="salasaga" --package-version="0.8.0-alpha6" --msgid-bugs-address="justin@salasaga.org" -f po/POTFILES.in -o po/salasaga.pot
+  sed -i 's/Copyright (C) YEAR/Copyright (C) 2009/' po/salasaga.pot
 
