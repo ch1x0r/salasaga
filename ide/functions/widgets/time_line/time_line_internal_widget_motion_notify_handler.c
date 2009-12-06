@@ -78,7 +78,10 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 	gfloat				time_moved;					// Number of seconds the row is being adjusted by
 
 	// Safety check
-	g_return_val_if_fail(IS_TIME_LINE(this_time_line), FALSE);
+	if (FALSE == IS_TIME_LINE(this_time_line))
+	{
+		return FALSE;
+	}
 
 	// If there isn't anything to do, then skip running on this call
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
