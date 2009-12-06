@@ -1,5 +1,5 @@
-# Translation template file for Salasaga
-# Copyright (C) 2009 Justin Clift <justin@salasaga.org>
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2009 Justin Clift
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga 0.8.0-alpha6\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-05 21:23+1100\n"
+"POT-Creation-Date: 2009-12-06 14:21+1100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -84,14 +84,14 @@ msgstr ""
 #: ide/functions/export/html/export_html_wrapper.c:167
 #: ide/functions/export/swf/export_swf_control_bar.c:460
 #: ide/functions/export/swf/export_swf_control_bar.c:1294
-#: ide/functions/export/swf/export_swf_create_shape.c:171
-#: ide/functions/export/swf/export_swf_create_shape.c:187
-#: ide/functions/export/swf/export_swf_create_shape.c:207
-#: ide/functions/export/swf/export_swf_create_shape.c:270
-#: ide/functions/export/swf/export_swf_create_shape.c:349
-#: ide/functions/export/swf/export_swf_create_shape.c:440
-#: ide/functions/export/swf/export_swf_create_shape.c:766
-#: ide/functions/export/swf/export_swf_create_shape.c:870
+#: ide/functions/export/swf/export_swf_create_shape.c:172
+#: ide/functions/export/swf/export_swf_create_shape.c:188
+#: ide/functions/export/swf/export_swf_create_shape.c:208
+#: ide/functions/export/swf/export_swf_create_shape.c:271
+#: ide/functions/export/swf/export_swf_create_shape.c:350
+#: ide/functions/export/swf/export_swf_create_shape.c:441
+#: ide/functions/export/swf/export_swf_create_shape.c:781
+#: ide/functions/export/swf/export_swf_create_shape.c:885
 #: ide/functions/export/swf/export_swf_inner.c:108
 #: ide/functions/export/swf/export_swf_inner.c:118
 #: ide/functions/export/swf/export_swf_inner.c:259
@@ -125,20 +125,20 @@ msgstr ""
 #: ide/functions/load_fonts.c:69 ide/functions/load_fonts.c:173
 #: ide/functions/load_fonts.c:180 ide/functions/load_fonts.c:209
 #: ide/functions/load_fonts.c:219
-#: ide/functions/menu/menu_edit_preferences.c:373
-#: ide/functions/menu/menu_edit_preferences.c:387
 #: ide/functions/menu/menu_edit_preferences.c:401
 #: ide/functions/menu/menu_edit_preferences.c:415
-#: ide/functions/menu/menu_edit_preferences.c:430
-#: ide/functions/menu/menu_edit_preferences.c:444
+#: ide/functions/menu/menu_edit_preferences.c:429
+#: ide/functions/menu/menu_edit_preferences.c:443
 #: ide/functions/menu/menu_edit_preferences.c:458
 #: ide/functions/menu/menu_edit_preferences.c:472
 #: ide/functions/menu/menu_edit_preferences.c:486
-#: ide/functions/menu/menu_edit_preferences.c:499
+#: ide/functions/menu/menu_edit_preferences.c:500
 #: ide/functions/menu/menu_edit_preferences.c:514
-#: ide/functions/menu/menu_edit_preferences.c:616
-#: ide/functions/menu/menu_edit_preferences.c:636
-#: ide/functions/menu/menu_edit_preferences.c:655
+#: ide/functions/menu/menu_edit_preferences.c:527
+#: ide/functions/menu/menu_edit_preferences.c:542
+#: ide/functions/menu/menu_edit_preferences.c:644
+#: ide/functions/menu/menu_edit_preferences.c:664
+#: ide/functions/menu/menu_edit_preferences.c:683
 #: ide/functions/menu/menu_export_layer.c:74
 #: ide/functions/menu/menu_export_layer.c:139
 #: ide/functions/menu/menu_export_layer.c:178
@@ -334,9 +334,9 @@ msgstr ""
 #: ide/functions/widgets/time_line/time_line_internal_initialise_bg_image.c:109
 #: ide/functions/widgets/time_line/time_line_internal_initialise_display_buffer.c:93
 #: ide/functions/widgets/time_line/time_line_internal_initialise_display_buffer.c:107
-#: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:394
-#: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:505
-#: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:611
+#: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:398
+#: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:509
+#: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:615
 #: ide/functions/working_area/calculate_object_boundaries.c:182
 #: ide/functions/working_area/draw_highlight_box.c:53
 #: ide/functions/working_area/draw_highlight_box.c:92
@@ -391,6 +391,8 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_image.c:205
 #: ide/functions/layer/image_crop.c:158 ide/functions/layer/image_crop.c:179
 #: ide/functions/layer/image_crop.c:200 ide/functions/layer/image_crop.c:221
+#: ide/functions/menu/menu_edit_preferences.c:303
+#: ide/functions/menu/menu_edit_preferences.c:315
 #: ide/functions/menu/menu_project_properties.c:170
 #: ide/functions/menu/menu_project_properties.c:182
 #: ide/functions/project_adjust_dimensions.c:118
@@ -953,107 +955,107 @@ msgid "Font face: "
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:252
-#: ide/functions/menu/menu_edit_preferences.c:194
+#: ide/functions/menu/menu_edit_preferences.c:200
 msgid "DejaVu Sans"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:253
-#: ide/functions/menu/menu_edit_preferences.c:195
+#: ide/functions/menu/menu_edit_preferences.c:201
 msgid "DejaVu Sans Bold"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:254
-#: ide/functions/menu/menu_edit_preferences.c:196
+#: ide/functions/menu/menu_edit_preferences.c:202
 msgid "DejaVu Sans Bold Oblique"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:255
-#: ide/functions/menu/menu_edit_preferences.c:197
+#: ide/functions/menu/menu_edit_preferences.c:203
 msgid "DejaVu Sans Condensed"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:256
-#: ide/functions/menu/menu_edit_preferences.c:198
+#: ide/functions/menu/menu_edit_preferences.c:204
 msgid "DejaVu Sans Condensed Bold"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:257
-#: ide/functions/menu/menu_edit_preferences.c:199
+#: ide/functions/menu/menu_edit_preferences.c:205
 msgid "DejaVu Sans Condensed Bold Oblique"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:258
-#: ide/functions/menu/menu_edit_preferences.c:200
+#: ide/functions/menu/menu_edit_preferences.c:206
 msgid "DejaVu Sans Condensed Oblique"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:259
-#: ide/functions/menu/menu_edit_preferences.c:201
+#: ide/functions/menu/menu_edit_preferences.c:207
 msgid "DejaVu Sans Extra Light"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:260
-#: ide/functions/menu/menu_edit_preferences.c:202
+#: ide/functions/menu/menu_edit_preferences.c:208
 msgid "DejaVu Sans Mono"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:261
-#: ide/functions/menu/menu_edit_preferences.c:203
+#: ide/functions/menu/menu_edit_preferences.c:209
 msgid "DejaVu Sans Mono Bold"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:262
-#: ide/functions/menu/menu_edit_preferences.c:204
+#: ide/functions/menu/menu_edit_preferences.c:210
 msgid "DejaVu Sans Mono Bold Oblique"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:263
-#: ide/functions/menu/menu_edit_preferences.c:205
+#: ide/functions/menu/menu_edit_preferences.c:211
 msgid "DejaVu Sans Mono Oblique"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:264
-#: ide/functions/menu/menu_edit_preferences.c:206
+#: ide/functions/menu/menu_edit_preferences.c:212
 msgid "DejaVu Sans Oblique"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:265
-#: ide/functions/menu/menu_edit_preferences.c:207
+#: ide/functions/menu/menu_edit_preferences.c:213
 msgid "DejaVu Serif"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:266
-#: ide/functions/menu/menu_edit_preferences.c:208
+#: ide/functions/menu/menu_edit_preferences.c:214
 msgid "DejaVu Serif Bold"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:267
-#: ide/functions/menu/menu_edit_preferences.c:209
+#: ide/functions/menu/menu_edit_preferences.c:215
 msgid "DejaVu Serif Bold Italic"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:268
-#: ide/functions/menu/menu_edit_preferences.c:210
+#: ide/functions/menu/menu_edit_preferences.c:216
 msgid "DejaVu Serif Condensed"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:269
-#: ide/functions/menu/menu_edit_preferences.c:211
+#: ide/functions/menu/menu_edit_preferences.c:217
 msgid "DejaVu Serif Condensed Bold"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:270
-#: ide/functions/menu/menu_edit_preferences.c:212
+#: ide/functions/menu/menu_edit_preferences.c:218
 msgid "DejaVu Serif Condensed Bold Italic"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:271
-#: ide/functions/menu/menu_edit_preferences.c:213
+#: ide/functions/menu/menu_edit_preferences.c:219
 msgid "DejaVu Serif Condensed Italic"
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:272
-#: ide/functions/menu/menu_edit_preferences.c:214
+#: ide/functions/menu/menu_edit_preferences.c:220
 msgid "DejaVu Serif Italic"
 msgstr ""
 
@@ -1283,84 +1285,84 @@ msgid ""
 "Something went wrong when creating the information button background shape."
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:160
+#: ide/functions/export/swf/export_swf_create_shape.c:161
 #, c-format
 msgid "Image width: %d\n"
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:161
+#: ide/functions/export/swf/export_swf_create_shape.c:162
 #, c-format
 msgid "Scaled width: %d\n"
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:162
+#: ide/functions/export/swf/export_swf_create_shape.c:163
 #, c-format
 msgid "Image height: %d\n"
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:163
+#: ide/functions/export/swf/export_swf_create_shape.c:164
 #, c-format
 msgid "Scaled height: %d\n"
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:171
+#: ide/functions/export/swf/export_swf_create_shape.c:172
 msgid ""
 "Something went wrong when creating the dictionary shape for an image layer."
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:187
+#: ide/functions/export/swf/export_swf_create_shape.c:188
 msgid "Something went wrong when encoding an image to required format."
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:207
+#: ide/functions/export/swf/export_swf_create_shape.c:208
 #: ide/functions/export/swf/swf_shape_from_image_file.c:131
 msgid "Something went wrong converting an image to a swf shape object."
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:226
+#: ide/functions/export/swf/export_swf_create_shape.c:227
 #, c-format
 msgid "This image has an external link: '%s'\n"
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:270
+#: ide/functions/export/swf/export_swf_create_shape.c:271
 msgid "Something went wrong when creating an empty layer for swf output."
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:300
+#: ide/functions/export/swf/export_swf_create_shape.c:301
 #, c-format
 msgid "This empty layer has an external link: '%s'\n"
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:349
+#: ide/functions/export/swf/export_swf_create_shape.c:350
 msgid "Something went wrong when creating a highlight layer for swf output."
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:393
+#: ide/functions/export/swf/export_swf_create_shape.c:394
 #, c-format
 msgid "This highlight has an external link: '%s'\n"
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:440
+#: ide/functions/export/swf/export_swf_create_shape.c:441
 msgid ""
 "Something went wrong when creating a mouse pointer shape for swf output."
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:461
+#: ide/functions/export/swf/export_swf_create_shape.c:462
 #, c-format
 msgid "This mouse cursor layer has an external link: '%s'\n"
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:766
+#: ide/functions/export/swf/export_swf_create_shape.c:781
 msgid ""
 "Something went wrong when creating a text layer background for swf output."
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:819
+#: ide/functions/export/swf/export_swf_create_shape.c:834
 #, c-format
 msgid "This text has an external link: '%s'\n"
 msgstr ""
 
-#: ide/functions/export/swf/export_swf_create_shape.c:870
+#: ide/functions/export/swf/export_swf_create_shape.c:885
 msgid "Unknown layer type in swf output."
 msgstr ""
 
@@ -1697,7 +1699,7 @@ msgstr ""
 #: ide/functions/layer/layer_new_highlight_inner.c:154
 #: ide/functions/layer/layer_new_image_inner.c:99
 #: ide/functions/layer/layer_new_mouse_inner.c:84
-#: ide/functions/layer/layer_new_text_inner.c:115
+#: ide/functions/layer/layer_new_text_inner.c:111
 #: ide/functions/menu/menu_screenshots_import.c:307
 #: ide/functions/menu/menu_screenshots_import.c:369
 #: ide/functions/read/read_highlight_layer.c:71
@@ -1741,15 +1743,15 @@ msgstr ""
 msgid " Mouse layer added"
 msgstr ""
 
-#: ide/functions/layer/layer_new_text_inner.c:73
+#: ide/functions/layer/layer_new_text_inner.c:72
 msgid "New text..."
 msgstr ""
 
-#: ide/functions/layer/layer_new_text_inner.c:113
+#: ide/functions/layer/layer_new_text_inner.c:109
 msgid "Text layer"
 msgstr ""
 
-#: ide/functions/layer/layer_new_text_inner.c:154
+#: ide/functions/layer/layer_new_text_inner.c:150
 msgid " Text layer added"
 msgstr ""
 
@@ -2048,174 +2050,180 @@ msgstr ""
 msgid "/Export"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:148
+#: ide/functions/menu/menu_edit_preferences.c:154
 msgid "Application Preferences"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:153
+#: ide/functions/menu/menu_edit_preferences.c:159
 msgid "Default Project Folder: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:156
+#: ide/functions/menu/menu_edit_preferences.c:162
 msgid "Select the Default Project Folder"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:162
+#: ide/functions/menu/menu_edit_preferences.c:168
 msgid "Screenshots Folder: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:165
+#: ide/functions/menu/menu_edit_preferences.c:171
 msgid "Select the Screenshot Folder"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:171
+#: ide/functions/menu/menu_edit_preferences.c:177
 msgid "Default Output Folder: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:174
+#: ide/functions/menu/menu_edit_preferences.c:180
 msgid "Select the Default Output Folder"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:180
+#: ide/functions/menu/menu_edit_preferences.c:186
 msgid "Default Output Resolution: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:188
+#: ide/functions/menu/menu_edit_preferences.c:194
 msgid "Default text layer font face:"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:220
+#: ide/functions/menu/menu_edit_preferences.c:226
 msgid "Default text layer font size: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:238
-msgid "Default text layer text foreground color: "
+#: ide/functions/menu/menu_edit_preferences.c:243
+msgid "points"
 msgstr ""
 
 #: ide/functions/menu/menu_edit_preferences.c:249
-msgid ""
-"Default Slide Duration: \n"
-"(seconds)"
+msgid "Default text layer text foreground color: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:259
-msgid ""
-"Default Layer Duration: \n"
-"(seconds)"
+#: ide/functions/menu/menu_edit_preferences.c:260
+msgid "Default Slide Duration"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:269
+#: ide/functions/menu/menu_edit_preferences.c:268
+#: ide/functions/menu/menu_edit_preferences.c:282
+#: ide/functions/menu/menu_edit_preferences.c:344
+msgid "seconds"
+msgstr ""
+
+#: ide/functions/menu/menu_edit_preferences.c:274
+msgid "Default Layer Duration"
+msgstr ""
+
+#: ide/functions/menu/menu_edit_preferences.c:288
 msgid "Default Frames Per Second: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:278
+#: ide/functions/menu/menu_edit_preferences.c:297
 msgid "Film Strip Width: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:287
+#: ide/functions/menu/menu_edit_preferences.c:309
 msgid "Icon Height: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:296
+#: ide/functions/menu/menu_edit_preferences.c:321
 msgid "Default Zoom Level: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:304
+#: ide/functions/menu/menu_edit_preferences.c:329
 msgid "Default Background Color: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:313
+#: ide/functions/menu/menu_edit_preferences.c:338
 msgid "Number of seconds for screenshot delay: "
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:322
+#: ide/functions/menu/menu_edit_preferences.c:350
 msgid "Display help text?"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:334
+#: ide/functions/menu/menu_edit_preferences.c:362
 msgid "Display warning when screenshot key isn't enabled?"
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:373
+#: ide/functions/menu/menu_edit_preferences.c:401
 #: ide/functions/menu/menu_project_properties.c:341
 msgid ""
 "There was something wrong with the project folder given.  Please try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:387
+#: ide/functions/menu/menu_edit_preferences.c:415
 msgid ""
 "There was something wrong with the screenshot folder given.  Please try "
 "again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:401
+#: ide/functions/menu/menu_edit_preferences.c:429
 #: ide/functions/menu/menu_project_properties.c:355
 msgid ""
 "There was something wrong with the output folder given.  Please try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:415
+#: ide/functions/menu/menu_edit_preferences.c:443
 msgid ""
 "There was something wrong with the default output resolution given.  Please "
 "try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:430
+#: ide/functions/menu/menu_edit_preferences.c:458
 msgid ""
 "There was something wrong with the default slide duration value.  Please try "
 "again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:444
+#: ide/functions/menu/menu_edit_preferences.c:472
 msgid ""
 "There was something wrong with the default layer duration value.  Please try "
 "again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:458
+#: ide/functions/menu/menu_edit_preferences.c:486
 #: ide/functions/menu/menu_project_properties.c:370
 msgid ""
 "There was something wrong with the default frames per second value.  Please "
 "try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:472
+#: ide/functions/menu/menu_edit_preferences.c:500
 msgid ""
 "There was something wrong with the preview width value.  Please try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:486
+#: ide/functions/menu/menu_edit_preferences.c:514
 msgid ""
 "There was something wrong with the icon height value.  Please try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:499
+#: ide/functions/menu/menu_edit_preferences.c:527
 msgid ""
 "There was something wrong with the default zoom level given.  Please try "
 "again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:514
+#: ide/functions/menu/menu_edit_preferences.c:542
 msgid ""
 "There was something wrong with the screenshot delay value.  Please try again."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:617
+#: ide/functions/menu/menu_edit_preferences.c:645
 #, c-format
 msgid "An error '%s' occurred when opening the lock file '%s' for writing."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:637
+#: ide/functions/menu/menu_edit_preferences.c:665
 #, c-format
 msgid "An error '%s' occurred when writing data to the lock file '%s'."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:656
+#: ide/functions/menu/menu_edit_preferences.c:684
 #, c-format
 msgid "An error '%s' occurred when closing the lock file '%s'."
 msgstr ""
 
-#: ide/functions/menu/menu_edit_preferences.c:693
+#: ide/functions/menu/menu_edit_preferences.c:721
 msgid " Application preferences updated"
 msgstr ""
 
@@ -3499,9 +3507,9 @@ msgstr ""
 msgid "Couldn't create the time line display buffer image."
 msgstr ""
 
-#: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:394
-#: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:505
-#: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:611
+#: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:398
+#: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:509
+#: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:615
 msgid "Unknown layer resize type."
 msgstr ""
 
