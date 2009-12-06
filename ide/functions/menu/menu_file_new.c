@@ -128,7 +128,7 @@ void menu_file_new(void)
 	// Create the slider that accepts the project width
 	width_slider = gtk_hscale_new_with_range(valid_fields[PROJECT_WIDTH].min_value, valid_fields[PROJECT_WIDTH].max_value, 1);
 	gtk_range_set_value(GTK_RANGE(width_slider), project_width);
-	gtk_scale_add_mark(GTK_SCALE(width_slider), project_width, GTK_POS_BOTTOM, NULL);
+	gtk_scale_add_mark(GTK_SCALE(width_slider), project_width, GTK_POS_TOP, NULL);
 	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[PROJECT_WIDTH].max_value; scale_mark_counter += 1024)
 	{
 		// Add scale marks
@@ -145,7 +145,7 @@ void menu_file_new(void)
 	// Create the slider that accepts the project height
 	height_slider = gtk_hscale_new_with_range(valid_fields[PROJECT_HEIGHT].min_value, valid_fields[PROJECT_HEIGHT].max_value, 1);
 	gtk_range_set_value(GTK_RANGE(height_slider), project_height);
-	gtk_scale_add_mark(GTK_SCALE(height_slider), project_height, GTK_POS_BOTTOM, NULL);
+	gtk_scale_add_mark(GTK_SCALE(height_slider), project_height, GTK_POS_TOP, NULL);
 	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[PROJECT_HEIGHT].max_value; scale_mark_counter += 1024)
 	{
 		// Add scale marks
@@ -162,7 +162,7 @@ void menu_file_new(void)
 	// Create the slider that accepts the number of frames per second
 	fps_slider = gtk_hscale_new_with_range(valid_fields[PROJECT_FPS].min_value, valid_fields[PROJECT_FPS].max_value, 1);
 	gtk_range_set_value(GTK_RANGE(fps_slider), default_fps);
-	gtk_scale_add_mark(GTK_SCALE(fps_slider), default_fps, GTK_POS_BOTTOM, NULL);
+	gtk_scale_add_mark(GTK_SCALE(fps_slider), default_fps, GTK_POS_TOP, NULL);
 	for (scale_mark_counter = 24; scale_mark_counter <= valid_fields[PROJECT_FPS].max_value; scale_mark_counter += 24)
 	{
 		// Add scale marks
