@@ -65,6 +65,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	GError				*error = NULL;				// Pointer to error return structure
 	GdkColor			*fg_colour;					// Foreground colour to set a text layer character to
 	guint				final_opacity;				// Used when calculating the final opacity figure for a highlight layer
+	gboolean			font_face_found;			// Used to track if we've found the font face
 	gdouble				font_size;					// Used for retrieving the desired size of a character in a text layer
 	gint				font_size_int;				// Used for calculating the scaled font size to display a text layer character at
 	guint16				green_component;			// Used when retrieving the foreground color of text
@@ -555,6 +556,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 					// Run through the list of tags and extract the info that tells us which font face to use
 					num_tags = g_slist_length(applied_tags);
+					font_face_found = FALSE;
 					for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
 					{
 						this_tag = g_slist_nth_data(applied_tags, loop_counter);
@@ -563,8 +565,14 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 						{
 							// Found the required font face info, so set the font face with it
 							char_font_face = *char_font_ptr;
+							font_face_found = TRUE;
 							SWFText_setFont(temp_text_object, fdb_font_object[char_font_face]);
 						}
+					}
+					if (FALSE == font_face_found)
+					{
+						// Couldn't determine the font face to be applied to this text, so we use the default text layer font face
+						SWFText_setFont(temp_text_object, fdb_font_object[default_text_font_face]);
 					}
 
 					// Free the list of tags, as they're no longer needed
@@ -666,6 +674,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 					// Run through the list of tags and extract the info that tells us which font face to use
 					num_tags = g_slist_length(applied_tags);
+					font_face_found = FALSE;
 					for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
 					{
 						this_tag = g_slist_nth_data(applied_tags, loop_counter);
@@ -674,8 +683,14 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 						{
 							// Found the required font face info, so set the font face with it
 							char_font_face = *char_font_ptr;
+							font_face_found = TRUE;
 							SWFText_setFont(text_object, fdb_font_object[char_font_face]);
 						}
+					}
+					if (FALSE == font_face_found)
+					{
+						// Couldn't determine the font face to be applied to this text, so we use the default text layer font face
+						SWFText_setFont(text_object, fdb_font_object[default_text_font_face]);
 					}
 
 					// Free the list of tags, as they're no longer needed
