@@ -69,7 +69,7 @@ void create_film_strip()
 	film_strip_container = GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL));
 
 	// Set the scroll bar settings
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(film_strip_container), GTK_POLICY_NEVER, GTK_POLICY_ALWAYS);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(film_strip_container), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
 	// Create a GtkListStore, to have the thumbnail data in
 	film_strip_store = gtk_list_store_new(1, GDK_TYPE_PIXBUF);
