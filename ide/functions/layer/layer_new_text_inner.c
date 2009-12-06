@@ -45,7 +45,6 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	GtkTextIter			selection_end;
 	GtkTextIter			selection_start;
 	slide				*slide_data;				// Pointer to the data for the current slide
-	GdkColor			text_colour;				// Used to set the default colour of the text
 	GtkTextTag			*text_tag;					// Used for the default text tags
 	layer				*tmp_layer;					// Temporary layer
 	layer_text			*tmp_text_ob;				// Temporary text layer object
@@ -72,19 +71,16 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	tmp_text_ob->text_buffer = gtk_text_buffer_new(text_tags_table);
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), _("New text..."), -1);
 
-	// Apply default font of DejaVu Sans
+	// Apply the default font face
 	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), &selection_start, &selection_end);
-	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), salasaga_font_names[FONT_DEJAVU_SANS], &selection_start, &selection_end);
+	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), salasaga_font_names[default_text_font_face], &selection_start, &selection_end);
 
-	// Apply default 40 point text size
-	text_tag = text_layer_create_font_size_tag(40.0);
+	// Apply the default font size
+	text_tag = text_layer_create_font_size_tag(default_text_font_size);
 	gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), GTK_TEXT_TAG(text_tag), &selection_start, &selection_end);
 
-	// Apply default black foreground colour
-	text_colour.red = 0;
-	text_colour.green = 0;
-	text_colour.blue = 0;
-	text_tag = text_layer_create_colour_tag(&text_colour);
+	// Apply the default font foreground colour
+	text_tag = text_layer_create_colour_tag(&default_text_fg_colour);
 	gtk_text_buffer_apply_tag(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), GTK_TEXT_TAG(text_tag), &selection_start, &selection_end);
 
 	tmp_text_ob->show_bg = TRUE;
