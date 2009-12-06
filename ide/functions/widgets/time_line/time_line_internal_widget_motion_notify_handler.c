@@ -77,6 +77,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 	slide				*this_slide_data;			// Data for the presently selected slide
 	gfloat				time_moved;					// Number of seconds the row is being adjusted by
 
+
 	// Safety check
 	if (FALSE == IS_TIME_LINE(this_time_line))
 	{
