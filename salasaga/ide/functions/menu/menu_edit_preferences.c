@@ -101,24 +101,29 @@ void menu_edit_preferences(void)
 
 	GtkWidget			*default_font_size_label;			// Label widget
 	GtkWidget			*default_font_size_slider;			//
+	GtkWidget			*default_font_size_points_label;	//
 
 	GtkWidget			*default_font_fg_colour_label;		// Label widget
 	GtkWidget			*default_font_fg_colour_button;		// Default text layer foreground colour selector
 
 	GtkWidget			*label_default_slide_duration;		// Default Slide Duration
 	GtkWidget			*button_default_slide_duration;		//
+	GtkWidget			*label_default_slide_duration_seconds;
 
 	GtkWidget			*label_default_layer_duration;		// Default Layer Duration
 	GtkWidget			*button_default_layer_duration;		//
+	GtkWidget			*label_default_layer_duration_seconds;
 
 	GtkWidget			*label_default_fps;					// Default Frames Per Second
 	GtkWidget			*button_default_fps;				//
 
 	GtkWidget			*label_preview_width;				// Preview Width
 	GtkWidget			*button_preview_width;				//
+	GtkWidget			*label_preview_width_pixels;		//
 
 	GtkWidget			*label_icon_height;					// Icon Height
 	GtkWidget			*button_icon_height;				//
+	GtkWidget			*label_icon_height_pixels;			//
 
 	GtkWidget			*label_default_zoom_level;			// Default Zoom Level
 	GtkWidget			*selector_default_zoom_level;		//
@@ -128,6 +133,7 @@ void menu_edit_preferences(void)
 
 	GtkWidget			*label_screenshot_delay;			// Screenshot delay time
 	GtkWidget			*button_screenshot_delay;			//
+	GtkWidget			*label_screenshot_delay_seconds;	//
 
 	GtkWidget			*check_help_text;					// Whether to display help text or not
 
@@ -232,6 +238,11 @@ void menu_edit_preferences(void)
 		gtk_scale_add_mark(GTK_SCALE(default_font_size_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_size_slider), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+
+	// Create the "points" label
+	default_font_size_points_label = gtk_label_new(_("points"));
+	gtk_misc_set_alignment(GTK_MISC(default_font_size_points_label), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_size_points_label), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Create the foreground colour selection label
@@ -246,23 +257,31 @@ void menu_edit_preferences(void)
 	app_row_counter = app_row_counter + 1;
 
 	// Default Slide Duration
-	label_default_slide_duration = gtk_label_new(_("Default Slide Duration: \n(seconds)"));
+	g_string_printf(message, "%s:", _("Default Slide Duration"));
+	label_default_slide_duration = gtk_label_new(message->str);
 	gtk_misc_set_alignment(GTK_MISC(label_default_slide_duration), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_slide_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_default_slide_duration = gtk_spin_button_new_with_range(valid_fields[SLIDE_DURATION].min_value, valid_fields[SLIDE_DURATION].max_value, 1);
 	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(button_default_slide_duration), 2);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_slide_duration), default_slide_duration);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_slide_duration), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	label_default_slide_duration_seconds = gtk_label_new(_("seconds"));
+	gtk_misc_set_alignment(GTK_MISC(label_default_slide_duration_seconds), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_slide_duration_seconds), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Layer Duration
-	label_default_layer_duration = gtk_label_new(_("Default Layer Duration: \n(seconds)"));
+	g_string_printf(message, "%s:", _("Default Layer Duration"));
+	label_default_layer_duration = gtk_label_new(message->str);
 	gtk_misc_set_alignment(GTK_MISC(label_default_layer_duration), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_layer_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_default_layer_duration = gtk_spin_button_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 1);
 	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(button_default_layer_duration), 2);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_layer_duration), default_layer_duration);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_layer_duration), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	label_default_layer_duration_seconds = gtk_label_new(_("seconds"));
+	gtk_misc_set_alignment(GTK_MISC(label_default_layer_duration_seconds), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_layer_duration_seconds), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Frames Per Second
@@ -281,6 +300,9 @@ void menu_edit_preferences(void)
 	button_preview_width = gtk_spin_button_new_with_range(valid_fields[PREVIEW_WIDTH].min_value, valid_fields[PREVIEW_WIDTH].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_preview_width), preview_width);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_preview_width), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	label_preview_width_pixels = gtk_label_new(_("pixels"));
+	gtk_misc_set_alignment(GTK_MISC(label_preview_width_pixels), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_preview_width_pixels), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Icon Height
@@ -290,6 +312,9 @@ void menu_edit_preferences(void)
 	button_icon_height = gtk_spin_button_new_with_range(valid_fields[ICON_HEIGHT].min_value, valid_fields[ICON_HEIGHT].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_icon_height), icon_height);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_icon_height), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	label_icon_height_pixels = gtk_label_new(_("pixels"));
+	gtk_misc_set_alignment(GTK_MISC(label_icon_height_pixels), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_icon_height_pixels), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Zoom level
@@ -316,6 +341,9 @@ void menu_edit_preferences(void)
 	button_screenshot_delay = gtk_spin_button_new_with_range(valid_fields[SCREENSHOT_DELAY].min_value, valid_fields[SCREENSHOT_DELAY].max_value, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_screenshot_delay), screenshot_delay_time);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_delay), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	label_screenshot_delay_seconds = gtk_label_new(_("seconds"));
+	gtk_misc_set_alignment(GTK_MISC(label_screenshot_delay_seconds), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_delay_seconds), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
 	// Whether to display help text or not
