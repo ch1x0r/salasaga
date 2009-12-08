@@ -44,7 +44,6 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../cairo/render_text_string.h"
 #include "../dialog/display_warning.h"
 #include "get_layer_position.h"
