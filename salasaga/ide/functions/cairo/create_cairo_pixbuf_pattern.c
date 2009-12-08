@@ -128,7 +128,7 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf)
 	}
 
 	// Turn the reformatted buffer into a cairo surface
-	image_surface = cairo_image_surface_create_for_data(dest_buffer, CAIRO_FORMAT_RGB24, source_width, source_height, source_width * 4);
+	image_surface = cairo_image_surface_create_for_data(dest_buffer, CAIRO_FORMAT_ARGB32, source_width, source_height, source_width * 4);
 
 	// Check if an error occurred when creating this image surface
 	cairo_status = cairo_surface_status(image_surface);
