@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga 0.8.0-alpha6\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-06 14:21+1100\n"
+"POT-Creation-Date: 2009-12-13 12:13+1100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,10 +106,13 @@ msgstr ""
 #: ide/functions/film_strip/film_strip_create_thumbnail.c:79
 #: ide/functions/gtk_text_buffer_duplicate.c:87
 #: ide/functions/gtk_text_buffer_duplicate.c:96 ide/functions/key_bind.c:80
-#: ide/functions/key_bind.c:98 ide/functions/layer/compress_layers_inner.c:274
+#: ide/functions/key_bind.c:98 ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
 #: ide/functions/layer/image_crop.c:118 ide/functions/layer/image_crop.c:129
 #: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_crop.c:287
+#: ide/functions/layer/image_resize.c:208
+#: ide/functions/layer/image_resize.c:212
+#: ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:57
 #: ide/functions/layer/layer_duplicate.c:111
 #: ide/functions/layer/layer_duplicate.c:128
@@ -391,6 +394,8 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_image.c:205
 #: ide/functions/layer/image_crop.c:158 ide/functions/layer/image_crop.c:179
 #: ide/functions/layer/image_crop.c:200 ide/functions/layer/image_crop.c:221
+#: ide/functions/layer/image_resize.c:140
+#: ide/functions/layer/image_resize.c:162
 #: ide/functions/menu/menu_edit_preferences.c:303
 #: ide/functions/menu/menu_edit_preferences.c:315
 #: ide/functions/menu/menu_project_properties.c:170
@@ -1556,7 +1561,7 @@ msgid ""
 "is disabled."
 msgstr ""
 
-#: ide/functions/layer/compress_layers_inner.c:274
+#: ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
 #: ide/functions/layer/layer_edit.c:207
 #: ide/functions/working_area/calculate_object_boundaries.c:182
@@ -1598,13 +1603,14 @@ msgstr ""
 msgid "Those crop values will remove the entire image."
 msgstr ""
 
-#: ide/functions/layer/image_crop.c:258
+#: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_resize.c:208
+#: ide/functions/layer/image_resize.c:212
 #: ide/functions/project_adjust_dimensions.c:175
 #: ide/functions/project_adjust_dimensions.c:179
 msgid "Please try again."
 msgstr ""
 
-#: ide/functions/layer/image_crop.c:287
+#: ide/functions/layer/image_crop.c:287 ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:142
 #: ide/functions/layer/layer_new_image_inner.c:167
 #: ide/functions/menu/menu_screenshots_import.c:274
@@ -1614,6 +1620,57 @@ msgstr ""
 
 #: ide/functions/layer/image_crop.c:312
 msgid " Image cropped"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:119
+msgid "Resize image layer"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:124
+msgid "Image width:"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:146
+msgid "Image height:"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:168
+msgid "Resize image using:"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:174
+msgid "Nearest neighbor (lowest quality)"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:175
+msgid "Tiled"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:176
+msgid "Bilinear (default)"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:177
+msgid "Hyperbolic (best quality for photos)"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:208
+msgid ""
+"Those adjustment values would make the image smaller than the minimum "
+"allowed."
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:212
+msgid ""
+"Those adjustment values would make the image larger than the maximum allowed."
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:231
+msgid "Image layer resize skipped"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:271
+msgid "Image layer resized"
 msgstr ""
 
 #: ide/functions/layer/layer_copy.c:69
@@ -3602,6 +3659,116 @@ msgstr ""
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
 msgstr ""
 
+#: screen_capture/salasaga_screencapture.c:81
+msgid "Something went wrong when getting the window identifier."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:91
+#: screen_capture/salasaga_screencapture.c:499
+msgid "Something went wrong when getting the screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:120
+msgid "Screenshot GetDC failed."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:129
+msgid "Screenshot CreateCompatibleDC failed."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:138
+msgid "Screenshot CreateCompatibleBitmap failed."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:147
+msgid "Screenshot SelectObject failed: selected object is not a region."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:155
+msgid "Screenshot SelectObject failed: unknown error."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:164
+msgid "Screenshot BitBlt failed."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:281
+msgid ""
+"There was something wrong with the project name value.  Aborting screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:295
+msgid ""
+"There was something wrong with the screenshot folder value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:309
+msgid ""
+"There was something wrong with the x offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:322
+msgid ""
+"There was something wrong with the y offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:335
+msgid "There was something wrong with the width value.  Aborting screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:348
+msgid "There was something wrong with the height value.  Aborting screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:361
+msgid ""
+"There was something wrong with the screenshot delay value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:423
+#: screen_capture/salasaga_screencapture.c:446
+#: screen_capture/salasaga_screencapture.c:472
+#, c-format
+msgid "Screenshot in %u seconds"
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:508
+msgid "Screenshot taken"
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:531
+msgid "Something went wrong opening"
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:540
+msgid "The target directory doesn't exist."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:626
+msgid ""
+"Something went wrong when opening the output screenshot file for writing."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:636
+msgid "Something went wrong when creating the png write structure."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:651
+msgid "Something went wrong when creating the png info structure."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:685
+msgid "Something went wrong when retrieving the screenshot metadata."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:702
+msgid "Something went wrong when copying the screenshot data."
+msgstr ""
+
 #: ide/valid_fields.h:35
 msgid "8 Bit Color Value Component"
 msgstr ""
@@ -3792,116 +3959,6 @@ msgstr ""
 
 #: ide/valid_fields.h:82
 msgid "Magnification level of working area"
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:81
-msgid "Something went wrong when getting the window identifier."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:91
-#: screen_capture/salasaga_screencapture.c:499
-msgid "Something went wrong when getting the screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:120
-msgid "Screenshot GetDC failed."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:129
-msgid "Screenshot CreateCompatibleDC failed."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:138
-msgid "Screenshot CreateCompatibleBitmap failed."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:147
-msgid "Screenshot SelectObject failed: selected object is not a region."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:155
-msgid "Screenshot SelectObject failed: unknown error."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:164
-msgid "Screenshot BitBlt failed."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:281
-msgid ""
-"There was something wrong with the project name value.  Aborting screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:295
-msgid ""
-"There was something wrong with the screenshot folder value.  Aborting "
-"screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:309
-msgid ""
-"There was something wrong with the x offset start value.  Aborting "
-"screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:322
-msgid ""
-"There was something wrong with the y offset start value.  Aborting "
-"screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:335
-msgid "There was something wrong with the width value.  Aborting screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:348
-msgid "There was something wrong with the height value.  Aborting screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:361
-msgid ""
-"There was something wrong with the screenshot delay value.  Aborting "
-"screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:423
-#: screen_capture/salasaga_screencapture.c:446
-#: screen_capture/salasaga_screencapture.c:472
-#, c-format
-msgid "Screenshot in %u seconds"
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:508
-msgid "Screenshot taken"
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:531
-msgid "Something went wrong opening"
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:540
-msgid "The target directory doesn't exist."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:626
-msgid ""
-"Something went wrong when opening the output screenshot file for writing."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:636
-msgid "Something went wrong when creating the png write structure."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:651
-msgid "Something went wrong when creating the png info structure."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:685
-msgid "Something went wrong when retrieving the screenshot metadata."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:702
-msgid "Something went wrong when copying the screenshot data."
 msgstr ""
 
 #: screen_capture/valid_fields.h:40

@@ -48,6 +48,7 @@ ide/functions/layer/compress_layers.c
 ide/functions/layer/compress_layers_inner.c
 ide/functions/layer/get_layer_position.c
 ide/functions/layer/image_crop.c
+ide/functions/layer/image_resize.c
 ide/functions/layer/layer_copy.c
 ide/functions/layer/layer_delete.c
 ide/functions/layer/layer_duplicate.c
@@ -173,12 +174,12 @@ ide/functions/working_area/working_area_expose_event.c
 ide/functions/working_area/working_area_motion_notify_event.c
 ide/functions/zoom_selector_changed.c
 ide/salasaga.c
-ide/salasaga_types.h
 ide/sounds/generate_double_click.c
 ide/sounds/generate_single_click.c
 ide/sounds/generate_triple_click.c
-ide/valid_fields.h
 screen_capture/display_warning.c
 screen_capture/salasaga_screencapture.c
 screen_capture/validate_value.c
+ide/salasaga_types.h
+ide/valid_fields.h
 screen_capture/valid_fields.h
