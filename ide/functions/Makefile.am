@@ -53,6 +53,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	film_strip/film_strip_create_thumbnail.c \
 	film_strip/film_strip_handle_changed.c \
 	film_strip/film_strip_handle_released.c \
+	film_strip/film_strip_key_release_event.c \
 	film_strip/film_strip_slide_clicked.c \
 	film_strip/regenerate_film_strip_thumbnails.c \
 	layer/compress_layers.c \

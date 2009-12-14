@@ -36,6 +36,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../callbacks/film_strip_drag_motion.h"
+#include "film_strip_key_release_event.h"
 #include "film_strip_slide_clicked.h"
 
 
@@ -109,4 +110,10 @@ void create_film_strip()
 
 	// Add the DnD callback to capture drag motion
 	g_signal_connect(GTK_WIDGET(film_strip_view), "drag-motion", G_CALLBACK(film_strip_drag_motion), NULL);
+
+	// Add a signal handler to the film strip, to be called whenever a key is pressed while it is in focus
+	g_signal_connect(film_strip_view, "key-release-event", G_CALLBACK(film_strip_key_release_event), NULL);
+
+	// Ensure we get the signals we want
+	gtk_widget_set_events(film_strip_view, gtk_widget_get_events(film_strip_view) | GDK_KEY_RELEASE_MASK);
 }
