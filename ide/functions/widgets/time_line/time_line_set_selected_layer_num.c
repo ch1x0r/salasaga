@@ -43,7 +43,7 @@
 #include "time_line_internal_redraw_bg_area.h"
 
 
-// fixme3: Should this be done as a property instead?
+// fixme3: This should be done as a property instead
 gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 {
 	// Local variables
@@ -91,9 +91,6 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 		width = GTK_WIDGET(widget)->allocation.width;
 	}
 
-	// Set the internal variable, as requested
-	priv->selected_layer_num = selected_row;
-
 	// * Restore the background underneath the existing selection box *
 
 	// Only invalidate things if there is a gdk window set
@@ -130,6 +127,9 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 		time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
 		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
 	}
+
+	// The previously selected row's selection lines have now been erased, so we can point to the new row
+	priv->selected_layer_num = selected_row;
 
 	// Draw a selection box around the newly selected layer
 	time_line_internal_draw_selection_highlight(priv, width);
