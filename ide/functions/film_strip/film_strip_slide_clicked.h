@@ -29,10 +29,10 @@
 extern "C" {
 #endif // __cplusplus
 
-void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data);
+gboolean film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /*FILM_STRIP_SLIDE_CLICKED_H_*/
+#endif /* FILM_STRIP_SLIDE_CLICKED_H_ */
