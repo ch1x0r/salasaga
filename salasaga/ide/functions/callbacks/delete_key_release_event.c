@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Salasaga: Function called when the user presses a key while the film strip has focus
+ * Salasaga: Function called when the user presses a key in some widgets
  * 
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
@@ -38,31 +38,32 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../widget_focus.h"
+#include "../layer/layer_delete.h"
 #include "../slide/slide_delete.h"
 
 
-void film_strip_key_release_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
+gboolean delete_key_release_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data)
 {
 	// Temporary variables
 	gint	check_val;
 
-
 	// Only do this function if we have a front store available and a project loaded
 	if ((NULL == front_store) || (FALSE == project_active))
 	{
-		return;
+		return TRUE;
 	}
 
 	// Double check if the event is a key release
 	if (GDK_KEY_RELEASE != event->type)
 	{
-		return;
+		return TRUE;
 	}
 
 	// Check if the delete key is the one pressed
 	if (GDK_Delete != event->keyval)
 	{
-		return;
+		return TRUE;
 	}
 
 	// Make sure there were no modifier were keys pressed at the same time as the delete key
@@ -70,26 +71,38 @@ void film_strip_key_release_event(GtkWidget *widget, GdkEventKey *event, gpointe
 	check_val = event->state & GDK_SHIFT_MASK;
 	if (0 != check_val)  // Shift key
 	{
-		return;
+		return TRUE;
 	}
 
 	check_val = GDK_CONTROL_MASK;
 	check_val = event->state & GDK_CONTROL_MASK;
 	if (0 != check_val)  // Control key
 	{
-		return;
+		return TRUE;
 	}
 
-	// * Disabling the check for the shift key for now, as the NUMLOCK key on my keyboard trips it for some unknown reason *
+	// * Disabling the check for the Alt key for now, as the NUMLOCK key on my keyboard trips it for some unknown reason *
 //	check_val = GDK_META_MASK;
 //	check_val = event->state & GDK_META_MASK;
 //	if (0 != check_val)  // Alt key
 //	{
-//		return;
+//		return FALSE;
 //	}
 
-	// If so, then call the function that removes the present slide from the workspace
-	slide_delete();
+	// If so, then call the function that removes the present slide or layer from the workspace
+	switch (get_delete_focus())
+	{
+		case FOCUS_SLIDE:
+			slide_delete();
+			break;
 
-	return;
+		case FOCUS_LAYER:
+			layer_delete();
+			break;
+
+		default:
+			break;
+	}
+
+	return TRUE;
 }
