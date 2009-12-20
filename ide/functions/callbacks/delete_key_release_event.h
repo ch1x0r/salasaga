@@ -21,18 +21,18 @@
  *
  */
 
-#ifndef FILM_STRIP_KEY_RELEASE_EVENT_H_
-#define FILM_STRIP_KEY_RELEASE_EVENT_H_
+#ifndef DELETE_KEY_RELEASE_EVENT_H_
+#define DELETE_KEY_RELEASE_EVENT_H_
 
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
 
-void film_strip_key_release_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
+gboolean delete_key_release_event(GtkWidget *widget, GdkEventKey *event, gpointer user_data);
 
 #ifdef __cplusplus
 }
 #endif // __cplusplus
 
-#endif /* FILM_STRIP_KEY_RELEASE_EVENT_H_ */
+#endif /* DELETE_KEY_RELEASE_EVENT_H_ */
