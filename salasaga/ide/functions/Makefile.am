@@ -19,9 +19,11 @@ salasaga_SOURCES = create_resolution_selector.c \
 	resolution_selector_changed.c \
 	save_preferences_and_exit.c \
 	validate_value.c \
+	widget_focus.c \
 	zoom_selector_changed.c \
 	cairo/create_cairo_pixbuf_pattern.c \
 	cairo/render_text_string.c \
+	callbacks/delete_key_release_event.c \
 	callbacks/dump_selection_info.c \
 	callbacks/film_strip_drag_motion.c \
 	callbacks/text_layer_dialog_bg_colour_changed.c \
@@ -50,10 +52,10 @@ salasaga_SOURCES = create_resolution_selector.c \
 	export/swf/swf_add_mouse_click.c \
 	export/swf/swf_shape_from_image_file.c \
 	film_strip/create_film_strip.c \
+	film_strip/film_strip_button_clicked.c \
 	film_strip/film_strip_create_thumbnail.c \
 	film_strip/film_strip_handle_changed.c \
 	film_strip/film_strip_handle_released.c \
-	film_strip/film_strip_key_release_event.c \
 	film_strip/film_strip_slide_clicked.c \
 	film_strip/regenerate_film_strip_thumbnails.c \
 	layer/compress_layers.c \
