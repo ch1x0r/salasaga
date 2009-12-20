@@ -39,6 +39,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../draw_timeline.h"
+#include "../widget_focus.h"
 #include "../dialog/display_dialog_empty.h"
 #include "../dialog/display_dialog_highlight.h"
 #include "../dialog/display_dialog_image.h"
@@ -75,6 +76,9 @@ void layer_edit(void)
 	slide_data = (slide *) current_slide->data;
 	layer_pointer = slide_data->layers;
 	message = g_string_new(NULL);
+
+	// Change the focus of the window to be this widget
+	set_delete_focus(FOCUS_LAYER);
 
 	// Determine the number of layers present in this slide
 	layer_pointer = g_list_first(layer_pointer);

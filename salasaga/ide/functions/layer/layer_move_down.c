@@ -39,6 +39,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../draw_timeline.h"
+#include "../widget_focus.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "../widgets/time_line/time_line_get_selected_layer_num.h"
@@ -66,6 +67,9 @@ void layer_move_down(void)
 
 	// Initialise various things
 	layer_pointer = ((slide *) current_slide->data)->layers;
+
+	// Change the focus of the window to be this widget
+	set_delete_focus(FOCUS_LAYER);
 
 	// Determine which layer the user has selected in the timeline
 	num_layers = ((slide *) current_slide->data)->num_layers;
