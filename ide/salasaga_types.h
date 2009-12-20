@@ -63,6 +63,11 @@ extern "C" {
 #define END_POINT_VERTICAL_OFFSET	15
 #define END_POINT_HORIZONTAL_OFFSET	15
 
+// Focus definitions
+#define FOCUS_UNKNOWN	0
+#define FOCUS_SLIDE		1
+#define FOCUS_LAYER		2
+
 // Statuses for the bounding box resize handles
 #define	RESIZE_HANDLES_INACTIVE		0
 #define	RESIZE_HANDLES_WAITING		1
