@@ -35,6 +35,7 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "callbacks/delete_key_release_event.h"
 #include "layer/image_crop.h"
 #include "layer/layer_delete.h"
 #include "layer/layer_edit.h"
@@ -65,7 +66,6 @@ GtkWidget *create_time_line(void)
 	// Local variables
 	GtkWidget			*time_line_toolbar;			// Widget for holding the time line toolbar
 	GtkScrolledWindow	*time_line_scrolled_window;	// Widget for holding the scrolled window
-
 	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
 	GString				*tmp_gstring;				// Temporary GString
 
@@ -83,6 +83,7 @@ GtkWidget *create_time_line(void)
 
 	// Create the time line container contents
 	time_line_container = gtk_viewport_new(NULL, NULL);
+	gtk_widget_set_can_focus(GTK_WIDGET(time_line_container), TRUE);
 	gtk_container_add(GTK_CONTAINER(time_line_scrolled_window), GTK_WIDGET(time_line_container));
 
 	// Add signal handlers to the time line area for receiving events (i.e. mouse clicks)
@@ -90,13 +91,17 @@ GtkWidget *create_time_line(void)
 	g_signal_connect(time_line_container, "button_press_event", G_CALLBACK(time_line_button_press_event), NULL);
 	g_signal_connect(time_line_container, "motion_notify_event", G_CALLBACK(time_line_motion_notify_event), NULL);
 
+	// Add a signal handler to the time line, to be called whenever a key is pressed while it is in focus
+	g_signal_connect(time_line_container, "key-release-event", G_CALLBACK(delete_key_release_event), NULL);
+
 	// Ensure we get the signals we want
 	gtk_widget_set_events(time_line_container, gtk_widget_get_events(time_line_container)
 		| GDK_LEAVE_NOTIFY_MASK
 		| GDK_BUTTON_PRESS_MASK
 		| GDK_BUTTON_RELEASE_MASK
 		| GDK_BUTTON1_MOTION_MASK
-		| GDK_POINTER_MOTION_HINT_MASK);
+		| GDK_POINTER_MOTION_HINT_MASK
+		| GDK_KEY_RELEASE_MASK);
 
 	// Create the time line toolbar
 	time_line_toolbar = gtk_toolbar_new();
