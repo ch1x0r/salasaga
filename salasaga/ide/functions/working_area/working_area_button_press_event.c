@@ -38,6 +38,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../widget_focus.h"
 #include "../dialog/display_warning.h"
 #include "../layer/layer_edit.h"
 #include "../widgets/time_line/time_line_get_selected_layer_num.h"
@@ -81,6 +82,12 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	{
 		return TRUE;
 	}
+
+	// Set the delete key focus to be layers
+	set_delete_focus(FOCUS_LAYER);
+
+	// Change the focus of the window to be this widget
+	gtk_widget_grab_focus(GTK_WIDGET(widget));
 
 	// Initialise some things
 	this_slide_data = current_slide->data;
