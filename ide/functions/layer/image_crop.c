@@ -44,6 +44,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../widget_focus.h"
 #include "../draw_timeline.h"
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../dialog/display_warning.h"
@@ -101,6 +102,9 @@ void image_crop(void)
 	// Initialise some variables
 	layer_pointer = ((slide *) current_slide->data)->layers;
 	message = g_string_new(NULL);
+
+	// Change the focus of the window to be this widget
+	set_delete_focus(FOCUS_LAYER);
 
 	// * Check if the selected layer is an image *
 

@@ -35,6 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../widget_focus.h"
 
 
 void layer_new_mouse(void)
@@ -50,6 +51,9 @@ void layer_new_mouse(void)
 		gdk_beep();
 		return;
 	}
+
+	// Change the focus of the window to be this widget
+	set_delete_focus(FOCUS_LAYER);
 
 	// Change the cursor to something suitable
 	selection_cursor = gdk_cursor_new(GDK_CROSSHAIR);
