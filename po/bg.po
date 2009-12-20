@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-06 14:21+1100\n"
-"PO-Revision-Date: 2009-11-30 21:45+0000\n"
+"POT-Creation-Date: 2009-12-13 12:13+1100\n"
+"PO-Revision-Date: 2009-12-13 14:19+0000\n"
 "Last-Translator: Dilomo <Unknown>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-01 05:48+0000\n"
+"X-Launchpad-Export-Date: 2009-12-20 08:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
@@ -107,10 +107,13 @@ msgstr ""
 #: ide/functions/film_strip/film_strip_create_thumbnail.c:79
 #: ide/functions/gtk_text_buffer_duplicate.c:87
 #: ide/functions/gtk_text_buffer_duplicate.c:96 ide/functions/key_bind.c:80
-#: ide/functions/key_bind.c:98 ide/functions/layer/compress_layers_inner.c:274
+#: ide/functions/key_bind.c:98 ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
 #: ide/functions/layer/image_crop.c:118 ide/functions/layer/image_crop.c:129
 #: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_crop.c:287
+#: ide/functions/layer/image_resize.c:208
+#: ide/functions/layer/image_resize.c:212
+#: ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:57
 #: ide/functions/layer/layer_duplicate.c:111
 #: ide/functions/layer/layer_duplicate.c:128
@@ -392,6 +395,8 @@ msgstr "Не можа да създаде шарка на повърхностт
 #: ide/functions/dialog/display_dialog_image.c:205
 #: ide/functions/layer/image_crop.c:158 ide/functions/layer/image_crop.c:179
 #: ide/functions/layer/image_crop.c:200 ide/functions/layer/image_crop.c:221
+#: ide/functions/layer/image_resize.c:140
+#: ide/functions/layer/image_resize.c:162
 #: ide/functions/menu/menu_edit_preferences.c:303
 #: ide/functions/menu/menu_edit_preferences.c:315
 #: ide/functions/menu/menu_project_properties.c:170
@@ -763,7 +768,7 @@ msgstr "Постепенно избледняване"
 #: ide/functions/dialog/display_dialog_mouse.c:454
 #: ide/functions/dialog/display_dialog_text.c:629
 msgid "Exit duration (seconds):"
-msgstr "Продължителност на спирането (сек.):"
+msgstr "Продължителност на спиране (сек.):"
 
 #: ide/functions/dialog/display_dialog_highlight.c:565
 #: ide/functions/dialog/display_dialog_image.c:505
@@ -778,7 +783,8 @@ msgstr "Нещо не е наред с ширината на рамката. М�
 
 #: ide/functions/dialog/display_dialog_highlight.c:594
 msgid "There was something wrong with the opacity value.  Please try again."
-msgstr "Нещо не е наред със стойността на непрозрачност. Моля опитайте отново."
+msgstr ""
+"Нещо не е наред със стойността на непрозрачност. Моля опитайте отново."
 
 #: ide/functions/dialog/display_dialog_highlight.c:608
 #: ide/functions/dialog/display_dialog_image.c:520
@@ -894,11 +900,11 @@ msgstr "Връзки"
 
 #: ide/functions/dialog/display_dialog_image.c:192
 msgid "Layer width:"
-msgstr ""
+msgstr "Ширина на слоя:"
 
 #: ide/functions/dialog/display_dialog_image.c:202
 msgid "Layer height:"
-msgstr ""
+msgstr "Височина на слоя:"
 
 #: ide/functions/dialog/display_dialog_mouse.c:179
 msgid "Mouse click type: "
@@ -906,7 +912,7 @@ msgstr "Тип щракване с мишката: "
 
 #: ide/functions/dialog/display_dialog_mouse.c:183
 msgid "No mouse click"
-msgstr "Без щтракване"
+msgstr "Без щракване"
 
 #: ide/functions/dialog/display_dialog_mouse.c:184
 msgid "Left single click"
@@ -1084,7 +1090,8 @@ msgid "Dump text layer to stdout: "
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:712
-msgid "There was something wrong with the layer name value.  Please try again."
+msgid ""
+"There was something wrong with the layer name value.  Please try again."
 msgstr "Нещо се обърка с името на слоя. Опитай отново."
 
 #: ide/functions/dialog/display_dialog_text.c:783
@@ -1164,7 +1171,8 @@ msgstr "Всички файлове (*.*)"
 #: ide/functions/menu/menu_export_swf.c:130
 #: ide/functions/menu/menu_file_open.c:170
 #: ide/functions/menu/menu_file_save_as.c:148
-msgid "There was something wrong with the file name given.  Please try again."
+msgid ""
+"There was something wrong with the file name given.  Please try again."
 msgstr "Има нещо неправилно в даденото име за файл. Моля опитайте отново."
 
 #: ide/functions/export/html/export_html_wrapper.c:133
@@ -1393,7 +1401,7 @@ msgstr ""
 
 #: ide/functions/export/swf/export_swf_inner.c:155
 msgid "Number of slides"
-msgstr ""
+msgstr "Брой слайдове"
 
 #: ide/functions/export/swf/export_swf_inner.c:174
 msgid "Total number of layers"
@@ -1530,7 +1538,8 @@ msgstr "Неуспех при създаването на мини изобра�
 
 #: ide/functions/film_strip/film_strip_create_thumbnail.c:79
 msgid "Couldn't allocate memory for a new film strip thumbnail."
-msgstr "Неуспех при заделянето на памет за мини изображение на филмовата лента"
+msgstr ""
+"Неуспех при заделянето на памет за мини изображение на филмовата лента"
 
 #: ide/functions/film_strip/film_strip_slide_clicked.c:75
 #, c-format
@@ -1567,7 +1576,7 @@ msgstr ""
 "'salasaga_screencapture' не е намерен в съответната папка. Прихващането на "
 "екрана е изкючено."
 
-#: ide/functions/layer/compress_layers_inner.c:274
+#: ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
 #: ide/functions/layer/layer_edit.c:207
 #: ide/functions/working_area/calculate_object_boundaries.c:182
@@ -1609,13 +1618,14 @@ msgstr "Изрязване отдолу: "
 msgid "Those crop values will remove the entire image."
 msgstr ""
 
-#: ide/functions/layer/image_crop.c:258
+#: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_resize.c:208
+#: ide/functions/layer/image_resize.c:212
 #: ide/functions/project_adjust_dimensions.c:175
 #: ide/functions/project_adjust_dimensions.c:179
 msgid "Please try again."
 msgstr ""
 
-#: ide/functions/layer/image_crop.c:287
+#: ide/functions/layer/image_crop.c:287 ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:142
 #: ide/functions/layer/layer_new_image_inner.c:167
 #: ide/functions/menu/menu_screenshots_import.c:274
@@ -1626,6 +1636,57 @@ msgstr "Не може да създаде шарка на изображение
 #: ide/functions/layer/image_crop.c:312
 msgid " Image cropped"
 msgstr " Изображението е отрязано"
+
+#: ide/functions/layer/image_resize.c:119
+msgid "Resize image layer"
+msgstr "Преоразмеряване на слоя с изображение"
+
+#: ide/functions/layer/image_resize.c:124
+msgid "Image width:"
+msgstr "Ширина на изображението:"
+
+#: ide/functions/layer/image_resize.c:146
+msgid "Image height:"
+msgstr "Височина на изображението:"
+
+#: ide/functions/layer/image_resize.c:168
+msgid "Resize image using:"
+msgstr "Преоразмери чрез:"
+
+#: ide/functions/layer/image_resize.c:174
+msgid "Nearest neighbor (lowest quality)"
+msgstr "Nearest neighbor (ниско качество)"
+
+#: ide/functions/layer/image_resize.c:175
+msgid "Tiled"
+msgstr "Tiled"
+
+#: ide/functions/layer/image_resize.c:176
+msgid "Bilinear (default)"
+msgstr "Bilinear (по подразбиране)"
+
+#: ide/functions/layer/image_resize.c:177
+msgid "Hyperbolic (best quality for photos)"
+msgstr "Hyperbolic (добро качество, за снимки)"
+
+#: ide/functions/layer/image_resize.c:208
+msgid ""
+"Those adjustment values would make the image smaller than the minimum "
+"allowed."
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:212
+msgid ""
+"Those adjustment values would make the image larger than the maximum allowed."
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:231
+msgid "Image layer resize skipped"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:271
+msgid "Image layer resized"
+msgstr ""
 
 #: ide/functions/layer/layer_copy.c:69
 msgid " Copy failed"
@@ -1738,7 +1799,8 @@ msgid "Please choose an image file"
 msgstr "Моля изберете изображение"
 
 #: ide/functions/layer/layer_new_image_inner.c:137
-msgid "There was something wrong with the image path given.  Please try again."
+msgid ""
+"There was something wrong with the image path given.  Please try again."
 msgstr "Нещо се обърка с пътя до избранато изображение. Опитайте отново."
 
 #: ide/functions/layer/layer_new_image_inner.c:146
@@ -1975,7 +2037,7 @@ msgstr "/Слой/Изр_язване на изображение"
 
 #: ide/functions/menu/create_menu_bar.c:143
 msgid "/Layer/Image resi_ze"
-msgstr ""
+msgstr "/Слой/Преоразмеряване на изображение"
 
 #: ide/functions/menu/create_menu_bar.c:145
 msgid "/E_xport"
@@ -2099,33 +2161,33 @@ msgstr "Изходна резолюция по подразбиране: "
 
 #: ide/functions/menu/menu_edit_preferences.c:194
 msgid "Default text layer font face:"
-msgstr ""
+msgstr "Шрифт на текста по подразбиране:"
 
 #: ide/functions/menu/menu_edit_preferences.c:226
 msgid "Default text layer font size: "
-msgstr ""
+msgstr "Размер на текста по подразбиране: "
 
 #: ide/functions/menu/menu_edit_preferences.c:243
 msgid "points"
-msgstr ""
+msgstr "точки"
 
 #: ide/functions/menu/menu_edit_preferences.c:249
 msgid "Default text layer text foreground color: "
-msgstr ""
+msgstr "Цвчт на текста по подразбиране: "
 
 #: ide/functions/menu/menu_edit_preferences.c:260
 msgid "Default Slide Duration"
-msgstr ""
+msgstr "Продължителност на слайд по подразбиране"
 
 #: ide/functions/menu/menu_edit_preferences.c:268
 #: ide/functions/menu/menu_edit_preferences.c:282
 #: ide/functions/menu/menu_edit_preferences.c:344
 msgid "seconds"
-msgstr ""
+msgstr "секунди"
 
 #: ide/functions/menu/menu_edit_preferences.c:274
 msgid "Default Layer Duration"
-msgstr ""
+msgstr "Продължителност на слой по подразбиране"
 
 #: ide/functions/menu/menu_edit_preferences.c:288
 msgid "Default Frames Per Second: "
@@ -2149,7 +2211,7 @@ msgstr "Фонов цвят по подразбиране: "
 
 #: ide/functions/menu/menu_edit_preferences.c:338
 msgid "Number of seconds for screenshot delay: "
-msgstr "Секунди закъснение преди заснемането: "
+msgstr "Закъснение преди заснемането: "
 
 #: ide/functions/menu/menu_edit_preferences.c:350
 msgid "Display help text?"
@@ -2252,7 +2314,8 @@ msgstr " Настройките на програмата са обновени"
 
 #: ide/functions/menu/menu_export_layer.c:74
 msgid "Only image layers can be exported to an image file."
-msgstr "Само слоеве с изображения могат да се изнасят към файл с изображение."
+msgstr ""
+"Само слоеве с изображения могат да се изнасят към файл с изображение."
 
 #: ide/functions/menu/menu_export_layer.c:83
 #: ide/functions/menu/menu_export_slide.c:64
@@ -2410,7 +2473,7 @@ msgstr "Проектът е зареден"
 
 #: ide/functions/menu/menu_file_open.c:277
 msgid "slides"
-msgstr "слайдове"
+msgstr "слайда"
 
 #: ide/functions/menu/menu_file_save.c:87
 #: ide/functions/menu/menu_file_save.c:228
@@ -2534,11 +2597,11 @@ msgstr "Изберете изходната папка"
 
 #: ide/functions/menu/menu_project_properties.c:165
 msgid "Project Width: "
-msgstr "Ширина на проекта: "
+msgstr ""
 
 #: ide/functions/menu/menu_project_properties.c:177
 msgid "Project Height: "
-msgstr "Височина на проекта: "
+msgstr ""
 
 #: ide/functions/menu/menu_project_properties.c:189
 msgid "SWF start behavior: "
@@ -2662,8 +2725,8 @@ msgstr "Показалеца е пуснат от прихващането.\n"
 #: ide/functions/menu/menu_screenshots_capture.c:212
 #, c-format
 msgid ""
-"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: %"
-"d\n"
+"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: "
+"%d\n"
 msgstr ""
 "Геометрията на прозореца е получена. Отместване по X: %d\t, отместване по Y: "
 "%d\t. Ширина: %d\t, височина: %d\n"
@@ -2819,6 +2882,8 @@ msgstr ""
 msgid ""
 "No screenshots found.  You need to take some screenshots before using Import."
 msgstr ""
+"Няма намерени снимки на екрана.  Трябва да прихванете няколко преди да "
+"използвате Внасяне."
 
 #: ide/functions/menu/menu_screenshots_import.c:219
 msgid "Screenshots found"
@@ -2838,11 +2903,11 @@ msgstr "Изображението е заредено"
 
 #: ide/functions/menu/menu_screenshots_import.c:491
 msgid "screenshot imported"
-msgstr ""
+msgstr "прихванат екран е внесен"
 
 #: ide/functions/menu/menu_screenshots_import.c:494
 msgid "screenshots imported"
-msgstr "прихванатите екрани са внесени"
+msgstr "прихванати екрана са внесени"
 
 #: ide/functions/preferences_load.c:118
 msgid ""
@@ -2992,11 +3057,11 @@ msgstr "Настройки на размерите на проекта"
 
 #: ide/functions/project_adjust_dimensions.c:102
 msgid "Project width:"
-msgstr ""
+msgstr "Ширина на проекта:"
 
 #: ide/functions/project_adjust_dimensions.c:124
 msgid "Project height:"
-msgstr ""
+msgstr "Височина на проекта:"
 
 #: ide/functions/project_adjust_dimensions.c:175
 msgid ""
@@ -3070,13 +3135,15 @@ msgstr ""
 #: ide/functions/read/read_text_layer.c:590
 msgid ""
 "There was something wrong with a layer visibility value in the project file."
-msgstr "Нещо се обърка със стойността за видимост на слоя във файла с проекта."
+msgstr ""
+"Нещо се обърка със стойността за видимост на слоя във файла с проекта."
 
 #: ide/functions/read/read_empty_layer.c:198
 #: ide/functions/read/read_highlight_layer.c:396
 #: ide/functions/read/read_mouse_layer.c:289
 #: ide/functions/read/read_text_layer.c:608
-msgid "There was something wrong with a layer name value in the project file."
+msgid ""
+"There was something wrong with a layer name value in the project file."
 msgstr "Нещо се обърка със стойността за име на слоя във файла с проекта."
 
 #: ide/functions/read/read_empty_layer.c:216
@@ -3085,7 +3152,8 @@ msgstr "Нещо се обърка със стойността за име на 
 #: ide/functions/read/read_text_layer.c:626
 msgid ""
 "There was something wrong with an external link value in the project file."
-msgstr "Нещо се обърка със стойността на външната връзка във файла с проекта."
+msgstr ""
+"Нещо се обърка със стойността на външната връзка във файла с проекта."
 
 #: ide/functions/read/read_empty_layer.c:234
 #: ide/functions/read/read_highlight_layer.c:432
@@ -3114,14 +3182,16 @@ msgstr "Нещо се обърка със стойността за плътно
 #: ide/functions/read/read_text_layer.c:125
 msgid ""
 "There was something wrong with an x offset start value in the project file."
-msgstr "Нещо се обърка със стойността за начало на отместване по X в проекта."
+msgstr ""
+"Нещо се обърка със стойността за начало на отместване по X в проекта."
 
 #: ide/functions/read/read_highlight_layer.c:252
 #: ide/functions/read/read_mouse_layer.c:108
 #: ide/functions/read/read_text_layer.c:143
 msgid ""
 "There was something wrong with a y offset start value in the project file."
-msgstr "Нещо се обърка със стойността за начало на отместване по Y в проекта."
+msgstr ""
+"Нещо се обърка със стойността за начало на отместване по Y в проекта."
 
 #: ide/functions/read/read_highlight_layer.c:270
 #: ide/functions/read/read_mouse_layer.c:126
@@ -3139,7 +3209,8 @@ msgstr ""
 
 #: ide/functions/read/read_highlight_layer.c:306
 #: ide/functions/read/read_mouse_layer.c:162
-msgid "There was something wrong with a layer width value in the project file."
+msgid ""
+"There was something wrong with a layer width value in the project file."
 msgstr ""
 
 #: ide/functions/read/read_highlight_layer.c:324
@@ -3222,7 +3293,8 @@ msgstr "Нещо се обърка със стойността за ширина
 msgid ""
 "There was something wrong with an image layer height value in the project "
 "file."
-msgstr "Нещо се обърка със стойността за височина на слоя във файла с проекта."
+msgstr ""
+"Нещо се обърка със стойността за височина на слоя във файла с проекта."
 
 #: ide/functions/read/read_image_layer.c:209
 msgid ""
@@ -3330,18 +3402,19 @@ msgid "Couldn't create an image pattern"
 msgstr "Не може да създаде шарка на изображението"
 
 #: ide/functions/read/read_mouse_layer.c:198
-msgid "There was something wrong with a mouse click value in the project file."
+msgid ""
+"There was something wrong with a mouse click value in the project file."
 msgstr ""
 
 #: ide/functions/read/read_project.c:153
 msgid "Loading file"
-msgstr ""
+msgstr "Зареждане"
 
 #: ide/functions/read/read_project.c:161
 msgid ""
 "The selected project file was not loaded successfully.  Please choose a "
 "different project file."
-msgstr "Избрания проект не беше зареден успешно. Моля, изберете друг файл."
+msgstr "Избрания проект не беше зареден успешно. Моля изберете друг файл."
 
 #: ide/functions/read/read_project.c:177
 msgid "Project file is empty.  Please choose a different project file."
@@ -3406,12 +3479,14 @@ msgstr "Нещо се обърка с името на проекта във фа
 #: ide/functions/read/read_project.c:557
 msgid ""
 "There was something wrong with the output folder value in the project file."
-msgstr "Нещо се обърка със стойността на изходната папка във файла с проекта."
+msgstr ""
+"Нещо се обърка със стойността на изходната папка във файла с проекта."
 
 #: ide/functions/read/read_project.c:573
 msgid ""
 "There was something wrong with the output width value in the project file."
-msgstr "Нещо се обърка със стойността на изходната ширина във файла с проекта."
+msgstr ""
+"Нещо се обърка със стойността на изходната ширина във файла с проекта."
 
 #: ide/functions/read/read_project.c:588
 msgid ""
@@ -3428,7 +3503,8 @@ msgstr "Нещо се обърка с ширината на проекта въ�
 msgid ""
 "There was something wrong with the frames per second value in the project "
 "file."
-msgstr "Нещо се обърка със стойността на кадри в секунда във файла с проекта."
+msgstr ""
+"Нещо се обърка със стойността на кадри в секунда във файла с проекта."
 
 #: ide/functions/read/read_project.c:652
 msgid ""
@@ -3465,7 +3541,8 @@ msgstr ""
 "с проекта."
 
 #: ide/functions/read/read_project.c:909
-msgid "There was something wrong with a slide name value in the project file."
+msgid ""
+"There was something wrong with a slide name value in the project file."
 msgstr ""
 
 #: ide/functions/read/read_project.c:928
@@ -3649,7 +3726,7 @@ msgstr ""
 #: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:509
 #: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:615
 msgid "Unknown layer resize type."
-msgstr ""
+msgstr "Неизвестен тип за преоразмеряване."
 
 #: ide/functions/widgets/time_line/time_line_set_selected_layer_num.c:173
 #: ide/functions/widgets/time_line/time_line_set_selected_layer_num.c:177
@@ -3659,7 +3736,7 @@ msgstr "/Слой/Изрязване на изображение"
 #: ide/functions/widgets/time_line/time_line_set_selected_layer_num.c:174
 #: ide/functions/widgets/time_line/time_line_set_selected_layer_num.c:178
 msgid "/Layer/Image resize"
-msgstr ""
+msgstr "/Слой/Преоразмеряване на изображение"
 
 #: ide/functions/working_area/draw_highlight_box.c:53
 #: ide/functions/working_area/draw_highlight_box.c:92
@@ -3742,6 +3819,118 @@ msgid "Screenshots disabled: salasaga_screencapture not found in search path"
 msgstr ""
 "Прихващането на екрана е изключено: salasaga_screencapture не е намерена в "
 "пътя за търсене."
+
+#: screen_capture/salasaga_screencapture.c:81
+msgid "Something went wrong when getting the window identifier."
+msgstr "Нещо се обърка при прихващане на ID на прозореца."
+
+#: screen_capture/salasaga_screencapture.c:91
+#: screen_capture/salasaga_screencapture.c:499
+msgid "Something went wrong when getting the screenshot."
+msgstr "Нещо се обърка при прихващането на екрана."
+
+#: screen_capture/salasaga_screencapture.c:120
+msgid "Screenshot GetDC failed."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:129
+msgid "Screenshot CreateCompatibleDC failed."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:138
+msgid "Screenshot CreateCompatibleBitmap failed."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:147
+msgid "Screenshot SelectObject failed: selected object is not a region."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:155
+msgid "Screenshot SelectObject failed: unknown error."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:164
+msgid "Screenshot BitBlt failed."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:281
+msgid ""
+"There was something wrong with the project name value.  Aborting screenshot."
+msgstr "Нещо не е наред с името на проекта. Прекратяване на снимането."
+
+#: screen_capture/salasaga_screencapture.c:295
+msgid ""
+"There was something wrong with the screenshot folder value.  Aborting "
+"screenshot."
+msgstr ""
+"Нещо не е наред с папката за снимки на проекта. Прекратяване на снимането."
+
+#: screen_capture/salasaga_screencapture.c:309
+msgid ""
+"There was something wrong with the x offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:322
+msgid ""
+"There was something wrong with the y offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:335
+msgid "There was something wrong with the width value.  Aborting screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:348
+msgid ""
+"There was something wrong with the height value.  Aborting screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:361
+msgid ""
+"There was something wrong with the screenshot delay value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:423
+#: screen_capture/salasaga_screencapture.c:446
+#: screen_capture/salasaga_screencapture.c:472
+#, c-format
+msgid "Screenshot in %u seconds"
+msgstr "Снимка на екрана след %u секунди"
+
+#: screen_capture/salasaga_screencapture.c:508
+msgid "Screenshot taken"
+msgstr "Екранът е заснет"
+
+#: screen_capture/salasaga_screencapture.c:531
+msgid "Something went wrong opening"
+msgstr "Нещо не е наред с отварянето"
+
+#: screen_capture/salasaga_screencapture.c:540
+msgid "The target directory doesn't exist."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:626
+msgid ""
+"Something went wrong when opening the output screenshot file for writing."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:636
+msgid "Something went wrong when creating the png write structure."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:651
+msgid "Something went wrong when creating the png info structure."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:685
+msgid "Something went wrong when retrieving the screenshot metadata."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:702
+msgid "Something went wrong when copying the screenshot data."
+msgstr "Нещо се обърка с копирането на данните за прихванатия екран."
 
 #: ide/valid_fields.h:35
 msgid "8 Bit Color Value Component"
@@ -3935,117 +4124,6 @@ msgstr "Отместване по Y"
 msgid "Magnification level of working area"
 msgstr "Степен на приближение на работнота площ"
 
-#: screen_capture/salasaga_screencapture.c:81
-msgid "Something went wrong when getting the window identifier."
-msgstr "Нещо се обърка при прихващане на ID на прозореца."
-
-#: screen_capture/salasaga_screencapture.c:91
-#: screen_capture/salasaga_screencapture.c:499
-msgid "Something went wrong when getting the screenshot."
-msgstr "Нещо се обърка при прихващането на екрана."
-
-#: screen_capture/salasaga_screencapture.c:120
-msgid "Screenshot GetDC failed."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:129
-msgid "Screenshot CreateCompatibleDC failed."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:138
-msgid "Screenshot CreateCompatibleBitmap failed."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:147
-msgid "Screenshot SelectObject failed: selected object is not a region."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:155
-msgid "Screenshot SelectObject failed: unknown error."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:164
-msgid "Screenshot BitBlt failed."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:281
-msgid ""
-"There was something wrong with the project name value.  Aborting screenshot."
-msgstr "Нещо не е наред с името на проекта. Прекратяване на снимането."
-
-#: screen_capture/salasaga_screencapture.c:295
-msgid ""
-"There was something wrong with the screenshot folder value.  Aborting "
-"screenshot."
-msgstr ""
-"Нещо не е наред с папката за снимки на проекта. Прекратяване на снимането."
-
-#: screen_capture/salasaga_screencapture.c:309
-msgid ""
-"There was something wrong with the x offset start value.  Aborting "
-"screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:322
-msgid ""
-"There was something wrong with the y offset start value.  Aborting "
-"screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:335
-msgid "There was something wrong with the width value.  Aborting screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:348
-msgid "There was something wrong with the height value.  Aborting screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:361
-msgid ""
-"There was something wrong with the screenshot delay value.  Aborting "
-"screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:423
-#: screen_capture/salasaga_screencapture.c:446
-#: screen_capture/salasaga_screencapture.c:472
-#, c-format
-msgid "Screenshot in %u seconds"
-msgstr "Снимка на екрана след %u секунди"
-
-#: screen_capture/salasaga_screencapture.c:508
-msgid "Screenshot taken"
-msgstr "Екранът е заснет"
-
-#: screen_capture/salasaga_screencapture.c:531
-msgid "Something went wrong opening"
-msgstr "Нещо не е наред с отварянето"
-
-#: screen_capture/salasaga_screencapture.c:540
-msgid "The target directory doesn't exist."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:626
-msgid ""
-"Something went wrong when opening the output screenshot file for writing."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:636
-msgid "Something went wrong when creating the png write structure."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:651
-msgid "Something went wrong when creating the png info structure."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:685
-msgid "Something went wrong when retrieving the screenshot metadata."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:702
-msgid "Something went wrong when copying the screenshot data."
-msgstr "Нещо се обърка с копирането на данните за прихванатия екран."
-
 #: screen_capture/valid_fields.h:40
 msgid "X offset for next screenshot"
 msgstr "Х отместване за следващия прихванат екран"
@@ -4053,34 +4131,6 @@ msgstr "Х отместване за следващия прихванат ек�
 #: screen_capture/valid_fields.h:41
 msgid "Y offset for next screenshot"
 msgstr "Y отместване за следващия прихванат екран"
-
-#~ msgid ""
-#~ "Default Slide Duration: \n"
-#~ "(seconds)"
-#~ msgstr "Времетраене на слайд по подразбиране:"
-
-#~ msgid ""
-#~ "Default Layer Duration: \n"
-#~ "(seconds)"
-#~ msgstr "Времетраене на слой по подразбиране:"
-
-#~ msgid " Ready"
-#~ msgstr " Готово"
-
-#~ msgid "Present project width:"
-#~ msgstr "Текуща ширина на проекта:"
-
-#~ msgid "Present project height:"
-#~ msgstr "Текуща височина на проекта:"
-
-#~ msgid "New project width:"
-#~ msgstr "Нова ширина на проекта:"
-
-#~ msgid "New project height:"
-#~ msgstr "Нова височина на проекта:"
-
-#~ msgid "Minimise window"
-#~ msgstr "Минимизирай прозореца"
 
 #~ msgid "Starting X Offset:"
 #~ msgstr "Началнo отместване по X:"
@@ -4097,14 +4147,26 @@ msgstr "Y отместване за следващия прихванат екр
 #~ msgid "Object"
 #~ msgstr "Обект"
 
+#~ msgid " Ready"
+#~ msgstr " Готово"
+
 #~ msgid ""
-#~ "Unable to set screenshot key to Control-Printscreen.  (Not running "
-#~ "Metacity, so not sure how to.)  You will need to do this yourself "
-#~ "manually."
+#~ "Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, "
+#~ "so not sure how to.)  You will need to do this yourself manually."
 #~ msgstr ""
 #~ "Неуспех при задаването на клавишна комбинация Control-Printscreen за "
-#~ "прихващане на екрана. (Не използвате Metacity като декоратор на прозорци, "
-#~ "за това не знам как да го направя). Ще трябва да я зададете ръчно."
+#~ "прихващане на екрана. (Не използвате Metacity като декоратор на прозорци, за "
+#~ "това не знам как да го направя). Ще трябва да я зададете ръчно."
+
+#~ msgid ""
+#~ "Default Slide Duration: \n"
+#~ "(seconds)"
+#~ msgstr "Времетраене на слайд по подразбиране:"
+
+#~ msgid ""
+#~ "Default Layer Duration: \n"
+#~ "(seconds)"
+#~ msgstr "Времетраене на слой по подразбиране:"
 
 #~ msgid "Display non-metacity key bind warning?"
 #~ msgstr "Покажи предупреждение при неизползване на Metacity?"
@@ -4119,13 +4181,14 @@ msgstr "Y отместване за следващия прихванат екр
 #~ "Моля, щракнете върху прозореца, който искате да прихванте (след като "
 #~ "затворите този диалогов прозорец)"
 
+#, c-format
 #~ msgid " Wrote capture settings file - %s"
 #~ msgstr " Написа файла с настройките за прихващане - %s"
 
 #~ msgid ""
 #~ "Not all of the screenshots are of the same size, or some differ from the "
-#~ "size of the project.  If you proceed, they will be scaled to the same "
-#~ "size as the project.  Do you want to proceed?"
+#~ "size of the project.  If you proceed, they will be scaled to the same size "
+#~ "as the project.  Do you want to proceed?"
 #~ msgstr ""
 #~ "Не всички прихванати екрани са един размер или някои се различават от "
 #~ "размера зададен за проекта. Ако продължите те ще бъдат преоразмерени до "
@@ -4133,8 +4196,8 @@ msgstr "Y отместване за следващия прихванат екр
 
 #~ msgid ""
 #~ "Not all of the screenshots are of the same size, or some differ from the "
-#~ "size of the project.  If you proceed, they will all be scaled to the size "
-#~ "of the first one.  Do you want to proceed?"
+#~ "size of the project.  If you proceed, they will all be scaled to the size of "
+#~ "the first one.  Do you want to proceed?"
 #~ msgstr ""
 #~ "Не всички прихванати екрани са един размер или някои се различават от "
 #~ "размера зададен за проекта. Ако продължите те ще бъдат преоразмерени до "
@@ -4182,8 +4245,7 @@ msgstr "Y отместване за следващия прихванат екр
 #~ "There was something wrong with an image start frame value in the project "
 #~ "file."
 #~ msgstr ""
-#~ "Нещо се обърка със стойността на стартовия кадър на изображението в "
-#~ "проекта."
+#~ "Нещо се обърка със стойността на стартовия кадър на изображението в проекта."
 
 #~ msgid ""
 #~ "There was something wrong with an image finish frame value in the project "
@@ -4207,8 +4269,8 @@ msgstr "Y отместване за следващия прихванат екр
 #~ msgstr "Път за Шрифтове: '%s'\n"
 
 #~ msgid ""
-#~ "Window dimensions successfully retrieved.  Please use Control-Printscreen "
-#~ "to take screenshots then Import when finished."
+#~ "Window dimensions successfully retrieved.  Please use Control-Printscreen to "
+#~ "take screenshots then Import when finished."
 #~ msgstr ""
 #~ "Размерът на прозореца е взет успешно. Натиснете Control-Printscreen за да "
 #~ "прихванете екрана и после натиснете Внеси когато сте готови."

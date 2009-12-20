@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-06 14:21+1100\n"
+"POT-Creation-Date: 2009-12-13 12:13+1100\n"
 "PO-Revision-Date: 2009-10-19 07:08+0000\n"
 "Last-Translator: Justin Clift <Unknown>\n"
 "Language-Team: Portuguese <pt@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-01 05:48+0000\n"
+"X-Launchpad-Export-Date: 2009-12-20 08:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
@@ -107,10 +107,13 @@ msgstr ""
 #: ide/functions/film_strip/film_strip_create_thumbnail.c:79
 #: ide/functions/gtk_text_buffer_duplicate.c:87
 #: ide/functions/gtk_text_buffer_duplicate.c:96 ide/functions/key_bind.c:80
-#: ide/functions/key_bind.c:98 ide/functions/layer/compress_layers_inner.c:274
+#: ide/functions/key_bind.c:98 ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
 #: ide/functions/layer/image_crop.c:118 ide/functions/layer/image_crop.c:129
 #: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_crop.c:287
+#: ide/functions/layer/image_resize.c:208
+#: ide/functions/layer/image_resize.c:212
+#: ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:57
 #: ide/functions/layer/layer_duplicate.c:111
 #: ide/functions/layer/layer_duplicate.c:128
@@ -392,6 +395,8 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_image.c:205
 #: ide/functions/layer/image_crop.c:158 ide/functions/layer/image_crop.c:179
 #: ide/functions/layer/image_crop.c:200 ide/functions/layer/image_crop.c:221
+#: ide/functions/layer/image_resize.c:140
+#: ide/functions/layer/image_resize.c:162
 #: ide/functions/menu/menu_edit_preferences.c:303
 #: ide/functions/menu/menu_edit_preferences.c:315
 #: ide/functions/menu/menu_project_properties.c:170
@@ -1080,7 +1085,8 @@ msgid "Dump text layer to stdout: "
 msgstr ""
 
 #: ide/functions/dialog/display_dialog_text.c:712
-msgid "There was something wrong with the layer name value.  Please try again."
+msgid ""
+"There was something wrong with the layer name value.  Please try again."
 msgstr "Ocorreu um erro com o valor do nome da camada. Tente novamente."
 
 #: ide/functions/dialog/display_dialog_text.c:783
@@ -1161,7 +1167,8 @@ msgstr "Todos os ficheiros (*.*)"
 #: ide/functions/menu/menu_export_swf.c:130
 #: ide/functions/menu/menu_file_open.c:170
 #: ide/functions/menu/menu_file_save_as.c:148
-msgid "There was something wrong with the file name given.  Please try again."
+msgid ""
+"There was something wrong with the file name given.  Please try again."
 msgstr "Ocorreu um erro com o nome de ficheiro atribuído. Tente novamente."
 
 #: ide/functions/export/html/export_html_wrapper.c:133
@@ -1193,7 +1200,8 @@ msgstr ""
 
 #: ide/functions/export/swf/export_swf_control_bar.c:528
 msgid "Restart button pressed, slide counter has been set to:"
-msgstr "Botão de reiníciar pressionado, contador de slides foi alterado para:"
+msgstr ""
+"Botão de reiníciar pressionado, contador de slides foi alterado para:"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:532
 #: ide/functions/export/swf/export_swf_control_bar.c:679
@@ -1563,10 +1571,10 @@ msgid ""
 "'salasaga_screencapture' not found in the search path. Screenshot capturing "
 "is disabled."
 msgstr ""
-"'salasaga_screencapture' não encontrado no caminho de pesquisa indicado."
-"Capturas inactivas"
+"'salasaga_screencapture' não encontrado no caminho de pesquisa "
+"indicado.Capturas inactivas"
 
-#: ide/functions/layer/compress_layers_inner.c:274
+#: ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
 #: ide/functions/layer/layer_edit.c:207
 #: ide/functions/working_area/calculate_object_boundaries.c:182
@@ -1608,13 +1616,14 @@ msgstr "Recorte de fundo: "
 msgid "Those crop values will remove the entire image."
 msgstr ""
 
-#: ide/functions/layer/image_crop.c:258
+#: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_resize.c:208
+#: ide/functions/layer/image_resize.c:212
 #: ide/functions/project_adjust_dimensions.c:175
 #: ide/functions/project_adjust_dimensions.c:179
 msgid "Please try again."
 msgstr ""
 
-#: ide/functions/layer/image_crop.c:287
+#: ide/functions/layer/image_crop.c:287 ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:142
 #: ide/functions/layer/layer_new_image_inner.c:167
 #: ide/functions/menu/menu_screenshots_import.c:274
@@ -1625,6 +1634,57 @@ msgstr "Incapaz de criar padrão de imagem."
 #: ide/functions/layer/image_crop.c:312
 msgid " Image cropped"
 msgstr " Imagem recortada"
+
+#: ide/functions/layer/image_resize.c:119
+msgid "Resize image layer"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:124
+msgid "Image width:"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:146
+msgid "Image height:"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:168
+msgid "Resize image using:"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:174
+msgid "Nearest neighbor (lowest quality)"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:175
+msgid "Tiled"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:176
+msgid "Bilinear (default)"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:177
+msgid "Hyperbolic (best quality for photos)"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:208
+msgid ""
+"Those adjustment values would make the image smaller than the minimum "
+"allowed."
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:212
+msgid ""
+"Those adjustment values would make the image larger than the maximum allowed."
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:231
+msgid "Image layer resize skipped"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:271
+msgid "Image layer resized"
+msgstr ""
 
 #: ide/functions/layer/layer_copy.c:69
 msgid " Copy failed"
@@ -1733,13 +1793,15 @@ msgid "Please choose an image file"
 msgstr "Seleccione um ficheiro de imagem"
 
 #: ide/functions/layer/layer_new_image_inner.c:137
-msgid "There was something wrong with the image path given.  Please try again."
+msgid ""
+"There was something wrong with the image path given.  Please try again."
 msgstr "Ocorreu um erro com o caminho da imagem indicado. Tente novamente."
 
 #: ide/functions/layer/layer_new_image_inner.c:146
 msgid ""
 "There was something wrong with the image file selected.  Please try again."
-msgstr "Ocorreu um erro com o ficheiro de imagem seleccionado. Tente novamente"
+msgstr ""
+"Ocorreu um erro com o ficheiro de imagem seleccionado. Tente novamente"
 
 #: ide/functions/layer/layer_new_image_inner.c:218
 msgid " Image layer added"
@@ -2628,8 +2690,8 @@ msgstr "Captura de ponteiro de rato terminada.\n"
 #: ide/functions/menu/menu_screenshots_capture.c:212
 #, c-format
 msgid ""
-"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: %"
-"d\n"
+"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: "
+"%d\n"
 msgstr ""
 
 #: ide/functions/menu/menu_screenshots_capture.c:225
@@ -2830,8 +2892,8 @@ msgid ""
 "There was something wrong with the default project width value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
-"Ocorreu um erro com o valor de largura do projecto indicado nas Preferências."
-"A usar as definições de origem."
+"Ocorreu um erro com o valor de largura do projecto indicado nas "
+"Preferências.A usar as definições de origem."
 
 #: ide/functions/preferences_load.c:212
 msgid ""
@@ -3030,8 +3092,10 @@ msgstr ""
 #: ide/functions/read/read_highlight_layer.c:396
 #: ide/functions/read/read_mouse_layer.c:289
 #: ide/functions/read/read_text_layer.c:608
-msgid "There was something wrong with a layer name value in the project file."
-msgstr "Ocorreu um erro com o valor do nome da camada no ficheiro do projecto."
+msgid ""
+"There was something wrong with a layer name value in the project file."
+msgstr ""
+"Ocorreu um erro com o valor do nome da camada no ficheiro do projecto."
 
 #: ide/functions/read/read_empty_layer.c:216
 #: ide/functions/read/read_highlight_layer.c:414
@@ -3095,7 +3159,8 @@ msgstr ""
 
 #: ide/functions/read/read_highlight_layer.c:306
 #: ide/functions/read/read_mouse_layer.c:162
-msgid "There was something wrong with a layer width value in the project file."
+msgid ""
+"There was something wrong with a layer width value in the project file."
 msgstr ""
 
 #: ide/functions/read/read_highlight_layer.c:324
@@ -3118,7 +3183,8 @@ msgstr "Ocorreu um erro com um valor de tipo de transição no projecto."
 msgid ""
 "There was something wrong with a transition in duration value in the project "
 "file."
-msgstr "Ocorreu um erro com um valor de duração de uma transição no projecto."
+msgstr ""
+"Ocorreu um erro com um valor de duração de uma transição no projecto."
 
 #: ide/functions/read/read_highlight_layer.c:492
 #: ide/functions/read/read_mouse_layer.c:385
@@ -3275,7 +3341,8 @@ msgid "Couldn't create an image pattern"
 msgstr "Incapaz de criar padrão de imagem."
 
 #: ide/functions/read/read_mouse_layer.c:198
-msgid "There was something wrong with a mouse click value in the project file."
+msgid ""
+"There was something wrong with a mouse click value in the project file."
 msgstr ""
 
 #: ide/functions/read/read_project.c:153
@@ -3343,7 +3410,8 @@ msgstr ""
 msgid ""
 "The file format value in the project file is not recognized.  This project "
 "file can't be used."
-msgstr "Formato do ficheiro não reconhecido.Este ficheiro não pode ser usado."
+msgstr ""
+"Formato do ficheiro não reconhecido.Este ficheiro não pode ser usado."
 
 #: ide/functions/read/read_project.c:542
 msgid ""
@@ -3360,7 +3428,8 @@ msgstr ""
 #: ide/functions/read/read_project.c:573
 msgid ""
 "There was something wrong with the output width value in the project file."
-msgstr "Ocorreu um erro no valor de largura indicado no ficheiro do projecto."
+msgstr ""
+"Ocorreu um erro no valor de largura indicado no ficheiro do projecto."
 
 #: ide/functions/read/read_project.c:588
 msgid ""
@@ -3413,7 +3482,8 @@ msgid ""
 msgstr ""
 
 #: ide/functions/read/read_project.c:909
-msgid "There was something wrong with a slide name value in the project file."
+msgid ""
+"There was something wrong with a slide name value in the project file."
 msgstr ""
 
 #: ide/functions/read/read_project.c:928
@@ -3515,7 +3585,8 @@ msgstr "Duração do slide: "
 #: ide/functions/slide/slide_duration.c:115
 msgid ""
 "There was something wrong with the slide duration value.  Please try again."
-msgstr "Ocorreu um erro durante a inserção do valor do slide. Tente novamente"
+msgstr ""
+"Ocorreu um erro durante a inserção do valor do slide. Tente novamente"
 
 #: ide/functions/slide/slide_duration.c:200
 msgid " Slide properties updated"
@@ -3688,6 +3759,120 @@ msgstr "Ocorreu um erro na criação do filme."
 msgid "Screenshots disabled: salasaga_screencapture not found in search path"
 msgstr ""
 "Capturas desactivadas: caminho para salasaga_screencapture não encontrado"
+
+#: screen_capture/salasaga_screencapture.c:81
+msgid "Something went wrong when getting the window identifier."
+msgstr "Ocorreu um erro ao detectar identificador da janela."
+
+#: screen_capture/salasaga_screencapture.c:91
+#: screen_capture/salasaga_screencapture.c:499
+msgid "Something went wrong when getting the screenshot."
+msgstr "Ocorreu um erro ao realizar a captura."
+
+#: screen_capture/salasaga_screencapture.c:120
+msgid "Screenshot GetDC failed."
+msgstr "A captura GetDC falhou."
+
+#: screen_capture/salasaga_screencapture.c:129
+msgid "Screenshot CreateCompatibleDC failed."
+msgstr "A captura  CreateCompatibleDC falhou."
+
+#: screen_capture/salasaga_screencapture.c:138
+msgid "Screenshot CreateCompatibleBitmap failed."
+msgstr "A captura CreateCompatibleBitmap falhou."
+
+#: screen_capture/salasaga_screencapture.c:147
+msgid "Screenshot SelectObject failed: selected object is not a region."
+msgstr ""
+"A captura SelectObject falhou: o objecto seleccionado não é uma região."
+
+#: screen_capture/salasaga_screencapture.c:155
+msgid "Screenshot SelectObject failed: unknown error."
+msgstr "A captura SelectObject falhou: erro desconhecido."
+
+#: screen_capture/salasaga_screencapture.c:164
+msgid "Screenshot BitBlt failed."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:281
+msgid ""
+"There was something wrong with the project name value.  Aborting screenshot."
+msgstr ""
+"Ocorreu um erro com o valor do nome do projecto. A abortar a captura."
+
+#: screen_capture/salasaga_screencapture.c:295
+msgid ""
+"There was something wrong with the screenshot folder value.  Aborting "
+"screenshot."
+msgstr ""
+"Ocorreu um erro com o valor da directoria de captura. A abortar captura."
+
+#: screen_capture/salasaga_screencapture.c:309
+msgid ""
+"There was something wrong with the x offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:322
+msgid ""
+"There was something wrong with the y offset start value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:335
+msgid "There was something wrong with the width value.  Aborting screenshot."
+msgstr "Ocorreu um erro com o valor da largura. A abortar captura."
+
+#: screen_capture/salasaga_screencapture.c:348
+msgid ""
+"There was something wrong with the height value.  Aborting screenshot."
+msgstr "Ocorreu um erro com o valor de altura. A abortar captura."
+
+#: screen_capture/salasaga_screencapture.c:361
+msgid ""
+"There was something wrong with the screenshot delay value.  Aborting "
+"screenshot."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:423
+#: screen_capture/salasaga_screencapture.c:446
+#: screen_capture/salasaga_screencapture.c:472
+#, c-format
+msgid "Screenshot in %u seconds"
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:508
+msgid "Screenshot taken"
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:531
+msgid "Something went wrong opening"
+msgstr "Ocorreu um erro ao abrir."
+
+#: screen_capture/salasaga_screencapture.c:540
+msgid "The target directory doesn't exist."
+msgstr "O directorio de destino não existe."
+
+#: screen_capture/salasaga_screencapture.c:626
+msgid ""
+"Something went wrong when opening the output screenshot file for writing."
+msgstr "Ocorreu um erro ao abrir o ficheiro de captura para escrita."
+
+#: screen_capture/salasaga_screencapture.c:636
+msgid "Something went wrong when creating the png write structure."
+msgstr ""
+
+#: screen_capture/salasaga_screencapture.c:651
+msgid "Something went wrong when creating the png info structure."
+msgstr "Ocorreu um erro ao criar a informação PNG para escrita."
+
+#: screen_capture/salasaga_screencapture.c:685
+msgid "Something went wrong when retrieving the screenshot metadata."
+msgstr "Ocorreu um erro ao adquirir metadados da captura."
+
+#: screen_capture/salasaga_screencapture.c:702
+msgid "Something went wrong when copying the screenshot data."
+msgstr "Ocorrreu um erro ao copiar os dados da captura."
 
 #: ide/valid_fields.h:35
 msgid "8 Bit Color Value Component"
@@ -3881,118 +4066,6 @@ msgstr "Deslocamento em Y"
 msgid "Magnification level of working area"
 msgstr "Aumento da área de trabalho"
 
-#: screen_capture/salasaga_screencapture.c:81
-msgid "Something went wrong when getting the window identifier."
-msgstr "Ocorreu um erro ao detectar identificador da janela."
-
-#: screen_capture/salasaga_screencapture.c:91
-#: screen_capture/salasaga_screencapture.c:499
-msgid "Something went wrong when getting the screenshot."
-msgstr "Ocorreu um erro ao realizar a captura."
-
-#: screen_capture/salasaga_screencapture.c:120
-msgid "Screenshot GetDC failed."
-msgstr "A captura GetDC falhou."
-
-#: screen_capture/salasaga_screencapture.c:129
-msgid "Screenshot CreateCompatibleDC failed."
-msgstr "A captura  CreateCompatibleDC falhou."
-
-#: screen_capture/salasaga_screencapture.c:138
-msgid "Screenshot CreateCompatibleBitmap failed."
-msgstr "A captura CreateCompatibleBitmap falhou."
-
-#: screen_capture/salasaga_screencapture.c:147
-msgid "Screenshot SelectObject failed: selected object is not a region."
-msgstr ""
-"A captura SelectObject falhou: o objecto seleccionado não é uma região."
-
-#: screen_capture/salasaga_screencapture.c:155
-msgid "Screenshot SelectObject failed: unknown error."
-msgstr "A captura SelectObject falhou: erro desconhecido."
-
-#: screen_capture/salasaga_screencapture.c:164
-msgid "Screenshot BitBlt failed."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:281
-msgid ""
-"There was something wrong with the project name value.  Aborting screenshot."
-msgstr "Ocorreu um erro com o valor do nome do projecto. A abortar a captura."
-
-#: screen_capture/salasaga_screencapture.c:295
-msgid ""
-"There was something wrong with the screenshot folder value.  Aborting "
-"screenshot."
-msgstr ""
-"Ocorreu um erro com o valor da directoria de captura. A abortar captura."
-
-#: screen_capture/salasaga_screencapture.c:309
-msgid ""
-"There was something wrong with the x offset start value.  Aborting "
-"screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:322
-msgid ""
-"There was something wrong with the y offset start value.  Aborting "
-"screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:335
-msgid "There was something wrong with the width value.  Aborting screenshot."
-msgstr "Ocorreu um erro com o valor da largura. A abortar captura."
-
-#: screen_capture/salasaga_screencapture.c:348
-msgid "There was something wrong with the height value.  Aborting screenshot."
-msgstr "Ocorreu um erro com o valor de altura. A abortar captura."
-
-#: screen_capture/salasaga_screencapture.c:361
-msgid ""
-"There was something wrong with the screenshot delay value.  Aborting "
-"screenshot."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:423
-#: screen_capture/salasaga_screencapture.c:446
-#: screen_capture/salasaga_screencapture.c:472
-#, c-format
-msgid "Screenshot in %u seconds"
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:508
-msgid "Screenshot taken"
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:531
-msgid "Something went wrong opening"
-msgstr "Ocorreu um erro ao abrir."
-
-#: screen_capture/salasaga_screencapture.c:540
-msgid "The target directory doesn't exist."
-msgstr "O directorio de destino não existe."
-
-#: screen_capture/salasaga_screencapture.c:626
-msgid ""
-"Something went wrong when opening the output screenshot file for writing."
-msgstr "Ocorreu um erro ao abrir o ficheiro de captura para escrita."
-
-#: screen_capture/salasaga_screencapture.c:636
-msgid "Something went wrong when creating the png write structure."
-msgstr ""
-
-#: screen_capture/salasaga_screencapture.c:651
-msgid "Something went wrong when creating the png info structure."
-msgstr "Ocorreu um erro ao criar a informação PNG para escrita."
-
-#: screen_capture/salasaga_screencapture.c:685
-msgid "Something went wrong when retrieving the screenshot metadata."
-msgstr "Ocorreu um erro ao adquirir metadados da captura."
-
-#: screen_capture/salasaga_screencapture.c:702
-msgid "Something went wrong when copying the screenshot data."
-msgstr "Ocorrreu um erro ao copiar os dados da captura."
-
 #: screen_capture/valid_fields.h:40
 msgid "X offset for next screenshot"
 msgstr ""
@@ -4000,6 +4073,19 @@ msgstr ""
 #: screen_capture/valid_fields.h:41
 msgid "Y offset for next screenshot"
 msgstr ""
+
+#~ msgid "Object"
+#~ msgstr "Objecto"
+
+#~ msgid " Ready"
+#~ msgstr " Pronto"
+
+#~ msgid ""
+#~ "Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, "
+#~ "so not sure how to.)  You will need to do this yourself manually."
+#~ msgstr ""
+#~ "Incapaz de definir Ctrl-PrtSc como tecla de captura. (Metacity não está a "
+#~ "ser executado)"
 
 #~ msgid ""
 #~ "Default Slide Duration: \n"
@@ -4014,20 +4100,6 @@ msgstr ""
 #~ msgstr ""
 #~ "Duração standar de Camada: \n"
 #~ "(segundos)"
-
-#~ msgid " Ready"
-#~ msgstr " Pronto"
-
-#~ msgid "Object"
-#~ msgstr "Objecto"
-
-#~ msgid ""
-#~ "Unable to set screenshot key to Control-Printscreen.  (Not running "
-#~ "Metacity, so not sure how to.)  You will need to do this yourself "
-#~ "manually."
-#~ msgstr ""
-#~ "Incapaz de definir Ctrl-PrtSc como tecla de captura. (Metacity não está a "
-#~ "ser executado)"
 
 #~ msgid "Display non-metacity key bind warning?"
 #~ msgstr "Apresentar aviso non-metacity?"
@@ -4072,15 +4144,14 @@ msgstr ""
 
 #~ msgid ""
 #~ "There was something wrong with a finish frame value in the project file."
-#~ msgstr ""
-#~ "Ocorreu um erro com o valor da frame de fim do ficheiro do projecto."
+#~ msgstr "Ocorreu um erro com o valor da frame de fim do ficheiro do projecto."
 
 #~ msgid ""
 #~ "Capture dimensions set to full screen.  Please use Control-Printscreen to "
 #~ "take screenshots then Import when finished."
 #~ msgstr ""
-#~ "Dimensões da captura definidas para ecrân completo. Use Ctrl-PrtSc "
-#~ "paracriar Capturas e Importar."
+#~ "Dimensões da captura definidas para ecrân completo. Use Ctrl-PrtSc paracriar "
+#~ "Capturas e Importar."
 
 #~ msgid ""
 #~ "There was something wrong with the font size value.  Please try again."
@@ -4096,8 +4167,8 @@ msgstr ""
 #~ msgstr "Largura desta string: %.2f\n"
 
 #~ msgid ""
-#~ "Window dimensions successfully retrieved.  Please use Control-Printscreen "
-#~ "to take screenshots then Import when finished."
+#~ "Window dimensions successfully retrieved.  Please use Control-Printscreen to "
+#~ "take screenshots then Import when finished."
 #~ msgstr ""
 #~ "Dimensões da janela identificadas com sucesso. Use Ctrl-PrtScpara fazer "
 #~ "Capturas e Importar."

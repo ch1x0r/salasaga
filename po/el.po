@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-06 14:21+1100\n"
-"PO-Revision-Date: 2009-11-18 05:02+0000\n"
+"POT-Creation-Date: 2009-12-13 12:13+1100\n"
+"PO-Revision-Date: 2009-12-06 10:39+0000\n"
 "Last-Translator: Yannis Kaskamanidis <ttnfy17@yahoo.gr>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-01 05:48+0000\n"
+"X-Launchpad-Export-Date: 2009-12-20 08:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
@@ -107,10 +107,13 @@ msgstr ""
 #: ide/functions/film_strip/film_strip_create_thumbnail.c:79
 #: ide/functions/gtk_text_buffer_duplicate.c:87
 #: ide/functions/gtk_text_buffer_duplicate.c:96 ide/functions/key_bind.c:80
-#: ide/functions/key_bind.c:98 ide/functions/layer/compress_layers_inner.c:274
+#: ide/functions/key_bind.c:98 ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
 #: ide/functions/layer/image_crop.c:118 ide/functions/layer/image_crop.c:129
 #: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_crop.c:287
+#: ide/functions/layer/image_resize.c:208
+#: ide/functions/layer/image_resize.c:212
+#: ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:57
 #: ide/functions/layer/layer_duplicate.c:111
 #: ide/functions/layer/layer_duplicate.c:128
@@ -392,6 +395,8 @@ msgstr "Αδυναμία δημιουργίας επιφάνειας προτύ�
 #: ide/functions/dialog/display_dialog_image.c:205
 #: ide/functions/layer/image_crop.c:158 ide/functions/layer/image_crop.c:179
 #: ide/functions/layer/image_crop.c:200 ide/functions/layer/image_crop.c:221
+#: ide/functions/layer/image_resize.c:140
+#: ide/functions/layer/image_resize.c:162
 #: ide/functions/menu/menu_edit_preferences.c:303
 #: ide/functions/menu/menu_edit_preferences.c:315
 #: ide/functions/menu/menu_project_properties.c:170
@@ -552,12 +557,12 @@ msgstr "Εισαγωγή στιγμιότυπων"
 
 #: ide/functions/create_toolbar.c:152
 msgid "Dimensions"
-msgstr ""
+msgstr "Διαστάσεις"
 
 #: ide/functions/create_toolbar.c:153
 #: ide/functions/enable_main_toolbar_buttons.c:49
 msgid "Adjust the dimensions of the project"
-msgstr ""
+msgstr "Προσαρμογή των διαστάσεων του έργου"
 
 #: ide/functions/create_toolbar.c:169
 msgid "Flash"
@@ -915,15 +920,15 @@ msgstr ""
 
 #: ide/functions/dialog/display_dialog_image.c:168
 msgid "Links"
-msgstr ""
+msgstr "Συνδέσεις"
 
 #: ide/functions/dialog/display_dialog_image.c:192
 msgid "Layer width:"
-msgstr ""
+msgstr "Πλάτος στρώσης:"
 
 #: ide/functions/dialog/display_dialog_image.c:202
 msgid "Layer height:"
-msgstr ""
+msgstr "Ύψος στρώσης:"
 
 #: ide/functions/dialog/display_dialog_mouse.c:179
 msgid "Mouse click type: "
@@ -987,112 +992,112 @@ msgstr "Όνομα στρώσης: "
 
 #: ide/functions/dialog/display_dialog_text.c:246
 msgid "Font face: "
-msgstr ""
+msgstr "Όψη γραμματοσειράς: "
 
 #: ide/functions/dialog/display_dialog_text.c:252
 #: ide/functions/menu/menu_edit_preferences.c:200
 msgid "DejaVu Sans"
-msgstr ""
+msgstr "DejaVu Sans"
 
 #: ide/functions/dialog/display_dialog_text.c:253
 #: ide/functions/menu/menu_edit_preferences.c:201
 msgid "DejaVu Sans Bold"
-msgstr ""
+msgstr "DejaVu Sans Έντονα"
 
 #: ide/functions/dialog/display_dialog_text.c:254
 #: ide/functions/menu/menu_edit_preferences.c:202
 msgid "DejaVu Sans Bold Oblique"
-msgstr ""
+msgstr "DejaVu Sans Έντονα Πλάγια"
 
 #: ide/functions/dialog/display_dialog_text.c:255
 #: ide/functions/menu/menu_edit_preferences.c:203
 msgid "DejaVu Sans Condensed"
-msgstr ""
+msgstr "DejaVu Sans Συμπυκνωμένα"
 
 #: ide/functions/dialog/display_dialog_text.c:256
 #: ide/functions/menu/menu_edit_preferences.c:204
 msgid "DejaVu Sans Condensed Bold"
-msgstr ""
+msgstr "DejaVu Sans Συμπυκνωμένα Έντονα"
 
 #: ide/functions/dialog/display_dialog_text.c:257
 #: ide/functions/menu/menu_edit_preferences.c:205
 msgid "DejaVu Sans Condensed Bold Oblique"
-msgstr ""
+msgstr "DejaVu Sans Συμπυκνωμένα Έντονα Πλάγια"
 
 #: ide/functions/dialog/display_dialog_text.c:258
 #: ide/functions/menu/menu_edit_preferences.c:206
 msgid "DejaVu Sans Condensed Oblique"
-msgstr ""
+msgstr "DejaVu Sans Συμπυκνωμένα Πλάγια"
 
 #: ide/functions/dialog/display_dialog_text.c:259
 #: ide/functions/menu/menu_edit_preferences.c:207
 msgid "DejaVu Sans Extra Light"
-msgstr ""
+msgstr "DejaVu Sans Πολύ λεπτά"
 
 #: ide/functions/dialog/display_dialog_text.c:260
 #: ide/functions/menu/menu_edit_preferences.c:208
 msgid "DejaVu Sans Mono"
-msgstr ""
+msgstr "DejaVu Sans Mono"
 
 #: ide/functions/dialog/display_dialog_text.c:261
 #: ide/functions/menu/menu_edit_preferences.c:209
 msgid "DejaVu Sans Mono Bold"
-msgstr ""
+msgstr "DejaVu Sans Mono Έντονα"
 
 #: ide/functions/dialog/display_dialog_text.c:262
 #: ide/functions/menu/menu_edit_preferences.c:210
 msgid "DejaVu Sans Mono Bold Oblique"
-msgstr ""
+msgstr "DejaVu Sans Mono Έντονα Πλάγια"
 
 #: ide/functions/dialog/display_dialog_text.c:263
 #: ide/functions/menu/menu_edit_preferences.c:211
 msgid "DejaVu Sans Mono Oblique"
-msgstr ""
+msgstr "DejaVu Sans Mono Πλάγια"
 
 #: ide/functions/dialog/display_dialog_text.c:264
 #: ide/functions/menu/menu_edit_preferences.c:212
 msgid "DejaVu Sans Oblique"
-msgstr ""
+msgstr "DejaVu Sans Πλάγια"
 
 #: ide/functions/dialog/display_dialog_text.c:265
 #: ide/functions/menu/menu_edit_preferences.c:213
 msgid "DejaVu Serif"
-msgstr ""
+msgstr "DejaVu Serif"
 
 #: ide/functions/dialog/display_dialog_text.c:266
 #: ide/functions/menu/menu_edit_preferences.c:214
 msgid "DejaVu Serif Bold"
-msgstr ""
+msgstr "DejaVu Serif Έντονα"
 
 #: ide/functions/dialog/display_dialog_text.c:267
 #: ide/functions/menu/menu_edit_preferences.c:215
 msgid "DejaVu Serif Bold Italic"
-msgstr ""
+msgstr "DejaVu Serif Έντονα Πλάγια"
 
 #: ide/functions/dialog/display_dialog_text.c:268
 #: ide/functions/menu/menu_edit_preferences.c:216
 msgid "DejaVu Serif Condensed"
-msgstr ""
+msgstr "DejaVu Serif Συμπυκνωμένα"
 
 #: ide/functions/dialog/display_dialog_text.c:269
 #: ide/functions/menu/menu_edit_preferences.c:217
 msgid "DejaVu Serif Condensed Bold"
-msgstr ""
+msgstr "DejaVu Serif Συμπυκνωμένα Έντονα"
 
 #: ide/functions/dialog/display_dialog_text.c:270
 #: ide/functions/menu/menu_edit_preferences.c:218
 msgid "DejaVu Serif Condensed Bold Italic"
-msgstr ""
+msgstr "DejaVu Serif Συμπυκνωμένα Έντονα Πλάγια"
 
 #: ide/functions/dialog/display_dialog_text.c:271
 #: ide/functions/menu/menu_edit_preferences.c:219
 msgid "DejaVu Serif Condensed Italic"
-msgstr ""
+msgstr "DejaVu Serif Συμπυκνωμένα Πλάγια"
 
 #: ide/functions/dialog/display_dialog_text.c:272
 #: ide/functions/menu/menu_edit_preferences.c:220
 msgid "DejaVu Serif Italic"
-msgstr ""
+msgstr "DejaVu Serif Πλάγια"
 
 #: ide/functions/dialog/display_dialog_text.c:278
 msgid "Font size: "
@@ -1108,10 +1113,11 @@ msgstr "Εμφάνιση παρασκηνίου;"
 
 #: ide/functions/dialog/display_dialog_text.c:439
 msgid "Dump text layer to stdout: "
-msgstr ""
+msgstr "Διαμόρφωση κειμένου ώστε να ξεχωρίζει: "
 
 #: ide/functions/dialog/display_dialog_text.c:712
-msgid "There was something wrong with the layer name value.  Please try again."
+msgid ""
+"There was something wrong with the layer name value.  Please try again."
 msgstr ""
 "Υπήρξε κάποιο πρόβλημα με την τιμή ονόματος της διαφάνειας. Παρακαλώ "
 "προσπαθήστε πάλι."
@@ -1146,11 +1152,13 @@ msgstr "Μετακίνηση στρώσης επάνω απενεργοποιη�
 
 #: ide/functions/disable_layer_toolbar_buttons.c:92
 msgid "Add mouse pointer disabled: No project loaded"
-msgstr "Προσθήκη δείκτη ποντικιού απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
+msgstr ""
+"Προσθήκη δείκτη ποντικιού απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
 
 #: ide/functions/disable_layer_toolbar_buttons.c:101
 msgid "Add text layer disabled: No project loaded"
-msgstr "Στρώση προσθήκης κειμένου απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
+msgstr ""
+"Στρώση προσθήκης κειμένου απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
 
 #: ide/functions/disable_layer_toolbar_buttons.c:110
 msgid "Add highlight layer disabled: No project loaded"
@@ -1164,6 +1172,7 @@ msgstr "Στρώση προσθήκης εικόνας απενεργοποιη�
 #: ide/functions/disable_main_toolbar_buttons.c:47
 msgid "Dimension adjustment disabled: No project loaded"
 msgstr ""
+"Η ρύθμιση των διαστάσεων είναι απενεργοποιημένη: Κανένα έργο δεν φορτώθηκε"
 
 #: ide/functions/disable_main_toolbar_buttons.c:56
 msgid "Export to Flash disabled: No project loaded"
@@ -1196,7 +1205,8 @@ msgstr "Όλα τα αρχεία (*.*)"
 #: ide/functions/menu/menu_export_swf.c:130
 #: ide/functions/menu/menu_file_open.c:170
 #: ide/functions/menu/menu_file_save_as.c:148
-msgid "There was something wrong with the file name given.  Please try again."
+msgid ""
+"There was something wrong with the file name given.  Please try again."
 msgstr ""
 "Υπήρξε κάποιο πρόβλημα με το όνομα που δόθηκε στο αρχείο. Παρακαλώ, "
 "προσπαθήστε πάλι."
@@ -1230,7 +1240,8 @@ msgstr "Διάταξη ονομασίας διαφάνειας Action Script: %s
 
 #: ide/functions/export/swf/export_swf_control_bar.c:528
 msgid "Restart button pressed, slide counter has been set to:"
-msgstr "Το πλήκτρο Επανεκκίνσηςη πατήθηκε, ο μετρητής διαφανειών ορίστηκε σε:"
+msgstr ""
+"Το πλήκτρο Επανεκκίνσηςη πατήθηκε, ο μετρητής διαφανειών ορίστηκε σε:"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:532
 #: ide/functions/export/swf/export_swf_control_bar.c:679
@@ -1579,7 +1590,8 @@ msgstr ""
 
 #: ide/functions/export/swf/swf_shape_from_image_file.c:76
 msgid "Something went wrong when encoding an image to png format."
-msgstr "Υπήρξε κάποιο πρόβλημα κατά την κωδικοποίηση της εικόνας σε μορφή png."
+msgstr ""
+"Υπήρξε κάποιο πρόβλημα κατά την κωδικοποίηση της εικόνας σε μορφή png."
 
 #: ide/functions/export/swf/swf_shape_from_image_file.c:93
 msgid "Something went wrong converting an image to a swf input object."
@@ -1614,20 +1626,24 @@ msgstr "Έτοιμο"
 #: ide/functions/gtk_text_buffer_duplicate.c:87
 #: ide/functions/save/save_layer.c:355
 msgid "Could not convert unicode character from ucs4 to utf8."
-msgstr ""
+msgstr "Αδυναμία μετατροπής χαρακτήρα unicode από ucs4 σε utf8."
 
 #: ide/functions/gtk_text_buffer_duplicate.c:96
 #: ide/functions/save/save_layer.c:364
 msgid "Invalid unicode character found in text."
-msgstr ""
+msgstr "Βρέθηκε μη έγκυρος χαρακτήρας unicode στο κείμενο."
 
 #: ide/functions/key_bind.c:80
 msgid "Setting Control-Printscreen as the screenshot key didn't work."
 msgstr ""
+"Ο συνδυασμός πλήκτρων Control-Printscreen για τη λήψη στιγμιότυπου οθόνης "
+"δεν δουλεύει."
 
 #: ide/functions/key_bind.c:80
 msgid "You'll have to trigger screenshots from the status bar icon."
 msgstr ""
+"Θα πρέπει να θέσετε σε λειτουργία τα στιγμιότυπα οθόνης από το εικονίδιο της "
+"γραμμής κατάστασης."
 
 #: ide/functions/key_bind.c:98
 msgid ""
@@ -1637,7 +1653,7 @@ msgstr ""
 "Το 'salasaga_screencapture' δεν βρέθηκε στη διαδρομή αναζήτησης. Η σύλληψη "
 "στιγμιότυπου είναι απενεργοποιημένη."
 
-#: ide/functions/layer/compress_layers_inner.c:274
+#: ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
 #: ide/functions/layer/layer_edit.c:207
 #: ide/functions/working_area/calculate_object_boundaries.c:182
@@ -1677,15 +1693,16 @@ msgstr "Κάτω ξάκρισμα: "
 
 #: ide/functions/layer/image_crop.c:258
 msgid "Those crop values will remove the entire image."
-msgstr ""
+msgstr "Με αυτές τις τιμές ξακρίσματος θα διαγραφεί ολόκληρη η εικόνα."
 
-#: ide/functions/layer/image_crop.c:258
+#: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_resize.c:208
+#: ide/functions/layer/image_resize.c:212
 #: ide/functions/project_adjust_dimensions.c:175
 #: ide/functions/project_adjust_dimensions.c:179
 msgid "Please try again."
-msgstr ""
+msgstr "Παρακαλώ προσπαθήστε ξανά."
 
-#: ide/functions/layer/image_crop.c:287
+#: ide/functions/layer/image_crop.c:287 ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:142
 #: ide/functions/layer/layer_new_image_inner.c:167
 #: ide/functions/menu/menu_screenshots_import.c:274
@@ -1696,6 +1713,57 @@ msgstr "Αδυναμία δημιουργίας προτύπου εικόνας.
 #: ide/functions/layer/image_crop.c:312
 msgid " Image cropped"
 msgstr " Η Εικόνα ξακρίστηκε"
+
+#: ide/functions/layer/image_resize.c:119
+msgid "Resize image layer"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:124
+msgid "Image width:"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:146
+msgid "Image height:"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:168
+msgid "Resize image using:"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:174
+msgid "Nearest neighbor (lowest quality)"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:175
+msgid "Tiled"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:176
+msgid "Bilinear (default)"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:177
+msgid "Hyperbolic (best quality for photos)"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:208
+msgid ""
+"Those adjustment values would make the image smaller than the minimum "
+"allowed."
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:212
+msgid ""
+"Those adjustment values would make the image larger than the maximum allowed."
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:231
+msgid "Image layer resize skipped"
+msgstr ""
+
+#: ide/functions/layer/image_resize.c:271
+msgid "Image layer resized"
+msgstr ""
 
 #: ide/functions/layer/layer_copy.c:69
 msgid " Copy failed"
@@ -1808,7 +1876,8 @@ msgid "Please choose an image file"
 msgstr "Παρακαλώ επιλέξτε ένα αρχείο εικόνας"
 
 #: ide/functions/layer/layer_new_image_inner.c:137
-msgid "There was something wrong with the image path given.  Please try again."
+msgid ""
+"There was something wrong with the image path given.  Please try again."
 msgstr ""
 "Υπήρξε κάποιο πρόβλημα με τη δοσμένη διαδρομή της εικόνας. Παρακαλώ, "
 "προσπαθήστε πάλι."
@@ -1850,7 +1919,7 @@ msgstr " Διαφάνεια επικολλημένη από την ενδιάμ�
 
 #: ide/functions/load_fonts.c:69
 msgid "Failed to initialize FreeType."
-msgstr ""
+msgstr "Αποτυχία αρχικοποίησης FreeType."
 
 #: ide/functions/load_fonts.c:173 ide/functions/load_fonts.c:180
 msgid "Font file"
@@ -1858,11 +1927,11 @@ msgstr "Αρχείο γραμματοσειράς"
 
 #: ide/functions/load_fonts.c:173
 msgid "is not in a format FreeType recognizes."
-msgstr ""
+msgstr "Δεν είναι σε μορφή που μπορεί να αναγνωριστεί από το FreeType."
 
 #: ide/functions/load_fonts.c:180
 msgid "could not be opened by FreeType."
-msgstr ""
+msgstr "Δεν είναι δυνατό το άνοιγμα με το FreeType."
 
 #: ide/functions/load_fonts.c:209
 msgid "Something went wrong when opening the font file"
@@ -1964,11 +2033,11 @@ msgstr "/Έργο/Ι_διότητες"
 
 #: ide/functions/menu/create_menu_bar.c:118
 msgid "/Project/Sep"
-msgstr ""
+msgstr "/Project/Sep"
 
 #: ide/functions/menu/create_menu_bar.c:119
 msgid "/Project/_Adjust dimensions"
-msgstr ""
+msgstr "/Project/_Adjust dimensions"
 
 #: ide/functions/menu/create_menu_bar.c:121
 msgid "/Sl_ide"
@@ -2045,11 +2114,11 @@ msgstr "/Στρώση/Προσθήκη _ποντικιού"
 
 #: ide/functions/menu/create_menu_bar.c:142
 msgid "/Layer/Image c_rop"
-msgstr ""
+msgstr "/Layer/Image c_rop"
 
 #: ide/functions/menu/create_menu_bar.c:143
 msgid "/Layer/Image resi_ze"
-msgstr ""
+msgstr "/Layer/Image resi_ze"
 
 #: ide/functions/menu/create_menu_bar.c:145
 msgid "/E_xport"
@@ -2141,7 +2210,7 @@ msgstr "/Εξαγωγή"
 
 #: ide/functions/menu/menu_edit_preferences.c:154
 msgid "Application Preferences"
-msgstr "Προτιμήσεις Εφαρμογής"
+msgstr "Προτιμήσεις εφαρμογής"
 
 #: ide/functions/menu/menu_edit_preferences.c:159
 msgid "Default Project Folder: "
@@ -2173,33 +2242,33 @@ msgstr "Καθορισμένη ανάλυσης εξαγωγής: "
 
 #: ide/functions/menu/menu_edit_preferences.c:194
 msgid "Default text layer font face:"
-msgstr ""
+msgstr "Προκαθορισμένη μορφή γραμματοσειράς του κειμένου της στρώσης."
 
 #: ide/functions/menu/menu_edit_preferences.c:226
 msgid "Default text layer font size: "
-msgstr ""
+msgstr "Προκαθορισμένο μέγεθος γραμματοσειράς του κειμένου της στρώσης: "
 
 #: ide/functions/menu/menu_edit_preferences.c:243
 msgid "points"
-msgstr ""
+msgstr "σημεία"
 
 #: ide/functions/menu/menu_edit_preferences.c:249
 msgid "Default text layer text foreground color: "
-msgstr ""
+msgstr "Προκαθορισμένο χρώμα προσκηνίου του κειμένου της στρώσης: "
 
 #: ide/functions/menu/menu_edit_preferences.c:260
 msgid "Default Slide Duration"
-msgstr ""
+msgstr "Προκαθορισμένη διάρκεια διαφάνειας"
 
 #: ide/functions/menu/menu_edit_preferences.c:268
 #: ide/functions/menu/menu_edit_preferences.c:282
 #: ide/functions/menu/menu_edit_preferences.c:344
 msgid "seconds"
-msgstr ""
+msgstr "δευτερόλεπτα"
 
 #: ide/functions/menu/menu_edit_preferences.c:274
 msgid "Default Layer Duration"
-msgstr ""
+msgstr "Προκαθορισμένη διάρκεια στρώσης"
 
 #: ide/functions/menu/menu_edit_preferences.c:288
 msgid "Default Frames Per Second: "
@@ -2223,15 +2292,17 @@ msgstr "Καθορισμένο χρώμα παρασκηνίου: "
 
 #: ide/functions/menu/menu_edit_preferences.c:338
 msgid "Number of seconds for screenshot delay: "
-msgstr ""
+msgstr "Δευτερόλεπτα για την καθυστέρηση του στιγμιότυπου οθόνης: "
 
 #: ide/functions/menu/menu_edit_preferences.c:350
 msgid "Display help text?"
-msgstr ""
+msgstr "Εμφάνιση κειμένου βοήθειας;"
 
 #: ide/functions/menu/menu_edit_preferences.c:362
 msgid "Display warning when screenshot key isn't enabled?"
 msgstr ""
+"Εμφάνιση προειδοποίησης όταν ο συνδυασμός πλήκτρων για τη λήψη στιγμιότυπου "
+"οθόνης δεν είναι ενεργοποιημένος;"
 
 #: ide/functions/menu/menu_edit_preferences.c:401
 #: ide/functions/menu/menu_project_properties.c:341
@@ -2316,21 +2387,28 @@ msgstr ""
 msgid ""
 "There was something wrong with the screenshot delay value.  Please try again."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα με την τιμή καθυστέρησης του στιγμιότυπου οθόνης. "
+"Παρακαλώ δοκιμάστε ξανά."
 
 #: ide/functions/menu/menu_edit_preferences.c:645
 #, c-format
 msgid "An error '%s' occurred when opening the lock file '%s' for writing."
 msgstr ""
+"Ένα σφάλμα '%s' συνέβη κατά το άνοιγμα του αρχείου κλειδώματος '%s' για "
+"εγγραφή."
 
 #: ide/functions/menu/menu_edit_preferences.c:665
 #, c-format
 msgid "An error '%s' occurred when writing data to the lock file '%s'."
 msgstr ""
+"Ένα σφάλμα '%s' συνέβη κατά την εγγραφή δεδομένων στο αρχείο κλειδώματος "
+"'%s'."
 
 #: ide/functions/menu/menu_edit_preferences.c:684
 #, c-format
 msgid "An error '%s' occurred when closing the lock file '%s'."
 msgstr ""
+"Ένα σφάλμα '%s' συνέβη κατά το  κλείσιμο του αρχείου κλειδώματος '%s'."
 
 #: ide/functions/menu/menu_edit_preferences.c:721
 msgid " Application preferences updated"
@@ -2379,7 +2457,7 @@ msgstr "Adobe Flash (*.swf)"
 
 #: ide/functions/menu/menu_export_swf.c:163
 msgid "Exporting"
-msgstr ""
+msgstr "Εξαγωγή"
 
 #: ide/functions/menu/menu_export_swf.c:171
 msgid "Something went wrong when creating the swf movie."
@@ -2494,16 +2572,16 @@ msgstr "Αρχείο έργου Flame (*.flame)"
 
 #: ide/functions/menu/menu_file_open.c:277
 msgid "Project loaded"
-msgstr ""
+msgstr "Το έργο φορτώθηκε"
 
 #: ide/functions/menu/menu_file_open.c:277
 msgid "slides"
-msgstr ""
+msgstr "διαφάνειες"
 
 #: ide/functions/menu/menu_file_save.c:87
 #: ide/functions/menu/menu_file_save.c:228
 msgid "Saving project"
-msgstr ""
+msgstr "Αποθήκευση έργου"
 
 #: ide/functions/menu/menu_file_save.c:94
 msgid "Error creating the XML save document."
@@ -2531,7 +2609,7 @@ msgstr "Σφάλμα κατά τη δημιουργία τιμής της συμ
 
 #: ide/functions/menu/menu_file_save.c:208
 msgid "Error creating the text tag container."
-msgstr ""
+msgstr "Σφάλμα δημιουργίας του αποδέκτη ετικετών κειμένου."
 
 #: ide/functions/menu/menu_file_save.c:221
 msgid "Error creating the slides container."
@@ -2561,10 +2639,10 @@ msgid ""
 "License along with this program.  If not, see\n"
 "http://www.gnu.org/licenses/."
 msgstr ""
-"Αυτό το πρόγραμμα είναι Ελεύθερο Λογισμικό: μπορείτε να το αναδιανείμετε ή/"
-"και να το τροποποιήσετε υπό τους όρους της Γενικής Δημόσιας Άδειας GNU, όπως "
-"αυτή εκδόθηκε από το Free Software Foundation, είτε της έκδοσης 3.0 είτε (η "
-"επιλογή είναι δική σας) κάθε επόμενης έκδοσης.\n"
+"Αυτό το πρόγραμμα είναι Ελεύθερο Λογισμικό: μπορείτε να το αναδιανείμετε "
+"ή/και να το τροποποιήσετε υπό τους όρους της Γενικής Δημόσιας Άδειας GNU, "
+"όπως αυτή εκδόθηκε από το Free Software Foundation, είτε της έκδοσης 3.0 "
+"είτε (η επιλογή είναι δική σας) κάθε επόμενης έκδοσης.\n"
 "\n"
 "Το πρόγραμμα διανέμεται με την ελπίδα ότι θα είναι χρήσιμο, αλλά ΧΩΡΙΣ ΚΑΜΙΑ "
 "ΕΓΓΥΗΣΗ. Ακόμη, χωρίς εγγύηση ΕΜΠΟΡΕΥΣΙΜΟΤΗΤΑΣ ή ΚΑΤΑΛΛΗΛΟΤΗΤΑΣ ΓΙΑ "
@@ -2723,10 +2801,13 @@ msgstr " Οι ιδιότητες του έργου ενημερώθηκαν."
 msgid ""
 "Please click on the window you want to capture, after closing this dialog."
 msgstr ""
+"Κάντε κλικ στο παράθυρο που θέλετε να 'συλλάβετε', αφού κλείσετε αυτό το "
+"παράθυρο διαλόγου."
 
 #: ide/functions/menu/menu_screenshots_capture.c:97
 msgid "You can turn this help text off in Edit -> Preferences"
 msgstr ""
+"Μπορείτε να κλείστε αυτό το παράθυρο βοήθειας από Επεξεργασία -> Ρυθμίσεις"
 
 #: ide/functions/menu/menu_screenshots_capture.c:119
 msgid "Unable to create alternative cursor."
@@ -2758,22 +2839,25 @@ msgstr "Η λήψη δείκτη ποντικιού ελευθερώθηκε.\n"
 #: ide/functions/menu/menu_screenshots_capture.c:212
 #, c-format
 msgid ""
-"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: %"
-"d\n"
+"Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: "
+"%d\n"
 msgstr ""
-"Ανάκτηση γεωμετρίας παράθυρου. Μετακίνηση X: %d\tΜετακίνηση Y: %d\tΠλάτος: %d"
-"\tΎψος: %d\n"
+"Ανάκτηση γεωμετρίας παράθυρου. Μετακίνηση X: %d\tΜετακίνηση Y: %d\tΠλάτος: "
+"%d\tΎψος: %d\n"
 
 #: ide/functions/menu/menu_screenshots_capture.c:225
 msgid ""
 "Screenshot window set.  Right click on the status bar icon to take "
 "screenshots, then Import when finished."
 msgstr ""
+"Παράθυρο ρύθμισης στιγμιότυπου οθόνης. Κάντε δεξί κλικ στο εικονίδιο της "
+"γραμμής κατάστασης για να λάβετε στιγμιότυπα οθόνης και, αφού τελειώσετε, "
+"κάντε Εισαγωγή."
 
 #: ide/functions/menu/menu_screenshots_capture.c:231
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:103
 msgid "Salasaga - Capture active"
-msgstr ""
+msgstr "Salasaga - Σύλληψη ενεργή"
 
 #: ide/functions/menu/menu_screenshots_capture.c:271
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:140
@@ -2800,30 +2884,32 @@ msgstr ""
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:235
 #, c-format
 msgid "An error '%s' occurred when opening '%s' for writing."
-msgstr ""
+msgstr "Ένα σφάλμα '%s' συνέβη κατά το άνοιγμα του '%s' για εγγραφή."
 
 #: ide/functions/menu/menu_screenshots_capture.c:385
 #, c-format
 msgid "An error '%s' occurred when writing data to the file '%s'."
-msgstr ""
+msgstr "Ένα σφάλμα '%s' συνέβη κατά την εγγραφή δεδομένων στο αρχείο '%s'."
 
 #: ide/functions/menu/menu_screenshots_capture.c:402
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:268
 #, c-format
 msgid "An error '%s' occurred when closing the output file '%s'."
-msgstr ""
+msgstr "Ένα σφάλμα '%s' συνέβη κατά το κλείσιμο του αρχείου εξαγωγής '%s'."
 
 #: ide/functions/menu/menu_screenshots_capture.c:437
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:299
 #, c-format
 msgid "Keyboard hook LoadLibrary failed with error %d: %s"
-msgstr "Το άγκιστρο πληκτρολογίου για το LoadLibrary απέτυχε με σφάλμα %d: %s"
+msgstr ""
+"Το άγκιστρο πληκτρολογίου για το LoadLibrary απέτυχε με σφάλμα %d: %s"
 
 #: ide/functions/menu/menu_screenshots_capture.c:448
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:310
 #, c-format
 msgid "Keyboard hook GetProcAddress failed with error %d: %s"
-msgstr "Το άγκιστρο πληκτρολογίου στο GetProcAddress απέτυχε με σφάλμα %d: %s"
+msgstr ""
+"Το άγκιστρο πληκτρολογίου στο GetProcAddress απέτυχε με σφάλμα %d: %s"
 
 #: ide/functions/menu/menu_screenshots_capture.c:460
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:322
@@ -2834,11 +2920,13 @@ msgstr "Η αγκίστρωση του πληκτρολογίου απέτυχε
 #: ide/functions/menu/menu_screenshots_capture.c:467
 msgid "Installed Control-Printscreen screenshot key"
 msgstr ""
+"Εγκατεστημένος συνδυασμός πλήκτρων Control-Printscreen για τη λήψη "
+"στιγμιότυπου οθόνης"
 
 #: ide/functions/menu/menu_screenshots_capture.c:473
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:335
 msgid "Wrote screenshot settings file"
-msgstr ""
+msgstr "Αρχείο εγγραφής ρυθμίσεων στιγμιότυπου οθόνης"
 
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:74
 msgid "Unable to retrieve details for the screen to capture."
@@ -2854,11 +2942,14 @@ msgid ""
 "Full screen capture set.  Right click on the status bar icon to take "
 "screenshots, then Import when finished."
 msgstr ""
+"Ρύθμιση λήψης πλήρους οθόνης. Κάντε δεξί κλικ στο εικονίδιο της γραμμής "
+"κατάστασης για να λάβετε στιγμιότυπα οθόνης και, αφού τελειώσετε, κάντε "
+"Εισαγωγή."
 
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:252
 #, c-format
 msgid "An error '%s' occurred when writing data to the '%s' file."
-msgstr ""
+msgstr "Ένα σφάλμα '%s' συνέβη κατά την εγγραφή δεδομένων στο αρχείο '%s'."
 
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:329
 #, c-format
@@ -2891,6 +2982,9 @@ msgid ""
 "size of the project.  If you proceed, all screenshots different to the "
 "project size will become image layers.  Do you want to proceed?"
 msgstr ""
+"Όλα τα στιγμιότυπα οθόνης δεν έχουν το ίδιο μέγεθος, ή κάποια από αυτά έχουν "
+"διαφορετικό μέγεθος από αυτό του έργου. Εάν συνεχίσετε, όλα τα διαφορετικά "
+"στιγμιότυπα θα γίνουν στρώσεις εικόνων. Θέλετε να συνεχίσετε;"
 
 #: ide/functions/menu/menu_screenshots_import.c:184
 msgid ""
@@ -2899,11 +2993,17 @@ msgid ""
 "screenshots of a different size to that will become image layers.  Do you "
 "want to proceed?"
 msgstr ""
+"Όλα τα στιγμιότυπα δεν έχουν το ίδιο μέγεθος. Εάν συνεχίσετε, το μέγεθος του "
+"έργου θα ρυθμιστεί με βάση το μέγεθος του πρώτου στιγμιότυπου οθόνης. Όλα τα "
+"στιγμιότυπα με διαφορετικό μέγεθος από αυτό θα γίνουν στρώσεις εικόνων. "
+"Θέλετε να συνεχίσετε;"
 
 #: ide/functions/menu/menu_screenshots_import.c:209
 msgid ""
 "No screenshots found.  You need to take some screenshots before using Import."
 msgstr ""
+"Δεν βρέθηκαν στιγμιότυπα οθόνης. Πρέπει να 'συλλάβετε' μερικά πριν "
+"χρησιμοποιήσετε την Εισαγωγή."
 
 #: ide/functions/menu/menu_screenshots_import.c:219
 msgid "Screenshots found"
@@ -2923,7 +3023,7 @@ msgstr "Η εικόνα φορτώθηκε"
 
 #: ide/functions/menu/menu_screenshots_import.c:491
 msgid "screenshot imported"
-msgstr ""
+msgstr "έγινε εισαγωγή του στιγμιότυπου οθόνης"
 
 #: ide/functions/menu/menu_screenshots_import.c:494
 msgid "screenshots imported"
@@ -3051,6 +3151,8 @@ msgid ""
 "There was something wrong with the screenshot delay value stored in the "
 "preferences.  Using default preferences instead."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα με την τιμή καθυστέρησης του στιγμιότυπου οθόνης που "
+"ορίστηκε στις προτιμήσεις. Θα χρησιμοποιηθούν οι προκαθορισμένες προτιμήσεις."
 
 #: ide/functions/preferences_load.c:390 ide/functions/preferences_load.c:404
 #: ide/functions/preferences_load.c:418
@@ -3058,58 +3160,70 @@ msgid ""
 "There was something wrong with the default text foreground color value "
 "stored in the preferences."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα με την προκαθορισμένη τιμή του χρώματος προσκηνίου του "
+"κειμένου που ορίστηκε στις επιλογές."
 
 #: ide/functions/preferences_load.c:390 ide/functions/preferences_load.c:404
 #: ide/functions/preferences_load.c:418 ide/functions/preferences_load.c:435
 #: ide/functions/preferences_load.c:454
 msgid "Using default preferences instead."
-msgstr ""
+msgstr "Αντ' αυτού, θα χρησιμοποιηθούν οι προκαθορισμένες επιλογές."
 
 #: ide/functions/preferences_load.c:435
 msgid ""
 "There was something wrong with the default text layer font size value stored "
 "in the preferences."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα με την προκαθορισμένη τιμή του μεγέθους γραμματοσειράς "
+"στη στρώση κειμένου που ορίστηκε στις επιλογές."
 
 #: ide/functions/preferences_load.c:454
 msgid ""
 "There was something wrong with the default text layer font face value stored "
 "in the preferences."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα με την προκαθορισμένη τιμή της μορφής γραμματοσειράς "
+"στη στρώση κειμένου που ορίστηκε στις επιλογές."
 
 #: ide/functions/preferences_load.c:930
 msgid ""
 "Some of the application preference registry keys are missing.  Using "
 "defaults."
 msgstr ""
+"Κάποια από τα κλειδιά μητρώου της εφαρμογής λείπουν. Θα χρησιμοποιηθούν τα "
+"προκαθορισμένα."
 
 #: ide/functions/project_adjust_dimensions.c:97
 msgid "Adjust project dimensions"
-msgstr ""
+msgstr "Ρύθμιση διαστάσεων έργου"
 
 #: ide/functions/project_adjust_dimensions.c:102
 msgid "Project width:"
-msgstr ""
+msgstr "Πλάτος έργου:"
 
 #: ide/functions/project_adjust_dimensions.c:124
 msgid "Project height:"
-msgstr ""
+msgstr "Ύψος έργου:"
 
 #: ide/functions/project_adjust_dimensions.c:175
 msgid ""
 "Those adjustment values would make the project smaller than the minimum "
 "allowed."
 msgstr ""
+"Αυτές οι τιμές θα κάνουν το έργο μικρότερο από το επιτρεπόμενο ελάχιστο "
+"μέγεθος."
 
 #: ide/functions/project_adjust_dimensions.c:179
 msgid ""
 "Those adjustment values would make the project larger than the maximum "
 "allowed."
 msgstr ""
+"Αυτές οι τιμές θα κάνουν το έργο μεγαλύτερο από το επιτρεπόμενο μέγιστο "
+"μέγεθος."
 
 #: ide/functions/project_adjust_dimensions.c:277
 msgid "Project dimensions adjusted"
-msgstr ""
+msgstr "Οι διαστάσεις του έργου ρυθμίστηκαν"
 
 #: ide/functions/read/read_empty_layer.c:90
 #: ide/functions/read/read_highlight_layer.c:98
@@ -3184,7 +3298,8 @@ msgstr ""
 #: ide/functions/read/read_highlight_layer.c:396
 #: ide/functions/read/read_mouse_layer.c:289
 #: ide/functions/read/read_text_layer.c:608
-msgid "There was something wrong with a layer name value in the project file."
+msgid ""
+"There was something wrong with a layer name value in the project file."
 msgstr ""
 "Υπήρξε κάποιο πρόβλημα με την τιμή ονόματος της στρώσης στο αρχείο του έργου."
 
@@ -3260,7 +3375,8 @@ msgstr ""
 
 #: ide/functions/read/read_highlight_layer.c:306
 #: ide/functions/read/read_mouse_layer.c:162
-msgid "There was something wrong with a layer width value in the project file."
+msgid ""
+"There was something wrong with a layer width value in the project file."
 msgstr ""
 "Υπήρξε κάποιο πρόβλημα με την τιμή πλάτους της διαφάνειας στο αρχείο του "
 "έργου."
@@ -3474,14 +3590,15 @@ msgid "Couldn't create an image pattern"
 msgstr "Αδυναμία δημιουργίας ενός προτύπου εικόνας"
 
 #: ide/functions/read/read_mouse_layer.c:198
-msgid "There was something wrong with a mouse click value in the project file."
+msgid ""
+"There was something wrong with a mouse click value in the project file."
 msgstr ""
 "Υπήρξε κάποιο πρόβλημα με την τιμή των κλικ του ποντικιού στο αρχείο του "
 "έργου."
 
 #: ide/functions/read/read_project.c:153
 msgid "Loading file"
-msgstr ""
+msgstr "Φόρτωση αρχείου"
 
 #: ide/functions/read/read_project.c:161
 msgid ""
@@ -3627,7 +3744,8 @@ msgstr ""
 "στο αρχείο του έργου."
 
 #: ide/functions/read/read_project.c:909
-msgid "There was something wrong with a slide name value in the project file."
+msgid ""
+"There was something wrong with a slide name value in the project file."
 msgstr ""
 "Υπήρξε κάποιο πρόβλημα με την τιμή ονόματος της διαφάνειας στο αρχείο του "
 "έργου."
@@ -3664,14 +3782,19 @@ msgid ""
 "There was something wrong with the count of text layer values given in the "
 "project file."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα με την καταμέτρηση των δεδομένων τιμών της στρώσης "
+"κειμένου στο αρχείο του έργου."
 
 #: ide/functions/read/read_text_layer.c:389
 msgid "Invalid unicode character found in text layer input."
 msgstr ""
+"Βρέθηκε μη έγκυρος χαρακτήρας unicode κατά την εισαγωγή στη στρώση κειμένου."
 
 #: ide/functions/read/read_text_layer.c:458
 msgid "There was something wrong with a font face value in the project file."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα με μια τιμή της μορφής γραμματοσειράς στο αρχείο του "
+"έργου."
 
 #: ide/functions/read/read_text_layer.c:477
 msgid "There was something wrong with a font size value in the project file."
@@ -3695,11 +3818,11 @@ msgstr ""
 
 #: ide/functions/save/save_layer.c:319
 msgid "Error saving a text data node in the project file."
-msgstr ""
+msgstr "Σφάλμα αποθήκευσης κόμβου δεδομένων κειμένου στο αρχείο του έργου."
 
 #: ide/functions/save/save_layer.c:343
 msgid "Error saving character data to the project file."
-msgstr ""
+msgstr "Σφάλμα αποθήκευσης δεδομένων χαρακτήρων στο αρχείο του έργου."
 
 #: ide/functions/save/save_slide.c:72
 msgid "Error creating the slide node."
@@ -3707,19 +3830,21 @@ msgstr "Σφάλμα δημιουργίας κόμβου διαφανειών."
 
 #: ide/functions/save/save_text_tags.c:66
 msgid "Error creating the size tags container."
-msgstr ""
+msgstr "Σφάλμα κατά τη δημιουργία του αποδέκτη των ετικετών μεγέθους."
 
 #: ide/functions/save/save_text_tags.c:80
 msgid "Error creating a text tag node."
-msgstr ""
+msgstr "Σφάλμα κατά τη δημιουργία του κόμβου ετικετών κειμένου."
 
 #: ide/functions/save/save_text_tags.c:105
 msgid "Error creating the foreground color tags container."
 msgstr ""
+"Σφάλμα κατά τη δημιουργία του αποδέκτη ετικετών του χρώματος προσκηνίου."
 
 #: ide/functions/save/save_text_tags.c:119
 msgid "Error creating a foreground color tag node."
 msgstr ""
+"Σφάλμα κατά τη δημιουργία του κόμβου ετικετών του χρώματος προσκηνίου."
 
 #: ide/functions/slide/slide_delete.c:63
 msgid "You must leave at least one slide in a project."
@@ -3770,19 +3895,19 @@ msgstr " Η διαφάνεια μετακινήθηκε επάνω"
 
 #: ide/functions/status_icon/create_status_icon.c:55
 msgid "Salasaga - Not yet capturing"
-msgstr ""
+msgstr "Salasaga - Δεν έχει γίνει λήψη στιγμιότυπων οθόνης"
 
 #: ide/functions/status_icon/status_icon_popup.c:62
 msgid "Restore window"
-msgstr ""
+msgstr "Επαναφορά παραθύρου"
 
 #: ide/functions/status_icon/status_icon_popup.c:68
 msgid "Minimize window"
-msgstr ""
+msgstr "Ελαχιστοποίηση παραθύρου"
 
 #: ide/functions/status_icon/status_icon_popup.c:76
 msgid "Take Screenshot"
-msgstr ""
+msgstr "Λήψη στιγμιότυπου οθόνης"
 
 #: ide/functions/validate_value.c:713 screen_capture/validate_value.c:576
 msgid "Unknown value passed to validation function"
@@ -3833,12 +3958,12 @@ msgstr "Άγνωστος τύπος αλλαγής μεγέθους της στ�
 #: ide/functions/widgets/time_line/time_line_set_selected_layer_num.c:173
 #: ide/functions/widgets/time_line/time_line_set_selected_layer_num.c:177
 msgid "/Layer/Image crop"
-msgstr ""
+msgstr "/Layer/Image crop"
 
 #: ide/functions/widgets/time_line/time_line_set_selected_layer_num.c:174
 #: ide/functions/widgets/time_line/time_line_set_selected_layer_num.c:178
 msgid "/Layer/Image resize"
-msgstr ""
+msgstr "/Layer/Image resize"
 
 #: ide/functions/working_area/draw_highlight_box.c:53
 #: ide/functions/working_area/draw_highlight_box.c:92
@@ -3921,198 +4046,6 @@ msgstr ""
 "Τα στιγμιότυπα απενεργοποιήθηκαν: το salasaga_screencapture δεν βρέθηκε στη "
 "διαδρομή αναζήτησης."
 
-#: ide/valid_fields.h:35
-msgid "8 Bit Color Value Component"
-msgstr "Βάθος χρώματος 8 bit"
-
-#: ide/valid_fields.h:36
-msgid "16 Bit Color Value Component"
-msgstr "Βάθος χρώματος 16 bit."
-
-#: ide/valid_fields.h:37
-msgid "Animation behavior after playing"
-msgstr "Συμπεριφορά κινούμενης απεικόνισης μετά την αναπαραγωγή."
-
-#: ide/valid_fields.h:38
-msgid "External link"
-msgstr "Εξωτερικός σύνδεσμος"
-
-#: ide/valid_fields.h:39
-msgid "Window target for an external link"
-msgstr "Παράθυρο προορισμού για έναν εξωτερικό σύνδεσμο."
-
-#: ide/valid_fields.h:40
-msgid "Full path to a file"
-msgstr "Πλήρης διαδρομή για ένα αρχείο."
-
-#: ide/valid_fields.h:41 screen_capture/valid_fields.h:35
-msgid "Full path to a folder"
-msgstr "Πλήρης διαδρομή για έναν φάκελο."
-
-#: ide/valid_fields.h:42
-msgid "Font face"
-msgstr ""
-
-#: ide/valid_fields.h:43
-msgid "Font size"
-msgstr "Μέγεθος γραμματοσειράς"
-
-#: ide/valid_fields.h:44
-msgid "A frame number"
-msgstr "Αριθμός πλαισίου."
-
-#: ide/valid_fields.h:45
-msgid "Height of a highlight layer"
-msgstr "Ύψος στρώματος επισήμανσης."
-
-#: ide/valid_fields.h:46
-msgid "Width of a highlight layer"
-msgstr "Πλάτος στρώματος επισήμανσης."
-
-#: ide/valid_fields.h:47
-msgid "Height of the tool bar icons"
-msgstr "Ύψος εικονιδίων γραμμής εργαλείων."
-
-#: ide/valid_fields.h:48
-msgid "Base64 encoded image data"
-msgstr "Κρυπτογραφημένα δεδομένα εικόνας Base64"
-
-#: ide/valid_fields.h:49
-msgid "Length in bytes of image data"
-msgstr "Μήκος σε bytes των πληροφορίων εικόνας"
-
-#: ide/valid_fields.h:50
-msgid "Layer background switch"
-msgstr "Διακόπτης στρώσης παρασκηνίου"
-
-#: ide/valid_fields.h:51
-msgid "Layer duration in seconds"
-msgstr "Διάρκεια στρώσης σε δευτερόλεπτα"
-
-#: ide/valid_fields.h:52
-msgid "Height of this layer"
-msgstr "Ύψος της στρώσης"
-
-#: ide/valid_fields.h:53
-msgid "Name of this layer"
-msgstr "Όνομα της στρώσης"
-
-#: ide/valid_fields.h:54
-msgid "Layer visibility switch"
-msgstr "Διακόπτης ορατότητας της στρώσης"
-
-#: ide/valid_fields.h:55
-msgid "Width of this layer"
-msgstr "Πλάτος της στρώσης"
-
-#: ide/valid_fields.h:56
-msgid "Line width"
-msgstr "Πλάτος γραμμής"
-
-#: ide/valid_fields.h:57
-msgid "Mouse click"
-msgstr "Κλικ ποντικιού"
-
-#: ide/valid_fields.h:58
-msgid "Characters in a text layer"
-msgstr ""
-
-#: ide/valid_fields.h:59
-msgid "Opacity level"
-msgstr "Επίπεδο αδιαφάνειας"
-
-#: ide/valid_fields.h:60
-msgid "Width of film strip thumbnails"
-msgstr "Πλάτος μικρογραφιών ταινίας"
-
-#: ide/valid_fields.h:61
-msgid "Frames per Second for this project"
-msgstr "Πλαίσια ανά δευτερόλεπτο του έργου"
-
-#: ide/valid_fields.h:62
-msgid "Height of this project"
-msgstr "Ύψος του έργου"
-
-#: ide/valid_fields.h:63 screen_capture/valid_fields.h:36
-msgid "Name of this project"
-msgstr "Όνομα του έργου"
-
-#: ide/valid_fields.h:64
-msgid "Version number of the project file"
-msgstr "Αριθμός έκδοσης του αρχείου του έργου"
-
-#: ide/valid_fields.h:65
-msgid "Width of this project"
-msgstr "Πλάτος του έργου"
-
-#: ide/valid_fields.h:66
-msgid "An X * Y resolution value"
-msgstr "Τιμή ανάλυσης X * Y"
-
-#: ide/valid_fields.h:67 screen_capture/valid_fields.h:37
-msgid "Number of seconds to delay a screenshot"
-msgstr ""
-
-#: ide/valid_fields.h:68 screen_capture/valid_fields.h:38
-msgid "Height for next screenshot"
-msgstr "Ύψος επόμενου στιγμιότυπου"
-
-#: ide/valid_fields.h:69 screen_capture/valid_fields.h:39
-msgid "Width for next screenshot"
-msgstr "Πλάτος επόμενου στιγμιότυπου"
-
-#: ide/valid_fields.h:70
-msgid "Include control bar in exported swf"
-msgstr "Συμπερίληψη γραμμής ελέγχου στο εξαγόμενο swf."
-
-#: ide/valid_fields.h:71
-msgid "Include info button in exported swf"
-msgstr "Συμπερίληψη πλήκτρου πληροφοριών στο εξαγόμενο swf."
-
-#: ide/valid_fields.h:72
-msgid "Show the background for text layers"
-msgstr "Εμφάνιση παρασκηνίου για τις στρώσεις κειμένου."
-
-#: ide/valid_fields.h:73
-msgid "Number of frames per slide"
-msgstr "Αριθμός πλαισίων ανά διαφάνεια"
-
-#: ide/valid_fields.h:74
-msgid "Number of seconds in a slide"
-msgstr "Αριθμός δευτερολέπτων σε μια διαφάνεια"
-
-#: ide/valid_fields.h:75
-msgid "Name of this slide"
-msgstr "Όνομα της διαφάνειας"
-
-#: ide/valid_fields.h:76
-msgid "Animation behavior after loading"
-msgstr "Συμπεριφορά κινούμενης απεικόνισης μετά τη φόρτωση"
-
-#: ide/valid_fields.h:77
-msgid "Base64 encoded text buffer data"
-msgstr ""
-
-#: ide/valid_fields.h:78
-msgid "Transition duration in seconds"
-msgstr "Διάρκεια μετάβασης σε δευτερόλεπτα"
-
-#: ide/valid_fields.h:79
-msgid "Type of transition"
-msgstr "Τύπος μετάβασης"
-
-#: ide/valid_fields.h:80
-msgid "X Offset"
-msgstr "Μετατόπιση Χ"
-
-#: ide/valid_fields.h:81
-msgid "Y Offset"
-msgstr "Μετατόπιση Y"
-
-#: ide/valid_fields.h:82
-msgid "Magnification level of working area"
-msgstr "Επίπεδο μεγέθυνσης περιοχής εργασίας"
-
 #: screen_capture/salasaga_screencapture.c:81
 msgid "Something went wrong when getting the window identifier."
 msgstr "Κάτι πήγε λάθος κατά τη λήψη του αναγνωριστικού του παραθύρου."
@@ -4183,7 +4116,8 @@ msgstr ""
 "Υπήρξε κάποιο πρόβλημα με την τιμή του πλάτους. Το στιγμιότυπο ματαιώθηκε."
 
 #: screen_capture/salasaga_screencapture.c:348
-msgid "There was something wrong with the height value.  Aborting screenshot."
+msgid ""
+"There was something wrong with the height value.  Aborting screenshot."
 msgstr ""
 "Υπήρξε κάποιο πρόβλημα με την τιμή του ύψους. Το στιγμιότυπο ματαιώθηκε."
 
@@ -4192,17 +4126,19 @@ msgid ""
 "There was something wrong with the screenshot delay value.  Aborting "
 "screenshot."
 msgstr ""
+"Υπήρξε κάποιο σφάλμα με την τιμή καθυστέρησης του στιγμιότυπου οθόνης. "
+"Ματαίωση στιγμιότυπου οθόνης."
 
 #: screen_capture/salasaga_screencapture.c:423
 #: screen_capture/salasaga_screencapture.c:446
 #: screen_capture/salasaga_screencapture.c:472
 #, c-format
 msgid "Screenshot in %u seconds"
-msgstr ""
+msgstr "Στιγμιότυπο οθόνης σε %u δευτερόλεπτα"
 
 #: screen_capture/salasaga_screencapture.c:508
 msgid "Screenshot taken"
-msgstr ""
+msgstr "Λήφθηκε στιγμιότυπο οθόνης"
 
 #: screen_capture/salasaga_screencapture.c:531
 msgid "Something went wrong opening"
@@ -4237,41 +4173,218 @@ msgid "Something went wrong when copying the screenshot data."
 msgstr ""
 "Υπήρξε κάποιο πρόβλημα κατά την αντιγραφή των δεδομένων του στιγμιότυπου."
 
+#: ide/valid_fields.h:35
+msgid "8 Bit Color Value Component"
+msgstr "Βάθος χρώματος 8 bit"
+
+#: ide/valid_fields.h:36
+msgid "16 Bit Color Value Component"
+msgstr "Βάθος χρώματος 16 bit."
+
+#: ide/valid_fields.h:37
+msgid "Animation behavior after playing"
+msgstr "Συμπεριφορά κινούμενης απεικόνισης μετά την αναπαραγωγή."
+
+#: ide/valid_fields.h:38
+msgid "External link"
+msgstr "Εξωτερικός σύνδεσμος"
+
+#: ide/valid_fields.h:39
+msgid "Window target for an external link"
+msgstr "Παράθυρο προορισμού για έναν εξωτερικό σύνδεσμο."
+
+#: ide/valid_fields.h:40
+msgid "Full path to a file"
+msgstr "Πλήρης διαδρομή για ένα αρχείο."
+
+#: ide/valid_fields.h:41 screen_capture/valid_fields.h:35
+msgid "Full path to a folder"
+msgstr "Πλήρης διαδρομή για έναν φάκελο."
+
+#: ide/valid_fields.h:42
+msgid "Font face"
+msgstr "Μορφή γραμματοσειράς"
+
+#: ide/valid_fields.h:43
+msgid "Font size"
+msgstr "Μέγεθος γραμματοσειράς"
+
+#: ide/valid_fields.h:44
+msgid "A frame number"
+msgstr "Αριθμός πλαισίου."
+
+#: ide/valid_fields.h:45
+msgid "Height of a highlight layer"
+msgstr "Ύψος στρώματος επισήμανσης."
+
+#: ide/valid_fields.h:46
+msgid "Width of a highlight layer"
+msgstr "Πλάτος στρώματος επισήμανσης."
+
+#: ide/valid_fields.h:47
+msgid "Height of the tool bar icons"
+msgstr "Ύψος εικονιδίων γραμμής εργαλείων."
+
+#: ide/valid_fields.h:48
+msgid "Base64 encoded image data"
+msgstr "Κρυπτογραφημένα δεδομένα εικόνας Base64"
+
+#: ide/valid_fields.h:49
+msgid "Length in bytes of image data"
+msgstr "Μήκος σε bytes των πληροφορίων εικόνας"
+
+#: ide/valid_fields.h:50
+msgid "Layer background switch"
+msgstr "Διακόπτης στρώσης παρασκηνίου"
+
+#: ide/valid_fields.h:51
+msgid "Layer duration in seconds"
+msgstr "Διάρκεια στρώσης σε δευτερόλεπτα"
+
+#: ide/valid_fields.h:52
+msgid "Height of this layer"
+msgstr "Ύψος της στρώσης"
+
+#: ide/valid_fields.h:53
+msgid "Name of this layer"
+msgstr "Όνομα της στρώσης"
+
+#: ide/valid_fields.h:54
+msgid "Layer visibility switch"
+msgstr "Διακόπτης ορατότητας της στρώσης"
+
+#: ide/valid_fields.h:55
+msgid "Width of this layer"
+msgstr "Πλάτος της στρώσης"
+
+#: ide/valid_fields.h:56
+msgid "Line width"
+msgstr "Πλάτος γραμμής"
+
+#: ide/valid_fields.h:57
+msgid "Mouse click"
+msgstr "Κλικ ποντικιού"
+
+#: ide/valid_fields.h:58
+msgid "Characters in a text layer"
+msgstr "Χαρακτήρες στη στρώση κειμένου"
+
+#: ide/valid_fields.h:59
+msgid "Opacity level"
+msgstr "Επίπεδο αδιαφάνειας"
+
+#: ide/valid_fields.h:60
+msgid "Width of film strip thumbnails"
+msgstr "Πλάτος μικρογραφιών ταινίας"
+
+#: ide/valid_fields.h:61
+msgid "Frames per Second for this project"
+msgstr "Πλαίσια ανά δευτερόλεπτο του έργου"
+
+#: ide/valid_fields.h:62
+msgid "Height of this project"
+msgstr "Ύψος του έργου"
+
+#: ide/valid_fields.h:63 screen_capture/valid_fields.h:36
+msgid "Name of this project"
+msgstr "Όνομα του έργου"
+
+#: ide/valid_fields.h:64
+msgid "Version number of the project file"
+msgstr "Αριθμός έκδοσης του αρχείου του έργου"
+
+#: ide/valid_fields.h:65
+msgid "Width of this project"
+msgstr "Πλάτος του έργου"
+
+#: ide/valid_fields.h:66
+msgid "An X * Y resolution value"
+msgstr "Τιμή ανάλυσης X * Y"
+
+#: ide/valid_fields.h:67 screen_capture/valid_fields.h:37
+msgid "Number of seconds to delay a screenshot"
+msgstr "Δευτερόλεπτα καθυστέρησης του στιγμιότυπου οθόνης"
+
+#: ide/valid_fields.h:68 screen_capture/valid_fields.h:38
+msgid "Height for next screenshot"
+msgstr "Ύψος επόμενου στιγμιότυπου"
+
+#: ide/valid_fields.h:69 screen_capture/valid_fields.h:39
+msgid "Width for next screenshot"
+msgstr "Πλάτος επόμενου στιγμιότυπου"
+
+#: ide/valid_fields.h:70
+msgid "Include control bar in exported swf"
+msgstr "Συμπερίληψη γραμμής ελέγχου στο εξαγόμενο swf."
+
+#: ide/valid_fields.h:71
+msgid "Include info button in exported swf"
+msgstr "Συμπερίληψη πλήκτρου πληροφοριών στο εξαγόμενο swf."
+
+#: ide/valid_fields.h:72
+msgid "Show the background for text layers"
+msgstr "Εμφάνιση παρασκηνίου για τις στρώσεις κειμένου."
+
+#: ide/valid_fields.h:73
+msgid "Number of frames per slide"
+msgstr "Αριθμός πλαισίων ανά διαφάνεια"
+
+#: ide/valid_fields.h:74
+msgid "Number of seconds in a slide"
+msgstr "Αριθμός δευτερολέπτων σε μια διαφάνεια"
+
+#: ide/valid_fields.h:75
+msgid "Name of this slide"
+msgstr "Όνομα της διαφάνειας"
+
+#: ide/valid_fields.h:76
+msgid "Animation behavior after loading"
+msgstr "Συμπεριφορά κινούμενης απεικόνισης μετά τη φόρτωση"
+
+#: ide/valid_fields.h:77
+msgid "Base64 encoded text buffer data"
+msgstr "Base64 κωδικοποιημένα δεδομένα κειμένου στην προσωρινή μνήμη"
+
+#: ide/valid_fields.h:78
+msgid "Transition duration in seconds"
+msgstr "Διάρκεια μετάβασης σε δευτερόλεπτα"
+
+#: ide/valid_fields.h:79
+msgid "Type of transition"
+msgstr "Τύπος μετάβασης"
+
+#: ide/valid_fields.h:80
+msgid "X Offset"
+msgstr "Μετατόπιση Χ"
+
+#: ide/valid_fields.h:81
+msgid "Y Offset"
+msgstr "Μετατόπιση Y"
+
+#: ide/valid_fields.h:82
+msgid "Magnification level of working area"
+msgstr "Επίπεδο μεγέθυνσης περιοχής εργασίας"
+
 #: screen_capture/valid_fields.h:40
 msgid "X offset for next screenshot"
-msgstr ""
+msgstr "Χ αρχή για το επόμενο στιγμιότυπο οθόνης"
 
 #: screen_capture/valid_fields.h:41
 msgid "Y offset for next screenshot"
-msgstr ""
-
-#~ msgid ""
-#~ "Default Slide Duration: \n"
-#~ "(seconds)"
-#~ msgstr "Καθορισμένη διάρκεια διαφάνειας:"
-
-#~ msgid ""
-#~ "Default Layer Duration: \n"
-#~ "(seconds)"
-#~ msgstr "Καθορισμένη διάρκεια στρώσης:"
-
-#~ msgid " Ready"
-#~ msgstr " Έτοιμο"
+msgstr "Υ αρχή για το επόμενο στιγμιότυπο οθόνης"
 
 #~ msgid "Error in the Base64 decoding function, unrecognized input"
 #~ msgstr ""
-#~ "Σφάλμα στη λειτουργία αποκωδικοποίησης του Base64, μη αναγνωρίσιμη "
-#~ "εισαγωγή"
+#~ "Σφάλμα στη λειτουργία αποκωδικοποίησης του Base64, μη αναγνωρίσιμη εισαγωγή"
 
 #~ msgid "Unknown Base64 decoding remainder.  This should not happen."
 #~ msgstr "Άγνωστο υπόλοιπο κωδικοποίησης Base64. Αυτό δεν πρέπει να συμβεί."
 
 #~ msgid ""
-#~ "Unknown remainder amount when Base64 encoding.  This should not ever "
-#~ "happen."
+#~ "Unknown remainder amount when Base64 encoding.  This should not ever happen."
 #~ msgstr ""
-#~ "Άγνωστη ποσότητα υπολοίπου κατά την κωδικοποίηση Base64. Αυτό δεν πρέπει "
-#~ "να συμβεί ποτέ."
+#~ "Άγνωστη ποσότητα υπολοίπου κατά την κωδικοποίηση Base64. Αυτό δεν πρέπει να "
+#~ "συμβεί ποτέ."
 
 #~ msgid "Starting X Offset:"
 #~ msgstr "Έναρξη X μετακίνησης:"
@@ -4288,14 +4401,26 @@ msgstr ""
 #~ msgid "Object"
 #~ msgstr "Αντικείμενο"
 
+#~ msgid " Ready"
+#~ msgstr " Έτοιμο"
+
 #~ msgid ""
-#~ "Unable to set screenshot key to Control-Printscreen.  (Not running "
-#~ "Metacity, so not sure how to.)  You will need to do this yourself "
-#~ "manually."
+#~ "Unable to set screenshot key to Control-Printscreen.  (Not running Metacity, "
+#~ "so not sure how to.)  You will need to do this yourself manually."
 #~ msgstr ""
 #~ "Αδυναμία ορισμού κλειδιού στιγμιότυπου για το Control-Printscreen. (Δεν "
-#~ "εκτελείται το Metacity, συνεπώς δεν μπορεί να βρεθεί τρόπος.) Πρέπει να "
-#~ "το κάνετε μόνοι σας χειροκίνητα."
+#~ "εκτελείται το Metacity, συνεπώς δεν μπορεί να βρεθεί τρόπος.) Πρέπει να το "
+#~ "κάνετε μόνοι σας χειροκίνητα."
+
+#~ msgid ""
+#~ "Default Slide Duration: \n"
+#~ "(seconds)"
+#~ msgstr "Καθορισμένη διάρκεια διαφάνειας:"
+
+#~ msgid ""
+#~ "Default Layer Duration: \n"
+#~ "(seconds)"
+#~ msgstr "Καθορισμένη διάρκεια στρώσης:"
 
 #~ msgid "Display non-metacity key bind warning?"
 #~ msgstr "Η εμφάνιση ενός κλειδιού non-metacity δεσμεύει την προειδοποίηση;"
@@ -4307,36 +4432,38 @@ msgstr ""
 #~ "Please click on the window you want to capture (after closing this dialog "
 #~ "box)."
 #~ msgstr ""
-#~ "Παρακαλώ, κάντε κλικ στο παράθυρο που θέλετε να συλλάβετε (μετά το "
-#~ "κλείσιμο του παράθυρου διαλόγου)."
+#~ "Παρακαλώ, κάντε κλικ στο παράθυρο που θέλετε να συλλάβετε (μετά το κλείσιμο "
+#~ "του παράθυρου διαλόγου)."
 
+#, c-format
 #~ msgid ""
-#~ " Wrote capture lock file - %s - and installed Control-Printscreen "
-#~ "keyboard hook"
+#~ " Wrote capture lock file - %s - and installed Control-Printscreen keyboard "
+#~ "hook"
 #~ msgstr ""
-#~ " Εγγράφηκε αρχείο κλειδώματος της σύλληψης - %s - και εγκαταστάθηκε "
-#~ "άγκιστρο πληκτρολογίου για το Control-Printscreen."
+#~ " Εγγράφηκε αρχείο κλειδώματος της σύλληψης - %s - και εγκαταστάθηκε άγκιστρο "
+#~ "πληκτρολογίου για το Control-Printscreen."
 
+#, c-format
 #~ msgid " Wrote capture settings file - %s"
 #~ msgstr " Αρχείο εγγραφής ρυθμίσεων σύλληψης - %s"
 
 #~ msgid ""
 #~ "Not all of the screenshots are of the same size, or some differ from the "
-#~ "size of the project.  If you proceed, they will be scaled to the same "
-#~ "size as the project.  Do you want to proceed?"
+#~ "size of the project.  If you proceed, they will be scaled to the same size "
+#~ "as the project.  Do you want to proceed?"
 #~ msgstr ""
 #~ "Δεν έχουν όλα τα στιγμιότυπα το ίδιο μέγεθος, ή ορισμένα διαφέρουν από το "
-#~ "μέγεθος του έργου. Εάν συνεχίσετε, θα αλλάξουν μέγεθος ώστε να ταιριάζουν "
-#~ "με αυτό του έργου. Θέλετε να συνεχίσετε;"
+#~ "μέγεθος του έργου. Εάν συνεχίσετε, θα αλλάξουν μέγεθος ώστε να ταιριάζουν με "
+#~ "αυτό του έργου. Θέλετε να συνεχίσετε;"
 
 #~ msgid ""
 #~ "Not all of the screenshots are of the same size, or some differ from the "
-#~ "size of the project.  If you proceed, they will all be scaled to the size "
-#~ "of the first one.  Do you want to proceed?"
+#~ "size of the project.  If you proceed, they will all be scaled to the size of "
+#~ "the first one.  Do you want to proceed?"
 #~ msgstr ""
 #~ "Δεν έχουν όλα τα στιγμιότυπα το ίδιο μέγεθος, ή ορισμένα διαφέρουν από το "
-#~ "μέγεθος του έργου. Εάν συνεχίσετε, θα αλλάξουν μέγεθος ώστε να ταιριάζουν "
-#~ "με αυτό του πρώτου στιγμιότυπου. Θέλετε να συνεχίσετε;"
+#~ "μέγεθος του έργου. Εάν συνεχίσετε, θα αλλάξουν μέγεθος ώστε να ταιριάζουν με "
+#~ "αυτό του πρώτου στιγμιότυπου. Θέλετε να συνεχίσετε;"
 
 #~ msgid "No screenshots found in screenshot folder"
 #~ msgstr "Δεν βρέθηκαν στιγμιότυπα στον φάκελο στιγμιότυπων."
@@ -4377,15 +4504,14 @@ msgstr ""
 #~ msgid ""
 #~ "There was something wrong with a finish frame value in the project file."
 #~ msgstr ""
-#~ "Υπήρξε κάποιο πρόβλημα με την τιμή του πλαισίου τέλους στο αρχείο του "
-#~ "έργου."
+#~ "Υπήρξε κάποιο πρόβλημα με την τιμή του πλαισίου τέλους στο αρχείο του έργου."
 
 #~ msgid ""
 #~ "There was something wrong with an image start frame value in the project "
 #~ "file."
 #~ msgstr ""
-#~ "Υπήρξε κάποιο πρόβλημα με την τιμή της εικόνας πλαισίου έναρξης στο "
-#~ "αρχείο του έργου."
+#~ "Υπήρξε κάποιο πρόβλημα με την τιμή της εικόνας πλαισίου έναρξης στο αρχείο "
+#~ "του έργου."
 
 #~ msgid ""
 #~ "There was something wrong with an image finish frame value in the project "
@@ -4436,11 +4562,11 @@ msgstr ""
 #~ msgstr "Πλάτος της ευρύτερης γραμμής μέχρι εδώ: %.2f\n"
 
 #~ msgid ""
-#~ "Window dimensions successfully retrieved.  Please use Control-Printscreen "
-#~ "to take screenshots then Import when finished."
+#~ "Window dimensions successfully retrieved.  Please use Control-Printscreen to "
+#~ "take screenshots then Import when finished."
 #~ msgstr ""
-#~ "Οι διαστάσεις του παραθύρου ανακτήθηκαν επιτυχώς. Παρακαλώ χρησιμοποιήστε "
-#~ "το Control-Printscreen για να πάρετε στιγμιότυπα και κάντε Εισαγωγή όταν "
+#~ "Οι διαστάσεις του παραθύρου ανακτήθηκαν επιτυχώς. Παρακαλώ χρησιμοποιήστε το "
+#~ "Control-Printscreen για να πάρετε στιγμιότυπα και κάντε Εισαγωγή όταν "
 #~ "τελειώσετε."
 
 #~ msgid "An error '%s' occured when opening '%s' for writing."
