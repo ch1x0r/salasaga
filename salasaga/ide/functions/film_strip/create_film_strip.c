@@ -35,8 +35,9 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../callbacks/delete_key_release_event.h"
 #include "../callbacks/film_strip_drag_motion.h"
-#include "film_strip_key_release_event.h"
+#include "film_strip_button_clicked.h"
 #include "film_strip_slide_clicked.h"
 
 
@@ -90,9 +91,11 @@ void create_film_strip()
 	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
 	gtk_tree_selection_set_mode(GTK_TREE_SELECTION(selector), GTK_SELECTION_SINGLE);
 
-	// Connect a signal handler to the film strip, which gets called whenever a selection is made
-	gtk_tree_selection_set_mode(selector, GTK_SELECTION_SINGLE);
+	// Add a signal hander that is called whenever the selected slide is changed
 	g_signal_connect(G_OBJECT(selector), "changed", G_CALLBACK(film_strip_slide_clicked), NULL);
+
+	// Add a signal handler to the film strip, to be called whenever the mouse button is clicked on it
+	g_signal_connect(GTK_WIDGET(film_strip_view), "button-press-event", G_CALLBACK(film_strip_button_clicked), NULL);
 
 	// Make the film strip a Drag and Drop (DnD) destination
 	gtk_drag_dest_set(GTK_WIDGET(film_strip_view),	// The widget
@@ -112,8 +115,8 @@ void create_film_strip()
 	g_signal_connect(GTK_WIDGET(film_strip_view), "drag-motion", G_CALLBACK(film_strip_drag_motion), NULL);
 
 	// Add a signal handler to the film strip, to be called whenever a key is pressed while it is in focus
-	g_signal_connect(film_strip_view, "key-release-event", G_CALLBACK(film_strip_key_release_event), NULL);
+	g_signal_connect(GTK_WIDGET(film_strip_view), "key-release-event", G_CALLBACK(delete_key_release_event), NULL);
 
 	// Ensure we get the signals we want
-	gtk_widget_set_events(film_strip_view, gtk_widget_get_events(film_strip_view) | GDK_KEY_RELEASE_MASK);
+	gtk_widget_set_events(film_strip_view, gtk_widget_get_events(film_strip_view) | GDK_BUTTON_PRESS_MASK | GDK_KEY_RELEASE_MASK);
 }
