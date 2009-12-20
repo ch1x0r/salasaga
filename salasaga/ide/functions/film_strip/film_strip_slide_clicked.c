@@ -39,6 +39,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../draw_timeline.h"
+#include "../widget_focus.h"
 #include "../widgets/time_line/time_line_new.h"
 #include "../widgets/time_line/time_line_get_selected_layer_num.h"
 #include "../widgets/time_line/time_line_set_selected_layer_num.h"
@@ -46,7 +47,7 @@
 #include "../working_area/draw_workspace.h"
 
 
-void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
+gboolean film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 {
 	// Local variables
 	GString				*message;
@@ -59,22 +60,18 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 	// Only do this function if we have a front store available and a project loaded
 	if ((NULL == front_store) || (FALSE == project_active))
 	{
-		return;
+		return TRUE;
 	}
 
+	// Set the internal application focus to be the film strip
+	set_delete_focus(FOCUS_SLIDE);
+
 	// Determine if a row has been selected
-	if (TRUE == gtk_tree_selection_get_selected(selection, NULL, NULL))
+	if (TRUE == gtk_tree_selection_get_selected(GTK_TREE_SELECTION(selection), NULL, &selected_iter))
 	{
 		// * Update current_slide to be the clicked on slide's GList entry, then redraw the timeline and workspace *
 
 		// Determine which slide is now selected
-		gtk_tree_model_get_iter_first(GTK_TREE_MODEL(film_strip_store), &selected_iter);
-		gtk_tree_selection_get_selected(selection, NULL, &selected_iter);
-		if ((debug_level) && (!gtk_list_store_iter_is_valid(GTK_LIST_STORE(film_strip_store), &selected_iter)))
-		{
-			printf(_("Invalid iter! No layer selected when changing slide!\n"));
-		}
-
 		selected_path = gtk_tree_model_get_path(GTK_TREE_MODEL(film_strip_store), &selected_iter);
 		selection_string = gtk_tree_path_to_string(selected_path);
 
@@ -111,4 +108,6 @@ void film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		g_string_free(message, TRUE);
 		gdk_flush();
 	}
+
+	return TRUE;
 }
