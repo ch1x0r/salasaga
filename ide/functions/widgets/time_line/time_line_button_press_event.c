@@ -36,6 +36,7 @@
 // Salasaga includes
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
+#include "../../widget_focus.h"
 #include "../../layer/layer_edit.h"
 #include "../../working_area/draw_handle_box.h"
 #include "../../working_area/draw_layer_start_and_end_points.h"
@@ -71,6 +72,12 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 	{
 		return;
 	}
+
+	// Set the delete focus to be layers
+	set_delete_focus(FOCUS_LAYER);
+
+	// Change the focus of the window to be this widget
+	gtk_widget_grab_focus(GTK_WIDGET(widget));
 
 	// Check for primary mouse button
 	if (1 != event->button)
