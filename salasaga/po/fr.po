@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-13 12:13+1100\n"
-"PO-Revision-Date: 2009-12-08 12:40+0000\n"
-"Last-Translator: Philippe DUBRULLE <Unknown>\n"
+"POT-Creation-Date: 2009-12-20 19:23+1100\n"
+"PO-Revision-Date: 2009-12-22 13:45+0000\n"
+"Last-Translator: Pierre Couillard <pcouillard@solinfpc.net>\n"
 "Language-Team: French <fr@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-20 08:36+0000\n"
+"X-Launchpad-Export-Date: 2009-12-25 00:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
@@ -109,8 +109,8 @@ msgstr ""
 #: ide/functions/gtk_text_buffer_duplicate.c:96 ide/functions/key_bind.c:80
 #: ide/functions/key_bind.c:98 ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
-#: ide/functions/layer/image_crop.c:118 ide/functions/layer/image_crop.c:129
-#: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_crop.c:287
+#: ide/functions/layer/image_crop.c:122 ide/functions/layer/image_crop.c:133
+#: ide/functions/layer/image_crop.c:262 ide/functions/layer/image_crop.c:291
 #: ide/functions/layer/image_resize.c:208
 #: ide/functions/layer/image_resize.c:212
 #: ide/functions/layer/image_resize.c:252
@@ -122,7 +122,7 @@ msgstr ""
 #: ide/functions/layer/layer_duplicate.c:179
 #: ide/functions/layer/layer_duplicate.c:195
 #: ide/functions/layer/layer_duplicate.c:221
-#: ide/functions/layer/layer_edit.c:207 ide/functions/layer/layer_free.c:87
+#: ide/functions/layer/layer_edit.c:211 ide/functions/layer/layer_free.c:87
 #: ide/functions/layer/layer_new_image_inner.c:137
 #: ide/functions/layer/layer_new_image_inner.c:146
 #: ide/functions/layer/layer_new_image_inner.c:167
@@ -344,7 +344,7 @@ msgstr ""
 #: ide/functions/working_area/calculate_object_boundaries.c:182
 #: ide/functions/working_area/draw_highlight_box.c:53
 #: ide/functions/working_area/draw_highlight_box.c:92
-#: ide/functions/working_area/working_area_button_press_event.c:205
+#: ide/functions/working_area/working_area_button_press_event.c:212
 #: ide/functions/working_area/working_area_button_release_event.c:262
 #: ide/functions/working_area/working_area_button_release_event.c:382
 #: ide/functions/working_area/working_area_motion_notify_event.c:205
@@ -393,8 +393,8 @@ msgstr "Impossible de créer la surface forme."
 #: ide/functions/create_resolution_selector.c:103
 #: ide/functions/dialog/display_dialog_image.c:195
 #: ide/functions/dialog/display_dialog_image.c:205
-#: ide/functions/layer/image_crop.c:158 ide/functions/layer/image_crop.c:179
-#: ide/functions/layer/image_crop.c:200 ide/functions/layer/image_crop.c:221
+#: ide/functions/layer/image_crop.c:162 ide/functions/layer/image_crop.c:183
+#: ide/functions/layer/image_crop.c:204 ide/functions/layer/image_crop.c:225
 #: ide/functions/layer/image_resize.c:140
 #: ide/functions/layer/image_resize.c:162
 #: ide/functions/menu/menu_edit_preferences.c:303
@@ -406,87 +406,87 @@ msgstr "Impossible de créer la surface forme."
 msgid "pixels"
 msgstr "pixels"
 
-#: ide/functions/create_time_line.c:119
+#: ide/functions/create_time_line.c:124
 msgid "Edit"
 msgstr "Éditer"
 
-#: ide/functions/create_time_line.c:120
+#: ide/functions/create_time_line.c:125
 #: ide/functions/enable_layer_toolbar_buttons.c:56
 msgid "Edit layer"
 msgstr "Éditer calque"
 
-#: ide/functions/create_time_line.c:132
+#: ide/functions/create_time_line.c:137
 msgid "Crop"
 msgstr "Rogner"
 
-#: ide/functions/create_time_line.c:133
+#: ide/functions/create_time_line.c:138
 #: ide/functions/enable_layer_toolbar_buttons.c:65
 msgid "Crop image"
 msgstr "Rogner l'image"
 
-#: ide/functions/create_time_line.c:145
+#: ide/functions/create_time_line.c:150
 msgid "Delete"
 msgstr "Supprimer"
 
-#: ide/functions/create_time_line.c:146
+#: ide/functions/create_time_line.c:151
 #: ide/functions/enable_layer_toolbar_buttons.c:74
 msgid "Delete selected layer"
 msgstr "Supprimer le calque sélectionné"
 
-#: ide/functions/create_time_line.c:158
+#: ide/functions/create_time_line.c:163
 msgid "Down"
 msgstr "Descendre"
 
-#: ide/functions/create_time_line.c:159
+#: ide/functions/create_time_line.c:164
 #: ide/functions/enable_layer_toolbar_buttons.c:83
 msgid "Move layer down"
 msgstr "Déplacer le calque vers le bas"
 
-#: ide/functions/create_time_line.c:171
+#: ide/functions/create_time_line.c:176
 msgid "Up"
 msgstr "Monter"
 
-#: ide/functions/create_time_line.c:172
+#: ide/functions/create_time_line.c:177
 #: ide/functions/enable_layer_toolbar_buttons.c:92
 msgid "Move layer up"
 msgstr "Déplacer le calque vers le haut"
 
-#: ide/functions/create_time_line.c:188
+#: ide/functions/create_time_line.c:193
 msgid "Mouse"
 msgstr "Souris"
 
-#: ide/functions/create_time_line.c:189
+#: ide/functions/create_time_line.c:194
 #: ide/functions/enable_layer_toolbar_buttons.c:101
 msgid "Add a mouse pointer"
 msgstr "Ajouter un pointeur de souris"
 
-#: ide/functions/create_time_line.c:201
+#: ide/functions/create_time_line.c:206
 msgid "Text"
 msgstr "Texte"
 
-#: ide/functions/create_time_line.c:202
+#: ide/functions/create_time_line.c:207
 #: ide/functions/enable_layer_toolbar_buttons.c:110
 msgid "Add a text layer"
 msgstr "Ajouter un calque texte"
 
-#: ide/functions/create_time_line.c:214
+#: ide/functions/create_time_line.c:219
 #: ide/functions/layer/layer_new_highlight_inner.c:152
 msgid "Highlight"
 msgstr "Surligner"
 
-#: ide/functions/create_time_line.c:215
+#: ide/functions/create_time_line.c:220
 #: ide/functions/enable_layer_toolbar_buttons.c:119
 msgid "Add a highlight layer"
 msgstr "Ajouter un calque de surlignage"
 
-#: ide/functions/create_time_line.c:227
+#: ide/functions/create_time_line.c:232
 #: ide/functions/layer/layer_duplicate.c:91
 #: ide/functions/layer/layer_new_image_inner.c:97
 #: ide/functions/menu/menu_screenshots_import.c:355
 msgid "Image"
 msgstr "Image"
 
-#: ide/functions/create_time_line.c:228
+#: ide/functions/create_time_line.c:233
 #: ide/functions/enable_layer_toolbar_buttons.c:128
 msgid "Add an image layer"
 msgstr "Ajouter un calque image"
@@ -1223,7 +1223,7 @@ msgstr "Écriture du conteneur HTML"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:397
 #: ide/functions/export/swf/export_swf_control_bar.c:411
-#: ide/functions/film_strip/create_film_strip.c:81
+#: ide/functions/film_strip/create_film_strip.c:83
 msgid "Slide"
 msgstr "Diapositive"
 
@@ -1608,14 +1608,7 @@ msgid "Couldn't allocate memory for a new film strip thumbnail."
 msgstr ""
 "Impossible d'allouer de la mémoire pour une nouvelle vignette de film."
 
-#: ide/functions/film_strip/film_strip_slide_clicked.c:75
-#, c-format
-msgid "Invalid iter! No layer selected when changing slide!\n"
-msgstr ""
-"Itérateur invalide! Aucun calque sélectionné lors du changement de "
-"diapositives!\n"
-
-#: ide/functions/film_strip/film_strip_slide_clicked.c:109 ide/salasaga.c:581
+#: ide/functions/film_strip/film_strip_slide_clicked.c:106 ide/salasaga.c:581
 msgid "Ready"
 msgstr "Prêt"
 
@@ -1650,54 +1643,54 @@ msgstr ""
 
 #: ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
-#: ide/functions/layer/layer_edit.c:207
+#: ide/functions/layer/layer_edit.c:211
 #: ide/functions/working_area/calculate_object_boundaries.c:182
-#: ide/functions/working_area/working_area_button_press_event.c:205
+#: ide/functions/working_area/working_area_button_press_event.c:212
 #: ide/functions/working_area/working_area_button_release_event.c:382
 #: ide/functions/working_area/working_area_motion_notify_event.c:365
 msgid "Unknown layer type."
 msgstr "Type de calque inconnu."
 
-#: ide/functions/layer/image_crop.c:118
+#: ide/functions/layer/image_crop.c:122
 msgid "Only Image layers can be cropped."
 msgstr "Seulement les calques images peuvent être découpés."
 
-#: ide/functions/layer/image_crop.c:129
+#: ide/functions/layer/image_crop.c:133
 msgid "Background layers can not be cropped."
 msgstr "Les calques d'arrières-plans ne peuvent être découpés."
 
-#: ide/functions/layer/image_crop.c:138
+#: ide/functions/layer/image_crop.c:142
 msgid "Crop image layer"
 msgstr "Découper le calque image"
 
-#: ide/functions/layer/image_crop.c:143
+#: ide/functions/layer/image_crop.c:147
 msgid "Left crop: "
 msgstr "Découpage gauche: "
 
-#: ide/functions/layer/image_crop.c:164
+#: ide/functions/layer/image_crop.c:168
 msgid "Right crop: "
 msgstr "Découpage droit: "
 
-#: ide/functions/layer/image_crop.c:185
+#: ide/functions/layer/image_crop.c:189
 msgid "Top crop: "
 msgstr "Découpage haut: "
 
-#: ide/functions/layer/image_crop.c:206
+#: ide/functions/layer/image_crop.c:210
 msgid "Bottom crop: "
 msgstr "Découpage bas: "
 
-#: ide/functions/layer/image_crop.c:258
+#: ide/functions/layer/image_crop.c:262
 msgid "Those crop values will remove the entire image."
 msgstr "Ces valeurs de rognage effaceront l'image entière."
 
-#: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_resize.c:208
+#: ide/functions/layer/image_crop.c:262 ide/functions/layer/image_resize.c:208
 #: ide/functions/layer/image_resize.c:212
 #: ide/functions/project_adjust_dimensions.c:175
 #: ide/functions/project_adjust_dimensions.c:179
 msgid "Please try again."
 msgstr "Veuillez essayer à nouveau."
 
-#: ide/functions/layer/image_crop.c:287 ide/functions/layer/image_resize.c:252
+#: ide/functions/layer/image_crop.c:291 ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:142
 #: ide/functions/layer/layer_new_image_inner.c:167
 #: ide/functions/menu/menu_screenshots_import.c:274
@@ -1705,60 +1698,64 @@ msgstr "Veuillez essayer à nouveau."
 msgid "Couldn't create an image pattern."
 msgstr "Impossible de créer une forme d'image"
 
-#: ide/functions/layer/image_crop.c:312
+#: ide/functions/layer/image_crop.c:316
 msgid " Image cropped"
 msgstr " Image découpée"
 
 #: ide/functions/layer/image_resize.c:119
 msgid "Resize image layer"
-msgstr ""
+msgstr "Redimensionner le calque image"
 
 #: ide/functions/layer/image_resize.c:124
 msgid "Image width:"
-msgstr ""
+msgstr "Largeur de l'image:"
 
 #: ide/functions/layer/image_resize.c:146
 msgid "Image height:"
-msgstr ""
+msgstr "Hauteur de l'image:"
 
 #: ide/functions/layer/image_resize.c:168
 msgid "Resize image using:"
-msgstr ""
+msgstr "Redimensionner l'image en utilisant:"
 
 #: ide/functions/layer/image_resize.c:174
 msgid "Nearest neighbor (lowest quality)"
-msgstr ""
+msgstr "Voisin le plus proche (basse qualité)"
 
 #: ide/functions/layer/image_resize.c:175
 msgid "Tiled"
-msgstr ""
+msgstr "Mosaïque"
 
 #: ide/functions/layer/image_resize.c:176
 msgid "Bilinear (default)"
-msgstr ""
+msgstr "Bilinéaire (défaut)"
 
 #: ide/functions/layer/image_resize.c:177
 msgid "Hyperbolic (best quality for photos)"
-msgstr ""
+msgstr "Hyperbolique (meilleure qualité pour les photos)"
 
 #: ide/functions/layer/image_resize.c:208
 msgid ""
 "Those adjustment values would make the image smaller than the minimum "
 "allowed."
 msgstr ""
+"Ces valeurs d'ajustement rendraient l'image plus petite que le minimum "
+"autorisé."
 
 #: ide/functions/layer/image_resize.c:212
 msgid ""
 "Those adjustment values would make the image larger than the maximum allowed."
 msgstr ""
+"Ces valeurs d'ajustement rendraient l'image plus grande que le maximum "
+"autorisé."
 
 #: ide/functions/layer/image_resize.c:231
 msgid "Image layer resize skipped"
-msgstr ""
+msgstr "Redimensionnement du calque de l'image sautée"
 
 #: ide/functions/layer/image_resize.c:271
 msgid "Image layer resized"
-msgstr ""
+msgstr "Calque de l'image redimensionné"
 
 #: ide/functions/layer/layer_copy.c:69
 msgid " Copy failed"
@@ -1768,7 +1765,7 @@ msgstr " La copie a échoué"
 msgid " Layer copied to buffer"
 msgstr " Le calque est copié dans le tampon"
 
-#: ide/functions/layer/layer_delete.c:110
+#: ide/functions/layer/layer_delete.c:114
 msgid " Layer deleted"
 msgstr " Le calque est effacé"
 
@@ -1804,27 +1801,27 @@ msgstr ""
 msgid "Unknown layer type when duplicating layer."
 msgstr "Type de ccalque inconnu lors de la duplication du calque."
 
-#: ide/functions/layer/layer_edit.c:93
+#: ide/functions/layer/layer_edit.c:97
 msgid "Edit background color"
 msgstr "Éditer la couleur de l'arrière-plan"
 
-#: ide/functions/layer/layer_edit.c:110
+#: ide/functions/layer/layer_edit.c:114
 msgid "Edit image layer"
 msgstr "Éditer le calque image"
 
-#: ide/functions/layer/layer_edit.c:134
+#: ide/functions/layer/layer_edit.c:138
 msgid "Edit mouse pointer"
 msgstr "Éditer le pointeur de souris"
 
-#: ide/functions/layer/layer_edit.c:159
+#: ide/functions/layer/layer_edit.c:163
 msgid "Edit text layer"
 msgstr "Éditer le calque texte"
 
-#: ide/functions/layer/layer_edit.c:184
+#: ide/functions/layer/layer_edit.c:188
 msgid "Edit highlight layer"
 msgstr "Éditer le calque surbrillance"
 
-#: ide/functions/layer/layer_edit.c:223
+#: ide/functions/layer/layer_edit.c:227
 msgid " Layer edited"
 msgstr " Calque édité"
 
@@ -1832,15 +1829,15 @@ msgstr " Calque édité"
 msgid "Unknown layer type when destroying a layer."
 msgstr "Type de calque inconnu lors de la destruction d'un calque."
 
-#: ide/functions/layer/layer_move_down.c:106
+#: ide/functions/layer/layer_move_down.c:110
 msgid " Layer moved down"
 msgstr " Calque déplacé vers le bas"
 
-#: ide/functions/layer/layer_move_up.c:112
+#: ide/functions/layer/layer_move_up.c:116
 msgid " Layer moved up"
 msgstr " Calque déplacé vers le haut"
 
-#: ide/functions/layer/layer_new_highlight.c:63
+#: ide/functions/layer/layer_new_highlight.c:67
 msgid " Please draw the new layer"
 msgstr " Veuillez dessiner le nouveau calque"
 
@@ -1860,9 +1857,9 @@ msgstr "_self"
 msgid " Highlight layer added"
 msgstr " Calque surbrillance ajouté"
 
-#: ide/functions/layer/layer_new_image.c:63
-#: ide/functions/layer/layer_new_mouse.c:63
-#: ide/functions/layer/layer_new_text.c:63
+#: ide/functions/layer/layer_new_image.c:67
+#: ide/functions/layer/layer_new_mouse.c:67
+#: ide/functions/layer/layer_new_text.c:67
 msgid " Please click the insertion point"
 msgstr " Veuillez cliquer le point d'insertion"
 
@@ -4383,6 +4380,12 @@ msgstr "Décalage vertical pour la prochaine capture"
 
 #~ msgid "Object"
 #~ msgstr "Objet"
+
+#, c-format
+#~ msgid "Invalid iter! No layer selected when changing slide!\n"
+#~ msgstr ""
+#~ "Itérateur invalide! Aucun calque sélectionné lors du changement de "
+#~ "diapositives!\n"
 
 #~ msgid " Ready"
 #~ msgstr " Prêt"

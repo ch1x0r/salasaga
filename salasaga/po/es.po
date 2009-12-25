@@ -3,14 +3,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga 0.8.0-alpha6\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-13 12:13+1100\n"
-"PO-Revision-Date: 2009-12-14 04:09+0000\n"
-"Last-Translator: Ravenman <correo.cuervo@gmail.com>\n"
+"POT-Creation-Date: 2009-12-20 19:23+1100\n"
+"PO-Revision-Date: 2009-12-22 14:28+0000\n"
+"Last-Translator: Luis Díaz <piponazo@gmail.com>\n"
 "Language-Team: Spanish <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-20 08:36+0000\n"
+"X-Launchpad-Export-Date: 2009-12-25 00:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
@@ -105,8 +105,8 @@ msgstr ""
 #: ide/functions/gtk_text_buffer_duplicate.c:96 ide/functions/key_bind.c:80
 #: ide/functions/key_bind.c:98 ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
-#: ide/functions/layer/image_crop.c:118 ide/functions/layer/image_crop.c:129
-#: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_crop.c:287
+#: ide/functions/layer/image_crop.c:122 ide/functions/layer/image_crop.c:133
+#: ide/functions/layer/image_crop.c:262 ide/functions/layer/image_crop.c:291
 #: ide/functions/layer/image_resize.c:208
 #: ide/functions/layer/image_resize.c:212
 #: ide/functions/layer/image_resize.c:252
@@ -118,7 +118,7 @@ msgstr ""
 #: ide/functions/layer/layer_duplicate.c:179
 #: ide/functions/layer/layer_duplicate.c:195
 #: ide/functions/layer/layer_duplicate.c:221
-#: ide/functions/layer/layer_edit.c:207 ide/functions/layer/layer_free.c:87
+#: ide/functions/layer/layer_edit.c:211 ide/functions/layer/layer_free.c:87
 #: ide/functions/layer/layer_new_image_inner.c:137
 #: ide/functions/layer/layer_new_image_inner.c:146
 #: ide/functions/layer/layer_new_image_inner.c:167
@@ -340,7 +340,7 @@ msgstr ""
 #: ide/functions/working_area/calculate_object_boundaries.c:182
 #: ide/functions/working_area/draw_highlight_box.c:53
 #: ide/functions/working_area/draw_highlight_box.c:92
-#: ide/functions/working_area/working_area_button_press_event.c:205
+#: ide/functions/working_area/working_area_button_press_event.c:212
 #: ide/functions/working_area/working_area_button_release_event.c:262
 #: ide/functions/working_area/working_area_button_release_event.c:382
 #: ide/functions/working_area/working_area_motion_notify_event.c:205
@@ -389,8 +389,8 @@ msgstr "No se puede crear un patrón de superficie."
 #: ide/functions/create_resolution_selector.c:103
 #: ide/functions/dialog/display_dialog_image.c:195
 #: ide/functions/dialog/display_dialog_image.c:205
-#: ide/functions/layer/image_crop.c:158 ide/functions/layer/image_crop.c:179
-#: ide/functions/layer/image_crop.c:200 ide/functions/layer/image_crop.c:221
+#: ide/functions/layer/image_crop.c:162 ide/functions/layer/image_crop.c:183
+#: ide/functions/layer/image_crop.c:204 ide/functions/layer/image_crop.c:225
 #: ide/functions/layer/image_resize.c:140
 #: ide/functions/layer/image_resize.c:162
 #: ide/functions/menu/menu_edit_preferences.c:303
@@ -402,87 +402,87 @@ msgstr "No se puede crear un patrón de superficie."
 msgid "pixels"
 msgstr "píxeles"
 
-#: ide/functions/create_time_line.c:119
+#: ide/functions/create_time_line.c:124
 msgid "Edit"
 msgstr "Editar"
 
-#: ide/functions/create_time_line.c:120
+#: ide/functions/create_time_line.c:125
 #: ide/functions/enable_layer_toolbar_buttons.c:56
 msgid "Edit layer"
 msgstr "Editar capa"
 
-#: ide/functions/create_time_line.c:132
+#: ide/functions/create_time_line.c:137
 msgid "Crop"
 msgstr "Recortar"
 
-#: ide/functions/create_time_line.c:133
+#: ide/functions/create_time_line.c:138
 #: ide/functions/enable_layer_toolbar_buttons.c:65
 msgid "Crop image"
 msgstr "Recortar imagen"
 
-#: ide/functions/create_time_line.c:145
+#: ide/functions/create_time_line.c:150
 msgid "Delete"
 msgstr "Eliminar"
 
-#: ide/functions/create_time_line.c:146
+#: ide/functions/create_time_line.c:151
 #: ide/functions/enable_layer_toolbar_buttons.c:74
 msgid "Delete selected layer"
 msgstr "Borrar la capa seleccionada"
 
-#: ide/functions/create_time_line.c:158
+#: ide/functions/create_time_line.c:163
 msgid "Down"
 msgstr "Bajar"
 
-#: ide/functions/create_time_line.c:159
+#: ide/functions/create_time_line.c:164
 #: ide/functions/enable_layer_toolbar_buttons.c:83
 msgid "Move layer down"
 msgstr "Mover capa hacia abajo"
 
-#: ide/functions/create_time_line.c:171
+#: ide/functions/create_time_line.c:176
 msgid "Up"
 msgstr "Subir"
 
-#: ide/functions/create_time_line.c:172
+#: ide/functions/create_time_line.c:177
 #: ide/functions/enable_layer_toolbar_buttons.c:92
 msgid "Move layer up"
 msgstr "Mover capa hacia arriba"
 
-#: ide/functions/create_time_line.c:188
+#: ide/functions/create_time_line.c:193
 msgid "Mouse"
 msgstr "Ratón"
 
-#: ide/functions/create_time_line.c:189
+#: ide/functions/create_time_line.c:194
 #: ide/functions/enable_layer_toolbar_buttons.c:101
 msgid "Add a mouse pointer"
 msgstr "Añadir un puntero de ratón"
 
-#: ide/functions/create_time_line.c:201
+#: ide/functions/create_time_line.c:206
 msgid "Text"
 msgstr "Texto"
 
-#: ide/functions/create_time_line.c:202
+#: ide/functions/create_time_line.c:207
 #: ide/functions/enable_layer_toolbar_buttons.c:110
 msgid "Add a text layer"
 msgstr "Añadir capa de texto"
 
-#: ide/functions/create_time_line.c:214
+#: ide/functions/create_time_line.c:219
 #: ide/functions/layer/layer_new_highlight_inner.c:152
 msgid "Highlight"
 msgstr "Resaltar"
 
-#: ide/functions/create_time_line.c:215
+#: ide/functions/create_time_line.c:220
 #: ide/functions/enable_layer_toolbar_buttons.c:119
 msgid "Add a highlight layer"
 msgstr "Añadir capa de resalte"
 
-#: ide/functions/create_time_line.c:227
+#: ide/functions/create_time_line.c:232
 #: ide/functions/layer/layer_duplicate.c:91
 #: ide/functions/layer/layer_new_image_inner.c:97
 #: ide/functions/menu/menu_screenshots_import.c:355
 msgid "Image"
 msgstr "Imagen"
 
-#: ide/functions/create_time_line.c:228
+#: ide/functions/create_time_line.c:233
 #: ide/functions/enable_layer_toolbar_buttons.c:128
 msgid "Add an image layer"
 msgstr "Añadir capa de imagen"
@@ -1219,7 +1219,7 @@ msgstr "Contenedor html escrito"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:397
 #: ide/functions/export/swf/export_swf_control_bar.c:411
-#: ide/functions/film_strip/create_film_strip.c:81
+#: ide/functions/film_strip/create_film_strip.c:83
 msgid "Slide"
 msgstr "Diapositiva"
 
@@ -1593,13 +1593,7 @@ msgid "Couldn't allocate memory for a new film strip thumbnail."
 msgstr ""
 "No se puede reservar memoria para una nueva miniatura de tira de la película."
 
-#: ide/functions/film_strip/film_strip_slide_clicked.c:75
-#, c-format
-msgid "Invalid iter! No layer selected when changing slide!\n"
-msgstr ""
-"¡Iter inválido! ¡Ninguna capa seleccionada al cambiar de transparencia!\n"
-
-#: ide/functions/film_strip/film_strip_slide_clicked.c:109 ide/salasaga.c:581
+#: ide/functions/film_strip/film_strip_slide_clicked.c:106 ide/salasaga.c:581
 msgid "Ready"
 msgstr "Listo"
 
@@ -1635,54 +1629,54 @@ msgstr ""
 
 #: ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
-#: ide/functions/layer/layer_edit.c:207
+#: ide/functions/layer/layer_edit.c:211
 #: ide/functions/working_area/calculate_object_boundaries.c:182
-#: ide/functions/working_area/working_area_button_press_event.c:205
+#: ide/functions/working_area/working_area_button_press_event.c:212
 #: ide/functions/working_area/working_area_button_release_event.c:382
 #: ide/functions/working_area/working_area_motion_notify_event.c:365
 msgid "Unknown layer type."
 msgstr "Tipo de capa desconocido."
 
-#: ide/functions/layer/image_crop.c:118
+#: ide/functions/layer/image_crop.c:122
 msgid "Only Image layers can be cropped."
 msgstr "Solo las capas de imagen pueden ser recortadas."
 
-#: ide/functions/layer/image_crop.c:129
+#: ide/functions/layer/image_crop.c:133
 msgid "Background layers can not be cropped."
 msgstr "Las capas de fondo no pueden ser recortadas."
 
-#: ide/functions/layer/image_crop.c:138
+#: ide/functions/layer/image_crop.c:142
 msgid "Crop image layer"
 msgstr "Recortar capa de imagen"
 
-#: ide/functions/layer/image_crop.c:143
+#: ide/functions/layer/image_crop.c:147
 msgid "Left crop: "
 msgstr "Recorte por la izquierda: "
 
-#: ide/functions/layer/image_crop.c:164
+#: ide/functions/layer/image_crop.c:168
 msgid "Right crop: "
 msgstr "Recorte por la derecha: "
 
-#: ide/functions/layer/image_crop.c:185
+#: ide/functions/layer/image_crop.c:189
 msgid "Top crop: "
 msgstr "Recorte por arriba: "
 
-#: ide/functions/layer/image_crop.c:206
+#: ide/functions/layer/image_crop.c:210
 msgid "Bottom crop: "
 msgstr "Recorte por abajo: "
 
-#: ide/functions/layer/image_crop.c:258
+#: ide/functions/layer/image_crop.c:262
 msgid "Those crop values will remove the entire image."
 msgstr "Dichos valores de recorte eliminarán la imagen por completo."
 
-#: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_resize.c:208
+#: ide/functions/layer/image_crop.c:262 ide/functions/layer/image_resize.c:208
 #: ide/functions/layer/image_resize.c:212
 #: ide/functions/project_adjust_dimensions.c:175
 #: ide/functions/project_adjust_dimensions.c:179
 msgid "Please try again."
 msgstr "Por favor, inténtelo de nuevo."
 
-#: ide/functions/layer/image_crop.c:287 ide/functions/layer/image_resize.c:252
+#: ide/functions/layer/image_crop.c:291 ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:142
 #: ide/functions/layer/layer_new_image_inner.c:167
 #: ide/functions/menu/menu_screenshots_import.c:274
@@ -1690,60 +1684,64 @@ msgstr "Por favor, inténtelo de nuevo."
 msgid "Couldn't create an image pattern."
 msgstr "No se puede crear un patrón de imagen."
 
-#: ide/functions/layer/image_crop.c:312
+#: ide/functions/layer/image_crop.c:316
 msgid " Image cropped"
 msgstr " Imagen recortada"
 
 #: ide/functions/layer/image_resize.c:119
 msgid "Resize image layer"
-msgstr ""
+msgstr "Redimensionar capa de imagen"
 
 #: ide/functions/layer/image_resize.c:124
 msgid "Image width:"
-msgstr ""
+msgstr "Ancho de imagen:"
 
 #: ide/functions/layer/image_resize.c:146
 msgid "Image height:"
-msgstr ""
+msgstr "Altura de la imagen:"
 
 #: ide/functions/layer/image_resize.c:168
 msgid "Resize image using:"
-msgstr ""
+msgstr "Redimensionar imagen usando:"
 
 #: ide/functions/layer/image_resize.c:174
 msgid "Nearest neighbor (lowest quality)"
-msgstr ""
+msgstr "Vecinos más cercanos (calidad más baja)"
 
 #: ide/functions/layer/image_resize.c:175
 msgid "Tiled"
-msgstr ""
+msgstr "En mosaico"
 
 #: ide/functions/layer/image_resize.c:176
 msgid "Bilinear (default)"
-msgstr ""
+msgstr "Bilinear (por defecto)"
 
 #: ide/functions/layer/image_resize.c:177
 msgid "Hyperbolic (best quality for photos)"
-msgstr ""
+msgstr "Hyperbólico (mejor calidad para fotos)"
 
 #: ide/functions/layer/image_resize.c:208
 msgid ""
 "Those adjustment values would make the image smaller than the minimum "
 "allowed."
 msgstr ""
+"Dichos valores de ajustes pueden hacer a la imagen más pequeña que el mínimo "
+"permitido."
 
 #: ide/functions/layer/image_resize.c:212
 msgid ""
 "Those adjustment values would make the image larger than the maximum allowed."
 msgstr ""
+"Dichos valores de ajustes pueden hacer a la imagen más grande que el máximo "
+"permitido."
 
 #: ide/functions/layer/image_resize.c:231
 msgid "Image layer resize skipped"
-msgstr ""
+msgstr "Redimensión de capa de imagen saltada"
 
 #: ide/functions/layer/image_resize.c:271
 msgid "Image layer resized"
-msgstr ""
+msgstr "Capa de imagen redimensionada"
 
 #: ide/functions/layer/layer_copy.c:69
 msgid " Copy failed"
@@ -1753,7 +1751,7 @@ msgstr " Copia fallida"
 msgid " Layer copied to buffer"
 msgstr " Capa copiada al búfer"
 
-#: ide/functions/layer/layer_delete.c:110
+#: ide/functions/layer/layer_delete.c:114
 msgid " Layer deleted"
 msgstr " Capa eliminada"
 
@@ -1787,27 +1785,27 @@ msgstr ""
 msgid "Unknown layer type when duplicating layer."
 msgstr "Tipo de capa desconocida al duplicar capa."
 
-#: ide/functions/layer/layer_edit.c:93
+#: ide/functions/layer/layer_edit.c:97
 msgid "Edit background color"
 msgstr "Editar color de fondo"
 
-#: ide/functions/layer/layer_edit.c:110
+#: ide/functions/layer/layer_edit.c:114
 msgid "Edit image layer"
 msgstr "Editar capa de imagen"
 
-#: ide/functions/layer/layer_edit.c:134
+#: ide/functions/layer/layer_edit.c:138
 msgid "Edit mouse pointer"
 msgstr "Editar puntero de ratón"
 
-#: ide/functions/layer/layer_edit.c:159
+#: ide/functions/layer/layer_edit.c:163
 msgid "Edit text layer"
 msgstr "Editar capa de texto"
 
-#: ide/functions/layer/layer_edit.c:184
+#: ide/functions/layer/layer_edit.c:188
 msgid "Edit highlight layer"
 msgstr "Editar capa de resaltado"
 
-#: ide/functions/layer/layer_edit.c:223
+#: ide/functions/layer/layer_edit.c:227
 msgid " Layer edited"
 msgstr " Capa editada"
 
@@ -1815,15 +1813,15 @@ msgstr " Capa editada"
 msgid "Unknown layer type when destroying a layer."
 msgstr "Tipo de capa desconocido al destruir una capa."
 
-#: ide/functions/layer/layer_move_down.c:106
+#: ide/functions/layer/layer_move_down.c:110
 msgid " Layer moved down"
 msgstr " Capa movida hacia abajo"
 
-#: ide/functions/layer/layer_move_up.c:112
+#: ide/functions/layer/layer_move_up.c:116
 msgid " Layer moved up"
 msgstr " Capa movida hacia arriba"
 
-#: ide/functions/layer/layer_new_highlight.c:63
+#: ide/functions/layer/layer_new_highlight.c:67
 msgid " Please draw the new layer"
 msgstr " Por favor dibuja la nueva capa"
 
@@ -1843,9 +1841,9 @@ msgstr "_self"
 msgid " Highlight layer added"
 msgstr " Capa de resaltado añadida"
 
-#: ide/functions/layer/layer_new_image.c:63
-#: ide/functions/layer/layer_new_mouse.c:63
-#: ide/functions/layer/layer_new_text.c:63
+#: ide/functions/layer/layer_new_image.c:67
+#: ide/functions/layer/layer_new_mouse.c:67
+#: ide/functions/layer/layer_new_text.c:67
 msgid " Please click the insertion point"
 msgstr " Por favor haz click en el punto de inserción"
 
@@ -2219,7 +2217,7 @@ msgstr "Resolución de salida por defecto: "
 
 #: ide/functions/menu/menu_edit_preferences.c:194
 msgid "Default text layer font face:"
-msgstr ""
+msgstr "Capa de texto fuente por defecto:"
 
 #: ide/functions/menu/menu_edit_preferences.c:226
 msgid "Default text layer font size: "
@@ -2759,6 +2757,8 @@ msgid ""
 "There was something wrong with the information button target window value.  "
 "Please try again."
 msgstr ""
+"Hubo algo erróneo con el valor del botón de información de la ventana de "
+"destino. Por favor inténtelo de nuevo."
 
 #: ide/functions/menu/menu_project_properties.c:484
 msgid " Project properties updated"
@@ -2828,12 +2828,12 @@ msgstr "Salasaga - Captura activa"
 #: ide/functions/menu/menu_screenshots_capture.c:271
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:140
 msgid "X Offset: "
-msgstr ""
+msgstr "Offset en X: "
 
 #: ide/functions/menu/menu_screenshots_capture.c:282
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:151
 msgid "Y Offset: "
-msgstr ""
+msgstr "Offset en Y: "
 
 #: ide/functions/menu/menu_screenshots_capture.c:318
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:187
@@ -2867,19 +2867,19 @@ msgstr "Ocurrió un error '%s' al cerrar el fichero de salida '%s'."
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:299
 #, c-format
 msgid "Keyboard hook LoadLibrary failed with error %d: %s"
-msgstr ""
+msgstr "Hook de teclado LoadLibrary falló con error: %d: %s"
 
 #: ide/functions/menu/menu_screenshots_capture.c:448
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:310
 #, c-format
 msgid "Keyboard hook GetProcAddress failed with error %d: %s"
-msgstr ""
+msgstr "Hook de teclado GetProcAddress falló con error: %d: %s"
 
 #: ide/functions/menu/menu_screenshots_capture.c:460
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:322
 #, c-format
 msgid "Keyboard hooking failed with error %d: %s"
-msgstr ""
+msgstr "Hook de teclado falló con error: %d: %s"
 
 #: ide/functions/menu/menu_screenshots_capture.c:467
 msgid "Installed Control-Printscreen screenshot key"
@@ -2919,6 +2919,8 @@ msgid ""
 " Wrote capture settings file - %s - and installed Control-Printscreen "
 "keyboard hook"
 msgstr ""
+" Fichero de ajustes de captura - %s - escrito e instalado hook de teclado "
+"Control-Printscreen"
 
 #: ide/functions/menu/menu_screenshots_import.c:117
 msgid "Something went wrong opening the screenshots folder."
@@ -3130,6 +3132,8 @@ msgid ""
 "There was something wrong with the default text layer font face value stored "
 "in the preferences."
 msgstr ""
+"Hubo algo erróneo con el valor de fuente por defecto en la capa de texto "
+"almacenado en las preferencias."
 
 #: ide/functions/preferences_load.c:930
 msgid ""
@@ -3266,6 +3270,8 @@ msgid ""
 "There was something wrong with an external link target window value in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con un valor de enlace externo a ventana destino en el "
+"fichero del proyecto."
 
 #: ide/functions/read/read_highlight_layer.c:149
 msgid ""
@@ -3339,6 +3345,8 @@ msgid ""
 "There was something wrong with a transition in type value in the project "
 "file."
 msgstr ""
+"Hubo algo erróneo con una transición en el valor de tipo en el fichero del "
+"proyecto."
 
 #: ide/functions/read/read_highlight_layer.c:474
 #: ide/functions/read/read_mouse_layer.c:367
@@ -3347,6 +3355,8 @@ msgid ""
 "There was something wrong with a transition in duration value in the project "
 "file."
 msgstr ""
+"Hubo algo erróneo con una transición en el valor de duración en el fichero "
+"del proyecto."
 
 #: ide/functions/read/read_highlight_layer.c:492
 #: ide/functions/read/read_mouse_layer.c:385
@@ -3355,6 +3365,8 @@ msgid ""
 "There was something wrong with a transition out type value in the project "
 "file."
 msgstr ""
+"Hubo algo erróneo con un valor de tipo de salida de transición en el fichero "
+"del proyecto."
 
 #: ide/functions/read/read_highlight_layer.c:516
 #: ide/functions/read/read_mouse_layer.c:409
@@ -3363,472 +3375,568 @@ msgid ""
 "There was something wrong with a transition out duration value in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con un valor de duración de salida de transición en el "
+"fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:101
 msgid ""
 "There was something wrong with an image x offset start value in the project "
 "file."
 msgstr ""
+"Hubo algo erróneo con un valor de comienzo de offset en X de una imagen en "
+"el fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:119
 msgid ""
 "There was something wrong with an image y offset start value in the project "
 "file."
 msgstr ""
+"Hubo algo erróneo con un valor de comienzo de offset en y de una imagen en "
+"el fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:137
 msgid ""
 "There was something wrong with an image x offset finish value in the project "
 "file."
 msgstr ""
+"Hubo algo erróneo con un valor de finalización de offset en x de una imagen "
+"en el fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:155
 msgid ""
 "There was something wrong with an image y offset finish value in the project "
 "file."
 msgstr ""
+"Hubo algo erróneo con un valor de finalización de offset en y de una imagen "
+"en el fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:173
 msgid ""
 "There was something wrong with an image layer width value in the project "
 "file."
 msgstr ""
+"Hubo algo erróneo con un valor de ancho de una capa de imagen en el fichero "
+"del proyecto."
 
 #: ide/functions/read/read_image_layer.c:191
 msgid ""
 "There was something wrong with an image layer height value in the project "
 "file."
 msgstr ""
+"Hubo algo erróneo con un valor de altura de una capa de imagen en el fichero "
+"del proyecto."
 
 #: ide/functions/read/read_image_layer.c:209
 msgid ""
 "There was something wrong with an image layer background value in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con un valor de background de una capa de imagen en el "
+"fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:226
 msgid ""
 "There was something wrong with an image layer start time value in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con un valor de instante de comienzo de una capa de imagen "
+"en el fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:244
 msgid ""
 "There was something wrong with an image layer duration value in the project "
 "file."
 msgstr ""
+"Hubo algo erróneo con un valor de duración de una capa de imagen en el "
+"fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:262
 msgid ""
 "There was something wrong with an image layer visibility value in the "
 "project file."
 msgstr ""
+"Hubo un error con un valor de visibilidad de una capa de imagen en el "
+"fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:280
 msgid ""
 "There was something wrong with an image layer name value in the project file."
 msgstr ""
+"Hubo un error con un valor de nombre de una capa de imagen en el fichero del "
+"proyecto."
 
 #: ide/functions/read/read_image_layer.c:298
 msgid ""
 "There was something wrong with an image layer external link value in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con un valor de enlace externo de una capa de imagen en el "
+"fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:316
 msgid ""
 "There was something wrong with an image layer external link target window "
 "value in the project file."
 msgstr ""
+"Hubo algo erróneo con un valor de enlace externo de ventana de destino de "
+"una capa de imagen en el fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:334
 msgid "There was something wrong with image data in the project file."
 msgstr ""
+"Hubo algo erróneo con los datos de una imagen en el fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:352
 msgid ""
 "There was something wrong with an image data length value in the project "
 "file."
 msgstr ""
+"Hubo algo erróneo con un valor de longitud de datos de imagen en el fichero "
+"del proyecto."
 
 #: ide/functions/read/read_image_layer.c:370
 msgid ""
 "There was something wrong with an image transition in type value in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con una transición de imagen en el valor tipo en el "
+"fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:394
 msgid ""
 "There was something wrong with an image transition in duration value in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con una transición de imagen en el valor duración en el "
+"fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:412
 msgid ""
 "There was something wrong with an image transition out type value in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con una transición de salida de imagen en el valor tipo en "
+"el fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:436
 msgid ""
 "There was something wrong with an image transition out duration value in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con una transición de salida de imagen en el valor "
+"duración en el fichero del proyecto."
 
 #: ide/functions/read/read_image_layer.c:460
 #: ide/functions/read/read_image_layer.c:472
 msgid "Image data loading failed"
-msgstr ""
+msgstr "Carga de datos de una imagen fallida"
 
 #: ide/functions/read/read_image_layer.c:466
 msgid "Error when loading image data"
-msgstr ""
+msgstr "Error al cargar datos de imagen"
 
 #: ide/functions/read/read_image_layer.c:481
 msgid "Couldn't create an image pattern"
-msgstr ""
+msgstr "No se pudo crear un patrón de imagen"
 
 #: ide/functions/read/read_mouse_layer.c:198
 msgid ""
 "There was something wrong with a mouse click value in the project file."
 msgstr ""
+"Hubo algo erróneo con un valor de click de ratón en el fichero del proyecto."
 
 #: ide/functions/read/read_project.c:153
 msgid "Loading file"
-msgstr ""
+msgstr "Cargando fichero"
 
 #: ide/functions/read/read_project.c:161
 msgid ""
 "The selected project file was not loaded successfully.  Please choose a "
 "different project file."
 msgstr ""
+"El fichero de proyecto seleccionado no se ha cargado satisfactoriamente. Por "
+"favor elija un fichero de proyecto diferente."
 
 #: ide/functions/read/read_project.c:177
 msgid "Project file is empty.  Please choose a different project file."
 msgstr ""
+"Fichero de proyecto está vacío. Por favor elija un fichero de proyecto "
+"diferente."
 
 #: ide/functions/read/read_project.c:245
 msgid ""
 "Project meta data missing, aborting load.  Please choose a different project "
 "file."
 msgstr ""
+"No se encuentran los meta datos del proyecto, abortando la carga. Por favor "
+"elija otro fichero de proyecto."
 
 #: ide/functions/read/read_project.c:261
 msgid ""
 "Project preferences missing, aborting load.  Please choose a different "
 "project file."
 msgstr ""
+"No se encuentran las preferencias del proyecto, abortando la carga. Por "
+"favor elija otro fichero de proyecto."
 
 #: ide/functions/read/read_project.c:277
 msgid ""
 "No slides in project, aborting load.  Please choose a different project file."
 msgstr ""
+"Sin transparencias en el proyecto, abortando la carga. Por favor elija otro "
+"fichero de proyecto."
 
 #: ide/functions/read/read_project.c:393
 msgid ""
 "Project Name missing, aborting load.  Please choose a different project file."
 msgstr ""
+"No se encuentra el nombre del proyecto, abortando la carga. Por favor elija "
+"otro fichero de proyecto."
 
 #: ide/functions/read/read_project.c:407
 msgid ""
 "Project Width missing, aborting load.  Please choose a different project "
 "file."
 msgstr ""
+"No se encuentra la anchura del proyecto, abortando la carga. Por favor elija "
+"otro fichero de proyecto."
 
 #: ide/functions/read/read_project.c:421
 msgid ""
 "Project Height missing, aborting load.  Please choose a different project "
 "file."
 msgstr ""
+"No se encuentra la altura del proyecto, abortando la carga. Por favor elija "
+"otro fichero de proyecto."
 
 #: ide/functions/read/read_project.c:438
 msgid ""
 "The file format value in the project file is not recognized.  This project "
 "file can't be used."
 msgstr ""
+"El valor de formato de fichero en el fichero del proyecto no se reconoce. "
+"Este fichero de proyecto no puede ser usado."
 
 #: ide/functions/read/read_project.c:542
 msgid ""
 "There was something wrong with the project name value in the project file."
 msgstr ""
+"Hubo algo erróneo con el valor de nombre de proyecto en el fichero del "
+"proyecto."
 
 #: ide/functions/read/read_project.c:557
 msgid ""
 "There was something wrong with the output folder value in the project file."
 msgstr ""
+"Hubo algo erróneo con el valor de carpeta de salida en el fichero del "
+"proyecto."
 
 #: ide/functions/read/read_project.c:573
 msgid ""
 "There was something wrong with the output width value in the project file."
 msgstr ""
+"Hubo algo erróneo con el valor de ancho de salida en el fichero del proyecto."
 
 #: ide/functions/read/read_project.c:588
 msgid ""
 "There was something wrong with the output height value in the project file."
 msgstr ""
+"Hubo algo erróneo con el valor de altura de salida en el fichero del "
+"proyecto."
 
 #: ide/functions/read/read_project.c:603 ide/functions/read/read_project.c:618
 msgid ""
 "There was something wrong with the project width value in the project file."
 msgstr ""
+"Hubo algo erróneo con el valor de anchura del proyecto en el fichero del "
+"proyecto."
 
 #: ide/functions/read/read_project.c:635
 msgid ""
 "There was something wrong with the frames per second value in the project "
 "file."
 msgstr ""
+"Hubo algo erróneo con el valor de frames por segundo en el fichero del "
+"proyecto."
 
 #: ide/functions/read/read_project.c:652
 msgid ""
 "There was something wrong with the start behavior value in the project file."
 msgstr ""
+"Hubo algo erróneo con el valor de comportamiento de inicio en el fichero del "
+"proyecto."
 
 #: ide/functions/read/read_project.c:680
 msgid ""
 "There was something wrong with the end behavior value in the project file."
 msgstr ""
+"Hubo algo erróneo con el valor de comportamiento de finalización en el "
+"fichero del proyecto."
 
 #: ide/functions/read/read_project.c:714
 msgid ""
 "There was something wrong with the control bar display value in the project "
 "file."
 msgstr ""
+"Hubo algo erróneo con el valor de muestra de barra de control en el fichero "
+"del proyecto."
 
 #: ide/functions/read/read_project.c:742
 msgid ""
 "There was something wrong with the information button display value in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con el valor de muestra del botón de información en el "
+"fichero del proyecto."
 
 #: ide/functions/read/read_project.c:766 ide/functions/read/read_project.c:784
 msgid ""
 "There was something wrong with the information button link value in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con el valor del enlace del botón de información en el "
+"fichero del proyecto."
 
 #: ide/functions/read/read_project.c:909
 msgid ""
 "There was something wrong with a slide name value in the project file."
 msgstr ""
+"Hubo algo erróneo con el valor de nombre de transparencia en el fichero del "
+"proyecto."
 
 #: ide/functions/read/read_project.c:928
 msgid ""
 "There was something wrong with a slide duration value in the project file."
 msgstr ""
+"Hubo algo erróneo con el valor de duración de transparencia en el fichero "
+"del proyecto."
 
 #: ide/functions/read/read_project.c:967
 msgid "Aborting load of project file."
-msgstr ""
+msgstr "Abortando la carga del fichero del proyecto."
 
 #: ide/functions/read/read_text_layer.c:303
 msgid ""
 "There was something wrong with a background border width value in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con el valor de ancho del borde del background en el "
+"fichero del proyecto."
 
 #: ide/functions/read/read_text_layer.c:320
 msgid ""
 "There was something wrong with a text background visibility value in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con el valor de visibilidad del texto del background en el "
+"fichero del proyecto."
 
 #: ide/functions/read/read_text_layer.c:358
 msgid ""
 "There was something wrong with the count of text layer values given in the "
 "project file."
 msgstr ""
+"Hubo algo erróneo con la cuenta de valores de capas de texto en el fichero "
+"del proyecto."
 
 #: ide/functions/read/read_text_layer.c:389
 msgid "Invalid unicode character found in text layer input."
-msgstr ""
+msgstr "Caracter unicode inválido encontrado en la capa de entrada de texto."
 
 #: ide/functions/read/read_text_layer.c:458
 msgid "There was something wrong with a font face value in the project file."
 msgstr ""
+"Hubo algo erróneo con el valor de texto fuente en el fichero del proyecto."
 
 #: ide/functions/read/read_text_layer.c:477
 msgid "There was something wrong with a font size value in the project file."
 msgstr ""
+"Hubo algo erróneo con el valor de tamaño de fuente en el fichero del "
+"proyecto."
 
 #: ide/functions/save_preferences_and_exit.c:196
 #: ide/functions/save_preferences_and_exit.c:216
 msgid "Saving preferences in the registry failed."
-msgstr ""
+msgstr "Guardado de preferencias en el registro fallido."
 
 #: ide/functions/save/save_layer.c:96
 msgid "Error creating the layer elements."
-msgstr ""
+msgstr "Error al crear los elementos de capa."
 
 #: ide/functions/save/save_layer.c:163
 msgid "Something went wrong when encoding a slide to png format."
-msgstr ""
+msgstr "Algo fue mal al codificar una transparencia a formato png."
 
 #: ide/functions/save/save_layer.c:319
 msgid "Error saving a text data node in the project file."
 msgstr ""
+"Error al salvar un nodo de datos de texto en el fichero del proyecto."
 
 #: ide/functions/save/save_layer.c:343
 msgid "Error saving character data to the project file."
-msgstr ""
+msgstr "Error al salvar datos de caracter al fichero del proyecto."
 
 #: ide/functions/save/save_slide.c:72
 msgid "Error creating the slide node."
-msgstr ""
+msgstr "Error creando el nodo de transparencia."
 
 #: ide/functions/save/save_text_tags.c:66
 msgid "Error creating the size tags container."
-msgstr ""
+msgstr "Error creando el contenedor de etiquetas de tamaño."
 
 #: ide/functions/save/save_text_tags.c:80
 msgid "Error creating a text tag node."
-msgstr ""
+msgstr "Error creando un nodo de etiqueta de texto."
 
 #: ide/functions/save/save_text_tags.c:105
 msgid "Error creating the foreground color tags container."
-msgstr ""
+msgstr "Error creando el contenedor de etiquetas de color del foreground."
 
 #: ide/functions/save/save_text_tags.c:119
 msgid "Error creating a foreground color tag node."
-msgstr ""
+msgstr "Error al crear un nodo de etiqueta de color de foreground."
 
 #: ide/functions/slide/slide_delete.c:63
 msgid "You must leave at least one slide in a project."
-msgstr ""
+msgstr "Debes dejar al menos una transparencia en el proyecto."
 
 #: ide/functions/slide/slide_delete.c:105
 msgid " Slide deleted"
-msgstr ""
+msgstr " Transparencia eliminada"
 
 #: ide/functions/slide/slide_duration.c:75
 msgid "Edit slide duration"
-msgstr ""
+msgstr "Editar duración de transparencia"
 
 #: ide/functions/slide/slide_duration.c:80
 msgid "Slide duration: "
-msgstr ""
+msgstr "Duración de transparencia: "
 
 #: ide/functions/slide/slide_duration.c:115
 msgid ""
 "There was something wrong with the slide duration value.  Please try again."
 msgstr ""
+"Hubo algo erróneo con el valor de duración de transparencia. Por favor "
+"inténtelo de nuevo."
 
 #: ide/functions/slide/slide_duration.c:200
 msgid " Slide properties updated"
-msgstr ""
+msgstr " Propiedades de transparencia actualizadas"
 
 #: ide/functions/slide/slide_insert.c:117
 msgid " Slide added"
-msgstr ""
+msgstr " Transparencia añadida"
 
 #: ide/functions/slide/slide_move_bottom.c:94
 msgid " Slide moved to bottom"
-msgstr ""
+msgstr " Transparancia movida hacia la parte inferior"
 
 #: ide/functions/slide/slide_move_down.c:99
 msgid " Slide moved down"
-msgstr ""
+msgstr " Transparancia movida hacia abajo"
 
 #: ide/functions/slide/slide_move_top.c:92
 msgid " Slide moved to top"
-msgstr ""
+msgstr " Transparencia movida hacia la parte superior"
 
 #: ide/functions/slide/slide_move_up.c:97
 msgid " Slide moved up"
-msgstr ""
+msgstr " Transparencia movida hacia arriba"
 
 #: ide/functions/status_icon/create_status_icon.c:55
 msgid "Salasaga - Not yet capturing"
-msgstr ""
+msgstr "Salasaga - Aún sin capturar"
 
 #: ide/functions/status_icon/status_icon_popup.c:62
 msgid "Restore window"
-msgstr ""
+msgstr "Restablecer la ventana"
 
 #: ide/functions/status_icon/status_icon_popup.c:68
 msgid "Minimize window"
-msgstr ""
+msgstr "Minimizar ventana"
 
 #: ide/functions/status_icon/status_icon_popup.c:76
 msgid "Take Screenshot"
-msgstr ""
+msgstr "Capturar pantalla"
 
 #: ide/functions/validate_value.c:713 screen_capture/validate_value.c:576
 msgid "Unknown value passed to validation function"
-msgstr ""
+msgstr "Valor desconocido pasado a función de validación"
 
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:139
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:191
 msgid "Couldn't recreate time line background image."
-msgstr ""
+msgstr "No se puede recrear la imagen de fondo de la línea de tiempo."
 
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:148
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:200
 msgid "Couldn't recreate time line display buffer."
-msgstr ""
+msgstr "No se puede recrear el buffer de muestra de la línea de tiempo."
 
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:157
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:209
 msgid "Couldn't redraw the time line layer information."
-msgstr ""
+msgstr "No se puede redibujar la información de capa de la línea de tiempo."
 
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:281
 msgid " Resize completed"
-msgstr ""
+msgstr " Redimensionado completado"
 
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:322
 msgid " Drag completed"
-msgstr ""
+msgstr " Arrastre completado"
 
 #: ide/functions/widgets/time_line/time_line_internal_initialise_bg_image.c:109
 msgid "Couldn't create the time line background image."
-msgstr ""
+msgstr "No se puede crear la imagen de background de la línea de tiempo."
 
 #: ide/functions/widgets/time_line/time_line_internal_initialise_display_buffer.c:93
 #: ide/functions/widgets/time_line/time_line_internal_initialise_display_buffer.c:107
 msgid "Couldn't create the time line display buffer image."
 msgstr ""
+"No se puede crear la imagen de buffer de muestra de la línea de tiempo."
 
 #: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:398
 #: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:509
 #: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:615
 msgid "Unknown layer resize type."
-msgstr ""
+msgstr "Tipo de redimensionado de capa desconocido."
 
 #: ide/functions/widgets/time_line/time_line_set_selected_layer_num.c:173
 #: ide/functions/widgets/time_line/time_line_set_selected_layer_num.c:177
 msgid "/Layer/Image crop"
-msgstr ""
+msgstr "/Layer/Image crop"
 
 #: ide/functions/widgets/time_line/time_line_set_selected_layer_num.c:174
 #: ide/functions/widgets/time_line/time_line_set_selected_layer_num.c:178
 msgid "/Layer/Image resize"
-msgstr ""
+msgstr "/Layer/Image resize"
 
 #: ide/functions/working_area/draw_highlight_box.c:53
 #: ide/functions/working_area/draw_highlight_box.c:92
 msgid "Not enough memory for pixbuf allocation."
-msgstr ""
+msgstr "No hay suficiente memoria para la reserva de puxbuf."
 
 #: ide/functions/working_area/working_area_button_release_event.c:156
 msgid " Layer start point moved"
-msgstr ""
+msgstr " Punto de comienzo de capa movido"
 
 #: ide/functions/working_area/working_area_button_release_event.c:158
 msgid " Layer end point moved"
-msgstr ""
+msgstr " Punto de finalización de capa movido"
 
 #: ide/functions/working_area/working_area_button_release_event.c:262
 #: ide/functions/working_area/working_area_motion_notify_event.c:205
 msgid "Unknown resizing direction."
-msgstr ""
+msgstr "Dirección de redimensionamiento desconocida."
 
 #: ide/functions/working_area/working_area_button_release_event.c:320
 msgid " Layer resized"
-msgstr ""
+msgstr " Capa redimensionada"
 
 #: ide/functions/working_area/working_area_button_release_event.c:423
 msgid " Layer moved"
-msgstr ""
+msgstr " Capa movida"
 
 #: ide/salasaga.c:326
 #, c-format
@@ -3896,27 +4004,29 @@ msgstr "Se produjo un error al tomar la captura."
 
 #: screen_capture/salasaga_screencapture.c:120
 msgid "Screenshot GetDC failed."
-msgstr ""
+msgstr "Captura de pantalla GetDC fallida."
 
 #: screen_capture/salasaga_screencapture.c:129
 msgid "Screenshot CreateCompatibleDC failed."
-msgstr ""
+msgstr "Captura de pantalla CreateCompatibleDC fallida."
 
 #: screen_capture/salasaga_screencapture.c:138
 msgid "Screenshot CreateCompatibleBitmap failed."
-msgstr ""
+msgstr "Captura de pantalla CreateCompatibleBitmap fallida."
 
 #: screen_capture/salasaga_screencapture.c:147
 msgid "Screenshot SelectObject failed: selected object is not a region."
 msgstr ""
+"Captura de pantalla SelectObject fallida: el objeto seleccionado no es una "
+"región."
 
 #: screen_capture/salasaga_screencapture.c:155
 msgid "Screenshot SelectObject failed: unknown error."
-msgstr ""
+msgstr "Captura de pantalla SelectObject fallida: error desconocido."
 
 #: screen_capture/salasaga_screencapture.c:164
 msgid "Screenshot BitBlt failed."
-msgstr ""
+msgstr "Captura de pantalla BitBlt fallida."
 
 #: screen_capture/salasaga_screencapture.c:281
 msgid ""
@@ -3936,12 +4046,16 @@ msgid ""
 "There was something wrong with the x offset start value.  Aborting "
 "screenshot."
 msgstr ""
+"Hubo algo erróneo con el valor de comienzo de offset en X. Abortando la "
+"captura de pantalla."
 
 #: screen_capture/salasaga_screencapture.c:322
 msgid ""
 "There was something wrong with the y offset start value.  Aborting "
 "screenshot."
 msgstr ""
+"Hubo algo erróneo con el valor de comienzo de offset en Y. Abortando la "
+"captura de pantalla."
 
 #: screen_capture/salasaga_screencapture.c:335
 msgid "There was something wrong with the width value.  Aborting screenshot."
@@ -3957,17 +4071,19 @@ msgid ""
 "There was something wrong with the screenshot delay value.  Aborting "
 "screenshot."
 msgstr ""
+"Hubo algo erróneo con el valor de comienzo de retraso en la captura. "
+"Abortando la captura de pantalla."
 
 #: screen_capture/salasaga_screencapture.c:423
 #: screen_capture/salasaga_screencapture.c:446
 #: screen_capture/salasaga_screencapture.c:472
 #, c-format
 msgid "Screenshot in %u seconds"
-msgstr ""
+msgstr "Captura de pantalla en %u segundos"
 
 #: screen_capture/salasaga_screencapture.c:508
 msgid "Screenshot taken"
-msgstr ""
+msgstr "Captura de pantalla obtenida"
 
 #: screen_capture/salasaga_screencapture.c:531
 msgid "Something went wrong opening"
@@ -3981,14 +4097,16 @@ msgstr "El directorio especificado no existe."
 msgid ""
 "Something went wrong when opening the output screenshot file for writing."
 msgstr ""
+"Algo fue mal al abrir el fichero de captura de pantalla de salida para "
+"escritura."
 
 #: screen_capture/salasaga_screencapture.c:636
 msgid "Something went wrong when creating the png write structure."
-msgstr ""
+msgstr "Algo fue mal al crear la estructura de escritura png."
 
 #: screen_capture/salasaga_screencapture.c:651
 msgid "Something went wrong when creating the png info structure."
-msgstr ""
+msgstr "Algo fue mal al crear la estructura info png."
 
 #: screen_capture/salasaga_screencapture.c:685
 msgid "Something went wrong when retrieving the screenshot metadata."
@@ -4000,11 +4118,11 @@ msgstr "Se produjo un error al copiar la información de la captura."
 
 #: ide/valid_fields.h:35
 msgid "8 Bit Color Value Component"
-msgstr ""
+msgstr "Componente de valor de color de 8 bits"
 
 #: ide/valid_fields.h:36
 msgid "16 Bit Color Value Component"
-msgstr ""
+msgstr "Componente de valor de color de 16 bits"
 
 #: ide/valid_fields.h:37
 msgid "Animation behavior after playing"
@@ -4016,7 +4134,7 @@ msgstr "Enlace externo"
 
 #: ide/valid_fields.h:39
 msgid "Window target for an external link"
-msgstr ""
+msgstr "Ventana de destino para un enlace externo"
 
 #: ide/valid_fields.h:40
 msgid "Full path to a file"
@@ -4028,7 +4146,7 @@ msgstr "Ruta completa a la carpeta"
 
 #: ide/valid_fields.h:42
 msgid "Font face"
-msgstr ""
+msgstr "Tipo de letra"
 
 #: ide/valid_fields.h:43
 msgid "Font size"
@@ -4040,11 +4158,11 @@ msgstr "Número de fotograma"
 
 #: ide/valid_fields.h:45
 msgid "Height of a highlight layer"
-msgstr ""
+msgstr "Altura de una capa de resaltado"
 
 #: ide/valid_fields.h:46
 msgid "Width of a highlight layer"
-msgstr ""
+msgstr "Anchura de una capa de resaltado"
 
 #: ide/valid_fields.h:47
 msgid "Height of the tool bar icons"
@@ -4052,7 +4170,7 @@ msgstr "Altura de la barra de iconos"
 
 #: ide/valid_fields.h:48
 msgid "Base64 encoded image data"
-msgstr ""
+msgstr "Datos de imagen codificados con Base64"
 
 #: ide/valid_fields.h:49
 msgid "Length in bytes of image data"
@@ -4060,7 +4178,7 @@ msgstr "Longitud en bytes de los datos de imagen"
 
 #: ide/valid_fields.h:50
 msgid "Layer background switch"
-msgstr ""
+msgstr "Cambio de capa de background"
 
 #: ide/valid_fields.h:51
 msgid "Layer duration in seconds"
@@ -4092,7 +4210,7 @@ msgstr "Click de ratón"
 
 #: ide/valid_fields.h:58
 msgid "Characters in a text layer"
-msgstr ""
+msgstr "Caracteres en una capa de texto"
 
 #: ide/valid_fields.h:59
 msgid "Opacity level"
@@ -4124,11 +4242,11 @@ msgstr "Ancho de este proyecto"
 
 #: ide/valid_fields.h:66
 msgid "An X * Y resolution value"
-msgstr ""
+msgstr "Un valor de resolución X"
 
 #: ide/valid_fields.h:67 screen_capture/valid_fields.h:37
 msgid "Number of seconds to delay a screenshot"
-msgstr ""
+msgstr "Número de segundos para retrasar una captura de pantalla"
 
 #: ide/valid_fields.h:68 screen_capture/valid_fields.h:38
 msgid "Height for next screenshot"
@@ -4148,7 +4266,7 @@ msgstr "Incluir botón de información en la exportación swf"
 
 #: ide/valid_fields.h:72
 msgid "Show the background for text layers"
-msgstr ""
+msgstr "Mostrar el background para las capas de texto"
 
 #: ide/valid_fields.h:73
 msgid "Number of frames per slide"
@@ -4168,7 +4286,7 @@ msgstr "Comportamiento de la animación tras la carga"
 
 #: ide/valid_fields.h:77
 msgid "Base64 encoded text buffer data"
-msgstr ""
+msgstr "Datos de bufer de texto codificados con Base64"
 
 #: ide/valid_fields.h:78
 msgid "Transition duration in seconds"
@@ -4188,12 +4306,12 @@ msgstr "Desplazamiento en el eje Y"
 
 #: ide/valid_fields.h:82
 msgid "Magnification level of working area"
-msgstr ""
+msgstr "Nivel de magnificación de área de trabajo"
 
 #: screen_capture/valid_fields.h:40
 msgid "X offset for next screenshot"
-msgstr ""
+msgstr "Offset en X para la siguiente captura de pantalla"
 
 #: screen_capture/valid_fields.h:41
 msgid "Y offset for next screenshot"
-msgstr ""
+msgstr "Offset en Y para la siguiente captura de pantalla"
