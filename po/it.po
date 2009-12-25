@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-13 12:13+1100\n"
-"PO-Revision-Date: 2009-11-30 17:14+0000\n"
-"Last-Translator: Justin Clift <Unknown>\n"
+"POT-Creation-Date: 2009-12-20 19:23+1100\n"
+"PO-Revision-Date: 2009-12-21 12:28+0000\n"
+"Last-Translator: Stemby <carlo.stemberger@gmail.com>\n"
 "Language-Team: Italian <it@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-20 08:36+0000\n"
+"X-Launchpad-Export-Date: 2009-12-25 00:32+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
@@ -109,8 +109,8 @@ msgstr ""
 #: ide/functions/gtk_text_buffer_duplicate.c:96 ide/functions/key_bind.c:80
 #: ide/functions/key_bind.c:98 ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
-#: ide/functions/layer/image_crop.c:118 ide/functions/layer/image_crop.c:129
-#: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_crop.c:287
+#: ide/functions/layer/image_crop.c:122 ide/functions/layer/image_crop.c:133
+#: ide/functions/layer/image_crop.c:262 ide/functions/layer/image_crop.c:291
 #: ide/functions/layer/image_resize.c:208
 #: ide/functions/layer/image_resize.c:212
 #: ide/functions/layer/image_resize.c:252
@@ -122,7 +122,7 @@ msgstr ""
 #: ide/functions/layer/layer_duplicate.c:179
 #: ide/functions/layer/layer_duplicate.c:195
 #: ide/functions/layer/layer_duplicate.c:221
-#: ide/functions/layer/layer_edit.c:207 ide/functions/layer/layer_free.c:87
+#: ide/functions/layer/layer_edit.c:211 ide/functions/layer/layer_free.c:87
 #: ide/functions/layer/layer_new_image_inner.c:137
 #: ide/functions/layer/layer_new_image_inner.c:146
 #: ide/functions/layer/layer_new_image_inner.c:167
@@ -344,7 +344,7 @@ msgstr ""
 #: ide/functions/working_area/calculate_object_boundaries.c:182
 #: ide/functions/working_area/draw_highlight_box.c:53
 #: ide/functions/working_area/draw_highlight_box.c:92
-#: ide/functions/working_area/working_area_button_press_event.c:205
+#: ide/functions/working_area/working_area_button_press_event.c:212
 #: ide/functions/working_area/working_area_button_release_event.c:262
 #: ide/functions/working_area/working_area_button_release_event.c:382
 #: ide/functions/working_area/working_area_motion_notify_event.c:205
@@ -383,7 +383,7 @@ msgstr "Impossibile allocare memoria per il pixel buffer"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:137
 msgid "Couldn't create image surface."
-msgstr ""
+msgstr "Non posso creare la superficie dell'immagine."
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:148
 msgid "Couldn't create surface pattern."
@@ -393,8 +393,8 @@ msgstr "Non posso creare un modello di superfice."
 #: ide/functions/create_resolution_selector.c:103
 #: ide/functions/dialog/display_dialog_image.c:195
 #: ide/functions/dialog/display_dialog_image.c:205
-#: ide/functions/layer/image_crop.c:158 ide/functions/layer/image_crop.c:179
-#: ide/functions/layer/image_crop.c:200 ide/functions/layer/image_crop.c:221
+#: ide/functions/layer/image_crop.c:162 ide/functions/layer/image_crop.c:183
+#: ide/functions/layer/image_crop.c:204 ide/functions/layer/image_crop.c:225
 #: ide/functions/layer/image_resize.c:140
 #: ide/functions/layer/image_resize.c:162
 #: ide/functions/menu/menu_edit_preferences.c:303
@@ -404,89 +404,89 @@ msgstr "Non posso creare un modello di superfice."
 #: ide/functions/project_adjust_dimensions.c:118
 #: ide/functions/project_adjust_dimensions.c:140
 msgid "pixels"
-msgstr "pixels"
+msgstr "pixel"
 
-#: ide/functions/create_time_line.c:119
+#: ide/functions/create_time_line.c:124
 msgid "Edit"
 msgstr "Modifica..."
 
-#: ide/functions/create_time_line.c:120
+#: ide/functions/create_time_line.c:125
 #: ide/functions/enable_layer_toolbar_buttons.c:56
 msgid "Edit layer"
 msgstr "Modifica livello"
 
-#: ide/functions/create_time_line.c:132
+#: ide/functions/create_time_line.c:137
 msgid "Crop"
 msgstr "Taglia"
 
-#: ide/functions/create_time_line.c:133
+#: ide/functions/create_time_line.c:138
 #: ide/functions/enable_layer_toolbar_buttons.c:65
 msgid "Crop image"
 msgstr "Ritaglia immagine"
 
-#: ide/functions/create_time_line.c:145
+#: ide/functions/create_time_line.c:150
 msgid "Delete"
 msgstr "Cancella"
 
-#: ide/functions/create_time_line.c:146
+#: ide/functions/create_time_line.c:151
 #: ide/functions/enable_layer_toolbar_buttons.c:74
 msgid "Delete selected layer"
 msgstr "Cancella il livello selezionato"
 
-#: ide/functions/create_time_line.c:158
+#: ide/functions/create_time_line.c:163
 msgid "Down"
 msgstr "Giù"
 
-#: ide/functions/create_time_line.c:159
+#: ide/functions/create_time_line.c:164
 #: ide/functions/enable_layer_toolbar_buttons.c:83
 msgid "Move layer down"
 msgstr "Sposta livello in basso"
 
-#: ide/functions/create_time_line.c:171
+#: ide/functions/create_time_line.c:176
 msgid "Up"
 msgstr "Su"
 
-#: ide/functions/create_time_line.c:172
+#: ide/functions/create_time_line.c:177
 #: ide/functions/enable_layer_toolbar_buttons.c:92
 msgid "Move layer up"
 msgstr "Sposta livello in alto"
 
-#: ide/functions/create_time_line.c:188
+#: ide/functions/create_time_line.c:193
 msgid "Mouse"
 msgstr "Mouse"
 
-#: ide/functions/create_time_line.c:189
+#: ide/functions/create_time_line.c:194
 #: ide/functions/enable_layer_toolbar_buttons.c:101
 msgid "Add a mouse pointer"
 msgstr "Inserisci puntatore del mouse"
 
-#: ide/functions/create_time_line.c:201
+#: ide/functions/create_time_line.c:206
 msgid "Text"
 msgstr "Testo"
 
-#: ide/functions/create_time_line.c:202
+#: ide/functions/create_time_line.c:207
 #: ide/functions/enable_layer_toolbar_buttons.c:110
 msgid "Add a text layer"
 msgstr "Inserisci un livello di testo"
 
-#: ide/functions/create_time_line.c:214
+#: ide/functions/create_time_line.c:219
 #: ide/functions/layer/layer_new_highlight_inner.c:152
 msgid "Highlight"
 msgstr "Evidenzia"
 
-#: ide/functions/create_time_line.c:215
+#: ide/functions/create_time_line.c:220
 #: ide/functions/enable_layer_toolbar_buttons.c:119
 msgid "Add a highlight layer"
 msgstr "Inserire livello evidenziato"
 
-#: ide/functions/create_time_line.c:227
+#: ide/functions/create_time_line.c:232
 #: ide/functions/layer/layer_duplicate.c:91
 #: ide/functions/layer/layer_new_image_inner.c:97
 #: ide/functions/menu/menu_screenshots_import.c:355
 msgid "Image"
 msgstr "Immagine"
 
-#: ide/functions/create_time_line.c:228
+#: ide/functions/create_time_line.c:233
 #: ide/functions/enable_layer_toolbar_buttons.c:128
 msgid "Add an image layer"
 msgstr "Aggiungi livello immagine"
@@ -497,7 +497,7 @@ msgstr "Nuovo"
 
 #: ide/functions/create_toolbar.c:81
 msgid "Begin a new project"
-msgstr "Nuovo progetto"
+msgstr "Inizia un nuovo progetto"
 
 #: ide/functions/create_toolbar.c:87
 msgid "Open"
@@ -518,7 +518,7 @@ msgstr "Salva il progetto"
 #: ide/functions/create_toolbar.c:101
 #: ide/functions/menu/menu_file_save_as.c:76
 msgid "Save As"
-msgstr "Salva come"
+msgstr "Salva con nome"
 
 #: ide/functions/create_toolbar.c:102
 msgid "Save the project with a different file name"
@@ -628,7 +628,7 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_mouse.c:157
 #: ide/functions/dialog/display_dialog_text.c:206
 msgid "Appearance & Links"
-msgstr ""
+msgstr "Aspetto & Link"
 
 #: ide/functions/dialog/display_dialog_highlight.c:177
 #: ide/functions/dialog/display_dialog_image.c:163
@@ -682,28 +682,28 @@ msgstr "Questo livello è visibile?"
 #: ide/functions/dialog/display_dialog_mouse.c:283
 #: ide/functions/dialog/display_dialog_text.c:458
 msgid "Start X Offset: "
-msgstr ""
+msgstr "X Offset iniziale: "
 
 #: ide/functions/dialog/display_dialog_highlight.c:340
 #: ide/functions/dialog/display_dialog_image.c:233
 #: ide/functions/dialog/display_dialog_mouse.c:299
 #: ide/functions/dialog/display_dialog_text.c:474
 msgid "Start Y Offset: "
-msgstr ""
+msgstr "Y Offset iniziale: "
 
 #: ide/functions/dialog/display_dialog_highlight.c:356
 #: ide/functions/dialog/display_dialog_image.c:249
 #: ide/functions/dialog/display_dialog_mouse.c:315
 #: ide/functions/dialog/display_dialog_text.c:490
 msgid "Finish X Offset: "
-msgstr ""
+msgstr "X Offset finale: "
 
 #: ide/functions/dialog/display_dialog_highlight.c:372
 #: ide/functions/dialog/display_dialog_image.c:265
 #: ide/functions/dialog/display_dialog_mouse.c:331
 #: ide/functions/dialog/display_dialog_text.c:506
 msgid "Finish Y Offset: "
-msgstr ""
+msgstr "Y Offset finale: "
 
 #: ide/functions/dialog/display_dialog_highlight.c:388
 #: ide/functions/dialog/display_dialog_image.c:281
@@ -735,7 +735,7 @@ msgstr "Immediato"
 #: ide/functions/dialog/display_dialog_mouse.c:368
 #: ide/functions/dialog/display_dialog_text.c:543
 msgid "Fade in"
-msgstr ""
+msgstr "Fade in"
 
 #: ide/functions/dialog/display_dialog_highlight.c:423
 #: ide/functions/dialog/display_dialog_image.c:316
@@ -794,7 +794,7 @@ msgstr "Errore nel valore di opacità. Per piacere riprova."
 msgid ""
 "There was something wrong with the starting frame X offset value.  Please "
 "try again."
-msgstr ""
+msgstr "Errore nel valore X offset del frame iniziale. Riprova per piacere."
 
 #: ide/functions/dialog/display_dialog_highlight.c:622
 #: ide/functions/dialog/display_dialog_image.c:534
@@ -803,7 +803,7 @@ msgstr ""
 msgid ""
 "There was something wrong with the starting frame Y offset value.  Please "
 "try again."
-msgstr ""
+msgstr "Errore nel valore Y offset del frame iniziale. Riprova per piacere."
 
 #: ide/functions/dialog/display_dialog_highlight.c:636
 #: ide/functions/dialog/display_dialog_highlight.c:650
@@ -816,7 +816,7 @@ msgstr ""
 msgid ""
 "There was something wrong with the finish frame X offset value.  Please try "
 "again."
-msgstr ""
+msgstr "Errore nel valore X offset del frame finale. Riprova per piacere."
 
 #: ide/functions/dialog/display_dialog_highlight.c:664
 msgid ""
@@ -850,7 +850,7 @@ msgstr "Errore nel valore della durata. Per piacere riprova."
 msgid ""
 "There was something wrong with the external link target window value.  "
 "Please try again."
-msgstr ""
+msgstr "Errore nel valore Y offset del frame finale. Riprova per piacere."
 
 #: ide/functions/dialog/display_dialog_highlight.c:748
 #: ide/functions/dialog/display_dialog_image.c:604
@@ -893,15 +893,15 @@ msgstr ""
 
 #: ide/functions/dialog/display_dialog_image.c:168
 msgid "Links"
-msgstr ""
+msgstr "Collegamenti"
 
 #: ide/functions/dialog/display_dialog_image.c:192
 msgid "Layer width:"
-msgstr ""
+msgstr "Larghezza del layer:"
 
 #: ide/functions/dialog/display_dialog_image.c:202
 msgid "Layer height:"
-msgstr ""
+msgstr "Altezza del layer:"
 
 #: ide/functions/dialog/display_dialog_mouse.c:179
 msgid "Mouse click type: "
@@ -963,7 +963,7 @@ msgstr "Nome livello: "
 
 #: ide/functions/dialog/display_dialog_text.c:246
 msgid "Font face: "
-msgstr ""
+msgstr "Tipo di carattere: "
 
 #: ide/functions/dialog/display_dialog_text.c:252
 #: ide/functions/menu/menu_edit_preferences.c:200
@@ -1144,7 +1144,7 @@ msgstr "Esportazione in Flash disabilitata: Nessun progetto caricato"
 
 #: ide/functions/draw_timeline.c:66
 msgid "Could not regenerate the time line widget."
-msgstr ""
+msgstr "Impossibile rigenerare la linea del tempo."
 
 #: ide/functions/export/html/export_html_wrapper.c:65
 msgid "Export Html"
@@ -1187,18 +1187,18 @@ msgstr "Non posso creare il file di destinazione."
 
 #: ide/functions/export/html/export_html_wrapper.c:201
 msgid "Wrote html wrapper"
-msgstr ""
+msgstr "Scrivi l'involucro HTML"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:397
 #: ide/functions/export/swf/export_swf_control_bar.c:411
-#: ide/functions/film_strip/create_film_strip.c:81
+#: ide/functions/film_strip/create_film_strip.c:83
 msgid "Slide"
 msgstr "Diapositiva"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:425
 #, c-format
 msgid "Slide name array Action Script: %s\n"
-msgstr ""
+msgstr "Nome della tabella di dispositive Action Script: %s\n"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:528
 msgid "Restart button pressed, slide counter has been set to:"
@@ -1273,7 +1273,7 @@ msgstr "La variabile '_root.playing'  è impostata a vero."
 
 #: ide/functions/export/swf/export_swf_control_bar.c:896
 msgid "Slide name array is:"
-msgstr ""
+msgstr "Il nome della tabella di diapositive è:"
 
 #: ide/functions/export/swf/export_swf_control_bar.c:980
 msgid "Fast forward button pressed while in last slide, slide counter is:"
@@ -1373,7 +1373,7 @@ msgstr ""
 #: ide/functions/export/swf/export_swf_create_shape.c:462
 #, c-format
 msgid "This mouse cursor layer has an external link: '%s'\n"
-msgstr ""
+msgstr "Questo livello di cursore del mouse ha un link esterno: '%s'\n"
 
 #: ide/functions/export/swf/export_swf_create_shape.c:781
 msgid ""
@@ -1393,6 +1393,8 @@ msgstr "Tipo di livello non conosciuto nell'output swf."
 msgid ""
 "Unable to force locale to C.  Export in non-english locales may not work."
 msgstr ""
+"Impossibile forzare i parametri locali a C. L'esportazione dei parametri in "
+"formato non-anglofono può non funzionare."
 
 #: ide/functions/export/swf/export_swf_inner.c:118
 msgid "Unknown output resolution selected for swf export."
@@ -1400,11 +1402,11 @@ msgstr "Risoluzione per l'esportazione swf sconosciuta."
 
 #: ide/functions/export/swf/export_swf_inner.c:144
 msgid "Scaled height ratio"
-msgstr ""
+msgstr "Rapporto d'altezza scalato"
 
 #: ide/functions/export/swf/export_swf_inner.c:145
 msgid "Scaled width ratio"
-msgstr ""
+msgstr "Rapporto di larghezza scalato"
 
 #: ide/functions/export/swf/export_swf_inner.c:155
 msgid "Number of slides"
@@ -1530,6 +1532,8 @@ msgstr "Errore nell'apertura del file audio di mouse click."
 msgid ""
 "Something went wrong when loading the image for conversion to a swf shape"
 msgstr ""
+"Un errore è sopraggiunto nel caricamento dell'immagine per la conversione in "
+"oggetto swf"
 
 #: ide/functions/export/swf/swf_shape_from_image_file.c:76
 msgid "Something went wrong when encoding an image to png format."
@@ -1554,30 +1558,24 @@ msgstr ""
 msgid "Couldn't allocate memory for a new film strip thumbnail."
 msgstr "Non posso allocare memoria per una nuova sequenza di anteprime."
 
-#: ide/functions/film_strip/film_strip_slide_clicked.c:75
-#, c-format
-msgid "Invalid iter! No layer selected when changing slide!\n"
-msgstr ""
-"Iter non valido! Nessun livello selezionato durante il cambiamento della "
-"diapositiva!\n"
-
-#: ide/functions/film_strip/film_strip_slide_clicked.c:109 ide/salasaga.c:581
+#: ide/functions/film_strip/film_strip_slide_clicked.c:106 ide/salasaga.c:581
 msgid "Ready"
 msgstr "Pronto"
 
 #: ide/functions/gtk_text_buffer_duplicate.c:87
 #: ide/functions/save/save_layer.c:355
 msgid "Could not convert unicode character from ucs4 to utf8."
-msgstr ""
+msgstr "Impossibile convertire il carattere unicode da ucs4 ad utf8."
 
 #: ide/functions/gtk_text_buffer_duplicate.c:96
 #: ide/functions/save/save_layer.c:364
 msgid "Invalid unicode character found in text."
-msgstr ""
+msgstr "Carattere unicode non valido trovato nel testo."
 
 #: ide/functions/key_bind.c:80
 msgid "Setting Control-Printscreen as the screenshot key didn't work."
 msgstr ""
+"L'impostazione di Ctrl-Stamp come tasto di cattura non ha funzionato."
 
 #: ide/functions/key_bind.c:80
 msgid "You'll have to trigger screenshots from the status bar icon."
@@ -1593,54 +1591,54 @@ msgstr ""
 
 #: ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
-#: ide/functions/layer/layer_edit.c:207
+#: ide/functions/layer/layer_edit.c:211
 #: ide/functions/working_area/calculate_object_boundaries.c:182
-#: ide/functions/working_area/working_area_button_press_event.c:205
+#: ide/functions/working_area/working_area_button_press_event.c:212
 #: ide/functions/working_area/working_area_button_release_event.c:382
 #: ide/functions/working_area/working_area_motion_notify_event.c:365
 msgid "Unknown layer type."
 msgstr "Tipo livello sconosciuto"
 
-#: ide/functions/layer/image_crop.c:118
+#: ide/functions/layer/image_crop.c:122
 msgid "Only Image layers can be cropped."
 msgstr "Solo i livelli immagine possono essere ritagliati."
 
-#: ide/functions/layer/image_crop.c:129
+#: ide/functions/layer/image_crop.c:133
 msgid "Background layers can not be cropped."
 msgstr "I livelli di background non possono essere ritagliati."
 
-#: ide/functions/layer/image_crop.c:138
+#: ide/functions/layer/image_crop.c:142
 msgid "Crop image layer"
 msgstr "Ritaglia livello immagine"
 
-#: ide/functions/layer/image_crop.c:143
+#: ide/functions/layer/image_crop.c:147
 msgid "Left crop: "
 msgstr ""
 
-#: ide/functions/layer/image_crop.c:164
+#: ide/functions/layer/image_crop.c:168
 msgid "Right crop: "
 msgstr ""
 
-#: ide/functions/layer/image_crop.c:185
+#: ide/functions/layer/image_crop.c:189
 msgid "Top crop: "
 msgstr ""
 
-#: ide/functions/layer/image_crop.c:206
+#: ide/functions/layer/image_crop.c:210
 msgid "Bottom crop: "
 msgstr ""
 
-#: ide/functions/layer/image_crop.c:258
+#: ide/functions/layer/image_crop.c:262
 msgid "Those crop values will remove the entire image."
 msgstr ""
 
-#: ide/functions/layer/image_crop.c:258 ide/functions/layer/image_resize.c:208
+#: ide/functions/layer/image_crop.c:262 ide/functions/layer/image_resize.c:208
 #: ide/functions/layer/image_resize.c:212
 #: ide/functions/project_adjust_dimensions.c:175
 #: ide/functions/project_adjust_dimensions.c:179
 msgid "Please try again."
-msgstr ""
+msgstr "Provare di nuovo, per piacere."
 
-#: ide/functions/layer/image_crop.c:287 ide/functions/layer/image_resize.c:252
+#: ide/functions/layer/image_crop.c:291 ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:142
 #: ide/functions/layer/layer_new_image_inner.c:167
 #: ide/functions/menu/menu_screenshots_import.c:274
@@ -1648,7 +1646,7 @@ msgstr ""
 msgid "Couldn't create an image pattern."
 msgstr "Non posso creare un modello immagine."
 
-#: ide/functions/layer/image_crop.c:312
+#: ide/functions/layer/image_crop.c:316
 msgid " Image cropped"
 msgstr " Immagine ritagliata"
 
@@ -1658,15 +1656,15 @@ msgstr ""
 
 #: ide/functions/layer/image_resize.c:124
 msgid "Image width:"
-msgstr ""
+msgstr "Larghezza dell'immagine:"
 
 #: ide/functions/layer/image_resize.c:146
 msgid "Image height:"
-msgstr ""
+msgstr "Altezza dell'immagine:"
 
 #: ide/functions/layer/image_resize.c:168
 msgid "Resize image using:"
-msgstr ""
+msgstr "Ridimensiona l'immagine usando:"
 
 #: ide/functions/layer/image_resize.c:174
 msgid "Nearest neighbor (lowest quality)"
@@ -1674,7 +1672,7 @@ msgstr ""
 
 #: ide/functions/layer/image_resize.c:175
 msgid "Tiled"
-msgstr ""
+msgstr "Affiancato"
 
 #: ide/functions/layer/image_resize.c:176
 msgid "Bilinear (default)"
@@ -1682,26 +1680,30 @@ msgstr ""
 
 #: ide/functions/layer/image_resize.c:177
 msgid "Hyperbolic (best quality for photos)"
-msgstr ""
+msgstr "Iperbolico (la migliore qualità per le foto)"
 
 #: ide/functions/layer/image_resize.c:208
 msgid ""
 "Those adjustment values would make the image smaller than the minimum "
 "allowed."
 msgstr ""
+"Questi valori d'aggiustamento renderebbero l'immagine più piccola del minimo "
+"consentito."
 
 #: ide/functions/layer/image_resize.c:212
 msgid ""
 "Those adjustment values would make the image larger than the maximum allowed."
 msgstr ""
+"Questi valori d'aggiustamento renderebbero l'immagine più larga del massimo "
+"consentito."
 
 #: ide/functions/layer/image_resize.c:231
 msgid "Image layer resize skipped"
-msgstr ""
+msgstr "Ridimensionamento del livello immagine saltato"
 
 #: ide/functions/layer/image_resize.c:271
 msgid "Image layer resized"
-msgstr ""
+msgstr "Livello immagine ridimensionato"
 
 #: ide/functions/layer/layer_copy.c:69
 msgid " Copy failed"
@@ -1711,7 +1713,7 @@ msgstr " Copia fallita"
 msgid " Layer copied to buffer"
 msgstr " Livello copiato sul buffer"
 
-#: ide/functions/layer/layer_delete.c:110
+#: ide/functions/layer/layer_delete.c:114
 msgid " Layer deleted"
 msgstr " Livello cancellato"
 
@@ -1745,27 +1747,27 @@ msgstr ""
 msgid "Unknown layer type when duplicating layer."
 msgstr "Tipo livello sconosciuto durante la duplicazione dei livelli."
 
-#: ide/functions/layer/layer_edit.c:93
+#: ide/functions/layer/layer_edit.c:97
 msgid "Edit background color"
 msgstr "Modifica il colore di sfondo"
 
-#: ide/functions/layer/layer_edit.c:110
+#: ide/functions/layer/layer_edit.c:114
 msgid "Edit image layer"
 msgstr "Modifica livello immagine"
 
-#: ide/functions/layer/layer_edit.c:134
+#: ide/functions/layer/layer_edit.c:138
 msgid "Edit mouse pointer"
 msgstr "Modifica puntatore del mouse"
 
-#: ide/functions/layer/layer_edit.c:159
+#: ide/functions/layer/layer_edit.c:163
 msgid "Edit text layer"
 msgstr "Modifica livello testo"
 
-#: ide/functions/layer/layer_edit.c:184
+#: ide/functions/layer/layer_edit.c:188
 msgid "Edit highlight layer"
 msgstr "Modifica livello evidenziazione"
 
-#: ide/functions/layer/layer_edit.c:223
+#: ide/functions/layer/layer_edit.c:227
 msgid " Layer edited"
 msgstr " Livello modificato"
 
@@ -1773,15 +1775,15 @@ msgstr " Livello modificato"
 msgid "Unknown layer type when destroying a layer."
 msgstr "Tipo livello sconosciuto durante la distruzione di un livello."
 
-#: ide/functions/layer/layer_move_down.c:106
+#: ide/functions/layer/layer_move_down.c:110
 msgid " Layer moved down"
 msgstr " Livello spostato in basso"
 
-#: ide/functions/layer/layer_move_up.c:112
+#: ide/functions/layer/layer_move_up.c:116
 msgid " Layer moved up"
 msgstr " Livello spostato in alto"
 
-#: ide/functions/layer/layer_new_highlight.c:63
+#: ide/functions/layer/layer_new_highlight.c:67
 msgid " Please draw the new layer"
 msgstr " Per piacere disegna il nuovo livello"
 
@@ -1801,11 +1803,11 @@ msgstr "_self"
 msgid " Highlight layer added"
 msgstr " Livello evidenziazione aggiunto"
 
-#: ide/functions/layer/layer_new_image.c:63
-#: ide/functions/layer/layer_new_mouse.c:63
-#: ide/functions/layer/layer_new_text.c:63
+#: ide/functions/layer/layer_new_image.c:67
+#: ide/functions/layer/layer_new_mouse.c:67
+#: ide/functions/layer/layer_new_text.c:67
 msgid " Please click the insertion point"
-msgstr ""
+msgstr " Per piacere cliccare sul punto di inserimento"
 
 #: ide/functions/layer/layer_new_image_inner.c:106
 msgid "Please choose an image file"
@@ -2038,7 +2040,7 @@ msgstr "/Livello/Agiungi _Evidenziazione"
 
 #: ide/functions/menu/create_menu_bar.c:139
 msgid "/Layer/Add _Image"
-msgstr ""
+msgstr "/Livello/Aggiungi _Immagine"
 
 #: ide/functions/menu/create_menu_bar.c:140
 msgid "/Layer/Add _Mouse"
@@ -2066,7 +2068,7 @@ msgstr "<control><shift>F"
 
 #: ide/functions/menu/create_menu_bar.c:147
 msgid "/Export/_Html Wrapper"
-msgstr ""
+msgstr "/Esporta/_Html Wrapper"
 
 #: ide/functions/menu/create_menu_bar.c:148
 msgid "/Export/_Slide as Image"
@@ -2182,7 +2184,7 @@ msgstr ""
 
 #: ide/functions/menu/menu_edit_preferences.c:243
 msgid "points"
-msgstr ""
+msgstr "punti"
 
 #: ide/functions/menu/menu_edit_preferences.c:249
 msgid "Default text layer text foreground color: "
@@ -2196,7 +2198,7 @@ msgstr ""
 #: ide/functions/menu/menu_edit_preferences.c:282
 #: ide/functions/menu/menu_edit_preferences.c:344
 msgid "seconds"
-msgstr ""
+msgstr "secondi"
 
 #: ide/functions/menu/menu_edit_preferences.c:274
 msgid "Default Layer Duration"
@@ -2308,17 +2310,17 @@ msgstr ""
 #: ide/functions/menu/menu_edit_preferences.c:645
 #, c-format
 msgid "An error '%s' occurred when opening the lock file '%s' for writing."
-msgstr ""
+msgstr "Errore '%s' nell'apertura in scrittura del file bloccato  '%s'."
 
 #: ide/functions/menu/menu_edit_preferences.c:665
 #, c-format
 msgid "An error '%s' occurred when writing data to the lock file '%s'."
-msgstr ""
+msgstr "Errore '%s' nella scrittura dei dati sul file bloccato '%s'."
 
 #: ide/functions/menu/menu_edit_preferences.c:684
 #, c-format
 msgid "An error '%s' occurred when closing the lock file '%s'."
-msgstr ""
+msgstr "Errore '%s' nella chiusura del file bloccato '%s'."
 
 #: ide/functions/menu/menu_edit_preferences.c:721
 msgid " Application preferences updated"
@@ -2477,11 +2479,11 @@ msgstr "Progetto Flame (*.flame)"
 
 #: ide/functions/menu/menu_file_open.c:277
 msgid "Project loaded"
-msgstr ""
+msgstr "Progetto caricato"
 
 #: ide/functions/menu/menu_file_open.c:277
 msgid "slides"
-msgstr ""
+msgstr "diapositive"
 
 #: ide/functions/menu/menu_file_save.c:87
 #: ide/functions/menu/menu_file_save.c:228
@@ -2506,11 +2508,11 @@ msgstr "Errore nella creazione del container delle preferenze."
 
 #: ide/functions/menu/menu_file_save.c:160
 msgid "Error creating the start behavior value."
-msgstr ""
+msgstr "Errore nella creazione del valore iniziale del comportamento."
 
 #: ide/functions/menu/menu_file_save.c:180
 msgid "Error creating the end behavior value."
-msgstr ""
+msgstr "Errore nella creazione del valore finale del comportamento."
 
 #: ide/functions/menu/menu_file_save.c:208
 msgid "Error creating the text tag container."
@@ -2544,6 +2546,19 @@ msgid ""
 "License along with this program.  If not, see\n"
 "http://www.gnu.org/licenses/."
 msgstr ""
+"Questo è un programma libero: lo puoi ridistribuire e/o modificare\n"
+"nei termini della GNU Lesser General Public License come\n"
+"pubblicato dalla Free Software Foundation, versione 3 della\n"
+"Licenza, oppure qualunque versione successiva, secondo le tue preferenze.\n"
+"\n"
+"Questo programma è distribuito nella speranza che possa essere utile,\n"
+"ma SENZA ALCUNA GARANZIA; anche senza nessuna garanzia di\n"
+"commerciabilità e utilizzabilità per un particolare scopo. Si veda la \n"
+"GNU Lesser General Public License per maggiori dettagli.\n"
+"\n"
+"Dovresti aver ricevuto una copia della GNU Lesser General Public\n"
+"License assieme a questo programma. In caso contrario, vai al link \n"
+"http://www.gnu.org/licenses/."
 
 #: ide/functions/menu/menu_help_about.c:77
 #, c-format
@@ -2628,7 +2643,7 @@ msgstr ""
 
 #: ide/functions/menu/menu_project_properties.c:232
 msgid "Display SWF control bar: "
-msgstr ""
+msgstr "Mostra la barra di controllo SWF: "
 
 #: ide/functions/menu/menu_project_properties.c:247
 msgid "Display SWF information button: "
@@ -3435,12 +3450,13 @@ msgstr ""
 #: ide/functions/read/read_project.c:909
 msgid ""
 "There was something wrong with a slide name value in the project file."
-msgstr ""
+msgstr "Errore nel nome di una diapositiva nel file del progetto."
 
 #: ide/functions/read/read_project.c:928
 msgid ""
 "There was something wrong with a slide duration value in the project file."
 msgstr ""
+"Errore nel valore della durata di una diapositiva nel file del progetto."
 
 #: ide/functions/read/read_project.c:967
 msgid "Aborting load of project file."
@@ -3474,12 +3490,12 @@ msgstr ""
 
 #: ide/functions/read/read_text_layer.c:477
 msgid "There was something wrong with a font size value in the project file."
-msgstr ""
+msgstr "Errore nella dimensione di un carattere nel file del progetto."
 
 #: ide/functions/save_preferences_and_exit.c:196
 #: ide/functions/save_preferences_and_exit.c:216
 msgid "Saving preferences in the registry failed."
-msgstr ""
+msgstr "Il salvataggio delle preferenze nel registro è fallito."
 
 #: ide/functions/save/save_layer.c:96
 msgid "Error creating the layer elements."
@@ -3531,36 +3547,37 @@ msgstr ""
 
 #: ide/functions/slide/slide_duration.c:80
 msgid "Slide duration: "
-msgstr ""
+msgstr "Durata della diapositiva: "
 
 #: ide/functions/slide/slide_duration.c:115
 msgid ""
 "There was something wrong with the slide duration value.  Please try again."
 msgstr ""
+"Errore nel valore della durata della diapositiva. Per piacere prova di nuovo."
 
 #: ide/functions/slide/slide_duration.c:200
 msgid " Slide properties updated"
-msgstr ""
+msgstr " Proprietà della diapositiva aggiornate"
 
 #: ide/functions/slide/slide_insert.c:117
 msgid " Slide added"
-msgstr ""
+msgstr " Diapositiva aggiunta"
 
 #: ide/functions/slide/slide_move_bottom.c:94
 msgid " Slide moved to bottom"
-msgstr ""
+msgstr " Diapositiva spostata alla base"
 
 #: ide/functions/slide/slide_move_down.c:99
 msgid " Slide moved down"
-msgstr ""
+msgstr " Diapositiva spostata in basso"
 
 #: ide/functions/slide/slide_move_top.c:92
 msgid " Slide moved to top"
-msgstr ""
+msgstr " Diapositiva spostata in cima"
 
 #: ide/functions/slide/slide_move_up.c:97
 msgid " Slide moved up"
-msgstr ""
+msgstr " Diapositiva spostata in alto"
 
 #: ide/functions/status_icon/create_status_icon.c:55
 msgid "Salasaga - Not yet capturing"
@@ -3568,15 +3585,15 @@ msgstr ""
 
 #: ide/functions/status_icon/status_icon_popup.c:62
 msgid "Restore window"
-msgstr ""
+msgstr "Ripristina la finestra"
 
 #: ide/functions/status_icon/status_icon_popup.c:68
 msgid "Minimize window"
-msgstr ""
+msgstr "Minimizza la finestra"
 
 #: ide/functions/status_icon/status_icon_popup.c:76
 msgid "Take Screenshot"
-msgstr ""
+msgstr "Cattura schermata"
 
 #: ide/functions/validate_value.c:713 screen_capture/validate_value.c:576
 msgid "Unknown value passed to validation function"
@@ -3664,7 +3681,7 @@ msgstr "Modalità debugging, gli errori saranno visualizzati sullo stdout.\n"
 #: ide/salasaga.c:342
 #, c-format
 msgid "Program path: '%s'\n"
-msgstr ""
+msgstr "Percorso del programma: '%s'\n"
 
 #: ide/salasaga.c:343
 #, c-format
@@ -3866,7 +3883,7 @@ msgstr ""
 
 #: ide/valid_fields.h:43
 msgid "Font size"
-msgstr "Dimensione font"
+msgstr "Dimensione dei caratteri"
 
 #: ide/valid_fields.h:44
 msgid "A frame number"
@@ -3930,7 +3947,7 @@ msgstr ""
 
 #: ide/valid_fields.h:59
 msgid "Opacity level"
-msgstr ""
+msgstr "Livello d'opacità"
 
 #: ide/valid_fields.h:60
 msgid "Width of film strip thumbnails"
