@@ -1,10 +1,11 @@
-2009-??-?? - JustinClift
+2009-12-28 - JustinClift
 
  Alpha 6
  *******
  
- * The control bar in swf output is much better looking, now finally of acceptable quality.
+ * Added a status bar icon, with a right click menu for taking screenshots and various actions.
  * The default width and height for new projects is whatever width and height was last used.
+ * The control bar in swf output is much better looking, now finally of acceptable quality.
  * The user is now always given the option to Cancel in the application quit dialog.
  * Layers can now be moved both partially or completely off the visible slide area.
  * Added a "screenshot delay" preference, in seconds, which can range from 0 to 60.
@@ -12,17 +13,50 @@
  * Swapped the ordering of the Cancel and OK buttons.  Launchpad bug # 301070.
  * Added an additional output resolution 600x400, requested by Guy Rageot.
  * Visual notification messages are now shown when screenshots are taken.
+ * Pressing the delete key while a slide or layer is selected deletes it.
  * Removed support for loading extremely old project file formats (<4.0).
- * Added a status bar icon, with a right click menu for various actions.
+ * Slides in the film strip can be reordered by dragging with the mouse.
  * Updated the text layer dialog to display with the chosen attributes.
+ * The Control-Printscreen screenshot key is now set for Compiz users.
  * Rounded the corners of text boxes, both onscreen and in swf output.
  * Several minor improvements for the time line area.
  * Added a title bar icon.  Launchpad bug # 361019.
  * Text layers can now be any of the DejaVu fonts.
  * Centered selected slide in the workspace area.
+ * Updated to include DejaVu release 2.30. 
  * Added a dependency on libnotify.
- * Updated to work on Centos 5.3.
- * Minor bug fixes.
+ * Updated to work on Centos 5.3/5.4.
+ * Numerous minor bug fixes.
+
+   Plus many translations, due to the hard work and many hours of effort of translators:
+ 
+   Language                         % complete       Translators
+   ********                         **********       ***********
+ 
+   French (fr)                          100%         Arnaud Bonatti, Philippe DUBRULLE, Pierre Couillard
+   Greek (el)                           100%         Yannis Kaskamanidis
+   Spanish (es)                         100%         Javier Bolaños, Luis Díaz, Maxwell Draven (Ravenman)
+   English (Australia) (en_AU)          100%         Justin Clift (me)
+   English (United Kingdom) (en_GB)     100%         Justin Clift (me), Matthew Gall
+   Galician (gl)                         97%         Manuel Meixide
+   Filipino (fil)                        87%         Kezia Lounel Badulid
+   Bulgarian (bg)                        76%         Anton Kerezov (Dilomo), Svetoslav Stefanov
+   Italian (it)                          72%         Gerry Sicignano (Cercatore), Carlo Stemberger (Stemby)
+   Portuguese (pt)                       60%         Carlos Fernando Martins
+   Brazilian Portuguese (pt_BR)          29%         Cristiano Bernardo, Rafael Porto Rodrigues, Vagner K. Dos Santos, Victor Westmann
+   Russian (ru)                          25%         Andrew Sidun
+   Romanian (ro)                         20%         Doru Horișco
+   Arabic (ar)                           11%         عبد الله شلي (Abdellah Chelli)
+   Chinese (Simplified) (zh_CN)           7%         Chen Ming
+   Turkish (tr)                           5%         "linuxseven"
+   Catalan (ca)                           2%         Vicent Cubells
+   Norwegian Bokmal (nb)                 <1%         Olav Horpestad
+
+   Bugs fixed in this release
+   **************************
+
+   Bug # 301070 -
+   Bug # 361019 -
 
 
 2009-02-14 - JustinClift
