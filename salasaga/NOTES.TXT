@@ -19,6 +19,22 @@ $ pkg-config gtk+-2.0 --libs
 
 ***********
 
+The FDB format font outlines were created using this process.
+
+a) Convert the TTF files to FFT with "ttf2fft" from:
+
+   https://sourceforge.net/projects/ming/files/ming/ttf2fft/ttf2fft-1.0.tar.bz2/download
+  
+   It needs patching to work with Freetype 2.2+:
+
+   http://reddog.s35.xrea.com/wiki/ttf2fft%20patch%20for%20freetype2.2.html
+
+b) Convert the FFT files to FDB format with "makefdb", included in the Ming utils folder.
+
+   I used the one with Ming 0.4.2 for FDB files included with the the 0.8.0-alpha6 release. 
+
+***********
+
 I18n notes
 
  "gettextize" version 0.17 was used to prepare the m4, po and intl directories.
