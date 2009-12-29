@@ -1,7 +1,7 @@
-2009-12-28 - JustinClift
+2010-01-01 - JustinClift
 
- Alpha 6
- *******
+ 0.8.0-Alpha 6 Release
+ *********************
  
  * Added a status bar icon, with a right click menu for taking screenshots and various actions.
  * The default width and height for new projects is whatever width and height was last used.
@@ -55,8 +55,14 @@
    Bugs fixed in this release
    **************************
 
-   Bug # 301070 -
-   Bug # 361019 -
+   Bug # 246774 - Layer transition info not being kept
+   Bug # 301070 - OK and Cancel need to be switched about
+   Bug # 301072 - Option to scale project to screenshot size
+   Bug # 315731 - Crash/image distortion on changing the zoom level
+   Bug # 361019 - no icons for all windows of salasaga
+   Bug # 480491 - Some characters not being displayed correctly in the working area
+   Bug # 492388 - Cannot edit new text
+   Bug # 493312 - Cannot use keyboard to delete layer
 
 
 2009-02-14 - JustinClift
