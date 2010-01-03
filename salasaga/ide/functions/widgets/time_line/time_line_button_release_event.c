@@ -67,7 +67,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 	layer				*this_layer_data;			// Data for the presently selected layer
 	slide				*this_slide_data;			// Data for the presently selected slide
 	TimeLine			*this_time_line;
-	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
+	GList				*tmp_glist = NULL;			// Is given a list of child widgets, if any exist
 
 
 	// Safety check

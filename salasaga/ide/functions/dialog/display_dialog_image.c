@@ -86,7 +86,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*appearance_table;			//
 	guint				duration_row_counter = 0;	// Used to count which row things are up to
 	GtkWidget			*duration_tab_label;		//
-	GtkWidget			*duration_table;			//
+	GtkWidget			*duration_table = NULL;		//
 	GtkDialog			*image_dialog;				// Widget for the dialog
 	GtkWidget			*notebook_widget;			//
 
@@ -112,34 +112,34 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 	// * Duration tab fields *
 
 	GtkWidget			*x_off_label_start;			// Label widget
-	GtkWidget			*x_off_scale_start;			//
+	GtkWidget			*x_off_scale_start = NULL;	//
 
 	GtkWidget			*y_off_label_start;			// Label widget
-	GtkWidget			*y_off_scale_start;			//
+	GtkWidget			*y_off_scale_start = NULL;	//
 
 	GtkWidget			*x_off_label_finish;		// Label widget
-	GtkWidget			*x_off_scale_finish;		//
+	GtkWidget			*x_off_scale_finish = NULL;	//
 
 	GtkWidget			*y_off_label_finish;		// Label widget
-	GtkWidget			*y_off_scale_finish;		//
+	GtkWidget			*y_off_scale_finish = NULL;	//
 
 	GtkWidget			*start_label;				// Label widget
-	GtkWidget			*start_scale;				//
+	GtkWidget			*start_scale = NULL;		//
 
 	GtkWidget			*duration_label;			// Label widget
-	GtkWidget			*duration_scale;			//
+	GtkWidget			*duration_scale = NULL;		//
 
 	GtkWidget			*label_trans_in_type;		// Transition in type
-	GtkWidget			*selector_trans_in_type;	//
+	GtkWidget			*selector_trans_in_type = NULL;  //
 
 	GtkWidget			*label_trans_in_duration;	// Transition in duration (seconds)
-	GtkWidget			*scale_trans_in_duration;	//
+	GtkWidget			*scale_trans_in_duration = NULL;  //
 
 	GtkWidget			*label_trans_out_type;		// Transition out type
-	GtkWidget			*selector_trans_out_type;	//
+	GtkWidget			*selector_trans_out_type = NULL;  //
 
 	GtkWidget			*label_trans_out_duration;	// Transition out duration (seconds)
-	GtkWidget			*scale_trans_out_duration;	//
+	GtkWidget			*scale_trans_out_duration = NULL;  //
 
 
 	// Initialise some things

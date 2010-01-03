@@ -172,7 +172,7 @@ void save_layer(gpointer element, gpointer user_data)
 			}
 
 			// Store the count of image data bytes in the file for read back verification
-			g_string_printf(tmp_gstring2, "%lu", pixbuf_size);
+			g_string_printf(tmp_gstring2, "%lu", (gulong) pixbuf_size);
 			xmlNewChild(layer_node, NULL, (const xmlChar *) "data_length", (const xmlChar *) tmp_gstring2->str);
 
 			// Base64 encode the image data
