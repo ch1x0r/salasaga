@@ -55,10 +55,10 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	slide				*this_slide_data;			// Data for the presently selected slide
 	TimeLine			*this_time_line;
 	gint				width;
-	gint				x1;
-	gint				x2;
-	gint				y1;
-	gint				y2;
+	gint				x1 = 0;
+	gint				x2 = 0;
+	gint				y1 = 0;
+	gint				y2 = 0;
 
 
 	// Safety check

@@ -109,7 +109,7 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 	xmlChar				*tmp_char;					// Temporary string pointer
 	GList				*tmp_glist;					//
 	GString				*tmp_gstring;				// Temporary GString
-	layer				*tmp_layer;					// Temporary layer
+	layer				*tmp_layer = NULL;			// Temporary layer
 	GdkPixbuf			*tmp_pixbuf;				// Used to convert from a pixmap to a pixbuf
 	GdkPixmap			*tmp_pixmap;				//
 	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar

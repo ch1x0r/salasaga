@@ -67,8 +67,8 @@ gboolean preferences_load()
 	guint				valid_default_fps = 0;		// Receives the new default fps once validated
 	GdkColor			valid_default_text_fg_colour = {0, 0, 0};  // Receives the new default text layer foreground colour once validated
 	gint				valid_default_text_font_face = 0;  // Receives the new default text layer font face once validated
-	gdouble				valid_default_text_font_size;  // Receives the new default text layer font size once validated
-	guint				valid_icon_height;			// Receives the new icon height once validated
+	gdouble				valid_default_text_font_size =0.0;  // Receives the new default text layer font size once validated
+	guint				valid_icon_height = 0;		// Receives the new icon height once validated
 	gfloat				valid_layer_duration = 0;	// Receives the new default layer duration once validated
 	GString				*valid_output_folder;		// Receives the new output folder once validated
 	guint				valid_output_height = 0;	// Receives the new default output height once validated
@@ -77,7 +77,7 @@ gboolean preferences_load()
 	GString				*valid_project_folder;		// Receives the new default project folder once validated
 	guint				valid_project_height = 0;	// Receives the new project height once validated
 	guint				valid_project_width = 0;	// Receives the new project width once validated
-	guint				valid_screenshot_delay;		// Receives the new screenshot delay once validated
+	guint				valid_screenshot_delay = 0;  // Receives the new screenshot delay once validated
 	GString				*valid_screenshot_folder;	// Receives the new screenshot folder once validated
 	gfloat				valid_slide_duration = 0;	// Receives the new default slide duration once validated
 	GString				*valid_zoom_level;			// Receives the new default zoom level once validated

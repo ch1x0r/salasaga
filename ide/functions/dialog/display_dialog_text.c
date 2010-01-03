@@ -63,7 +63,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gint				active_type;				// Used to tell which type of transition is active
 	gint				dialog_height;				// Height of the dialog in pixels
 	gint				dialog_width;				// Width of the dialog in pixels
-	gulong				dump_button_callback;		// ID of the callback handler for dump text layer button
+	gulong				dump_button_callback = 0;	// ID of the callback handler for dump text layer button
 	gulong				entry_duration_callback;	// ID of the callback handler for the entry_duration_widgets
 	gulong				exit_duration_callback;		// ID of the callback handler for the exit_duration_widgets
 	transition_widgets	*entry_duration_widgets;	// Holds points to the entry duration widgets
@@ -154,7 +154,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*visibility_checkbox;		// Layer visibility check box widget
 
 	GtkWidget			*dump_buffer_label;			// Label widget
-	GtkWidget			*dump_buffer_button;		//
+	GtkWidget			*dump_buffer_button = NULL;	//
 
 	// * Duration tab fields *
 

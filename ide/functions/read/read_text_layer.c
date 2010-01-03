@@ -71,7 +71,7 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 	xmlChar				*tmp_xmlChar;				// Temporary xmlChar pointer
 	gboolean			usable_input = TRUE;		// Used as a flag to indicate if all validation was successful
 	gfloat				*validated_gfloat;			// Receives known good gfloat values from the validation function
-	guint				*validated_guint;			// Receives known good guint values from the validation function
+	guint				*validated_guint = NULL;	// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
 

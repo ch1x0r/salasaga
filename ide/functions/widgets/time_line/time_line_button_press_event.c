@@ -64,7 +64,7 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 	slide				*this_slide_data;			// Data for the presently selected slide
 	TimeLine			*this_time_line;
 	gfloat				tl_cursor_pos;				// Holds the position of the cursor in the time line (in seconds)
-	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
+	GList				*tmp_glist = NULL;			// Is given a list of child widgets, if any exist
 
 
 	// Safety check

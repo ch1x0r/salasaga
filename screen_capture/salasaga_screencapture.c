@@ -197,13 +197,13 @@ gint main(gint argc, gchar *argv[])
 	gint				screenshot_delay = 5;		// The number of seconds to delay before triggering a screenshot
 	gboolean			screenshots_exist = FALSE;	// Switch to track if other screenshots already exist
 	GString				*short_file_name;			// Name of the file to save as
-	NotifyNotification	*status_notify;				// Status message
+	NotifyNotification	*status_notify = NULL;		// Status message
 	GString				*suffix;					// Holds the screenshot file suffix
 	gpointer			tmp_ptr;					// Temporary pointer
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	GString				*valid_project_name;		// Receives the project name once validated
 	GString				*valid_screenshot_folder;	// Receives the screenshot folder once validated
-	guint				valid_height;				// Receives the screenshot height once validated
+	guint				valid_height = 0;			// Receives the screenshot height once validated
 	guint				valid_width = 0;			// Receives the screenshot width once validated
 	guint				valid_screenshot_delay = 0;	// Receives the screenshot delay time once validated
 	guint				valid_x_offset = 0;			// Receives the screenshot x offset once validated

@@ -49,7 +49,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 	guint				base_type;
 	guint				capabilities;
 	gboolean			capability_check;
-	gchar				*conversion_buffer;			// Used when converting between unicode character types
+	gchar				*conversion_buffer = NULL;			// Used when converting between unicode character types
 	gchar				*decimal_point;
 	GString				*error_string;
 	gchar				input_char;
