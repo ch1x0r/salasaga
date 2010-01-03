@@ -8,13 +8,13 @@ msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
 "POT-Creation-Date: 2009-12-20 19:23+1100\n"
-"PO-Revision-Date: 2009-12-08 21:01+0000\n"
+"PO-Revision-Date: 2010-01-03 00:43+0000\n"
 "Last-Translator: Manuel Meixide <taurozen@hotmail.com>\n"
 "Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-25 00:32+0000\n"
+"X-Launchpad-Export-Date: 2010-01-03 04:36+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
@@ -1351,6 +1351,7 @@ msgstr "Alto escalado: %d\n"
 msgid ""
 "Something went wrong when creating the dictionary shape for an image layer."
 msgstr ""
+"Houbo algo errado ao crear a forma de dicionario para unha capa da imaxe."
 
 #: ide/functions/export/swf/export_swf_create_shape.c:188
 msgid "Something went wrong when encoding an image to required format."
@@ -1674,54 +1675,55 @@ msgstr " Imaxe recortada"
 
 #: ide/functions/layer/image_resize.c:119
 msgid "Resize image layer"
-msgstr ""
+msgstr "Redimensionar a capa da imaxe"
 
 #: ide/functions/layer/image_resize.c:124
 msgid "Image width:"
-msgstr ""
+msgstr "Anchura da imaxe:"
 
 #: ide/functions/layer/image_resize.c:146
 msgid "Image height:"
-msgstr ""
+msgstr "Altura da imaxe"
 
 #: ide/functions/layer/image_resize.c:168
 msgid "Resize image using:"
-msgstr ""
+msgstr "Redimensionar a imaxe usando:"
 
 #: ide/functions/layer/image_resize.c:174
 msgid "Nearest neighbor (lowest quality)"
-msgstr ""
+msgstr "Veciña máis próxima (menor calidade)"
 
 #: ide/functions/layer/image_resize.c:175
 msgid "Tiled"
-msgstr ""
+msgstr "En mosaico"
 
 #: ide/functions/layer/image_resize.c:176
 msgid "Bilinear (default)"
-msgstr ""
+msgstr "Bilinear (por defecto)"
 
 #: ide/functions/layer/image_resize.c:177
 msgid "Hyperbolic (best quality for photos)"
-msgstr ""
+msgstr "Hiperbolica (mellor calidade para fotos)"
 
 #: ide/functions/layer/image_resize.c:208
 msgid ""
 "Those adjustment values would make the image smaller than the minimum "
 "allowed."
 msgstr ""
+"Eses valores de axuste farían a imaxe máis pequena co mínimo permitido."
 
 #: ide/functions/layer/image_resize.c:212
 msgid ""
 "Those adjustment values would make the image larger than the maximum allowed."
-msgstr ""
+msgstr "Eses valores de axuste farían a imaxe maior co máximo permitido."
 
 #: ide/functions/layer/image_resize.c:231
 msgid "Image layer resize skipped"
-msgstr ""
+msgstr "O redimensionamento da capa de imaxe foi ignorado"
 
 #: ide/functions/layer/image_resize.c:271
 msgid "Image layer resized"
-msgstr ""
+msgstr "A capa de imaxe foi redimensionada"
 
 #: ide/functions/layer/layer_copy.c:69
 msgid " Copy failed"
@@ -2896,6 +2898,8 @@ msgid ""
 " Wrote capture settings file - %s - and installed Control-Printscreen "
 "keyboard hook"
 msgstr ""
+" Escrito o arquivo de configuración de captura -%s- e instalado o gancho de "
+"teclado Control-Printscreen"
 
 #: ide/functions/menu/menu_screenshots_import.c:117
 msgid "Something went wrong opening the screenshots folder."
@@ -3732,19 +3736,19 @@ msgstr "Erro ao crear o nó de diapositivas."
 
 #: ide/functions/save/save_text_tags.c:66
 msgid "Error creating the size tags container."
-msgstr ""
+msgstr "Erro ao crear o recipiente de etiquetas de tamaño."
 
 #: ide/functions/save/save_text_tags.c:80
 msgid "Error creating a text tag node."
-msgstr ""
+msgstr "Erro ao crear o nodo de etiquetas de texto."
 
 #: ide/functions/save/save_text_tags.c:105
 msgid "Error creating the foreground color tags container."
-msgstr ""
+msgstr "Erro ao crear o recipiente de etiquetas de cor do primeiro plano."
 
 #: ide/functions/save/save_text_tags.c:119
 msgid "Error creating a foreground color tag node."
-msgstr ""
+msgstr "Erro ao crear o nodo de etiquetas de cor do primeiro plano."
 
 #: ide/functions/slide/slide_delete.c:63
 msgid "You must leave at least one slide in a project."
@@ -3820,12 +3824,12 @@ msgstr "Non se puido recrear a imaxe de fondo para a liña de tempo."
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:148
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:200
 msgid "Couldn't recreate time line display buffer."
-msgstr ""
+msgstr "Non se puido recrear o amortecedor de pantalla da liña de tempo."
 
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:157
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:209
 msgid "Couldn't redraw the time line layer information."
-msgstr ""
+msgstr "Non se puido redeseñar a información da capa da liña de tempo."
 
 #: ide/functions/widgets/time_line/time_line_button_release_event.c:281
 msgid " Resize completed"
@@ -3843,6 +3847,7 @@ msgstr "Non se puido crear a imaxe de fondo para a liña de tempo."
 #: ide/functions/widgets/time_line/time_line_internal_initialise_display_buffer.c:107
 msgid "Couldn't create the time line display buffer image."
 msgstr ""
+"Non se puido crear a imaxe do amortecedor de pantalla da liña de tempo."
 
 #: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:398
 #: ide/functions/widgets/time_line/time_line_internal_widget_motion_notify_handler.c:509
@@ -4155,7 +4160,7 @@ msgstr "Clic do rato"
 
 #: ide/valid_fields.h:58
 msgid "Characters in a text layer"
-msgstr ""
+msgstr "Caracteres dunha capa de texto"
 
 #: ide/valid_fields.h:59
 msgid "Opacity level"
