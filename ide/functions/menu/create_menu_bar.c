@@ -49,6 +49,8 @@
 #include "../layer/layer_new_text.h"
 #include "../layer/layer_paste.h"
 #include "../menu/menu_edit_preferences.h"
+#include "../menu/menu_edit_redo.h"
+#include "../menu/menu_edit_undo.h"
 #include "../menu/menu_enable.h"
 #include "../menu/menu_export_swf.h"
 #include "../menu/menu_export_layer.h"
@@ -106,6 +108,9 @@ void create_menu_bar()
 		{_("/File/_Quit"),				_("<control>Q"),		save_preferences_and_exit,		0,	"<Item>"},
 
 		{_("/_Edit"),					NULL,					NULL,							0,	"<Branch>"},
+		{_("/Edit/_Undo"),				_("<control>Z"),		menu_edit_undo,					0,	"<Item>"},
+		{_("/Edit/_Redo"),				_("<control>Y"),		menu_edit_redo,					0,	"<Item>"},
+		{_("/Edit/Sep"),				NULL,					NULL,							0,	"<Separator>"},
 		{_("/Edit/_Preferences"),		NULL,					menu_edit_preferences,			0,	"<Item>"},
 
 		{_("/_Screenshots"),			NULL,					NULL,							0,	"<Branch>"},

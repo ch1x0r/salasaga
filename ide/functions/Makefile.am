@@ -81,6 +81,8 @@ salasaga_SOURCES = create_resolution_selector.c \
 	layer/layer_paste.c \
 	menu/create_menu_bar.c \
 	menu/menu_edit_preferences.c \
+	menu/menu_edit_redo.c \
+	menu/menu_edit_undo.c \
 	menu/menu_enable.c \
 	menu/menu_export_swf.c \
 	menu/menu_export_layer.c \
