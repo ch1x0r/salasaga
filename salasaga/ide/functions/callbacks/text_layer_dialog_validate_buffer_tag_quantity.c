@@ -4,7 +4,7 @@
  * Salasaga: Function called after the tags in a text layer text buffer is changed, to double check the
  *           correct number of tags are present (should be 3 present for each character)
  *
- * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  * 

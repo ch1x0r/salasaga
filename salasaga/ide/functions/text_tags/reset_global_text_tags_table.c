@@ -3,7 +3,7 @@
  *
  * Salasaga: Resets the global text tab table, freeing all of the font size and foreground colour text tags
  *
- * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *

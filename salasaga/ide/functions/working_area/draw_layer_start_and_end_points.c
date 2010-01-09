@@ -3,7 +3,7 @@
  *
  * Salasaga: Draws the start and end points for a layer
  *
- * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *

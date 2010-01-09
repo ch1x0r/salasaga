@@ -3,7 +3,7 @@
  *
  * Salasaga: Draw the layer information onto the display buffer
  *
- * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *

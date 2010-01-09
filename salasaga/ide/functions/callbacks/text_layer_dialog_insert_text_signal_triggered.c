@@ -3,7 +3,7 @@
  *
  * Salasaga: Functions called when the "insert-text" signal is triggered in a text layer text view widget
  *
- * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *
