@@ -35,9 +35,11 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../undo_redo/undo_functions.h"
 
 
 void menu_edit_redo(void)
 {
-	// Stub function
+	// Replay the last item in the undo history
+	undo_next_history_item();
 }

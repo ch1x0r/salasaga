@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Salasaga:
+ * Salasaga: Functions for Salasaga's undo and redo history
  * 
  * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
  *
@@ -43,22 +43,32 @@
 
 // Variables common to several undo/redo functions
 static GList			*undo_history = NULL;
-gint					undo_cursor = 0;		// Tracks the present position in the undo history list
+static gint				undo_cursor = 0;			// Tracks the present position in the undo history list
 
 
 // Add an undo item to the undo history
 gint undo_add_item(gint undo_type, gpointer undo_data)
 {
 	// Local variables
-	undo_item			*new_item = NULL;
+	gint				loop_counter;				// Simple counter used in loops
+	undo_history_item	*new_item = NULL;
+	gint				num_items;					// The number of items in the undo history
+	GList				*this_item;
 
 
 	// Remove any undo history items that are after the present cursor position
-// Fixme1:  Needs to be written
+	num_items = g_list_length(undo_history);
+	for (loop_counter = num_items; loop_counter > undo_cursor; loop_counter--)
+	{
+		// Remove the undo history item we're pointing to
+		this_item = g_list_nth(undo_history, loop_counter - 1);
 
+		// fixme5: We should properly free the memory used by the link history items before unlinking them
+		undo_history = g_list_delete_link(undo_history, this_item);
+	}
 
 	// Create the undo item
-	new_item = g_new0(undo_item, 1);
+	new_item = g_new0(undo_history_item, 1);
 	new_item->undo_type = undo_type;
 	new_item->undo_data = undo_data;
 
@@ -77,9 +87,10 @@ gint undo_add_item(gint undo_type, gpointer undo_data)
 gint undo_last_history_item(void)
 {
 	// Local variables
-	layer				*layer_pointer;			// Points to layer items in undo history
-	GString				*message;				// Temporary string used for message creation
-	undo_data			*undo_data;
+	layer				*layer_pointer;				// Points to layer items in undo history
+	GString				*message;					// Temporary string used for message creation
+	undo_history_item	*undo_item;					// Points to the undo history item we're working with
+	undo_history_data	*undo_data;
 	gint				undo_type;
 
 
@@ -87,26 +98,19 @@ gint undo_last_history_item(void)
 	message = g_string_new(NULL);
 
 	// Determine which undo item type we're being called with, as each type is handled differently
-	undo_history = g_list_last(undo_history);
-	undo_data = ((undo_item *) undo_history->data)->undo_data;
-	undo_type = ((undo_item *) undo_history->data)->undo_type;
+	undo_item = g_list_nth_data(undo_history, undo_cursor - 1);
+	undo_data = undo_item->undo_data;
+	undo_type = undo_item->undo_type;
 	switch (undo_type)
 	{
 		case UNDO_CHANGE_HIGHLIGHT_SIZE:
-
-			// We're working with a change in highlight layer size
-printf("The size of a highlight layer is being undone\n");
-
-			// Change the highlight layer size to the value stored in the undo item
+			// Change the highlight layer size to the old value stored in the undo item
 			layer_pointer = undo_data->layer_pointer;
 			((layer_highlight *) layer_pointer->object_data)->height = undo_data->old_highlight_height;
 			((layer_highlight *) layer_pointer->object_data)->width = undo_data->old_highlight_width;
-
 			break;
 
-
 		default:
-
 			// Unknown type of undo item.  Let the user know then return
 			g_string_printf(message, "%s ED459: %s", _("Error"), _("Programming error.  The Undo/Redo functions were called with an unknown undo type."));
 			display_warning(message->str);
@@ -117,20 +121,14 @@ printf("The size of a highlight layer is being undone\n");
 	// Move the undo cursor back one item
 	undo_cursor--;
 
+	// Enable the Edit -> Redo option
+	menu_enable(_("/Edit/Redo"), TRUE);
+
 	// If we're at the start of the undo history we can't undo any further
 	if (0 == undo_cursor)
 	{
 		menu_enable(_("/Edit/Undo"), FALSE);
 	}
-/*
-	// If the undo history list is empty we disable the Edit -> Undo and Edit -> Redo menu bar options
-	undo_history = g_list_first(undo_history);
-	if (0 == g_list_length(undo_history))
-	{
-		menu_enable(_("/Edit/Redo"), FALSE);
-		menu_enable(_("/Edit/Undo"), FALSE);
-	}
-*/
 
 	// Redraw the workspace
 	draw_workspace();
@@ -146,6 +144,75 @@ printf("The size of a highlight layer is being undone\n");
 
 	// Use the status bar to give further feedback to the user
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Last action undone"));
+	gdk_flush();
+
+	return TRUE;
+}
+
+
+// Redo the last item in the undo history
+gint undo_next_history_item(void)
+{
+	// Local variables
+	layer				*layer_pointer;				// Points to layer items in undo history
+	GString				*message;					// Temporary string used for message creation
+	gint				num_items;					// The number of items in the undo history
+	undo_history_item	*undo_item;					// Points to the undo history item we're working with
+	undo_history_data	*undo_data;
+	gint				undo_type;
+
+
+	// Initialisation
+	message = g_string_new(NULL);
+
+	// Determine which undo item type we're being called with, as each type is handled differently
+	undo_item = g_list_nth_data(undo_history, undo_cursor);
+	undo_data = undo_item->undo_data;
+	undo_type = undo_item->undo_type;
+	switch (undo_type)
+	{
+		case UNDO_CHANGE_HIGHLIGHT_SIZE:
+			// Change the highlight layer size to the new value stored in the undo item
+			layer_pointer = undo_data->layer_pointer;
+			((layer_highlight *) layer_pointer->object_data)->height = undo_data->new_highlight_height;
+			((layer_highlight *) layer_pointer->object_data)->width = undo_data->new_highlight_width;
+			break;
+
+		default:
+			// Unknown type of undo item.  Let the user know then return
+			g_string_printf(message, "%s ED459: %s", _("Error"), _("Programming error.  The Undo/Redo functions were called with an unknown undo type."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
+			return FALSE;
+	}
+
+	// Move the undo cursor back one item
+	undo_cursor++;
+
+	// Enable the Edit -> Undo option
+	menu_enable(_("/Edit/Undo"), TRUE);
+
+	// If we're at the end of the undo history we can't redo any further
+	num_items = g_list_length(undo_history);
+	if (num_items == undo_cursor)
+	{
+		menu_enable(_("/Edit/Redo"), FALSE);
+	}
+
+	// Redraw the workspace
+	draw_workspace();
+
+	// Tell (force) the window system to redraw the working area *immediately*
+	gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+
+	// Recreate the slide thumbnail
+	film_strip_create_thumbnail((slide *) current_slide->data);
+
+	// Set the changes made variable
+	changes_made = TRUE;
+
+	// Use the status bar to give further feedback to the user
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Last action redone"));
 	gdk_flush();
 
 	return TRUE;
