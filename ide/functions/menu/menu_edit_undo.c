@@ -40,6 +40,6 @@
 
 void menu_edit_undo(void)
 {
-	// Replay the last item in the undo history
+	// Undo the last item in the undo history
 	undo_last_history_item();
 }

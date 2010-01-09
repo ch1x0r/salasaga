@@ -71,7 +71,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gint				selected_row;				// Holds the number of the row that is selected
 	guint				swap_value;					// Temporary value used when swapping border positions
 	slide				*this_slide_data;			// Alias to make things easier
-	undo_data			*undo_item_data = NULL;		// Memory structure undo history items are created in
+	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 	gint				width;
 	gint				x_change;					// The X distance the layer object moves from start to finish
 	gint				y_change;					// The Y distance the layer object moves from start to finish
@@ -283,18 +283,24 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			onscreen_bottom = swap_value;
 		}
 
-		// Save the old layer sizes in the undo history
-		undo_item_data = g_new0(undo_data, 1);
+		// Create an undo history item and store the old layer height and width values in it
+		undo_item_data = g_new0(undo_history_data, 1);
 		undo_item_data->layer_pointer = layer_data;
 		undo_item_data->old_highlight_height = ((layer_highlight *) layer_data->object_data)->height;
 		undo_item_data->old_highlight_width = ((layer_highlight *) layer_data->object_data)->width;
-		undo_add_item(UNDO_CHANGE_HIGHLIGHT_SIZE, undo_item_data);
 
 		// Calculate the new layer width and height
 		((layer_highlight *) layer_data->object_data)->width = width = CLAMP(onscreen_right - onscreen_left,
 				valid_fields[HIGHLIGHT_WIDTH].min_value, project_width - 2);
 		((layer_highlight *) layer_data->object_data)->height = height = CLAMP(onscreen_bottom - onscreen_top,
 				valid_fields[HIGHLIGHT_HEIGHT].min_value, project_height - 2);
+
+		// Also store the new layer height and width values in the undo history item
+		undo_item_data->new_highlight_height = ((layer_highlight *) layer_data->object_data)->height;
+		undo_item_data->new_highlight_width = ((layer_highlight *) layer_data->object_data)->width;
+
+		// Add the undo history item to the undo history
+		undo_add_item(UNDO_CHANGE_HIGHLIGHT_SIZE, undo_item_data);
 
 		// Bounds check the starting x offset, then update the object with the new value
 		layer_data->x_offset_start = CLAMP(onscreen_left, 1, project_width - width - 2);

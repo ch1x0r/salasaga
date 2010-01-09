@@ -32,6 +32,7 @@ extern "C" {
 
 gint undo_add_item(gint undo_type, gpointer undo_data);
 gint undo_last_history_item(void);
+gint undo_next_history_item(void);
 
 
 #ifdef __cplusplus

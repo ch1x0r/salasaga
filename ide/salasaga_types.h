@@ -458,17 +458,19 @@ typedef struct
 // Undo structure specific to undo/redo functions
 typedef struct
 {
+	gint				new_highlight_height;
+	gint				new_highlight_width;
 	gint				old_highlight_height;
 	gint				old_highlight_width;
 	layer				*layer_pointer;
-} undo_data;
+} undo_history_data;
 
 // Generic structure for undo/redo functions
 typedef struct
 {
 	gint				undo_type;
 	gpointer			undo_data;
-} undo_item;
+} undo_history_item;
 
 // Defines the structure of a validation field entry
 typedef struct
