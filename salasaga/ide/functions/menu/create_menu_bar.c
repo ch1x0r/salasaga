@@ -183,6 +183,8 @@ void create_menu_bar()
 	menu_enable(_("/Slide"), FALSE);
 	menu_enable(_("/Layer"), FALSE);
 	menu_enable(_("/Export"), FALSE);
+	menu_enable(_("/Edit/Undo"), FALSE);
+	menu_enable(_("/Edit/Redo"), FALSE);
 
 	// If screenshots are disabled, then grey out the screenshot menu items
 	if (FALSE == screenshots_enabled)
