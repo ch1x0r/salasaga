@@ -133,6 +133,7 @@ salasaga_SOURCES = create_resolution_selector.c \
 	text_tags/reset_global_text_tags_table.c \
 	text_tags/text_layer_create_colour_tag.c \
 	text_tags/text_layer_create_font_size_tag.c \
+	undo_redo/undo_functions.c \
 	widgets/time_line/time_line.c \
 	widgets/time_line/time_line_button_press_event.c \
 	widgets/time_line/time_line_button_release_event.c \

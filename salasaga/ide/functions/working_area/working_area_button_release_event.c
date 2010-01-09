@@ -44,6 +44,7 @@
 #include "../layer/layer_new_image_inner.h"
 #include "../layer/layer_new_mouse_inner.h"
 #include "../layer/layer_new_text_inner.h"
+#include "../undo_redo/undo_functions.h"
 #include "../widgets/time_line/time_line_get_selected_layer_num.h"
 #include "draw_workspace.h"
 
@@ -70,6 +71,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gint				selected_row;				// Holds the number of the row that is selected
 	guint				swap_value;					// Temporary value used when swapping border positions
 	slide				*this_slide_data;			// Alias to make things easier
+	undo_data			*undo_item_data = NULL;		// Memory structure undo history items are created in
 	gint				width;
 	gint				x_change;					// The X distance the layer object moves from start to finish
 	gint				y_change;					// The Y distance the layer object moves from start to finish
@@ -280,6 +282,13 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			onscreen_top = onscreen_bottom;
 			onscreen_bottom = swap_value;
 		}
+
+		// Save the old layer sizes in the undo history
+		undo_item_data = g_new0(undo_data, 1);
+		undo_item_data->layer_pointer = layer_data;
+		undo_item_data->old_highlight_height = ((layer_highlight *) layer_data->object_data)->height;
+		undo_item_data->old_highlight_width = ((layer_highlight *) layer_data->object_data)->width;
+		undo_add_item(UNDO_CHANGE_HIGHLIGHT_SIZE, undo_item_data);
 
 		// Calculate the new layer width and height
 		((layer_highlight *) layer_data->object_data)->width = width = CLAMP(onscreen_right - onscreen_left,
