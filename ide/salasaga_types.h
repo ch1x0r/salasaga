@@ -288,11 +288,7 @@ enum {
 
 // The known undo types
 enum {
-	UNDO_CHANGE_HIGHLIGHT_LAYER,
-	UNDO_CHANGE_HIGHLIGHT_SIZE,
-	UNDO_CHANGE_IMAGE_LAYER,
-	UNDO_CHANGE_MOUSE_LAYER,
-	UNDO_CHANGE_TEXT_LAYER,
+	UNDO_CHANGE_LAYER,
 	UNDO_INSERT_LAYER,
 	UNDO_INSERT_SLIDE,
 	UNDO_DELETE_LAYER,
@@ -458,11 +454,11 @@ typedef struct
 // Undo structure specific to undo/redo functions
 typedef struct
 {
-	gint				new_highlight_height;
-	gint				new_highlight_width;
-	gint				old_highlight_height;
-	gint				old_highlight_width;
+//	layer				*new_layer_pointer;
+	gint				new_layer_position;
 	layer				*layer_pointer;
+	gint				old_layer_position;
+	slide				*slide_data;
 } undo_history_data;
 
 // Generic structure for undo/redo functions
