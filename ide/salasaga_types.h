@@ -288,9 +288,8 @@ enum {
 
 // The known undo types
 enum {
-	UNDO_CHANGE_HIGHLIGHT_HEIGHT,
 	UNDO_CHANGE_HIGHLIGHT_LAYER,
-	UNDO_CHANGE_HIGHLIGHT_WIDTH,
+	UNDO_CHANGE_HIGHLIGHT_SIZE,
 	UNDO_CHANGE_IMAGE_LAYER,
 	UNDO_CHANGE_MOUSE_LAYER,
 	UNDO_CHANGE_TEXT_LAYER,
@@ -455,6 +454,21 @@ typedef struct
 	GtkWidget			*transition_duration_label;
 	GtkWidget			*transition_duration_widget;
 } transition_widgets;
+
+// Undo structure specific to undo/redo functions
+typedef struct
+{
+	gint				old_highlight_height;
+	gint				old_highlight_width;
+	layer				*layer_pointer;
+} undo_data;
+
+// Generic structure for undo/redo functions
+typedef struct
+{
+	gint				undo_type;
+	gpointer			undo_data;
+} undo_item;
 
 // Defines the structure of a validation field entry
 typedef struct

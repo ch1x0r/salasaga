@@ -1,8 +1,6 @@
 /*
  * $Id$
  *
- * Salasaga: Function to undo the last action the user performed
- * 
  * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
@@ -23,23 +21,21 @@
  *
  */
 
+#ifndef UNDO_FUNCTIONS_H_
+#define UNDO_FUNCTIONS_H_
 
-// GTK includes
-#include <gtk/gtk.h>
-
-#ifdef _WIN32
-	// Windows only code
-	#include <windows.h>
-#endif
-
-// Salasaga includes
-#include "../../salasaga_types.h"
-#include "../../externs.h"
-#include "../undo_redo/undo_functions.h"
+// To keep C++ programs that include this header happy
+#ifdef __cplusplus
+extern "C" {
+#endif // __cplusplus
 
 
-void menu_edit_undo(void)
-{
-	// Replay the last item in the undo history
-	undo_last_history_item();
+gint undo_add_item(gint undo_type, gpointer undo_data);
+gint undo_last_history_item(void);
+
+
+#ifdef __cplusplus
 }
+#endif // __cplusplus
+
+#endif /* UNDO_FUNCTIONS_H_ */
