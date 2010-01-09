@@ -402,6 +402,18 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 					return TRUE;  // Unknown layer type, so no idea how to extract the needed data for the next code
 			}
 
+			// Create an undo history item and store the existing layer data in it
+			undo_item_data = g_new0(undo_history_data, 1);
+			undo_item_data->layer_pointer = layer_data;
+			undo_item_data->old_layer_position = selected_row;
+			undo_item_data->slide_data = current_slide->data;
+			undo_add_item(UNDO_CHANGE_LAYER, undo_item_data);
+
+			// Duplicate the present layer and use that instead
+			layer_pointer = g_list_nth(this_slide_data->layers, selected_row);
+			layer_pointer->data = layer_duplicate(layer_data);
+			layer_data = layer_pointer->data;
+
 			// Calculate the distance the object has been dragged
 			x_diff = (mouse_x - stored_x) * scaled_width_ratio;
 			y_diff = (mouse_y - stored_y) * scaled_height_ratio;
