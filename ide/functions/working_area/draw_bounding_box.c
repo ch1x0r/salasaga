@@ -3,7 +3,7 @@
  *
  * Salasaga: Function to draw a bounding box directly onto the drawing area widget
  *
- * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *

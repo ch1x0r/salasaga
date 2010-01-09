@@ -3,7 +3,7 @@
  *
  * Salasaga: Function called when the user selects Help -> About from the top menu 
  * 
- * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  * 
@@ -53,7 +53,7 @@ void menu_help_about(void)
 	about_dialog = GTK_ABOUT_DIALOG(gtk_about_dialog_new());
 	gtk_about_dialog_set_name(about_dialog, APP_NAME);
 	gtk_about_dialog_set_version(about_dialog, APP_VERSION);
-	g_string_printf(tmp_gstring, "%s (C) 2005-2009 Justin Clift\n<justin@salasaga.org>", _("Copyright"));
+	g_string_printf(tmp_gstring, "%s (C) 2005-2010 Justin Clift\n<justin@salasaga.org>", _("Copyright"));
 	gtk_about_dialog_set_copyright(about_dialog, tmp_gstring->str);
 	gtk_about_dialog_set_license(about_dialog,
 			_("This program is free software: you can redistribute it and/or modify\n"

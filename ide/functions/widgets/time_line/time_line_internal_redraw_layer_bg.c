@@ -3,7 +3,7 @@
  *
  * Salasaga: Refresh the area of the display buffer covered by a layer, from the cached background image
  *
- * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *

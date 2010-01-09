@@ -3,7 +3,7 @@
  *
  * Salasaga: Functions called when the main window is iconified or not
  *
- * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *

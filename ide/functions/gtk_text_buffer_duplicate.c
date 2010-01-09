@@ -3,7 +3,7 @@
  *
  * Salasaga: Creates a duplicate of a given text buffer, preserving tags and so forth
  *
- * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *

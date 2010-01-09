@@ -4,7 +4,7 @@
  * Salasaga: Callback function called when the user drags a slide around in the film strip.
  *           This function moves the currently selected slide to the new position the user dragged it to.
  *
- * Copyright (C) 2005-2009 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  * 
