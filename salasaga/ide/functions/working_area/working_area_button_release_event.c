@@ -40,6 +40,7 @@
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
+#include "../layer/layer_duplicate.h"
 #include "../layer/layer_new_highlight_inner.h"
 #include "../layer/layer_new_image_inner.h"
 #include "../layer/layer_new_mouse_inner.h"
@@ -55,6 +56,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	GdkModifierType		button_state;
 	gint				height;
 	layer				*layer_data;
+	GList				*layer_pointer;				// Used briefly to hold a pointer to this layer
 	GString				*message;					// Used to construct message strings
 	gint				mouse_x;
 	gint				mouse_y;
@@ -283,24 +285,23 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			onscreen_bottom = swap_value;
 		}
 
-		// Create an undo history item and store the old layer height and width values in it
+		// Create an undo history item and store the existing layer data in it
 		undo_item_data = g_new0(undo_history_data, 1);
 		undo_item_data->layer_pointer = layer_data;
-		undo_item_data->old_highlight_height = ((layer_highlight *) layer_data->object_data)->height;
-		undo_item_data->old_highlight_width = ((layer_highlight *) layer_data->object_data)->width;
+		undo_item_data->old_layer_position = selected_row;
+		undo_item_data->slide_data = current_slide->data;
+		undo_add_item(UNDO_CHANGE_LAYER, undo_item_data);
+
+		// Duplicate the present layer and use that instead
+		layer_pointer = g_list_nth(this_slide_data->layers, selected_row);
+		layer_pointer->data = layer_duplicate(layer_data);
+		layer_data = layer_pointer->data;
 
 		// Calculate the new layer width and height
 		((layer_highlight *) layer_data->object_data)->width = width = CLAMP(onscreen_right - onscreen_left,
 				valid_fields[HIGHLIGHT_WIDTH].min_value, project_width - 2);
 		((layer_highlight *) layer_data->object_data)->height = height = CLAMP(onscreen_bottom - onscreen_top,
 				valid_fields[HIGHLIGHT_HEIGHT].min_value, project_height - 2);
-
-		// Also store the new layer height and width values in the undo history item
-		undo_item_data->new_highlight_height = ((layer_highlight *) layer_data->object_data)->height;
-		undo_item_data->new_highlight_width = ((layer_highlight *) layer_data->object_data)->width;
-
-		// Add the undo history item to the undo history
-		undo_add_item(UNDO_CHANGE_HIGHLIGHT_SIZE, undo_item_data);
 
 		// Bounds check the starting x offset, then update the object with the new value
 		layer_data->x_offset_start = CLAMP(onscreen_left, 1, project_width - width - 2);
