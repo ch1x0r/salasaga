@@ -47,6 +47,8 @@
 #include "../dialog/display_dialog_text.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
+#include "../layer/layer_duplicate.h"
+#include "../undo_redo/undo_functions.h"
 #include "../widgets/time_line/time_line_get_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 
@@ -54,6 +56,7 @@
 void layer_edit(void)
 {
 	// Local variables
+	layer				*backup_layer_data;
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gfloat 				layer_total_time;			// Total length in time that a layer is displayed
 	GString				*message;					// Used to construct message strings
@@ -62,6 +65,7 @@ void layer_edit(void)
 	guint				selected_row;				// Holds the row that is selected
 	slide				*slide_data;				// Pointer to current slide data
 	layer				*tmp_layer;					// Temporary layer
+	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 
 
 	// If no project is loaded then don't run this function
@@ -88,8 +92,10 @@ void layer_edit(void)
 	selected_row = time_line_get_selected_layer_num(slide_data->timeline_widget);
 	tmp_layer = g_list_nth_data(layer_pointer, selected_row);
 
-	// * Open a dialog box showing the existing values, asking for the new ones *
+	// Create a backup copy of the layer data
+	backup_layer_data = layer_duplicate(tmp_layer);
 
+	// * Open a dialog box showing the existing values, asking for the new ones *
 	switch (tmp_layer->object_type)
 	{
 		case TYPE_EMPTY:
@@ -212,6 +218,17 @@ void layer_edit(void)
 			display_warning(message->str);
 			g_string_free(message, TRUE);
 			return;
+	}
+
+	// If the layer was changed, then create an undo history item for it
+	if (TRUE == return_code)
+	{
+		// Create and store the undo history item
+		undo_item_data = g_new0(undo_history_data, 1);
+		undo_item_data->layer_pointer = backup_layer_data;
+		undo_item_data->old_layer_position = selected_row;
+		undo_item_data->slide_data = current_slide->data;
+		undo_add_item(UNDO_CHANGE_LAYER, undo_item_data);
 	}
 
 	// Regenerate the timeline
