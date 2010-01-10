@@ -164,7 +164,7 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	undo_item_data->layer_data = tmp_layer;
 	undo_item_data->new_layer_position = 0;
 	undo_item_data->slide_data = current_slide->data;
-	undo_add_item(UNDO_INSERT_LAYER, undo_item_data);
+	undo_add_item(UNDO_INSERT_LAYER, undo_item_data, TRUE);
 
 	// Add the new layer to the slide
 	layer_pointer = slide_data->layers;

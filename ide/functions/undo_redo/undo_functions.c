@@ -50,7 +50,7 @@ static gint				undo_cursor = -1;			// Tracks the present position in the undo hi
 
 
 // Add an undo item to the undo history
-gint undo_add_item(gint undo_type, gpointer undo_data)
+gint undo_add_item(gint undo_type, gpointer undo_data, gboolean remove_new)
 {
 	// Local variables
 	gint				loop_counter;				// Simple counter used in loops
@@ -59,19 +59,22 @@ gint undo_add_item(gint undo_type, gpointer undo_data)
 	GList				*this_item;
 
 
-	// Remove any undo history items that are after the present cursor position
-	num_items = g_list_length(undo_history);
-	for (loop_counter = num_items; loop_counter > (undo_cursor + 1); loop_counter--)
+	// If requested, remove any undo history items that are after the present cursor position
+	if (TRUE == remove_new)
 	{
-		// Remove the undo history item we're pointing to
-		this_item = g_list_nth(undo_history, loop_counter - 1);
+		num_items = g_list_length(undo_history);
+		for (loop_counter = num_items; loop_counter > (undo_cursor + 1); loop_counter--)
+		{
+			// Remove the undo history item we're pointing to
+			this_item = g_list_nth(undo_history, loop_counter - 1);
 
-		// Free the layer memory used by link history items
-		// fixme3: Probably needs to be coded for specific undo history types
-//		layer_free(this_item->data);
+			// Free the layer memory used by link history items
+			// fixme3: Probably needs to be coded for specific undo history types
+//			layer_free(this_item->data);
 
-		// Remove the link history items no longer needed
-		undo_history = g_list_delete_link(undo_history, this_item);
+			// Remove the link history items no longer needed
+			undo_history = g_list_delete_link(undo_history, this_item);
+		}
 	}
 
 	// Create the undo history item
@@ -80,7 +83,7 @@ gint undo_add_item(gint undo_type, gpointer undo_data)
 	new_item->undo_data = undo_data;
 
 	// Add the new undo item to the undo list
-	undo_history = g_list_append(undo_history, new_item);
+	undo_history = g_list_insert(undo_history, new_item, undo_cursor + 1);
 	undo_cursor++;
 
 	// Unset the flag that indicates the redo function was just run
@@ -136,7 +139,7 @@ gint undo_last_history_item(void)
 				new_undo_data->layer_data = layer_pointer->data;
 				new_undo_data->old_layer_position = undo_data->old_layer_position;
 				new_undo_data->slide_data = slide_data;
-				undo_add_item(UNDO_CHANGE_LAYER, new_undo_data);
+				undo_add_item(UNDO_CHANGE_LAYER, new_undo_data, FALSE);
 				undo_cursor--;
 			}
 
@@ -152,14 +155,24 @@ gint undo_last_history_item(void)
 			// Point to the layer we're going to change
 			slide_data = undo_data->slide_data;
 
+			// Save the present layer state in the undo history if it's not already there.  This
+			// is so we can Edit -> Redo to it later on if asked
+			num_items = g_list_length(undo_history);
+			if (FALSE == just_did_redo)
+			{
+				new_undo_data = g_new0(undo_history_data, 1);
+				new_undo_data->layer_data = undo_data->layer_data;
+				new_undo_data->old_layer_position = undo_data->new_layer_position;
+				new_undo_data->slide_data = slide_data;
+				undo_add_item(UNDO_DELETE_LAYER, new_undo_data, FALSE);
+				undo_cursor--;
+			}
+
 			// Remove the layer from the slide
 			slide_data->layers = g_list_remove(slide_data->layers, undo_data->layer_data);
 
 			// Decrement the counter of layers in the slide
 			slide_data->num_layers--;
-
-			// Move the undo cursor back an additional item, so the redo action points at the insert still
-			undo_cursor--;
 
 			// Redraw the timeline area
 			draw_timeline();
@@ -181,7 +194,7 @@ gint undo_last_history_item(void)
 	menu_enable(_("/Edit/Redo"), TRUE);
 
 	// If we're at the start of the undo history we can't undo any further
-	if (0 == undo_cursor)
+	if (-1 == undo_cursor)
 	{
 		menu_enable(_("/Edit/Undo"), FALSE);
 	}
@@ -237,6 +250,7 @@ gint undo_next_history_item(void)
 			break;
 
 		case UNDO_INSERT_LAYER:
+		case UNDO_DELETE_LAYER:
 			// We're redoing the addition of a layer
 			slide_data = undo_data->slide_data;
 
@@ -253,6 +267,7 @@ gint undo_next_history_item(void)
 			draw_timeline();
 
 			break;
+
 
 		default:
 			// Unknown type of undo item.  Let the user know then return

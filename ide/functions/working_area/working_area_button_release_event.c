@@ -290,7 +290,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		undo_item_data->layer_data = layer_data;
 		undo_item_data->old_layer_position = selected_row;
 		undo_item_data->slide_data = current_slide->data;
-		undo_add_item(UNDO_CHANGE_LAYER, undo_item_data);
+		undo_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
 
 		// Duplicate the present layer and use that instead
 		layer_pointer = g_list_nth(this_slide_data->layers, selected_row);
@@ -407,7 +407,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			undo_item_data->layer_data = layer_data;
 			undo_item_data->old_layer_position = selected_row;
 			undo_item_data->slide_data = current_slide->data;
-			undo_add_item(UNDO_CHANGE_LAYER, undo_item_data);
+			undo_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
 
 			// Duplicate the present layer and use that instead
 			layer_pointer = g_list_nth(this_slide_data->layers, selected_row);
