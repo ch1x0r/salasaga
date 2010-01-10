@@ -228,7 +228,7 @@ void layer_edit(void)
 		undo_item_data->layer_data = backup_layer_data;
 		undo_item_data->old_layer_position = selected_row;
 		undo_item_data->slide_data = current_slide->data;
-		undo_add_item(UNDO_CHANGE_LAYER, undo_item_data);
+		undo_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
 	}
 
 	// Regenerate the timeline

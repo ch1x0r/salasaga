@@ -30,7 +30,7 @@ extern "C" {
 #endif // __cplusplus
 
 
-gint undo_add_item(gint undo_type, gpointer undo_data);
+gint undo_add_item(gint undo_type, gpointer undo_data, gboolean remove_new);
 gint undo_last_history_item(void);
 gint undo_next_history_item(void);
 
