@@ -225,7 +225,7 @@ void layer_edit(void)
 	{
 		// Create and store the undo history item
 		undo_item_data = g_new0(undo_history_data, 1);
-		undo_item_data->layer_pointer = backup_layer_data;
+		undo_item_data->layer_data = backup_layer_data;
 		undo_item_data->old_layer_position = selected_row;
 		undo_item_data->slide_data = current_slide->data;
 		undo_add_item(UNDO_CHANGE_LAYER, undo_item_data);

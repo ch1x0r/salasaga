@@ -35,6 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../draw_timeline.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "../layer/layer_free.h"
@@ -132,7 +133,7 @@ gint undo_last_history_item(void)
 			if ((FALSE == just_did_redo) && ((undo_cursor + 1) == num_items))
 			{
 				new_undo_data = g_new0(undo_history_data, 1);
-				new_undo_data->layer_pointer = layer_pointer->data;
+				new_undo_data->layer_data = layer_pointer->data;
 				new_undo_data->old_layer_position = undo_data->old_layer_position;
 				new_undo_data->slide_data = slide_data;
 				undo_add_item(UNDO_CHANGE_LAYER, new_undo_data);
@@ -140,7 +141,28 @@ gint undo_last_history_item(void)
 			}
 
 			// Update the slide to use the version of the layer stored in the undo history
-			layer_pointer->data = undo_data->layer_pointer;
+			layer_pointer->data = undo_data->layer_data;
+
+			break;
+
+		case UNDO_INSERT_LAYER:
+
+			// * We're undoing the addition of a layer *
+
+			// Point to the layer we're going to change
+			slide_data = undo_data->slide_data;
+
+			// Remove the layer from the slide
+			slide_data->layers = g_list_remove(slide_data->layers, undo_data->layer_data);
+
+			// Decrement the counter of layers in the slide
+			slide_data->num_layers--;
+
+			// Move the undo cursor back an additional item, so the redo action points at the insert still
+			undo_cursor--;
+
+			// Redraw the timeline area
+			draw_timeline();
 
 			break;
 
@@ -211,18 +233,36 @@ gint undo_next_history_item(void)
 			// We're redoing a layer change, so we update the slide to use the new version of the layer
 			slide_data = undo_data->slide_data;
 			layer_pointer = g_list_nth(slide_data->layers, undo_data->old_layer_position);
-			layer_pointer->data = undo_data->layer_pointer;
+			layer_pointer->data = undo_data->layer_data;
+			break;
+
+		case UNDO_INSERT_LAYER:
+			// We're redoing the addition of a layer
+			slide_data = undo_data->slide_data;
+
+			// Insert the slide back in its original position
+			slide_data->layers = g_list_insert(slide_data->layers, undo_data->layer_data, undo_data->new_layer_position);
+
+			// Increment the counter of layers in the slide
+			slide_data->num_layers++;
+
+			// Move the undo cursor forward one item so the undo history still points at this insert
+			undo_cursor++;
+
+			// Redraw the timeline area
+			draw_timeline();
+
 			break;
 
 		default:
 			// Unknown type of undo item.  Let the user know then return
-			g_string_printf(message, "%s ED459: %s", _("Error"), _("Programming error.  The Undo/Redo functions were called with an unknown undo type."));
+			g_string_printf(message, "%s ED460: %s", _("Error"), _("Programming error.  The Undo/Redo functions were called with an unknown undo type."));
 			display_warning(message->str);
 			g_string_free(message, TRUE);
 			return FALSE;
 	}
 
-	// Move the undo cursor back one item
+	// Move the undo cursor forward one item
 	undo_cursor++;
 
 	// Set the flag that indicates the redo function was just run
