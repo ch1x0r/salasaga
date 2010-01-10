@@ -38,6 +38,7 @@
 #include "../../externs.h"
 #include "../draw_timeline.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
+#include "../undo_redo/undo_functions.h"
 #include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 
@@ -61,6 +62,7 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	gfloat				start_y;					// Top side of the highlight layer
 	layer_highlight		*tmp_highlight_ob;			// Temporary highlight layer object
 	layer				*tmp_layer;					// Temporary layer
+	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 
 
 	// If no project is loaded then don't run this function
@@ -156,6 +158,13 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	tmp_layer->transition_in_duration = 0.0;
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_out_duration = 0.0;
+
+	// Create and store the undo history item for this layer
+	undo_item_data = g_new0(undo_history_data, 1);
+	undo_item_data->layer_data = tmp_layer;
+	undo_item_data->new_layer_position = 0;
+	undo_item_data->slide_data = current_slide->data;
+	undo_add_item(UNDO_INSERT_LAYER, undo_item_data);
 
 	// Add the new layer to the slide
 	layer_pointer = slide_data->layers;

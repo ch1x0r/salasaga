@@ -456,7 +456,7 @@ typedef struct
 {
 //	layer				*new_layer_pointer;
 	gint				new_layer_position;
-	layer				*layer_pointer;
+	layer				*layer_data;
 	gint				old_layer_position;
 	slide				*slide_data;
 } undo_history_data;

@@ -287,7 +287,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 		// Create an undo history item and store the existing layer data in it
 		undo_item_data = g_new0(undo_history_data, 1);
-		undo_item_data->layer_pointer = layer_data;
+		undo_item_data->layer_data = layer_data;
 		undo_item_data->old_layer_position = selected_row;
 		undo_item_data->slide_data = current_slide->data;
 		undo_add_item(UNDO_CHANGE_LAYER, undo_item_data);
@@ -404,7 +404,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 			// Create an undo history item and store the existing layer data in it
 			undo_item_data = g_new0(undo_history_data, 1);
-			undo_item_data->layer_pointer = layer_data;
+			undo_item_data->layer_data = layer_data;
 			undo_item_data->old_layer_position = selected_row;
 			undo_item_data->slide_data = current_slide->data;
 			undo_add_item(UNDO_CHANGE_LAYER, undo_item_data);
