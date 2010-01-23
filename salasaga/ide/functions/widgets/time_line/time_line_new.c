@@ -1,7 +1,7 @@
 /*
  * $Id$
  *
- * Salasaga:
+ * Salasaga: Creates a new time line widget object
  *
  * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
  *
@@ -42,5 +42,5 @@
 
 GtkWidget* time_line_new()
 {
-	return GTK_WIDGET(g_object_new(time_line_get_type(), NULL));
+	return GTK_WIDGET(g_object_new(time_line_get_type(), "name", "time_line_widget", NULL));
 }
