@@ -70,6 +70,12 @@ gboolean draw_layer_start_and_end_points()
 	layer_pointer = g_list_first(this_slide_data->layers);
 	this_layer_data = g_list_nth_data(layer_pointer, selected_row);
 
+	// If the layer data isn't accessible, then don't run this function
+	if (NULL == this_layer_data)
+	{
+		return TRUE;
+	}
+
 	// Is this layer invisible, or is it a background layer?
 	if ((FALSE == this_layer_data->visible) || (TRUE == this_layer_data->background))
 	{
