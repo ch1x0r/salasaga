@@ -56,11 +56,11 @@ gboolean time_line_regenerate_widget(GtkWidget *widget)
 	// Safety check
 	if (NULL == widget)
 	{
-		return FALSE;
+		return TRUE;
 	}
 	if (FALSE == IS_TIME_LINE(widget))
 	{
-		return FALSE;
+		return TRUE;
 	}
 
 	// Initialisation
