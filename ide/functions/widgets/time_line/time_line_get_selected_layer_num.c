@@ -51,11 +51,11 @@ gint time_line_get_selected_layer_num(GtkWidget *widget)
 	// Safety check
 	if (NULL == widget)
 	{
-		return -1;
+		return 0;
 	}
 	if (FALSE == IS_TIME_LINE(widget))
 	{
-		return -1;
+		return 0;
 	}
 
 	// Initialisation
