@@ -149,6 +149,12 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		layer_pointer = g_list_first(this_slide_data->layers);
 		this_layer_data = g_list_nth_data(layer_pointer, selected_row);
 
+		// If the layer data isn't accessible, then don't run this function
+		if (NULL == this_layer_data)
+		{
+			return TRUE;
+		}
+
 		// Calculate start and end points
 		finish_x = (this_layer_data->x_offset_finish / scaled_width_ratio) + END_POINT_HORIZONTAL_OFFSET;
 		finish_y = (this_layer_data->y_offset_finish / scaled_height_ratio) + END_POINT_VERTICAL_OFFSET;
