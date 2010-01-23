@@ -41,5 +41,5 @@
 void menu_edit_redo(void)
 {
 	// Replay the last item in the undo history
-	undo_next_history_item();
+	undo_history_redo_item();
 }
