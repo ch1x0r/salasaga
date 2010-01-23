@@ -289,14 +289,11 @@ enum {
 // The known undo types
 enum {
 	UNDO_CHANGE_LAYER,
-	UNDO_INSERT_LAYER,
-	UNDO_INSERT_SLIDE,
 	UNDO_DELETE_LAYER,
 	UNDO_DELETE_SLIDE,
-	UNDO_MOVE_X_END,
-	UNDO_MOVE_X_START,
-	UNDO_MOVE_Y_END,
-	UNDO_MOVE_Y_START
+	UNDO_INSERT_LAYER,
+	UNDO_INSERT_SLIDE,
+	UNDO_REORDER_SLIDE
 };
 
 // * Define the structures used in the application *
@@ -454,10 +451,10 @@ typedef struct
 // Undo structure specific to undo/redo functions
 typedef struct
 {
-//	layer				*new_layer_pointer;
-	gint				new_layer_position;
-	layer				*layer_data;
-	gint				old_layer_position;
+	layer				*layer_data_new;
+	layer				*layer_data_old;
+	gint				position_new;
+	gint				position_old;
 	slide				*slide_data;
 } undo_history_data;
 

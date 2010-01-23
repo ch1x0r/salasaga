@@ -287,10 +287,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 		// Create an undo history item and store the existing layer data in it
 		undo_item_data = g_new0(undo_history_data, 1);
-		undo_item_data->layer_data = layer_data;
-		undo_item_data->old_layer_position = selected_row;
+		undo_item_data->layer_data_old = layer_duplicate(layer_data);
+		undo_item_data->position_new = selected_row;
+		undo_item_data->position_old = -1;  // -1 means not set
 		undo_item_data->slide_data = current_slide->data;
-		undo_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
 
 		// Duplicate the present layer and use that instead
 		layer_pointer = g_list_nth(this_slide_data->layers, selected_row);
@@ -314,6 +314,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 		// Bounds check the finishing y offset, then update the object with the new value
 		layer_data->y_offset_finish = CLAMP(onscreen_top + y_change, 1, project_height - height - 2);
+
+		// Store the undo item
+		undo_item_data->layer_data_new = layer_duplicate(layer_data);
+		undo_history_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
 
 		// Redraw the workspace
 		draw_workspace();
@@ -404,15 +408,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 			// Create an undo history item and store the existing layer data in it
 			undo_item_data = g_new0(undo_history_data, 1);
-			undo_item_data->layer_data = layer_data;
-			undo_item_data->old_layer_position = selected_row;
+			undo_item_data->layer_data_old = layer_duplicate(layer_data);
+			undo_item_data->position_new = selected_row;
+			undo_item_data->position_old = -1;  // -1 means not set
 			undo_item_data->slide_data = current_slide->data;
-			undo_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
-
-			// Duplicate the present layer and use that instead
-			layer_pointer = g_list_nth(this_slide_data->layers, selected_row);
-			layer_pointer->data = layer_duplicate(layer_data);
-			layer_data = layer_pointer->data;
 
 			// Calculate the distance the object has been dragged
 			x_diff = (mouse_x - stored_x) * scaled_width_ratio;
@@ -429,6 +428,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 			// Bounds check the finishing y offset, then update the object with the new value
 			layer_data->y_offset_finish = layer_data->y_offset_finish + y_diff;
+
+			// Store the undo item
+			undo_item_data->layer_data_new = layer_duplicate(layer_data);
+			undo_history_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
 
 			// Redraw the workspace
 			draw_workspace();

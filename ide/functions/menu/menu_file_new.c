@@ -40,6 +40,7 @@
 #include "../dialog/display_warning.h"
 #include "../slide/slide_free.h"
 #include "../slide/slide_insert.h"
+#include "../undo_redo/undo_functions.h"
 #include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 #include "../disable_layer_toolbar_buttons.h"
@@ -354,6 +355,9 @@ void menu_file_new(void)
 
 	// Redraw the workspace
 	draw_workspace();
+
+	// Reset the undo history
+	undo_history_clear();
 
 	// Enable the project based menu items
 	menu_enable(_("/Project"), TRUE);

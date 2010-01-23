@@ -41,5 +41,5 @@
 void menu_edit_undo(void)
 {
 	// Undo the last item in the undo history
-	undo_last_history_item();
+	undo_history_undo_item();
 }

@@ -35,6 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../undo_redo/undo_functions.h"
 
 
 void slide_insert(void)
@@ -45,6 +46,7 @@ void slide_insert(void)
 	gfloat				project_ratio;				// Ratio of project height to width
 	layer				*tmp_layer;					// Temporary layer
 	slide				*tmp_slide;					// Temporary slide
+	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 
 
 	// Create a new, empty slide
@@ -83,7 +85,7 @@ void slide_insert(void)
 	project_ratio = (gfloat) project_height / (gfloat) project_width;
 	preview_height = preview_width * project_ratio;
 
-	// Create a blank thumbnail using the default background color, then add it to the new slide structure
+	// Create a blank thumbnail using the default background colour, then add it to the new slide structure
 	tmp_slide->thumbnail = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, preview_height);
 	gdk_pixbuf_fill(tmp_slide->thumbnail, ((default_bg_colour.red / 256) << 24)
 		+ ((default_bg_colour.green / 256) << 16)
@@ -98,6 +100,15 @@ void slide_insert(void)
 
 	// Set the timeline widget for the slide to NULL, so we know to create it later on
 	tmp_slide->timeline_widget = NULL;
+
+	// Create and store the undo history item for this layer
+	undo_item_data = g_new0(undo_history_data, 1);
+	undo_item_data->layer_data_new = NULL;  // NULL means not set
+	undo_item_data->layer_data_old = NULL;  // NULL means not set
+	undo_item_data->position_new = 0;
+	undo_item_data->position_old = -1;  // -1 means not set
+	undo_item_data->slide_data = tmp_slide;
+	undo_history_add_item(UNDO_INSERT_SLIDE, undo_item_data, TRUE);
 
 	// If the current slide hasn't been initialised (this is the first slide), then we initialise it
 	if (NULL == current_slide)

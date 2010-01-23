@@ -48,6 +48,7 @@
 #include "../dialog/display_warning.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "../layer/layer_duplicate.h"
+#include "../layer/layer_free.h"
 #include "../undo_redo/undo_functions.h"
 #include "../widgets/time_line/time_line_get_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
@@ -225,10 +226,16 @@ void layer_edit(void)
 	{
 		// Create and store the undo history item
 		undo_item_data = g_new0(undo_history_data, 1);
-		undo_item_data->layer_data = backup_layer_data;
-		undo_item_data->old_layer_position = selected_row;
+		undo_item_data->layer_data_new = layer_duplicate(tmp_layer);
+		undo_item_data->layer_data_old = backup_layer_data;
+		undo_item_data->position_new = -1;  // -1 means not set
+		undo_item_data->position_old = selected_row;
 		undo_item_data->slide_data = current_slide->data;
-		undo_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
+		undo_history_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
+	} else
+	{
+		// The layer wasn't changed, so we don't need to keep the backup copy
+		layer_free(backup_layer_data);
 	}
 
 	// Regenerate the timeline

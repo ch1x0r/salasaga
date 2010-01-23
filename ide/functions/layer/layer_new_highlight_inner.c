@@ -161,10 +161,12 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 
 	// Create and store the undo history item for this layer
 	undo_item_data = g_new0(undo_history_data, 1);
-	undo_item_data->layer_data = tmp_layer;
-	undo_item_data->new_layer_position = 0;
+	undo_item_data->layer_data_new = tmp_layer;
+	undo_item_data->layer_data_old = NULL;  // NULL means not set
+	undo_item_data->position_new = 0;
+	undo_item_data->position_old = -1;  // -1 means not set
 	undo_item_data->slide_data = current_slide->data;
-	undo_add_item(UNDO_INSERT_LAYER, undo_item_data, TRUE);
+	undo_history_add_item(UNDO_INSERT_LAYER, undo_item_data, TRUE);
 
 	// Add the new layer to the slide
 	layer_pointer = slide_data->layers;
