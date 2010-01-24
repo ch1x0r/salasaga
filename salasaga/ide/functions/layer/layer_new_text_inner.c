@@ -32,6 +32,7 @@
 #include "../../externs.h"
 #include "../draw_timeline.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
+#include "../layer/layer_duplicate.h"
 #include "../text_tags/text_layer_create_colour_tag.h"
 #include "../text_tags/text_layer_create_font_size_tag.h"
 #include "../undo_redo/undo_functions.h"
@@ -118,7 +119,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 
 	// Create and store the undo history item for this layer
 	undo_item_data = g_new0(undo_history_data, 1);
-	undo_item_data->layer_data_new = tmp_layer;
+	undo_item_data->layer_data_new = layer_duplicate(tmp_layer);
 	undo_item_data->layer_data_old = NULL;  // NULL means not set
 	undo_item_data->position_new = 0;
 	undo_item_data->position_old = -1;  // -1 means not set

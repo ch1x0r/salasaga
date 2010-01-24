@@ -38,6 +38,7 @@
 #include "../../externs.h"
 #include "../draw_timeline.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
+#include "../layer/layer_duplicate.h"
 #include "../undo_redo/undo_functions.h"
 #include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
@@ -161,7 +162,7 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 
 	// Create and store the undo history item for this layer
 	undo_item_data = g_new0(undo_history_data, 1);
-	undo_item_data->layer_data_new = tmp_layer;
+	undo_item_data->layer_data_new = layer_duplicate(tmp_layer);
 	undo_item_data->layer_data_old = NULL;  // NULL means not set
 	undo_item_data->position_new = 0;
 	undo_item_data->position_old = -1;  // -1 means not set
