@@ -37,6 +37,7 @@
 #include "../../externs.h"
 #include "../draw_timeline.h"
 #include "../dialog/display_warning.h"
+#include "../undo_redo/undo_functions.h"
 #include "../working_area/draw_workspace.h"
 #include "slide_free.h"
 
@@ -50,8 +51,8 @@ void slide_delete(void)
 	gint				slide_position;				// Which slide in the slide list we are deleting
 	GtkTreeSelection	*film_strip_selector;		//
 	GtkTreeIter			selection_iter;				//
-
-	GList				*tmp_glist;					// Temporary GList
+//	GList				*tmp_glist;					// Temporary GList
+	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 
 
 	// Are we trying to delete the only slide in the project (not good)?
@@ -60,13 +61,24 @@ void slide_delete(void)
 	if (1 == num_slides)
 	{
 		// Yes we are, so give a warning message and don't delete the slide
-		display_warning(_("You must leave at least one slide in a project."));
+//		display_warning(_("You must leave at least one slide in a project."));
 		return;
 	}
 
-	// Remove the current slide from the slide list
+	// Determine where the slide is positioned in the project
 	slide_position = g_list_position(slides, current_slide);
-	tmp_glist = current_slide;
+//	tmp_glist = current_slide;
+
+	// Create and store the undo history item for this slide
+	undo_item_data = g_new0(undo_history_data, 1);
+	undo_item_data->layer_data_new = NULL;  // NULL means not set
+	undo_item_data->layer_data_old = NULL;  // NULL means not set
+	undo_item_data->position_new = -1;  // -1 means not set
+	undo_item_data->position_old = slide_position;
+	undo_item_data->slide_data = current_slide->data;
+	undo_history_add_item(UNDO_DELETE_SLIDE, undo_item_data, TRUE);
+
+	// Remove the current slide from the slide list
 	slides = g_list_remove_link(slides, current_slide);
 
 	// Remove the current slide from the film strip
@@ -106,6 +118,7 @@ void slide_delete(void)
 	gdk_flush();
 
 	// Free the resources allocated to the deleted slide
-	slide_free(tmp_glist->data, NULL);
-	g_list_free(tmp_glist);
+//	slide_free(tmp_glist->data, NULL);
+
+//	g_list_free(tmp_glist);
 }
