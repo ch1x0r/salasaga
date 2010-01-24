@@ -171,9 +171,6 @@ printf("Redoing UNDO_CHANGE_LAYER\n");
 			// Insert the "new" layer into the slide at the old position
 			slide_data->layers = g_list_insert(slide_data->layers, undo_data->layer_data_new, undo_data->position_new);
 
-			// Free the layer data in the existing layer
-//			layer_free(layer_pointer->data);
-
 			// Redraw the timeline area
 			draw_timeline();
 
@@ -181,6 +178,29 @@ printf("Redoing UNDO_CHANGE_LAYER\n");
 
 		case UNDO_DELETE_LAYER:
 printf("Redoing UNDO_DELETE_LAYER\n");
+
+			// Point to the layer we're going to change
+			slide_data = undo_data->slide_data;
+			layer_pointer = g_list_nth(slide_data->layers, undo_data->position_old);
+
+			// Remove the "old" layer from the slide
+			slide_data->layers = g_list_remove(slide_data->layers, layer_pointer->data);
+
+			// Decrement the counter of layers in the slide
+			slide_data->num_layers--;
+
+			// Redraw the timeline area
+			draw_timeline();
+
+			// Redraw the workspace
+			draw_workspace();
+
+			// Tell (force) the window system to redraw the working area *immediately*
+			gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+
+			// Recreate the slide thumbnail
+			film_strip_create_thumbnail((slide *) current_slide->data);
+
 			break;
 
 		case UNDO_DELETE_SLIDE:
@@ -276,8 +296,6 @@ gint undo_history_undo_item(void)
 	// Local variables
 	GList				*layer_pointer;				// Points to layer items
 	GString				*message;					// Temporary string used for message creation
-//	undo_history_data	*new_undo_data;
-//	gint				num_items;					// The number of items in the undo history
 	gint				num_slides;
 	slide				*slide_data;
 	gint				slide_position;
@@ -310,9 +328,6 @@ printf("UNDO_CHANGE_LAYER item undone\n");
 			// Insert the "old" layer into the slide at the old position
 			slide_data->layers = g_list_insert(slide_data->layers, undo_data->layer_data_old, undo_data->position_old);
 
-			// Free the layer data in the existing layer
-//			layer_free(layer_pointer->data);
-
 			// Redraw the timeline area
 			draw_timeline();
 
@@ -329,6 +344,28 @@ printf("UNDO_CHANGE_LAYER item undone\n");
 
 		case UNDO_DELETE_LAYER:
 printf("UNDO_DELETE_LAYER item undone\n");
+
+			// Point to the layer we're going to change
+			slide_data = undo_data->slide_data;
+
+			// Insert the "old" layer into the slide at the old position
+			slide_data->layers = g_list_insert(slide_data->layers, undo_data->layer_data_old, undo_data->position_old);
+
+			// Increment the counter of layers in the slide
+			slide_data->num_layers++;
+
+			// Redraw the timeline area
+			draw_timeline();
+
+			// Redraw the workspace
+			draw_workspace();
+
+			// Tell (force) the window system to redraw the working area *immediately*
+			gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+
+			// Recreate the slide thumbnail
+			film_strip_create_thumbnail((slide *) current_slide->data);
+
 			break;
 
 		case UNDO_DELETE_SLIDE:

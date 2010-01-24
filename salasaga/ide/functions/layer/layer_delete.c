@@ -42,6 +42,8 @@
 #include "../widget_focus.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
+#include "../layer/layer_duplicate.h"
+#include "../undo_redo/undo_functions.h"
 #include "../widgets/time_line/time_line_get_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 #include "layer_free.h"
@@ -54,6 +56,7 @@ void layer_delete(void)
 	guint				num_layers;					// Number of layers
 	guint				selected_row;				// Holds the number of the row that is selected
 	layer				*tmp_layer;					// Temporary layer
+	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 
 
 	// If no project is loaded then don't run this function
@@ -84,9 +87,18 @@ void layer_delete(void)
 		return;
 	}
 
-	// Remove the layer from the Timeline widget
+	// Set up pointers
 	layer_pointer = g_list_first(layer_pointer);
 	tmp_layer = g_list_nth_data(layer_pointer, selected_row);
+
+	// Create and store the undo history item for this layer
+	undo_item_data = g_new0(undo_history_data, 1);
+	undo_item_data->layer_data_new = NULL;  // NULL means not set
+	undo_item_data->layer_data_old = layer_duplicate(tmp_layer);
+	undo_item_data->position_new = -1;  // -1 means not set
+	undo_item_data->position_old = 0;
+	undo_item_data->slide_data = current_slide->data;
+	undo_history_add_item(UNDO_DELETE_LAYER, undo_item_data, TRUE);
 
 	// Remove the layer from the layer structure
 	layer_pointer = g_list_remove(layer_pointer, tmp_layer);
