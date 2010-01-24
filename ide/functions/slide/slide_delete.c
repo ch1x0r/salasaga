@@ -45,13 +45,13 @@
 void slide_delete(void)
 {
 	// Local variables
+	GString				*message;					// Used to construct message strings
 	GtkTreePath			*new_path;					// Temporary path
 	gint				num_slides;					// Number of slides in the whole slide list
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	gint				slide_position;				// Which slide in the slide list we are deleting
 	GtkTreeSelection	*film_strip_selector;		//
 	GtkTreeIter			selection_iter;				//
-//	GList				*tmp_glist;					// Temporary GList
 	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 
 
@@ -61,13 +61,15 @@ void slide_delete(void)
 	if (1 == num_slides)
 	{
 		// Yes we are, so give a warning message and don't delete the slide
-//		display_warning(_("You must leave at least one slide in a project."));
+		message = g_string_new(NULL);
+		g_string_printf(message, "%s ED462: %s", _("Error"), _("You must leave at least one slide in a project."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 		return;
 	}
 
 	// Determine where the slide is positioned in the project
 	slide_position = g_list_position(slides, current_slide);
-//	tmp_glist = current_slide;
 
 	// Create and store the undo history item for this slide
 	undo_item_data = g_new0(undo_history_data, 1);
@@ -116,9 +118,4 @@ void slide_delete(void)
 	// Update the status bar
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Slide deleted"));
 	gdk_flush();
-
-	// Free the resources allocated to the deleted slide
-//	slide_free(tmp_glist->data, NULL);
-
-//	g_list_free(tmp_glist);
 }
