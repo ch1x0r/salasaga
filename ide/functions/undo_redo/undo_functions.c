@@ -138,7 +138,7 @@ gint undo_history_redo_item(void)
 {
 
 	// Local variables
-//	GList				*layer_pointer;				// Points to layer items
+	GList				*layer_pointer;				// Points to layer items
 	GString				*message;					// Temporary string used for message creation
 	gint				num_items;					// The number of items in the undo history
 	slide				*slide_data;
@@ -160,9 +160,23 @@ gint undo_history_redo_item(void)
 		case UNDO_CHANGE_LAYER:
 printf("Redoing UNDO_CHANGE_LAYER\n");
 			// * We're redoing a layer change, so we update the slide to use the new version of the layer *
-//			slide_data = undo_data->slide_data;
-//			layer_pointer = g_list_nth(slide_data->layers, undo_data->position_old);
-//			layer_pointer->data = undo_data->layer_data_old;
+
+			// Point to the layer we're going to change
+			slide_data = undo_data->slide_data;
+			layer_pointer = g_list_nth(slide_data->layers, undo_data->position_old);
+
+			// Remove the "old" layer from the slide
+			slide_data->layers = g_list_remove(slide_data->layers, layer_pointer->data);
+
+			// Insert the "new" layer into the slide at the old position
+			slide_data->layers = g_list_insert(slide_data->layers, undo_data->layer_data_new, undo_data->position_new);
+
+			// Free the layer data in the existing layer
+//			layer_free(layer_pointer->data);
+
+			// Redraw the timeline area
+			draw_timeline();
+
 			break;
 
 		case UNDO_DELETE_LAYER:
@@ -288,13 +302,16 @@ printf("UNDO_CHANGE_LAYER item undone\n");
 
 			// Point to the layer we're going to change
 			slide_data = undo_data->slide_data;
-			layer_pointer = g_list_nth(slide_data->layers, undo_data->position_old);
+			layer_pointer = g_list_nth(slide_data->layers, undo_data->position_new);
+
+			// Remove the "new" layer from the slide
+			slide_data->layers = g_list_remove(slide_data->layers, layer_pointer->data);
+
+			// Insert the "old" layer into the slide at the old position
+			slide_data->layers = g_list_insert(slide_data->layers, undo_data->layer_data_old, undo_data->position_old);
 
 			// Free the layer data in the existing layer
-			layer_free(layer_pointer->data);
-
-			// Update the slide to use the version of the layer stored in the undo history
-			layer_pointer->data = layer_duplicate(undo_data->layer_data_old);
+//			layer_free(layer_pointer->data);
 
 			// Redraw the timeline area
 			draw_timeline();
@@ -327,7 +344,8 @@ printf("UNDO_INSERT_LAYER item undone\n");
 			slide_data = undo_data->slide_data;
 
 			// Remove the layer from the slide
-			slide_data->layers = g_list_remove(slide_data->layers, undo_data->layer_data_new);
+			layer_pointer = g_list_nth(slide_data->layers, undo_data->position_new);
+			slide_data->layers = g_list_remove(slide_data->layers, layer_pointer->data);
 
 			// Decrement the counter of layers in the slide
 			slide_data->num_layers--;

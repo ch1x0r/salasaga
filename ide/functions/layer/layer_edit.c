@@ -228,7 +228,7 @@ void layer_edit(void)
 		undo_item_data = g_new0(undo_history_data, 1);
 		undo_item_data->layer_data_new = layer_duplicate(tmp_layer);
 		undo_item_data->layer_data_old = backup_layer_data;
-		undo_item_data->position_new = -1;  // -1 means not set
+		undo_item_data->position_new = selected_row;
 		undo_item_data->position_old = selected_row;
 		undo_item_data->slide_data = current_slide->data;
 		undo_history_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);

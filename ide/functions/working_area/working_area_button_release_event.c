@@ -289,7 +289,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		undo_item_data = g_new0(undo_history_data, 1);
 		undo_item_data->layer_data_old = layer_duplicate(layer_data);
 		undo_item_data->position_new = selected_row;
-		undo_item_data->position_old = -1;  // -1 means not set
+		undo_item_data->position_old = selected_row;
 		undo_item_data->slide_data = current_slide->data;
 
 		// Duplicate the present layer and use that instead
@@ -410,7 +410,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			undo_item_data = g_new0(undo_history_data, 1);
 			undo_item_data->layer_data_old = layer_duplicate(layer_data);
 			undo_item_data->position_new = selected_row;
-			undo_item_data->position_old = -1;  // -1 means not set
+			undo_item_data->position_old = selected_row;
 			undo_item_data->slide_data = current_slide->data;
 
 			// Calculate the distance the object has been dragged
