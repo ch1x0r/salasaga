@@ -37,6 +37,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../undo_redo/undo_functions.h"
 
 
 gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context, gint x, gint y, guint t, gpointer user_data)
@@ -55,6 +56,7 @@ gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context,
 	slide				*this_slide;
 	GString				*tmp_gstring;
 	GtkAdjustment		*vert_adjustment;
+	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 
 
 	// Initialisation
@@ -91,6 +93,15 @@ gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context,
 		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &current_slide_iter, tmp_gstring->str);
 		g_string_printf(tmp_gstring, "%u", target_slide_position);
 		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &target_slide_iter, tmp_gstring->str);
+
+		// Create and store the undo history item for this layer
+		undo_item_data = g_new0(undo_history_data, 1);
+		undo_item_data->layer_data_new = NULL;  // NULL means not set
+		undo_item_data->layer_data_old = NULL;  // NULL means not set
+		undo_item_data->position_new = target_slide_position;
+		undo_item_data->position_old = current_slide_position;
+		undo_item_data->slide_data = current_slide->data;
+		undo_history_add_item(UNDO_REORDER_SLIDE, undo_item_data, TRUE);
 
 		// Swap the slides in the film strip area
 		gtk_list_store_swap(GTK_LIST_STORE(film_strip_store), &current_slide_iter, &target_slide_iter);
