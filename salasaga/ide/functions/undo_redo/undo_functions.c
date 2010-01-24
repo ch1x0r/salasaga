@@ -138,9 +138,12 @@ gint undo_history_redo_item(void)
 {
 
 	// Local variables
+	GtkTreeIter			film_strip_iter;
 	GList				*layer_pointer;				// Points to layer items
 	GString				*message;					// Temporary string used for message creation
+	GtkTreePath			*new_path;					// Temporary path
 	gint				num_items;					// The number of items in the undo history
+	gint				num_slides;					// The number of slides in the project
 	slide				*slide_data;
 	undo_history_data	*undo_data;
 	undo_history_item	*undo_item;					// Points to the undo history item we're working with
@@ -205,6 +208,39 @@ printf("Redoing UNDO_DELETE_LAYER\n");
 
 		case UNDO_DELETE_SLIDE:
 printf("Redoing UNDO_DELETE_SLIDE\n");
+
+			// Point to the deleted slide data we need to undo
+			slide_data = undo_data->slide_data;
+
+			// Remove the slide from the project again
+			slides = g_list_remove(slides, slide_data);
+
+			// Select the next slide
+			slides = g_list_first(slides);
+			num_slides = g_list_length(slides);
+			if (undo_data->position_old >= num_slides)
+			{
+				// If we're deleting the last slide, we'll need to point to the previous one instead
+				current_slide = g_list_last(slides);
+			} else
+			{
+				current_slide = g_list_nth(slides, undo_data->position_old);
+			}
+
+			// Remove the current slide from the film strip
+			new_path = gtk_tree_path_new_from_indices(undo_data->position_old, -1);
+			gtk_tree_model_get_iter(GTK_TREE_MODEL(film_strip_store), &film_strip_iter, new_path);
+			gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &film_strip_iter);
+
+			// Redraw the workspace
+			draw_workspace();
+
+			// Redraw the timeline area
+			draw_timeline();
+
+			// Tell (force) the window system to redraw the working area *immediately*
+			gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+
 			break;
 
 		case UNDO_INSERT_LAYER:
@@ -373,15 +409,15 @@ printf("UNDO_DELETE_SLIDE item undone\n");
 			// Point to the deleted slide data we need to undo
 			slide_data = undo_data->slide_data;
 
-			// Insert the "old" layer into the slide at the old position
+			// Insert the "old" slide at the old position
 			slides = g_list_insert(slides, slide_data, undo_data->position_old);
 
 			// Select the newly inserted slide
 			current_slide = g_list_nth(slides, undo_data->position_old);
 
 			// Add the thumbnail to the GtkListView based film strip
-			gtk_list_store_insert(film_strip_store, &film_strip_iter, undo_data->position_old);  // Acquire an iterator
-			gtk_list_store_set(film_strip_store, &film_strip_iter, 0, slide_data->thumbnail, -1);
+			gtk_list_store_insert(GTK_LIST_STORE(film_strip_store), &film_strip_iter, undo_data->position_old);  // Acquire an iterator
+			gtk_list_store_set(GTK_LIST_STORE(film_strip_store), &film_strip_iter, 0, slide_data->thumbnail, -1);
 
 			// Select the next thumbnail in the film strip and scroll to display it
 			new_path = gtk_tree_path_new_from_indices(undo_data->position_old, -1);
