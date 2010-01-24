@@ -294,15 +294,16 @@ printf("Redo done\n");
 gint undo_history_undo_item(void)
 {
 	// Local variables
+	GtkTreeIter			film_strip_iter;
 	GList				*layer_pointer;				// Points to layer items
 	GString				*message;					// Temporary string used for message creation
+	GtkTreePath			*new_path;					// Temporary path
 	gint				num_slides;
 	slide				*slide_data;
 	gint				slide_position;
 	undo_history_item	*undo_item;					// Points to the undo history item we're working with
 	undo_history_data	*undo_data;
 	gint				undo_type;
-
 
 
 	// Initialisation
@@ -345,10 +346,8 @@ printf("UNDO_CHANGE_LAYER item undone\n");
 		case UNDO_DELETE_LAYER:
 printf("UNDO_DELETE_LAYER item undone\n");
 
-			// Point to the layer we're going to change
-			slide_data = undo_data->slide_data;
-
 			// Insert the "old" layer into the slide at the old position
+			slide_data = undo_data->slide_data;
 			slide_data->layers = g_list_insert(slide_data->layers, undo_data->layer_data_old, undo_data->position_old);
 
 			// Increment the counter of layers in the slide
@@ -370,6 +369,37 @@ printf("UNDO_DELETE_LAYER item undone\n");
 
 		case UNDO_DELETE_SLIDE:
 printf("UNDO_DELETE_SLIDE item undone\n");
+
+			// Point to the deleted slide data we need to undo
+			slide_data = undo_data->slide_data;
+
+			// Insert the "old" layer into the slide at the old position
+			slides = g_list_insert(slides, slide_data, undo_data->position_old);
+
+			// Select the newly inserted slide
+			current_slide = g_list_nth(slides, undo_data->position_old);
+
+			// Add the thumbnail to the GtkListView based film strip
+			gtk_list_store_insert(film_strip_store, &film_strip_iter, undo_data->position_old);  // Acquire an iterator
+			gtk_list_store_set(film_strip_store, &film_strip_iter, 0, slide_data->thumbnail, -1);
+
+			// Select the next thumbnail in the film strip and scroll to display it
+			new_path = gtk_tree_path_new_from_indices(undo_data->position_old, -1);
+			gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
+			gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
+
+			// Redraw the workspace
+			draw_workspace();
+
+			// Recreate the slide thumbnail
+			film_strip_create_thumbnail((slide *) current_slide->data);
+
+			// Redraw the timeline area
+			draw_timeline();
+
+			// Tell (force) the window system to redraw the working area *immediately*
+			gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+
 			break;
 
 		case UNDO_INSERT_LAYER:
