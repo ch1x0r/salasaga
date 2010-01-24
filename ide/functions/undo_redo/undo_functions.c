@@ -138,6 +138,8 @@ gint undo_history_redo_item(void)
 {
 
 	// Local variables
+	slide				*current_slide_data;		// Pointer to the data for the currently selected slide
+	GtkTreeIter			current_slide_iter;			// Points to the currently selected slide
 	GtkTreeIter			film_strip_iter;
 	GList				*layer_pointer;				// Points to layer items
 	GString				*message;					// Temporary string used for message creation
@@ -145,6 +147,9 @@ gint undo_history_redo_item(void)
 	gint				num_items;					// The number of items in the undo history
 	gint				num_slides;					// The number of slides in the project
 	slide				*slide_data;
+	GList				*target_slide;				// Pointer to the target slide
+	GtkTreeIter			target_slide_iter;
+	GString				*tmp_gstring;
 	undo_history_data	*undo_data;
 	undo_history_item	*undo_item;					// Points to the undo history item we're working with
 	gint				undo_type;
@@ -283,6 +288,27 @@ printf("Redoing UNDO_INSERT_SLIDE\n");
 
 		case UNDO_REORDER_SLIDE:
 printf("Redoing UNDO_REORDER_SLIDE\n");
+
+			// * We're redoing the reordering of a slide *
+
+			// Reorder the slides in the film strip
+			tmp_gstring = g_string_new(NULL);
+			g_string_printf(tmp_gstring, "%u", undo_data->position_old);
+			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &current_slide_iter, tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", undo_data->position_new);
+			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &target_slide_iter, tmp_gstring->str);
+			gtk_list_store_swap(GTK_LIST_STORE(film_strip_store), &current_slide_iter, &target_slide_iter);
+
+			// Swap the slides around in the project
+			current_slide_data = current_slide->data;
+			target_slide = g_list_nth(slides, undo_data->position_new);
+			current_slide->data = target_slide->data;
+			target_slide->data = current_slide_data;
+			current_slide = target_slide;
+
+			// Free the temporary GString
+			g_string_free(tmp_gstring, TRUE);
+
 			break;
 
 		default:
@@ -330,6 +356,8 @@ printf("Redo done\n");
 gint undo_history_undo_item(void)
 {
 	// Local variables
+	slide				*current_slide_data;		// Pointer to the data for the currently selected slide
+	GtkTreeIter			current_slide_iter;			// Points to the currently selected slide
 	GtkTreeIter			film_strip_iter;
 	GList				*layer_pointer;				// Points to layer items
 	GString				*message;					// Temporary string used for message creation
@@ -337,6 +365,9 @@ gint undo_history_undo_item(void)
 	gint				num_slides;
 	slide				*slide_data;
 	gint				slide_position;
+	GList				*target_slide;				// Pointer to the target slide
+	GtkTreeIter			target_slide_iter;
+	GString				*tmp_gstring;
 	undo_history_item	*undo_item;					// Points to the undo history item we're working with
 	undo_history_data	*undo_data;
 	gint				undo_type;
@@ -507,6 +538,24 @@ printf("UNDO_INSERT_SLIDE item undone\n");
 printf("UNDO_REORDER_SLIDE item undone\n");
 
 			// * We're undoing the reordering of a slide *
+
+			// Swap the slides around in the film strip
+			tmp_gstring = g_string_new(NULL);
+			g_string_printf(tmp_gstring, "%u", undo_data->position_old);
+			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &target_slide_iter, tmp_gstring->str);
+			g_string_printf(tmp_gstring, "%u", undo_data->position_new);
+			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &current_slide_iter, tmp_gstring->str);
+			gtk_list_store_swap(GTK_LIST_STORE(film_strip_store), &current_slide_iter, &target_slide_iter);
+
+			// Swap the slides around in the project
+			current_slide_data = current_slide->data;
+			target_slide = g_list_nth(slides, undo_data->position_old);
+			current_slide->data = target_slide->data;
+			target_slide->data = current_slide_data;
+			current_slide = target_slide;
+
+			// Free the temporary GString
+			g_string_free(tmp_gstring, TRUE);
 
 			break;
 
