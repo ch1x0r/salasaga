@@ -37,6 +37,7 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "../../widget_focus.h"
+#include "../../dialog/display_warning.h"
 #include "../../layer/layer_edit.h"
 #include "../../working_area/draw_handle_box.h"
 #include "../../working_area/draw_layer_start_and_end_points.h"
@@ -57,6 +58,7 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 	gfloat				end_time;					// The end time in seconds of the presently selected layer
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				left_border;
+	GString				*message;					// Used to construct message strings
 	gint				new_row;					// Used to determine the row clicked upon
 	gint				pps;						// Holds the number of pixels per second used when drawing
 	TimeLinePrivate		*priv;
@@ -86,9 +88,14 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 		return;
 	}
 
-	// It's probably the child of the called widget that we need to get data from
-	if (FALSE == IS_TIME_LINE(widget))
+	// Determine if this widget or it's child is the one we want
+	if (TRUE == IS_TIME_LINE(widget))
 	{
+		// This is a time line widget
+		this_time_line = TIME_LINE(widget);
+	} else
+	{
+		// Check the child widget
 		tmp_glist = gtk_container_get_children(GTK_CONTAINER(widget));
 		if (NULL == tmp_glist)
 			return;
@@ -98,16 +105,19 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 			return;
 		}
 
-		// The child is the TimeLine widget
+		// The child is the timeline widget
 		this_time_line = TIME_LINE(tmp_glist->data);
-	} else
-	{
-		// This is a time line widget
-		this_time_line = TIME_LINE(widget);
 	}
 
 	// Initialisation
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+	if (NULL == priv)
+	{
+		message = g_string_new(NULL);
+		g_string_printf(message, "%s ED461: %s", _("Error"), _("Private internal timeline data is not present!"));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
+	}
 	this_slide_data = ((slide *) current_slide->data);
 	layer_pointer = this_slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
