@@ -47,6 +47,7 @@
 #include "../dialog/display_dialog_save_warning.h"
 #include "../dialog/display_warning.h"
 #include "../read/read_project.h"
+#include "../undo_redo/undo_functions.h"
 #include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 #include "menu_enable.h"
@@ -272,6 +273,9 @@ void menu_file_open(void)
 
 	// Clear the changes made variable
 	changes_made = FALSE;
+
+	// Clear the undo/redo history
+	undo_history_clear();
 
 	// Use the status bar to communicate the successful loading of the project
 	g_string_printf(message, " %s - %u %s", _("Project loaded"), num_slides, _("slides"));
