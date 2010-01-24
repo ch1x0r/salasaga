@@ -141,7 +141,7 @@ gint undo_history_redo_item(void)
 //	GList				*layer_pointer;				// Points to layer items
 	GString				*message;					// Temporary string used for message creation
 	gint				num_items;					// The number of items in the undo history
-//	slide				*slide_data;
+	slide				*slide_data;
 	undo_history_data	*undo_data;
 	undo_history_item	*undo_item;					// Points to the undo history item we're working with
 	gint				undo_type;
@@ -158,7 +158,7 @@ gint undo_history_redo_item(void)
 	switch (undo_type)
 	{
 		case UNDO_CHANGE_LAYER:
-printf("UNDO_CHANGE_LAYER item redone\n");
+printf("Redoing UNDO_CHANGE_LAYER\n");
 			// * We're redoing a layer change, so we update the slide to use the new version of the layer *
 //			slide_data = undo_data->slide_data;
 //			layer_pointer = g_list_nth(slide_data->layers, undo_data->position_old);
@@ -166,36 +166,32 @@ printf("UNDO_CHANGE_LAYER item redone\n");
 			break;
 
 		case UNDO_DELETE_LAYER:
-printf("UNDO_DELETE_LAYER item redone\n");
+printf("Redoing UNDO_DELETE_LAYER\n");
 			break;
 
 		case UNDO_DELETE_SLIDE:
-printf("UNDO_DELETE_SLIDE item redone\n");
+printf("Redoing UNDO_DELETE_SLIDE\n");
 			break;
 
 		case UNDO_INSERT_LAYER:
-printf("UNDO_INSERT_LAYER item redone\n");
-/*
+printf("Redoing UNDO_INSERT_LAYER\n");
+
 			// * We're redoing the addition of a layer *
 
-			slide_data = undo_data->slide_data;
-
 			// Insert the slide back in its original position
-			slide_data->layers = g_list_insert(slide_data->layers, undo_data->layer_data, undo_data->position_new);
+			slide_data = undo_data->slide_data;
+			slide_data->layers = g_list_insert(slide_data->layers, undo_data->layer_data_new, undo_data->position_new);
 
 			// Increment the counter of layers in the slide
 			slide_data->num_layers++;
 
-			// Move the undo cursor forward one item so the undo history still points at this insert
-			undo_cursor++;
-
 			// Redraw the timeline area
 			draw_timeline();
-*/
+
 			break;
 
 		case UNDO_INSERT_SLIDE:
-printf("UNDO_INSERT_SLIDE item redone\n");
+printf("Redoing UNDO_INSERT_SLIDE\n");
 
 			// * We're redoing the addition of a slide *
 			slides = g_list_append(slides, undo_data->slide_data);
@@ -216,7 +212,7 @@ printf("UNDO_INSERT_SLIDE item redone\n");
 			break;
 
 		case UNDO_REORDER_SLIDE:
-printf("UNDO_REORDER_SLIDE item redone\n");
+printf("Redoing UNDO_REORDER_SLIDE\n");
 			break;
 
 		default:
@@ -235,7 +231,7 @@ printf("UNDO_REORDER_SLIDE item redone\n");
 
 	// If we're at the end of the undo history we can't redo any further
 	num_items = g_list_length(undo_history);
-	if (undo_cursor >= (num_items - 2))
+	if (undo_cursor >= (num_items - 1))
 	{
 		menu_enable(_("/Edit/Redo"), FALSE);
 	}
@@ -255,7 +251,7 @@ printf("UNDO_REORDER_SLIDE item redone\n");
 	// Use the status bar to give further feedback to the user
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Last action redone"));
 	gdk_flush();
-
+printf("Redo done\n");
 	return TRUE;
 }
 

@@ -34,6 +34,7 @@
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "../text_tags/text_layer_create_colour_tag.h"
 #include "../text_tags/text_layer_create_font_size_tag.h"
+#include "../undo_redo/undo_functions.h"
 #include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 
@@ -48,6 +49,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	GtkTextTag			*text_tag;					// Used for the default text tags
 	layer				*tmp_layer;					// Temporary layer
 	layer_text			*tmp_text_ob;				// Temporary text layer object
+	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 
 
 	// If no project is loaded then don't run this function
@@ -113,6 +115,15 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	tmp_layer->transition_in_duration = 0.0;
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_out_duration = 0.0;
+
+	// Create and store the undo history item for this layer
+	undo_item_data = g_new0(undo_history_data, 1);
+	undo_item_data->layer_data_new = tmp_layer;
+	undo_item_data->layer_data_old = NULL;  // NULL means not set
+	undo_item_data->position_new = 0;
+	undo_item_data->position_old = -1;  // -1 means not set
+	undo_item_data->slide_data = current_slide->data;
+	undo_history_add_item(UNDO_INSERT_LAYER, undo_item_data, TRUE);
 
 	// Add the new text layer to the slide
 	layer_pointer = slide_data->layers;

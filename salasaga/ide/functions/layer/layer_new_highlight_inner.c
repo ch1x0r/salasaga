@@ -139,7 +139,7 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	tmp_highlight_ob->fill_colour.blue = 0;
 	tmp_highlight_ob->opacity = 50;  // Sensible default
 
-	// Constuct the new highlight layer
+	// Construct the new highlight layer
 	tmp_layer = g_new(layer, 1);
 	tmp_layer->object_type = TYPE_HIGHLIGHT;
 	tmp_layer->object_data = (GObject *) tmp_highlight_ob;
