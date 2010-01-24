@@ -38,6 +38,8 @@
 #include "../../../externs.h"
 #include "../../film_strip/film_strip_create_thumbnail.h"
 #include "../../dialog/display_warning.h"
+#include "../../layer/layer_duplicate.h"
+#include "../../undo_redo/undo_functions.h"
 #include "../../working_area/draw_layer_start_and_end_points.h"
 #include "time_line.h"
 #include "time_line_get_type.h"
@@ -68,6 +70,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 	slide				*this_slide_data;			// Data for the presently selected slide
 	TimeLine			*this_time_line;
 	GList				*tmp_glist = NULL;			// Is given a list of child widgets, if any exist
+	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 
 
 	// Safety check
@@ -229,7 +232,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 	area.x = priv->guide_line_end;
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 
-	// Check if this mouse releases matches a cursor drag
+	// Check if this mouse release matches a cursor drag
 	if (TRUE == priv->cursor_drag_active)
 	{
 		// Note that the cursor drag has finished
@@ -250,11 +253,13 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 		priv->guide_line_resize = 0;
 
-		// Calculate the end time of the layer (in seconds)
+		// Create pointers to things we're working with
 		this_slide_data = (slide *) current_slide->data;
 		layer_pointer = this_slide_data->layers;
 		layer_pointer = g_list_first(layer_pointer);
 		this_layer_data = g_list_nth_data(layer_pointer, priv->selected_layer_num);
+
+		// Calculate the end time of the layer (in seconds)
 		end_time = this_layer_data->start_time + this_layer_data->duration;
 		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 			end_time += this_layer_data->transition_in_duration;
@@ -280,6 +285,12 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		// Use the status bar to communicate the resize has completed
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Resize completed"));
 		gdk_flush();
+
+		// Store the undo item created in the button click event handler function
+		undo_item_data = time_line_get_undo_item();
+		undo_item_data->position_new = priv->selected_layer_num;
+		undo_item_data->layer_data_new = layer_duplicate(this_layer_data);
+		undo_history_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
 	}
 
 	// Check if this mouse release matches a drag
@@ -291,11 +302,13 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		// Mark that there are unsaved changes
 		changes_made = TRUE;
 
-		// Calculate the end time of the layer (in seconds)
+		// Create pointers to things we're working with
 		this_slide_data = (slide *) current_slide->data;
 		layer_pointer = this_slide_data->layers;
 		layer_pointer = g_list_first(layer_pointer);
 		this_layer_data = g_list_nth_data(layer_pointer, priv->selected_layer_num);
+
+		// Calculate the end time of the layer (in seconds)
 		end_time = this_layer_data->start_time + this_layer_data->duration;
 		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 			end_time += this_layer_data->transition_in_duration;
@@ -321,6 +334,12 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		// Use the status bar to communicate the drag has completed
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Drag completed"));
 		gdk_flush();
+
+		// Store the undo item created in the button click event handler function
+		undo_item_data = time_line_get_undo_item();
+		undo_item_data->position_new = priv->selected_layer_num;
+		undo_item_data->layer_data_new = layer_duplicate(this_layer_data);
+		undo_history_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
 	}
 
 	// Free the memory used in this function

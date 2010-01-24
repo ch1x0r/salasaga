@@ -37,7 +37,8 @@
 
 
 // Library wide variables
-gint					pixels_per_second;			// Number of pixels used to display each second
+static gint					pixels_per_second;		// Number of pixels used to display each second
+static undo_history_data	*undo_item_data = NULL;	// Memory structure undo history items are created in
 
 
 gint time_line_get_pixels_per_second()
@@ -45,9 +46,21 @@ gint time_line_get_pixels_per_second()
 	return pixels_per_second;
 }
 
+undo_history_data *time_line_get_undo_item()
+{
+	return undo_item_data;
+}
+
 void time_line_set_pixels_per_second(gint pps)
 {
 	pixels_per_second = pps;
+
+	return;
+}
+
+void time_line_set_undo_item(undo_history_data *item_data)
+{
+	undo_item_data = item_data;
 
 	return;
 }
