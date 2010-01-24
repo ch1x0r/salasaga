@@ -38,7 +38,9 @@
 #include "../../../externs.h"
 #include "../../widget_focus.h"
 #include "../../dialog/display_warning.h"
+#include "../../layer/layer_duplicate.h"
 #include "../../layer/layer_edit.h"
+#include "../../undo_redo/undo_functions.h"
 #include "../../working_area/draw_handle_box.h"
 #include "../../working_area/draw_layer_start_and_end_points.h"
 #include "../../working_area/draw_workspace.h"
@@ -67,6 +69,7 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 	TimeLine			*this_time_line;
 	gfloat				tl_cursor_pos;				// Holds the position of the cursor in the time line (in seconds)
 	GList				*tmp_glist = NULL;			// Is given a list of child widgets, if any exist
+	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 
 
 	// Safety check
@@ -183,9 +186,16 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 
 	// The user clicked on a valid row, so update the selection
 	time_line_set_selected_layer_num(GTK_WIDGET(this_time_line), new_row);
+	this_layer_data = g_list_nth_data(layer_pointer, new_row);
+
+	// Create an undo history item and store the existing layer data in it
+	undo_item_data = g_new0(undo_history_data, 1);
+	undo_item_data->layer_data_old = layer_duplicate(this_layer_data);
+	undo_item_data->position_old = new_row;
+	undo_item_data->slide_data = this_slide_data;
+	time_line_set_undo_item(undo_item_data);
 
 	// Calculate the present end time of the layer (in seconds)
-	this_layer_data = g_list_nth_data(layer_pointer, new_row);
 	end_time = this_layer_data->start_time + this_layer_data->duration;
 	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 		end_time += this_layer_data->transition_in_duration;

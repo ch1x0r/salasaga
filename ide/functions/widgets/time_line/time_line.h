@@ -107,7 +107,9 @@ struct _TimeLinePrivate
 
 // Functions to access time line variables
 gint time_line_get_pixels_per_second();
+undo_history_data *time_line_get_undo_item();
 void time_line_set_pixels_per_second(gint pps);
+void time_line_set_undo_item(undo_history_data *item_data);
 
 
 #ifdef __cplusplus
