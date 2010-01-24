@@ -35,6 +35,7 @@
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
+#include "../undo_redo/undo_functions.h"
 #include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 
@@ -55,6 +56,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	GString				*valid_image_path;			// Receives the new image path once validated
 	GString				*validated_string;			// Receives known good strings from the validation function
+	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 
 
 	// If no project is loaded then don't run this function
@@ -178,6 +180,15 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	gtk_widget_destroy(GTK_WIDGET(path_widget));
 
 	// * To get here, the user must have chosen a valid image file, so we process the results *
+
+	// Create and store the undo history item for this layer
+	undo_item_data = g_new0(undo_history_data, 1);
+	undo_item_data->layer_data_new = tmp_layer;
+	undo_item_data->layer_data_old = NULL;  // NULL means not set
+	undo_item_data->position_new = 0;
+	undo_item_data->position_old = -1;  // -1 means not set
+	undo_item_data->slide_data = current_slide->data;
+	undo_history_add_item(UNDO_INSERT_LAYER, undo_item_data, TRUE);
 
 	// Add the new layer to the slide
 	layer_pointer = slide_data->layers;
