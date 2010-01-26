@@ -54,11 +54,15 @@ gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpo
 		event->area.x, event->area.y,
 		event->area.width, event->area.height);
 
-	// Draw a handle box around the selected layer
-	draw_handle_box();
+	// If we're creating a new layer, we don't need to draw a handle box nor layer start and end points
+	if (TYPE_NONE == new_layer_selected)
+	{
+		// Draw a handle box around the selected layer
+		draw_handle_box();
 
-	// Draw the start and end points for the layer
-	draw_layer_start_and_end_points();
+		// Draw the start and end points for the layer
+		draw_layer_start_and_end_points();
+	}
 
 	return FALSE;
 }
