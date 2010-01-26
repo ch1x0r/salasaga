@@ -113,6 +113,9 @@ gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context,
 		target_slide->data = current_slide_data;
 		current_slide = target_slide;
 
+		// Set the changes made variable
+		changes_made = TRUE;
+
 		// Free the temporary GString
 		g_string_free(tmp_gstring, TRUE);
 	}
