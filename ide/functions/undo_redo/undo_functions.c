@@ -200,15 +200,6 @@ printf("Redoing UNDO_DELETE_LAYER\n");
 			// Redraw the timeline area
 			draw_timeline();
 
-			// Redraw the workspace
-			draw_workspace();
-
-			// Tell (force) the window system to redraw the working area *immediately*
-			gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
-
-			// Recreate the slide thumbnail
-			film_strip_create_thumbnail((slide *) current_slide->data);
-
 			break;
 
 		case UNDO_DELETE_SLIDE:
@@ -237,14 +228,8 @@ printf("Redoing UNDO_DELETE_SLIDE\n");
 			gtk_tree_model_get_iter(GTK_TREE_MODEL(film_strip_store), &film_strip_iter, new_path);
 			gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &film_strip_iter);
 
-			// Redraw the workspace
-			draw_workspace();
-
 			// Redraw the timeline area
 			draw_timeline();
-
-			// Tell (force) the window system to redraw the working area *immediately*
-			gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
 
 			break;
 
@@ -275,14 +260,8 @@ printf("Redoing UNDO_INSERT_SLIDE\n");
 			slides = g_list_first(slides);
 			current_slide = g_list_nth(slides, undo_data->position_new);
 
-			// Redraw the film strip
-			regenerate_film_strip_thumbnails();
-
 			// Redraw the timeline area
 			draw_timeline();
-
-			// Redraw the workspace
-			draw_workspace();
 
 			break;
 
@@ -338,8 +317,8 @@ printf("Redoing UNDO_REORDER_SLIDE\n");
 	// Tell (force) the window system to redraw the working area *immediately*
 	gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
 
-	// Recreate the slide thumbnail
-	film_strip_create_thumbnail((slide *) current_slide->data);
+	// Redraw the film strip
+	regenerate_film_strip_thumbnails();
 
 	// Set the changes made variable
 	changes_made = TRUE;
@@ -399,15 +378,6 @@ printf("UNDO_CHANGE_LAYER item undone\n");
 			// Redraw the timeline area
 			draw_timeline();
 
-			// Redraw the workspace
-			draw_workspace();
-
-			// Tell (force) the window system to redraw the working area *immediately*
-			gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
-
-			// Recreate the slide thumbnail
-			film_strip_create_thumbnail((slide *) current_slide->data);
-
 			break;
 
 		case UNDO_DELETE_LAYER:
@@ -422,15 +392,6 @@ printf("UNDO_DELETE_LAYER item undone\n");
 
 			// Redraw the timeline area
 			draw_timeline();
-
-			// Redraw the workspace
-			draw_workspace();
-
-			// Tell (force) the window system to redraw the working area *immediately*
-			gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
-
-			// Recreate the slide thumbnail
-			film_strip_create_thumbnail((slide *) current_slide->data);
 
 			break;
 
@@ -455,17 +416,8 @@ printf("UNDO_DELETE_SLIDE item undone\n");
 			gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
 			gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
 
-			// Redraw the workspace
-			draw_workspace();
-
-			// Recreate the slide thumbnail
-			film_strip_create_thumbnail((slide *) current_slide->data);
-
 			// Redraw the timeline area
 			draw_timeline();
-
-			// Tell (force) the window system to redraw the working area *immediately*
-			gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
 
 			break;
 
@@ -486,15 +438,6 @@ printf("UNDO_INSERT_LAYER item undone\n");
 
 			// Redraw the timeline area
 			draw_timeline();
-
-			// Redraw the workspace
-			draw_workspace();
-
-			// Tell (force) the window system to redraw the working area *immediately*
-			gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
-
-			// Recreate the slide thumbnail
-			film_strip_create_thumbnail((slide *) current_slide->data);
 
 			break;
 
@@ -523,14 +466,8 @@ printf("UNDO_INSERT_SLIDE item undone\n");
 				current_slide = g_list_nth(slides, slide_position);
 			}
 
-			// Redraw the film strip
-			regenerate_film_strip_thumbnails();
-
 			// Redraw the timeline area
 			draw_timeline();
-
-			// Redraw the workspace
-			draw_workspace();
 
 			break;
 
@@ -569,6 +506,15 @@ printf("UNDO_REORDER_SLIDE item undone\n");
 
 	// Move the undo cursor back one item
 	undo_cursor--;
+
+	// Redraw the workspace
+	draw_workspace();
+
+	// Tell (force) the window system to redraw the working area *immediately*
+	gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+
+	// Redraw the film strip
+	regenerate_film_strip_thumbnails();
 
 	// Enable the Edit -> Redo option
 	menu_enable(_("/Edit/Redo"), TRUE);
