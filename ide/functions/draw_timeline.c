@@ -36,8 +36,11 @@
 #include "../salasaga_types.h"
 #include "../externs.h"
 #include "dialog/display_warning.h"
+#include "widgets/time_line/time_line.h"
+#include "widgets/time_line/time_line_get_type.h"
 #include "widgets/time_line/time_line_new.h"
 #include "widgets/time_line/time_line_regenerate_widget.h"
+#include "widgets/time_line/time_line_set_stored_slide_duration.h"
 
 
 void draw_timeline(void)
@@ -51,10 +54,11 @@ void draw_timeline(void)
 
 	// If the slide doesn't have a timeline widget constructed for it yet, then make one
 	slide_pointer = (slide *) current_slide->data;
-	if (NULL == slide_pointer->timeline_widget)
+	if (FALSE == IS_TIME_LINE(slide_pointer->timeline_widget))
 	{
 		// Construct the widget used to display the slide in the timeline
 		slide_pointer->timeline_widget = time_line_new();
+		time_line_set_stored_slide_duration(slide_pointer->timeline_widget, slide_pointer->duration);
 	} else
 	{
 		// This slide already has a widget, so regenerate it
