@@ -38,6 +38,7 @@
 #include "../layer/compress_layers.h"
 #include "../widgets/time_line/time_line_get_cursor_position.h"
 #include "../widgets/time_line/time_line_new.h"
+#include "../widgets/time_line/time_line_set_stored_slide_duration.h"
 
 
 void draw_workspace(void)
@@ -65,6 +66,7 @@ void draw_workspace(void)
 	{
 		// Construct the widget used to display the slide in the timeline
 		current_slide_data->timeline_widget = time_line_new();
+		time_line_set_stored_slide_duration(current_slide_data->timeline_widget, current_slide_data->duration);
 	}
 
 	// Recalculate the size of the working area

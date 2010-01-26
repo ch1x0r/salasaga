@@ -45,6 +45,7 @@
 #include "../widgets/time_line/time_line_get_type.h"
 #include "../widgets/time_line/time_line_new.h"
 #include "../widgets/time_line/time_line_set_selected_layer_num.h"
+#include "../widgets/time_line/time_line_set_stored_slide_duration.h"
 #include "../working_area/draw_handle_box.h"
 #include "../working_area/draw_workspace.h"
 
@@ -84,10 +85,11 @@ gboolean film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		slide_data = current_slide->data;
 
 		// If the slide doesn't have a timeline widget constructed for it yet, then make one
-		if (NULL == slide_data->timeline_widget)
+		if (FALSE == IS_TIME_LINE(slide_data->timeline_widget))
 		{
 			// Construct the widget used to display the slide in the timeline
 			slide_data->timeline_widget = time_line_new();
+			time_line_set_stored_slide_duration(slide_data->timeline_widget, slide_data->duration);
 		}
 
 		// Redraw the timeline

@@ -36,8 +36,11 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../layer/compress_layers.h"
+#include "../widgets/time_line/time_line.h"
+#include "../widgets/time_line/time_line_get_type.h"
 #include "../widgets/time_line/time_line_get_cursor_position.h"
 #include "../widgets/time_line/time_line_new.h"
+#include "../widgets/time_line/time_line_set_stored_slide_duration.h"
 
 
 void regenerate_film_strip_thumbnails()
@@ -82,10 +85,11 @@ void regenerate_film_strip_thumbnails()
 		this_slide_data = (slide *) this_slide->data;
 
 		// If the present slide doesn't have a time line widget, then create one
-		if (NULL == this_slide_data->timeline_widget)
+		if (FALSE == IS_TIME_LINE(this_slide_data->timeline_widget))
 		{
 			// Construct the widget used to display the slide in the timeline
 			this_slide_data->timeline_widget = time_line_new();
+			time_line_set_stored_slide_duration(this_slide_data->timeline_widget, this_slide_data->duration);
 		}
 
 		// Get the current time line cursor position
