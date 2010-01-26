@@ -179,9 +179,6 @@ printf("Redoing UNDO_CHANGE_LAYER\n");
 			// Insert the "new" layer into the slide at the old position
 			slide_data->layers = g_list_insert(slide_data->layers, undo_data->layer_data_new, undo_data->position_new);
 
-			// Redraw the timeline area
-			draw_timeline();
-
 			break;
 
 		case UNDO_DELETE_LAYER:
@@ -196,9 +193,6 @@ printf("Redoing UNDO_DELETE_LAYER\n");
 
 			// Decrement the counter of layers in the slide
 			slide_data->num_layers--;
-
-			// Redraw the timeline area
-			draw_timeline();
 
 			break;
 
@@ -228,9 +222,6 @@ printf("Redoing UNDO_DELETE_SLIDE\n");
 			gtk_tree_model_get_iter(GTK_TREE_MODEL(film_strip_store), &film_strip_iter, new_path);
 			gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &film_strip_iter);
 
-			// Redraw the timeline area
-			draw_timeline();
-
 			break;
 
 		case UNDO_INSERT_LAYER:
@@ -245,9 +236,6 @@ printf("Redoing UNDO_INSERT_LAYER\n");
 			// Increment the counter of layers in the slide
 			slide_data->num_layers++;
 
-			// Redraw the timeline area
-			draw_timeline();
-
 			break;
 
 		case UNDO_INSERT_SLIDE:
@@ -259,9 +247,6 @@ printf("Redoing UNDO_INSERT_SLIDE\n");
 			// Point to the redone slide
 			slides = g_list_first(slides);
 			current_slide = g_list_nth(slides, undo_data->position_new);
-
-			// Redraw the timeline area
-			draw_timeline();
 
 			break;
 
@@ -310,6 +295,9 @@ printf("Redoing UNDO_REORDER_SLIDE\n");
 	{
 		menu_enable(_("/Edit/Redo"), FALSE);
 	}
+
+	// Redraw the timeline area
+	draw_timeline();
 
 	// Redraw the workspace
 	draw_workspace();
@@ -375,9 +363,6 @@ printf("UNDO_CHANGE_LAYER item undone\n");
 			// Insert the "old" layer into the slide at the old position
 			slide_data->layers = g_list_insert(slide_data->layers, undo_data->layer_data_old, undo_data->position_old);
 
-			// Redraw the timeline area
-			draw_timeline();
-
 			break;
 
 		case UNDO_DELETE_LAYER:
@@ -389,9 +374,6 @@ printf("UNDO_DELETE_LAYER item undone\n");
 
 			// Increment the counter of layers in the slide
 			slide_data->num_layers++;
-
-			// Redraw the timeline area
-			draw_timeline();
 
 			break;
 
@@ -416,9 +398,6 @@ printf("UNDO_DELETE_SLIDE item undone\n");
 			gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
 			gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
 
-			// Redraw the timeline area
-			draw_timeline();
-
 			break;
 
 		case UNDO_INSERT_LAYER:
@@ -435,9 +414,6 @@ printf("UNDO_INSERT_LAYER item undone\n");
 
 			// Decrement the counter of layers in the slide
 			slide_data->num_layers--;
-
-			// Redraw the timeline area
-			draw_timeline();
 
 			break;
 
@@ -465,9 +441,6 @@ printf("UNDO_INSERT_SLIDE item undone\n");
 			{
 				current_slide = g_list_nth(slides, slide_position);
 			}
-
-			// Redraw the timeline area
-			draw_timeline();
 
 			break;
 
@@ -506,6 +479,9 @@ printf("UNDO_REORDER_SLIDE item undone\n");
 
 	// Move the undo cursor back one item
 	undo_cursor--;
+
+	// Redraw the timeline area
+	draw_timeline();
 
 	// Redraw the workspace
 	draw_workspace();
