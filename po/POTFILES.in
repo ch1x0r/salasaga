@@ -42,7 +42,6 @@ ide/functions/film_strip/film_strip_button_clicked.c
 ide/functions/film_strip/film_strip_create_thumbnail.c
 ide/functions/film_strip/film_strip_handle_changed.c
 ide/functions/film_strip/film_strip_handle_released.c
-ide/functions/film_strip/film_strip_key_release_event.c
 ide/functions/film_strip/film_strip_slide_clicked.c
 ide/functions/film_strip/regenerate_film_strip_thumbnails.c
 ide/functions/gtk_text_buffer_duplicate.c
@@ -73,6 +72,8 @@ ide/functions/logger_simple.c
 ide/functions/logger_with_domain.c
 ide/functions/menu/create_menu_bar.c
 ide/functions/menu/menu_edit_preferences.c
+ide/functions/menu/menu_edit_redo.c
+ide/functions/menu/menu_edit_undo.c
 ide/functions/menu/menu_enable.c
 ide/functions/menu/menu_export_layer.c
 ide/functions/menu/menu_export_slide.c
@@ -129,6 +130,7 @@ ide/functions/text_tags/get_selection_font_size.c
 ide/functions/text_tags/reset_global_text_tags_table.c
 ide/functions/text_tags/text_layer_create_colour_tag.c
 ide/functions/text_tags/text_layer_create_font_size_tag.c
+ide/functions/undo_redo/undo_functions.c
 ide/functions/validate_value.c
 ide/functions/widget_focus.c
 ide/functions/widgets/time_line/time_line_button_press_event.c
