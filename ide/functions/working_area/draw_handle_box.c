@@ -96,6 +96,8 @@ gboolean draw_handle_box(void)
 	// Simplify pointers
 	current_slide_data->layers = g_list_first(current_slide_data->layers);
 	this_layer_data = g_list_nth_data(current_slide_data->layers, selected_layer);
+	if (NULL == this_layer_data)  // Sanity check
+		return TRUE;
 	finish_x = this_layer_data->x_offset_finish;
 	finish_y = this_layer_data->y_offset_finish;
 	start_time = this_layer_data->start_time;
