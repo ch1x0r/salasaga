@@ -138,16 +138,18 @@ gint undo_history_redo_item(void)
 {
 
 	// Local variables
-	slide				*current_slide_data;		// Pointer to the data for the currently selected slide
-	GtkTreeIter			current_slide_iter;			// Points to the currently selected slide
 	GtkTreeIter			film_strip_iter;
 	GList				*layer_pointer;				// Points to layer items
 	GString				*message;					// Temporary string used for message creation
 	GtkTreePath			*new_path;					// Temporary path
 	gint				num_items;					// The number of items in the undo history
 	gint				num_slides;					// The number of slides in the project
+	slide				*our_slide_data;			// Pointer to slide data
+	GList				*our_slide_entry;			// Pointer to a slide
+	GtkTreeIter			our_slide_iter;				// Points to the slide we're working with
+	slide				*other_slide_data;			// Pointer to slide data
+	GList				*other_slide_entry;			// Pointer to a slide
 	slide				*slide_data;
-	GList				*target_slide;				// Pointer to the target slide
 	GtkTreeIter			target_slide_iter;
 	GString				*tmp_gstring;
 	undo_history_data	*undo_data;
@@ -166,8 +168,8 @@ gint undo_history_redo_item(void)
 	switch (undo_type)
 	{
 		case UNDO_CHANGE_LAYER:
-printf("Redoing UNDO_CHANGE_LAYER\n");
-			// * We're redoing a layer change, so we update the slide to use the new version of the layer *
+
+			// * We're redoing a change to a layer *
 
 			// Point to the layer we're going to change
 			slide_data = undo_data->slide_data;
@@ -182,7 +184,8 @@ printf("Redoing UNDO_CHANGE_LAYER\n");
 			break;
 
 		case UNDO_DELETE_LAYER:
-printf("Redoing UNDO_DELETE_LAYER\n");
+
+			// * We're redoing the deletion of a layer *
 
 			// Point to the layer we're going to change
 			slide_data = undo_data->slide_data;
@@ -197,7 +200,8 @@ printf("Redoing UNDO_DELETE_LAYER\n");
 			break;
 
 		case UNDO_DELETE_SLIDE:
-printf("Redoing UNDO_DELETE_SLIDE\n");
+
+			// * We're redoing the deletion of a slide *
 
 			// Point to the deleted slide data we need to undo
 			slide_data = undo_data->slide_data;
@@ -225,7 +229,6 @@ printf("Redoing UNDO_DELETE_SLIDE\n");
 			break;
 
 		case UNDO_INSERT_LAYER:
-printf("Redoing UNDO_INSERT_LAYER\n");
 
 			// * We're redoing the addition of a layer *
 
@@ -239,7 +242,6 @@ printf("Redoing UNDO_INSERT_LAYER\n");
 			break;
 
 		case UNDO_INSERT_SLIDE:
-printf("Redoing UNDO_INSERT_SLIDE\n");
 
 			// * We're redoing the addition of a slide *
 			slides = g_list_append(slides, undo_data->slide_data);
@@ -251,24 +253,24 @@ printf("Redoing UNDO_INSERT_SLIDE\n");
 			break;
 
 		case UNDO_REORDER_SLIDE:
-printf("Redoing UNDO_REORDER_SLIDE\n");
 
 			// * We're redoing the reordering of a slide *
 
 			// Reorder the slides in the film strip
 			tmp_gstring = g_string_new(NULL);
 			g_string_printf(tmp_gstring, "%u", undo_data->position_old);
-			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &current_slide_iter, tmp_gstring->str);
+			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &our_slide_iter, tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", undo_data->position_new);
 			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &target_slide_iter, tmp_gstring->str);
-			gtk_list_store_swap(GTK_LIST_STORE(film_strip_store), &current_slide_iter, &target_slide_iter);
+			gtk_list_store_swap(GTK_LIST_STORE(film_strip_store), &our_slide_iter, &target_slide_iter);
 
 			// Swap the slides around in the project
-			current_slide_data = current_slide->data;
-			target_slide = g_list_nth(slides, undo_data->position_new);
-			current_slide->data = target_slide->data;
-			target_slide->data = current_slide_data;
-			current_slide = target_slide;
+			our_slide_entry = g_list_nth(slides, undo_data->position_new);
+			our_slide_data = our_slide_entry->data;
+			other_slide_entry = g_list_nth(slides, undo_data->position_old);
+			other_slide_data = other_slide_entry->data;
+			our_slide_entry->data = other_slide_data;
+			other_slide_entry->data = our_slide_data;
 
 			// Free the temporary GString
 			g_string_free(tmp_gstring, TRUE);
@@ -314,7 +316,7 @@ printf("Redoing UNDO_REORDER_SLIDE\n");
 	// Use the status bar to give further feedback to the user
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Last action redone"));
 	gdk_flush();
-printf("Redo done\n");
+
 	return TRUE;
 }
 
@@ -323,16 +325,18 @@ printf("Redo done\n");
 gint undo_history_undo_item(void)
 {
 	// Local variables
-	slide				*current_slide_data;		// Pointer to the data for the currently selected slide
-	GtkTreeIter			current_slide_iter;			// Points to the currently selected slide
 	GtkTreeIter			film_strip_iter;
 	GList				*layer_pointer;				// Points to layer items
 	GString				*message;					// Temporary string used for message creation
 	GtkTreePath			*new_path;					// Temporary path
 	gint				num_slides;
+	slide				*our_slide_data;			// Pointer to slide data
+	GList				*our_slide_entry;			// Pointer to a slide
+	GtkTreeIter			our_slide_iter;				// Points to the slide we're working with
+	slide				*other_slide_data;			// Pointer to slide data
+	GList				*other_slide_entry;			// Pointer to a slide
 	slide				*slide_data;
 	gint				slide_position;
-	GList				*target_slide;				// Pointer to the target slide
 	GtkTreeIter			target_slide_iter;
 	GString				*tmp_gstring;
 	undo_history_item	*undo_item;					// Points to the undo history item we're working with
@@ -350,8 +354,8 @@ gint undo_history_undo_item(void)
 	switch (undo_type)
 	{
 		case UNDO_CHANGE_LAYER:
-printf("UNDO_CHANGE_LAYER item undone\n");
-			// * We're undoing a layer change *
+
+			// * We're undoing a change to a layer *
 
 			// Point to the layer we're going to change
 			slide_data = undo_data->slide_data;
@@ -366,7 +370,8 @@ printf("UNDO_CHANGE_LAYER item undone\n");
 			break;
 
 		case UNDO_DELETE_LAYER:
-printf("UNDO_DELETE_LAYER item undone\n");
+
+			// * We're undoing the deletion of a layer *
 
 			// Insert the "old" layer into the slide at the old position
 			slide_data = undo_data->slide_data;
@@ -378,7 +383,8 @@ printf("UNDO_DELETE_LAYER item undone\n");
 			break;
 
 		case UNDO_DELETE_SLIDE:
-printf("UNDO_DELETE_SLIDE item undone\n");
+
+			// * We're undoing the deletion of a slide *
 
 			// Point to the deleted slide data we need to undo
 			slide_data = undo_data->slide_data;
@@ -401,7 +407,6 @@ printf("UNDO_DELETE_SLIDE item undone\n");
 			break;
 
 		case UNDO_INSERT_LAYER:
-printf("UNDO_INSERT_LAYER item undone\n");
 
 			// * We're undoing the addition of a layer *
 
@@ -418,7 +423,6 @@ printf("UNDO_INSERT_LAYER item undone\n");
 			break;
 
 		case UNDO_INSERT_SLIDE:
-printf("UNDO_INSERT_SLIDE item undone\n");
 
 			// * We're undoing the addition of a slide *
 
@@ -445,7 +449,6 @@ printf("UNDO_INSERT_SLIDE item undone\n");
 			break;
 
 		case UNDO_REORDER_SLIDE:
-printf("UNDO_REORDER_SLIDE item undone\n");
 
 			// * We're undoing the reordering of a slide *
 
@@ -454,15 +457,16 @@ printf("UNDO_REORDER_SLIDE item undone\n");
 			g_string_printf(tmp_gstring, "%u", undo_data->position_old);
 			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &target_slide_iter, tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", undo_data->position_new);
-			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &current_slide_iter, tmp_gstring->str);
-			gtk_list_store_swap(GTK_LIST_STORE(film_strip_store), &current_slide_iter, &target_slide_iter);
+			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &our_slide_iter, tmp_gstring->str);
+			gtk_list_store_swap(GTK_LIST_STORE(film_strip_store), &our_slide_iter, &target_slide_iter);
 
 			// Swap the slides around in the project
-			current_slide_data = current_slide->data;
-			target_slide = g_list_nth(slides, undo_data->position_old);
-			current_slide->data = target_slide->data;
-			target_slide->data = current_slide_data;
-			current_slide = target_slide;
+			our_slide_entry = g_list_nth(slides, undo_data->position_new);
+			our_slide_data = our_slide_entry->data;
+			other_slide_entry = g_list_nth(slides, undo_data->position_old);
+			other_slide_data = other_slide_entry->data;
+			our_slide_entry->data = other_slide_data;
+			other_slide_entry->data = our_slide_data;
 
 			// Free the temporary GString
 			g_string_free(tmp_gstring, TRUE);
