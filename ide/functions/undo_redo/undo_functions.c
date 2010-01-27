@@ -314,7 +314,7 @@ gint undo_history_redo_item(void)
 	changes_made = TRUE;
 
 	// Use the status bar to give further feedback to the user
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Last action redone"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Last action redone"));
 	gdk_flush();
 
 	return TRUE;
@@ -509,7 +509,7 @@ gint undo_history_undo_item(void)
 	changes_made = TRUE;
 
 	// Use the status bar to give further feedback to the user
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Last action undone"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Last action undone"));
 	gdk_flush();
 
 	return TRUE;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga 0.8.0-alpha7\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2010-01-26 21:59+1100\n"
+"POT-Creation-Date: 2010-01-27 21:57+1100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -3572,11 +3572,11 @@ msgid ""
 msgstr ""
 
 #: ide/functions/undo_redo/undo_functions.c:317
-msgid " Last action redone"
+msgid "Last action redone"
 msgstr ""
 
 #: ide/functions/undo_redo/undo_functions.c:512
-msgid " Last action undone"
+msgid "Last action undone"
 msgstr ""
 
 #: ide/functions/validate_value.c:713 screen_capture/validate_value.c:576
