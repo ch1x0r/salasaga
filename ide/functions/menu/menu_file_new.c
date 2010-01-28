@@ -77,10 +77,10 @@ void menu_file_new(void)
 	GtkWidget			*name_entry;				// Widget for accepting the name of the new project
 
 	GtkWidget			*width_label;				// Label widget
-	GtkWidget			*width_slider;				//
+	GtkWidget			*width_button;				//
 
 	GtkWidget			*height_label;				// Label widget
-	GtkWidget			*height_slider;				//
+	GtkWidget			*height_button;				//
 
 	GtkWidget			*fps_label;					// Label widget
 	GtkWidget			*fps_slider;				//
@@ -126,16 +126,10 @@ void menu_file_new(void)
 	gtk_misc_set_alignment(GTK_MISC(width_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the slider that accepts the project width
-	width_slider = gtk_hscale_new_with_range(valid_fields[PROJECT_WIDTH].min_value, valid_fields[PROJECT_WIDTH].max_value, 1);
-	gtk_range_set_value(GTK_RANGE(width_slider), project_width);
-	gtk_scale_add_mark(GTK_SCALE(width_slider), project_width, GTK_POS_TOP, NULL);
-	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[PROJECT_WIDTH].max_value; scale_mark_counter += 1024)
-	{
-		// Add scale marks
-		gtk_scale_add_mark(GTK_SCALE(width_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
-	}
-	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_slider), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the entry that accepts the project width
+	width_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_WIDTH].max_value, 10);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(width_button), project_width);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the project height
@@ -143,16 +137,10 @@ void menu_file_new(void)
 	gtk_misc_set_alignment(GTK_MISC(height_label), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 
-	// Create the slider that accepts the project height
-	height_slider = gtk_hscale_new_with_range(valid_fields[PROJECT_HEIGHT].min_value, valid_fields[PROJECT_HEIGHT].max_value, 1);
-	gtk_range_set_value(GTK_RANGE(height_slider), project_height);
-	gtk_scale_add_mark(GTK_SCALE(height_slider), project_height, GTK_POS_TOP, NULL);
-	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[PROJECT_HEIGHT].max_value; scale_mark_counter += 1024)
-	{
-		// Add scale marks
-		gtk_scale_add_mark(GTK_SCALE(height_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
-	}
-	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_slider), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	// Create the entry that accepts the project height
+	height_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_HEIGHT].max_value, 10);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(height_button), project_height);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the number of frames per second
@@ -218,7 +206,7 @@ void menu_file_new(void)
 		}
 
 		// Validate the project width
-		guint_val = gtk_range_get_value(GTK_RANGE(width_slider));
+		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(width_button));
 		validated_guint = validate_value(PROJECT_WIDTH, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
@@ -232,7 +220,7 @@ void menu_file_new(void)
 		}
 
 		// Validate the project height
-		guint_val = gtk_range_get_value(GTK_RANGE(height_slider));
+		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(height_button));
 		validated_guint = validate_value(PROJECT_HEIGHT, V_INT_UNSIGNED, &guint_val);
 		if (NULL == validated_guint)
 		{
