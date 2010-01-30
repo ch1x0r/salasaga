@@ -36,6 +36,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../dialog/display_warning.h"
 #include "compress_layers_inner.h"
 
 
@@ -48,6 +49,7 @@ GdkPixmap *compress_layers(GList *which_slide, gfloat time_position, guint width
 	layer				*layer_data;				// Pointer to the layer data
 	gint				layer_counter;				// Simple counter
 	GList				*layer_pointer;				// Pointer to the layer GList
+	GString				*message;					// Used to construct message strings
 	GdkGC				*pixmap_gc;
 	gint				pixmap_height;				// Receives the height of a given pixmap
 	gint				pixmap_width;				// Receives the width of a given pixmap
@@ -92,7 +94,16 @@ GdkPixmap *compress_layers(GList *which_slide, gfloat time_position, guint width
 		{
 			// This is an empty layer
 			backing_pixbuf = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, width, height);
-			gdk_pixbuf_fill(backing_pixbuf, ((((layer_empty *) layer_data->object_data)->bg_color.red / 256) << 24)
+			if (NULL == backing_pixbuf)
+			{
+				// Couldn't create a GDK Pixbuf
+				message = g_string_new(NULL);
+				g_string_printf(message, "%s ED463: %s", _("Error"), _("Couldn't create a GDK Pixbuf."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
+				return NULL;
+			}
+			gdk_pixbuf_fill(GDK_PIXBUF(backing_pixbuf), ((((layer_empty *) layer_data->object_data)->bg_color.red / 256) << 24)
 				+ ((((layer_empty *) layer_data->object_data)->bg_color.green / 256) << 16)
 				+ ((((layer_empty *) layer_data->object_data)->bg_color.blue / 256) << 8) + 0xff);
 		} else
