@@ -1,11 +1,11 @@
-2010-??-??
+2010-01-30 - JustinClift
 
  0.8.0-Alpha 7 Release
  *********************
 
  * Added support for Undo/Redo.  Presently keep a history of unlimited length.
  * Fixed a significant crashing bug which was likely present for some time.
-
+ * Fix small corner case bugs.
 
 
 2010-01-01 - JustinClift

@@ -1,4 +1,12 @@
-Salasaga 0.8.0-Alpha 6
+Salasaga 0.8.0-Alpha 7 (2010-01-30)
+**********************
+
+* Added support for Undo/Redo.  Presently keep a history of unlimited length.
+* Fixed a significant crashing bug which was likely present for some time.
+* Fix small corner case bugs.
+
+
+Salasaga 0.8.0-Alpha 6 (2010-01-01)
 **********************
  
 * Added a status bar icon, with a right click menu for taking screenshots and various actions.
