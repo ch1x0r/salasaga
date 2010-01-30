@@ -83,6 +83,10 @@ void draw_workspace(void)
 		front_store = NULL;
 	}
 	front_store = compress_layers(current_slide, cursor_position, working_width, working_height);
+	if (NULL == front_store)
+	{
+		return;
+	}
 
 	// Make a 1 pixel border around the front store, to separate it visually from its background
 	if (NULL == line_gc)
