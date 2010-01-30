@@ -1,5 +1,5 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2010 Justin Clift
+# Copyright (C) YEAR Justin Clift
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga 0.8.0-alpha7\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2010-01-27 21:57+1100\n"
+"POT-Creation-Date: 2010-01-30 19:32+1100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -106,7 +106,8 @@ msgstr ""
 #: ide/functions/film_strip/film_strip_create_thumbnail.c:79
 #: ide/functions/gtk_text_buffer_duplicate.c:87
 #: ide/functions/gtk_text_buffer_duplicate.c:96 ide/functions/key_bind.c:80
-#: ide/functions/key_bind.c:98 ide/functions/layer/compress_layers_inner.c:273
+#: ide/functions/key_bind.c:98 ide/functions/layer/compress_layers.c:101
+#: ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
 #: ide/functions/layer/image_crop.c:122 ide/functions/layer/image_crop.c:133
 #: ide/functions/layer/image_crop.c:262 ide/functions/layer/image_crop.c:291
@@ -150,10 +151,10 @@ msgstr ""
 #: ide/functions/menu/menu_export_swf.c:65
 #: ide/functions/menu/menu_export_swf.c:130
 #: ide/functions/menu/menu_export_swf.c:171
-#: ide/functions/menu/menu_file_new.c:210
-#: ide/functions/menu/menu_file_new.c:225
-#: ide/functions/menu/menu_file_new.c:239
-#: ide/functions/menu/menu_file_new.c:253
+#: ide/functions/menu/menu_file_new.c:198
+#: ide/functions/menu/menu_file_new.c:213
+#: ide/functions/menu/menu_file_new.c:227
+#: ide/functions/menu/menu_file_new.c:241
 #: ide/functions/menu/menu_file_open.c:171
 #: ide/functions/menu/menu_file_save_as.c:148
 #: ide/functions/menu/menu_file_save.c:94
@@ -1561,6 +1562,10 @@ msgid ""
 "is disabled."
 msgstr ""
 
+#: ide/functions/layer/compress_layers.c:101
+msgid "Couldn't create a GDK Pixbuf."
+msgstr ""
+
 #: ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
 #: ide/functions/layer/layer_edit.c:218
@@ -2097,7 +2102,7 @@ msgstr ""
 
 #: ide/functions/menu/create_menu_bar.c:182
 #: ide/functions/menu/menu_file_close.c:109
-#: ide/functions/menu/menu_file_new.c:363
+#: ide/functions/menu/menu_file_new.c:351
 #: ide/functions/menu/menu_file_open.c:265
 #: ide/functions/menu/menu_screenshots_import.c:476
 msgid "/Project"
@@ -2105,7 +2110,7 @@ msgstr ""
 
 #: ide/functions/menu/create_menu_bar.c:183
 #: ide/functions/menu/menu_file_close.c:110
-#: ide/functions/menu/menu_file_new.c:364
+#: ide/functions/menu/menu_file_new.c:352
 #: ide/functions/menu/menu_file_open.c:266
 #: ide/functions/menu/menu_screenshots_import.c:477
 msgid "/Slide"
@@ -2113,7 +2118,7 @@ msgstr ""
 
 #: ide/functions/menu/create_menu_bar.c:184
 #: ide/functions/menu/menu_file_close.c:111
-#: ide/functions/menu/menu_file_new.c:365
+#: ide/functions/menu/menu_file_new.c:353
 #: ide/functions/menu/menu_file_open.c:267
 #: ide/functions/menu/menu_screenshots_import.c:478
 msgid "/Layer"
@@ -2121,7 +2126,7 @@ msgstr ""
 
 #: ide/functions/menu/create_menu_bar.c:185
 #: ide/functions/menu/menu_file_close.c:112
-#: ide/functions/menu/menu_file_new.c:366
+#: ide/functions/menu/menu_file_new.c:354
 #: ide/functions/menu/menu_file_open.c:268
 #: ide/functions/menu/menu_screenshots_import.c:479
 msgid "/Export"
@@ -2392,66 +2397,66 @@ msgstr ""
 msgid "Width: "
 msgstr ""
 
-#: ide/functions/menu/menu_file_new.c:142
+#: ide/functions/menu/menu_file_new.c:136
 #: ide/functions/menu/menu_screenshots_capture.c:307
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:176
 msgid "Height: "
 msgstr ""
 
-#: ide/functions/menu/menu_file_new.c:159
+#: ide/functions/menu/menu_file_new.c:147
 #: ide/functions/menu/menu_project_properties.c:156
 msgid "Frames per second: "
 msgstr ""
 
-#: ide/functions/menu/menu_file_new.c:176
+#: ide/functions/menu/menu_file_new.c:164
 msgid "Background color: "
 msgstr ""
 
-#: ide/functions/menu/menu_file_new.c:210
+#: ide/functions/menu/menu_file_new.c:198
 msgid ""
 "There was something wrong with the new project name.  Defaulting to 'New "
 "Project' instead."
 msgstr ""
 
-#: ide/functions/menu/menu_file_new.c:212 ide/salasaga.c:301
+#: ide/functions/menu/menu_file_new.c:200 ide/salasaga.c:301
 msgid "New Project"
 msgstr ""
 
-#: ide/functions/menu/menu_file_new.c:225
+#: ide/functions/menu/menu_file_new.c:213
 msgid ""
 "There was something wrong with the project width value.  Please try again."
 msgstr ""
 
-#: ide/functions/menu/menu_file_new.c:239
+#: ide/functions/menu/menu_file_new.c:227
 msgid ""
 "There was something wrong with the project height value.  Please try again."
 msgstr ""
 
-#: ide/functions/menu/menu_file_new.c:253
+#: ide/functions/menu/menu_file_new.c:241
 msgid ""
 "There was something wrong with the project frames per second value.  Please "
 "try again."
 msgstr ""
 
-#: ide/functions/menu/menu_file_new.c:306
+#: ide/functions/menu/menu_file_new.c:294
 #: ide/functions/menu/menu_help_website.c:47
 #: ide/functions/read/read_project.c:146
 msgid "http://www.salasaga.org"
 msgstr ""
 
-#: ide/functions/menu/menu_file_new.c:307
+#: ide/functions/menu/menu_file_new.c:295
 #: ide/functions/menu/menu_screenshots_import.c:99
 #: ide/functions/read/read_project.c:147
 msgid "_blank"
 msgstr ""
 
-#: ide/functions/menu/menu_file_new.c:309
+#: ide/functions/menu/menu_file_new.c:297
 #: ide/functions/menu/menu_screenshots_import.c:101
 #: ide/functions/read/read_project.c:149
 msgid "Created using Salasaga"
 msgstr ""
 
-#: ide/functions/menu/menu_file_new.c:335
+#: ide/functions/menu/menu_file_new.c:323
 msgid " Project initialized"
 msgstr ""
 
