@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-20 19:23+1100\n"
-"PO-Revision-Date: 2009-12-20 10:09+0000\n"
+"POT-Creation-Date: 2010-01-27 21:57+1100\n"
+"PO-Revision-Date: 2010-01-26 15:25+0000\n"
 "Last-Translator: Yannis Kaskamanidis <ttnfy17@yahoo.gr>\n"
 "Language-Team: Greek <el@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-25 00:32+0000\n"
+"X-Launchpad-Export-Date: 2010-01-30 08:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
@@ -80,7 +80,7 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_text.c:867
 #: ide/functions/dialog/display_dialog_text.c:881
 #: ide/functions/dialog/display_dialog_text.c:895
-#: ide/functions/draw_timeline.c:66
+#: ide/functions/draw_timeline.c:70
 #: ide/functions/export/html/export_html_wrapper.c:121
 #: ide/functions/export/html/export_html_wrapper.c:167
 #: ide/functions/export/swf/export_swf_control_bar.c:460
@@ -122,10 +122,10 @@ msgstr ""
 #: ide/functions/layer/layer_duplicate.c:179
 #: ide/functions/layer/layer_duplicate.c:195
 #: ide/functions/layer/layer_duplicate.c:221
-#: ide/functions/layer/layer_edit.c:211 ide/functions/layer/layer_free.c:87
-#: ide/functions/layer/layer_new_image_inner.c:137
-#: ide/functions/layer/layer_new_image_inner.c:146
-#: ide/functions/layer/layer_new_image_inner.c:167
+#: ide/functions/layer/layer_edit.c:218 ide/functions/layer/layer_free.c:87
+#: ide/functions/layer/layer_new_image_inner.c:140
+#: ide/functions/layer/layer_new_image_inner.c:149
+#: ide/functions/layer/layer_new_image_inner.c:170
 #: ide/functions/load_fonts.c:69 ide/functions/load_fonts.c:173
 #: ide/functions/load_fonts.c:180 ide/functions/load_fonts.c:209
 #: ide/functions/load_fonts.c:219
@@ -151,11 +151,11 @@ msgstr ""
 #: ide/functions/menu/menu_export_swf.c:65
 #: ide/functions/menu/menu_export_swf.c:130
 #: ide/functions/menu/menu_export_swf.c:171
-#: ide/functions/menu/menu_file_new.c:209
-#: ide/functions/menu/menu_file_new.c:224
-#: ide/functions/menu/menu_file_new.c:238
-#: ide/functions/menu/menu_file_new.c:252
-#: ide/functions/menu/menu_file_open.c:170
+#: ide/functions/menu/menu_file_new.c:210
+#: ide/functions/menu/menu_file_new.c:225
+#: ide/functions/menu/menu_file_new.c:239
+#: ide/functions/menu/menu_file_new.c:253
+#: ide/functions/menu/menu_file_open.c:171
 #: ide/functions/menu/menu_file_save_as.c:148
 #: ide/functions/menu/menu_file_save.c:94
 #: ide/functions/menu/menu_file_save.c:104
@@ -328,13 +328,18 @@ msgstr ""
 #: ide/functions/save/save_text_tags.c:80
 #: ide/functions/save/save_text_tags.c:105
 #: ide/functions/save/save_text_tags.c:119
-#: ide/functions/slide/slide_duration.c:115 ide/functions/validate_value.c:713
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:139
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:148
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:157
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:191
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:200
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:209
+#: ide/functions/slide/slide_delete.c:65
+#: ide/functions/slide/slide_duration.c:115
+#: ide/functions/undo_redo/undo_functions.c:282
+#: ide/functions/undo_redo/undo_functions.c:478
+#: ide/functions/validate_value.c:713
+#: ide/functions/widgets/time_line/time_line_button_press_event.c:120
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:142
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:151
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:160
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:194
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:203
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:212
 #: ide/functions/widgets/time_line/time_line_internal_initialise_bg_image.c:109
 #: ide/functions/widgets/time_line/time_line_internal_initialise_display_buffer.c:93
 #: ide/functions/widgets/time_line/time_line_internal_initialise_display_buffer.c:107
@@ -344,9 +349,9 @@ msgstr ""
 #: ide/functions/working_area/calculate_object_boundaries.c:182
 #: ide/functions/working_area/draw_highlight_box.c:53
 #: ide/functions/working_area/draw_highlight_box.c:92
-#: ide/functions/working_area/working_area_button_press_event.c:212
-#: ide/functions/working_area/working_area_button_release_event.c:262
-#: ide/functions/working_area/working_area_button_release_event.c:382
+#: ide/functions/working_area/working_area_button_press_event.c:218
+#: ide/functions/working_area/working_area_button_release_event.c:266
+#: ide/functions/working_area/working_area_button_release_event.c:402
 #: ide/functions/working_area/working_area_motion_notify_event.c:205
 #: ide/functions/working_area/working_area_motion_notify_event.c:365
 #: ide/salasaga.c:492 ide/salasaga.c:503 ide/salasaga.c:562
@@ -470,7 +475,7 @@ msgid "Add a text layer"
 msgstr "Προσθήκη στρώσης κειμένου"
 
 #: ide/functions/create_time_line.c:219
-#: ide/functions/layer/layer_new_highlight_inner.c:152
+#: ide/functions/layer/layer_new_highlight_inner.c:155
 msgid "Highlight"
 msgstr "Επισήμανση"
 
@@ -481,7 +486,7 @@ msgstr "Προσθήκη στρώσης επισήμανσης"
 
 #: ide/functions/create_time_line.c:232
 #: ide/functions/layer/layer_duplicate.c:91
-#: ide/functions/layer/layer_new_image_inner.c:97
+#: ide/functions/layer/layer_new_image_inner.c:100
 #: ide/functions/menu/menu_screenshots_import.c:355
 msgid "Image"
 msgstr "Εικόνα"
@@ -1178,7 +1183,7 @@ msgstr ""
 msgid "Export to Flash disabled: No project loaded"
 msgstr "Εξαγωγή σε Flash απενεργοποιημένη: Δεν φορτώθηκε κανένα έργο"
 
-#: ide/functions/draw_timeline.c:66
+#: ide/functions/draw_timeline.c:70
 msgid "Could not regenerate the time line widget."
 msgstr "Αδυναμία ανάπλασης γραφικού αντικειμένου χρονογραμμής."
 
@@ -1194,7 +1199,7 @@ msgstr "HyperText Markup Language (*.html)"
 #: ide/functions/menu/menu_export_layer.c:99
 #: ide/functions/menu/menu_export_slide.c:80
 #: ide/functions/menu/menu_export_swf.c:90
-#: ide/functions/menu/menu_file_open.c:110
+#: ide/functions/menu/menu_file_open.c:111
 #: ide/functions/menu/menu_file_save_as.c:92
 msgid "All files (*.*)"
 msgstr "Όλα τα αρχεία (*.*)"
@@ -1203,7 +1208,7 @@ msgstr "Όλα τα αρχεία (*.*)"
 #: ide/functions/menu/menu_export_layer.c:139
 #: ide/functions/menu/menu_export_slide.c:120
 #: ide/functions/menu/menu_export_swf.c:130
-#: ide/functions/menu/menu_file_open.c:170
+#: ide/functions/menu/menu_file_open.c:171
 #: ide/functions/menu/menu_file_save_as.c:148
 msgid ""
 "There was something wrong with the file name given.  Please try again."
@@ -1613,7 +1618,7 @@ msgstr "Αδυναμία δημιουργίας μικρογραφίας της 
 msgid "Couldn't allocate memory for a new film strip thumbnail."
 msgstr "Αδυναμία εκχώρησης μνήμης για τη μικρογραφία μιας νέας ταινίας."
 
-#: ide/functions/film_strip/film_strip_slide_clicked.c:106 ide/salasaga.c:581
+#: ide/functions/film_strip/film_strip_slide_clicked.c:115 ide/salasaga.c:581
 msgid "Ready"
 msgstr "Έτοιμο"
 
@@ -1649,10 +1654,10 @@ msgstr ""
 
 #: ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
-#: ide/functions/layer/layer_edit.c:211
+#: ide/functions/layer/layer_edit.c:218
 #: ide/functions/working_area/calculate_object_boundaries.c:182
-#: ide/functions/working_area/working_area_button_press_event.c:212
-#: ide/functions/working_area/working_area_button_release_event.c:382
+#: ide/functions/working_area/working_area_button_press_event.c:218
+#: ide/functions/working_area/working_area_button_release_event.c:402
 #: ide/functions/working_area/working_area_motion_notify_event.c:365
 msgid "Unknown layer type."
 msgstr "Άγνωστος τύπος στρώσης."
@@ -1698,7 +1703,7 @@ msgstr "Παρακαλώ προσπαθήστε ξανά."
 
 #: ide/functions/layer/image_crop.c:291 ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:142
-#: ide/functions/layer/layer_new_image_inner.c:167
+#: ide/functions/layer/layer_new_image_inner.c:170
 #: ide/functions/menu/menu_screenshots_import.c:274
 #: ide/functions/project_adjust_dimensions.c:243
 msgid "Couldn't create an image pattern."
@@ -1771,7 +1776,7 @@ msgstr " Αποτυχία Αντιγραφής"
 msgid " Layer copied to buffer"
 msgstr " Η διαφάνεια αντιγράφηκε στην ενδιάμεση μνήμη"
 
-#: ide/functions/layer/layer_delete.c:114
+#: ide/functions/layer/layer_delete.c:126
 msgid " Layer deleted"
 msgstr " Η Στρώση διαγράφηκε"
 
@@ -1787,7 +1792,7 @@ msgid "Background"
 msgstr "Παρασκήνιο"
 
 #: ide/functions/layer/layer_duplicate.c:94
-#: ide/functions/slide/slide_insert.c:66
+#: ide/functions/slide/slide_insert.c:68
 msgid "Empty"
 msgstr "Κενό"
 
@@ -1807,27 +1812,27 @@ msgstr ""
 msgid "Unknown layer type when duplicating layer."
 msgstr "Άγνωστος τύπος στρώσης κατά την ανατύπωσή της."
 
-#: ide/functions/layer/layer_edit.c:97
+#: ide/functions/layer/layer_edit.c:104
 msgid "Edit background color"
 msgstr "Επεξεργασία χρώματος παρασκηνίου"
 
-#: ide/functions/layer/layer_edit.c:114
+#: ide/functions/layer/layer_edit.c:121
 msgid "Edit image layer"
 msgstr "Επεξεργασία στρώσης εικόνας"
 
-#: ide/functions/layer/layer_edit.c:138
+#: ide/functions/layer/layer_edit.c:145
 msgid "Edit mouse pointer"
 msgstr "Επεξεργασία δείκτη ποντικιού"
 
-#: ide/functions/layer/layer_edit.c:163
+#: ide/functions/layer/layer_edit.c:170
 msgid "Edit text layer"
 msgstr "Επεξεργασία στρώσης κειμένου"
 
-#: ide/functions/layer/layer_edit.c:188
+#: ide/functions/layer/layer_edit.c:195
 msgid "Edit highlight layer"
 msgstr "Επεξεργασία στρώσης επισήμανσης"
 
-#: ide/functions/layer/layer_edit.c:227
+#: ide/functions/layer/layer_edit.c:251
 msgid " Layer edited"
 msgstr " Η διαφάνεια έχει υποστεί επεξεργασία"
 
@@ -1847,19 +1852,19 @@ msgstr " Η Στρώση μετακινήθηκε πάνω"
 msgid " Please draw the new layer"
 msgstr " Παρακαλώ δημιουργήστε τη νέα διαφάνεια"
 
-#: ide/functions/layer/layer_new_highlight_inner.c:154
-#: ide/functions/layer/layer_new_image_inner.c:99
-#: ide/functions/layer/layer_new_mouse_inner.c:84
-#: ide/functions/layer/layer_new_text_inner.c:111
+#: ide/functions/layer/layer_new_highlight_inner.c:157
+#: ide/functions/layer/layer_new_image_inner.c:102
+#: ide/functions/layer/layer_new_mouse_inner.c:87
+#: ide/functions/layer/layer_new_text_inner.c:114
 #: ide/functions/menu/menu_screenshots_import.c:307
 #: ide/functions/menu/menu_screenshots_import.c:369
 #: ide/functions/read/read_highlight_layer.c:71
 #: ide/functions/read/read_text_layer.c:95
-#: ide/functions/slide/slide_insert.c:68
+#: ide/functions/slide/slide_insert.c:70
 msgid "_self"
 msgstr "_self"
 
-#: ide/functions/layer/layer_new_highlight_inner.c:193
+#: ide/functions/layer/layer_new_highlight_inner.c:205
 msgid " Highlight layer added"
 msgstr " Προστέθηκε στρώση Επισήμανσης"
 
@@ -1869,45 +1874,45 @@ msgstr " Προστέθηκε στρώση Επισήμανσης"
 msgid " Please click the insertion point"
 msgstr " Παρακαλώ κάντε κλικ στο σημείο εισαγωγής"
 
-#: ide/functions/layer/layer_new_image_inner.c:106
+#: ide/functions/layer/layer_new_image_inner.c:109
 msgid "Please choose an image file"
 msgstr "Παρακαλώ επιλέξτε ένα αρχείο εικόνας"
 
-#: ide/functions/layer/layer_new_image_inner.c:137
+#: ide/functions/layer/layer_new_image_inner.c:140
 msgid ""
 "There was something wrong with the image path given.  Please try again."
 msgstr ""
 "Υπήρξε κάποιο πρόβλημα με τη δοσμένη διαδρομή της εικόνας. Παρακαλώ, "
 "προσπαθήστε πάλι."
 
-#: ide/functions/layer/layer_new_image_inner.c:146
+#: ide/functions/layer/layer_new_image_inner.c:149
 msgid ""
 "There was something wrong with the image file selected.  Please try again."
 msgstr ""
 "Υπήρξε κάποιο πρόβλημα με το επιλεγμένο αρχείο εικόνας. Παρακαλώ, "
 "προσπαθήστε πάλι."
 
-#: ide/functions/layer/layer_new_image_inner.c:218
+#: ide/functions/layer/layer_new_image_inner.c:230
 msgid " Image layer added"
 msgstr " Προστέθηκε στρώση Εικόνας"
 
-#: ide/functions/layer/layer_new_mouse_inner.c:82
+#: ide/functions/layer/layer_new_mouse_inner.c:85
 msgid "Mouse Pointer"
 msgstr "Δείκτης Ποντικιού"
 
-#: ide/functions/layer/layer_new_mouse_inner.c:123
+#: ide/functions/layer/layer_new_mouse_inner.c:135
 msgid " Mouse layer added"
 msgstr " Προστέθηκε στρώση Ποντικιού"
 
-#: ide/functions/layer/layer_new_text_inner.c:72
+#: ide/functions/layer/layer_new_text_inner.c:75
 msgid "New text..."
 msgstr "Νέο κείμενο..."
 
-#: ide/functions/layer/layer_new_text_inner.c:109
+#: ide/functions/layer/layer_new_text_inner.c:112
 msgid "Text layer"
 msgstr "Στρώση Κειμένου"
 
-#: ide/functions/layer/layer_new_text_inner.c:150
+#: ide/functions/layer/layer_new_text_inner.c:162
 msgid " Text layer added"
 msgstr " Προστέθηκε Στρώση Κειμένου"
 
@@ -1939,272 +1944,308 @@ msgstr "Κάτι δεν πήγε καλά κατά το άνοιγμα του α
 msgid "Something went wrong when loading the font file"
 msgstr "Κάτι δεν πήγε καλά κατά τη φόρτωση του αρχείου γραμματοσειράς"
 
-#: ide/functions/menu/create_menu_bar.c:99
+#: ide/functions/menu/create_menu_bar.c:101
 msgid "/_File"
 msgstr "/_Αρχείο"
 
-#: ide/functions/menu/create_menu_bar.c:100
+#: ide/functions/menu/create_menu_bar.c:102
 msgid "/File/_New Project"
 msgstr "/Αρχείο/_Νέο Έργο"
 
-#: ide/functions/menu/create_menu_bar.c:100
+#: ide/functions/menu/create_menu_bar.c:102
 msgid "<control>N"
 msgstr "<control>N"
 
-#: ide/functions/menu/create_menu_bar.c:101
+#: ide/functions/menu/create_menu_bar.c:103
 msgid "/File/_Open Project"
 msgstr "/Αρχείο/_Άνοιγμα έργου"
 
-#: ide/functions/menu/create_menu_bar.c:101
+#: ide/functions/menu/create_menu_bar.c:103
 msgid "<control>O"
 msgstr "<control>O"
 
-#: ide/functions/menu/create_menu_bar.c:102
+#: ide/functions/menu/create_menu_bar.c:104
 msgid "/File/_Save Project"
 msgstr "/Αρχείο/_Αποθήκευση έργου"
 
-#: ide/functions/menu/create_menu_bar.c:102
+#: ide/functions/menu/create_menu_bar.c:104
 msgid "<control>S"
 msgstr "<control>S"
 
-#: ide/functions/menu/create_menu_bar.c:103
+#: ide/functions/menu/create_menu_bar.c:105
 msgid "/File/Save _As Project"
 msgstr "/Αρχείο/Αποθήκευση _ως έργου"
 
-#: ide/functions/menu/create_menu_bar.c:103
+#: ide/functions/menu/create_menu_bar.c:105
 msgid "<control><shift>S"
 msgstr "<control><shift>S"
 
-#: ide/functions/menu/create_menu_bar.c:104
+#: ide/functions/menu/create_menu_bar.c:106
 msgid "/File/_Close Project"
 msgstr "/Αρχείο/_Κλείσιμο αρχείου"
 
-#: ide/functions/menu/create_menu_bar.c:104
+#: ide/functions/menu/create_menu_bar.c:106
 msgid "<control>W"
 msgstr "<control>W"
 
-#: ide/functions/menu/create_menu_bar.c:105
+#: ide/functions/menu/create_menu_bar.c:107
 msgid "/File/Sep"
 msgstr "/Αρχείο"
 
-#: ide/functions/menu/create_menu_bar.c:106
+#: ide/functions/menu/create_menu_bar.c:108
 msgid "/File/_Quit"
 msgstr "/Αρχείο/_Έξοδος"
 
-#: ide/functions/menu/create_menu_bar.c:106
+#: ide/functions/menu/create_menu_bar.c:108
 msgid "<control>Q"
 msgstr "<control>Q"
 
-#: ide/functions/menu/create_menu_bar.c:108
+#: ide/functions/menu/create_menu_bar.c:110
 msgid "/_Edit"
 msgstr "/_Επεξεργασία"
 
-#: ide/functions/menu/create_menu_bar.c:109
+#: ide/functions/menu/create_menu_bar.c:111
+msgid "/Edit/_Undo"
+msgstr "/Επεξεργασία/_Αναίρεση"
+
+#: ide/functions/menu/create_menu_bar.c:111
+msgid "<control>Z"
+msgstr "<control>Z"
+
+#: ide/functions/menu/create_menu_bar.c:112
+msgid "/Edit/_Redo"
+msgstr "/Επεξεργασία/_Επανάληψη"
+
+#: ide/functions/menu/create_menu_bar.c:112
+msgid "<control>Y"
+msgstr "<control>Y"
+
+#: ide/functions/menu/create_menu_bar.c:113
+msgid "/Edit/Sep"
+msgstr "/Επεξεργασία/Sep"
+
+#: ide/functions/menu/create_menu_bar.c:114
 msgid "/Edit/_Preferences"
 msgstr "/Επεξεργασία/_Προτιμήσεις"
 
-#: ide/functions/menu/create_menu_bar.c:111
+#: ide/functions/menu/create_menu_bar.c:116
 msgid "/_Screenshots"
 msgstr "/_Στιγμιότυπα"
 
-#: ide/functions/menu/create_menu_bar.c:112
-#: ide/functions/menu/create_menu_bar.c:185
+#: ide/functions/menu/create_menu_bar.c:117
+#: ide/functions/menu/create_menu_bar.c:192
 msgid "/Screenshots/Capture _window"
 msgstr "/Στιγμιότυπα/Σύλληψη _παραθύρου"
 
-#: ide/functions/menu/create_menu_bar.c:113
-#: ide/functions/menu/create_menu_bar.c:186
+#: ide/functions/menu/create_menu_bar.c:118
+#: ide/functions/menu/create_menu_bar.c:193
 msgid "/Screenshots/Capture _full screen"
 msgstr "/Στιγμιότυπα/Σύλληψη _πλήρους οθόνης"
 
-#: ide/functions/menu/create_menu_bar.c:114
+#: ide/functions/menu/create_menu_bar.c:119
 msgid "/Screenshots/_Import"
 msgstr "/Στιγμιότυπα/_Εισαγωγή"
 
-#: ide/functions/menu/create_menu_bar.c:116
+#: ide/functions/menu/create_menu_bar.c:121
 msgid "/_Project"
 msgstr "/_Έργο"
 
-#: ide/functions/menu/create_menu_bar.c:117
+#: ide/functions/menu/create_menu_bar.c:122
 msgid "/Project/P_roperties"
 msgstr "/Έργο/Ι_διότητες"
 
-#: ide/functions/menu/create_menu_bar.c:118
+#: ide/functions/menu/create_menu_bar.c:123
 msgid "/Project/Sep"
 msgstr "/Project/Sep"
 
-#: ide/functions/menu/create_menu_bar.c:119
+#: ide/functions/menu/create_menu_bar.c:124
 msgid "/Project/_Adjust dimensions"
 msgstr "/Project/_Adjust dimensions"
 
-#: ide/functions/menu/create_menu_bar.c:121
+#: ide/functions/menu/create_menu_bar.c:126
 msgid "/Sl_ide"
 msgstr "/Δια_φάνεια"
 
-#: ide/functions/menu/create_menu_bar.c:122
+#: ide/functions/menu/create_menu_bar.c:127
 msgid "/Slide/_Insert"
 msgstr "/Διαφάνεια/_Εισαγωγή"
 
-#: ide/functions/menu/create_menu_bar.c:123
+#: ide/functions/menu/create_menu_bar.c:128
 msgid "/Slide/_Delete"
 msgstr "/Διαφάνεια/_Διαγραφή"
 
-#: ide/functions/menu/create_menu_bar.c:124
+#: ide/functions/menu/create_menu_bar.c:129
 msgid "/Slide/Du_ration"
 msgstr "/Διαφάνεια/Διά_ρκεια"
 
-#: ide/functions/menu/create_menu_bar.c:125
+#: ide/functions/menu/create_menu_bar.c:130
 msgid "/Slide/Move _up"
 msgstr "/Διαφάνεια/_Μετακίνηση _πάνω"
 
-#: ide/functions/menu/create_menu_bar.c:126
+#: ide/functions/menu/create_menu_bar.c:131
 msgid "/Slide/Move dow_n"
 msgstr "/Διαφάνεια/_Μετακίνηση _κάτω"
 
-#: ide/functions/menu/create_menu_bar.c:127
+#: ide/functions/menu/create_menu_bar.c:132
 msgid "/Slide/Move to _top"
 msgstr "/Διαφάνεια/Μετακίνηση στην _κορυφή"
 
-#: ide/functions/menu/create_menu_bar.c:128
+#: ide/functions/menu/create_menu_bar.c:133
 msgid "/Slide/Move to _bottom"
 msgstr "/Διαφάνεια/Μετακίνηση στο _κάτω μέρος"
 
-#: ide/functions/menu/create_menu_bar.c:130
+#: ide/functions/menu/create_menu_bar.c:135
 msgid "/_Layer"
 msgstr "/_Στρώση"
 
-#: ide/functions/menu/create_menu_bar.c:132
+#: ide/functions/menu/create_menu_bar.c:137
 msgid "/Layer/_Copy"
 msgstr "/Στρώση/_Αντιγραφή"
 
-#: ide/functions/menu/create_menu_bar.c:133
+#: ide/functions/menu/create_menu_bar.c:138
 msgid "/Layer/_Paste"
 msgstr "/Στρώση/_Επικόλληση"
 
-#: ide/functions/menu/create_menu_bar.c:134
+#: ide/functions/menu/create_menu_bar.c:139
 msgid "/Layer/_Edit"
 msgstr "/Στρώση/_Επεξεργασία"
 
-#: ide/functions/menu/create_menu_bar.c:135
+#: ide/functions/menu/create_menu_bar.c:140
 msgid "/Layer/_Delete"
 msgstr "/Στρώση/_Διαγραφή"
 
-#: ide/functions/menu/create_menu_bar.c:136
 #: ide/functions/menu/create_menu_bar.c:141
+#: ide/functions/menu/create_menu_bar.c:146
 msgid "/Layer/Sep"
 msgstr "/Στρώση"
 
-#: ide/functions/menu/create_menu_bar.c:137
+#: ide/functions/menu/create_menu_bar.c:142
 msgid "/Layer/Add _Text"
 msgstr "/Στρώση/Προσθήκη _κειμένου"
 
-#: ide/functions/menu/create_menu_bar.c:138
+#: ide/functions/menu/create_menu_bar.c:143
 msgid "/Layer/Add _Highlight"
 msgstr "/Στρώση/Προσθήκη _επισήμανσης"
 
-#: ide/functions/menu/create_menu_bar.c:139
+#: ide/functions/menu/create_menu_bar.c:144
 msgid "/Layer/Add _Image"
 msgstr "/Στρώση/Προσθήκη _εικόνας"
 
-#: ide/functions/menu/create_menu_bar.c:140
+#: ide/functions/menu/create_menu_bar.c:145
 msgid "/Layer/Add _Mouse"
 msgstr "/Στρώση/Προσθήκη _ποντικιού"
 
-#: ide/functions/menu/create_menu_bar.c:142
+#: ide/functions/menu/create_menu_bar.c:147
 msgid "/Layer/Image c_rop"
 msgstr "/Layer/Image c_rop"
 
-#: ide/functions/menu/create_menu_bar.c:143
+#: ide/functions/menu/create_menu_bar.c:148
 msgid "/Layer/Image resi_ze"
 msgstr "/Layer/Image resi_ze"
 
-#: ide/functions/menu/create_menu_bar.c:145
+#: ide/functions/menu/create_menu_bar.c:150
 msgid "/E_xport"
 msgstr "/Ε_ξαγωγή"
 
-#: ide/functions/menu/create_menu_bar.c:146
+#: ide/functions/menu/create_menu_bar.c:151
 msgid "/Export/_Flash Animation"
 msgstr "/Εξαγωγή/_Κινούμενης απεικόνισης (Flash)"
 
-#: ide/functions/menu/create_menu_bar.c:146
+#: ide/functions/menu/create_menu_bar.c:151
 msgid "<control><shift>F"
 msgstr "<control><shift>F"
 
-#: ide/functions/menu/create_menu_bar.c:147
+#: ide/functions/menu/create_menu_bar.c:152
 msgid "/Export/_Html Wrapper"
 msgstr "/Εξαγωγή/_Αρχείου Html"
 
-#: ide/functions/menu/create_menu_bar.c:148
+#: ide/functions/menu/create_menu_bar.c:153
 msgid "/Export/_Slide as Image"
 msgstr "/Εξαγωγή/_Διαφάνειας ως εικόνα"
 
-#: ide/functions/menu/create_menu_bar.c:149
+#: ide/functions/menu/create_menu_bar.c:154
 msgid "/Export/_Image Layer"
 msgstr "/Εξαγωγή/_Στρώσης εικόνας"
 
-#: ide/functions/menu/create_menu_bar.c:151
+#: ide/functions/menu/create_menu_bar.c:156
 msgid "/_Help"
 msgstr "/_Βοήθεια"
 
-#: ide/functions/menu/create_menu_bar.c:152
+#: ide/functions/menu/create_menu_bar.c:157
 msgid "/_Help/_About"
 msgstr "/_Βοήθεια/_Σχετικά"
 
-#: ide/functions/menu/create_menu_bar.c:153
+#: ide/functions/menu/create_menu_bar.c:158
 msgid "/_Help/_Main Website"
 msgstr "/_Βοήθεια/_Κύριος Ιστότοπος"
 
-#: ide/functions/menu/create_menu_bar.c:154
+#: ide/functions/menu/create_menu_bar.c:159
 msgid "/_Help/Sep"
 msgstr "/_Βοήθεια"
 
-#: ide/functions/menu/create_menu_bar.c:156
+#: ide/functions/menu/create_menu_bar.c:161
 msgid "/_Help/_Forum"
 msgstr "/_Βοήθεια/_Συζήτηση"
 
-#: ide/functions/menu/create_menu_bar.c:157
+#: ide/functions/menu/create_menu_bar.c:162
 msgid "/_Help/_Register"
 msgstr "/_Βοήθεια/_Εγγραφή"
 
-#: ide/functions/menu/create_menu_bar.c:158
+#: ide/functions/menu/create_menu_bar.c:163
 msgid "/_Help/_Support"
 msgstr "/_Βοήθεια/_Υποστήριξη"
 
-#: ide/functions/menu/create_menu_bar.c:159
+#: ide/functions/menu/create_menu_bar.c:164
 msgid "/_Help/_Wiki"
 msgstr "/_Βοήθεια/_Wiki"
 
-#: ide/functions/menu/create_menu_bar.c:177
+#: ide/functions/menu/create_menu_bar.c:182
 #: ide/functions/menu/menu_file_close.c:109
-#: ide/functions/menu/menu_file_new.c:359
-#: ide/functions/menu/menu_file_open.c:264
+#: ide/functions/menu/menu_file_new.c:363
+#: ide/functions/menu/menu_file_open.c:265
 #: ide/functions/menu/menu_screenshots_import.c:476
 msgid "/Project"
 msgstr "/Έργο"
 
-#: ide/functions/menu/create_menu_bar.c:178
+#: ide/functions/menu/create_menu_bar.c:183
 #: ide/functions/menu/menu_file_close.c:110
-#: ide/functions/menu/menu_file_new.c:360
-#: ide/functions/menu/menu_file_open.c:265
+#: ide/functions/menu/menu_file_new.c:364
+#: ide/functions/menu/menu_file_open.c:266
 #: ide/functions/menu/menu_screenshots_import.c:477
 msgid "/Slide"
 msgstr "/Διαφάνεια"
 
-#: ide/functions/menu/create_menu_bar.c:179
+#: ide/functions/menu/create_menu_bar.c:184
 #: ide/functions/menu/menu_file_close.c:111
-#: ide/functions/menu/menu_file_new.c:361
-#: ide/functions/menu/menu_file_open.c:266
+#: ide/functions/menu/menu_file_new.c:365
+#: ide/functions/menu/menu_file_open.c:267
 #: ide/functions/menu/menu_screenshots_import.c:478
 msgid "/Layer"
 msgstr "/Στρώση"
 
-#: ide/functions/menu/create_menu_bar.c:180
+#: ide/functions/menu/create_menu_bar.c:185
 #: ide/functions/menu/menu_file_close.c:112
-#: ide/functions/menu/menu_file_new.c:362
-#: ide/functions/menu/menu_file_open.c:267
+#: ide/functions/menu/menu_file_new.c:366
+#: ide/functions/menu/menu_file_open.c:268
 #: ide/functions/menu/menu_screenshots_import.c:479
 msgid "/Export"
 msgstr "/Εξαγωγή"
+
+#: ide/functions/menu/create_menu_bar.c:186
+#: ide/functions/undo_redo/undo_functions.c:91
+#: ide/functions/undo_redo/undo_functions.c:130
+#: ide/functions/undo_redo/undo_functions.c:292
+#: ide/functions/undo_redo/undo_functions.c:505
+msgid "/Edit/Undo"
+msgstr "/Επεξεργασία/Αναίρεση"
+
+#: ide/functions/menu/create_menu_bar.c:187
+#: ide/functions/undo_redo/undo_functions.c:94
+#: ide/functions/undo_redo/undo_functions.c:129
+#: ide/functions/undo_redo/undo_functions.c:298
+#: ide/functions/undo_redo/undo_functions.c:500
+msgid "/Edit/Redo"
+msgstr "/Επεξεργασία/Επανάληψη"
 
 #: ide/functions/menu/menu_edit_preferences.c:154
 msgid "Application Preferences"
@@ -2469,37 +2510,37 @@ msgstr "Εξήχθη"
 msgid " Project closed"
 msgstr " Το Έργο έκλεισε"
 
-#: ide/functions/menu/menu_file_new.c:107
+#: ide/functions/menu/menu_file_new.c:108
 msgid "Create new Salasaga Project"
 msgstr "Δημιουργία νέου έργου Salasaga"
 
-#: ide/functions/menu/menu_file_new.c:112
+#: ide/functions/menu/menu_file_new.c:113
 #: ide/functions/menu/menu_project_properties.c:128
 msgid "Project Name: "
 msgstr "Όνομα έργου: "
 
-#: ide/functions/menu/menu_file_new.c:124
+#: ide/functions/menu/menu_file_new.c:125
 #: ide/functions/menu/menu_screenshots_capture.c:296
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:165
 msgid "Width: "
 msgstr "Πλάτος: "
 
-#: ide/functions/menu/menu_file_new.c:141
+#: ide/functions/menu/menu_file_new.c:142
 #: ide/functions/menu/menu_screenshots_capture.c:307
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:176
 msgid "Height: "
 msgstr "Ύψος: "
 
-#: ide/functions/menu/menu_file_new.c:158
+#: ide/functions/menu/menu_file_new.c:159
 #: ide/functions/menu/menu_project_properties.c:156
 msgid "Frames per second: "
 msgstr "Πλαίσια ανά δευτερόλεπτο: "
 
-#: ide/functions/menu/menu_file_new.c:175
+#: ide/functions/menu/menu_file_new.c:176
 msgid "Background color: "
 msgstr "Χρώμα παρασκηνίου: "
 
-#: ide/functions/menu/menu_file_new.c:209
+#: ide/functions/menu/menu_file_new.c:210
 msgid ""
 "There was something wrong with the new project name.  Defaulting to 'New "
 "Project' instead."
@@ -2507,25 +2548,25 @@ msgstr ""
 "Υπήρξε κάποιο πρόβλημα με το όνομα του νέου έργου. Αντ' αυτού, "
 "προκαθορισμένο 'New project."
 
-#: ide/functions/menu/menu_file_new.c:211 ide/salasaga.c:301
+#: ide/functions/menu/menu_file_new.c:212 ide/salasaga.c:301
 msgid "New Project"
 msgstr "Νέο έργο"
 
-#: ide/functions/menu/menu_file_new.c:224
+#: ide/functions/menu/menu_file_new.c:225
 msgid ""
 "There was something wrong with the project width value.  Please try again."
 msgstr ""
 "Υπήρξε κάποιο πρόβλημα με την τιμή πλάτους του έργου. Παρακαλώ, προσπαθήστε "
 "πάλι."
 
-#: ide/functions/menu/menu_file_new.c:238
+#: ide/functions/menu/menu_file_new.c:239
 msgid ""
 "There was something wrong with the project height value.  Please try again."
 msgstr ""
 "Υπήρξε κάποιο πρόβλημα με την τιμή ύψους του έργου. Παρακαλώ, προσπαθήστε "
 "πάλι."
 
-#: ide/functions/menu/menu_file_new.c:252
+#: ide/functions/menu/menu_file_new.c:253
 msgid ""
 "There was something wrong with the project frames per second value.  Please "
 "try again."
@@ -2533,46 +2574,46 @@ msgstr ""
 "Υπήρξε κάποιο πρόβλημα με την τιμή πλαισίων ανά δευτερόλεπτο του έργου. "
 "Παρακαλώ, προσπαθήστε πάλι."
 
-#: ide/functions/menu/menu_file_new.c:305
+#: ide/functions/menu/menu_file_new.c:306
 #: ide/functions/menu/menu_help_website.c:47
 #: ide/functions/read/read_project.c:146
 msgid "http://www.salasaga.org"
 msgstr "http://www.salasaga.org"
 
-#: ide/functions/menu/menu_file_new.c:306
+#: ide/functions/menu/menu_file_new.c:307
 #: ide/functions/menu/menu_screenshots_import.c:99
 #: ide/functions/read/read_project.c:147
 msgid "_blank"
 msgstr "_κενό"
 
-#: ide/functions/menu/menu_file_new.c:308
+#: ide/functions/menu/menu_file_new.c:309
 #: ide/functions/menu/menu_screenshots_import.c:101
 #: ide/functions/read/read_project.c:149
 msgid "Created using Salasaga"
 msgstr "Δημιουργήθηκε με τη χρήση του Salasaga"
 
-#: ide/functions/menu/menu_file_new.c:334
+#: ide/functions/menu/menu_file_new.c:335
 msgid " Project initialized"
 msgstr " Το Έργο αρχικοποιήθηκε"
 
-#: ide/functions/menu/menu_file_open.c:88
+#: ide/functions/menu/menu_file_open.c:89
 msgid "Open a Salasaga Project"
 msgstr "Άνοιγμα έργου του Salasaga"
 
-#: ide/functions/menu/menu_file_open.c:98
+#: ide/functions/menu/menu_file_open.c:99
 #: ide/functions/menu/menu_file_save_as.c:86
 msgid "Salasaga Project file (*.salasaga)"
 msgstr "Αρχείο έργου Salasaga (*.salasaga)"
 
-#: ide/functions/menu/menu_file_open.c:104
+#: ide/functions/menu/menu_file_open.c:105
 msgid "Flame Project file (*.flame)"
 msgstr "Αρχείο έργου Flame (*.flame)"
 
-#: ide/functions/menu/menu_file_open.c:277
+#: ide/functions/menu/menu_file_open.c:281
 msgid "Project loaded"
 msgstr "Το έργο φορτώθηκε"
 
-#: ide/functions/menu/menu_file_open.c:277
+#: ide/functions/menu/menu_file_open.c:281
 msgid "slides"
 msgstr "διαφάνειες"
 
@@ -3844,11 +3885,11 @@ msgid "Error creating a foreground color tag node."
 msgstr ""
 "Σφάλμα κατά τη δημιουργία του κόμβου ετικετών του χρώματος προσκηνίου."
 
-#: ide/functions/slide/slide_delete.c:63
+#: ide/functions/slide/slide_delete.c:65
 msgid "You must leave at least one slide in a project."
 msgstr "Πρέπει να αφήσετε το λιγότερο μια διαφάνεια στο έργο."
 
-#: ide/functions/slide/slide_delete.c:105
+#: ide/functions/slide/slide_delete.c:119
 msgid " Slide deleted"
 msgstr " Η διαφάνεια διαγράφηκε"
 
@@ -3871,7 +3912,7 @@ msgstr ""
 msgid " Slide properties updated"
 msgstr " Οι ιδιότητες της διαφάνειας ενημερώθηκαν"
 
-#: ide/functions/slide/slide_insert.c:117
+#: ide/functions/slide/slide_insert.c:128
 msgid " Slide added"
 msgstr " Η διαφάνεια προστέθηκε"
 
@@ -3907,32 +3948,53 @@ msgstr "Ελαχιστοποίηση παραθύρου"
 msgid "Take Screenshot"
 msgstr "Λήψη στιγμιότυπου οθόνης"
 
+#: ide/functions/undo_redo/undo_functions.c:282
+#: ide/functions/undo_redo/undo_functions.c:478
+msgid ""
+"Programming error.  The Undo/Redo functions were called with an unknown undo "
+"type."
+msgstr ""
+"Προγραμματιστικό σφάλμα. Οι λειτουργίες Αναίρεση/Ακύρωση αναίρεση κλήθηκαν "
+"με έναν άγνωστο τύπο αναίρεσης."
+
+#: ide/functions/undo_redo/undo_functions.c:317
+msgid "Last action redone"
+msgstr ""
+
+#: ide/functions/undo_redo/undo_functions.c:512
+msgid "Last action undone"
+msgstr ""
+
 #: ide/functions/validate_value.c:713 screen_capture/validate_value.c:576
 msgid "Unknown value passed to validation function"
 msgstr "Άγνωστη τιμή πέρασε τη λειτουργία επικύρωσης"
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:139
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:191
+#: ide/functions/widgets/time_line/time_line_button_press_event.c:120
+msgid "Private internal timeline data is not present!"
+msgstr "Τα προσωπικά εσωτερικά δεδομένα χρονογραμμής δεν εμφανίζονται!"
+
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:142
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:194
 msgid "Couldn't recreate time line background image."
 msgstr "Αδυναμία αναδημιουργίας εικόνας χρονογραμμής του παρασκηνίου."
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:148
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:200
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:151
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:203
 msgid "Couldn't recreate time line display buffer."
 msgstr ""
 "Αδυναμία αναδημιουργίας εικόνας χρονογραμμής για την εμφάνιση της ενδιάμεσης "
 "μνήμης."
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:157
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:209
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:160
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:212
 msgid "Couldn't redraw the time line layer information."
 msgstr "Αδυναμία ανασχεδίασης χρονογραμμής πληροφοριών της στρώσης."
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:281
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:286
 msgid " Resize completed"
 msgstr " Αλλαγή μεγέθους ολοκληρώθηκε"
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:322
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:335
 msgid " Drag completed"
 msgstr " Η μεταφορά ολοκληρώθηκε"
 
@@ -3968,24 +4030,24 @@ msgstr "/Layer/Image resize"
 msgid "Not enough memory for pixbuf allocation."
 msgstr "Δεν υπάρχει αρκετή μνήμη για εκχώρηση pixbuf."
 
-#: ide/functions/working_area/working_area_button_release_event.c:156
+#: ide/functions/working_area/working_area_button_release_event.c:160
 msgid " Layer start point moved"
 msgstr " Το αρχικό σημείο της στρώσης μετακινήθηκε"
 
-#: ide/functions/working_area/working_area_button_release_event.c:158
+#: ide/functions/working_area/working_area_button_release_event.c:162
 msgid " Layer end point moved"
 msgstr " Το τελικό σημείο της στρώσης μετακινήθηκε"
 
-#: ide/functions/working_area/working_area_button_release_event.c:262
+#: ide/functions/working_area/working_area_button_release_event.c:266
 #: ide/functions/working_area/working_area_motion_notify_event.c:205
 msgid "Unknown resizing direction."
 msgstr "Άγνωστη κατεύθυνση αλλαγής μεγέθους."
 
-#: ide/functions/working_area/working_area_button_release_event.c:320
+#: ide/functions/working_area/working_area_button_release_event.c:340
 msgid " Layer resized"
 msgstr " Η Στρώση άλλαξε μέγεθος"
 
-#: ide/functions/working_area/working_area_button_release_event.c:423
+#: ide/functions/working_area/working_area_button_release_event.c:454
 msgid " Layer moved"
 msgstr " Η Στρώση μετακινήθηκε"
 

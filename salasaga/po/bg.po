@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-20 19:23+1100\n"
+"POT-Creation-Date: 2010-01-27 21:57+1100\n"
 "PO-Revision-Date: 2009-12-13 14:19+0000\n"
 "Last-Translator: Dilomo <Unknown>\n"
 "Language-Team: Bulgarian <bg@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-25 00:32+0000\n"
+"X-Launchpad-Export-Date: 2010-01-30 08:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
@@ -80,7 +80,7 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_text.c:867
 #: ide/functions/dialog/display_dialog_text.c:881
 #: ide/functions/dialog/display_dialog_text.c:895
-#: ide/functions/draw_timeline.c:66
+#: ide/functions/draw_timeline.c:70
 #: ide/functions/export/html/export_html_wrapper.c:121
 #: ide/functions/export/html/export_html_wrapper.c:167
 #: ide/functions/export/swf/export_swf_control_bar.c:460
@@ -122,10 +122,10 @@ msgstr ""
 #: ide/functions/layer/layer_duplicate.c:179
 #: ide/functions/layer/layer_duplicate.c:195
 #: ide/functions/layer/layer_duplicate.c:221
-#: ide/functions/layer/layer_edit.c:211 ide/functions/layer/layer_free.c:87
-#: ide/functions/layer/layer_new_image_inner.c:137
-#: ide/functions/layer/layer_new_image_inner.c:146
-#: ide/functions/layer/layer_new_image_inner.c:167
+#: ide/functions/layer/layer_edit.c:218 ide/functions/layer/layer_free.c:87
+#: ide/functions/layer/layer_new_image_inner.c:140
+#: ide/functions/layer/layer_new_image_inner.c:149
+#: ide/functions/layer/layer_new_image_inner.c:170
 #: ide/functions/load_fonts.c:69 ide/functions/load_fonts.c:173
 #: ide/functions/load_fonts.c:180 ide/functions/load_fonts.c:209
 #: ide/functions/load_fonts.c:219
@@ -151,11 +151,11 @@ msgstr ""
 #: ide/functions/menu/menu_export_swf.c:65
 #: ide/functions/menu/menu_export_swf.c:130
 #: ide/functions/menu/menu_export_swf.c:171
-#: ide/functions/menu/menu_file_new.c:209
-#: ide/functions/menu/menu_file_new.c:224
-#: ide/functions/menu/menu_file_new.c:238
-#: ide/functions/menu/menu_file_new.c:252
-#: ide/functions/menu/menu_file_open.c:170
+#: ide/functions/menu/menu_file_new.c:210
+#: ide/functions/menu/menu_file_new.c:225
+#: ide/functions/menu/menu_file_new.c:239
+#: ide/functions/menu/menu_file_new.c:253
+#: ide/functions/menu/menu_file_open.c:171
 #: ide/functions/menu/menu_file_save_as.c:148
 #: ide/functions/menu/menu_file_save.c:94
 #: ide/functions/menu/menu_file_save.c:104
@@ -328,13 +328,18 @@ msgstr ""
 #: ide/functions/save/save_text_tags.c:80
 #: ide/functions/save/save_text_tags.c:105
 #: ide/functions/save/save_text_tags.c:119
-#: ide/functions/slide/slide_duration.c:115 ide/functions/validate_value.c:713
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:139
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:148
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:157
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:191
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:200
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:209
+#: ide/functions/slide/slide_delete.c:65
+#: ide/functions/slide/slide_duration.c:115
+#: ide/functions/undo_redo/undo_functions.c:282
+#: ide/functions/undo_redo/undo_functions.c:478
+#: ide/functions/validate_value.c:713
+#: ide/functions/widgets/time_line/time_line_button_press_event.c:120
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:142
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:151
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:160
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:194
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:203
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:212
 #: ide/functions/widgets/time_line/time_line_internal_initialise_bg_image.c:109
 #: ide/functions/widgets/time_line/time_line_internal_initialise_display_buffer.c:93
 #: ide/functions/widgets/time_line/time_line_internal_initialise_display_buffer.c:107
@@ -344,9 +349,9 @@ msgstr ""
 #: ide/functions/working_area/calculate_object_boundaries.c:182
 #: ide/functions/working_area/draw_highlight_box.c:53
 #: ide/functions/working_area/draw_highlight_box.c:92
-#: ide/functions/working_area/working_area_button_press_event.c:212
-#: ide/functions/working_area/working_area_button_release_event.c:262
-#: ide/functions/working_area/working_area_button_release_event.c:382
+#: ide/functions/working_area/working_area_button_press_event.c:218
+#: ide/functions/working_area/working_area_button_release_event.c:266
+#: ide/functions/working_area/working_area_button_release_event.c:402
 #: ide/functions/working_area/working_area_motion_notify_event.c:205
 #: ide/functions/working_area/working_area_motion_notify_event.c:365
 #: ide/salasaga.c:492 ide/salasaga.c:503 ide/salasaga.c:562
@@ -470,7 +475,7 @@ msgid "Add a text layer"
 msgstr "Добави слой с тескт"
 
 #: ide/functions/create_time_line.c:219
-#: ide/functions/layer/layer_new_highlight_inner.c:152
+#: ide/functions/layer/layer_new_highlight_inner.c:155
 msgid "Highlight"
 msgstr "Акцент"
 
@@ -481,7 +486,7 @@ msgstr "Добави слой с акцент"
 
 #: ide/functions/create_time_line.c:232
 #: ide/functions/layer/layer_duplicate.c:91
-#: ide/functions/layer/layer_new_image_inner.c:97
+#: ide/functions/layer/layer_new_image_inner.c:100
 #: ide/functions/menu/menu_screenshots_import.c:355
 msgid "Image"
 msgstr "Изображение"
@@ -1144,7 +1149,7 @@ msgstr "Настройките на размерите са изключени -
 msgid "Export to Flash disabled: No project loaded"
 msgstr "Изнасянето към Flash е изключено: Не е отворен проект"
 
-#: ide/functions/draw_timeline.c:66
+#: ide/functions/draw_timeline.c:70
 msgid "Could not regenerate the time line widget."
 msgstr "Не може да се създаде времевата линия"
 
@@ -1160,7 +1165,7 @@ msgstr "HyperText Markup Language (*.html)"
 #: ide/functions/menu/menu_export_layer.c:99
 #: ide/functions/menu/menu_export_slide.c:80
 #: ide/functions/menu/menu_export_swf.c:90
-#: ide/functions/menu/menu_file_open.c:110
+#: ide/functions/menu/menu_file_open.c:111
 #: ide/functions/menu/menu_file_save_as.c:92
 msgid "All files (*.*)"
 msgstr "Всички файлове (*.*)"
@@ -1169,7 +1174,7 @@ msgstr "Всички файлове (*.*)"
 #: ide/functions/menu/menu_export_layer.c:139
 #: ide/functions/menu/menu_export_slide.c:120
 #: ide/functions/menu/menu_export_swf.c:130
-#: ide/functions/menu/menu_file_open.c:170
+#: ide/functions/menu/menu_file_open.c:171
 #: ide/functions/menu/menu_file_save_as.c:148
 msgid ""
 "There was something wrong with the file name given.  Please try again."
@@ -1541,7 +1546,7 @@ msgid "Couldn't allocate memory for a new film strip thumbnail."
 msgstr ""
 "Неуспех при заделянето на памет за мини изображение на филмовата лента"
 
-#: ide/functions/film_strip/film_strip_slide_clicked.c:106 ide/salasaga.c:581
+#: ide/functions/film_strip/film_strip_slide_clicked.c:115 ide/salasaga.c:581
 msgid "Ready"
 msgstr "Готово"
 
@@ -1573,10 +1578,10 @@ msgstr ""
 
 #: ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
-#: ide/functions/layer/layer_edit.c:211
+#: ide/functions/layer/layer_edit.c:218
 #: ide/functions/working_area/calculate_object_boundaries.c:182
-#: ide/functions/working_area/working_area_button_press_event.c:212
-#: ide/functions/working_area/working_area_button_release_event.c:382
+#: ide/functions/working_area/working_area_button_press_event.c:218
+#: ide/functions/working_area/working_area_button_release_event.c:402
 #: ide/functions/working_area/working_area_motion_notify_event.c:365
 msgid "Unknown layer type."
 msgstr "Неизвестен тип слой."
@@ -1622,7 +1627,7 @@ msgstr ""
 
 #: ide/functions/layer/image_crop.c:291 ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:142
-#: ide/functions/layer/layer_new_image_inner.c:167
+#: ide/functions/layer/layer_new_image_inner.c:170
 #: ide/functions/menu/menu_screenshots_import.c:274
 #: ide/functions/project_adjust_dimensions.c:243
 msgid "Couldn't create an image pattern."
@@ -1691,7 +1696,7 @@ msgstr " Копирането пропадна"
 msgid " Layer copied to buffer"
 msgstr " Слоят е копиран в буфера"
 
-#: ide/functions/layer/layer_delete.c:114
+#: ide/functions/layer/layer_delete.c:126
 msgid " Layer deleted"
 msgstr " Слоят е изтрит"
 
@@ -1707,7 +1712,7 @@ msgid "Background"
 msgstr "Фон"
 
 #: ide/functions/layer/layer_duplicate.c:94
-#: ide/functions/slide/slide_insert.c:66
+#: ide/functions/slide/slide_insert.c:68
 msgid "Empty"
 msgstr "Празен"
 
@@ -1727,27 +1732,27 @@ msgstr ""
 msgid "Unknown layer type when duplicating layer."
 msgstr "Неизвестен тип слой при дублирането."
 
-#: ide/functions/layer/layer_edit.c:97
+#: ide/functions/layer/layer_edit.c:104
 msgid "Edit background color"
 msgstr "Редактирай фоновия цвят"
 
-#: ide/functions/layer/layer_edit.c:114
+#: ide/functions/layer/layer_edit.c:121
 msgid "Edit image layer"
 msgstr "Редактирай слоя с изображение"
 
-#: ide/functions/layer/layer_edit.c:138
+#: ide/functions/layer/layer_edit.c:145
 msgid "Edit mouse pointer"
 msgstr "Редактирай показалеца"
 
-#: ide/functions/layer/layer_edit.c:163
+#: ide/functions/layer/layer_edit.c:170
 msgid "Edit text layer"
 msgstr "Редактирай слоя с текст"
 
-#: ide/functions/layer/layer_edit.c:188
+#: ide/functions/layer/layer_edit.c:195
 msgid "Edit highlight layer"
 msgstr "Редактирай слоя с акцент"
 
-#: ide/functions/layer/layer_edit.c:227
+#: ide/functions/layer/layer_edit.c:251
 msgid " Layer edited"
 msgstr " Слоят редактиран"
 
@@ -1767,19 +1772,19 @@ msgstr " Слоят е преместен нагоре"
 msgid " Please draw the new layer"
 msgstr " Моля нарисувайте новия слой"
 
-#: ide/functions/layer/layer_new_highlight_inner.c:154
-#: ide/functions/layer/layer_new_image_inner.c:99
-#: ide/functions/layer/layer_new_mouse_inner.c:84
-#: ide/functions/layer/layer_new_text_inner.c:111
+#: ide/functions/layer/layer_new_highlight_inner.c:157
+#: ide/functions/layer/layer_new_image_inner.c:102
+#: ide/functions/layer/layer_new_mouse_inner.c:87
+#: ide/functions/layer/layer_new_text_inner.c:114
 #: ide/functions/menu/menu_screenshots_import.c:307
 #: ide/functions/menu/menu_screenshots_import.c:369
 #: ide/functions/read/read_highlight_layer.c:71
 #: ide/functions/read/read_text_layer.c:95
-#: ide/functions/slide/slide_insert.c:68
+#: ide/functions/slide/slide_insert.c:70
 msgid "_self"
 msgstr "_self"
 
-#: ide/functions/layer/layer_new_highlight_inner.c:193
+#: ide/functions/layer/layer_new_highlight_inner.c:205
 msgid " Highlight layer added"
 msgstr " Слоя с акцент е добавен"
 
@@ -1789,41 +1794,41 @@ msgstr " Слоя с акцент е добавен"
 msgid " Please click the insertion point"
 msgstr " Моля натиснете в точката за вмъкване"
 
-#: ide/functions/layer/layer_new_image_inner.c:106
+#: ide/functions/layer/layer_new_image_inner.c:109
 msgid "Please choose an image file"
 msgstr "Моля изберете изображение"
 
-#: ide/functions/layer/layer_new_image_inner.c:137
+#: ide/functions/layer/layer_new_image_inner.c:140
 msgid ""
 "There was something wrong with the image path given.  Please try again."
 msgstr "Нещо се обърка с пътя до избранато изображение. Опитайте отново."
 
-#: ide/functions/layer/layer_new_image_inner.c:146
+#: ide/functions/layer/layer_new_image_inner.c:149
 msgid ""
 "There was something wrong with the image file selected.  Please try again."
 msgstr "Нещо се обърка с избранато изображение. Опитайте отново."
 
-#: ide/functions/layer/layer_new_image_inner.c:218
+#: ide/functions/layer/layer_new_image_inner.c:230
 msgid " Image layer added"
 msgstr " Слой с изображение е добавен"
 
-#: ide/functions/layer/layer_new_mouse_inner.c:82
+#: ide/functions/layer/layer_new_mouse_inner.c:85
 msgid "Mouse Pointer"
 msgstr "Показалец"
 
-#: ide/functions/layer/layer_new_mouse_inner.c:123
+#: ide/functions/layer/layer_new_mouse_inner.c:135
 msgid " Mouse layer added"
 msgstr " Слой с показалец добавен"
 
-#: ide/functions/layer/layer_new_text_inner.c:72
+#: ide/functions/layer/layer_new_text_inner.c:75
 msgid "New text..."
 msgstr "Нов текст..."
 
-#: ide/functions/layer/layer_new_text_inner.c:109
+#: ide/functions/layer/layer_new_text_inner.c:112
 msgid "Text layer"
 msgstr "Текстов слой"
 
-#: ide/functions/layer/layer_new_text_inner.c:150
+#: ide/functions/layer/layer_new_text_inner.c:162
 msgid " Text layer added"
 msgstr " Текстов слой добавен"
 
@@ -1855,272 +1860,308 @@ msgstr "Нещо се обърка при отварянето на файла �
 msgid "Something went wrong when loading the font file"
 msgstr "Нещо се обърка при зареждането на файла с шрифт"
 
-#: ide/functions/menu/create_menu_bar.c:99
+#: ide/functions/menu/create_menu_bar.c:101
 msgid "/_File"
 msgstr "/_Файл"
 
-#: ide/functions/menu/create_menu_bar.c:100
+#: ide/functions/menu/create_menu_bar.c:102
 msgid "/File/_New Project"
 msgstr "/Файл/_Нов Проект"
 
-#: ide/functions/menu/create_menu_bar.c:100
+#: ide/functions/menu/create_menu_bar.c:102
 msgid "<control>N"
 msgstr "<control>N"
 
-#: ide/functions/menu/create_menu_bar.c:101
+#: ide/functions/menu/create_menu_bar.c:103
 msgid "/File/_Open Project"
 msgstr "/Файл/_Отваряне на проект"
 
-#: ide/functions/menu/create_menu_bar.c:101
+#: ide/functions/menu/create_menu_bar.c:103
 msgid "<control>O"
 msgstr "<control>O"
 
-#: ide/functions/menu/create_menu_bar.c:102
+#: ide/functions/menu/create_menu_bar.c:104
 msgid "/File/_Save Project"
 msgstr "/Файл/_Запазване на проект"
 
-#: ide/functions/menu/create_menu_bar.c:102
+#: ide/functions/menu/create_menu_bar.c:104
 msgid "<control>S"
 msgstr "<control>S"
 
-#: ide/functions/menu/create_menu_bar.c:103
+#: ide/functions/menu/create_menu_bar.c:105
 msgid "/File/Save _As Project"
 msgstr "/Файл/Запазване _като проект"
 
-#: ide/functions/menu/create_menu_bar.c:103
+#: ide/functions/menu/create_menu_bar.c:105
 msgid "<control><shift>S"
 msgstr "<control><shift>S"
 
-#: ide/functions/menu/create_menu_bar.c:104
+#: ide/functions/menu/create_menu_bar.c:106
 msgid "/File/_Close Project"
 msgstr "/Файл/_Затваряне на проект"
 
-#: ide/functions/menu/create_menu_bar.c:104
+#: ide/functions/menu/create_menu_bar.c:106
 msgid "<control>W"
 msgstr "<control>W"
 
-#: ide/functions/menu/create_menu_bar.c:105
+#: ide/functions/menu/create_menu_bar.c:107
 msgid "/File/Sep"
 msgstr "/Файл/раздрелител"
 
-#: ide/functions/menu/create_menu_bar.c:106
+#: ide/functions/menu/create_menu_bar.c:108
 msgid "/File/_Quit"
 msgstr "/Файл/_Изход"
 
-#: ide/functions/menu/create_menu_bar.c:106
+#: ide/functions/menu/create_menu_bar.c:108
 msgid "<control>Q"
 msgstr "<control>Q"
 
-#: ide/functions/menu/create_menu_bar.c:108
+#: ide/functions/menu/create_menu_bar.c:110
 msgid "/_Edit"
 msgstr "/_Редактиране"
 
-#: ide/functions/menu/create_menu_bar.c:109
+#: ide/functions/menu/create_menu_bar.c:111
+msgid "/Edit/_Undo"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:111
+msgid "<control>Z"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:112
+msgid "/Edit/_Redo"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:112
+msgid "<control>Y"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:113
+msgid "/Edit/Sep"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:114
 msgid "/Edit/_Preferences"
 msgstr "/Редактиране/_Настройки"
 
-#: ide/functions/menu/create_menu_bar.c:111
+#: ide/functions/menu/create_menu_bar.c:116
 msgid "/_Screenshots"
 msgstr "/_Прихванати екрани"
 
-#: ide/functions/menu/create_menu_bar.c:112
-#: ide/functions/menu/create_menu_bar.c:185
+#: ide/functions/menu/create_menu_bar.c:117
+#: ide/functions/menu/create_menu_bar.c:192
 msgid "/Screenshots/Capture _window"
 msgstr "/Прихванати екрани/Прихващане на _прозорец"
 
-#: ide/functions/menu/create_menu_bar.c:113
-#: ide/functions/menu/create_menu_bar.c:186
+#: ide/functions/menu/create_menu_bar.c:118
+#: ide/functions/menu/create_menu_bar.c:193
 msgid "/Screenshots/Capture _full screen"
 msgstr "/Прихванати екрани/Прихващане на целия _екран"
 
-#: ide/functions/menu/create_menu_bar.c:114
+#: ide/functions/menu/create_menu_bar.c:119
 msgid "/Screenshots/_Import"
 msgstr "/Прихванати екрани/_Внасяне"
 
-#: ide/functions/menu/create_menu_bar.c:116
+#: ide/functions/menu/create_menu_bar.c:121
 msgid "/_Project"
 msgstr "/_Проект"
 
-#: ide/functions/menu/create_menu_bar.c:117
+#: ide/functions/menu/create_menu_bar.c:122
 msgid "/Project/P_roperties"
 msgstr "/Проект/_Свойства"
 
-#: ide/functions/menu/create_menu_bar.c:118
+#: ide/functions/menu/create_menu_bar.c:123
 msgid "/Project/Sep"
 msgstr "/Проект/Sep"
 
-#: ide/functions/menu/create_menu_bar.c:119
+#: ide/functions/menu/create_menu_bar.c:124
 msgid "/Project/_Adjust dimensions"
 msgstr "/Проект/_Настройка на размерите"
 
-#: ide/functions/menu/create_menu_bar.c:121
+#: ide/functions/menu/create_menu_bar.c:126
 msgid "/Sl_ide"
 msgstr "/Сла_йд"
 
-#: ide/functions/menu/create_menu_bar.c:122
+#: ide/functions/menu/create_menu_bar.c:127
 msgid "/Slide/_Insert"
 msgstr "/Слайд/_Вмъкване"
 
-#: ide/functions/menu/create_menu_bar.c:123
+#: ide/functions/menu/create_menu_bar.c:128
 msgid "/Slide/_Delete"
 msgstr "/Слайд/_Изтриване"
 
-#: ide/functions/menu/create_menu_bar.c:124
+#: ide/functions/menu/create_menu_bar.c:129
 msgid "/Slide/Du_ration"
 msgstr "/Слайд/П_родължителност"
 
-#: ide/functions/menu/create_menu_bar.c:125
+#: ide/functions/menu/create_menu_bar.c:130
 msgid "/Slide/Move _up"
 msgstr "/Слайд/Премести на_горе"
 
-#: ide/functions/menu/create_menu_bar.c:126
+#: ide/functions/menu/create_menu_bar.c:131
 msgid "/Slide/Move dow_n"
 msgstr "/Слайд/Премести на_долу"
 
-#: ide/functions/menu/create_menu_bar.c:127
+#: ide/functions/menu/create_menu_bar.c:132
 msgid "/Slide/Move to _top"
 msgstr "/Слайд/Премести на_й-отгоре"
 
-#: ide/functions/menu/create_menu_bar.c:128
+#: ide/functions/menu/create_menu_bar.c:133
 msgid "/Slide/Move to _bottom"
 msgstr "/Слайд/Премести най-отдол_у"
 
-#: ide/functions/menu/create_menu_bar.c:130
+#: ide/functions/menu/create_menu_bar.c:135
 msgid "/_Layer"
 msgstr "/_Слой"
 
-#: ide/functions/menu/create_menu_bar.c:132
+#: ide/functions/menu/create_menu_bar.c:137
 msgid "/Layer/_Copy"
 msgstr "/Слой/_Копиране"
 
-#: ide/functions/menu/create_menu_bar.c:133
+#: ide/functions/menu/create_menu_bar.c:138
 msgid "/Layer/_Paste"
 msgstr "/Слой/_Поставяне"
 
-#: ide/functions/menu/create_menu_bar.c:134
+#: ide/functions/menu/create_menu_bar.c:139
 msgid "/Layer/_Edit"
 msgstr "/Слой/_Редактиране"
 
-#: ide/functions/menu/create_menu_bar.c:135
+#: ide/functions/menu/create_menu_bar.c:140
 msgid "/Layer/_Delete"
 msgstr "/Слой/_Изтриване"
 
-#: ide/functions/menu/create_menu_bar.c:136
 #: ide/functions/menu/create_menu_bar.c:141
+#: ide/functions/menu/create_menu_bar.c:146
 msgid "/Layer/Sep"
 msgstr "/Слой/раздрелител"
 
-#: ide/functions/menu/create_menu_bar.c:137
+#: ide/functions/menu/create_menu_bar.c:142
 msgid "/Layer/Add _Text"
 msgstr "/Слой/Добавяне на _текст"
 
-#: ide/functions/menu/create_menu_bar.c:138
+#: ide/functions/menu/create_menu_bar.c:143
 msgid "/Layer/Add _Highlight"
 msgstr "/Слой/Добавяне на _акцент"
 
-#: ide/functions/menu/create_menu_bar.c:139
+#: ide/functions/menu/create_menu_bar.c:144
 msgid "/Layer/Add _Image"
 msgstr "/Слой/Добавяне на и_зображение"
 
-#: ide/functions/menu/create_menu_bar.c:140
+#: ide/functions/menu/create_menu_bar.c:145
 msgid "/Layer/Add _Mouse"
 msgstr "/Слой/Добавяне на _показалец"
 
-#: ide/functions/menu/create_menu_bar.c:142
+#: ide/functions/menu/create_menu_bar.c:147
 msgid "/Layer/Image c_rop"
 msgstr "/Слой/Изр_язване на изображение"
 
-#: ide/functions/menu/create_menu_bar.c:143
+#: ide/functions/menu/create_menu_bar.c:148
 msgid "/Layer/Image resi_ze"
 msgstr "/Слой/Преоразмеряване на изображение"
 
-#: ide/functions/menu/create_menu_bar.c:145
+#: ide/functions/menu/create_menu_bar.c:150
 msgid "/E_xport"
 msgstr "/И_знеси"
 
-#: ide/functions/menu/create_menu_bar.c:146
+#: ide/functions/menu/create_menu_bar.c:151
 msgid "/Export/_Flash Animation"
 msgstr "/Изнеси/_Flash анимация"
 
-#: ide/functions/menu/create_menu_bar.c:146
+#: ide/functions/menu/create_menu_bar.c:151
 msgid "<control><shift>F"
 msgstr "<control><shift>F"
 
-#: ide/functions/menu/create_menu_bar.c:147
+#: ide/functions/menu/create_menu_bar.c:152
 msgid "/Export/_Html Wrapper"
 msgstr "/Изнеси/_Html Шаблон за видео"
 
-#: ide/functions/menu/create_menu_bar.c:148
+#: ide/functions/menu/create_menu_bar.c:153
 msgid "/Export/_Slide as Image"
 msgstr "/Изнеси/_Слайд като изображение"
 
-#: ide/functions/menu/create_menu_bar.c:149
+#: ide/functions/menu/create_menu_bar.c:154
 msgid "/Export/_Image Layer"
 msgstr "/Изнеси/Слоя като _изображението"
 
-#: ide/functions/menu/create_menu_bar.c:151
+#: ide/functions/menu/create_menu_bar.c:156
 msgid "/_Help"
 msgstr "/_Помощ"
 
-#: ide/functions/menu/create_menu_bar.c:152
+#: ide/functions/menu/create_menu_bar.c:157
 msgid "/_Help/_About"
 msgstr "/_Помощ/_Относно"
 
-#: ide/functions/menu/create_menu_bar.c:153
+#: ide/functions/menu/create_menu_bar.c:158
 msgid "/_Help/_Main Website"
 msgstr "/_Помощ/_Уеб Сайт"
 
-#: ide/functions/menu/create_menu_bar.c:154
+#: ide/functions/menu/create_menu_bar.c:159
 msgid "/_Help/Sep"
 msgstr "/_Помощ/раздрелител"
 
-#: ide/functions/menu/create_menu_bar.c:156
+#: ide/functions/menu/create_menu_bar.c:161
 msgid "/_Help/_Forum"
 msgstr "/_Помощ/_Интернет Форум"
 
-#: ide/functions/menu/create_menu_bar.c:157
+#: ide/functions/menu/create_menu_bar.c:162
 msgid "/_Help/_Register"
 msgstr "/_Помощ/_Регистрация"
 
-#: ide/functions/menu/create_menu_bar.c:158
+#: ide/functions/menu/create_menu_bar.c:163
 msgid "/_Help/_Support"
 msgstr "/_Помощ/_Поддръжка"
 
-#: ide/functions/menu/create_menu_bar.c:159
+#: ide/functions/menu/create_menu_bar.c:164
 msgid "/_Help/_Wiki"
 msgstr "/_Помощ/_Wiki страница"
 
-#: ide/functions/menu/create_menu_bar.c:177
+#: ide/functions/menu/create_menu_bar.c:182
 #: ide/functions/menu/menu_file_close.c:109
-#: ide/functions/menu/menu_file_new.c:359
-#: ide/functions/menu/menu_file_open.c:264
+#: ide/functions/menu/menu_file_new.c:363
+#: ide/functions/menu/menu_file_open.c:265
 #: ide/functions/menu/menu_screenshots_import.c:476
 msgid "/Project"
 msgstr "/Проект"
 
-#: ide/functions/menu/create_menu_bar.c:178
+#: ide/functions/menu/create_menu_bar.c:183
 #: ide/functions/menu/menu_file_close.c:110
-#: ide/functions/menu/menu_file_new.c:360
-#: ide/functions/menu/menu_file_open.c:265
+#: ide/functions/menu/menu_file_new.c:364
+#: ide/functions/menu/menu_file_open.c:266
 #: ide/functions/menu/menu_screenshots_import.c:477
 msgid "/Slide"
 msgstr "/Слайд"
 
-#: ide/functions/menu/create_menu_bar.c:179
+#: ide/functions/menu/create_menu_bar.c:184
 #: ide/functions/menu/menu_file_close.c:111
-#: ide/functions/menu/menu_file_new.c:361
-#: ide/functions/menu/menu_file_open.c:266
+#: ide/functions/menu/menu_file_new.c:365
+#: ide/functions/menu/menu_file_open.c:267
 #: ide/functions/menu/menu_screenshots_import.c:478
 msgid "/Layer"
 msgstr "/Слой"
 
-#: ide/functions/menu/create_menu_bar.c:180
+#: ide/functions/menu/create_menu_bar.c:185
 #: ide/functions/menu/menu_file_close.c:112
-#: ide/functions/menu/menu_file_new.c:362
-#: ide/functions/menu/menu_file_open.c:267
+#: ide/functions/menu/menu_file_new.c:366
+#: ide/functions/menu/menu_file_open.c:268
 #: ide/functions/menu/menu_screenshots_import.c:479
 msgid "/Export"
 msgstr "/Изнеси"
+
+#: ide/functions/menu/create_menu_bar.c:186
+#: ide/functions/undo_redo/undo_functions.c:91
+#: ide/functions/undo_redo/undo_functions.c:130
+#: ide/functions/undo_redo/undo_functions.c:292
+#: ide/functions/undo_redo/undo_functions.c:505
+msgid "/Edit/Undo"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:187
+#: ide/functions/undo_redo/undo_functions.c:94
+#: ide/functions/undo_redo/undo_functions.c:129
+#: ide/functions/undo_redo/undo_functions.c:298
+#: ide/functions/undo_redo/undo_functions.c:500
+msgid "/Edit/Redo"
+msgstr ""
 
 #: ide/functions/menu/menu_edit_preferences.c:154
 msgid "Application Preferences"
@@ -2365,37 +2406,37 @@ msgstr "Изнесено успешно"
 msgid " Project closed"
 msgstr " Проекта е затворен"
 
-#: ide/functions/menu/menu_file_new.c:107
+#: ide/functions/menu/menu_file_new.c:108
 msgid "Create new Salasaga Project"
 msgstr "Създай нов Salasaga проект"
 
-#: ide/functions/menu/menu_file_new.c:112
+#: ide/functions/menu/menu_file_new.c:113
 #: ide/functions/menu/menu_project_properties.c:128
 msgid "Project Name: "
 msgstr "Име на проекта: "
 
-#: ide/functions/menu/menu_file_new.c:124
+#: ide/functions/menu/menu_file_new.c:125
 #: ide/functions/menu/menu_screenshots_capture.c:296
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:165
 msgid "Width: "
 msgstr "Ширина: "
 
-#: ide/functions/menu/menu_file_new.c:141
+#: ide/functions/menu/menu_file_new.c:142
 #: ide/functions/menu/menu_screenshots_capture.c:307
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:176
 msgid "Height: "
 msgstr "Височина: "
 
-#: ide/functions/menu/menu_file_new.c:158
+#: ide/functions/menu/menu_file_new.c:159
 #: ide/functions/menu/menu_project_properties.c:156
 msgid "Frames per second: "
 msgstr "Кадъра в секунда: "
 
-#: ide/functions/menu/menu_file_new.c:175
+#: ide/functions/menu/menu_file_new.c:176
 msgid "Background color: "
 msgstr "Цвят на фона: "
 
-#: ide/functions/menu/menu_file_new.c:209
+#: ide/functions/menu/menu_file_new.c:210
 msgid ""
 "There was something wrong with the new project name.  Defaulting to 'New "
 "Project' instead."
@@ -2403,23 +2444,23 @@ msgstr ""
 "Нещо не е наред с новото име на проекта. Вместо това се използва 'New "
 "Project' по подразбиране."
 
-#: ide/functions/menu/menu_file_new.c:211 ide/salasaga.c:301
+#: ide/functions/menu/menu_file_new.c:212 ide/salasaga.c:301
 msgid "New Project"
 msgstr "Нов проект"
 
-#: ide/functions/menu/menu_file_new.c:224
+#: ide/functions/menu/menu_file_new.c:225
 msgid ""
 "There was something wrong with the project width value.  Please try again."
 msgstr ""
 "Нещо не е наред със стойността за ширина в проекта. Моля, опитайте отново."
 
-#: ide/functions/menu/menu_file_new.c:238
+#: ide/functions/menu/menu_file_new.c:239
 msgid ""
 "There was something wrong with the project height value.  Please try again."
 msgstr ""
 "Нещо не е наред със стойността за височина в проекта. Моля, опитайте отново."
 
-#: ide/functions/menu/menu_file_new.c:252
+#: ide/functions/menu/menu_file_new.c:253
 msgid ""
 "There was something wrong with the project frames per second value.  Please "
 "try again."
@@ -2427,46 +2468,46 @@ msgstr ""
 "Нещо не е наред със стойността за кадри в секунда в проекта. Моля, опитайте "
 "отново."
 
-#: ide/functions/menu/menu_file_new.c:305
+#: ide/functions/menu/menu_file_new.c:306
 #: ide/functions/menu/menu_help_website.c:47
 #: ide/functions/read/read_project.c:146
 msgid "http://www.salasaga.org"
 msgstr "http://www.salasaga.org"
 
-#: ide/functions/menu/menu_file_new.c:306
+#: ide/functions/menu/menu_file_new.c:307
 #: ide/functions/menu/menu_screenshots_import.c:99
 #: ide/functions/read/read_project.c:147
 msgid "_blank"
 msgstr "_blank"
 
-#: ide/functions/menu/menu_file_new.c:308
+#: ide/functions/menu/menu_file_new.c:309
 #: ide/functions/menu/menu_screenshots_import.c:101
 #: ide/functions/read/read_project.c:149
 msgid "Created using Salasaga"
 msgstr "Създадено със Salasaga"
 
-#: ide/functions/menu/menu_file_new.c:334
+#: ide/functions/menu/menu_file_new.c:335
 msgid " Project initialized"
 msgstr " Поректа е инициализиран"
 
-#: ide/functions/menu/menu_file_open.c:88
+#: ide/functions/menu/menu_file_open.c:89
 msgid "Open a Salasaga Project"
 msgstr "Отоври Salasaga проект"
 
-#: ide/functions/menu/menu_file_open.c:98
+#: ide/functions/menu/menu_file_open.c:99
 #: ide/functions/menu/menu_file_save_as.c:86
 msgid "Salasaga Project file (*.salasaga)"
 msgstr "Файл-проект Salasaga (*.salasaga)"
 
-#: ide/functions/menu/menu_file_open.c:104
+#: ide/functions/menu/menu_file_open.c:105
 msgid "Flame Project file (*.flame)"
 msgstr "Файл-проект Flame (*.flame)"
 
-#: ide/functions/menu/menu_file_open.c:277
+#: ide/functions/menu/menu_file_open.c:281
 msgid "Project loaded"
 msgstr "Проектът е зареден"
 
-#: ide/functions/menu/menu_file_open.c:277
+#: ide/functions/menu/menu_file_open.c:281
 msgid "slides"
 msgstr "слайда"
 
@@ -3620,11 +3661,11 @@ msgstr ""
 msgid "Error creating a foreground color tag node."
 msgstr ""
 
-#: ide/functions/slide/slide_delete.c:63
+#: ide/functions/slide/slide_delete.c:65
 msgid "You must leave at least one slide in a project."
 msgstr "Трябва да оставите поне един слайд в проекта."
 
-#: ide/functions/slide/slide_delete.c:105
+#: ide/functions/slide/slide_delete.c:119
 msgid " Slide deleted"
 msgstr " Слайдът е изтрит"
 
@@ -3645,7 +3686,7 @@ msgstr ""
 msgid " Slide properties updated"
 msgstr " Свойствата на слайда са обновени"
 
-#: ide/functions/slide/slide_insert.c:117
+#: ide/functions/slide/slide_insert.c:128
 msgid " Slide added"
 msgstr " Слайда е добавен"
 
@@ -3681,30 +3722,49 @@ msgstr ""
 msgid "Take Screenshot"
 msgstr "Направи снимка"
 
+#: ide/functions/undo_redo/undo_functions.c:282
+#: ide/functions/undo_redo/undo_functions.c:478
+msgid ""
+"Programming error.  The Undo/Redo functions were called with an unknown undo "
+"type."
+msgstr ""
+
+#: ide/functions/undo_redo/undo_functions.c:317
+msgid "Last action redone"
+msgstr ""
+
+#: ide/functions/undo_redo/undo_functions.c:512
+msgid "Last action undone"
+msgstr ""
+
 #: ide/functions/validate_value.c:713 screen_capture/validate_value.c:576
 msgid "Unknown value passed to validation function"
 msgstr "Неизвестна стойност е подадена към функцията"
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:139
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:191
+#: ide/functions/widgets/time_line/time_line_button_press_event.c:120
+msgid "Private internal timeline data is not present!"
+msgstr ""
+
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:142
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:194
 msgid "Couldn't recreate time line background image."
 msgstr ""
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:148
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:200
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:151
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:203
 msgid "Couldn't recreate time line display buffer."
 msgstr ""
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:157
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:209
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:160
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:212
 msgid "Couldn't redraw the time line layer information."
 msgstr ""
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:281
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:286
 msgid " Resize completed"
 msgstr " Преоразмеряването е завършено"
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:322
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:335
 msgid " Drag completed"
 msgstr " Провлачването е завършено"
 
@@ -3738,24 +3798,24 @@ msgstr "/Слой/Преоразмеряване на изображение"
 msgid "Not enough memory for pixbuf allocation."
 msgstr ""
 
-#: ide/functions/working_area/working_area_button_release_event.c:156
+#: ide/functions/working_area/working_area_button_release_event.c:160
 msgid " Layer start point moved"
 msgstr ""
 
-#: ide/functions/working_area/working_area_button_release_event.c:158
+#: ide/functions/working_area/working_area_button_release_event.c:162
 msgid " Layer end point moved"
 msgstr ""
 
-#: ide/functions/working_area/working_area_button_release_event.c:262
+#: ide/functions/working_area/working_area_button_release_event.c:266
 #: ide/functions/working_area/working_area_motion_notify_event.c:205
 msgid "Unknown resizing direction."
 msgstr "Неизвестна посока на преоразмеряване"
 
-#: ide/functions/working_area/working_area_button_release_event.c:320
+#: ide/functions/working_area/working_area_button_release_event.c:340
 msgid " Layer resized"
 msgstr " Слоят е преоразмерен"
 
-#: ide/functions/working_area/working_area_button_release_event.c:423
+#: ide/functions/working_area/working_area_button_release_event.c:454
 msgid " Layer moved"
 msgstr " Слоят е преместен"
 

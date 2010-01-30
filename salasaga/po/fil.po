@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-20 19:23+1100\n"
+"POT-Creation-Date: 2010-01-27 21:57+1100\n"
 "PO-Revision-Date: 2009-12-10 14:40+0000\n"
 "Last-Translator: Kezia <kezialounel@gmail.com>\n"
 "Language-Team: Filipino <fil@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2009-12-25 00:32+0000\n"
+"X-Launchpad-Export-Date: 2010-01-30 08:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
@@ -80,7 +80,7 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_text.c:867
 #: ide/functions/dialog/display_dialog_text.c:881
 #: ide/functions/dialog/display_dialog_text.c:895
-#: ide/functions/draw_timeline.c:66
+#: ide/functions/draw_timeline.c:70
 #: ide/functions/export/html/export_html_wrapper.c:121
 #: ide/functions/export/html/export_html_wrapper.c:167
 #: ide/functions/export/swf/export_swf_control_bar.c:460
@@ -122,10 +122,10 @@ msgstr ""
 #: ide/functions/layer/layer_duplicate.c:179
 #: ide/functions/layer/layer_duplicate.c:195
 #: ide/functions/layer/layer_duplicate.c:221
-#: ide/functions/layer/layer_edit.c:211 ide/functions/layer/layer_free.c:87
-#: ide/functions/layer/layer_new_image_inner.c:137
-#: ide/functions/layer/layer_new_image_inner.c:146
-#: ide/functions/layer/layer_new_image_inner.c:167
+#: ide/functions/layer/layer_edit.c:218 ide/functions/layer/layer_free.c:87
+#: ide/functions/layer/layer_new_image_inner.c:140
+#: ide/functions/layer/layer_new_image_inner.c:149
+#: ide/functions/layer/layer_new_image_inner.c:170
 #: ide/functions/load_fonts.c:69 ide/functions/load_fonts.c:173
 #: ide/functions/load_fonts.c:180 ide/functions/load_fonts.c:209
 #: ide/functions/load_fonts.c:219
@@ -151,11 +151,11 @@ msgstr ""
 #: ide/functions/menu/menu_export_swf.c:65
 #: ide/functions/menu/menu_export_swf.c:130
 #: ide/functions/menu/menu_export_swf.c:171
-#: ide/functions/menu/menu_file_new.c:209
-#: ide/functions/menu/menu_file_new.c:224
-#: ide/functions/menu/menu_file_new.c:238
-#: ide/functions/menu/menu_file_new.c:252
-#: ide/functions/menu/menu_file_open.c:170
+#: ide/functions/menu/menu_file_new.c:210
+#: ide/functions/menu/menu_file_new.c:225
+#: ide/functions/menu/menu_file_new.c:239
+#: ide/functions/menu/menu_file_new.c:253
+#: ide/functions/menu/menu_file_open.c:171
 #: ide/functions/menu/menu_file_save_as.c:148
 #: ide/functions/menu/menu_file_save.c:94
 #: ide/functions/menu/menu_file_save.c:104
@@ -328,13 +328,18 @@ msgstr ""
 #: ide/functions/save/save_text_tags.c:80
 #: ide/functions/save/save_text_tags.c:105
 #: ide/functions/save/save_text_tags.c:119
-#: ide/functions/slide/slide_duration.c:115 ide/functions/validate_value.c:713
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:139
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:148
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:157
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:191
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:200
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:209
+#: ide/functions/slide/slide_delete.c:65
+#: ide/functions/slide/slide_duration.c:115
+#: ide/functions/undo_redo/undo_functions.c:282
+#: ide/functions/undo_redo/undo_functions.c:478
+#: ide/functions/validate_value.c:713
+#: ide/functions/widgets/time_line/time_line_button_press_event.c:120
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:142
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:151
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:160
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:194
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:203
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:212
 #: ide/functions/widgets/time_line/time_line_internal_initialise_bg_image.c:109
 #: ide/functions/widgets/time_line/time_line_internal_initialise_display_buffer.c:93
 #: ide/functions/widgets/time_line/time_line_internal_initialise_display_buffer.c:107
@@ -344,9 +349,9 @@ msgstr ""
 #: ide/functions/working_area/calculate_object_boundaries.c:182
 #: ide/functions/working_area/draw_highlight_box.c:53
 #: ide/functions/working_area/draw_highlight_box.c:92
-#: ide/functions/working_area/working_area_button_press_event.c:212
-#: ide/functions/working_area/working_area_button_release_event.c:262
-#: ide/functions/working_area/working_area_button_release_event.c:382
+#: ide/functions/working_area/working_area_button_press_event.c:218
+#: ide/functions/working_area/working_area_button_release_event.c:266
+#: ide/functions/working_area/working_area_button_release_event.c:402
 #: ide/functions/working_area/working_area_motion_notify_event.c:205
 #: ide/functions/working_area/working_area_motion_notify_event.c:365
 #: ide/salasaga.c:492 ide/salasaga.c:503 ide/salasaga.c:562
@@ -470,7 +475,7 @@ msgid "Add a text layer"
 msgstr "Maglagay ng patong na text"
 
 #: ide/functions/create_time_line.c:219
-#: ide/functions/layer/layer_new_highlight_inner.c:152
+#: ide/functions/layer/layer_new_highlight_inner.c:155
 msgid "Highlight"
 msgstr "Highlight"
 
@@ -481,7 +486,7 @@ msgstr "Maglagay ng patong na highlight"
 
 #: ide/functions/create_time_line.c:232
 #: ide/functions/layer/layer_duplicate.c:91
-#: ide/functions/layer/layer_new_image_inner.c:97
+#: ide/functions/layer/layer_new_image_inner.c:100
 #: ide/functions/menu/menu_screenshots_import.c:355
 msgid "Image"
 msgstr "Imahe"
@@ -1146,7 +1151,7 @@ msgstr ""
 msgid "Export to Flash disabled: No project loaded"
 msgstr "Hindi pwedeng mag-Export sa Flash: Walang proyekto na naka-load"
 
-#: ide/functions/draw_timeline.c:66
+#: ide/functions/draw_timeline.c:70
 msgid "Could not regenerate the time line widget."
 msgstr "Hindi magawa uli ang time line na widget"
 
@@ -1162,7 +1167,7 @@ msgstr "HyperText Markup Language (*.html)"
 #: ide/functions/menu/menu_export_layer.c:99
 #: ide/functions/menu/menu_export_slide.c:80
 #: ide/functions/menu/menu_export_swf.c:90
-#: ide/functions/menu/menu_file_open.c:110
+#: ide/functions/menu/menu_file_open.c:111
 #: ide/functions/menu/menu_file_save_as.c:92
 msgid "All files (*.*)"
 msgstr "Lahat ng mga file (*.*)"
@@ -1171,7 +1176,7 @@ msgstr "Lahat ng mga file (*.*)"
 #: ide/functions/menu/menu_export_layer.c:139
 #: ide/functions/menu/menu_export_slide.c:120
 #: ide/functions/menu/menu_export_swf.c:130
-#: ide/functions/menu/menu_file_open.c:170
+#: ide/functions/menu/menu_file_open.c:171
 #: ide/functions/menu/menu_file_save_as.c:148
 msgid ""
 "There was something wrong with the file name given.  Please try again."
@@ -1565,7 +1570,7 @@ msgstr "Hindi magawa ang film strip thumbnail."
 msgid "Couldn't allocate memory for a new film strip thumbnail."
 msgstr "Hindi makapaglaan ng memorya para sa bagong film strip thumbnail."
 
-#: ide/functions/film_strip/film_strip_slide_clicked.c:106 ide/salasaga.c:581
+#: ide/functions/film_strip/film_strip_slide_clicked.c:115 ide/salasaga.c:581
 msgid "Ready"
 msgstr "Handa"
 
@@ -1598,10 +1603,10 @@ msgstr ""
 
 #: ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
-#: ide/functions/layer/layer_edit.c:211
+#: ide/functions/layer/layer_edit.c:218
 #: ide/functions/working_area/calculate_object_boundaries.c:182
-#: ide/functions/working_area/working_area_button_press_event.c:212
-#: ide/functions/working_area/working_area_button_release_event.c:382
+#: ide/functions/working_area/working_area_button_press_event.c:218
+#: ide/functions/working_area/working_area_button_release_event.c:402
 #: ide/functions/working_area/working_area_motion_notify_event.c:365
 msgid "Unknown layer type."
 msgstr "Hind kilalang uri ng patong."
@@ -1647,7 +1652,7 @@ msgstr ""
 
 #: ide/functions/layer/image_crop.c:291 ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:142
-#: ide/functions/layer/layer_new_image_inner.c:167
+#: ide/functions/layer/layer_new_image_inner.c:170
 #: ide/functions/menu/menu_screenshots_import.c:274
 #: ide/functions/project_adjust_dimensions.c:243
 msgid "Couldn't create an image pattern."
@@ -1716,7 +1721,7 @@ msgstr " Pumalpak ang pagkopya"
 msgid " Layer copied to buffer"
 msgstr " Kinopya ang patong sa buffer"
 
-#: ide/functions/layer/layer_delete.c:114
+#: ide/functions/layer/layer_delete.c:126
 msgid " Layer deleted"
 msgstr " Tinanggal ang patong"
 
@@ -1732,7 +1737,7 @@ msgid "Background"
 msgstr "Background"
 
 #: ide/functions/layer/layer_duplicate.c:94
-#: ide/functions/slide/slide_insert.c:66
+#: ide/functions/slide/slide_insert.c:68
 msgid "Empty"
 msgstr "Bakante"
 
@@ -1752,27 +1757,27 @@ msgstr ""
 msgid "Unknown layer type when duplicating layer."
 msgstr "Hindi kilalang uri ng patong habang dinodoble ang patong."
 
-#: ide/functions/layer/layer_edit.c:97
+#: ide/functions/layer/layer_edit.c:104
 msgid "Edit background color"
 msgstr "Ibahin ang kulay ng background"
 
-#: ide/functions/layer/layer_edit.c:114
+#: ide/functions/layer/layer_edit.c:121
 msgid "Edit image layer"
 msgstr "Ibahin ang patong na imahe"
 
-#: ide/functions/layer/layer_edit.c:138
+#: ide/functions/layer/layer_edit.c:145
 msgid "Edit mouse pointer"
 msgstr "Ibahin ang pointer ng mouse"
 
-#: ide/functions/layer/layer_edit.c:163
+#: ide/functions/layer/layer_edit.c:170
 msgid "Edit text layer"
 msgstr "Ibahin ang patong na text"
 
-#: ide/functions/layer/layer_edit.c:188
+#: ide/functions/layer/layer_edit.c:195
 msgid "Edit highlight layer"
 msgstr "Ibahin ang highlight na patong"
 
-#: ide/functions/layer/layer_edit.c:227
+#: ide/functions/layer/layer_edit.c:251
 msgid " Layer edited"
 msgstr " Iniba ang patong"
 
@@ -1792,19 +1797,19 @@ msgstr " Itinaas ang patong"
 msgid " Please draw the new layer"
 msgstr " Pakidrowing ng bagong patong"
 
-#: ide/functions/layer/layer_new_highlight_inner.c:154
-#: ide/functions/layer/layer_new_image_inner.c:99
-#: ide/functions/layer/layer_new_mouse_inner.c:84
-#: ide/functions/layer/layer_new_text_inner.c:111
+#: ide/functions/layer/layer_new_highlight_inner.c:157
+#: ide/functions/layer/layer_new_image_inner.c:102
+#: ide/functions/layer/layer_new_mouse_inner.c:87
+#: ide/functions/layer/layer_new_text_inner.c:114
 #: ide/functions/menu/menu_screenshots_import.c:307
 #: ide/functions/menu/menu_screenshots_import.c:369
 #: ide/functions/read/read_highlight_layer.c:71
 #: ide/functions/read/read_text_layer.c:95
-#: ide/functions/slide/slide_insert.c:68
+#: ide/functions/slide/slide_insert.c:70
 msgid "_self"
 msgstr "_sarili"
 
-#: ide/functions/layer/layer_new_highlight_inner.c:193
+#: ide/functions/layer/layer_new_highlight_inner.c:205
 msgid " Highlight layer added"
 msgstr " Naglagay ng patong ha highlight"
 
@@ -1814,41 +1819,41 @@ msgstr " Naglagay ng patong ha highlight"
 msgid " Please click the insertion point"
 msgstr " Paki-click ng pagsisingitan"
 
-#: ide/functions/layer/layer_new_image_inner.c:106
+#: ide/functions/layer/layer_new_image_inner.c:109
 msgid "Please choose an image file"
 msgstr "Pakipili ng file ng imahe"
 
-#: ide/functions/layer/layer_new_image_inner.c:137
+#: ide/functions/layer/layer_new_image_inner.c:140
 msgid ""
 "There was something wrong with the image path given.  Please try again."
 msgstr "May problema sa ibinigay na landas ng imahe.  Pakiulit."
 
-#: ide/functions/layer/layer_new_image_inner.c:146
+#: ide/functions/layer/layer_new_image_inner.c:149
 msgid ""
 "There was something wrong with the image file selected.  Please try again."
 msgstr "May problema sa piniling file ng imahe.  Pakiulit."
 
-#: ide/functions/layer/layer_new_image_inner.c:218
+#: ide/functions/layer/layer_new_image_inner.c:230
 msgid " Image layer added"
 msgstr " Naglagay ng patong na imahe."
 
-#: ide/functions/layer/layer_new_mouse_inner.c:82
+#: ide/functions/layer/layer_new_mouse_inner.c:85
 msgid "Mouse Pointer"
 msgstr "Mouse Pointer"
 
-#: ide/functions/layer/layer_new_mouse_inner.c:123
+#: ide/functions/layer/layer_new_mouse_inner.c:135
 msgid " Mouse layer added"
 msgstr " Naglagay ng patong na mouse"
 
-#: ide/functions/layer/layer_new_text_inner.c:72
+#: ide/functions/layer/layer_new_text_inner.c:75
 msgid "New text..."
 msgstr "Bagong text..."
 
-#: ide/functions/layer/layer_new_text_inner.c:109
+#: ide/functions/layer/layer_new_text_inner.c:112
 msgid "Text layer"
 msgstr "Patong na text"
 
-#: ide/functions/layer/layer_new_text_inner.c:150
+#: ide/functions/layer/layer_new_text_inner.c:162
 msgid " Text layer added"
 msgstr " Naglagay ng patong na text"
 
@@ -1880,272 +1885,308 @@ msgstr ""
 msgid "Something went wrong when loading the font file"
 msgstr ""
 
-#: ide/functions/menu/create_menu_bar.c:99
+#: ide/functions/menu/create_menu_bar.c:101
 msgid "/_File"
 msgstr "/_File"
 
-#: ide/functions/menu/create_menu_bar.c:100
+#: ide/functions/menu/create_menu_bar.c:102
 msgid "/File/_New Project"
 msgstr "/File/_Bagong Proyekto"
 
-#: ide/functions/menu/create_menu_bar.c:100
+#: ide/functions/menu/create_menu_bar.c:102
 msgid "<control>N"
 msgstr "<control>N"
 
-#: ide/functions/menu/create_menu_bar.c:101
+#: ide/functions/menu/create_menu_bar.c:103
 msgid "/File/_Open Project"
 msgstr "/File/_Buksan ang Proyekto"
 
-#: ide/functions/menu/create_menu_bar.c:101
+#: ide/functions/menu/create_menu_bar.c:103
 msgid "<control>O"
 msgstr "<control>O"
 
-#: ide/functions/menu/create_menu_bar.c:102
+#: ide/functions/menu/create_menu_bar.c:104
 msgid "/File/_Save Project"
 msgstr "/File/_I-save ang Proyekto"
 
-#: ide/functions/menu/create_menu_bar.c:102
+#: ide/functions/menu/create_menu_bar.c:104
 msgid "<control>S"
 msgstr "<control>S"
 
-#: ide/functions/menu/create_menu_bar.c:103
+#: ide/functions/menu/create_menu_bar.c:105
 msgid "/File/Save _As Project"
 msgstr "/File/i-Save ang Proyekto Bilang"
 
-#: ide/functions/menu/create_menu_bar.c:103
+#: ide/functions/menu/create_menu_bar.c:105
 msgid "<control><shift>S"
 msgstr "<control><shift>S"
 
-#: ide/functions/menu/create_menu_bar.c:104
+#: ide/functions/menu/create_menu_bar.c:106
 msgid "/File/_Close Project"
 msgstr "/File/_Isara ng Proyekto"
 
-#: ide/functions/menu/create_menu_bar.c:104
+#: ide/functions/menu/create_menu_bar.c:106
 msgid "<control>W"
 msgstr "<control>W"
 
-#: ide/functions/menu/create_menu_bar.c:105
+#: ide/functions/menu/create_menu_bar.c:107
 msgid "/File/Sep"
 msgstr "/File/Sep"
 
-#: ide/functions/menu/create_menu_bar.c:106
+#: ide/functions/menu/create_menu_bar.c:108
 msgid "/File/_Quit"
 msgstr "/File/_Ihinto ang Paggawa"
 
-#: ide/functions/menu/create_menu_bar.c:106
+#: ide/functions/menu/create_menu_bar.c:108
 msgid "<control>Q"
 msgstr "<control>Q"
 
-#: ide/functions/menu/create_menu_bar.c:108
+#: ide/functions/menu/create_menu_bar.c:110
 msgid "/_Edit"
 msgstr "/_Ibahin"
 
-#: ide/functions/menu/create_menu_bar.c:109
+#: ide/functions/menu/create_menu_bar.c:111
+msgid "/Edit/_Undo"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:111
+msgid "<control>Z"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:112
+msgid "/Edit/_Redo"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:112
+msgid "<control>Y"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:113
+msgid "/Edit/Sep"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:114
 msgid "/Edit/_Preferences"
 msgstr "/Ibahin/_Mga Kagustuhan"
 
-#: ide/functions/menu/create_menu_bar.c:111
+#: ide/functions/menu/create_menu_bar.c:116
 msgid "/_Screenshots"
 msgstr "/_Mga Kuha ng Screen"
 
-#: ide/functions/menu/create_menu_bar.c:112
-#: ide/functions/menu/create_menu_bar.c:185
+#: ide/functions/menu/create_menu_bar.c:117
+#: ide/functions/menu/create_menu_bar.c:192
 msgid "/Screenshots/Capture _window"
 msgstr "/_Mga Kuha ng Screen/Kuhaan ang _window"
 
-#: ide/functions/menu/create_menu_bar.c:113
-#: ide/functions/menu/create_menu_bar.c:186
+#: ide/functions/menu/create_menu_bar.c:118
+#: ide/functions/menu/create_menu_bar.c:193
 msgid "/Screenshots/Capture _full screen"
 msgstr "/_Mga Kuha ng Screen/Kuhaan ang _buong screen"
 
-#: ide/functions/menu/create_menu_bar.c:114
+#: ide/functions/menu/create_menu_bar.c:119
 msgid "/Screenshots/_Import"
 msgstr "/_Mga Kuha ng Screen/_i-Import"
 
-#: ide/functions/menu/create_menu_bar.c:116
+#: ide/functions/menu/create_menu_bar.c:121
 msgid "/_Project"
 msgstr "/_Proyekto"
 
-#: ide/functions/menu/create_menu_bar.c:117
+#: ide/functions/menu/create_menu_bar.c:122
 msgid "/Project/P_roperties"
 msgstr "/Proyekto/K_atangian"
 
-#: ide/functions/menu/create_menu_bar.c:118
+#: ide/functions/menu/create_menu_bar.c:123
 msgid "/Project/Sep"
 msgstr ""
 
-#: ide/functions/menu/create_menu_bar.c:119
+#: ide/functions/menu/create_menu_bar.c:124
 msgid "/Project/_Adjust dimensions"
 msgstr ""
 
-#: ide/functions/menu/create_menu_bar.c:121
+#: ide/functions/menu/create_menu_bar.c:126
 msgid "/Sl_ide"
 msgstr "/Sl_ide"
 
-#: ide/functions/menu/create_menu_bar.c:122
+#: ide/functions/menu/create_menu_bar.c:127
 msgid "/Slide/_Insert"
 msgstr "/Slide/_Isingit"
 
-#: ide/functions/menu/create_menu_bar.c:123
+#: ide/functions/menu/create_menu_bar.c:128
 msgid "/Slide/_Delete"
 msgstr "/Slide/_Tanggalin"
 
-#: ide/functions/menu/create_menu_bar.c:124
+#: ide/functions/menu/create_menu_bar.c:129
 msgid "/Slide/Du_ration"
 msgstr "/Slide/Ta_gal"
 
-#: ide/functions/menu/create_menu_bar.c:125
+#: ide/functions/menu/create_menu_bar.c:130
 msgid "/Slide/Move _up"
 msgstr "/Slide/Itaas"
 
-#: ide/functions/menu/create_menu_bar.c:126
+#: ide/functions/menu/create_menu_bar.c:131
 msgid "/Slide/Move dow_n"
 msgstr "/Slide/Ibaba"
 
-#: ide/functions/menu/create_menu_bar.c:127
+#: ide/functions/menu/create_menu_bar.c:132
 msgid "/Slide/Move to _top"
 msgstr "/Slide/Ilagay sa tuktok"
 
-#: ide/functions/menu/create_menu_bar.c:128
+#: ide/functions/menu/create_menu_bar.c:133
 msgid "/Slide/Move to _bottom"
 msgstr "/Slide/Ilagay sa baba"
 
-#: ide/functions/menu/create_menu_bar.c:130
+#: ide/functions/menu/create_menu_bar.c:135
 msgid "/_Layer"
 msgstr "/_Patong"
 
-#: ide/functions/menu/create_menu_bar.c:132
+#: ide/functions/menu/create_menu_bar.c:137
 msgid "/Layer/_Copy"
 msgstr "/Patong/_Kopyahin"
 
-#: ide/functions/menu/create_menu_bar.c:133
+#: ide/functions/menu/create_menu_bar.c:138
 msgid "/Layer/_Paste"
 msgstr "/Patong/_Idikit"
 
-#: ide/functions/menu/create_menu_bar.c:134
+#: ide/functions/menu/create_menu_bar.c:139
 msgid "/Layer/_Edit"
 msgstr "/Patong/_Ibahin"
 
-#: ide/functions/menu/create_menu_bar.c:135
+#: ide/functions/menu/create_menu_bar.c:140
 msgid "/Layer/_Delete"
 msgstr "/Patong/_Tanggalin"
 
-#: ide/functions/menu/create_menu_bar.c:136
 #: ide/functions/menu/create_menu_bar.c:141
+#: ide/functions/menu/create_menu_bar.c:146
 msgid "/Layer/Sep"
 msgstr "/Patong/Sep"
 
-#: ide/functions/menu/create_menu_bar.c:137
+#: ide/functions/menu/create_menu_bar.c:142
 msgid "/Layer/Add _Text"
 msgstr "/Patong/Lagyan ng _Text"
 
-#: ide/functions/menu/create_menu_bar.c:138
+#: ide/functions/menu/create_menu_bar.c:143
 msgid "/Layer/Add _Highlight"
 msgstr "/Patong/Lagyan ng _Highlight"
 
-#: ide/functions/menu/create_menu_bar.c:139
+#: ide/functions/menu/create_menu_bar.c:144
 msgid "/Layer/Add _Image"
 msgstr "/Layer/Lagyan ng _Imahe"
 
-#: ide/functions/menu/create_menu_bar.c:140
+#: ide/functions/menu/create_menu_bar.c:145
 msgid "/Layer/Add _Mouse"
 msgstr "/Patong/Lagyan ng _Mouse"
 
-#: ide/functions/menu/create_menu_bar.c:142
+#: ide/functions/menu/create_menu_bar.c:147
 msgid "/Layer/Image c_rop"
 msgstr ""
 
-#: ide/functions/menu/create_menu_bar.c:143
+#: ide/functions/menu/create_menu_bar.c:148
 msgid "/Layer/Image resi_ze"
 msgstr ""
 
-#: ide/functions/menu/create_menu_bar.c:145
+#: ide/functions/menu/create_menu_bar.c:150
 msgid "/E_xport"
 msgstr "/E_xport"
 
-#: ide/functions/menu/create_menu_bar.c:146
+#: ide/functions/menu/create_menu_bar.c:151
 msgid "/Export/_Flash Animation"
 msgstr "/Export/_Flash Animation"
 
-#: ide/functions/menu/create_menu_bar.c:146
+#: ide/functions/menu/create_menu_bar.c:151
 msgid "<control><shift>F"
 msgstr "<control><shift>F"
 
-#: ide/functions/menu/create_menu_bar.c:147
+#: ide/functions/menu/create_menu_bar.c:152
 msgid "/Export/_Html Wrapper"
 msgstr "/Export/_Html Wrapper"
 
-#: ide/functions/menu/create_menu_bar.c:148
+#: ide/functions/menu/create_menu_bar.c:153
 msgid "/Export/_Slide as Image"
 msgstr "/Export/_Slide bilang Imahe"
 
-#: ide/functions/menu/create_menu_bar.c:149
+#: ide/functions/menu/create_menu_bar.c:154
 msgid "/Export/_Image Layer"
 msgstr "/Export/_Patong na Imahe"
 
-#: ide/functions/menu/create_menu_bar.c:151
+#: ide/functions/menu/create_menu_bar.c:156
 msgid "/_Help"
 msgstr "/_Tulong"
 
-#: ide/functions/menu/create_menu_bar.c:152
+#: ide/functions/menu/create_menu_bar.c:157
 msgid "/_Help/_About"
 msgstr "/_Tulong/_Tungkol"
 
-#: ide/functions/menu/create_menu_bar.c:153
+#: ide/functions/menu/create_menu_bar.c:158
 msgid "/_Help/_Main Website"
 msgstr "/_Tulong/_Main Website"
 
-#: ide/functions/menu/create_menu_bar.c:154
+#: ide/functions/menu/create_menu_bar.c:159
 msgid "/_Help/Sep"
 msgstr "/_Tulong/Sep"
 
-#: ide/functions/menu/create_menu_bar.c:156
+#: ide/functions/menu/create_menu_bar.c:161
 msgid "/_Help/_Forum"
 msgstr "/_Tulong/_Forum"
 
-#: ide/functions/menu/create_menu_bar.c:157
+#: ide/functions/menu/create_menu_bar.c:162
 msgid "/_Help/_Register"
 msgstr "/_Tulong/_Magpatala"
 
-#: ide/functions/menu/create_menu_bar.c:158
+#: ide/functions/menu/create_menu_bar.c:163
 msgid "/_Help/_Support"
 msgstr "/_Tulong/_Suporta"
 
-#: ide/functions/menu/create_menu_bar.c:159
+#: ide/functions/menu/create_menu_bar.c:164
 msgid "/_Help/_Wiki"
 msgstr "/_Tulong/_Wiki"
 
-#: ide/functions/menu/create_menu_bar.c:177
+#: ide/functions/menu/create_menu_bar.c:182
 #: ide/functions/menu/menu_file_close.c:109
-#: ide/functions/menu/menu_file_new.c:359
-#: ide/functions/menu/menu_file_open.c:264
+#: ide/functions/menu/menu_file_new.c:363
+#: ide/functions/menu/menu_file_open.c:265
 #: ide/functions/menu/menu_screenshots_import.c:476
 msgid "/Project"
 msgstr "/Proyekto"
 
-#: ide/functions/menu/create_menu_bar.c:178
+#: ide/functions/menu/create_menu_bar.c:183
 #: ide/functions/menu/menu_file_close.c:110
-#: ide/functions/menu/menu_file_new.c:360
-#: ide/functions/menu/menu_file_open.c:265
+#: ide/functions/menu/menu_file_new.c:364
+#: ide/functions/menu/menu_file_open.c:266
 #: ide/functions/menu/menu_screenshots_import.c:477
 msgid "/Slide"
 msgstr "/Slide"
 
-#: ide/functions/menu/create_menu_bar.c:179
+#: ide/functions/menu/create_menu_bar.c:184
 #: ide/functions/menu/menu_file_close.c:111
-#: ide/functions/menu/menu_file_new.c:361
-#: ide/functions/menu/menu_file_open.c:266
+#: ide/functions/menu/menu_file_new.c:365
+#: ide/functions/menu/menu_file_open.c:267
 #: ide/functions/menu/menu_screenshots_import.c:478
 msgid "/Layer"
 msgstr "/Patong"
 
-#: ide/functions/menu/create_menu_bar.c:180
+#: ide/functions/menu/create_menu_bar.c:185
 #: ide/functions/menu/menu_file_close.c:112
-#: ide/functions/menu/menu_file_new.c:362
-#: ide/functions/menu/menu_file_open.c:267
+#: ide/functions/menu/menu_file_new.c:366
+#: ide/functions/menu/menu_file_open.c:268
 #: ide/functions/menu/menu_screenshots_import.c:479
 msgid "/Export"
 msgstr "/Export"
+
+#: ide/functions/menu/create_menu_bar.c:186
+#: ide/functions/undo_redo/undo_functions.c:91
+#: ide/functions/undo_redo/undo_functions.c:130
+#: ide/functions/undo_redo/undo_functions.c:292
+#: ide/functions/undo_redo/undo_functions.c:505
+msgid "/Edit/Undo"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:187
+#: ide/functions/undo_redo/undo_functions.c:94
+#: ide/functions/undo_redo/undo_functions.c:129
+#: ide/functions/undo_redo/undo_functions.c:298
+#: ide/functions/undo_redo/undo_functions.c:500
+msgid "/Edit/Redo"
+msgstr ""
 
 #: ide/functions/menu/menu_edit_preferences.c:154
 msgid "Application Preferences"
@@ -2385,37 +2426,37 @@ msgstr "InExport"
 msgid " Project closed"
 msgstr " Isinara ang proyekto"
 
-#: ide/functions/menu/menu_file_new.c:107
+#: ide/functions/menu/menu_file_new.c:108
 msgid "Create new Salasaga Project"
 msgstr "Gumawa ng bagong proyekto ng Salasaga"
 
-#: ide/functions/menu/menu_file_new.c:112
+#: ide/functions/menu/menu_file_new.c:113
 #: ide/functions/menu/menu_project_properties.c:128
 msgid "Project Name: "
 msgstr "Pangalan ng Proyekto: "
 
-#: ide/functions/menu/menu_file_new.c:124
+#: ide/functions/menu/menu_file_new.c:125
 #: ide/functions/menu/menu_screenshots_capture.c:296
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:165
 msgid "Width: "
 msgstr "Lapad: "
 
-#: ide/functions/menu/menu_file_new.c:141
+#: ide/functions/menu/menu_file_new.c:142
 #: ide/functions/menu/menu_screenshots_capture.c:307
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:176
 msgid "Height: "
 msgstr "Tangkad: "
 
-#: ide/functions/menu/menu_file_new.c:158
+#: ide/functions/menu/menu_file_new.c:159
 #: ide/functions/menu/menu_project_properties.c:156
 msgid "Frames per second: "
 msgstr "Bilang ng Frame sa bawat segundo: "
 
-#: ide/functions/menu/menu_file_new.c:175
+#: ide/functions/menu/menu_file_new.c:176
 msgid "Background color: "
 msgstr "Kulay ng background: "
 
-#: ide/functions/menu/menu_file_new.c:209
+#: ide/functions/menu/menu_file_new.c:210
 msgid ""
 "There was something wrong with the new project name.  Defaulting to 'New "
 "Project' instead."
@@ -2423,21 +2464,21 @@ msgstr ""
 "May problema sa bagong pangalan ng proyekto.  Papangalanan na lamang ng "
 "'Bagong Proyekto'"
 
-#: ide/functions/menu/menu_file_new.c:211 ide/salasaga.c:301
+#: ide/functions/menu/menu_file_new.c:212 ide/salasaga.c:301
 msgid "New Project"
 msgstr "Bagong Proyekto"
 
-#: ide/functions/menu/menu_file_new.c:224
+#: ide/functions/menu/menu_file_new.c:225
 msgid ""
 "There was something wrong with the project width value.  Please try again."
 msgstr "May problema sa nakalagay na lapad ng proyekto.  Pakiulit."
 
-#: ide/functions/menu/menu_file_new.c:238
+#: ide/functions/menu/menu_file_new.c:239
 msgid ""
 "There was something wrong with the project height value.  Please try again."
 msgstr "May problema sa nakalagay na tangkad ng proyekto.  Pakiulit."
 
-#: ide/functions/menu/menu_file_new.c:252
+#: ide/functions/menu/menu_file_new.c:253
 msgid ""
 "There was something wrong with the project frames per second value.  Please "
 "try again."
@@ -2445,46 +2486,46 @@ msgstr ""
 "May problema sa nakalagay na bilang ng frame bawat segundo sa proyekto.  "
 "Pakiulit."
 
-#: ide/functions/menu/menu_file_new.c:305
+#: ide/functions/menu/menu_file_new.c:306
 #: ide/functions/menu/menu_help_website.c:47
 #: ide/functions/read/read_project.c:146
 msgid "http://www.salasaga.org"
 msgstr "http://www.salasaga.org"
 
-#: ide/functions/menu/menu_file_new.c:306
+#: ide/functions/menu/menu_file_new.c:307
 #: ide/functions/menu/menu_screenshots_import.c:99
 #: ide/functions/read/read_project.c:147
 msgid "_blank"
 msgstr "_blanko"
 
-#: ide/functions/menu/menu_file_new.c:308
+#: ide/functions/menu/menu_file_new.c:309
 #: ide/functions/menu/menu_screenshots_import.c:101
 #: ide/functions/read/read_project.c:149
 msgid "Created using Salasaga"
 msgstr "Ginawa gamit ang Salasaga"
 
-#: ide/functions/menu/menu_file_new.c:334
+#: ide/functions/menu/menu_file_new.c:335
 msgid " Project initialized"
 msgstr " Sinimulan ang proyekto"
 
-#: ide/functions/menu/menu_file_open.c:88
+#: ide/functions/menu/menu_file_open.c:89
 msgid "Open a Salasaga Project"
 msgstr "Magbukas ng Proyekto na Salasaga"
 
-#: ide/functions/menu/menu_file_open.c:98
+#: ide/functions/menu/menu_file_open.c:99
 #: ide/functions/menu/menu_file_save_as.c:86
 msgid "Salasaga Project file (*.salasaga)"
 msgstr "Salasaga Project file (*.salasaga)"
 
-#: ide/functions/menu/menu_file_open.c:104
+#: ide/functions/menu/menu_file_open.c:105
 msgid "Flame Project file (*.flame)"
 msgstr "Flame Project file (*.flame)"
 
-#: ide/functions/menu/menu_file_open.c:277
+#: ide/functions/menu/menu_file_open.c:281
 msgid "Project loaded"
 msgstr ""
 
-#: ide/functions/menu/menu_file_open.c:277
+#: ide/functions/menu/menu_file_open.c:281
 msgid "slides"
 msgstr ""
 
@@ -3627,11 +3668,11 @@ msgstr ""
 msgid "Error creating a foreground color tag node."
 msgstr ""
 
-#: ide/functions/slide/slide_delete.c:63
+#: ide/functions/slide/slide_delete.c:65
 msgid "You must leave at least one slide in a project."
 msgstr "Kailangan mong mag-iwan ng kahit isang slide sa proyektong ito."
 
-#: ide/functions/slide/slide_delete.c:105
+#: ide/functions/slide/slide_delete.c:119
 msgid " Slide deleted"
 msgstr " Tinanggal ang slide"
 
@@ -3652,7 +3693,7 @@ msgstr "May problema sa nakalagay na tagal ng slide.  Pakiulit."
 msgid " Slide properties updated"
 msgstr " Slide properties updated"
 
-#: ide/functions/slide/slide_insert.c:117
+#: ide/functions/slide/slide_insert.c:128
 msgid " Slide added"
 msgstr " Naglagay ng slide"
 
@@ -3688,30 +3729,49 @@ msgstr ""
 msgid "Take Screenshot"
 msgstr ""
 
+#: ide/functions/undo_redo/undo_functions.c:282
+#: ide/functions/undo_redo/undo_functions.c:478
+msgid ""
+"Programming error.  The Undo/Redo functions were called with an unknown undo "
+"type."
+msgstr ""
+
+#: ide/functions/undo_redo/undo_functions.c:317
+msgid "Last action redone"
+msgstr ""
+
+#: ide/functions/undo_redo/undo_functions.c:512
+msgid "Last action undone"
+msgstr ""
+
 #: ide/functions/validate_value.c:713 screen_capture/validate_value.c:576
 msgid "Unknown value passed to validation function"
 msgstr "Unknown value passed to validation function"
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:139
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:191
+#: ide/functions/widgets/time_line/time_line_button_press_event.c:120
+msgid "Private internal timeline data is not present!"
+msgstr ""
+
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:142
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:194
 msgid "Couldn't recreate time line background image."
 msgstr "Hindi magawa uli ang time line background image."
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:148
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:200
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:151
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:203
 msgid "Couldn't recreate time line display buffer."
 msgstr "Hindi magawa uli ang time line display buffer."
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:157
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:209
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:160
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:212
 msgid "Couldn't redraw the time line layer information."
 msgstr "Hindi mai-drawing uli ang impormasyon ng patong ng time line."
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:281
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:286
 msgid " Resize completed"
 msgstr " Natapos ang pagbabago ng laki"
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:322
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:335
 msgid " Drag completed"
 msgstr " Natapos ang paghila"
 
@@ -3745,24 +3805,24 @@ msgstr ""
 msgid "Not enough memory for pixbuf allocation."
 msgstr "Kulang na ang memorya para sa paglalaan sa pixbuf"
 
-#: ide/functions/working_area/working_area_button_release_event.c:156
+#: ide/functions/working_area/working_area_button_release_event.c:160
 msgid " Layer start point moved"
 msgstr " Inilipat ang start point ng patong"
 
-#: ide/functions/working_area/working_area_button_release_event.c:158
+#: ide/functions/working_area/working_area_button_release_event.c:162
 msgid " Layer end point moved"
 msgstr " Inilipat ang end point ng patong"
 
-#: ide/functions/working_area/working_area_button_release_event.c:262
+#: ide/functions/working_area/working_area_button_release_event.c:266
 #: ide/functions/working_area/working_area_motion_notify_event.c:205
 msgid "Unknown resizing direction."
 msgstr "Hindi kilalang direksyon ng pagbabago ng laki"
 
-#: ide/functions/working_area/working_area_button_release_event.c:320
+#: ide/functions/working_area/working_area_button_release_event.c:340
 msgid " Layer resized"
 msgstr " Binago ang laki ng patong"
 
-#: ide/functions/working_area/working_area_button_release_event.c:423
+#: ide/functions/working_area/working_area_button_release_event.c:454
 msgid " Layer moved"
 msgstr " Inilipat ang patong"
 
