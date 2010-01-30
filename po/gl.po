@@ -7,14 +7,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2009-12-20 19:23+1100\n"
+"POT-Creation-Date: 2010-01-27 21:57+1100\n"
 "PO-Revision-Date: 2010-01-03 00:43+0000\n"
 "Last-Translator: Manuel Meixide <taurozen@hotmail.com>\n"
 "Language-Team: Galician <gl@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2010-01-03 04:36+0000\n"
+"X-Launchpad-Export-Date: 2010-01-30 08:56+0000\n"
 "X-Generator: Launchpad (build Unknown)\n"
 
 #: ide/functions/cairo/create_cairo_pixbuf_pattern.c:72
@@ -80,7 +80,7 @@ msgstr ""
 #: ide/functions/dialog/display_dialog_text.c:867
 #: ide/functions/dialog/display_dialog_text.c:881
 #: ide/functions/dialog/display_dialog_text.c:895
-#: ide/functions/draw_timeline.c:66
+#: ide/functions/draw_timeline.c:70
 #: ide/functions/export/html/export_html_wrapper.c:121
 #: ide/functions/export/html/export_html_wrapper.c:167
 #: ide/functions/export/swf/export_swf_control_bar.c:460
@@ -122,10 +122,10 @@ msgstr ""
 #: ide/functions/layer/layer_duplicate.c:179
 #: ide/functions/layer/layer_duplicate.c:195
 #: ide/functions/layer/layer_duplicate.c:221
-#: ide/functions/layer/layer_edit.c:211 ide/functions/layer/layer_free.c:87
-#: ide/functions/layer/layer_new_image_inner.c:137
-#: ide/functions/layer/layer_new_image_inner.c:146
-#: ide/functions/layer/layer_new_image_inner.c:167
+#: ide/functions/layer/layer_edit.c:218 ide/functions/layer/layer_free.c:87
+#: ide/functions/layer/layer_new_image_inner.c:140
+#: ide/functions/layer/layer_new_image_inner.c:149
+#: ide/functions/layer/layer_new_image_inner.c:170
 #: ide/functions/load_fonts.c:69 ide/functions/load_fonts.c:173
 #: ide/functions/load_fonts.c:180 ide/functions/load_fonts.c:209
 #: ide/functions/load_fonts.c:219
@@ -151,11 +151,11 @@ msgstr ""
 #: ide/functions/menu/menu_export_swf.c:65
 #: ide/functions/menu/menu_export_swf.c:130
 #: ide/functions/menu/menu_export_swf.c:171
-#: ide/functions/menu/menu_file_new.c:209
-#: ide/functions/menu/menu_file_new.c:224
-#: ide/functions/menu/menu_file_new.c:238
-#: ide/functions/menu/menu_file_new.c:252
-#: ide/functions/menu/menu_file_open.c:170
+#: ide/functions/menu/menu_file_new.c:210
+#: ide/functions/menu/menu_file_new.c:225
+#: ide/functions/menu/menu_file_new.c:239
+#: ide/functions/menu/menu_file_new.c:253
+#: ide/functions/menu/menu_file_open.c:171
 #: ide/functions/menu/menu_file_save_as.c:148
 #: ide/functions/menu/menu_file_save.c:94
 #: ide/functions/menu/menu_file_save.c:104
@@ -328,13 +328,18 @@ msgstr ""
 #: ide/functions/save/save_text_tags.c:80
 #: ide/functions/save/save_text_tags.c:105
 #: ide/functions/save/save_text_tags.c:119
-#: ide/functions/slide/slide_duration.c:115 ide/functions/validate_value.c:713
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:139
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:148
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:157
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:191
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:200
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:209
+#: ide/functions/slide/slide_delete.c:65
+#: ide/functions/slide/slide_duration.c:115
+#: ide/functions/undo_redo/undo_functions.c:282
+#: ide/functions/undo_redo/undo_functions.c:478
+#: ide/functions/validate_value.c:713
+#: ide/functions/widgets/time_line/time_line_button_press_event.c:120
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:142
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:151
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:160
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:194
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:203
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:212
 #: ide/functions/widgets/time_line/time_line_internal_initialise_bg_image.c:109
 #: ide/functions/widgets/time_line/time_line_internal_initialise_display_buffer.c:93
 #: ide/functions/widgets/time_line/time_line_internal_initialise_display_buffer.c:107
@@ -344,9 +349,9 @@ msgstr ""
 #: ide/functions/working_area/calculate_object_boundaries.c:182
 #: ide/functions/working_area/draw_highlight_box.c:53
 #: ide/functions/working_area/draw_highlight_box.c:92
-#: ide/functions/working_area/working_area_button_press_event.c:212
-#: ide/functions/working_area/working_area_button_release_event.c:262
-#: ide/functions/working_area/working_area_button_release_event.c:382
+#: ide/functions/working_area/working_area_button_press_event.c:218
+#: ide/functions/working_area/working_area_button_release_event.c:266
+#: ide/functions/working_area/working_area_button_release_event.c:402
 #: ide/functions/working_area/working_area_motion_notify_event.c:205
 #: ide/functions/working_area/working_area_motion_notify_event.c:365
 #: ide/salasaga.c:492 ide/salasaga.c:503 ide/salasaga.c:562
@@ -470,7 +475,7 @@ msgid "Add a text layer"
 msgstr "Engadir  capa de texto"
 
 #: ide/functions/create_time_line.c:219
-#: ide/functions/layer/layer_new_highlight_inner.c:152
+#: ide/functions/layer/layer_new_highlight_inner.c:155
 msgid "Highlight"
 msgstr "Resaltar"
 
@@ -481,7 +486,7 @@ msgstr "Engadir  capa de resalte"
 
 #: ide/functions/create_time_line.c:232
 #: ide/functions/layer/layer_duplicate.c:91
-#: ide/functions/layer/layer_new_image_inner.c:97
+#: ide/functions/layer/layer_new_image_inner.c:100
 #: ide/functions/menu/menu_screenshots_import.c:355
 msgid "Image"
 msgstr "Imaxe"
@@ -1164,7 +1169,7 @@ msgstr "Desactivado o axuste de dimensións: Ningún proxecto cargado"
 msgid "Export to Flash disabled: No project loaded"
 msgstr "Desactivada a exportación a Flash: Ningún proxecto cargado"
 
-#: ide/functions/draw_timeline.c:66
+#: ide/functions/draw_timeline.c:70
 msgid "Could not regenerate the time line widget."
 msgstr "Non se pode rexenerar o elemento da liña do tempo."
 
@@ -1180,7 +1185,7 @@ msgstr "Linguaxe de Marcas de HiperTexto (*.html)"
 #: ide/functions/menu/menu_export_layer.c:99
 #: ide/functions/menu/menu_export_slide.c:80
 #: ide/functions/menu/menu_export_swf.c:90
-#: ide/functions/menu/menu_file_open.c:110
+#: ide/functions/menu/menu_file_open.c:111
 #: ide/functions/menu/menu_file_save_as.c:92
 msgid "All files (*.*)"
 msgstr "Tódolos ficheiros (*.*)"
@@ -1189,7 +1194,7 @@ msgstr "Tódolos ficheiros (*.*)"
 #: ide/functions/menu/menu_export_layer.c:139
 #: ide/functions/menu/menu_export_slide.c:120
 #: ide/functions/menu/menu_export_swf.c:130
-#: ide/functions/menu/menu_file_open.c:170
+#: ide/functions/menu/menu_file_open.c:171
 #: ide/functions/menu/menu_file_save_as.c:148
 msgid ""
 "There was something wrong with the file name given.  Please try again."
@@ -1578,7 +1583,7 @@ msgid "Couldn't allocate memory for a new film strip thumbnail."
 msgstr ""
 "Non se puido reservar memoria para unha nova miniatura da tira de película."
 
-#: ide/functions/film_strip/film_strip_slide_clicked.c:106 ide/salasaga.c:581
+#: ide/functions/film_strip/film_strip_slide_clicked.c:115 ide/salasaga.c:581
 msgid "Ready"
 msgstr "Listo"
 
@@ -1614,10 +1619,10 @@ msgstr ""
 
 #: ide/functions/layer/compress_layers_inner.c:273
 #: ide/functions/layer/get_layer_position.c:218
-#: ide/functions/layer/layer_edit.c:211
+#: ide/functions/layer/layer_edit.c:218
 #: ide/functions/working_area/calculate_object_boundaries.c:182
-#: ide/functions/working_area/working_area_button_press_event.c:212
-#: ide/functions/working_area/working_area_button_release_event.c:382
+#: ide/functions/working_area/working_area_button_press_event.c:218
+#: ide/functions/working_area/working_area_button_release_event.c:402
 #: ide/functions/working_area/working_area_motion_notify_event.c:365
 msgid "Unknown layer type."
 msgstr "Tipo de capa descoñecido"
@@ -1663,7 +1668,7 @@ msgstr "Tente de novo."
 
 #: ide/functions/layer/image_crop.c:291 ide/functions/layer/image_resize.c:252
 #: ide/functions/layer/layer_duplicate.c:142
-#: ide/functions/layer/layer_new_image_inner.c:167
+#: ide/functions/layer/layer_new_image_inner.c:170
 #: ide/functions/menu/menu_screenshots_import.c:274
 #: ide/functions/project_adjust_dimensions.c:243
 msgid "Couldn't create an image pattern."
@@ -1733,7 +1738,7 @@ msgstr " Fallou a cópia"
 msgid " Layer copied to buffer"
 msgstr " Capa copiada para o buffer"
 
-#: ide/functions/layer/layer_delete.c:114
+#: ide/functions/layer/layer_delete.c:126
 msgid " Layer deleted"
 msgstr " Capa eliminada"
 
@@ -1748,7 +1753,7 @@ msgid "Background"
 msgstr "Imaxe de fondo"
 
 #: ide/functions/layer/layer_duplicate.c:94
-#: ide/functions/slide/slide_insert.c:66
+#: ide/functions/slide/slide_insert.c:68
 msgid "Empty"
 msgstr "Baleiro"
 
@@ -1768,27 +1773,27 @@ msgstr ""
 msgid "Unknown layer type when duplicating layer."
 msgstr "Tipo de capa descoñecido ao duplicar capa."
 
-#: ide/functions/layer/layer_edit.c:97
+#: ide/functions/layer/layer_edit.c:104
 msgid "Edit background color"
 msgstr "Editar a cor do fondo"
 
-#: ide/functions/layer/layer_edit.c:114
+#: ide/functions/layer/layer_edit.c:121
 msgid "Edit image layer"
 msgstr "Editar a capa de imaxe"
 
-#: ide/functions/layer/layer_edit.c:138
+#: ide/functions/layer/layer_edit.c:145
 msgid "Edit mouse pointer"
 msgstr "Editar o ponteiro do rato"
 
-#: ide/functions/layer/layer_edit.c:163
+#: ide/functions/layer/layer_edit.c:170
 msgid "Edit text layer"
 msgstr "Editar a capa de texto"
 
-#: ide/functions/layer/layer_edit.c:188
+#: ide/functions/layer/layer_edit.c:195
 msgid "Edit highlight layer"
 msgstr "Editar capa de resalte"
 
-#: ide/functions/layer/layer_edit.c:227
+#: ide/functions/layer/layer_edit.c:251
 msgid " Layer edited"
 msgstr " Capa editada"
 
@@ -1808,19 +1813,19 @@ msgstr " A capa se moveu para arriba"
 msgid " Please draw the new layer"
 msgstr " Por favor, chamar a nova capa"
 
-#: ide/functions/layer/layer_new_highlight_inner.c:154
-#: ide/functions/layer/layer_new_image_inner.c:99
-#: ide/functions/layer/layer_new_mouse_inner.c:84
-#: ide/functions/layer/layer_new_text_inner.c:111
+#: ide/functions/layer/layer_new_highlight_inner.c:157
+#: ide/functions/layer/layer_new_image_inner.c:102
+#: ide/functions/layer/layer_new_mouse_inner.c:87
+#: ide/functions/layer/layer_new_text_inner.c:114
 #: ide/functions/menu/menu_screenshots_import.c:307
 #: ide/functions/menu/menu_screenshots_import.c:369
 #: ide/functions/read/read_highlight_layer.c:71
 #: ide/functions/read/read_text_layer.c:95
-#: ide/functions/slide/slide_insert.c:68
+#: ide/functions/slide/slide_insert.c:70
 msgid "_self"
 msgstr "_self"
 
-#: ide/functions/layer/layer_new_highlight_inner.c:193
+#: ide/functions/layer/layer_new_highlight_inner.c:205
 msgid " Highlight layer added"
 msgstr " Engadiuse unha capa resaltada"
 
@@ -1830,43 +1835,43 @@ msgstr " Engadiuse unha capa resaltada"
 msgid " Please click the insertion point"
 msgstr " Por favor, prema no punto de inserción"
 
-#: ide/functions/layer/layer_new_image_inner.c:106
+#: ide/functions/layer/layer_new_image_inner.c:109
 msgid "Please choose an image file"
 msgstr "Por favor, seleccione un arquivo de imaxe"
 
-#: ide/functions/layer/layer_new_image_inner.c:137
+#: ide/functions/layer/layer_new_image_inner.c:140
 msgid ""
 "There was something wrong with the image path given.  Please try again."
 msgstr "Houbo algo errado co camiño da imaxe. Por favor, ténteo de novo."
 
-#: ide/functions/layer/layer_new_image_inner.c:146
+#: ide/functions/layer/layer_new_image_inner.c:149
 msgid ""
 "There was something wrong with the image file selected.  Please try again."
 msgstr ""
 "Houbo algo errado co arquivo da imaxe seleccionada. Por favor, ténteo de "
 "novo."
 
-#: ide/functions/layer/layer_new_image_inner.c:218
+#: ide/functions/layer/layer_new_image_inner.c:230
 msgid " Image layer added"
 msgstr " Engadida a capa de imaxe"
 
-#: ide/functions/layer/layer_new_mouse_inner.c:82
+#: ide/functions/layer/layer_new_mouse_inner.c:85
 msgid "Mouse Pointer"
 msgstr "Punteiro do rato"
 
-#: ide/functions/layer/layer_new_mouse_inner.c:123
+#: ide/functions/layer/layer_new_mouse_inner.c:135
 msgid " Mouse layer added"
 msgstr " Engadida a capa do rato"
 
-#: ide/functions/layer/layer_new_text_inner.c:72
+#: ide/functions/layer/layer_new_text_inner.c:75
 msgid "New text..."
 msgstr "Texto novo..."
 
-#: ide/functions/layer/layer_new_text_inner.c:109
+#: ide/functions/layer/layer_new_text_inner.c:112
 msgid "Text layer"
 msgstr "Capa de texto"
 
-#: ide/functions/layer/layer_new_text_inner.c:150
+#: ide/functions/layer/layer_new_text_inner.c:162
 msgid " Text layer added"
 msgstr " Engadida a capa de texto"
 
@@ -1898,272 +1903,308 @@ msgstr "Houbo algo errado ao abrir o arquivo de fontes"
 msgid "Something went wrong when loading the font file"
 msgstr "Houbo algo errado ao cargar o arquivo de fontes"
 
-#: ide/functions/menu/create_menu_bar.c:99
+#: ide/functions/menu/create_menu_bar.c:101
 msgid "/_File"
 msgstr "/_Ficheiro"
 
-#: ide/functions/menu/create_menu_bar.c:100
+#: ide/functions/menu/create_menu_bar.c:102
 msgid "/File/_New Project"
 msgstr "/Ficheiro/_Proxecto Novo"
 
-#: ide/functions/menu/create_menu_bar.c:100
+#: ide/functions/menu/create_menu_bar.c:102
 msgid "<control>N"
 msgstr "<control>N"
 
-#: ide/functions/menu/create_menu_bar.c:101
+#: ide/functions/menu/create_menu_bar.c:103
 msgid "/File/_Open Project"
 msgstr "/Ficheiro/_Abrir Proxecto"
 
-#: ide/functions/menu/create_menu_bar.c:101
+#: ide/functions/menu/create_menu_bar.c:103
 msgid "<control>O"
 msgstr "<control>O"
 
-#: ide/functions/menu/create_menu_bar.c:102
+#: ide/functions/menu/create_menu_bar.c:104
 msgid "/File/_Save Project"
 msgstr "/Ficheiro/_Gravar Proxecto"
 
-#: ide/functions/menu/create_menu_bar.c:102
+#: ide/functions/menu/create_menu_bar.c:104
 msgid "<control>S"
 msgstr "<control>S"
 
-#: ide/functions/menu/create_menu_bar.c:103
+#: ide/functions/menu/create_menu_bar.c:105
 msgid "/File/Save _As Project"
 msgstr "/Ficheiro/_Gravar Proxecto Como..."
 
-#: ide/functions/menu/create_menu_bar.c:103
+#: ide/functions/menu/create_menu_bar.c:105
 msgid "<control><shift>S"
 msgstr "<control><shift>S"
 
-#: ide/functions/menu/create_menu_bar.c:104
+#: ide/functions/menu/create_menu_bar.c:106
 msgid "/File/_Close Project"
 msgstr "/Ficheiro/_Pechar Proxecto"
 
-#: ide/functions/menu/create_menu_bar.c:104
+#: ide/functions/menu/create_menu_bar.c:106
 msgid "<control>W"
 msgstr "<control>W"
 
-#: ide/functions/menu/create_menu_bar.c:105
+#: ide/functions/menu/create_menu_bar.c:107
 msgid "/File/Sep"
 msgstr "/File/Sep"
 
-#: ide/functions/menu/create_menu_bar.c:106
+#: ide/functions/menu/create_menu_bar.c:108
 msgid "/File/_Quit"
 msgstr "/Ficheiro/_Saír"
 
-#: ide/functions/menu/create_menu_bar.c:106
+#: ide/functions/menu/create_menu_bar.c:108
 msgid "<control>Q"
 msgstr "<control>Q"
 
-#: ide/functions/menu/create_menu_bar.c:108
+#: ide/functions/menu/create_menu_bar.c:110
 msgid "/_Edit"
 msgstr "/_Editar"
 
-#: ide/functions/menu/create_menu_bar.c:109
+#: ide/functions/menu/create_menu_bar.c:111
+msgid "/Edit/_Undo"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:111
+msgid "<control>Z"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:112
+msgid "/Edit/_Redo"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:112
+msgid "<control>Y"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:113
+msgid "/Edit/Sep"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:114
 msgid "/Edit/_Preferences"
 msgstr "/Editar/_Preferencias"
 
-#: ide/functions/menu/create_menu_bar.c:111
+#: ide/functions/menu/create_menu_bar.c:116
 msgid "/_Screenshots"
 msgstr "/_Capturas de pantalla"
 
-#: ide/functions/menu/create_menu_bar.c:112
-#: ide/functions/menu/create_menu_bar.c:185
+#: ide/functions/menu/create_menu_bar.c:117
+#: ide/functions/menu/create_menu_bar.c:192
 msgid "/Screenshots/Capture _window"
 msgstr "/Capturas/Capturar fiestra"
 
-#: ide/functions/menu/create_menu_bar.c:113
-#: ide/functions/menu/create_menu_bar.c:186
+#: ide/functions/menu/create_menu_bar.c:118
+#: ide/functions/menu/create_menu_bar.c:193
 msgid "/Screenshots/Capture _full screen"
 msgstr "/Capturas/Capturar pantalla"
 
-#: ide/functions/menu/create_menu_bar.c:114
+#: ide/functions/menu/create_menu_bar.c:119
 msgid "/Screenshots/_Import"
 msgstr "/Capturas/_Importar"
 
-#: ide/functions/menu/create_menu_bar.c:116
+#: ide/functions/menu/create_menu_bar.c:121
 msgid "/_Project"
 msgstr "/_Proxecto"
 
-#: ide/functions/menu/create_menu_bar.c:117
+#: ide/functions/menu/create_menu_bar.c:122
 msgid "/Project/P_roperties"
 msgstr "/Proxecto/P_ropiedades"
 
-#: ide/functions/menu/create_menu_bar.c:118
+#: ide/functions/menu/create_menu_bar.c:123
 msgid "/Project/Sep"
 msgstr "/Project/Sep"
 
-#: ide/functions/menu/create_menu_bar.c:119
+#: ide/functions/menu/create_menu_bar.c:124
 msgid "/Project/_Adjust dimensions"
 msgstr "/Project/_Adjust dimensions"
 
-#: ide/functions/menu/create_menu_bar.c:121
+#: ide/functions/menu/create_menu_bar.c:126
 msgid "/Sl_ide"
 msgstr "/_Diapositiva"
 
-#: ide/functions/menu/create_menu_bar.c:122
+#: ide/functions/menu/create_menu_bar.c:127
 msgid "/Slide/_Insert"
 msgstr "/Diapositiva/_Insertar"
 
-#: ide/functions/menu/create_menu_bar.c:123
+#: ide/functions/menu/create_menu_bar.c:128
 msgid "/Slide/_Delete"
 msgstr "/Diapositiva/Borra_r"
 
-#: ide/functions/menu/create_menu_bar.c:124
+#: ide/functions/menu/create_menu_bar.c:129
 msgid "/Slide/Du_ration"
 msgstr "/Diapositiva/D_uración"
 
-#: ide/functions/menu/create_menu_bar.c:125
+#: ide/functions/menu/create_menu_bar.c:130
 msgid "/Slide/Move _up"
 msgstr "/Diapositiva/_Subir"
 
-#: ide/functions/menu/create_menu_bar.c:126
+#: ide/functions/menu/create_menu_bar.c:131
 msgid "/Slide/Move dow_n"
 msgstr "/Diapositiva/_Baixar"
 
-#: ide/functions/menu/create_menu_bar.c:127
+#: ide/functions/menu/create_menu_bar.c:132
 msgid "/Slide/Move to _top"
 msgstr "/Diapositiva/_Traer á fronte"
 
-#: ide/functions/menu/create_menu_bar.c:128
+#: ide/functions/menu/create_menu_bar.c:133
 msgid "/Slide/Move to _bottom"
 msgstr "/Diapositiva/_Levar ao fondo"
 
-#: ide/functions/menu/create_menu_bar.c:130
+#: ide/functions/menu/create_menu_bar.c:135
 msgid "/_Layer"
 msgstr "/_Capa"
 
-#: ide/functions/menu/create_menu_bar.c:132
+#: ide/functions/menu/create_menu_bar.c:137
 msgid "/Layer/_Copy"
 msgstr "/Capa/_Copiar"
 
-#: ide/functions/menu/create_menu_bar.c:133
+#: ide/functions/menu/create_menu_bar.c:138
 msgid "/Layer/_Paste"
 msgstr "/Capa/_Pegar"
 
-#: ide/functions/menu/create_menu_bar.c:134
+#: ide/functions/menu/create_menu_bar.c:139
 msgid "/Layer/_Edit"
 msgstr "/Capa/_Editar"
 
-#: ide/functions/menu/create_menu_bar.c:135
+#: ide/functions/menu/create_menu_bar.c:140
 msgid "/Layer/_Delete"
 msgstr "/Capa/_Borrar"
 
-#: ide/functions/menu/create_menu_bar.c:136
 #: ide/functions/menu/create_menu_bar.c:141
+#: ide/functions/menu/create_menu_bar.c:146
 msgid "/Layer/Sep"
 msgstr "/Capa/Sep"
 
-#: ide/functions/menu/create_menu_bar.c:137
+#: ide/functions/menu/create_menu_bar.c:142
 msgid "/Layer/Add _Text"
 msgstr "/Capa/Engadir _Texto"
 
-#: ide/functions/menu/create_menu_bar.c:138
+#: ide/functions/menu/create_menu_bar.c:143
 msgid "/Layer/Add _Highlight"
 msgstr "/Capa/Engadir _Resalte"
 
-#: ide/functions/menu/create_menu_bar.c:139
+#: ide/functions/menu/create_menu_bar.c:144
 msgid "/Layer/Add _Image"
 msgstr "/Capa/Engadir _Imaxe"
 
-#: ide/functions/menu/create_menu_bar.c:140
+#: ide/functions/menu/create_menu_bar.c:145
 msgid "/Layer/Add _Mouse"
 msgstr "/Capa/Engadir P_unteiro"
 
-#: ide/functions/menu/create_menu_bar.c:142
+#: ide/functions/menu/create_menu_bar.c:147
 msgid "/Layer/Image c_rop"
 msgstr "/Layer/Image c_rop"
 
-#: ide/functions/menu/create_menu_bar.c:143
+#: ide/functions/menu/create_menu_bar.c:148
 msgid "/Layer/Image resi_ze"
 msgstr "/Layer/Image resi_ze"
 
-#: ide/functions/menu/create_menu_bar.c:145
+#: ide/functions/menu/create_menu_bar.c:150
 msgid "/E_xport"
 msgstr "/E_xportar"
 
-#: ide/functions/menu/create_menu_bar.c:146
+#: ide/functions/menu/create_menu_bar.c:151
 msgid "/Export/_Flash Animation"
 msgstr "/Exportar/Animación _Flash"
 
-#: ide/functions/menu/create_menu_bar.c:146
+#: ide/functions/menu/create_menu_bar.c:151
 msgid "<control><shift>F"
 msgstr "<control><shift>F"
 
-#: ide/functions/menu/create_menu_bar.c:147
+#: ide/functions/menu/create_menu_bar.c:152
 msgid "/Export/_Html Wrapper"
 msgstr "/Export/_Html Wrapper"
 
-#: ide/functions/menu/create_menu_bar.c:148
+#: ide/functions/menu/create_menu_bar.c:153
 msgid "/Export/_Slide as Image"
 msgstr "/Exportar/_Diapositiva como imaxe"
 
-#: ide/functions/menu/create_menu_bar.c:149
+#: ide/functions/menu/create_menu_bar.c:154
 msgid "/Export/_Image Layer"
 msgstr "/Exportar/_Capa de Imaxe"
 
-#: ide/functions/menu/create_menu_bar.c:151
+#: ide/functions/menu/create_menu_bar.c:156
 msgid "/_Help"
 msgstr "/_Axuda"
 
-#: ide/functions/menu/create_menu_bar.c:152
+#: ide/functions/menu/create_menu_bar.c:157
 msgid "/_Help/_About"
 msgstr "/_Axuda/_Acerca de"
 
-#: ide/functions/menu/create_menu_bar.c:153
+#: ide/functions/menu/create_menu_bar.c:158
 msgid "/_Help/_Main Website"
 msgstr "/_Axuda/_Sitio do proxecto"
 
-#: ide/functions/menu/create_menu_bar.c:154
+#: ide/functions/menu/create_menu_bar.c:159
 msgid "/_Help/Sep"
 msgstr "/_Help/Sep"
 
-#: ide/functions/menu/create_menu_bar.c:156
+#: ide/functions/menu/create_menu_bar.c:161
 msgid "/_Help/_Forum"
 msgstr "/_Axuda/_Foro"
 
-#: ide/functions/menu/create_menu_bar.c:157
+#: ide/functions/menu/create_menu_bar.c:162
 msgid "/_Help/_Register"
 msgstr "/_Axuda/_Rexistro"
 
-#: ide/functions/menu/create_menu_bar.c:158
+#: ide/functions/menu/create_menu_bar.c:163
 msgid "/_Help/_Support"
 msgstr "/_Axuda/_Soporte"
 
-#: ide/functions/menu/create_menu_bar.c:159
+#: ide/functions/menu/create_menu_bar.c:164
 msgid "/_Help/_Wiki"
 msgstr "/_Axuda/_Wiki"
 
-#: ide/functions/menu/create_menu_bar.c:177
+#: ide/functions/menu/create_menu_bar.c:182
 #: ide/functions/menu/menu_file_close.c:109
-#: ide/functions/menu/menu_file_new.c:359
-#: ide/functions/menu/menu_file_open.c:264
+#: ide/functions/menu/menu_file_new.c:363
+#: ide/functions/menu/menu_file_open.c:265
 #: ide/functions/menu/menu_screenshots_import.c:476
 msgid "/Project"
 msgstr "/Proxecto"
 
-#: ide/functions/menu/create_menu_bar.c:178
+#: ide/functions/menu/create_menu_bar.c:183
 #: ide/functions/menu/menu_file_close.c:110
-#: ide/functions/menu/menu_file_new.c:360
-#: ide/functions/menu/menu_file_open.c:265
+#: ide/functions/menu/menu_file_new.c:364
+#: ide/functions/menu/menu_file_open.c:266
 #: ide/functions/menu/menu_screenshots_import.c:477
 msgid "/Slide"
 msgstr "/Diapositiva"
 
-#: ide/functions/menu/create_menu_bar.c:179
+#: ide/functions/menu/create_menu_bar.c:184
 #: ide/functions/menu/menu_file_close.c:111
-#: ide/functions/menu/menu_file_new.c:361
-#: ide/functions/menu/menu_file_open.c:266
+#: ide/functions/menu/menu_file_new.c:365
+#: ide/functions/menu/menu_file_open.c:267
 #: ide/functions/menu/menu_screenshots_import.c:478
 msgid "/Layer"
 msgstr "/Capa"
 
-#: ide/functions/menu/create_menu_bar.c:180
+#: ide/functions/menu/create_menu_bar.c:185
 #: ide/functions/menu/menu_file_close.c:112
-#: ide/functions/menu/menu_file_new.c:362
-#: ide/functions/menu/menu_file_open.c:267
+#: ide/functions/menu/menu_file_new.c:366
+#: ide/functions/menu/menu_file_open.c:268
 #: ide/functions/menu/menu_screenshots_import.c:479
 msgid "/Export"
 msgstr "/Exportar"
+
+#: ide/functions/menu/create_menu_bar.c:186
+#: ide/functions/undo_redo/undo_functions.c:91
+#: ide/functions/undo_redo/undo_functions.c:130
+#: ide/functions/undo_redo/undo_functions.c:292
+#: ide/functions/undo_redo/undo_functions.c:505
+msgid "/Edit/Undo"
+msgstr ""
+
+#: ide/functions/menu/create_menu_bar.c:187
+#: ide/functions/undo_redo/undo_functions.c:94
+#: ide/functions/undo_redo/undo_functions.c:129
+#: ide/functions/undo_redo/undo_functions.c:298
+#: ide/functions/undo_redo/undo_functions.c:500
+msgid "/Edit/Redo"
+msgstr ""
 
 #: ide/functions/menu/menu_edit_preferences.c:154
 msgid "Application Preferences"
@@ -2420,37 +2461,37 @@ msgstr "Exportado"
 msgid " Project closed"
 msgstr " Proxecto pechado"
 
-#: ide/functions/menu/menu_file_new.c:107
+#: ide/functions/menu/menu_file_new.c:108
 msgid "Create new Salasaga Project"
 msgstr "Crear un novo Proxecto Salasaga"
 
-#: ide/functions/menu/menu_file_new.c:112
+#: ide/functions/menu/menu_file_new.c:113
 #: ide/functions/menu/menu_project_properties.c:128
 msgid "Project Name: "
 msgstr "Nome do Proxecto: "
 
-#: ide/functions/menu/menu_file_new.c:124
+#: ide/functions/menu/menu_file_new.c:125
 #: ide/functions/menu/menu_screenshots_capture.c:296
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:165
 msgid "Width: "
 msgstr "Ancho: "
 
-#: ide/functions/menu/menu_file_new.c:141
+#: ide/functions/menu/menu_file_new.c:142
 #: ide/functions/menu/menu_screenshots_capture.c:307
 #: ide/functions/menu/menu_screenshots_capture_full_screen.c:176
 msgid "Height: "
 msgstr "Alto: "
 
-#: ide/functions/menu/menu_file_new.c:158
+#: ide/functions/menu/menu_file_new.c:159
 #: ide/functions/menu/menu_project_properties.c:156
 msgid "Frames per second: "
 msgstr "Fotogramas por segundo: "
 
-#: ide/functions/menu/menu_file_new.c:175
+#: ide/functions/menu/menu_file_new.c:176
 msgid "Background color: "
 msgstr "Cor de fondo: "
 
-#: ide/functions/menu/menu_file_new.c:209
+#: ide/functions/menu/menu_file_new.c:210
 msgid ""
 "There was something wrong with the new project name.  Defaulting to 'New "
 "Project' instead."
@@ -2458,23 +2499,23 @@ msgstr ""
 "Houbo algo errado co nome do novo proxecto. Cambiámolo polo nome por "
 "defecto,'New Project'."
 
-#: ide/functions/menu/menu_file_new.c:211 ide/salasaga.c:301
+#: ide/functions/menu/menu_file_new.c:212 ide/salasaga.c:301
 msgid "New Project"
 msgstr "Novo proxecto"
 
-#: ide/functions/menu/menu_file_new.c:224
+#: ide/functions/menu/menu_file_new.c:225
 msgid ""
 "There was something wrong with the project width value.  Please try again."
 msgstr ""
 "Houbo algo errado co valor do ancho do proxecto. Por favor, ténteo de novo."
 
-#: ide/functions/menu/menu_file_new.c:238
+#: ide/functions/menu/menu_file_new.c:239
 msgid ""
 "There was something wrong with the project height value.  Please try again."
 msgstr ""
 "Houbo algo errado co valor do alto do proxecto. Por favor, ténteo de novo."
 
-#: ide/functions/menu/menu_file_new.c:252
+#: ide/functions/menu/menu_file_new.c:253
 msgid ""
 "There was something wrong with the project frames per second value.  Please "
 "try again."
@@ -2482,46 +2523,46 @@ msgstr ""
 "Houbo algo errado cos fotogramas por segundo do proxecto. Por favor, ténteo "
 "de novo."
 
-#: ide/functions/menu/menu_file_new.c:305
+#: ide/functions/menu/menu_file_new.c:306
 #: ide/functions/menu/menu_help_website.c:47
 #: ide/functions/read/read_project.c:146
 msgid "http://www.salasaga.org"
 msgstr "http://www.salasaga.org"
 
-#: ide/functions/menu/menu_file_new.c:306
+#: ide/functions/menu/menu_file_new.c:307
 #: ide/functions/menu/menu_screenshots_import.c:99
 #: ide/functions/read/read_project.c:147
 msgid "_blank"
 msgstr "_blank"
 
-#: ide/functions/menu/menu_file_new.c:308
+#: ide/functions/menu/menu_file_new.c:309
 #: ide/functions/menu/menu_screenshots_import.c:101
 #: ide/functions/read/read_project.c:149
 msgid "Created using Salasaga"
 msgstr "Creado con Salasaga"
 
-#: ide/functions/menu/menu_file_new.c:334
+#: ide/functions/menu/menu_file_new.c:335
 msgid " Project initialized"
 msgstr " Proxecto iniciado"
 
-#: ide/functions/menu/menu_file_open.c:88
+#: ide/functions/menu/menu_file_open.c:89
 msgid "Open a Salasaga Project"
 msgstr "Abrir un ProxectoSalasaga"
 
-#: ide/functions/menu/menu_file_open.c:98
+#: ide/functions/menu/menu_file_open.c:99
 #: ide/functions/menu/menu_file_save_as.c:86
 msgid "Salasaga Project file (*.salasaga)"
 msgstr "Arquivo de proxecto Salasaga (*.salasaga)"
 
-#: ide/functions/menu/menu_file_open.c:104
+#: ide/functions/menu/menu_file_open.c:105
 msgid "Flame Project file (*.flame)"
 msgstr "Arquivo de Proxecto Flame (*.flame)"
 
-#: ide/functions/menu/menu_file_open.c:277
+#: ide/functions/menu/menu_file_open.c:281
 msgid "Project loaded"
 msgstr "Proxecto cargado"
 
-#: ide/functions/menu/menu_file_open.c:277
+#: ide/functions/menu/menu_file_open.c:281
 msgid "slides"
 msgstr "diapositivas"
 
@@ -3750,11 +3791,11 @@ msgstr "Erro ao crear o recipiente de etiquetas de cor do primeiro plano."
 msgid "Error creating a foreground color tag node."
 msgstr "Erro ao crear o nodo de etiquetas de cor do primeiro plano."
 
-#: ide/functions/slide/slide_delete.c:63
+#: ide/functions/slide/slide_delete.c:65
 msgid "You must leave at least one slide in a project."
 msgstr "Debe deixar como mínimo 1 diapositiva no projecto"
 
-#: ide/functions/slide/slide_delete.c:105
+#: ide/functions/slide/slide_delete.c:119
 msgid " Slide deleted"
 msgstr " Diapositiva eliminada"
 
@@ -3776,7 +3817,7 @@ msgstr ""
 msgid " Slide properties updated"
 msgstr " Propiedades da diapositiva actualizadas"
 
-#: ide/functions/slide/slide_insert.c:117
+#: ide/functions/slide/slide_insert.c:128
 msgid " Slide added"
 msgstr " Diapositiva engadida"
 
@@ -3812,30 +3853,49 @@ msgstr "Minimizar a ventá"
 msgid "Take Screenshot"
 msgstr "Facer unha captura de pantalla"
 
+#: ide/functions/undo_redo/undo_functions.c:282
+#: ide/functions/undo_redo/undo_functions.c:478
+msgid ""
+"Programming error.  The Undo/Redo functions were called with an unknown undo "
+"type."
+msgstr ""
+
+#: ide/functions/undo_redo/undo_functions.c:317
+msgid "Last action redone"
+msgstr ""
+
+#: ide/functions/undo_redo/undo_functions.c:512
+msgid "Last action undone"
+msgstr ""
+
 #: ide/functions/validate_value.c:713 screen_capture/validate_value.c:576
 msgid "Unknown value passed to validation function"
 msgstr "Valor descoñecido pasado á función de validación"
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:139
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:191
+#: ide/functions/widgets/time_line/time_line_button_press_event.c:120
+msgid "Private internal timeline data is not present!"
+msgstr ""
+
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:142
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:194
 msgid "Couldn't recreate time line background image."
 msgstr "Non se puido recrear a imaxe de fondo para a liña de tempo."
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:148
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:200
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:151
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:203
 msgid "Couldn't recreate time line display buffer."
 msgstr "Non se puido recrear o amortecedor de pantalla da liña de tempo."
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:157
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:209
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:160
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:212
 msgid "Couldn't redraw the time line layer information."
 msgstr "Non se puido redeseñar a información da capa da liña de tempo."
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:281
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:286
 msgid " Resize completed"
 msgstr " Redimensionamento rematado"
 
-#: ide/functions/widgets/time_line/time_line_button_release_event.c:322
+#: ide/functions/widgets/time_line/time_line_button_release_event.c:335
 msgid " Drag completed"
 msgstr " Arrastre rematado"
 
@@ -3870,24 +3930,24 @@ msgstr "/Layer/Image resize"
 msgid "Not enough memory for pixbuf allocation."
 msgstr "Non hai memoria suficiente para a asignación pixbuf."
 
-#: ide/functions/working_area/working_area_button_release_event.c:156
+#: ide/functions/working_area/working_area_button_release_event.c:160
 msgid " Layer start point moved"
 msgstr " O punto de inicio de capa foi movido"
 
-#: ide/functions/working_area/working_area_button_release_event.c:158
+#: ide/functions/working_area/working_area_button_release_event.c:162
 msgid " Layer end point moved"
 msgstr " O punto de fin de capa foi movido"
 
-#: ide/functions/working_area/working_area_button_release_event.c:262
+#: ide/functions/working_area/working_area_button_release_event.c:266
 #: ide/functions/working_area/working_area_motion_notify_event.c:205
 msgid "Unknown resizing direction."
 msgstr "Dirección redimensionamento descoñecida."
 
-#: ide/functions/working_area/working_area_button_release_event.c:320
+#: ide/functions/working_area/working_area_button_release_event.c:340
 msgid " Layer resized"
 msgstr " Capa redimensionada"
 
-#: ide/functions/working_area/working_area_button_release_event.c:423
+#: ide/functions/working_area/working_area_button_release_event.c:454
 msgid " Layer moved"
 msgstr " Capa movida"
 

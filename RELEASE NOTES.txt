@@ -3,8 +3,34 @@ Salasaga 0.8.0-Alpha 7 (2010-01-30)
 
 * Added support for Undo/Redo.  Presently keep a history of unlimited length.
 * Fixed a significant crashing bug which was likely present for some time.
-* Fix small corner case bugs.
+* Several small bugs.
 
+  Plus several updated translations (some significantly)
+
+  Language                         % complete       Translators
+  ********                         **********       ***********
+
+  Greek (el)                           100%         Yannis Kaskamanidis
+  Spanish (es)                         100%         Javier Bolaños, Luis Díaz, Maxwell Draven (Ravenman)
+  English (Australia) (en_AU)          100%         Justin Clift (me)
+  English (United Kingdom) (en_GB)     100%         Justin Clift (me), Matthew Gall
+  French (fr)                           99%         Arnaud Bonatti, Philippe DUBRULLE, Pierre Couillard
+  Galician (gl)                         99%         Manuel Meixide
+  Filipino (fil)                        87%         Kezia Lounel Badulid
+  Brazilian Portuguese (pt_BR)          81%         Cristiano Bernardo, Rafael Porto Rodrigues, Sam Samuels,
+                                                    Vagner K. Dos Santos, Victor Westmann
+  Bulgarian (bg)                        76%         Anton Kerezov (Dilomo), Svetoslav Stefanov
+  Italian (it)                          72%         Gerry Sicignano (Cercatore), Carlo Stemberger (Stemby)
+  Portuguese (pt)                       60%         Carlos Fernando Martins
+  Russian (ru)                          26%         Andrew Sidun, Andrew Sudarikov
+  Arabic (ar)                           22%         عبد الله شلي (Abdellah Chelli)
+  Romanian (ro)                         20%         Doru Horișco
+  Chinese (Simplified) (zh_CN)           7%         Chen Ming, Harris 
+  Turkish (tr)                           5%         "linuxseven"
+  Catalan (ca)                           2%         Vicent Cubells
+  Indonesian (id)                        2%         Iwan Setiawan
+  Norwegian Bokmal (nb)                 <1%         Olav Horpestad
+  
 
 Salasaga 0.8.0-Alpha 6 (2010-01-01)
 **********************
