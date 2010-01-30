@@ -101,6 +101,10 @@ void regenerate_film_strip_thumbnails()
 
 		// Create the thumbnail for the slide
 		tmp_pixmap = compress_layers(this_slide, cursor_position, project_width, project_height);
+		if (NULL == tmp_pixmap)
+		{
+			return;
+		}
 		tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
 		this_slide_data->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
 		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
