@@ -67,6 +67,12 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 		zoom = atoi(tmp_string->str);
 	}
 
+	// Sanity check the zoom level.  Sometimes needed when using small project sizes.
+	if (zoom >= 400.0)
+	{
+		zoom = 400.0;
+	}
+
 	// Free the memory allocated in this function
 	g_string_free(tmp_string, TRUE);
 
