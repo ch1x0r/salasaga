@@ -181,8 +181,15 @@ void menu_file_open(void)
 			}
 			else
 			{
-				// The project file wasn't valid, so we abort the dialog and return
+				// The project file wasn't valid, so we abort the dialog
 				gtk_widget_destroy(open_dialog);
+
+				// Use the status bar to communicate the failed loading of the project
+				g_string_printf(message, " %s - %s", _("Project load aborted"), g_path_get_basename(validated_string->str));
+				gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), message->str);
+				gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
+
+				// Return
 				g_string_free(validated_string, TRUE);
 				g_string_free(message, TRUE);
 				g_free(filename);
