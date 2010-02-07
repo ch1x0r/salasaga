@@ -110,6 +110,7 @@ extern "C" {
 #define V_QUESTION			2048
 #define V_SPACES			4096
 #define V_UNDERSCORES		8192
+#define V_ANY_UNICHAR		16384
 
 // Window managers
 #define WM_UNKNOWN			0

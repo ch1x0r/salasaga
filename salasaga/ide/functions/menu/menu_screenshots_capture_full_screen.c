@@ -216,7 +216,7 @@ void menu_screenshots_capture_full_screen(void)
 
 	// Create the contents of the ~/.salasaga-lock file in memory
 	lock_file = g_key_file_new();
-	g_key_file_set_string(lock_file, "Project", "Name", "screenshot");  // Name of project
+	g_key_file_set_string(lock_file, "Project", "Name", _("screenshot"));  // Name to give screenshot files
 	g_key_file_set_string(lock_file, "Project", "Directory", screenshots_folder->str);  // Directory to save screenshots in
 	g_key_file_set_integer(lock_file, "Project", "X_Offset", capture_x);  // Top left X coordinate of screen area
 	g_key_file_set_integer(lock_file, "Project", "X_Length", capture_width);  // Width of screen area to grab

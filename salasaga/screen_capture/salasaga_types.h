@@ -77,6 +77,7 @@ extern "C" {
 #define V_PLUSES			128
 #define V_SPACES			256
 #define V_UNDERSCORES		512
+#define V_ANY_UNICHAR		1024
 
 // Field IDs for the validate_value function
 enum

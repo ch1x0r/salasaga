@@ -136,6 +136,19 @@ void *validate_value(gint value_id, gint input_type, void *value)
 					// * The input wasn't a standard alphanumic character, so check if it *
 					// * is one of the characters in the capabilities list for this field *
 					match_found = FALSE;
+					capability_check = V_ANY_UNICHAR & capabilities;
+					if (FALSE != capability_check)
+					{
+						// This field is allowed to have any valid unicode character
+						if (TRUE == g_unichar_validate(input_char_unicode))
+						{
+							// Yes, this is a valid unicode character
+							match_found = TRUE;
+							g_string_append_printf(output_gstring, "%s", conversion_buffer);
+							input_ptr = g_utf8_find_next_char(input_ptr, NULL);
+							continue;
+						}
+					}
 					capability_check = V_SPACES & capabilities;
 					if (FALSE != capability_check)
 					{
