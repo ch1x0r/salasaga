@@ -179,6 +179,7 @@ HBITMAP win_take_screenshot(HWND desktop_window_handle, gint x_off, gint x_len, 
 gint main(gint argc, gchar *argv[])
 {
 	// Local variables
+	GVfs				*default_gvfs;
 	gint				delay_counter;				// Simple loop counter
 	const gchar			*dir_entry;					// Holds a file name
 	GDir				*dir_ptr;					// Pointer to the directory entry structure
@@ -188,11 +189,13 @@ gint main(gint argc, gchar *argv[])
 	gboolean			libnotify_is_notify_osd = FALSE;  // Indicates whether the libnotify server is Notify-OSD
 	GKeyFile			*lock_file;					// Pointer to the lock file structure
 	GString				*message;					// Used to construct message strings
-	GString				*name, *directory;			// GStrings from the lock file
+	GString				*name;						// GString from the lock file
+	gchar				*directory;					// Name of the folder to save the screenshot in
 	gchar				*notify_server_name;		// Receives the name of the libnotify server
 	gchar				*notify_server_vendor;		// Receives the vendor name of the libnotify server
 	gchar				*notify_server_version;		// Receives the version string of the libnotify server
 	gchar				*notify_server_spec_version;  // Receives the libnotify spec of the libnotify server
+	GFile				*output_folder_gfile;
 	gboolean			return_code_gboolean;		// Receives a boolean return code from the libnotify server
 	gint				screenshot_delay = 5;		// The number of seconds to delay before triggering a screenshot
 	gboolean			screenshots_exist = FALSE;	// Switch to track if other screenshots already exist
@@ -376,12 +379,16 @@ gint main(gint argc, gchar *argv[])
 	// ** We only get here if all the input is considered valid **
 
 	name = valid_project_name;  // Name of project
-	directory = valid_screenshot_folder;  // Directory to save screenshots in
 	x_offset = valid_x_offset;  // Top left X coordinate of screen area
 	x_length = valid_width;  // Width of screen area to grab
 	y_offset = valid_y_offset;  // Top left Y coordinate of screen area
 	y_length = valid_height;  // Height of screen area to grab
 	screenshot_delay = valid_screenshot_delay;  // Number of seconds to delay the screenshot by
+
+	// Work out the directory to save the screenshots in
+	default_gvfs = g_vfs_get_default();
+	output_folder_gfile = g_vfs_get_file_for_uri(default_gvfs, valid_screenshot_folder->str);
+	directory = g_file_get_path(output_folder_gfile);
 
 	// * Other potentially useful things to include *
 	// Which displays to grab, for multi-monitor display
@@ -522,13 +529,13 @@ gint main(gint argc, gchar *argv[])
 	notify_notification_show(status_notify, &error);
 
 	// Check if the output folder exists
-	if (!(dir_ptr = g_dir_open(directory->str, 0, &error)))
+	if (!(dir_ptr = g_dir_open(directory, 0, &error)))
 	{
 		// Something went wrong when opening the folder
 		if (G_FILE_ERROR_NOENT != error->code)
 		{
 			// The error was something other than the folder not existing (which we can cope with)
-			g_string_printf(message, "%s CA05: %s '%s': %s", _("Error"), _("Something went wrong opening"), directory->str, error->message);
+			g_string_printf(message, "%s CA05: %s '%s': %s", _("Error"), _("Something went wrong opening"), directory, error->message);
 			display_warning(message->str);
 			g_string_free(message, TRUE);
 			g_error_free(error);
@@ -537,7 +544,7 @@ gint main(gint argc, gchar *argv[])
 
 		// The directory doesn't exist
 		// fixme3: Add code to create the directory
-		g_string_printf(message, "%s CA06: %s", _("Error"), _("The target directory doesn't exist."));
+		g_string_printf(message, "%s CA06: %s - '%s'", _("Error"), _("The target directory doesn't exist."), directory);
 		display_warning(message->str);
 		g_string_free(message, TRUE);
 		g_error_free(error);
@@ -604,7 +611,7 @@ gint main(gint argc, gchar *argv[])
 	// Construct the screenshot file name
 	short_file_name = g_string_new(NULL);
 	g_string_printf(short_file_name, "%s%s%s", name->str, suffix->str, ".png");
-	full_file_name = g_build_filename(directory->str, short_file_name->str, NULL);
+	full_file_name = g_build_filename(directory, short_file_name->str, NULL);
 
 #ifndef _WIN32
 	// Non-windows code to save the screenshot
@@ -731,6 +738,10 @@ gint main(gint argc, gchar *argv[])
 
 	// g_build_filename() requires the returned string to be g_free'd
 	g_free(full_file_name);
+
+	// Free various bits
+	g_object_unref(output_folder_gfile);
+	g_free(directory);
 
 	// Free the GString's we allocated
 	g_string_free(suffix, TRUE);
