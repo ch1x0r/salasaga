@@ -160,7 +160,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_default_project_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_project_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_default_project_folder = gtk_file_chooser_button_new(_("Select the Default Project Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_project_folder), default_project_folder->str);
+	gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(button_default_project_folder), default_project_folder->str);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_project_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
@@ -169,7 +169,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_screenshot_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_screenshot_folder = gtk_file_chooser_button_new(_("Select the Screenshot Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_screenshot_folder), screenshots_folder->str);
+	gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(button_screenshot_folder), screenshots_folder->str);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
@@ -178,7 +178,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_default_output_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_default_output_folder = gtk_file_chooser_button_new(_("Select the Default Output Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_output_folder), default_output_folder->str);
+	gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(button_default_output_folder), default_output_folder->str);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_output_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
@@ -395,7 +395,7 @@ void menu_edit_preferences(void)
 		usable_input = TRUE;
 
 		// Retrieve the new default project folder input
-		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_default_project_folder)));
+		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_default_project_folder)));
 		if (NULL == validated_string)
 		{
 			g_string_printf(message, "%s ED126: %s", _("Error"), _("There was something wrong with the project folder given.  Please try again."));
@@ -409,7 +409,7 @@ void menu_edit_preferences(void)
 		}
 
 		// Retrieve the new default screenshot folder input
-		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_screenshot_folder)));
+		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_screenshot_folder)));
 		if (NULL == validated_string)
 		{
 			g_string_printf(message, "%s ED127: %s", _("Error"), _("There was something wrong with the screenshot folder given.  Please try again."));
@@ -423,7 +423,7 @@ void menu_edit_preferences(void)
 		}
 
 		// Retrieve the new default output folder input
-		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(button_default_output_folder)));
+		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_default_output_folder)));
 		if (NULL == validated_string)
 		{
 			g_string_printf(message, "%s ED128: %s", _("Error"), _("There was something wrong with the output folder given.  Please try again."));

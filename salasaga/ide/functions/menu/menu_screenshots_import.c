@@ -54,6 +54,7 @@
 void menu_screenshots_import(void)
 {
 	// Local variables
+	GVfs				*default_gvfs;
 	GDir				*dir_ptr;					// Pointer to the directory entry structure
 	const gchar			*dir_entry;					// Holds a file name
 	GSList				*entries = NULL;			// Holds a list of screen shot file names
@@ -71,6 +72,8 @@ void menu_screenshots_import(void)
 	gfloat				project_ratio;				// Ratio of project height to width
 	gint				return_code = 0;			// Receives return code
 	gint				return_code_int;
+	gchar				*screenshot_directory;		// Name of the screenshot folder
+	GFile				*screenshot_folder_gfile;
 	gint				slide_position;				// Which slide in the slide list do we have selected?
 	GList				*this_slide = NULL;			// Temporary Glist
 	GtkWidget			*tmp_dialog;
@@ -92,6 +95,11 @@ void menu_screenshots_import(void)
 	tmp_string = g_string_new(NULL);
 	using_first_screenshot = FALSE;
 
+	// Work out the directory to import screenshots from
+	default_gvfs = g_vfs_get_default();
+	screenshot_folder_gfile = g_vfs_get_file_for_uri(default_gvfs, screenshots_folder->str);
+	screenshot_directory = g_file_get_path(screenshot_folder_gfile);
+
 	// Set the default information button display info if there isn't a project already active
 	if (TRUE != project_active)
 	{
@@ -106,7 +114,7 @@ void menu_screenshots_import(void)
 	//   so we make a list of them and add them to the slides linked list *
 
 	// * Check if the screenshots folder exists *
-	if (!(dir_ptr = g_dir_open(screenshots_folder->str, 0, &error)))
+	if (!(dir_ptr = g_dir_open(screenshot_directory, 0, &error)))
 	{
 		// * Something went wrong when opening the screenshots folder *
 		if (G_FILE_ERROR_NOENT != error->code)
@@ -114,7 +122,7 @@ void menu_screenshots_import(void)
 			// * The error was something other than the folder not existing, which we could cope with *
 
 			// Display the warning message using our function
-			g_string_printf(message, "%s ED03: %s '%s': %s", _("Error"), _("Something went wrong opening the screenshots folder."), screenshots_folder->str, error->message);
+			g_string_printf(message, "%s ED03: %s '%s': %s", _("Error"), _("Something went wrong opening the screenshots folder."), screenshot_directory, error->message);
 			display_warning(message->str);
 
 			// Free the memory allocated in this function
@@ -142,7 +150,7 @@ void menu_screenshots_import(void)
 			if (g_str_has_suffix(dir_entry, ".png"))
 			{
 				// * The directory entry has the correct file extension too, so it's very likely one of our screenshots *
-				g_string_printf(tmp_string, "%s", g_build_path(G_DIR_SEPARATOR_S, screenshots_folder->str, dir_entry, NULL));
+				g_string_printf(tmp_string, "%s", g_build_path(G_DIR_SEPARATOR_S, screenshot_directory, dir_entry, NULL));
 				file_format = gdk_pixbuf_get_file_info(tmp_string->str, &image_width, &image_height);
 				if (NULL != file_format)
 				{
@@ -230,7 +238,7 @@ void menu_screenshots_import(void)
 		image_differences = FALSE;
 
 		// Work out the full path to the image file
-		g_string_printf(tmp_string, "%s%c", screenshots_folder->str, G_DIR_SEPARATOR);
+		g_string_printf(tmp_string, "%s%c", screenshot_directory, G_DIR_SEPARATOR);
 		tmp_string = g_string_append(tmp_string, g_slist_nth(entries, tmp_int - 1)->data);
 
 		// Get the size of the image
@@ -498,5 +506,7 @@ void menu_screenshots_import(void)
 	gdk_flush();
 
 	// Free the memory allocated in this function
+	g_object_unref(screenshot_folder_gfile);
+	g_free(screenshot_directory);
 	g_string_free(tmp_string, TRUE);
 }
