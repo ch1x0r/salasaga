@@ -43,12 +43,16 @@
 void menu_project_properties(void)
 {
 	// Local variables
+	GVfs				*default_gvfs;
+	gchar				*directory;
 	gint				gint_val;					// Temporary gint value
 	guint				guint_val;					// Temporary guint value used for validation
 	GtkDialog			*main_dialog;				// Widget for the main dialog
 	GString				*message;					// Used to construct message strings
 	GtkWidget			*proj_dialog_table;			// Table used for neat layout of the labels and fields in project preferences
 	gint				proj_row_counter;			// Used when building the project preferences dialog box
+	gchar				*retrieved_uri;
+	GFile				*temp_gfile;
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	gboolean			valid_control_bar_behaviour;  // Receives the new control bar display behaviour
 	guint				valid_end_behaviour = 0;	// Receives the new end behaviour once validated
@@ -110,6 +114,7 @@ void menu_project_properties(void)
 
 
 	// Initialise various things
+	default_gvfs = g_vfs_get_default();
 	message = g_string_new(NULL);
 	proj_row_counter = 0;
 	valid_ext_link = g_string_new(NULL);
@@ -139,7 +144,7 @@ void menu_project_properties(void)
 	gtk_misc_set_alignment(GTK_MISC(label_project_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_folder), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_project_folder = gtk_file_chooser_button_new(_("Select the Project Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_current_folder_uri(GTK_FILE_CHOOSER(button_project_folder), project_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_project_folder), project_folder->str);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_project_folder), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
 
@@ -148,7 +153,7 @@ void menu_project_properties(void)
 	gtk_misc_set_alignment(GTK_MISC(label_output_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_output_folder), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_output_folder = gtk_file_chooser_button_new(_("Select the Output Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_current_folder_uri(GTK_FILE_CHOOSER(button_output_folder), output_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_output_folder), output_folder->str);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_output_folder), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	proj_row_counter = proj_row_counter + 1;
 
@@ -335,7 +340,10 @@ void menu_project_properties(void)
 		}
 
 		// Retrieve the new project folder input
-		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_project_folder)));
+		retrieved_uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_project_folder));
+		temp_gfile = g_vfs_get_file_for_uri(default_gvfs, retrieved_uri);
+		directory = g_file_get_path(temp_gfile);
+		validated_string = validate_value(FOLDER_PATH, V_CHAR, directory);
 		if (NULL == validated_string)
 		{
 			g_string_printf(message, "%s ED136: %s", _("Error"), _("There was something wrong with the project folder given.  Please try again."));
@@ -347,9 +355,14 @@ void menu_project_properties(void)
 			g_string_free(validated_string, TRUE);
 			validated_string = NULL;
 		}
+		g_object_unref(temp_gfile);
+		g_free(directory);
 
 		// Retrieve the new output folder input
-		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_output_folder)));
+		retrieved_uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_output_folder));
+		temp_gfile = g_vfs_get_file_for_uri(default_gvfs, retrieved_uri);
+		directory = g_file_get_path(temp_gfile);
+		validated_string = validate_value(FOLDER_PATH, V_CHAR, directory);
 		if (NULL == validated_string)
 		{
 			g_string_printf(message, "%s ED137: %s", _("Error"), _("There was something wrong with the output folder given.  Please try again."));
@@ -361,6 +374,8 @@ void menu_project_properties(void)
 			g_string_free(validated_string, TRUE);
 			validated_string = NULL;
 		}
+		g_object_unref(temp_gfile);
+		g_free(directory);
 
 		// Retrieve the new frames per second input
 		guint_val = gtk_spin_button_get_value(GTK_SPIN_BUTTON(button_frames_per_second));
