@@ -290,6 +290,12 @@ void menu_file_new(void)
 	// Set the default background color
 	default_bg_colour = new_bg_colour;
 
+	// Set the project folder
+	g_string_assign(project_folder, default_project_folder->str);
+
+	// Set the output folder
+	g_string_assign(output_folder, default_output_folder->str);
+
 	// Set the initial information text and link
 	info_link = g_string_new(_("http://www.salasaga.org"));
 	info_link_target = g_string_new(_("_blank"));
