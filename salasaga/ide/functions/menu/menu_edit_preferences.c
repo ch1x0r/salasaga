@@ -50,6 +50,8 @@ void menu_edit_preferences(void)
 	// Local variables
 	GtkWidget			*app_dialog_table;					// Table used for neat layout of the labels and fields in application preferences
 	gint				app_row_counter;					// Used when building the application preferences dialog box
+	GVfs				*default_gvfs;
+	gchar				*directory;
 	GError				*error = NULL;						// Pointer to error return structure
 	gchar				*full_file_name;					// Holds the fully worked out lock file name
 	gfloat				gfloat_val;							// Temporary gfloat value used for validation
@@ -59,10 +61,12 @@ void menu_edit_preferences(void)
 	GKeyFile			*lock_file;							// Pointer to the lock file structure
 	GString				*message;							// Used to construct message strings
 	GIOChannel			*output_file;						// The output output xlock file handle
+	gchar				*retrieved_uri;
 	GIOStatus			return_value;						// Return value used in most GIOChannel functions
 	gboolean			return_gbool;						// Receives the true/false return code when opening a lock file
 	gdouble				scale_mark_counter;					// Simple counter used when constructing scale marks for sliders
 	gchar				**strings;							// Text string are split apart with this
+	GFile				*temp_gfile;
 	gchar				*tmp_gchar;							// Temporary gchar
 	gsize				tmp_gsize;							// Temporary gsize
 	GString				*tmp_gstring;						// Text strings are constructed in this
@@ -142,6 +146,7 @@ void menu_edit_preferences(void)
 
 	// Initialise various things
 	app_row_counter = 0;
+	default_gvfs = g_vfs_get_default();
 	message = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 	valid_project_folder = g_string_new(NULL);
@@ -160,7 +165,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_default_project_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_project_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_default_project_folder = gtk_file_chooser_button_new(_("Select the Default Project Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(button_default_project_folder), default_project_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_project_folder), default_project_folder->str);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_project_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
@@ -169,7 +174,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_screenshot_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_screenshot_folder = gtk_file_chooser_button_new(_("Select the Screenshot Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(button_screenshot_folder), screenshots_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_screenshot_folder), screenshots_folder->str);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
@@ -178,7 +183,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_default_output_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	button_default_output_folder = gtk_file_chooser_button_new(_("Select the Default Output Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_uri(GTK_FILE_CHOOSER(button_default_output_folder), default_output_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_output_folder), default_output_folder->str);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_output_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
@@ -395,7 +400,10 @@ void menu_edit_preferences(void)
 		usable_input = TRUE;
 
 		// Retrieve the new default project folder input
-		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_default_project_folder)));
+		retrieved_uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_default_project_folder));
+		temp_gfile = g_vfs_get_file_for_uri(default_gvfs, retrieved_uri);
+		directory = g_file_get_path(temp_gfile);
+		validated_string = validate_value(FOLDER_PATH, V_CHAR, directory);
 		if (NULL == validated_string)
 		{
 			g_string_printf(message, "%s ED126: %s", _("Error"), _("There was something wrong with the project folder given.  Please try again."));
@@ -407,9 +415,14 @@ void menu_edit_preferences(void)
 			g_string_free(validated_string, TRUE);
 			validated_string = NULL;
 		}
+		g_object_unref(temp_gfile);
+		g_free(directory);
 
 		// Retrieve the new default screenshot folder input
-		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_screenshot_folder)));
+		retrieved_uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_screenshot_folder));
+		temp_gfile = g_vfs_get_file_for_uri(default_gvfs, retrieved_uri);
+		directory = g_file_get_path(temp_gfile);
+		validated_string = validate_value(FOLDER_PATH, V_CHAR, directory);
 		if (NULL == validated_string)
 		{
 			g_string_printf(message, "%s ED127: %s", _("Error"), _("There was something wrong with the screenshot folder given.  Please try again."));
@@ -421,9 +434,14 @@ void menu_edit_preferences(void)
 			g_string_free(validated_string, TRUE);
 			validated_string = NULL;
 		}
+		g_object_unref(temp_gfile);
+		g_free(directory);
 
 		// Retrieve the new default output folder input
-		validated_string = validate_value(FOLDER_PATH, V_CHAR, gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_default_output_folder)));
+		retrieved_uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_default_output_folder));
+		temp_gfile = g_vfs_get_file_for_uri(default_gvfs, retrieved_uri);
+		directory = g_file_get_path(temp_gfile);
+		validated_string = validate_value(FOLDER_PATH, V_CHAR, directory);
 		if (NULL == validated_string)
 		{
 			g_string_printf(message, "%s ED128: %s", _("Error"), _("There was something wrong with the output folder given.  Please try again."));
@@ -435,6 +453,8 @@ void menu_edit_preferences(void)
 			g_string_free(validated_string, TRUE);
 			validated_string = NULL;
 		}
+		g_object_unref(temp_gfile);
+		g_free(directory);
 
 		// Retrieve the new default output resolution input
 		validated_string = validate_value(RESOLUTION, V_INT_UNSIGNED, gtk_combo_box_get_active_text(GTK_COMBO_BOX(selector_default_output_res)));
@@ -633,6 +653,9 @@ void menu_edit_preferences(void)
 
 		// Set the new screenshot delay value
 		g_key_file_set_integer(lock_file, "Project", "Screenshot_Delay", screenshot_delay_time);  // Number of seconds to delay the screenshot capture
+
+		// Set the new screenshot folder value
+		g_key_file_set_string(lock_file, "Project", "Directory", screenshots_folder->str);  // Directory to save screenshots in
 
 		// Create IO channel for writing to
 		output_file = g_io_channel_new_file(full_file_name, "w", &error);
