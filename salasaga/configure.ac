@@ -1,8 +1,8 @@
-AC_INIT(Salasaga, [0.8.0-alpha8-3], [salasaga-devel@lists.sourceforge.net])
+AC_INIT(Salasaga, [0.8.0-alpha8-4], [salasaga-devel@lists.sourceforge.net])
 
 MAJOR_VERSION=0
 MINOR_VERSION=8
-MICRO_VERSION=0-alpha8-3
+MICRO_VERSION=0-alpha8-4
 
 SALASAGA_VERSION=[${MAJOR_VERSION}.${MINOR_VERSION}.${MICRO_VERSION}]
 
