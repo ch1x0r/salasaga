@@ -246,7 +246,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		priv->resize_type = RESIZE_NONE;
 
 		// Mark that there are unsaved changes
-		changes_made = TRUE;
+		set_changes_made(TRUE);
 
 		// Remove the resize guideline from the widget
 		area.x = priv->guide_line_resize;
@@ -300,7 +300,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		priv->drag_active = FALSE;
 
 		// Mark that there are unsaved changes
-		changes_made = TRUE;
+		set_changes_made(TRUE);
 
 		// Create pointers to things we're working with
 		this_slide_data = (slide *) current_slide->data;

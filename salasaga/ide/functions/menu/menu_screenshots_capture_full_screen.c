@@ -88,10 +88,10 @@ void menu_screenshots_capture_full_screen(void)
 	}
 
 	// Use the returned offset and dimensions
-	capture_x = (guint) 0;
-	capture_y = (guint) 0;
-	capture_width = (guint) win_width;
-	capture_height = (guint) win_height;
+	set_capture_x((guint) 0);
+	set_capture_y((guint) 0);
+	set_capture_width((guint) win_width);
+	set_capture_height((guint) win_height);
 
 	// Let the user know that the window they selected has been successfully grabbed
 	message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
@@ -218,10 +218,10 @@ void menu_screenshots_capture_full_screen(void)
 	lock_file = g_key_file_new();
 	g_key_file_set_string(lock_file, "Project", "Name", _("screenshot"));  // Name to give screenshot files
 	g_key_file_set_string(lock_file, "Project", "Directory", screenshots_folder->str);  // Directory to save screenshots in
-	g_key_file_set_integer(lock_file, "Project", "X_Offset", capture_x);  // Top left X coordinate of screen area
-	g_key_file_set_integer(lock_file, "Project", "X_Length", capture_width);  // Width of screen area to grab
-	g_key_file_set_integer(lock_file, "Project", "Y_Offset", capture_y);  // Top left Y coordinate of screen area
-	g_key_file_set_integer(lock_file, "Project", "Y_Length", capture_height);  // Height of screen area to grab
+	g_key_file_set_integer(lock_file, "Project", "X_Offset", get_capture_x());  // Top left X coordinate of screen area
+	g_key_file_set_integer(lock_file, "Project", "X_Length", get_capture_width());  // Width of screen area to grab
+	g_key_file_set_integer(lock_file, "Project", "Y_Offset", get_capture_y());  // Top left Y coordinate of screen area
+	g_key_file_set_integer(lock_file, "Project", "Y_Length", get_capture_height());  // Height of screen area to grab
 	g_key_file_set_integer(lock_file, "Project", "Screenshot_Delay", screenshot_delay_time);  // Number of seconds to delay the screenshot capture
 
 	// Create IO channel for writing to

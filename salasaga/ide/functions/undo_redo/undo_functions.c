@@ -311,7 +311,7 @@ gint undo_history_redo_item(void)
 	regenerate_film_strip_thumbnails();
 
 	// Set the changes made variable
-	changes_made = TRUE;
+	set_changes_made(TRUE);
 
 	// Use the status bar to give further feedback to the user
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Last action redone"));
@@ -506,7 +506,7 @@ gint undo_history_undo_item(void)
 	}
 
 	// Set the changes made variable
-	changes_made = TRUE;
+	set_changes_made(TRUE);
 
 	// Use the status bar to give further feedback to the user
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Last action undone"));

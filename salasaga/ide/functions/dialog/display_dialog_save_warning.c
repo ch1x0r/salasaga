@@ -55,7 +55,7 @@ gboolean display_dialog_save_warning(void)
 	if (GTK_RESPONSE_YES == return_code_int)
 	{
 		menu_file_save();
-		changes_made = FALSE;
+		set_changes_made(FALSE);
 	}
 
 	// If the user wants to cancel, then indicate this

@@ -261,7 +261,7 @@ void image_resize(void)
 	draw_workspace();
 
 	// Set the changes made variable
-	changes_made = TRUE;
+	set_changes_made(TRUE);
 
 	// Show movement on the progress bar
 	gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));

@@ -110,7 +110,7 @@ void layer_edit(void)
 				slide_data->cached_pixmap_valid = FALSE;
 
 				// Set the changes made variable
-				changes_made = TRUE;
+				set_changes_made(TRUE);
 			}
 
 			// Nothing to update in the timeline for empty layers
@@ -136,7 +136,7 @@ void layer_edit(void)
 				}
 
 				// Set the changes made variable
-				changes_made = TRUE;
+				set_changes_made(TRUE);
 			}
 			break;
 
@@ -160,7 +160,7 @@ void layer_edit(void)
 				}
 
 				// Set the changes made variable
-				changes_made = TRUE;
+				set_changes_made(TRUE);
 			}
 			break;
 
@@ -185,7 +185,7 @@ void layer_edit(void)
 				}
 
 				// Set the changes made variable
-				changes_made = TRUE;
+				set_changes_made(TRUE);
 			}
 			break;
 
@@ -210,7 +210,7 @@ void layer_edit(void)
 				}
 
 				// Set the changes made variable
-				changes_made = TRUE;
+				set_changes_made(TRUE);
 			}
 			break;
 

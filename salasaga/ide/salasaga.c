@@ -81,11 +81,6 @@
 // Global variables
 GList					*boundary_list = NULL;		// Stores a linked list of layer object boundaries
 cairo_font_face_t		*cairo_font_face[FONT_COUNT];	// The ttf font faces we use get loaded into this
-guint					capture_height;				// Height for screen captures
-guint					capture_width;				// Width for screen captures
-guint					capture_x;					// X offset for screen captures
-guint					capture_y;					// Y offset for screen captures
-gboolean				changes_made = FALSE;		// Have there been changes to the project since the last save?
 layer					*copy_layer = NULL;			// The copy buffer for layers
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
 guint					debug_level = 0;			// Used to indicate debugging level
@@ -456,10 +451,10 @@ gint main(gint argc, gchar *argv[])
 #endif // End of non-windows code
 
 	// Set defaults values for the window capture code
-	capture_height = project_height;
-	capture_width = project_width;
-	capture_x = 0;
-	capture_y = 0;
+	set_capture_height(project_height);
+	set_capture_width(project_width);
+	set_capture_x(0);
+	set_capture_y(0);
 
 	// Use the default output width and height
 	output_width = default_output_width;

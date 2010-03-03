@@ -483,7 +483,7 @@ void menu_screenshots_import(void)
 	enable_main_toolbar_buttons();
 
 	// Set the changes made variable
-	changes_made = TRUE;
+	set_changes_made(TRUE);
 
 	// Update the status bar
 	if (1 == num_screenshots)

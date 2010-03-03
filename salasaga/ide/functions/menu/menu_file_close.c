@@ -54,7 +54,7 @@ void menu_file_close()
 		return;
 
 	// If we have unsaved changes, warn the user
-	if (TRUE == changes_made)
+	if (TRUE == get_changes_made())
 	{
 		return_code_gbool = display_dialog_save_warning();
 		if (FALSE == return_code_gbool)
@@ -79,7 +79,7 @@ void menu_file_close()
 	project_active = FALSE;
 
 	// Clear the changes made variable
-	changes_made = FALSE;
+	set_changes_made(FALSE);
 
 	// Clear the saved file name string
 	if (NULL != file_name)

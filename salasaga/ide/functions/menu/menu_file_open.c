@@ -72,7 +72,7 @@ void menu_file_open(void)
 
 
 	// If we have unsaved changes, warn the user
-	if (TRUE == changes_made)
+	if (TRUE == get_changes_made())
 	{
 		return_code = display_dialog_save_warning();
 		if (FALSE == return_code)
@@ -279,7 +279,7 @@ void menu_file_open(void)
 	enable_main_toolbar_buttons();
 
 	// Clear the changes made variable
-	changes_made = FALSE;
+	set_changes_made(FALSE);
 
 	// Clear the undo/redo history
 	undo_history_clear();

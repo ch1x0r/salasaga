@@ -199,7 +199,7 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	time_line_set_selected_layer_num(slide_data->timeline_widget, 0);
 
 	// Set the changes made variable
-	changes_made = TRUE;
+	set_changes_made(TRUE);
 
 	// Update the status bar
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Highlight layer added"));

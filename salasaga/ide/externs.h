@@ -41,11 +41,6 @@ extern "C" {
 // Variables defined elsewhere
 extern GList				*boundary_list;
 extern cairo_font_face_t	*cairo_font_face[FONT_COUNT];
-extern guint				capture_height;
-extern guint				capture_width;
-extern guint				capture_x;
-extern guint				capture_y;
-extern gboolean				changes_made;
 extern layer				*copy_layer;
 extern GList				*current_slide;
 extern guint				debug_level;
@@ -168,6 +163,9 @@ extern gchar				*salasaga_font_names[FONT_COUNT];
 // Windows only variables
 extern HHOOK				win32_keyboard_hook_handle;
 #endif
+
+// Include the global functions
+#include "functions/global_functions.h"
 
 
 #ifdef __cplusplus

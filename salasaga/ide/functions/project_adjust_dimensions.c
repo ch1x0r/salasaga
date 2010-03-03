@@ -271,7 +271,7 @@ void project_adjust_dimensions(void)
 	regenerate_film_strip_thumbnails();
 
 	// Set the changes made variable
-	changes_made = TRUE;
+	set_changes_made(TRUE);
 
 	// Update the status bar
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Project dimensions adjusted"));

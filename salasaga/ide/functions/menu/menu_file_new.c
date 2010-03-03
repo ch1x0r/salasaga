@@ -90,7 +90,7 @@ void menu_file_new(void)
 
 
 	// If we have unsaved changes, warn the user
-	if (TRUE == changes_made)
+	if (TRUE == get_changes_made())
 	{
 		return_code_gbool = display_dialog_save_warning();
 		if (FALSE == return_code_gbool)
@@ -323,7 +323,7 @@ void menu_file_new(void)
 	project_active = TRUE;
 
 	// Set the changes made variable
-	changes_made = TRUE;
+	set_changes_made(TRUE);
 
 	// Update the status bar
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Project initialized"));

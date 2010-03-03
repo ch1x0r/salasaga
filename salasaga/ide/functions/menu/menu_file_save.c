@@ -242,7 +242,7 @@ void menu_file_save(void)
 	tmp_int = xmlSaveClose(save_context);
 
 	// Clear the changes made variable
-	changes_made = FALSE;
+	set_changes_made(FALSE);
 
 	// Add a message to the status bar so the user gets visual feedback
 	g_string_printf(tmp_gstring, " %s - %s", _("Project saved"), file_name->str);

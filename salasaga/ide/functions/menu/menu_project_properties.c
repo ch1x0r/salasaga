@@ -493,7 +493,7 @@ void menu_project_properties(void)
 	g_string_printf(info_link_target, "%s", valid_ext_link_win->str);
 
 	// Set the changes made variable
-	changes_made = TRUE;
+	set_changes_made(TRUE);
 
 	// Update the status bar
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Project properties updated"));

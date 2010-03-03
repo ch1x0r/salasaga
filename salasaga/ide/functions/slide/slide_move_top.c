@@ -86,7 +86,7 @@ void slide_move_top(void)
 		gtk_tree_path_free(old_path);  // Free the old path
 
 	// Set the changes made variable
-	changes_made = TRUE;
+	set_changes_made(TRUE);
 
 	// Update the status bar
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Slide moved to top"));

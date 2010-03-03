@@ -194,7 +194,7 @@ void slide_duration(void)
 	gtk_widget_destroy(GTK_WIDGET(slide_dialog));
 
 	// Set the changes made variable
-	changes_made = TRUE;
+	set_changes_made(TRUE);
 
 	// Update the status bar
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Slide properties updated"));

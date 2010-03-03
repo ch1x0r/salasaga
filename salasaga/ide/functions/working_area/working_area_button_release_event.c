@@ -168,7 +168,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		stored_y = -1;
 
 		// Set the changes made variable
-		changes_made = TRUE;
+		set_changes_made(TRUE);
 
 		return TRUE;
 	}
@@ -334,7 +334,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		stored_y = -1;
 
 		// Set the changes made variable
-		changes_made = TRUE;
+		set_changes_made(TRUE);
 
 		// Use the status bar to give further feedback to the user
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer resized"));
@@ -448,7 +448,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			stored_y = -1;
 
 			// Set the changes made variable
-			changes_made = TRUE;
+			set_changes_made(TRUE);
 
 			// Use the status bar to give further feedback to the user
 			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer moved"));
