@@ -79,9 +79,6 @@
 
 
 // Global variables
-GList					*boundary_list = NULL;		// Stores a linked list of layer object boundaries
-cairo_font_face_t		*cairo_font_face[FONT_COUNT];	// The ttf font faces we use get loaded into this
-layer					*copy_layer = NULL;			// The copy buffer for layers
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
 guint					debug_level = 0;			// Used to indicate debugging level
 GdkColor				default_text_fg_colour;		// Default foreground colour for text layer text

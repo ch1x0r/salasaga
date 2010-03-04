@@ -93,12 +93,12 @@ void calculate_object_boundaries(void)
 	time_position = time_line_get_cursor_position(this_slide_data->timeline_widget);
 
 	// (Re-)Initialise the boundary list
-	if (NULL != boundary_list)
+	if (NULL != get_boundary_list())
 	{
-		boundary_list = g_list_first(boundary_list);
-		g_list_foreach(boundary_list, (GFunc) g_free, NULL);
-		g_list_free(boundary_list);
-		boundary_list = NULL;
+		set_boundary_list(g_list_first(get_boundary_list()));
+		g_list_foreach(get_boundary_list(), (GFunc) g_free, NULL);
+		g_list_free(get_boundary_list());
+		set_boundary_list(NULL);
 	}
 
 	for (count_int = 0; count_int < num_layers; count_int++)
@@ -193,8 +193,8 @@ void calculate_object_boundaries(void)
 			boundary = g_new(boundary_box, 1);
 			boundary->region_ptr = gdk_region_rectangle(&tmp_rectangle);
 			boundary->layer_ptr = layer_pointer;
-			boundary_list = g_list_first(boundary_list);
-			boundary_list = g_list_append(boundary_list, boundary);
+			set_boundary_list(g_list_first(get_boundary_list()));
+			set_boundary_list(g_list_append(get_boundary_list(), boundary));
 		}
 	}
 }

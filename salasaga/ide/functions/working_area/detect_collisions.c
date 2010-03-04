@@ -54,14 +54,14 @@ GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y
 
 
 	// Only do this if we've been given a list of boundary boxes
-	if (NULL == boundary_list)
+	if (NULL == get_boundary_list())
 	{
 		return NULL;
 	}
 
 	// Check if there are any boundaries to detect collisions with
-	boundary_list = g_list_first(boundary_list);
-	num_boundaries = g_list_length(boundary_list);
+	set_boundary_list(g_list_first(get_boundary_list()));
+	num_boundaries = g_list_length(get_boundary_list());
 	if (0 == num_boundaries)
 	{
 		//  No boundaries given, so return
@@ -71,8 +71,8 @@ GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y
 	// Yes there are boundaries to check
 	for (count_int = 0; count_int < num_boundaries; count_int++)
 	{
-		boundary_list = g_list_first(boundary_list);
-		boundary = g_list_nth_data(boundary_list, count_int);
+		set_boundary_list(g_list_first(get_boundary_list()));
+		boundary = g_list_nth_data(get_boundary_list(), count_int);
 		if (TRUE == gdk_region_point_in(boundary->region_ptr, roundf(mouse_x), roundf(mouse_y)))
 		{
 			// Collision detected, so add it to the collision list

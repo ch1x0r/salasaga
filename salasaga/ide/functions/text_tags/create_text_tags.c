@@ -57,7 +57,7 @@ gboolean create_text_tags(void)
 		g_object_set(text_tags_fonts[loop_counter], "font", salasaga_font_names[loop_counter], NULL);
 
 		// Add a matching data item to this tag, pointing to the equivalent font in our loaded cairo font face array
-		g_object_set_data(G_OBJECT(text_tags_fonts[loop_counter]), "array-font", cairo_font_face[loop_counter]);
+		g_object_set_data(G_OBJECT(text_tags_fonts[loop_counter]), "array-font", get_cairo_font_face(loop_counter));
 
 		// Add a data item to this tag, indicating which font number in our list of fonts it is
 		int_ptr = g_slice_new0(gint);

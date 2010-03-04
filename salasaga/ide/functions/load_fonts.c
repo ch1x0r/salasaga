@@ -184,10 +184,10 @@ gboolean load_fonts()
 		}
 
 		// Load the font face into Cairo
-		cairo_font_face[loop_counter] = cairo_ft_font_face_create_for_ft_face(ft_font_face[loop_counter], 0);
+		set_cairo_font_face(loop_counter, cairo_ft_font_face_create_for_ft_face(ft_font_face[loop_counter], 0));
 
 		// Check if the font face was successfully loaded
-		cairo_status = cairo_font_face_status(cairo_font_face[loop_counter]);
+		cairo_status = cairo_font_face_status(get_cairo_font_face(loop_counter));
 		if (CAIRO_STATUS_SUCCESS != cairo_status)
 		{
 			message = g_string_new(NULL);

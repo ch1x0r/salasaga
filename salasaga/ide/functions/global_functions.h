@@ -29,16 +29,22 @@
 extern "C" {
 #endif // __cplusplus
 
+GList *get_boundary_list();
+cairo_font_face_t *get_cairo_font_face(guint index);
 guint get_capture_height();
 guint get_capture_width();
 guint get_capture_x();
 guint get_capture_y();
 gboolean get_changes_made();
+layer *get_copy_layer();
+void set_boundary_list(GList *new_boundary_list);
+void set_cairo_font_face(guint index, cairo_font_face_t *new_cairo_font_face);
 void set_capture_height(guint new_capture_height);
 void set_capture_width(guint new_capture_width);
 void set_capture_x(guint new_capture_x);
 void set_capture_y(guint new_capture_y);
 void set_changes_made(gboolean new_changes_made);
+void set_copy_layer(layer *new_copy_layer);
 
 #ifdef __cplusplus
 }

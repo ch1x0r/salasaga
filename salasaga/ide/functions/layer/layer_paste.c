@@ -56,7 +56,7 @@ void layer_paste(void)
 	}
 
 	// Create a new layer
-	new_layer = layer_duplicate(copy_layer);
+	new_layer = layer_duplicate(get_copy_layer());
 	if (NULL == new_layer)
 	{
 		// Something went wrong duplicating the copy buffer layer, so exit

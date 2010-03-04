@@ -39,9 +39,6 @@ extern "C" {
 #endif // __cplusplus
 
 // Variables defined elsewhere
-extern GList				*boundary_list;
-extern cairo_font_face_t	*cairo_font_face[FONT_COUNT];
-extern layer				*copy_layer;
 extern GList				*current_slide;
 extern guint				debug_level;
 extern GdkColor				default_text_fg_colour;

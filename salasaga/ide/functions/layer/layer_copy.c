@@ -55,14 +55,14 @@ void layer_copy(void)
 	this_layer = g_list_nth_data(current_slide_data->layers, selected_layer);
 
 	// If there is already a layer in the copy buffer, then we free it
-	if (NULL != copy_layer)
+	if (NULL != get_copy_layer())
 	{
-		layer_free(copy_layer);
+		layer_free(get_copy_layer());
 	}
 
 	// Create a new layer
-	copy_layer = layer_duplicate(this_layer);
-	if (NULL == copy_layer)
+	set_copy_layer(layer_duplicate(this_layer));
+	if (NULL == get_copy_layer())
 	{
 		// Something went wrong duplicating the existing layer.  Not much we can do
 		gdk_beep();
