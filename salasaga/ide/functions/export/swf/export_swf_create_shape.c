@@ -156,7 +156,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			scaled_width = roundf(scaled_width_ratio * (gfloat) image_width);
 
 			// Displaying debugging info if requested
-			if (debug_level)
+			if (get_debug_level())
 			{
 				printf(_("Image width: %d\n"), image_width);
 				printf(_("Scaled width: %d\n"), scaled_width);
@@ -222,7 +222,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			if (0 < this_layer_data->external_link->len)
 			{
 				// Displaying debugging info if requested
-				if (debug_level)
+				if (get_debug_level())
 				{
 					printf(_("This image has an external link: '%s'\n"), this_layer_data->external_link->str);
 				}
@@ -296,7 +296,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			if (0 < this_layer_data->external_link->len)
 			{
 				// Displaying debugging info if requested
-				if (debug_level)
+				if (get_debug_level())
 				{
 					printf(_("This empty layer has an external link: '%s'\n"), this_layer_data->external_link->str);
 				}
@@ -389,7 +389,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			if (0 < this_layer_data->external_link->len)
 			{
 				// Displaying debugging info if requested
-				if (debug_level)
+				if (get_debug_level())
 				{
 					printf(_("This highlight has an external link: '%s'\n"), this_layer_data->external_link->str);
 				}
@@ -457,7 +457,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			if (0 < this_layer_data->external_link->len)
 			{
 				// Displaying debugging info if requested
-				if (debug_level)
+				if (get_debug_level())
 				{
 					printf(_("This mouse cursor layer has an external link: '%s'\n"), this_layer_data->external_link->str);
 				}
@@ -572,7 +572,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 					if (FALSE == font_face_found)
 					{
 						// Couldn't determine the font face to be applied to this text, so we use the default text layer font face
-						SWFText_setFont(temp_text_object, fdb_font_object[default_text_font_face]);
+						SWFText_setFont(temp_text_object, fdb_font_object[get_default_text_font_face()]);
 					}
 
 					// Free the list of tags, as they're no longer needed
@@ -690,7 +690,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 					if (FALSE == font_face_found)
 					{
 						// Couldn't determine the font face to be applied to this text, so we use the default text layer font face
-						SWFText_setFont(text_object, fdb_font_object[default_text_font_face]);
+						SWFText_setFont(text_object, fdb_font_object[get_default_text_font_face()]);
 					}
 
 					// Free the list of tags, as they're no longer needed
@@ -829,7 +829,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			if (0 < this_layer_data->external_link->len)
 			{
 				// Displaying debugging info if requested
-				if (debug_level)
+				if (get_debug_level())
 				{
 					printf(_("This text has an external link: '%s'\n"), this_layer_data->external_link->str);
 				}

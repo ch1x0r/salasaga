@@ -420,7 +420,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	slide_names_gstring = g_string_append(slide_names_gstring, " if (false == _root.playing) { _root.stop(); };");
 
 	// Displaying debugging info if requested
-	if (debug_level)
+	if (get_debug_level())
 	{
 		printf(_("Slide name array Action Script: %s\n"), slide_names_gstring->str);
 	}
@@ -513,7 +513,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFButton_addShape(restart_button, (SWFCharacter) restart_shape_down, SWFBUTTON_DOWN);
 
 	// Add the restart action to the restart button
-	if (debug_level)
+	if (get_debug_level())
 	{
 		// If we're debugging, then generate debugging swf's too
 		g_string_printf(message,
@@ -604,7 +604,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		SWFButton_addShape(rewind_button, (SWFCharacter) rewind_shape_down, SWFBUTTON_DOWN);
 
 		// Add the rewind action to the rewind button
-		if (debug_level)
+		if (get_debug_level())
 		{
 			// If we're debugging, then generate debugging swf's too
 			g_string_printf(message,
@@ -784,7 +784,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFButton_addShape(pause_button, (SWFCharacter) pause_shape_down, SWFBUTTON_DOWN);
 
 	// Add the pause action to the pause button
-	if (debug_level)
+	if (get_debug_level())
 	{
 		// If we're debugging, then generate debugging swf's too
 		g_string_printf(message,
@@ -867,7 +867,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFButton_addShape(play_button, (SWFCharacter) play_shape_down, SWFBUTTON_DOWN);
 
 	// Add the play action to the play button
-	if (debug_level)
+	if (get_debug_level())
 	{
 		// If we're debugging, then generate debugging swf's too
 		g_string_printf(message,
@@ -962,7 +962,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		SWFButton_addShape(forward_button, (SWFCharacter) forward_shape_down, SWFBUTTON_DOWN);
 
 		// Add the forward action to the forward button
-		if (debug_level)
+		if (get_debug_level())
 		{
 			// If we're debugging, then generate debugging swf's too
 			g_string_printf(message,
@@ -1116,7 +1116,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	SWFButton_addShape(finish_button, (SWFCharacter) finish_shape_down, SWFBUTTON_DOWN);
 
 	// Add the finish action to the finish button
-	if (debug_level)
+	if (get_debug_level())
 	{
 		// If we're debugging, then generate debugging swf's too
 		g_string_printf(message,
@@ -1207,7 +1207,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		SWFButton_addShape(info_button, (SWFCharacter) info_shape_down, SWFBUTTON_DOWN);
 
 		// Add the info action to the info button
-		if (debug_level)
+		if (get_debug_level())
 		{
 			// If we're debugging, then generate debugging swf's too
 			g_string_printf(message,

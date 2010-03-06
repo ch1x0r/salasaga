@@ -100,7 +100,7 @@ gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this
 			SWFMovie_add(this_movie, (SWFBlock) swf_action);
 
 			// Display debugging info if requested
-			if (debug_level)
+			if (get_debug_level())
 				printf("Remove string: '%s'\n", as_gstring->str);
 		}
 
@@ -123,7 +123,7 @@ gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this
 			SWFMovie_add(this_movie, (SWFBlock) swf_action);
 
 			// Display debugging info if requested
-			//if (debug_level)
+			//if (get_debug_level())
 			//	printf("Opacity string: '%s'\n", as_gstring->str);
 		}
 
@@ -145,7 +145,7 @@ gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this
 			SWFMovie_add(this_movie, (SWFBlock) swf_action);
 
 			// Display debugging info if requested
-			//if (debug_level)
+			//if (get_debug_level())
 			//	printf("Move string: '%s'\n", as_gstring->str);
 		}
 

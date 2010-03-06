@@ -40,6 +40,10 @@ static guint				capture_x;
 static guint				capture_y;
 static gboolean				changes_made = FALSE;			// Have there been changes to the project since the last save?
 static layer				*copy_layer = NULL;				// The copy buffer for layers
+static guint				debug_level = 0;				// Used to indicate debugging level
+static GdkColor				default_text_fg_colour;			// Default foreground colour for text layer text
+static gint					default_text_font_face;			// Default font face in text layers
+static gdouble				default_text_font_size;			// Default font size in text layers
 
 
 // Functions to get and set the variables
@@ -83,6 +87,26 @@ layer *get_copy_layer()
 	return copy_layer;
 }
 
+guint get_debug_level()
+{
+	return debug_level;
+}
+
+GdkColor get_default_text_fg_colour()
+{
+	return default_text_fg_colour;
+}
+
+gint get_default_text_font_face()
+{
+	return default_text_font_face;
+}
+
+gdouble get_default_text_font_size()
+{
+	return default_text_font_size;
+}
+
 void set_boundary_list(GList *new_boundary_list)
 {
 	boundary_list = new_boundary_list;
@@ -121,4 +145,24 @@ void set_changes_made(gboolean new_changes_made)
 void set_copy_layer(layer *new_copy_layer)
 {
 	copy_layer = new_copy_layer;
+}
+
+void set_debug_level(guint new_debug_level)
+{
+	debug_level = new_debug_level;
+}
+
+void set_default_text_fg_colour(GdkColor new_default_text_fg_colour)
+{
+	default_text_fg_colour = new_default_text_fg_colour;
+}
+
+void set_default_text_font_face(gint new_default_text_font_face)
+{
+	default_text_font_face = new_default_text_font_face;
+}
+
+void set_default_text_font_size(gdouble new_default_text_font_size)
+{
+	default_text_font_size = new_default_text_font_size;
 }

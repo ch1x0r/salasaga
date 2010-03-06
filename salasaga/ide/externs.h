@@ -40,10 +40,6 @@ extern "C" {
 
 // Variables defined elsewhere
 extern GList				*current_slide;
-extern guint				debug_level;
-extern GdkColor				default_text_fg_colour;
-extern gint					default_text_font_face;
-extern gdouble				default_text_font_size;
 extern gboolean				display_help_text;
 extern guint				end_behaviour;
 extern guint				end_point_status;

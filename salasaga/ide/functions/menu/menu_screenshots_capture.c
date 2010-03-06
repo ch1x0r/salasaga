@@ -142,7 +142,7 @@ void menu_screenshots_capture(void)
     }
 
 	// Display debugging info
-	if (debug_level)
+	if (get_debug_level())
 	{
 		printf(_("Mouse pointer grabbed.\n"));
 	}
@@ -164,7 +164,7 @@ void menu_screenshots_capture(void)
 				capture_window = new_event.xbutton.subwindow;
 
 				// Display debugging info
-				if (debug_level)
+				if (get_debug_level())
 				{
 					printf(_("Capture window set.\n"));
 				}
@@ -187,7 +187,7 @@ void menu_screenshots_capture(void)
 	XUngrabPointer(x_display, CurrentTime);
 
 	// Display debugging info
-	if (debug_level)
+	if (get_debug_level())
 	{
 		printf(_("Mouse pointer grab released.\n"));
 	}
@@ -207,7 +207,7 @@ void menu_screenshots_capture(void)
 						&win_depth);
 
 	// Display debugging info
-	if (debug_level)
+	if (get_debug_level())
 	{
 		printf(_("Window geometry retrieved. X offset: %d\tY offset: %d\tWidth: %d\tHeight: %d\n"), x_offset, y_offset, win_width, win_height);
 	}

@@ -54,6 +54,7 @@ void save_preferences_and_exit(void)
 	GString				*command_key;				// Used to work out paths into the GConf structure
 	GConfEngine			*gconf_engine;				// GConf engine
 	gboolean			return_code_gbool;			// Catches gboolean return codes
+	GdkColor			temp_colour;				// Temporarily holds colour information
 	guint				tmp_int;					// Temporary integer
 	GtkWindow			*tmp_gtk_window;			// Temporary GtkWindow
 	GdkWindow			*tmp_gdk_window;			// Temporary GdkWindow
@@ -92,11 +93,12 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/screenshot_delay", screenshot_delay_time, NULL);
 	gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/display_help_text", display_help_text, NULL);
 	gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/screenshot_key_warning", screenshot_key_warning, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_text_fg_colour_red", default_text_fg_colour.red, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_text_fg_colour_green", default_text_fg_colour.green, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_text_fg_colour_blue", default_text_fg_colour.blue, NULL);
-	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/default_text_font_size", default_text_font_size, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_text_font_face", default_text_font_face, NULL);
+	temp_colour = get_default_text_fg_colour();
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_text_fg_colour_red", temp_colour.red, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_text_fg_colour_green", temp_colour.green, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_text_fg_colour_blue", temp_colour.blue, NULL);
+	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/default_text_font_size", get_default_text_font_size(), NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_text_font_face", get_default_text_font_face(), NULL);
 
 	// Treat the zoom level specially.  If the zoom level is the equivalent of "Fit to width" we store the English
 	// version of the string in gconf.  This allows people (ie developers) to change between languages and still

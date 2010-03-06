@@ -82,7 +82,7 @@ void menu_screenshots_capture_full_screen(void)
 	win_height = gdk_screen_get_height(GDK_SCREEN(default_screen));
 
 	// Display debugging info
-	if (debug_level)
+	if (get_debug_level())
 	{
 		printf(_("Window geometry retrieved. Width: %d\tHeight: %d\n"), win_width, win_height);
 	}

@@ -80,10 +80,6 @@
 
 // Global variables
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
-guint					debug_level = 0;			// Used to indicate debugging level
-GdkColor				default_text_fg_colour;		// Default foreground colour for text layer text
-gint					default_text_font_face;		// Default font face in text layers
-gdouble					default_text_font_size;		// Default font size in text layers
 gboolean				display_help_text = TRUE;	// Should we display help text and dialogs?
 guint					end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations
 guint					end_point_status = END_POINTS_INACTIVE;  // Is one of the layer end points being moved?
@@ -240,6 +236,7 @@ gint main(gint argc, gchar *argv[])
 	GtkWidget			*outer_box;					// Widget for the onscreen display
 	GtkLabel			*resolution_label;			// Widget for the resolution selector label
 	GSList				*supported_formats;			// Used to determine if SVG images can be loaded
+	GdkColor			temp_colour;				// Temporarily holds colour information
 	GString				*title_bar_icon_path;		// Path to the title bar icon image
 	gchar				*tmp_gchar;					// Temporary gchar
 	guint				tmp_int;					// Temporary guint
@@ -314,7 +311,7 @@ gint main(gint argc, gchar *argv[])
 	if ((2 == argc) && (0 == g_ascii_strncasecmp("-d", argv[1], 2)))
 	{
 		// Disable logging
-		debug_level = 1;
+		set_debug_level(1);
 		printf(_("Debugging mode, errors will be shown on stdout.\n"));
 	} else
 	{
@@ -329,7 +326,7 @@ gint main(gint argc, gchar *argv[])
 		g_log_set_handler("GThread", G_LOG_LEVEL_MASK | G_LOG_FLAG_FATAL | G_LOG_FLAG_RECURSION, logger_with_domain, NULL);
 	}
 
-	if (debug_level)
+	if (get_debug_level())
 	{
 		printf(_("Program path: '%s'\n"), argv[0]);
 		printf(_("Directory base: '%s'\n"), g_path_get_dirname(argv[0]));
@@ -354,7 +351,7 @@ gint main(gint argc, gchar *argv[])
 #endif
 
 	// Display debugging info if requested
-	if (debug_level) printf(_("Icon path: %s\n"), icon_path->str);
+	if (get_debug_level()) printf(_("Icon path: %s\n"), icon_path->str);
 
 	supported_formats = gdk_pixbuf_get_formats();
 	num_formats = g_slist_length(supported_formats);
@@ -382,7 +379,7 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// Display debugging info if requested
-	if (debug_level) printf(_("Path to mouse pointer image: %s\n"), mouse_ptr_string->str);
+	if (get_debug_level()) printf(_("Path to mouse pointer image: %s\n"), mouse_ptr_string->str);
 
 	// Load initial mouse pointer graphic
 	mouse_ptr_pixbuf = gdk_pixbuf_new_from_file_at_size(mouse_ptr_string->str, -1, -1, NULL);
@@ -431,11 +428,12 @@ gint main(gint argc, gchar *argv[])
 		default_layer_duration = 5;  // Default number of seconds to use for new layers
 		default_fps = 12;
 		screenshot_key_warning = TRUE;
-		default_text_fg_colour.red = 0;
-		default_text_fg_colour.green = 0;
-		default_text_fg_colour.blue = 0;
-		default_text_font_size = 10.0;
-		default_text_font_face = 0;  // Set the default text layer font face to DejaVu Sans
+		temp_colour.red = 0;
+		temp_colour.green = 0;
+		temp_colour.blue = 0;
+		set_default_text_fg_colour(temp_colour);
+		set_default_text_font_size(10.0);
+		set_default_text_font_face(0);  // Set the default text layer font face to DejaVu Sans
 	}
 
 	// Set various required defaults that will be overwritten by the first project loaded

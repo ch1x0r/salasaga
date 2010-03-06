@@ -66,6 +66,7 @@ void menu_edit_preferences(void)
 	gboolean			return_gbool;						// Receives the true/false return code when opening a lock file
 	gdouble				scale_mark_counter;					// Simple counter used when constructing scale marks for sliders
 	gchar				**strings;							// Text string are split apart with this
+	GdkColor			temp_colour;						// Temporarily holds a colour value
 	GFile				*temp_gfile;
 	gchar				*tmp_gchar;							// Temporary gchar
 	gsize				tmp_gsize;							// Temporary gsize
@@ -223,7 +224,7 @@ void menu_edit_preferences(void)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(default_font_face_selector), _("DejaVu Serif Condensed Bold Italic"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(default_font_face_selector), _("DejaVu Serif Condensed Italic"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(default_font_face_selector), _("DejaVu Serif Italic"));
-	gtk_combo_box_set_active(GTK_COMBO_BOX(default_font_face_selector), default_text_font_face);
+	gtk_combo_box_set_active(GTK_COMBO_BOX(default_font_face_selector), get_default_text_font_face());
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_face_selector), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
 
@@ -236,8 +237,8 @@ void menu_edit_preferences(void)
 	default_font_size_slider = gtk_hscale_new_with_range(valid_fields[FONT_SIZE].min_value, valid_fields[FONT_SIZE].max_value, 0.1);
 	gtk_scale_set_digits(GTK_SCALE(default_font_size_slider), 1);
 	gtk_scale_set_draw_value(GTK_SCALE(default_font_size_slider), TRUE);
-	gtk_range_set_value(GTK_RANGE(default_font_size_slider), default_text_font_size);
-	for (scale_mark_counter = 10.0; scale_mark_counter <= valid_fields[FONT_SIZE].max_value; scale_mark_counter += 10.0)
+	gtk_range_set_value(GTK_RANGE(default_font_size_slider), get_default_text_font_size());
+	for (scale_mark_counter = 10.0; scale_mark_counter <= valid_fields[FONT_SIZE].max_value; scale_mark_counter += 20.0)
 	{
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(default_font_size_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -256,7 +257,8 @@ void menu_edit_preferences(void)
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_fg_colour_label), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 
 	// Create the foreground colour selection button
-	default_font_fg_colour_button = gtk_color_button_new_with_color(&default_text_fg_colour);
+	temp_colour = get_default_text_fg_colour();
+	default_font_fg_colour_button = gtk_color_button_new_with_color(&temp_colour);
     gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(default_font_fg_colour_button), TRUE);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_fg_colour_button), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
 	app_row_counter = app_row_counter + 1;
@@ -591,13 +593,14 @@ void menu_edit_preferences(void)
 	g_strfreev(strings);
 
 	// Default text layer font face
-	default_text_font_face = gtk_combo_box_get_active(GTK_COMBO_BOX(default_font_face_selector));
+	set_default_text_font_face(gtk_combo_box_get_active(GTK_COMBO_BOX(default_font_face_selector)));
 
 	// Default text layer font size
-	default_text_font_size = gtk_range_get_value(GTK_RANGE(default_font_size_slider));
+	set_default_text_font_size(gtk_range_get_value(GTK_RANGE(default_font_size_slider)));
 
 	// Default text layer foreground font colour
-	gtk_color_button_get_color(GTK_COLOR_BUTTON(default_font_fg_colour_button), &default_text_fg_colour);
+	gtk_color_button_get_color(GTK_COLOR_BUTTON(default_font_fg_colour_button), &temp_colour);
+	set_default_text_fg_colour(temp_colour);
 
 	// Default Slide Duration
 	default_slide_duration = valid_slide_duration;
@@ -638,7 +641,7 @@ void menu_edit_preferences(void)
 	// Screenshot delay
 	screenshot_delay_time = valid_screenshot_delay;
 
-	// * Update the screenshot delay time in the .lock file, if one exists *
+	// * Update the screenshot delay time and folder in the .lock file, if one exists *
 
 	// Construct the fully qualified path name to the lock file, to hold capture settings in
 	tmp_ptr = (gchar *) g_get_home_dir();

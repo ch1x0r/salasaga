@@ -116,7 +116,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	// Create the Capture button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "capture", icon_extension->str);
-	if (debug_level) printf("%s: '%s'\n", _("Path to toolbar 'Capture Screenshots' icon"), tmp_gstring->str);
+	if (get_debug_level()) printf("%s: '%s'\n", _("Path to toolbar 'Capture Screenshots' icon"), tmp_gstring->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{

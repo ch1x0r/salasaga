@@ -283,7 +283,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	font_size_scale = gtk_hscale_new_with_range(valid_fields[FONT_SIZE].min_value, valid_fields[FONT_SIZE].max_value, 0.1);
 	gtk_scale_set_digits(GTK_SCALE(font_size_scale), 1);
 	gtk_scale_set_draw_value(GTK_SCALE(font_size_scale), TRUE);
-	for (scale_mark_counter = 10.0; scale_mark_counter <= valid_fields[FONT_SIZE].max_value; scale_mark_counter += 10.0)
+	for (scale_mark_counter = 10.0; scale_mark_counter <= valid_fields[FONT_SIZE].max_value; scale_mark_counter += 20.0)
 	{
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(font_size_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -433,7 +433,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	// * Should only display while debugging *
 
 	// If the debug flag is set, we display a button that allows dumping the text layer to stdout when pressed
-	if (0 != debug_level)
+	if (0 != get_debug_level())
 	{
 		// Create the label for the debugging button to dump the text layer to stdout
 		dump_buffer_label = gtk_label_new(_("Dump text layer to stdout: "));
@@ -686,7 +686,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 			g_signal_handler_disconnect(G_OBJECT(text_buffer), insert_text_after_callback);
 			g_signal_handler_disconnect(G_OBJECT(text_buffer), insert_text_before_callback);
 			g_signal_handler_disconnect(G_OBJECT(text_buffer), selection_callback);
-			if (0 != debug_level)
+			if (0 != get_debug_level())
 			{
 				g_signal_handler_disconnect(G_OBJECT(dump_buffer_button), dump_button_callback);
 			}
@@ -949,7 +949,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	g_signal_handler_disconnect(G_OBJECT(text_buffer), insert_text_after_callback);
 	g_signal_handler_disconnect(G_OBJECT(text_buffer), insert_text_before_callback);
 	g_signal_handler_disconnect(G_OBJECT(text_buffer), selection_callback);
-	if (0 != debug_level)
+	if (0 != get_debug_level())
 	{
 		g_signal_handler_disconnect(G_OBJECT(dump_buffer_button), dump_button_callback);
 	}

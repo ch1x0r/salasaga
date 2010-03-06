@@ -37,6 +37,10 @@ guint get_capture_x();
 guint get_capture_y();
 gboolean get_changes_made();
 layer *get_copy_layer();
+guint get_debug_level();
+GdkColor get_default_text_fg_colour();
+gint get_default_text_font_face();
+gdouble get_default_text_font_size();
 void set_boundary_list(GList *new_boundary_list);
 void set_cairo_font_face(guint index, cairo_font_face_t *new_cairo_font_face);
 void set_capture_height(guint new_capture_height);
@@ -45,6 +49,10 @@ void set_capture_x(guint new_capture_x);
 void set_capture_y(guint new_capture_y);
 void set_changes_made(gboolean new_changes_made);
 void set_copy_layer(layer *new_copy_layer);
+void set_debug_level(guint new_debug_level);
+void set_default_text_fg_colour(GdkColor new_default_text_fg_colour);
+void set_default_text_font_face(gint new_default_text_font_face);
+void set_default_text_font_size(gdouble new_default_text_font_size);
 
 #ifdef __cplusplus
 }

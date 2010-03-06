@@ -61,13 +61,14 @@ gboolean preferences_load()
 	gboolean			should_display_help_text = TRUE;	// Receives the gboolean as to whether help text should be displayed
 	gboolean			should_maximise = FALSE;	// Briefly keeps track of whether the window should be maximised
 	gboolean			should_keybind_warn = TRUE;	// Receives the gboolean as to whether the non-metacity key bind warning should be displayed
+	GdkColor			temp_colour;				// Temporarily holds colour information
 	gchar				*tmp_gchar;					// Used for temporary string retrieval
 	gboolean			usable_input;				// Used to control loop flow
 	GdkColor			valid_bg_colour = {0,0,0};	// Receives the new default background colour for slides once validated
 	guint				valid_default_fps = 0;		// Receives the new default fps once validated
 	GdkColor			valid_default_text_fg_colour = {0, 0, 0};  // Receives the new default text layer foreground colour once validated
 	gint				valid_default_text_font_face = 0;  // Receives the new default text layer font face once validated
-	gdouble				valid_default_text_font_size =0.0;  // Receives the new default text layer font size once validated
+	gdouble				valid_default_text_font_size = 0.0;  // Receives the new default text layer font size once validated
 	guint				valid_icon_height = 0;		// Receives the new icon height once validated
 	gfloat				valid_layer_duration = 0;	// Receives the new default layer duration once validated
 	GString				*valid_output_folder;		// Receives the new output folder once validated
@@ -534,15 +535,16 @@ gboolean preferences_load()
 	default_bg_colour.blue = valid_bg_colour.blue;
 
 	// Set the default text layer foreground colour
-	default_text_fg_colour.red = valid_default_text_fg_colour.red;
-	default_text_fg_colour.green = valid_default_text_fg_colour.green;
-	default_text_fg_colour.blue = valid_default_text_fg_colour.blue;
+	temp_colour.red = valid_default_text_fg_colour.red;
+	temp_colour.green = valid_default_text_fg_colour.green;
+	temp_colour.blue = valid_default_text_fg_colour.blue;
+	set_default_text_fg_colour(temp_colour);
 
 	// Set the default text layer font size
-	default_text_font_size = valid_default_text_font_size;
+	set_default_text_font_size(valid_default_text_font_size);
 
 	// Set the default text layer font face
-	default_text_font_face = valid_default_text_font_face;
+	set_default_text_font_face(valid_default_text_font_face);
 
 	// Set the default film strip thumbnail width
 	preview_width = valid_preview_width;

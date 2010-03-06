@@ -139,7 +139,7 @@ gint export_swf_inner(gchar *output_filename)
 	scaled_width_ratio = (gfloat) output_width / (gfloat) project_width;
 
 	// Displaying debugging info if requested
-	if (debug_level)
+	if (get_debug_level())
 	{
 		printf("%s: %.2f\n", _("Scaled height ratio"), scaled_height_ratio);
 		printf("%s: %.2f\n", _("Scaled width ratio"), scaled_width_ratio);
@@ -150,7 +150,7 @@ gint export_swf_inner(gchar *output_filename)
 	num_slides = g_list_length(slides);
 
 	// Output some debugging info if requested
-	if (debug_level)
+	if (get_debug_level())
 	{
 		printf("%s: %u\n", _("Number of slides"), num_slides);
 	}
@@ -169,7 +169,7 @@ gint export_swf_inner(gchar *output_filename)
 	total_num_layers += num_slides; // Extra safety margin
 
 	// Output some debugging info if requested
-	if (debug_level)
+	if (get_debug_level())
 	{
 		printf("%s: %u\n", _("Total number of layers"), total_num_layers);
 	}
@@ -245,7 +245,7 @@ gint export_swf_inner(gchar *output_filename)
 		// * At this stage we should know both the number of frames (slide_duration) and number of layers (num_layers) in the slide *
 
 		// Output some debugging info if requested
-		if (debug_level)
+		if (get_debug_level())
 		{
 			printf(_("Number of layers in slide %u is %u\n"), slide_counter, num_layers);
 			printf(_("Maximum frame number in slide %u is %u\n"), slide_counter, slide_duration);
@@ -294,7 +294,7 @@ gint export_swf_inner(gchar *output_filename)
 		}
 
 		// Debugging output, displaying what we have in the pre-processing element array thus far
-		if (3 == debug_level)
+		if (3 == get_debug_level())
 		{
 			for (frame_counter = 0; frame_counter < slide_duration; frame_counter++)  // This loops _frame_ number of times
 			{
@@ -348,7 +348,7 @@ gint export_swf_inner(gchar *output_filename)
 				this_frame_ptr = &swf_timing_array[frame_number];
 
 				// Display debugging info if requested
-				if (debug_level)
+				if (get_debug_level())
 				{
 					// Commented out for now, as it's WAY too verbose until extremely needed, even when debugging
 					// printf("Processing slide %d, swf array element # %u\n", slide_counter, frame_number);
@@ -367,7 +367,7 @@ gint export_swf_inner(gchar *output_filename)
 		}
 
 		// * Advance the slide counting variable inside the swf *
-		if (debug_level)
+		if (get_debug_level())
 		{
 			// If we're debugging, then generate debugging swf's too
 			g_string_printf(message,
@@ -466,7 +466,7 @@ gint export_swf_inner(gchar *output_filename)
 	}
 
 	// Output some debugging info if requested
-	if (debug_level)
+	if (get_debug_level())
 	{
 		printf(_("The animation is %u frames long\n"), total_frames);
 	}

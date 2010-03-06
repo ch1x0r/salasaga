@@ -121,7 +121,7 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 	if (NULL != sound_pathname)
 	{
 		// Create the sound object we'll be using
-		if (debug_level) printf("%s: '%s'\n", _("Full path name to sound file is"), sound_pathname);
+		if (get_debug_level()) printf("%s: '%s'\n", _("Full path name to sound file is"), sound_pathname);
 
 		// Load the sound file
 		sound_file = fopen(sound_pathname, "rb");

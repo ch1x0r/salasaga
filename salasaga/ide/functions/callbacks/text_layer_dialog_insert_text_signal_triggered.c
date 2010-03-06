@@ -115,7 +115,7 @@ gboolean text_layer_dialog_insert_text_before(GtkTextBuffer *text_buffer, GtkTex
 	if (FALSE == font_face_found)
 	{
 		// Couldn't determine the font face to be applied to this text, so we use the default text layer font face
-		our_font_face = default_text_font_face;
+		our_font_face = get_default_text_font_face();
 	}
 
 	// Determine the font size we should apply to the new text, and save it for the "after" function to use
@@ -147,7 +147,7 @@ gboolean text_layer_dialog_insert_text_after(GtkTextBuffer *text_buffer, GtkText
 	// * Apply the desired font face to the new text *
 	if (-1 == our_font_face)
 	{
-		font_face_to_use = default_text_font_face;
+		font_face_to_use = get_default_text_font_face();
 	} else
 	{
 		font_face_to_use = our_font_face;

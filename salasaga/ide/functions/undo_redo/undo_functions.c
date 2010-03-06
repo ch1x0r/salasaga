@@ -426,6 +426,10 @@ gint undo_history_undo_item(void)
 			// Update the selected layer
 			selected_layer = time_line_get_selected_layer_num(slide_data->timeline_widget);
 			selected_layer -= 1;
+			if (0 > selected_layer)
+			{
+				selected_layer = 0;
+			}
 			time_line_set_selected_layer_num(slide_data->timeline_widget, selected_layer);
 
 			break;
