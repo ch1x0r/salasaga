@@ -75,7 +75,9 @@ gdouble get_selection_font_size(GtkTextBuffer *text_buffer, GtkTextView *text_vi
 	text_attributes = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(text_view));
 	gtk_text_iter_get_attributes(&first_iter, text_attributes);
 	font_size_int = pango_font_description_get_size(text_attributes->font);
-	font_size = rint(font_size_int / PANGO_SCALE);
+	font_size_int *= 10;
+	font_size = roundf(((gfloat) font_size_int) / PANGO_SCALE);
+	font_size /= 10;
 
 	// Step through the text buffer character by character,
 	// checking if the font size has changed
@@ -88,7 +90,9 @@ gdouble get_selection_font_size(GtkTextBuffer *text_buffer, GtkTextView *text_vi
 		text_attributes = gtk_text_view_get_default_attributes(GTK_TEXT_VIEW(text_view));
 		gtk_text_iter_get_attributes(&first_iter, text_attributes);
 		font_size_int = pango_font_description_get_size(text_attributes->font);
-		iter_size = rint(font_size_int / PANGO_SCALE);
+		font_size_int *= 10;
+		iter_size = roundf(((gfloat) font_size_int) / PANGO_SCALE);
+		iter_size /= 10;
 
 		// If the font size value is different to the original size,
 		// then we short circuit the loop and return -1.0
