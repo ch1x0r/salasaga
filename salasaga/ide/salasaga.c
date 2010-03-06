@@ -80,10 +80,6 @@
 
 // Global variables
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
-gboolean				display_help_text = TRUE;	// Should we display help text and dialogs?
-guint					end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations
-guint					end_point_status = END_POINTS_INACTIVE;  // Is one of the layer end points being moved?
-gfloat					export_time_counter;		// Used when exporting, holds the number of seconds thus far
 SWFFont					fdb_font_object[FONT_COUNT];	// The fdb font faces we use get loaded into this
 GString					*file_name = NULL;			// Holds the file name the project is saved as
 gboolean				film_strip_being_resized;	// Toggle to indicate if the film strip is being resized

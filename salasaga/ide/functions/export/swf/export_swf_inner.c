@@ -446,7 +446,7 @@ gint export_swf_inner(gchar *output_filename)
 	}
 
 	// If the end behaviour is to loop, then do that
-	switch (end_behaviour)
+	switch (get_end_behaviour())
 	{
 		case END_BEHAVIOUR_LOOP_PLAY:
 			end_action = compileSWFActionCode("_root.playing = true; cb_main.cb_play._visible = false; _root.gotoAndPlay(2);");

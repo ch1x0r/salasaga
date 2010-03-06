@@ -162,7 +162,7 @@ void menu_file_save(void)
 			g_string_free(message, TRUE);
 			return;
 	}
-	switch (end_behaviour)
+	switch (get_end_behaviour())
 	{
 		case END_BEHAVIOUR_STOP:
 			xmlNewChild(pref_pointer, NULL, (const xmlChar *) "end_behaviour", (const xmlChar *) "stop");

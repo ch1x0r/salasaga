@@ -40,10 +40,6 @@ extern "C" {
 
 // Variables defined elsewhere
 extern GList				*current_slide;
-extern gboolean				display_help_text;
-extern guint				end_behaviour;
-extern guint				end_point_status;
-extern gfloat				export_time_counter;
 extern SWFFont				fdb_font_object[FONT_COUNT];
 extern GString				*file_name;
 extern gboolean				film_strip_being_resized;

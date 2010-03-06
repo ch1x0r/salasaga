@@ -355,7 +355,7 @@ void menu_edit_preferences(void)
 
 	// Whether to display help text or not
 	check_help_text = gtk_check_button_new_with_label(_("Display help text?"));
-	if (FALSE == display_help_text)
+	if (FALSE == get_display_help_text())
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_help_text), FALSE);
 	} else
@@ -728,10 +728,10 @@ void menu_edit_preferences(void)
 	// Find out if we should display help text or not
 	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_help_text)))
 	{
-		display_help_text = TRUE;
+		set_display_help_text(TRUE);
 	} else
 	{
-		display_help_text = FALSE;
+		set_display_help_text(FALSE);
 	}
 
 	// Find out if we should display a warning when the screenshot key isn't bound

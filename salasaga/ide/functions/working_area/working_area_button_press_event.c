@@ -136,7 +136,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 
 	// If the user has clicked on the start or end points for the selected layer, we
 	// don't want to do the collision detection below that changes layers
-	if (END_POINTS_INACTIVE == end_point_status)
+	if (END_POINTS_INACTIVE == get_end_point_status())
 	{
 		// * Check if the user is clicking on the layer start or end points *
 
@@ -177,7 +177,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 				case TYPE_EMPTY:
 					// We can't drag an empty layer, so reset things and return
 					mouse_dragging = FALSE;
-					end_point_status = END_POINTS_INACTIVE;
+					set_end_point_status(END_POINTS_INACTIVE);
 					stored_x = -1;
 					stored_y = -1;
 					return TRUE;
@@ -192,7 +192,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 					if (TRUE == this_layer_data->background)
 					{
 						mouse_dragging = FALSE;
-						end_point_status = END_POINTS_INACTIVE;
+						set_end_point_status(END_POINTS_INACTIVE);
 						stored_x = -1;
 						stored_y = -1;
 						return TRUE;

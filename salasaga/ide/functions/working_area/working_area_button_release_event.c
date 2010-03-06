@@ -144,7 +144,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	}
 
 	// If this release matches an end point moving operation, we process it
-	if (END_POINTS_INACTIVE != end_point_status)
+	if (END_POINTS_INACTIVE != get_end_point_status())
 	{
 		// Redraw the workspace
 		draw_workspace();
@@ -156,14 +156,14 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		film_strip_create_thumbnail((slide *) current_slide->data);
 
 		// Use the status bar to give further feedback to the user
-		if (END_POINTS_START_ACTIVE == end_point_status)
+		if (END_POINTS_START_ACTIVE == get_end_point_status())
 			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer start point moved"));
-		if (END_POINTS_END_ACTIVE == end_point_status)
+		if (END_POINTS_END_ACTIVE == get_end_point_status())
 			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer end point moved"));
 		gdk_flush();
 
 		// Reset the end point status switch and related info
-		end_point_status = END_POINTS_INACTIVE;
+		set_end_point_status(END_POINTS_INACTIVE);
 		stored_x = -1;
 		stored_y = -1;
 

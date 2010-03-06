@@ -90,7 +90,7 @@ void menu_screenshots_capture(void)
 	capture_window = None;
 	mouse_buttons_pressed = 0;
 
-	if (TRUE == display_help_text)
+	if (TRUE == get_display_help_text())
 	{
 		// Display a message to the user, asking them to click on the window they want to capture
 		message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s\n\n%s",
@@ -218,7 +218,7 @@ void menu_screenshots_capture(void)
 	set_capture_width((guint) win_width);
 	set_capture_height((guint) win_height);
 
-	if (TRUE == display_help_text)
+	if (TRUE == get_display_help_text())
 	{
 		// Let the user know that the window they selected has been successfully grabbed
 		message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,

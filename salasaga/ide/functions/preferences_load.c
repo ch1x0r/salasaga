@@ -559,7 +559,7 @@ gboolean preferences_load()
 	screenshot_delay_time = valid_screenshot_delay;
 
 	// Set whether help text and dialogs should be displayed or not
-	display_help_text = should_display_help_text;
+	set_display_help_text(should_display_help_text);
 
 	// Set the screenshot key bind warning
 	screenshot_key_warning = should_keybind_warn;

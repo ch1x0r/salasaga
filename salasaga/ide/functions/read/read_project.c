@@ -1038,7 +1038,7 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 	start_behaviour = valid_start_behaviour;
 
 	// Load End behaviour
-	end_behaviour = valid_end_behaviour;
+	set_end_behaviour(valid_end_behaviour);
 
 	// Control bar display
 	show_control_bar = valid_control_bar_behaviour;

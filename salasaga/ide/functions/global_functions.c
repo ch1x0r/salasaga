@@ -44,6 +44,9 @@ static guint				debug_level = 0;				// Used to indicate debugging level
 static GdkColor				default_text_fg_colour;			// Default foreground colour for text layer text
 static gint					default_text_font_face;			// Default font face in text layers
 static gdouble				default_text_font_size;			// Default font size in text layers
+static gboolean				display_help_text = TRUE;		// Should we display help text and dialogs?
+static guint				end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations
+static guint				end_point_status = END_POINTS_INACTIVE;  // Is one of the layer end points being moved?
 
 
 // Functions to get and set the variables
@@ -107,6 +110,21 @@ gdouble get_default_text_font_size()
 	return default_text_font_size;
 }
 
+gboolean get_display_help_text()
+{
+	return display_help_text;
+}
+
+guint get_end_behaviour()
+{
+	return end_behaviour;
+}
+
+guint get_end_point_status()
+{
+	return end_point_status;
+}
+
 void set_boundary_list(GList *new_boundary_list)
 {
 	boundary_list = new_boundary_list;
@@ -165,4 +183,19 @@ void set_default_text_font_face(gint new_default_text_font_face)
 void set_default_text_font_size(gdouble new_default_text_font_size)
 {
 	default_text_font_size = new_default_text_font_size;
+}
+
+void set_display_help_text(gboolean new_display_help_text)
+{
+	display_help_text = new_display_help_text;
+}
+
+void set_end_behaviour(guint new_end_behaviour)
+{
+	end_behaviour = new_end_behaviour;
+}
+
+void set_end_point_status(guint new_end_point_status)
+{
+	end_point_status = new_end_point_status;
 }

@@ -41,6 +41,9 @@ guint get_debug_level();
 GdkColor get_default_text_fg_colour();
 gint get_default_text_font_face();
 gdouble get_default_text_font_size();
+gboolean get_display_help_text();
+guint get_end_behaviour();
+guint get_end_point_status();
 void set_boundary_list(GList *new_boundary_list);
 void set_cairo_font_face(guint index, cairo_font_face_t *new_cairo_font_face);
 void set_capture_height(guint new_capture_height);
@@ -53,6 +56,9 @@ void set_debug_level(guint new_debug_level);
 void set_default_text_fg_colour(GdkColor new_default_text_fg_colour);
 void set_default_text_font_face(gint new_default_text_font_face);
 void set_default_text_font_size(gdouble new_default_text_font_size);
+void set_display_help_text(gboolean new_display_help_text);
+void set_end_behaviour(guint new_end_behaviour);
+void set_end_point_status(guint new_end_point_status);
 
 #ifdef __cplusplus
 }

@@ -217,7 +217,7 @@ void menu_project_properties(void)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), _("Stop"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), _("Loop and play"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), _("Loop and stop"));
-	switch (end_behaviour)
+	switch (get_end_behaviour())
 	{
 		case END_BEHAVIOUR_LOOP_PLAY:
 			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_end_behaviour), END_BEHAVIOUR_LOOP_PLAY);
@@ -482,7 +482,7 @@ void menu_project_properties(void)
 	start_behaviour = valid_start_behaviour;
 
 	// End behaviour
-	end_behaviour = valid_end_behaviour;
+	set_end_behaviour(valid_end_behaviour);
 
 	// Control bar display
 	show_control_bar = valid_control_bar_behaviour;

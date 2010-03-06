@@ -241,7 +241,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		start_y = (layer_data->y_offset_start / scaled_height_ratio) + END_POINT_VERTICAL_OFFSET;
 
 		// Check if the user is clicking on the layer start or end points
-		if (END_POINTS_INACTIVE == end_point_status)
+		if (END_POINTS_INACTIVE == get_end_point_status())
 		{
 			// Is the user clicking on a start or end point?
 			if (((event->x >= start_x)							// Start point
@@ -260,7 +260,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 					&& (event->y <= start_y + END_POINT_HEIGHT))	// Bottom
 				{
 					// Start point clicked
-					end_point_status = END_POINTS_START_ACTIVE;
+					set_end_point_status(END_POINTS_START_ACTIVE);
 					stored_x = event->x;
 					stored_y = event->y;
 					stored_x_val = layer_data->x_offset_start;
@@ -269,7 +269,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				} else
 				{
 					// End point clicked
-					end_point_status = END_POINTS_END_ACTIVE;
+					set_end_point_status(END_POINTS_END_ACTIVE);
 					stored_x = event->x;
 					stored_y = event->y;
 					stored_x_val = layer_data->x_offset_finish;
@@ -281,7 +281,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	}
 
 	// Check if we're already aware of an end point drag operation going on
-	if (END_POINTS_INACTIVE != end_point_status)
+	if (END_POINTS_INACTIVE != get_end_point_status())
 	{
 		// Initialise some things
 		this_slide_data = current_slide->data;
@@ -305,13 +305,13 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		y_diff = cursor_movement_y * scaled_height_ratio;
 
 		// If the start or end point is being moved, we use the start or end time instead of time line cursor time
-		if (END_POINTS_START_ACTIVE == end_point_status)
+		if (END_POINTS_START_ACTIVE == get_end_point_status())
 		{
 			// The start point is being dragged
 			time_x = stored_x_val;
 			time_y = stored_y_val;
 		}
-		if (END_POINTS_END_ACTIVE == end_point_status)
+		if (END_POINTS_END_ACTIVE == get_end_point_status())
 		{
 			// The end point is being dragged
 			time_x = stored_x_val;
@@ -324,7 +324,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			case TYPE_EMPTY:
 				// We can't drag an empty layer, so reset things and return
 				mouse_dragging = FALSE;
-				end_point_status = END_POINTS_INACTIVE;
+				set_end_point_status(END_POINTS_INACTIVE);
 				stored_x = -1;
 				stored_y = -1;
 				return TRUE;
@@ -339,7 +339,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				if (TRUE == layer_data->background)
 				{
 					mouse_dragging = FALSE;
-					end_point_status = END_POINTS_INACTIVE;
+					set_end_point_status(END_POINTS_INACTIVE);
 					stored_x = -1;
 					stored_y = -1;
 					return TRUE;
@@ -376,7 +376,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		onscreen_bottom = new_y_val + height;
 
 		// Update the layer object positions
-		if (END_POINTS_START_ACTIVE == end_point_status)
+		if (END_POINTS_START_ACTIVE == get_end_point_status())
 		{
 			// Bounds check the starting x offset, then update the object with the new value
 			layer_data->x_offset_start = new_x_val;
@@ -384,7 +384,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			// Bounds check the starting y offset, then update the object with the new value
 			layer_data->y_offset_start = new_y_val;
 		}
-		if (END_POINTS_END_ACTIVE == end_point_status)
+		if (END_POINTS_END_ACTIVE == get_end_point_status())
 		{
 			// Bounds check the finishing x offset, then update the object with the new value
 			layer_data->x_offset_finish = new_x_val;
