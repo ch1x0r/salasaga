@@ -112,7 +112,7 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 	layer				*tmp_layer = NULL;			// Temporary layer
 	GdkPixbuf			*tmp_pixbuf;				// Used to convert from a pixmap to a pixbuf
 	GdkPixmap			*tmp_pixmap;				//
-	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
+	GdkRectangle		tmp_rect = {0, 0, get_status_bar()->allocation.width, get_status_bar()->allocation.height};  // Temporary rectangle covering the area of the status bar
 	slide				*tmp_slide;					// Temporary slide
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	gboolean			valid_control_bar_behaviour = TRUE;// Receives the new control bar display behaviour
@@ -151,7 +151,7 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 
 	// Update the status bar
 	g_string_printf(tmp_gstring, "%s - %s", _("Loading file"), filename);
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
 
 	// Begin reading the file
 	document = xmlParseFile(filename);
@@ -951,8 +951,8 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 			new_slides = g_list_append(new_slides, tmp_slide);
 
 			// Update the status bar
-			gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
-			gtk_widget_draw(status_bar, &tmp_rect);
+			gtk_progress_bar_pulse(GTK_PROGRESS_BAR(get_status_bar()));
+			gtk_widget_draw(get_status_bar(), &tmp_rect);
 			gdk_flush();
 
 		}  // End of "We're in a slide" loop

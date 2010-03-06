@@ -142,6 +142,7 @@ gint undo_history_redo_item(void)
 	// Local variables
 	GtkTreeIter			film_strip_iter;
 	GList				*layer_pointer;				// Points to layer items
+	GtkWidget			*main_drawing_area_widget;	// Temporarily holds the main drawing widget
 	GString				*message;					// Temporary string used for message creation
 	GtkTreePath			*new_path;					// Temporary path
 	gint				num_items;					// The number of items in the undo history
@@ -307,7 +308,8 @@ gint undo_history_redo_item(void)
 	draw_workspace();
 
 	// Tell (force) the window system to redraw the working area *immediately*
-	gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+	main_drawing_area_widget = get_main_drawing_area();
+	gtk_widget_draw(GTK_WIDGET(main_drawing_area_widget), &main_drawing_area_widget->allocation);  // Yes, this is deprecated, but it *works*
 
 	// Redraw the film strip
 	regenerate_film_strip_thumbnails();
@@ -316,7 +318,7 @@ gint undo_history_redo_item(void)
 	set_changes_made(TRUE);
 
 	// Use the status bar to give further feedback to the user
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Last action redone"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _("Last action redone"));
 	gdk_flush();
 
 	return TRUE;
@@ -329,6 +331,7 @@ gint undo_history_undo_item(void)
 	// Local variables
 	GtkTreeIter			film_strip_iter;
 	GList				*layer_pointer;				// Points to layer items
+	GtkWidget			*main_drawing_area_widget;	// Temporarily holds the main drawing widget
 	GString				*message;					// Temporary string used for message creation
 	GtkTreePath			*new_path;					// Temporary path
 	gint				num_slides;
@@ -404,8 +407,8 @@ gint undo_history_undo_item(void)
 
 			// Select the next thumbnail in the film strip and scroll to display it
 			new_path = gtk_tree_path_new_from_indices(undo_data->position_old, -1);
-			gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
-			gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
+			gtk_tree_view_set_cursor(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, FALSE);
+			gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, TRUE, 0.5, 0.0);
 
 			break;
 
@@ -503,7 +506,8 @@ gint undo_history_undo_item(void)
 	draw_workspace();
 
 	// Tell (force) the window system to redraw the working area *immediately*
-	gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+	main_drawing_area_widget = get_main_drawing_area();
+	gtk_widget_draw(GTK_WIDGET(main_drawing_area_widget), &main_drawing_area_widget->allocation);  // Yes, this is deprecated, but it *works*
 
 	// Redraw the film strip
 	regenerate_film_strip_thumbnails();
@@ -521,7 +525,7 @@ gint undo_history_undo_item(void)
 	set_changes_made(TRUE);
 
 	// Use the status bar to give further feedback to the user
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Last action undone"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _("Last action undone"));
 	gdk_flush();
 
 	return TRUE;

@@ -75,7 +75,7 @@ void save_layer(gpointer element, gpointer user_data)
 	gboolean			tmp_bool;				// Temporary boolean value
 	GString				*tmp_gstring;			// Temporary GString
 	GString				*tmp_gstring2;			// Temporary GString
-	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
+	GdkRectangle		tmp_rect = {0, 0, get_status_bar()->allocation.width, get_status_bar()->allocation.height};  // Temporary rectangle covering the area of the status bar
 
 
 	// Initialise various things
@@ -422,8 +422,8 @@ void save_layer(gpointer element, gpointer user_data)
 	g_string_free(tmp_gstring2, TRUE);
 
 	// Update the status bar to show progress
-	gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
-	gtk_widget_draw(status_bar, &tmp_rect);
+	gtk_progress_bar_pulse(GTK_PROGRESS_BAR(get_status_bar()));
+	gtk_widget_draw(get_status_bar(), &tmp_rect);
 	gdk_flush();
 
 	return;

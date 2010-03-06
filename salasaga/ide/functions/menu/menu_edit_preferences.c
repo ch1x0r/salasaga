@@ -161,7 +161,7 @@ void menu_edit_preferences(void)
 	valid_zoom_level = g_string_new(NULL);
 
 	// Create the main dialog window
-	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Application Preferences"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
+	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Application Preferences"), GTK_WINDOW(get_main_window()), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	app_dialog_table = gtk_table_new(10, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(main_dialog->vbox), GTK_WIDGET(app_dialog_table), FALSE, FALSE, 5);
 
@@ -627,8 +627,8 @@ void menu_edit_preferences(void)
 		// Set the new width of the film strip widget
 		handle_size = g_new0(GValue, 1);
 		g_value_init(handle_size, G_TYPE_INT);
-		gtk_widget_style_get_property(GTK_WIDGET(main_area), "handle-size", handle_size);
-		gtk_paned_set_position(GTK_PANED(main_area), g_value_get_int(handle_size) + preview_width + 15);
+		gtk_widget_style_get_property(GTK_WIDGET(get_main_area()), "handle-size", handle_size);
+		gtk_paned_set_position(GTK_PANED(get_main_area()), g_value_get_int(handle_size) + preview_width + 15);
 		g_free(handle_size);
 	}
 
@@ -748,7 +748,7 @@ void menu_edit_preferences(void)
 	}
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Application preferences updated"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Application preferences updated"));
 	gdk_flush();
 
 	// Free up the memory allocated in this function

@@ -77,22 +77,22 @@ void draw_timeline(void)
 	}
 
 	// Check if the timeline area already has children
-	tmp_glist = gtk_container_get_children(GTK_CONTAINER(time_line_container));
+	tmp_glist = gtk_container_get_children(GTK_CONTAINER(get_time_line_container()));
 	if (NULL != tmp_glist)
 	{
 		// Increase the reference count for the timeline widget, so it's not destroyed when it's removed from the container
 		g_object_ref(GTK_WIDGET(slide_pointer->timeline_widget));
 
 		// Remove timeline widget from the container
-		gtk_container_remove(GTK_CONTAINER(time_line_container), GTK_WIDGET(tmp_glist->data));
+		gtk_container_remove(GTK_CONTAINER(get_time_line_container()), GTK_WIDGET(tmp_glist->data));
 	}
 	g_list_free(tmp_glist);
 
 	// Add the timeline widget to the onscreen timeline area
-	gtk_container_add(GTK_CONTAINER(time_line_container), GTK_WIDGET(slide_pointer->timeline_widget));
+	gtk_container_add(GTK_CONTAINER(get_time_line_container()), GTK_WIDGET(slide_pointer->timeline_widget));
 
 	// Show all of the widgets in the timeline
-	gtk_widget_show_all(GTK_WIDGET(time_line_container));
-	if (NULL != GTK_WIDGET(time_line_container)->window)
-		gdk_window_invalidate_rect(GTK_WIDGET(time_line_container)->window, &GTK_WIDGET(time_line_container)->allocation, TRUE);
+	gtk_widget_show_all(GTK_WIDGET(get_time_line_container()));
+	if (NULL != GTK_WIDGET(get_time_line_container())->window)
+		gdk_window_invalidate_rect(GTK_WIDGET(get_time_line_container())->window, &GTK_WIDGET(get_time_line_container())->allocation, TRUE);
 }

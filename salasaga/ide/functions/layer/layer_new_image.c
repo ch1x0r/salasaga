@@ -57,13 +57,13 @@ void layer_new_image(void)
 
 	// Change the cursor to something suitable
 	selection_cursor = gdk_cursor_new(GDK_CROSSHAIR);
-	gdk_window_set_cursor(main_drawing_area->window, selection_cursor);
+	gdk_window_set_cursor(get_main_drawing_area()->window, selection_cursor);
 	gdk_cursor_unref(selection_cursor);
 
 	// Set a toggle so the release button callback will know to do the rest
 	set_new_layer_selected(TYPE_GDK_PIXBUF);
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Please click the insertion point"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Please click the insertion point"));
 	gdk_flush();
 }

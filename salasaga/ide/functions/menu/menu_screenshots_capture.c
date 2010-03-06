@@ -95,17 +95,17 @@ void menu_screenshots_capture(void)
 	if (TRUE == get_display_help_text())
 	{
 		// Display a message to the user, asking them to click on the window they want to capture
-		message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s\n\n%s",
+		message_dialog = gtk_message_dialog_new(GTK_WINDOW(get_main_window()), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s\n\n%s",
 												_("Please click on the window you want to capture, after closing this dialog."), _("You can turn this help text off in Edit -> Preferences"));
 		gtk_dialog_run(GTK_DIALOG(message_dialog));
 		gtk_widget_destroy(message_dialog);
 	}
 
 	// Minimise the main window so the user can choose another application
-	gtk_window_iconify(GTK_WINDOW(main_window));
+	gtk_window_iconify(GTK_WINDOW(get_main_window()));
 
 	// Hide the application from the task bar
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(main_window), TRUE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(get_main_window()), TRUE);
 
 	// * Determine the area of screen covered by the window that the user wants to capture *
 
@@ -223,7 +223,7 @@ void menu_screenshots_capture(void)
 	if (TRUE == get_display_help_text())
 	{
 		// Let the user know that the window they selected has been successfully grabbed
-		message_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
+		message_dialog = gtk_message_dialog_new(GTK_WINDOW(get_main_window()), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK,
 				_("Screenshot window set.  Right click on the status bar icon to take screenshots, then Import when finished."));
 		gtk_dialog_run(GTK_DIALOG(message_dialog));
 		gtk_widget_destroy(message_dialog);
@@ -265,7 +265,7 @@ void menu_screenshots_capture(void)
 
 
 	// Create the dialog window, and table to hold its children
-	capture_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Capture screenshots"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
+	capture_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Capture screenshots"), GTK_WINDOW(get_main_window()), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	capture_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(capture_dialog->vbox), GTK_WIDGET(capture_table), FALSE, FALSE, 10);
 
@@ -292,7 +292,7 @@ void menu_screenshots_capture(void)
 	row_counter = row_counter + 1;
 
 	// Which monitor are we displaying on?
-	which_screen = gtk_window_get_screen(GTK_WINDOW(main_window));
+	which_screen = gtk_window_get_screen(GTK_WINDOW(get_main_window()));
 
 	// Create the label asking for the X Length
 	x_length_label = gtk_label_new(_("Width: "));
@@ -467,13 +467,13 @@ void menu_screenshots_capture(void)
 
 		// Add a message to the status bar so the user gets visual feedback
 		g_string_printf(tmp_gstring, " %s", _("Installed Control-Printscreen screenshot key"));
-		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
 		gdk_flush();
 	}
 #else
 	// Add a message to the status bar so the user gets visual feedback
 	g_string_printf(tmp_gstring, " %s - %s", _("Wrote screenshot settings file"), full_file_name);
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
 	gdk_flush();
 #endif
 

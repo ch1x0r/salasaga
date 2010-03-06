@@ -51,6 +51,7 @@ void draw_workspace(void)
 	static GdkGC		*line_gc = NULL;
 	GdkSegment			lines[4];
 	slide				*current_slide_data;
+	GtkWidget			*temp_widget;				// Temporarily holds a pointer to the main drawing area widget
 	GdkRectangle		tmp_rectangle;
 
 
@@ -113,12 +114,13 @@ void draw_workspace(void)
 	gdk_draw_segments(GDK_DRAWABLE(front_store), line_gc, lines, 4);
 
 	// Tell the window system to redraw the working area
+	temp_widget = get_main_drawing_area();
 	tmp_rectangle.x = 0;
 	tmp_rectangle.y = 0;
 	tmp_rectangle.width = front_store_width;
 	tmp_rectangle.height = front_store_height;
-	gdk_window_invalidate_rect(main_drawing_area->window, &tmp_rectangle, TRUE);
+	gdk_window_invalidate_rect(temp_widget->window, &tmp_rectangle, TRUE);
 
 	// Update the workspace
-	gtk_widget_queue_draw(GTK_WIDGET(main_drawing_area));
+	gtk_widget_queue_draw(GTK_WIDGET(get_main_drawing_area()));
 }

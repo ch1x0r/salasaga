@@ -74,7 +74,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	valid_image_path = g_string_new(NULL);
 
 	// Change the cursor back to normal
-	gdk_window_set_cursor(main_drawing_area->window, NULL);
+	gdk_window_set_cursor(get_main_drawing_area()->window, NULL);
 
 	// * Create a new image layer in memory using reasonable defaults *
 
@@ -106,7 +106,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	tmp_layer->transition_out_duration = 0.0;
 
 	// Open a dialog asking the user to select an image
-	path_widget = gtk_file_chooser_dialog_new(_("Please choose an image file"), GTK_WINDOW(main_window), GTK_FILE_CHOOSER_ACTION_OPEN,
+	path_widget = gtk_file_chooser_dialog_new(_("Please choose an image file"), GTK_WINDOW(get_main_window()), GTK_FILE_CHOOSER_ACTION_OPEN,
 				      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,  // Cancel button
 				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,  // Open button
 				      NULL);
@@ -227,6 +227,6 @@ void layer_new_image_inner(guint release_x, guint release_y)
 	set_changes_made(TRUE);
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Image layer added"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Image layer added"));
 	gdk_flush();
 }

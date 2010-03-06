@@ -67,6 +67,7 @@ gboolean draw_handle_box(void)
 	gfloat				start_time;					// Time in seconds of the layer objects start time
 	gint				start_x;					// X position at the layer objects start time
 	gint				start_y;					// Y position at the layer objects start time
+	GtkWidget			*temp_widget;				// Temporarily holds a pointer to the main drawing area widget
 	layer				*this_layer_data;
 	gfloat				time_alpha;
 	gfloat 				time_position;				// The point in time we need the handle box for
@@ -80,6 +81,7 @@ gboolean draw_handle_box(void)
 
 	// Initialise some things
 	current_slide_data = current_slide->data;
+	temp_widget = get_main_drawing_area();
 	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
 
 	// Determine which layer the user has selected in the timeline
@@ -114,7 +116,7 @@ gboolean draw_handle_box(void)
 	{
 		case TYPE_EMPTY:
 			// This is an empty layer, so clear any existing handle box then return
-			gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
+			gdk_draw_drawable(GDK_DRAWABLE(temp_widget->window), GDK_GC(temp_widget->style->fg_gc[GTK_WIDGET_STATE(temp_widget)]),
 					GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
 			return TRUE;
 
@@ -123,7 +125,7 @@ gboolean draw_handle_box(void)
 			if (TRUE == this_layer_data->background)
 			{
 				// Clear any existing handle box then return
-				gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
+				gdk_draw_drawable(GDK_DRAWABLE(temp_widget->window), GDK_GC(temp_widget->style->fg_gc[GTK_WIDGET_STATE(temp_widget)]),
 						GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
 				return TRUE;
 			}

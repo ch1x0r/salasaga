@@ -85,7 +85,7 @@ void menu_file_save(void)
 
 	// Add a message to the status bar so the user gets visual feedback
 	g_string_printf(tmp_gstring, " %s - %s", _("Saving project"), file_name->str);
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
 
 	// Create an empty document pointer
 	document_pointer = xmlNewDoc((const xmlChar *) "1.0");
@@ -226,7 +226,7 @@ void menu_file_save(void)
 
 	// Update the status bar to indicate we're exporting the swf file
 	g_string_printf(tmp_gstring, " %s - %s", _("Saving project"), file_name->str);
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
 
 	// Add the slide data to the XML structure
 	slides = g_list_first(slides);
@@ -246,13 +246,13 @@ void menu_file_save(void)
 
 	// Add a message to the status bar so the user gets visual feedback
 	g_string_printf(tmp_gstring, " %s - %s", _("Project saved"), file_name->str);
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
-	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(get_status_bar()), 0.0);
 	gdk_flush();
 
 	// Change the title bar to include the file name
 	g_string_printf(message, "%s v%s - %s", APP_NAME, APP_VERSION, g_path_get_basename(file_name->str));
-	gtk_window_set_title(GTK_WINDOW(main_window), message->str);
+	gtk_window_set_title(GTK_WINDOW(get_main_window()), message->str);
 
 	// * Function clean up area *
 

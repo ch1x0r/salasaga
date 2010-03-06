@@ -49,12 +49,16 @@ static gboolean				display_help_text = TRUE;		// Should we display help text and
 static guint				end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations
 static guint				end_point_status = END_POINTS_INACTIVE;  // Is one of the layer end points being moved?
 static gboolean				film_strip_being_resized;		// Toggle to indicate if the film strip is being resized
+static GtkWidget			*film_strip_view;				// The view of the film strip list store
 static guint				frames_per_second;				// Number of frames per second
 static gboolean				info_display = TRUE;			// Toggle for whether to display the information button in swf output
 static gint					invalidation_end_x;				// Right side of the front store area to invalidate
 static gint					invalidation_end_y;				// Bottom of the front store area to invalidate
 static gint					invalidation_start_x;			// Left side of the front store area to invalidate
 static gint					invalidation_start_y;			// Top of the front store area to invalidate
+static GtkWidget			*main_area;						// Widget for the onscreen display
+static GtkWidget			*main_drawing_area;				// Widget for the drawing area
+static GtkWidget			*main_window;					// Widget for the main window
 static gboolean				mouse_click_double_added;		// Have we added a double mouse click to the exported swf yet?
 static gboolean				mouse_click_single_added;		// Have we added a single mouse click to the exported swf yet?
 static gboolean				mouse_click_triple_added;		// Have we added a triple mouse click to the exported swf yet?
@@ -64,16 +68,20 @@ static gboolean				project_active;					// Whether or not a project is active (i.
 static guint				resize_handles_status;			// Are the layer resize handles active, in progress, etc
 static guint				resize_handle_size = 6;			// Size of the resize handles
 static gulong				resolution_callback;			// Holds the id of the resolution selector callback
+static GtkWidget			*right_side;					// Widget for the right side area
 static gint					screenshot_command_num = -1;	// The metacity run command number used for the screenshot key
 static guint				screenshot_delay_time = 5;		// The number of seconds the screenshot trigger is delayed
 static gboolean				screenshot_key_warning;			// Should the warning about not being able to set the screenshot key be displayed?
 static gboolean				screenshots_enabled = FALSE;	// Toggle for whether to enable screenshots
 static gboolean				show_control_bar = TRUE;		// Toggle for whether to display the control bar in swf output
 static guint				start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
+static GtkWidget			*status_bar;					// Widget for the status bar
 static gint					stored_x;						// X co-ordinate of the mouse last click
 static gint					stored_y;						// Y co-ordinate of the mouse last click
 static gint					table_x_padding;				// Number of pixels to pad table entries by
 static gint					table_y_padding;				// Number of pixels to pad table entries by
+static GtkWidget			*time_line_container;			// Scrolled window widget, to add scroll bars to the time line widget
+static GtkWidget			*time_line_vbox;				// VBox widget holding all of the time line elements
 static guint				working_height;					// Height of the display portion of the working area in pixels
 static guint				working_width;					// Width of the display portion of the working area in pixels
 static guint				zoom;							// Percentage zoom to use in the drawing area
@@ -160,6 +168,11 @@ gboolean get_film_strip_being_resized()
 	return film_strip_being_resized;
 }
 
+GtkWidget *get_film_strip_view()
+{
+	return film_strip_view;
+}
+
 guint get_frames_per_second()
 {
 	return frames_per_second;
@@ -190,6 +203,21 @@ gint get_invalidation_start_y()
 	return invalidation_start_y;
 }
 
+GtkWidget *get_main_area()
+{
+	return main_area;
+}
+
+GtkWidget *get_main_drawing_area()
+{
+	return main_drawing_area;
+}
+
+GtkWidget *get_main_window()
+{
+	return main_window;
+}
+
 gboolean get_mouse_click_double_added()
 {
 	return mouse_click_double_added;
@@ -218,6 +246,11 @@ gboolean get_new_layer_selected()
 gboolean get_project_active()
 {
 	return project_active;
+}
+
+GtkWidget *get_right_side()
+{
+	return right_side;
 }
 
 guint get_resize_handles_status()
@@ -265,6 +298,11 @@ guint get_start_behaviour()
 	return start_behaviour;
 }
 
+GtkWidget *get_status_bar()
+{
+	return status_bar;
+}
+
 gint get_stored_x()
 {
 	return stored_x;
@@ -283,6 +321,16 @@ gint get_table_x_padding()
 gint get_table_y_padding()
 {
 	return table_y_padding;
+}
+
+GtkWidget *get_time_line_container()
+{
+	return time_line_container;
+}
+
+GtkWidget *get_time_line_vbox()
+{
+	return time_line_vbox;
 }
 
 guint get_working_height()
@@ -380,6 +428,11 @@ void set_film_strip_being_resized(gboolean new_film_strip_being_resized)
 	film_strip_being_resized = new_film_strip_being_resized;
 }
 
+void set_film_strip_view(GtkWidget *new_film_strip_view)
+{
+	film_strip_view = new_film_strip_view;
+}
+
 void set_frames_per_second(guint new_frames_per_second)
 {
 	frames_per_second = new_frames_per_second;
@@ -408,6 +461,21 @@ void set_invalidation_start_x(gint new_invalidation_start_x)
 void set_invalidation_start_y(gint new_invalidation_start_y)
 {
 	invalidation_start_y = new_invalidation_start_y;
+}
+
+void set_main_area(GtkWidget *new_main_area)
+{
+	main_area = new_main_area;
+}
+
+void set_main_drawing_area(GtkWidget *new_main_drawing_area)
+{
+	main_drawing_area = new_main_drawing_area;
+}
+
+void set_main_window(GtkWidget *new_main_window)
+{
+	main_window = new_main_window;
 }
 
 void set_mouse_click_double_added(gboolean new_mouse_click_double_added)
@@ -455,6 +523,11 @@ void set_resolution_callback(gulong new_resolution_callback)
 	resolution_callback = new_resolution_callback;
 }
 
+void set_right_side(GtkWidget *new_right_side)
+{
+	right_side = new_right_side;
+}
+
 void set_screenshot_command_num(gint new_screenshot_command_num)
 {
 	screenshot_command_num = new_screenshot_command_num;
@@ -485,6 +558,11 @@ void set_start_behaviour(guint new_start_behaviour)
 	start_behaviour = new_start_behaviour;
 }
 
+void set_status_bar(GtkWidget *new_status_bar)
+{
+	status_bar = new_status_bar;
+}
+
 void set_stored_x(gint new_stored_x)
 {
 	stored_x = new_stored_x;
@@ -503,6 +581,16 @@ void set_table_x_padding(gint new_table_x_padding)
 void set_table_y_padding(gint new_table_y_padding)
 {
 	table_y_padding = new_table_y_padding;
+}
+
+void set_time_line_container(GtkWidget *new_time_line_container)
+{
+	time_line_container = new_time_line_container;
+}
+
+void set_time_line_vbox(GtkWidget *new_time_line_vbox)
+{
+	time_line_vbox = new_time_line_vbox;
 }
 
 void set_working_height(guint new_working_height)

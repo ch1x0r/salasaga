@@ -109,7 +109,7 @@ void layer_paste(void)
 	set_changes_made(TRUE);
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer pasted from buffer"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Layer pasted from buffer"));
 	gdk_flush();
 	return;
 }

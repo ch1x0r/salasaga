@@ -129,7 +129,7 @@ void menu_project_properties(void)
 	tmp_gstring = g_string_new(NULL);
 
 	// Create the main dialog window
-	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Project Properties"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
+	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Project Properties"), GTK_WINDOW(get_main_window()), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	proj_dialog_table = gtk_table_new(10, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(main_dialog->vbox), GTK_WIDGET(proj_dialog_table), FALSE, FALSE, 5);
 
@@ -500,7 +500,7 @@ void menu_project_properties(void)
 	set_changes_made(TRUE);
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Project properties updated"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Project properties updated"));
 	gdk_flush();
 
 	// Free the memory allocated in this function

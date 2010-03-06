@@ -115,14 +115,14 @@ void save_preferences_and_exit(void)
 	// * Save the present window maximised state (i.e. if we're maximised or not) *
 
 	// Get a pointer to the underlying GDK window
-	tmp_gtk_window = GTK_WINDOW(main_window);
+	tmp_gtk_window = GTK_WINDOW(get_main_window());
 	if (NULL != tmp_gtk_window->frame)
 	{
 		tmp_gdk_window = tmp_gtk_window->frame;
 	}
 	else
 	{
-		tmp_gdk_window = main_window->window;
+		tmp_gdk_window = get_main_window()->window;
 	}
 
 	// If the main application window still exists, save the window maximisation state, else don't bother

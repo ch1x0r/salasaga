@@ -47,9 +47,12 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 	gint				pixmap_height;				// Height of the front store
 	gint				pixmap_width;				// Width of the front store
 	gint				swap_value;					// Temp location while we swap galues
+	GtkWidget			*temp_widget;				// Temporarily holds a pointer to the main drawing area widget
+
 
 	// Initialise some things
 	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	temp_widget = get_main_drawing_area();
 
 	// Swap around the top and side positions if we need to
 	if (left > right)
@@ -96,7 +99,7 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 	set_invalidation_end_y(CLAMP(get_invalidation_end_y(), 1, pixmap_height - 1));
 
 	// Restore the widget area we're going over from the front store
-	gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
+	gdk_draw_drawable(GDK_DRAWABLE(temp_widget->window), GDK_GC(temp_widget->style->fg_gc[GTK_WIDGET_STATE(temp_widget)]),
 		GDK_PIXMAP(front_store),
 		get_invalidation_start_x(), get_invalidation_start_y(),
 		get_invalidation_start_x(), get_invalidation_start_y(),
@@ -105,7 +108,7 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 	// Draw a bounding box directly onto the widget
 	if (NULL == line_gc)
 	{
-		line_gc = gdk_gc_new(GDK_DRAWABLE(main_drawing_area->window));
+		line_gc = gdk_gc_new(GDK_DRAWABLE(temp_widget->window));
 	}
 	gdk_gc_set_function(GDK_GC(line_gc), GDK_INVERT);
 
@@ -121,28 +124,28 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 	lines[0].y1 = top;
 	lines[0].x2 = right;
 	lines[0].y2 = top;
-	gdk_draw_segments(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(line_gc), &lines[0], 1);
+	gdk_draw_segments(GDK_DRAWABLE(temp_widget->window), GDK_GC(line_gc), &lines[0], 1);
 
 	// Draw as much of the right hand side line as fits in the slide area onscreen
 	lines[1].x1 = right;
 	lines[1].y1 = top;
 	lines[1].x2 = right;
 	lines[1].y2 = bottom;
-	gdk_draw_segments(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(line_gc), &lines[1], 1);
+	gdk_draw_segments(GDK_DRAWABLE(temp_widget->window), GDK_GC(line_gc), &lines[1], 1);
 
 	// Draw as much of the bottom line as fits in the slide area onscreen
 	lines[2].x1 = left;
 	lines[2].y1 = bottom;
 	lines[2].x2 = right;
 	lines[2].y2 = bottom;
-	gdk_draw_segments(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(line_gc), &lines[2], 1);
+	gdk_draw_segments(GDK_DRAWABLE(temp_widget->window), GDK_GC(line_gc), &lines[2], 1);
 
 	// Draw as much of the left hand side line as fits in the slide area onscreen
 	lines[3].x1 = left;
 	lines[3].y1 = top;
 	lines[3].x2 = left;
 	lines[3].y2 = bottom;
-	gdk_draw_segments(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(line_gc), &lines[3], 1);
+	gdk_draw_segments(GDK_DRAWABLE(temp_widget->window), GDK_GC(line_gc), &lines[3], 1);
 
 	// Draw the start and end points for the layer
 	draw_layer_start_and_end_points();

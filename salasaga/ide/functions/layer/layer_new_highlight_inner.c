@@ -120,7 +120,7 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	}
 
 	// Change the cursor back to normal
-	gdk_window_set_cursor(main_drawing_area->window, NULL);
+	gdk_window_set_cursor(get_main_drawing_area()->window, NULL);
 
 	// * Create a new highlight layer in memory using reasonable defaults *
 
@@ -202,6 +202,6 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	set_changes_made(TRUE);
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Highlight layer added"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Highlight layer added"));
 	gdk_flush();
 }

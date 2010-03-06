@@ -267,7 +267,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		time_line_set_selected_layer_num(this_slide_data->timeline_widget, this_slide_data->num_layers - 1);  // *Needs* the -1, don't remove
 
 		// Clear any existing handle box
-		gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(main_drawing_area->style->fg_gc[GTK_WIDGET_STATE(main_drawing_area)]),
+		gdk_draw_drawable(GDK_DRAWABLE(get_main_drawing_area()->window), GDK_GC(get_main_drawing_area()->style->fg_gc[GTK_WIDGET_STATE(get_main_drawing_area())]),
 				GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
 
 		// Reset the stored mouse coordinates

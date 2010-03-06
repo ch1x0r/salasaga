@@ -40,10 +40,10 @@
 gint status_icon_iconify(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
 	// Iconify the window
-	gtk_window_iconify(GTK_WINDOW(main_window));
+	gtk_window_iconify(GTK_WINDOW(get_main_window()));
 
 	// Hide the application from the task bar
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(main_window), TRUE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(get_main_window()), TRUE);
 
 	return FALSE;
 }

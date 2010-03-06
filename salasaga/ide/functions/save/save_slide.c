@@ -52,11 +52,11 @@ void save_slide(gpointer element, gpointer user_data)
 	xmlNodePtr			slide_node;				// Pointer to the new slide node
 
 	GString				*tmp_gstring;			// Temporary GString
-	GdkRectangle		tmp_rect = {0, 0, main_window->allocation.width, main_window->allocation.height};  // Temporary rectangle covering the area of the whole Salasaga window
+	GdkRectangle		tmp_rect = {0, 0, get_main_window()->allocation.width, get_main_window()->allocation.height};  // Temporary rectangle covering the area of the whole Salasaga window
 
 
 	// Repaint the entire window (where the dialog box was, plus the status bar)
-	gtk_widget_draw(main_window, &tmp_rect);
+	gtk_widget_draw(get_main_window(), &tmp_rect);
 	gdk_flush();
 
 	// Initialise various things
@@ -93,7 +93,7 @@ void save_slide(gpointer element, gpointer user_data)
 	g_string_free(tmp_gstring, TRUE);
 
 	// Update the status bar to show progress
-	gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
+	gtk_progress_bar_pulse(GTK_PROGRESS_BAR(get_status_bar()));
 
 	return;
 }

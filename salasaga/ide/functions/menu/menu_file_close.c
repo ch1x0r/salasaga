@@ -91,14 +91,14 @@ void menu_file_close()
 	// Change the title bar
 	title_bar = g_string_new(NULL);
 	g_string_printf(title_bar, "%s v%s", APP_NAME, APP_VERSION);
-	gtk_window_set_title(GTK_WINDOW(main_window), title_bar->str);
+	gtk_window_set_title(GTK_WINDOW(get_main_window()), title_bar->str);
 	g_string_free(title_bar, TRUE);
 
 	// Reset the global text tag table
 	reset_global_text_tags_table();
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Project closed"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Project closed"));
 	gdk_flush();
 
 	// Gray out the toolbar items that can't be used without a project loaded
@@ -120,5 +120,5 @@ void menu_file_close()
 	tmp_rectangle.y = 0;
 	tmp_rectangle.width = pixmap_width;
 	tmp_rectangle.height = pixmap_height;
-	gdk_window_invalidate_rect(main_drawing_area->window, &tmp_rectangle, TRUE);
+	gdk_window_invalidate_rect(get_main_drawing_area()->window, &tmp_rectangle, TRUE);
 }

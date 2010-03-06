@@ -113,7 +113,7 @@ gboolean film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		// Update the status bar
 		message = g_string_new(NULL);
 		g_string_printf(message, " %s", _("Ready"));
-		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), message->str);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), message->str);
 		g_string_free(message, TRUE);
 		gdk_flush();
 	}

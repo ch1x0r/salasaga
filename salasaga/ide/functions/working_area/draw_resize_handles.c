@@ -49,16 +49,18 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 	gint				pixmap_height;				// Height of the front store
 	gint				pixmap_width;				// Width of the front store
 	guint				required_size_mid_point;	// Minimum size we need in order to draw mid point handles
+	GtkWidget			*temp_widget;				// Temporarily holds a pointer to the main drawing area widget
 	guint				width;						// Width of the bounding box
 
 
 	// Initialise some things
+	temp_widget = get_main_drawing_area();
 	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
 
 	// Draw the handles directly onto the widget
 	if (NULL == handle_gc)
 	{
-		handle_gc = gdk_gc_new(GDK_DRAWABLE(main_drawing_area->window));
+		handle_gc = gdk_gc_new(GDK_DRAWABLE(temp_widget->window));
 	}
 	gdk_gc_set_function(GDK_GC(handle_gc), GDK_INVERT);
 
@@ -100,22 +102,22 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 	// * Draw the corner handles *
 
 	// Top left
-	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+	gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
 		resize_handles_rect[0].x, resize_handles_rect[0].y,
 		resize_handles_rect[0].width, resize_handles_rect[0].height);
 
 	// Top right
-	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+	gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
 		resize_handles_rect[2].x, resize_handles_rect[2].y,
 		resize_handles_rect[2].width, resize_handles_rect[2].height);
 
 	// Bottom right
-	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+	gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
 		resize_handles_rect[4].x, resize_handles_rect[4].y,
 		resize_handles_rect[4].width, resize_handles_rect[4].height);
 
 	// Bottom left
-	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+	gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
 		resize_handles_rect[6].x, resize_handles_rect[6].y,
 		resize_handles_rect[6].width, resize_handles_rect[6].height);
 
@@ -142,12 +144,12 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 		resize_handles_rect[7].height = get_resize_handle_size();
 
 		// Right middle
-		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+		gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
 			resize_handles_rect[3].x, resize_handles_rect[3].y,
 			resize_handles_rect[3].width, resize_handles_rect[3].height);
 
 		// Left middle
-		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+		gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
 			resize_handles_rect[7].x, resize_handles_rect[7].y,
 			resize_handles_rect[7].width, resize_handles_rect[7].height);
 	} else
@@ -177,12 +179,12 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 		resize_handles_rect[5].height = get_resize_handle_size() - 1;
 
 		// Top middle
-		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+		gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
 			resize_handles_rect[1].x, resize_handles_rect[1].y,
 			resize_handles_rect[1].width, resize_handles_rect[1].height);
 
 		// Bottom middle
-		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
+		gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
 			resize_handles_rect[5].x, resize_handles_rect[5].y,
 			resize_handles_rect[5].width, resize_handles_rect[5].height);
 	} else

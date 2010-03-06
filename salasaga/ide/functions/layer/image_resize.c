@@ -120,7 +120,7 @@ void image_resize(void)
 	// * Pop open a dialog box asking the user how much to adjust the dimensions of the image by *
 
 	// Create the dialog window, and table to hold its children
-	adjustment_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Resize image layer"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
+	adjustment_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Resize image layer"), GTK_WINDOW(get_main_window()), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	adjustment_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(adjustment_dialog->vbox), GTK_WIDGET(adjustment_table), FALSE, FALSE, 10);
 
@@ -232,8 +232,8 @@ void image_resize(void)
 		g_string_free(message, TRUE);
 
 		// Update the status bar
-		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Image layer resize skipped"));
-		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _("Image layer resize skipped"));
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(get_status_bar()), 0.0);
 		gdk_flush();
 
 		return;
@@ -268,12 +268,12 @@ void image_resize(void)
 	set_changes_made(TRUE);
 
 	// Show movement on the progress bar
-	gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
+	gtk_progress_bar_pulse(GTK_PROGRESS_BAR(get_status_bar()));
 	gdk_flush();
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Image layer resized"));
-	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _("Image layer resized"));
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(get_status_bar()), 0.0);
 	gdk_flush();
 
 	// Free the memory used in this function

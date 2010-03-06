@@ -68,21 +68,21 @@ GtkWidget *create_working_area(GtkWidget *working_frame)
 	gtk_scrolled_window_add_with_viewport(GTK_SCROLLED_WINDOW(working_frame), GTK_WIDGET(working));
 
 	// Create the main drawing area widget
-	main_drawing_area = gtk_drawing_area_new();
-	gtk_widget_set_can_focus(GTK_WIDGET(main_drawing_area), TRUE);
-	gtk_container_add(GTK_CONTAINER(working), GTK_WIDGET(main_drawing_area));
+	set_main_drawing_area(gtk_drawing_area_new());
+	gtk_widget_set_can_focus(GTK_WIDGET(get_main_drawing_area()), TRUE);
+	gtk_container_add(GTK_CONTAINER(working), GTK_WIDGET(get_main_drawing_area()));
 
 	// Hook up signal handlers for mouse events to the working area
-	g_signal_connect(main_drawing_area, "button_press_event", G_CALLBACK(working_area_button_press_event), NULL);
-	g_signal_connect(main_drawing_area, "button_release_event", G_CALLBACK(working_area_button_release_event), NULL);
-	g_signal_connect(main_drawing_area, "expose_event", G_CALLBACK(working_area_expose_event), NULL);
-	g_signal_connect(main_drawing_area, "motion_notify_event", G_CALLBACK(working_area_motion_notify_event), NULL);
+	g_signal_connect(get_main_drawing_area(), "button_press_event", G_CALLBACK(working_area_button_press_event), NULL);
+	g_signal_connect(get_main_drawing_area(), "button_release_event", G_CALLBACK(working_area_button_release_event), NULL);
+	g_signal_connect(get_main_drawing_area(), "expose_event", G_CALLBACK(working_area_expose_event), NULL);
+	g_signal_connect(get_main_drawing_area(), "motion_notify_event", G_CALLBACK(working_area_motion_notify_event), NULL);
 
 	// Add a signal handler to the working area, to be called whenever a key is pressed while it is in focus
-	g_signal_connect(main_drawing_area, "key-release-event", G_CALLBACK(delete_key_release_event), NULL);
+	g_signal_connect(get_main_drawing_area(), "key-release-event", G_CALLBACK(delete_key_release_event), NULL);
 
 	// Ensure we get the signals we want
-	gtk_widget_set_events(main_drawing_area, gtk_widget_get_events(main_drawing_area)
+	gtk_widget_set_events(get_main_drawing_area(), gtk_widget_get_events(get_main_drawing_area())
 		| GDK_LEAVE_NOTIFY_MASK
 		| GDK_BUTTON_PRESS_MASK
 		| GDK_BUTTON_RELEASE_MASK

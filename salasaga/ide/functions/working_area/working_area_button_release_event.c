@@ -72,6 +72,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gfloat				scaled_width_ratio;			// Used to calculate a horizontal scaling ratio
 	gint				selected_row;				// Holds the number of the row that is selected
 	guint				swap_value;					// Temporary value used when swapping border positions
+	GtkWidget			*temp_widget;				// Temporarily holds a pointer to the main drawing area widget
 	slide				*this_slide_data;			// Alias to make things easier
 	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 	gint				width;
@@ -150,16 +151,17 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		draw_workspace();
 
 		// Tell (force) the window system to redraw the working area *immediately*
-		gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+		temp_widget = get_main_drawing_area();
+		gtk_widget_draw(GTK_WIDGET(temp_widget), &temp_widget->allocation);  // Yes, this is deprecated, but it *works*
 
 		// Recreate the slide thumbnail
 		film_strip_create_thumbnail((slide *) current_slide->data);
 
 		// Use the status bar to give further feedback to the user
 		if (END_POINTS_START_ACTIVE == get_end_point_status())
-			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer start point moved"));
+			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Layer start point moved"));
 		if (END_POINTS_END_ACTIVE == get_end_point_status())
-			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer end point moved"));
+			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Layer end point moved"));
 		gdk_flush();
 
 		// Reset the end point status switch and related info
@@ -323,7 +325,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		draw_workspace();
 
 		// Tell (force) the window system to redraw the working area *immediately*
-		gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+		temp_widget = get_main_drawing_area();
+		gtk_widget_draw(GTK_WIDGET(temp_widget), &temp_widget->allocation);  // Yes, this is deprecated, but it *works*
 
 		// Recreate the slide thumbnail
 		film_strip_create_thumbnail((slide *) current_slide->data);
@@ -337,7 +340,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		set_changes_made(TRUE);
 
 		// Use the status bar to give further feedback to the user
-		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer resized"));
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Layer resized"));
 		gdk_flush();
 
 		return TRUE;
@@ -437,7 +440,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			draw_workspace();
 
 			// Tell (force) the window system to redraw the working area *immediately*
-			gtk_widget_draw(GTK_WIDGET(main_drawing_area), &main_drawing_area->allocation);  // Yes, this is deprecated, but it *works*
+			temp_widget = get_main_drawing_area();
+			gtk_widget_draw(GTK_WIDGET(temp_widget), &temp_widget->allocation);  // Yes, this is deprecated, but it *works*
 
 			// Recreate the slide thumbnail
 			film_strip_create_thumbnail((slide *) current_slide->data);
@@ -451,7 +455,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			set_changes_made(TRUE);
 
 			// Use the status bar to give further feedback to the user
-			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Layer moved"));
+			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Layer moved"));
 			gdk_flush();
 		}
 	}

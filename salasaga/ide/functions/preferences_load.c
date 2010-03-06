@@ -671,7 +671,7 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			which_screen = gtk_window_get_screen(GTK_WINDOW(main_window));
+			which_screen = gtk_window_get_screen(GTK_WINDOW(get_main_window()));
 			project_width = gdk_screen_get_width(which_screen);
 		} else
 		{
@@ -692,7 +692,7 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			which_screen = gtk_window_get_screen(GTK_WINDOW(main_window));
+			which_screen = gtk_window_get_screen(GTK_WINDOW(get_main_window()));
 			project_height = gdk_screen_get_height(which_screen);
 		} else
 		{
@@ -946,7 +946,7 @@ gboolean preferences_load()
 	if (TRUE == should_maximise)
 	{
 		// Maximise the window
-		gtk_window_maximize(GTK_WINDOW(main_window));
+		gtk_window_maximize(GTK_WINDOW(get_main_window()));
 	}
 
 	// Free the memory used in this function

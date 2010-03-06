@@ -63,7 +63,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	}
 
 	// Change the cursor back to normal
-	gdk_window_set_cursor(main_drawing_area->window, NULL);
+	gdk_window_set_cursor(get_main_drawing_area()->window, NULL);
 
 	// * Prepare a new text layer object in memory, with reasonable defaults *
 
@@ -161,6 +161,6 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	set_changes_made(TRUE);
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Text layer added"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Text layer added"));
 	gdk_flush();
 }

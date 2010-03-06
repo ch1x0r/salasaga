@@ -77,46 +77,46 @@ void create_film_strip()
 	film_strip_store = gtk_list_store_new(1, GDK_TYPE_PIXBUF);
 
 	// Create the view of the list store
-	film_strip_view = gtk_tree_view_new_with_model(GTK_TREE_MODEL(film_strip_store));
-	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(film_strip_view), FALSE);
+	set_film_strip_view(gtk_tree_view_new_with_model(GTK_TREE_MODEL(film_strip_store)));
+	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(get_film_strip_view()), FALSE);
 	renderer = gtk_cell_renderer_pixbuf_new();
 	film_strip_column = gtk_tree_view_column_new_with_attributes(_("Slide"), renderer, "pixbuf", 0, NULL);
 	gtk_tree_view_column_set_sizing(film_strip_column, GTK_TREE_VIEW_COLUMN_FIXED);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(film_strip_view), film_strip_column);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(get_film_strip_view()), film_strip_column);
 
 	// Add the list view to the film strip
-	gtk_container_add(GTK_CONTAINER(film_strip_container), GTK_WIDGET(film_strip_view));
+	gtk_container_add(GTK_CONTAINER(film_strip_container), GTK_WIDGET(get_film_strip_view()));
 
 	// Set the selection mode of the film strip to single
-	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
+	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(get_film_strip_view()));
 	gtk_tree_selection_set_mode(GTK_TREE_SELECTION(selector), GTK_SELECTION_SINGLE);
 
 	// Add a signal hander that is called whenever the selected slide is changed
 	g_signal_connect(G_OBJECT(selector), "changed", G_CALLBACK(film_strip_slide_clicked), NULL);
 
 	// Add a signal handler to the film strip, to be called whenever the mouse button is clicked on it
-	g_signal_connect(GTK_WIDGET(film_strip_view), "button-press-event", G_CALLBACK(film_strip_button_clicked), NULL);
+	g_signal_connect(GTK_WIDGET(get_film_strip_view()), "button-press-event", G_CALLBACK(film_strip_button_clicked), NULL);
 
 	// Make the film strip a Drag and Drop (DnD) destination
-	gtk_drag_dest_set(GTK_WIDGET(film_strip_view),	// The widget
+	gtk_drag_dest_set(GTK_WIDGET(get_film_strip_view()),	// The widget
 		GTK_DEST_DEFAULT_DROP,						// Flags
 		&target_entry,								// Pointer to the target list
 		1,											// Number of targets in the target list
 		GDK_ACTION_COPY);							// The type(s) of Drag and Drop actions
 
 	// Make the film strip a Drag and Drop (DnD) source
-	gtk_drag_source_set(GTK_WIDGET(film_strip_view),  // The widget
+	gtk_drag_source_set(GTK_WIDGET(get_film_strip_view()),  // The widget
 		GDK_BUTTON1_MASK,							// Only primary mouse button clicks are accepted
 		&target_entry,								// Pointer to the target list
 		1,											// Number of targets in the target list
 		GDK_ACTION_COPY);							// The type(s) of Drag and Drop actions
 
 	// Add the DnD callback to capture drag motion
-	g_signal_connect(GTK_WIDGET(film_strip_view), "drag-motion", G_CALLBACK(film_strip_drag_motion), NULL);
+	g_signal_connect(GTK_WIDGET(get_film_strip_view()), "drag-motion", G_CALLBACK(film_strip_drag_motion), NULL);
 
 	// Add a signal handler to the film strip, to be called whenever a key is pressed while it is in focus
-	g_signal_connect(GTK_WIDGET(film_strip_view), "key-release-event", G_CALLBACK(delete_key_release_event), NULL);
+	g_signal_connect(GTK_WIDGET(get_film_strip_view()), "key-release-event", G_CALLBACK(delete_key_release_event), NULL);
 
 	// Ensure we get the signals we want
-	gtk_widget_set_events(film_strip_view, gtk_widget_get_events(film_strip_view) | GDK_BUTTON_PRESS_MASK | GDK_KEY_RELEASE_MASK);
+	gtk_widget_set_events(get_film_strip_view(), gtk_widget_get_events(get_film_strip_view()) | GDK_BUTTON_PRESS_MASK | GDK_KEY_RELEASE_MASK);
 }

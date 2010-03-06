@@ -109,7 +109,7 @@ void menu_file_new(void)
 	valid_proj_name = g_string_new(NULL);
 
 	// Create the dialog window, and table to hold its children
-	project_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Create new Salasaga Project"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
+	project_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Create new Salasaga Project"), GTK_WINDOW(get_main_window()), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	project_table = gtk_table_new(3, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(project_dialog->vbox), GTK_WIDGET(project_table), FALSE, FALSE, 10);
 
@@ -312,12 +312,12 @@ void menu_file_new(void)
 	current_slide = slides;
 
 	// Select the thumbnail for the new slide in the film strip
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &new_path, NULL);
 	if (NULL != new_path)
 		old_path = new_path;  // Make a backup of the old path, so we can free it
 	new_path = gtk_tree_path_new_first();
-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
-	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, TRUE, 0.5, 0.0);
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
 	if (NULL != new_path)
@@ -330,7 +330,7 @@ void menu_file_new(void)
 	set_changes_made(TRUE);
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Project initialized"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Project initialized"));
 	gdk_flush();
 
 	// Redraw the timeline
@@ -342,7 +342,7 @@ void menu_file_new(void)
 	set_working_height((project_height * get_zoom()) / 100);
 
 	// Resize the drawing area so it draws properly
-	gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), get_working_width(), get_working_height());
+	gtk_widget_set_size_request(GTK_WIDGET(get_main_drawing_area()), get_working_width(), get_working_height());
 
 	// Free the existing front store for the workspace
 	if (NULL != front_store)

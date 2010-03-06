@@ -72,7 +72,7 @@ void menu_export_swf(void)
 
 	// Create the dialog asking the user for the name to save as
 	export_dialog = gtk_file_chooser_dialog_new(_("Export as Flash"),
-						GTK_WINDOW(main_window),
+						GTK_WINDOW(get_main_window()),
 						GTK_FILE_CHOOSER_ACTION_SAVE,
 						GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 						GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
@@ -135,7 +135,7 @@ void menu_export_swf(void)
 			if (TRUE == g_file_test(validated_string->str, G_FILE_TEST_EXISTS))
 			{
 				// Something with this name already exists
-				warn_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window),
+				warn_dialog = gtk_message_dialog_new(GTK_WINDOW(get_main_window()),
 									GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT,
 									GTK_MESSAGE_QUESTION,
 									GTK_BUTTONS_YES_NO,
@@ -161,7 +161,7 @@ void menu_export_swf(void)
 
 	// Update the status bar to indicate we're exporting the swf file
 	g_string_printf(tmp_gstring, " %s %u x %u flash - %s", _("Exporting"), output_width, output_height, validated_string->str);
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
 
 	// Export the swf
 	return_code_gint = export_swf_inner(validated_string->str);
@@ -174,8 +174,8 @@ void menu_export_swf(void)
 	{
 		// Movie created successfully, so update the status bar to let the user know
 		g_string_printf(tmp_gstring, " %s %u x %u flash - %s", _("Exported"), output_width, output_height, validated_string->str);
-		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_gstring->str);
-		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
+		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(get_status_bar()), 0.0);
 		gdk_flush();
 	}
 

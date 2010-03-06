@@ -283,7 +283,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		}
 
 		// Use the status bar to communicate the resize has completed
-		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Resize completed"));
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Resize completed"));
 		gdk_flush();
 
 		// Store the undo item created in the button click event handler function
@@ -332,7 +332,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		}
 
 		// Use the status bar to communicate the drag has completed
-		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Drag completed"));
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Drag completed"));
 		gdk_flush();
 
 		// Store the undo item created in the button click event handler function

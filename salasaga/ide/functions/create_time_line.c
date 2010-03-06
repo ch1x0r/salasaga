@@ -74,28 +74,28 @@ GtkWidget *create_time_line(void)
 	tmp_gstring = g_string_new(NULL);
 
 	// Create the VBox the time line elements are packed into
-	time_line_vbox = gtk_vbox_new(FALSE, 0);
+	set_time_line_vbox(gtk_vbox_new(FALSE, 0));
 
 	// Create the scrolled window that the time line widgets are swapped into and out of
 	time_line_scrolled_window = GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL));
 	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(time_line_scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	gtk_box_pack_start(GTK_BOX(time_line_vbox), GTK_WIDGET(time_line_scrolled_window), TRUE, TRUE, 0);
+	gtk_box_pack_start(GTK_BOX(get_time_line_vbox()), GTK_WIDGET(time_line_scrolled_window), TRUE, TRUE, 0);
 
 	// Create the time line container contents
-	time_line_container = gtk_viewport_new(NULL, NULL);
-	gtk_widget_set_can_focus(GTK_WIDGET(time_line_container), TRUE);
-	gtk_container_add(GTK_CONTAINER(time_line_scrolled_window), GTK_WIDGET(time_line_container));
+	set_time_line_container(gtk_viewport_new(NULL, NULL));
+	gtk_widget_set_can_focus(GTK_WIDGET(get_time_line_container()), TRUE);
+	gtk_container_add(GTK_CONTAINER(time_line_scrolled_window), GTK_WIDGET(get_time_line_container()));
 
 	// Add signal handlers to the time line area for receiving events (i.e. mouse clicks)
-	g_signal_connect(time_line_container, "button_release_event", G_CALLBACK(time_line_button_release_event), NULL);
-	g_signal_connect(time_line_container, "button_press_event", G_CALLBACK(time_line_button_press_event), NULL);
-	g_signal_connect(time_line_container, "motion_notify_event", G_CALLBACK(time_line_motion_notify_event), NULL);
+	g_signal_connect(get_time_line_container(), "button_release_event", G_CALLBACK(time_line_button_release_event), NULL);
+	g_signal_connect(get_time_line_container(), "button_press_event", G_CALLBACK(time_line_button_press_event), NULL);
+	g_signal_connect(get_time_line_container(), "motion_notify_event", G_CALLBACK(time_line_motion_notify_event), NULL);
 
 	// Add a signal handler to the time line, to be called whenever a key is pressed while it is in focus
-	g_signal_connect(time_line_container, "key-release-event", G_CALLBACK(delete_key_release_event), NULL);
+	g_signal_connect(get_time_line_container(), "key-release-event", G_CALLBACK(delete_key_release_event), NULL);
 
 	// Ensure we get the signals we want
-	gtk_widget_set_events(time_line_container, gtk_widget_get_events(time_line_container)
+	gtk_widget_set_events(get_time_line_container(), gtk_widget_get_events(get_time_line_container())
 		| GDK_LEAVE_NOTIFY_MASK
 		| GDK_BUTTON_PRESS_MASK
 		| GDK_BUTTON_RELEASE_MASK
@@ -105,7 +105,7 @@ GtkWidget *create_time_line(void)
 
 	// Create the time line toolbar
 	time_line_toolbar = gtk_toolbar_new();
-	gtk_box_pack_start(GTK_BOX(time_line_vbox), GTK_WIDGET(time_line_toolbar), FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(get_time_line_vbox()), GTK_WIDGET(time_line_toolbar), FALSE, FALSE, 0);
 
 	// Create the tooltips structure
 	layer_toolbar_tooltips = gtk_tooltips_new();
@@ -321,5 +321,5 @@ GtkWidget *create_time_line(void)
 	g_string_free(tmp_gstring, TRUE);
 
 	// Return the handle of the time line container
-	return time_line_vbox;
+	return get_time_line_vbox();
 }

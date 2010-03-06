@@ -40,10 +40,10 @@
 gint status_icon_restore(GtkWidget *widget, GdkEvent *event, gpointer data)
 {
 	// Make the window visible to the user, and bring it to the front
-	gtk_window_present(GTK_WINDOW(main_window));
+	gtk_window_present(GTK_WINDOW(get_main_window()));
 
 	// Display the application in the task bar
-	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(main_window), FALSE);
+	gtk_window_set_skip_taskbar_hint(GTK_WINDOW(get_main_window()), FALSE);
 
 	return FALSE;
 }

@@ -43,7 +43,7 @@ gint display_warning(gchar *warning_string)
 	GtkWidget			*tmp_dialog;				// Temporary dialog box
 
 	// Display the warning dialog
-	tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s", warning_string);
+	tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(get_main_window()), GTK_DIALOG_MODAL, GTK_MESSAGE_INFO, GTK_BUTTONS_OK, "%s", warning_string);
 	gtk_dialog_run(GTK_DIALOG(tmp_dialog));
 	gtk_widget_destroy(tmp_dialog);
 

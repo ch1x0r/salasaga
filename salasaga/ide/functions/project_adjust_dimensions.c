@@ -98,7 +98,7 @@ void project_adjust_dimensions(void)
 	// * Pop open a dialog box asking the user how much to adjust the dimensions of the project by *
 
 	// Create the dialog window, and table to hold its children
-	adjustment_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Adjust project dimensions"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
+	adjustment_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Adjust project dimensions"), GTK_WINDOW(get_main_window()), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	adjustment_table = gtk_table_new(4, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(adjustment_dialog->vbox), GTK_WIDGET(adjustment_table), FALSE, FALSE, 10);
 
@@ -253,7 +253,7 @@ void project_adjust_dimensions(void)
 		draw_workspace();
 
 		// Show movement on the progress bar
-		gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
+		gtk_progress_bar_pulse(GTK_PROGRESS_BAR(get_status_bar()));
 		gdk_flush();
 	}
 
@@ -278,7 +278,7 @@ void project_adjust_dimensions(void)
 	set_changes_made(TRUE);
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _("Project dimensions adjusted"));
-	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _("Project dimensions adjusted"));
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(get_status_bar()), 0.0);
 	gdk_flush();
 }

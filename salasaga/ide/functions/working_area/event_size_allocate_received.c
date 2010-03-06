@@ -42,12 +42,14 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
 {
 	// Local variables
 	static gint			old_width = 0;
+	GtkWidget			*right_side_widget;		// Temporarily holds a pointer to the right side widget
 	gchar				*tmp_gchar;
 	GString				*tmp_string;
 
 
 	// Check if the width of the drawing area has changed
-	if (old_width != right_side->allocation.width)
+	right_side_widget = get_right_side();
+	if (old_width != right_side_widget->allocation.width)
 	{
 		// * The width has been changed *
 
@@ -63,10 +65,10 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
 			zoom_selector_changed(GTK_WIDGET(zoom_selector), NULL, (gpointer) NULL);
 		}
 
-		old_width = right_side->allocation.width;
+		old_width = right_side_widget->allocation.width;
 
 		// Resize the drawing area so it draws properly
-		gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), get_working_width(), get_working_height());
+		gtk_widget_set_size_request(GTK_WIDGET(get_main_drawing_area()), get_working_width(), get_working_height());
 
 		// Free the memory allocated in this function
 		g_string_free(tmp_string, TRUE);

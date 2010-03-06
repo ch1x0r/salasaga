@@ -71,7 +71,7 @@ void regenerate_film_strip_thumbnails()
 	}
 
 	// Get the path to the presently selected thumbnail in the film strip
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &new_path, NULL);
 
 	// Remove the existing film strip thumbnails
 	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
@@ -121,8 +121,8 @@ void regenerate_film_strip_thumbnails()
 	slides = g_list_first(slides);
 	slide_position = g_list_position(slides, current_slide);
 	new_path = gtk_tree_path_new_from_indices(slide_position, -1);
-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
-	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, TRUE, 0.5, 0.0);
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
 }

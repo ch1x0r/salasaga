@@ -84,7 +84,7 @@ void slide_delete(void)
 	slides = g_list_remove_link(slides, current_slide);
 
 	// Remove the current slide from the film strip
-	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(film_strip_view));
+	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(get_film_strip_view()));
 	gtk_tree_selection_get_selected(film_strip_selector, NULL, &selection_iter);
 	gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &selection_iter);
 
@@ -97,12 +97,12 @@ void slide_delete(void)
 	current_slide = g_list_nth(slides, slide_position);
 
 	// Select the next thumbnail in the film strip and scroll to display it
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &new_path, NULL);
 	if (NULL != new_path)
 		old_path = new_path;  // Make a backup of the old path, so we can free it
 	new_path = gtk_tree_path_new_from_indices(slide_position, -1);
-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
-	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, TRUE, 0.5, 0.0);
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
 
@@ -116,6 +116,6 @@ void slide_delete(void)
 	set_changes_made(TRUE);
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Slide deleted"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Slide deleted"));
 	gdk_flush();
 }

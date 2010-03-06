@@ -78,12 +78,12 @@ void slide_move_bottom(void)
 	g_string_free(tmp_gstring, TRUE);
 
 	// Scroll the film strip to show the new thumbnail position
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &new_path, NULL);
 	if (NULL != new_path)
 		old_path = new_path;  // Make a backup of the old path, so we can free it
 	new_path = gtk_tree_path_new_from_indices(num_slides - 1, -1);
-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
-	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 1.0, 0.0);
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, TRUE, 1.0, 0.0);
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
 
@@ -91,6 +91,6 @@ void slide_move_bottom(void)
 	set_changes_made(TRUE);
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Slide moved to bottom"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Slide moved to bottom"));
 	gdk_flush();
 }

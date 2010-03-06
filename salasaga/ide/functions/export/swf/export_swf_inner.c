@@ -82,7 +82,7 @@ gint export_swf_inner(gchar *output_filename)
 	swf_frame_element 	*this_frame_ptr;			// Points to frame information when looping
 	layer				*this_layer_data;			// Points to the data in the present layer
 	slide				*this_slide_data;			// Points to the data in the present slide
-	GdkRectangle		tmp_rect = {0, 0, main_window->allocation.width, main_window->allocation.height};  // Temporary rectangle covering the area of the whole Salasaga window
+	GdkRectangle		tmp_rect = {0, 0, get_main_window()->allocation.width, get_main_window()->allocation.height};  // Temporary rectangle covering the area of the whole Salasaga window
 	GString				*message;					// Used to construct message strings
 	guint				total_frames;				// The total number of frames in the animation
 	guint				total_num_layers;			// The total number of layers in the animation
@@ -214,7 +214,7 @@ gint export_swf_inner(gchar *output_filename)
 	for (slide_counter = 0; slide_counter <  num_slides; slide_counter++)
 	{
 		// Repaint the entire window (where the dialog box was, plus the status bar)
-		gtk_widget_draw(main_window, &tmp_rect);
+		gtk_widget_draw(get_main_window(), &tmp_rect);
 		gdk_flush();
 
 		// Initialise things for this slide
@@ -360,7 +360,7 @@ gint export_swf_inner(gchar *output_filename)
 			}
 
 			// Show movement on the progress bar
-			gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
+			gtk_progress_bar_pulse(GTK_PROGRESS_BAR(get_status_bar()));
 
 			// Advance to the next frame
 			SWFMovie_nextFrame(swf_movie);

@@ -59,6 +59,7 @@ gboolean draw_layer_start_and_end_points()
 	gint				start_mid_point_y;
 	gint				start_x;					// X position at the layer objects start time
 	gint				start_y;					// Y position at the layer objects start time
+	GtkWidget			*temp_widget;				// Temporarily holds a pointer to the main drawing area widget
 	layer 				*this_layer_data;			// Pointer to the data for the selected layer
 	slide				*this_slide_data;			// Pointer to the data for the selected slide
 	static GdkGC		*widget_gc = NULL;
@@ -69,6 +70,7 @@ gboolean draw_layer_start_and_end_points()
 	selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
 	layer_pointer = g_list_first(this_slide_data->layers);
 	this_layer_data = g_list_nth_data(layer_pointer, selected_row);
+	temp_widget = get_main_drawing_area();
 
 	// If the layer data isn't accessible, then don't run this function
 	if (NULL == this_layer_data)
@@ -87,15 +89,15 @@ gboolean draw_layer_start_and_end_points()
 	if (NULL == colourmap)
 	{
 		colourmap = gdk_colormap_get_system();
-		gdk_drawable_set_colormap(GDK_DRAWABLE(main_drawing_area->window), GDK_COLORMAP(colourmap));
+		gdk_drawable_set_colormap(GDK_DRAWABLE(temp_widget->window), GDK_COLORMAP(colourmap));
 	}
 	if (NULL == widget_gc)
 	{
-		widget_gc = gdk_gc_new(GDK_DRAWABLE(main_drawing_area->window));
+		widget_gc = gdk_gc_new(GDK_DRAWABLE(temp_widget->window));
 	}
 
 	// Refresh the area covered by the old end points
-	gdk_draw_drawable(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc),
+	gdk_draw_drawable(GDK_DRAWABLE(temp_widget->window), GDK_GC(widget_gc),
 		GDK_PIXMAP(front_store), old_start_x, old_start_y, old_start_x, old_start_y, old_width, old_height);
 
 	// Calculate the height and width scaling values for the requested layer
@@ -128,23 +130,23 @@ gboolean draw_layer_start_and_end_points()
 	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
 	gdk_gc_set_line_attributes(GDK_GC(widget_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	gdk_gc_set_clip_rectangle(GDK_GC(widget_gc), &line_clip_region);
-	gdk_draw_line(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc),
+	gdk_draw_line(GDK_DRAWABLE(temp_widget->window), GDK_GC(widget_gc),
 			start_mid_point_x, start_mid_point_y, finish_mid_point_x, finish_mid_point_y);
 
 	// Draw end point
 	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_red);
-	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), TRUE,
+	gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(widget_gc), TRUE,
 			finish_x, finish_y, END_POINT_WIDTH, END_POINT_HEIGHT);
 	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
-	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), FALSE,
+	gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(widget_gc), FALSE,
 			finish_x, finish_y, END_POINT_WIDTH, END_POINT_HEIGHT);
 
 	// Draw start point
 	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_green);
-	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), TRUE,
+	gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(widget_gc), TRUE,
 			start_x, start_y, END_POINT_WIDTH, END_POINT_HEIGHT);
 	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
-	gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(widget_gc), FALSE,
+	gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(widget_gc), FALSE,
 			start_x, start_y, END_POINT_WIDTH, END_POINT_HEIGHT);
 
 	return TRUE;

@@ -143,7 +143,7 @@ void image_crop(void)
 	// * Pop open a dialog box asking the user how much to crop off each side of the image *
 
 	// Create the dialog window, and table to hold its children
-	crop_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Crop image layer"), GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
+	crop_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Crop image layer"), GTK_WINDOW(get_main_window()), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	crop_table = gtk_table_new(4, 3, FALSE);
 	gtk_box_pack_start(GTK_BOX(crop_dialog->vbox), GTK_WIDGET(crop_table), FALSE, FALSE, 10);
 
@@ -317,7 +317,7 @@ void image_crop(void)
 	set_changes_made(TRUE);
 
 	// Update the status bar
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Image cropped"));
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Image cropped"));
 	gdk_flush();
 
 	// Free the memory used in this function

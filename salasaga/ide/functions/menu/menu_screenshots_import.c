@@ -80,7 +80,7 @@ void menu_screenshots_import(void)
 	layer				*tmp_layer;					// Temporary layer
 	GdkPixbuf			*tmp_pixbuf;				// Used to convert from a pixmap to a pixbuf
 	GdkPixmap			*tmp_pixmap;				// Used when converting from a pixmap to a pixbuf
-	GdkRectangle		tmp_rect = {0, 0, status_bar->allocation.width, status_bar->allocation.height};  // Temporary rectangle covering the area of the status bar
+	GdkRectangle		tmp_rect = {0, 0, get_status_bar()->allocation.width, get_status_bar()->allocation.height};  // Temporary rectangle covering the area of the status bar
 	slide				*tmp_slide;					// Temporary slide
 	GString				*tmp_string;				// Temporary string
 	gboolean			using_first_screenshot;		// Used to indicate there's no project active, so we're using the dimensions of the first screenshot
@@ -185,7 +185,7 @@ void menu_screenshots_import(void)
 		}
 
 		// Display the warning dialog
-		tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(main_window), GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, "%s", tmp_string->str);
+		tmp_dialog = gtk_message_dialog_new(GTK_WINDOW(get_main_window()), GTK_DIALOG_MODAL, GTK_MESSAGE_WARNING, GTK_BUTTONS_YES_NO, "%s", tmp_string->str);
 		return_code_int = gtk_dialog_run(GTK_DIALOG(tmp_dialog));
 
 		// Was the NO button pressed?
@@ -217,11 +217,11 @@ void menu_screenshots_import(void)
 
 	// Use the status bar to communicate the number of screenshots found
 	g_string_printf(tmp_string, " %u %s", num_screenshots, _("Screenshots found"));
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_string->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_string->str);
 	gdk_flush();
 
 	// Redraw the main window
-	gtk_widget_draw(status_bar, &tmp_rect);
+	gtk_widget_draw(get_status_bar(), &tmp_rect);
 
 	// * Load the screenshots *
 	for (tmp_int = 1; tmp_int <= num_screenshots; tmp_int++)
@@ -409,12 +409,12 @@ void menu_screenshots_import(void)
 
 		// Update the status bar with a progress counter
 		g_string_printf(tmp_string, " %s %u of %u", _("Loaded image"), tmp_int, num_screenshots);
-		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_string->str);
-		gtk_progress_bar_pulse(GTK_PROGRESS_BAR(status_bar));
+		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_string->str);
+		gtk_progress_bar_pulse(GTK_PROGRESS_BAR(get_status_bar()));
 		gdk_flush();
 
 		// Redraw the main window
-		gtk_widget_draw(status_bar, &tmp_rect);
+		gtk_widget_draw(get_status_bar(), &tmp_rect);
 	}
 
 	// If not presently set, make the first imported slide the present slide
@@ -424,14 +424,14 @@ void menu_screenshots_import(void)
 	}
 
 	// Select the correct thumbnail in the film strip and scroll to display it
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &new_path, NULL);
 	if (NULL != new_path)
 		old_path = new_path;  // Make a backup of the old path, so we can free it
 	slides = g_list_first(slides);
 	slide_position = g_list_position(slides, current_slide);
 	new_path = gtk_tree_path_new_from_indices(slide_position, -1);
-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
-	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.5, 0.0);
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, TRUE, 0.5, 0.0);
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
 
@@ -448,7 +448,7 @@ void menu_screenshots_import(void)
 		// "Fit to width" is selected, so work out the zoom level by figuring out how much space the widget really has
 		//  (Look at the allocation of it's parent widget)
 		//  Reduce the width calculated by 24 pixels (guessed) to give space for widget borders and such
-		set_zoom((guint) (((float) (right_side->allocation.width - 24) / (float) project_width) * 100));
+		set_zoom((guint) (((float) (get_right_side()->allocation.width - 24) / (float) project_width) * 100));
 	} else
 	{
 		tmp_string = g_string_truncate(tmp_string, tmp_string->len - 1);
@@ -460,7 +460,7 @@ void menu_screenshots_import(void)
 	set_working_height((project_height * get_zoom()) / 100);
 
 	// Resize the drawing area so it draws properly
-	gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), get_working_width(), get_working_height());
+	gtk_widget_set_size_request(GTK_WIDGET(get_main_drawing_area()), get_working_width(), get_working_height());
 
 	// Free the existing front store for the workspace
 	if (NULL != front_store)
@@ -493,8 +493,8 @@ void menu_screenshots_import(void)
 	{
 		g_string_printf(tmp_string, " %u %s", num_screenshots, _("screenshots imported"));
 	}
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), tmp_string->str);
-	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_string->str);
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(get_status_bar()), 0.0);
 	gdk_flush();
 
 	// Free the memory allocated in this function

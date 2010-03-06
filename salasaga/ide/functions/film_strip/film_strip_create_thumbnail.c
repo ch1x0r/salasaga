@@ -54,7 +54,7 @@ void film_strip_create_thumbnail(slide *slide_data)
 	}
 
 	// Get the iter for the presently selected thumbnail in the film strip
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &old_path, NULL);
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &old_path, NULL);
 	gtk_tree_model_get_iter(GTK_TREE_MODEL(film_strip_store), &old_iter, old_path);
 
 	// Determine the proper thumbnail height

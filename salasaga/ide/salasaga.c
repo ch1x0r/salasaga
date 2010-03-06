@@ -85,7 +85,6 @@ GString					*file_name = NULL;			// Holds the file name the project is saved as
 GtkTreeViewColumn		*film_strip_column;			// Pointer to the film strip column
 GtkScrolledWindow		*film_strip_container;		// Container for the film strip
 GtkListStore			*film_strip_store;			// Film strip list store
-GtkWidget				*film_strip_view;			// The view of the film strip list store
 GdkPixmap				*front_store;				// Front store for double buffering the workspace area
 FT_Face					ft_font_face[FONT_COUNT];	// Array of FreeType font face handles
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
@@ -94,9 +93,6 @@ GString					*info_link;					//
 GString					*info_link_target;			//
 GtkTextBuffer			*info_text;					// Text to be shown in the information button in swf output
 GString					*last_folder;				// Keeps track of the last folder the user visited
-GtkWidget				*main_area;					// Widget for the onscreen display
-GtkWidget				*main_drawing_area;			// Widget for the drawing area
-GtkWidget				*main_window;				// Widget for the main window
 GtkItemFactory			*menu_bar = NULL;			// Widget for the menu bar
 GtkTable				*message_bar;				// Widget for message bar
 GdkPixbuf				*mouse_ptr_pixbuf;			// Temporary GDK Pixbuf
@@ -104,17 +100,12 @@ GString					*mouse_ptr_string;			// Full path to the mouse pointer graphic
 GIOChannel				*output_file;				// The output file handle
 GtkComboBox				*resolution_selector;		// Widget for the resolution selector
 GdkRectangle			resize_handles_rect[8];		// Contains the onscreen offsets and size for the resize handles
-GtkWidget				*right_side;				// Widget for the right side area
 GList					*slides = NULL;				// Linked list holding the slide info
-GtkWidget				*status_bar;				// Widget for the status bar
 GtkStatusIcon			*status_icon;				// Pointer to the GtkStatusIcon object, used for StatusIcon communication
 GSList					*text_tags_fg_colour_slist = NULL;	// Text tags for text foreground colour, used for changing text colour in text layers
 GtkTextTag				*text_tags_fonts[FONT_COUNT];	// Text tags for font faces, used for applying font faces in text layers
 GSList					*text_tags_size_slist = NULL;	// Text tags for text sizes, used for changing text size in text layers
 GtkTextTagTable			*text_tags_table;			// The table of all text tags, used for applying text tags in text layers
-GtkWidget				*time_line_container;		// Scrolled window widget, to add scroll bars to the time line widget
-GtkWidget				*time_line_vbox;			// VBox widget holding all of the time line elements
-GtkWidget				*working;					// Widget for the working area
 GtkComboBox				*zoom_selector;				// Widget for the zoom selector
 
 // Main tool bar items
@@ -346,15 +337,15 @@ gint main(gint argc, gchar *argv[])
 	mouse_ptr_pixbuf = gdk_pixbuf_new_from_file_at_size(mouse_ptr_string->str, -1, -1, NULL);
 
 	// Start up the GUI part of things
-	main_window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
-	gtk_window_set_default_size(GTK_WINDOW(main_window), 800, 600);
-	gtk_window_set_position(GTK_WINDOW(main_window), GTK_WIN_POS_CENTER);
+	set_main_window(gtk_window_new(GTK_WINDOW_TOPLEVEL));
+	gtk_window_set_default_size(GTK_WINDOW(get_main_window()), 800, 600);
+	gtk_window_set_position(GTK_WINDOW(get_main_window()), GTK_WIN_POS_CENTER);
 
 	// Create the Salasaga status bar icon
 	create_status_icon();
 
 	// Attach a signal handler to the main window, so we can track when the window is iconified and deiconfied
-	g_signal_connect(G_OBJECT(main_window), "window-state-event", G_CALLBACK(window_state_changed), (gpointer) NULL);
+	g_signal_connect(G_OBJECT(get_main_window()), "window-state-event", G_CALLBACK(window_state_changed), (gpointer) NULL);
 
 #ifndef _WIN32  // Non-windows check
 	// Initialise sound
@@ -375,7 +366,7 @@ gint main(gint argc, gchar *argv[])
 		g_mkdir(tmp_gstring->str, 0750);
 
 		// Which monitor are we displaying on?
-		which_screen = gtk_window_get_screen(GTK_WINDOW(main_window));
+		which_screen = gtk_window_get_screen(GTK_WINDOW(get_main_window()));
 
 		// Initialise the application variables to sensible defaults
 		g_string_printf(default_project_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "projects");
@@ -420,20 +411,20 @@ gint main(gint argc, gchar *argv[])
 	snprintf(wintitle, 40, "%s v%s", APP_NAME, APP_VERSION);
 
 	// Set the window title and border
-	gtk_window_set_title(GTK_WINDOW(main_window), wintitle);
-	gtk_container_set_border_width(GTK_CONTAINER(main_window), 0);
+	gtk_window_set_title(GTK_WINDOW(get_main_window()), wintitle);
+	gtk_container_set_border_width(GTK_CONTAINER(get_main_window()), 0);
 
 	// Create the title bar icon
 	g_string_printf(title_bar_icon_path, "%s%c%s", STATUS_ICON_DIR, G_DIR_SEPARATOR, "salasaga-icon.png");
-	gtk_window_set_icon_from_file(GTK_WINDOW(main_window), title_bar_icon_path->str, NULL);
+	gtk_window_set_icon_from_file(GTK_WINDOW(get_main_window()), title_bar_icon_path->str, NULL);
 	g_string_free(title_bar_icon_path, TRUE);
 
 	// Set signal handlers to catch user requests to quit
-	g_signal_connect(G_OBJECT(main_window), "delete-event", G_CALLBACK(quit_event), NULL);
+	g_signal_connect(G_OBJECT(get_main_window()), "delete-event", G_CALLBACK(quit_event), NULL);
 
 	// Create the outermost container that everything (menu, main, status bar) fits into
 	outer_box = gtk_vbox_new(FALSE, 0);
-	gtk_container_add(GTK_CONTAINER(main_window), GTK_WIDGET(outer_box));
+	gtk_container_add(GTK_CONTAINER(get_main_window()), GTK_WIDGET(outer_box));
 
 	// * Create the menu *
 	create_menu_bar();
@@ -458,28 +449,28 @@ gint main(gint argc, gchar *argv[])
 	gtk_box_pack_start(GTK_BOX(outer_box), GTK_WIDGET(toolbar), FALSE, FALSE, 0);
 
 	// * Create a HPaned to pack the film strip into, and a vbox for the time line plus working area *
-	main_area = gtk_hpaned_new();
+	set_main_area(gtk_hpaned_new());
 	handle_size = g_new0(GValue, 1);
 	g_value_init(handle_size, G_TYPE_INT);
-	gtk_widget_style_get_property(GTK_WIDGET(main_area), "handle-size", handle_size);
-	gtk_paned_set_position(GTK_PANED(main_area), g_value_get_int(handle_size) + preview_width + 15);
-	gtk_box_pack_start_defaults(GTK_BOX(outer_box), GTK_WIDGET(main_area));
+	gtk_widget_style_get_property(GTK_WIDGET(get_main_area()), "handle-size", handle_size);
+	gtk_paned_set_position(GTK_PANED(get_main_area()), g_value_get_int(handle_size) + preview_width + 15);
+	gtk_box_pack_start_defaults(GTK_BOX(outer_box), GTK_WIDGET(get_main_area()));
 
 	// Attach signal handlers to the movable handle between film strip and right hand side
 	set_film_strip_being_resized(FALSE);
-	g_signal_connect(G_OBJECT(main_area), "notify::position", G_CALLBACK(film_strip_handle_changed), (gpointer) NULL);
-	g_signal_connect(G_OBJECT(main_area), "button_release_event", G_CALLBACK(film_strip_handle_released), (gpointer) NULL);
+	g_signal_connect(G_OBJECT(get_main_area()), "notify::position", G_CALLBACK(film_strip_handle_changed), (gpointer) NULL);
+	g_signal_connect(G_OBJECT(get_main_area()), "button_release_event", G_CALLBACK(film_strip_handle_released), (gpointer) NULL);
 
 	// * Create a table for the status bar, zoom selector, and resolution selectors to go in *
 	message_bar = GTK_TABLE(gtk_table_new(1, 6, TRUE));
 	gtk_box_pack_start(GTK_BOX(outer_box), GTK_WIDGET(message_bar), FALSE, FALSE, 0);
 
 	// Create the status bar
-	status_bar = gtk_progress_bar_new();
-	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(status_bar), GTK_PROGRESS_LEFT_TO_RIGHT);
-	gtk_progress_bar_set_ellipsize(GTK_PROGRESS_BAR(status_bar), PANGO_ELLIPSIZE_END);
-	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
-	gtk_table_attach(message_bar, GTK_WIDGET(status_bar), 0, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
+	set_status_bar(gtk_progress_bar_new());
+	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(get_status_bar()), GTK_PROGRESS_LEFT_TO_RIGHT);
+	gtk_progress_bar_set_ellipsize(GTK_PROGRESS_BAR(get_status_bar()), PANGO_ELLIPSIZE_END);
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(get_status_bar()), 0.0);
+	gtk_table_attach(message_bar, GTK_WIDGET(get_status_bar()), 0, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
 
 	// Create the zoom selector label
 	zoom_label = GTK_LABEL(gtk_label_new(_("Zoom: ")));
@@ -514,26 +505,26 @@ gint main(gint argc, gchar *argv[])
 		display_warning(message->str);
 		exit(2);
 	}
-	gtk_paned_add1(GTK_PANED(main_area), GTK_WIDGET(film_strip_container));
+	gtk_paned_add1(GTK_PANED(get_main_area()), GTK_WIDGET(film_strip_container));
 
 	// * Create the vertical box to pack the time line and working area into *
-	right_side = gtk_vpaned_new();
+	set_right_side(gtk_vpaned_new());
 	create_time_line();  // Create the time line
 	tmp_widget = create_working_area(tmp_widget);  // Create the working area
-	gtk_paned_add1(GTK_PANED(right_side), GTK_WIDGET(time_line_vbox));
-	gtk_paned_add2(GTK_PANED(right_side), GTK_WIDGET(tmp_widget));
-	gtk_paned_set_position(GTK_PANED(right_side), 250);
-	gtk_paned_add2(GTK_PANED(main_area), GTK_WIDGET(right_side));
+	gtk_paned_add1(GTK_PANED(get_right_side()), GTK_WIDGET(get_time_line_vbox()));
+	gtk_paned_add2(GTK_PANED(get_right_side()), GTK_WIDGET(tmp_widget));
+	gtk_paned_set_position(GTK_PANED(get_right_side()), 250);
+	gtk_paned_add2(GTK_PANED(get_main_area()), GTK_WIDGET(get_right_side()));
 
 	// Create the text tags used in text layers
 	create_text_tags();
 
 	// Display a "Ready" message in the status bar
 	g_string_printf(message, " %s", _("Ready"));
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), message->str);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), message->str);
 
 	// Catch when the window is resized, to automatically recalculate the zoom and redraw the drawing area
-	g_signal_connect(G_OBJECT(right_side), "size-allocate", G_CALLBACK(event_size_allocate_received), (gpointer) NULL);
+	g_signal_connect(G_OBJECT(get_right_side()), "size-allocate", G_CALLBACK(event_size_allocate_received), (gpointer) NULL);
 
 	// Gray out the toolbar items that can't be used without a project loaded
 	disable_layer_toolbar_buttons();
@@ -556,7 +547,7 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// Display the main window
-	gtk_widget_show_all(main_window);
+	gtk_widget_show_all(get_main_window());
 
 	// Calculate the zoom and drawing area, and initialise the project dimensions
 	zoom_selector_changed(GTK_WIDGET(zoom_selector), NULL, (gpointer) NULL);

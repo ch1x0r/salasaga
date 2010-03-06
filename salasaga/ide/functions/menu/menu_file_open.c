@@ -87,7 +87,7 @@ void menu_file_open(void)
 
 	// Create the dialog asking the user to select a Salasaga Project file
 	open_dialog = gtk_file_chooser_dialog_new(_("Open a Salasaga Project"),
-						  GTK_WINDOW(main_window),
+						  GTK_WINDOW(get_main_window()),
 						  GTK_FILE_CHOOSER_ACTION_OPEN,
 						  GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
 						  GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
@@ -186,8 +186,8 @@ void menu_file_open(void)
 
 				// Use the status bar to communicate the failed loading of the project
 				g_string_printf(message, " %s - %s", _("Project load aborted"), g_path_get_basename(validated_string->str));
-				gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), message->str);
-				gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
+				gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), message->str);
+				gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(get_status_bar()), 0.0);
 
 				// Return
 				g_string_free(validated_string, TRUE);
@@ -217,7 +217,7 @@ void menu_file_open(void)
 
 	// Change the title bar to include the project name
 	g_string_printf(message, "%s v%s - %s", APP_NAME, APP_VERSION, g_path_get_basename(file_name->str));
-	gtk_window_set_title(GTK_WINDOW(main_window), message->str);
+	gtk_window_set_title(GTK_WINDOW(get_main_window()), message->str);
 
 	// Destroy the existing output resolution selector
 	g_signal_handler_disconnect(G_OBJECT(resolution_selector), get_resolution_callback());
@@ -240,7 +240,7 @@ void menu_file_open(void)
 	set_working_height((project_height * get_zoom()) / 100);
 
 	// Resize the drawing area so it draws properly
-	gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), get_working_width(), get_working_height());
+	gtk_widget_set_size_request(GTK_WIDGET(get_main_drawing_area()), get_working_width(), get_working_height());
 
 	// Free the existing front store for the workspace
 	if (NULL != front_store)
@@ -257,12 +257,12 @@ void menu_file_open(void)
 	time_line_set_selected_layer_num(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget), 0);
 
 	// Scroll the film strip to show the new thumbnail position
-	gtk_tree_view_get_cursor(GTK_TREE_VIEW(film_strip_view), &new_path, NULL);
+	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &new_path, NULL);
 	if (NULL != new_path)
 		old_path = new_path;  // Make a backup of the old path, so we can free it
 	new_path = gtk_tree_path_new_first();
-	gtk_tree_view_set_cursor(GTK_TREE_VIEW(film_strip_view), new_path, NULL, FALSE);
-	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(film_strip_view), new_path, NULL, TRUE, 0.0, 0.0);
+	gtk_tree_view_set_cursor(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, FALSE);
+	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, TRUE, 0.0, 0.0);
 	if (NULL != old_path)
 		gtk_tree_path_free(old_path);  // Free the old path
 	if (NULL != new_path)
@@ -286,8 +286,8 @@ void menu_file_open(void)
 
 	// Use the status bar to communicate the successful loading of the project
 	g_string_printf(message, " %s - %u %s", _("Project loaded"), num_slides, _("slides"));
-	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), message->str);
-	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(status_bar), 0.0);
+	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), message->str);
+	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(get_status_bar()), 0.0);
 
 	// Free the memory allocated in this function
 	// (note that salasaga_filter, flame_filter and the all_filter seem to be freed when the dialog is destroyed)
