@@ -73,7 +73,7 @@ gboolean draw_handle_box(void)
 
 
 	// Only do this function if we have a front store available and a project loaded
-	if ((NULL == front_store) || (FALSE == project_active))
+	if ((NULL == front_store) || (FALSE == get_project_active()))
 	{
 		return TRUE;
 	}

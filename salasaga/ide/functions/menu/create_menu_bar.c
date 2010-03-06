@@ -187,7 +187,7 @@ void create_menu_bar()
 	menu_enable(_("/Edit/Redo"), FALSE);
 
 	// If screenshots are disabled, then grey out the screenshot menu items
-	if (FALSE == screenshots_enabled)
+	if (FALSE == get_screenshots_enabled())
 	{
 		menu_enable(_("/Screenshots/Capture _window"), FALSE);
 		menu_enable(_("/Screenshots/Capture _full screen"), FALSE);

@@ -82,7 +82,6 @@
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
 SWFFont					fdb_font_object[FONT_COUNT];	// The fdb font faces we use get loaded into this
 GString					*file_name = NULL;			// Holds the file name the project is saved as
-gboolean				film_strip_being_resized;	// Toggle to indicate if the film strip is being resized
 GtkTreeViewColumn		*film_strip_column;			// Pointer to the film strip column
 GtkScrolledWindow		*film_strip_container;		// Container for the film strip
 GtkListStore			*film_strip_store;			// Film strip list store
@@ -92,7 +91,6 @@ GdkPixmap				*front_store;				// Front store for double buffering the workspace 
 FT_Face					ft_font_face[FONT_COUNT];	// Array of FreeType font face handles
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
 GString					*icon_path;					// Points to the base location for Salasaga icon files
-gboolean				info_display = TRUE;		// Toggle for whether to display the information button in swf output
 GString					*info_link;					//
 GString					*info_link_target;			//
 GtkTextBuffer			*info_text;					// Text to be shown in the information button in swf output
@@ -106,15 +104,9 @@ GtkWidget				*main_drawing_area;			// Widget for the drawing area
 GtkWidget				*main_window;				// Widget for the main window
 GtkItemFactory			*menu_bar = NULL;			// Widget for the menu bar
 GtkTable				*message_bar;				// Widget for message bar
-gboolean				mouse_click_double_added;	// Have we added a double mouse click to the exported swf yet?
-gboolean				mouse_click_single_added;	// Have we added a single mouse click to the exported swf yet?
-gboolean				mouse_click_triple_added;	// Have we added a triple mouse click to the exported swf yet?
-gboolean				mouse_dragging = FALSE;		// Is the mouse being dragged?
 GdkPixbuf				*mouse_ptr_pixbuf;			// Temporary GDK Pixbuf
 GString					*mouse_ptr_string;			// Full path to the mouse pointer graphic
-gboolean				new_layer_selected = TYPE_NONE;	// Is a new layer being created?
 GIOChannel				*output_file;				// The output file handle
-gboolean				project_active;				// Whether or not a project is active (i.e. something is loaded or has been created)
 gulong					resolution_callback;		// Holds the id of the resolution selector callback
 GtkComboBox				*resolution_selector;		// Widget for the resolution selector
 GdkRectangle			resize_handles_rect[8];		// Contains the onscreen offsets and size for the resize handles
@@ -123,9 +115,6 @@ guint					resize_handle_size = 6;		// Size of the resize handles
 GtkWidget				*right_side;				// Widget for the right side area
 gint					screenshot_command_num = -1;  // The metacity run command number used for the screenshot key
 guint					screenshot_delay_time = 5;	// The number of seconds the screenshot trigger is delayed
-gboolean				screenshot_key_warning;		// Should the warning about not being able to set the screenshot key be displayed?
-gboolean				screenshots_enabled = FALSE;  // Toggle for whether to enable screenshots
-gboolean				show_control_bar = TRUE;	// Toggle for whether to display the control bar in swf output
 GList					*slides = NULL;				// Linked list holding the slide info
 guint					start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
 GtkWidget				*status_bar;				// Widget for the status bar
@@ -245,7 +234,7 @@ gint main(gint argc, gchar *argv[])
 
 
 	// Set defaults
-	project_active = FALSE;
+	set_project_active(FALSE);
 	default_bg_colour.red = 0;
 	default_bg_colour.green = 0;
 	default_bg_colour.blue = 0;
@@ -423,7 +412,7 @@ gint main(gint argc, gchar *argv[])
 		default_slide_duration = 5;  // Default number of seconds to use for new slides
 		default_layer_duration = 5;  // Default number of seconds to use for new layers
 		default_fps = 12;
-		screenshot_key_warning = TRUE;
+		set_screenshot_key_warning(TRUE);
 		temp_colour.red = 0;
 		temp_colour.green = 0;
 		temp_colour.blue = 0;
@@ -501,7 +490,7 @@ gint main(gint argc, gchar *argv[])
 	gtk_box_pack_start_defaults(GTK_BOX(outer_box), GTK_WIDGET(main_area));
 
 	// Attach signal handlers to the movable handle between film strip and right hand side
-	film_strip_being_resized = FALSE;
+	set_film_strip_being_resized(FALSE);
 	g_signal_connect(G_OBJECT(main_area), "notify::position", G_CALLBACK(film_strip_handle_changed), (gpointer) NULL);
 	g_signal_connect(G_OBJECT(main_area), "button_release_event", G_CALLBACK(film_strip_handle_released), (gpointer) NULL);
 
@@ -575,7 +564,7 @@ gint main(gint argc, gchar *argv[])
 	disable_main_toolbar_buttons();
 
 	// Gray out the screenshot capture main toolbar icon if screenshots aren't enabled
-	if (FALSE == screenshots_enabled)
+	if (FALSE == get_screenshots_enabled())
 	{
 		// Disable the Capture icon
 		if (NULL != main_toolbar_icons[CAPTURE])

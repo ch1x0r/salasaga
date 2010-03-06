@@ -367,7 +367,7 @@ void menu_edit_preferences(void)
 
 	// Whether to display warning when screenshot key bind fails
 	check_screenshot_key_bind = gtk_check_button_new_with_label(_("Display warning when screenshot key isn't enabled?"));
-	if (FALSE == screenshot_key_warning)
+	if (FALSE == get_screenshot_key_warning())
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_screenshot_key_bind), FALSE);
 	} else
@@ -737,10 +737,10 @@ void menu_edit_preferences(void)
 	// Find out if we should display a warning when the screenshot key isn't bound
 	if (TRUE == gtk_toggle_button_get_active(GTK_TOGGLE_BUTTON(check_screenshot_key_bind)))
 	{
-		screenshot_key_warning = TRUE;
+		set_screenshot_key_warning(TRUE);
 	} else
 	{
-		screenshot_key_warning = FALSE;
+		set_screenshot_key_warning(FALSE);
 	}
 
 	// Update the status bar

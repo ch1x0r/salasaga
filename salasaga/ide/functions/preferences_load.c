@@ -562,7 +562,7 @@ gboolean preferences_load()
 	set_display_help_text(should_display_help_text);
 
 	// Set the screenshot key bind warning
-	screenshot_key_warning = should_keybind_warn;
+	set_screenshot_key_warning(should_keybind_warn);
 
 	// Free our GConf engine
 	gconf_engine_unref(gconf_engine);

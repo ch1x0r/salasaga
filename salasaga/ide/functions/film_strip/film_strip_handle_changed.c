@@ -58,7 +58,7 @@ void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data)
 	if (new_position != preview_width)
 	{
 		// Set a toggle to indicate the film strip width is being changed
-		film_strip_being_resized = TRUE;
+		set_film_strip_being_resized(TRUE);
 		preview_width = new_position;
 	}
 }

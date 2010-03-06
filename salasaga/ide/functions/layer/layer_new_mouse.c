@@ -61,7 +61,7 @@ void layer_new_mouse(void)
 	gdk_cursor_unref(selection_cursor);
 
 	// Set a toggle so the release button callback will know to do the rest
-	new_layer_selected = TYPE_MOUSE_CURSOR;
+	set_new_layer_selected(TYPE_MOUSE_CURSOR);
 
 	// Update the status bar
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(status_bar), _(" Please click the insertion point"));

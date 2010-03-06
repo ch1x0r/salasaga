@@ -62,7 +62,7 @@ void menu_file_save_as(void)
 
 
 	// If there's no project active, we just beep and return
-	if (FALSE == project_active)
+	if (FALSE == get_project_active())
 	{
 		gdk_beep();
 		return;

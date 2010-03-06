@@ -41,7 +41,7 @@
 gint film_strip_handle_released(GObject *paned, GParamSpec *pspec, gpointer data)
 {
 	// Check if we're in the middle of resizing the film strip
-	if (TRUE == film_strip_being_resized)
+	if (TRUE == get_film_strip_being_resized())
 	{
 		// Set the new width of the film strip widget
 		gtk_tree_view_column_set_fixed_width(GTK_TREE_VIEW_COLUMN(film_strip_column), preview_width);
@@ -50,7 +50,7 @@ gint film_strip_handle_released(GObject *paned, GParamSpec *pspec, gpointer data
 		regenerate_film_strip_thumbnails();
 
 		// Set a toggle to indicate the film strip width changing has completed
-		film_strip_being_resized = FALSE;
+		set_film_strip_being_resized(FALSE);
 	}
 
 	// Indicate to the calling routine that this function finished fine

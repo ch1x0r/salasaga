@@ -82,7 +82,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 
 	// Only do this function if we have a front store available and a project loaded
-	if ((NULL == front_store) || (FALSE == project_active))
+	if ((NULL == front_store) || (FALSE == get_project_active()))
 	{
 		return TRUE;
 	}
@@ -100,10 +100,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	project_y_position = mouse_y * scaled_height_ratio;
 
 	// Code to run if this button release is for the creation of a new highlight layer
-	if (TYPE_HIGHLIGHT == new_layer_selected)
+	if (TYPE_HIGHLIGHT == get_new_layer_selected())
 	{
 		// Reset the new layer toggle
-		new_layer_selected = TYPE_NONE;
+		set_new_layer_selected(TYPE_NONE);
 
 		// Ask the user for the rest of the required details
 		layer_new_highlight_inner(mouse_x, mouse_y);  // Note that this one gets the unscaled mouse positions
@@ -111,10 +111,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	}
 
 	// Code to run if this button release is for the creation of a new image layer
-	if (TYPE_GDK_PIXBUF == new_layer_selected)
+	if (TYPE_GDK_PIXBUF == get_new_layer_selected())
 	{
 		// Reset the new layer toggle
-		new_layer_selected = TYPE_NONE;
+		set_new_layer_selected(TYPE_NONE);
 
 		// Ask the user for the rest of the required details
 		layer_new_image_inner(project_x_position, project_y_position);
@@ -122,10 +122,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	}
 
 	// Code to run if this button release is for the creation of a new mouse layer
-	if (TYPE_MOUSE_CURSOR == new_layer_selected)
+	if (TYPE_MOUSE_CURSOR == get_new_layer_selected())
 	{
 		// Reset the new layer toggle
-		new_layer_selected = TYPE_NONE;
+		set_new_layer_selected(TYPE_NONE);
 
 		// Ask the user for the rest of the required details
 		layer_new_mouse_inner(project_x_position, project_y_position);
@@ -133,10 +133,10 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	}
 
 	// Code to run if this button release is for the creation of a new text layer
-	if (TYPE_TEXT == new_layer_selected)
+	if (TYPE_TEXT == get_new_layer_selected())
 	{
 		// Reset the new layer toggle
-		new_layer_selected = TYPE_NONE;
+		set_new_layer_selected(TYPE_NONE);
 
 		// Ask the user for the rest of the required details
 		layer_new_text_inner(project_x_position, project_y_position);
@@ -344,7 +344,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	}
 
 	// If this release matches the end of a mouse drag operation, we process it
-	if (TRUE == mouse_dragging)
+	if (TRUE == get_mouse_dragging())
 	{
 		// Initialise some things
 		this_slide_data = current_slide->data;
@@ -362,7 +362,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			{
 				case TYPE_EMPTY:
 					// We can't drag an empty layer, so reset things and return
-					mouse_dragging = FALSE;
+					set_mouse_dragging(FALSE);
 					stored_x = -1;
 					stored_y = -1;
 					return TRUE;
@@ -376,7 +376,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 					// If this is the background layer, then we ignore it
 					if (TRUE == layer_data->background)
 					{
-						mouse_dragging = FALSE;
+						set_mouse_dragging(FALSE);
 						stored_x = -1;
 						stored_y = -1;
 						return TRUE;
@@ -443,7 +443,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			film_strip_create_thumbnail((slide *) current_slide->data);
 
 			// Reset the mouse drag switch and related info
-			mouse_dragging = FALSE;
+			set_mouse_dragging(FALSE);
 			stored_x = -1;
 			stored_y = -1;
 

@@ -93,9 +93,9 @@ gint export_swf_inner(gchar *output_filename)
 	slide_depth = 2;
 	total_frames = 0;
 	total_seconds = 0;
-	mouse_click_double_added = FALSE;
-	mouse_click_single_added = FALSE;
-	mouse_click_triple_added = FALSE;
+	set_mouse_click_double_added(FALSE);
+	set_mouse_click_single_added(FALSE);
+	set_mouse_click_triple_added(FALSE);
 	as_gstring = g_string_new(NULL);
 	initial_action_gstring = g_string_new(NULL);
 	message = g_string_new(NULL);
@@ -175,7 +175,7 @@ gint export_swf_inner(gchar *output_filename)
 	}
 
 	// If requested, add the swf control bar to the movie
-	if (TRUE == show_control_bar)
+	if (TRUE == get_show_control_bar())
 	{
 		return_code_bool = export_swf_control_bar(swf_movie, out_res_index, total_num_layers + 8);
 		if (TRUE != return_code_bool)

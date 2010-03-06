@@ -238,7 +238,7 @@ void menu_project_properties(void)
 	gtk_misc_set_alignment(GTK_MISC(label_control_bar), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_control_bar), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	check_control_bar = gtk_check_button_new();
-	if (TRUE == show_control_bar)
+	if (TRUE == get_show_control_bar())
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_control_bar), TRUE);
 	} else
@@ -253,7 +253,7 @@ void menu_project_properties(void)
 	gtk_misc_set_alignment(GTK_MISC(label_display_info), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_display_info), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
 	check_display_info = gtk_check_button_new();
-	if (TRUE == info_display)
+	if (TRUE == get_info_display())
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_display_info), TRUE);
 	} else
@@ -485,10 +485,10 @@ void menu_project_properties(void)
 	set_end_behaviour(valid_end_behaviour);
 
 	// Control bar display
-	show_control_bar = valid_control_bar_behaviour;
+	set_show_control_bar(valid_control_bar_behaviour);
 
 	// Information button display
-	info_display = valid_info_display;
+	set_info_display(valid_info_display);
 	g_string_printf(info_link, "%s", valid_ext_link->str);
 	g_string_printf(info_link_target, "%s", valid_ext_link_win->str);
 

@@ -68,13 +68,13 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 		case MOUSE_MIDDLE_ONE:
 
 			// If we've already added the sound to the movie, we don't need to add it again
-			if (FALSE == mouse_click_single_added)
+			if (FALSE == get_mouse_click_single_added())
 			{
 				// Single click mouse sound
 				sound_pathname = g_build_path(G_DIR_SEPARATOR_S, SOUND_DIR, "mouse_single_click.mp3", NULL);
 
 				// Make sure we only add this click sound once
-				mouse_click_single_added = TRUE;
+				set_mouse_click_single_added(TRUE);
 			}
 
 			click_name = g_string_assign(click_name, "mousesingleclick");
@@ -86,13 +86,13 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 		case MOUSE_MIDDLE_DOUBLE:
 
 			// If we've already added the sound to the movie, we don't need to add it again
-			if (FALSE == mouse_click_double_added)
+			if (FALSE == get_mouse_click_double_added())
 			{
 				// Double click mouse sound
 				sound_pathname = g_build_path(G_DIR_SEPARATOR_S, SOUND_DIR, "mouse_double_click.mp3", NULL);
 
 				// Make sure we only add this click sound once
-				mouse_click_double_added = TRUE;
+				set_mouse_click_double_added(TRUE);
 			}
 
 			click_name = g_string_assign(click_name, "mousedoubleclick");
@@ -104,13 +104,13 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 		case MOUSE_MIDDLE_TRIPLE:
 
 			// If we've already added the sound to the movie, we don't need to add it again
-			if (FALSE == mouse_click_triple_added)
+			if (FALSE == get_mouse_click_triple_added())
 			{
 				// Triple click mouse sound
 				sound_pathname = g_build_path(G_DIR_SEPARATOR_S, SOUND_DIR, "mouse_triple_click.mp3", NULL);
 
 				// Make sure we only add this click sound once
-				mouse_click_triple_added = TRUE;
+				set_mouse_click_triple_added(TRUE);
 			}
 
 			click_name = g_string_assign(click_name, "mousetripleclick");

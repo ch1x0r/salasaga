@@ -50,7 +50,7 @@ void menu_file_close()
 
 
 	// If there isn't an active project, we just return
-	if (FALSE == project_active)
+	if (FALSE == get_project_active())
 		return;
 
 	// If we have unsaved changes, warn the user
@@ -76,7 +76,7 @@ void menu_file_close()
 	}
 
 	// Update the global project active flag
-	project_active = FALSE;
+	set_project_active(FALSE);
 
 	// Clear the changes made variable
 	set_changes_made(FALSE);

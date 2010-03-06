@@ -65,7 +65,7 @@ void menu_file_save(void)
 
 
 	// If there's no project active, we just beep and return
-	if (FALSE == project_active)
+	if (FALSE == get_project_active())
 	{
 		gdk_beep();
 		return;
@@ -182,14 +182,14 @@ void menu_file_save(void)
 			g_string_free(message, TRUE);
 			return;
 	}
-	if (TRUE == show_control_bar)
+	if (TRUE == get_show_control_bar())
 	{
 		xmlNewChild(pref_pointer, NULL, (const xmlChar *) "show_control_bar", (const xmlChar *) "true");
 	} else
 	{
 		xmlNewChild(pref_pointer, NULL, (const xmlChar *) "show_control_bar", (const xmlChar *) "false");
 	}
-	if (TRUE == info_display)
+	if (TRUE == get_info_display())
 	{
 		xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_display", (const xmlChar *) "true");
 	} else

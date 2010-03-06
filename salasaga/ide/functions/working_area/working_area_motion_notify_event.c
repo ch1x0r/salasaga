@@ -87,7 +87,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 
 
 	// If the current slide hasn't been initialised, or there is no project active don't run this function
-	if ((NULL == current_slide) || (FALSE == project_active))
+	if ((NULL == current_slide) || (FALSE == get_project_active()))
 	{
 		return TRUE;
 	}
@@ -99,7 +99,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
 
 	// If we're creating a new highlight layer, draw a bounding box
-	if (TYPE_HIGHLIGHT == new_layer_selected)
+	if (TYPE_HIGHLIGHT == get_new_layer_selected())
 	{
 		// Draw the updated bounding box
 		draw_bounding_box(stored_x, stored_y, mouse_x, mouse_y);
@@ -215,7 +215,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	}
 
 	// * Start and end point movement detection code *
-	if ((FALSE == mouse_dragging)								// Not dragging mouse already
+	if ((FALSE == get_mouse_dragging())							// Not dragging mouse already
 		&& ((RESIZE_HANDLES_WAITING == resize_handles_status)
 		|| (RESIZE_HANDLES_INACTIVE == resize_handles_status)))	// Not resizing a layer already
 	{
@@ -323,7 +323,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		{
 			case TYPE_EMPTY:
 				// We can't drag an empty layer, so reset things and return
-				mouse_dragging = FALSE;
+				set_mouse_dragging(FALSE);
 				set_end_point_status(END_POINTS_INACTIVE);
 				stored_x = -1;
 				stored_y = -1;
@@ -338,7 +338,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				// If this is the background layer, then we ignore it
 				if (TRUE == layer_data->background)
 				{
-					mouse_dragging = FALSE;
+					set_mouse_dragging(FALSE);
 					set_end_point_status(END_POINTS_INACTIVE);
 					stored_x = -1;
 					stored_y = -1;
@@ -406,7 +406,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	}
 
 	// If we're already aware of a mouse drag operation going on, then draw a bounding box
-	if (TRUE == mouse_dragging)
+	if (TRUE == get_mouse_dragging())
 	{
 		// Initialise some things
 		this_slide_data = current_slide->data;
@@ -542,7 +542,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		|| (RESIZE_HANDLES_INACTIVE == resize_handles_status)))	// Not resizing a layer already
 	{
 		// We're commencing a drag, so note this
-		mouse_dragging = TRUE;
+		set_mouse_dragging(TRUE);
 
 		// Initialise some things
 		this_slide_data = current_slide->data;

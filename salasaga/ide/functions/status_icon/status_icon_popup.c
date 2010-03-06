@@ -71,7 +71,7 @@ gint status_icon_popup(GtkWidget *widget, GdkEvent *event, gpointer data)
 	}
 
 	// Add the Take Screenshot menu item if screenshots are enabled
-	if (TRUE == screenshots_enabled)
+	if (TRUE == get_screenshots_enabled())
 	{
 		status_icon_menu_item_screenshot = gtk_menu_item_new_with_label(_("Take Screenshot"));
 		gtk_menu_shell_append(GTK_MENU_SHELL(status_icon_menu), GTK_WIDGET(status_icon_menu_item_screenshot));

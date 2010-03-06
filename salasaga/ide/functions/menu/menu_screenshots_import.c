@@ -93,13 +93,13 @@ void menu_screenshots_import(void)
 	using_first_screenshot = FALSE;
 
 	// Set the default information button display info if there isn't a project already active
-	if (TRUE != project_active)
+	if (TRUE != get_project_active())
 	{
 		info_link = g_string_new("http://www.salasaga.org");
 		info_link_target = g_string_new(_("_blank"));
 		info_text = gtk_text_buffer_new(text_tags_table);
 		gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), _("Created using Salasaga"), -1);
-		info_display = TRUE;
+		set_info_display(TRUE);
 	}
 
 	// * We know the path to get the screenshots from (screenshots_folder), and their prefix name (project_name),
@@ -149,7 +149,7 @@ void menu_screenshots_import(void)
 					// * The file format was recognised *
 
 					// If a project is already active, then we have existing dimensions we need to conform to
-					if ((TRUE == project_active) || (TRUE == using_first_screenshot))
+					if ((TRUE == get_project_active()) || (TRUE == using_first_screenshot))
 					{
 						// Make a note if the width and height of this screenshot differs from the existing project dimensions
 						if (image_width != project_width)
@@ -176,7 +176,7 @@ void menu_screenshots_import(void)
 	// If screenshots of differing dimensions were found, warn the user and let them cancel out of the import
 	if (TRUE == image_differences)
 	{
-		if (TRUE == project_active)
+		if (TRUE == get_project_active())
 		{
 			g_string_printf(tmp_string, "%s", _("Not all of the screenshots are of the same size, or some differ from the size of the project.  If you proceed, all screenshots different to the project size will become image layers.  Do you want to proceed?"));
 		} else
@@ -237,14 +237,14 @@ void menu_screenshots_import(void)
 		gdk_pixbuf_get_file_info(tmp_string->str, &image_width, &image_height);
 
 		// Is there a project already loaded?
-		if (FALSE == project_active)
+		if (FALSE == get_project_active())
 		{
 			// This is the first screenshot, so we make the project size the same dimensions as it
 			project_width = image_width;
 			project_height = image_height;
 
 			// Set the global toggle that a project is now active
-			project_active = TRUE;
+			set_project_active(TRUE);
 		} else
 		{
 			// The project size is already known, so if the size of this screenshot is different we make it a separate image layer instead

@@ -44,6 +44,17 @@ gdouble get_default_text_font_size();
 gboolean get_display_help_text();
 guint get_end_behaviour();
 guint get_end_point_status();
+gboolean get_film_strip_being_resized();
+gboolean get_info_display();
+gboolean get_mouse_click_double_added();
+gboolean get_mouse_click_single_added();
+gboolean get_mouse_click_triple_added();
+gboolean get_mouse_dragging();
+gboolean get_new_layer_selected();
+gboolean get_project_active();
+gboolean get_screenshot_key_warning();
+gboolean get_screenshots_enabled();
+gboolean get_show_control_bar();
 void set_boundary_list(GList *new_boundary_list);
 void set_cairo_font_face(guint index, cairo_font_face_t *new_cairo_font_face);
 void set_capture_height(guint new_capture_height);
@@ -59,6 +70,18 @@ void set_default_text_font_size(gdouble new_default_text_font_size);
 void set_display_help_text(gboolean new_display_help_text);
 void set_end_behaviour(guint new_end_behaviour);
 void set_end_point_status(guint new_end_point_status);
+void set_film_strip_being_resized(gboolean new_film_strip_being_resized);
+void set_info_display(gboolean new_info_display);
+void set_mouse_click_double_added(gboolean new_mouse_click_double_added);
+void set_mouse_click_single_added(gboolean new_mouse_click_single_added);
+void set_mouse_click_triple_added(gboolean new_mouse_click_triple_added);
+void set_mouse_dragging(gboolean new_mouse_dragging);
+void set_new_layer_selected(gboolean new_new_layer_selected);
+void set_project_active(gboolean new_project_active);
+void set_screenshot_key_warning(gboolean new_screenshot_key_warning);
+void set_screenshots_enabled(gboolean new_screenshots_enabled);
+void set_show_control_bar(gboolean new_show_control_bar);
+
 
 #ifdef __cplusplus
 }

@@ -55,7 +55,7 @@ void draw_workspace(void)
 
 
 	// If the current slide hasn't been initialised, or there is no project active don't run this function
-	if ((NULL == current_slide) || (FALSE == project_active))
+	if ((NULL == current_slide) || (FALSE == get_project_active()))
 	{
 		return;
 	}

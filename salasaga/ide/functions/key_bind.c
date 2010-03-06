@@ -74,17 +74,17 @@ gint key_bind(void)
 	if (WM_UNKNOWN == window_manager)
 	{
 		// Should we display a warning?
-		if (TRUE == screenshot_key_warning)
+		if (TRUE == get_screenshot_key_warning())
 		{
 			// Display the warning
 			g_string_printf(message, "%s ED379: %s\n\n%s", _("Error"), _("Setting Control-Printscreen as the screenshot key didn't work."), _("You'll have to trigger screenshots from the status bar icon."));
 			display_warning(message->str);
 
 			// Ensure the the warning is only displayed once unless the user specifically requests otherwise
-			screenshot_key_warning = FALSE;
+			set_screenshot_key_warning(FALSE);
 
 			// Enable screenshots, as the user should have set up the key binding themselves
-			screenshots_enabled = TRUE;
+			set_screenshots_enabled(TRUE);
 		}
 
 		// Return, as we don't need to run the rest of this function
@@ -101,7 +101,7 @@ gint key_bind(void)
 	}
 
 	// Enable screenshots
-	screenshots_enabled = TRUE;
+	set_screenshots_enabled(TRUE);
 
 	// Search for the first unused run command
 	gconf_engine = gconf_engine_get_default();

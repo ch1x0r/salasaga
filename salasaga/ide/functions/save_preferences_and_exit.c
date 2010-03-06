@@ -92,7 +92,7 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/icon_height", icon_height, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/screenshot_delay", screenshot_delay_time, NULL);
 	gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/display_help_text", get_display_help_text(), NULL);
-	gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/screenshot_key_warning", screenshot_key_warning, NULL);
+	gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/screenshot_key_warning", get_screenshot_key_warning(), NULL);
 	temp_colour = get_default_text_fg_colour();
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_text_fg_colour_red", temp_colour.red, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_text_fg_colour_green", temp_colour.green, NULL);

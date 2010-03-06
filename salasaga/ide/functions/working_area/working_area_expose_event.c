@@ -42,7 +42,7 @@
 gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	// Only do this function if we have a front store available and a project loaded
-	if ((NULL == front_store) || (FALSE == project_active))
+	if ((NULL == front_store) || (FALSE == get_project_active()))
 	{
 		return TRUE;
 	}
@@ -55,7 +55,7 @@ gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpo
 		event->area.width, event->area.height);
 
 	// If we're creating a new layer, we don't need to draw a handle box nor layer start and end points
-	if (TYPE_NONE == new_layer_selected)
+	if (TYPE_NONE == get_new_layer_selected())
 	{
 		// Draw a handle box around the selected layer
 		draw_handle_box();

@@ -230,7 +230,7 @@ void menu_file_open(void)
 	gtk_widget_show_all(GTK_WIDGET(message_bar));
 
 	// Set the global toggle that a project is now active
-	project_active = TRUE;
+	set_project_active(TRUE);
 
 	// Make the current slide point to the first slide
 	current_slide = slides;

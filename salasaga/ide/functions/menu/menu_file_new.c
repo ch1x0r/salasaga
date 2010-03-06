@@ -301,7 +301,7 @@ void menu_file_new(void)
 	info_link_target = g_string_new(_("_blank"));
 	info_text = gtk_text_buffer_new(text_tags_table);
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), _("Created using Salasaga"), -1);
-	info_display = TRUE;
+	set_info_display(TRUE);
 
 	// Create an initial blank slide for the project
 	slide_insert();
@@ -320,7 +320,7 @@ void menu_file_new(void)
 		gtk_tree_path_free(new_path);  // Free the old path
 
 	// Set the global toggle that a project is now active
-	project_active = TRUE;
+	set_project_active(TRUE);
 
 	// Set the changes made variable
 	set_changes_made(TRUE);

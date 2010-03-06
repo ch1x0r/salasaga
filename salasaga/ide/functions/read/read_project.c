@@ -1041,13 +1041,13 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 	set_end_behaviour(valid_end_behaviour);
 
 	// Control bar display
-	show_control_bar = valid_control_bar_behaviour;
+	set_show_control_bar(valid_control_bar_behaviour);
 
 	// Information button variables
 	info_link = valid_info_link;
 	info_link_target = valid_info_link_target;
 	info_text = valid_info_text;
-	info_display = valid_info_display;
+	set_info_display(valid_info_display);
 
 	// Make the new slides active, and update them to fill in their remaining pieces
 	slides = g_list_first(new_slides);

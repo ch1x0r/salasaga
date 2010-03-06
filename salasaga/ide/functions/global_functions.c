@@ -47,6 +47,17 @@ static gdouble				default_text_font_size;			// Default font size in text layers
 static gboolean				display_help_text = TRUE;		// Should we display help text and dialogs?
 static guint				end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations
 static guint				end_point_status = END_POINTS_INACTIVE;  // Is one of the layer end points being moved?
+static gboolean				film_strip_being_resized;		// Toggle to indicate if the film strip is being resized
+static gboolean				info_display = TRUE;			// Toggle for whether to display the information button in swf output
+static gboolean				mouse_click_double_added;		// Have we added a double mouse click to the exported swf yet?
+static gboolean				mouse_click_single_added;		// Have we added a single mouse click to the exported swf yet?
+static gboolean				mouse_click_triple_added;		// Have we added a triple mouse click to the exported swf yet?
+static gboolean				mouse_dragging = FALSE;			// Is the mouse being dragged?
+static gboolean				new_layer_selected = TYPE_NONE;	// Is a new layer being created?
+static gboolean				project_active;					// Whether or not a project is active (i.e. something is loaded or has been created)
+static gboolean				screenshot_key_warning;			// Should the warning about not being able to set the screenshot key be displayed?
+static gboolean				screenshots_enabled = FALSE;	// Toggle for whether to enable screenshots
+static gboolean				show_control_bar = TRUE;		// Toggle for whether to display the control bar in swf output
 
 
 // Functions to get and set the variables
@@ -125,6 +136,61 @@ guint get_end_point_status()
 	return end_point_status;
 }
 
+gboolean get_film_strip_being_resized()
+{
+	return film_strip_being_resized;
+}
+
+gboolean get_info_display()
+{
+	return info_display;
+}
+
+gboolean get_mouse_click_double_added()
+{
+	return mouse_click_double_added;
+}
+
+gboolean get_mouse_click_single_added()
+{
+	return mouse_click_single_added;
+}
+
+gboolean get_mouse_click_triple_added()
+{
+	return mouse_click_triple_added;
+}
+
+gboolean get_mouse_dragging()
+{
+	return mouse_dragging;
+}
+
+gboolean get_new_layer_selected()
+{
+	return new_layer_selected;
+}
+
+gboolean get_project_active()
+{
+	return project_active;
+}
+
+gboolean get_screenshot_key_warning()
+{
+	return screenshot_key_warning;
+}
+
+gboolean get_screenshots_enabled()
+{
+	return screenshots_enabled;
+}
+
+gboolean get_show_control_bar()
+{
+	return show_control_bar;
+}
+
 void set_boundary_list(GList *new_boundary_list)
 {
 	boundary_list = new_boundary_list;
@@ -198,4 +264,59 @@ void set_end_behaviour(guint new_end_behaviour)
 void set_end_point_status(guint new_end_point_status)
 {
 	end_point_status = new_end_point_status;
+}
+
+void set_film_strip_being_resized(gboolean new_film_strip_being_resized)
+{
+	film_strip_being_resized = new_film_strip_being_resized;
+}
+
+void set_info_display(gboolean new_info_display)
+{
+	info_display = new_info_display;
+}
+
+void set_mouse_click_double_added(gboolean new_mouse_click_double_added)
+{
+	mouse_click_double_added = new_mouse_click_double_added;
+}
+
+void set_mouse_click_single_added(gboolean new_mouse_click_single_added)
+{
+	mouse_click_single_added = new_mouse_click_single_added;
+}
+
+void set_mouse_click_triple_added(gboolean new_mouse_click_triple_added)
+{
+	mouse_click_triple_added = new_mouse_click_triple_added;
+}
+
+void set_mouse_dragging(gboolean new_mouse_dragging)
+{
+	mouse_dragging = new_mouse_dragging;
+}
+
+void set_new_layer_selected(gboolean new_new_layer_selected)
+{
+	new_layer_selected = new_new_layer_selected;
+}
+
+void set_project_active(gboolean new_project_active)
+{
+	project_active = new_project_active;
+}
+
+void set_screenshot_key_warning(gboolean new_screenshot_key_warning)
+{
+	screenshot_key_warning = new_screenshot_key_warning;
+}
+
+void set_screenshots_enabled(gboolean new_screenshots_enabled)
+{
+	screenshots_enabled = new_screenshots_enabled;
+}
+
+void set_show_control_bar(gboolean new_show_control_bar)
+{
+	show_control_bar = new_show_control_bar;
 }

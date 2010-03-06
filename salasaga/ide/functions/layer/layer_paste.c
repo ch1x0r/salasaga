@@ -48,7 +48,7 @@ void layer_paste(void)
 
 
 	// If no project is loaded then don't run this function
-	if (FALSE == project_active)
+	if (FALSE == get_project_active())
 	{
 		// Make a beep, then return
 		gdk_beep();

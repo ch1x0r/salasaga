@@ -365,7 +365,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	}
 
 	// If the information button should be displayed, we add that to the control bar background width
-	if (TRUE == info_display)
+	if (TRUE == get_info_display())
 	{
 		control_bar_width += button_width + button_spacing;
 		control_bar_x -= (button_width + button_spacing) / 2;
@@ -434,7 +434,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 
 	// Work out which background image to use
 	g_string_printf(file_name_full, "background");  // We use the file_name_full variable here as a temporary variable, purely for efficiency
-	if (TRUE == info_display)  // Check if the background image should be wide enough for the info button
+	if (TRUE == get_info_display())  // Check if the background image should be wide enough for the info button
 	{
 		g_string_append(file_name_full, "_with_info");
 	} else
@@ -1157,7 +1157,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 
 	// * Create the information button *
 
-	if (TRUE == info_display)
+	if (TRUE == get_info_display())
 	{
 		// Create an empty button object we can use
 		info_button = newSWFButton();
@@ -1414,7 +1414,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	button_x = button_x + button_width + button_spacing;
 
 	// Add the information button components
-	if (TRUE == info_display)
+	if (TRUE == get_info_display())
 	{
 		// Add the info button to the control bar
 		mc_display_item = SWFMovieClip_add(movie_clip, (SWFBlock) info_button);

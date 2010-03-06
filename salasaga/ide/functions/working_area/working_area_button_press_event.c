@@ -78,7 +78,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 
 
 	// Only do this function if we have a front store available and a project loaded
-	if ((NULL == front_store) || (FALSE == project_active))
+	if ((NULL == front_store) || (FALSE == get_project_active()))
 	{
 		return TRUE;
 	}
@@ -101,7 +101,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	}
 
 	// Reset the mouse drag toggle
-	mouse_dragging = FALSE;
+	set_mouse_dragging(FALSE);
 
 	// Check if this was a double mouse click.  If it was, open an edit dialog
 	if (GDK_2BUTTON_PRESS == event->type)
@@ -119,7 +119,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	}
 
 	// If we're presently creating a new highlight layer, store the mouse coordinates
-	if (TYPE_HIGHLIGHT == new_layer_selected)
+	if (TYPE_HIGHLIGHT == get_new_layer_selected())
 	{
 		// Save the mouse coordinates
 		stored_x = event->x;
@@ -176,7 +176,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 			{
 				case TYPE_EMPTY:
 					// We can't drag an empty layer, so reset things and return
-					mouse_dragging = FALSE;
+					set_mouse_dragging(FALSE);
 					set_end_point_status(END_POINTS_INACTIVE);
 					stored_x = -1;
 					stored_y = -1;
@@ -191,7 +191,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 					// If this is the background layer, then we ignore it
 					if (TRUE == this_layer_data->background)
 					{
-						mouse_dragging = FALSE;
+						set_mouse_dragging(FALSE);
 						set_end_point_status(END_POINTS_INACTIVE);
 						stored_x = -1;
 						stored_y = -1;

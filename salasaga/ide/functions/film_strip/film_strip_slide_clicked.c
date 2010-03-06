@@ -62,7 +62,7 @@ gboolean film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 
 
 	// Only do this function if we have a front store available and a project loaded
-	if ((NULL == front_store) || (FALSE == project_active))
+	if ((NULL == front_store) || (FALSE == get_project_active()))
 	{
 		return TRUE;
 	}
