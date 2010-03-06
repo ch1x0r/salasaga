@@ -84,6 +84,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gulong				selection_callback;			// ID of the callback handler for text selection change
 	GtkTextIter			selection_end;
 	GtkTextIter			selection_start;
+	gint				table_padding_x;			// Amount of padding to use in the table
+	gint				table_padding_y;			// Amount of padding to use in the table
 	GdkColor			temp_colour;				// Used to set the colour of the font size slider's text value
 	text_dialog_widgets	*text_widgets;				// Holds pointers to various widgets in this dialog, for passing to callbacks
 	layer_text			*tmp_text_ob;				// Temporary text layer object
@@ -190,6 +192,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 
 
 	// Initialise some things
+	table_padding_x = get_table_x_padding();
+	table_padding_y = get_table_y_padding();
 	tmp_text_ob = (layer_text *) tmp_layer->object_data;
 	message = g_string_new(NULL);
 	valid_ext_link = g_string_new(NULL);
@@ -223,7 +227,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_widget_modify_base(text_view, GTK_STATE_NORMAL, &(tmp_text_ob->bg_fill_colour));  // Set the bg colour of the text area
 	gtk_widget_set_size_request(GTK_WIDGET(text_view), 0, 100);
 	gtk_container_add(GTK_CONTAINER(text_frame), text_view);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(text_frame), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(text_frame), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// "Select" all of the text in the buffer
@@ -233,19 +237,19 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	// Create the label asking for the layer name
 	name_label = gtk_label_new(_("Layer name: "));
 	gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the new layer name
 	name_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(name_entry), valid_fields[LAYER_NAME].max_value);
 	gtk_entry_set_text(GTK_ENTRY(name_entry), tmp_layer->name->str);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the font face
 	font_face_label = gtk_label_new(_("Font face: "));
 	gtk_misc_set_alignment(GTK_MISC(font_face_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_face_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_face_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the drop down list of font faces
 	selector_font_face = gtk_combo_box_new_text();
@@ -271,13 +275,13 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Condensed Italic"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Italic"));
 	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_font_face), get_selection_font_face(GTK_TEXT_BUFFER(text_buffer)));
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(selector_font_face), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(selector_font_face), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the font size
 	font_size_label = gtk_label_new(_("Font size: "));
 	gtk_misc_set_alignment(GTK_MISC(font_size_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_size_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_size_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the font size input
 	font_size_scale = gtk_hscale_new_with_range(valid_fields[FONT_SIZE].min_value, valid_fields[FONT_SIZE].max_value, 0.1);
@@ -288,7 +292,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(font_size_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_size_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_size_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Update the font size widget with the selection font size
@@ -314,25 +318,25 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	// Create the foreground colour selection label
 	fg_colour_label = gtk_label_new(_("Text color: "));
 	gtk_misc_set_alignment(GTK_MISC(fg_colour_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fg_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fg_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the foreground colour selection button
 	fg_colour = get_selection_fg_colour(GTK_TEXT_BUFFER(text_buffer), GTK_TEXT_VIEW(text_view));
 	fg_colour_button = gtk_color_button_new_with_color(fg_colour);
 	g_slice_free(GdkColor, fg_colour);  // We no longer need the colour value
     gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(fg_colour_button), TRUE);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fg_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fg_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the background fill colour selection label
 	fill_colour_label = gtk_label_new(_("Background fill color: "));
 	gtk_misc_set_alignment(GTK_MISC(fill_colour_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fill_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fill_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the background fill colour selection button
     fill_colour_button = gtk_color_button_new_with_color(&(tmp_text_ob->bg_fill_colour));
     gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(fill_colour_button), TRUE);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fill_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(fill_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Set up pointers to the font face, font size, background colour and foreground colour widgets, for passing to signal handlers
@@ -359,18 +363,18 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	// Create the background line colour selection label
 	border_colour_label = gtk_label_new(_("Background border color: "));
 	gtk_misc_set_alignment(GTK_MISC(border_colour_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_colour_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the background line colour selection button
     border_colour_button = gtk_color_button_new_with_color(&(tmp_text_ob->bg_border_colour));
     gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(border_colour_button), TRUE);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_colour_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the background border width
 	border_width_label = gtk_label_new(_("Background border width: "));
 	gtk_misc_set_alignment(GTK_MISC(border_width_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the background border width input
 	border_width_scale = gtk_hscale_new_with_range(valid_fields[LINE_WIDTH].min_value, valid_fields[LINE_WIDTH].max_value, 0.1);
@@ -380,31 +384,31 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_scale_add_mark(GTK_SCALE(border_width_scale), 5.0, GTK_POS_BOTTOM, NULL);
 	gtk_scale_add_mark(GTK_SCALE(border_width_scale), 10.0, GTK_POS_BOTTOM, NULL);
 	gtk_scale_add_mark(GTK_SCALE(border_width_scale), 15.0, GTK_POS_BOTTOM, NULL);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_width_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(border_width_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for an external link
 	external_link_label = gtk_label_new(_("External link: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts an external link
 	external_link_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), valid_fields[EXTERNAL_LINK].max_value);
 	gtk_entry_set_text(GTK_ENTRY(external_link_entry), tmp_layer->external_link->str);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the window to open the external link in
 	external_link_win_label = gtk_label_new(_("External link window: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts a text string for the window to open the external link in
 	external_link_win_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), valid_fields[EXTERNAL_LINK_WINDOW].max_value);
 	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), tmp_layer->external_link_window->str);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the check box asking if the background should be visible
@@ -416,7 +420,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(display_bg_checkbox), TRUE);
 	}
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(display_bg_checkbox), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(display_bg_checkbox), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the check box asking if the layer should be visible
 	visibility_checkbox = gtk_check_button_new_with_label(_("Is this layer visible?"));
@@ -427,7 +431,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(visibility_checkbox), TRUE);
 	}
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(visibility_checkbox), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(visibility_checkbox), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// * Should only display while debugging *
@@ -438,11 +442,11 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		// Create the label for the debugging button to dump the text layer to stdout
 		dump_buffer_label = gtk_label_new(_("Dump text layer to stdout: "));
 		gtk_misc_set_alignment(GTK_MISC(dump_buffer_label), 0, 0.5);
-		gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(dump_buffer_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+		gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(dump_buffer_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 		// Create the button to dump the text layer to stdout
 		dump_buffer_button = gtk_button_new_with_label("Press to dump");
-		gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(dump_buffer_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+		gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(dump_buffer_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 		row_counter = row_counter + 1;
 
 		// Add a signal handler to button, to be called when the user presses it
@@ -457,7 +461,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	// Create the label asking for the starting X Offset
 	x_off_label_start = gtk_label_new(_("Start X Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(x_off_label_start), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the starting X Offset input
 	x_off_scale_start = gtk_hscale_new_with_range(0, project_width, 1);
@@ -467,13 +471,13 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(x_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_scale_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_scale_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting Y Offset
 	y_off_label_start = gtk_label_new(_("Start Y Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(y_off_label_start), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the starting Y Offset input
 	y_off_scale_start = gtk_hscale_new_with_range(0, project_height, 1);
@@ -483,13 +487,13 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(y_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_scale_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_scale_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the finishing X Offset
 	x_off_label_finish = gtk_label_new(_("Finish X Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(x_off_label_finish), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the finishing X Offset input
 	x_off_scale_finish = gtk_hscale_new_with_range(0, project_width, 1);
@@ -499,13 +503,13 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(x_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_scale_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_scale_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the finishing Y Offset
 	y_off_label_finish = gtk_label_new(_("Finish Y Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(y_off_label_finish), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the finishing Y Offset input
 	y_off_scale_finish = gtk_hscale_new_with_range(0, project_height, 1);
@@ -515,13 +519,13 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(y_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_scale_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_scale_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting time
 	start_label = gtk_label_new(_("Starting time (seconds): "));
 	gtk_misc_set_alignment(GTK_MISC(start_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(start_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(start_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the starting time input
 	start_scale = gtk_hscale_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 0.1);
@@ -531,13 +535,13 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(start_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(start_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(start_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Appearance transition type
 	label_trans_in_type = gtk_label_new(_("Start how: "));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_in_type), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_in_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_in_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	selector_trans_in_type = gtk_combo_box_new_text();
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), _("Immediate"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), _("Fade in"));
@@ -550,13 +554,13 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		default:
 			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_NONE);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(selector_trans_in_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(selector_trans_in_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Appearance transition duration label
 	label_trans_in_duration = gtk_label_new(_("Start duration (seconds):"));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_in_duration), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_in_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_in_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Appearance transition duration entry
 	scale_trans_in_duration = gtk_hscale_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.01);
@@ -566,7 +570,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(scale_trans_in_duration), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_in_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_in_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Enable or disable the entry transition widgets
@@ -593,7 +597,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	// Create the label asking for the layer duration
 	duration_label = gtk_label_new(_("Display for (seconds): "));
 	gtk_misc_set_alignment(GTK_MISC(duration_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the duration input
 	duration_scale = gtk_hscale_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 0.1);
@@ -603,13 +607,13 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(duration_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(duration_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(duration_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Exit Transition type
 	label_trans_out_type = gtk_label_new(_("Exit how: "));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_out_type), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_out_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_out_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	selector_trans_out_type = gtk_combo_box_new_text();
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), _("Immediate"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), _("Fade out"));
@@ -622,13 +626,13 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		default:
 			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_NONE);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(selector_trans_out_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(selector_trans_out_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Exit transition duration label
 	label_trans_out_duration = gtk_label_new(_("Exit duration (seconds):"));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_out_duration), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_out_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_out_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Exit transition duration entry
 	scale_trans_out_duration = gtk_hscale_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.01);
@@ -638,7 +642,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(scale_trans_out_duration), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Enable or disable the exit transition widgets

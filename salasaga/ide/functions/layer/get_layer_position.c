@@ -157,8 +157,8 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 	{
 		case TYPE_EMPTY:
 			// This is an empty layer, so reset things and return
-			stored_x = -1;
-			stored_y = -1;
+			set_stored_x(-1);
+			set_stored_y(-1);
 			g_string_free(message, TRUE);
 			return FALSE;
 
@@ -171,8 +171,8 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 			// If this is the background layer, then we ignore it
 			if (TRUE == this_layer_data->background)
 			{
-				stored_x = -1;
-				stored_y = -1;
+				set_stored_x(-1);
+				set_stored_y(-1);
 				g_string_free(message, TRUE);
 				return FALSE;
 			}

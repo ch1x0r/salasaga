@@ -122,14 +122,14 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	if (TYPE_HIGHLIGHT == get_new_layer_selected())
 	{
 		// Save the mouse coordinates
-		stored_x = event->x;
-		stored_y = event->y;
+		set_stored_x(event->x);
+		set_stored_y(event->y);
 
 		// Reset the invalidation area
-		invalidation_end_x = event->x;
-		invalidation_end_y = event->y;
-		invalidation_start_x = event->x - 1;
-		invalidation_start_y = event->y - 1;
+		set_invalidation_end_x(event->x);
+		set_invalidation_end_y(event->y);
+		set_invalidation_start_x(event->x - 1);
+		set_invalidation_start_y(event->y - 1);
 
 		return TRUE;
 	}
@@ -178,8 +178,8 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 					// We can't drag an empty layer, so reset things and return
 					set_mouse_dragging(FALSE);
 					set_end_point_status(END_POINTS_INACTIVE);
-					stored_x = -1;
-					stored_y = -1;
+					set_stored_x(-1);
+					set_stored_y(-1);
 					return TRUE;
 
 				case TYPE_HIGHLIGHT:
@@ -193,8 +193,8 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 					{
 						set_mouse_dragging(FALSE);
 						set_end_point_status(END_POINTS_INACTIVE);
-						stored_x = -1;
-						stored_y = -1;
+						set_stored_x(-1);
+						set_stored_y(-1);
 						return TRUE;
 					}
 
@@ -271,8 +271,8 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 				GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
 
 		// Reset the stored mouse coordinates
-		stored_x = -1;
-		stored_y = -1;
+		set_stored_x(-1);
+		set_stored_y(-1);
 
 		// Free the memory allocated during the collision detection
 		g_list_free(collision_list);
@@ -284,8 +284,8 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	// * To get here there must have been at least one collision *
 
 	// Save the mouse coordinates
-	stored_x = event->x;
-	stored_y = event->y;
+	set_stored_x(event->x);
+	set_stored_y(event->y);
 
 	// Determine which layer the user has selected in the timeline
 	selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);

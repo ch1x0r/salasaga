@@ -164,8 +164,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 		// Reset the end point status switch and related info
 		set_end_point_status(END_POINTS_INACTIVE);
-		stored_x = -1;
-		stored_y = -1;
+		set_stored_x(-1);
+		set_stored_y(-1);
 
 		// Set the changes made variable
 		set_changes_made(TRUE);
@@ -191,8 +191,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		y_change = layer_data->y_offset_finish - layer_data->y_offset_start;
 
 		// Calculate the distance the mouse was moved
-		x_diff = (mouse_x - stored_x) * scaled_width_ratio;
-		y_diff = (mouse_y - stored_y) * scaled_height_ratio;
+		x_diff = (mouse_x - get_stored_x()) * scaled_width_ratio;
+		y_diff = (mouse_y - get_stored_y()) * scaled_height_ratio;
 
 		// Work out the new size for the layer
 		switch (resize_handles_status & RESIZE_HANDLES_RESIZING_ALL)
@@ -330,8 +330,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 		// Reset the resize switch and related info
 		resize_handles_status = RESIZE_HANDLES_WAITING;
-		stored_x = -1;
-		stored_y = -1;
+		set_stored_x(-1);
+		set_stored_y(-1);
 
 		// Set the changes made variable
 		set_changes_made(TRUE);
@@ -363,8 +363,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 				case TYPE_EMPTY:
 					// We can't drag an empty layer, so reset things and return
 					set_mouse_dragging(FALSE);
-					stored_x = -1;
-					stored_y = -1;
+					set_stored_x(-1);
+					set_stored_y(-1);
 					return TRUE;
 
 				case TYPE_HIGHLIGHT:
@@ -377,8 +377,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 					if (TRUE == layer_data->background)
 					{
 						set_mouse_dragging(FALSE);
-						stored_x = -1;
-						stored_y = -1;
+						set_stored_x(-1);
+						set_stored_y(-1);
 						return TRUE;
 					}
 
@@ -414,8 +414,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			undo_item_data->slide_data = current_slide->data;
 
 			// Calculate the distance the object has been dragged
-			x_diff = (mouse_x - stored_x) * scaled_width_ratio;
-			y_diff = (mouse_y - stored_y) * scaled_height_ratio;
+			x_diff = (mouse_x - get_stored_x()) * scaled_width_ratio;
+			y_diff = (mouse_y - get_stored_y()) * scaled_height_ratio;
 
 			// Bounds check the starting x offset, then update the object with the new value
 			layer_data->x_offset_start = layer_data->x_offset_start + x_diff;
@@ -444,8 +444,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 			// Reset the mouse drag switch and related info
 			set_mouse_dragging(FALSE);
-			stored_x = -1;
-			stored_y = -1;
+			set_stored_x(-1);
+			set_stored_y(-1);
 
 			// Set the changes made variable
 			set_changes_made(TRUE);

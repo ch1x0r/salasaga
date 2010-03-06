@@ -94,10 +94,6 @@ GString					*icon_path;					// Points to the base location for Salasaga icon fil
 GString					*info_link;					//
 GString					*info_link_target;			//
 GtkTextBuffer			*info_text;					// Text to be shown in the information button in swf output
-gint					invalidation_end_x;			// Right side of the front store area to invalidate
-gint					invalidation_end_y;			// Bottom of the front store area to invalidate
-gint					invalidation_start_x;		// Left side of the front store area to invalidate
-gint					invalidation_start_y;		// Top of the front store area to invalidate
 GString					*last_folder;				// Keeps track of the last folder the user visited
 GtkWidget				*main_area;					// Widget for the onscreen display
 GtkWidget				*main_drawing_area;			// Widget for the drawing area
@@ -113,16 +109,11 @@ GdkRectangle			resize_handles_rect[8];		// Contains the onscreen offsets and siz
 guint					resize_handles_status;		// Are the layer resize handles active, in progress, etc
 guint					resize_handle_size = 6;		// Size of the resize handles
 GtkWidget				*right_side;				// Widget for the right side area
-gint					screenshot_command_num = -1;  // The metacity run command number used for the screenshot key
 guint					screenshot_delay_time = 5;	// The number of seconds the screenshot trigger is delayed
 GList					*slides = NULL;				// Linked list holding the slide info
 guint					start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
 GtkWidget				*status_bar;				// Widget for the status bar
 GtkStatusIcon			*status_icon;				// Pointer to the GtkStatusIcon object, used for StatusIcon communication
-gint					stored_x;					// X co-ordinate of the mouse last click
-gint					stored_y;					// Y co-ordinate of the mouse last click
-gint					table_x_padding;			// Number of pixels to pad table entries by
-gint					table_y_padding;			// Number of pixels to pad table entries by
 GSList					*text_tags_fg_colour_slist = NULL;	// Text tags for text foreground colour, used for changing text colour in text layers
 GtkTextTag				*text_tags_fonts[FONT_COUNT];	// Text tags for font faces, used for applying font faces in text layers
 GSList					*text_tags_size_slist = NULL;	// Text tags for text sizes, used for changing text size in text layers
@@ -240,8 +231,8 @@ gint main(gint argc, gchar *argv[])
 	default_bg_colour.blue = 0;
 	preview_width = 300;
 	frames_per_second = 12;  // Half of 24 fps (film)
-	table_x_padding = 5;
-	table_y_padding = 5;
+	set_table_x_padding(5);
+	set_table_y_padding(5);
 	toolbar = NULL;
 	tmp_widget = NULL;
 	unscaled_button_height = 50;
@@ -427,7 +418,7 @@ gint main(gint argc, gchar *argv[])
 
 #ifndef _WIN32
 	// * Setup the Control-Printscreen key combination to capture screenshots - Non-windows only *
-	screenshot_command_num = key_bind();
+	set_screenshot_command_num(key_bind());
 #endif // End of non-windows code
 
 	// Set defaults values for the window capture code

@@ -29,6 +29,7 @@
 extern "C" {
 #endif // __cplusplus
 
+
 GList *get_boundary_list();
 cairo_font_face_t *get_cairo_font_face(guint index);
 guint get_capture_height();
@@ -46,15 +47,24 @@ guint get_end_behaviour();
 guint get_end_point_status();
 gboolean get_film_strip_being_resized();
 gboolean get_info_display();
+gint get_invalidation_end_x();
+gint get_invalidation_end_y();
+gint get_invalidation_start_x();
+gint get_invalidation_start_y();
 gboolean get_mouse_click_double_added();
 gboolean get_mouse_click_single_added();
 gboolean get_mouse_click_triple_added();
 gboolean get_mouse_dragging();
 gboolean get_new_layer_selected();
 gboolean get_project_active();
+gint get_screenshot_command_num();
 gboolean get_screenshot_key_warning();
 gboolean get_screenshots_enabled();
 gboolean get_show_control_bar();
+gint get_stored_x();
+gint get_stored_y();
+gint get_table_x_padding();
+gint get_table_y_padding();
 void set_boundary_list(GList *new_boundary_list);
 void set_cairo_font_face(guint index, cairo_font_face_t *new_cairo_font_face);
 void set_capture_height(guint new_capture_height);
@@ -72,15 +82,24 @@ void set_end_behaviour(guint new_end_behaviour);
 void set_end_point_status(guint new_end_point_status);
 void set_film_strip_being_resized(gboolean new_film_strip_being_resized);
 void set_info_display(gboolean new_info_display);
+void set_invalidation_end_x(gint new_invalidation_end_x);
+void set_invalidation_end_y(gint new_invalidation_end_y);
+void set_invalidation_start_x(gint new_invalidation_start_x);
+void set_invalidation_start_y(gint new_invalidation_start_y);
 void set_mouse_click_double_added(gboolean new_mouse_click_double_added);
 void set_mouse_click_single_added(gboolean new_mouse_click_single_added);
 void set_mouse_click_triple_added(gboolean new_mouse_click_triple_added);
 void set_mouse_dragging(gboolean new_mouse_dragging);
 void set_new_layer_selected(gboolean new_new_layer_selected);
 void set_project_active(gboolean new_project_active);
+void set_screenshot_command_num(gint new_screenshot_command_num);
 void set_screenshot_key_warning(gboolean new_screenshot_key_warning);
 void set_screenshots_enabled(gboolean new_screenshots_enabled);
 void set_show_control_bar(gboolean new_show_control_bar);
+void set_stored_x(gint new_stored_x);
+void set_stored_y(gint new_stored_y);
+void set_table_x_padding(gint new_table_x_padding);
+void set_table_y_padding(gint new_table_y_padding);
 
 
 #ifdef __cplusplus

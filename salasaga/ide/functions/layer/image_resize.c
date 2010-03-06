@@ -61,6 +61,8 @@ void image_resize(void)
 	gdouble				scale_mark_counter;			// Simple counter used when constructing scale marks for sliders
 	guint				selected_row;				// Holds the row that is selected
 	slide				*slide_data;				// Pointer to current slide data
+	gint				table_padding_x;			// Amount of padding to use in the table
+	gint				table_padding_y;			// Amount of padding to use in the table
 	layer				*this_layer = NULL;			// Temporary layer
 	layer_image			*tmp_image_ob;				// Points to the image data in the selected layer
 
@@ -86,6 +88,8 @@ void image_resize(void)
 
 	// Initialisation
 	message = g_string_new(NULL);
+	table_padding_x = get_table_x_padding();
+	table_padding_y = get_table_y_padding();
 
 	// Get a pointer to the layer we're resizing
 	slide_data = (slide *) current_slide->data;
@@ -123,7 +127,7 @@ void image_resize(void)
 	// Create the label asking for the new image width
 	new_width_label = gtk_label_new(_("Image width:"));
 	gtk_misc_set_alignment(GTK_MISC(new_width_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the slider asking for the new image width
 	new_width_scale = gtk_hscale_new_with_range(valid_fields[LAYER_WIDTH].min_value, valid_fields[LAYER_WIDTH].max_value, 1);
@@ -134,18 +138,18 @@ void image_resize(void)
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(new_width_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the new image width "pixels" string
 	new_width_pixels_label = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(new_width_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_pixels_label), 2, 3, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_pixels_label), 2, 3, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the new image height
 	new_height_label = gtk_label_new(_("Image height:"));
 	gtk_misc_set_alignment(GTK_MISC(new_height_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the slider asking for the new image height
 	new_height_scale = gtk_hscale_new_with_range(valid_fields[LAYER_HEIGHT].min_value, valid_fields[LAYER_HEIGHT].max_value, 1);
@@ -156,18 +160,18 @@ void image_resize(void)
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(new_height_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the new image height "pixels" string
 	new_height_pixels_label = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(new_height_pixels_label), 0.0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_pixels_label), 2, 3, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_pixels_label), 2, 3, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the image resize type
 	resize_type_label = gtk_label_new(_("Resize image using:"));
 	gtk_misc_set_alignment(GTK_MISC(resize_type_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(resize_type_label), 0, 1, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(resize_type_label), 0, 1, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the selector for the image resize type
 	selector_resize_type = gtk_combo_box_new_text();
@@ -176,7 +180,7 @@ void image_resize(void)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_resize_type), _("Bilinear (default)"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_resize_type), _("Hyperbolic (best quality for photos)"));
 	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_resize_type), 2);
-	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(selector_resize_type), 1, 3, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(selector_resize_type), 1, 3, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Run the dialog

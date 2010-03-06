@@ -66,6 +66,8 @@ void menu_edit_preferences(void)
 	gboolean			return_gbool;						// Receives the true/false return code when opening a lock file
 	gdouble				scale_mark_counter;					// Simple counter used when constructing scale marks for sliders
 	gchar				**strings;							// Text string are split apart with this
+	gint				table_padding_x;			// Amount of padding to use in the table
+	gint				table_padding_y;			// Amount of padding to use in the table
 	GdkColor			temp_colour;						// Temporarily holds a colour value
 	GFile				*temp_gfile;
 	gchar				*tmp_gchar;							// Temporary gchar
@@ -149,6 +151,8 @@ void menu_edit_preferences(void)
 	app_row_counter = 0;
 	default_gvfs = g_vfs_get_default();
 	message = g_string_new(NULL);
+	table_padding_x = get_table_x_padding();
+	table_padding_y = get_table_y_padding();
 	tmp_gstring = g_string_new(NULL);
 	valid_project_folder = g_string_new(NULL);
 	valid_screenshot_folder = g_string_new(NULL);
@@ -164,42 +168,42 @@ void menu_edit_preferences(void)
 	// Default Project Folder
 	label_default_project_folder = gtk_label_new(_("Default Project Folder: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_project_folder), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_project_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_project_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_default_project_folder = gtk_file_chooser_button_new(_("Select the Default Project Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_project_folder), default_project_folder->str);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_project_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_project_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Screenshot Folder
 	label_screenshot_folder = gtk_label_new(_("Screenshots Folder: "));
 	gtk_misc_set_alignment(GTK_MISC(label_screenshot_folder), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_screenshot_folder = gtk_file_chooser_button_new(_("Select the Screenshot Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_screenshot_folder), screenshots_folder->str);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Output Folder
 	label_default_output_folder = gtk_label_new(_("Default Output Folder: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_output_folder), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_default_output_folder = gtk_file_chooser_button_new(_("Select the Default Output Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_output_folder), default_output_folder->str);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_output_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_output_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Output Resolution
 	label_default_output_res = gtk_label_new(_("Default Output Resolution: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_output_res), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_res), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_res), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	selector_default_output_res = GTK_WIDGET(create_resolution_selector(default_output_width, default_output_height));
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_default_output_res), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_default_output_res), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Create the label asking for the font face
 	default_font_face_label = gtk_label_new(_("Default text layer font face:"));
 	gtk_misc_set_alignment(GTK_MISC(default_font_face_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_face_label), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_face_label), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the drop down list of font faces
 	default_font_face_selector = gtk_combo_box_new_text();
@@ -225,13 +229,13 @@ void menu_edit_preferences(void)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(default_font_face_selector), _("DejaVu Serif Condensed Italic"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(default_font_face_selector), _("DejaVu Serif Italic"));
 	gtk_combo_box_set_active(GTK_COMBO_BOX(default_font_face_selector), get_default_text_font_face());
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_face_selector), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_face_selector), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Create the label asking for the default text layer font size
 	default_font_size_label = gtk_label_new(_("Default text layer font size: "));
 	gtk_misc_set_alignment(GTK_MISC(default_font_size_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_size_label), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_size_label), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the default text layer font size input
 	default_font_size_slider = gtk_hscale_new_with_range(valid_fields[FONT_SIZE].min_value, valid_fields[FONT_SIZE].max_value, 0.1);
@@ -243,114 +247,114 @@ void menu_edit_preferences(void)
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(default_font_size_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_size_slider), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_size_slider), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the "points" label
 	default_font_size_points_label = gtk_label_new(_("points"));
 	gtk_misc_set_alignment(GTK_MISC(default_font_size_points_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_size_points_label), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_size_points_label), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Create the foreground colour selection label
 	default_font_fg_colour_label = gtk_label_new(_("Default text layer text foreground color: "));
 	gtk_misc_set_alignment(GTK_MISC(default_font_fg_colour_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_fg_colour_label), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_fg_colour_label), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the foreground colour selection button
 	temp_colour = get_default_text_fg_colour();
 	default_font_fg_colour_button = gtk_color_button_new_with_color(&temp_colour);
     gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(default_font_fg_colour_button), TRUE);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_fg_colour_button), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_fg_colour_button), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Slide Duration
 	g_string_printf(message, "%s:", _("Default Slide Duration"));
 	label_default_slide_duration = gtk_label_new(message->str);
 	gtk_misc_set_alignment(GTK_MISC(label_default_slide_duration), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_slide_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_slide_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_default_slide_duration = gtk_spin_button_new_with_range(valid_fields[SLIDE_DURATION].min_value, valid_fields[SLIDE_DURATION].max_value, 1);
 	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(button_default_slide_duration), 2);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_slide_duration), default_slide_duration);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_slide_duration), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_slide_duration), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	label_default_slide_duration_seconds = gtk_label_new(_("seconds"));
 	gtk_misc_set_alignment(GTK_MISC(label_default_slide_duration_seconds), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_slide_duration_seconds), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_slide_duration_seconds), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Layer Duration
 	g_string_printf(message, "%s:", _("Default Layer Duration"));
 	label_default_layer_duration = gtk_label_new(message->str);
 	gtk_misc_set_alignment(GTK_MISC(label_default_layer_duration), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_layer_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_layer_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_default_layer_duration = gtk_spin_button_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 1);
 	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(button_default_layer_duration), 2);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_layer_duration), default_layer_duration);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_layer_duration), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_layer_duration), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	label_default_layer_duration_seconds = gtk_label_new(_("seconds"));
 	gtk_misc_set_alignment(GTK_MISC(label_default_layer_duration_seconds), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_layer_duration_seconds), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_layer_duration_seconds), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Frames Per Second
 	label_default_fps = gtk_label_new(_("Default Frames Per Second: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_fps), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_fps), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_fps), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_default_fps = gtk_spin_button_new_with_range(valid_fields[PROJECT_FPS].min_value, valid_fields[PROJECT_FPS].max_value, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_fps), default_fps);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_fps), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_fps), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Preview width
 	label_preview_width = gtk_label_new(_("Film Strip Width: "));
 	gtk_misc_set_alignment(GTK_MISC(label_preview_width), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_preview_width), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_preview_width), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_preview_width = gtk_spin_button_new_with_range(valid_fields[PREVIEW_WIDTH].min_value, valid_fields[PREVIEW_WIDTH].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_preview_width), preview_width);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_preview_width), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_preview_width), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	label_preview_width_pixels = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(label_preview_width_pixels), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_preview_width_pixels), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_preview_width_pixels), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Icon Height
 	label_icon_height = gtk_label_new(_("Icon Height: "));
 	gtk_misc_set_alignment(GTK_MISC(label_icon_height), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_icon_height), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_icon_height), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_icon_height = gtk_spin_button_new_with_range(valid_fields[ICON_HEIGHT].min_value, valid_fields[ICON_HEIGHT].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_icon_height), icon_height);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_icon_height), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_icon_height), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	label_icon_height_pixels = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(label_icon_height_pixels), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_icon_height_pixels), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_icon_height_pixels), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Zoom level
 	label_default_zoom_level = gtk_label_new(_("Default Zoom Level: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_zoom_level), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_zoom_level), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_zoom_level), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	selector_default_zoom_level = create_zoom_selector(default_zoom_level->str);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_default_zoom_level), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_default_zoom_level), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Background Colour
 	label_default_bg_colour = gtk_label_new(_("Default Background Color: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_bg_colour), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_bg_colour), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_bg_colour), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_default_bg_colour = gtk_color_button_new_with_color(&default_bg_colour);
 	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(button_default_bg_colour), TRUE);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_bg_colour), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_bg_colour), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Screenshot delay time
 	label_screenshot_delay = gtk_label_new(_("Number of seconds for screenshot delay: "));
 	gtk_misc_set_alignment(GTK_MISC(label_screenshot_delay), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_delay), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_delay), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_screenshot_delay = gtk_spin_button_new_with_range(valid_fields[SCREENSHOT_DELAY].min_value, valid_fields[SCREENSHOT_DELAY].max_value, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_screenshot_delay), screenshot_delay_time);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_delay), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_delay), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	label_screenshot_delay_seconds = gtk_label_new(_("seconds"));
 	gtk_misc_set_alignment(GTK_MISC(label_screenshot_delay_seconds), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_delay_seconds), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_delay_seconds), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Whether to display help text or not
@@ -362,7 +366,7 @@ void menu_edit_preferences(void)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_help_text), TRUE);
 	}
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_help_text), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_help_text), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Whether to display warning when screenshot key bind fails
@@ -374,7 +378,7 @@ void menu_edit_preferences(void)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_screenshot_key_bind), TRUE);
 	}
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_screenshot_key_bind), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_screenshot_key_bind), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Ensure everything will show

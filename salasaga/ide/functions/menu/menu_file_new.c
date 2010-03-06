@@ -65,6 +65,8 @@ void menu_file_new(void)
 	gdouble				scale_mark_counter;			// Simple counter used when constructing scale marks for sliders
 	gboolean			return_code_gbool;			// Catches gboolean return codes
 	guint				row_counter = 0;			// Used to count which row things are up to
+	gint				table_padding_x;			// Amount of padding to use in the table
+	gint				table_padding_y;			// Amount of padding to use in the table
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	guint				valid_fps;					// Receives the new project fps once validated
 	guint				valid_height = 0;			// Receives the new project height once validated
@@ -100,8 +102,10 @@ void menu_file_new(void)
 		}
 	}
 
-	// Initialise some things
+	// Initialisation
 	message = g_string_new(NULL);
+	table_padding_x = get_table_x_padding();
+	table_padding_y = get_table_y_padding();
 	valid_proj_name = g_string_new(NULL);
 
 	// Create the dialog window, and table to hold its children
@@ -112,41 +116,41 @@ void menu_file_new(void)
 	// Create the label asking for the new project name
 	name_label = gtk_label_new(_("Project Name: "));
 	gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the new project name
 	name_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(name_entry), valid_fields[PROJECT_NAME].max_value);
 	gtk_entry_set_text(GTK_ENTRY(name_entry), "New Project");
-	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the project width
 	width_label = gtk_label_new(_("Width: "));
 	gtk_misc_set_alignment(GTK_MISC(width_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the project width
 	width_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_WIDTH].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(width_button), project_width);
-	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the project height
 	height_label = gtk_label_new(_("Height: "));
 	gtk_misc_set_alignment(GTK_MISC(height_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the project height
 	height_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_HEIGHT].max_value, 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(height_button), project_height);
-	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the number of frames per second
 	fps_label = gtk_label_new(_("Frames per second: "));
 	gtk_misc_set_alignment(GTK_MISC(fps_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(fps_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(fps_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the slider that accepts the number of frames per second
 	fps_slider = gtk_hscale_new_with_range(valid_fields[PROJECT_FPS].min_value, valid_fields[PROJECT_FPS].max_value, 1);
@@ -157,18 +161,18 @@ void menu_file_new(void)
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(fps_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(fps_slider), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(fps_slider), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label next to the colour swatch
 	bg_color_label = gtk_label_new(_("Background color: "));
 	gtk_misc_set_alignment(GTK_MISC(bg_color_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(bg_color_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(bg_color_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the background colour selection button
 	bg_color_button = gtk_color_button_new_with_color(&default_bg_colour);
 	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(bg_color_button), TRUE);
-	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(bg_color_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(bg_color_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Ensure everything will show

@@ -102,7 +102,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	if (TYPE_HIGHLIGHT == get_new_layer_selected())
 	{
 		// Draw the updated bounding box
-		draw_bounding_box(stored_x, stored_y, mouse_x, mouse_y);
+		draw_bounding_box(get_stored_x(), get_stored_y(), mouse_x, mouse_y);
 		return TRUE;
 	}
 
@@ -130,8 +130,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
 
 		// Calculate the distance the object has been dragged onscreen
-		x_diff = mouse_x - stored_x;
-		y_diff = mouse_y - stored_y;
+		x_diff = mouse_x - get_stored_x();
+		y_diff = mouse_y - get_stored_y();
 
 		// Work out the bounding box boundaries
 		switch (resize_handles_status & RESIZE_HANDLES_RESIZING_ALL)
@@ -261,8 +261,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				{
 					// Start point clicked
 					set_end_point_status(END_POINTS_START_ACTIVE);
-					stored_x = event->x;
-					stored_y = event->y;
+					set_stored_x(event->x);
+					set_stored_y(event->y);
 					stored_x_val = layer_data->x_offset_start;
 					stored_y_val = layer_data->y_offset_start;
 					return TRUE;
@@ -270,8 +270,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				{
 					// End point clicked
 					set_end_point_status(END_POINTS_END_ACTIVE);
-					stored_x = event->x;
-					stored_y = event->y;
+					set_stored_x(event->x);
+					set_stored_y(event->y);
 					stored_x_val = layer_data->x_offset_finish;
 					stored_y_val = layer_data->y_offset_finish;
 					return TRUE;
@@ -297,8 +297,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		time_position = time_line_get_cursor_position(this_slide_data->timeline_widget);
 
 		// Work out the distance the cursor has moved in screen pixels
-		cursor_movement_x = event->x - stored_x;
-		cursor_movement_y = event->y - stored_y;
+		cursor_movement_x = event->x - get_stored_x();
+		cursor_movement_y = event->y - get_stored_y();
 
 		// Calculate the distance the object has been dragged
 		x_diff = cursor_movement_x * scaled_width_ratio;
@@ -325,8 +325,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				// We can't drag an empty layer, so reset things and return
 				set_mouse_dragging(FALSE);
 				set_end_point_status(END_POINTS_INACTIVE);
-				stored_x = -1;
-				stored_y = -1;
+				set_stored_x(-1);
+				set_stored_y(-1);
 				return TRUE;
 
 			case TYPE_HIGHLIGHT:
@@ -340,8 +340,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 				{
 					set_mouse_dragging(FALSE);
 					set_end_point_status(END_POINTS_INACTIVE);
-					stored_x = -1;
-					stored_y = -1;
+					set_stored_x(-1);
+					set_stored_y(-1);
 					return TRUE;
 				}
 
@@ -429,8 +429,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			return TRUE;
 
 		// Calculate the distance the object has been dragged onscreen
-		x_diff = mouse_x - stored_x;
-		y_diff = mouse_y - stored_y;
+		x_diff = mouse_x - get_stored_x();
+		y_diff = mouse_y - get_stored_y();
 
 		// Work out the bounding box boundaries
 		onscreen_left = (layer_positions.x / scaled_width_ratio) + x_diff;
@@ -525,14 +525,14 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		if (FALSE != (RESIZE_HANDLES_RESIZING & resize_handles_status))
 		{
 			// Store the mouse coordinates so we know where to resize from
-			stored_x = event->x;
-			stored_y = event->y;
+			set_stored_x(event->x);
+			set_stored_y(event->y);
 
 			// Reset the invalidation area
-			invalidation_end_x = event->x;
-			invalidation_end_y = event->y;
-			invalidation_start_x = event->x - 1;
-			invalidation_start_y = event->y - 1;
+			set_invalidation_end_x(event->x);
+			set_invalidation_end_y(event->y);
+			set_invalidation_start_x(event->x - 1);
+			set_invalidation_start_y(event->y - 1);
 		}
 	}
 
@@ -565,14 +565,14 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			return TRUE;
 
 		// Store the mouse coordinates so we know where to drag from
-		stored_x = event->x;
-		stored_y = event->y;
+		set_stored_x(event->x);
+		set_stored_y(event->y);
 
 		// Reset the invalidation area to the size of the selected layer
-		invalidation_end_x = ((layer_positions.x + layer_positions.width) / scaled_width_ratio) + x_diff;
-		invalidation_end_y = ((layer_positions.y + layer_positions.height) / scaled_height_ratio) + y_diff;
-		invalidation_start_x = (layer_positions.x / scaled_width_ratio) + x_diff;
-		invalidation_start_y = (layer_positions.y / scaled_height_ratio) + y_diff;
+		set_invalidation_end_x(((layer_positions.x + layer_positions.width) / scaled_width_ratio) + x_diff);
+		set_invalidation_end_y(((layer_positions.y + layer_positions.height) / scaled_height_ratio) + y_diff);
+		set_invalidation_start_x((layer_positions.x / scaled_width_ratio) + x_diff);
+		set_invalidation_start_y((layer_positions.y / scaled_height_ratio) + y_diff);
 
 		return TRUE;
 	}

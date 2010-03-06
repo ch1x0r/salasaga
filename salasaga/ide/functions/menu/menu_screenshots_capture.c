@@ -54,11 +54,12 @@ void menu_screenshots_capture(void)
 	GString				*message;					// Used to construct message strings
 	GIOChannel			*output_file;				// The output file handle
 	GIOStatus			return_value;				// Return value used in most GIOChannel functions
-
+	gint				table_padding_x;			// Amount of padding to use in the table
+	gint				table_padding_y;			// Amount of padding to use in the table
 	gchar				*tmp_gchar;					// Temporary gchar
 	gsize				tmp_gsize;					// Temporary gsize
-	gpointer			tmp_ptr;					// Temporary pointer
 	GString				*tmp_gstring;				// Temporary string
+	gpointer			tmp_ptr;					// Temporary pointer
 
 
 	// Initialise various things
@@ -69,6 +70,7 @@ void menu_screenshots_capture(void)
 	// Variables used by the non-windows code
 	guint				border_width;
 	Window				capture_window;				// The window the user selected
+	GtkWidget			*message_dialog;			// Dialog box for messages to the user
 	int					mouse_buttons_pressed;
 	Cursor				new_cursor;					// The new cursor to display while the user is choosing
 	XEvent				new_event;
@@ -83,12 +85,12 @@ void menu_screenshots_capture(void)
 	guint				win_width;					// The width to capture with
 	Status				window_status;
 
-	GtkWidget			*message_dialog;			// Dialog box for messages to the user
-
 
 	// Initialise various things
 	capture_window = None;
 	mouse_buttons_pressed = 0;
+	table_padding_x = get_table_x_padding();
+	table_padding_y = get_table_y_padding();
 
 	if (TRUE == get_display_help_text())
 	{
@@ -270,23 +272,23 @@ void menu_screenshots_capture(void)
 	// Create the label asking for the X Offset
 	x_offset_label = gtk_label_new(_("X Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(x_offset_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_offset_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_offset_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the new X Offset data
 	x_offset_button = gtk_spin_button_new_with_range(0, project_width, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_offset_button), capture_x);
-	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_offset_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_offset_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the Y Offset
 	y_offset_label = gtk_label_new(_("Y Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(y_offset_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_offset_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_offset_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the new Y Offset data
 	y_offset_button = gtk_spin_button_new_with_range(0, project_height, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_offset_button), capture_y);
-	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_offset_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_offset_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Which monitor are we displaying on?
@@ -295,29 +297,29 @@ void menu_screenshots_capture(void)
 	// Create the label asking for the X Length
 	x_length_label = gtk_label_new(_("Width: "));
 	gtk_misc_set_alignment(GTK_MISC(x_length_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_length_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_length_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the new X Length data
 	x_length_button = gtk_spin_button_new_with_range(0, gdk_screen_get_width(which_screen), 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_length_button), capture_width);
-	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_length_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_length_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the Y Length
 	y_length_label = gtk_label_new(_("Height: "));
 	gtk_misc_set_alignment(GTK_MISC(y_length_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_length_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);;
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_length_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);;
 
 	// Create the entry that accepts the new Y Length data
 	y_length_button = gtk_spin_button_new_with_range(0, gdk_screen_get_height(which_screen), 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_length_button), capture_height);
-	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_length_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_length_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label that tells the user about Control-Printscreen
 	key_combo_label = gtk_label_new(_("Hint: Use the Control-Printscreen key\ncombination to capture screenshots,\nthen the Import button to import them."));
 	gtk_misc_set_alignment(GTK_MISC(key_combo_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(key_combo_label), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(key_combo_label), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Run the dialog
 	gtk_widget_show_all(GTK_WIDGET(capture_dialog));

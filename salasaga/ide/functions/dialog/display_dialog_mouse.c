@@ -61,6 +61,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	guint				guint_val;					// Temporary guint value used for validation
 	GString				*message;					// Used to construct message strings
 	gdouble				scale_mark_counter;			// Simple counter used when constructing scale marks for sliders
+	gint				table_padding_x;			// Amount of padding to use in the table
+	gint				table_padding_y;			// Amount of padding to use in the table
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	guint				valid_click_type = 0;		// Receives the new mouse click type once validated
 	gfloat				valid_duration = 0;			// Receives the new finish frame once validated
@@ -141,6 +143,8 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 
 
 	// Initialise some things
+	table_padding_x = get_table_x_padding();
+	table_padding_y = get_table_y_padding();
 	tmp_mouse_ob = (layer_mouse *) tmp_layer->object_data;
 	message = g_string_new(NULL);
 	valid_ext_link = g_string_new(NULL);
@@ -166,19 +170,19 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// Create the label asking for the layer name
 	name_label = gtk_label_new(_("Layer Name: "));
 	gtk_misc_set_alignment(GTK_MISC(name_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the new layer name
 	name_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(name_entry), valid_fields[LAYER_NAME].max_value);
 	gtk_entry_set_text(GTK_ENTRY(name_entry), tmp_layer->name->str);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Mouse click type
 	label_click = gtk_label_new(_("Mouse click type: "));
 	gtk_misc_set_alignment(GTK_MISC(label_click), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(label_click), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(label_click), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	selector_click = gtk_combo_box_new_text();
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), _("No mouse click"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_click), _("Left single click"));
@@ -235,31 +239,31 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		default:
 			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_click), MOUSE_NONE);
 	}
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(selector_click), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(selector_click), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for an external link
 	external_link_label = gtk_label_new(_("External link: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts an external link
 	external_link_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), valid_fields[EXTERNAL_LINK].max_value);
 	gtk_entry_set_text(GTK_ENTRY(external_link_entry), tmp_layer->external_link->str);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the window to open the external link in
 	external_link_win_label = gtk_label_new(_("External link window: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts a text string for the window to open the external link in
 	external_link_win_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), valid_fields[EXTERNAL_LINK_WINDOW].max_value);
 	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), tmp_layer->external_link_window->str);
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the check box asking if the layer should be visible
@@ -271,7 +275,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(visibility_checkbox), TRUE);
 	}
-	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(visibility_checkbox), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(visibility_checkbox), 0, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// * Duration tab fields *
@@ -282,7 +286,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// Create the label asking for the starting X Offset
 	x_off_label_start = gtk_label_new(_("Start X Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(x_off_label_start), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the starting X Offset input
 	x_off_scale_start = gtk_hscale_new_with_range(0, project_width, 1);
@@ -292,13 +296,13 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(x_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_scale_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_scale_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting Y Offset
 	y_off_label_start = gtk_label_new(_("Start Y Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(y_off_label_start), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the starting Y Offset input
 	y_off_scale_start = gtk_hscale_new_with_range(0, project_height, 1);
@@ -308,13 +312,13 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(y_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_scale_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_scale_start), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the finishing X Offset
 	x_off_label_finish = gtk_label_new(_("Finish X Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(x_off_label_finish), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the finishing X Offset input
 	x_off_scale_finish = gtk_hscale_new_with_range(0, project_width, 1);
@@ -324,13 +328,13 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(x_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_scale_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_scale_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the finishing Y Offset
 	y_off_label_finish = gtk_label_new(_("Finish Y Offset: "));
 	gtk_misc_set_alignment(GTK_MISC(y_off_label_finish), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the finishing Y Offset input
 	y_off_scale_finish = gtk_hscale_new_with_range(0, project_height, 1);
@@ -340,13 +344,13 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(y_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_scale_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_scale_finish), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the starting time
 	start_label = gtk_label_new(_("Starting time (seconds): "));
 	gtk_misc_set_alignment(GTK_MISC(start_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(start_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(start_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the starting time input
 	start_scale = gtk_hscale_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 0.1);
@@ -356,13 +360,13 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(start_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(start_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(start_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Appearance transition type
 	label_trans_in_type = gtk_label_new(_("Start how: "));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_in_type), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_in_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_in_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	selector_trans_in_type = gtk_combo_box_new_text();
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), _("Immediate"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_in_type), _("Fade in"));
@@ -375,13 +379,13 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		default:
 			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_in_type), TRANS_LAYER_NONE);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(selector_trans_in_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(selector_trans_in_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Appearance transition duration label
 	label_trans_in_duration = gtk_label_new(_("Start duration (seconds):"));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_in_duration), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_in_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_in_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Appearance transition duration entry
 	scale_trans_in_duration = gtk_hscale_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.01);
@@ -391,7 +395,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(scale_trans_in_duration), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_in_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_in_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Enable or disable the entry transition widgets
@@ -418,7 +422,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	// Create the label asking for the layer duration
 	duration_label = gtk_label_new(_("Display for (seconds): "));
 	gtk_misc_set_alignment(GTK_MISC(duration_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(duration_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the duration input
 	duration_scale = gtk_hscale_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 0.1);
@@ -428,13 +432,13 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(duration_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(duration_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(duration_scale), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Exit Transition type
 	label_trans_out_type = gtk_label_new(_("Exit how: "));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_out_type), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_out_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_out_type), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	selector_trans_out_type = gtk_combo_box_new_text();
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), _("Immediate"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_trans_out_type), _("Fade out"));
@@ -447,13 +451,13 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		default:
 			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_trans_out_type), TRANS_LAYER_NONE);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(selector_trans_out_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(selector_trans_out_type), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Exit transition duration label
 	label_trans_out_duration = gtk_label_new(_("Exit duration (seconds):"));
 	gtk_misc_set_alignment(GTK_MISC(label_trans_out_duration), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_out_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(label_trans_out_duration), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Exit transition duration entry
 	scale_trans_out_duration = gtk_hscale_new_with_range(valid_fields[TRANSITION_DURATION].min_value, valid_fields[TRANSITION_DURATION].max_value, 0.01);
@@ -463,7 +467,7 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(scale_trans_out_duration), scale_mark_counter, GTK_POS_BOTTOM, NULL);
 	}
-	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(scale_trans_out_duration), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Enable or disable the exit transition widgets

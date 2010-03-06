@@ -46,6 +46,8 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 	GtkWidget			*empty_table;				// Table used for neat layout of the dialog box
 	GString				*message;					// Used to construct message strings
 	guint				row_counter = 0;			// Used to count which row things are up to
+	gint				table_padding_x;			// Amount of padding to use in the table
+	gint				table_padding_y;			// Amount of padding to use in the table
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	GString				*valid_ext_link;			// Receives the new external link once validated
 	GString				*valid_ext_link_win;		// Receives the new external link window once validated
@@ -64,6 +66,8 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 
 
 	// Initialise some things
+	table_padding_x = get_table_x_padding();
+	table_padding_y = get_table_y_padding();
 	tmp_empty_ob = (layer_empty *) tmp_layer->object_data;
 	message = g_string_new(NULL);
 	valid_ext_link = g_string_new(NULL);
@@ -79,34 +83,34 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 	// Background Colour
 	label_bg_colour = gtk_label_new(_("Background Color: "));
 	gtk_misc_set_alignment(GTK_MISC(label_bg_colour), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(label_bg_colour), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(label_bg_colour), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_bg_colour = gtk_color_button_new_with_color(&tmp_empty_ob->bg_color);
 	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(button_bg_colour), TRUE);
-	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(button_bg_colour), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(button_bg_colour), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for an external link
 	external_link_label = gtk_label_new(_("External link: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(external_link_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts an external link
 	external_link_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), valid_fields[EXTERNAL_LINK].max_value);
 	gtk_entry_set_text(GTK_ENTRY(external_link_entry), tmp_layer->external_link->str);
-	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Create the label asking for the window to open the external link in
 	external_link_win_label = gtk_label_new(_("External link window: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(external_link_win_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts a text string for the window to open the external link in
 	external_link_win_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), valid_fields[EXTERNAL_LINK_WINDOW].max_value);
 	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), tmp_layer->external_link_window->str);
-	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
 	// Ensure everything will show

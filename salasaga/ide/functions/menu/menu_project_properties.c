@@ -52,6 +52,8 @@ void menu_project_properties(void)
 	GtkWidget			*proj_dialog_table;			// Table used for neat layout of the labels and fields in project preferences
 	gint				proj_row_counter;			// Used when building the project preferences dialog box
 	gchar				*retrieved_uri;
+	gint				table_padding_x;			// Amount of padding to use in the table
+	gint				table_padding_y;			// Amount of padding to use in the table
 	GFile				*temp_gfile;
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	gboolean			valid_control_bar_behaviour;  // Receives the new control bar display behaviour
@@ -117,6 +119,8 @@ void menu_project_properties(void)
 	default_gvfs = g_vfs_get_default();
 	message = g_string_new(NULL);
 	proj_row_counter = 0;
+	table_padding_x = get_table_x_padding();
+	table_padding_y = get_table_y_padding();
 	valid_ext_link = g_string_new(NULL);
 	valid_ext_link_win = g_string_new(NULL);
 	valid_output_folder = g_string_new(NULL);
@@ -132,68 +136,68 @@ void menu_project_properties(void)
 	// Project Name
 	label_project_name = gtk_label_new(_("Project Name: "));
 	gtk_misc_set_alignment(GTK_MISC(label_project_name), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_name), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_name), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	entry_project_name = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry_project_name), valid_fields[PROJECT_NAME].max_value);
 	gtk_entry_set_text(GTK_ENTRY(entry_project_name), (gchar *) project_name->str);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_name), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_name), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Project Folder
 	label_project_folder = gtk_label_new(_("Project Folder: "));
 	gtk_misc_set_alignment(GTK_MISC(label_project_folder), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_folder), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_folder), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_project_folder = gtk_file_chooser_button_new(_("Select the Project Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_project_folder), project_folder->str);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_project_folder), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_project_folder), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Output Folder
 	label_output_folder = gtk_label_new(_("Output Folder: "));
 	gtk_misc_set_alignment(GTK_MISC(label_output_folder), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_output_folder), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_output_folder), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_output_folder = gtk_file_chooser_button_new(_("Select the Output Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_output_folder), output_folder->str);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_output_folder), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_output_folder), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Frames per second
 	label_frames_per_second = gtk_label_new(_("Frames per second: "));
 	gtk_misc_set_alignment(GTK_MISC(label_frames_per_second), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_frames_per_second), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_frames_per_second), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_frames_per_second = gtk_spin_button_new_with_range(valid_fields[PROJECT_FPS].min_value, valid_fields[PROJECT_FPS].max_value, 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_frames_per_second), frames_per_second);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_frames_per_second), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_frames_per_second), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Project Width
 	label_project_width = gtk_label_new(_("Project Width: "));
 	gtk_misc_set_alignment(GTK_MISC(label_project_width), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_width), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_width), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	entry_project_width = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry_project_width), 12);
 	g_string_printf(tmp_gstring, "%d %s", project_width, _("pixels"));
 	gtk_entry_set_text(GTK_ENTRY(entry_project_width), tmp_gstring->str);
 	gtk_editable_set_editable(GTK_EDITABLE(entry_project_width), FALSE);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_width), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_width), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Project Height
 	label_project_height = gtk_label_new(_("Project Height: "));
 	gtk_misc_set_alignment(GTK_MISC(label_project_height), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_height), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_height), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	entry_project_height = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry_project_height), 12);
 	g_string_printf(tmp_gstring, "%d %s", project_height, _("pixels"));
 	gtk_entry_set_text(GTK_ENTRY(entry_project_height), tmp_gstring->str);
 	gtk_editable_set_editable(GTK_EDITABLE(entry_project_height), FALSE);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_height), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_height), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Start behaviour
 	label_start_behaviour = gtk_label_new(_("SWF start behavior: "));
 	gtk_misc_set_alignment(GTK_MISC(label_start_behaviour), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_start_behaviour), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_start_behaviour), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	selector_start_behaviour = gtk_combo_box_new_text();
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_start_behaviour), _("Paused"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_start_behaviour), _("Play"));
@@ -206,13 +210,13 @@ void menu_project_properties(void)
 		default:
 			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_start_behaviour), START_BEHAVIOUR_PAUSED);
 	}
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(selector_start_behaviour), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(selector_start_behaviour), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
 	// End behaviour
 	label_end_behaviour = gtk_label_new(_("SWF end behavior: "));
 	gtk_misc_set_alignment(GTK_MISC(label_end_behaviour), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_end_behaviour), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_end_behaviour), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	selector_end_behaviour = gtk_combo_box_new_text();
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), _("Stop"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_end_behaviour), _("Loop and play"));
@@ -230,13 +234,13 @@ void menu_project_properties(void)
 		default:
 			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_end_behaviour), END_BEHAVIOUR_STOP);
 	}
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(selector_end_behaviour), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(selector_end_behaviour), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Display control bar
 	label_control_bar = gtk_label_new(_("Display SWF control bar: "));
 	gtk_misc_set_alignment(GTK_MISC(label_control_bar), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_control_bar), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_control_bar), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	check_control_bar = gtk_check_button_new();
 	if (TRUE == get_show_control_bar())
 	{
@@ -245,13 +249,13 @@ void menu_project_properties(void)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_control_bar), FALSE);
 	}
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(check_control_bar), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(check_control_bar), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Display information button
 	label_display_info = gtk_label_new(_("Display SWF information button: "));
 	gtk_misc_set_alignment(GTK_MISC(label_display_info), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_display_info), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_display_info), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	check_display_info = gtk_check_button_new();
 	if (TRUE == get_info_display())
 	{
@@ -260,13 +264,13 @@ void menu_project_properties(void)
 	{
 		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_display_info), FALSE);
 	}
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(check_display_info), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(check_display_info), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Create a label for the information button text view
 	label_info_text = gtk_label_new(_("Information button text"));
 	gtk_misc_set_alignment(GTK_MISC(label_info_text), 0.5, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_info_text), 0, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_info_text), 0, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Create the text view that accepts the new information button text
@@ -277,31 +281,31 @@ void menu_project_properties(void)
 	text_view = gtk_text_view_new_with_buffer(text_buffer);
 	gtk_widget_set_size_request(GTK_WIDGET(text_view), 0, 100);
 	gtk_container_add(GTK_CONTAINER(text_frame), text_view);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(text_frame), 0, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(text_frame), 0, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Create the label asking for an external link
 	external_link_label = gtk_label_new(_("Information button link: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_label), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_label), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts an external link
 	external_link_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), valid_fields[EXTERNAL_LINK].max_value);
 	gtk_entry_set_text(GTK_ENTRY(external_link_entry), info_link->str);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_entry), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_entry), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
 	// Create the label asking for the window to open the external link in
 	external_link_win_label = gtk_label_new(_("Information button link window: "));
 	gtk_misc_set_alignment(GTK_MISC(external_link_win_label), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_win_label), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_win_label), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts a text string for the window to open the external link in
 	external_link_win_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), valid_fields[EXTERNAL_LINK_WINDOW].max_value);
 	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), info_link_target->str);
-	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_win_entry), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_x_padding, table_y_padding);
+	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_win_entry), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Ensure everything will be shown
 	gtk_widget_show_all(GTK_WIDGET(main_dialog));

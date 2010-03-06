@@ -75,23 +75,23 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	}
 
 	// Sort out the mouse coordinates to use
-	if (release_x > stored_x)
+	if (release_x > get_stored_x())
 	{
-		start_x = stored_x;
+		start_x = get_stored_x();
 		end_x = release_x;
 	} else
 	{
 		start_x = release_x;
-		end_x = stored_x;
+		end_x = get_stored_x();
 	}
-	if (release_y > stored_y)
+	if (release_y > get_stored_y())
 	{
-		start_y = stored_y;
+		start_y = get_stored_y();
 		end_y = release_y;
 	} else
 	{
 		start_y = release_y;
-		end_y = stored_y;
+		end_y = get_stored_y();
 	}
 
 	// Ensure the mouse coordinates can't go out of bounds

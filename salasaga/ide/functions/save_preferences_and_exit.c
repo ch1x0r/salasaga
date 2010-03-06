@@ -148,13 +148,13 @@ void save_preferences_and_exit(void)
 	// fixme4: Should we save a list of recent projects worked on?
 
 	// Unbind the screenshot key if it was bound
-	if (-1 != screenshot_command_num)
+	if (-1 != get_screenshot_command_num())
 	{
 		// Create the name of the key to reset
 		command_key = g_string_new(NULL);
-		g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", screenshot_command_num);
+		g_string_printf(command_key, "%s%u", "/apps/metacity/keybinding_commands/command_", get_screenshot_command_num());
 		gconf_engine_set_string(gconf_engine, command_key->str, "", NULL);
-		g_string_printf(command_key, "%s%u", "/apps/metacity/global_keybindings/run_command_", screenshot_command_num);
+		g_string_printf(command_key, "%s%u", "/apps/metacity/global_keybindings/run_command_", get_screenshot_command_num());
 		gconf_engine_set_string(gconf_engine, command_key->str, "disabled", NULL);
 		g_string_free(command_key, TRUE);
 	}
