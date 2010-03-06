@@ -1031,11 +1031,11 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 	// Load frames per second
 	if (0 != valid_fps)
 	{
-		frames_per_second = valid_fps;
+		set_frames_per_second(valid_fps);
 	}
 
 	// Load Start behaviour
-	start_behaviour = valid_start_behaviour;
+	set_start_behaviour(valid_start_behaviour);
 
 	// Load End behaviour
 	set_end_behaviour(valid_end_behaviour);

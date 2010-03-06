@@ -49,6 +49,7 @@ static gboolean				display_help_text = TRUE;		// Should we display help text and
 static guint				end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations
 static guint				end_point_status = END_POINTS_INACTIVE;  // Is one of the layer end points being moved?
 static gboolean				film_strip_being_resized;		// Toggle to indicate if the film strip is being resized
+static guint				frames_per_second;				// Number of frames per second
 static gboolean				info_display = TRUE;			// Toggle for whether to display the information button in swf output
 static gint					invalidation_end_x;				// Right side of the front store area to invalidate
 static gint					invalidation_end_y;				// Bottom of the front store area to invalidate
@@ -60,14 +61,21 @@ static gboolean				mouse_click_triple_added;		// Have we added a triple mouse cl
 static gboolean				mouse_dragging = FALSE;			// Is the mouse being dragged?
 static gboolean				new_layer_selected = TYPE_NONE;	// Is a new layer being created?
 static gboolean				project_active;					// Whether or not a project is active (i.e. something is loaded or has been created)
+static guint				resize_handles_status;			// Are the layer resize handles active, in progress, etc
+static guint				resize_handle_size = 6;			// Size of the resize handles
 static gint					screenshot_command_num = -1;	// The metacity run command number used for the screenshot key
+static guint				screenshot_delay_time = 5;		// The number of seconds the screenshot trigger is delayed
 static gboolean				screenshot_key_warning;			// Should the warning about not being able to set the screenshot key be displayed?
 static gboolean				screenshots_enabled = FALSE;	// Toggle for whether to enable screenshots
 static gboolean				show_control_bar = TRUE;		// Toggle for whether to display the control bar in swf output
+static guint				start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
 static gint					stored_x;						// X co-ordinate of the mouse last click
 static gint					stored_y;						// Y co-ordinate of the mouse last click
 static gint					table_x_padding;				// Number of pixels to pad table entries by
 static gint					table_y_padding;				// Number of pixels to pad table entries by
+static guint				working_height;					// Height of the display portion of the working area in pixels
+static guint				working_width;					// Width of the display portion of the working area in pixels
+static guint				zoom;							// Percentage zoom to use in the drawing area
 
 
 // Functions to get and set the variables
@@ -151,6 +159,11 @@ gboolean get_film_strip_being_resized()
 	return film_strip_being_resized;
 }
 
+guint get_frames_per_second()
+{
+	return frames_per_second;
+}
+
 gboolean get_info_display()
 {
 	return info_display;
@@ -206,9 +219,24 @@ gboolean get_project_active()
 	return project_active;
 }
 
+guint get_resize_handles_status()
+{
+	return resize_handles_status;
+}
+
+guint get_resize_handle_size()
+{
+	return resize_handle_size;
+}
+
 gint get_screenshot_command_num()
 {
 	return screenshot_command_num;
+}
+
+guint get_screenshot_delay_time()
+{
+	return screenshot_delay_time;
 }
 
 gboolean get_screenshot_key_warning()
@@ -224,6 +252,11 @@ gboolean get_screenshots_enabled()
 gboolean get_show_control_bar()
 {
 	return show_control_bar;
+}
+
+guint get_start_behaviour()
+{
+	return start_behaviour;
 }
 
 gint get_stored_x()
@@ -244,6 +277,21 @@ gint get_table_x_padding()
 gint get_table_y_padding()
 {
 	return table_y_padding;
+}
+
+guint get_working_height()
+{
+	return working_height;
+}
+
+guint get_working_width()
+{
+	return working_width;
+}
+
+guint get_zoom()
+{
+	return zoom;
 }
 
 void set_boundary_list(GList *new_boundary_list)
@@ -326,6 +374,11 @@ void set_film_strip_being_resized(gboolean new_film_strip_being_resized)
 	film_strip_being_resized = new_film_strip_being_resized;
 }
 
+void set_frames_per_second(guint new_frames_per_second)
+{
+	frames_per_second = new_frames_per_second;
+}
+
 void set_info_display(gboolean new_info_display)
 {
 	info_display = new_info_display;
@@ -381,9 +434,24 @@ void set_project_active(gboolean new_project_active)
 	project_active = new_project_active;
 }
 
+void set_resize_handles_status(guint new_resize_handles_status)
+{
+	resize_handles_status = new_resize_handles_status;
+}
+
+void set_resize_handle_size(guint new_resize_handle_size)
+{
+	resize_handle_size = new_resize_handle_size;
+}
+
 void set_screenshot_command_num(gint new_screenshot_command_num)
 {
 	screenshot_command_num = new_screenshot_command_num;
+}
+
+void set_screenshot_delay_time(guint new_screenshot_delay_time)
+{
+	screenshot_delay_time = new_screenshot_delay_time;
 }
 
 void set_screenshot_key_warning(gboolean new_screenshot_key_warning)
@@ -399,6 +467,11 @@ void set_screenshots_enabled(gboolean new_screenshots_enabled)
 void set_show_control_bar(gboolean new_show_control_bar)
 {
 	show_control_bar = new_show_control_bar;
+}
+
+void set_start_behaviour(guint new_start_behaviour)
+{
+	start_behaviour = new_start_behaviour;
 }
 
 void set_stored_x(gint new_stored_x)
@@ -419,4 +492,19 @@ void set_table_x_padding(gint new_table_x_padding)
 void set_table_y_padding(gint new_table_y_padding)
 {
 	table_y_padding = new_table_y_padding;
+}
+
+void set_working_height(guint new_working_height)
+{
+	working_height = new_working_height;
+}
+
+void set_working_width(guint new_working_width)
+{
+	working_width = new_working_width;
+}
+
+void set_zoom(guint new_zoom)
+{
+	zoom = new_zoom;
 }

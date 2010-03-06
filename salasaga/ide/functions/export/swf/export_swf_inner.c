@@ -129,7 +129,7 @@ gint export_swf_inner(gchar *output_filename)
 	SWFMovie_setDimension(swf_movie, output_width, output_height);
 
 	// Set the frame rate for the movie
-	SWFMovie_setRate(swf_movie, frames_per_second);
+	SWFMovie_setRate(swf_movie, get_frames_per_second());
 
 	// Set the background colour for the animation
 	SWFMovie_setBackground(swf_movie, 0x00, 0x00, 0x00);  // RGB value - black
@@ -187,7 +187,7 @@ gint export_swf_inner(gchar *output_filename)
 	} else
 	{
 		// Ensure the swf output starts out in the correct play state
-		if (START_BEHAVIOUR_PLAY == start_behaviour)
+		if (START_BEHAVIOUR_PLAY == get_start_behaviour())
 		{
 			g_string_printf(initial_action_gstring, " var playing = true;");
 		} else
@@ -220,7 +220,7 @@ gint export_swf_inner(gchar *output_filename)
 		// Initialise things for this slide
 		slides = g_list_first(slides);
 		this_slide_data = g_list_nth_data(slides, slide_counter);
-		slide_duration = this_slide_data->duration * frames_per_second;
+		slide_duration = this_slide_data->duration * get_frames_per_second();
 
 		// Add the duration in seconds to the total duration count for the animation
 		total_seconds += this_slide_data->duration;

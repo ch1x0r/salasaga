@@ -144,9 +144,9 @@ void menu_file_save(void)
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_width", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", project_height);
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_height", (const xmlChar *) tmp_gstring->str);
-	g_string_printf(tmp_gstring, "%u", frames_per_second);
+	g_string_printf(tmp_gstring, "%u", get_frames_per_second());
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "frames_per_second", (const xmlChar *) tmp_gstring->str);
-	switch (start_behaviour)
+	switch (get_start_behaviour())
 	{
 		case START_BEHAVIOUR_PAUSED:
 			xmlNewChild(pref_pointer, NULL, (const xmlChar *) "start_behaviour", (const xmlChar *) "paused");

@@ -350,7 +350,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_screenshot_delay), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_delay), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_screenshot_delay = gtk_spin_button_new_with_range(valid_fields[SCREENSHOT_DELAY].min_value, valid_fields[SCREENSHOT_DELAY].max_value, 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_screenshot_delay), screenshot_delay_time);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_screenshot_delay), get_screenshot_delay_time());
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_delay), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	label_screenshot_delay_seconds = gtk_label_new(_("seconds"));
 	gtk_misc_set_alignment(GTK_MISC(label_screenshot_delay_seconds), 0, 0.5);
@@ -643,7 +643,7 @@ void menu_edit_preferences(void)
 	gtk_color_button_get_color(GTK_COLOR_BUTTON(button_default_bg_colour), &default_bg_colour);
 
 	// Screenshot delay
-	screenshot_delay_time = valid_screenshot_delay;
+	set_screenshot_delay_time(valid_screenshot_delay);
 
 	// * Update the screenshot delay time and folder in the .lock file, if one exists *
 
@@ -659,7 +659,7 @@ void menu_edit_preferences(void)
 		// * The lock file exists, so we modify the existing contents *
 
 		// Set the new screenshot delay value
-		g_key_file_set_integer(lock_file, "Project", "Screenshot_Delay", screenshot_delay_time);  // Number of seconds to delay the screenshot capture
+		g_key_file_set_integer(lock_file, "Project", "Screenshot_Delay", get_screenshot_delay_time());  // Number of seconds to delay the screenshot capture
 
 		// Set the new screenshot folder value
 		g_key_file_set_string(lock_file, "Project", "Directory", screenshots_folder->str);  // Directory to save screenshots in

@@ -149,7 +149,7 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type)
 		SWFMovieClip_nextFrame(sound_movie_clip);
 
 		// Add extra frames to allow the click to play it's full length
-		click_frames = roundf(click_duration * frames_per_second);
+		click_frames = roundf(click_duration * get_frames_per_second());
 		for (i = 0; i < click_frames; i++)
 		{
 			SWFMovieClip_nextFrame(sound_movie_clip);

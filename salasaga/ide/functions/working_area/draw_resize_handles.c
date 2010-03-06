@@ -75,26 +75,26 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 	// Top left
 	resize_handles_rect[0].x = left + 1;
 	resize_handles_rect[0].y = top + 1;
-	resize_handles_rect[0].width = resize_handle_size - 1;
-	resize_handles_rect[0].height = resize_handle_size - 1;
+	resize_handles_rect[0].width = get_resize_handle_size() - 1;
+	resize_handles_rect[0].height = get_resize_handle_size() - 1;
 
 	// Top right
-	resize_handles_rect[2].x = right - resize_handle_size + 1;
+	resize_handles_rect[2].x = right - get_resize_handle_size() + 1;
 	resize_handles_rect[2].y = top + 1;
-	resize_handles_rect[2].width = resize_handle_size - 1;
-	resize_handles_rect[2].height = resize_handle_size - 1;
+	resize_handles_rect[2].width = get_resize_handle_size() - 1;
+	resize_handles_rect[2].height = get_resize_handle_size() - 1;
 
 	// Bottom right
-	resize_handles_rect[4].x = right - resize_handle_size + 1;
-	resize_handles_rect[4].y = bottom - resize_handle_size + 1;
-	resize_handles_rect[4].width = resize_handle_size - 1;
-	resize_handles_rect[4].height = resize_handle_size - 1;
+	resize_handles_rect[4].x = right - get_resize_handle_size() + 1;
+	resize_handles_rect[4].y = bottom - get_resize_handle_size() + 1;
+	resize_handles_rect[4].width = get_resize_handle_size() - 1;
+	resize_handles_rect[4].height = get_resize_handle_size() - 1;
 
 	// Bottom left
 	resize_handles_rect[6].x = left + 1;
-	resize_handles_rect[6].y = bottom - resize_handle_size + 1;
-	resize_handles_rect[6].width = resize_handle_size - 1;
-	resize_handles_rect[6].height = resize_handle_size - 1;
+	resize_handles_rect[6].y = bottom - get_resize_handle_size() + 1;
+	resize_handles_rect[6].width = get_resize_handle_size() - 1;
+	resize_handles_rect[6].height = get_resize_handle_size() - 1;
 
 
 	// * Draw the corner handles *
@@ -120,26 +120,26 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 		resize_handles_rect[6].width, resize_handles_rect[6].height);
 
 	// * If there is enough room, draw the mid point handles *
-	required_size_mid_point = (resize_handle_size * 3) + 2;
+	required_size_mid_point = (get_resize_handle_size() * 3) + 2;
 
 	// Draw the horizontal resize handles
 	width = bottom - top;
 	if (required_size_mid_point < width)
 	{
 		// Calculate where to place the horizontal resize handles
-		mid_point_vertical = top + roundf(((gfloat) width - resize_handle_size) / 2);
+		mid_point_vertical = top + roundf(((gfloat) width - get_resize_handle_size()) / 2);
 
 		// Right middle
-		resize_handles_rect[3].x = right - resize_handle_size + 1;
+		resize_handles_rect[3].x = right - get_resize_handle_size() + 1;
 		resize_handles_rect[3].y = mid_point_vertical;
-		resize_handles_rect[3].width = resize_handle_size - 1;
-		resize_handles_rect[3].height = resize_handle_size;
+		resize_handles_rect[3].width = get_resize_handle_size() - 1;
+		resize_handles_rect[3].height = get_resize_handle_size();
 
 		// Left middle
 		resize_handles_rect[7].x = left + 1;
 		resize_handles_rect[7].y = mid_point_vertical;
-		resize_handles_rect[7].width = resize_handle_size - 1;
-		resize_handles_rect[7].height = resize_handle_size;
+		resize_handles_rect[7].width = get_resize_handle_size() - 1;
+		resize_handles_rect[7].height = get_resize_handle_size();
 
 		// Right middle
 		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,
@@ -162,19 +162,19 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 	if (required_size_mid_point < height)
 	{
 		// Calculate where to place the vertical resize handles
-		mid_point_horizontal = left + roundf(((gfloat) height - resize_handle_size) / 2);
+		mid_point_horizontal = left + roundf(((gfloat) height - get_resize_handle_size()) / 2);
 
 		// Top Middle
 		resize_handles_rect[1].x = mid_point_horizontal;
 		resize_handles_rect[1].y = top + 1;
-		resize_handles_rect[1].width = resize_handle_size;
-		resize_handles_rect[1].height = resize_handle_size - 1;
+		resize_handles_rect[1].width = get_resize_handle_size();
+		resize_handles_rect[1].height = get_resize_handle_size() - 1;
 
 		// Bottom middle
 		resize_handles_rect[5].x = mid_point_horizontal;
-		resize_handles_rect[5].y = bottom - resize_handle_size + 1;
-		resize_handles_rect[5].width = resize_handle_size;
-		resize_handles_rect[5].height = resize_handle_size - 1;
+		resize_handles_rect[5].y = bottom - get_resize_handle_size() + 1;
+		resize_handles_rect[5].width = get_resize_handle_size();
+		resize_handles_rect[5].height = get_resize_handle_size() - 1;
 
 		// Top middle
 		gdk_draw_rectangle(GDK_DRAWABLE(main_drawing_area->window), GDK_GC(handle_gc), TRUE,

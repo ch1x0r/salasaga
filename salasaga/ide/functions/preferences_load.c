@@ -550,13 +550,14 @@ gboolean preferences_load()
 	preview_width = valid_preview_width;
 
 	// Set the default frames per second
-	default_fps = frames_per_second = valid_default_fps;
+	default_fps = valid_default_fps;
+	set_frames_per_second(default_fps);
 
 	// Set the icon height
 	icon_height = valid_icon_height;
 
 	// Set the screenshot delay
-	screenshot_delay_time = valid_screenshot_delay;
+	set_screenshot_delay_time(valid_screenshot_delay);
 
 	// Set whether help text and dialogs should be displayed or not
 	set_display_help_text(should_display_help_text);
@@ -812,7 +813,8 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			default_fps = frames_per_second = 12;
+			default_fps = 12;
+			set_frames_per_second(default_fps);
 		} else
 		{
 			// Retrieve the value
@@ -820,7 +822,8 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "frames_per_second", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				default_fps = frames_per_second = atoi(buffer_ptr);
+				default_fps = atoi(buffer_ptr);
+				set_frames_per_second(default_fps);
 			}
 
 			// Close the registry key
@@ -892,7 +895,7 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			screenshot_delay_time = 5;
+			set_screenshot_delay_time(5);
 		} else
 		{
 			// Retrieve the value

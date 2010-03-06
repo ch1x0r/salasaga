@@ -86,7 +86,6 @@ GtkTreeViewColumn		*film_strip_column;			// Pointer to the film strip column
 GtkScrolledWindow		*film_strip_container;		// Container for the film strip
 GtkListStore			*film_strip_store;			// Film strip list store
 GtkWidget				*film_strip_view;			// The view of the film strip list store
-guint					frames_per_second;			// Number of frames per second
 GdkPixmap				*front_store;				// Front store for double buffering the workspace area
 FT_Face					ft_font_face[FONT_COUNT];	// Array of FreeType font face handles
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
@@ -106,12 +105,8 @@ GIOChannel				*output_file;				// The output file handle
 gulong					resolution_callback;		// Holds the id of the resolution selector callback
 GtkComboBox				*resolution_selector;		// Widget for the resolution selector
 GdkRectangle			resize_handles_rect[8];		// Contains the onscreen offsets and size for the resize handles
-guint					resize_handles_status;		// Are the layer resize handles active, in progress, etc
-guint					resize_handle_size = 6;		// Size of the resize handles
 GtkWidget				*right_side;				// Widget for the right side area
-guint					screenshot_delay_time = 5;	// The number of seconds the screenshot trigger is delayed
 GList					*slides = NULL;				// Linked list holding the slide info
-guint					start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
 GtkWidget				*status_bar;				// Widget for the status bar
 GtkStatusIcon			*status_icon;				// Pointer to the GtkStatusIcon object, used for StatusIcon communication
 GSList					*text_tags_fg_colour_slist = NULL;	// Text tags for text foreground colour, used for changing text colour in text layers
@@ -120,13 +115,7 @@ GSList					*text_tags_size_slist = NULL;	// Text tags for text sizes, used for c
 GtkTextTagTable			*text_tags_table;			// The table of all text tags, used for applying text tags in text layers
 GtkWidget				*time_line_container;		// Scrolled window widget, to add scroll bars to the time line widget
 GtkWidget				*time_line_vbox;			// VBox widget holding all of the time line elements
-guint					unscaled_button_height;		// Height of buttons in swf output control bar
-guint					unscaled_button_spacing;	// Spacing between buttons of swf output control bar
-guint					unscaled_button_width;		// Width of buttons in swf output control bar
 GtkWidget				*working;					// Widget for the working area
-guint					working_width;				// Width of the display portion of the working area in pixels
-guint					working_height;				// Height of the display portion of the working area in pixels
-guint					zoom;						// Percentage zoom to use in the drawing area
 GtkComboBox				*zoom_selector;				// Widget for the zoom selector
 
 // Main toolbar items
@@ -230,14 +219,11 @@ gint main(gint argc, gchar *argv[])
 	default_bg_colour.green = 0;
 	default_bg_colour.blue = 0;
 	preview_width = 300;
-	frames_per_second = 12;  // Half of 24 fps (film)
+	set_frames_per_second(12);  // Half of 24 fps (film)
 	set_table_x_padding(5);
 	set_table_y_padding(5);
 	toolbar = NULL;
 	tmp_widget = NULL;
-	unscaled_button_height = 50;
-	unscaled_button_spacing = 5;
-	unscaled_button_width = 50;
 
 	// Initialise i18n
 	locale_return = setlocale(LC_ALL, "");

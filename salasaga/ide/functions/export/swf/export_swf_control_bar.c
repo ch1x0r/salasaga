@@ -372,7 +372,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	}
 
 	// Ensure the swf output starts out in the correct play state and the play button is correct
-	if (START_BEHAVIOUR_PLAY == start_behaviour)
+	if (START_BEHAVIOUR_PLAY == get_start_behaviour())
 	{
 		g_string_printf(slide_names_gstring, " var playing = true; cb_main.cb_play._visible = false;");
 	} else

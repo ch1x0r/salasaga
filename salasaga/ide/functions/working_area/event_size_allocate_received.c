@@ -66,7 +66,7 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
 		old_width = right_side->allocation.width;
 
 		// Resize the drawing area so it draws properly
-		gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), working_width, working_height);
+		gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), get_working_width(), get_working_height());
 
 		// Free the memory allocated in this function
 		g_string_free(tmp_string, TRUE);

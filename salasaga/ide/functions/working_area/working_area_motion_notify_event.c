@@ -107,7 +107,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	}
 
 	// If we're already aware of a resize operation going on, then draw the appropriate bounding box
-	if (FALSE != (RESIZE_HANDLES_RESIZING & resize_handles_status))
+	if (FALSE != (RESIZE_HANDLES_RESIZING & get_resize_handles_status()))
 	{
 		// Initialise some things
 		this_slide_data = current_slide->data;
@@ -134,7 +134,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		y_diff = mouse_y - get_stored_y();
 
 		// Work out the bounding box boundaries
-		switch (resize_handles_status & RESIZE_HANDLES_RESIZING_ALL)
+		switch (get_resize_handles_status() & RESIZE_HANDLES_RESIZING_ALL)
 		{
 			case RESIZE_HANDLES_RESIZING_TL:
 				// Top left resize
@@ -216,8 +216,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 
 	// * Start and end point movement detection code *
 	if ((FALSE == get_mouse_dragging())							// Not dragging mouse already
-		&& ((RESIZE_HANDLES_WAITING == resize_handles_status)
-		|| (RESIZE_HANDLES_INACTIVE == resize_handles_status)))	// Not resizing a layer already
+		&& ((RESIZE_HANDLES_WAITING == get_resize_handles_status())
+		|| (RESIZE_HANDLES_INACTIVE == get_resize_handles_status())))	// Not resizing a layer already
 	{
 		// Initialise some things
 		this_slide_data = current_slide->data;
@@ -447,7 +447,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	// * To get here, this must be the first time we've heard of this particular drag operation *
 
 	// Check if the primary mouse button is down and we're open to being clicked on the resize handles
-	if ((GDK_BUTTON1_MASK & button_state) && (RESIZE_HANDLES_WAITING == resize_handles_status))
+	if ((GDK_BUTTON1_MASK & button_state) && (RESIZE_HANDLES_WAITING == get_resize_handles_status()))
 	{
 		// Create the mouse pointer rectangle
 		mouse_pointer_rect.x = event->x - 5;
@@ -461,28 +461,28 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[0], &mouse_pointer_rect, NULL))
 		{
 			// We're resizing from the top left
-			resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_TL;
+			set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_TL);
 		}
 
 		// Top right
 		if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[2], &mouse_pointer_rect, NULL))
 		{
 			// We're resizing from the top right
-			resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_TR;
+			set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_TR);
 		}
 
 		// Bottom right
 		if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[4], &mouse_pointer_rect, NULL))
 		{
 			// We're resizing from the bottom right
-			resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_BR;
+			set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_BR);
 		}
 
 		// Bottom left
 		if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[6], &mouse_pointer_rect, NULL))
 		{
 			// We're resizing from the bottom left
-			resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_BL;
+			set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_BL);
 		}
 
 		// If the horizontal resize handles are in use, check them
@@ -492,14 +492,14 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[3], &mouse_pointer_rect, NULL))
 			{
 				// We're resizing from the right middle
-				resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_RM;
+				set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_RM);
 			}
 
 			// Left middle
 			if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[7], &mouse_pointer_rect, NULL))
 			{
 				// We're resizing from the left middle
-				resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_LM;
+				set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_LM);
 			}
 		}
 
@@ -510,19 +510,19 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[1], &mouse_pointer_rect, NULL))
 			{
 				// We're resizing from the top middle
-				resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_TM;
+				set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_TM);
 			}
 
 			// Bottom middle
 			if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[5], &mouse_pointer_rect, NULL))
 			{
 				// We're resizing from the bottom middle
-				resize_handles_status = RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_BM;
+				set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_BM);
 			}
 		}
 
 		// If we're resizing, then return, else drop through to the next check
-		if (FALSE != (RESIZE_HANDLES_RESIZING & resize_handles_status))
+		if (FALSE != (RESIZE_HANDLES_RESIZING & get_resize_handles_status()))
 		{
 			// Store the mouse coordinates so we know where to resize from
 			set_stored_x(event->x);
@@ -538,8 +538,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 
 	// Check if the primary mouse button is down and we're not resizing a layer
 	if ((GDK_BUTTON1_MASK & button_state)
-		&& ((RESIZE_HANDLES_WAITING == resize_handles_status)
-		|| (RESIZE_HANDLES_INACTIVE == resize_handles_status)))	// Not resizing a layer already
+		&& ((RESIZE_HANDLES_WAITING == get_resize_handles_status())
+		|| (RESIZE_HANDLES_INACTIVE == get_resize_handles_status())))	// Not resizing a layer already
 	{
 		// We're commencing a drag, so note this
 		set_mouse_dragging(TRUE);

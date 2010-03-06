@@ -145,16 +145,16 @@ gboolean draw_handle_box(void)
 	// If this is a highlight layer and it's not too small, then draw the handle box handles onscreen and mark them as active
 	if (TYPE_HIGHLIGHT == this_layer_data->object_type)
 	{
-		required_size_for_handles = (resize_handle_size * 2) + 1;
+		required_size_for_handles = (get_resize_handle_size() * 2) + 1;
 		if ((required_size_for_handles < layer_positions.width) && (required_size_for_handles < layer_positions.height))
 		{
 			draw_resize_handles(onscreen_left, onscreen_top, onscreen_right, onscreen_bottom);
-			resize_handles_status |= RESIZE_HANDLES_WAITING;
+			set_resize_handles_status(get_resize_handles_status() | RESIZE_HANDLES_WAITING);
 		}
 	} else
 	{
 		// Either wrong layer type or it's too small
-		resize_handles_status = RESIZE_HANDLES_INACTIVE;
+		set_resize_handles_status(RESIZE_HANDLES_INACTIVE);
 	}
 
 	return TRUE;

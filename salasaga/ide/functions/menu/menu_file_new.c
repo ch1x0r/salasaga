@@ -289,7 +289,7 @@ void menu_file_new(void)
 	project_height = valid_height;
 
 	// Set the number of frames per second
-	frames_per_second = valid_fps;
+	set_frames_per_second(valid_fps);
 
 	// Set the default background color
 	default_bg_colour = new_bg_colour;
@@ -338,11 +338,11 @@ void menu_file_new(void)
 	time_line_set_selected_layer_num(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget), 0);
 
 	// Calculate and set the display size of the working area
-	working_width = (project_width * zoom) / 100;
-	working_height = (project_height * zoom) / 100;
+	set_working_width((project_width * get_zoom()) / 100);
+	set_working_height((project_height * get_zoom()) / 100);
 
 	// Resize the drawing area so it draws properly
-	gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), working_width, working_height);
+	gtk_widget_set_size_request(GTK_WIDGET(main_drawing_area), get_working_width(), get_working_height());
 
 	// Free the existing front store for the workspace
 	if (NULL != front_store)

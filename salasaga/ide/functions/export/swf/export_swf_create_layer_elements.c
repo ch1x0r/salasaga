@@ -92,11 +92,11 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 	element_y_position_finish = scaled_height_ratio * this_layer_data->y_offset_finish;
 
 	// If there is a fade in transition, fill in the relevant elements
-	start_frame = this_layer_data->start_time * frames_per_second;
+	start_frame = this_layer_data->start_time * get_frames_per_second();
 	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 	{
 		// Work out the starting and ending frames for the fade
-		finish_frame = start_frame + (this_layer_data->transition_in_duration * frames_per_second);
+		finish_frame = start_frame + (this_layer_data->transition_in_duration * get_frames_per_second());
 
 		// Indicate on which frame the element should be displayed, at what display depth, and its starting co-ordinates
 		start_frame_rounded = roundf(start_frame);
@@ -106,7 +106,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 		array_start[start_frame_rounded].y_position = element_y_position_start;
 
 		// Work out how much opacity to increment each frame by
-		opacity_step = 100 / ((this_layer_data->transition_in_duration * frames_per_second));
+		opacity_step = 100 / ((this_layer_data->transition_in_duration * get_frames_per_second()));
 
 		// Loop through each frame of the fade in, setting the opacity values
 		opacity_count = 0;
@@ -141,14 +141,14 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 		// Work out the starting and ending frames for the fade
 		fade_frame = start_frame;
 		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-			fade_frame += this_layer_data->transition_in_duration * frames_per_second;
-		fade_frame += this_layer_data->duration * frames_per_second;
-		finish_frame = fade_frame + (this_layer_data->transition_out_duration * frames_per_second);
+			fade_frame += this_layer_data->transition_in_duration * get_frames_per_second();
+		fade_frame += this_layer_data->duration * get_frames_per_second();
+		finish_frame = fade_frame + (this_layer_data->transition_out_duration * get_frames_per_second());
 		start_frame_rounded = roundf(fade_frame);
 		finish_frame_rounded = roundf(finish_frame) == 0 ? 0 : ((roundf(finish_frame)>=num_frames) ? num_frames-1 : roundf(finish_frame));
 
 		// Work out how much opacity to decrement each frame by
-		opacity_step = 100 / ((this_layer_data->transition_out_duration * frames_per_second));
+		opacity_step = 100 / ((this_layer_data->transition_out_duration * get_frames_per_second()));
 
 		// Loop through each frame of the fade out, setting the opacity values
 		opacity_count = 100;
@@ -172,10 +172,10 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 
 	// Work out the start frame of the fully visible layer display
 	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-		start_frame += this_layer_data->transition_in_duration * frames_per_second;
+		start_frame += this_layer_data->transition_in_duration * get_frames_per_second();
 
 	// Work out the finish frame of the fully visible layer display
-	finish_frame = start_frame + (this_layer_data->duration * frames_per_second);
+	finish_frame = start_frame + (this_layer_data->duration * get_frames_per_second());
 
 	// If this is a mouse cursor with a click, we squeeze the movement part into a smaller number of frames
 	// to give time for the click sound to play while the mouse is stationery and before it fades
@@ -192,7 +192,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 			case MOUSE_MIDDLE_ONE:
 
 				click_duration = 0.5;
-				click_frames = roundf(click_duration * frames_per_second) + 1;
+				click_frames = roundf(click_duration * get_frames_per_second()) + 1;
 				play_click = mouse_data->click;
 				break;
 
@@ -201,7 +201,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 			case MOUSE_MIDDLE_DOUBLE:
 
 				click_duration = 0.5;
-				click_frames = roundf(click_duration * frames_per_second) + 1;
+				click_frames = roundf(click_duration * get_frames_per_second()) + 1;
 				play_click = mouse_data->click;
 				break;
 
@@ -210,7 +210,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 			case MOUSE_MIDDLE_TRIPLE:
 
 				click_duration = 0.5;
-				click_frames = roundf(click_duration * frames_per_second) + 1;
+				click_frames = roundf(click_duration * get_frames_per_second()) + 1;
 				play_click = mouse_data->click;
 				break;
 
@@ -277,7 +277,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 
 	// Determine on which frame the element should be removed from display
 	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
-			finish_frame += (this_layer_data->transition_out_duration * frames_per_second);
+			finish_frame += (this_layer_data->transition_out_duration * get_frames_per_second());
 	finish_frame_rounded = roundf(finish_frame) == 0 ? 0 : ((roundf(finish_frame)>=num_frames) ? num_frames-1 : roundf(finish_frame));
 	array_start[finish_frame_rounded].action_this = TRUE;
 	array_start[finish_frame_rounded].remove = TRUE;

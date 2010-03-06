@@ -166,7 +166,7 @@ void menu_project_properties(void)
 	gtk_misc_set_alignment(GTK_MISC(label_frames_per_second), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_frames_per_second), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_frames_per_second = gtk_spin_button_new_with_range(valid_fields[PROJECT_FPS].min_value, valid_fields[PROJECT_FPS].max_value, 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_frames_per_second), frames_per_second);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_frames_per_second), get_frames_per_second());
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_frames_per_second), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
@@ -201,7 +201,7 @@ void menu_project_properties(void)
 	selector_start_behaviour = gtk_combo_box_new_text();
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_start_behaviour), _("Paused"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_start_behaviour), _("Play"));
-	switch (start_behaviour)
+	switch (get_start_behaviour())
 	{
 		case START_BEHAVIOUR_PLAY:
 			gtk_combo_box_set_active(GTK_COMBO_BOX(selector_start_behaviour), START_BEHAVIOUR_PLAY);
@@ -480,10 +480,10 @@ void menu_project_properties(void)
 	g_string_free(valid_output_folder, TRUE);
 
 	// Frames per second
-	frames_per_second = valid_fps;
+	set_frames_per_second(valid_fps);
 
 	// Start behaviour
-	start_behaviour = valid_start_behaviour;
+	set_start_behaviour(valid_start_behaviour);
 
 	// End behaviour
 	set_end_behaviour(valid_end_behaviour);

@@ -70,8 +70,8 @@ void draw_workspace(void)
 	}
 
 	// Recalculate the size of the working area
-	front_store_height = working_height;
-	front_store_width = working_width;
+	front_store_height = get_working_height();
+	front_store_width = get_working_width();
 
 	// Get the current time line cursor position
 	cursor_position = time_line_get_cursor_position(current_slide_data->timeline_widget);
@@ -82,7 +82,7 @@ void draw_workspace(void)
 		g_object_unref(GDK_PIXMAP(front_store));
 		front_store = NULL;
 	}
-	front_store = compress_layers(current_slide, cursor_position, working_width, working_height);
+	front_store = compress_layers(current_slide, cursor_position, get_working_width(), get_working_height());
 	if (NULL == front_store)
 	{
 		return;

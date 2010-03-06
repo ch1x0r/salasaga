@@ -174,7 +174,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	}
 
 	// If this release matches the end of a layer resize operation, we process it
-	if (FALSE != (RESIZE_HANDLES_RESIZING & resize_handles_status))
+	if (FALSE != (RESIZE_HANDLES_RESIZING & get_resize_handles_status()))
 	{
 		// Initialise some things
 		this_slide_data = current_slide->data;
@@ -195,7 +195,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		y_diff = (mouse_y - get_stored_y()) * scaled_height_ratio;
 
 		// Work out the new size for the layer
-		switch (resize_handles_status & RESIZE_HANDLES_RESIZING_ALL)
+		switch (get_resize_handles_status() & RESIZE_HANDLES_RESIZING_ALL)
 		{
 			case RESIZE_HANDLES_RESIZING_TL:
 				// Top left resize
@@ -329,7 +329,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		film_strip_create_thumbnail((slide *) current_slide->data);
 
 		// Reset the resize switch and related info
-		resize_handles_status = RESIZE_HANDLES_WAITING;
+		set_resize_handles_status(RESIZE_HANDLES_WAITING);
 		set_stored_x(-1);
 		set_stored_y(-1);
 
