@@ -63,6 +63,7 @@ static gboolean				new_layer_selected = TYPE_NONE;	// Is a new layer being creat
 static gboolean				project_active;					// Whether or not a project is active (i.e. something is loaded or has been created)
 static guint				resize_handles_status;			// Are the layer resize handles active, in progress, etc
 static guint				resize_handle_size = 6;			// Size of the resize handles
+static gulong				resolution_callback;			// Holds the id of the resolution selector callback
 static gint					screenshot_command_num = -1;	// The metacity run command number used for the screenshot key
 static guint				screenshot_delay_time = 5;		// The number of seconds the screenshot trigger is delayed
 static gboolean				screenshot_key_warning;			// Should the warning about not being able to set the screenshot key be displayed?
@@ -227,6 +228,11 @@ guint get_resize_handles_status()
 guint get_resize_handle_size()
 {
 	return resize_handle_size;
+}
+
+gulong get_resolution_callback()
+{
+	return resolution_callback;
 }
 
 gint get_screenshot_command_num()
@@ -442,6 +448,11 @@ void set_resize_handles_status(guint new_resize_handles_status)
 void set_resize_handle_size(guint new_resize_handle_size)
 {
 	resize_handle_size = new_resize_handle_size;
+}
+
+void set_resolution_callback(gulong new_resolution_callback)
+{
+	resolution_callback = new_resolution_callback;
 }
 
 void set_screenshot_command_num(gint new_screenshot_command_num)

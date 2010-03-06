@@ -102,7 +102,6 @@ GtkTable				*message_bar;				// Widget for message bar
 GdkPixbuf				*mouse_ptr_pixbuf;			// Temporary GDK Pixbuf
 GString					*mouse_ptr_string;			// Full path to the mouse pointer graphic
 GIOChannel				*output_file;				// The output file handle
-gulong					resolution_callback;		// Holds the id of the resolution selector callback
 GtkComboBox				*resolution_selector;		// Widget for the resolution selector
 GdkRectangle			resize_handles_rect[8];		// Contains the onscreen offsets and size for the resize handles
 GtkWidget				*right_side;				// Widget for the right side area
@@ -118,14 +117,14 @@ GtkWidget				*time_line_vbox;			// VBox widget holding all of the time line elem
 GtkWidget				*working;					// Widget for the working area
 GtkComboBox				*zoom_selector;				// Widget for the zoom selector
 
-// Main toolbar items
+// Main tool bar items
 GtkTooltips				*main_toolbar_tooltips;		// Tooltips structure
 GtkWidget				*main_toolbar_icons[MAIN_TB_COUNT];			// Array of toolbar icons
 GtkWidget				*main_toolbar_icons_gray[MAIN_TB_COUNT];	// Array of toolbar icons (the grayed out ones)
 GtkToolItem				*main_toolbar_items[MAIN_TB_COUNT];			// Array of toolbar items
 gulong					main_toolbar_signals[MAIN_TB_COUNT];		// Array of toolbar signals
 
-// Layer toolbar items
+// Layer tool bar items
 GtkTooltips				*layer_toolbar_tooltips;	// Tooltips structure
 GtkWidget				*layer_toolbar_icons[MAIN_TB_COUNT];		// Array of toolbar icons
 GtkWidget				*layer_toolbar_icons_gray[MAIN_TB_COUNT];	// Array of toolbar icons (the grayed out ones)
@@ -504,7 +503,7 @@ gint main(gint argc, gchar *argv[])
 	gtk_table_attach(message_bar, GTK_WIDGET(resolution_selector), 5, 6, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
 
 	// Link the resolution selector to the function that stores the new values in global variables
-	resolution_callback = g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL);
+	set_resolution_callback(g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL));
 
 	// * Create the film strip area *
 	create_film_strip();

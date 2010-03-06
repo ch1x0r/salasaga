@@ -220,13 +220,13 @@ void menu_file_open(void)
 	gtk_window_set_title(GTK_WINDOW(main_window), message->str);
 
 	// Destroy the existing output resolution selector
-	g_signal_handler_disconnect(G_OBJECT(resolution_selector), resolution_callback);
+	g_signal_handler_disconnect(G_OBJECT(resolution_selector), get_resolution_callback());
 	gtk_container_remove(GTK_CONTAINER(message_bar), GTK_WIDGET(resolution_selector));
 
 	// Create a new output resolution selector, including the resolution of the loaded project
 	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(output_width, output_height));
 	gtk_table_attach(message_bar, GTK_WIDGET(resolution_selector), 5, 6, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
-	resolution_callback = g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL);
+	set_resolution_callback(g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL));
 	gtk_widget_show_all(GTK_WIDGET(message_bar));
 
 	// Set the global toggle that a project is now active

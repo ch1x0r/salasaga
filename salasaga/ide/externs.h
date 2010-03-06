@@ -62,7 +62,6 @@ extern GtkTable				*message_bar;
 extern GdkPixbuf			*mouse_ptr_pixbuf;
 extern GString				*mouse_ptr_string;
 extern GIOChannel			*output_file;
-extern gulong				resolution_callback;
 extern GtkComboBox			*resolution_selector;
 extern GdkRectangle			resize_handles_rect[8];
 extern GtkWidget			*right_side;
@@ -78,13 +77,14 @@ extern GtkWidget			*time_line_vbox;
 extern GtkWidget			*working;
 extern GtkComboBox			*zoom_selector;
 
+// Main tool bar items
 extern GtkTooltips			*main_toolbar_tooltips;
 extern GtkWidget			*main_toolbar_icons[MAIN_TB_COUNT];
 extern GtkWidget			*main_toolbar_icons_gray[MAIN_TB_COUNT];
 extern GtkToolItem			*main_toolbar_items[MAIN_TB_COUNT];
 extern gulong				main_toolbar_signals[MAIN_TB_COUNT];
 
-// Layer toolbar items
+// Layer tool bar items
 extern GtkTooltips			*layer_toolbar_tooltips;
 extern GtkWidget			*layer_toolbar_icons[MAIN_TB_COUNT];
 extern GtkWidget			*layer_toolbar_icons_gray[MAIN_TB_COUNT];
