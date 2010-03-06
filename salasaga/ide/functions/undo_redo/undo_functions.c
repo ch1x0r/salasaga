@@ -42,6 +42,8 @@
 #include "../layer/layer_duplicate.h"
 #include "../layer/layer_free.h"
 #include "../menu/menu_enable.h"
+#include "../widgets/time_line/time_line_get_selected_layer_num.h"
+#include "../widgets/time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 
 
@@ -335,6 +337,7 @@ gint undo_history_undo_item(void)
 	GtkTreeIter			our_slide_iter;				// Points to the slide we're working with
 	slide				*other_slide_data;			// Pointer to slide data
 	GList				*other_slide_entry;			// Pointer to a slide
+	gint				selected_layer;				// Temporarily holds the index of the selected layer
 	slide				*slide_data;
 	gint				slide_position;
 	GtkTreeIter			target_slide_iter;
@@ -419,6 +422,11 @@ gint undo_history_undo_item(void)
 
 			// Decrement the counter of layers in the slide
 			slide_data->num_layers--;
+
+			// Update the selected layer
+			selected_layer = time_line_get_selected_layer_num(slide_data->timeline_widget);
+			selected_layer -= 1;
+			time_line_set_selected_layer_num(slide_data->timeline_widget, selected_layer);
 
 			break;
 
