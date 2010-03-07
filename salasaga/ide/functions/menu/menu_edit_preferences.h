@@ -35,4 +35,4 @@ void menu_edit_preferences(void);
 }
 #endif // __cplusplus
 
-#endif /*MENU_EDIT_PREFERENCES_H_*/
+#endif /* MENU_EDIT_PREFERENCES_H_ */

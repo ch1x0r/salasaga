@@ -35,4 +35,4 @@ void layer_delete(void);
 }
 #endif // __cplusplus
 
-#endif /*LAYER_DELETE_H_*/
+#endif /* LAYER_DELETE_H_ */

@@ -35,4 +35,4 @@ gboolean swf_add_mouse_click(SWFMovie this_movie, gint click_type);
 }
 #endif // __cplusplus
 
-#endif /*SWF_ADD_MOUSE_CLICK_H_*/
+#endif /* SWF_ADD_MOUSE_CLICK_H_ */

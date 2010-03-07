@@ -35,4 +35,4 @@ SWFShape swf_shape_from_image_file(gchar *filename, gint width, gint height);
 }
 #endif // __cplusplus
 
-#endif /*SWF_SHAPE_FROM_IMAGE_FILE_*/
+#endif /* SWF_SHAPE_FROM_IMAGE_FILE_ */

@@ -35,8 +35,8 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../draw_timeline.h"
 #include "../dialog/display_warning.h"
+#include "../time_line/draw_timeline.h"
 #include "../undo_redo/undo_functions.h"
 #include "../working_area/draw_workspace.h"
 #include "slide_free.h"

@@ -34,7 +34,7 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "../../dialog/display_warning.h"
-#include "../../validate_value.h"
+#include "../../other/validate_value.h"
 
 
 void export_html_wrapper(void)

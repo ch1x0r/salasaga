@@ -35,4 +35,4 @@ void layer_copy();
 }
 #endif // __cplusplus
 
-#endif /*LAYER_COPY_H_*/
+#endif /* LAYER_COPY_H_ */

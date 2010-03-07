@@ -35,4 +35,4 @@ void slide_delete(void);
 }
 #endif // __cplusplus
 
-#endif /*SLIDE_DELETE_H_*/
+#endif /* SLIDE_DELETE_H_ */

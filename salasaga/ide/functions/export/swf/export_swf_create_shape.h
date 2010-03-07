@@ -35,4 +35,4 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data);
 }
 #endif // __cplusplus
 
-#endif /*EXPORT_SWF_CREATE_SHAPE_H_*/
+#endif /* EXPORT_SWF_CREATE_SHAPE_H_ */

@@ -38,11 +38,11 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../create_resolution_selector.h"
-#include "../create_zoom_selector.h"
-#include "../validate_value.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/regenerate_film_strip_thumbnails.h"
+#include "../other/validate_value.h"
+#include "../resolution_selector/create_resolution_selector.h"
+#include "../zoom_selector/create_zoom_selector.h"
 
 
 void menu_edit_preferences(void)

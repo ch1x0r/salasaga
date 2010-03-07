@@ -39,13 +39,13 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "zoom_selector_changed.h"
-#include "cairo/create_cairo_pixbuf_pattern.h"
-#include "dialog/display_warning.h"
-#include "film_strip/regenerate_film_strip_thumbnails.h"
-#include "working_area/draw_workspace.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../cairo/create_cairo_pixbuf_pattern.h"
+#include "../dialog/display_warning.h"
+#include "../film_strip/regenerate_film_strip_thumbnails.h"
+#include "../working_area/draw_workspace.h"
+#include "../zoom_selector/zoom_selector_changed.h"
 
 
 void project_adjust_dimensions(void)

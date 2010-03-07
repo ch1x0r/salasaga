@@ -35,4 +35,4 @@ void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data)
 }
 #endif // __cplusplus
 
-#endif /*FILM_STRIP_HANDLE_CHANGED_H_*/
+#endif /* FILM_STRIP_HANDLE_CHANGED_H_ */

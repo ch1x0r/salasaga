@@ -33,21 +33,21 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "callbacks/delete_key_release_event.h"
-#include "layer/image_crop.h"
-#include "layer/layer_delete.h"
-#include "layer/layer_edit.h"
-#include "layer/layer_move_down.h"
-#include "layer/layer_move_up.h"
-#include "layer/layer_new_highlight.h"
-#include "layer/layer_new_image.h"
-#include "layer/layer_new_mouse.h"
-#include "layer/layer_new_text.h"
-#include "widgets/time_line/time_line_button_press_event.h"
-#include "widgets/time_line/time_line_button_release_event.h"
-#include "widgets/time_line/time_line_motion_notify_event.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../call_back/delete_key_release_event.h"
+#include "../layer/image_crop.h"
+#include "../layer/layer_delete.h"
+#include "../layer/layer_edit.h"
+#include "../layer/layer_move_down.h"
+#include "../layer/layer_move_up.h"
+#include "../layer/layer_new_highlight.h"
+#include "../layer/layer_new_image.h"
+#include "../layer/layer_new_mouse.h"
+#include "../layer/layer_new_text.h"
+#include "../time_line/time_line_button_press_event.h"
+#include "../time_line/time_line_button_release_event.h"
+#include "../time_line/time_line_motion_notify_event.h"
 
 
 GtkWidget *create_time_line(void)

@@ -35,4 +35,4 @@ void layer_new_image(void);
 }
 #endif // __cplusplus
 
-#endif /*LAYER_NEW_IMAGE_H_*/
+#endif /* LAYER_NEW_IMAGE_H_ */

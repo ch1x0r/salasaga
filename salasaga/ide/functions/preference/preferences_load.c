@@ -42,10 +42,10 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "dialog/display_warning.h"
-#include "validate_value.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../dialog/display_warning.h"
+#include "../other/validate_value.h"
 
 gboolean preferences_load()
 {

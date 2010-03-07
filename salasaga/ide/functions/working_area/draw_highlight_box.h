@@ -35,4 +35,4 @@ void draw_highlight_box(GdkPixbuf *tmp_pixbuf, gint x_offset, gint y_offset, gin
 }
 #endif // __cplusplus
 
-#endif /*DRAW_HIGHLIGHT_BOX_H_*/
+#endif /* DRAW_HIGHLIGHT_BOX_H_ */

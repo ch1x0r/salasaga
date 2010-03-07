@@ -35,4 +35,4 @@ gint display_warning(gchar *warning_string);
 }
 #endif // __cplusplus
 
-#endif /*DISPLAY_WARNING_H_*/
+#endif /* DISPLAY_WARNING_H_ */

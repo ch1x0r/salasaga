@@ -35,4 +35,4 @@ void layer_new_highlight_inner(gint release_x, gint release_y);
 }
 #endif // __cplusplus
 
-#endif /*LAYER_NEW_HIGHLIGHT_INNER_H_*/
+#endif /* LAYER_NEW_HIGHLIGHT_INNER_H_ */

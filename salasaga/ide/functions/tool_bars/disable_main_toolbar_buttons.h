@@ -35,4 +35,4 @@ void disable_main_toolbar_buttons(void);
 }
 #endif // __cplusplus
 
-#endif /*DISABLE_MAIN_TOOLBAR_BUTTONS_H_*/
+#endif /* DISABLE_MAIN_TOOLBAR_BUTTONS_H_ */

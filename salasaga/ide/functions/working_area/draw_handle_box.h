@@ -35,4 +35,4 @@ gboolean draw_handle_box(void);
 }
 #endif // __cplusplus
 
-#endif /*DRAW_HANDLE_BOX_H_*/
+#endif /* DRAW_HANDLE_BOX_H_ */

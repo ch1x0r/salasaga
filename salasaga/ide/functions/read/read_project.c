@@ -45,9 +45,9 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../validate_value.h"
 #include "../dialog/display_warning.h"
 #include "../layer/compress_layers.h"
+#include "../other/validate_value.h"
 #include "../read/read_empty_layer.h"
 #include "../read/read_highlight_layer.h"
 #include "../read/read_image_layer.h"

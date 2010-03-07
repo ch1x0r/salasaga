@@ -35,8 +35,6 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../project_adjust_dimensions.h"
-#include "../save_preferences_and_exit.h"
 #include "../export/html/export_html_wrapper.h"
 #include "../layer/image_crop.h"
 #include "../layer/image_resize.h"
@@ -71,6 +69,8 @@
 #include "../menu/menu_screenshots_capture.h"
 #include "../menu/menu_screenshots_capture_full_screen.h"
 #include "../menu/menu_screenshots_import.h"
+#include "../other/project_adjust_dimensions.h"
+#include "../preference/save_preferences_and_exit.h"
 #include "../slide/slide_insert.h"
 #include "../slide/slide_delete.h"
 #include "../slide/slide_duration.h"

@@ -35,4 +35,4 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom);
 }
 #endif // __cplusplus
 
-#endif /*DRAW_RESIZE_HANDLES_*/
+#endif /* DRAW_RESIZE_HANDLES_ */

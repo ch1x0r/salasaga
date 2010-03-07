@@ -35,4 +35,4 @@ gint quit_event(GtkWidget *widget, GdkEvent *event, gpointer data);
 }
 #endif // __cplusplus
 
-#endif /*QUIT_EVENT_H_*/
+#endif /* QUIT_EVENT_H_ */

@@ -35,4 +35,4 @@ void export_html_wrapper(void);
 }
 #endif // __cplusplus
 
-#endif /*EXPORT_HTML_WRAPPER_H_*/
+#endif /* EXPORT_HTML_WRAPPER_H_ */

@@ -35,4 +35,4 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
 }
 #endif // __cplusplus
 
-#endif /*EVENT_SIZE_ALLOCATE_RECEIVED_H_*/
+#endif /* EVENT_SIZE_ALLOCATE_RECEIVED_H_ */

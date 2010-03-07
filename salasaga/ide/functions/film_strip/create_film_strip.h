@@ -35,4 +35,4 @@ void create_film_strip();
 }
 #endif // __cplusplus
 
-#endif /*CREATE_FILM_STRIP_H_*/
+#endif /* CREATE_FILM_STRIP_H_ */

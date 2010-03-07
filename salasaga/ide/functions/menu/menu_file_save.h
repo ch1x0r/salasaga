@@ -35,4 +35,4 @@ void menu_file_save(void);
 }
 #endif // __cplusplus
 
-#endif /*MENU_FILE_SAVE_H_*/
+#endif /* MENU_FILE_SAVE_H_ */

@@ -35,4 +35,4 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar);
 }
 #endif // __cplusplus
 
-#endif /*CREATE_TOOLBAR_H_*/
+#endif /* CREATE_TOOLBAR_H_ */

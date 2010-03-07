@@ -41,19 +41,19 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../callbacks/dump_selection_info.h"
-#include "../callbacks/text_layer_dialog_bg_colour_changed.h"
-#include "../callbacks/text_layer_dialog_fg_colour_changed.h"
-#include "../callbacks/text_layer_dialog_font_changed.h"
-#include "../callbacks/text_layer_dialog_selection_changed.h"
-#include "../callbacks/text_layer_dialog_size_changed.h"
-#include "../callbacks/text_layer_dialog_insert_text_signal_triggered.h"
-#include "../callbacks/transition_type_changed.h"
+#include "../call_back/dump_selection_info.h"
+#include "../call_back/text_layer_dialog_bg_colour_changed.h"
+#include "../call_back/text_layer_dialog_fg_colour_changed.h"
+#include "../call_back/text_layer_dialog_font_changed.h"
+#include "../call_back/text_layer_dialog_selection_changed.h"
+#include "../call_back/text_layer_dialog_size_changed.h"
+#include "../call_back/text_layer_dialog_insert_text_signal_triggered.h"
+#include "../call_back/transition_type_changed.h"
+#include "../other/gtk_text_buffer_duplicate.h"
+#include "../other/validate_value.h"
 #include "../text_tags/get_selection_fg_colour.h"
 #include "../text_tags/get_selection_font_face.h"
 #include "../text_tags/get_selection_font_size.h"
-#include "../gtk_text_buffer_duplicate.h"
-#include "../validate_value.h"
 #include "display_warning.h"
 
 
@@ -87,7 +87,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gint				table_padding_x;			// Amount of padding to use in the table
 	gint				table_padding_y;			// Amount of padding to use in the table
 	GdkColor			temp_colour;				// Used to set the colour of the font size slider's text value
-	text_dialog_widgets	*text_widgets;				// Holds pointers to various widgets in this dialog, for passing to callbacks
+	text_dialog_widgets	*text_widgets;				// Holds pointers to various widgets in this dialog, for passing to call_back
 	layer_text			*tmp_text_ob;				// Temporary text layer object
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	gfloat				valid_border_width = 0;		// Receives the new border width once validated
@@ -682,7 +682,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 		{
 			// * The dialog was cancelled *
 
-			// Disconnect the signal handler callbacks
+			// Disconnect the signal handler call_back
 			g_signal_handler_disconnect(G_OBJECT(fg_colour_button), font_fg_callback);
 			g_signal_handler_disconnect(G_OBJECT(fill_colour_button), font_bg_callback);
 			g_signal_handler_disconnect(G_OBJECT(font_size_scale), font_size_callback);
@@ -945,7 +945,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	g_object_unref(tmp_text_ob->text_buffer);
 	tmp_text_ob->text_buffer = text_buffer;
 
-	// Disconnect the signal handler callbacks
+	// Disconnect the signal handler call_back
 	g_signal_handler_disconnect(G_OBJECT(fg_colour_button), font_fg_callback);
 	g_signal_handler_disconnect(G_OBJECT(fill_colour_button), font_bg_callback);
 	g_signal_handler_disconnect(G_OBJECT(font_size_scale), font_size_callback);

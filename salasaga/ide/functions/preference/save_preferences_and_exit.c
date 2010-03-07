@@ -40,9 +40,9 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "dialog/display_dialog_save_warning.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../dialog/display_dialog_save_warning.h"
 
 
 void save_preferences_and_exit(void)

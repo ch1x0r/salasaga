@@ -35,4 +35,4 @@ void menu_screenshots_capture(void);
 }
 #endif // __cplusplus
 
-#endif /*MENU_SCREENSHOTS_CAPTURE_H_*/
+#endif /* MENU_SCREENSHOTS_CAPTURE_H_ */

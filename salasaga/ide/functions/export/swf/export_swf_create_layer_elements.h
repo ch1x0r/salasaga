@@ -35,4 +35,4 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 }
 #endif // __cplusplus
 
-#endif /*EXPORT_SWF_CREATE_LAYER_ELEMENTS_H_*/
+#endif /* EXPORT_SWF_CREATE_LAYER_ELEMENTS_H_ */

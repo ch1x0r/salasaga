@@ -35,4 +35,4 @@ gboolean preferences_load();
 }
 #endif // __cplusplus
 
-#endif /*PREFERENCES_LOAD_*/
+#endif /* PREFERENCES_LOAD_ */

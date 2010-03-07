@@ -35,4 +35,4 @@ void draw_timeline(void);
 }
 #endif // __cplusplus
 
-#endif /*DRAW_TIMELINE_H_*/
+#endif /* DRAW_TIMELINE_H_ */

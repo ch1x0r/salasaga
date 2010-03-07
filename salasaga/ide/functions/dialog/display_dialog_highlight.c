@@ -41,8 +41,8 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../callbacks/transition_type_changed.h"
-#include "../validate_value.h"
+#include "../call_back/transition_type_changed.h"
+#include "../other/validate_value.h"
 #include "display_warning.h"
 
 
@@ -548,7 +548,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 		{
 			// * The dialog was cancelled *
 
-			// Disconnect the signal handler callbacks
+			// Disconnect the signal handler call_back
 			g_signal_handler_disconnect(G_OBJECT(selector_trans_in_type), entry_duration_callback);
 			g_signal_handler_disconnect(G_OBJECT(selector_trans_out_type), exit_duration_callback);
 
@@ -831,7 +831,7 @@ gboolean display_dialog_highlight(layer *tmp_layer, gchar *dialog_title)
 	tmp_highlight_ob->border_width = valid_border_width;
 	tmp_highlight_ob->opacity = valid_opacity;
 
-	// Disconnect the signal handler callbacks
+	// Disconnect the signal handler call_back
 	g_signal_handler_disconnect(G_OBJECT(selector_trans_in_type), entry_duration_callback);
 	g_signal_handler_disconnect(G_OBJECT(selector_trans_out_type), exit_duration_callback);
 

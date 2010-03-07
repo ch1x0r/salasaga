@@ -35,4 +35,4 @@ void menu_project_properties(void);
 }
 #endif // __cplusplus
 
-#endif /*MENU_PROJECT_PROPERTIES_*/
+#endif /* MENU_PROJECT_PROPERTIES_ */

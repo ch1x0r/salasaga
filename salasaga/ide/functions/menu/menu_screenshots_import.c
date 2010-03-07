@@ -40,13 +40,13 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../draw_timeline.h"
-#include "../enable_layer_toolbar_buttons.h"
-#include "../enable_main_toolbar_buttons.h"
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../layer/compress_layers.h"
 #include "../dialog/display_warning.h"
-#include "../widgets/time_line/time_line_set_selected_layer_num.h"
+#include "../time_line/draw_timeline.h"
+#include "../time_line/time_line_set_selected_layer_num.h"
+#include "../tool_bars/enable_layer_toolbar_buttons.h"
+#include "../tool_bars/enable_main_toolbar_buttons.h"
 #include "../working_area/draw_workspace.h"
 #include "menu_enable.h"
 

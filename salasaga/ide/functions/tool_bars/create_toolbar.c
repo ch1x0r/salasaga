@@ -33,17 +33,17 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "menu/menu_export_swf.h"
-#include "menu/menu_file_new.h"
-#include "menu/menu_file_open.h"
-#include "menu/menu_file_save.h"
-#include "menu/menu_file_save_as.h"
-#include "menu/menu_screenshots_capture.h"
-#include "menu/menu_screenshots_import.h"
-#include "project_adjust_dimensions.h"
-#include "quit_event.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../call_back/quit_event.h"
+#include "../menu/menu_export_swf.h"
+#include "../menu/menu_file_new.h"
+#include "../menu/menu_file_open.h"
+#include "../menu/menu_file_save.h"
+#include "../menu/menu_file_save_as.h"
+#include "../menu/menu_screenshots_capture.h"
+#include "../menu/menu_screenshots_import.h"
+#include "../other/project_adjust_dimensions.h"
 
 
 GtkWidget *create_toolbar(GtkWidget *inner_toolbar)

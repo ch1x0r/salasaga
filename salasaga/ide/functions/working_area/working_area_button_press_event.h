@@ -35,4 +35,4 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 }
 #endif // __cplusplus
 
-#endif /*WORKING_AREA_BUTTON_PRESS_EVENT_H_*/
+#endif /* WORKING_AREA_BUTTON_PRESS_EVENT_H_ */

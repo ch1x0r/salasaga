@@ -35,4 +35,4 @@ gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer da
 }
 #endif // __cplusplus
 
-#endif /*RESOLUTION_SELECTOR_CHANGED_H_*/
+#endif /* RESOLUTION_SELECTOR_CHANGED_H_ */

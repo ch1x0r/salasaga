@@ -35,4 +35,4 @@ void project_adjust_dimensions(void);
 }
 #endif // __cplusplus
 
-#endif /*PROJECT_ADJUST_DIMENSIONS_H_*/
+#endif /* PROJECT_ADJUST_DIMENSIONS_H_ */

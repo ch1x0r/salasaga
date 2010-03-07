@@ -35,4 +35,4 @@ void slide_insert(void);
 }
 #endif // __cplusplus
 
-#endif /*SLIDE_INSERT_H_*/
+#endif /* SLIDE_INSERT_H_ */

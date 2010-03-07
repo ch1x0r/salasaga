@@ -34,8 +34,8 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
-#include "../validate_value.h"
-#include "../widgets/time_line/time_line_get_selected_layer_num.h"
+#include "../other/validate_value.h"
+#include "../time_line/time_line_get_selected_layer_num.h"
 
 
 void menu_export_layer(void)

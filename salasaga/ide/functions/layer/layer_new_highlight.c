@@ -35,7 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../widget_focus.h"
+#include "../other/widget_focus.h"
 
 
 void layer_new_highlight(void)

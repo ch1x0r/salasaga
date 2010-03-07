@@ -35,4 +35,4 @@ GList *detect_collisions(GList *collision_list, gdouble mouse_x, gdouble mouse_y
 }
 #endif // __cplusplus
 
-#endif /*DETECT_COLLISIONS_H_*/
+#endif /* DETECT_COLLISIONS_H_ */

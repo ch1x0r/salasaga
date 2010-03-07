@@ -35,4 +35,4 @@ gboolean draw_layer_start_and_end_points();
 }
 #endif // __cplusplus
 
-#endif /*DRAW_LAYER_START_AND_END_POINTS_H_*/
+#endif /* DRAW_LAYER_START_AND_END_POINTS_H_ */

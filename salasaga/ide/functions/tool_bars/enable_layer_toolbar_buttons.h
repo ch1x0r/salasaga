@@ -35,4 +35,4 @@ void enable_layer_toolbar_buttons(void);
 }
 #endif // __cplusplus
 
-#endif /*ENABLE_LAYER_TOOLBAR_BUTTONS_H_*/
+#endif /* ENABLE_LAYER_TOOLBAR_BUTTONS_H_ */

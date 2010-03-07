@@ -35,4 +35,4 @@ void layer_new_image_inner(guint release_x, guint release_y);
 }
 #endif // __cplusplus
 
-#endif /*LAYER_NEW_IMAGE_INNER_*/
+#endif /* LAYER_NEW_IMAGE_INNER_ */

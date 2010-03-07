@@ -36,9 +36,9 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
-#include "../widgets/time_line/time_line_set_stored_slide_duration.h"
-#include "../draw_timeline.h"
-#include "../validate_value.h"
+#include "../other/validate_value.h"
+#include "../time_line/draw_timeline.h"
+#include "../time_line/time_line_set_stored_slide_duration.h"
 
 
 void slide_duration(void)

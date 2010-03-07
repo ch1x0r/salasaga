@@ -1,41 +1,20 @@
 bin_PROGRAMS = salasaga
-salasaga_SOURCES = create_resolution_selector.c \
-	create_time_line.c \
-	create_toolbar.c \
-	create_zoom_selector.c \
-	disable_layer_toolbar_buttons.c \
-	disable_main_toolbar_buttons.c \
-	draw_timeline.c \
-	enable_layer_toolbar_buttons.c \
-	enable_main_toolbar_buttons.c \
-	global_functions.c \
-	gtk_text_buffer_duplicate.c \
-	key_bind.c \
-	load_fonts.c \
-	logger_simple.c \
-	logger_with_domain.c \
-	preferences_load.c \
-	project_adjust_dimensions.c \
-	quit_event.c \
-	resolution_selector_changed.c \
-	save_preferences_and_exit.c \
-	validate_value.c \
-	widget_focus.c \
-	zoom_selector_changed.c \
+salasaga_SOURCES = global_functions.c \
 	cairo/create_cairo_pixbuf_pattern.c \
 	cairo/render_text_string.c \
-	callbacks/delete_key_release_event.c \
-	callbacks/dump_selection_info.c \
-	callbacks/film_strip_drag_motion.c \
-	callbacks/text_layer_dialog_bg_colour_changed.c \
-	callbacks/text_layer_dialog_fg_colour_changed.c \
-	callbacks/text_layer_dialog_font_changed.c \
-	callbacks/text_layer_dialog_insert_text_signal_triggered.c \
-	callbacks/text_layer_dialog_selection_changed.c \
-	callbacks/text_layer_dialog_size_changed.c \
-	callbacks/text_layer_dialog_validate_buffer_tag_quantity.c \
-	callbacks/track_window_state.c \
-	callbacks/transition_type_changed.c \
+	call_back/delete_key_release_event.c \
+	call_back/dump_selection_info.c \
+	call_back/film_strip_drag_motion.c \
+	call_back/quit_event.c \
+	call_back/text_layer_dialog_bg_colour_changed.c \
+	call_back/text_layer_dialog_fg_colour_changed.c \
+	call_back/text_layer_dialog_font_changed.c \
+	call_back/text_layer_dialog_insert_text_signal_triggered.c \
+	call_back/text_layer_dialog_selection_changed.c \
+	call_back/text_layer_dialog_size_changed.c \
+	call_back/text_layer_dialog_validate_buffer_tag_quantity.c \
+	call_back/track_window_state.c \
+	call_back/transition_type_changed.c \
 	dialog/display_dialog_empty.c \
 	dialog/display_dialog_highlight.c \
 	dialog/display_dialog_image.c \
@@ -104,12 +83,24 @@ salasaga_SOURCES = create_resolution_selector.c \
 	menu/menu_screenshots_capture.c \
 	menu/menu_screenshots_capture_full_screen.c \
 	menu/menu_screenshots_import.c \
+	other/gtk_text_buffer_duplicate.c \
+	other/key_bind.c \
+	other/load_fonts.c \
+	other/logger_simple.c \
+	other/logger_with_domain.c \
+	other/project_adjust_dimensions.c \
+	other/validate_value.c \
+	other/widget_focus.c \
+	preference/preferences_load.c \
+	preference/save_preferences_and_exit.c \
 	read/read_project.c \
 	read/read_empty_layer.c \
 	read/read_highlight_layer.c \
 	read/read_image_layer.c \
 	read/read_mouse_layer.c \
 	read/read_text_layer.c \
+	resolution_selector/create_resolution_selector.c \
+	resolution_selector/resolution_selector_changed.c \
 	save/save_layer.c \
 	save/save_slide.c \
 	save/save_text_tags.c \
@@ -134,38 +125,45 @@ salasaga_SOURCES = create_resolution_selector.c \
 	text_tags/reset_global_text_tags_table.c \
 	text_tags/text_layer_create_colour_tag.c \
 	text_tags/text_layer_create_font_size_tag.c \
+	time_line/create_time_line.c \
+	time_line/draw_timeline.c \
+	time_line/time_line.c \
+	time_line/time_line_button_press_event.c \
+	time_line/time_line_button_release_event.c \
+	time_line/time_line_class_init.c \
+	time_line/time_line_expose.c \
+	time_line/time_line_get_cursor_position.c \
+	time_line/time_line_get_left_border_width.c \
+	time_line/time_line_get_selected_layer_num.c \
+	time_line/time_line_get_type.c \
+	time_line/time_line_init.c \
+	time_line/time_line_internal_draw_cursor.c \
+	time_line/time_line_internal_draw_guide_line.c \
+	time_line/time_line_internal_draw_layer_duration.c \
+	time_line/time_line_internal_draw_layer_info.c \
+	time_line/time_line_internal_draw_layer_name.c \
+	time_line/time_line_internal_draw_selection_highlight.c \
+	time_line/time_line_internal_initialise_bg_image.c \
+	time_line/time_line_internal_initialise_display_buffer.c \
+	time_line/time_line_internal_invalidate_layer_area.c \
+	time_line/time_line_internal_redraw_bg_area.c \
+	time_line/time_line_internal_redraw_layer_bg.c \
+	time_line/time_line_internal_widget_motion_notify_handler.c \
+	time_line/time_line_motion_notify_event.c \
+	time_line/time_line_new.c \
+	time_line/time_line_realise.c \
+	time_line/time_line_regenerate_widget.c \
+	time_line/time_line_set_cursor_position.c \
+	time_line/time_line_set_selected_layer_num.c \
+	time_line/time_line_set_stored_slide_duration.c \
+	time_line/time_line_size_allocate.c \
+	time_line/time_line_size_request.c \
+	tool_bars/disable_layer_toolbar_buttons.c \
+	tool_bars/disable_main_toolbar_buttons.c \
+	tool_bars/enable_layer_toolbar_buttons.c \
+	tool_bars/enable_main_toolbar_buttons.c \
+	tool_bars/create_toolbar.c \
 	undo_redo/undo_functions.c \
-	widgets/time_line/time_line.c \
-	widgets/time_line/time_line_button_press_event.c \
-	widgets/time_line/time_line_button_release_event.c \
-	widgets/time_line/time_line_class_init.c \
-	widgets/time_line/time_line_expose.c \
-	widgets/time_line/time_line_get_cursor_position.c \
-	widgets/time_line/time_line_get_left_border_width.c \
-	widgets/time_line/time_line_get_selected_layer_num.c \
-	widgets/time_line/time_line_get_type.c \
-	widgets/time_line/time_line_init.c \
-	widgets/time_line/time_line_internal_draw_cursor.c \
-	widgets/time_line/time_line_internal_draw_guide_line.c \
-	widgets/time_line/time_line_internal_draw_layer_duration.c \
-	widgets/time_line/time_line_internal_draw_layer_info.c \
-	widgets/time_line/time_line_internal_draw_layer_name.c \
-	widgets/time_line/time_line_internal_draw_selection_highlight.c \
-	widgets/time_line/time_line_internal_initialise_bg_image.c \
-	widgets/time_line/time_line_internal_initialise_display_buffer.c \
-	widgets/time_line/time_line_internal_invalidate_layer_area.c \
-	widgets/time_line/time_line_internal_redraw_bg_area.c \
-	widgets/time_line/time_line_internal_redraw_layer_bg.c \
-	widgets/time_line/time_line_internal_widget_motion_notify_handler.c \
-	widgets/time_line/time_line_motion_notify_event.c \
-	widgets/time_line/time_line_new.c \
-	widgets/time_line/time_line_realise.c \
-	widgets/time_line/time_line_regenerate_widget.c \
-	widgets/time_line/time_line_set_cursor_position.c \
-	widgets/time_line/time_line_set_selected_layer_num.c \
-	widgets/time_line/time_line_set_stored_slide_duration.c \
-	widgets/time_line/time_line_size_allocate.c \
-	widgets/time_line/time_line_size_request.c \
 	working_area/calculate_object_boundaries.c \
 	working_area/create_working_area.c \
 	working_area/detect_collisions.c \
@@ -180,6 +178,8 @@ salasaga_SOURCES = create_resolution_selector.c \
 	working_area/working_area_button_release_event.c \
 	working_area/working_area_expose_event.c \
 	working_area/working_area_motion_notify_event.c \
+	zoom_selector/create_zoom_selector.c \
+	zoom_selector/zoom_selector_changed.c \
 	../salasaga.c
 salasaga_LDADD = $(DEPS_LIBS) $(GTK_LIBS) $(ZLIB) $(XLIB) $(MINGLIB)
 

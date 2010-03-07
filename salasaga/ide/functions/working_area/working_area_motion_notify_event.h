@@ -35,4 +35,4 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 }
 #endif // __cplusplus
 
-#endif /*WORKING_AREA_MOTION_NOTIFY_EVENT_H_*/
+#endif /* WORKING_AREA_MOTION_NOTIFY_EVENT_H_ */

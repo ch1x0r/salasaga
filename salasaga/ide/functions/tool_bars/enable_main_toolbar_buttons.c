@@ -33,10 +33,10 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "menu/menu_export_swf.h"
-#include "project_adjust_dimensions.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../menu/menu_export_swf.h"
+#include "../other/project_adjust_dimensions.h"
 
 
 void enable_main_toolbar_buttons(void)

@@ -35,4 +35,4 @@ void create_menu_bar();
 }
 #endif // __cplusplus
 
-#endif /*CREATE_MENU_BAR_H_*/
+#endif /* CREATE_MENU_BAR_H_ */

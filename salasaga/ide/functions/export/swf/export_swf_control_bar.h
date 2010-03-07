@@ -35,4 +35,4 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 }
 #endif // __cplusplus
 
-#endif /*EXPORT_SWF_CONTROL_BAR_*/
+#endif /* EXPORT_SWF_CONTROL_BAR_ */

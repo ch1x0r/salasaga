@@ -35,4 +35,4 @@ void menu_export_slide(void);
 }
 #endif // __cplusplus
 
-#endif /*MENU_EXPORT_SLIDE_H_*/
+#endif /* MENU_EXPORT_SLIDE_H_ */

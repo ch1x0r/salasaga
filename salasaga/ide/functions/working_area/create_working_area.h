@@ -35,4 +35,4 @@ GtkWidget *create_working_area(GtkWidget *working_frame);
 }
 #endif // __cplusplus
 
-#endif /*CREATE_WORKING_AREA_H_*/
+#endif /* CREATE_WORKING_AREA_H_ */

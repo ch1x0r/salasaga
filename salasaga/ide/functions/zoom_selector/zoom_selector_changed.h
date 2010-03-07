@@ -35,4 +35,4 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data);
 }
 #endif // __cplusplus
 
-#endif /*ZOOM_SELECTOR_CHANGED_H_*/
+#endif /* ZOOM_SELECTOR_CHANGED_H_ */

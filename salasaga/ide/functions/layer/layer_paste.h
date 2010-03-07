@@ -35,4 +35,4 @@ void layer_paste();
 }
 #endif // __cplusplus
 
-#endif /*LAYER_PASTE_H_*/
+#endif /* LAYER_PASTE_H_ */

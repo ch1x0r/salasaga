@@ -35,4 +35,4 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 }
 #endif // __cplusplus
 
-#endif /*WORKING_AREA_BUTTON_RELEASE_EVENT_H_*/
+#endif /* WORKING_AREA_BUTTON_RELEASE_EVENT_H_ */

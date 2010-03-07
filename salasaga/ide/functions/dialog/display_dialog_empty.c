@@ -35,7 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../validate_value.h"
+#include "../other/validate_value.h"
 #include "display_warning.h"
 
 

@@ -35,4 +35,4 @@ GtkWidget *create_time_line(void);
 }
 #endif // __cplusplus
 
-#endif /*CREATE_TIME_LINE_H_*/
+#endif /* CREATE_TIME_LINE_H_ */

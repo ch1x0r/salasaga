@@ -32,8 +32,8 @@
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
 #include "../layer/compress_layers.h"
-#include "../validate_value.h"
-#include "../widgets/time_line/time_line_get_cursor_position.h"
+#include "../other/validate_value.h"
+#include "../time_line/time_line_get_cursor_position.h"
 
 
 void menu_export_slide(void)

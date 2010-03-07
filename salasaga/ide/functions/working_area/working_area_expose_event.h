@@ -35,4 +35,4 @@ gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpo
 }
 #endif // __cplusplus
 
-#endif /*WORKING_AREA_EXPOSE_EVENT_H_*/
+#endif /* WORKING_AREA_EXPOSE_EVENT_H_ */

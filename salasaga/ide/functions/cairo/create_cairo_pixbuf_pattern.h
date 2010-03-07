@@ -35,4 +35,4 @@ cairo_pattern_t *create_cairo_pixbuf_pattern(GdkPixbuf *source_pixbuf);
 }
 #endif // __cplusplus
 
-#endif /*CREATE_CAIRO_PIXBUF_PATTERN_H_*/
+#endif /* CREATE_CAIRO_PIXBUF_PATTERN_H_ */

@@ -35,4 +35,4 @@ void slide_free(gpointer element, gpointer user_data);
 }
 #endif // __cplusplus
 
-#endif /*SLIDE_FREE_H_*/
+#endif /* SLIDE_FREE_H_ */

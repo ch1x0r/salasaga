@@ -35,4 +35,4 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom);
 }
 #endif // __cplusplus
 
-#endif /*DRAW_BOUNDING_BOX_H_*/
+#endif /* DRAW_BOUNDING_BOX_H_ */

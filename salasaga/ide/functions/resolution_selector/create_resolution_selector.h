@@ -35,4 +35,4 @@ GtkWidget *create_resolution_selector(guint initial_width, guint initial_height)
 }
 #endif // __cplusplus
 
-#endif /*CREATE_RESOLUTION_SELECTOR_H_*/
+#endif /* CREATE_RESOLUTION_SELECTOR_H_ */

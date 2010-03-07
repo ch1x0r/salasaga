@@ -38,7 +38,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../widget_focus.h"
+#include "../other/widget_focus.h"
 
 
 gboolean film_strip_button_clicked(GtkWidget *widget, gpointer data)

@@ -33,9 +33,9 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../validate_value.h"
 #include "../dialog/display_warning.h"
 #include "../export/swf/export_swf_inner.h"
+#include "../other/validate_value.h"
 
 
 void menu_export_swf(void)

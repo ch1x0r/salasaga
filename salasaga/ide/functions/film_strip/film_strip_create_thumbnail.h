@@ -35,4 +35,4 @@ void film_strip_create_thumbnail(slide *slide_data);
 }
 #endif // __cplusplus
 
-#endif /*FILM_STRIP_CREATE_THUMBNAIL_*/
+#endif /* FILM_STRIP_CREATE_THUMBNAIL_ */

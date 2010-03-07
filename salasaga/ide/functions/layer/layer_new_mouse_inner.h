@@ -35,4 +35,4 @@ void layer_new_mouse_inner(guint release_x, guint release_y);
 }
 #endif // __cplusplus
 
-#endif /*LAYER_NEW_MOUSE_INNER_H_*/
+#endif /* LAYER_NEW_MOUSE_INNER_H_ */

@@ -33,14 +33,14 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "dialog/display_warning.h"
-#include "widgets/time_line/time_line.h"
-#include "widgets/time_line/time_line_get_type.h"
-#include "widgets/time_line/time_line_new.h"
-#include "widgets/time_line/time_line_regenerate_widget.h"
-#include "widgets/time_line/time_line_set_stored_slide_duration.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../dialog/display_warning.h"
+#include "../time_line/time_line.h"
+#include "../time_line/time_line_get_type.h"
+#include "../time_line/time_line_new.h"
+#include "../time_line/time_line_regenerate_widget.h"
+#include "../time_line/time_line_set_stored_slide_duration.h"
 
 
 void draw_timeline(void)

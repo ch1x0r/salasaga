@@ -35,4 +35,4 @@ void image_crop(void);
 }
 #endif // __cplusplus
 
-#endif /*IMAGE_CROP_H_*/
+#endif /* IMAGE_CROP_H_ */

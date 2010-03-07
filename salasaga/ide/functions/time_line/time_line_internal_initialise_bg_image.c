@@ -34,11 +34,11 @@
 #include <gtk/gtk.h>
 
 // Salasaga includes
-#include "../../../salasaga_types.h"
-#include "../../../externs.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../dialog/display_warning.h"
 #include "time_line.h"
 #include "time_line_get_left_border_width.h"
-#include "../../dialog/display_warning.h"
 
 
 gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint width, gint height)

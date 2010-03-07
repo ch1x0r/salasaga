@@ -35,4 +35,4 @@ void disable_layer_toolbar_buttons(void);
 }
 #endif // __cplusplus
 
-#endif /*DISABLE_LAYER_TOOLBAR_BUTTONS_H_*/
+#endif /* DISABLE_LAYER_TOOLBAR_BUTTONS_H_ */

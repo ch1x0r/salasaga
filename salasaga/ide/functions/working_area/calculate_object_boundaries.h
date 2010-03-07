@@ -35,4 +35,4 @@ void calculate_object_boundaries(void);
 }
 #endif // __cplusplus
 
-#endif /*CALCULATE_OBJECT_BOUNDARIES_H_*/
+#endif /* CALCULATE_OBJECT_BOUNDARIES_H_ */

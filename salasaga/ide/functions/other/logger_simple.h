@@ -35,4 +35,4 @@ void logger_simple(const gchar *str);
 }
 #endif // __cplusplus
 
-#endif /*LOGGER_SIMPLE_H_*/
+#endif /* LOGGER_SIMPLE_H_ */

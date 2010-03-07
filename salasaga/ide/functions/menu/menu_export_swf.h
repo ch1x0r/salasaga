@@ -35,4 +35,4 @@ void menu_export_swf(void);
 }
 #endif // __cplusplus
 
-#endif /*MENU_EXPORT_SWF_H_*/
+#endif /* MENU_EXPORT_SWF_H_ */

@@ -35,4 +35,4 @@ void layer_new_highlight(void);
 }
 #endif // __cplusplus
 
-#endif /*LAYER_NEW_HIGHLIGHT_H_*/
+#endif /* LAYER_NEW_HIGHLIGHT_H_ */

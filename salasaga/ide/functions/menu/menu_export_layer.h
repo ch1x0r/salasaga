@@ -35,4 +35,4 @@ void menu_export_layer(void);
 }
 #endif // __cplusplus
 
-#endif /*MENU_EXPORT_LAYER_H_*/
+#endif /* MENU_EXPORT_LAYER_H_ */

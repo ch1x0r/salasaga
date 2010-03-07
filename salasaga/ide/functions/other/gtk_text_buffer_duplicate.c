@@ -33,10 +33,10 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "callbacks/text_layer_dialog_validate_buffer_tag_quantity.h"
-#include "dialog/display_warning.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../call_back/text_layer_dialog_validate_buffer_tag_quantity.h"
+#include "../dialog/display_warning.h"
 
 
 GtkTextBuffer *gtk_text_buffer_duplicate(GtkTextBuffer *source_buffer)

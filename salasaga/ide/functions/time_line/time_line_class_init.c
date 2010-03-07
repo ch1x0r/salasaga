@@ -34,8 +34,8 @@
 #include <gtk/gtk.h>
 
 // Salasaga includes
-#include "../../../salasaga_types.h"
-#include "../../../externs.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
 #include "time_line.h"
 #include "time_line_expose.h"
 #include "time_line_realise.h"

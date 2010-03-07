@@ -35,4 +35,4 @@ void slide_duration(void);
 }
 #endif // __cplusplus
 
-#endif /*SLIDE_DURATION_*/
+#endif /* SLIDE_DURATION_ */

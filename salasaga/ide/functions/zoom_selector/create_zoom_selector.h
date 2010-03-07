@@ -35,4 +35,4 @@ GtkWidget *create_zoom_selector(gchar *initial_zoom);
 }
 #endif // __cplusplus
 
-#endif /*CREATE_ZOOM_SELECTOR_H_*/
+#endif /* CREATE_ZOOM_SELECTOR_H_ */

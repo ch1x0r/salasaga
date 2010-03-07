@@ -35,4 +35,4 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title);
 }
 #endif // __cplusplus
 
-#endif /*DISPLAY_DIALOG_EMPTY_H_*/
+#endif /* DISPLAY_DIALOG_EMPTY_H_ */

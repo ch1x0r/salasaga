@@ -35,4 +35,4 @@ void layer_edit(void);
 }
 #endif // __cplusplus
 
-#endif /*LAYER_EDIT_H_*/
+#endif /* LAYER_EDIT_H_ */

@@ -35,4 +35,4 @@ void menu_file_new(void);
 }
 #endif // __cplusplus
 
-#endif /*MENU_FILE_NEW_H_*/
+#endif /* MENU_FILE_NEW_H_ */

@@ -86,4 +86,4 @@ validatation_entry		valid_fields[] =
 }
 #endif // __cplusplus
 
-#endif /*VALID_FIELDS_H_*/
+#endif /* VALID_FIELDS_H_ */

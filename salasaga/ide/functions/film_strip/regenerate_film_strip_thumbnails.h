@@ -35,4 +35,4 @@ void regenerate_film_strip_thumbnails(void);
 }
 #endif // __cplusplus
 
-#endif /*REGENERATE_FILM_STRIP_THUMBNAILS_H_*/
+#endif /* REGENERATE_FILM_STRIP_THUMBNAILS_H_ */

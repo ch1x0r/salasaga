@@ -33,9 +33,9 @@
 #endif
 
 // Salasaga includes
-#include "../salasaga_types.h"
-#include "../externs.h"
-#include "save_preferences_and_exit.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../preference/save_preferences_and_exit.h"
 
 
 gint quit_event(GtkWidget *widget, GdkEvent *event, gpointer data)

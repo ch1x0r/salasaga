@@ -35,4 +35,4 @@ void layer_move_up(void);
 }
 #endif // __cplusplus
 
-#endif /*LAYER_MOVE_UP_H_*/
+#endif /* LAYER_MOVE_UP_H_ */

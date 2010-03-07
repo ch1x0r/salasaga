@@ -35,4 +35,4 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 }
 #endif // __cplusplus
 
-#endif /*COMPRESS_LAYERS_INNER_H_*/
+#endif /* COMPRESS_LAYERS_INNER_H_ */

@@ -35,4 +35,4 @@ void menu_help_website(void);
 }
 #endif // __cplusplus
 
-#endif /*MENU_HELP_WEBSITE_H_*/
+#endif /* MENU_HELP_WEBSITE_H_ */

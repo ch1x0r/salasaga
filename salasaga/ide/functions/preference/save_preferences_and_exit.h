@@ -35,4 +35,4 @@ void save_preferences_and_exit(void);
 }
 #endif // __cplusplus
 
-#endif /*SAVE_PREFERENCES_AND_EXIT_H_*/
+#endif /* SAVE_PREFERENCES_AND_EXIT_H_ */

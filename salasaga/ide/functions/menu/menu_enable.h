@@ -35,4 +35,4 @@ void menu_enable(const gchar *full_path, gboolean enable);
 }
 #endif // __cplusplus
 
-#endif /*MENU_ENABLE_H_*/
+#endif /* MENU_ENABLE_H_ */

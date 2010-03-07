@@ -35,4 +35,4 @@ GdkPixmap *compress_layers(GList *which_slide, gfloat time_position, guint width
 }
 #endif // __cplusplus
 
-#endif /*COMPRESS_LAYERS_H_*/
+#endif /* COMPRESS_LAYERS_H_ */

@@ -35,4 +35,4 @@ void logger_with_domain(const gchar *log_domain, GLogLevelFlags log_level, const
 }
 #endif // __cplusplus
 
-#endif /*LOGGER_WITH_DOMAIN_H_*/
+#endif /* LOGGER_WITH_DOMAIN_H_ */

@@ -35,4 +35,4 @@ void layer_new_mouse(void);
 }
 #endif // __cplusplus
 
-#endif /*LAYER_NEW_MOUSE_H_*/
+#endif /* LAYER_NEW_MOUSE_H_ */

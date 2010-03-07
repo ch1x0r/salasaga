@@ -38,13 +38,13 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../draw_timeline.h"
-#include "../widget_focus.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "../layer/layer_duplicate.h"
+#include "../other/widget_focus.h"
+#include "../time_line/draw_timeline.h"
+#include "../time_line/time_line_get_selected_layer_num.h"
 #include "../undo_redo/undo_functions.h"
-#include "../widgets/time_line/time_line_get_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 #include "layer_free.h"
 

@@ -35,4 +35,4 @@ gboolean display_dialog_save_warning(void);
 }
 #endif // __cplusplus
 
-#endif /*DISPLAY_DIALOG_SAVE_WARNING_H_*/
+#endif /* DISPLAY_DIALOG_SAVE_WARNING_H_ */

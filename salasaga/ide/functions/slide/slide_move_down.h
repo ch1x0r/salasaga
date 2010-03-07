@@ -35,4 +35,4 @@ void slide_move_down(void);
 }
 #endif // __cplusplus
 
-#endif /*SLIDE_MOVE_DOWN_H_*/
+#endif /* SLIDE_MOVE_DOWN_H_ */

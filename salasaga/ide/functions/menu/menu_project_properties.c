@@ -36,8 +36,8 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
-#include "../validate_value.h"
-#include "../gtk_text_buffer_duplicate.h"
+#include "../other/gtk_text_buffer_duplicate.h"
+#include "../other/validate_value.h"
 
 
 void menu_project_properties(void)

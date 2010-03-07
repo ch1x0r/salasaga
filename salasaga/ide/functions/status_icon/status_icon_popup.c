@@ -35,8 +35,8 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../callbacks/track_window_state.h"
-#include "../quit_event.h"
+#include "../call_back/quit_event.h"
+#include "../call_back/track_window_state.h"
 #include "status_icon_iconify.h"
 #include "status_icon_restore.h"
 #include "status_icon_take_screenshot.h"

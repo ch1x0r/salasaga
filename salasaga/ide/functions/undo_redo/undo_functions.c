@@ -35,15 +35,15 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../draw_timeline.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "../film_strip/regenerate_film_strip_thumbnails.h"
 #include "../layer/layer_duplicate.h"
 #include "../layer/layer_free.h"
 #include "../menu/menu_enable.h"
-#include "../widgets/time_line/time_line_get_selected_layer_num.h"
-#include "../widgets/time_line/time_line_set_selected_layer_num.h"
+#include "../time_line/draw_timeline.h"
+#include "../time_line/time_line_get_selected_layer_num.h"
+#include "../time_line/time_line_set_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 
 

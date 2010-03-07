@@ -35,4 +35,4 @@ void draw_workspace(void);
 }
 #endif // __cplusplus
 
-#endif /*DRAW_WORKSPACE_H_*/
+#endif /* DRAW_WORKSPACE_H_ */

@@ -35,4 +35,4 @@ gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this
 }
 #endif // __cplusplus
 
-#endif /*EXPORT_SWF_PROCESS_ELEMENT_H_*/
+#endif /* EXPORT_SWF_PROCESS_ELEMENT_H_ */

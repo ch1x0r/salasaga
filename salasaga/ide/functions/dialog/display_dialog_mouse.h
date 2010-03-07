@@ -35,4 +35,4 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 }
 #endif // __cplusplus
 
-#endif /*DISPLAY_DIALOG_MOUSE_H_*/
+#endif /* DISPLAY_DIALOG_MOUSE_H_ */

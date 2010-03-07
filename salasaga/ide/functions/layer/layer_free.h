@@ -35,4 +35,4 @@ gboolean layer_free(layer *this_layer);
 }
 #endif // __cplusplus
 
-#endif /*LAYER_FREE_H_*/
+#endif /* LAYER_FREE_H_ */

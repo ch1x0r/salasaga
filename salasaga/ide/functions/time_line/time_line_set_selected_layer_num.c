@@ -34,9 +34,9 @@
 #include <gtk/gtk.h>
 
 // Salasaga includes
-#include "../../../salasaga_types.h"
-#include "../../../externs.h"
-#include "../../menu/menu_enable.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
+#include "../menu/menu_enable.h"
 #include "time_line.h"
 #include "time_line_get_type.h"
 #include "time_line_internal_draw_selection_highlight.h"

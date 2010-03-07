@@ -31,11 +31,11 @@
 #include "../../../config.h"
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../disable_layer_toolbar_buttons.h"
-#include "../disable_main_toolbar_buttons.h"
 #include "../dialog/display_dialog_save_warning.h"
 #include "../slide/slide_free.h"
 #include "../text_tags/reset_global_text_tags_table.h"
+#include "../tool_bars/disable_layer_toolbar_buttons.h"
+#include "../tool_bars/disable_main_toolbar_buttons.h"
 #include "menu_enable.h"
 
 

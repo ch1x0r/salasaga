@@ -35,4 +35,4 @@ void menu_help_survey(void);
 }
 #endif // __cplusplus
 
-#endif /*MENU_HELP_SURVEY_H_*/
+#endif /* MENU_HELP_SURVEY_H_ */

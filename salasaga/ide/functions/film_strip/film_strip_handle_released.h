@@ -35,4 +35,4 @@ gint film_strip_handle_released(GObject *paned, GParamSpec *pspec, gpointer data
 }
 #endif // __cplusplus
 
-#endif /*FILM_STRIP_HANDLE_RELEASED_H_*/
+#endif /* FILM_STRIP_HANDLE_RELEASED_H_ */

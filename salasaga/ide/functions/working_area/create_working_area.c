@@ -35,7 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
-#include "../callbacks/delete_key_release_event.h"
+#include "../call_back/delete_key_release_event.h"
 #include "working_area_button_press_event.h"
 #include "working_area_button_release_event.h"
 #include "working_area_expose_event.h"

@@ -35,4 +35,4 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 }
 #endif // __cplusplus
 
-#endif /*GET_LAYER_POSITION_H_*/
+#endif /* GET_LAYER_POSITION_H_ */

@@ -35,4 +35,4 @@ void *validate_value(gint value_id, gint input_type, void *value);
 }
 #endif // __cplusplus
 
-#endif /*VALIDATE_VALUE_H_*/
+#endif /* VALIDATE_VALUE_H_ */

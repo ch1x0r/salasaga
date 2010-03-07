@@ -35,4 +35,4 @@ void layer_new_text(void);
 }
 #endif // __cplusplus
 
-#endif /*LAYER_NEW_TEXT_H_*/
+#endif /* LAYER_NEW_TEXT_H_ */

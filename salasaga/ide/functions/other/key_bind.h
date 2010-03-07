@@ -35,4 +35,4 @@ gint key_bind(void);
 }
 #endif // __cplusplus
 
-#endif /*KEY_BIND_H_*/
+#endif /* KEY_BIND_H_ */

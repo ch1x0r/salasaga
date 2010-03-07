@@ -32,7 +32,7 @@
 #include "../../externs.h"
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../dialog/display_warning.h"
-#include "../gtk_text_buffer_duplicate.h"
+#include "../other/gtk_text_buffer_duplicate.h"
 
 
 layer *layer_duplicate(layer *source_layer)

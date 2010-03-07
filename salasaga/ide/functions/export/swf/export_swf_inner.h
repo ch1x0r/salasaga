@@ -35,4 +35,4 @@ gint export_swf_inner(gchar *output_filename);
 }
 #endif // __cplusplus
 
-#endif /*EXPORT_SWF_INNER_H_*/
+#endif /* EXPORT_SWF_INNER_H_ */

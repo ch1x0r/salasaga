@@ -38,7 +38,7 @@
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/regenerate_film_strip_thumbnails.h"
-#include "../widgets/time_line/time_line_get_selected_layer_num.h"
+#include "../time_line/time_line_get_selected_layer_num.h"
 #include "../working_area/draw_workspace.h"
 
 

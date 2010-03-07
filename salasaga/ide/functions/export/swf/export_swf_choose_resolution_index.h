@@ -35,4 +35,4 @@ gint export_swf_choose_resolution_index();
 }
 #endif // __cplusplus
 
-#endif /*EXPORT_SWF_CHOOSE_RESOLUTION_INDEX_H_*/
+#endif /* EXPORT_SWF_CHOOSE_RESOLUTION_INDEX_H_ */

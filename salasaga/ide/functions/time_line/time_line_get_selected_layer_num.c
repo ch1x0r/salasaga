@@ -34,13 +34,13 @@
 #include <gtk/gtk.h>
 
 // Salasaga includes
-#include "../../../salasaga_types.h"
-#include "../../../externs.h"
+#include "../../salasaga_types.h"
+#include "../../externs.h"
 #include "time_line.h"
 #include "time_line_get_type.h"
 
 
-// fixme3: Should this be done as a property instead?
+// fixme3: This should be done as a property instead
 gint time_line_get_selected_layer_num(GtkWidget *widget)
 {
 	// Local variables
