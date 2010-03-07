@@ -39,6 +39,7 @@
 #include "../dialog/display_dialog_save_warning.h"
 #include "../dialog/display_warning.h"
 #include "../other/validate_value.h"
+#include "../preference/project_preferences.h"
 #include "../read/read_project.h"
 #include "../resolution_selector/create_resolution_selector.h"
 #include "../resolution_selector/resolution_selector_changed.h"
@@ -57,6 +58,7 @@ void menu_file_open(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;
+	gchar				*dir_name;					// Temporarily holds the name of the directory being saved into
 	gchar				*filename;					// Pointer to the chosen file name
 	GtkFileFilter		*flame_filter;
 	GString				*message;					// Used to construct message strings
@@ -203,6 +205,11 @@ void menu_file_open(void)
 	// Destroy the dialog box, as it's not needed any more
 	gtk_widget_destroy(open_dialog);
 
+	// Update the project folder variable with this new path
+	dir_name = g_path_get_dirname(validated_string->str);
+	set_project_folder(dir_name);
+	g_free(dir_name);
+
 	// Gray out the toolbar items that can't be used without a project loaded
 	disable_layer_toolbar_buttons();
 	disable_main_toolbar_buttons();
@@ -224,7 +231,7 @@ void menu_file_open(void)
 	gtk_container_remove(GTK_CONTAINER(message_bar), GTK_WIDGET(resolution_selector));
 
 	// Create a new output resolution selector, including the resolution of the loaded project
-	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(output_width, output_height));
+	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(get_output_width(), get_output_height()));
 	gtk_table_attach(message_bar, GTK_WIDGET(resolution_selector), 5, 6, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
 	set_resolution_callback(g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL));
 	gtk_widget_show_all(GTK_WIDGET(message_bar));
@@ -236,8 +243,8 @@ void menu_file_open(void)
 	current_slide = slides;
 
 	// Calculate and set the display size of the working area
-	set_working_width((project_width * get_zoom()) / 100);
-	set_working_height((project_height * get_zoom()) / 100);
+	set_working_width((get_project_width() * get_zoom()) / 100);
+	set_working_height((get_project_height() * get_zoom()) / 100);
 
 	// Resize the drawing area so it draws properly
 	gtk_widget_set_size_request(GTK_WIDGET(get_main_drawing_area()), get_working_width(), get_working_height());

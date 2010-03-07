@@ -39,6 +39,7 @@
 #include "../dialog/display_dialog_save_warning.h"
 #include "../dialog/display_warning.h"
 #include "../other/validate_value.h"
+#include "../preference/project_preferences.h"
 #include "../slide/slide_free.h"
 #include "../slide/slide_insert.h"
 #include "../time_line/draw_timeline.h"
@@ -132,7 +133,7 @@ void menu_file_new(void)
 
 	// Create the entry that accepts the project width
 	width_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_WIDTH].max_value, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(width_button), project_width);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(width_button), get_project_width());
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
@@ -143,7 +144,7 @@ void menu_file_new(void)
 
 	// Create the entry that accepts the project height
 	height_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_HEIGHT].max_value, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(height_button), project_height);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(height_button), get_project_height());
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
@@ -279,14 +280,14 @@ void menu_file_new(void)
 	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
 
 	// Set the project name
-	g_string_assign(project_name, valid_proj_name->str);
+	set_project_name(valid_proj_name->str);
 	g_string_free(valid_proj_name, TRUE);
 
 	// Set the project width
-	project_width = valid_width;
+	set_project_width(valid_width);
 
 	// Set the project height
-	project_height = valid_height;
+	set_project_height(valid_height);
 
 	// Set the number of frames per second
 	set_frames_per_second(valid_fps);
@@ -295,10 +296,10 @@ void menu_file_new(void)
 	default_bg_colour = new_bg_colour;
 
 	// Set the project folder
-	g_string_assign(project_folder, default_project_folder->str);
+	set_project_folder(default_project_folder->str);
 
 	// Set the output folder
-	g_string_assign(output_folder, default_output_folder->str);
+	set_output_folder(default_output_folder->str);
 
 	// Set the initial information text and link
 	info_link = g_string_new(_("http://www.salasaga.org"));
@@ -338,8 +339,8 @@ void menu_file_new(void)
 	time_line_set_selected_layer_num(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget), 0);
 
 	// Calculate and set the display size of the working area
-	set_working_width((project_width * get_zoom()) / 100);
-	set_working_height((project_height * get_zoom()) / 100);
+	set_working_width((get_project_width() * get_zoom()) / 100);
+	set_working_height((get_project_height() * get_zoom()) / 100);
 
 	// Resize the drawing area so it draws properly
 	gtk_widget_set_size_request(GTK_WIDGET(get_main_drawing_area()), get_working_width(), get_working_height());

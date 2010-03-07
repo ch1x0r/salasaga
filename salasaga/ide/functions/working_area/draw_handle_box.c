@@ -40,6 +40,7 @@
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
 #include "../layer/get_layer_position.h"
+#include "../preference/project_preferences.h"
 #include "../time_line/time_line_get_selected_layer_num.h"
 #include "../time_line/time_line_get_cursor_position.h"
 #include "draw_bounding_box.h"
@@ -132,8 +133,8 @@ gboolean draw_handle_box(void)
 	}
 
 	// Calculate the height and width scaling values for the main drawing area at its present size
-	scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
-	scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
+	scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;
+	scaled_width_ratio = (gfloat) get_project_width() / (gfloat) pixmap_width;
 
 	// Work out the bounding box boundaries
 	onscreen_left = (layer_positions.x + 1) / scaled_width_ratio;

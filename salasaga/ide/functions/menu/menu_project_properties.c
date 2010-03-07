@@ -38,6 +38,7 @@
 #include "../dialog/display_warning.h"
 #include "../other/gtk_text_buffer_duplicate.h"
 #include "../other/validate_value.h"
+#include "../preference/project_preferences.h"
 
 
 void menu_project_properties(void)
@@ -139,7 +140,7 @@ void menu_project_properties(void)
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_name), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	entry_project_name = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry_project_name), valid_fields[PROJECT_NAME].max_value);
-	gtk_entry_set_text(GTK_ENTRY(entry_project_name), (gchar *) project_name->str);
+	gtk_entry_set_text(GTK_ENTRY(entry_project_name), (gchar *) get_project_name());
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_name), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
@@ -148,7 +149,7 @@ void menu_project_properties(void)
 	gtk_misc_set_alignment(GTK_MISC(label_project_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_folder), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_project_folder = gtk_file_chooser_button_new(_("Select the Project Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_project_folder), project_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_project_folder), get_project_folder());
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_project_folder), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
@@ -157,7 +158,7 @@ void menu_project_properties(void)
 	gtk_misc_set_alignment(GTK_MISC(label_output_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_output_folder), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_output_folder = gtk_file_chooser_button_new(_("Select the Output Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_output_folder), output_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_output_folder), get_output_folder());
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_output_folder), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
@@ -176,7 +177,7 @@ void menu_project_properties(void)
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_width), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	entry_project_width = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry_project_width), 12);
-	g_string_printf(tmp_gstring, "%d %s", project_width, _("pixels"));
+	g_string_printf(tmp_gstring, "%d %s", get_project_width(), _("pixels"));
 	gtk_entry_set_text(GTK_ENTRY(entry_project_width), tmp_gstring->str);
 	gtk_editable_set_editable(GTK_EDITABLE(entry_project_width), FALSE);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_width), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
@@ -188,7 +189,7 @@ void menu_project_properties(void)
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_height), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	entry_project_height = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(entry_project_height), 12);
-	g_string_printf(tmp_gstring, "%d %s", project_height, _("pixels"));
+	g_string_printf(tmp_gstring, "%d %s", get_project_height(), _("pixels"));
 	gtk_entry_set_text(GTK_ENTRY(entry_project_height), tmp_gstring->str);
 	gtk_editable_set_editable(GTK_EDITABLE(entry_project_height), FALSE);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_height), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
@@ -468,15 +469,15 @@ void menu_project_properties(void)
 	gtk_widget_destroy(GTK_WIDGET(main_dialog));
 
 	// Project Name
-	project_name = g_string_assign(project_name, valid_proj_name->str);
+	set_project_name(valid_proj_name->str);
 	g_string_free(valid_proj_name, TRUE);
 
 	// Project Folder
-	project_folder = g_string_assign(project_folder, valid_project_folder->str);
+	set_project_folder(valid_project_folder->str);
 	g_string_free(valid_project_folder, TRUE);
 
 	// Output Folder
-	output_folder = g_string_assign(output_folder, valid_output_folder->str);
+	set_output_folder(valid_output_folder->str);
 	g_string_free(valid_output_folder, TRUE);
 
 	// Frames per second

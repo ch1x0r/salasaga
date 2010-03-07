@@ -38,6 +38,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../preference/project_preferences.h"
 
 
 gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
@@ -53,8 +54,8 @@ gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer da
 	// Parse and store the new project output size
 	main_strings = g_strsplit(tmp_gchar, " ", 2);
 	resolution_strings = g_strsplit(main_strings[0], "x", 2);
-	output_width = atoi(resolution_strings[0]);
-	output_height = atoi(resolution_strings[1]);
+	set_output_width(atoi(resolution_strings[0]));
+	set_output_height(atoi(resolution_strings[1]));
 
 	// Free the memory allocated in this function
 	g_strfreev(main_strings);

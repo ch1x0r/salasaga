@@ -92,6 +92,7 @@ salasaga_SOURCES = global_functions.c \
 	other/validate_value.c \
 	other/widget_focus.c \
 	preference/preferences_load.c \
+	preference/project_preferences.c \
 	preference/save_preferences_and_exit.c \
 	read/read_project.c \
 	read/read_empty_layer.c \

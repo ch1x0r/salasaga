@@ -31,6 +31,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
+#include "../preference/project_preferences.h"
 
 
 void film_strip_create_thumbnail(slide *slide_data)
@@ -58,7 +59,7 @@ void film_strip_create_thumbnail(slide *slide_data)
 	gtk_tree_model_get_iter(GTK_TREE_MODEL(film_strip_store), &old_iter, old_path);
 
 	// Determine the proper thumbnail height
-	project_ratio = (gfloat) project_height / (gfloat) project_width;
+	project_ratio = (gfloat) get_project_height() / (gfloat) get_project_width();
 	preview_height = preview_width * project_ratio;
 
 	// Create the thumbnail for the slide from the working space pixmap

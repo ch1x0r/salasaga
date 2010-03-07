@@ -41,6 +41,7 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "../../dialog/display_warning.h"
+#include "../../preference/project_preferences.h"
 #include "swf_add_mouse_click.h"
 #include "swf_shape_from_image_file.h"
 
@@ -140,8 +141,8 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 	render_string = g_string_new(NULL);
 
 	// Calculate the height and width scaling values needed for this swf output
-	scaled_height_ratio = (gfloat) output_height / (gfloat) project_height;
-	scaled_width_ratio = (gfloat) output_width / (gfloat) project_width;
+	scaled_height_ratio = (gfloat) get_output_height() / (gfloat) get_project_height();
+	scaled_width_ratio = (gfloat) get_output_width() / (gfloat) get_project_width();
 
 	// Create the dictionary shape for this layer
 	switch (this_layer_data->object_type)
@@ -287,9 +288,9 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 			// Create the empty layer object
 			SWFShape_movePenTo(empty_layer_shape, 0.0, 0.0);
-			SWFShape_drawLine(empty_layer_shape, output_width, 0.0);
-			SWFShape_drawLine(empty_layer_shape, 0.0, output_height);
-			SWFShape_drawLine(empty_layer_shape, -((gint) output_width), 0.0);
+			SWFShape_drawLine(empty_layer_shape, get_output_width(), 0.0);
+			SWFShape_drawLine(empty_layer_shape, 0.0, get_output_height());
+			SWFShape_drawLine(empty_layer_shape, -((gint) get_output_width()), 0.0);
 			SWFShape_drawLineTo(empty_layer_shape, 0.0, 0.0);
 
 			// If this layer has an external link associated with it, turn it into a button

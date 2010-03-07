@@ -30,19 +30,21 @@
 // Salasaga includes
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
+#include "../../preference/project_preferences.h"
+
 
 gint export_swf_choose_resolution_index()
 {
 	// Local variables
-	switch (output_width)
+	switch (get_output_width())
 	{
 		case 1920:
 
-			if (1200 == output_height)
+			if (1200 == get_output_height())
 			{
 				return 0;
 			}
-			if (1080 == output_height)
+			if (1080 == get_output_height())
 			{
 				return 1;
 			}
@@ -52,7 +54,7 @@ gint export_swf_choose_resolution_index()
 
 		case 1600:
 
-			if (1200 == output_height)
+			if (1200 == get_output_height())
 			{
 				return 2;
 			}
@@ -62,11 +64,11 @@ gint export_swf_choose_resolution_index()
 
 		case 1280:
 
-			if (1024 == output_height)
+			if (1024 == get_output_height())
 			{
 				return 3;
 			}
-			if (720 == output_height)
+			if (720 == get_output_height())
 			{
 				return 4;
 			}
@@ -76,7 +78,7 @@ gint export_swf_choose_resolution_index()
 
 		case 1024:
 
-			if (768 == output_height)
+			if (768 == get_output_height())
 			{
 				return 5;
 			}
@@ -86,7 +88,7 @@ gint export_swf_choose_resolution_index()
 
 		case 800:
 
-			if (600 == output_height)
+			if (600 == get_output_height())
 			{
 				return 6;
 			}
@@ -96,7 +98,7 @@ gint export_swf_choose_resolution_index()
 
 		case 720:
 
-			if (480 == output_height)
+			if (480 == get_output_height())
 			{
 				return 7;
 			}
@@ -106,7 +108,7 @@ gint export_swf_choose_resolution_index()
 
 		case 640:
 
-			if (480 == output_height)
+			if (480 == get_output_height())
 			{
 				return 8;
 			}
@@ -116,7 +118,7 @@ gint export_swf_choose_resolution_index()
 
 		case 600:
 
-			if (400 == output_height)
+			if (400 == get_output_height())
 			{
 				return 9;
 			}
@@ -126,7 +128,7 @@ gint export_swf_choose_resolution_index()
 
 		case 528:
 
-			if (396 == output_height)
+			if (396 == get_output_height())
 			{
 				return 10;
 			}
@@ -136,7 +138,7 @@ gint export_swf_choose_resolution_index()
 
 		case 480:
 
-			if (120 == output_height)
+			if (120 == get_output_height())
 			{
 				return 11;
 			}
@@ -146,7 +148,7 @@ gint export_swf_choose_resolution_index()
 
 		case 352:
 
-			if (288 == output_height)
+			if (288 == get_output_height())
 			{
 				return 12;
 			}
@@ -156,7 +158,7 @@ gint export_swf_choose_resolution_index()
 
 		case 320:
 
-			if (240 == output_height)
+			if (240 == get_output_height())
 			{
 				return 13;
 			}
@@ -166,7 +168,7 @@ gint export_swf_choose_resolution_index()
 
 		case 176:
 
-			if (144 == output_height)
+			if (144 == get_output_height())
 			{
 				return 14;
 			}
@@ -176,7 +178,7 @@ gint export_swf_choose_resolution_index()
 
 		case 160:
 
-			if (120 == output_height)
+			if (120 == get_output_height())
 			{
 				return 15;
 			}
@@ -186,7 +188,7 @@ gint export_swf_choose_resolution_index()
 
 		case 128:
 
-			if (96 == output_height)
+			if (96 == get_output_height())
 			{
 				return 16;
 			}

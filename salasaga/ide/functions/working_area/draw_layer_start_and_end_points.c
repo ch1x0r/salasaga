@@ -30,6 +30,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../preference/project_preferences.h"
 #include "../time_line/time_line_get_selected_layer_num.h"
 
 
@@ -102,8 +103,8 @@ gboolean draw_layer_start_and_end_points()
 
 	// Calculate the height and width scaling values for the requested layer
 	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
-	scaled_height_ratio = (gfloat) pixmap_height / (gfloat) project_height;
-	scaled_width_ratio = (gfloat) pixmap_width / (gfloat) project_width;
+	scaled_height_ratio = (gfloat) pixmap_height / (gfloat) get_project_height();
+	scaled_width_ratio = (gfloat) pixmap_width / (gfloat) get_project_width();
 
 	// Calculate start and end points
 	finish_x = (this_layer_data->x_offset_finish * scaled_width_ratio) + END_POINT_HORIZONTAL_OFFSET;

@@ -64,6 +64,7 @@
 #include "functions/other/logger_simple.h"
 #include "functions/other/logger_with_domain.h"
 #include "functions/preference/preferences_load.h"
+#include "functions/preference/project_preferences.h"
 #include "functions/resolution_selector/create_resolution_selector.h"
 #include "functions/resolution_selector/resolution_selector_changed.h"
 #include "functions/status_icon/create_status_icon.h"
@@ -135,15 +136,6 @@ guint					icon_height = 30;			// Height in pixels for the toolbar icons (they're
 gfloat					default_layer_duration;		// Length of all new layers, in frames
 guint					preview_width;				// Width in pixel for the film strip preview (might turn into a structure later)
 GString					*screenshots_folder;		// Application default for where to store screenshots
-
-// Project preferences
-GString					*output_folder;				// Where to export output files too
-guint					output_height;				// How high to create project output
-guint					output_width;				// How wide to create project output
-GString					*project_folder;			// The path to the project folder
-guint					project_height;				// The height of the project in pixels
-GString					*project_name;				// The name of the project
-guint					project_width;				// The width of the project in pixels
 
 #ifdef _WIN32
 // Windows only variables
@@ -237,9 +229,7 @@ gint main(gint argc, gchar *argv[])
 	icon_path = g_string_new(NULL);
 	message = g_string_new(NULL);
 	mouse_ptr_string = g_string_new(NULL);
-	output_folder = g_string_new(NULL);
-	project_folder = g_string_new(NULL);
-	project_name = g_string_new(_("New Project"));
+	set_project_name(_("New Project"));
 	screenshots_folder = g_string_new(NULL);
 	title_bar_icon_path = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
@@ -372,8 +362,8 @@ gint main(gint argc, gchar *argv[])
 		g_string_printf(default_project_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "projects");
 		g_string_printf(screenshots_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "screenshots");
 		g_string_printf(default_output_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "output");
-		project_width = gdk_screen_get_width(which_screen);
-		project_height = gdk_screen_get_height(which_screen);
+		set_project_width(gdk_screen_get_width(which_screen));
+		set_project_height(gdk_screen_get_height(which_screen));
 		default_output_width = 800;
 		default_output_height = 600;
 		default_slide_duration = 5;  // Default number of seconds to use for new slides
@@ -389,8 +379,8 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// Set various required defaults that will be overwritten by the first project loaded
-	g_string_printf(project_folder, "%s", default_project_folder->str);
-	g_string_printf(output_folder, "%s", default_output_folder->str);
+	set_project_folder(default_project_folder->str);
+	set_output_folder(default_output_folder->str);
 
 #ifndef _WIN32
 	// * Setup the Control-Printscreen key combination to capture screenshots - Non-windows only *
@@ -398,14 +388,14 @@ gint main(gint argc, gchar *argv[])
 #endif // End of non-windows code
 
 	// Set defaults values for the window capture code
-	set_capture_height(project_height);
-	set_capture_width(project_width);
+	set_capture_height(get_project_height());
+	set_capture_width(get_project_width());
 	set_capture_x(0);
 	set_capture_y(0);
 
 	// Use the default output width and height
-	output_width = default_output_width;
-	output_height = default_output_height;
+	set_output_width(default_output_width);
+	set_output_height(default_output_height);
 
 	// Set the application title
 	snprintf(wintitle, 40, "%s v%s", APP_NAME, APP_VERSION);
@@ -490,7 +480,7 @@ gint main(gint argc, gchar *argv[])
 	gtk_table_attach(message_bar, GTK_WIDGET(resolution_label), 4, 5, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
 
 	// Create the resolution selector
-	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(output_width, output_height));
+	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(get_output_width(), get_output_height()));
 	gtk_table_attach(message_bar, GTK_WIDGET(resolution_selector), 5, 6, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
 
 	// Link the resolution selector to the function that stores the new values in global variables

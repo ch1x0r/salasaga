@@ -43,6 +43,7 @@
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../layer/compress_layers.h"
 #include "../dialog/display_warning.h"
+#include "../preference/project_preferences.h"
 #include "../time_line/draw_timeline.h"
 #include "../time_line/time_line_set_selected_layer_num.h"
 #include "../tool_bars/enable_layer_toolbar_buttons.h"
@@ -152,15 +153,15 @@ void menu_screenshots_import(void)
 					if ((TRUE == get_project_active()) || (TRUE == using_first_screenshot))
 					{
 						// Make a note if the width and height of this screenshot differs from the existing project dimensions
-						if (image_width != project_width)
+						if (image_width != get_project_width())
 							image_differences = TRUE;
-						if (image_height != project_height)
+						if (image_height != get_project_height())
 							image_differences = TRUE;
 					} else
 					{
 						// There isn't a project loaded yet, so we take the dimensions of the first screenshot as the new project dimensions
-						project_width = image_width;
-						project_height = image_height;
+						set_project_width(image_width);
+						set_project_height(image_height);
 
 						using_first_screenshot = TRUE;
 					}
@@ -240,15 +241,15 @@ void menu_screenshots_import(void)
 		if (FALSE == get_project_active())
 		{
 			// This is the first screenshot, so we make the project size the same dimensions as it
-			project_width = image_width;
-			project_height = image_height;
+			set_project_width(image_width);
+			set_project_height(image_height);
 
 			// Set the global toggle that a project is now active
 			set_project_active(TRUE);
 		} else
 		{
 			// The project size is already known, so if the size of this screenshot is different we make it a separate image layer instead
-			if ((image_width != project_width) || (image_height != project_height))
+			if ((image_width != get_project_width()) || (image_height != get_project_height()))
 			{
 				// The image size is different from the project size, so we make a note of this
 				image_differences = TRUE;
@@ -256,7 +257,7 @@ void menu_screenshots_import(void)
 		}
 
 		// Determine the proper thumbnail height
-		project_ratio = (gfloat) project_height / (gfloat) project_width;
+		project_ratio = (gfloat) get_project_height() / (gfloat) get_project_width();
 		preview_height = preview_width * project_ratio;
 
 		// Construct a new image object and load the image data
@@ -374,7 +375,7 @@ void menu_screenshots_import(void)
 
 			// Create the thumbnail for the slide
 			this_slide = g_list_append(this_slide, tmp_slide);
-			tmp_pixmap = compress_layers(this_slide, 0.0, project_width, project_height);
+			tmp_pixmap = compress_layers(this_slide, 0.0, get_project_width(), get_project_height());
 			tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
 			tmp_slide->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
 			g_list_free(this_slide);
@@ -448,7 +449,7 @@ void menu_screenshots_import(void)
 		// "Fit to width" is selected, so work out the zoom level by figuring out how much space the widget really has
 		//  (Look at the allocation of it's parent widget)
 		//  Reduce the width calculated by 24 pixels (guessed) to give space for widget borders and such
-		set_zoom((guint) (((float) (get_right_side()->allocation.width - 24) / (float) project_width) * 100));
+		set_zoom((guint) (((float) (get_right_side()->allocation.width - 24) / (float) get_project_width()) * 100));
 	} else
 	{
 		tmp_string = g_string_truncate(tmp_string, tmp_string->len - 1);
@@ -456,8 +457,8 @@ void menu_screenshots_import(void)
 	}
 
 	// Calculate and set the display size of the working area
-	set_working_width((project_width * get_zoom()) / 100);
-	set_working_height((project_height * get_zoom()) / 100);
+	set_working_width((get_project_width() * get_zoom()) / 100);
+	set_working_height((get_project_height() * get_zoom()) / 100);
 
 	// Resize the drawing area so it draws properly
 	gtk_widget_set_size_request(GTK_WIDGET(get_main_drawing_area()), get_working_width(), get_working_height());

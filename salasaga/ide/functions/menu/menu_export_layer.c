@@ -35,6 +35,7 @@
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
 #include "../other/validate_value.h"
+#include "../preference/project_preferences.h"
 #include "../time_line/time_line_get_selected_layer_num.h"
 
 
@@ -42,6 +43,7 @@ void menu_export_layer(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;				// Filter for *.*
+	gchar				*dir_name;					// Temporarily holds the name of the directory being saved into
 	GtkWidget 			*export_dialog;				// Dialog widget
 	gchar				*filename;					// Pointer to the chosen file name
 	GtkFileFilter		*file_filter;				// Filter for *.swf
@@ -101,11 +103,11 @@ void menu_export_layer(void)
 
 	// Set the name of the file to save as
 	tmp_gstring = g_string_new(NULL);
-	g_string_printf(tmp_gstring, "%s.png", project_name->str);
+	g_string_printf(tmp_gstring, "%s.png", get_project_name());
 	gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(export_dialog), tmp_gstring->str);
 
 	// Change to the default output directory
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), output_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), get_output_folder());
 
 	// Loop around until we have a valid filename or the user cancels out
 	usable_input = FALSE;
@@ -168,6 +170,11 @@ void menu_export_layer(void)
 
 	// Destroy the dialog box, as it's not needed any more
 	gtk_widget_destroy(export_dialog);
+
+	// Update the output folder variable with this new path
+	dir_name = g_path_get_dirname(validated_string->str);
+	set_output_folder(dir_name);
+	g_free(dir_name);
 
 	// Export the image
 	this_image_ob = (layer_image *) this_layer->object_data;

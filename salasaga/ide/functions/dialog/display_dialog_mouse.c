@@ -43,6 +43,7 @@
 #include "../../externs.h"
 #include "../call_back/transition_type_changed.h"
 #include "../other/validate_value.h"
+#include "../preference/project_preferences.h"
 #include "display_warning.h"
 
 
@@ -289,9 +290,9 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the starting X Offset input
-	x_off_scale_start = gtk_hscale_new_with_range(0, project_width, 1);
+	x_off_scale_start = gtk_hscale_new_with_range(0, get_project_width(), 1);
 	gtk_range_set_value(GTK_RANGE(x_off_scale_start), tmp_layer->x_offset_start);
-	for (scale_mark_counter = 100; scale_mark_counter <= project_width; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= get_project_width(); scale_mark_counter += 100)
 	{
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(x_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -305,9 +306,9 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_start), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the starting Y Offset input
-	y_off_scale_start = gtk_hscale_new_with_range(0, project_height, 1);
+	y_off_scale_start = gtk_hscale_new_with_range(0, get_project_height(), 1);
 	gtk_range_set_value(GTK_RANGE(y_off_scale_start), tmp_layer->y_offset_start);
-	for (scale_mark_counter = 100; scale_mark_counter <= project_height; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= get_project_height(); scale_mark_counter += 100)
 	{
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(y_off_scale_start), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -321,9 +322,9 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(x_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the finishing X Offset input
-	x_off_scale_finish = gtk_hscale_new_with_range(0, project_width, 1);
+	x_off_scale_finish = gtk_hscale_new_with_range(0, get_project_width(), 1);
 	gtk_range_set_value(GTK_RANGE(x_off_scale_finish), tmp_layer->x_offset_finish);
-	for (scale_mark_counter = 100; scale_mark_counter <= project_width; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= get_project_width(); scale_mark_counter += 100)
 	{
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(x_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -337,9 +338,9 @@ gboolean display_dialog_mouse(layer *tmp_layer, gchar *dialog_title, gboolean re
 	gtk_table_attach(GTK_TABLE(duration_table), GTK_WIDGET(y_off_label_finish), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the finishing Y Offset input
-	y_off_scale_finish = gtk_hscale_new_with_range(0, project_height, 1);
+	y_off_scale_finish = gtk_hscale_new_with_range(0, get_project_height(), 1);
 	gtk_range_set_value(GTK_RANGE(y_off_scale_finish), tmp_layer->y_offset_finish);
-	for (scale_mark_counter = 100; scale_mark_counter <= project_height; scale_mark_counter += 100)
+	for (scale_mark_counter = 100; scale_mark_counter <= get_project_height(); scale_mark_counter += 100)
 	{
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(y_off_scale_finish), scale_mark_counter, GTK_POS_BOTTOM, NULL);

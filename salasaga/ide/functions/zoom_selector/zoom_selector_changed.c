@@ -38,6 +38,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../preference/project_preferences.h"
 #include "../working_area/draw_workspace.h"
 
 
@@ -60,7 +61,7 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 		// "Fit to width" is selected, so work out a new zoom level by figuring out how much space the widget really has
 		//  (Look at the allocation of it's parent widget)
 		//  Reduce the width calculated by 24 pixels (guessed) to give space for widget borders and such
-		set_zoom((guint) (((float) (get_right_side()->allocation.width - 24) / (float) project_width) * 100));
+		set_zoom((guint) (((float) (get_right_side()->allocation.width - 24) / (float) get_project_width()) * 100));
 	} else
 	{
 		tmp_string = g_string_truncate(tmp_string, tmp_string->len - 1);
@@ -77,8 +78,8 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 	g_string_free(tmp_string, TRUE);
 
 	// Calculate and set the display size of the working area
-	set_working_width((project_width * get_zoom()) / 100);
-	set_working_height((project_height * get_zoom()) / 100);
+	set_working_width((get_project_width() * get_zoom()) / 100);
+	set_working_height((get_project_height() * get_zoom()) / 100);
 
 	// Resize the drawing area so it draws properly
 	gtk_widget_set_size_request(GTK_WIDGET(get_main_drawing_area()), get_working_width(), get_working_height());

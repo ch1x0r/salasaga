@@ -41,6 +41,7 @@
 #include "../dialog/display_warning.h"
 #include "../layer/layer_edit.h"
 #include "../other/widget_focus.h"
+#include "../preference/project_preferences.h"
 #include "../time_line/time_line_get_selected_layer_num.h"
 #include "../time_line/time_line_set_selected_layer_num.h"
 #include "calculate_object_boundaries.h"
@@ -141,8 +142,8 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 		// * Check if the user is clicking on the layer start or end points *
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
+		scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;
+		scaled_width_ratio = (gfloat) get_project_width() / (gfloat) pixmap_width;
 
 		// Determine which row is selected in the time line
 		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);

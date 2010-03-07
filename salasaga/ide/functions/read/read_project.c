@@ -48,6 +48,7 @@
 #include "../dialog/display_warning.h"
 #include "../layer/compress_layers.h"
 #include "../other/validate_value.h"
+#include "../preference/project_preferences.h"
 #include "../read/read_empty_layer.h"
 #include "../read/read_highlight_layer.h"
 #include "../read/read_image_layer.h"
@@ -997,36 +998,32 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
 
 	// Load project name
-	if (NULL == project_name)
-		project_name = g_string_new(NULL);
-	g_string_assign(project_name, valid_project_name->str);
+	set_project_name(valid_project_name->str);
 	g_string_free(valid_project_name, TRUE);
 
 	// Load output folder
-	if (NULL == output_folder)
-		output_folder = g_string_new(NULL);
 	if (TRUE == g_file_test(valid_output_folder->str, G_FILE_TEST_IS_DIR))  // Test if the directory given in the project file exists
 	{
 		// Yes, it does
-		g_string_assign(output_folder, valid_output_folder->str);
+		set_output_folder(valid_output_folder->str);
 	} else
 	{
 		// No, it doesn't, so use the default output folder
-		g_string_assign(output_folder, default_output_folder->str);
+		set_output_folder(default_output_folder->str);
 	}
 	g_string_free(valid_output_folder, TRUE);
 
 	// Load output width
-	output_width = valid_output_width;
+	set_output_width(valid_output_width);
 
 	// Load output height
-	output_height = valid_output_height;
+	set_output_height(valid_output_height);
 
 	// Load project_width
-	project_width = valid_project_width;
+	set_project_width(valid_project_width);
 
 	// Load project height
-	project_height = valid_project_height;
+	set_project_height(valid_project_height);
 
 	// Load frames per second
 	if (0 != valid_fps)
@@ -1078,13 +1075,13 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 		tmp_slide->timeline_widget = NULL;
 
 		// Determine the proper thumbnail height
-		project_ratio = (gfloat) project_height / (gfloat) project_width;
+		project_ratio = (gfloat) get_project_height() / (gfloat) get_project_width();
 		preview_height = preview_width * project_ratio;
 
 		// Create the thumbnail for the slide
 		tmp_glist = NULL;
 		tmp_glist = g_list_append(tmp_glist, tmp_slide);
-		tmp_pixmap = compress_layers(tmp_glist, 0, project_width, project_height);
+		tmp_pixmap = compress_layers(tmp_glist, 0, get_project_width(), get_project_height());
 		tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
 		tmp_slide->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
 		g_object_unref(GDK_PIXBUF(tmp_pixbuf));

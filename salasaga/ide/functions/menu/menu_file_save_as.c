@@ -40,6 +40,7 @@
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
 #include "../other/validate_value.h"
+#include "../preference/project_preferences.h"
 #include "../save/save_slide.h"
 #include "menu_file_save.h"
 
@@ -48,17 +49,17 @@ void menu_file_save_as(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;				// Filter for *.*
+	gchar				*dir_name;					// Temporarily holds the name of the directory being saved into
 	gchar				*dir_name_part;				// Briefly used for holding a directory name
 	gchar				*filename;					// Pointer to the chosen file name
 	gchar				*file_name_part;			// Briefly used for holding a file name
 	GString				*message;					// Used to construct message strings
 	GtkFileFilter		*salasaga_filter;			// Filter for *.salasaga
 	GtkWidget 			*save_dialog;				// Dialog widget
+	GString				*tmp_gstring;				// Temporary GString
 	gboolean			usable_input;				// Used to control loop flow
 	GString				*validated_string;			// Receives known good strings from the validation function
 	GtkWidget			*warn_dialog;				// Widget for overwrite warning dialog
-
-	GString				*tmp_gstring;				// Temporary GString
 
 
 	// If there's no project active, we just beep and return
@@ -109,7 +110,7 @@ void menu_file_save_as(void)
 	} else
 	{
 		// Nothing has been established, so use project_name
-		g_string_printf(tmp_gstring, "%s.salasaga", project_name->str);
+		g_string_printf(tmp_gstring, "%s.salasaga", get_project_name());
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(save_dialog), tmp_gstring->str);
 
 		// Change to the default project directory
@@ -181,6 +182,11 @@ void menu_file_save_as(void)
 		file_name = g_string_new(NULL);
 	}
 	file_name = g_string_assign(file_name, validated_string->str);
+
+	// Update the project folder variable with this new path
+	dir_name = g_path_get_dirname(validated_string->str);
+	set_project_folder(dir_name);
+	g_free(dir_name);
 
 	// Save the file
 	menu_file_save();

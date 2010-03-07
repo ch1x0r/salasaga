@@ -36,12 +36,14 @@
 #include "../dialog/display_warning.h"
 #include "../export/swf/export_swf_inner.h"
 #include "../other/validate_value.h"
+#include "../preference/project_preferences.h"
 
 
 void menu_export_swf(void)
 {
 	// Local variables
 	GtkFileFilter		*all_filter;				// Filter for *.*
+	gchar				*dir_name;					// Temporarily holds the name of the directory being saved into
 	GtkWidget 			*export_dialog;				// Dialog widget
 	gchar				*filename;					// Pointer to the chosen file name
 	GtkFileFilter		*flash_filter;				// Filter for *.swf
@@ -92,11 +94,11 @@ void menu_export_swf(void)
 
 	// Set the name of the file to save as
 	tmp_gstring = g_string_new(NULL);
-	g_string_printf(tmp_gstring, "%s.swf", project_name->str);
+	g_string_printf(tmp_gstring, "%s.swf", get_project_name());
 	gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(export_dialog), tmp_gstring->str);
 
 	// Change to the default output directory
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), output_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), get_output_folder());
 
 	// Loop around until we have a valid filename or the user cancels out
 	usable_input = FALSE;
@@ -159,8 +161,13 @@ void menu_export_swf(void)
 	// Destroy the dialog box, as it's not needed any more
 	gtk_widget_destroy(export_dialog);
 
+	// Update the output folder variable with this new path
+	dir_name = g_path_get_dirname(validated_string->str);
+	set_output_folder(dir_name);
+	g_free(dir_name);
+
 	// Update the status bar to indicate we're exporting the swf file
-	g_string_printf(tmp_gstring, " %s %u x %u flash - %s", _("Exporting"), output_width, output_height, validated_string->str);
+	g_string_printf(tmp_gstring, " %s %u x %u flash - %s", _("Exporting"), get_output_width(), get_output_height(), validated_string->str);
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
 
 	// Export the swf
@@ -173,7 +180,7 @@ void menu_export_swf(void)
 	} else
 	{
 		// Movie created successfully, so update the status bar to let the user know
-		g_string_printf(tmp_gstring, " %s %u x %u flash - %s", _("Exported"), output_width, output_height, validated_string->str);
+		g_string_printf(tmp_gstring, " %s %u x %u flash - %s", _("Exported"), get_output_width(), get_output_height(), validated_string->str);
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
 		gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(get_status_bar()), 0.0);
 		gdk_flush();

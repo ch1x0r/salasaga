@@ -36,6 +36,8 @@
 // Salasaga includes
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
+#include "../../preference/project_preferences.h"
+
 
 gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint num_frames, layer *this_layer_data, guint layer_depth)
 {
@@ -82,8 +84,8 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 	}
 
 	// Calculate the height and width scaling values needed for this swf output
-	scaled_height_ratio = (gfloat) output_height / (gfloat) project_height;
-	scaled_width_ratio = (gfloat) output_width / (gfloat) project_width;
+	scaled_height_ratio = (gfloat) get_output_height() / (gfloat) get_project_height();
+	scaled_width_ratio = (gfloat) get_output_width() / (gfloat) get_project_width();
 
 	// Calculate the scaled start and finish positions for each element
 	element_x_position_start = scaled_width_ratio * this_layer_data->x_offset_start;

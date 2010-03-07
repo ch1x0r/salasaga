@@ -40,6 +40,7 @@
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
 #include "../layer/get_layer_position.h"
+#include "../preference/project_preferences.h"
 #include "../time_line/time_line_get_cursor_position.h"
 #include "../time_line/time_line_get_selected_layer_num.h"
 #include "draw_bounding_box.h"
@@ -126,8 +127,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 			return TRUE;
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
+		scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;
+		scaled_width_ratio = (gfloat) get_project_width() / (gfloat) pixmap_width;
 
 		// Calculate the distance the object has been dragged onscreen
 		x_diff = mouse_x - get_stored_x();
@@ -230,8 +231,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		time_position = time_line_get_cursor_position(this_slide_data->timeline_widget);
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
+		scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;
+		scaled_width_ratio = (gfloat) get_project_width() / (gfloat) pixmap_width;
 
 		// Calculate start and end points
 		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
@@ -290,8 +291,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
+		scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;
+		scaled_width_ratio = (gfloat) get_project_width() / (gfloat) pixmap_width;
 
 		// Find out where the time line cursor is
 		time_position = time_line_get_cursor_position(this_slide_data->timeline_widget);
@@ -412,8 +413,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		this_slide_data = current_slide->data;
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
+		scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;
+		scaled_width_ratio = (gfloat) get_project_width() / (gfloat) pixmap_width;
 
 		// Determine which layer is selected in the timeline
 		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
@@ -548,8 +549,8 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		this_slide_data = current_slide->data;
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
-		scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
-		scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
+		scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;
+		scaled_width_ratio = (gfloat) get_project_width() / (gfloat) pixmap_width;
 
 		// Determine which layer is selected in the timeline
 		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);

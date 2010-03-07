@@ -43,6 +43,7 @@
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
 #include "../layer/get_layer_position.h"
+#include "../preference/project_preferences.h"
 #include "../time_line/time_line_get_cursor_position.h"
 
 
@@ -82,8 +83,8 @@ void calculate_object_boundaries(void)
 
 	// Calculate the height and width scaling values for the main drawing area at its present size
 	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
-	scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
-	scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
+	scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;
+	scaled_width_ratio = (gfloat) get_project_width() / (gfloat) pixmap_width;
 
 	// Work out how many layers we need to iterate through
 	layer_pointer = g_list_first(this_slide_data->layers);

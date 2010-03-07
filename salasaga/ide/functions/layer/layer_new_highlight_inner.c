@@ -38,6 +38,7 @@
 #include "../../externs.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "../layer/layer_duplicate.h"
+#include "../preference/project_preferences.h"
 #include "../time_line/draw_timeline.h"
 #include "../time_line/time_line_set_selected_layer_num.h"
 #include "../undo_redo/undo_functions.h"
@@ -102,8 +103,8 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	end_y = CLAMP(end_y, 1, pixmap_height - 1);
 
 	// Calculate the height and width scaling values for the main drawing area at its present size
-	scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
-	scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
+	scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;
+	scaled_width_ratio = (gfloat) get_project_width() / (gfloat) pixmap_width;
 
 	// Work out where the mouse is positioned
 	scaled_x = start_x * scaled_width_ratio;

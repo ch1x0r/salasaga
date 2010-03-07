@@ -33,6 +33,7 @@
 #include "../dialog/display_warning.h"
 #include "../layer/compress_layers.h"
 #include "../other/validate_value.h"
+#include "../preference/project_preferences.h"
 #include "../time_line/time_line_get_cursor_position.h"
 
 
@@ -41,6 +42,7 @@ void menu_export_slide(void)
 	// Local variables
 	GtkFileFilter		*all_filter;				// Filter for *.*
 	gfloat				cursor_position;
+	gchar				*dir_name;					// Temporarily holds the name of the directory being saved into
 	GtkWidget 			*export_dialog;				// Dialog widget
 	GError				*error = NULL;				// Pointer to error return structure
 	gchar				*filename;					// Pointer to the chosen file name
@@ -82,11 +84,11 @@ void menu_export_slide(void)
 
 	// Set the name of the file to save as
 	tmp_gstring = g_string_new(NULL);
-	g_string_printf(tmp_gstring, "%s.png", project_name->str);
+	g_string_printf(tmp_gstring, "%s.png", get_project_name());
 	gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(export_dialog), tmp_gstring->str);
 
 	// Change to the default output directory
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), output_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), get_output_folder());
 
 	// Loop around until we have a valid filename or the user cancels out
 	usable_input = FALSE;
@@ -149,11 +151,16 @@ void menu_export_slide(void)
 	// Destroy the dialog box, as it's not needed any more
 	gtk_widget_destroy(export_dialog);
 
+	// Update the output folder variable with this new path
+	dir_name = g_path_get_dirname(validated_string->str);
+	set_output_folder(dir_name);
+	g_free(dir_name);
+
 	// Get the current time line cursor position
 	cursor_position = time_line_get_cursor_position(((slide *) current_slide->data)->timeline_widget);
 
 	// Create a new pixbuf of the current slide at its cursor time position
-	tmp_pixmap = compress_layers(current_slide, cursor_position, project_width, project_height);
+	tmp_pixmap = compress_layers(current_slide, cursor_position, get_project_width(), get_project_height());
 	slide_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
 	g_object_unref(GDK_PIXMAP(tmp_pixmap));
 

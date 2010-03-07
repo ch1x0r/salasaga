@@ -36,6 +36,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../layer/compress_layers.h"
+#include "../preference/project_preferences.h"
 #include "../time_line/time_line.h"
 #include "../time_line/time_line_get_type.h"
 #include "../time_line/time_line_get_cursor_position.h"
@@ -96,11 +97,11 @@ void regenerate_film_strip_thumbnails()
 		cursor_position = time_line_get_cursor_position(this_slide_data->timeline_widget);
 
 		// Determine the proper thumbnail height
-		project_ratio = (gfloat) project_height / (gfloat) project_width;
+		project_ratio = (gfloat) get_project_height() / (gfloat) get_project_width();
 		preview_height = preview_width * project_ratio;
 
 		// Create the thumbnail for the slide
-		tmp_pixmap = compress_layers(this_slide, cursor_position, project_width, project_height);
+		tmp_pixmap = compress_layers(this_slide, cursor_position, get_project_width(), get_project_height());
 		if (NULL == tmp_pixmap)
 		{
 			return;

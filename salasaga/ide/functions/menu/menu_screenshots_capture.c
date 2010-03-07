@@ -275,7 +275,7 @@ void menu_screenshots_capture(void)
 	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_offset_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the new X Offset data
-	x_offset_button = gtk_spin_button_new_with_range(0, project_width, 1);
+	x_offset_button = gtk_spin_button_new_with_range(0, get_project_width(), 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(x_offset_button), capture_x);
 	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(x_offset_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
@@ -286,7 +286,7 @@ void menu_screenshots_capture(void)
 	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_offset_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the new Y Offset data
-	y_offset_button = gtk_spin_button_new_with_range(0, project_height, 1);
+	y_offset_button = gtk_spin_button_new_with_range(0, get_project_height(), 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(y_offset_button), capture_y);
 	gtk_table_attach(GTK_TABLE(capture_table), GTK_WIDGET(y_offset_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;

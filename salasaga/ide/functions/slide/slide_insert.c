@@ -35,6 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../preference/project_preferences.h"
 #include "../undo_redo/undo_functions.h"
 
 
@@ -82,7 +83,7 @@ void slide_insert(void)
 	tmp_layer->transition_out_duration = 0.0;
 
 	// Determine the proper thumbnail height
-	project_ratio = (gfloat) project_height / (gfloat) project_width;
+	project_ratio = (gfloat) get_project_height() / (gfloat) get_project_width();
 	preview_height = preview_width * project_ratio;
 
 	// Create a blank thumbnail using the default background colour, then add it to the new slide structure

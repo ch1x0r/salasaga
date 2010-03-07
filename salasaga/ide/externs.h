@@ -95,14 +95,6 @@ extern gfloat				default_layer_duration;
 extern guint				preview_width;
 extern GString				*screenshots_folder;
 
-extern GString				*output_folder;
-extern guint				output_height;
-extern guint				output_width;
-extern GString				*project_folder;
-extern guint				project_height;
-extern GString				*project_name;
-extern guint				project_width;
-
 // Field descriptions used for bounds and validation
 extern validatation_entry	valid_fields[];
 

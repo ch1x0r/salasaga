@@ -46,6 +46,8 @@
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
 #include "../other/validate_value.h"
+#include "project_preferences.h"
+
 
 gboolean preferences_load()
 {
@@ -512,10 +514,10 @@ gboolean preferences_load()
 	}
 
 	// Set the default project width
-	project_width = valid_project_width;
+	set_project_width(valid_project_width);
 
 	// Set the default project height
-	project_height = valid_project_height;
+	set_project_height(valid_project_height);
 
 	// Set the default output width
 	default_output_width = valid_output_width;
@@ -672,7 +674,7 @@ gboolean preferences_load()
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
 			which_screen = gtk_window_get_screen(GTK_WINDOW(get_main_window()));
-			project_width = gdk_screen_get_width(which_screen);
+			set_project_width(gdk_screen_get_width(which_screen)_;
 		} else
 		{
 			// Retrieve the value
@@ -680,7 +682,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "project_width", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				project_width = atoi(buffer_ptr);
+				set_project_width(atoi(buffer_ptr));
 			}
 
 			// Close the registry key
@@ -693,7 +695,7 @@ gboolean preferences_load()
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
 			which_screen = gtk_window_get_screen(GTK_WINDOW(get_main_window()));
-			project_height = gdk_screen_get_height(which_screen);
+			set_project_height(gdk_screen_get_height(which_screen));
 		} else
 		{
 			// Retrieve the value
@@ -701,7 +703,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "project_height", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				project_height = atoi(buffer_ptr);
+				set_project_height(atoi(buffer_ptr));
 			}
 
 			// Close the registry key

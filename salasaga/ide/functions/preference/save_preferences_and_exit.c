@@ -43,6 +43,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../dialog/display_dialog_save_warning.h"
+#include "../preference/project_preferences.h"
 
 
 void save_preferences_and_exit(void)
@@ -78,8 +79,8 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/project_folder", default_project_folder->str, NULL);
 	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/screenshots_folder", screenshots_folder->str, NULL);
 	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/output_folder", default_output_folder->str, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/project_width", project_width, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/project_height", project_height, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/project_width", get_project_width(), NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/project_height", get_project_height(), NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_width", default_output_width, NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_height", default_output_height, NULL);
 	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/slide_duration", default_slide_duration, NULL);
@@ -237,16 +238,16 @@ void save_preferences_and_exit(void)
 	return_code = RegSetValueEx(hkey, "output_folder", 0, REG_SZ, default_output_folder->str, string_size);
 
 	// Set the value for the project name
-	string_size = (project_name->len) + 1;
-	return_code = RegSetValueEx(hkey, "project_name", 0, REG_SZ, project_name->str, string_size);
+	string_size = (get_project_name_length()) + 1;
+	return_code = RegSetValueEx(hkey, "project_name", 0, REG_SZ, get_project_name(), string_size);
 
 	// Set the value for the project width
-	g_string_printf(tmp_gstring, "%d", project_width);
+	g_string_printf(tmp_gstring, "%d", get_project_width());
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "project_width", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the project height
-	g_string_printf(tmp_gstring, "%d", project_height);
+	g_string_printf(tmp_gstring, "%d", get_project_height());
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "project_height", 0, REG_SZ, tmp_gstring->str, string_size);
 

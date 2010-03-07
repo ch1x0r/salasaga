@@ -35,6 +35,7 @@
 #include "../../../externs.h"
 #include "../../dialog/display_warning.h"
 #include "../../other/validate_value.h"
+#include "../../preference/project_preferences.h"
 
 
 void export_html_wrapper(void)
@@ -42,6 +43,7 @@ void export_html_wrapper(void)
 	// Local variables
 	GtkFileFilter		*all_filter;				// Filter for *.*
 	gchar				*base_name;					// Pointer to the file name, excluding the path component
+	gchar				*dir_name;					// Temporarily holds the name of the directory being saved into
 	GtkWidget 			*export_dialog;				// Dialog widget
 	gchar				*filename;					// Pointer to the chosen file name
 	GtkFileFilter		*file_filter;				// Filter for *.html
@@ -83,11 +85,11 @@ void export_html_wrapper(void)
 
 	// Set the name of the file to save as
 	tmp_gstring = g_string_new(NULL);
-	g_string_printf(tmp_gstring, "%s.html", project_name->str);
+	g_string_printf(tmp_gstring, "%s.html", get_project_name());
 	gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(export_dialog), tmp_gstring->str);
 
 	// Change to the default output directory
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), output_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(export_dialog), get_output_folder());
 
 	// Loop around until we have a valid filename or the user cancels out
 	usable_input = FALSE;
@@ -150,6 +152,11 @@ void export_html_wrapper(void)
 	// Destroy the dialog box, as it's not needed any more
 	gtk_widget_destroy(export_dialog);
 
+	// Update the output folder variable with this new path
+	dir_name = g_path_get_dirname(validated_string->str);
+	set_output_folder(dir_name);
+	g_free(dir_name);
+
 	// Get a pointer to the start of file name suffix
 	base_name = g_path_get_basename(validated_string->str);
 	suffix_start = g_strrstr(base_name, ".");
@@ -179,9 +186,9 @@ void export_html_wrapper(void)
 	fprintf(output_file, "\t\t<meta http-equiv=\"Content-Type\" content=\"text/html;charset=utf-8\">\n");
 
 	// If the project has a title, add it to the output file
-	if (0 < project_name->len)
+	if (0 < get_project_name_length())
 	{
-		fprintf(output_file, "\t\t<title>%s</title>\n", project_name->str);
+		fprintf(output_file, "\t\t<title>%s</title>\n", get_project_name());
 	}
 	fprintf(output_file, "\t</head>\n");
 
@@ -191,7 +198,7 @@ void export_html_wrapper(void)
 			"\t\t\t<param name=\"movie\" value=\"%s\"></param>\n"
 			"\t\t\t<param name=\"quality\" value=\"high\"></param>\n"
 			"\t\t\t<embed src=\"%s\" quality=\"high\" pluginspage=\"http://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash\" type=\"application/x-shockwave-flash\" align=\"middle\" width=\"%u\" height=\"%u\"></embed>\n"
-			"\t\t</object>\n", output_width, output_height, swf_file, swf_file, output_width, output_height);
+			"\t\t</object>\n", get_output_width(), get_output_height(), swf_file, swf_file, get_output_width(), get_output_height());
 	fprintf(output_file, "\t</body>\n</html>");
 
 	// Close the output file

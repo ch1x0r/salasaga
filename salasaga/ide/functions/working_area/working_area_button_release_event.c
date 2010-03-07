@@ -45,6 +45,7 @@
 #include "../layer/layer_new_image_inner.h"
 #include "../layer/layer_new_mouse_inner.h"
 #include "../layer/layer_new_text_inner.h"
+#include "../preference/project_preferences.h"
 #include "../undo_redo/undo_functions.h"
 #include "../time_line/time_line_get_selected_layer_num.h"
 #include "draw_workspace.h"
@@ -93,8 +94,8 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 	// Calculate the height and width scaling values for the main drawing area at its present size
 	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
-	scaled_height_ratio = (gfloat) project_height / (gfloat) pixmap_height;
-	scaled_width_ratio = (gfloat) project_width / (gfloat) pixmap_width;
+	scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;
+	scaled_width_ratio = (gfloat) get_project_width() / (gfloat) pixmap_width;
 
 	// Work out where the mouse is positioned
 	project_x_position = mouse_x * scaled_width_ratio;
@@ -301,21 +302,21 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 		// Calculate the new layer width and height
 		((layer_highlight *) layer_data->object_data)->width = width = CLAMP(onscreen_right - onscreen_left,
-				valid_fields[HIGHLIGHT_WIDTH].min_value, project_width - 2);
+				valid_fields[HIGHLIGHT_WIDTH].min_value, get_project_width() - 2);
 		((layer_highlight *) layer_data->object_data)->height = height = CLAMP(onscreen_bottom - onscreen_top,
-				valid_fields[HIGHLIGHT_HEIGHT].min_value, project_height - 2);
+				valid_fields[HIGHLIGHT_HEIGHT].min_value, get_project_height() - 2);
 
 		// Bounds check the starting x offset, then update the object with the new value
-		layer_data->x_offset_start = CLAMP(onscreen_left, 1, project_width - width - 2);
+		layer_data->x_offset_start = CLAMP(onscreen_left, 1, get_project_width() - width - 2);
 
 		// Bounds check the finishing x offset, then update the object with the new value
-		layer_data->x_offset_finish = CLAMP(onscreen_left + x_change, 1, project_width - width - 2);
+		layer_data->x_offset_finish = CLAMP(onscreen_left + x_change, 1, get_project_width() - width - 2);
 
 		// Bounds check the starting y offset, then update the object with the new value
-		layer_data->y_offset_start = CLAMP(onscreen_top, 1, project_height - height - 2);
+		layer_data->y_offset_start = CLAMP(onscreen_top, 1, get_project_height() - height - 2);
 
 		// Bounds check the finishing y offset, then update the object with the new value
-		layer_data->y_offset_finish = CLAMP(onscreen_top + y_change, 1, project_height - height - 2);
+		layer_data->y_offset_finish = CLAMP(onscreen_top + y_change, 1, get_project_height() - height - 2);
 
 		// Store the undo item
 		undo_item_data->layer_data_new = layer_duplicate(layer_data);

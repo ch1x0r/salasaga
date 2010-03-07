@@ -46,6 +46,7 @@
 #include "../../externs.h"
 #include "../cairo/render_text_string.h"
 #include "../dialog/display_warning.h"
+#include "../preference/project_preferences.h"
 #include "get_layer_position.h"
 
 
@@ -104,8 +105,8 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 	// Calculate the height and width scaling values for the requested layer size
 	gdk_drawable_get_size(GDK_PIXMAP(incoming_pixmap), &pixmap_width, &pixmap_height);
-	scaled_height_ratio = (gfloat) pixmap_height / (gfloat) project_height;
-	scaled_width_ratio = (gfloat) pixmap_width / (gfloat) project_width;
+	scaled_height_ratio = (gfloat) pixmap_height / (gfloat) get_project_height();
+	scaled_width_ratio = (gfloat) pixmap_width / (gfloat) get_project_width();
 
 	// Create a cairo drawing context
 	cairo_context = gdk_cairo_create(GDK_PIXMAP(incoming_pixmap));

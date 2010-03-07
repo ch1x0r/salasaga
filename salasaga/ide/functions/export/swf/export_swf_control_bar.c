@@ -39,6 +39,7 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "../../dialog/display_warning.h"
+#include "../../preference/project_preferences.h"
 #include "swf_shape_from_image_file.h"
 
 
@@ -449,7 +450,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		g_string_append(file_name_full, "_with_ffrv");
 	}
 
-	g_string_printf(message, "%ux%u", output_width, output_height);  // We use the message variable here as a temporary variable, for efficiency
+	g_string_printf(message, "%ux%u", get_output_width(), get_output_height());  // We use the message variable here as a temporary variable, for efficiency
 	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", message->str, file_name_full->str, NULL);
 	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
 	g_free(image_path);
@@ -1234,8 +1235,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		// * Create the information text object *
 
 		// Calculate the height and width scaling values needed for this swf shape
-		scaled_height_ratio = (gfloat) output_height / (gfloat) project_height;
-		scaled_width_ratio = (gfloat) output_width / (gfloat) project_width;
+		scaled_height_ratio = (gfloat) get_output_height() / (gfloat) get_project_height();
+		scaled_width_ratio = (gfloat) get_output_width() / (gfloat) get_project_width();
 
 		// Create the text object we'll be using
 		info_object = newSWFText();

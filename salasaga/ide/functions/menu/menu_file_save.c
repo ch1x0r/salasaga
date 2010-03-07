@@ -41,6 +41,7 @@
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
 #include "../other/validate_value.h"
+#include "../preference/project_preferences.h"
 #include "../save/save_slide.h"
 #include "../save/save_text_tags.h"
 #include "menu_file_save_as.h"
@@ -134,16 +135,16 @@ void menu_file_save(void)
 	}
 
 	// Add the project preferences to the XML document
-	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_name", (const xmlChar *) project_name->str);
-	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "output_folder", (const xmlChar *) output_folder->str);
-	g_string_printf(tmp_gstring, "%u", output_width);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_name", (const xmlChar *) get_project_name());
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "output_folder", (const xmlChar *) get_output_folder());
+	g_string_printf(tmp_gstring, "%u", get_output_width());
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "output_width", (const xmlChar *) tmp_gstring->str);
-	g_string_printf(tmp_gstring, "%u", output_height);
+	g_string_printf(tmp_gstring, "%u", get_output_height());
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "output_height", (const xmlChar *) tmp_gstring->str);
-	g_string_printf(tmp_gstring, "%u", project_width);
+	g_string_printf(tmp_gstring, "%u", get_project_width());
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_width", (const xmlChar *) tmp_gstring->str);
-	g_string_printf(tmp_gstring, "%u", project_height);
-	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_height", (const xmlChar *) tmp_gstring->str);
+	g_string_printf(tmp_gstring, "%u", get_project_height());
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "get_project_height()", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", get_frames_per_second());
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "frames_per_second", (const xmlChar *) tmp_gstring->str);
 	switch (get_start_behaviour())

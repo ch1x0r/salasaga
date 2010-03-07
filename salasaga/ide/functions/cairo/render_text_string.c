@@ -44,6 +44,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../preference/project_preferences.h"
 
 
 int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object, gfloat scaled_width_ratio, gfloat scaled_height_ratio, gdouble incoming_cairo_pos_x, gdouble incoming_cairo_pos_y, gfloat time_alpha, gboolean display_onscreen)
@@ -106,7 +107,7 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 			{
 				system_colourmap = gdk_colormap_get_system();
 			}
-			front_store = gdk_pixmap_new(NULL, project_width, project_height, system_colourmap->visual->depth);
+			front_store = gdk_pixmap_new(NULL, get_project_width(), get_project_height(), system_colourmap->visual->depth);
 			gdk_drawable_set_colormap(GDK_DRAWABLE(front_store), GDK_COLORMAP(system_colourmap));
 		}
 

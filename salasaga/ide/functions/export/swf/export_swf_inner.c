@@ -44,6 +44,7 @@
 #include "../../../salasaga_types.h"
 #include "../../../externs.h"
 #include "../../dialog/display_warning.h"
+#include "../../preference/project_preferences.h"
 #include "export_swf_choose_resolution_index.h"
 #include "export_swf_control_bar.h"
 #include "export_swf_create_layer_elements.h"
@@ -126,7 +127,7 @@ gint export_swf_inner(gchar *output_filename)
 	Ming_setSWFCompression(9);
 
 	// Set the output size of the swf movie
-	SWFMovie_setDimension(swf_movie, output_width, output_height);
+	SWFMovie_setDimension(swf_movie, get_output_width(), get_output_height());
 
 	// Set the frame rate for the movie
 	SWFMovie_setRate(swf_movie, get_frames_per_second());
@@ -135,8 +136,8 @@ gint export_swf_inner(gchar *output_filename)
 	SWFMovie_setBackground(swf_movie, 0x00, 0x00, 0x00);  // RGB value - black
 
 	// Calculate the height and width scaling values needed for this swf output
-	scaled_height_ratio = (gfloat) output_height / (gfloat) project_height;
-	scaled_width_ratio = (gfloat) output_width / (gfloat) project_width;
+	scaled_height_ratio = (gfloat) get_output_height() / (gfloat) get_project_height();
+	scaled_width_ratio = (gfloat) get_output_width() / (gfloat) get_project_width();
 
 	// Displaying debugging info if requested
 	if (get_debug_level())

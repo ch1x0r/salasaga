@@ -32,6 +32,7 @@
 #include "../../externs.h"
 #include "../cairo/render_text_string.h"
 #include "../dialog/display_warning.h"
+#include "../preference/project_preferences.h"
 
 
 gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfloat time_position, gfloat *time_alpha)
@@ -198,14 +199,14 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 					{
 						system_colourmap = gdk_colormap_get_system();
 					}
-					front_store = gdk_pixmap_new(NULL, project_width, project_height, system_colourmap->visual->depth);
+					front_store = gdk_pixmap_new(NULL, get_project_width(), get_project_height(), system_colourmap->visual->depth);
 					gdk_drawable_set_colormap(GDK_DRAWABLE(front_store), GDK_COLORMAP(system_colourmap));
 				}
 
 				// Calculate the height and width scaling values for the front pixmap
 				gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
-				scaled_height_ratio = (gfloat) pixmap_height / (gfloat) project_height;
-				scaled_width_ratio = (gfloat) pixmap_width / (gfloat) project_width;
+				scaled_height_ratio = (gfloat) pixmap_height / (gfloat) get_project_height();
+				scaled_width_ratio = (gfloat) pixmap_width / (gfloat) get_project_width();
 
 				// Calculate the rendered size of the text layer
 				render_text_string(NULL, (layer_text *) this_layer_data->object_data, scaled_width_ratio, scaled_height_ratio, 0, 0, *time_alpha, FALSE);
