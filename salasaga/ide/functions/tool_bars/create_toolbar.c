@@ -44,6 +44,7 @@
 #include "../menu/menu_screenshots_capture.h"
 #include "../menu/menu_screenshots_import.h"
 #include "../other/project_adjust_dimensions.h"
+#include "../preference/application_preferences.h"
 
 
 GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
@@ -76,35 +77,35 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	gtk_tooltips_enable(GTK_TOOLTIPS(main_toolbar_tooltips));
 
 	// Create the New button
-	main_toolbar_icons[NEW] = gtk_image_new_from_stock(GTK_STOCK_NEW, icon_height);
+	main_toolbar_icons[NEW] = gtk_image_new_from_stock(GTK_STOCK_NEW, get_icon_height());
 	main_toolbar_items[NEW] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[NEW]), _("New"));
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[NEW]), main_toolbar_tooltips, _("Begin a new project"), "Private");
 	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[NEW], NEW);
 	main_toolbar_signals[NEW] = g_signal_connect(G_OBJECT(main_toolbar_items[NEW]), "clicked", G_CALLBACK(menu_file_new), (gpointer) NULL);
 
 	// Create the Open button
-	main_toolbar_icons[OPEN] = gtk_image_new_from_stock(GTK_STOCK_OPEN, icon_height);
+	main_toolbar_icons[OPEN] = gtk_image_new_from_stock(GTK_STOCK_OPEN, get_icon_height());
 	main_toolbar_items[OPEN] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[OPEN]), _("Open"));
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[OPEN]), main_toolbar_tooltips, _("Open an existing project"), "Private");
 	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[OPEN], OPEN);
 	main_toolbar_signals[OPEN] = g_signal_connect(G_OBJECT(main_toolbar_items[OPEN]), "clicked", G_CALLBACK(menu_file_open), (gpointer) NULL);
 
 	// Create the Save button
-	main_toolbar_icons[SAVE] = gtk_image_new_from_stock(GTK_STOCK_SAVE, icon_height);
+	main_toolbar_icons[SAVE] = gtk_image_new_from_stock(GTK_STOCK_SAVE, get_icon_height());
 	main_toolbar_items[SAVE] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[SAVE]), _("Save"));
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[SAVE]), main_toolbar_tooltips, _("Save the project"), "Private");
 	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[SAVE], SAVE);
 	main_toolbar_signals[SAVE] = g_signal_connect(G_OBJECT(main_toolbar_items[SAVE]), "clicked", G_CALLBACK(menu_file_save), (gpointer) NULL);
 
 	// Create the Save As button
-	main_toolbar_icons[SAVE_AS] = gtk_image_new_from_stock(GTK_STOCK_SAVE_AS, icon_height);
+	main_toolbar_icons[SAVE_AS] = gtk_image_new_from_stock(GTK_STOCK_SAVE_AS, get_icon_height());
 	main_toolbar_items[SAVE_AS] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[SAVE_AS]), _("Save As"));
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[SAVE_AS]), main_toolbar_tooltips, _("Save the project with a different file name"), "Private");
 	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[SAVE_AS], SAVE_AS);
 	main_toolbar_signals[SAVE_AS] = g_signal_connect(G_OBJECT(main_toolbar_items[SAVE_AS]), "clicked", G_CALLBACK(menu_file_save_as), (gpointer) NULL);
 
 	// Create the Quit button
-	main_toolbar_icons[QUIT] = gtk_image_new_from_stock(GTK_STOCK_QUIT, icon_height);
+	main_toolbar_icons[QUIT] = gtk_image_new_from_stock(GTK_STOCK_QUIT, get_icon_height());
 	main_toolbar_items[QUIT] = gtk_tool_button_new(GTK_WIDGET(main_toolbar_icons[QUIT]), _("Quit"));
 	gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[QUIT]), main_toolbar_tooltips, _("Quit the application"), "Private");
 	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), main_toolbar_items[QUIT], QUIT);
@@ -117,7 +118,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	// Create the Capture button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "capture", icon_extension->str);
 	if (get_debug_level()) printf("%s: '%s'\n", _("Path to toolbar 'Capture Screenshots' icon"), tmp_gstring->str);
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons[CAPTURE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
@@ -130,7 +131,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	// Create the Import button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "import", icon_extension->str);
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons[IMPORT] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
@@ -143,7 +144,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	// Create the Adjust Dimensions button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop", icon_extension->str);
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons[DIMENSIONS] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
@@ -160,7 +161,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	// Create the Export Flash button
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "export_flash", icon_extension->str);
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons[EXPORT_FLASH] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
@@ -175,7 +176,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	// Create the grayed out Capture icon
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "capture_grayed", icon_extension->str);
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons_gray[CAPTURE] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
@@ -184,7 +185,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	// Create the grayed out Dimensions icon
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop_grayed", icon_extension->str);
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons_gray[DIMENSIONS] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);
@@ -193,7 +194,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 
 	// Create the grayed out Export Flash icon
 	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "export_flash_grayed", icon_extension->str);
-	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, icon_height, NULL);
+	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
 		main_toolbar_icons_gray[EXPORT_FLASH] = gtk_image_new_from_pixbuf(tmp_gdk_pixbuf);

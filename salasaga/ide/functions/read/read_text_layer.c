@@ -42,6 +42,7 @@
 #include "../dialog/display_warning.h"
 #include "../layer/layer_free.h"
 #include "../other/validate_value.h"
+#include "../preference/application_preferences.h"
 #include "../text_tags/text_layer_create_colour_tag.h"
 #include "../text_tags/text_layer_create_font_size_tag.h"
 
@@ -96,7 +97,7 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 	tmp_layer->start_time = 0.0;
 	tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_in_duration = 0.0;
-	tmp_layer->duration = default_layer_duration;
+	tmp_layer->duration = get_default_layer_duration();
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_out_duration = 0.0;
 	tmp_text_ob->text_buffer = NULL;

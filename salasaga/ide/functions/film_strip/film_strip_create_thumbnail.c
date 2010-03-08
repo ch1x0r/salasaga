@@ -31,6 +31,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
+#include "../preference/application_preferences.h"
 #include "../preference/project_preferences.h"
 
 
@@ -60,7 +61,7 @@ void film_strip_create_thumbnail(slide *slide_data)
 
 	// Determine the proper thumbnail height
 	project_ratio = (gfloat) get_project_height() / (gfloat) get_project_width();
-	preview_height = preview_width * project_ratio;
+	preview_height = get_preview_width() * project_ratio;
 
 	// Create the thumbnail for the slide from the working space pixmap
 	tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(front_store), NULL, 0, 0, 0, 0, -1, -1);
@@ -73,7 +74,7 @@ void film_strip_create_thumbnail(slide *slide_data)
 		gtk_tree_path_free(old_path);
 		return;
 	}
-	new_thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
+	new_thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), get_preview_width(), preview_height, GDK_INTERP_TILES);
 	if (NULL == new_thumbnail)
 	{
 		message = g_string_new(NULL);

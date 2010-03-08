@@ -43,6 +43,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../dialog/display_dialog_save_warning.h"
+#include "../preference/application_preferences.h"
 #include "../preference/project_preferences.h"
 
 
@@ -76,21 +77,21 @@ void save_preferences_and_exit(void)
 
 	// Save the application preferences
 	gconf_engine = gconf_engine_get_default();
-	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/project_folder", default_project_folder->str, NULL);
-	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/screenshots_folder", screenshots_folder->str, NULL);
-	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/output_folder", default_output_folder->str, NULL);
+	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/project_folder", get_default_project_folder(), NULL);
+	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/screenshots_folder", get_screenshots_folder(), NULL);
+	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/output_folder", get_default_output_folder(), NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/project_width", get_project_width(), NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/project_height", get_project_height(), NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_width", default_output_width, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_height", default_output_height, NULL);
-	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/slide_duration", default_slide_duration, NULL);
-	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/layer_duration", default_layer_duration, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/thumbnail_width", preview_width, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/frames_per_second", default_fps, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_red", default_bg_colour.red, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_green", default_bg_colour.green, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_blue", default_bg_colour.blue, NULL);
-	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/icon_height", icon_height, NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_width", get_default_output_width(), NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_height", get_default_output_height(), NULL);
+	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/slide_duration", get_default_slide_duration(), NULL);
+	gconf_engine_set_float(gconf_engine, "/apps/salasaga/defaults/layer_duration", get_default_layer_duration(), NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/thumbnail_width", get_preview_width(), NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/frames_per_second", get_default_fps(), NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_red", get_default_bg_colour_red(), NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_green", get_default_bg_colour_green(), NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/default_bg_colour_blue", get_default_bg_colour_blue(), NULL);
+	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/icon_height", get_icon_height(), NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/screenshot_delay", get_screenshot_delay_time(), NULL);
 	gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/display_help_text", get_display_help_text(), NULL);
 	gconf_engine_set_bool(gconf_engine, "/apps/salasaga/defaults/screenshot_key_warning", get_screenshot_key_warning(), NULL);
@@ -104,13 +105,13 @@ void save_preferences_and_exit(void)
 	// Treat the zoom level specially.  If the zoom level is the equivalent of "Fit to width" we store the English
 	// version of the string in gconf.  This allows people (ie developers) to change between languages and still
 	// have the "Fit to width" option work, but still display properly in a localised way
-	if ((0 == g_strcmp0("Fit to width", default_zoom_level->str)) || (0 == g_strcmp0(_("Fit to width"), default_zoom_level->str)))
+	if ((0 == g_strcmp0("Fit to width", get_default_zoom_level())) || (0 == g_strcmp0(_("Fit to width"), get_default_zoom_level())))
 	{
 		gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/zoom_level", "Fit to width", NULL);
 	}
 	else
 	{
-		gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/zoom_level", default_zoom_level->str, NULL);
+		gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/zoom_level", get_default_zoom_level(), NULL);
 	}
 
 	// * Save the present window maximised state (i.e. if we're maximised or not) *
@@ -226,16 +227,16 @@ void save_preferences_and_exit(void)
 	// * At this point, the variable hkey should point to the opened defaults registry key *
 
 	// Set the value for the project folder
-	string_size = (default_project_folder->len) + 1;
-	return_code = RegSetValueEx(hkey, "project_folder", 0, REG_SZ, default_project_folder->str, string_size);
+	string_size = (get_default_project_folder_length()) + 1;
+	return_code = RegSetValueEx(hkey, "project_folder", 0, REG_SZ, get_default_project_folder(), string_size);
 
 	// Set the value for the screenshots folder
-	string_size = (screenshots_folder->len) + 1;
-	return_code = RegSetValueEx(hkey, "screenshots_folder", 0, REG_SZ, screenshots_folder->str, string_size);
+	string_size = (get_screenshots_folder_length()) + 1;
+	return_code = RegSetValueEx(hkey, "screenshots_folder", 0, REG_SZ, get_screenshots_folder(), string_size);
 
 	// Set the value for the output folder
-	string_size = (default_output_folder->len) + 1;
-	return_code = RegSetValueEx(hkey, "output_folder", 0, REG_SZ, default_output_folder->str, string_size);
+	string_size = (get_default_output_folder_length()) + 1;
+	return_code = RegSetValueEx(hkey, "output_folder", 0, REG_SZ, get_default_output_folder(), string_size);
 
 	// Set the value for the project name
 	string_size = (get_project_name_length()) + 1;
@@ -252,52 +253,52 @@ void save_preferences_and_exit(void)
 	return_code = RegSetValueEx(hkey, "project_height", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the default output width
-	g_string_printf(tmp_gstring, "%d", default_output_width);
+	g_string_printf(tmp_gstring, "%d", get_default_output_width());
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "output_width", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the default output height
-	g_string_printf(tmp_gstring, "%d", default_output_height);
+	g_string_printf(tmp_gstring, "%d", get_default_output_height());
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "output_height", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the default slide duration
-	g_string_printf(tmp_gstring, "%d", default_slide_duration);
+	g_string_printf(tmp_gstring, "%d", get_default_slide_duration());
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "slide_duration", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the default layer duration
-	g_string_printf(tmp_gstring, "%d", default_layer_duration);
+	g_string_printf(tmp_gstring, "%d", get_default_layer_duration());
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "layer_duration", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the thumbnail width
-	g_string_printf(tmp_gstring, "%d", preview_width);
+	g_string_printf(tmp_gstring, "%d", get_preview_width());
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "thumbnail_width", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the frames per second
-	g_string_printf(tmp_gstring, "%d", default_fps);
+	g_string_printf(tmp_gstring, "%d", get_default_fps());
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "frames_per_second", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the red component of the default background colour
-	g_string_printf(tmp_gstring, "%d", default_bg_colour.red);
+	g_string_printf(tmp_gstring, "%d", get_default_bg_colour_red());
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "default_bg_colour_red", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the green component of the default background colour
-	g_string_printf(tmp_gstring, "%d", default_bg_colour.green);
+	g_string_printf(tmp_gstring, "%d", get_default_bg_colour_green());
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "default_bg_colour_green", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the blue component of the default background colour
-	g_string_printf(tmp_gstring, "%d", default_bg_colour.blue);
+	g_string_printf(tmp_gstring, "%d", get_default_bg_colour_blue());
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "default_bg_colour_blue", 0, REG_SZ, tmp_gstring->str, string_size);
 
 	// Set the value for the icon height
-	g_string_printf(tmp_gstring, "%d", icon_height);
+	g_string_printf(tmp_gstring, "%d", get_icon_height());
 	string_size = (tmp_gstring->len) + 1;
 	return_code = RegSetValueEx(hkey, "icon_height", 0, REG_SZ, tmp_gstring->str, string_size);
 
@@ -315,7 +316,7 @@ void save_preferences_and_exit(void)
 	// Treat the zoom level specially.  If the zoom level is the equivalent of "Fit to width" we store the English
 	// version of the string in gconf.  This allows people (ie developers) to change between languages and still
 	// have the "Fit to width" option work, but still display properly in a localised way
-	if ((0 == g_strcmp0("Fit to width", default_zoom_level->str)) || (0 == g_strcmp0(_("Fit to width"), default_zoom_level->str)))
+	if ((0 == g_strcmp0("Fit to width", get_default_zoom_level())) || (0 == g_strcmp0(_("Fit to width"), get_default_zoom_level())))
 	{
 		// Set the value for the zoom level
 		return_code = RegSetValueEx(hkey, "zoom_level", 0, REG_SZ, "Fit to width", strlen("Fit to width"));
@@ -323,8 +324,8 @@ void save_preferences_and_exit(void)
 	else
 	{
 		// Set the value for the zoom level
-		string_size = (default_zoom_level->len) + 1;
-		return_code = RegSetValueEx(hkey, "zoom_level", 0, REG_SZ, default_zoom_level->str, string_size);
+		string_size = (get_default_zoom_level_length()) + 1;
+		return_code = RegSetValueEx(hkey, "zoom_level", 0, REG_SZ, get_default_zoom_level(), string_size);
 	}
 
 

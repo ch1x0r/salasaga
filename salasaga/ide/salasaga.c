@@ -63,6 +63,7 @@
 #include "functions/other/load_fonts.h"
 #include "functions/other/logger_simple.h"
 #include "functions/other/logger_with_domain.h"
+#include "functions/preference/application_preferences.h"
 #include "functions/preference/preferences_load.h"
 #include "functions/preference/project_preferences.h"
 #include "functions/resolution_selector/create_resolution_selector.h"
@@ -122,20 +123,6 @@ GtkWidget				*layer_toolbar_icons[MAIN_TB_COUNT];		// Array of toolbar icons
 GtkWidget				*layer_toolbar_icons_gray[MAIN_TB_COUNT];	// Array of toolbar icons (the grayed out ones)
 GtkToolItem				*layer_toolbar_items[MAIN_TB_COUNT];		// Array of toolbar items
 gulong					layer_toolbar_signals[MAIN_TB_COUNT];		// Array of toolbar signals
-
-// Application default preferences
-GdkColor				default_bg_colour;			// Default background colour for slides
-guint					default_fps;				// Default number of frames per second
-GString					*default_output_folder;		// Application default save path for exporting animations
-guint					default_output_height;		// Application default for how high to create project output
-guint					default_output_width;		// Application default for how wide to create project output
-GString					*default_project_folder;	// Application default save path for project folders
-gfloat					default_slide_duration;		// Default length of all new slides, in frames
-GString					*default_zoom_level;		// Default zoom level to use
-guint					icon_height = 30;			// Height in pixels for the toolbar icons (they're scalable SVG's)
-gfloat					default_layer_duration;		// Length of all new layers, in frames
-guint					preview_width;				// Width in pixel for the film strip preview (might turn into a structure later)
-GString					*screenshots_folder;		// Application default for where to store screenshots
 
 #ifdef _WIN32
 // Windows only variables
@@ -197,10 +184,10 @@ gint main(gint argc, gchar *argv[])
 
 	// Set defaults
 	set_project_active(FALSE);
-	default_bg_colour.red = 0;
-	default_bg_colour.green = 0;
-	default_bg_colour.blue = 0;
-	preview_width = 300;
+	set_default_bg_colour_red(0);
+	set_default_bg_colour_green(0);
+	set_default_bg_colour_blue(0);
+	set_preview_width(300);
 	set_frames_per_second(12);  // Half of 24 fps (film)
 	set_table_x_padding(5);
 	set_table_y_padding(5);
@@ -222,15 +209,12 @@ gint main(gint argc, gchar *argv[])
 	gtk_init(&argc, &argv);
 
 	// Initialise various strings
-	default_output_folder = g_string_new(NULL);
-	default_project_folder = g_string_new(NULL);
-	default_zoom_level = g_string_new(_("Fit to width"));  // Sensible default
+	set_default_zoom_level(_("Fit to width"));  // Sensible default
 	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
 	icon_path = g_string_new(NULL);
 	message = g_string_new(NULL);
 	mouse_ptr_string = g_string_new(NULL);
 	set_project_name(_("New Project"));
-	screenshots_folder = g_string_new(NULL);
 	title_bar_icon_path = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
 
@@ -359,16 +343,19 @@ gint main(gint argc, gchar *argv[])
 		which_screen = gtk_window_get_screen(GTK_WINDOW(get_main_window()));
 
 		// Initialise the application variables to sensible defaults
-		g_string_printf(default_project_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "projects");
-		g_string_printf(screenshots_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "screenshots");
-		g_string_printf(default_output_folder, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "output");
+		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "projects");
+		set_default_project_folder(tmp_gstring->str);
+		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "screenshots");
+		set_screenshots_folder(tmp_gstring->str);
+		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "output");
+		set_default_output_folder(tmp_gstring->str);
 		set_project_width(gdk_screen_get_width(which_screen));
 		set_project_height(gdk_screen_get_height(which_screen));
-		default_output_width = 800;
-		default_output_height = 600;
-		default_slide_duration = 5;  // Default number of seconds to use for new slides
-		default_layer_duration = 5;  // Default number of seconds to use for new layers
-		default_fps = 12;
+		set_default_output_width(800);
+		set_default_output_height(600);
+		set_default_slide_duration(5);  // Default number of seconds to use for new slides
+		set_default_layer_duration(5);  // Default number of seconds to use for new layers
+		set_default_fps(12);
 		set_screenshot_key_warning(TRUE);
 		temp_colour.red = 0;
 		temp_colour.green = 0;
@@ -379,8 +366,8 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// Set various required defaults that will be overwritten by the first project loaded
-	set_project_folder(default_project_folder->str);
-	set_output_folder(default_output_folder->str);
+	set_project_folder(get_default_project_folder());
+	set_output_folder(get_default_output_folder());
 
 #ifndef _WIN32
 	// * Setup the Control-Printscreen key combination to capture screenshots - Non-windows only *
@@ -394,8 +381,8 @@ gint main(gint argc, gchar *argv[])
 	set_capture_y(0);
 
 	// Use the default output width and height
-	set_output_width(default_output_width);
-	set_output_height(default_output_height);
+	set_output_width(get_default_output_width());
+	set_output_height(get_default_output_height());
 
 	// Set the application title
 	snprintf(wintitle, 40, "%s v%s", APP_NAME, APP_VERSION);
@@ -443,7 +430,7 @@ gint main(gint argc, gchar *argv[])
 	handle_size = g_new0(GValue, 1);
 	g_value_init(handle_size, G_TYPE_INT);
 	gtk_widget_style_get_property(GTK_WIDGET(get_main_area()), "handle-size", handle_size);
-	gtk_paned_set_position(GTK_PANED(get_main_area()), g_value_get_int(handle_size) + preview_width + 15);
+	gtk_paned_set_position(GTK_PANED(get_main_area()), g_value_get_int(handle_size) + get_preview_width() + 15);
 	gtk_box_pack_start_defaults(GTK_BOX(outer_box), GTK_WIDGET(get_main_area()));
 
 	// Attach signal handlers to the movable handle between film strip and right hand side
@@ -468,7 +455,7 @@ gint main(gint argc, gchar *argv[])
 	gtk_table_attach(message_bar, GTK_WIDGET(zoom_label), 2, 3, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
 
 	// Create the zoom selector
-	zoom_selector = GTK_COMBO_BOX(create_zoom_selector(default_zoom_level->str));
+	zoom_selector = GTK_COMBO_BOX(create_zoom_selector(get_default_zoom_level()));
 	gtk_table_attach(message_bar, GTK_WIDGET(zoom_selector), 3, 4, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
 
 	// Link the zoom selector to the function that recalculates the zoom and redraws the working area

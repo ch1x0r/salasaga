@@ -35,6 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../preference/application_preferences.h"
 
 
 void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data)
@@ -55,10 +56,10 @@ void film_strip_handle_changed(GObject *paned, GParamSpec *pspec, gpointer data)
 	g_free(handle_size);
 
 	// If the handle has moved, set the new thumbnail width in the application preferences
-	if (new_position != preview_width)
+	if (new_position != get_preview_width())
 	{
 		// Set a toggle to indicate the film strip width is being changed
 		set_film_strip_being_resized(TRUE);
-		preview_width = new_position;
+		set_preview_width(new_position);
 	}
 }

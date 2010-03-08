@@ -39,6 +39,7 @@
 #include "../dialog/display_dialog_save_warning.h"
 #include "../dialog/display_warning.h"
 #include "../other/validate_value.h"
+#include "../preference/application_preferences.h"
 #include "../preference/project_preferences.h"
 #include "../slide/slide_free.h"
 #include "../slide/slide_insert.h"
@@ -58,7 +59,6 @@ void menu_file_new(void)
 	// Local variables
 	guint				guint_val;					// Used in the input validation process
 	GString				*message;					// Used to construct message strings
-	GdkColor			new_bg_colour;				// Received the new background color for the project
 	GtkTreePath			*new_path;					// Path used to select the new film strip thumbnail
 	GtkTreePath			*old_path = NULL;			// The old path, which we'll free
 	GtkDialog			*project_dialog;			// Widget for the dialog
@@ -68,6 +68,7 @@ void menu_file_new(void)
 	guint				row_counter = 0;			// Used to count which row things are up to
 	gint				table_padding_x;			// Amount of padding to use in the table
 	gint				table_padding_y;			// Amount of padding to use in the table
+	GdkColor			*temp_bg_colour;			// Temporarily holds a background colour value
 	gboolean			usable_input;				// Used as a flag to indicate if all validation was successful
 	guint				valid_fps;					// Receives the new project fps once validated
 	guint				valid_height = 0;			// Receives the new project height once validated
@@ -155,8 +156,8 @@ void menu_file_new(void)
 
 	// Create the slider that accepts the number of frames per second
 	fps_slider = gtk_hscale_new_with_range(valid_fields[PROJECT_FPS].min_value, valid_fields[PROJECT_FPS].max_value, 1);
-	gtk_range_set_value(GTK_RANGE(fps_slider), default_fps);
-	gtk_scale_add_mark(GTK_SCALE(fps_slider), default_fps, GTK_POS_TOP, NULL);
+	gtk_range_set_value(GTK_RANGE(fps_slider), get_default_fps());
+	gtk_scale_add_mark(GTK_SCALE(fps_slider), get_default_fps(), GTK_POS_TOP, NULL);
 	for (scale_mark_counter = 24; scale_mark_counter <= valid_fields[PROJECT_FPS].max_value; scale_mark_counter += 24)
 	{
 		// Add scale marks
@@ -171,7 +172,8 @@ void menu_file_new(void)
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(bg_color_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the background colour selection button
-	bg_color_button = gtk_color_button_new_with_color(&default_bg_colour);
+	temp_bg_colour = get_default_bg_colour();
+	bg_color_button = gtk_color_button_new_with_color(temp_bg_colour);
 	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(bg_color_button), TRUE);
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(bg_color_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
@@ -256,7 +258,7 @@ void menu_file_new(void)
 	// * We only get here after all input is considered valid *
 
 	// Get the new background colour
-	gtk_color_button_get_color(GTK_COLOR_BUTTON(bg_color_button), &new_bg_colour);
+	gtk_color_button_get_color(GTK_COLOR_BUTTON(bg_color_button), temp_bg_colour);
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(project_dialog));
@@ -293,13 +295,14 @@ void menu_file_new(void)
 	set_frames_per_second(valid_fps);
 
 	// Set the default background color
-	default_bg_colour = new_bg_colour;
+	set_default_bg_colour(temp_bg_colour);
+	g_free(temp_bg_colour);
 
 	// Set the project folder
-	set_project_folder(default_project_folder->str);
+	set_project_folder(get_default_project_folder());
 
 	// Set the output folder
-	set_output_folder(default_output_folder->str);
+	set_output_folder(get_default_output_folder());
 
 	// Set the initial information text and link
 	info_link = g_string_new(_("http://www.salasaga.org"));

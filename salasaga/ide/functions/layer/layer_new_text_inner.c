@@ -32,6 +32,7 @@
 #include "../../externs.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "../layer/layer_duplicate.h"
+#include "../preference/application_preferences.h"
 #include "../text_tags/text_layer_create_colour_tag.h"
 #include "../text_tags/text_layer_create_font_size_tag.h"
 #include "../time_line/draw_timeline.h"
@@ -104,7 +105,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	tmp_layer->object_type = TYPE_TEXT;
 	tmp_layer->object_data = (GObject *) tmp_text_ob;
 	tmp_layer->start_time = 0.0;
-	tmp_layer->duration = default_layer_duration;
+	tmp_layer->duration = get_default_layer_duration();
 	tmp_layer->x_offset_start = release_x;
 	tmp_layer->y_offset_start = release_y;
 	tmp_layer->x_offset_finish = release_x;

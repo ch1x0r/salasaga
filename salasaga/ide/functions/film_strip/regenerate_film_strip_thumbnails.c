@@ -36,6 +36,7 @@
 #include "../../salasaga_types.h"
 #include "../../externs.h"
 #include "../layer/compress_layers.h"
+#include "../preference/application_preferences.h"
 #include "../preference/project_preferences.h"
 #include "../time_line/time_line.h"
 #include "../time_line/time_line_get_type.h"
@@ -98,7 +99,7 @@ void regenerate_film_strip_thumbnails()
 
 		// Determine the proper thumbnail height
 		project_ratio = (gfloat) get_project_height() / (gfloat) get_project_width();
-		preview_height = preview_width * project_ratio;
+		preview_height = get_preview_width() * project_ratio;
 
 		// Create the thumbnail for the slide
 		tmp_pixmap = compress_layers(this_slide, cursor_position, get_project_width(), get_project_height());
@@ -107,7 +108,7 @@ void regenerate_film_strip_thumbnails()
 			return;
 		}
 		tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
-		this_slide_data->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
+		this_slide_data->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), get_preview_width(), preview_height, GDK_INTERP_TILES);
 		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
 		g_object_unref(GDK_PIXMAP(tmp_pixmap));
 

@@ -43,6 +43,7 @@
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../layer/compress_layers.h"
 #include "../dialog/display_warning.h"
+#include "../preference/application_preferences.h"
 #include "../preference/project_preferences.h"
 #include "../time_line/draw_timeline.h"
 #include "../time_line/time_line_set_selected_layer_num.h"
@@ -107,7 +108,7 @@ void menu_screenshots_import(void)
 	//   so we make a list of them and add them to the slides linked list *
 
 	// * Check if the screenshots folder exists *
-	if (!(dir_ptr = g_dir_open(screenshots_folder->str, 0, &error)))
+	if (!(dir_ptr = g_dir_open(get_screenshots_folder(), 0, &error)))
 	{
 		// * Something went wrong when opening the screenshots folder *
 		if (G_FILE_ERROR_NOENT != error->code)
@@ -115,7 +116,7 @@ void menu_screenshots_import(void)
 			// * The error was something other than the folder not existing, which we could cope with *
 
 			// Display the warning message using our function
-			g_string_printf(message, "%s ED03: %s '%s': %s", _("Error"), _("Something went wrong opening the screenshots folder."), screenshots_folder->str, error->message);
+			g_string_printf(message, "%s ED03: %s '%s': %s", _("Error"), _("Something went wrong opening the screenshots folder."), get_screenshots_folder(), error->message);
 			display_warning(message->str);
 
 			// Free the memory allocated in this function
@@ -143,7 +144,7 @@ void menu_screenshots_import(void)
 			if (g_str_has_suffix(dir_entry, ".png"))
 			{
 				// * The directory entry has the correct file extension too, so it's very likely one of our screenshots *
-				g_string_printf(tmp_string, "%s", g_build_path(G_DIR_SEPARATOR_S, screenshots_folder->str, dir_entry, NULL));
+				g_string_printf(tmp_string, "%s", g_build_path(G_DIR_SEPARATOR_S, get_screenshots_folder(), dir_entry, NULL));
 				file_format = gdk_pixbuf_get_file_info(tmp_string->str, &image_width, &image_height);
 				if (NULL != file_format)
 				{
@@ -231,7 +232,7 @@ void menu_screenshots_import(void)
 		image_differences = FALSE;
 
 		// Work out the full path to the image file
-		g_string_printf(tmp_string, "%s%c", screenshots_folder->str, G_DIR_SEPARATOR);
+		g_string_printf(tmp_string, "%s%c", get_screenshots_folder(), G_DIR_SEPARATOR);
 		tmp_string = g_string_append(tmp_string, g_slist_nth(entries, tmp_int - 1)->data);
 
 		// Get the size of the image
@@ -258,7 +259,7 @@ void menu_screenshots_import(void)
 
 		// Determine the proper thumbnail height
 		project_ratio = (gfloat) get_project_height() / (gfloat) get_project_width();
-		preview_height = preview_width * project_ratio;
+		preview_height = get_preview_width() * project_ratio;
 
 		// Construct a new image object and load the image data
 		tmp_image_ob = g_new(layer_image, 1);
@@ -284,7 +285,7 @@ void menu_screenshots_import(void)
 		// Allocate a new slide structure for use
 		tmp_slide = g_new(slide, 1);
 		tmp_slide->layers = NULL;
-		tmp_slide->duration = default_slide_duration;
+		tmp_slide->duration = get_default_slide_duration();
 		tmp_slide->scaled_cached_pixmap = NULL;
 		tmp_slide->cached_pixmap_valid = FALSE;
 		tmp_slide->num_layers = 1;
@@ -293,7 +294,7 @@ void menu_screenshots_import(void)
 		tmp_layer = g_new(layer, 1);
 		tmp_layer->name = g_string_new(_("Background"));
 		tmp_layer->start_time = 0.0;
-		tmp_layer->duration = default_slide_duration;  // Slide duration rather than layer duration, because these become slides
+		tmp_layer->duration = get_default_slide_duration();  // Slide duration rather than layer duration, because these become slides
 		tmp_layer->x_offset_start = 0;
 		tmp_layer->y_offset_start = 0;
 		tmp_layer->x_offset_finish = 0;
@@ -317,7 +318,7 @@ void menu_screenshots_import(void)
 			tmp_layer->object_data = (GObject *) tmp_image_ob;
 
 			// Create the film strip thumbnail and add it to the new slide structure
-			tmp_slide->thumbnail = gdk_pixbuf_scale_simple(tmp_image_ob->image_data, preview_width, preview_height, GDK_INTERP_TILES);
+			tmp_slide->thumbnail = gdk_pixbuf_scale_simple(tmp_image_ob->image_data, get_preview_width(), preview_height, GDK_INTERP_TILES);
 			if (NULL == tmp_slide->thumbnail)
 			{
 				// Something went wrong when loading the screenshot
@@ -341,10 +342,10 @@ void menu_screenshots_import(void)
 			tmp_empty_ob = g_new(layer_empty, 1);
 			tmp_layer->object_type = TYPE_EMPTY;
 			tmp_layer->object_data = (GObject *) tmp_empty_ob;
-			tmp_empty_ob->bg_color.pixel = default_bg_colour.pixel;
-			tmp_empty_ob->bg_color.blue = default_bg_colour.blue;
-			tmp_empty_ob->bg_color.green = default_bg_colour.green;
-			tmp_empty_ob->bg_color.red = default_bg_colour.red;
+			tmp_empty_ob->bg_color.pixel = get_default_bg_colour_pixel();
+			tmp_empty_ob->bg_color.blue = get_default_bg_colour_blue();
+			tmp_empty_ob->bg_color.green = get_default_bg_colour_green();
+			tmp_empty_ob->bg_color.red = get_default_bg_colour_red();
 
 			// Add the empty background layer to the new slide being created
 			tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
@@ -355,7 +356,7 @@ void menu_screenshots_import(void)
 			tmp_layer->object_data = (GObject *) tmp_image_ob;
 			tmp_layer->name = g_string_new(_("Image"));
 			tmp_layer->start_time = 0.0;
-			tmp_layer->duration = default_slide_duration;
+			tmp_layer->duration = get_default_slide_duration();
 			tmp_layer->x_offset_start = 0;
 			tmp_layer->y_offset_start = 0;
 			tmp_layer->x_offset_finish = 0;
@@ -377,7 +378,7 @@ void menu_screenshots_import(void)
 			this_slide = g_list_append(this_slide, tmp_slide);
 			tmp_pixmap = compress_layers(this_slide, 0.0, get_project_width(), get_project_height());
 			tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
-			tmp_slide->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
+			tmp_slide->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), get_preview_width(), preview_height, GDK_INTERP_TILES);
 			g_list_free(this_slide);
 			this_slide = NULL;
 			g_object_unref(GDK_PIXBUF(tmp_pixbuf));

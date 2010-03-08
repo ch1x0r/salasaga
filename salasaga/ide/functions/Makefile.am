@@ -91,6 +91,7 @@ salasaga_SOURCES = global_functions.c \
 	other/project_adjust_dimensions.c \
 	other/validate_value.c \
 	other/widget_focus.c \
+	preference/application_preferences.c \
 	preference/preferences_load.c \
 	preference/project_preferences.c \
 	preference/save_preferences_and_exit.c \

@@ -48,6 +48,7 @@
 #include "../dialog/display_warning.h"
 #include "../layer/compress_layers.h"
 #include "../other/validate_value.h"
+#include "../preference/application_preferences.h"
 #include "../preference/project_preferences.h"
 #include "../read/read_empty_layer.h"
 #include "../read/read_highlight_layer.h"
@@ -1009,7 +1010,7 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 	} else
 	{
 		// No, it doesn't, so use the default output folder
-		set_output_folder(default_output_folder->str);
+		set_output_folder(get_default_output_folder());
 	}
 	g_string_free(valid_output_folder, TRUE);
 
@@ -1076,14 +1077,14 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 
 		// Determine the proper thumbnail height
 		project_ratio = (gfloat) get_project_height() / (gfloat) get_project_width();
-		preview_height = preview_width * project_ratio;
+		preview_height = get_preview_width() * project_ratio;
 
 		// Create the thumbnail for the slide
 		tmp_glist = NULL;
 		tmp_glist = g_list_append(tmp_glist, tmp_slide);
 		tmp_pixmap = compress_layers(tmp_glist, 0, get_project_width(), get_project_height());
 		tmp_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
-		tmp_slide->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), preview_width, preview_height, GDK_INTERP_TILES);
+		tmp_slide->thumbnail = gdk_pixbuf_scale_simple(GDK_PIXBUF(tmp_pixbuf), get_preview_width(), preview_height, GDK_INTERP_TILES);
 		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
 
 		// Add the thumbnail to the film strip

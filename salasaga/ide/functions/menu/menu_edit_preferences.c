@@ -41,6 +41,7 @@
 #include "../dialog/display_warning.h"
 #include "../film_strip/regenerate_film_strip_thumbnails.h"
 #include "../other/validate_value.h"
+#include "../preference/application_preferences.h"
 #include "../resolution_selector/create_resolution_selector.h"
 #include "../zoom_selector/create_zoom_selector.h"
 
@@ -68,6 +69,7 @@ void menu_edit_preferences(void)
 	gchar				**strings;							// Text strings are split apart with this
 	gint				table_padding_x;					// Amount of padding to use in the table
 	gint				table_padding_y;					// Amount of padding to use in the table
+	GdkColor			*temp_bg_colour;					// Temporarily holds the default background colour value
 	GdkColor			temp_colour;						// Temporarily holds a colour value
 	GFile				*temp_gfile;
 	gchar				*tmp_gchar;							// Temporary gchar
@@ -170,7 +172,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_default_project_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_project_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_default_project_folder = gtk_file_chooser_button_new(_("Select the Default Project Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_project_folder), default_project_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_project_folder), get_default_project_folder());
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_project_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
@@ -179,7 +181,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_screenshot_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_screenshot_folder = gtk_file_chooser_button_new(_("Select the Screenshot Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_screenshot_folder), screenshots_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_screenshot_folder), get_screenshots_folder());
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
@@ -188,7 +190,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_default_output_folder), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_folder), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_default_output_folder = gtk_file_chooser_button_new(_("Select the Default Output Folder"), GTK_FILE_CHOOSER_ACTION_SELECT_FOLDER);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_output_folder), default_output_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_output_folder), get_default_output_folder());
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_output_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
@@ -196,7 +198,7 @@ void menu_edit_preferences(void)
 	label_default_output_res = gtk_label_new(_("Default Output Resolution: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_output_res), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_output_res), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
-	selector_default_output_res = GTK_WIDGET(create_resolution_selector(default_output_width, default_output_height));
+	selector_default_output_res = GTK_WIDGET(create_resolution_selector(get_default_output_width(), get_default_output_height()));
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_default_output_res), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
@@ -274,7 +276,7 @@ void menu_edit_preferences(void)
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_slide_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_default_slide_duration = gtk_spin_button_new_with_range(valid_fields[SLIDE_DURATION].min_value, valid_fields[SLIDE_DURATION].max_value, 1);
 	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(button_default_slide_duration), 2);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_slide_duration), default_slide_duration);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_slide_duration), get_default_slide_duration());
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_slide_duration), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	label_default_slide_duration_seconds = gtk_label_new(_("seconds"));
 	gtk_misc_set_alignment(GTK_MISC(label_default_slide_duration_seconds), 0, 0.5);
@@ -288,7 +290,7 @@ void menu_edit_preferences(void)
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_layer_duration), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_default_layer_duration = gtk_spin_button_new_with_range(valid_fields[LAYER_DURATION].min_value, valid_fields[LAYER_DURATION].max_value, 1);
 	gtk_spin_button_set_digits(GTK_SPIN_BUTTON(button_default_layer_duration), 2);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_layer_duration), default_layer_duration);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_layer_duration), get_default_layer_duration());
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_layer_duration), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	label_default_layer_duration_seconds = gtk_label_new(_("seconds"));
 	gtk_misc_set_alignment(GTK_MISC(label_default_layer_duration_seconds), 0, 0.5);
@@ -300,7 +302,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_default_fps), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_fps), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_default_fps = gtk_spin_button_new_with_range(valid_fields[PROJECT_FPS].min_value, valid_fields[PROJECT_FPS].max_value, 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_fps), default_fps);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_default_fps), get_default_fps());
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_fps), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
@@ -309,7 +311,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_preview_width), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_preview_width), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_preview_width = gtk_spin_button_new_with_range(valid_fields[PREVIEW_WIDTH].min_value, valid_fields[PREVIEW_WIDTH].max_value, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_preview_width), preview_width);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_preview_width), get_preview_width());
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_preview_width), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	label_preview_width_pixels = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(label_preview_width_pixels), 0, 0.5);
@@ -321,7 +323,7 @@ void menu_edit_preferences(void)
 	gtk_misc_set_alignment(GTK_MISC(label_icon_height), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_icon_height), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	button_icon_height = gtk_spin_button_new_with_range(valid_fields[ICON_HEIGHT].min_value, valid_fields[ICON_HEIGHT].max_value, 10);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_icon_height), icon_height);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_icon_height), get_icon_height());
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_icon_height), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	label_icon_height_pixels = gtk_label_new(_("pixels"));
 	gtk_misc_set_alignment(GTK_MISC(label_icon_height_pixels), 0, 0.5);
@@ -332,15 +334,16 @@ void menu_edit_preferences(void)
 	label_default_zoom_level = gtk_label_new(_("Default Zoom Level: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_zoom_level), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_zoom_level), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
-	selector_default_zoom_level = create_zoom_selector(default_zoom_level->str);
+	selector_default_zoom_level = create_zoom_selector(get_default_zoom_level());
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_default_zoom_level), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
 	// Default Background Colour
+	temp_bg_colour = get_default_bg_colour();
 	label_default_bg_colour = gtk_label_new(_("Default Background Color: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_bg_colour), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_bg_colour), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
-	button_default_bg_colour = gtk_color_button_new_with_color(&default_bg_colour);
+	button_default_bg_colour = gtk_color_button_new_with_color(temp_bg_colour);
 	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(button_default_bg_colour), TRUE);
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_bg_colour), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
@@ -578,21 +581,21 @@ void menu_edit_preferences(void)
 	// * We only get here after all input is considered valid *
 
 	// Default Project Folder
-	default_project_folder = g_string_assign(default_project_folder, valid_project_folder->str);
+	set_default_project_folder(valid_project_folder->str);
 	g_string_free(valid_project_folder, TRUE);
 
 	// Default Screenshot Folder
-	screenshots_folder = g_string_assign(screenshots_folder, valid_screenshot_folder->str);
+	set_screenshots_folder(valid_screenshot_folder->str);
 	g_string_free(valid_screenshot_folder, TRUE);
 
 	// Default Output Folder
-	default_output_folder = g_string_assign(default_output_folder, valid_output_folder->str);
+	set_default_output_folder(valid_output_folder->str);
 	g_string_free(valid_output_folder, TRUE);
 
 	// Default Output Resolution
 	strings = g_strsplit(valid_output_resolution->str, "x", 2);
-	default_output_width = atoi(strings[0]);
-	default_output_height = atoi(strings[1]);
+	set_default_output_width(atoi(strings[0]));
+	set_default_output_height(atoi(strings[1]));
 	g_string_free(valid_output_resolution, TRUE);
 	g_strfreev(strings);
 
@@ -607,19 +610,19 @@ void menu_edit_preferences(void)
 	set_default_text_fg_colour(temp_colour);
 
 	// Default Slide Duration
-	default_slide_duration = valid_slide_duration;
+	set_default_slide_duration(valid_slide_duration);
 
 	// Default Layer Duration
-	default_layer_duration = valid_layer_duration;
+	set_default_layer_duration(valid_layer_duration);
 
 	// Default Frames Per Second
-	default_fps = valid_default_fps;
+	set_default_fps(valid_default_fps);
 
 	// Preview width
-	if (preview_width != valid_preview_width)
+	if (get_preview_width() != valid_preview_width)
 	{
 		// The desired film strip width has changed
-		preview_width = valid_preview_width;
+		set_preview_width(valid_preview_width);
 
 		// Regenerate the film strip thumbnails
 		regenerate_film_strip_thumbnails();
@@ -628,19 +631,21 @@ void menu_edit_preferences(void)
 		handle_size = g_new0(GValue, 1);
 		g_value_init(handle_size, G_TYPE_INT);
 		gtk_widget_style_get_property(GTK_WIDGET(get_main_area()), "handle-size", handle_size);
-		gtk_paned_set_position(GTK_PANED(get_main_area()), g_value_get_int(handle_size) + preview_width + 15);
+		gtk_paned_set_position(GTK_PANED(get_main_area()), g_value_get_int(handle_size) + get_preview_width() + 15);
 		g_free(handle_size);
 	}
 
 	// Icon Height
-	icon_height = valid_icon_height;
+	set_icon_height(valid_icon_height);
 
 	// Default Zoom Level
-	default_zoom_level = g_string_assign(default_zoom_level, valid_zoom_level->str);
+	set_default_zoom_level(valid_zoom_level->str);
 	g_string_free(valid_zoom_level, TRUE);
 
 	// Default Background Colour
-	gtk_color_button_get_color(GTK_COLOR_BUTTON(button_default_bg_colour), &default_bg_colour);
+	gtk_color_button_get_color(GTK_COLOR_BUTTON(button_default_bg_colour), temp_bg_colour);
+	set_default_bg_colour(temp_bg_colour);
+	g_free(temp_bg_colour);
 
 	// Screenshot delay
 	set_screenshot_delay_time(valid_screenshot_delay);
@@ -662,7 +667,7 @@ void menu_edit_preferences(void)
 		g_key_file_set_integer(lock_file, "Project", "Screenshot_Delay", get_screenshot_delay_time());  // Number of seconds to delay the screenshot capture
 
 		// Set the new screenshot folder value
-		g_key_file_set_string(lock_file, "Project", "Directory", screenshots_folder->str);  // Directory to save screenshots in
+		g_key_file_set_string(lock_file, "Project", "Directory", get_screenshots_folder());  // Directory to save screenshots in
 
 		// Create IO channel for writing to
 		output_file = g_io_channel_new_file(full_file_name, "w", &error);

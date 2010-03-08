@@ -38,6 +38,7 @@
 #include "../../externs.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "../layer/layer_duplicate.h"
+#include "../preference/application_preferences.h"
 #include "../preference/project_preferences.h"
 #include "../time_line/draw_timeline.h"
 #include "../time_line/time_line_set_selected_layer_num.h"
@@ -146,7 +147,7 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	tmp_layer->object_type = TYPE_HIGHLIGHT;
 	tmp_layer->object_data = (GObject *) tmp_highlight_ob;
 	tmp_layer->start_time = 0.0;
-	tmp_layer->duration = default_layer_duration;
+	tmp_layer->duration = get_default_layer_duration();
 	tmp_layer->x_offset_start = roundf(scaled_x);
 	tmp_layer->y_offset_start = roundf(scaled_y);
 	tmp_layer->x_offset_finish = roundf(scaled_x);

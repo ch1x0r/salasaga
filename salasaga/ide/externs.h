@@ -82,19 +82,6 @@ extern GtkWidget			*layer_toolbar_icons_gray[MAIN_TB_COUNT];
 extern GtkToolItem			*layer_toolbar_items[MAIN_TB_COUNT];
 extern gulong				layer_toolbar_signals[MAIN_TB_COUNT];
 
-extern GdkColor				default_bg_colour;
-extern guint				default_fps;
-extern GString				*default_output_folder;
-extern guint				default_output_height;
-extern guint				default_output_width;
-extern GString				*default_project_folder;
-extern gfloat				default_slide_duration;
-extern GString				*default_zoom_level;
-extern guint				icon_height;
-extern gfloat				default_layer_duration;
-extern guint				preview_width;
-extern GString				*screenshots_folder;
-
 // Field descriptions used for bounds and validation
 extern validatation_entry	valid_fields[];
 

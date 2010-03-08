@@ -32,6 +32,7 @@
 #include "../../externs.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "../layer/layer_duplicate.h"
+#include "../preference/application_preferences.h"
 #include "../time_line/draw_timeline.h"
 #include "../time_line/time_line_set_selected_layer_num.h"
 #include "../undo_redo/undo_functions.h"
@@ -75,7 +76,7 @@ void layer_new_mouse_inner(guint release_x, guint release_y)
 	tmp_layer->object_type = TYPE_MOUSE_CURSOR;
 	tmp_layer->object_data = (GObject *) tmp_mouse_ob;
 	tmp_layer->start_time = 0.0;
-	tmp_layer->duration = default_layer_duration;
+	tmp_layer->duration = get_default_layer_duration();
 	tmp_layer->x_offset_start = release_x;
 	tmp_layer->y_offset_start = release_y;
 	tmp_layer->x_offset_finish = release_x;

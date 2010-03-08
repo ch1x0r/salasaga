@@ -40,6 +40,7 @@
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
 #include "../other/validate_value.h"
+#include "../preference/application_preferences.h"
 #include "../preference/project_preferences.h"
 #include "../save/save_slide.h"
 #include "menu_file_save.h"
@@ -114,7 +115,7 @@ void menu_file_save_as(void)
 		gtk_file_chooser_set_current_name(GTK_FILE_CHOOSER(save_dialog), tmp_gstring->str);
 
 		// Change to the default project directory
-		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(save_dialog), default_project_folder->str);
+		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(save_dialog), get_default_project_folder());
 	}
 
 	// Loop around until we have a valid filename or the user cancels out

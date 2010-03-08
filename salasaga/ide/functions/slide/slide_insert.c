@@ -35,6 +35,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "../preference/application_preferences.h"
 #include "../preference/project_preferences.h"
 #include "../undo_redo/undo_functions.h"
 
@@ -54,7 +55,7 @@ void slide_insert(void)
 	tmp_slide = g_new(slide, 1);
 	tmp_slide->layers = NULL;
 	tmp_slide->name = NULL;
-	tmp_slide->duration = default_slide_duration;
+	tmp_slide->duration = get_default_slide_duration();
 	tmp_slide->scaled_cached_pixmap = NULL;
 	tmp_slide->cached_pixmap_valid = FALSE;
 	tmp_slide->num_layers = 1;
@@ -63,16 +64,16 @@ void slide_insert(void)
 	tmp_layer = g_new(layer, 1);
 	tmp_layer->object_type = TYPE_EMPTY;
 	tmp_layer->start_time = 0;
-	tmp_layer->duration = default_layer_duration;
+	tmp_layer->duration = get_default_layer_duration();
 	tmp_layer->visible = TRUE;
 	tmp_layer->background = TRUE;
 	tmp_layer->name = g_string_new(_("Empty"));
 	tmp_layer->external_link = g_string_new(NULL);
 	tmp_layer->external_link_window = g_string_new(_("_self"));
 	tmp_layer->object_data = (GObject *) g_new(layer_empty, 1);
-	((layer_empty *) tmp_layer->object_data)->bg_color.red = default_bg_colour.red;
-	((layer_empty *) tmp_layer->object_data)->bg_color.green = default_bg_colour.green;
-	((layer_empty *) tmp_layer->object_data)->bg_color.blue = default_bg_colour.blue;
+	((layer_empty *) tmp_layer->object_data)->bg_color.red = get_default_bg_colour_red();
+	((layer_empty *) tmp_layer->object_data)->bg_color.green = get_default_bg_colour_green();
+	((layer_empty *) tmp_layer->object_data)->bg_color.blue = get_default_bg_colour_blue();
 	tmp_layer->x_offset_start = 0;
 	tmp_layer->y_offset_start = 0;
 	tmp_layer->x_offset_finish = 0;
@@ -84,13 +85,13 @@ void slide_insert(void)
 
 	// Determine the proper thumbnail height
 	project_ratio = (gfloat) get_project_height() / (gfloat) get_project_width();
-	preview_height = preview_width * project_ratio;
+	preview_height = get_preview_width() * project_ratio;
 
 	// Create a blank thumbnail using the default background colour, then add it to the new slide structure
-	tmp_slide->thumbnail = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, preview_width, preview_height);
-	gdk_pixbuf_fill(tmp_slide->thumbnail, ((default_bg_colour.red / 256) << 24)
-		+ ((default_bg_colour.green / 256) << 16)
-		+ ((default_bg_colour.blue / 256) << 8) + 0xff);
+	tmp_slide->thumbnail = gdk_pixbuf_new(GDK_COLORSPACE_RGB, TRUE, 8, get_preview_width(), preview_height);
+	gdk_pixbuf_fill(tmp_slide->thumbnail, ((get_default_bg_colour_red() / 256) << 24)
+		+ ((get_default_bg_colour_green() / 256) << 16)
+		+ ((get_default_bg_colour_blue() / 256) << 8) + 0xff);
 
 	// Add the empty layer to the new slide being created
 	tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);

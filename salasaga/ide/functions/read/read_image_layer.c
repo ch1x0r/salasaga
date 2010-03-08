@@ -43,6 +43,7 @@
 #include "../dialog/display_warning.h"
 #include "../layer/layer_free.h"
 #include "../other/validate_value.h"
+#include "../preference/application_preferences.h"
 
 
 layer *read_image_layer(xmlDocPtr document, xmlNodePtr this_node)
@@ -83,7 +84,7 @@ layer *read_image_layer(xmlDocPtr document, xmlNodePtr this_node)
 	tmp_layer->start_time = 0.0;
 	tmp_layer->transition_in_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_in_duration = 0.0;
-	tmp_layer->duration = default_layer_duration;
+	tmp_layer->duration = get_default_layer_duration();
 	tmp_layer->transition_out_type = TRANS_LAYER_NONE;
 	tmp_layer->transition_out_duration = 0.0;
 

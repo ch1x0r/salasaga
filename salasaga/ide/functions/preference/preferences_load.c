@@ -46,6 +46,7 @@
 #include "../../externs.h"
 #include "../dialog/display_warning.h"
 #include "../other/validate_value.h"
+#include "application_preferences.h"
 #include "project_preferences.h"
 
 
@@ -64,6 +65,7 @@ gboolean preferences_load()
 	gboolean			should_maximise = FALSE;	// Briefly keeps track of whether the window should be maximised
 	gboolean			should_keybind_warn = TRUE;	// Receives the gboolean as to whether the non-metacity key bind warning should be displayed
 	GdkColor			temp_colour;				// Temporarily holds colour information
+	GString				*temp_gstring;				// Temporary string
 	gchar				*tmp_gchar;					// Used for temporary string retrieval
 	gboolean			usable_input;				// Used to control loop flow
 	GdkColor			valid_bg_colour = {0,0,0};	// Receives the new default background colour for slides once validated
@@ -91,6 +93,7 @@ gboolean preferences_load()
 
 	// Initialise things
 	message = g_string_new(NULL);
+	temp_gstring = g_string_new(NULL);
 	valid_output_folder = g_string_new(NULL);
 	valid_project_folder = g_string_new(NULL);
 	valid_screenshot_folder = g_string_new(NULL);
@@ -495,21 +498,21 @@ gboolean preferences_load()
 	// * We only get here after all input is considered valid *
 
 	// Set the project folder preference
-	g_string_printf(default_project_folder, "%s", valid_project_folder->str);
+	set_default_project_folder(valid_project_folder->str);
 	g_string_free(valid_project_folder, TRUE);
 
 	// Set the screenshots folder preference
-	g_string_printf(screenshots_folder, "%s", valid_screenshot_folder->str);
+	set_screenshots_folder(valid_screenshot_folder->str);
 	g_string_free(valid_screenshot_folder, TRUE);
 
 	// Set the default output folder preference
-	g_string_printf(default_output_folder, "%s", valid_output_folder->str);
+	set_default_output_folder(valid_output_folder->str);
 	g_string_free(valid_output_folder, TRUE);
 
 	// Set the default zoom level preference
 	if (0 != valid_zoom_level->len)
 	{
-		g_string_printf(default_zoom_level, "%s", valid_zoom_level->str);
+		set_default_zoom_level(valid_zoom_level->str);
 		g_string_free(valid_zoom_level, TRUE);
 	}
 
@@ -520,21 +523,21 @@ gboolean preferences_load()
 	set_project_height(valid_project_height);
 
 	// Set the default output width
-	default_output_width = valid_output_width;
+	set_default_output_width(valid_output_width);
 
 	// Set the default output height
-	default_output_height = valid_output_height;
+	set_default_output_height(valid_output_height);
 
 	// Set the default slide duration (in seconds)
-	default_slide_duration = valid_slide_duration;
+	set_default_slide_duration(valid_slide_duration);
 
 	// Set the default layer duration (in seconds)
-	default_layer_duration = valid_layer_duration;
+	set_default_layer_duration(valid_layer_duration);
 
 	// Set the default background colour
-	default_bg_colour.red = valid_bg_colour.red;
-	default_bg_colour.green = valid_bg_colour.green;
-	default_bg_colour.blue = valid_bg_colour.blue;
+	set_default_bg_colour_red(valid_bg_colour.red);
+	set_default_bg_colour_green(valid_bg_colour.green);
+	set_default_bg_colour_blue(valid_bg_colour.blue);
 
 	// Set the default text layer foreground colour
 	temp_colour.red = valid_default_text_fg_colour.red;
@@ -549,14 +552,14 @@ gboolean preferences_load()
 	set_default_text_font_face(valid_default_text_font_face);
 
 	// Set the default film strip thumbnail width
-	preview_width = valid_preview_width;
+	set_preview_width(valid_preview_width);
 
 	// Set the default frames per second
-	default_fps = valid_default_fps;
-	set_frames_per_second(default_fps);
+	set_default_fps(valid_default_fps);
+	set_frames_per_second(valid_default_fps);
 
 	// Set the icon height
-	icon_height = valid_icon_height;
+	set_icon_height(valid_icon_height);
 
 	// Set the screenshot delay
 	set_screenshot_delay_time(valid_screenshot_delay);
@@ -594,7 +597,8 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			g_string_printf(default_project_folder, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "projects");
+			g_string_printf(temp_gstring, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "projects");
+			set_default_project_folder(temp_gstring->str;)
 		} else
 		{
 			// Retrieve the value
@@ -602,7 +606,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "project_folder", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				g_string_printf(default_project_folder, "%s", buffer_ptr);
+				set_default_project_folder(buffer_ptr);
 			}
 
 			// Close the registry key
@@ -614,7 +618,8 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			g_string_printf(screenshots_folder, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "screenshots");
+			g_string_printf(temp_gstring, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "screenshots");
+			set_screenshots_folder(temp_gstring->str);
 		} else
 		{
 			// Retrieve the value
@@ -622,7 +627,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "screenshots_folder", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				g_string_printf(screenshots_folder, "%s", buffer_ptr);
+				set_screenshots_folder(buffer_ptr);
 			}
 
 			// Close the registry key
@@ -634,7 +639,8 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			g_string_printf(default_output_folder, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "output");
+			g_string_printf(temp_gstring, "%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "output");
+			set_default_output_folder(temp_gstring->str);
 		} else
 		{
 			// Retrieve the value
@@ -642,7 +648,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "default_output_folder", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				g_string_printf(default_output_folder, "%s", buffer_ptr);
+				set_default_output_folder(buffer_ptr);
 			}
 
 			// Close the registry key
@@ -661,7 +667,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "default_zoom_level", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				g_string_printf(default_zoom_level, "%s", buffer_ptr);
+				set_default_zoom_level(buffer_ptr);
 			}
 
 			// Close the registry key
@@ -715,7 +721,7 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			default_output_width = 800;
+			set_default_output_width(800);
 		} else
 		{
 			// Retrieve the value
@@ -723,7 +729,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "output_width", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				default_output_width = atoi(buffer_ptr);
+				set_default_output_width(atoi(buffer_ptr));
 			}
 
 			// Close the registry key
@@ -735,7 +741,7 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			default_output_height = 600;
+			set_default_output_height(600);
 		} else
 		{
 			// Retrieve the value
@@ -743,7 +749,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "output_height", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				default_output_height = atoi(buffer_ptr);
+				set_default_output_height(atoi(buffer_ptr));
 			}
 
 			// Close the registry key
@@ -755,7 +761,7 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			preview_width = 300;
+			set_preview_width(300);
 		} else
 		{
 			// Retrieve the value
@@ -763,7 +769,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "thumbnail_width", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				preview_width = atoi(buffer_ptr);
+				set_preview_width(atoi(buffer_ptr));
 			}
 
 			// Close the registry key
@@ -775,7 +781,7 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			default_slide_duration = 60;
+			set_default_slide_duration(60);
 		} else
 		{
 			// Retrieve the value
@@ -783,7 +789,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "slide_duration", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				default_slide_duration = strtof(buffer_ptr, NULL);
+				set_default_slide_duration(strtof(buffer_ptr, NULL));
 			}
 
 			// Close the registry key
@@ -795,7 +801,7 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			default_layer_duration = 60;
+			set_default_layer_duration(60);
 		} else
 		{
 			// Retrieve the value
@@ -803,7 +809,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "layer_duration", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				default_layer_duration = strtof(buffer_ptr, NULL);
+				set_default_layer_duration(strtof(buffer_ptr, NULL));
 			}
 
 			// Close the registry key
@@ -815,8 +821,8 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			default_fps = 12;
-			set_frames_per_second(default_fps);
+			set_default_fps(12);
+			set_frames_per_second(12);
 		} else
 		{
 			// Retrieve the value
@@ -824,8 +830,8 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "frames_per_second", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				default_fps = atoi(buffer_ptr);
-				set_frames_per_second(default_fps);
+				set_default_fps(atoi(buffer_ptr));
+				set_frames_per_second(atoi(buffer_ptr));
 			}
 
 			// Close the registry key
@@ -837,7 +843,7 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			default_bg_colour.red = 0;
+			set_default_bg_colour_red(0);
 		} else
 		{
 			// Retrieve the value
@@ -845,7 +851,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "default_bg_colour_red", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				default_bg_colour.red = atoi(buffer_ptr);
+				set_default_bg_colour_red(atoi(buffer_ptr));
 			}
 
 			// Close the registry key
@@ -857,7 +863,7 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			default_bg_colour.green = 0;
+			set_default_bg_colour_green(0);
 		} else
 		{
 			// Retrieve the value
@@ -865,7 +871,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "default_bg_colour_green", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				default_bg_colour.green = atoi(buffer_ptr);
+				set_default_bg_colour_green(atoi(buffer_ptr));
 			}
 
 			// Close the registry key
@@ -877,7 +883,7 @@ gboolean preferences_load()
 		{
 			// Value is missing, so warn the user and set a sensible default
 			missing_keys = TRUE;
-			default_bg_colour.blue = 0;
+			set_default_bg_colour_blue(0);
 		} else
 		{
 			// Retrieve the value
@@ -885,7 +891,7 @@ gboolean preferences_load()
 			return_code = RegQueryValueExA(hkey, "default_bg_colour_blue", NULL, NULL, buffer_ptr, &buffer_size);
 			if (ERROR_SUCCESS == return_code)
 			{
-				default_bg_colour.blue = atoi(buffer_ptr);
+				set_default_bg_colour_blue(atoi(buffer_ptr));
 			}
 
 			// Close the registry key
@@ -953,6 +959,7 @@ gboolean preferences_load()
 
 	// Free the memory used in this function
 	g_string_free(message, TRUE);
+	g_string_free(temp_gstring, TRUE);
 	if (NULL != error)
 		g_error_free(error);
 
