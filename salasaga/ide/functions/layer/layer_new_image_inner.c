@@ -111,7 +111,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 				      GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,  // Cancel button
 				      GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,  // Open button
 				      NULL);
-	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(path_widget), last_folder->str);
+	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(path_widget), get_last_folder());
 	gtk_widget_show_all(GTK_WIDGET(path_widget));
 
 	// Loop around until we have all valid values, or the user cancels out
@@ -129,7 +129,7 @@ void layer_new_image_inner(guint release_x, guint release_y)
 		}
 
 		// Grab the folder the user may have changed too
-		last_folder = g_string_assign(last_folder, gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(path_widget)));
+		set_last_folder(gtk_file_chooser_get_current_folder(GTK_FILE_CHOOSER(path_widget)));
 
 		// Reset the usable input flag
 		usable_input = TRUE;

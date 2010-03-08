@@ -451,8 +451,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	}
 
 	g_string_printf(message, "%ux%u", get_output_width(), get_output_height());  // We use the message variable here as a temporary variable, for efficiency
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", message->str, file_name_full->str, NULL);
-	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", message->str, file_name_full->str, NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 	g_free(image_path);
 	cb_background = swf_shape_from_image_file(file_name_full->str, -1, -1);
 	if (NULL == cb_background)
@@ -467,8 +467,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	// *** Create the Restart button ***
 
 	// Load restart button's UP state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_up", NULL);
-	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "3leftarrow_up", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 	g_free(image_path);
 	restart_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == restart_shape_up)
@@ -479,8 +479,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	}
 
 	// Load restart button's OVER state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_over", NULL);
-	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "3leftarrow_over", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 	g_free(image_path);
 	restart_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == restart_shape_over)
@@ -492,8 +492,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	}
 
 	// Load restart button's DOWN state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3leftarrow_down", NULL);
-	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "3leftarrow_down", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 	g_free(image_path);
 	restart_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == restart_shape_down)
@@ -558,8 +558,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	if (1 < num_slides) // No need for a Rewind button if there's only one slide in the project
 	{
 		// Load rewind button's UP state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_up", NULL);
-		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "2leftarrow_up", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 		g_free(image_path);
 		rewind_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == rewind_shape_up)
@@ -570,8 +570,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		}
 
 		// Load rewind button's OVER state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_over", NULL);
-		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "2leftarrow_over", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 		g_free(image_path);
 		rewind_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == rewind_shape_over)
@@ -583,8 +583,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		}
 
 		// Load rewind button's DOWN state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2leftarrow_down", NULL);
-		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "2leftarrow_down", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 		g_free(image_path);
 		rewind_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == rewind_shape_down)
@@ -738,8 +738,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	// *** Create the Pause button ***
 
 	// Load pause button's UP state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_up", NULL);
-	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "player_pause_up", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 	g_free(image_path);
 	pause_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == pause_shape_up)
@@ -750,8 +750,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	}
 
 	// Load pause button's OVER state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_over", NULL);
-	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "player_pause_over", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 	g_free(image_path);
 	pause_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == pause_shape_over)
@@ -763,8 +763,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	}
 
 	// Load pause button's DOWN state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "player_pause_down", NULL);
-	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "player_pause_down", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 	g_free(image_path);
 	pause_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == pause_shape_down)
@@ -821,8 +821,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	// *** Create the Play button ***
 
 	// Load play button's UP state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_up", NULL);
-	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "1rightarrow_up", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 	g_free(image_path);
 	play_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == play_shape_up)
@@ -833,8 +833,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	}
 
 	// Load play button's OVER state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_over", NULL);
-	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "1rightarrow_over", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 	g_free(image_path);
 	play_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == play_shape_over)
@@ -846,8 +846,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	}
 
 	// Load play button's DOWN state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "1rightarrow_down", NULL);
-	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "1rightarrow_down", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 	g_free(image_path);
 	play_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == play_shape_down)
@@ -916,8 +916,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	if (1 < num_slides) // No need for a Forward button if there's only one slide in the project
 	{
 		// Load forward button's UP state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_up", NULL);
-		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "2rightarrow_up", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 		g_free(image_path);
 		forward_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == forward_shape_up)
@@ -928,8 +928,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		}
 
 		// Load forward button's OVER state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_over", NULL);
-		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "2rightarrow_over", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 		g_free(image_path);
 		forward_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == forward_shape_over)
@@ -941,8 +941,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		}
 
 		// Load forward button's DOWN state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "2rightarrow_down", NULL);
-		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "2rightarrow_down", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 		g_free(image_path);
 		forward_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == forward_shape_down)
@@ -1070,8 +1070,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	// *** Create the Finish button ***
 
 	// Load finish button's UP state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3rightarrow_up", NULL);
-	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "3rightarrow_up", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 	g_free(image_path);
 	finish_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == finish_shape_up)
@@ -1082,8 +1082,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	}
 
 	// Load finish button's OVER state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3rightarrow_over", NULL);
-	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "3rightarrow_over", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 	g_free(image_path);
 	finish_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == finish_shape_over)
@@ -1095,8 +1095,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	}
 
 	// Load finish button's DOWN state image
-	image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "3rightarrow_down", NULL);
-	g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+	image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "3rightarrow_down", NULL);
+	g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 	g_free(image_path);
 	finish_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 	if (NULL == finish_shape_down)
@@ -1164,8 +1164,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		info_button = newSWFButton();
 
 		// Load info button's UP state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "info_up", NULL);
-		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "info_up", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 		g_free(image_path);
 		info_shape_up = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == info_shape_up)
@@ -1176,8 +1176,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		}
 
 		// Load info button's OVER state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "info_over", NULL);
-		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "info_over", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 		g_free(image_path);
 		info_shape_over = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == info_shape_over)
@@ -1189,8 +1189,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		}
 
 		// Load finish button's DOWN state image
-		image_path = g_build_path(G_DIR_SEPARATOR_S, icon_path->str, "control_bar", "info_down", NULL);
-		g_string_printf(file_name_full, "%s.%s", image_path, icon_extension->str);
+		image_path = g_build_path(G_DIR_SEPARATOR_S, get_icon_path(), "control_bar", "info_down", NULL);
+		g_string_printf(file_name_full, "%s.%s", image_path, get_icon_extension());
 		g_free(image_path);
 		info_shape_down = swf_shape_from_image_file(file_name_full->str, button_width, button_width);
 		if (NULL == info_shape_down)

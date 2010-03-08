@@ -90,14 +90,10 @@ GtkScrolledWindow		*film_strip_container;		// Container for the film strip
 GtkListStore			*film_strip_store;			// Film strip list store
 GdkPixmap				*front_store;				// Front store for double buffering the workspace area
 FT_Face					ft_font_face[FONT_COUNT];	// Array of FreeType font face handles
-GString					*icon_extension;			// Used to determine if SVG images can be loaded
-GString					*icon_path;					// Points to the base location for Salasaga icon files
 GtkTextBuffer			*info_text;					// Text to be shown in the information button in swf output
-GString					*last_folder;				// Keeps track of the last folder the user visited
 GtkItemFactory			*menu_bar = NULL;			// Widget for the menu bar
 GtkTable				*message_bar;				// Widget for message bar
 GdkPixbuf				*mouse_ptr_pixbuf;			// Temporary GDK Pixbuf
-GString					*mouse_ptr_string;			// Full path to the mouse pointer graphic
 GIOChannel				*output_file;				// The output file handle
 GtkComboBox				*resolution_selector;		// Widget for the resolution selector
 GdkRectangle			resize_handles_rect[8];		// Contains the onscreen offsets and size for the resize handles
@@ -195,10 +191,8 @@ gint main(gint argc, gchar *argv[])
 
 	// Initialise various strings
 	set_default_zoom_level(_("Fit to width"));  // Sensible default
-	icon_extension = g_string_new("png");  // Fallback to png format if SVG isn't supported
-	icon_path = g_string_new(NULL);
+	set_icon_extension("png");  // Fallback to png format if SVG isn't supported
 	message = g_string_new(NULL);
-	mouse_ptr_string = g_string_new(NULL);
 	set_project_name(_("New Project"));
 	title_bar_icon_path = g_string_new(NULL);
 	tmp_gstring = g_string_new(NULL);
@@ -215,8 +209,8 @@ gint main(gint argc, gchar *argv[])
 	}
 
 	// Initialise the string holding the path of the most recent directory the user accessed
-	last_folder = g_string_new(g_get_home_dir());
-	g_string_append(last_folder, G_DIR_SEPARATOR_S);  //  Add a trailing slash to the folder name
+	g_string_printf(tmp_gstring, "%s%s", g_get_home_dir(), G_DIR_SEPARATOR_S);  // We specifically add a trailing slash to the end
+	set_last_folder(tmp_gstring->str);
 
 	// Redirect log output so it doesn't pop open a console window
 	if ((2 == argc) && (0 == g_ascii_strncasecmp("-d", argv[1], 2)))
@@ -250,19 +244,19 @@ gint main(gint argc, gchar *argv[])
 
 #ifdef _WIN32
 	// Hard coded icon path for windows
-	icon_path = g_string_assign(icon_path, _("icons"));
+	set_icon_path(_("icons"));
 
 	// Mouse pointer image file
-	g_string_printf(mouse_ptr_string, "%s%c%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", icon_extension->str);
+	g_string_printf(mouse_ptr_string, "%s%c%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", get_icon_extension());
 
 #else
 	// Default to PNG images, in case an SVG loader isn't present
-	g_string_assign(icon_path, IMAGES_PNG_DIR);
+	set_icon_path(IMAGES_PNG_DIR);
 
 #endif
 
 	// Display debugging info if requested
-	if (get_debug_level()) printf(_("Icon path: %s\n"), icon_path->str);
+	if (get_debug_level()) printf(_("Icon path: %s\n"), get_icon_path());
 
 	supported_formats = gdk_pixbuf_get_formats();
 	num_formats = g_slist_length(supported_formats);
@@ -273,27 +267,29 @@ gint main(gint argc, gchar *argv[])
 		if (0 == g_ascii_strncasecmp(tmp_gchar, "svg", 3));
 		{
 			// SVG is supported
-			icon_extension = g_string_assign(icon_extension, "svg");
+			set_icon_extension("svg");
 
 #ifndef _WIN32
 			// Point to the svg image directory
-			g_string_assign(icon_path, IMAGES_SVG_DIR);
+			set_icon_path(IMAGES_SVG_DIR);
 
 			// Determine path for mouse pointer image file
-			g_string_printf(mouse_ptr_string, "%s%c%s.%s", MOUSE_PTR_SVG_DIR, G_DIR_SEPARATOR, "standard", icon_extension->str);
+			g_string_printf(tmp_gstring, "%s%c%s.%s", MOUSE_PTR_SVG_DIR, G_DIR_SEPARATOR, "standard", get_icon_extension());
+			set_mouse_ptr_string(tmp_gstring->str);
 #else
 			// Windows specific
-			g_string_printf(mouse_ptr_string, "%s%c%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", icon_extension->str);
+			g_string_printf(tmp_gstring, "%s%c%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", get_icon_extension());
+			set_mouse_ptr_string(tmp_gstring->str);
 #endif
 		}
 		g_free(tmp_gchar);
 	}
 
 	// Display debugging info if requested
-	if (get_debug_level()) printf(_("Path to mouse pointer image: %s\n"), mouse_ptr_string->str);
+	if (get_debug_level()) printf(_("Path to mouse pointer image: %s\n"), get_mouse_ptr_string());
 
 	// Load initial mouse pointer graphic
-	mouse_ptr_pixbuf = gdk_pixbuf_new_from_file_at_size(mouse_ptr_string->str, -1, -1, NULL);
+	mouse_ptr_pixbuf = gdk_pixbuf_new_from_file_at_size(get_mouse_ptr_string(), -1, -1, NULL);
 
 	// Start up the GUI part of things
 	set_main_window(gtk_window_new(GTK_WINDOW_TOPLEVEL));
@@ -519,9 +515,6 @@ gint main(gint argc, gchar *argv[])
 	gtk_main();
 
 	// Free the memory use in this function
-	g_string_free(icon_extension, TRUE);
-	g_string_free(icon_path, TRUE);
-	g_string_free(mouse_ptr_string, TRUE);
 	g_string_free(message, TRUE);
 	g_string_free(tmp_gstring, TRUE);
 	g_slist_free(supported_formats);

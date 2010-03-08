@@ -435,7 +435,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			// Load the mouse pointer graphic
 			mouse_ptr_width = 21 * scaled_width_ratio;
 			mouse_ptr_height = 30 * scaled_height_ratio;
-			mouse_shape = swf_shape_from_image_file(mouse_ptr_string->str, mouse_ptr_width, mouse_ptr_height);
+			mouse_shape = swf_shape_from_image_file(get_mouse_ptr_string(), mouse_ptr_width, mouse_ptr_height);
 			if (NULL == mouse_shape)
 			{
 				// Something went wrong when creating the empty shape, so we skip this layer

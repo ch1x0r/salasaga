@@ -51,11 +51,14 @@ static guint				end_point_status = END_POINTS_INACTIVE;  // Is one of the layer 
 static gboolean				film_strip_being_resized;		// Toggle to indicate if the film strip is being resized
 static GtkWidget			*film_strip_view;				// The view of the film strip list store
 static guint				frames_per_second;				// Number of frames per second
+static GString				*icon_extension;				// Used to determine if SVG images can be loaded
+static GString				*icon_path;						// Points to the base location for Salasaga icon files
 static gboolean				info_display = TRUE;			// Toggle for whether to display the information button in swf output
 static gint					invalidation_end_x;				// Right side of the front store area to invalidate
 static gint					invalidation_end_y;				// Bottom of the front store area to invalidate
 static gint					invalidation_start_x;			// Left side of the front store area to invalidate
 static gint					invalidation_start_y;			// Top of the front store area to invalidate
+static GString				*last_folder;					// Keeps track of the last folder the user visited
 static GtkWidget			*main_area;						// Widget for the onscreen display
 static GtkWidget			*main_drawing_area;				// Widget for the drawing area
 static GtkWidget			*main_window;					// Widget for the main window
@@ -63,6 +66,7 @@ static gboolean				mouse_click_double_added;		// Have we added a double mouse cl
 static gboolean				mouse_click_single_added;		// Have we added a single mouse click to the exported swf yet?
 static gboolean				mouse_click_triple_added;		// Have we added a triple mouse click to the exported swf yet?
 static gboolean				mouse_dragging = FALSE;			// Is the mouse being dragged?
+static GString				*mouse_ptr_string;				// Full path to the mouse pointer graphic
 static gboolean				new_layer_selected = TYPE_NONE;	// Is a new layer being created?
 static gboolean				project_active;					// Whether or not a project is active (i.e. something is loaded or has been created)
 static guint				resize_handles_status;			// Are the layer resize handles active, in progress, etc
@@ -178,6 +182,26 @@ guint get_frames_per_second()
 	return frames_per_second;
 }
 
+gchar *get_icon_extension()
+{
+	return icon_extension->str;
+}
+
+gsize get_icon_extension_length()
+{
+	return icon_extension->len;
+}
+
+gchar *get_icon_path()
+{
+	return icon_path->str;
+}
+
+gsize get_icon_path_length()
+{
+	return icon_path->len;
+}
+
 gboolean get_info_display()
 {
 	return info_display;
@@ -201,6 +225,16 @@ gint get_invalidation_start_x()
 gint get_invalidation_start_y()
 {
 	return invalidation_start_y;
+}
+
+gchar *get_last_folder()
+{
+	return last_folder->str;
+}
+
+gsize get_last_folder_length()
+{
+	return last_folder->len;
 }
 
 GtkWidget *get_main_area()
@@ -236,6 +270,16 @@ gboolean get_mouse_click_triple_added()
 gboolean get_mouse_dragging()
 {
 	return mouse_dragging;
+}
+
+gchar *get_mouse_ptr_string()
+{
+	return mouse_ptr_string->str;
+}
+
+gsize get_mouse_ptr_string_length()
+{
+	return mouse_ptr_string->len;
 }
 
 gboolean get_new_layer_selected()
@@ -438,6 +482,28 @@ void set_frames_per_second(guint new_frames_per_second)
 	frames_per_second = new_frames_per_second;
 }
 
+void set_icon_extension(gchar *new_icon_extension)
+{
+	if (NULL == icon_extension)
+	{
+		icon_extension = g_string_new(new_icon_extension);
+	} else
+	{
+		icon_extension = g_string_assign(icon_extension, new_icon_extension);
+	}
+}
+
+void set_icon_path(gchar *new_icon_path)
+{
+	if (NULL == icon_path)
+	{
+		icon_path = g_string_new(new_icon_path);
+	} else
+	{
+		icon_path = g_string_assign(icon_path, new_icon_path);
+	}
+}
+
 void set_info_display(gboolean new_info_display)
 {
 	info_display = new_info_display;
@@ -461,6 +527,17 @@ void set_invalidation_start_x(gint new_invalidation_start_x)
 void set_invalidation_start_y(gint new_invalidation_start_y)
 {
 	invalidation_start_y = new_invalidation_start_y;
+}
+
+void set_last_folder(gchar *new_last_folder)
+{
+	if (NULL == last_folder)
+	{
+		last_folder = g_string_new(new_last_folder);
+	} else
+	{
+		last_folder = g_string_assign(last_folder, new_last_folder);
+	}
 }
 
 void set_main_area(GtkWidget *new_main_area)
@@ -496,6 +573,17 @@ void set_mouse_click_triple_added(gboolean new_mouse_click_triple_added)
 void set_mouse_dragging(gboolean new_mouse_dragging)
 {
 	mouse_dragging = new_mouse_dragging;
+}
+
+void set_mouse_ptr_string(gchar *new_mouse_ptr_string)
+{
+	if (NULL == last_folder)
+	{
+		mouse_ptr_string = g_string_new(new_mouse_ptr_string);
+	} else
+	{
+		mouse_ptr_string = g_string_assign(mouse_ptr_string, new_mouse_ptr_string);
+	}
 }
 
 void set_new_layer_selected(gboolean new_new_layer_selected)

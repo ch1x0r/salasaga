@@ -117,7 +117,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), get_main_toolbar_item(SEPARATOR_1), SEPARATOR_1);
 
 	// Create the Capture button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "capture", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "capture", get_icon_extension());
 	if (get_debug_level()) printf("%s: '%s'\n", _("Path to toolbar 'Capture Screenshots' icon"), tmp_gstring->str);
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
@@ -131,7 +131,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	set_main_toolbar_signal(CAPTURE, g_signal_connect(G_OBJECT(get_main_toolbar_item(CAPTURE)), "clicked", G_CALLBACK(menu_screenshots_capture), (gpointer) NULL));
 
 	// Create the Import button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "import", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "import", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -144,7 +144,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	set_main_toolbar_signal(IMPORT, g_signal_connect(G_OBJECT(get_main_toolbar_item(IMPORT)), "clicked", G_CALLBACK(menu_screenshots_import), (gpointer) NULL));
 
 	// Create the Adjust Dimensions button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "crop", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -161,7 +161,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	gtk_toolbar_insert(GTK_TOOLBAR(inner_toolbar), get_main_toolbar_item(SEPARATOR_2), SEPARATOR_2);
 
 	// Create the Export Flash button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "export_flash", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "export_flash", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -176,7 +176,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	// * Create the "grayed out" icons for buttons *
 
 	// Create the grayed out Capture icon
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "capture_grayed", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "capture_grayed", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -185,7 +185,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	}
 
 	// Create the grayed out Dimensions icon
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop_grayed", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "crop_grayed", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -194,7 +194,7 @@ GtkWidget *create_toolbar(GtkWidget *inner_toolbar)
 	}
 
 	// Create the grayed out Export Flash icon
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "export_flash_grayed", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "export_flash_grayed", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{

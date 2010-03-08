@@ -116,7 +116,7 @@ GtkWidget *create_time_line(void)
 	// * Create the layer toolbar icons *
 
 	// Create the Edit Layer button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "edit", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "edit", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -129,7 +129,7 @@ GtkWidget *create_time_line(void)
 	set_layer_toolbar_signal(LAYER_EDIT, g_signal_connect(G_OBJECT(get_layer_toolbar_item(LAYER_EDIT)), "clicked", G_CALLBACK(layer_edit), (gpointer) NULL));
 
 	// Create the Crop button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "crop", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -142,7 +142,7 @@ GtkWidget *create_time_line(void)
 	set_layer_toolbar_signal(LAYER_CROP, g_signal_connect(G_OBJECT(get_layer_toolbar_item(LAYER_CROP)), "clicked", G_CALLBACK(image_crop), (gpointer) NULL));
 
 	// Create the Delete layer button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "delete", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "delete", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -155,7 +155,7 @@ GtkWidget *create_time_line(void)
 	set_layer_toolbar_signal(LAYER_DELETE, g_signal_connect(G_OBJECT(get_layer_toolbar_item(LAYER_DELETE)), "clicked", G_CALLBACK(layer_delete), (gpointer) NULL));
 
 	// Create the Move Layer Down button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "down_arrow", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "down_arrow", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -168,7 +168,7 @@ GtkWidget *create_time_line(void)
 	set_layer_toolbar_signal(LAYER_DOWN, g_signal_connect(G_OBJECT(get_layer_toolbar_item(LAYER_DOWN)), "clicked", G_CALLBACK(layer_move_down), (gpointer) NULL));
 
 	// Create the Move Layer Up button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "up_arrow", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "up_arrow", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -185,7 +185,7 @@ GtkWidget *create_time_line(void)
 	gtk_toolbar_insert(GTK_TOOLBAR(time_line_toolbar), get_layer_toolbar_item(LAYER_SEPARATOR_1), LAYER_SEPARATOR_1);
 
 	// Create the add mouse pointer button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_mouse", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "add_mouse", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -198,7 +198,7 @@ GtkWidget *create_time_line(void)
 	set_layer_toolbar_signal(LAYER_MOUSE, g_signal_connect(G_OBJECT(get_layer_toolbar_item(LAYER_MOUSE)), "clicked", G_CALLBACK(layer_new_mouse), (gpointer) NULL));
 
 	// Create the add text layer button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_text", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "add_text", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -211,7 +211,7 @@ GtkWidget *create_time_line(void)
 	set_layer_toolbar_signal(LAYER_TEXT, g_signal_connect(G_OBJECT(get_layer_toolbar_item(LAYER_TEXT)), "clicked", G_CALLBACK(layer_new_text), (gpointer) NULL));
 
 	// Create the add highlight layer button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_highlight", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "add_highlight", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -224,7 +224,7 @@ GtkWidget *create_time_line(void)
 	set_layer_toolbar_signal(LAYER_HIGHLIGHT, g_signal_connect(G_OBJECT(get_layer_toolbar_item(LAYER_HIGHLIGHT)), "clicked", G_CALLBACK(layer_new_highlight), (gpointer) NULL));
 
 	// Create the add image layer button
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_image", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "add_image", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -239,7 +239,7 @@ GtkWidget *create_time_line(void)
 	// * Create the "grayed out" icons for buttons *
 
 	// Create the grayed out Edit Layer icon
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "edit_grayed", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "edit_grayed", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -248,7 +248,7 @@ GtkWidget *create_time_line(void)
 	}
 
 	// Create the grayed out Crop Layer icon
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "crop_grayed", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "crop_grayed", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -257,7 +257,7 @@ GtkWidget *create_time_line(void)
 	}
 
 	// Create the grayed out Delete Layer icon
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "delete_grayed", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "delete_grayed", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -266,7 +266,7 @@ GtkWidget *create_time_line(void)
 	}
 
 	// Create the grayed out Move Layer Down icon
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "down_arrow_grayed", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "down_arrow_grayed", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -275,7 +275,7 @@ GtkWidget *create_time_line(void)
 	}
 
 	// Create the grayed out Move Layer Up icon
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "up_arrow_grayed", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "up_arrow_grayed", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -284,7 +284,7 @@ GtkWidget *create_time_line(void)
 	}
 
 	// Create the grayed out Add Mouse Pointer icon
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_mouse_grayed", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "add_mouse_grayed", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -293,7 +293,7 @@ GtkWidget *create_time_line(void)
 	}
 
 	// Create the grayed out Add Text Layer icon
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_text_grayed", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "add_text_grayed", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -302,7 +302,7 @@ GtkWidget *create_time_line(void)
 	}
 
 	// Create the grayed out Add Highlight Layer icon
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_highlight_grayed", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "add_highlight_grayed", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
@@ -311,7 +311,7 @@ GtkWidget *create_time_line(void)
 	}
 
 	// Create the grayed out Add Image Layer icon
-	g_string_printf(tmp_gstring, "%s%c%s.%s", icon_path->str, G_DIR_SEPARATOR, "add_image_grayed", icon_extension->str);
+	g_string_printf(tmp_gstring, "%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "add_image_grayed", get_icon_extension());
 	tmp_gdk_pixbuf = gdk_pixbuf_new_from_file_at_size(tmp_gstring->str, -1, get_icon_height(), NULL);
 	if (NULL != tmp_gdk_pixbuf)
 	{
