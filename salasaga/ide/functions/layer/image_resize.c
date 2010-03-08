@@ -130,10 +130,10 @@ void image_resize(void)
 	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the slider asking for the new image width
-	new_width_scale = gtk_hscale_new_with_range(valid_fields[LAYER_WIDTH].min_value, valid_fields[LAYER_WIDTH].max_value, 1);
+	new_width_scale = gtk_hscale_new_with_range(get_valid_fields_min_value(LAYER_WIDTH), get_valid_fields_max_value(LAYER_WIDTH), 1);
 	gtk_range_set_value(GTK_RANGE(new_width_scale), image_width);
 	gtk_scale_add_mark(GTK_SCALE(new_width_scale), image_width, GTK_POS_TOP, NULL);
-	for (scale_mark_counter = 512; scale_mark_counter <= valid_fields[LAYER_WIDTH].max_value; scale_mark_counter += 512)
+	for (scale_mark_counter = 512; scale_mark_counter <= get_valid_fields_max_value(LAYER_WIDTH); scale_mark_counter += 512)
 	{
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(new_width_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -152,10 +152,10 @@ void image_resize(void)
 	gtk_table_attach(GTK_TABLE(adjustment_table), GTK_WIDGET(new_height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the slider asking for the new image height
-	new_height_scale = gtk_hscale_new_with_range(valid_fields[LAYER_HEIGHT].min_value, valid_fields[LAYER_HEIGHT].max_value, 1);
+	new_height_scale = gtk_hscale_new_with_range(get_valid_fields_min_value(LAYER_HEIGHT), get_valid_fields_max_value(LAYER_HEIGHT), 1);
 	gtk_range_set_value(GTK_RANGE(new_height_scale), image_height);
 	gtk_scale_add_mark(GTK_SCALE(new_height_scale), image_height, GTK_POS_TOP, NULL);
-	for (scale_mark_counter = 512; scale_mark_counter <= valid_fields[LAYER_HEIGHT].max_value; scale_mark_counter += 512)
+	for (scale_mark_counter = 512; scale_mark_counter <= get_valid_fields_max_value(LAYER_HEIGHT); scale_mark_counter += 512)
 	{
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(new_height_scale), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -202,12 +202,12 @@ void image_resize(void)
 		new_height = (gint) gtk_range_get_value(GTK_RANGE(new_height_scale));
 
 		// If the user is adjusting the size out of acceptable limits, warn them and loop again
-		if ((valid_fields[PROJECT_HEIGHT].min_value <= new_height) && (valid_fields[PROJECT_HEIGHT].max_value >= new_height) && (valid_fields[PROJECT_WIDTH].min_value <= new_width) && (valid_fields[PROJECT_WIDTH].max_value >= new_width))
+		if ((get_valid_fields_min_value(PROJECT_HEIGHT) <= new_height) && (get_valid_fields_max_value(PROJECT_HEIGHT) >= new_height) && (get_valid_fields_min_value(PROJECT_WIDTH) <= new_width) && (get_valid_fields_max_value(PROJECT_WIDTH) >= new_width))
 		{
 			acceptable_result = TRUE;
 		} else
 		{
-			if ((valid_fields[PROJECT_HEIGHT].min_value > new_height) || (valid_fields[PROJECT_WIDTH].min_value > new_width))
+			if ((get_valid_fields_min_value(PROJECT_HEIGHT) > new_height) || (get_valid_fields_min_value(PROJECT_WIDTH) > new_width))
 			{
 				g_string_printf(message, "%s ED450: %s\n\n%s", _("Error"), _("Those adjustment values would make the image smaller than the minimum allowed."), _("Please try again."));
 				display_warning(message->str);

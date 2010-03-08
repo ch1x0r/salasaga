@@ -139,7 +139,7 @@ void menu_project_properties(void)
 	gtk_misc_set_alignment(GTK_MISC(label_project_name), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_project_name), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	entry_project_name = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(entry_project_name), valid_fields[PROJECT_NAME].max_value);
+	gtk_entry_set_max_length(GTK_ENTRY(entry_project_name), get_valid_fields_max_value(PROJECT_NAME));
 	gtk_entry_set_text(GTK_ENTRY(entry_project_name), (gchar *) get_project_name());
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(entry_project_name), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
@@ -166,7 +166,7 @@ void menu_project_properties(void)
 	label_frames_per_second = gtk_label_new(_("Frames per second: "));
 	gtk_misc_set_alignment(GTK_MISC(label_frames_per_second), 0, 0.5);
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(label_frames_per_second), 0, 1, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
-	button_frames_per_second = gtk_spin_button_new_with_range(valid_fields[PROJECT_FPS].min_value, valid_fields[PROJECT_FPS].max_value, 1);
+	button_frames_per_second = gtk_spin_button_new_with_range(get_valid_fields_min_value(PROJECT_FPS), get_valid_fields_max_value(PROJECT_FPS), 1);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_frames_per_second), get_frames_per_second());
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(button_frames_per_second), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
@@ -292,7 +292,7 @@ void menu_project_properties(void)
 
 	// Create the entry that accepts an external link
 	external_link_entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), valid_fields[EXTERNAL_LINK].max_value);
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), get_valid_fields_max_value(EXTERNAL_LINK));
 	gtk_entry_set_text(GTK_ENTRY(external_link_entry), get_info_link());
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_entry), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
@@ -304,7 +304,7 @@ void menu_project_properties(void)
 
 	// Create the entry that accepts a text string for the window to open the external link in
 	external_link_win_entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), valid_fields[EXTERNAL_LINK_WINDOW].max_value);
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), get_valid_fields_max_value(EXTERNAL_LINK_WINDOW));
 	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), get_info_link_target());
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_win_entry), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 

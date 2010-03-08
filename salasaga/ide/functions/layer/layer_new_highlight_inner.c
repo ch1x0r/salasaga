@@ -98,8 +98,8 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 
 	// Ensure the mouse coordinates can't go out of bounds
 	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
-	start_x = CLAMP(start_x, 1, pixmap_width - valid_fields[HIGHLIGHT_WIDTH].min_value);
-	start_y = CLAMP(start_y, 1, pixmap_height - valid_fields[HIGHLIGHT_HEIGHT].min_value);
+	start_x = CLAMP(start_x, 1, pixmap_width - get_valid_fields_min_value(HIGHLIGHT_WIDTH));
+	start_y = CLAMP(start_y, 1, pixmap_height - get_valid_fields_min_value(HIGHLIGHT_HEIGHT));
 	end_x = CLAMP(end_x, 1, pixmap_width - 1);
 	end_y = CLAMP(end_y, 1, pixmap_height - 1);
 
@@ -114,11 +114,11 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	mouse_drag_height = roundf((gfloat) (end_y - start_y) * scaled_height_ratio);
 	if (0 == mouse_drag_width)
 	{
-		mouse_drag_width = valid_fields[HIGHLIGHT_WIDTH].min_value;
+		mouse_drag_width = get_valid_fields_min_value(HIGHLIGHT_WIDTH);
 	}
 	if (0 == mouse_drag_height)
 	{
-		mouse_drag_height = valid_fields[HIGHLIGHT_HEIGHT].min_value;
+		mouse_drag_height = get_valid_fields_min_value(HIGHLIGHT_HEIGHT);
 	}
 
 	// Change the cursor back to normal

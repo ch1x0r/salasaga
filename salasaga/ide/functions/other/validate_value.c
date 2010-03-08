@@ -74,8 +74,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 
 
 	// Initialise various things
-	base_type = valid_fields[value_id].base_type;
-	capabilities = valid_fields[value_id].capabilities;
+	base_type = get_valid_fields_base_type(value_id);
+	capabilities = get_valid_fields_capabilities(value_id);
 	input_ptr = (gchar *) value;
 	output_gstring = g_string_new(NULL);
 	locale_info = localeconv();
@@ -94,8 +94,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			}
 
 			// Get the length of the input string
-			string_max = valid_fields[value_id].max_value;
-			string_min = valid_fields[value_id].min_value;
+			string_max = get_valid_fields_max_value(value_id);
+			string_min = get_valid_fields_min_value(value_id);
 			string_length = g_utf8_strlen(input_ptr, -1);
 
 			// If the length of the string isn't in the acceptable range, return NULL
@@ -430,8 +430,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			}
 
 			// Is the float value within the defined bounds?
-			value_max = valid_fields[value_id].max_value;
-			value_min = valid_fields[value_id].min_value;
+			value_max = get_valid_fields_max_value(value_id);
+			value_min = get_valid_fields_min_value(value_id);
 			if ((output_gfloat < value_min) || (output_gfloat > value_max))
 			{
 				// Value is out of bounds, so fail
@@ -494,8 +494,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			}
 
 			// Is the integer value within the defined bounds?
-			value_max = valid_fields[value_id].max_value;
-			value_min = valid_fields[value_id].min_value;
+			value_max = get_valid_fields_max_value(value_id);
+			value_min = get_valid_fields_min_value(value_id);
 			if ((output_guint < value_min) || (output_guint > value_max))
 			{
 				// Value is out of bounds, so fail
@@ -576,8 +576,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 			}
 
 			// Is the integer value within the defined bounds?
-			value_max = valid_fields[value_id].max_value;
-			value_min = valid_fields[value_id].min_value;
+			value_max = get_valid_fields_max_value(value_id);
+			value_min = get_valid_fields_min_value(value_id);
 			if ((output_gint < value_min) || (output_gint > value_max))
 			{
 				// Value is out of bounds, so fail
@@ -606,8 +606,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 
 				// Get the length of the input string
 				string_length = strlen((gchar *) value);
-				string_max = valid_fields[value_id].max_value;
-				string_min = valid_fields[value_id].min_value;
+				string_max = get_valid_fields_max_value(value_id);
+				string_min = get_valid_fields_min_value(value_id);
 
 				// If the length of the string isn't in the acceptable range, return NULL
 				if ((string_length < string_min) || (string_length > string_max))
@@ -677,8 +677,8 @@ void *validate_value(gint value_id, gint input_type, void *value)
 
 			// Get the length of the input string
 			string_length = g_utf8_strlen((gchar *) value, -1);
-			string_max = valid_fields[value_id].max_value;
-			string_min = valid_fields[value_id].min_value;
+			string_max = get_valid_fields_max_value(value_id);
+			string_min = get_valid_fields_min_value(value_id);
 
 			// If the length of the string isn't in the acceptable range, return NULL
 			if ((string_length < string_min) || (string_length > string_max))
@@ -724,7 +724,7 @@ void *validate_value(gint value_id, gint input_type, void *value)
 
 			// Unknown value type, we should never get here
 			error_string = g_string_new(NULL);
-			g_string_printf(error_string, "%s ED119: %s - '%s'", _("Error"), _("Unknown value passed to validation function"), valid_fields[value_id].name_string);
+			g_string_printf(error_string, "%s ED119: %s - '%s'", _("Error"), _("Unknown value passed to validation function"), get_valid_fields_name(value_id));
 			display_warning(error_string->str);
 			g_string_free(error_string, TRUE);
 

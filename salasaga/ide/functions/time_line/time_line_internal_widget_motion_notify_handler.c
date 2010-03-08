@@ -337,9 +337,9 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				case RESIZE_LAYER_START:
 
 					// If the adjustment would make the transition in duration longer than the maximum allowed, we limit it to the maximum allowed
-					if ((this_layer_data->transition_in_duration + time_moved) > valid_fields[TRANSITION_DURATION].max_value)
+					if ((this_layer_data->transition_in_duration + time_moved) > get_valid_fields_max_value(TRANSITION_DURATION))
 					{
-						time_moved = valid_fields[TRANSITION_DURATION].max_value - this_layer_data->transition_in_duration;
+						time_moved = get_valid_fields_max_value(TRANSITION_DURATION) - this_layer_data->transition_in_duration;
 						max_duration_reached = TRUE;
 					}
 
@@ -406,9 +406,9 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 					end_time += time_moved;
 
 					// If the adjustment makes the duration longer than the maximum, limit it to the maximum
-					if (this_layer_data->transition_out_duration > valid_fields[TRANSITION_DURATION].max_value)
+					if (this_layer_data->transition_out_duration > get_valid_fields_max_value(TRANSITION_DURATION))
 					{
-						this_layer_data->transition_out_duration = valid_fields[TRANSITION_DURATION].max_value;
+						this_layer_data->transition_out_duration = get_valid_fields_max_value(TRANSITION_DURATION);
 					}
 
 					break;
@@ -437,9 +437,9 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 					// We're adjusting the transition in start time
 
 					// If the adjustment makes the duration longer than the maximum, limit it to the maximum
-					if ((this_layer_data->transition_in_duration + time_moved) > valid_fields[TRANSITION_DURATION].max_value)
+					if ((this_layer_data->transition_in_duration + time_moved) > get_valid_fields_max_value(TRANSITION_DURATION))
 					{
-						max_moved = valid_fields[TRANSITION_DURATION].max_value - this_layer_data->transition_in_duration;
+						max_moved = get_valid_fields_max_value(TRANSITION_DURATION) - this_layer_data->transition_in_duration;
 						this_layer_data->start_time -= max_moved;
 						this_layer_data->transition_in_duration += max_moved;
 					} else
@@ -477,9 +477,9 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				case RESIZE_LAYER_DURATION:
 
 					// If the adjustment would make the transition out duration longer than the maximum allowed, we limit it to the maximum allowed
-					if ((this_layer_data->transition_out_duration + time_moved) > valid_fields[TRANSITION_DURATION].max_value)
+					if ((this_layer_data->transition_out_duration + time_moved) > get_valid_fields_max_value(TRANSITION_DURATION))
 					{
-						time_moved = valid_fields[TRANSITION_DURATION].max_value - this_layer_data->transition_out_duration;
+						time_moved = get_valid_fields_max_value(TRANSITION_DURATION) - this_layer_data->transition_out_duration;
 						max_duration_reached = TRUE;
 					}
 

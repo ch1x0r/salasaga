@@ -122,7 +122,7 @@ void menu_file_new(void)
 
 	// Create the entry that accepts the new project name
 	name_entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(name_entry), valid_fields[PROJECT_NAME].max_value);
+	gtk_entry_set_max_length(GTK_ENTRY(name_entry), get_valid_fields_max_value(PROJECT_NAME));
 	gtk_entry_set_text(GTK_ENTRY(name_entry), "New Project");
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(name_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
@@ -133,7 +133,7 @@ void menu_file_new(void)
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the project width
-	width_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_WIDTH].max_value, 10);
+	width_button = gtk_spin_button_new_with_range(0, get_valid_fields_max_value(PROJECT_WIDTH), 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(width_button), get_project_width());
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(width_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
@@ -144,7 +144,7 @@ void menu_file_new(void)
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the entry that accepts the project height
-	height_button = gtk_spin_button_new_with_range(0, valid_fields[PROJECT_HEIGHT].max_value, 10);
+	height_button = gtk_spin_button_new_with_range(0, get_valid_fields_max_value(PROJECT_HEIGHT), 10);
 	gtk_spin_button_set_value(GTK_SPIN_BUTTON(height_button), get_project_height());
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(height_button), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
@@ -155,10 +155,10 @@ void menu_file_new(void)
 	gtk_table_attach(GTK_TABLE(project_table), GTK_WIDGET(fps_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the slider that accepts the number of frames per second
-	fps_slider = gtk_hscale_new_with_range(valid_fields[PROJECT_FPS].min_value, valid_fields[PROJECT_FPS].max_value, 1);
+	fps_slider = gtk_hscale_new_with_range(get_valid_fields_min_value(PROJECT_FPS), get_valid_fields_max_value(PROJECT_FPS), 1);
 	gtk_range_set_value(GTK_RANGE(fps_slider), get_default_fps());
 	gtk_scale_add_mark(GTK_SCALE(fps_slider), get_default_fps(), GTK_POS_TOP, NULL);
-	for (scale_mark_counter = 24; scale_mark_counter <= valid_fields[PROJECT_FPS].max_value; scale_mark_counter += 24)
+	for (scale_mark_counter = 24; scale_mark_counter <= get_valid_fields_max_value(PROJECT_FPS); scale_mark_counter += 24)
 	{
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(fps_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);

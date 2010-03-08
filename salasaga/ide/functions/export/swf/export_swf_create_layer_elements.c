@@ -224,7 +224,7 @@ gboolean export_swf_create_layer_elements(swf_frame_element *array_start, guint 
 		}
 
 		// Compress the mouse movement by the determined amount
-		finish_frame = CLAMP(finish_frame - click_frames, start_frame + 1, valid_fields[FRAME_NUMBER].max_value);
+		finish_frame = CLAMP(finish_frame - click_frames, start_frame + 1, get_valid_fields_max_value(FRAME_NUMBER));
 	}
 	
 	start_frame_rounded = roundf(start_frame);

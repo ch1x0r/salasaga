@@ -96,7 +96,7 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 
 	// Create the entry that accepts an external link
 	external_link_entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), valid_fields[EXTERNAL_LINK].max_value);
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), get_valid_fields_max_value(EXTERNAL_LINK));
 	gtk_entry_set_text(GTK_ENTRY(external_link_entry), tmp_layer->external_link->str);
 	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(external_link_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
@@ -108,7 +108,7 @@ gboolean display_dialog_empty(layer *tmp_layer, gchar *dialog_title)
 
 	// Create the entry that accepts a text string for the window to open the external link in
 	external_link_win_entry = gtk_entry_new();
-	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), valid_fields[EXTERNAL_LINK_WINDOW].max_value);
+	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), get_valid_fields_max_value(EXTERNAL_LINK_WINDOW));
 	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), tmp_layer->external_link_window->str);
 	gtk_table_attach(GTK_TABLE(empty_table), GTK_WIDGET(external_link_win_entry), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;

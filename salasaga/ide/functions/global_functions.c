@@ -32,6 +32,9 @@
 #include "../externs.h"
 
 
+// Field descriptions used for bounds and validation
+extern validatation_entry	valid_fields[];
+
 // Application wide variables
 static GList				*boundary_list = NULL;			// Stores a linked list of layer object boundaries
 static cairo_font_face_t	*cairo_font_face[FONT_COUNT];	// The ttf font faces we use get loaded into this
@@ -606,6 +609,31 @@ GtkWidget *get_time_line_container()
 GtkWidget *get_time_line_vbox()
 {
 	return time_line_vbox;
+}
+
+guint get_valid_fields_base_type(guint index)
+{
+	return valid_fields[index].base_type;
+}
+
+guint get_valid_fields_capabilities(guint index)
+{
+	return valid_fields[index].capabilities;
+}
+
+gfloat get_valid_fields_min_value(guint index)
+{
+	return valid_fields[index].min_value;
+}
+
+gfloat get_valid_fields_max_value(guint index)
+{
+	return valid_fields[index].max_value;
+}
+
+gchar *get_valid_fields_name(guint index)
+{
+	return valid_fields[index].name_string;
 }
 
 guint get_working_height()

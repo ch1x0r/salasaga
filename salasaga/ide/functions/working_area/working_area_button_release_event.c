@@ -302,9 +302,9 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 		// Calculate the new layer width and height
 		((layer_highlight *) layer_data->object_data)->width = width = CLAMP(onscreen_right - onscreen_left,
-				valid_fields[HIGHLIGHT_WIDTH].min_value, get_project_width() - 2);
+				get_valid_fields_min_value(HIGHLIGHT_WIDTH), get_project_width() - 2);
 		((layer_highlight *) layer_data->object_data)->height = height = CLAMP(onscreen_bottom - onscreen_top,
-				valid_fields[HIGHLIGHT_HEIGHT].min_value, get_project_height() - 2);
+				get_valid_fields_min_value(HIGHLIGHT_HEIGHT), get_project_height() - 2);
 
 		// Bounds check the starting x offset, then update the object with the new value
 		layer_data->x_offset_start = CLAMP(onscreen_left, 1, get_project_width() - width - 2);

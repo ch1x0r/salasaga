@@ -153,9 +153,9 @@ void image_crop(void)
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(left_label), 0, 1, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the slider that accepts the left side crop amount
-	left_slider = gtk_hscale_new_with_range(0, valid_fields[LAYER_WIDTH].max_value, 1);
+	left_slider = gtk_hscale_new_with_range(0, get_valid_fields_max_value(LAYER_WIDTH), 1);
 	gtk_range_set_value(GTK_RANGE(left_slider), 0);
-	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[LAYER_WIDTH].max_value; scale_mark_counter += 1024)
+	for (scale_mark_counter = 1024; scale_mark_counter <= get_valid_fields_max_value(LAYER_WIDTH); scale_mark_counter += 1024)
 	{
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(left_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -174,9 +174,9 @@ void image_crop(void)
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(right_label), 0, 1, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the slider that accepts the right side crop amount
-	right_slider = gtk_hscale_new_with_range(0, valid_fields[LAYER_WIDTH].max_value, 1);
+	right_slider = gtk_hscale_new_with_range(0, get_valid_fields_max_value(LAYER_WIDTH), 1);
 	gtk_range_set_value(GTK_RANGE(right_slider), 0);
-	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[LAYER_WIDTH].max_value; scale_mark_counter += 1024)
+	for (scale_mark_counter = 1024; scale_mark_counter <= get_valid_fields_max_value(LAYER_WIDTH); scale_mark_counter += 1024)
 	{
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(right_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -195,9 +195,9 @@ void image_crop(void)
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(top_label), 0, 1, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the slider that accepts the top crop amount
-	top_slider = gtk_hscale_new_with_range(0, valid_fields[LAYER_HEIGHT].max_value, 1);
+	top_slider = gtk_hscale_new_with_range(0, get_valid_fields_max_value(LAYER_HEIGHT), 1);
 	gtk_range_set_value(GTK_RANGE(top_slider), 0);
-	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[LAYER_HEIGHT].max_value; scale_mark_counter += 1024)
+	for (scale_mark_counter = 1024; scale_mark_counter <= get_valid_fields_max_value(LAYER_HEIGHT); scale_mark_counter += 1024)
 	{
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(top_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);
@@ -216,9 +216,9 @@ void image_crop(void)
 	gtk_table_attach(GTK_TABLE(crop_table), GTK_WIDGET(bottom_label), 0, 1, row_counter, row_counter + 1, 0, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the slider that accepts the bottom crop amount
-	bottom_slider = gtk_hscale_new_with_range(0, valid_fields[LAYER_HEIGHT].max_value, 1);
+	bottom_slider = gtk_hscale_new_with_range(0, get_valid_fields_max_value(LAYER_HEIGHT), 1);
 	gtk_range_set_value(GTK_RANGE(bottom_slider), 0);
-	for (scale_mark_counter = 1024; scale_mark_counter <= valid_fields[LAYER_HEIGHT].max_value; scale_mark_counter += 1024)
+	for (scale_mark_counter = 1024; scale_mark_counter <= get_valid_fields_max_value(LAYER_HEIGHT); scale_mark_counter += 1024)
 	{
 		// Add scale marks
 		gtk_scale_add_mark(GTK_SCALE(bottom_slider), scale_mark_counter, GTK_POS_BOTTOM, NULL);

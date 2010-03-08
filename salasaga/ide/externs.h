@@ -41,9 +41,6 @@ extern "C" {
 // Variables defined elsewhere
 extern GList				*slides;
 
-// Field descriptions used for bounds and validation
-extern validatation_entry	valid_fields[];
-
 #ifdef _WIN32
 // Windows only global variable
 extern HHOOK				win32_keyboard_hook_handle;
