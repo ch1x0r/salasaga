@@ -84,7 +84,6 @@
 // Global variables
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
 SWFFont					fdb_font_object[FONT_COUNT];	// The fdb font faces we use get loaded into this
-GString					*file_name = NULL;			// Holds the file name the project is saved as
 GtkTreeViewColumn		*film_strip_column;			// Pointer to the film strip column
 GtkScrolledWindow		*film_strip_container;		// Container for the film strip
 GtkListStore			*film_strip_store;			// Film strip list store

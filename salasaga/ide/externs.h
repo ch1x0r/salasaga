@@ -41,7 +41,6 @@ extern "C" {
 // Variables defined elsewhere
 extern GList				*current_slide;
 extern SWFFont				fdb_font_object[FONT_COUNT];
-extern GString				*file_name;
 extern GtkTreeViewColumn	*film_strip_column;
 extern GtkScrolledWindow	*film_strip_container;
 extern GtkListStore			*film_strip_store;

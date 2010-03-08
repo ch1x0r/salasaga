@@ -95,11 +95,11 @@ void menu_file_save_as(void)
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(save_dialog), all_filter);
 
 	// Set the path and name of the file to save as.  Use project_name as a default
-	if (NULL != file_name)
+	if (NULL != get_file_name())
 	{
 		// Work out the directory and file name components
-		dir_name_part = g_path_get_dirname(file_name->str);
-		file_name_part = g_path_get_basename(file_name->str);
+		dir_name_part = g_path_get_dirname(get_file_name());
+		file_name_part = g_path_get_basename(get_file_name());
 
 		// Set the default directory and file name for the dialog
 		gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(save_dialog), dir_name_part);
@@ -177,12 +177,8 @@ void menu_file_save_as(void)
 	// Destroy the dialog box, as it's not needed any more
 	gtk_widget_destroy(save_dialog);
 
-	// Keep the full file name around for future reference
-	if (NULL == file_name)
-	{
-		file_name = g_string_new(NULL);
-	}
-	file_name = g_string_assign(file_name, validated_string->str);
+	// Keep the full file name for future reference
+	set_file_name(validated_string->str);
 
 	// Update the project folder variable with this new path
 	dir_name = g_path_get_dirname(validated_string->str);

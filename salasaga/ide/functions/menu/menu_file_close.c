@@ -82,10 +82,9 @@ void menu_file_close()
 	set_changes_made(FALSE);
 
 	// Clear the saved file name string
-	if (NULL != file_name)
+	if (NULL != get_file_name())
 	{
-		g_string_free(file_name, TRUE);
-		file_name = NULL;
+		set_file_name(NULL);
 	}
 
 	// Change the title bar

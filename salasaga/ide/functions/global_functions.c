@@ -48,17 +48,18 @@ static gdouble				default_text_font_size;			// Default font size in text layers
 static gboolean				display_help_text = TRUE;		// Should we display help text and dialogs?
 static guint				end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations
 static guint				end_point_status = END_POINTS_INACTIVE;  // Is one of the layer end points being moved?
+static GString				*file_name = NULL;				// Holds the file name the project is saved as
 static gboolean				film_strip_being_resized;		// Toggle to indicate if the film strip is being resized
 static GtkWidget			*film_strip_view;				// The view of the film strip list store
 static guint				frames_per_second;				// Number of frames per second
-static GString				*icon_extension;				// Used to determine if SVG images can be loaded
-static GString				*icon_path;						// Points to the base location for Salasaga icon files
+static GString				*icon_extension = NULL;			// Used to determine if SVG images can be loaded
+static GString				*icon_path = NULL;				// Points to the base location for Salasaga icon files
 static gboolean				info_display = TRUE;			// Toggle for whether to display the information button in swf output
 static gint					invalidation_end_x;				// Right side of the front store area to invalidate
 static gint					invalidation_end_y;				// Bottom of the front store area to invalidate
 static gint					invalidation_start_x;			// Left side of the front store area to invalidate
 static gint					invalidation_start_y;			// Top of the front store area to invalidate
-static GString				*last_folder;					// Keeps track of the last folder the user visited
+static GString				*last_folder = NULL;			// Keeps track of the last folder the user visited
 static GtkWidget			*main_area;						// Widget for the onscreen display
 static GtkWidget			*main_drawing_area;				// Widget for the drawing area
 static GtkWidget			*main_window;					// Widget for the main window
@@ -66,7 +67,7 @@ static gboolean				mouse_click_double_added;		// Have we added a double mouse cl
 static gboolean				mouse_click_single_added;		// Have we added a single mouse click to the exported swf yet?
 static gboolean				mouse_click_triple_added;		// Have we added a triple mouse click to the exported swf yet?
 static gboolean				mouse_dragging = FALSE;			// Is the mouse being dragged?
-static GString				*mouse_ptr_string;				// Full path to the mouse pointer graphic
+static GString				*mouse_ptr_string = NULL;		// Full path to the mouse pointer graphic
 static gboolean				new_layer_selected = TYPE_NONE;	// Is a new layer being created?
 static gboolean				project_active;					// Whether or not a project is active (i.e. something is loaded or has been created)
 static guint				resize_handles_status;			// Are the layer resize handles active, in progress, etc
@@ -165,6 +166,16 @@ guint get_end_behaviour()
 guint get_end_point_status()
 {
 	return end_point_status;
+}
+
+gchar *get_file_name()
+{
+	return file_name->str;
+}
+
+gsize get_file_name_length()
+{
+	return file_name->len;
 }
 
 gboolean get_film_strip_being_resized()
@@ -465,6 +476,17 @@ void set_end_behaviour(guint new_end_behaviour)
 void set_end_point_status(guint new_end_point_status)
 {
 	end_point_status = new_end_point_status;
+}
+
+void set_file_name(gchar *new_file_name)
+{
+	if (NULL == file_name)
+	{
+		file_name = g_string_new(new_file_name);
+	} else
+	{
+		file_name = g_string_assign(file_name, new_file_name);
+	}
 }
 
 void set_film_strip_being_resized(gboolean new_film_strip_being_resized)

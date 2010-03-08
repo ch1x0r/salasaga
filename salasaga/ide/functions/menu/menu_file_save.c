@@ -73,7 +73,7 @@ void menu_file_save(void)
 	}
 
 	// If we don't have a valid file name, we open the Save As dialog instead
-	if (NULL == file_name)
+	if (NULL == get_file_name())
 	{
 		// Call the function which gets the filename (then does it's own save)
 		menu_file_save_as();
@@ -85,7 +85,7 @@ void menu_file_save(void)
 	tmp_gstring = g_string_new(NULL);
 
 	// Add a message to the status bar so the user gets visual feedback
-	g_string_printf(tmp_gstring, " %s - %s", _("Saving project"), file_name->str);
+	g_string_printf(tmp_gstring, " %s - %s", _("Saving project"), get_file_name());
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
 
 	// Create an empty document pointer
@@ -226,7 +226,7 @@ void menu_file_save(void)
 	}
 
 	// Update the status bar to indicate we're exporting the swf file
-	g_string_printf(tmp_gstring, " %s - %s", _("Saving project"), file_name->str);
+	g_string_printf(tmp_gstring, " %s - %s", _("Saving project"), get_file_name());
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
 
 	// Add the slide data to the XML structure
@@ -234,7 +234,7 @@ void menu_file_save(void)
 	g_list_foreach(slides, save_slide, slide_root);
 
 	// Create a saving context
-	save_context = xmlSaveToFilename(file_name->str, "utf8", 1);  // XML_SAVE_FORMAT == 1
+	save_context = xmlSaveToFilename(get_file_name(), "utf8", 1);  // XML_SAVE_FORMAT == 1
 
 	// Flush the saving context
 	tmp_long = xmlSaveDoc(save_context, document_pointer);
@@ -246,13 +246,13 @@ void menu_file_save(void)
 	set_changes_made(FALSE);
 
 	// Add a message to the status bar so the user gets visual feedback
-	g_string_printf(tmp_gstring, " %s - %s", _("Project saved"), file_name->str);
+	g_string_printf(tmp_gstring, " %s - %s", _("Project saved"), get_file_name());
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
 	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(get_status_bar()), 0.0);
 	gdk_flush();
 
 	// Change the title bar to include the file name
-	g_string_printf(message, "%s v%s - %s", APP_NAME, APP_VERSION, g_path_get_basename(file_name->str));
+	g_string_printf(message, "%s v%s - %s", APP_NAME, APP_VERSION, g_path_get_basename(get_file_name()));
 	gtk_window_set_title(GTK_WINDOW(get_main_window()), message->str);
 
 	// * Function clean up area *

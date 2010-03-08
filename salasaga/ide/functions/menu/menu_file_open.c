@@ -115,10 +115,10 @@ void menu_file_open(void)
 	gtk_file_chooser_add_filter(GTK_FILE_CHOOSER(open_dialog), all_filter);
 
 	// Set the path and name of the file to open
-	if (NULL != file_name)
+	if (NULL != get_file_name())
 	{
 		// Select the last opened file if possible
-		return_code = gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(open_dialog), file_name->str);
+		return_code = gtk_file_chooser_select_filename(GTK_FILE_CHOOSER(open_dialog), get_file_name());
 
 		// We couldn't successfully open the given project file
 		if (FALSE == return_code)
@@ -128,14 +128,14 @@ void menu_file_open(void)
 		} else
 		{
 			// If the selected project file has a ".flame" extension, we use the flame filter
-			return_code = g_str_has_suffix(file_name->str, ".flame");
+			return_code = g_str_has_suffix(get_file_name(), ".flame");
 			if (TRUE == return_code)
 			{
 				gtk_file_chooser_set_filter(GTK_FILE_CHOOSER(open_dialog), flame_filter);
 			} else
 			{
 				// Not a flame project file, so we need to decide whether to use the all filter (*.*) or the salasaga one
-				return_code = g_str_has_suffix(file_name->str, ".salasaga");
+				return_code = g_str_has_suffix(get_file_name(), ".salasaga");
 				if (TRUE != return_code)
 				{
 					// Doesn't have a ".salasaga" file extension either, so we'll use the all filter
@@ -215,16 +215,11 @@ void menu_file_open(void)
 	disable_layer_toolbar_buttons();
 	disable_main_toolbar_buttons();
 
-	// Keep the full file name around for future reference
-	if (NULL == file_name)
-	{
-		// We don't have a global file_name variable yet, so we create it
-		file_name = g_string_new(NULL);
-	}
-	file_name = g_string_assign(file_name, validated_string->str);
+	// Keep the full file name for future reference
+	set_file_name(validated_string->str);
 
 	// Change the title bar to include the project name
-	g_string_printf(message, "%s v%s - %s", APP_NAME, APP_VERSION, g_path_get_basename(file_name->str));
+	g_string_printf(message, "%s v%s - %s", APP_NAME, APP_VERSION, g_path_get_basename(get_file_name()));
 	gtk_window_set_title(GTK_WINDOW(get_main_window()), message->str);
 
 	// Destroy the existing output resolution selector
