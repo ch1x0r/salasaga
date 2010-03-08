@@ -1253,14 +1253,14 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		SWFText_setColor(info_object, 0, 0, 0, 0xff);
 
 		// Work out how many lines of text we're dealing with
-		num_text_lines = gtk_text_buffer_get_line_count(info_text);
+		num_text_lines = gtk_text_buffer_get_line_count(get_info_text());
 
 		// Add each line of text to the output
 		widest_text_string_width = 0;
 		for (text_lines_counter = 0; text_lines_counter < num_text_lines; text_lines_counter++)
 		{
 			// Select the start and end positions for the given line, in the text buffer
-			gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(info_text), &text_start, text_lines_counter);
+			gtk_text_buffer_get_iter_at_line(GTK_TEXT_BUFFER(get_info_text()), &text_start, text_lines_counter);
 			text_end = text_start;
 			gtk_text_iter_forward_to_line_end(&text_end);
 

@@ -99,8 +99,8 @@ void menu_screenshots_import(void)
 	{
 		set_info_link("http://www.salasaga.org");
 		set_info_link_target(_("_blank"));
-		info_text = gtk_text_buffer_new(text_tags_table);
-		gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), _("Created using Salasaga"), -1);
+		set_info_text(gtk_text_buffer_new(get_text_tags_table()));
+		gtk_text_buffer_set_text(GTK_TEXT_BUFFER(get_info_text()), _("Created using Salasaga"), -1);
 		set_info_display(TRUE);
 	}
 
@@ -392,8 +392,8 @@ void menu_screenshots_import(void)
 		tmp_slide->timeline_widget = NULL;
 
 		// Add the thumbnail to the GtkListView based film strip
-		gtk_list_store_append(film_strip_store, &film_strip_iter);  // Acquire an iterator
-		gtk_list_store_set(film_strip_store, &film_strip_iter, 0, tmp_slide->thumbnail, -1);
+		gtk_list_store_append(get_film_strip_store(), &film_strip_iter);  // Acquire an iterator
+		gtk_list_store_set(get_film_strip_store(), &film_strip_iter, 0, tmp_slide->thumbnail, -1);
 
 		// Add the temporary slide to the slides GList
 		slides = g_list_append(slides, tmp_slide);
@@ -442,7 +442,7 @@ void menu_screenshots_import(void)
 	time_line_set_selected_layer_num(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget), 0);
 
 	// Get the presently selected zoom level
-	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(zoom_selector)));
+	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(get_zoom_selector())));
 
 	// Parse and store the zoom level
 	if ((0 == g_strcmp0("Fit to width", tmp_string->str)) || (0 == g_strcmp0(_("Fit to width"), tmp_string->str)))
@@ -465,10 +465,10 @@ void menu_screenshots_import(void)
 	gtk_widget_set_size_request(GTK_WIDGET(get_main_drawing_area()), get_working_width(), get_working_height());
 
 	// Free the existing front store for the workspace
-	if (NULL != front_store)
+	if (NULL != get_front_store())
 	{
-		g_object_unref(GDK_PIXMAP(front_store));
-		front_store = NULL;
+		g_object_unref(GDK_PIXMAP(get_front_store()));
+		set_front_store(NULL);
 	}
 
 	// Redraw the workspace

@@ -45,7 +45,7 @@ gboolean create_text_tags(void)
 
 
 	// Create a global text tag table
-	text_tags_table = gtk_text_tag_table_new();
+	set_text_tags_table(gtk_text_tag_table_new());
 
 	// Create all of the text tags responsible for setting the font face
 	for (loop_counter = 0; loop_counter < FONT_COUNT; loop_counter++)
@@ -65,7 +65,7 @@ gboolean create_text_tags(void)
 		g_object_set_data(G_OBJECT(text_tags_fonts[loop_counter]), "font-num", int_ptr);
 
 		// Add the font tag to the global text table
-		gtk_text_tag_table_add(text_tags_table, text_tags_fonts[loop_counter]);
+		gtk_text_tag_table_add(get_text_tags_table(), text_tags_fonts[loop_counter]);
 	}
 
 	return TRUE;

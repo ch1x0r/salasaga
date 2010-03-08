@@ -270,7 +270,7 @@ void project_adjust_dimensions(void)
 	current_slide = g_list_nth(slides, present_slide_num);
 
 	// Recalculate the size of the working area
-	zoom_selector_changed(GTK_WIDGET(zoom_selector), NULL, (gpointer) NULL);
+	zoom_selector_changed(GTK_WIDGET(get_zoom_selector()), NULL, (gpointer) NULL);
 
 	// Recreate the film strip thumbnails
 	regenerate_film_strip_thumbnails();

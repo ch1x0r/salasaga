@@ -101,18 +101,18 @@ int render_text_string(cairo_t *existing_cairo_context, layer_text *text_object,
 	} else
 	{
 		// Create the front store if it doesn't already exist
-		if (NULL == front_store)
+		if (NULL == get_front_store())
 		{
 			if (NULL == system_colourmap)
 			{
 				system_colourmap = gdk_colormap_get_system();
 			}
-			front_store = gdk_pixmap_new(NULL, get_project_width(), get_project_height(), system_colourmap->visual->depth);
-			gdk_drawable_set_colormap(GDK_DRAWABLE(front_store), GDK_COLORMAP(system_colourmap));
+			set_front_store(gdk_pixmap_new(NULL, get_project_width(), get_project_height(), system_colourmap->visual->depth));
+			gdk_drawable_set_colormap(GDK_DRAWABLE(get_front_store()), GDK_COLORMAP(system_colourmap));
 		}
 
 		// Create a cairo context, as one wasn't supplied
-		cairo_context = gdk_cairo_create(GDK_PIXMAP(front_store));
+		cairo_context = gdk_cairo_create(GDK_PIXMAP(get_front_store()));
 	}
 
 	// Set things up

@@ -55,14 +55,14 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
 
 		// If the required zoom level is "Fit to width", then recalculate the zoom and redraw the drawing area
 		tmp_string = g_string_new(NULL);
-		tmp_gchar = gtk_combo_box_get_active_text(GTK_COMBO_BOX(zoom_selector));
+		tmp_gchar = gtk_combo_box_get_active_text(GTK_COMBO_BOX(get_zoom_selector()));
 		g_string_printf(tmp_string, "%s", tmp_gchar);
 		g_free(tmp_gchar);
 
 		// Parse and store the new zoom level
 		if ((0 == g_strcmp0("Fit to width", tmp_string->str)) || (0 == g_strcmp0(_("Fit to width"), tmp_string->str)))
 		{
-			zoom_selector_changed(GTK_WIDGET(zoom_selector), NULL, (gpointer) NULL);
+			zoom_selector_changed(GTK_WIDGET(get_zoom_selector()), NULL, (gpointer) NULL);
 		}
 
 		old_width = right_side_widget->allocation.width;

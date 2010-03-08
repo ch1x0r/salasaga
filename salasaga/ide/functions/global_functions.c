@@ -50,11 +50,16 @@ static guint				end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour 
 static guint				end_point_status = END_POINTS_INACTIVE;  // Is one of the layer end points being moved?
 static GString				*file_name = NULL;				// Holds the file name the project is saved as
 static gboolean				film_strip_being_resized;		// Toggle to indicate if the film strip is being resized
+static GtkTreeViewColumn	*film_strip_column;				// Pointer to the film strip column
+static GtkScrolledWindow	*film_strip_container;			// Container for the film strip
+static GtkListStore			*film_strip_store;				// Film strip list store
 static GtkWidget			*film_strip_view;				// The view of the film strip list store
 static guint				frames_per_second;				// Number of frames per second
+static GdkPixmap			*front_store;					// Front store for double buffering the workspace area
 static GString				*icon_extension = NULL;			// Used to determine if SVG images can be loaded
 static GString				*icon_path = NULL;				// Points to the base location for Salasaga icon files
 static gboolean				info_display = TRUE;			// Toggle for whether to display the information button in swf output
+static GtkTextBuffer		*info_text;						// Text to be shown in the information button in swf output
 static gint					invalidation_end_x;				// Right side of the front store area to invalidate
 static gint					invalidation_end_y;				// Bottom of the front store area to invalidate
 static gint					invalidation_start_x;			// Left side of the front store area to invalidate
@@ -63,16 +68,20 @@ static GString				*last_folder = NULL;			// Keeps track of the last folder the u
 static GtkWidget			*main_area;						// Widget for the onscreen display
 static GtkWidget			*main_drawing_area;				// Widget for the drawing area
 static GtkWidget			*main_window;					// Widget for the main window
+static GtkItemFactory		*menu_bar = NULL;				// Widget for the menu bar
+static GtkTable				*message_bar;					// Widget for message bar
 static gboolean				mouse_click_double_added;		// Have we added a double mouse click to the exported swf yet?
 static gboolean				mouse_click_single_added;		// Have we added a single mouse click to the exported swf yet?
 static gboolean				mouse_click_triple_added;		// Have we added a triple mouse click to the exported swf yet?
 static gboolean				mouse_dragging = FALSE;			// Is the mouse being dragged?
+static GdkPixbuf			*mouse_ptr_pixbuf;				// Temporary GDK Pixbuf
 static GString				*mouse_ptr_string = NULL;		// Full path to the mouse pointer graphic
 static gboolean				new_layer_selected = TYPE_NONE;	// Is a new layer being created?
 static gboolean				project_active;					// Whether or not a project is active (i.e. something is loaded or has been created)
 static guint				resize_handles_status;			// Are the layer resize handles active, in progress, etc
 static guint				resize_handle_size = 6;			// Size of the resize handles
 static gulong				resolution_callback;			// Holds the id of the resolution selector callback
+static GtkComboBox			*resolution_selector;			// Widget for the resolution selector
 static GtkWidget			*right_side;					// Widget for the right side area
 static gint					screenshot_command_num = -1;	// The metacity run command number used for the screenshot key
 static guint				screenshot_delay_time = 5;		// The number of seconds the screenshot trigger is delayed
@@ -81,15 +90,20 @@ static gboolean				screenshots_enabled = FALSE;	// Toggle for whether to enable 
 static gboolean				show_control_bar = TRUE;		// Toggle for whether to display the control bar in swf output
 static guint				start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
 static GtkWidget			*status_bar;					// Widget for the status bar
+static GtkStatusIcon		*status_icon;					// Pointer to the GtkStatusIcon object, used for StatusIcon communication
 static gint					stored_x;						// X co-ordinate of the mouse last click
 static gint					stored_y;						// Y co-ordinate of the mouse last click
 static gint					table_x_padding;				// Number of pixels to pad table entries by
 static gint					table_y_padding;				// Number of pixels to pad table entries by
+static GSList				*text_tags_fg_colour_slist = NULL;  // Text tags for text foreground colour, used for changing text colour in text layers
+static GSList				*text_tags_size_slist = NULL;	// Text tags for text sizes, used for changing text size in text layers
+static GtkTextTagTable		*text_tags_table;				// The table of all text tags, used for applying text tags in text layers
 static GtkWidget			*time_line_container;			// Scrolled window widget, to add scroll bars to the time line widget
 static GtkWidget			*time_line_vbox;				// VBox widget holding all of the time line elements
 static guint				working_height;					// Height of the display portion of the working area in pixels
 static guint				working_width;					// Width of the display portion of the working area in pixels
 static guint				zoom;							// Percentage zoom to use in the drawing area
+static GtkComboBox			*zoom_selector;					// Widget for the zoom selector
 
 
 // Functions to get and set the variables
@@ -170,7 +184,13 @@ guint get_end_point_status()
 
 gchar *get_file_name()
 {
-	return file_name->str;
+	if (NULL == file_name)
+	{
+		return NULL;
+	} else
+	{
+		return file_name->str;
+	}
 }
 
 gsize get_file_name_length()
@@ -183,6 +203,21 @@ gboolean get_film_strip_being_resized()
 	return film_strip_being_resized;
 }
 
+GtkTreeViewColumn *get_film_strip_column()
+{
+	return film_strip_column;
+}
+
+GtkScrolledWindow *get_film_strip_container()
+{
+	return film_strip_container;
+}
+
+GtkListStore *get_film_strip_store()
+{
+	return film_strip_store;
+}
+
 GtkWidget *get_film_strip_view()
 {
 	return film_strip_view;
@@ -193,9 +228,20 @@ guint get_frames_per_second()
 	return frames_per_second;
 }
 
+GdkPixmap *get_front_store()
+{
+	return front_store;
+}
+
 gchar *get_icon_extension()
 {
-	return icon_extension->str;
+	if (NULL == icon_extension)
+	{
+		return NULL;
+	} else
+	{
+		return icon_extension->str;
+	}
 }
 
 gsize get_icon_extension_length()
@@ -205,7 +251,13 @@ gsize get_icon_extension_length()
 
 gchar *get_icon_path()
 {
-	return icon_path->str;
+	if (NULL == icon_path)
+	{
+		return NULL;
+	} else
+	{
+		return icon_path->str;
+	}
 }
 
 gsize get_icon_path_length()
@@ -216,6 +268,11 @@ gsize get_icon_path_length()
 gboolean get_info_display()
 {
 	return info_display;
+}
+
+GtkTextBuffer *get_info_text()
+{
+	return info_text;
 }
 
 gint get_invalidation_end_x()
@@ -240,7 +297,13 @@ gint get_invalidation_start_y()
 
 gchar *get_last_folder()
 {
-	return last_folder->str;
+	if (NULL == last_folder)
+	{
+		return NULL;
+	} else
+	{
+		return last_folder->str;
+	}
 }
 
 gsize get_last_folder_length()
@@ -263,6 +326,16 @@ GtkWidget *get_main_window()
 	return main_window;
 }
 
+GtkItemFactory *get_menu_bar()
+{
+	return menu_bar;
+}
+
+GtkTable *get_message_bar()
+{
+	return message_bar;
+}
+
 gboolean get_mouse_click_double_added()
 {
 	return mouse_click_double_added;
@@ -283,9 +356,20 @@ gboolean get_mouse_dragging()
 	return mouse_dragging;
 }
 
+GdkPixbuf *get_mouse_ptr_pixbuf()
+{
+	return mouse_ptr_pixbuf;
+}
+
 gchar *get_mouse_ptr_string()
 {
-	return mouse_ptr_string->str;
+	if (NULL == mouse_ptr_string)
+	{
+		return NULL;
+	} else
+	{
+		return mouse_ptr_string->str;
+	}
 }
 
 gsize get_mouse_ptr_string_length()
@@ -323,6 +407,11 @@ gulong get_resolution_callback()
 	return resolution_callback;
 }
 
+GtkComboBox *get_resolution_selector()
+{
+	return resolution_selector;
+}
+
 gint get_screenshot_command_num()
 {
 	return screenshot_command_num;
@@ -358,6 +447,11 @@ GtkWidget *get_status_bar()
 	return status_bar;
 }
 
+GtkStatusIcon *get_status_icon()
+{
+	return status_icon;
+}
+
 gint get_stored_x()
 {
 	return stored_x;
@@ -376,6 +470,21 @@ gint get_table_x_padding()
 gint get_table_y_padding()
 {
 	return table_y_padding;
+}
+
+GSList *get_text_tags_fg_colour_slist()
+{
+	return text_tags_fg_colour_slist;
+}
+
+GSList *get_text_tags_size_slist()
+{
+	return text_tags_size_slist;
+}
+
+GtkTextTagTable *get_text_tags_table()
+{
+	return text_tags_table;
 }
 
 GtkWidget *get_time_line_container()
@@ -401,6 +510,11 @@ guint get_working_width()
 guint get_zoom()
 {
 	return zoom;
+}
+
+GtkComboBox *get_zoom_selector()
+{
+	return zoom_selector;
 }
 
 void set_boundary_list(GList *new_boundary_list)
@@ -494,6 +608,21 @@ void set_film_strip_being_resized(gboolean new_film_strip_being_resized)
 	film_strip_being_resized = new_film_strip_being_resized;
 }
 
+void set_film_strip_column(GtkTreeViewColumn *new_film_strip_column)
+{
+	film_strip_column = new_film_strip_column;
+}
+
+void set_film_strip_container(GtkScrolledWindow *new_film_strip_container)
+{
+	film_strip_container = new_film_strip_container;
+}
+
+void set_film_strip_store(GtkListStore *new_film_strip_store)
+{
+	film_strip_store = new_film_strip_store;
+}
+
 void set_film_strip_view(GtkWidget *new_film_strip_view)
 {
 	film_strip_view = new_film_strip_view;
@@ -502,6 +631,11 @@ void set_film_strip_view(GtkWidget *new_film_strip_view)
 void set_frames_per_second(guint new_frames_per_second)
 {
 	frames_per_second = new_frames_per_second;
+}
+
+void set_front_store(GdkPixmap *new_front_store)
+{
+	front_store = new_front_store;
 }
 
 void set_icon_extension(gchar *new_icon_extension)
@@ -529,6 +663,11 @@ void set_icon_path(gchar *new_icon_path)
 void set_info_display(gboolean new_info_display)
 {
 	info_display = new_info_display;
+}
+
+void set_info_text(GtkTextBuffer *new_info_text)
+{
+	info_text = new_info_text;
 }
 
 void set_invalidation_end_x(gint new_invalidation_end_x)
@@ -577,6 +716,16 @@ void set_main_window(GtkWidget *new_main_window)
 	main_window = new_main_window;
 }
 
+void set_menu_bar(GtkItemFactory *new_menu_bar)
+{
+	menu_bar = new_menu_bar;
+}
+
+void set_message_bar(GtkTable *new_message_bar)
+{
+	message_bar = new_message_bar;
+}
+
 void set_mouse_click_double_added(gboolean new_mouse_click_double_added)
 {
 	mouse_click_double_added = new_mouse_click_double_added;
@@ -597,9 +746,14 @@ void set_mouse_dragging(gboolean new_mouse_dragging)
 	mouse_dragging = new_mouse_dragging;
 }
 
+void set_mouse_ptr_pixbuf(GdkPixbuf *new_mouse_ptr_pixbuf)
+{
+	mouse_ptr_pixbuf = new_mouse_ptr_pixbuf;
+}
+
 void set_mouse_ptr_string(gchar *new_mouse_ptr_string)
 {
-	if (NULL == last_folder)
+	if (NULL == mouse_ptr_string)
 	{
 		mouse_ptr_string = g_string_new(new_mouse_ptr_string);
 	} else
@@ -631,6 +785,11 @@ void set_resize_handle_size(guint new_resize_handle_size)
 void set_resolution_callback(gulong new_resolution_callback)
 {
 	resolution_callback = new_resolution_callback;
+}
+
+void set_resolution_selector(GtkComboBox *new_resolution_selector)
+{
+	resolution_selector = new_resolution_selector;
 }
 
 void set_right_side(GtkWidget *new_right_side)
@@ -673,6 +832,11 @@ void set_status_bar(GtkWidget *new_status_bar)
 	status_bar = new_status_bar;
 }
 
+void set_status_icon(GtkStatusIcon *new_status_icon)
+{
+	status_icon = new_status_icon;
+}
+
 void set_stored_x(gint new_stored_x)
 {
 	stored_x = new_stored_x;
@@ -691,6 +855,21 @@ void set_table_x_padding(gint new_table_x_padding)
 void set_table_y_padding(gint new_table_y_padding)
 {
 	table_y_padding = new_table_y_padding;
+}
+
+void set_text_tags_fg_colour_slist(GSList *new_text_tags_fg_colour_slist)
+{
+	text_tags_fg_colour_slist = new_text_tags_fg_colour_slist;
+}
+
+void set_text_tags_size_slist(GSList *new_text_tags_size_slist)
+{
+	text_tags_size_slist = new_text_tags_size_slist;
+}
+
+void set_text_tags_table(GtkTextTagTable *new_text_tags_table)
+{
+	text_tags_table = new_text_tags_table;
 }
 
 void set_time_line_container(GtkWidget *new_time_line_container)
@@ -716,4 +895,9 @@ void set_working_width(guint new_working_width)
 void set_zoom(guint new_zoom)
 {
 	zoom = new_zoom;
+}
+
+void set_zoom_selector(GtkComboBox *new_zoom_selector)
+{
+	zoom_selector = new_zoom_selector;
 }

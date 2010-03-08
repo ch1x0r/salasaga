@@ -346,7 +346,7 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 				text_node = this_node;
 
 				// Create a new text buffer for putting text in
-				tmp_text_ob->text_buffer = gtk_text_buffer_new(text_tags_table);
+				tmp_text_ob->text_buffer = gtk_text_buffer_new(get_text_tags_table());
 				gtk_text_buffer_get_start_iter(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), &text_start);
 
 				// Get the number of characters to process
@@ -442,7 +442,7 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 			{
 				// Get the text
 				// fixme5: Unsure how to validate this... it's supposed to be free-form. (?)
-				tmp_text_ob->text_buffer = gtk_text_buffer_new(text_tags_table);
+				tmp_text_ob->text_buffer = gtk_text_buffer_new(get_text_tags_table());
 				tmp_xmlChar = xmlNodeListGetString(document, this_node->xmlChildrenNode, 1);
 				gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), (const gchar *) tmp_xmlChar, -1);
 				xmlFree(tmp_xmlChar);

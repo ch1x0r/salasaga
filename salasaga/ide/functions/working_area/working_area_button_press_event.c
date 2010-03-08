@@ -79,7 +79,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 
 
 	// Only do this function if we have a front store available and a project loaded
-	if ((NULL == front_store) || (FALSE == get_project_active()))
+	if ((NULL == get_front_store()) || (FALSE == get_project_active()))
 	{
 		return TRUE;
 	}
@@ -92,7 +92,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 
 	// Initialise some things
 	this_slide_data = current_slide->data;
-	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
 
 	// Check for primary mouse button click
 	if (1 != event->button)
@@ -269,7 +269,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 
 		// Clear any existing handle box
 		gdk_draw_drawable(GDK_DRAWABLE(get_main_drawing_area()->window), GDK_GC(get_main_drawing_area()->style->fg_gc[GTK_WIDGET_STATE(get_main_drawing_area())]),
-				GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
+				GDK_PIXMAP(get_front_store()), 0, 0, 0, 0, -1, -1);
 
 		// Reset the stored mouse coordinates
 		set_stored_x(-1);

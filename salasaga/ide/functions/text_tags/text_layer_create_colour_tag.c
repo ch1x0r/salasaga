@@ -49,7 +49,7 @@ GtkTextTag *text_layer_create_colour_tag(GdkColor *fg_colour)
 
 	// Create the name of a text tag to match the desired colour
 	g_string_printf(fg_colour_tag_name, "text fg colour #%u-%u-%u", fg_colour->red, fg_colour->green, fg_colour->blue);
-	fg_colour_tag = gtk_text_tag_table_lookup(GTK_TEXT_TAG_TABLE(text_tags_table), fg_colour_tag_name->str);
+	fg_colour_tag = gtk_text_tag_table_lookup(GTK_TEXT_TAG_TABLE(get_text_tags_table()), fg_colour_tag_name->str);
 	if (NULL == fg_colour_tag)
 	{
 		// No text tag with the requested colour already exists in the tag table, so we create one
@@ -57,10 +57,10 @@ GtkTextTag *text_layer_create_colour_tag(GdkColor *fg_colour)
 		g_object_set(GTK_TEXT_TAG(fg_colour_tag), "foreground-gdk", fg_colour, NULL);
 
 		// Add the new tag to the global text table
-		gtk_text_tag_table_add(GTK_TEXT_TAG_TABLE(text_tags_table), GTK_TEXT_TAG(fg_colour_tag));
+		gtk_text_tag_table_add(GTK_TEXT_TAG_TABLE(get_text_tags_table()), GTK_TEXT_TAG(fg_colour_tag));
 
 		// Add the new colour tag to the linked list
-		text_tags_fg_colour_slist = g_slist_prepend(text_tags_fg_colour_slist, GTK_TEXT_TAG(fg_colour_tag));
+		set_text_tags_fg_colour_slist(g_slist_prepend(get_text_tags_fg_colour_slist(), GTK_TEXT_TAG(fg_colour_tag)));
 	}
 
 	// Free the memory used in this function

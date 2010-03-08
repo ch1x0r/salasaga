@@ -86,7 +86,7 @@ void slide_delete(void)
 	// Remove the current slide from the film strip
 	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(get_film_strip_view()));
 	gtk_tree_selection_get_selected(film_strip_selector, NULL, &selection_iter);
-	gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &selection_iter);
+	gtk_list_store_remove(GTK_LIST_STORE(get_film_strip_store()), &selection_iter);
 
 	// * Update the currently selected slide to point to the next slide *
 	if (num_slides == (slide_position + 1))

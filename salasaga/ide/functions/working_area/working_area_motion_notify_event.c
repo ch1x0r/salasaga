@@ -97,7 +97,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);
 
 	// Initialise things
-	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
 
 	// If we're creating a new highlight layer, draw a bounding box
 	if (TYPE_HIGHLIGHT == get_new_layer_selected())

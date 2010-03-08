@@ -105,7 +105,7 @@ void menu_screenshots_capture_full_screen(void)
 	gtk_widget_destroy(message_dialog);
 
 	// Update the status icon
-	gtk_status_icon_set_tooltip_text(status_icon, _("Salasaga - Capture active"));
+	gtk_status_icon_set_tooltip_text(get_status_icon(), _("Salasaga - Capture active"));
 
 #else
 	// * Pop open a dialog box asking the user for the offset and size of capture area *

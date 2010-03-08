@@ -67,7 +67,7 @@ GtkTextBuffer *gtk_text_buffer_duplicate(GtkTextBuffer *source_buffer)
 	temp_gstring = g_string_new(NULL);
 
 	// Create a new text buffer
-	new_text_buffer = gtk_text_buffer_new(text_tags_table);
+	new_text_buffer = gtk_text_buffer_new(get_text_tags_table());
 
 	// Get the bounds of the source buffer
 	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(source_buffer), &source_buffer_start, &source_buffer_end);

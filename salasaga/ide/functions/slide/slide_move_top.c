@@ -69,9 +69,9 @@ void slide_move_top(void)
 
 	// Move the thumbnail to the start of the slides list
 	g_string_printf(tmp_gstring, "%u", slide_position);
-	if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &new_iter, tmp_gstring->str))
+	if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(get_film_strip_store()), &new_iter, tmp_gstring->str))
 	{
-		gtk_list_store_move_after(GTK_LIST_STORE(film_strip_store), &new_iter, NULL);
+		gtk_list_store_move_after(GTK_LIST_STORE(get_film_strip_store()), &new_iter, NULL);
 	}
 	g_string_free(tmp_gstring, TRUE);
 

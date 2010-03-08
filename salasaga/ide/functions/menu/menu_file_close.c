@@ -111,10 +111,10 @@ void menu_file_close()
 	menu_enable(_("/Export"), FALSE);
 
 	// If there's an existing film strip, we unload it
-	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
+	gtk_list_store_clear(GTK_LIST_STORE(get_film_strip_store()));
 
 	// Clear the working area
-	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
 	tmp_rectangle.x = 0;
 	tmp_rectangle.y = 0;
 	tmp_rectangle.width = pixmap_width;

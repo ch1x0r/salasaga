@@ -49,7 +49,7 @@ gint resolution_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer da
 	gchar		**resolution_strings;
 
 	// Get the new output resolution
-	tmp_gchar = gtk_combo_box_get_active_text(GTK_COMBO_BOX(resolution_selector));
+	tmp_gchar = gtk_combo_box_get_active_text(GTK_COMBO_BOX(get_resolution_selector()));
 
 	// Parse and store the new project output size
 	main_strings = g_strsplit(tmp_gchar, " ", 2);

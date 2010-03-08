@@ -223,14 +223,14 @@ void menu_file_open(void)
 	gtk_window_set_title(GTK_WINDOW(get_main_window()), message->str);
 
 	// Destroy the existing output resolution selector
-	g_signal_handler_disconnect(G_OBJECT(resolution_selector), get_resolution_callback());
-	gtk_container_remove(GTK_CONTAINER(message_bar), GTK_WIDGET(resolution_selector));
+	g_signal_handler_disconnect(G_OBJECT(get_resolution_selector()), get_resolution_callback());
+	gtk_container_remove(GTK_CONTAINER(get_message_bar()), GTK_WIDGET(get_resolution_selector()));
 
 	// Create a new output resolution selector, including the resolution of the loaded project
-	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(get_output_width(), get_output_height()));
-	gtk_table_attach(message_bar, GTK_WIDGET(resolution_selector), 5, 6, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
-	set_resolution_callback(g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL));
-	gtk_widget_show_all(GTK_WIDGET(message_bar));
+	set_resolution_selector(GTK_COMBO_BOX(create_resolution_selector(get_output_width(), get_output_height())));
+	gtk_table_attach(get_message_bar(), GTK_WIDGET(get_resolution_selector()), 5, 6, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
+	set_resolution_callback(g_signal_connect(G_OBJECT(get_resolution_selector()), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL));
+	gtk_widget_show_all(GTK_WIDGET(get_message_bar()));
 
 	// Set the global toggle that a project is now active
 	set_project_active(TRUE);
@@ -246,10 +246,10 @@ void menu_file_open(void)
 	gtk_widget_set_size_request(GTK_WIDGET(get_main_drawing_area()), get_working_width(), get_working_height());
 
 	// Free the existing front store for the workspace
-	if (NULL != front_store)
+	if (NULL != get_front_store())
 	{
-		g_object_unref(GDK_PIXMAP(front_store));
-		front_store = NULL;
+		g_object_unref(GDK_PIXMAP(get_front_store()));
+		set_front_store(NULL);
 	}
 
 	// Redraw the workspace

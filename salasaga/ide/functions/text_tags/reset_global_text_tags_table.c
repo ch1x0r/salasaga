@@ -45,22 +45,22 @@ gboolean reset_global_text_tags_table(void)
 
 
 	// Free all of the font size text tags
-	num_tags = g_slist_length(text_tags_size_slist);
+	num_tags = g_slist_length(get_text_tags_size_slist());
 	for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
 	{
-		gtk_text_tag_table_remove(text_tags_table, g_slist_nth_data(text_tags_size_slist, loop_counter));
+		gtk_text_tag_table_remove(get_text_tags_table(), g_slist_nth_data(get_text_tags_size_slist(), loop_counter));
 	}
-	g_slist_free(text_tags_size_slist);
-	text_tags_size_slist = NULL;
+	g_slist_free(get_text_tags_size_slist());
+	set_text_tags_size_slist(NULL);
 
 	// Free all of the foreground font colour text tags
-	num_tags = g_slist_length(text_tags_fg_colour_slist);
+	num_tags = g_slist_length(get_text_tags_fg_colour_slist());
 	for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
 	{
-		gtk_text_tag_table_remove(text_tags_table, g_slist_nth_data(text_tags_fg_colour_slist, loop_counter));
+		gtk_text_tag_table_remove(get_text_tags_table(), g_slist_nth_data(get_text_tags_fg_colour_slist(), loop_counter));
 	}
-	g_slist_free(text_tags_fg_colour_slist);
-	text_tags_fg_colour_slist = NULL;
+	g_slist_free(get_text_tags_fg_colour_slist());
+	set_text_tags_fg_colour_slist(NULL);
 
 	return TRUE;
 }

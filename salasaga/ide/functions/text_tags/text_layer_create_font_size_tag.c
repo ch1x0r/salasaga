@@ -54,7 +54,7 @@ GtkTextTag *text_layer_create_font_size_tag(gdouble font_size)
 	// that transporting project files between users with different numeric locales works
 	g_strcanon(tag_name_text_size->str, "tex siz0123456789", '.');
 
-	text_size_text_tag = gtk_text_tag_table_lookup(GTK_TEXT_TAG_TABLE(text_tags_table), tag_name_text_size->str);
+	text_size_text_tag = gtk_text_tag_table_lookup(GTK_TEXT_TAG_TABLE(get_text_tags_table()), tag_name_text_size->str);
 	if (NULL == text_size_text_tag)
 	{
 		// No text tag with the requested size already exists in the tag table, so we create one
@@ -62,10 +62,10 @@ GtkTextTag *text_layer_create_font_size_tag(gdouble font_size)
 		g_object_set(GTK_TEXT_TAG(text_size_text_tag), "size-points", font_size, NULL);
 
 		// Add the new tag to the global text table
-		gtk_text_tag_table_add(GTK_TEXT_TAG_TABLE(text_tags_table), GTK_TEXT_TAG(text_size_text_tag));
+		gtk_text_tag_table_add(GTK_TEXT_TAG_TABLE(get_text_tags_table()), GTK_TEXT_TAG(text_size_text_tag));
 
 		// Add the new size tag to the linked list
-		text_tags_size_slist = g_slist_prepend(text_tags_size_slist, GTK_TEXT_TAG(text_size_text_tag));
+		set_text_tags_size_slist(g_slist_prepend(get_text_tags_size_slist(), GTK_TEXT_TAG(text_size_text_tag)));
 	}
 
 	// Free the memory used in this function

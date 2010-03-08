@@ -68,24 +68,24 @@ void create_film_strip()
 
 
 	// Create the film strip top widget
-	film_strip_container = GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL));
+	set_film_strip_container(GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL)));
 
 	// Set the scroll bar settings
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(film_strip_container), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(get_film_strip_container()), GTK_POLICY_NEVER, GTK_POLICY_AUTOMATIC);
 
 	// Create a GtkListStore, to have the thumbnail data in
-	film_strip_store = gtk_list_store_new(1, GDK_TYPE_PIXBUF);
+	set_film_strip_store(gtk_list_store_new(1, GDK_TYPE_PIXBUF));
 
 	// Create the view of the list store
-	set_film_strip_view(gtk_tree_view_new_with_model(GTK_TREE_MODEL(film_strip_store)));
+	set_film_strip_view(gtk_tree_view_new_with_model(GTK_TREE_MODEL(get_film_strip_store())));
 	gtk_tree_view_set_headers_visible(GTK_TREE_VIEW(get_film_strip_view()), FALSE);
 	renderer = gtk_cell_renderer_pixbuf_new();
-	film_strip_column = gtk_tree_view_column_new_with_attributes(_("Slide"), renderer, "pixbuf", 0, NULL);
-	gtk_tree_view_column_set_sizing(film_strip_column, GTK_TREE_VIEW_COLUMN_FIXED);
-	gtk_tree_view_append_column(GTK_TREE_VIEW(get_film_strip_view()), film_strip_column);
+	set_film_strip_column(gtk_tree_view_column_new_with_attributes(_("Slide"), renderer, "pixbuf", 0, NULL));
+	gtk_tree_view_column_set_sizing(get_film_strip_column(), GTK_TREE_VIEW_COLUMN_FIXED);
+	gtk_tree_view_append_column(GTK_TREE_VIEW(get_film_strip_view()), get_film_strip_column());
 
 	// Add the list view to the film strip
-	gtk_container_add(GTK_CONTAINER(film_strip_container), GTK_WIDGET(get_film_strip_view()));
+	gtk_container_add(GTK_CONTAINER(get_film_strip_container()), GTK_WIDGET(get_film_strip_view()));
 
 	// Set the selection mode of the film strip to single
 	selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(get_film_strip_view()));

@@ -97,7 +97,7 @@ void layer_new_highlight_inner(gint release_x, gint release_y)
 	}
 
 	// Ensure the mouse coordinates can't go out of bounds
-	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
 	start_x = CLAMP(start_x, 1, pixmap_width - valid_fields[HIGHLIGHT_WIDTH].min_value);
 	start_y = CLAMP(start_y, 1, pixmap_height - valid_fields[HIGHLIGHT_HEIGHT].min_value);
 	end_x = CLAMP(end_x, 1, pixmap_width - 1);

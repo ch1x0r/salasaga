@@ -73,7 +73,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 
 	// Create the text layer data
 	tmp_text_ob = g_new(layer_text, 1);
-	tmp_text_ob->text_buffer = gtk_text_buffer_new(text_tags_table);
+	tmp_text_ob->text_buffer = gtk_text_buffer_new(get_text_tags_table());
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), _("New text..."), -1);
 
 	// Apply the default font face

@@ -44,7 +44,7 @@
 gboolean film_strip_button_clicked(GtkWidget *widget, gpointer data)
 {
 	// Only do this function if we have a front store available and a project loaded
-	if ((NULL == front_store) || (FALSE == get_project_active()))
+	if ((NULL == get_front_store()) || (FALSE == get_project_active()))
 	{
 		return FALSE;
 	}

@@ -152,7 +152,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 			// * Composite the mouse pointer image onto the backing pixmap *
 
 			// If the mouse pointer image hasn't been loaded then we skip this layer
-			if (NULL == mouse_ptr_pixbuf)
+			if (NULL == get_mouse_ptr_pixbuf())
 			{
 				// The cairo drawing context is no longer needed, so free it
 				cairo_destroy(cairo_context);
@@ -169,7 +169,7 @@ void compress_layers_inner(layer *this_layer_data, GdkPixmap *incoming_pixmap, g
 
 			// Draw the mouse cursor
 			cairo_scale(cairo_context, scaled_width_ratio, scaled_height_ratio);
-			gdk_cairo_set_source_pixbuf(cairo_context, GDK_PIXBUF(mouse_ptr_pixbuf), layer_positions.x, layer_positions.y);
+			gdk_cairo_set_source_pixbuf(cairo_context, GDK_PIXBUF(get_mouse_ptr_pixbuf()), layer_positions.x, layer_positions.y);
 			cairo_rectangle(cairo_context, layer_positions.x, layer_positions.y, width, height);
 			cairo_clip(cairo_context);
 			cairo_paint_with_alpha(cairo_context, time_alpha);

@@ -173,10 +173,10 @@ void create_menu_bar()
 	gtk_window_add_accel_group(GTK_WINDOW(get_main_window()), accel_group);
 
 	// Create the ItemFactory menu bar
-	menu_bar = gtk_item_factory_new(GTK_TYPE_MENU_BAR, "<main>", accel_group);
+	set_menu_bar(gtk_item_factory_new(GTK_TYPE_MENU_BAR, "<main>", accel_group));
 
 	// Create the menu items
-	gtk_item_factory_create_items(menu_bar, num_items, menu_items, NULL);
+	gtk_item_factory_create_items(get_menu_bar(), num_items, menu_items, NULL);
 
 	// Grey out the menu items
 	menu_enable(_("/Project"), FALSE);

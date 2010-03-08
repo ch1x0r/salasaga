@@ -67,10 +67,10 @@ gboolean text_layer_dialog_fg_colour_changed(GtkWidget *calling_widget, text_dia
 	}
 
 	// Remove all of the existing colour tags for the selected text
-	num_tags = g_slist_length(text_tags_fg_colour_slist);
+	num_tags = g_slist_length(get_text_tags_fg_colour_slist());
 	for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
 	{
-		gtk_text_buffer_remove_tag(GTK_TEXT_BUFFER(text_buffer), g_slist_nth_data(text_tags_fg_colour_slist, loop_counter), &selection_start, &selection_end);
+		gtk_text_buffer_remove_tag(GTK_TEXT_BUFFER(text_buffer), g_slist_nth_data(get_text_tags_fg_colour_slist(), loop_counter), &selection_start, &selection_end);
 	}
 
 	// Retrieve the requested colour from the colour button

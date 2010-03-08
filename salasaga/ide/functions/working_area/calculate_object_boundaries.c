@@ -82,7 +82,7 @@ void calculate_object_boundaries(void)
 	this_slide_data = current_slide->data;
 
 	// Calculate the height and width scaling values for the main drawing area at its present size
-	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
 	scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;
 	scaled_width_ratio = (gfloat) get_project_width() / (gfloat) pixmap_width;
 

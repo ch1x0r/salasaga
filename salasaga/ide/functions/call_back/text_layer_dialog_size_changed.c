@@ -77,10 +77,10 @@ gboolean text_layer_dialog_size_changed(GtkWidget *calling_widget, text_dialog_w
 	}
 
 	// Remove all of the existing size tags for the selected text
-	num_tags = g_slist_length(text_tags_size_slist);
+	num_tags = g_slist_length(get_text_tags_size_slist());
 	for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
 	{
-		gtk_text_buffer_remove_tag(GTK_TEXT_BUFFER(text_buffer), g_slist_nth_data(text_tags_size_slist, loop_counter), &selection_start, &selection_end);
+		gtk_text_buffer_remove_tag(GTK_TEXT_BUFFER(text_buffer), g_slist_nth_data(get_text_tags_size_slist(), loop_counter), &selection_start, &selection_end);
 	}
 
 	// Create the name of a text tag to match the desired size

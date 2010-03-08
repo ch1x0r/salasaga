@@ -72,12 +72,12 @@ void slide_move_down(void)
 
 	// Move the thumbnail down one position in the film strip list
 	g_string_printf(tmp_gstring, "%u", slide_position);
-	if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &from_iter, tmp_gstring->str))
+	if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(get_film_strip_store()), &from_iter, tmp_gstring->str))
 	{
 		g_string_printf(tmp_gstring, "%u", slide_position + 1);
-		if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &to_iter, tmp_gstring->str))
+		if (TRUE == gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(get_film_strip_store()), &to_iter, tmp_gstring->str))
 		{
-			gtk_list_store_move_after(GTK_LIST_STORE(film_strip_store), &from_iter, &to_iter);
+			gtk_list_store_move_after(GTK_LIST_STORE(get_film_strip_store()), &from_iter, &to_iter);
 		}
 	}
 	g_string_free(tmp_gstring, TRUE);

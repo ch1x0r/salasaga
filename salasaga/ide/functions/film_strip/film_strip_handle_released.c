@@ -45,7 +45,7 @@ gint film_strip_handle_released(GObject *paned, GParamSpec *pspec, gpointer data
 	if (TRUE == get_film_strip_being_resized())
 	{
 		// Set the new width of the film strip widget
-		gtk_tree_view_column_set_fixed_width(GTK_TREE_VIEW_COLUMN(film_strip_column), get_preview_width());
+		gtk_tree_view_column_set_fixed_width(GTK_TREE_VIEW_COLUMN(get_film_strip_column()), get_preview_width());
 		
 		// Regenerate the film strip thumbnails at the new size
 		regenerate_film_strip_thumbnails();

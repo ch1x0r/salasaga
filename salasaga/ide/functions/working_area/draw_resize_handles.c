@@ -55,7 +55,7 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 
 	// Initialise some things
 	temp_widget = get_main_drawing_area();
-	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
 
 	// Draw the handles directly onto the widget
 	if (NULL == handle_gc)

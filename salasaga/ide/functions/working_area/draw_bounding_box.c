@@ -51,7 +51,7 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 
 
 	// Initialise some things
-	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
 	temp_widget = get_main_drawing_area();
 
 	// Swap around the top and side positions if we need to
@@ -100,7 +100,7 @@ gboolean draw_bounding_box(gint left, gint top, gint right, gint bottom)
 
 	// Restore the widget area we're going over from the front store
 	gdk_draw_drawable(GDK_DRAWABLE(temp_widget->window), GDK_GC(temp_widget->style->fg_gc[GTK_WIDGET_STATE(temp_widget)]),
-		GDK_PIXMAP(front_store),
+		GDK_PIXMAP(get_front_store()),
 		get_invalidation_start_x(), get_invalidation_start_y(),
 		get_invalidation_start_x(), get_invalidation_start_y(),
 		(get_invalidation_end_x() - get_invalidation_start_x()) + 1, (get_invalidation_end_y() - get_invalidation_start_y()) + 1);

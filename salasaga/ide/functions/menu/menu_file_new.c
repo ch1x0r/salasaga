@@ -279,7 +279,7 @@ void menu_file_new(void)
 	disable_main_toolbar_buttons();
 
 	// If there's an existing film strip, we unload it
-	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
+	gtk_list_store_clear(GTK_LIST_STORE(get_film_strip_store()));
 
 	// Set the project name
 	set_project_name(valid_proj_name->str);
@@ -307,8 +307,8 @@ void menu_file_new(void)
 	// Set the initial information text and link
 	set_info_link("http://www.salasaga.org");
 	set_info_link_target(_("_blank"));
-	info_text = gtk_text_buffer_new(text_tags_table);
-	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(info_text), _("Created using Salasaga"), -1);
+	set_info_text(gtk_text_buffer_new(get_text_tags_table()));
+	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(get_info_text()), _("Created using Salasaga"), -1);
 	set_info_display(TRUE);
 
 	// Create an initial blank slide for the project
@@ -349,10 +349,10 @@ void menu_file_new(void)
 	gtk_widget_set_size_request(GTK_WIDGET(get_main_drawing_area()), get_working_width(), get_working_height());
 
 	// Free the existing front store for the workspace
-	if (NULL != front_store)
+	if (NULL != get_front_store())
 	{
-		g_object_unref(GDK_PIXMAP(front_store));
-		front_store = NULL;
+		g_object_unref(GDK_PIXMAP(get_front_store()));
+		set_front_store(NULL);
 	}
 
 	// Redraw the workspace

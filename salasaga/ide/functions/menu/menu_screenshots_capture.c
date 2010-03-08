@@ -231,7 +231,7 @@ void menu_screenshots_capture(void)
 	}
 
 	// Update the status icon
-	gtk_status_icon_set_tooltip_text(status_icon, _("Salasaga - Capture active"));
+	gtk_status_icon_set_tooltip_text(get_status_icon(), _("Salasaga - Capture active"));
 
 	// Free the mouse cursor object
 	XFreeCursor(x_display, new_cursor);

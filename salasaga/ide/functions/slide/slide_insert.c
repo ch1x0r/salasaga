@@ -97,8 +97,8 @@ void slide_insert(void)
 	tmp_slide->layers = g_list_append(tmp_slide->layers, tmp_layer);
 
 	// Add the thumbnail to the GtkListView based film strip
-	gtk_list_store_append(film_strip_store, &film_strip_iter);  // Acquire an iterator
-	gtk_list_store_set(film_strip_store, &film_strip_iter, 0, tmp_slide->thumbnail, -1);
+	gtk_list_store_append(get_film_strip_store(), &film_strip_iter);  // Acquire an iterator
+	gtk_list_store_set(get_film_strip_store(), &film_strip_iter, 0, tmp_slide->thumbnail, -1);
 
 	// Set the timeline widget for the slide to NULL, so we know to create it later on
 	tmp_slide->timeline_widget = NULL;

@@ -49,7 +49,7 @@ gboolean delete_key_release_event(GtkWidget *widget, GdkEventKey *event, gpointe
 	gint	check_val;
 
 	// Only do this function if we have a front store available and a project loaded
-	if ((NULL == front_store) || (FALSE == get_project_active()))
+	if ((NULL == get_front_store()) || (FALSE == get_project_active()))
 	{
 		return TRUE;
 	}

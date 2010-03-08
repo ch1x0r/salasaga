@@ -76,7 +76,7 @@ void regenerate_film_strip_thumbnails()
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &new_path, NULL);
 
 	// Remove the existing film strip thumbnails
-	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
+	gtk_list_store_clear(GTK_LIST_STORE(get_film_strip_store()));
 
 	// Generate new thumbnails
 	for (slide_counter = 0; slide_counter < num_slides; slide_counter++)
@@ -113,8 +113,8 @@ void regenerate_film_strip_thumbnails()
 		g_object_unref(GDK_PIXMAP(tmp_pixmap));
 
 		// Add the thumbnail to the film strip
-		gtk_list_store_append(film_strip_store, &film_strip_iter);
-		gtk_list_store_set(film_strip_store, &film_strip_iter, 0, this_slide_data->thumbnail, -1);
+		gtk_list_store_append(get_film_strip_store(), &film_strip_iter);
+		gtk_list_store_set(get_film_strip_store(), &film_strip_iter, 0, this_slide_data->thumbnail, -1);
 	}
 
 	// Reselect the thumbnail that was previously selected

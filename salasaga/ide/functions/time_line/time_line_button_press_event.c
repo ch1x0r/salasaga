@@ -222,7 +222,7 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 	{
 		// Background layer was clicked, so clear any start and end points shown in the working area
 		gdk_draw_drawable(GDK_DRAWABLE(get_main_drawing_area()->window), GDK_GC(get_main_drawing_area()->style->fg_gc[GTK_WIDGET_STATE(get_main_drawing_area())]),
-				GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
+				GDK_PIXMAP(get_front_store()), 0, 0, 0, 0, -1, -1);
 	}
 
 	// Free the memory allocated in this function

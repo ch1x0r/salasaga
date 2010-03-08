@@ -51,12 +51,12 @@ void create_status_icon()
 
 	// Create the status bar icon
 	g_string_printf(status_icon_path, "%s%c%s", STATUS_ICON_DIR, G_DIR_SEPARATOR, "salasaga-icon.png");
-	status_icon = gtk_status_icon_new_from_file(status_icon_path->str);
-	gtk_status_icon_set_tooltip_text(status_icon, _("Salasaga - Not yet capturing"));
-	gtk_status_icon_set_visible(status_icon, TRUE);
+	set_status_icon(gtk_status_icon_new_from_file(status_icon_path->str));
+	gtk_status_icon_set_tooltip_text(get_status_icon(), _("Salasaga - Not yet capturing"));
+	gtk_status_icon_set_visible(get_status_icon(), TRUE);
 	g_string_free(status_icon_path, TRUE);
 
 	// Connect the signal handlers
-	status_icon_signal_activate = g_signal_connect(G_OBJECT(status_icon), "activate", G_CALLBACK(status_icon_activate), (gpointer) NULL);
-	status_icon_signal_popup = g_signal_connect(G_OBJECT(status_icon), "popup-menu", G_CALLBACK(status_icon_popup), (gpointer) NULL);
+	status_icon_signal_activate = g_signal_connect(G_OBJECT(get_status_icon()), "activate", G_CALLBACK(status_icon_activate), (gpointer) NULL);
+	status_icon_signal_popup = g_signal_connect(G_OBJECT(get_status_icon()), "popup-menu", G_CALLBACK(status_icon_popup), (gpointer) NULL);
 }

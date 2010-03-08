@@ -41,25 +41,10 @@ extern "C" {
 // Variables defined elsewhere
 extern GList				*current_slide;
 extern SWFFont				fdb_font_object[FONT_COUNT];
-extern GtkTreeViewColumn	*film_strip_column;
-extern GtkScrolledWindow	*film_strip_container;
-extern GtkListStore			*film_strip_store;
-extern GdkPixmap			*front_store;
 extern FT_Face				ft_font_face[FONT_COUNT];
-extern GtkTextBuffer		*info_text;
-extern GtkItemFactory		*menu_bar;
-extern GtkTable				*message_bar;
-extern GdkPixbuf			*mouse_ptr_pixbuf;
-extern GIOChannel			*output_file;
-extern GtkComboBox			*resolution_selector;
 extern GdkRectangle			resize_handles_rect[8];
 extern GList				*slides;
-extern GtkStatusIcon		*status_icon;
-extern GSList				*text_tags_fg_colour_slist;
 extern GtkTextTag			*text_tags_fonts[FONT_COUNT];
-extern GSList				*text_tags_size_slist;
-extern GtkTextTagTable		*text_tags_table;
-extern GtkComboBox			*zoom_selector;
 
 // Field descriptions used for bounds and validation
 extern validatation_entry	valid_fields[];

@@ -51,7 +51,7 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 
 	// Get the new zoom level
 	tmp_string = g_string_new(NULL);
-	tmp_gchar = gtk_combo_box_get_active_text(GTK_COMBO_BOX(zoom_selector));
+	tmp_gchar = gtk_combo_box_get_active_text(GTK_COMBO_BOX(get_zoom_selector()));
 	g_string_printf(tmp_string, "%s", tmp_gchar);
 	g_free(tmp_gchar);
 
@@ -85,10 +85,10 @@ gint zoom_selector_changed(GtkWidget *widget, GdkEvent *event, gpointer data)
 	gtk_widget_set_size_request(GTK_WIDGET(get_main_drawing_area()), get_working_width(), get_working_height());
 
 	// Free the existing front store for the workspace
-	if (NULL != front_store)
+	if (NULL != get_front_store())
 	{
-		g_object_unref(GDK_PIXMAP(front_store));
-		front_store = NULL;
+		g_object_unref(GDK_PIXMAP(get_front_store()));
+		set_front_store(NULL);
 	}
 
 	// Redraw the workspace area

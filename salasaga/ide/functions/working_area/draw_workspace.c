@@ -78,13 +78,13 @@ void draw_workspace(void)
 	cursor_position = time_line_get_cursor_position(current_slide_data->timeline_widget);
 
 	// Create a new front store from the current slide
-	if (NULL != front_store)
+	if (NULL != get_front_store())
 	{
-		g_object_unref(GDK_PIXMAP(front_store));
-		front_store = NULL;
+		g_object_unref(GDK_PIXMAP(get_front_store()));
+		set_front_store(NULL);
 	}
-	front_store = compress_layers(current_slide, cursor_position, get_working_width(), get_working_height());
-	if (NULL == front_store)
+	set_front_store(compress_layers(current_slide, cursor_position, get_working_width(), get_working_height()));
+	if (NULL == get_front_store())
 	{
 		return;
 	}
@@ -92,7 +92,7 @@ void draw_workspace(void)
 	// Make a 1 pixel border around the front store, to separate it visually from its background
 	if (NULL == line_gc)
 	{
-		line_gc = gdk_gc_new(GDK_DRAWABLE(front_store));
+		line_gc = gdk_gc_new(GDK_DRAWABLE(get_front_store()));
 		gdk_gc_set_rgb_fg_color(line_gc, &line_fg_colour);
 	}
 	lines[0].x1 = 0;
@@ -111,7 +111,7 @@ void draw_workspace(void)
 	lines[3].y1 = front_store_height - 1;
 	lines[3].x2 = 0;
 	lines[3].y2 = 0;
-	gdk_draw_segments(GDK_DRAWABLE(front_store), line_gc, lines, 4);
+	gdk_draw_segments(GDK_DRAWABLE(get_front_store()), line_gc, lines, 4);
 
 	// Tell the window system to redraw the working area
 	temp_widget = get_main_drawing_area();

@@ -84,7 +84,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 
 
 	// Only do this function if we have a front store available and a project loaded
-	if ((NULL == front_store) || (FALSE == get_project_active()))
+	if ((NULL == get_front_store()) || (FALSE == get_project_active()))
 	{
 		return TRUE;
 	}
@@ -93,7 +93,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);
 
 	// Calculate the height and width scaling values for the main drawing area at its present size
-	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
 	scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;
 	scaled_width_ratio = (gfloat) get_project_width() / (gfloat) pixmap_width;
 

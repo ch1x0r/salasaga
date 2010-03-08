@@ -75,7 +75,7 @@ gboolean draw_handle_box(void)
 
 
 	// Only do this function if we have a front store available and a project loaded
-	if ((NULL == front_store) || (FALSE == get_project_active()))
+	if ((NULL == get_front_store()) || (FALSE == get_project_active()))
 	{
 		return TRUE;
 	}
@@ -83,7 +83,7 @@ gboolean draw_handle_box(void)
 	// Initialise some things
 	current_slide_data = current_slide->data;
 	temp_widget = get_main_drawing_area();
-	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
 
 	// Determine which layer the user has selected in the timeline
 	selected_layer = time_line_get_selected_layer_num(current_slide_data->timeline_widget);
@@ -118,7 +118,7 @@ gboolean draw_handle_box(void)
 		case TYPE_EMPTY:
 			// This is an empty layer, so clear any existing handle box then return
 			gdk_draw_drawable(GDK_DRAWABLE(temp_widget->window), GDK_GC(temp_widget->style->fg_gc[GTK_WIDGET_STATE(temp_widget)]),
-					GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
+					GDK_PIXMAP(get_front_store()), 0, 0, 0, 0, -1, -1);
 			return TRUE;
 
 		case TYPE_GDK_PIXBUF:
@@ -127,7 +127,7 @@ gboolean draw_handle_box(void)
 			{
 				// Clear any existing handle box then return
 				gdk_draw_drawable(GDK_DRAWABLE(temp_widget->window), GDK_GC(temp_widget->style->fg_gc[GTK_WIDGET_STATE(temp_widget)]),
-						GDK_PIXMAP(front_store), 0, 0, 0, 0, -1, -1);
+						GDK_PIXMAP(get_front_store()), 0, 0, 0, 0, -1, -1);
 				return TRUE;
 			}
 	}

@@ -226,8 +226,8 @@ gint undo_history_redo_item(void)
 
 			// Remove the current slide from the film strip
 			new_path = gtk_tree_path_new_from_indices(undo_data->position_old, -1);
-			gtk_tree_model_get_iter(GTK_TREE_MODEL(film_strip_store), &film_strip_iter, new_path);
-			gtk_list_store_remove(GTK_LIST_STORE(film_strip_store), &film_strip_iter);
+			gtk_tree_model_get_iter(GTK_TREE_MODEL(get_film_strip_store()), &film_strip_iter, new_path);
+			gtk_list_store_remove(GTK_LIST_STORE(get_film_strip_store()), &film_strip_iter);
 
 			break;
 
@@ -262,10 +262,10 @@ gint undo_history_redo_item(void)
 			// Reorder the slides in the film strip
 			tmp_gstring = g_string_new(NULL);
 			g_string_printf(tmp_gstring, "%u", undo_data->position_old);
-			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &our_slide_iter, tmp_gstring->str);
+			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(get_film_strip_store()), &our_slide_iter, tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", undo_data->position_new);
-			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &target_slide_iter, tmp_gstring->str);
-			gtk_list_store_swap(GTK_LIST_STORE(film_strip_store), &our_slide_iter, &target_slide_iter);
+			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(get_film_strip_store()), &target_slide_iter, tmp_gstring->str);
+			gtk_list_store_swap(GTK_LIST_STORE(get_film_strip_store()), &our_slide_iter, &target_slide_iter);
 
 			// Swap the slides around in the project
 			our_slide_entry = g_list_nth(slides, undo_data->position_new);
@@ -402,8 +402,8 @@ gint undo_history_undo_item(void)
 			current_slide = g_list_nth(slides, undo_data->position_old);
 
 			// Add the thumbnail to the GtkListView based film strip
-			gtk_list_store_insert(GTK_LIST_STORE(film_strip_store), &film_strip_iter, undo_data->position_old);  // Acquire an iterator
-			gtk_list_store_set(GTK_LIST_STORE(film_strip_store), &film_strip_iter, 0, slide_data->thumbnail, -1);
+			gtk_list_store_insert(GTK_LIST_STORE(get_film_strip_store()), &film_strip_iter, undo_data->position_old);  // Acquire an iterator
+			gtk_list_store_set(GTK_LIST_STORE(get_film_strip_store()), &film_strip_iter, 0, slide_data->thumbnail, -1);
 
 			// Select the next thumbnail in the film strip and scroll to display it
 			new_path = gtk_tree_path_new_from_indices(undo_data->position_old, -1);
@@ -470,10 +470,10 @@ gint undo_history_undo_item(void)
 			// Swap the slides around in the film strip
 			tmp_gstring = g_string_new(NULL);
 			g_string_printf(tmp_gstring, "%u", undo_data->position_old);
-			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &target_slide_iter, tmp_gstring->str);
+			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(get_film_strip_store()), &target_slide_iter, tmp_gstring->str);
 			g_string_printf(tmp_gstring, "%u", undo_data->position_new);
-			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &our_slide_iter, tmp_gstring->str);
-			gtk_list_store_swap(GTK_LIST_STORE(film_strip_store), &our_slide_iter, &target_slide_iter);
+			gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(get_film_strip_store()), &our_slide_iter, tmp_gstring->str);
+			gtk_list_store_swap(GTK_LIST_STORE(get_film_strip_store()), &our_slide_iter, &target_slide_iter);
 
 			// Swap the slides around in the project
 			our_slide_entry = g_list_nth(slides, undo_data->position_new);

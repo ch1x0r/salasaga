@@ -70,7 +70,7 @@ void save_text_tags(xmlNodePtr tag_root)
 	}
 
 	// Add all of the font size tags
-	num_tags = g_slist_length(text_tags_size_slist);
+	num_tags = g_slist_length(get_text_tags_size_slist());
 	for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
 	{
 		// Create the tag container
@@ -84,7 +84,7 @@ void save_text_tags(xmlNodePtr tag_root)
 		}
 
 		// Retrieve the properties of the text tag
-		text_tag = g_slist_nth_data(text_tags_size_slist, loop_counter);
+		text_tag = g_slist_nth_data(get_text_tags_size_slist(), loop_counter);
 		g_object_get(G_OBJECT(text_tag), "name", &tag_name, "size-points", &font_size, NULL);
 
 		// Add the tag name to the tag container attributes
@@ -109,7 +109,7 @@ void save_text_tags(xmlNodePtr tag_root)
 	}
 
 	// Add all of the foreground colour tags
-	num_tags = g_slist_length(text_tags_fg_colour_slist);
+	num_tags = g_slist_length(get_text_tags_fg_colour_slist());
 	for (loop_counter = 0; loop_counter < num_tags; loop_counter++)
 	{
 		// Create the tag container
@@ -123,7 +123,7 @@ void save_text_tags(xmlNodePtr tag_root)
 		}
 
 		// Retrieve the properties of the text tag
-		text_tag = g_slist_nth_data(text_tags_fg_colour_slist, loop_counter);
+		text_tag = g_slist_nth_data(get_text_tags_fg_colour_slist(), loop_counter);
 		g_object_get(G_OBJECT(text_tag), "name", &tag_name, "foreground-gdk", &fg_colour, NULL);
 
 		// Add the tag name to the tag container attributes

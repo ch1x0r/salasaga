@@ -62,7 +62,7 @@ gboolean film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 
 
 	// Only do this function if we have a front store available and a project loaded
-	if ((NULL == front_store) || (FALSE == get_project_active()))
+	if ((NULL == get_front_store()) || (FALSE == get_project_active()))
 	{
 		return TRUE;
 	}
@@ -76,7 +76,7 @@ gboolean film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		// * Update current_slide to be the clicked on slide's GList entry, then redraw the timeline and workspace *
 
 		// Determine which slide is now selected
-		selected_path = gtk_tree_model_get_path(GTK_TREE_MODEL(film_strip_store), &selected_iter);
+		selected_path = gtk_tree_model_get_path(GTK_TREE_MODEL(get_film_strip_store()), &selected_iter);
 		selection_string = gtk_tree_path_to_string(selected_path);
 
 		// Get a pointer to the clicked on slide's data

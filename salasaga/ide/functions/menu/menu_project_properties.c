@@ -278,7 +278,7 @@ void menu_project_properties(void)
 	text_frame = gtk_frame_new(NULL);
 	gtk_container_set_border_width(GTK_CONTAINER(text_frame), 2);
 	gtk_frame_set_shadow_type(GTK_FRAME(text_frame), GTK_SHADOW_OUT);
-	text_buffer = gtk_text_buffer_duplicate(info_text);  // Temporary text buffer
+	text_buffer = gtk_text_buffer_duplicate(get_info_text());  // Temporary text buffer
 	text_view = gtk_text_view_new_with_buffer(text_buffer);
 	gtk_widget_set_size_request(GTK_WIDGET(text_view), 0, 100);
 	gtk_container_add(GTK_CONTAINER(text_frame), text_view);
@@ -462,8 +462,8 @@ void menu_project_properties(void)
 	// * We only get here after all input is considered valid *
 
 	// Replace the info buffer with our new one
-	g_object_unref(info_text);
-	info_text = text_buffer;
+	g_object_unref(get_info_text());
+	set_info_text(text_buffer);
 
 	// Destroy the dialog box
 	gtk_widget_destroy(GTK_WIDGET(main_dialog));

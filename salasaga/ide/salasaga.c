@@ -83,26 +83,11 @@
 
 // Global variables
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
-SWFFont					fdb_font_object[FONT_COUNT];	// The fdb font faces we use get loaded into this
-GtkTreeViewColumn		*film_strip_column;			// Pointer to the film strip column
-GtkScrolledWindow		*film_strip_container;		// Container for the film strip
-GtkListStore			*film_strip_store;			// Film strip list store
-GdkPixmap				*front_store;				// Front store for double buffering the workspace area
+SWFFont					fdb_font_object[FONT_COUNT];	// The fdb font faces used by Ming are loaded into this
 FT_Face					ft_font_face[FONT_COUNT];	// Array of FreeType font face handles
-GtkTextBuffer			*info_text;					// Text to be shown in the information button in swf output
-GtkItemFactory			*menu_bar = NULL;			// Widget for the menu bar
-GtkTable				*message_bar;				// Widget for message bar
-GdkPixbuf				*mouse_ptr_pixbuf;			// Temporary GDK Pixbuf
-GIOChannel				*output_file;				// The output file handle
-GtkComboBox				*resolution_selector;		// Widget for the resolution selector
 GdkRectangle			resize_handles_rect[8];		// Contains the onscreen offsets and size for the resize handles
 GList					*slides = NULL;				// Linked list holding the slide info
-GtkStatusIcon			*status_icon;				// Pointer to the GtkStatusIcon object, used for StatusIcon communication
-GSList					*text_tags_fg_colour_slist = NULL;	// Text tags for text foreground colour, used for changing text colour in text layers
 GtkTextTag				*text_tags_fonts[FONT_COUNT];	// Text tags for font faces, used for applying font faces in text layers
-GSList					*text_tags_size_slist = NULL;	// Text tags for text sizes, used for changing text size in text layers
-GtkTextTagTable			*text_tags_table;			// The table of all text tags, used for applying text tags in text layers
-GtkComboBox				*zoom_selector;				// Widget for the zoom selector
 
 #ifdef _WIN32
 // Windows only variables
@@ -246,7 +231,8 @@ gint main(gint argc, gchar *argv[])
 	set_icon_path(_("icons"));
 
 	// Mouse pointer image file
-	g_string_printf(mouse_ptr_string, "%s%c%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", get_icon_extension());
+	g_string_printf(tmp_gstring, "%s%c%s%c%s.%s", get_icon_path(), G_DIR_SEPARATOR, "pointers", G_DIR_SEPARATOR, "standard", get_icon_extension());
+	set_mouse_ptr_string(tmp_gstring->str);
 
 #else
 	// Default to PNG images, in case an SVG loader isn't present
@@ -288,7 +274,7 @@ gint main(gint argc, gchar *argv[])
 	if (get_debug_level()) printf(_("Path to mouse pointer image: %s\n"), get_mouse_ptr_string());
 
 	// Load initial mouse pointer graphic
-	mouse_ptr_pixbuf = gdk_pixbuf_new_from_file_at_size(get_mouse_ptr_string(), -1, -1, NULL);
+	set_mouse_ptr_pixbuf(gdk_pixbuf_new_from_file_at_size(get_mouse_ptr_string(), -1, -1, NULL));
 
 	// Start up the GUI part of things
 	set_main_window(gtk_window_new(GTK_WINDOW_TOPLEVEL));
@@ -385,14 +371,14 @@ gint main(gint argc, gchar *argv[])
 
 	// * Create the menu *
 	create_menu_bar();
-	if (FALSE == menu_bar)
+	if (FALSE == get_menu_bar())
 	{
 		// Something went wrong when creating the menu bar
 		g_string_printf(message, "%s ED01: %s", _("Error"), _("Something went wrong when creating the menu bar."));
 		display_warning(message->str);
 		exit(1);
 	}
-	gtk_box_pack_start(GTK_BOX(outer_box), GTK_WIDGET(gtk_item_factory_get_widget(menu_bar, "<main>")), FALSE, FALSE, 0);
+	gtk_box_pack_start(GTK_BOX(outer_box), GTK_WIDGET(gtk_item_factory_get_widget(get_menu_bar(), "<main>")), FALSE, FALSE, 0);
 
 	// * Create the toolbar *
 	toolbar = create_toolbar(toolbar);
@@ -419,50 +405,50 @@ gint main(gint argc, gchar *argv[])
 	g_signal_connect(G_OBJECT(get_main_area()), "button_release_event", G_CALLBACK(film_strip_handle_released), (gpointer) NULL);
 
 	// * Create a table for the status bar, zoom selector, and resolution selectors to go in *
-	message_bar = GTK_TABLE(gtk_table_new(1, 6, TRUE));
-	gtk_box_pack_start(GTK_BOX(outer_box), GTK_WIDGET(message_bar), FALSE, FALSE, 0);
+	set_message_bar(GTK_TABLE(gtk_table_new(1, 6, TRUE)));
+	gtk_box_pack_start(GTK_BOX(outer_box), GTK_WIDGET(get_message_bar()), FALSE, FALSE, 0);
 
 	// Create the status bar
 	set_status_bar(gtk_progress_bar_new());
 	gtk_progress_bar_set_orientation(GTK_PROGRESS_BAR(get_status_bar()), GTK_PROGRESS_LEFT_TO_RIGHT);
 	gtk_progress_bar_set_ellipsize(GTK_PROGRESS_BAR(get_status_bar()), PANGO_ELLIPSIZE_END);
 	gtk_progress_bar_set_fraction(GTK_PROGRESS_BAR(get_status_bar()), 0.0);
-	gtk_table_attach(message_bar, GTK_WIDGET(get_status_bar()), 0, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
+	gtk_table_attach(get_message_bar(), GTK_WIDGET(get_status_bar()), 0, 2, 0, 1, GTK_EXPAND | GTK_FILL, GTK_FILL, 0, 0);
 
 	// Create the zoom selector label
 	zoom_label = GTK_LABEL(gtk_label_new(_("Zoom: ")));
 	gtk_misc_set_alignment(GTK_MISC(zoom_label), 1, 0.5);
-	gtk_table_attach(message_bar, GTK_WIDGET(zoom_label), 2, 3, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
+	gtk_table_attach(get_message_bar(), GTK_WIDGET(zoom_label), 2, 3, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
 
 	// Create the zoom selector
-	zoom_selector = GTK_COMBO_BOX(create_zoom_selector(get_default_zoom_level()));
-	gtk_table_attach(message_bar, GTK_WIDGET(zoom_selector), 3, 4, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
+	set_zoom_selector(GTK_COMBO_BOX(create_zoom_selector(get_default_zoom_level())));
+	gtk_table_attach(get_message_bar(), GTK_WIDGET(get_zoom_selector()), 3, 4, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
 
 	// Link the zoom selector to the function that recalculates the zoom and redraws the working area
-	g_signal_connect(G_OBJECT(zoom_selector), "changed", G_CALLBACK(zoom_selector_changed), (gpointer) NULL);
+	g_signal_connect(G_OBJECT(get_zoom_selector()), "changed", G_CALLBACK(zoom_selector_changed), (gpointer) NULL);
 
 	// Create the resolution selector label
 	resolution_label = GTK_LABEL(gtk_label_new(_("Output: ")));
 	gtk_misc_set_alignment(GTK_MISC(resolution_label), 1, 0.5);
-	gtk_table_attach(message_bar, GTK_WIDGET(resolution_label), 4, 5, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
+	gtk_table_attach(get_message_bar(), GTK_WIDGET(resolution_label), 4, 5, 0, 1, GTK_SHRINK, GTK_SHRINK, 0, 0);
 
 	// Create the resolution selector
-	resolution_selector = GTK_COMBO_BOX(create_resolution_selector(get_output_width(), get_output_height()));
-	gtk_table_attach(message_bar, GTK_WIDGET(resolution_selector), 5, 6, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
+	set_resolution_selector(GTK_COMBO_BOX(create_resolution_selector(get_output_width(), get_output_height())));
+	gtk_table_attach(get_message_bar(), GTK_WIDGET(get_resolution_selector()), 5, 6, 0, 1, GTK_FILL, GTK_SHRINK, 0, 0);
 
 	// Link the resolution selector to the function that stores the new values in global variables
-	set_resolution_callback(g_signal_connect(G_OBJECT(resolution_selector), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL));
+	set_resolution_callback(g_signal_connect(G_OBJECT(get_resolution_selector()), "changed", G_CALLBACK(resolution_selector_changed), (gpointer) NULL));
 
 	// * Create the film strip area *
 	create_film_strip();
-	if (FALSE == film_strip_container)
+	if (FALSE == get_film_strip_container())
 	{
 		// Something went wrong when creating the film strip
 		g_string_printf(message, "%s ED02: %s", _("Error"), _("Something went wrong when creating the film strip."));
 		display_warning(message->str);
 		exit(2);
 	}
-	gtk_paned_add1(GTK_PANED(get_main_area()), GTK_WIDGET(film_strip_container));
+	gtk_paned_add1(GTK_PANED(get_main_area()), GTK_WIDGET(get_film_strip_container()));
 
 	// * Create the vertical box to pack the time line and working area into *
 	set_right_side(gtk_vpaned_new());
@@ -507,8 +493,8 @@ gint main(gint argc, gchar *argv[])
 	gtk_widget_show_all(get_main_window());
 
 	// Calculate the zoom and drawing area, and initialise the project dimensions
-	zoom_selector_changed(GTK_WIDGET(zoom_selector), NULL, (gpointer) NULL);
-	resolution_selector_changed(GTK_WIDGET(resolution_selector), NULL, (gpointer) NULL);
+	zoom_selector_changed(GTK_WIDGET(get_zoom_selector()), NULL, (gpointer) NULL);
+	resolution_selector_changed(GTK_WIDGET(get_resolution_selector()), NULL, (gpointer) NULL);
 
 	// Start the main event loop
 	gtk_main();

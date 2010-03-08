@@ -42,6 +42,6 @@ void menu_enable(const gchar *full_path, gboolean enable)
 	// Local variables
 	GtkWidget			*menu_item;
 
-	menu_item = gtk_item_factory_get_item(GTK_ITEM_FACTORY(menu_bar), full_path);
+	menu_item = gtk_item_factory_get_item(GTK_ITEM_FACTORY(get_menu_bar()), full_path);
 	gtk_widget_set_sensitive(menu_item, enable);
 }

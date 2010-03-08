@@ -99,10 +99,10 @@ gboolean draw_layer_start_and_end_points()
 
 	// Refresh the area covered by the old end points
 	gdk_draw_drawable(GDK_DRAWABLE(temp_widget->window), GDK_GC(widget_gc),
-		GDK_PIXMAP(front_store), old_start_x, old_start_y, old_start_x, old_start_y, old_width, old_height);
+		GDK_PIXMAP(get_front_store()), old_start_x, old_start_y, old_start_x, old_start_y, old_width, old_height);
 
 	// Calculate the height and width scaling values for the requested layer
-	gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
 	scaled_height_ratio = (gfloat) pixmap_height / (gfloat) get_project_height();
 	scaled_width_ratio = (gfloat) pixmap_width / (gfloat) get_project_width();
 

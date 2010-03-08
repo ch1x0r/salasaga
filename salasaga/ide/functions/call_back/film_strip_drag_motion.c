@@ -63,10 +63,10 @@ gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context,
 	this_slide = current_slide->data;
 
 	// Find out how many pixels high each slide is in the film strip
-	gtk_tree_view_column_cell_get_size(GTK_TREE_VIEW_COLUMN(film_strip_column), NULL, NULL, NULL, NULL, &slide_height);
+	gtk_tree_view_column_cell_get_size(GTK_TREE_VIEW_COLUMN(get_film_strip_column()), NULL, NULL, NULL, NULL, &slide_height);
 
 	// Work out the actual Y position the user has dragged to in the entire film strip
-	vert_adjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(film_strip_container));
+	vert_adjustment = gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(get_film_strip_container()));
 	film_strip_adjustment_present_value = gtk_adjustment_get_value(GTK_ADJUSTMENT(vert_adjustment));
 	actual_y_pos = y + film_strip_adjustment_present_value;
 
@@ -90,9 +90,9 @@ gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context,
 
 		// Create iters pointing to the current and target slide positions
 		g_string_printf(tmp_gstring, "%u", current_slide_position);
-		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &current_slide_iter, tmp_gstring->str);
+		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(get_film_strip_store()), &current_slide_iter, tmp_gstring->str);
 		g_string_printf(tmp_gstring, "%u", target_slide_position);
-		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(film_strip_store), &target_slide_iter, tmp_gstring->str);
+		gtk_tree_model_get_iter_from_string(GTK_TREE_MODEL(get_film_strip_store()), &target_slide_iter, tmp_gstring->str);
 
 		// Create and store the undo history item for this layer
 		undo_item_data = g_new0(undo_history_data, 1);
@@ -104,7 +104,7 @@ gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context,
 		undo_history_add_item(UNDO_REORDER_SLIDE, undo_item_data, TRUE);
 
 		// Swap the slides in the film strip area
-		gtk_list_store_swap(GTK_LIST_STORE(film_strip_store), &current_slide_iter, &target_slide_iter);
+		gtk_list_store_swap(GTK_LIST_STORE(get_film_strip_store()), &current_slide_iter, &target_slide_iter);
 
 		// Swap the slides in the slide list
 		current_slide_data = current_slide->data;

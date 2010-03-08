@@ -193,18 +193,18 @@ gboolean get_layer_position(GtkAllocation *position, layer *this_layer_data, gfl
 			if (0 == ((layer_text *) this_layer_data->object_data)->rendered_width)
 			{
 				// Create the front store if it doesn't already exist
-				if (NULL == front_store)
+				if (NULL == get_front_store())
 				{
 					if (NULL == system_colourmap)
 					{
 						system_colourmap = gdk_colormap_get_system();
 					}
-					front_store = gdk_pixmap_new(NULL, get_project_width(), get_project_height(), system_colourmap->visual->depth);
-					gdk_drawable_set_colormap(GDK_DRAWABLE(front_store), GDK_COLORMAP(system_colourmap));
+					set_front_store(gdk_pixmap_new(NULL, get_project_width(), get_project_height(), system_colourmap->visual->depth));
+					gdk_drawable_set_colormap(GDK_DRAWABLE(get_front_store()), GDK_COLORMAP(system_colourmap));
 				}
 
 				// Calculate the height and width scaling values for the front pixmap
-				gdk_drawable_get_size(GDK_PIXMAP(front_store), &pixmap_width, &pixmap_height);
+				gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
 				scaled_height_ratio = (gfloat) pixmap_height / (gfloat) get_project_height();
 				scaled_width_ratio = (gfloat) pixmap_width / (gfloat) get_project_width();
 

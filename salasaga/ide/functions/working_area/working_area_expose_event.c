@@ -42,14 +42,14 @@
 gboolean working_area_expose_event(GtkWidget *widget, GdkEventExpose *event, gpointer data)
 {
 	// Only do this function if we have a front store available and a project loaded
-	if ((NULL == front_store) || (FALSE == get_project_active()))
+	if ((NULL == get_front_store()) || (FALSE == get_project_active()))
 	{
 		return TRUE;
 	}
 
 	// Draw the invalidated front store area onto the working area
 	gdk_draw_drawable(GDK_DRAWABLE(widget->window), GDK_GC(widget->style->fg_gc[GTK_WIDGET_STATE(widget)]),
-		GDK_PIXMAP(front_store),
+		GDK_PIXMAP(get_front_store()),
 		event->area.x, event->area.y,
 		event->area.x, event->area.y,
 		event->area.width, event->area.height);

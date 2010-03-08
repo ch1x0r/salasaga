@@ -147,7 +147,7 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 	// Set sensible defaults for the swf information button
 	valid_info_link = g_string_new("http://www.salasaga.org");
 	valid_info_link_target = g_string_new(_("_blank"));
-	valid_info_text = gtk_text_buffer_new(text_tags_table);
+	valid_info_text = gtk_text_buffer_new(get_text_tags_table());
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(valid_info_text), _("Created using Salasaga"), -1);
 	valid_info_display = TRUE;
 
@@ -996,7 +996,7 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 	}
 
 	// If there's an existing film strip, we unload it
-	gtk_list_store_clear(GTK_LIST_STORE(film_strip_store));
+	gtk_list_store_clear(GTK_LIST_STORE(get_film_strip_store()));
 
 	// Load project name
 	set_project_name(valid_project_name->str);
@@ -1044,7 +1044,7 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 	// Information button variables
 	set_info_link(valid_info_link->str);
 	set_info_link_target(valid_info_link_target->str);
-	info_text = valid_info_text;
+	set_info_text(valid_info_text);
 	set_info_display(valid_info_display);
 
 	// Make the new slides active, and update them to fill in their remaining pieces
@@ -1088,8 +1088,8 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 		g_object_unref(GDK_PIXBUF(tmp_pixbuf));
 
 		// Add the thumbnail to the film strip
-		gtk_list_store_append(film_strip_store, &film_strip_iter);
-		gtk_list_store_set(film_strip_store, &film_strip_iter, 0, tmp_slide->thumbnail, -1);
+		gtk_list_store_append(get_film_strip_store(), &film_strip_iter);
+		gtk_list_store_set(get_film_strip_store(), &film_strip_iter, 0, tmp_slide->thumbnail, -1);
 	}
 
 	// We're finished with this XML document, so release its memory
