@@ -35,35 +35,36 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../../externs.h"
+#include "shared_toolbar_functions.h"
 
 
 void disable_main_toolbar_buttons(void)
 {
 	// Disable the Adjust Dimensions icon
-	if (NULL != main_toolbar_icons[DIMENSIONS])
+	if (NULL != get_main_toolbar_icon(DIMENSIONS))
 	{
-		g_object_ref(main_toolbar_icons[DIMENSIONS]);
-		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[DIMENSIONS]), main_toolbar_icons_gray[DIMENSIONS]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[DIMENSIONS]), main_toolbar_tooltips, _("Dimension adjustment disabled: No project loaded"), "Private");
-		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[DIMENSIONS]));
+		g_object_ref(get_main_toolbar_icon(DIMENSIONS));
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(get_main_toolbar_item(DIMENSIONS)), get_main_toolbar_icon_gray(DIMENSIONS));
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(get_main_toolbar_item(DIMENSIONS)), get_main_toolbar_tooltips(), _("Dimension adjustment disabled: No project loaded"), "Private");
+		gtk_widget_show_all(GTK_WIDGET(get_main_toolbar_item(DIMENSIONS)));
 	}
 
 	// Disable the Export Flash icon
-	if (NULL != main_toolbar_icons[EXPORT_FLASH])
+	if (NULL != get_main_toolbar_icon(EXPORT_FLASH))
 	{
-		g_object_ref(main_toolbar_icons[EXPORT_FLASH]);
-		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[EXPORT_FLASH]), main_toolbar_icons_gray[EXPORT_FLASH]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[EXPORT_FLASH]), main_toolbar_tooltips, _("Export to Flash disabled: No project loaded"), "Private");
-		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[EXPORT_FLASH]));
+		g_object_ref(get_main_toolbar_icon(EXPORT_FLASH));
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(get_main_toolbar_item(EXPORT_FLASH)), get_main_toolbar_icon_gray(EXPORT_FLASH));
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(get_main_toolbar_item(EXPORT_FLASH)), get_main_toolbar_tooltips(), _("Export to Flash disabled: No project loaded"), "Private");
+		gtk_widget_show_all(GTK_WIDGET(get_main_toolbar_item(EXPORT_FLASH)));
 	}
 
 	// Disconnect the main toolbar signal handlers
-	if (0 != main_toolbar_signals[DIMENSIONS])
+	if (0 != get_main_toolbar_signal(DIMENSIONS))
 	{
-		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[DIMENSIONS]), main_toolbar_signals[DIMENSIONS]);
-		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[EXPORT_FLASH]), main_toolbar_signals[EXPORT_FLASH]);
+		g_signal_handler_disconnect(G_OBJECT(get_main_toolbar_item(DIMENSIONS)), get_main_toolbar_signal(DIMENSIONS));
+		g_signal_handler_disconnect(G_OBJECT(get_main_toolbar_item(EXPORT_FLASH)), get_main_toolbar_signal(EXPORT_FLASH));
 
 		// Flag the signal handlers as unused (used by enable_layer_toolbar_buttons())
-		main_toolbar_signals[DIMENSIONS] = 0;
+		set_main_toolbar_signal(DIMENSIONS, 0);
 	}
 }

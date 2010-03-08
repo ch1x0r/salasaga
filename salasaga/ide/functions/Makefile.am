@@ -160,11 +160,12 @@ salasaga_SOURCES = global_functions.c \
 	time_line/time_line_set_stored_slide_duration.c \
 	time_line/time_line_size_allocate.c \
 	time_line/time_line_size_request.c \
+	tool_bars/create_toolbar.c \
 	tool_bars/disable_layer_toolbar_buttons.c \
 	tool_bars/disable_main_toolbar_buttons.c \
 	tool_bars/enable_layer_toolbar_buttons.c \
 	tool_bars/enable_main_toolbar_buttons.c \
-	tool_bars/create_toolbar.c \
+	tool_bars/shared_toolbar_functions.c \
 	undo_redo/undo_functions.c \
 	working_area/calculate_object_boundaries.c \
 	working_area/create_working_area.c \

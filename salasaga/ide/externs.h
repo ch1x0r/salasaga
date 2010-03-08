@@ -68,20 +68,6 @@ extern GSList				*text_tags_size_slist;
 extern GtkTextTagTable		*text_tags_table;
 extern GtkComboBox			*zoom_selector;
 
-// Main tool bar items
-extern GtkTooltips			*main_toolbar_tooltips;
-extern GtkWidget			*main_toolbar_icons[MAIN_TB_COUNT];
-extern GtkWidget			*main_toolbar_icons_gray[MAIN_TB_COUNT];
-extern GtkToolItem			*main_toolbar_items[MAIN_TB_COUNT];
-extern gulong				main_toolbar_signals[MAIN_TB_COUNT];
-
-// Layer tool bar items
-extern GtkTooltips			*layer_toolbar_tooltips;
-extern GtkWidget			*layer_toolbar_icons[MAIN_TB_COUNT];
-extern GtkWidget			*layer_toolbar_icons_gray[MAIN_TB_COUNT];
-extern GtkToolItem			*layer_toolbar_items[MAIN_TB_COUNT];
-extern gulong				layer_toolbar_signals[MAIN_TB_COUNT];
-
 // Field descriptions used for bounds and validation
 extern validatation_entry	valid_fields[];
 

@@ -37,32 +37,33 @@
 #include "../../externs.h"
 #include "../menu/menu_export_swf.h"
 #include "../other/project_adjust_dimensions.h"
+#include "shared_toolbar_functions.h"
 
 
 void enable_main_toolbar_buttons(void)
 {
 	// Enable the Adjust Dimensions icon
-	if (NULL != main_toolbar_icons_gray[DIMENSIONS])
+	if (NULL != get_main_toolbar_icon_gray(DIMENSIONS))
 	{
-		g_object_ref(main_toolbar_icons_gray[DIMENSIONS]);
-		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[DIMENSIONS]), main_toolbar_icons[DIMENSIONS]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[DIMENSIONS]), main_toolbar_tooltips, _("Adjust the dimensions of the project"), "Private");
-		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[DIMENSIONS]));
+		g_object_ref(get_main_toolbar_icon_gray(DIMENSIONS));
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(get_main_toolbar_item(DIMENSIONS)), get_main_toolbar_icon(DIMENSIONS));
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(get_main_toolbar_item(DIMENSIONS)), get_main_toolbar_tooltips(), _("Adjust the dimensions of the project"), "Private");
+		gtk_widget_show_all(GTK_WIDGET(get_main_toolbar_item(DIMENSIONS)));
 	}
 
 	// Enable the Export Flash icon
-	if (NULL != main_toolbar_icons_gray[EXPORT_FLASH])
+	if (NULL != get_main_toolbar_icon_gray(EXPORT_FLASH))
 	{
-		g_object_ref(main_toolbar_icons_gray[EXPORT_FLASH]);
-		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[EXPORT_FLASH]), main_toolbar_icons[EXPORT_FLASH]);
-		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[EXPORT_FLASH]), main_toolbar_tooltips, _("Export as a Flash animation"), "Private");
-		gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[EXPORT_FLASH]));
+		g_object_ref(get_main_toolbar_icon_gray(EXPORT_FLASH));
+		gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(get_main_toolbar_item(EXPORT_FLASH)), get_main_toolbar_icon(EXPORT_FLASH));
+		gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(get_main_toolbar_item(EXPORT_FLASH)), get_main_toolbar_tooltips(), _("Export as a Flash animation"), "Private");
+		gtk_widget_show_all(GTK_WIDGET(get_main_toolbar_item(EXPORT_FLASH)));
 	}
 
 	// Set the event handlers for the main toolbar buttons
-	if (0 == main_toolbar_signals[DIMENSIONS])
+	if (0 == get_main_toolbar_signal(DIMENSIONS))
 	{
-		main_toolbar_signals[DIMENSIONS] = g_signal_connect(G_OBJECT(main_toolbar_items[DIMENSIONS]), "clicked", G_CALLBACK(project_adjust_dimensions), (gpointer) NULL);
-		main_toolbar_signals[EXPORT_FLASH] = g_signal_connect(G_OBJECT(main_toolbar_items[EXPORT_FLASH]), "clicked", G_CALLBACK(menu_export_swf), (gpointer) NULL);
+		set_main_toolbar_signal(DIMENSIONS, g_signal_connect(G_OBJECT(get_main_toolbar_item(DIMENSIONS)), "clicked", G_CALLBACK(project_adjust_dimensions), (gpointer) NULL));
+		set_main_toolbar_signal(EXPORT_FLASH, g_signal_connect(G_OBJECT(get_main_toolbar_item(EXPORT_FLASH)), "clicked", G_CALLBACK(menu_export_swf), (gpointer) NULL));
 	}
 }

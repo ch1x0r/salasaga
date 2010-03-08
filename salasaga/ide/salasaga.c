@@ -74,6 +74,7 @@
 #include "functions/tool_bars/create_toolbar.h"
 #include "functions/tool_bars/disable_layer_toolbar_buttons.h"
 #include "functions/tool_bars/disable_main_toolbar_buttons.h"
+#include "functions/tool_bars/shared_toolbar_functions.h"
 #include "functions/working_area/create_working_area.h"
 #include "functions/working_area/event_size_allocate_received.h"
 #include "functions/zoom_selector/create_zoom_selector.h"
@@ -109,20 +110,6 @@ GtkTextTag				*text_tags_fonts[FONT_COUNT];	// Text tags for font faces, used fo
 GSList					*text_tags_size_slist = NULL;	// Text tags for text sizes, used for changing text size in text layers
 GtkTextTagTable			*text_tags_table;			// The table of all text tags, used for applying text tags in text layers
 GtkComboBox				*zoom_selector;				// Widget for the zoom selector
-
-// Main tool bar items
-GtkTooltips				*main_toolbar_tooltips;		// Tooltips structure
-GtkWidget				*main_toolbar_icons[MAIN_TB_COUNT];			// Array of toolbar icons
-GtkWidget				*main_toolbar_icons_gray[MAIN_TB_COUNT];	// Array of toolbar icons (the grayed out ones)
-GtkToolItem				*main_toolbar_items[MAIN_TB_COUNT];			// Array of toolbar items
-gulong					main_toolbar_signals[MAIN_TB_COUNT];		// Array of toolbar signals
-
-// Layer tool bar items
-GtkTooltips				*layer_toolbar_tooltips;	// Tooltips structure
-GtkWidget				*layer_toolbar_icons[MAIN_TB_COUNT];		// Array of toolbar icons
-GtkWidget				*layer_toolbar_icons_gray[MAIN_TB_COUNT];	// Array of toolbar icons (the grayed out ones)
-GtkToolItem				*layer_toolbar_items[MAIN_TB_COUNT];		// Array of toolbar items
-gulong					layer_toolbar_signals[MAIN_TB_COUNT];		// Array of toolbar signals
 
 #ifdef _WIN32
 // Windows only variables
@@ -221,12 +208,12 @@ gint main(gint argc, gchar *argv[])
 	// Load the fonts we use for rendering display
 	font_status = load_fonts();
 
-	// Initialise the button event handlers on the toolbars to NULL
-	main_toolbar_signals[DIMENSIONS] = 0;
-	main_toolbar_signals[EXPORT_FLASH] = 0;
+	// Initialise the button event handlers on the toolbars
+	set_main_toolbar_signal(DIMENSIONS, 0);
+	set_main_toolbar_signal(EXPORT_FLASH, 0);
 	for (tmp_int = 0; tmp_int < MAIN_TB_COUNT; tmp_int++)
 	{
-	    layer_toolbar_signals[tmp_int] = 0;
+	    set_layer_toolbar_signal(tmp_int, 0);
 	}
 
 	// Initialise the string holding the path of the most recent directory the user accessed
@@ -511,16 +498,16 @@ gint main(gint argc, gchar *argv[])
 	if (FALSE == get_screenshots_enabled())
 	{
 		// Disable the Capture icon
-		if (NULL != main_toolbar_icons[CAPTURE])
+		if (NULL != get_main_toolbar_icon(CAPTURE))
 		{
-			g_object_ref(main_toolbar_icons[CAPTURE]);
-			gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(main_toolbar_items[CAPTURE]), main_toolbar_icons_gray[CAPTURE]);
-			gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(main_toolbar_items[CAPTURE]), main_toolbar_tooltips, _("Screenshots disabled: salasaga_screencapture not found in search path"), "Private");
-			gtk_widget_show_all(GTK_WIDGET(main_toolbar_items[CAPTURE]));
+			g_object_ref(get_main_toolbar_icon(CAPTURE));
+			gtk_tool_button_set_icon_widget(GTK_TOOL_BUTTON(get_main_toolbar_item(CAPTURE)), get_main_toolbar_icon_gray(CAPTURE));
+			gtk_tool_item_set_tooltip(GTK_TOOL_ITEM(get_main_toolbar_item(CAPTURE)), get_main_toolbar_tooltips(), _("Screenshots disabled: salasaga_screencapture not found in search path"), "Private");
+			gtk_widget_show_all(GTK_WIDGET(get_main_toolbar_item(CAPTURE)));
 		}
 
 		// Disconnect the Capture icon signal handler
-		g_signal_handler_disconnect(G_OBJECT(main_toolbar_items[CAPTURE]), main_toolbar_signals[CAPTURE]);
+		g_signal_handler_disconnect(G_OBJECT(get_main_toolbar_item(CAPTURE)), get_main_toolbar_signal(CAPTURE));
 	}
 
 	// Display the main window
