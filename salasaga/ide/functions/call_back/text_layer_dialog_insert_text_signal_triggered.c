@@ -152,7 +152,7 @@ gboolean text_layer_dialog_insert_text_after(GtkTextBuffer *text_buffer, GtkText
 	{
 		font_face_to_use = our_font_face;
 	}
-	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(text_buffer), salasaga_font_names[font_face_to_use], &selection_start, cursor_location);
+	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(text_buffer), get_salasaga_font_name(font_face_to_use), &selection_start, cursor_location);
 
 	// * Apply the desired font size to the new text *
 	text_size_text_tag = text_layer_create_font_size_tag(our_font_size);

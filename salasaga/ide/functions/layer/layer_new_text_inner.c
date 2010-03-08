@@ -78,7 +78,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 
 	// Apply the default font face
 	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), &selection_start, &selection_end);
-	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), salasaga_font_names[get_default_text_font_face()], &selection_start, &selection_end);
+	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), get_salasaga_font_name(get_default_text_font_face()), &selection_start, &selection_end);
 
 	// Apply the default font size
 	text_tag = text_layer_create_font_size_tag(get_default_text_font_size());

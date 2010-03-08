@@ -99,6 +99,7 @@ guint get_resize_handles_status();
 gulong get_resolution_callback();
 GtkComboBox *get_resolution_selector();
 GtkWidget *get_right_side();
+gchar *get_salasaga_font_name(guint index);
 gint get_screenshot_command_num();
 guint get_screenshot_delay_time();
 gboolean get_screenshot_key_warning();

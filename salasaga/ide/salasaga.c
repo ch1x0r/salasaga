@@ -81,39 +81,13 @@
 #include "functions/zoom_selector/zoom_selector_changed.h"
 
 
-// Global variables
+// Global variable
 GList					*slides = NULL;				// Linked list holding the slide info
 
 #ifdef _WIN32
 // Windows only global variable
 HHOOK					win32_keyboard_hook_handle = NULL;		// Handle used to keep track of the Win32 keyboard hook
 #endif
-
-// Fonts available for use in text layers
-gchar	*salasaga_font_names[] =
-{
-	"DejaVu Sans",							// FONT_DEJAVU_SANS
-	"DejaVu Sans Bold",						// FONT_DEJAVU_SANS_B
-	"DejaVu Sans Bold Oblique",				// FONT_DEJAVU_SANS_B_O
-	"DejaVu Sans Condensed",				// FONT_DEJAVU_SANS_C
-	"DejaVu Sans Condensed Bold",			// FONT_DEJAVU_SANS_C_B
-	"DejaVu Sans Condensed Bold Oblique",	// FONT_DEJAVU_SANS_C_B_O
-	"DejaVu Sans Condensed Oblique",		// FONT_DEJAVU_SANS_C_O
-	"DejaVu Sans Extra Light",				// FONT_DEJAVU_SANS_EL
-	"DejaVu Sans Mono",						// FONT_DEJAVU_SANS_MONO
-	"DejaVu Sans Mono Bold",				// FONT_DEJAVU_SANS_MONO_B
-	"DejaVu Sans Mono Bold Oblique",		// FONT_DEJAVU_SANS_MONO_B_O
-	"DejaVu Sans Mono Oblique",				// FONT_DEJAVU_SANS_MONO_O
-	"DejaVu Sans Oblique",					// FONT_DEJAVU_SANS_O
-	"DejaVu Serif",							// FONT_DEJAVU_SERIF
-	"DejaVu Serif Bold",					// FONT_DEJAVU_SERIF_B
-	"DejaVu Serif Bold Italic",				// FONT_DEJAVU_SERIF_B_I
-	"DejaVu Serif Condensed",				// FONT_DEJAVU_SERIF_C
-	"DejaVu Serif Condensed Bold",			// FONT_DEJAVU_SERIF_C_B
-	"DejaVu Serif Condensed Bold Italic",	// FONT_DEJAVU_SERIF_C_B_I
-	"DejaVu Serif Condensed Italic",		// FONT_DEJAVU_SERIF_C_I
-	"DejaVu Serif Italic"					// FONT_DEJAVU_SERIF_I
-};
 
 
 // The main program loop

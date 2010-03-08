@@ -80,7 +80,7 @@ gboolean text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_w
 	}
 
 	// Apply the requested font face to the selected text
-	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(text_buffer), salasaga_font_names[font_face_val], &selection_start, &selection_end);
+	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(text_buffer), get_salasaga_font_name(font_face_val), &selection_start, &selection_end);
 
 	// Validate the correct # of tags are in place for all characters in the buffer
 	text_layer_dialog_validate_buffer_tag_quantity(GTK_TEXT_BUFFER(text_buffer));

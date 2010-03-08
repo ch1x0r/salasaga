@@ -44,8 +44,6 @@ extern GList				*slides;
 // Field descriptions used for bounds and validation
 extern validatation_entry	valid_fields[];
 
-extern gchar				*salasaga_font_names[FONT_COUNT];
-
 #ifdef _WIN32
 // Windows only global variable
 extern HHOOK				win32_keyboard_hook_handle;

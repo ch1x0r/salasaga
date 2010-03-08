@@ -750,7 +750,7 @@ layer *read_text_layer(xmlDocPtr document, xmlNodePtr this_node, gfloat valid_sa
 		gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), &text_start, &text_end);
 
 		// Apply the font face (via a tag) to the entire text buffer
-		gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), salasaga_font_names[font_face], &text_start, &text_end);
+		gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(tmp_text_ob->text_buffer), get_salasaga_font_name(font_face), &text_start, &text_end);
 
 		// Apply the font size (via a tag) to the entire text buffer
 		text_size_text_tag = text_layer_create_font_size_tag(font_size);

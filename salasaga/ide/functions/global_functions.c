@@ -32,7 +32,7 @@
 #include "../externs.h"
 
 
-// Global variables
+// Application wide variables
 static GList				*boundary_list = NULL;			// Stores a linked list of layer object boundaries
 static cairo_font_face_t	*cairo_font_face[FONT_COUNT];	// The ttf font faces we use get loaded into this
 static guint				capture_height;					// Height for screen captures
@@ -109,6 +109,32 @@ static guint				working_height;					// Height of the display portion of the work
 static guint				working_width;					// Width of the display portion of the working area in pixels
 static guint				zoom;							// Percentage zoom to use in the drawing area
 static GtkComboBox			*zoom_selector;					// Widget for the zoom selector
+
+// Fonts available for use in text layers
+gchar	*salasaga_font_names[] =
+{
+	"DejaVu Sans",							// FONT_DEJAVU_SANS
+	"DejaVu Sans Bold",						// FONT_DEJAVU_SANS_B
+	"DejaVu Sans Bold Oblique",				// FONT_DEJAVU_SANS_B_O
+	"DejaVu Sans Condensed",				// FONT_DEJAVU_SANS_C
+	"DejaVu Sans Condensed Bold",			// FONT_DEJAVU_SANS_C_B
+	"DejaVu Sans Condensed Bold Oblique",	// FONT_DEJAVU_SANS_C_B_O
+	"DejaVu Sans Condensed Oblique",		// FONT_DEJAVU_SANS_C_O
+	"DejaVu Sans Extra Light",				// FONT_DEJAVU_SANS_EL
+	"DejaVu Sans Mono",						// FONT_DEJAVU_SANS_MONO
+	"DejaVu Sans Mono Bold",				// FONT_DEJAVU_SANS_MONO_B
+	"DejaVu Sans Mono Bold Oblique",		// FONT_DEJAVU_SANS_MONO_B_O
+	"DejaVu Sans Mono Oblique",				// FONT_DEJAVU_SANS_MONO_O
+	"DejaVu Sans Oblique",					// FONT_DEJAVU_SANS_O
+	"DejaVu Serif",							// FONT_DEJAVU_SERIF
+	"DejaVu Serif Bold",					// FONT_DEJAVU_SERIF_B
+	"DejaVu Serif Bold Italic",				// FONT_DEJAVU_SERIF_B_I
+	"DejaVu Serif Condensed",				// FONT_DEJAVU_SERIF_C
+	"DejaVu Serif Condensed Bold",			// FONT_DEJAVU_SERIF_C_B
+	"DejaVu Serif Condensed Bold Italic",	// FONT_DEJAVU_SERIF_C_B_I
+	"DejaVu Serif Condensed Italic",		// FONT_DEJAVU_SERIF_C_I
+	"DejaVu Serif Italic"					// FONT_DEJAVU_SERIF_I
+};
 
 
 // Functions to get and set the variables
@@ -485,6 +511,11 @@ GtkComboBox *get_resolution_selector()
 GtkWidget *get_right_side()
 {
 	return right_side;
+}
+
+gchar *get_salasaga_font_name(guint index)
+{
+	return salasaga_font_names[index];
 }
 
 gint get_screenshot_command_num()
