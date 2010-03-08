@@ -65,9 +65,9 @@ void menu_edit_preferences(void)
 	GIOStatus			return_value;						// Return value used in most GIOChannel functions
 	gboolean			return_gbool;						// Receives the true/false return code when opening a lock file
 	gdouble				scale_mark_counter;					// Simple counter used when constructing scale marks for sliders
-	gchar				**strings;							// Text string are split apart with this
-	gint				table_padding_x;			// Amount of padding to use in the table
-	gint				table_padding_y;			// Amount of padding to use in the table
+	gchar				**strings;							// Text strings are split apart with this
+	gint				table_padding_x;					// Amount of padding to use in the table
+	gint				table_padding_y;					// Amount of padding to use in the table
 	GdkColor			temp_colour;						// Temporarily holds a colour value
 	GFile				*temp_gfile;
 	gchar				*tmp_gchar;							// Temporary gchar
