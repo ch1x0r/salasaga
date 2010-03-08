@@ -344,10 +344,6 @@ void save_preferences_and_exit(void)
 #endif
 
 	// Free global variables
-	if (NULL != info_link)
-		g_string_free(info_link, TRUE);
-	if (NULL != info_link_target)
-		g_string_free(info_link_target, TRUE);
 	if (NULL != info_text)
 		g_object_unref(info_text);
 

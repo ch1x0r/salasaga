@@ -197,8 +197,8 @@ void menu_file_save(void)
 	{
 		xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_display", (const xmlChar *) "false");
 	}
-	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_link", (const xmlChar *) info_link->str);
-	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_link_target", (const xmlChar *) info_link_target->str);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_link", (const xmlChar *) get_info_link());
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_link_target", (const xmlChar *) get_info_link_target());
 	gtk_text_buffer_get_bounds(GTK_TEXT_BUFFER(info_text), &text_start, &text_end);
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "info_text", (const xmlChar *) gtk_text_buffer_get_slice(GTK_TEXT_BUFFER(info_text), &text_start, &text_end, TRUE));
 

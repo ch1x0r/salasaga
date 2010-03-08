@@ -33,6 +33,8 @@
 
 
 // Project preference variables
+static GString				*info_link;						// The URL to open when the user clicks the "Information" box
+static GString				*info_link_target;				// The target frame to open the URL in when the user clicks the "Information" box
 static GString				*output_folder = NULL;			// Where to export output files too
 static guint				output_height;					// How high to create project output
 static guint				output_width;					// How wide to create project output
@@ -43,6 +45,26 @@ static guint				project_width;					// The width of the project in pixels
 
 
 // Functions to get and set the variables
+gchar *get_info_link()
+{
+	return info_link->str;
+}
+
+gsize get_info_link_length()
+{
+	return info_link->len;
+}
+
+gchar *get_info_link_target()
+{
+	return info_link_target->str;
+}
+
+gsize get_info_link_target_length()
+{
+	return info_link_target->len;
+}
+
 gchar *get_output_folder()
 {
 	return output_folder->str;
@@ -91,6 +113,28 @@ gsize get_project_name_length()
 guint get_project_width()
 {
 	return project_width;
+}
+
+void set_info_link(gchar *new_info_link)
+{
+	if (NULL == info_link)
+	{
+		info_link = g_string_new(new_info_link);
+	} else
+	{
+		info_link = g_string_assign(info_link, new_info_link);
+	}
+}
+
+void set_info_link_target(gchar *new_info_link_target)
+{
+	if (NULL == info_link_target)
+	{
+		info_link_target = g_string_new(new_info_link_target);
+	} else
+	{
+		info_link_target = g_string_assign(info_link_target, new_info_link_target);
+	}
 }
 
 void set_output_folder(gchar *new_output_folder)

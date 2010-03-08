@@ -92,8 +92,6 @@ GdkPixmap				*front_store;				// Front store for double buffering the workspace 
 FT_Face					ft_font_face[FONT_COUNT];	// Array of FreeType font face handles
 GString					*icon_extension;			// Used to determine if SVG images can be loaded
 GString					*icon_path;					// Points to the base location for Salasaga icon files
-GString					*info_link;					//
-GString					*info_link_target;			//
 GtkTextBuffer			*info_text;					// Text to be shown in the information button in swf output
 GString					*last_folder;				// Keeps track of the last folder the user visited
 GtkItemFactory			*menu_bar = NULL;			// Widget for the menu bar

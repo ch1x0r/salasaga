@@ -30,6 +30,10 @@ extern "C" {
 #endif // __cplusplus
 
 
+gchar *get_info_link();
+gsize get_info_link_length();
+gchar *get_info_link_target();
+gsize get_info_link_target_length();
 gchar *get_output_folder();
 gsize get_output_folder_length();
 guint get_output_height();
@@ -40,6 +44,8 @@ guint get_project_height();
 gchar *get_project_name();
 gsize get_project_name_length();
 guint get_project_width();
+void set_info_link(gchar *new_info_link);
+void set_info_link_target(gchar *new_info_link_target);
 void set_output_folder(gchar *new_output_folder);
 void set_output_height(guint new_output_height);
 void set_output_width(guint new_output_width);

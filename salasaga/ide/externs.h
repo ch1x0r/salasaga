@@ -49,8 +49,6 @@ extern GdkPixmap			*front_store;
 extern FT_Face				ft_font_face[FONT_COUNT];
 extern GString				*icon_extension;
 extern GString				*icon_path;
-extern GString				*info_link;
-extern GString				*info_link_target;
 extern GtkTextBuffer		*info_text;
 extern GString				*last_folder;
 extern GtkItemFactory		*menu_bar;

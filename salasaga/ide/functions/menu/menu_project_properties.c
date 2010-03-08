@@ -293,7 +293,7 @@ void menu_project_properties(void)
 	// Create the entry that accepts an external link
 	external_link_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_entry), valid_fields[EXTERNAL_LINK].max_value);
-	gtk_entry_set_text(GTK_ENTRY(external_link_entry), info_link->str);
+	gtk_entry_set_text(GTK_ENTRY(external_link_entry), get_info_link());
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_entry), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	proj_row_counter = proj_row_counter + 1;
 
@@ -305,7 +305,7 @@ void menu_project_properties(void)
 	// Create the entry that accepts a text string for the window to open the external link in
 	external_link_win_entry = gtk_entry_new();
 	gtk_entry_set_max_length(GTK_ENTRY(external_link_win_entry), valid_fields[EXTERNAL_LINK_WINDOW].max_value);
-	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), info_link_target->str);
+	gtk_entry_set_text(GTK_ENTRY(external_link_win_entry), get_info_link_target());
 	gtk_table_attach(GTK_TABLE(proj_dialog_table), GTK_WIDGET(external_link_win_entry), 2, 3, proj_row_counter, proj_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 
 	// Ensure everything will be shown
@@ -494,8 +494,8 @@ void menu_project_properties(void)
 
 	// Information button display
 	set_info_display(valid_info_display);
-	g_string_printf(info_link, "%s", valid_ext_link->str);
-	g_string_printf(info_link_target, "%s", valid_ext_link_win->str);
+	set_info_link(valid_ext_link->str);
+	set_info_link_target(valid_ext_link_win->str);
 
 	// Set the changes made variable
 	set_changes_made(TRUE);

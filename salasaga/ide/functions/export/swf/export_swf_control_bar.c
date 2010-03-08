@@ -1342,7 +1342,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		SWFButton_addShape(info_text_button, (SWFCharacter) info_text_bg, SWFBUTTON_HIT);
 
 		// Add action script to the button, jumping to the external link
-		g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", info_link->str, info_link_target->str);
+		g_string_printf(as_gstring, "getURL(\"%s\", \"%s\", \"POST\");", get_info_link(), get_info_link_target());
 		info_action = compileSWFActionCode(as_gstring->str);
 		SWFButton_addAction(info_text_button, info_action, SWFBUTTON_MOUSEUP);
 
