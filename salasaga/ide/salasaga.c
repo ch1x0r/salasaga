@@ -85,9 +85,7 @@
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
 SWFFont					fdb_font_object[FONT_COUNT];	// The fdb font faces used by Ming are loaded into this
 FT_Face					ft_font_face[FONT_COUNT];	// Array of FreeType font face handles
-GdkRectangle			resize_handles_rect[8];		// Contains the onscreen offsets and size for the resize handles
 GList					*slides = NULL;				// Linked list holding the slide info
-GtkTextTag				*text_tags_fonts[FONT_COUNT];	// Text tags for font faces, used for applying font faces in text layers
 
 #ifdef _WIN32
 // Windows only variables

@@ -42,9 +42,7 @@ extern "C" {
 extern GList				*current_slide;
 extern SWFFont				fdb_font_object[FONT_COUNT];
 extern FT_Face				ft_font_face[FONT_COUNT];
-extern GdkRectangle			resize_handles_rect[8];
 extern GList				*slides;
-extern GtkTextTag			*text_tags_fonts[FONT_COUNT];
 
 // Field descriptions used for bounds and validation
 extern validatation_entry	valid_fields[];

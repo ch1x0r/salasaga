@@ -51,21 +51,21 @@ gboolean create_text_tags(void)
 	for (loop_counter = 0; loop_counter < FONT_COUNT; loop_counter++)
 	{
 		// Create the text tag itself
-		text_tags_fonts[loop_counter] = gtk_text_tag_new(salasaga_font_names[loop_counter]);
+		set_text_tags_font(loop_counter, gtk_text_tag_new(salasaga_font_names[loop_counter]));
 
 		// Add properties to the text tag.  In this case, we add the font to be applied when the tag is applied
-		g_object_set(text_tags_fonts[loop_counter], "font", salasaga_font_names[loop_counter], NULL);
+		g_object_set(get_text_tags_font(loop_counter), "font", salasaga_font_names[loop_counter], NULL);
 
 		// Add a matching data item to this tag, pointing to the equivalent font in our loaded cairo font face array
-		g_object_set_data(G_OBJECT(text_tags_fonts[loop_counter]), "array-font", get_cairo_font_face(loop_counter));
+		g_object_set_data(G_OBJECT(get_text_tags_font(loop_counter)), "array-font", get_cairo_font_face(loop_counter));
 
 		// Add a data item to this tag, indicating which font number in our list of fonts it is
 		int_ptr = g_slice_new0(gint);
 		*int_ptr = loop_counter;
-		g_object_set_data(G_OBJECT(text_tags_fonts[loop_counter]), "font-num", int_ptr);
+		g_object_set_data(G_OBJECT(get_text_tags_font(loop_counter)), "font-num", int_ptr);
 
 		// Add the font tag to the global text table
-		gtk_text_tag_table_add(get_text_tags_table(), text_tags_fonts[loop_counter]);
+		gtk_text_tag_table_add(get_text_tags_table(), get_text_tags_font(loop_counter));
 	}
 
 	return TRUE;

@@ -75,51 +75,51 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 	// * Generate the list of corner resize handle positions *
 
 	// Top left
-	resize_handles_rect[0].x = left + 1;
-	resize_handles_rect[0].y = top + 1;
-	resize_handles_rect[0].width = get_resize_handle_size() - 1;
-	resize_handles_rect[0].height = get_resize_handle_size() - 1;
+	set_resize_handles_rect_x(0, left + 1);
+	set_resize_handles_rect_y(0, top + 1);
+	set_resize_handles_rect_width(0, get_resize_handle_size() - 1);
+	set_resize_handles_rect_height(0, get_resize_handle_size() - 1);
 
 	// Top right
-	resize_handles_rect[2].x = right - get_resize_handle_size() + 1;
-	resize_handles_rect[2].y = top + 1;
-	resize_handles_rect[2].width = get_resize_handle_size() - 1;
-	resize_handles_rect[2].height = get_resize_handle_size() - 1;
+	set_resize_handles_rect_x(2, right - get_resize_handle_size() + 1);
+	set_resize_handles_rect_y(2, top + 1);
+	set_resize_handles_rect_width(2, get_resize_handle_size() - 1);
+	set_resize_handles_rect_height(2, get_resize_handle_size() - 1);
 
 	// Bottom right
-	resize_handles_rect[4].x = right - get_resize_handle_size() + 1;
-	resize_handles_rect[4].y = bottom - get_resize_handle_size() + 1;
-	resize_handles_rect[4].width = get_resize_handle_size() - 1;
-	resize_handles_rect[4].height = get_resize_handle_size() - 1;
+	set_resize_handles_rect_x(4, right - get_resize_handle_size() + 1);
+	set_resize_handles_rect_y(4, bottom - get_resize_handle_size() + 1);
+	set_resize_handles_rect_width(4, get_resize_handle_size() - 1);
+	set_resize_handles_rect_height(4, get_resize_handle_size() - 1);
 
 	// Bottom left
-	resize_handles_rect[6].x = left + 1;
-	resize_handles_rect[6].y = bottom - get_resize_handle_size() + 1;
-	resize_handles_rect[6].width = get_resize_handle_size() - 1;
-	resize_handles_rect[6].height = get_resize_handle_size() - 1;
+	set_resize_handles_rect_x(6, left + 1);
+	set_resize_handles_rect_y(6, bottom - get_resize_handle_size() + 1);
+	set_resize_handles_rect_width(6, get_resize_handle_size() - 1);
+	set_resize_handles_rect_height(6, get_resize_handle_size() - 1);
 
 
 	// * Draw the corner handles *
 
 	// Top left
 	gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
-		resize_handles_rect[0].x, resize_handles_rect[0].y,
-		resize_handles_rect[0].width, resize_handles_rect[0].height);
+		get_resize_handles_rect_x(0), get_resize_handles_rect_y(0),
+		get_resize_handles_rect_width(0), get_resize_handles_rect_height(0));
 
 	// Top right
 	gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
-		resize_handles_rect[2].x, resize_handles_rect[2].y,
-		resize_handles_rect[2].width, resize_handles_rect[2].height);
+		get_resize_handles_rect_x(2), get_resize_handles_rect_y(2),
+		get_resize_handles_rect_width(2), get_resize_handles_rect_height(2));
 
 	// Bottom right
 	gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
-		resize_handles_rect[4].x, resize_handles_rect[4].y,
-		resize_handles_rect[4].width, resize_handles_rect[4].height);
+		get_resize_handles_rect_x(4), get_resize_handles_rect_y(4),
+		get_resize_handles_rect_width(4), get_resize_handles_rect_height(4));
 
 	// Bottom left
 	gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
-		resize_handles_rect[6].x, resize_handles_rect[6].y,
-		resize_handles_rect[6].width, resize_handles_rect[6].height);
+		get_resize_handles_rect_x(6), get_resize_handles_rect_y(6),
+		get_resize_handles_rect_width(6), get_resize_handles_rect_height(6));
 
 	// * If there is enough room, draw the mid point handles *
 	required_size_mid_point = (get_resize_handle_size() * 3) + 2;
@@ -132,31 +132,31 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 		mid_point_vertical = top + roundf(((gfloat) width - get_resize_handle_size()) / 2);
 
 		// Right middle
-		resize_handles_rect[3].x = right - get_resize_handle_size() + 1;
-		resize_handles_rect[3].y = mid_point_vertical;
-		resize_handles_rect[3].width = get_resize_handle_size() - 1;
-		resize_handles_rect[3].height = get_resize_handle_size();
+		set_resize_handles_rect_x(3, right - get_resize_handle_size() + 1);
+		set_resize_handles_rect_y(3, mid_point_vertical);
+		set_resize_handles_rect_width(3, get_resize_handle_size() - 1);
+		set_resize_handles_rect_height(3, get_resize_handle_size());
 
 		// Left middle
-		resize_handles_rect[7].x = left + 1;
-		resize_handles_rect[7].y = mid_point_vertical;
-		resize_handles_rect[7].width = get_resize_handle_size() - 1;
-		resize_handles_rect[7].height = get_resize_handle_size();
+		set_resize_handles_rect_x(7, left + 1);
+		set_resize_handles_rect_y(7, mid_point_vertical);
+		set_resize_handles_rect_width(7, get_resize_handle_size() - 1);
+		set_resize_handles_rect_height(7, get_resize_handle_size());
 
 		// Right middle
 		gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
-			resize_handles_rect[3].x, resize_handles_rect[3].y,
-			resize_handles_rect[3].width, resize_handles_rect[3].height);
+			get_resize_handles_rect_x(3), get_resize_handles_rect_y(3),
+			get_resize_handles_rect_width(3), get_resize_handles_rect_height(3));
 
 		// Left middle
 		gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
-			resize_handles_rect[7].x, resize_handles_rect[7].y,
-			resize_handles_rect[7].width, resize_handles_rect[7].height);
+			get_resize_handles_rect_x(7), get_resize_handles_rect_y(7),
+			get_resize_handles_rect_width(7), get_resize_handles_rect_height(7));
 	} else
 	{
 		// Mark the mid point handle width's as 0, to indicate they're unused
-		resize_handles_rect[3].width = 0;
-		resize_handles_rect[7].width = 0;
+		set_resize_handles_rect_width(3, 0);
+		set_resize_handles_rect_width(7, 0);
 	}
 
 	// Draw the vertical resize handles
@@ -167,31 +167,31 @@ gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)
 		mid_point_horizontal = left + roundf(((gfloat) height - get_resize_handle_size()) / 2);
 
 		// Top Middle
-		resize_handles_rect[1].x = mid_point_horizontal;
-		resize_handles_rect[1].y = top + 1;
-		resize_handles_rect[1].width = get_resize_handle_size();
-		resize_handles_rect[1].height = get_resize_handle_size() - 1;
+		set_resize_handles_rect_x(1, mid_point_horizontal);
+		set_resize_handles_rect_y(1, top + 1);
+		set_resize_handles_rect_width(1, get_resize_handle_size());
+		set_resize_handles_rect_height(1, get_resize_handle_size() - 1);
 
 		// Bottom middle
-		resize_handles_rect[5].x = mid_point_horizontal;
-		resize_handles_rect[5].y = bottom - get_resize_handle_size() + 1;
-		resize_handles_rect[5].width = get_resize_handle_size();
-		resize_handles_rect[5].height = get_resize_handle_size() - 1;
+		set_resize_handles_rect_x(5, mid_point_horizontal);
+		set_resize_handles_rect_y(5, bottom - get_resize_handle_size() + 1);
+		set_resize_handles_rect_width(5, get_resize_handle_size());
+		set_resize_handles_rect_height(5, get_resize_handle_size() - 1);
 
 		// Top middle
 		gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
-			resize_handles_rect[1].x, resize_handles_rect[1].y,
-			resize_handles_rect[1].width, resize_handles_rect[1].height);
+			get_resize_handles_rect_x(1), get_resize_handles_rect_y(1),
+			get_resize_handles_rect_width(1), get_resize_handles_rect_height(1));
 
 		// Bottom middle
 		gdk_draw_rectangle(GDK_DRAWABLE(temp_widget->window), GDK_GC(handle_gc), TRUE,
-			resize_handles_rect[5].x, resize_handles_rect[5].y,
-			resize_handles_rect[5].width, resize_handles_rect[5].height);
+			get_resize_handles_rect_x(5), get_resize_handles_rect_y(5),
+			get_resize_handles_rect_width(5), get_resize_handles_rect_height(5));
 	} else
 	{
 		// Mark the mid point handle width's as 0, to indicate they're unused
-		resize_handles_rect[1].width = 0;
-		resize_handles_rect[5].width = 0;
+		set_resize_handles_rect_width(1, 0);
+		set_resize_handles_rect_width(5, 0);
 	}
 
 	return TRUE;

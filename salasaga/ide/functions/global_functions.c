@@ -78,8 +78,9 @@ static GdkPixbuf			*mouse_ptr_pixbuf;				// Temporary GDK Pixbuf
 static GString				*mouse_ptr_string = NULL;		// Full path to the mouse pointer graphic
 static gboolean				new_layer_selected = TYPE_NONE;	// Is a new layer being created?
 static gboolean				project_active;					// Whether or not a project is active (i.e. something is loaded or has been created)
-static guint				resize_handles_status;			// Are the layer resize handles active, in progress, etc
 static guint				resize_handle_size = 6;			// Size of the resize handles
+static GdkRectangle			resize_handles_rect[8];			// Contains the onscreen offsets and size for the resize handles
+static guint				resize_handles_status;			// Are the layer resize handles active, in progress, etc
 static gulong				resolution_callback;			// Holds the id of the resolution selector callback
 static GtkComboBox			*resolution_selector;			// Widget for the resolution selector
 static GtkWidget			*right_side;					// Widget for the right side area
@@ -96,6 +97,7 @@ static gint					stored_y;						// Y co-ordinate of the mouse last click
 static gint					table_x_padding;				// Number of pixels to pad table entries by
 static gint					table_y_padding;				// Number of pixels to pad table entries by
 static GSList				*text_tags_fg_colour_slist = NULL;  // Text tags for text foreground colour, used for changing text colour in text layers
+static GtkTextTag			*text_tags_fonts[FONT_COUNT];	// Text tags for font faces, used for applying font faces in text layers
 static GSList				*text_tags_size_slist = NULL;	// Text tags for text sizes, used for changing text size in text layers
 static GtkTextTagTable		*text_tags_table;				// The table of all text tags, used for applying text tags in text layers
 static GtkWidget			*time_line_container;			// Scrolled window widget, to add scroll bars to the time line widget
@@ -387,19 +389,39 @@ gboolean get_project_active()
 	return project_active;
 }
 
-GtkWidget *get_right_side()
+guint get_resize_handle_size()
 {
-	return right_side;
+	return resize_handle_size;
+}
+
+GdkRectangle *get_resize_handles_rect(guint index)
+{
+	return &resize_handles_rect[index];
+}
+
+gint get_resize_handles_rect_height(guint index)
+{
+	return resize_handles_rect[index].height;
+}
+
+gint get_resize_handles_rect_width(guint index)
+{
+	return resize_handles_rect[index].width;
+}
+
+gint get_resize_handles_rect_x(guint index)
+{
+	return resize_handles_rect[index].x;
+}
+
+gint get_resize_handles_rect_y(guint index)
+{
+	return resize_handles_rect[index].y;
 }
 
 guint get_resize_handles_status()
 {
 	return resize_handles_status;
-}
-
-guint get_resize_handle_size()
-{
-	return resize_handle_size;
 }
 
 gulong get_resolution_callback()
@@ -410,6 +432,11 @@ gulong get_resolution_callback()
 GtkComboBox *get_resolution_selector()
 {
 	return resolution_selector;
+}
+
+GtkWidget *get_right_side()
+{
+	return right_side;
 }
 
 gint get_screenshot_command_num()
@@ -475,6 +502,11 @@ gint get_table_y_padding()
 GSList *get_text_tags_fg_colour_slist()
 {
 	return text_tags_fg_colour_slist;
+}
+
+GtkTextTag *get_text_tags_font(guint index)
+{
+	return text_tags_fonts[index];
 }
 
 GSList *get_text_tags_size_slist()
@@ -772,14 +804,34 @@ void set_project_active(gboolean new_project_active)
 	project_active = new_project_active;
 }
 
-void set_resize_handles_status(guint new_resize_handles_status)
-{
-	resize_handles_status = new_resize_handles_status;
-}
-
 void set_resize_handle_size(guint new_resize_handle_size)
 {
 	resize_handle_size = new_resize_handle_size;
+}
+
+void set_resize_handles_rect_height(guint index, gint new_height)
+{
+	resize_handles_rect[index].height = new_height;
+}
+
+void set_resize_handles_rect_width(guint index, gint new_width)
+{
+	resize_handles_rect[index].width = new_width;
+}
+
+void set_resize_handles_rect_x(guint index, gint new_x)
+{
+	resize_handles_rect[index].x = new_x;
+}
+
+void set_resize_handles_rect_y(guint index, gint new_y)
+{
+	resize_handles_rect[index].y = new_y;
+}
+
+void set_resize_handles_status(guint new_resize_handles_status)
+{
+	resize_handles_status = new_resize_handles_status;
 }
 
 void set_resolution_callback(gulong new_resolution_callback)
@@ -860,6 +912,11 @@ void set_table_y_padding(gint new_table_y_padding)
 void set_text_tags_fg_colour_slist(GSList *new_text_tags_fg_colour_slist)
 {
 	text_tags_fg_colour_slist = new_text_tags_fg_colour_slist;
+}
+
+void set_text_tags_font(guint index, GtkTextTag *new_text_tags_font)
+{
+	text_tags_fonts[index] = new_text_tags_font;
 }
 
 void set_text_tags_size_slist(GSList *new_text_tags_size_slist)

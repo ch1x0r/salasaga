@@ -459,45 +459,45 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		// * Check if the mouse is over a corner resize handle *
 
 		// Top left
-		if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[0], &mouse_pointer_rect, NULL))
+		if (TRUE == gdk_rectangle_intersect(get_resize_handles_rect(0), &mouse_pointer_rect, NULL))
 		{
 			// We're resizing from the top left
 			set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_TL);
 		}
 
 		// Top right
-		if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[2], &mouse_pointer_rect, NULL))
+		if (TRUE == gdk_rectangle_intersect(get_resize_handles_rect(2), &mouse_pointer_rect, NULL))
 		{
 			// We're resizing from the top right
 			set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_TR);
 		}
 
 		// Bottom right
-		if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[4], &mouse_pointer_rect, NULL))
+		if (TRUE == gdk_rectangle_intersect(get_resize_handles_rect(4), &mouse_pointer_rect, NULL))
 		{
 			// We're resizing from the bottom right
 			set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_BR);
 		}
 
 		// Bottom left
-		if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[6], &mouse_pointer_rect, NULL))
+		if (TRUE == gdk_rectangle_intersect(get_resize_handles_rect(6), &mouse_pointer_rect, NULL))
 		{
 			// We're resizing from the bottom left
 			set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_BL);
 		}
 
 		// If the horizontal resize handles are in use, check them
-		if (0 != resize_handles_rect[3].width)
+		if (0 != get_resize_handles_rect_width(3))
 		{
 			// Right middle
-			if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[3], &mouse_pointer_rect, NULL))
+			if (TRUE == gdk_rectangle_intersect(get_resize_handles_rect(3), &mouse_pointer_rect, NULL))
 			{
 				// We're resizing from the right middle
 				set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_RM);
 			}
 
 			// Left middle
-			if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[7], &mouse_pointer_rect, NULL))
+			if (TRUE == gdk_rectangle_intersect(get_resize_handles_rect(7), &mouse_pointer_rect, NULL))
 			{
 				// We're resizing from the left middle
 				set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_LM);
@@ -505,17 +505,17 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		}
 
 		// If the vertical resize handles are in use, check them
-		if (0 != resize_handles_rect[1].width)
+		if (0 != get_resize_handles_rect_width(1))
 		{
 			// Top middle
-			if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[1], &mouse_pointer_rect, NULL))
+			if (TRUE == gdk_rectangle_intersect(get_resize_handles_rect(1), &mouse_pointer_rect, NULL))
 			{
 				// We're resizing from the top middle
 				set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_TM);
 			}
 
 			// Bottom middle
-			if (TRUE == gdk_rectangle_intersect(&resize_handles_rect[5], &mouse_pointer_rect, NULL))
+			if (TRUE == gdk_rectangle_intersect(get_resize_handles_rect(5), &mouse_pointer_rect, NULL))
 			{
 				// We're resizing from the bottom middle
 				set_resize_handles_status(RESIZE_HANDLES_RESIZING | RESIZE_HANDLES_RESIZING_BM);

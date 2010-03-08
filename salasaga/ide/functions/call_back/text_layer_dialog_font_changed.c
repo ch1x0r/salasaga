@@ -76,7 +76,7 @@ gboolean text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_w
 	// Remove any existing font face tags from the selected text
 	for (loop_counter = 0; loop_counter < FONT_COUNT; loop_counter++)
 	{
-		gtk_text_buffer_remove_tag(GTK_TEXT_BUFFER(text_buffer), text_tags_fonts[loop_counter], &selection_start, &selection_end);
+		gtk_text_buffer_remove_tag(GTK_TEXT_BUFFER(text_buffer), get_text_tags_font(loop_counter), &selection_start, &selection_end);
 	}
 
 	// Apply the requested font face to the selected text
