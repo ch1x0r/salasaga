@@ -48,6 +48,7 @@ static gdouble				default_text_font_size;			// Default font size in text layers
 static gboolean				display_help_text = TRUE;		// Should we display help text and dialogs?
 static guint				end_behaviour = END_BEHAVIOUR_STOP;  // Holds the end behaviour for output animations
 static guint				end_point_status = END_POINTS_INACTIVE;  // Is one of the layer end points being moved?
+static SWFFont				fdb_font_object[FONT_COUNT];	// The fdb font faces used by Ming are loaded into this
 static GString				*file_name = NULL;				// Holds the file name the project is saved as
 static gboolean				film_strip_being_resized;		// Toggle to indicate if the film strip is being resized
 static GtkTreeViewColumn	*film_strip_column;				// Pointer to the film strip column
@@ -56,6 +57,7 @@ static GtkListStore			*film_strip_store;				// Film strip list store
 static GtkWidget			*film_strip_view;				// The view of the film strip list store
 static guint				frames_per_second;				// Number of frames per second
 static GdkPixmap			*front_store;					// Front store for double buffering the workspace area
+static FT_Face				ft_font_face[FONT_COUNT];		// Array of FreeType font face handles
 static GString				*icon_extension = NULL;			// Used to determine if SVG images can be loaded
 static GString				*icon_path = NULL;				// Points to the base location for Salasaga icon files
 static gboolean				info_display = TRUE;			// Toggle for whether to display the information button in swf output
@@ -184,6 +186,11 @@ guint get_end_point_status()
 	return end_point_status;
 }
 
+SWFFont get_fdb_font_object(guint index)
+{
+	return fdb_font_object[index];
+}
+
 gchar *get_file_name()
 {
 	if (NULL == file_name)
@@ -233,6 +240,16 @@ guint get_frames_per_second()
 GdkPixmap *get_front_store()
 {
 	return front_store;
+}
+
+FT_Face get_ft_font_face(guint index)
+{
+	return ft_font_face[index];
+}
+
+FT_Face *get_ft_font_face_ptr(guint index)
+{
+	return &ft_font_face[index];
 }
 
 gchar *get_icon_extension()
@@ -624,6 +641,11 @@ void set_end_point_status(guint new_end_point_status)
 	end_point_status = new_end_point_status;
 }
 
+void set_fdb_font_object(guint index, SWFFont new_fdb_font_object)
+{
+	fdb_font_object[index] = new_fdb_font_object;
+}
+
 void set_file_name(gchar *new_file_name)
 {
 	if (NULL == file_name)
@@ -668,6 +690,11 @@ void set_frames_per_second(guint new_frames_per_second)
 void set_front_store(GdkPixmap *new_front_store)
 {
 	front_store = new_front_store;
+}
+
+void set_ft_font_face(guint index, FT_Face new_ft_font_face)
+{
+	ft_font_face[index] = new_ft_font_face;
 }
 
 void set_icon_extension(gchar *new_icon_extension)

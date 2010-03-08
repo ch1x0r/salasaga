@@ -567,13 +567,13 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 							// Found the required font face info, so set the font face with it
 							char_font_face = *char_font_ptr;
 							font_face_found = TRUE;
-							SWFText_setFont(temp_text_object, fdb_font_object[char_font_face]);
+							SWFText_setFont(temp_text_object, get_fdb_font_object(char_font_face));
 						}
 					}
 					if (FALSE == font_face_found)
 					{
 						// Couldn't determine the font face to be applied to this text, so we use the default text layer font face
-						SWFText_setFont(temp_text_object, fdb_font_object[get_default_text_font_face()]);
+						SWFText_setFont(temp_text_object, get_fdb_font_object(get_default_text_font_face()));
 					}
 
 					// Free the list of tags, as they're no longer needed
@@ -685,13 +685,13 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 							// Found the required font face info, so set the font face with it
 							char_font_face = *char_font_ptr;
 							font_face_found = TRUE;
-							SWFText_setFont(text_object, fdb_font_object[char_font_face]);
+							SWFText_setFont(text_object, get_fdb_font_object(char_font_face));
 						}
 					}
 					if (FALSE == font_face_found)
 					{
 						// Couldn't determine the font face to be applied to this text, so we use the default text layer font face
-						SWFText_setFont(text_object, fdb_font_object[get_default_text_font_face()]);
+						SWFText_setFont(text_object, get_fdb_font_object(get_default_text_font_face()));
 					}
 
 					// Free the list of tags, as they're no longer needed

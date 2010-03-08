@@ -1242,7 +1242,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 		info_object = newSWFText();
 
 		// Assign a font to the text object
-		SWFText_setFont(info_object, fdb_font_object[FONT_DEJAVU_SANS]);  // Hard code DejaVu Sans for now.  Should be adjustable later on.
+		SWFText_setFont(info_object, get_fdb_font_object(FONT_DEJAVU_SANS));  // Hard code DejaVu Sans for now.  Should be adjustable later on.
 
 		// Set the height we want for the text
 		scaled_font_size = scaled_height_ratio * 26;

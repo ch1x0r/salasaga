@@ -83,12 +83,10 @@
 
 // Global variables
 GList					*current_slide = NULL;		// Pointer to the presently selected slide
-SWFFont					fdb_font_object[FONT_COUNT];	// The fdb font faces used by Ming are loaded into this
-FT_Face					ft_font_face[FONT_COUNT];	// Array of FreeType font face handles
 GList					*slides = NULL;				// Linked list holding the slide info
 
 #ifdef _WIN32
-// Windows only variables
+// Windows only global variable
 HHOOK					win32_keyboard_hook_handle = NULL;		// Handle used to keep track of the Win32 keyboard hook
 #endif
 

@@ -40,8 +40,6 @@ extern "C" {
 
 // Variables defined elsewhere
 extern GList				*current_slide;
-extern SWFFont				fdb_font_object[FONT_COUNT];
-extern FT_Face				ft_font_face[FONT_COUNT];
 extern GList				*slides;
 
 // Field descriptions used for bounds and validation
@@ -50,7 +48,7 @@ extern validatation_entry	valid_fields[];
 extern gchar				*salasaga_font_names[FONT_COUNT];
 
 #ifdef _WIN32
-// Windows only variables
+// Windows only global variable
 extern HHOOK				win32_keyboard_hook_handle;
 #endif
 

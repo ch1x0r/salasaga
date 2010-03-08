@@ -167,7 +167,7 @@ gboolean load_fonts()
 		font_pathname = g_build_path(G_DIR_SEPARATOR_S, FONT_TTF_DIR, message->str, NULL);
 
 		// Load the FreeType font face
-		ft_error = FT_New_Face(ft_library_handle, font_pathname, 0, &ft_font_face[loop_counter]);
+		ft_error = FT_New_Face(ft_library_handle, font_pathname, 0, get_ft_font_face_ptr(loop_counter));
 		if (FT_Err_Unknown_File_Format == ft_error)
 		{
 			g_string_printf(message, "%s ED422: %s '%s' %s", _("Error"), _("Font file"), font_pathname, _("is not in a format FreeType recognizes."));
@@ -184,7 +184,7 @@ gboolean load_fonts()
 		}
 
 		// Load the font face into Cairo
-		set_cairo_font_face(loop_counter, cairo_ft_font_face_create_for_ft_face(ft_font_face[loop_counter], 0));
+		set_cairo_font_face(loop_counter, cairo_ft_font_face_create_for_ft_face(get_ft_font_face(loop_counter), 0));
 
 		// Check if the font face was successfully loaded
 		cairo_status = cairo_font_face_status(get_cairo_font_face(loop_counter));
@@ -212,8 +212,8 @@ gboolean load_fonts()
 			return FALSE;
 		}
 
-		fdb_font_object[loop_counter] = loadSWFFontFromFile(font_file);
-		if (NULL == fdb_font_object[loop_counter])
+		set_fdb_font_object(loop_counter, loadSWFFontFromFile(font_file));
+		if (NULL == get_fdb_font_object(loop_counter))
 		{
 			// Something went wrong when loading the font file, so return
 			g_string_printf(message, "%s ED96: %s: '%s'", _("Error"), _("Something went wrong when loading the font file"), font_pathname);
