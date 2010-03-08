@@ -56,7 +56,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 
 
 	// If no project is loaded then don't run this function
-	if (NULL == current_slide)
+	if (NULL == get_current_slide())
 	{
 		// Make a beep, then return
 		gdk_beep();
@@ -69,7 +69,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	// * Prepare a new text layer object in memory, with reasonable defaults *
 
 	// Simplify pointing to the current slide structure in memory
-	slide_data = current_slide->data;
+	slide_data = get_current_slide_data();
 
 	// Create the text layer data
 	tmp_text_ob = g_new(layer_text, 1);
@@ -126,7 +126,7 @@ void layer_new_text_inner(guint release_x, guint release_y)
 	undo_item_data->layer_data_old = NULL;  // NULL means not set
 	undo_item_data->position_new = 0;
 	undo_item_data->position_old = -1;  // -1 means not set
-	undo_item_data->slide_data = current_slide->data;
+	undo_item_data->slide_data = get_current_slide_data();
 	undo_history_add_item(UNDO_INSERT_LAYER, undo_item_data, TRUE);
 
 	// Add the new text layer to the slide

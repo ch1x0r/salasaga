@@ -992,7 +992,7 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 
 		// Re-initialise pointers
 		slides = NULL;
-		current_slide = NULL;
+		set_current_slide(NULL);
 	}
 
 	// If there's an existing film strip, we unload it

@@ -60,7 +60,7 @@ gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context,
 
 
 	// Initialisation
-	this_slide = current_slide->data;
+	this_slide = get_current_slide_data();
 
 	// Find out how many pixels high each slide is in the film strip
 	gtk_tree_view_column_cell_get_size(GTK_TREE_VIEW_COLUMN(get_film_strip_column()), NULL, NULL, NULL, NULL, &slide_height);
@@ -73,7 +73,7 @@ gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context,
 	// Work out which slide in the film strip the actual y position points to
 	slides = g_list_first(slides);
 	num_slides = g_list_length(slides);
-	current_slide_position = g_list_position(slides, current_slide);
+	current_slide_position = g_list_position(slides, get_current_slide());
 	target_slide_position = roundf(actual_y_pos / slide_height);
 
 	// Make sure the target slide position isn't pointing past the last slide
@@ -100,18 +100,18 @@ gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context,
 		undo_item_data->layer_data_old = NULL;  // NULL means not set
 		undo_item_data->position_new = target_slide_position;
 		undo_item_data->position_old = current_slide_position;
-		undo_item_data->slide_data = current_slide->data;
+		undo_item_data->slide_data = get_current_slide_data();
 		undo_history_add_item(UNDO_REORDER_SLIDE, undo_item_data, TRUE);
 
 		// Swap the slides in the film strip area
 		gtk_list_store_swap(GTK_LIST_STORE(get_film_strip_store()), &current_slide_iter, &target_slide_iter);
 
 		// Swap the slides in the slide list
-		current_slide_data = current_slide->data;
+		current_slide_data = get_current_slide_data();
 		target_slide = g_list_nth(slides, target_slide_position);
-		current_slide->data = target_slide->data;
+		set_current_slide_data(target_slide->data);
 		target_slide->data = current_slide_data;
-		current_slide = target_slide;
+		set_current_slide(target_slide);
 
 		// Set the changes made variable
 		set_changes_made(TRUE);

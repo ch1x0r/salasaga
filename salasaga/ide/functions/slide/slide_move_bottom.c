@@ -54,7 +54,7 @@ void slide_move_bottom(void)
 
 	// Safety check
 	slides = g_list_first(slides);
-	slide_position = g_list_position(slides, current_slide);
+	slide_position = g_list_position(slides, get_current_slide());
 	num_slides = g_list_length(slides);
 	if (num_slides == (slide_position + 1))
 	{
@@ -64,10 +64,10 @@ void slide_move_bottom(void)
 	}
 
 	// Remove this slide from the slides list, then re-attach it on the end
-	this_slide_data = current_slide->data;
+	this_slide_data = get_current_slide_data();
 	slides = g_list_remove(slides, this_slide_data);
 	slides = g_list_append(slides, this_slide_data);
-	current_slide = g_list_last(slides);
+	set_current_slide(g_list_last(slides));
 
 	// Move the thumbnail to the end of the slides list
 	g_string_printf(tmp_gstring, "%u", slide_position);

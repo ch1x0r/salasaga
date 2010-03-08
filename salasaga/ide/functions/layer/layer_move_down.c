@@ -58,7 +58,7 @@ void layer_move_down(void)
 
 
 	// If no project is loaded then don't run this function
-	if (NULL == current_slide)
+	if (NULL == get_current_slide())
 	{
 		// Make a beep, then return
 		gdk_beep();
@@ -66,14 +66,14 @@ void layer_move_down(void)
 	}
 
 	// Initialise various things
-	layer_pointer = ((slide *) current_slide->data)->layers;
+	layer_pointer = get_current_slide_layers_pointer();
 
 	// Change the focus of the window to be this widget
 	set_delete_focus(FOCUS_LAYER);
 
 	// Determine which layer the user has selected in the timeline
-	num_layers = ((slide *) current_slide->data)->num_layers;
-	selected_row = time_line_get_selected_layer_num(((slide *) current_slide->data)->timeline_widget);
+	num_layers = get_current_slide_num_layers();
+	selected_row = time_line_get_selected_layer_num(get_current_slide_timeline_widget());
 	if (num_layers - 2 <= selected_row)
 	{
 		// We're already at the bottom of the list or the background layer is selected, so return
@@ -89,10 +89,10 @@ void layer_move_down(void)
 	// Move the row down one in the layer list
 	layer_pointer = g_list_remove_link(layer_pointer, below_layer);
 	layer_pointer = g_list_insert_before(layer_pointer, our_layer, below_layer->data);
-	((slide *) current_slide->data)->layers = layer_pointer;
+	set_current_slide_layers_pointer(layer_pointer);
 
 	// Move the row down one in the timeline widget
-	time_line_set_selected_layer_num(((slide *) current_slide->data)->timeline_widget, selected_row + 1);
+	time_line_set_selected_layer_num(get_current_slide_timeline_widget(), selected_row + 1);
 
 	// Redraw the timeline area
 	draw_timeline();
@@ -101,7 +101,7 @@ void layer_move_down(void)
 	draw_workspace();
 
 	// Recreate the slide thumbnail
-	film_strip_create_thumbnail((slide *) current_slide->data);
+	film_strip_create_thumbnail(get_current_slide_data());
 
 	// Set the changes made variable
 	set_changes_made(TRUE);

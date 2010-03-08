@@ -81,7 +81,7 @@ gboolean draw_handle_box(void)
 	}
 
 	// Initialise some things
-	current_slide_data = current_slide->data;
+	current_slide_data = get_current_slide_data();
 	temp_widget = get_main_drawing_area();
 	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
 

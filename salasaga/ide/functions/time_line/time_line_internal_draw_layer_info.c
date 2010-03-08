@@ -49,7 +49,7 @@ gboolean time_line_internal_draw_layer_info(TimeLinePrivate *priv)
 
 
 	// Draw the layer names and durations
-	num_layers = ((slide *) current_slide->data)->num_layers;
+	num_layers = get_current_slide_num_layers();
 	for (loop_counter = 0; loop_counter < num_layers; loop_counter++)
 	{
 		time_line_internal_draw_layer_name(priv, loop_counter);

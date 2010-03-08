@@ -62,7 +62,7 @@ void menu_export_layer(void)
 
 
 	// Initialise some variables
-	slide_data = (slide *) current_slide->data;
+	slide_data = get_current_slide_data();
 	layer_pointer = slide_data->layers;
 	message = g_string_new(NULL);
 

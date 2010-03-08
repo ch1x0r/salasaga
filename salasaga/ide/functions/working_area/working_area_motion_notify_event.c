@@ -88,7 +88,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 
 
 	// If the current slide hasn't been initialised, or there is no project active don't run this function
-	if ((NULL == current_slide) || (FALSE == get_project_active()))
+	if ((NULL == get_current_slide()) || (FALSE == get_project_active()))
 	{
 		return TRUE;
 	}
@@ -111,7 +111,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	if (FALSE != (RESIZE_HANDLES_RESIZING & get_resize_handles_status()))
 	{
 		// Initialise some things
-		this_slide_data = current_slide->data;
+		this_slide_data = get_current_slide_data();
 
 		// Determine which layer is selected in the timeline
 		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
@@ -221,7 +221,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		|| (RESIZE_HANDLES_INACTIVE == get_resize_handles_status())))	// Not resizing a layer already
 	{
 		// Initialise some things
-		this_slide_data = current_slide->data;
+		this_slide_data = get_current_slide_data();
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 
 		// Determine which layer is selected in the timeline
@@ -285,7 +285,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	if (END_POINTS_INACTIVE != get_end_point_status())
 	{
 		// Initialise some things
-		this_slide_data = current_slide->data;
+		this_slide_data = get_current_slide_data();
 		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
@@ -410,7 +410,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 	if (TRUE == get_mouse_dragging())
 	{
 		// Initialise some things
-		this_slide_data = current_slide->data;
+		this_slide_data = get_current_slide_data();
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
 		scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;
@@ -546,7 +546,7 @@ gboolean working_area_motion_notify_event(GtkWidget *widget, GdkEventButton *eve
 		set_mouse_dragging(TRUE);
 
 		// Initialise some things
-		this_slide_data = current_slide->data;
+		this_slide_data = get_current_slide_data();
 
 		// Calculate the height and width scaling values for the main drawing area at its present size
 		scaled_height_ratio = (gfloat) get_project_height() / (gfloat) pixmap_height;

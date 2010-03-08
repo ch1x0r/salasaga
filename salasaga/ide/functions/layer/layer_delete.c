@@ -68,16 +68,16 @@ void layer_delete(void)
 	}
 
 	// Initialise some variables
-	layer_pointer = ((slide *) current_slide->data)->layers;
+	layer_pointer = get_current_slide_layers_pointer();
 
 	// Change the focus of the window to be this widget
 	set_delete_focus(FOCUS_LAYER);
 
 	// Determine the number of layers present in this slide
-	num_layers = ((slide *) current_slide->data)->num_layers;
+	num_layers = get_current_slide_num_layers();
 
 	// Determine which layer the user has selected in the timeline
-	selected_row = time_line_get_selected_layer_num(((slide *) current_slide->data)->timeline_widget);
+	selected_row = time_line_get_selected_layer_num(get_current_slide_timeline_widget());
 
 	// If the background layer is selected, don't delete it
 	if (1 == (num_layers - selected_row))
@@ -97,18 +97,18 @@ void layer_delete(void)
 	undo_item_data->layer_data_old = layer_duplicate(tmp_layer);
 	undo_item_data->position_new = -1;  // -1 means not set
 	undo_item_data->position_old = 0;
-	undo_item_data->slide_data = current_slide->data;
+	undo_item_data->slide_data = get_current_slide_data();
 	undo_history_add_item(UNDO_DELETE_LAYER, undo_item_data, TRUE);
 
 	// Remove the layer from the layer structure
 	layer_pointer = g_list_remove(layer_pointer, tmp_layer);
-	((slide *) current_slide->data)->layers = layer_pointer;
+	set_current_slide_layers_pointer(layer_pointer);
 
 	// Free the memory allocated to the layer
 	layer_free(tmp_layer);
 
 	// Decrement the number of layers counter
-	((slide *) current_slide->data)->num_layers--;
+	set_current_slide_num_layers(get_current_slide_num_layers() - 1);
 
 	// Redraw the timeline area
 	draw_timeline();
@@ -117,7 +117,7 @@ void layer_delete(void)
 	draw_workspace();
 
 	// Recreate the slide thumbnail
-	film_strip_create_thumbnail((slide *) current_slide->data);
+	film_strip_create_thumbnail(get_current_slide_data());
 
 	// Set the changes made variable
 	set_changes_made(TRUE);

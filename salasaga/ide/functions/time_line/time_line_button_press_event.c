@@ -121,7 +121,7 @@ void time_line_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 		display_warning(message->str);
 		g_string_free(message, TRUE);
 	}
-	this_slide_data = ((slide *) current_slide->data);
+	this_slide_data = get_current_slide_data();
 	layer_pointer = this_slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);
 	left_border = time_line_get_left_border_width(priv);

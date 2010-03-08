@@ -39,7 +39,6 @@ extern "C" {
 #endif // __cplusplus
 
 // Variables defined elsewhere
-extern GList				*current_slide;
 extern GList				*slides;
 
 // Field descriptions used for bounds and validation

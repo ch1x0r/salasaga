@@ -64,7 +64,7 @@ void layer_paste(void)
 	}
 
 	// Simplify pointers
-	slide_data = current_slide->data;
+	slide_data = get_current_slide_data();
 	layer_pointer = slide_data->layers;
 
 	// Insert it into the present slide

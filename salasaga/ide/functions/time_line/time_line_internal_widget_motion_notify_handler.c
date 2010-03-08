@@ -94,7 +94,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 	}
 
 	// Initialisation
-	this_slide_data = ((slide *) current_slide->data);
+	this_slide_data = get_current_slide_data();
 	layer_pointer = this_slide_data->layers;
 	end_row = this_slide_data->num_layers -1;
 	current_row = priv->selected_layer_num;

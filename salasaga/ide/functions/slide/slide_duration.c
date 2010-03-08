@@ -68,8 +68,8 @@ void slide_duration(void)
 
 
 	// Initialise various things
-	this_slide = current_slide->data;
-	old_slide_duration = this_slide->duration;
+	this_slide = get_current_slide_data();
+	old_slide_duration = get_current_slide_duration();
 	table_padding_x = get_table_x_padding();
 	table_padding_y = get_table_y_padding();
 

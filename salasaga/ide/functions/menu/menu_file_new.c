@@ -271,7 +271,7 @@ void menu_file_new(void)
 
 		// Re-initialise pointers
 		slides = NULL;
-		current_slide = NULL;
+		set_current_slide(NULL);
 	}
 
 	// Gray out the toolbar items that can't be used without a project loaded
@@ -313,7 +313,7 @@ void menu_file_new(void)
 
 	// Create an initial blank slide for the project
 	slide_insert();
-	current_slide = slides;
+	set_current_slide(slides);
 
 	// Select the thumbnail for the new slide in the film strip
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &new_path, NULL);
@@ -339,7 +339,7 @@ void menu_file_new(void)
 
 	// Redraw the timeline
 	draw_timeline();
-	time_line_set_selected_layer_num(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget), 0);
+	time_line_set_selected_layer_num(get_current_slide_timeline_widget(), 0);
 
 	// Calculate and set the display size of the working area
 	set_working_width((get_project_width() * get_zoom()) / 100);

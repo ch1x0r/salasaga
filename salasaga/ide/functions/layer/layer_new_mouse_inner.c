@@ -50,7 +50,7 @@ void layer_new_mouse_inner(guint release_x, guint release_y)
 
 
 	// If no project is loaded then don't run this function
-	if (NULL == current_slide)
+	if (NULL == get_current_slide())
 	{
 		// Make a beep, then return
 		gdk_beep();
@@ -63,7 +63,7 @@ void layer_new_mouse_inner(guint release_x, guint release_y)
 	// * Create a new mouse layer in memory using reasonable defaults *
 
 	// Simplify pointing to the current slide structure in memory
-	slide_data = current_slide->data;
+	slide_data = get_current_slide_data();
 
 	// Create the mouse pointer layer data
 	tmp_mouse_ob = g_new(layer_mouse, 1);
@@ -97,7 +97,7 @@ void layer_new_mouse_inner(guint release_x, guint release_y)
 	undo_item_data->layer_data_old = NULL;  // NULL means not set
 	undo_item_data->position_new = 0;
 	undo_item_data->position_old = -1;  // -1 means not set
-	undo_item_data->slide_data = current_slide->data;
+	undo_item_data->slide_data = get_current_slide_data();
 	undo_history_add_item(UNDO_INSERT_LAYER, undo_item_data, TRUE);
 
 	// Add the new layer to the slide

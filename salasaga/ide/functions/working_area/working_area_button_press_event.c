@@ -91,7 +91,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 	gtk_widget_grab_focus(GTK_WIDGET(widget));
 
 	// Initialise some things
-	this_slide_data = current_slide->data;
+	this_slide_data = get_current_slide_data();
 	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);
 
 	// Check for primary mouse button click
@@ -259,7 +259,7 @@ gboolean working_area_button_press_event(GtkWidget *widget, GdkEventButton *even
 
 	// * Do collision detection here to determine if the user has clicked on a layer's object *
 
-	this_slide_data = current_slide->data;
+	this_slide_data = get_current_slide_data();
 	calculate_object_boundaries();
 	collision_list = detect_collisions(collision_list, event->x, event->y);
 	if (NULL == collision_list)

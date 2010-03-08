@@ -72,7 +72,7 @@ void menu_file_close()
 
 		// Re-initialise pointers
 		slides = NULL;
-		current_slide = NULL;
+		set_current_slide(NULL);
 	}
 
 	// Update the global project active flag

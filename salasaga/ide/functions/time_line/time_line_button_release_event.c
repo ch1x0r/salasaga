@@ -254,7 +254,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		priv->guide_line_resize = 0;
 
 		// Create pointers to things we're working with
-		this_slide_data = (slide *) current_slide->data;
+		this_slide_data = get_current_slide_data();
 		layer_pointer = this_slide_data->layers;
 		layer_pointer = g_list_first(layer_pointer);
 		this_layer_data = g_list_nth_data(layer_pointer, priv->selected_layer_num);
@@ -303,7 +303,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		set_changes_made(TRUE);
 
 		// Create pointers to things we're working with
-		this_slide_data = (slide *) current_slide->data;
+		this_slide_data = get_current_slide_data();
 		layer_pointer = this_slide_data->layers;
 		layer_pointer = g_list_first(layer_pointer);
 		this_layer_data = g_list_nth_data(layer_pointer, priv->selected_layer_num);
@@ -346,7 +346,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 	g_string_free(message, TRUE);
 
 	// Recreate the film strip thumbnail
-	film_strip_create_thumbnail((slide *) current_slide->data);
+	film_strip_create_thumbnail(get_current_slide_data());
 
 	// Draw the start and end points for the layer
 	draw_layer_start_and_end_points();

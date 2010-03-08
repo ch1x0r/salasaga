@@ -81,8 +81,8 @@ gboolean film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 
 		// Get a pointer to the clicked on slide's data
 		slides = g_list_first(slides);
-		current_slide = g_list_nth(slides, atoi(selection_string));
-		slide_data = current_slide->data;
+		set_current_slide(g_list_nth(slides, atoi(selection_string)));
+		slide_data = get_current_slide_data();
 
 		// If the slide doesn't have a timeline widget constructed for it yet, then make one
 		if (FALSE == IS_TIME_LINE(slide_data->timeline_widget))

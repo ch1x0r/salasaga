@@ -236,7 +236,7 @@ void menu_file_open(void)
 	set_project_active(TRUE);
 
 	// Make the current slide point to the first slide
-	current_slide = slides;
+	set_current_slide(slides);
 
 	// Calculate and set the display size of the working area
 	set_working_width((get_project_width() * get_zoom()) / 100);
@@ -257,7 +257,7 @@ void menu_file_open(void)
 
 	// Draw the timeline area
 	draw_timeline();
-	time_line_set_selected_layer_num(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget), 0);
+	time_line_set_selected_layer_num(get_current_slide_timeline_widget(), 0);
 
 	// Scroll the film strip to show the new thumbnail position
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &new_path, NULL);

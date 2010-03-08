@@ -41,6 +41,7 @@ static guint				capture_x;
 static guint				capture_y;
 static gboolean				changes_made = FALSE;			// Have there been changes to the project since the last save?
 static layer				*copy_layer = NULL;				// The copy buffer for layers
+static GList				*current_slide = NULL;			// Pointer to the presently selected slide
 static guint				debug_level = 0;				// Used to indicate debugging level
 static GdkColor				default_text_fg_colour;			// Default foreground colour for text layer text
 static gint					default_text_font_face;			// Default font face in text layers
@@ -149,6 +150,36 @@ gboolean get_changes_made()
 layer *get_copy_layer()
 {
 	return copy_layer;
+}
+
+GList *get_current_slide()
+{
+	return current_slide;
+}
+
+slide *get_current_slide_data()
+{
+	return current_slide->data;
+}
+
+gfloat get_current_slide_duration()
+{
+	return ((slide *) current_slide->data)->duration;
+}
+
+GList *get_current_slide_layers_pointer()
+{
+	return ((slide *) current_slide->data)->layers;
+}
+
+gint get_current_slide_num_layers()
+{
+	return ((slide *) current_slide->data)->num_layers;
+}
+
+GtkWidget *get_current_slide_timeline_widget()
+{
+	return GTK_WIDGET(((slide *) current_slide->data)->timeline_widget);
 }
 
 guint get_debug_level()
@@ -604,6 +635,26 @@ void set_changes_made(gboolean new_changes_made)
 void set_copy_layer(layer *new_copy_layer)
 {
 	copy_layer = new_copy_layer;
+}
+
+void set_current_slide(GList *new_current_slide)
+{
+	current_slide = new_current_slide;
+}
+
+void set_current_slide_data(slide *new_data)
+{
+	current_slide->data = new_data;
+}
+
+void set_current_slide_layers_pointer(GList *new_layer_pointer)
+{
+	((slide *) current_slide->data)->layers = new_layer_pointer;
+}
+
+void set_current_slide_num_layers(gint new_num_layers)
+{
+	((slide *) current_slide->data)->num_layers = new_num_layers;
 }
 
 void set_debug_level(guint new_debug_level)

@@ -73,13 +73,13 @@ void calculate_object_boundaries(void)
 
 
 	// Only continue in this function if we have a slide structure available
-	if (NULL == current_slide)
+	if (NULL == get_current_slide())
 	{
 		return;
 	}
 
 	// Initialise some things
-	this_slide_data = current_slide->data;
+	this_slide_data = get_current_slide_data();
 
 	// Calculate the height and width scaling values for the main drawing area at its present size
 	gdk_drawable_get_size(GDK_PIXMAP(get_front_store()), &pixmap_width, &pixmap_height);

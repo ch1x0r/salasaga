@@ -420,9 +420,9 @@ void menu_screenshots_import(void)
 	}
 
 	// If not presently set, make the first imported slide the present slide
-	if (NULL == current_slide)
+	if (NULL == get_current_slide())
 	{
-		current_slide = g_list_first(slides);
+		set_current_slide(g_list_first(slides));
 	}
 
 	// Select the correct thumbnail in the film strip and scroll to display it
@@ -430,7 +430,7 @@ void menu_screenshots_import(void)
 	if (NULL != new_path)
 		old_path = new_path;  // Make a backup of the old path, so we can free it
 	slides = g_list_first(slides);
-	slide_position = g_list_position(slides, current_slide);
+	slide_position = g_list_position(slides, get_current_slide());
 	new_path = gtk_tree_path_new_from_indices(slide_position, -1);
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, FALSE);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, TRUE, 0.5, 0.0);
@@ -439,7 +439,7 @@ void menu_screenshots_import(void)
 
 	// Regenerate the timeline
 	draw_timeline();
-	time_line_set_selected_layer_num(GTK_WIDGET(((slide *) current_slide->data)->timeline_widget), 0);
+	time_line_set_selected_layer_num(get_current_slide_timeline_widget(), 0);
 
 	// Get the presently selected zoom level
 	g_string_printf(tmp_string, "%s", gtk_combo_box_get_active_text(GTK_COMBO_BOX(get_zoom_selector())));

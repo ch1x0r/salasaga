@@ -45,7 +45,7 @@ void layer_new_image(void)
 
 
 	// If no project is loaded then don't run this function
-	if (NULL == current_slide)
+	if (NULL == get_current_slide())
 	{
 		// Make a beep, then return
 		gdk_beep();

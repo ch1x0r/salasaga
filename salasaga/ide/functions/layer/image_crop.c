@@ -94,7 +94,7 @@ void image_crop(void)
 
 
 	// If no project is loaded then don't run this function
-	if (NULL == current_slide)
+	if (NULL == get_current_slide())
 	{
 		// Make a beep, then return
 		gdk_beep();
@@ -102,7 +102,7 @@ void image_crop(void)
 	}
 
 	// Initialise some variables
-	layer_pointer = ((slide *) current_slide->data)->layers;
+	layer_pointer = get_current_slide_layers_pointer();
 	message = g_string_new(NULL);
 	table_padding_x = get_table_x_padding();
 	table_padding_y = get_table_y_padding();
@@ -113,7 +113,7 @@ void image_crop(void)
 	// * Check if the selected layer is an image *
 
 	// Determine which layer the user has selected in the timeline
-	selected_row = time_line_get_selected_layer_num(((slide *) current_slide->data)->timeline_widget);
+	selected_row = time_line_get_selected_layer_num(get_current_slide_timeline_widget());
 	layer_pointer = g_list_first(layer_pointer);
 	this_layer = g_list_nth_data(layer_pointer, selected_row);
 	tmp_image_ob = (layer_image *) this_layer->object_data;
@@ -311,7 +311,7 @@ void image_crop(void)
 	draw_workspace();
 
 	// Recreate the slide thumbnail
-	film_strip_create_thumbnail((slide *) current_slide->data);
+	film_strip_create_thumbnail(get_current_slide_data());
 
 	// Set the changes made variable
 	set_changes_made(TRUE);

@@ -218,10 +218,10 @@ gint undo_history_redo_item(void)
 			if (undo_data->position_old >= num_slides)
 			{
 				// If we're deleting the last slide, we'll need to point to the previous one instead
-				current_slide = g_list_last(slides);
+				set_current_slide(g_list_last(slides));
 			} else
 			{
-				current_slide = g_list_nth(slides, undo_data->position_old);
+				set_current_slide(g_list_nth(slides, undo_data->position_old));
 			}
 
 			// Remove the current slide from the film strip
@@ -251,7 +251,7 @@ gint undo_history_redo_item(void)
 
 			// Point to the redone slide
 			slides = g_list_first(slides);
-			current_slide = g_list_nth(slides, undo_data->position_new);
+			set_current_slide(g_list_nth(slides, undo_data->position_new));
 
 			break;
 
@@ -399,7 +399,7 @@ gint undo_history_undo_item(void)
 			slides = g_list_insert(slides, slide_data, undo_data->position_old);
 
 			// Select the newly inserted slide
-			current_slide = g_list_nth(slides, undo_data->position_old);
+			set_current_slide(g_list_nth(slides, undo_data->position_old));
 
 			// Add the thumbnail to the GtkListView based film strip
 			gtk_list_store_insert(GTK_LIST_STORE(get_film_strip_store()), &film_strip_iter, undo_data->position_old);  // Acquire an iterator
@@ -455,10 +455,10 @@ gint undo_history_undo_item(void)
 			num_slides = g_list_length(slides);
 			if (slide_position >= num_slides)
 			{
-				current_slide = g_list_last(slides);
+				set_current_slide(g_list_last(slides));
 			} else
 			{
-				current_slide = g_list_nth(slides, slide_position);
+				set_current_slide(g_list_nth(slides, slide_position));
 			}
 
 			break;

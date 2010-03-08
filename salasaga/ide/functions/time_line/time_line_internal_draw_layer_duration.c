@@ -70,7 +70,7 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 	left_border = time_line_get_left_border_width(priv);
 
 	// Select the layer we're working with
-	layer_pointer = ((slide *) current_slide->data)->layers;
+	layer_pointer = get_current_slide_layers_pointer();
 	layer_pointer = g_list_first(layer_pointer);
 	layer_data = g_list_nth_data(layer_pointer, layer_number);
 

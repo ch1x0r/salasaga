@@ -70,7 +70,7 @@ void layer_edit(void)
 
 
 	// If no project is loaded then don't run this function
-	if (NULL == current_slide)
+	if (NULL == get_current_slide())
 	{
 		// Make a beep, then return
 		gdk_beep();
@@ -78,7 +78,7 @@ void layer_edit(void)
 	}
 
 	// Initialise some variables
-	slide_data = (slide *) current_slide->data;
+	slide_data = get_current_slide_data();
 	layer_pointer = slide_data->layers;
 	message = g_string_new(NULL);
 
@@ -230,7 +230,7 @@ void layer_edit(void)
 		undo_item_data->layer_data_old = backup_layer_data;
 		undo_item_data->position_new = selected_row;
 		undo_item_data->position_old = selected_row;
-		undo_item_data->slide_data = current_slide->data;
+		undo_item_data->slide_data = get_current_slide()->data;
 		undo_history_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
 	} else
 	{

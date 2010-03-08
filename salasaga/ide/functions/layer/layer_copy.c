@@ -47,7 +47,7 @@ void layer_copy(void)
 
 
 	// Initialise some things
-	current_slide_data = current_slide->data;
+	current_slide_data = get_current_slide_data();
 
 	// Determine which layer the user has selected in the timeline
 	selected_layer = time_line_get_selected_layer_num(current_slide_data->timeline_widget);

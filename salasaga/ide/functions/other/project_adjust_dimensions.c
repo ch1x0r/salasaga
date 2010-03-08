@@ -84,7 +84,7 @@ void project_adjust_dimensions(void)
 
 
 	// If no project is loaded then don't run this function
-	if (NULL == current_slide)
+	if (NULL == get_current_slide())
 	{
 		// Make a beep, then return
 		gdk_beep();
@@ -191,7 +191,7 @@ void project_adjust_dimensions(void)
 	gtk_widget_destroy(GTK_WIDGET(adjustment_dialog));
 
 	// Get the present slide, so we can select it again later
-	present_slide_num = g_list_position(slides, current_slide);
+	present_slide_num = g_list_position(slides, get_current_slide());
 
 	// Loop through the slide structure, adjusting the backgrounds
 	slides = g_list_first(slides);
@@ -199,8 +199,8 @@ void project_adjust_dimensions(void)
 	for (slide_counter = 0; slide_counter < num_slides; slide_counter++)
 	{
 		slides = g_list_first(slides);
-		current_slide = g_list_nth(slides, slide_counter);
-		slide_data = current_slide->data;
+		set_current_slide(g_list_nth(slides, slide_counter));
+		slide_data = get_current_slide_data();
 		layer_pointer = slide_data->layers;
 		layer_pointer = g_list_last(layer_pointer);
 
@@ -267,7 +267,7 @@ void project_adjust_dimensions(void)
 
 	// Select the appropriate slide again
 	slides = g_list_first(slides);
-	current_slide = g_list_nth(slides, present_slide_num);
+	set_current_slide(g_list_nth(slides, present_slide_num));
 
 	// Recalculate the size of the working area
 	zoom_selector_changed(GTK_WIDGET(get_zoom_selector()), NULL, (gpointer) NULL);

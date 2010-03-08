@@ -79,7 +79,7 @@ void image_resize(void)
 
 
 	// If no project is loaded then don't run this function
-	if (NULL == current_slide)
+	if (NULL == get_current_slide())
 	{
 		// Make a beep, then return
 		gdk_beep();
@@ -92,7 +92,7 @@ void image_resize(void)
 	table_padding_y = get_table_y_padding();
 
 	// Get a pointer to the layer we're resizing
-	slide_data = (slide *) current_slide->data;
+	slide_data = get_current_slide_data();
 	selected_row = time_line_get_selected_layer_num(slide_data->timeline_widget);
 	layer_pointer = slide_data->layers;
 	layer_pointer = g_list_first(layer_pointer);

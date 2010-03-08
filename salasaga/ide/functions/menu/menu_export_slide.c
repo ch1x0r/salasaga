@@ -157,10 +157,10 @@ void menu_export_slide(void)
 	g_free(dir_name);
 
 	// Get the current time line cursor position
-	cursor_position = time_line_get_cursor_position(((slide *) current_slide->data)->timeline_widget);
+	cursor_position = time_line_get_cursor_position(get_current_slide_timeline_widget());
 
 	// Create a new pixbuf of the current slide at its cursor time position
-	tmp_pixmap = compress_layers(current_slide, cursor_position, get_project_width(), get_project_height());
+	tmp_pixmap = compress_layers(get_current_slide(), cursor_position, get_project_width(), get_project_height());
 	slide_pixbuf = gdk_pixbuf_get_from_drawable(NULL, GDK_PIXMAP(tmp_pixmap), NULL, 0, 0, 0, 0, -1, -1);
 	g_object_unref(GDK_PIXMAP(tmp_pixmap));
 

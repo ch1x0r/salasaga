@@ -53,7 +53,7 @@ void draw_timeline(void)
 
 
 	// If the slide doesn't have a timeline widget constructed for it yet, then make one
-	slide_pointer = (slide *) current_slide->data;
+	slide_pointer = get_current_slide_data();
 	if (FALSE == IS_TIME_LINE(slide_pointer->timeline_widget))
 	{
 		// Construct the widget used to display the slide in the timeline

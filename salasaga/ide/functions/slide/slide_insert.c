@@ -113,10 +113,10 @@ void slide_insert(void)
 	undo_history_add_item(UNDO_INSERT_SLIDE, undo_item_data, TRUE);
 
 	// If the current slide hasn't been initialised (this is the first slide), then we initialise it
-	if (NULL == current_slide)
+	if (NULL == get_current_slide())
 	{
 		slides = g_list_append(slides, tmp_slide);
-		current_slide = slides;
+		set_current_slide(slides);
 	} else
 	{
 		// Add the newly created slide to the end of the slides

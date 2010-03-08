@@ -48,7 +48,7 @@ void film_strip_create_thumbnail(slide *slide_data)
 
 
 	// If no project is loaded then don't run this function
-	if (NULL == current_slide)
+	if (NULL == get_current_slide())
 	{
 		// Make a beep, then return
 		gdk_beep();

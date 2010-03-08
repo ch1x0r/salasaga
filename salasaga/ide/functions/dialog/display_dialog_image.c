@@ -697,7 +697,7 @@ gboolean display_dialog_image(layer *tmp_layer, gchar *dialog_title)
 		tmp_layer->x_offset_finish = 0;
 		tmp_layer->y_offset_finish = 0;
 		tmp_layer->start_time = 0;
-		tmp_layer->duration = ((slide *) current_slide->data)->duration;
+		tmp_layer->duration = get_current_slide_duration();
 
 		// Free the memory allocated in this function
 		g_string_free(valid_name, TRUE);

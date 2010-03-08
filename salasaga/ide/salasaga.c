@@ -82,7 +82,6 @@
 
 
 // Global variables
-GList					*current_slide = NULL;		// Pointer to the presently selected slide
 GList					*slides = NULL;				// Linked list holding the slide info
 
 #ifdef _WIN32

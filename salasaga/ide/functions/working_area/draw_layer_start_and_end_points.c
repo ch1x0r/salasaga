@@ -67,7 +67,7 @@ gboolean draw_layer_start_and_end_points()
 
 
 	// Determine which row is selected in the time line
-	this_slide_data = (slide *) current_slide->data;
+	this_slide_data = get_current_slide_data();
 	selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
 	layer_pointer = g_list_first(this_slide_data->layers);
 	this_layer_data = g_list_nth_data(layer_pointer, selected_row);

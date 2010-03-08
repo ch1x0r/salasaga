@@ -55,7 +55,7 @@ void slide_move_down(void)
 
 	// Safety check
 	slides = g_list_first(slides);
-	slide_position = g_list_position(slides, current_slide);
+	slide_position = g_list_position(slides, get_current_slide());
 	num_slides = g_list_length(slides);
 	if (num_slides == (slide_position + 1))
 	{
@@ -64,11 +64,11 @@ void slide_move_down(void)
 	}
 
 	// Swap the slides around
-	this_slide_data = current_slide->data;
+	this_slide_data = get_current_slide_data();
 	next_slide = g_list_nth(slides, slide_position + 1);
-	current_slide->data = next_slide->data;
+	set_current_slide_data(next_slide->data);
 	next_slide->data = this_slide_data;
-	current_slide = next_slide;
+	set_current_slide(next_slide);
 
 	// Move the thumbnail down one position in the film strip list
 	g_string_printf(tmp_gstring, "%u", slide_position);

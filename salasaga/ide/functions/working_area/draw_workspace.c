@@ -56,13 +56,13 @@ void draw_workspace(void)
 
 
 	// If the current slide hasn't been initialised, or there is no project active don't run this function
-	if ((NULL == current_slide) || (FALSE == get_project_active()))
+	if ((NULL == get_current_slide()) || (FALSE == get_project_active()))
 	{
 		return;
 	}
 
 	// If the slide doesn't have a timeline widget constructed for it yet, then make one
-	current_slide_data = current_slide->data;
+	current_slide_data = get_current_slide_data();
 	if (NULL == current_slide_data->timeline_widget)
 	{
 		// Construct the widget used to display the slide in the timeline
@@ -83,7 +83,7 @@ void draw_workspace(void)
 		g_object_unref(GDK_PIXMAP(get_front_store()));
 		set_front_store(NULL);
 	}
-	set_front_store(compress_layers(current_slide, cursor_position, get_working_width(), get_working_height()));
+	set_front_store(compress_layers(get_current_slide(), cursor_position, get_working_width(), get_working_height()));
 	if (NULL == get_front_store())
 	{
 		return;

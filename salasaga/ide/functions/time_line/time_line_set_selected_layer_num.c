@@ -165,7 +165,7 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	}
 
 	// If the newly selected layer is an image layer, then enable the "Layer -> Image *" menu selections
-	this_slide_data = ((slide *) current_slide->data);
+	this_slide_data = get_current_slide_data();
 	this_slide_data->layers = g_list_first(this_slide_data->layers);
 	this_layer_data = g_list_nth_data(this_slide_data->layers, selected_row);
 	if ((TYPE_GDK_PIXBUF == this_layer_data->object_type) && (FALSE == this_layer_data->background))

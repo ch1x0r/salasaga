@@ -66,7 +66,7 @@ void time_line_init(TimeLine *time_line)
 	priv->guide_line_end = 0;
 
 	// Store the slide duration
-	priv->stored_slide_duration = ((slide *) current_slide->data)->duration;
+	priv->stored_slide_duration = get_current_slide_duration();
 
 	// fixme3: These may be better as widget properties
 	priv->cursor_position = 0.0;

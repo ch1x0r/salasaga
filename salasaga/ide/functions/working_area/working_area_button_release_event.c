@@ -156,7 +156,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		gtk_widget_draw(GTK_WIDGET(temp_widget), &temp_widget->allocation);  // Yes, this is deprecated, but it *works*
 
 		// Recreate the slide thumbnail
-		film_strip_create_thumbnail((slide *) current_slide->data);
+		film_strip_create_thumbnail(get_current_slide_data());
 
 		// Use the status bar to give further feedback to the user
 		if (END_POINTS_START_ACTIVE == get_end_point_status())
@@ -180,7 +180,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	if (FALSE != (RESIZE_HANDLES_RESIZING & get_resize_handles_status()))
 	{
 		// Initialise some things
-		this_slide_data = current_slide->data;
+		this_slide_data = get_current_slide_data();
 
 		// Determine which layer is selected in the timeline
 		selected_row = time_line_get_selected_layer_num(this_slide_data->timeline_widget);
@@ -293,7 +293,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		undo_item_data->layer_data_old = layer_duplicate(layer_data);
 		undo_item_data->position_new = selected_row;
 		undo_item_data->position_old = selected_row;
-		undo_item_data->slide_data = current_slide->data;
+		undo_item_data->slide_data = get_current_slide_data();
 
 		// Duplicate the present layer and use that instead
 		layer_pointer = g_list_nth(this_slide_data->layers, selected_row);
@@ -330,7 +330,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 		gtk_widget_draw(GTK_WIDGET(temp_widget), &temp_widget->allocation);  // Yes, this is deprecated, but it *works*
 
 		// Recreate the slide thumbnail
-		film_strip_create_thumbnail((slide *) current_slide->data);
+		film_strip_create_thumbnail(get_current_slide_data());
 
 		// Reset the resize switch and related info
 		set_resize_handles_status(RESIZE_HANDLES_WAITING);
@@ -351,7 +351,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 	if (TRUE == get_mouse_dragging())
 	{
 		// Initialise some things
-		this_slide_data = current_slide->data;
+		this_slide_data = get_current_slide_data();
 
 		// Check for primary mouse button release
 		if (1 == event->button)
@@ -415,7 +415,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			undo_item_data->layer_data_old = layer_duplicate(layer_data);
 			undo_item_data->position_new = selected_row;
 			undo_item_data->position_old = selected_row;
-			undo_item_data->slide_data = current_slide->data;
+			undo_item_data->slide_data = get_current_slide_data();
 
 			// Calculate the distance the object has been dragged
 			x_diff = (mouse_x - get_stored_x()) * scaled_width_ratio;
@@ -445,7 +445,7 @@ gboolean working_area_button_release_event(GtkWidget *widget, GdkEventButton *ev
 			gtk_widget_draw(GTK_WIDGET(temp_widget), &temp_widget->allocation);  // Yes, this is deprecated, but it *works*
 
 			// Recreate the slide thumbnail
-			film_strip_create_thumbnail((slide *) current_slide->data);
+			film_strip_create_thumbnail(get_current_slide_data());
 
 			// Reset the mouse drag switch and related info
 			set_mouse_dragging(FALSE);
