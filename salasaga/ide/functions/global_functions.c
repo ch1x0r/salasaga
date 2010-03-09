@@ -30,10 +30,8 @@
 // Salasaga includes
 #include "../salasaga_types.h"
 #include "../externs.h"
+#include "../valid_fields.h"
 
-
-// Field descriptions used for bounds and validation
-extern validatation_entry	valid_fields[];
 
 // Application wide variables
 static GList				*boundary_list = NULL;			// Stores a linked list of layer object boundaries
