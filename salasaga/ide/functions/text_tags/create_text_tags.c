@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 
 gboolean create_text_tags(void)

@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../call_back/text_layer_dialog_validate_buffer_tag_quantity.h"
 #include "../dialog/display_warning.h"
 

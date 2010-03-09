@@ -36,7 +36,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../undo_redo/undo_functions.h"
 
 
@@ -71,9 +71,9 @@ gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context,
 	actual_y_pos = y + film_strip_adjustment_present_value;
 
 	// Work out which slide in the film strip the actual y position points to
-	slides = g_list_first(slides);
-	num_slides = g_list_length(slides);
-	current_slide_position = g_list_position(slides, get_current_slide());
+	set_slides(g_list_first(get_slides()));
+	num_slides = g_list_length(get_slides());
+	current_slide_position = g_list_position(get_slides(), get_current_slide());
 	target_slide_position = roundf(actual_y_pos / slide_height);
 
 	// Make sure the target slide position isn't pointing past the last slide
@@ -108,7 +108,7 @@ gboolean film_strip_drag_motion(GtkWidget *widget, GdkDragContext *drag_context,
 
 		// Swap the slides in the slide list
 		current_slide_data = get_current_slide_data();
-		target_slide = g_list_nth(slides, target_slide_position);
+		target_slide = g_list_nth(get_slides(), target_slide_position);
 		set_current_slide_data(target_slide->data);
 		target_slide->data = current_slide_data;
 		set_current_slide(target_slide);

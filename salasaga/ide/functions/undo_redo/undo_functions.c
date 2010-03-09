@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "../film_strip/regenerate_film_strip_thumbnails.h"
@@ -210,18 +210,18 @@ gint undo_history_redo_item(void)
 			slide_data = undo_data->slide_data;
 
 			// Remove the slide from the project again
-			slides = g_list_remove(slides, slide_data);
+			set_slides(g_list_remove(get_slides(), slide_data));
 
 			// Select the next slide
-			slides = g_list_first(slides);
-			num_slides = g_list_length(slides);
+			set_slides(g_list_first(get_slides()));
+			num_slides = g_list_length(get_slides());
 			if (undo_data->position_old >= num_slides)
 			{
 				// If we're deleting the last slide, we'll need to point to the previous one instead
-				set_current_slide(g_list_last(slides));
+				set_current_slide(g_list_last(get_slides()));
 			} else
 			{
-				set_current_slide(g_list_nth(slides, undo_data->position_old));
+				set_current_slide(g_list_nth(get_slides(), undo_data->position_old));
 			}
 
 			// Remove the current slide from the film strip
@@ -247,11 +247,11 @@ gint undo_history_redo_item(void)
 		case UNDO_INSERT_SLIDE:
 
 			// * We're redoing the addition of a slide *
-			slides = g_list_append(slides, undo_data->slide_data);
+			set_slides(g_list_append(get_slides(), undo_data->slide_data));
 
 			// Point to the redone slide
-			slides = g_list_first(slides);
-			set_current_slide(g_list_nth(slides, undo_data->position_new));
+			set_slides(g_list_first(get_slides()));
+			set_current_slide(g_list_nth(get_slides(), undo_data->position_new));
 
 			break;
 
@@ -268,9 +268,9 @@ gint undo_history_redo_item(void)
 			gtk_list_store_swap(GTK_LIST_STORE(get_film_strip_store()), &our_slide_iter, &target_slide_iter);
 
 			// Swap the slides around in the project
-			our_slide_entry = g_list_nth(slides, undo_data->position_new);
+			our_slide_entry = g_list_nth(get_slides(), undo_data->position_new);
 			our_slide_data = our_slide_entry->data;
-			other_slide_entry = g_list_nth(slides, undo_data->position_old);
+			other_slide_entry = g_list_nth(get_slides(), undo_data->position_old);
 			other_slide_data = other_slide_entry->data;
 			our_slide_entry->data = other_slide_data;
 			other_slide_entry->data = our_slide_data;
@@ -396,10 +396,10 @@ gint undo_history_undo_item(void)
 			slide_data = undo_data->slide_data;
 
 			// Insert the "old" slide at the old position
-			slides = g_list_insert(slides, slide_data, undo_data->position_old);
+			set_slides(g_list_insert(get_slides(), slide_data, undo_data->position_old));
 
 			// Select the newly inserted slide
-			set_current_slide(g_list_nth(slides, undo_data->position_old));
+			set_current_slide(g_list_nth(get_slides(), undo_data->position_old));
 
 			// Add the thumbnail to the GtkListView based film strip
 			gtk_list_store_insert(GTK_LIST_STORE(get_film_strip_store()), &film_strip_iter, undo_data->position_old);  // Acquire an iterator
@@ -442,23 +442,23 @@ gint undo_history_undo_item(void)
 			// * We're undoing the addition of a slide *
 
 			// Determine the position of the selected slide in the project
-			slide_position = g_list_index(slides, undo_data->slide_data);
+			slide_position = g_list_index(get_slides(), undo_data->slide_data);
 
 			// Remove the slide from the project
-			slides = g_list_first(slides);
-			slides = g_list_remove(slides, undo_data->slide_data);
+			set_slides(g_list_first(get_slides()));
+			set_slides(g_list_remove(get_slides(), undo_data->slide_data));
 
 			// * Update current_slide to point to the next slide *
 
 			// If the new position of the slide is off the end of the slide list, we instead select the last slide
-			slides = g_list_first(slides);
-			num_slides = g_list_length(slides);
+			set_slides(g_list_first(get_slides()));
+			num_slides = g_list_length(get_slides());
 			if (slide_position >= num_slides)
 			{
-				set_current_slide(g_list_last(slides));
+				set_current_slide(g_list_last(get_slides()));
 			} else
 			{
-				set_current_slide(g_list_nth(slides, slide_position));
+				set_current_slide(g_list_nth(get_slides(), slide_position));
 			}
 
 			break;
@@ -476,9 +476,9 @@ gint undo_history_undo_item(void)
 			gtk_list_store_swap(GTK_LIST_STORE(get_film_strip_store()), &our_slide_iter, &target_slide_iter);
 
 			// Swap the slides around in the project
-			our_slide_entry = g_list_nth(slides, undo_data->position_new);
+			our_slide_entry = g_list_nth(get_slides(), undo_data->position_new);
 			our_slide_data = our_slide_entry->data;
-			other_slide_entry = g_list_nth(slides, undo_data->position_old);
+			other_slide_entry = g_list_nth(get_slides(), undo_data->position_old);
 			other_slide_data = other_slide_entry->data;
 			our_slide_entry->data = other_slide_data;
 			other_slide_entry->data = our_slide_data;

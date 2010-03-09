@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../export/html/export_html_wrapper.h"
 #include "../layer/image_crop.h"
 #include "../layer/image_resize.h"

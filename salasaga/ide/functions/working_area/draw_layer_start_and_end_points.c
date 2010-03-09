@@ -29,7 +29,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../preference/project_preferences.h"
 #include "../time_line/time_line_get_selected_layer_num.h"
 

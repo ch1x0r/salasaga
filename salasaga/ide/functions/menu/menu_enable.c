@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 
 void menu_enable(const gchar *full_path, gboolean enable)

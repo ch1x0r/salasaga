@@ -32,7 +32,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../dialog/display_warning.h"
 #include "../export/swf/export_swf_inner.h"
 #include "../other/validate_value.h"
@@ -60,7 +60,7 @@ void menu_export_swf(void)
 	message = g_string_new(NULL);
 
 	// Check if there is an active project
-	if (NULL == slides)
+	if (NULL == get_slides())
 	{
 		// No project is active, so display a message and return
 		gdk_beep();

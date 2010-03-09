@@ -32,7 +32,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../time_line/time_line_get_selected_layer_num.h"
 #include "layer_duplicate.h"
 #include "layer_free.h"

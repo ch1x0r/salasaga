@@ -40,7 +40,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 
 // Function to detect collisions between a given coordinate and a GList of boundary boxes

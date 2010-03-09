@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 
 void slide_move_top(void)
@@ -52,8 +52,8 @@ void slide_move_top(void)
 	tmp_gstring = g_string_new(NULL);	
 
 	// Safety check
-	slides = g_list_first(slides);
-	slide_position = g_list_position(slides, get_current_slide());
+	set_slides(g_list_first(get_slides()));
+	slide_position = g_list_position(get_slides(), get_current_slide());
 	if (0 == slide_position)
 	{
 		// We can't move the upper most slide any further up, so just return
@@ -63,9 +63,9 @@ void slide_move_top(void)
 
 	// Remove this slide from the slides list, then re-attach it at the start
 	this_slide_data = get_current_slide_data();
-	slides = g_list_remove(slides, this_slide_data);
-	slides = g_list_prepend(slides, this_slide_data);
-	set_current_slide(g_list_first(slides));
+	set_slides(g_list_remove(get_slides(), this_slide_data));
+	set_slides(g_list_prepend(get_slides(), this_slide_data));
+	set_current_slide(g_list_first(get_slides()));
 
 	// Move the thumbnail to the start of the slides list
 	g_string_printf(tmp_gstring, "%u", slide_position);

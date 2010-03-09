@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../call_back/delete_key_release_event.h"
 #include "../call_back/film_strip_drag_motion.h"
 #include "film_strip_button_clicked.h"

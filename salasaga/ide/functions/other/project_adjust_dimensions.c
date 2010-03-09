@@ -40,7 +40,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../dialog/display_warning.h"
 #include "../film_strip/regenerate_film_strip_thumbnails.h"
@@ -191,15 +191,15 @@ void project_adjust_dimensions(void)
 	gtk_widget_destroy(GTK_WIDGET(adjustment_dialog));
 
 	// Get the present slide, so we can select it again later
-	present_slide_num = g_list_position(slides, get_current_slide());
+	present_slide_num = g_list_position(get_slides(), get_current_slide());
 
 	// Loop through the slide structure, adjusting the backgrounds
-	slides = g_list_first(slides);
-	num_slides = g_list_length(slides);
+	set_slides(g_list_first(get_slides()));
+	num_slides = g_list_length(get_slides());
 	for (slide_counter = 0; slide_counter < num_slides; slide_counter++)
 	{
-		slides = g_list_first(slides);
-		set_current_slide(g_list_nth(slides, slide_counter));
+		set_slides(g_list_first(get_slides()));
+		set_current_slide(g_list_nth(get_slides(), slide_counter));
 		slide_data = get_current_slide_data();
 		layer_pointer = slide_data->layers;
 		layer_pointer = g_list_last(layer_pointer);
@@ -266,8 +266,8 @@ void project_adjust_dimensions(void)
 	set_project_width(new_width);
 
 	// Select the appropriate slide again
-	slides = g_list_first(slides);
-	set_current_slide(g_list_nth(slides, present_slide_num));
+	set_slides(g_list_first(get_slides()));
+	set_current_slide(g_list_nth(get_slides(), present_slide_num));
 
 	// Recalculate the size of the working area
 	zoom_selector_changed(GTK_WIDGET(get_zoom_selector()), NULL, (gpointer) NULL);

@@ -40,7 +40,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../text_tags/text_layer_create_colour_tag.h"
 #include "../text_tags/text_layer_create_font_size_tag.h"
 

@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../menu/menu_export_swf.h"
 #include "../other/project_adjust_dimensions.h"
 #include "shared_toolbar_functions.h"

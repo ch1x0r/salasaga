@@ -35,7 +35,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 
 gboolean draw_resize_handles(gint left, gint top, gint right, gint bottom)

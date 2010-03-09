@@ -27,9 +27,15 @@
 // GTK includes
 #include <gtk/gtk.h>
 
+// FreeType includes
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+// Ming include
+#include <ming.h>
+
 // Salasaga includes
 #include "../salasaga_types.h"
-#include "../externs.h"
 #include "../valid_fields.h"
 
 
@@ -93,6 +99,7 @@ static guint				screenshot_delay_time = 5;		// The number of seconds the screens
 static gboolean				screenshot_key_warning;			// Should the warning about not being able to set the screenshot key be displayed?
 static gboolean				screenshots_enabled = FALSE;	// Toggle for whether to enable screenshots
 static gboolean				show_control_bar = TRUE;		// Toggle for whether to display the control bar in swf output
+static GList				*slides = NULL;					// Linked list holding the slide info
 static guint				start_behaviour = START_BEHAVIOUR_PAUSED;  // Holds the start behaviour for output animations
 static GtkWidget			*status_bar;					// Widget for the status bar
 static GtkStatusIcon		*status_icon;					// Pointer to the GtkStatusIcon object, used for StatusIcon communication
@@ -542,6 +549,11 @@ gboolean get_screenshots_enabled()
 gboolean get_show_control_bar()
 {
 	return show_control_bar;
+}
+
+GList *get_slides()
+{
+	return slides;
 }
 
 guint get_start_behaviour()
@@ -1007,6 +1019,11 @@ void set_screenshots_enabled(gboolean new_screenshots_enabled)
 void set_show_control_bar(gboolean new_show_control_bar)
 {
 	show_control_bar = new_show_control_bar;
+}
+
+void set_slides(GList *new_slides)
+{
+	slides = new_slides;
 }
 
 void set_start_behaviour(guint new_start_behaviour)

@@ -38,7 +38,7 @@
 // Salasaga includes
 #include "../../../config.h"
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../dialog/display_warning.h"
 #include "../other/validate_value.h"
 #include "../preference/project_preferences.h"
@@ -230,8 +230,8 @@ void menu_file_save(void)
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), tmp_gstring->str);
 
 	// Add the slide data to the XML structure
-	slides = g_list_first(slides);
-	g_list_foreach(slides, save_slide, slide_root);
+	set_slides(g_list_first(get_slides()));
+	g_list_foreach(get_slides(), save_slide, slide_root);
 
 	// Create a saving context
 	save_context = xmlSaveToFilename(get_file_name(), "utf8", 1);  // XML_SAVE_FORMAT == 1

@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../layer/compress_layers.h"
 #include "../time_line/time_line_get_cursor_position.h"
 #include "../time_line/time_line_new.h"

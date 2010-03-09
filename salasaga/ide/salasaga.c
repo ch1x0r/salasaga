@@ -51,7 +51,7 @@
 // Salasaga includes
 #include "../config.h"
 #include "salasaga_types.h"
-#include "externs.h"
+#include "functions/global_functions.h"
 #include "functions/call_back/quit_event.h"
 #include "functions/call_back/track_window_state.h"
 #include "functions/dialog/display_warning.h"
@@ -80,9 +80,6 @@
 #include "functions/zoom_selector/create_zoom_selector.h"
 #include "functions/zoom_selector/zoom_selector_changed.h"
 
-
-// Global variable
-GList					*slides = NULL;				// Linked list holding the slide info
 
 #ifdef _WIN32
 // Windows only global variable

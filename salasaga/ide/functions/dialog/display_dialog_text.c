@@ -40,7 +40,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../call_back/dump_selection_info.h"
 #include "../call_back/text_layer_dialog_bg_colour_changed.h"
 #include "../call_back/text_layer_dialog_fg_colour_changed.h"

@@ -37,7 +37,7 @@
 
 // Salasaga includes
 #include "../../../salasaga_types.h"
-#include "../../../externs.h"
+#include "../../global_functions.h"
 #include "../../dialog/display_warning.h"
 #include "../../preference/project_preferences.h"
 #include "swf_shape_from_image_file.h"
@@ -338,8 +338,8 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 
 
 	// Initialise various things
-	slides = g_list_first(slides);
-	num_slides = g_list_length(slides);
+	set_slides(g_list_first(get_slides()));
+	num_slides = g_list_length(get_slides());
 
 	as_gstring = g_string_new(NULL);
 	file_name_full = g_string_new(NULL);
@@ -391,7 +391,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	for (i = 0; i < (num_slides - 1); i++)
 	{
 		// Add a slide name to the list
-		slide_data = g_list_nth_data(slides, i);
+		slide_data = g_list_nth_data(get_slides(), i);
 		if (NULL == slide_data->name)
 		{
 			// The slide doesn't have a name, so we create a temporary one
@@ -405,7 +405,7 @@ gboolean export_swf_control_bar(SWFMovie main_movie, guint cb_index, guint depth
 	if (i == (num_slides - 1))
 	{
 		// Add the last slide name to the list
-		slide_data = g_list_nth_data(slides, i);
+		slide_data = g_list_nth_data(get_slides(), i);
 		if (NULL == slide_data->name)
 		{
 			// The slide doesn't have a name, so we create a temporary one

@@ -37,7 +37,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../layer/layer_delete.h"
 #include "../other/widget_focus.h"
 #include "../slide/slide_delete.h"

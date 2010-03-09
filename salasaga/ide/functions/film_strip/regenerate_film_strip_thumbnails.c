@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../layer/compress_layers.h"
 #include "../preference/application_preferences.h"
 #include "../preference/project_preferences.h"
@@ -64,8 +64,8 @@ void regenerate_film_strip_thumbnails()
 
 
 	// Safety check
-	slides = g_list_first(slides);
-	num_slides = g_list_length(slides);
+	set_slides(g_list_first(get_slides()));
+	num_slides = g_list_length(get_slides());
 	if (0 == num_slides)
 	{
 		// There aren't any slides in this project yet, so just return
@@ -82,8 +82,8 @@ void regenerate_film_strip_thumbnails()
 	for (slide_counter = 0; slide_counter < num_slides; slide_counter++)
 	{
 		// Point to the desired slide data
-		slides = g_list_first(slides);
-		this_slide = g_list_nth(slides, slide_counter);
+		set_slides(g_list_first(get_slides()));
+		this_slide = g_list_nth(get_slides(), slide_counter);
 		this_slide_data = (slide *) this_slide->data;
 
 		// If the present slide doesn't have a time line widget, then create one
@@ -120,8 +120,8 @@ void regenerate_film_strip_thumbnails()
 	// Reselect the thumbnail that was previously selected
 	if (NULL != new_path)
 		old_path = new_path;  // Make a backup of the old path, so we can free it
-	slides = g_list_first(slides);
-	slide_position = g_list_position(slides, get_current_slide());
+	set_slides(g_list_first(get_slides()));
+	slide_position = g_list_position(get_slides(), get_current_slide());
 	new_path = gtk_tree_path_new_from_indices(slide_position, -1);
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, FALSE);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, TRUE, 0.5, 0.0);

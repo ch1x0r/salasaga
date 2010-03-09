@@ -41,7 +41,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 
 gdouble get_selection_font_size(GtkTextBuffer *text_buffer, GtkTextView *text_view)

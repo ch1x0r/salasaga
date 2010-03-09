@@ -24,6 +24,13 @@
 #ifndef GLOBAL_FUNCTIONS_H_
 #define GLOBAL_FUNCTIONS_H_
 
+// FreeType includes
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
+// Ming include
+#include <ming.h>
+
 // To keep C++ programs that include this header happy
 #ifdef __cplusplus
 extern "C" {
@@ -105,6 +112,7 @@ guint get_screenshot_delay_time();
 gboolean get_screenshot_key_warning();
 gboolean get_screenshots_enabled();
 gboolean get_show_control_bar();
+GList *get_slides();
 guint get_start_behaviour();
 GtkWidget *get_status_bar();
 GtkStatusIcon *get_status_icon();
@@ -192,6 +200,7 @@ void set_screenshot_delay_time(guint new_screenshot_delay_time);
 void set_screenshot_key_warning(gboolean new_screenshot_key_warning);
 void set_screenshots_enabled(gboolean new_screenshots_enabled);
 void set_show_control_bar(gboolean new_show_control_bar);
+void set_slides(GList *new_slides);
 void set_start_behaviour(guint new_start_behaviour);
 void set_status_bar(GtkWidget *new_status_bar);
 void set_status_icon(GtkStatusIcon *new_status_icon);

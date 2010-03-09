@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 
 gboolean transition_type_changed(GtkWidget *calling_widget, transition_widgets *calling_widgets)

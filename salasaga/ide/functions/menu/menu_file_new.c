@@ -35,7 +35,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../dialog/display_dialog_save_warning.h"
 #include "../dialog/display_warning.h"
 #include "../other/validate_value.h"
@@ -264,13 +264,13 @@ void menu_file_new(void)
 	gtk_widget_destroy(GTK_WIDGET(project_dialog));
 
 	// If there's a project presently loaded in memory, we unload it
-	if (NULL != slides)
+	if (NULL != get_slides())
 	{
 		// Free the resources presently allocated to slides
-		g_list_foreach(slides, slide_free, NULL);
+		g_list_foreach(get_slides(), slide_free, NULL);
 
 		// Re-initialise pointers
-		slides = NULL;
+		set_slides(NULL);
 		set_current_slide(NULL);
 	}
 
@@ -313,7 +313,7 @@ void menu_file_new(void)
 
 	// Create an initial blank slide for the project
 	slide_insert();
-	set_current_slide(slides);
+	set_current_slide(get_slides());
 
 	// Select the thumbnail for the new slide in the film strip
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &new_path, NULL);

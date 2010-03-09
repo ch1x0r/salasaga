@@ -42,7 +42,7 @@
 
 // Salasaga includes
 #include "../../../salasaga_types.h"
-#include "../../../externs.h"
+#include "../../global_functions.h"
 #include "../../dialog/display_warning.h"
 #include "../../preference/project_preferences.h"
 #include "export_swf_choose_resolution_index.h"
@@ -147,8 +147,8 @@ gint export_swf_inner(gchar *output_filename)
 	}
 
 	// Count the number of slides in the movie
-	slides = g_list_first(slides);
-	num_slides = g_list_length(slides);
+	set_slides(g_list_first(get_slides()));
+	num_slides = g_list_length(get_slides());
 
 	// Output some debugging info if requested
 	if (get_debug_level())
@@ -161,8 +161,8 @@ gint export_swf_inner(gchar *output_filename)
 	for (slide_counter = 0; slide_counter <  num_slides; slide_counter++)
 	{
 		// Point to the selected slide
-		slides = g_list_first(slides);
-		this_slide_data = g_list_nth_data(slides, slide_counter);
+		set_slides(g_list_first(get_slides()));
+		this_slide_data = g_list_nth_data(get_slides(), slide_counter);
 
 		// Add the number of layers in this slide to the total count
 		total_num_layers += this_slide_data->num_layers;
@@ -219,8 +219,8 @@ gint export_swf_inner(gchar *output_filename)
 		gdk_flush();
 
 		// Initialise things for this slide
-		slides = g_list_first(slides);
-		this_slide_data = g_list_nth_data(slides, slide_counter);
+		set_slides(g_list_first(get_slides()));
+		this_slide_data = g_list_nth_data(get_slides(), slide_counter);
 		slide_duration = this_slide_data->duration * get_frames_per_second();
 
 		// Add the duration in seconds to the total duration count for the animation
@@ -267,7 +267,7 @@ gint export_swf_inner(gchar *output_filename)
 		// whether the object in the layer is visible, it's position, transparency, etc
 		slide_depth += num_layers + 1;
 		display_depth = slide_depth;
-		this_slide_data = g_list_nth_data(slides, slide_counter);
+		this_slide_data = g_list_nth_data(get_slides(), slide_counter);
 		this_slide_data->layers = g_list_first(this_slide_data->layers);
 		for (layer_counter = 0; layer_counter < num_layers; layer_counter++)
 		{

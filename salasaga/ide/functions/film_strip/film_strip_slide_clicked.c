@@ -37,7 +37,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../other/widget_focus.h"
 #include "../time_line/draw_timeline.h"
 #include "../time_line/time_line.h"
@@ -80,8 +80,8 @@ gboolean film_strip_slide_clicked(GtkTreeSelection *selection, gpointer data)
 		selection_string = gtk_tree_path_to_string(selected_path);
 
 		// Get a pointer to the clicked on slide's data
-		slides = g_list_first(slides);
-		set_current_slide(g_list_nth(slides, atoi(selection_string)));
+		set_slides(g_list_first(get_slides()));
+		set_current_slide(g_list_nth(get_slides(), atoi(selection_string)));
 		slide_data = get_current_slide_data();
 
 		// If the slide doesn't have a timeline widget constructed for it yet, then make one

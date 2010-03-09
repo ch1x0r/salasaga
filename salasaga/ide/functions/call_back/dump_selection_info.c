@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 
 gboolean dump_selection_info(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)

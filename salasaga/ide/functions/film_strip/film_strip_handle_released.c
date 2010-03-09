@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../preference/application_preferences.h"
 #include "regenerate_film_strip_thumbnails.h"
 

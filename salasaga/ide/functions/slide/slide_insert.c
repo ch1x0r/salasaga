@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../preference/application_preferences.h"
 #include "../preference/project_preferences.h"
 #include "../undo_redo/undo_functions.h"
@@ -115,12 +115,12 @@ void slide_insert(void)
 	// If the current slide hasn't been initialised (this is the first slide), then we initialise it
 	if (NULL == get_current_slide())
 	{
-		slides = g_list_append(slides, tmp_slide);
-		set_current_slide(slides);
+		set_slides(g_list_append(get_slides(), tmp_slide));
+		set_current_slide(get_slides());
 	} else
 	{
 		// Add the newly created slide to the end of the slides
-		slides = g_list_append(slides, tmp_slide);
+		set_slides(g_list_append(get_slides(), tmp_slide));
 	}
 
 	// Set the changes made variable

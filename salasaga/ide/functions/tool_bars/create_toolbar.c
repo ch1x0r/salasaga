@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../call_back/quit_event.h"
 #include "../menu/menu_export_swf.h"
 #include "../menu/menu_file_new.h"

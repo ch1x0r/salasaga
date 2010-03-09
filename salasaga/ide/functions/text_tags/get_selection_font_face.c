@@ -41,7 +41,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 
 gint get_selection_font_face(GtkTextBuffer *text_buffer)

@@ -40,7 +40,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../call_back/transition_type_changed.h"
 #include "../other/validate_value.h"
 #include "../preference/project_preferences.h"

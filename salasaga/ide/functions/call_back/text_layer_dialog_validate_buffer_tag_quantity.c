@@ -30,7 +30,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 void text_layer_dialog_validate_buffer_tag_quantity(GtkTextBuffer *text_buffer)
 {

@@ -35,7 +35,7 @@
 // Salasaga includes
 #include "../../../config.h"
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../dialog/display_dialog_save_warning.h"
 #include "../dialog/display_warning.h"
 #include "../other/validate_value.h"
@@ -236,7 +236,7 @@ void menu_file_open(void)
 	set_project_active(TRUE);
 
 	// Make the current slide point to the first slide
-	set_current_slide(slides);
+	set_current_slide(get_slides());
 
 	// Calculate and set the display size of the working area
 	set_working_width((get_project_width() * get_zoom()) / 100);

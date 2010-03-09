@@ -39,7 +39,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../cairo/create_cairo_pixbuf_pattern.h"
 #include "../layer/compress_layers.h"
 #include "../dialog/display_warning.h"
@@ -396,7 +396,7 @@ void menu_screenshots_import(void)
 		gtk_list_store_set(get_film_strip_store(), &film_strip_iter, 0, tmp_slide->thumbnail, -1);
 
 		// Add the temporary slide to the slides GList
-		slides = g_list_append(slides, tmp_slide);
+		set_slides(g_list_append(get_slides(), tmp_slide));
 
 		// Delete the screenshot file just loaded
 		return_code = g_remove(tmp_string->str);
@@ -422,15 +422,15 @@ void menu_screenshots_import(void)
 	// If not presently set, make the first imported slide the present slide
 	if (NULL == get_current_slide())
 	{
-		set_current_slide(g_list_first(slides));
+		set_current_slide(g_list_first(get_slides()));
 	}
 
 	// Select the correct thumbnail in the film strip and scroll to display it
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &new_path, NULL);
 	if (NULL != new_path)
 		old_path = new_path;  // Make a backup of the old path, so we can free it
-	slides = g_list_first(slides);
-	slide_position = g_list_position(slides, get_current_slide());
+	set_slides(g_list_first(get_slides()));
+	slide_position = g_list_position(get_slides(), get_current_slide());
 	new_path = gtk_tree_path_new_from_indices(slide_position, -1);
 	gtk_tree_view_set_cursor(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, FALSE);
 	gtk_tree_view_scroll_to_cell(GTK_TREE_VIEW(get_film_strip_view()), new_path, NULL, TRUE, 0.5, 0.0);

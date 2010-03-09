@@ -35,7 +35,7 @@
 // Salasaga includes
 #include "../../../config.h"
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "menu_help_website.h"
 
 

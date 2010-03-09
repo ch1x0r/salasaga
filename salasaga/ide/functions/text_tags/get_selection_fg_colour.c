@@ -35,7 +35,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 
 GdkColor *get_selection_fg_colour(GtkTextBuffer *text_buffer, GtkTextView *text_view)

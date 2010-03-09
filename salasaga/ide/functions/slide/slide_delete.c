@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../dialog/display_warning.h"
 #include "../time_line/draw_timeline.h"
 #include "../undo_redo/undo_functions.h"
@@ -56,8 +56,8 @@ void slide_delete(void)
 
 
 	// Are we trying to delete the only slide in the project (not good)?
-	slides = g_list_first(slides);
-	num_slides = g_list_length(slides);
+	set_slides(g_list_first(get_slides()));
+	num_slides = g_list_length(get_slides());
 	if (1 == num_slides)
 	{
 		// Yes we are, so give a warning message and don't delete the slide
@@ -69,7 +69,7 @@ void slide_delete(void)
 	}
 
 	// Determine where the slide is positioned in the project
-	slide_position = g_list_position(slides, get_current_slide());
+	slide_position = g_list_position(get_slides(), get_current_slide());
 
 	// Create and store the undo history item for this slide
 	undo_item_data = g_new0(undo_history_data, 1);
@@ -81,7 +81,7 @@ void slide_delete(void)
 	undo_history_add_item(UNDO_DELETE_SLIDE, undo_item_data, TRUE);
 
 	// Remove the current slide from the slide list
-	slides = g_list_remove_link(slides, get_current_slide());
+	set_slides(g_list_remove_link(get_slides(), get_current_slide()));
 
 	// Remove the current slide from the film strip
 	film_strip_selector = gtk_tree_view_get_selection(GTK_TREE_VIEW(get_film_strip_view()));
@@ -94,7 +94,7 @@ void slide_delete(void)
 		// If we're deleting the last slide, we'll need to point to the previous one instead
 		slide_position--;
 	}
-	set_current_slide(g_list_nth(slides, slide_position));
+	set_current_slide(g_list_nth(get_slides(), slide_position));
 
 	// Select the next thumbnail in the film strip and scroll to display it
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &new_path, NULL);

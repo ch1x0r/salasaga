@@ -44,7 +44,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../dialog/display_warning.h"
 #include "../layer/compress_layers.h"
 #include "../other/validate_value.h"
@@ -984,14 +984,14 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 	// ** We only get here if all the input is considered valid **
 
 	// If there's a project presently loaded in memory, we unload it
-	if (NULL != slides)
+	if (NULL != get_slides())
 	{
 		// Free the resources presently allocated to slides
-		g_list_foreach(slides, slide_free, NULL);
-		g_list_free(slides);
+		g_list_foreach(get_slides(), slide_free, NULL);
+		g_list_free(get_slides());
 
 		// Re-initialise pointers
-		slides = NULL;
+		set_slides(NULL);
 		set_current_slide(NULL);
 	}
 
@@ -1048,13 +1048,13 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 	set_info_display(valid_info_display);
 
 	// Make the new slides active, and update them to fill in their remaining pieces
-	slides = g_list_first(new_slides);
-	num_slides = g_list_length(slides);
+	set_slides(g_list_first(new_slides));
+	num_slides = g_list_length(get_slides());
 	for (slide_counter = 0; slide_counter < num_slides; slide_counter++)
 	{
 		// Select the desired slide
-		slides = g_list_first(slides);
-		tmp_slide = g_list_nth_data(slides, slide_counter);
+		set_slides(g_list_first(get_slides()));
+		tmp_slide = g_list_nth_data(get_slides(), slide_counter);
 
 		// As a workaround for potentially incorrectly saved (old) project files,
 		// we scan through all of the layers in each slide, setting the duration

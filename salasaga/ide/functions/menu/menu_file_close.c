@@ -30,7 +30,7 @@
 // Salasaga includes
 #include "../../../config.h"
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../dialog/display_dialog_save_warning.h"
 #include "../slide/slide_free.h"
 #include "../text_tags/reset_global_text_tags_table.h"
@@ -65,13 +65,13 @@ void menu_file_close()
 	}
 
 	// If there's a project presently loaded in memory, we unload it
-	if (NULL != slides)
+	if (NULL != get_slides())
 	{
 		// Free the resources presently allocated to slides
-		g_list_foreach(slides, slide_free, NULL);
+		g_list_foreach(get_slides(), slide_free, NULL);
 
 		// Re-initialise pointers
-		slides = NULL;
+		set_slides(NULL);
 		set_current_slide(NULL);
 	}
 

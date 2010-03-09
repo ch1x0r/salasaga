@@ -32,7 +32,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../dialog/display_warning.h"
 #include "../other/validate_value.h"
 #include "../preference/project_preferences.h"

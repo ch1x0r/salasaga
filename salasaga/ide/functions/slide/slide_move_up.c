@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 
 void slide_move_up(void)
@@ -53,8 +53,8 @@ void slide_move_up(void)
 	tmp_gstring = g_string_new(NULL);
 
 	// Safety check
-	slides = g_list_first(slides);
-	slide_position = g_list_position(slides, get_current_slide());
+	set_slides(g_list_first(get_slides()));
+	slide_position = g_list_position(get_slides(), get_current_slide());
 	if (0 == slide_position)
 	{
 		// We can't move the upper most slide any further up, so just return
@@ -63,7 +63,7 @@ void slide_move_up(void)
 
 	// Swap the slides around
 	this_slide_data = get_current_slide_data();
-	previous_slide = g_list_nth(slides, slide_position - 1);
+	previous_slide = g_list_nth(get_slides(), slide_position - 1);
 	set_current_slide_data(previous_slide->data);
 	previous_slide->data = this_slide_data;
 	set_current_slide(previous_slide);

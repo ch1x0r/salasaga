@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "../text_tags/get_selection_fg_colour.h"
 #include "../text_tags/get_selection_font_face.h"
 #include "../text_tags/get_selection_font_size.h"

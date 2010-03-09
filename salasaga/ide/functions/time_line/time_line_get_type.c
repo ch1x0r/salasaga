@@ -35,7 +35,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 #include "time_line.h"
 #include "time_line_init.h"
 #include "time_line_class_init.h"

@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 
 gboolean text_layer_dialog_bg_colour_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)

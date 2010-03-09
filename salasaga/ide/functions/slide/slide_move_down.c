@@ -34,7 +34,7 @@
 
 // Salasaga includes
 #include "../../salasaga_types.h"
-#include "../../externs.h"
+#include "../global_functions.h"
 
 
 void slide_move_down(void)
@@ -54,9 +54,9 @@ void slide_move_down(void)
 	tmp_gstring = g_string_new(NULL);
 
 	// Safety check
-	slides = g_list_first(slides);
-	slide_position = g_list_position(slides, get_current_slide());
-	num_slides = g_list_length(slides);
+	set_slides(g_list_first(get_slides()));
+	slide_position = g_list_position(get_slides(), get_current_slide());
+	num_slides = g_list_length(get_slides());
 	if (num_slides == (slide_position + 1))
 	{
 		// We can't move the bottom most slide any further down, so just return
@@ -65,7 +65,7 @@ void slide_move_down(void)
 
 	// Swap the slides around
 	this_slide_data = get_current_slide_data();
-	next_slide = g_list_nth(slides, slide_position + 1);
+	next_slide = g_list_nth(get_slides(), slide_position + 1);
 	set_current_slide_data(next_slide->data);
 	next_slide->data = this_slide_data;
 	set_current_slide(next_slide);
