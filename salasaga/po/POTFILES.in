@@ -90,7 +90,9 @@ ide/functions/other/logger_with_domain.c
 ide/functions/other/project_adjust_dimensions.c
 ide/functions/other/validate_value.c
 ide/functions/other/widget_focus.c
+ide/functions/preference/application_preferences.c
 ide/functions/preference/preferences_load.c
+ide/functions/preference/project_preferences.c
 ide/functions/preference/save_preferences_and_exit.c
 ide/functions/read/read_empty_layer.c
 ide/functions/read/read_highlight_layer.c
@@ -162,6 +164,7 @@ ide/functions/tool_bars/disable_layer_toolbar_buttons.c
 ide/functions/tool_bars/disable_main_toolbar_buttons.c
 ide/functions/tool_bars/enable_layer_toolbar_buttons.c
 ide/functions/tool_bars/enable_main_toolbar_buttons.c
+ide/functions/tool_bars/shared_toolbar_functions.c
 ide/functions/undo_redo/undo_functions.c
 ide/functions/working_area/calculate_object_boundaries.c
 ide/functions/working_area/create_working_area.c
