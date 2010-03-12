@@ -144,7 +144,7 @@ void menu_file_save(void)
 	g_string_printf(tmp_gstring, "%u", get_project_width());
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_width", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", get_project_height());
-	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "get_project_height()", (const xmlChar *) tmp_gstring->str);
+	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "project_height", (const xmlChar *) tmp_gstring->str);
 	g_string_printf(tmp_gstring, "%u", get_frames_per_second());
 	xmlNewChild(pref_pointer, NULL, (const xmlChar *) "frames_per_second", (const xmlChar *) tmp_gstring->str);
 	switch (get_start_behaviour())
