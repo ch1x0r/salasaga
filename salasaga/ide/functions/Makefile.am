@@ -184,9 +184,8 @@ salasaga_SOURCES = global_functions.c \
 	zoom_selector/create_zoom_selector.c \
 	zoom_selector/zoom_selector_changed.c \
 	../salasaga.c
-salasaga_LDADD = $(DEPS_LIBS) $(GTK_LIBS) $(ZLIB) $(XLIB) $(MINGLIB)
-
-AM_CPPFLAGS = $(DEPS_CFLAGS) $(GTK_CFLAGS) \
+salasaga_LDADD = $(DEPS_LIBS) $(GTK_LIBS) $(ZLIB) $(XLIB) $(MINGLIB) $(LIBXML_LIBS) $(GCONF_LIBS) $(LIBGNOME_LIBS) 
+AM_CPPFLAGS = $(DEPS_CFLAGS) $(GTK_CFLAGS) $(LIBXML_CFLAGS) $(LIBGNOME_CFLAGS) \
 	-DFONT_OUTLINE_DIR=\""$(DESTDIR)/$(datadir)/salasaga/font_outline"\" \
 	-DFONT_TTF_DIR=\""$(DESTDIR)/$(datadir)/salasaga/ttf"\" \
 	-DIMAGES_PNG_DIR=\""$(DESTDIR)/$(datadir)/salasaga/icons/72x72"\" \

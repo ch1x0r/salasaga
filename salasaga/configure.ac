@@ -76,13 +76,16 @@ then
 	exit -1
 fi 
 
-dnl Check for the GTK, GLib, GConf, Gnome, xml, and png libraries
-AC_CHECK_PROG(PKG_CONFIG, pkg-config, [yes])
-if test x$PKG_CONFIG = xyes;
-then
-	GTK_CFLAGS=`pkg-config --cflags glib-2.0 gdk-2.0 gdk-pixbuf-2.0 gtk+-2.0 gconf-2.0 libgnome-2.0 libnotify libpng libxml-2.0 --cflags`
-	GTK_LIBS=`pkg-config --libs glib-2.0 gdk-2.0 gdk-pixbuf-2.0 gtk+-2.0 gconf-2.0 libgnome-2.0 libnotify libpng libxml-2.0 --libs`
-fi
+dnl Check for needed libraries
+PKG_CHECK_MODULES([GLIB],[glib-2.0])
+PKG_CHECK_MODULES([GTK], [gtk+-2.0])
+PKG_CHECK_MODULES([GDK],[gdk-2.0])  
+PKG_CHECK_MODULES([GDK_PIXBUF],[gdk-pixbuf-2.0])
+PKG_CHECK_MODULES([LIBGNOME],[libgnome-2.0])    
+PKG_CHECK_MODULES([GCONF],[gconf-2.0])          
+PKG_CHECK_MODULES([LIBNOTIFY],[libnotify])      
+PKG_CHECK_MODULES([LIBPNG],[libpng])            
+PKG_CHECK_MODULES([LIBXML],[libxml-2.0])
 
 case "${host_os}" in
 	*darwin*)
@@ -115,8 +118,6 @@ case "${host_os}" in
 		SHLIBEXT=".so"
 esac
 
-AC_SUBST(GTK_CFLAGS)
-AC_SUBST(GTK_LIBS)
 AC_SUBST(LDFLAGS)
 AC_SUBST(SHLIBEXT)
 AC_SUBST(SHLIBLDFLAGS)

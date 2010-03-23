@@ -46,7 +46,6 @@
 #include "../global_functions.h"
 #include "../dialog/display_warning.h"
 
-
 gboolean load_fonts()
 {
 	// Local variables
@@ -167,6 +166,24 @@ gboolean load_fonts()
 		g_string_printf(message, "%s.ttf", font_name);
 		font_pathname = g_build_path(G_DIR_SEPARATOR_S, FONT_TTF_DIR, message->str, NULL);
 
+		// check, if font file is exists
+		if (!g_file_test (font_pathname, G_FILE_TEST_EXISTS)) {
+			// get font dir from env variable
+			char* envFontPath = getenv("SALASAGA_FONT_TTF_DIR");
+
+			if (envFontPath)
+			{
+				// use directory, that user specified in environment variable
+				font_pathname = g_build_path(G_DIR_SEPARATOR_S, envFontPath, message->str, NULL);
+			}
+
+			// check, if font file exist
+			if (!g_file_test (font_pathname, G_FILE_TEST_EXISTS)) {
+				// font file doesn't exists, last chance to gues font directory
+				font_pathname = g_build_path(G_DIR_SEPARATOR_S, "../ttf", message->str, NULL);
+			}
+		}
+
 		// Load the FreeType font face
 		ft_error = FT_New_Face(ft_library_handle, font_pathname, 0, get_ft_font_face_ptr(loop_counter));
 		if (FT_Err_Unknown_File_Format == ft_error)
@@ -201,6 +218,24 @@ gboolean load_fonts()
 		// Create the full path to the fdb font we want
 		g_string_printf(message, "%s.fdb", font_name);
 		font_pathname = g_build_path(G_DIR_SEPARATOR_S, FONT_OUTLINE_DIR, message->str, NULL);
+
+		// check, if fdb font file is exists
+		if (!g_file_test (font_pathname, G_FILE_TEST_EXISTS)) {
+			// get font dir from env variable
+			char* envFontPath = getenv("SALASAGA_FONT_OUTLINE_DIR");
+
+			if (envFontPath)
+			{
+				// use directory, that user specified in environment variable
+				font_pathname = g_build_path(G_DIR_SEPARATOR_S, envFontPath, message->str, NULL);
+			}
+
+			// check, if font file exist
+			if (!g_file_test (font_pathname, G_FILE_TEST_EXISTS)) {
+				// font file doesn't exists, last chance to gues font directory
+				font_pathname = g_build_path(G_DIR_SEPARATOR_S, "../font_outline", message->str, NULL);
+			}
+		}
 
 		// Open the fdb font face file
 		font_file = fopen(font_pathname, "r");
