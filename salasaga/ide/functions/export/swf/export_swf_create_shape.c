@@ -760,7 +760,8 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 					text_pos_y += line_heights[line_counter + 1] + line_descents[line_counter] - line_descents[line_counter + 1] + (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT);
 				} else
 				{
-					text_pos_y += line_descents[line_counter] + (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT);
+					// text_pos_y already have height, just add board height
+					text_pos_y += (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT) /* + line_descents[line_counter] */;
 				}
 
 				// Keep the largest line width known
