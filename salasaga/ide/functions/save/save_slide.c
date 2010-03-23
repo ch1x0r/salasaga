@@ -3,7 +3,8 @@
  *
  * Salasaga: Function that takes a slide structure pointer, and adds it's data to an in-memory XML document
  *
- * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Digital Distribution Global Training Solutions Pty. Ltd.
+ * <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *

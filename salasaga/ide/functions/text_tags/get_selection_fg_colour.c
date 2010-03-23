@@ -4,7 +4,8 @@
  * Salasaga: Returns the foreground colour of the selected text in a text buffer,
  *           or grey if there are multiple foreground colours in the selection
  *
- * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Digital Distribution Global Training Solutions Pty. Ltd.
+ * <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *

@@ -3,7 +3,8 @@
  *
  * Salasaga: Display a dialog box asking for mouse pointer settings
  *
- * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Digital Distribution Global Training Solutions Pty. Ltd.
+ * <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *

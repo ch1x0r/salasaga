@@ -3,7 +3,8 @@
  *
  * Salasaga: Called when the user chooses File -> Close from the top menu
  *
- * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Digital Distribution Global Training Solutions Pty. Ltd.
+ * <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *

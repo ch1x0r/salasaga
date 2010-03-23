@@ -4,7 +4,8 @@
  * Salasaga: Returns the font size of the selected text in a text buffer,
  *           or -1.0 if there are multiple font sizes in the selection
  *
- * Copyright (C) 2005-2010 Justin Clift <justin@salasaga.org>
+ * Copyright (C) 2005-2010 Digital Distribution Global Training Solutions Pty. Ltd.
+ * <justin@salasaga.org>
  *
  * This file is part of Salasaga.
  *
