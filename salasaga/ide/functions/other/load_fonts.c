@@ -169,7 +169,7 @@ gboolean load_fonts()
 		// check, if font file is exists
 		if (!g_file_test (font_pathname, G_FILE_TEST_EXISTS)) {
 			// get font dir from env variable
-			char* envFontPath = getenv("SALASAGA_FONT_TTF_DIR");
+			gchar* envFontPath = getenv("SALASAGA_FONT_TTF_DIR");
 
 			if (envFontPath)
 			{

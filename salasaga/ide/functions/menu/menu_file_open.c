@@ -169,7 +169,7 @@ void menu_file_open(void)
 		filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(open_dialog));
 
 		// Validate the filename input
-		validated_string = validate_value(FILE_PATH, V_CHAR, filename);
+		validated_string = (GString*)validate_value(FILE_PATH, V_CHAR, filename);
 		if (NULL == validated_string)
 		{
 			g_string_printf(message, "%s ED124: %s", _("Error"), _("There was something wrong with the file name given.  Please try again."));
