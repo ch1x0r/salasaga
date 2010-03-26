@@ -46,6 +46,9 @@
 #include "swf_add_mouse_click.h"
 #include "swf_shape_from_image_file.h"
 
+// fixme
+#define FIX_SWF_TEXT_LAYER_HEIGHT 3	// flash border height fix value. This size is in pixel
+
 
 gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 {
@@ -636,7 +639,12 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 			for (line_counter = 0; line_counter < num_lines; line_counter++)
 			{
 				// Position the SWF cursor to the start of the line
-				SWFText_moveTo(text_object, text_pos_x, text_pos_y);
+				if (line_counter > 0) {
+					SWFText_moveTo(text_object, text_pos_x, text_pos_y);
+				} else {
+					// if it is first line, fix position of text in text
+					SWFText_moveTo(text_object, text_pos_x, text_pos_y + FIX_SWF_TEXT_LAYER_HEIGHT);
+				}
 
 				// Ming has a bug that stops us from moving to x position 0, so we have to detect that and work around it
 				if (0 == text_pos_x)
@@ -761,7 +769,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				} else
 				{
 					// text_pos_y already have height, just add board height
-					text_pos_y += (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT) /* + line_descents[line_counter] */;
+					text_pos_y += (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT) + FIX_SWF_TEXT_LAYER_HEIGHT/* + line_descents[line_counter]*/;
 				}
 
 				// Keep the largest line width known
@@ -798,10 +806,12 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				red_component = roundf(text_data->bg_border_colour.red / 256);
 				green_component = roundf(text_data->bg_border_colour.green / 256);
 				blue_component = roundf(text_data->bg_border_colour.blue / 256);
-				SWFShape_setLine(text_bg, text_data->bg_border_width, red_component, green_component, blue_component, 0xff); // Alpha of 0xff is full opacity
+
+				// gtk line border width and flash border line width is not identical. gtk line width is more than 2 times greate then flash line widht
+				SWFShape_setLine(text_bg, text_data->bg_border_width/2, red_component, green_component, blue_component, 0xff); // Alpha of 0xff is full opacity
 
 				// Calculate the dimensions of the text background box
-				text_bg_box_height = text_pos_y + (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT * 2);
+				text_bg_box_height = text_pos_y + (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT * 2) + FIX_SWF_TEXT_LAYER_HEIGHT;
 				text_bg_box_width = max_line_width + (scaled_width_ratio * TEXT_BORDER_PADDING_WIDTH * 2);
 
 				// Draw the background curved rectangle
