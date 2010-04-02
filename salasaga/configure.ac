@@ -87,6 +87,10 @@ PKG_CHECK_MODULES([LIBNOTIFY],[libnotify])
 PKG_CHECK_MODULES([LIBPNG],[libpng])            
 PKG_CHECK_MODULES([LIBXML],[libxml-2.0])
 
+AC_CHECK_HEADER(check.h,,[AC_MSG_ERROR([Can't find a header of C unit test framework \
+"Check". Install "Check" framework from your distribution repository \
+or visit project homepage at http://sourceforge.net/projects/check/])])
+
 case "${host_os}" in
 	*darwin*)
 		SHLIBLDFLAGS="-dynamiclib \
@@ -130,6 +134,6 @@ AC_SUBST(MINOR_VERSION)
 AC_SUBST(MICRO_VERSION)
 AC_SUBST(SALASAGA_VERSION)
 
-AC_CONFIG_FILES(Makefile po/Makefile ide/Makefile ide/desktop/Makefile ide/font_outline/Makefile ide/functions/Makefile ide/images/Makefile ide/images/control_bar/Makefile ide/images/control_bar/128x96/Makefile ide/images/control_bar/160x120/Makefile ide/images/control_bar/176x144/Makefile ide/images/control_bar/320x240/Makefile ide/images/control_bar/352x288/Makefile ide/images/control_bar/480x120/Makefile ide/images/control_bar/528x396/Makefile ide/images/control_bar/600x400/Makefile ide/images/control_bar/640x480/Makefile ide/images/control_bar/720x480/Makefile ide/images/control_bar/800x600/Makefile ide/images/control_bar/1024x768/Makefile ide/images/control_bar/1280x720/Makefile ide/images/control_bar/1280x1024/Makefile ide/images/control_bar/1600x1200/Makefile ide/images/control_bar/1920x1080/Makefile ide/images/control_bar/1920x1200/Makefile ide/images/pointers/Makefile ide/sounds/Makefile ide/ttf/Makefile screen_capture/Makefile)
+AC_CONFIG_FILES(Makefile po/Makefile ide/Makefile ide/desktop/Makefile ide/font_outline/Makefile ide/functions/Makefile ide/images/Makefile ide/images/control_bar/Makefile ide/images/control_bar/128x96/Makefile ide/images/control_bar/160x120/Makefile ide/images/control_bar/176x144/Makefile ide/images/control_bar/320x240/Makefile ide/images/control_bar/352x288/Makefile ide/images/control_bar/480x120/Makefile ide/images/control_bar/528x396/Makefile ide/images/control_bar/600x400/Makefile ide/images/control_bar/640x480/Makefile ide/images/control_bar/720x480/Makefile ide/images/control_bar/800x600/Makefile ide/images/control_bar/1024x768/Makefile ide/images/control_bar/1280x720/Makefile ide/images/control_bar/1280x1024/Makefile ide/images/control_bar/1600x1200/Makefile ide/images/control_bar/1920x1080/Makefile ide/images/control_bar/1920x1200/Makefile ide/images/pointers/Makefile ide/sounds/Makefile ide/ttf/Makefile screen_capture/Makefile ide/functions/flex/tests/Makefile)
 
 AC_OUTPUT(intl/Makefile po/Makefile.in)

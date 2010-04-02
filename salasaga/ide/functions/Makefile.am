@@ -31,6 +31,7 @@ salasaga_SOURCES = global_functions.c \
 	export/swf/export_swf_process_element.c \
 	export/swf/swf_add_mouse_click.c \
 	export/swf/swf_shape_from_image_file.c \
+	flex/flex_mxml_operations.c \
 	film_strip/create_film_strip.c \
 	film_strip/film_strip_button_clicked.c \
 	film_strip/film_strip_create_thumbnail.c \
@@ -197,3 +198,5 @@ AM_CPPFLAGS = $(DEPS_CFLAGS) $(GTK_CFLAGS) $(LIBXML_CFLAGS) $(LIBGNOME_CFLAGS) \
 	-DSTATUS_ICON_DIR=\""$(DESTDIR)/$(datadir)/pixmaps/"\"
 
 DISTCLEANFILES = Makefile.in
+
+SUBDIRS= flex/tests

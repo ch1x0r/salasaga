@@ -17,12 +17,9 @@
 
 xmlDocPtr flex_mxml_create_document() {
 	/*
-     * this initialize the library and check potential ABI mismatches
-     * between the version it was compiled for and the actual shared
-     * library used.
+     * init libxml2 library
      */
 	LIBXML_TEST_VERSION
-
 
     gint rc;
     xmlTextWriterPtr writer;
