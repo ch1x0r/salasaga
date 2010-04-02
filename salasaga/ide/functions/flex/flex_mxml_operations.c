@@ -15,6 +15,7 @@
 
 #define XML_FILE_ENCODING "UTF-8" // use UTF-8 codepage in xml files as default codepage
 
+
 xmlDocPtr flex_mxml_create_document() {
 	/*
      * init libxml2 library
@@ -104,47 +105,109 @@ void flex_mxml_close_document(xmlDocPtr doc) {
 	xmlCleanupParser();
 }
 
-gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_swf_filename,swf_options_t* swf_options) {
+gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_swf_filename,flex_mxml_compilation_flash_options_t* swf_options) {
 	// prepare mxml compiller flags
-	GString mxml_compiller_path = "mxmlc";
-	GString mxml_compiller_parameters =  g_string_sized_new(250);
+	GString* mxml_compiller_path = g_string_sized_new(30);
+	GString* mxml_compiller_parameters =  g_string_sized_new(250);
 
-	g_strin_printf(mxml_compiller_parameters, "%s -output %s ",source_mxml_filename, destination_swf_filename);
+	g_string_append_printf(mxml_compiller_path, "%s", "mxmlc");
+	g_string_append_printf(mxml_compiller_parameters, "%s -output %s ",source_mxml_filename, destination_swf_filename);
 
 
 	if (swf_options != 0) {
 
 		if (swf_options->framerate > 0 && swf_options->framerate < 64) {
-			g_string_printf(mxml_compiller_parameters, "-default-frame-rate %i ", swf_options->framerate);
+			g_string_append_printf(mxml_compiller_parameters, "-default-frame-rate %i ", swf_options->framerate);
 		}
 		if (swf_options->width > 0 && swf_options->height > 0) {
-			g_string_printf(mxml_compiller_parameters, "-default-size %i %i ", swf_options->width, swf_options->height);
+			g_string_append_printf(mxml_compiller_parameters, "-default-size %i %i ", swf_options->width, swf_options->height);
 		}
-		if (swf_options->title->len > 0) {
-			g_string_printf(mxml_compiller_parameters, "-title %s ", swf_options->title->str);
+		if (swf_options->title != NULL) {
+			g_string_append_printf(mxml_compiller_parameters, "-title %s ", swf_options->title->str);
 		}
-		if (swf_options->description->len > 0) {
-			g_string_printf(mxml_compiller_parameters, "-description %s ", swf_options->description->str);
+		if (swf_options->description != NULL) {
+			g_string_append_printf(mxml_compiller_parameters, "-description %s ", swf_options->description->str);
 		}
-		if (swf_options->publisher->len > 0) {
-			g_string_printf(mxml_compiller_parameters, "-publisher %s ", swf_options->publisher->str);
+		if (swf_options->publisher != NULL) {
+			g_string_append_printf(mxml_compiller_parameters, "-publisher %s ", swf_options->publisher->str);
 		}
-		if (swf_options->creator->len > 0) {
-			g_string_printf(mxml_compiller_parameters, "-creator %s ", swf_options->creator->str);
+		if (swf_options->creator != NULL) {
+			g_string_append_printf(mxml_compiller_parameters, "-creator %s ", swf_options->creator->str);
 		}
-		if (swf_options->language->len > 0) {
-			g_string_printf(mxml_compiller_parameters, "-language+=%s ", swf_options->language->str);
+		if (swf_options->language != NULL) {
+			g_string_append_printf(mxml_compiller_parameters, "-language+=%s ", swf_options->language->str);
 		}
 	}
 	GError* error;
-	g_string_printf(mxml_compiller_path, " %s", mxml_compiller_parameters->str);
+	g_string_append_printf(mxml_compiller_path, " %s", mxml_compiller_parameters->str);
 
 	g_debug("run mxmlc\t:\t%s\n", mxml_compiller_path->str);
 
-	if (!g_spawn_command_line_async(mxml_compiller_path->str, &error)) {
-		g_critical(error->message);
+	gchar* stdout;
+	gchar* stderr;
+	gint exit_status;
+
+	// TODO: remove this stupid stuff like g_free, g_free, g_free
+
+	if (!g_spawn_command_line_sync(mxml_compiller_path->str, &stdout, &stderr,&exit_status,&error)) {
+		g_printf("%s\n%s\n", stdout,stderr);
+		g_critical("%s",error->message);
+
+		g_string_free(mxml_compiller_path,1);
+		g_string_free(mxml_compiller_parameters,1);
+
 		return -1;
 	}
 
+
+	g_printf("%s\n%s\n", stdout,stderr);
+
+
+	if (exit_status != 0) {
+
+		g_free(stdout);
+		g_free(stderr);
+		g_string_free(mxml_compiller_path,1);
+		g_string_free(mxml_compiller_parameters,1);
+
+		return exit_status;
+	}
+
+	g_free(stdout);
+	g_free(stderr);
+
+	g_string_free(mxml_compiller_path,1);
+	g_string_free(mxml_compiller_parameters,1);
+
 	return 0;
+}
+
+flex_mxml_compilation_flash_options_t* flex_mxml_compilation_flash_options_create() {
+	flex_mxml_compilation_flash_options_t* flash_options = g_malloc(sizeof(flex_mxml_compilation_flash_options_t));
+
+	memset(flash_options, 0, sizeof(flex_mxml_compilation_flash_options_t));
+
+	flash_options->creator = g_string_new("Salasaga");
+
+	return flash_options;
+}
+
+void flex_mxml_compilation_flash_options_delete(flex_mxml_compilation_flash_options_t* flash_options) {
+	if (flash_options->title) {
+		g_string_free(flash_options->title,1);
+	}
+	if (flash_options->description) {
+		g_string_free(flash_options->description,1);
+	}
+	if (flash_options->creator) {
+		g_string_free(flash_options->creator,1);
+	}
+	if (flash_options->publisher) {
+		g_string_free(flash_options->publisher,1);
+	}
+	if (flash_options->language) {
+		g_string_free(flash_options->language,1);
+	}
+
+	g_free(flash_options);
 }

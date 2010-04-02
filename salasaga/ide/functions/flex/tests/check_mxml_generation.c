@@ -49,10 +49,10 @@ START_TEST (mxml_init_test) {
 	print_text_file_to_stdout(mxml_file_name);
 
 	// compile mxml file into flash
-	flex_mxml_compile_to_swf(mxml_file_name, swf_file_name);
+	fail_unless(flex_mxml_compile_to_swf(mxml_file_name, swf_file_name,0) ==0, "Failed to compile mxml file");
 
 	//remove temporary file from filesystem
-	fail_unless(g_remove(mxml_file_name) == 0, "can't remove mxml file");
+	//fail_unless(g_remove(mxml_file_name) == 0, "can't remove mxml file");
 
 	// remove DOM from memory
 	flex_mxml_close_document(doc);
