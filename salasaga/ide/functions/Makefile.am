@@ -195,7 +195,8 @@ AM_CPPFLAGS = $(DEPS_CFLAGS) $(GTK_CFLAGS) $(LIBXML_CFLAGS) $(LIBGNOME_CFLAGS) \
 	-DMOUSE_PTR_PNG_DIR=\""$(DESTDIR)/$(datadir)/salasaga/icons/72x72/pointers"\" \
 	-DMOUSE_PTR_SVG_DIR=\""$(DESTDIR)/$(datadir)/salasaga/icons/scalable/pointers"\" \
 	-DSOUND_DIR=\""$(DESTDIR)/$(datadir)/salasaga/sounds/"\" \
-	-DSTATUS_ICON_DIR=\""$(DESTDIR)/$(datadir)/pixmaps/"\"
+	-DSTATUS_ICON_DIR=\""$(DESTDIR)/$(datadir)/pixmaps/"\" \
+	-DSALASAGA_FLEX_DIR=@abs_top_srcdir@/flex/sdk/bin/
 
 DISTCLEANFILES = Makefile.in
 

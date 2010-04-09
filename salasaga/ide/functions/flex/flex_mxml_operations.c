@@ -107,15 +107,12 @@ void flex_mxml_close_document(xmlDocPtr doc) {
 
 gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_swf_filename,flex_mxml_compilation_flash_options_t* swf_options) {
 	// prepare mxml compiller flags
-	GString* mxml_compiller_path = g_string_sized_new(30);
-	GString* mxml_compiller_parameters =  g_string_sized_new(250);
+	GString* mxml_compiller_parameters = g_string_sized_new(50);
 
-	g_string_append_printf(mxml_compiller_path, "%s", "mxmlc");
-	g_string_append_printf(mxml_compiller_parameters, "%s -output %s ",source_mxml_filename, destination_swf_filename);
+	g_string_append_printf(mxml_compiller_parameters, "mxmlc %s -output %s ",source_mxml_filename, destination_swf_filename);
 
-
+	// set additional options to mxmlc compiller
 	if (swf_options != 0) {
-
 		if (swf_options->framerate > 0 && swf_options->framerate < 64) {
 			g_string_append_printf(mxml_compiller_parameters, "-default-frame-rate %i ", swf_options->framerate);
 		}
@@ -138,48 +135,37 @@ gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_sw
 			g_string_append_printf(mxml_compiller_parameters, "-language+=%s ", swf_options->language->str);
 		}
 	}
-	GError* error;
-	g_string_append_printf(mxml_compiller_path, " %s", mxml_compiller_parameters->str);
+	g_debug("run mxmlc : %s\n", mxml_compiller_parameters->str);
 
-	g_debug("run mxmlc\t:\t%s\n", mxml_compiller_path->str);
-
+	GError* error = NULL;
 	gchar* stdout;
 	gchar* stderr;
 	gint exit_status;
+	int return_value = 0;
 
-	// TODO: remove this stupid stuff like g_free, g_free, g_free
-
-	if (!g_spawn_command_line_sync(mxml_compiller_path->str, &stdout, &stderr,&exit_status,&error)) {
-		g_printf("%s\n%s\n", stdout,stderr);
+	// call mxmlc using PATH environment variable
+	if (!g_spawn_command_line_sync(mxml_compiller_parameters->str, &stdout, &stderr,&exit_status,&error)) {
 		g_critical("%s",error->message);
-
-		g_string_free(mxml_compiller_path,1);
 		g_string_free(mxml_compiller_parameters,1);
-
-		return -1;
+		return 0;
 	}
 
+	#ifdef FLEX_DIR
+	}
+	#endif
 
 	g_printf("%s\n%s\n", stdout,stderr);
 
-
 	if (exit_status != 0) {
-
-		g_free(stdout);
-		g_free(stderr);
-		g_string_free(mxml_compiller_path,1);
-		g_string_free(mxml_compiller_parameters,1);
-
-		return exit_status;
+		return return_value = -1;
 	}
 
 	g_free(stdout);
 	g_free(stderr);
 
-	g_string_free(mxml_compiller_path,1);
 	g_string_free(mxml_compiller_parameters,1);
 
-	return 0;
+	return return_value;
 }
 
 flex_mxml_compilation_flash_options_t* flex_mxml_compilation_flash_options_create() {

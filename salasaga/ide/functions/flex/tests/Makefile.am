@@ -5,5 +5,5 @@ check_mxml_generation_LDFLAGS=-lcheck @GLIB_LIBS@ @LIBXML_LIBS@ ../../flex_mxml_
 
 TESTS = check_mxml_generation
 
-AM_CPPFLAGS=@GLIB_CFLAGS@ @LIBXML_CFLAGS@
+AM_CPPFLAGS=@GLIB_CFLAGS@ @LIBXML_CFLAGS@ -DFLEX_DIR=@abs_top_srcdir@/flex/sdk/bin/
 

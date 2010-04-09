@@ -51,7 +51,43 @@
 #include "export_swf_create_layer_elements.h"
 #include "export_swf_create_shape.h"
 #include "export_swf_process_element.h"
+#include "../../flex/flex_mxml_operations.h"
 
+#define NEWSWF
+
+#ifdef NEWSWF
+/**
+ * Generate flash from gtk layers
+ * @param gchar* name of generated swf file
+ */
+gint export_swf_inner(gchar *output_filename) {
+
+	// first step, get information about output flash parameters, create mxml DOM object
+
+	// Determine which of the control bar resolutions to use
+	out_res_index = export_swf_choose_resolution_index();
+
+	// If an unknown output resolution is given, indicate an error and return
+	if (out_res_index == -1) {
+		g_string_printf(message, "%s ED201: %s", _("Error"), _("Unknown output resolution selected for swf export."));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
+		return FALSE;
+	}
+
+	// get temporary filename for output mxml file
+	gchar mxml_file_name[L_tmpnam + sizeof(".mxml") + 1];
+
+	GString	*message = g_string_new(NULL);
+
+	g_string_printf(message, "this function under developing. Sorry");
+	display_warning(message->str);
+	g_string_free(message, TRUE);
+
+	return FALSE;
+}
+
+#else
 
 gint export_swf_inner(gchar *output_filename)
 {
@@ -499,3 +535,5 @@ gint export_swf_inner(gchar *output_filename)
 	// Indicate that the swf was created successfully
 	return TRUE;
 }
+
+#endif
