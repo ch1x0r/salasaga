@@ -9,6 +9,7 @@ extern "C" {
 #include <glib.h>
 #include <libxml/xmlwriter.h>
 
+
 /**
  * Flash compilation options
  */
@@ -24,6 +25,12 @@ typedef struct {
 	GString* creator;		// what generated flash. Containing text "Salasaga"
 	GString* language;		// flash language
 } flex_mxml_compilation_flash_options_t;
+
+typedef struct {
+	xmlDocPtr doc;
+	xmlNodePtr root;
+	xmlNodePtr style;
+} flex_mxml_dom_t;
 
 /**
  * Create flex_mxml_compilation_flash_options_t in a memory, and fill all fields with default values
@@ -44,20 +51,24 @@ void flex_mxml_compilation_flash_options_delete(flex_mxml_compilation_flash_opti
  * @return xmlDocPtr allocated pointer. If was some error, this value will be 0. You must remove this pointer, using flex_mxml_close_document function
  * @see flex_mxml_close_document
  */
-xmlDocPtr flex_mxml_create_document();
+flex_mxml_dom_t flex_mxml_create_document();
 
 /**
  * Save mxml DOM into file
  * @param xmlDocPtr allocated in memory mxml file
  * @param gchar* file name, where to save mxml file
  */
-void flex_mxml_file_save(xmlDocPtr doc,gchar* filepathname);
+void flex_mxml_file_save(flex_mxml_dom_t doc,gchar* filepathname);
 
 /**
  * Close opened xml document and free used memmory
  * @param xmlDocPtr allocated in memory xml file
  */
-void flex_mxml_close_document(xmlDocPtr doc);
+void flex_mxml_close_document(flex_mxml_dom_t dom);
+
+xmlNodePtr flex_mxml_shape_add_button(flex_mxml_dom_t dom);
+
+xmlNodePtr flex_mxml_shape_add_line(flex_mxml_dom_t dom);
 
 /**
  * Compile mxml file to swf file using flex mxmlc compiller

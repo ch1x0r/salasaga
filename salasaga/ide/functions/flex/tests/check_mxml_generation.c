@@ -41,13 +41,15 @@ START_TEST (mxml_init_test) {
 	g_debug("mxml file at\t%s\nswf file at\t%s\n", mxml_file_name, swf_file_name);
 
 	// create mxml DOM
-	xmlDocPtr doc = flex_mxml_create_document();
+	flex_mxml_dom_t dom = flex_mxml_create_document();
 
 	// check, if DOM created successfull
-	fail_unless(doc != 0, "Can't create xml file");
+	fail_unless(dom.doc != 0, "Can't create xml file");
+
+	flex_mxml_shape_add_button(dom);
 
 	// save DOM to temporary file
-	flex_mxml_file_save(doc, mxml_file_name);
+	flex_mxml_file_save(dom, mxml_file_name);
 
 	// print file content to stdout
 	print_text_file_to_stdout(mxml_file_name);
@@ -64,7 +66,7 @@ START_TEST (mxml_init_test) {
 	fail_unless(g_remove(swf_file_name) == 0, "can't remove swf file");
 
 	// remove DOM from memory
-	flex_mxml_close_document(doc);
+	flex_mxml_close_document(dom);
 }
 END_TEST
 

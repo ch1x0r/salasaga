@@ -61,11 +61,12 @@
  * @param gchar* name of generated swf file
  */
 gint export_swf_inner(gchar *output_filename) {
+	GString	*message = g_string_new(NULL);		// contains error messages
 
 	// first step, get information about output flash parameters, create mxml DOM object
 
 	// Determine which of the control bar resolutions to use
-	out_res_index = export_swf_choose_resolution_index();
+	guint out_res_index = export_swf_choose_resolution_index();
 
 	// If an unknown output resolution is given, indicate an error and return
 	if (out_res_index == -1) {
@@ -74,17 +75,29 @@ gint export_swf_inner(gchar *output_filename) {
 		g_string_free(message, TRUE);
 		return FALSE;
 	}
+	// dom object
+	flex_mxml_dom_t dom = flex_mxml_create_document();
 
 	// get temporary filename for output mxml file
-	gchar mxml_file_name[L_tmpnam + sizeof(".mxml") + 1];
+	gchar mxml_file_name[L_tmpnam + sizeof(".mxml") + 1];		// where to put temporary mxml file
 
-	GString	*message = g_string_new(NULL);
+	tmpnam(mxml_file_name);
 
-	g_string_printf(message, "this function under developing. Sorry");
-	display_warning(message->str);
-	g_string_free(message, TRUE);
+	strncat (mxml_file_name, ".mxml", sizeof(".mxml"));
 
-	return FALSE;
+	// save DOM to temporary file
+	flex_mxml_file_save(dom, mxml_file_name);
+
+	// compile mxml file into flash
+	if(flex_mxml_compile_to_swf(mxml_file_name, output_filename,0) !=0) {
+		g_string_printf(message, "Failed to compile swf file from mxml file %s", mxml_file_name);
+		display_warning(message->str);
+		g_string_free(message, TRUE);
+		return 0;
+	}
+	// remove temp
+
+	return 1;
 }
 
 #else
