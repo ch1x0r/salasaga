@@ -15,6 +15,11 @@
 
 #define XML_FILE_ENCODING "UTF-8" // use UTF-8 codepage in xml files as default codepage
 
+/**
+ * Create mxml DOM in memory, add standard xml header, create root element mx:Application
+ * @return xmlDocPtr allocated pointer. If was some error, this value will be 0. You must remove this pointer, using flex_mxml_close_document function
+ * @see flex_mxml_close_document
+ */
 flex_mxml_dom_t flex_mxml_create_document() {
     LIBXML_TEST_VERSION;
 
@@ -45,17 +50,37 @@ void flex_mxml_close_document(flex_mxml_dom_t dom) {
 	xmlCleanupParser();
 }
 
-xmlNodePtr flex_mxml_shape_add_line(flex_mxml_dom_t dom) {
+xmlNodePtr flex_mxml_shape_add_line(flex_mxml_dom_t dom, int x, int y, int width, int height, int r, int g, int b) {
 	/* Create a new XmlWriter for uri, with no compression. */
 	xmlNodePtr node = xmlNewChild(dom.root, NULL, BAD_CAST "mx:Line",NULL);
-	xmlNewProp(node, BAD_CAST "id", BAD_CAST "button1");
+	//xmlNewProp(dom.root, BAD_CAST "id", BAD_CAST "button1");
+
+	gchar* lineActionScript = "var lineShape:Shape = new Shape(); \
+							lineShape.graphics.lineStyle(2, 0x990000, .75);\
+							lineShape.graphics.moveTo(0,0); \
+							lineShape.graphics.lineTo(200,200); \
+							this.rawChildren.addChild(lineShape);";
+	//xmlNewProp(node, BAD_CAST "id", BAD_CAST "button1");
 	return node;
 }
 
-xmlNodePtr flex_mxml_shape_add_button(flex_mxml_dom_t dom) {
+xmlNodePtr flex_mxml_shape_add_button(flex_mxml_dom_t dom, int x, int y, gchar* name) {
 	/* Create a new XmlWriter for uri, with no compression. */
+	GString* x_str = g_string_sized_new(50);
+	GString* y_str = g_string_sized_new(50);
+
+	g_string_printf(x_str, "%i",x);
+	g_string_printf(y_str, "%i",y);
+
 	xmlNodePtr node = xmlNewChild(dom.root, NULL, BAD_CAST "mx:Button",NULL);
-	xmlNewProp(node, BAD_CAST "id", BAD_CAST "button1");
+	xmlNewProp(node, BAD_CAST "id", BAD_CAST name);
+	xmlNewProp(node, BAD_CAST "label", BAD_CAST name);
+	xmlNewProp(node, BAD_CAST "x", BAD_CAST x_str->str);
+	xmlNewProp(node, BAD_CAST "y", BAD_CAST y_str->str);
+
+	g_string_free(x_str,1);
+	g_string_free(y_str,1);
+
 	return node;
 }
 
@@ -97,11 +122,22 @@ gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_sw
 	gint exit_status;
 	int return_value = 0;
 
-	// call mxmlc using PATH environment variable
+	// call mxmlc using PATH environment variable (external)
 	if (!g_spawn_command_line_sync(mxml_compiller_parameters->str, &stdout, &stderr,&exit_status,&error)) {
-		g_critical("%s",error->message);
-		g_string_free(mxml_compiller_parameters,1);
-		return 0;
+
+		// try to use internal mxml
+		GString* flex_path = g_string_new(g_get_current_dir());
+		g_string_append(flex_path, "/../../flex/sdk/bin/");
+		g_string_append(flex_path, mxml_compiller_parameters->str);
+
+		if (!g_spawn_command_line_sync(mxml_compiller_parameters->str, &stdout, &stderr,&exit_status,&error)) {
+			g_critical("%s",error->message);
+			g_string_free(mxml_compiller_parameters,1);
+			g_string_free(flex_path, 1);
+
+			return -1;
+		}
+		g_string_free(flex_path, 1);
 	}
 
 	#ifdef FLEX_DIR
@@ -118,6 +154,16 @@ gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_sw
 	g_free(stderr);
 
 	g_string_free(mxml_compiller_parameters,1);
+
+
+	GString* command = g_string_sized_new(50);
+	g_string_append_printf(command, "firefox file://%s", destination_swf_filename);
+
+	//TODO: add into salasaga checkbox and path to browser
+	// show in browser generated flash
+	g_spawn_command_line_async (command->str, NULL);
+
+	g_string_free(command, 1);
 
 	return return_value;
 }

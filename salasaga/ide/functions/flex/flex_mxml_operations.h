@@ -46,11 +46,6 @@ flex_mxml_compilation_flash_options_t* flex_mxml_compilation_flash_options_creat
  */
 void flex_mxml_compilation_flash_options_delete(flex_mxml_compilation_flash_options_t*);
 
-/**
- * Create mxml DOM in memory, add standard xml header, create root element mx:Application
- * @return xmlDocPtr allocated pointer. If was some error, this value will be 0. You must remove this pointer, using flex_mxml_close_document function
- * @see flex_mxml_close_document
- */
 flex_mxml_dom_t flex_mxml_create_document();
 
 /**
@@ -66,9 +61,15 @@ void flex_mxml_file_save(flex_mxml_dom_t doc,gchar* filepathname);
  */
 void flex_mxml_close_document(flex_mxml_dom_t dom);
 
-xmlNodePtr flex_mxml_shape_add_button(flex_mxml_dom_t dom);
+/**
+ * add button into mxml file
+ */
+xmlNodePtr flex_mxml_shape_add_button(flex_mxml_dom_t dom, int x, int y, gchar* value);
 
-xmlNodePtr flex_mxml_shape_add_line(flex_mxml_dom_t dom);
+/**
+ * add line to mxml
+ */
+xmlNodePtr flex_mxml_shape_add_line(flex_mxml_dom_t dom, int x, int y, int width, int height, int r, int g, int b);
 
 /**
  * Compile mxml file to swf file using flex mxmlc compiller
