@@ -33,7 +33,11 @@ flex_mxml_dom_t flex_mxml_create_document() {
     dom.root = xmlNewNode(NULL, BAD_CAST "mx:Application");
 	xmlNewProp(dom.root, BAD_CAST "xmlns:mx", BAD_CAST "http://www.adobe.com/2006/mxml");
 
-	dom.style = xmlNewNode(NULL, BAD_CAST "mx:Style");
+	dom.style = xmlNewChild(dom.root, NULL, BAD_CAST "mx:Style", NULL);
+	//xmlNodeSetContent(dom.style, BAD_CAST "Application { background-color: #FFFAA0; }");
+    xmlNodePtr node1 = xmlNewText(BAD_CAST "Application { background-color: #000AA0; }");
+    xmlAddChild(dom.style, node1);
+
 
 	xmlDocSetRootElement(dom.doc, dom.root);
 
@@ -77,6 +81,9 @@ xmlNodePtr flex_mxml_shape_add_button(flex_mxml_dom_t dom, int x, int y, gchar* 
 	xmlNewProp(node, BAD_CAST "label", BAD_CAST name);
 	xmlNewProp(node, BAD_CAST "x", BAD_CAST x_str->str);
 	xmlNewProp(node, BAD_CAST "y", BAD_CAST y_str->str);
+	xmlNewProp(node, BAD_CAST "width", BAD_CAST "100");
+	xmlNewProp(node, BAD_CAST "height", BAD_CAST "20");
+
 
 	g_string_free(x_str,1);
 	g_string_free(y_str,1);
@@ -130,8 +137,9 @@ gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_sw
 		g_string_append(flex_path, "/../../flex/sdk/bin/");
 		g_string_append(flex_path, mxml_compiller_parameters->str);
 
-		if (!g_spawn_command_line_sync(mxml_compiller_parameters->str, &stdout, &stderr,&exit_status,&error)) {
-			g_critical("%s",error->message);
+		if (!g_spawn_command_line_sync(flex_path->str, &stdout, &stderr,&exit_status,&error)) {
+			g_debug("%s",error->message);
+
 			g_string_free(mxml_compiller_parameters,1);
 			g_string_free(flex_path, 1);
 
@@ -154,7 +162,6 @@ gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_sw
 	g_free(stderr);
 
 	g_string_free(mxml_compiller_parameters,1);
-
 
 	GString* command = g_string_sized_new(50);
 	g_string_append_printf(command, "firefox file://%s", destination_swf_filename);

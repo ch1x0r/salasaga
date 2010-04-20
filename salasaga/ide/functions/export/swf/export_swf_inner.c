@@ -79,6 +79,7 @@ gint export_swf_inner(gchar *output_filename) {
 	flex_mxml_dom_t dom = flex_mxml_create_document();
 
 	flex_mxml_shape_add_button(dom, 0,0, "test_button");
+	flex_mxml_shape_add_button(dom,20,20, "dd");
 
 	// get temporary filename for output mxml file
 	gchar mxml_file_name[L_tmpnam + sizeof(".mxml") + 1];		// where to put temporary mxml file
@@ -98,6 +99,7 @@ gint export_swf_inner(gchar *output_filename) {
 		return 0;
 	}
 	// remove temp
+	display_warning(mxml_file_name);
 
 	return 1;
 }
