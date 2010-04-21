@@ -34,10 +34,8 @@ flex_mxml_dom_t flex_mxml_create_document() {
 	xmlNewProp(dom.root, BAD_CAST "xmlns:mx", BAD_CAST "http://www.adobe.com/2006/mxml");
 
 	dom.style = xmlNewChild(dom.root, NULL, BAD_CAST "mx:Style", NULL);
-	//xmlNodeSetContent(dom.style, BAD_CAST "Application { background-color: #FFFAA0; }");
-    xmlNodePtr node1 = xmlNewText(BAD_CAST "Application { background-color: #000AA0; }");
+	xmlNodePtr node1 = xmlNewText(BAD_CAST "@namespace mx \"http://www.adobe.com/2006/mxml\"; mx|Button { font-size: 15; color: #000000; }");
     xmlAddChild(dom.style, node1);
-
 
 	xmlDocSetRootElement(dom.doc, dom.root);
 
@@ -84,7 +82,6 @@ xmlNodePtr flex_mxml_shape_add_button(flex_mxml_dom_t dom, int x, int y, gchar* 
 	xmlNewProp(node, BAD_CAST "width", BAD_CAST "100");
 	xmlNewProp(node, BAD_CAST "height", BAD_CAST "20");
 
-
 	g_string_free(x_str,1);
 	g_string_free(y_str,1);
 
@@ -121,7 +118,10 @@ gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_sw
 			g_string_append_printf(mxml_compiller_parameters, "-language+=%s ", swf_options->language->str);
 		}
 	}
-	g_debug("run mxmlc : %s\n", mxml_compiller_parameters->str);
+
+	if (get_debug_level()) {
+		g_printf("run mxmlc : %s\n", mxml_compiller_parameters->str);
+	}
 
 	GError* error = NULL;
 	gchar* stdout;
@@ -138,7 +138,10 @@ gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_sw
 		g_string_append(flex_path, mxml_compiller_parameters->str);
 
 		if (!g_spawn_command_line_sync(flex_path->str, &stdout, &stderr,&exit_status,&error)) {
-			g_debug("%s",error->message);
+			if (get_debug_level() && error) {
+				g_printf("%s",error->message);
+				g_printf("mxmlc compiller output: %s\n%s\n", stdout,stderr);
+			}
 
 			g_string_free(mxml_compiller_parameters,1);
 			g_string_free(flex_path, 1);
@@ -148,11 +151,9 @@ gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_sw
 		g_string_free(flex_path, 1);
 	}
 
-	#ifdef FLEX_DIR
+	if (get_debug_level()) {
+		g_printf("mxmlc compiller output: %s\n%s\n", stdout,stderr);
 	}
-	#endif
-
-	g_printf("%s\n%s\n", stdout,stderr);
 
 	if (exit_status != 0) {
 		return return_value = -1;
@@ -165,6 +166,10 @@ gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_sw
 
 	GString* command = g_string_sized_new(50);
 	g_string_append_printf(command, "firefox file://%s", destination_swf_filename);
+
+	if (get_debug_level()) {
+		g_printf("run firefox : %s\n", command->str);
+	}
 
 	//TODO: add into salasaga checkbox and path to browser
 	// show in browser generated flash
