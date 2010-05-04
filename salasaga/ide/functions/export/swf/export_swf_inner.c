@@ -62,42 +62,7 @@
  */
 gint export_swf_inner(gchar *output_filename) {
 
-	// Local variables
-	GString				*as_gstring;				// Used for constructing action script statements
-	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
-	guint				display_depth;				// Depth at which to display a layer
-	guint				element_index;				// Points to the start of a layers elements in the swf frame array
-	SWFAction			end_action;					// The actionscript for the end behaviour
-	guint				frame_counter;				// Holds the number of frames
-	guint				frame_number;
-	SWFAction			initial_action;				// Swf action object used to run some action script
-	GString				*initial_action_gstring;	// Swf action script can be constructed with this
-	SWFAction			inc_slide_counter_action;	// Swf action object used to run some action script
-	guint				layer_counter;				// Holds the number of layers
-	gchar				*locale_return;				// Receives a return code from the locale setting function
-	gint				num_bytes_written;			// Receives the number of bytes written to disk for the swf output
-	guint				num_layers = 0;				// The number of layers in the slide
-	guint				num_slides;					// The number of slides in the movie
-	guint				out_res_index;				// Index into the array of output resolution entries
-	gboolean			return_code_bool;			// Receives boolean return codes
-	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to
-	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
-	guint				slide_counter;				// Holds the number of slides
-	guint				slide_depth;				// Used in calculating the depth of layers in a slide
-	guint				slide_duration;				// Holds the total number of frames in this slide
-	GString				*slide_name_tmp;			// Temporary slide names are constructed with this
-	SWFMovie			swf_movie;					// Swf movie object
-	swf_frame_element	*swf_timing_array = NULL;	// Used to coordinate the actions in each frame
-	swf_frame_element 	*this_frame_ptr;			// Points to frame information when looping
-	layer				*this_layer_data;			// Points to the data in the present layer
-	slide				*this_slide_data;			// Points to the data in the present slide
-	GdkRectangle		tmp_rect = {0, 0, get_main_window()->allocation.width, get_main_window()->allocation.height};  // Temporary rectangle covering the area of the whole Salasaga window
-	guint				total_frames;				// The total number of frames in the animation
-	guint				total_num_layers;			// The total number of layers in the animation
-	gfloat				total_seconds;				// The duration of the entire animation in seconds
-
-
-	GString	*message = g_string_new(NULL);		// Used to construct message strings
+		GString	*message = g_string_new(NULL);		// Used to construct message strings
 
 	// first step, get information about output flash parameters, create mxml DOM object
 
