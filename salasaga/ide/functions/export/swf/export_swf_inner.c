@@ -61,7 +61,43 @@
  * @param gchar* name of generated swf file
  */
 gint export_swf_inner(gchar *output_filename) {
-	GString	*message = g_string_new(NULL);		// contains error messages
+
+	// Local variables
+	GString				*as_gstring;				// Used for constructing action script statements
+	gboolean			dictionary_shape_ok;		// Temporary value indicating if a dictionary shape was created ok or not
+	guint				display_depth;				// Depth at which to display a layer
+	guint				element_index;				// Points to the start of a layers elements in the swf frame array
+	SWFAction			end_action;					// The actionscript for the end behaviour
+	guint				frame_counter;				// Holds the number of frames
+	guint				frame_number;
+	SWFAction			initial_action;				// Swf action object used to run some action script
+	GString				*initial_action_gstring;	// Swf action script can be constructed with this
+	SWFAction			inc_slide_counter_action;	// Swf action object used to run some action script
+	guint				layer_counter;				// Holds the number of layers
+	gchar				*locale_return;				// Receives a return code from the locale setting function
+	gint				num_bytes_written;			// Receives the number of bytes written to disk for the swf output
+	guint				num_layers = 0;				// The number of layers in the slide
+	guint				num_slides;					// The number of slides in the movie
+	guint				out_res_index;				// Index into the array of output resolution entries
+	gboolean			return_code_bool;			// Receives boolean return codes
+	gfloat				scaled_height_ratio;		// Used to calculate the final size an object should be scaled to
+	gfloat				scaled_width_ratio;			// Used to calculate the final size an object should be scaled to
+	guint				slide_counter;				// Holds the number of slides
+	guint				slide_depth;				// Used in calculating the depth of layers in a slide
+	guint				slide_duration;				// Holds the total number of frames in this slide
+	GString				*slide_name_tmp;			// Temporary slide names are constructed with this
+	SWFMovie			swf_movie;					// Swf movie object
+	swf_frame_element	*swf_timing_array = NULL;	// Used to coordinate the actions in each frame
+	swf_frame_element 	*this_frame_ptr;			// Points to frame information when looping
+	layer				*this_layer_data;			// Points to the data in the present layer
+	slide				*this_slide_data;			// Points to the data in the present slide
+	GdkRectangle		tmp_rect = {0, 0, get_main_window()->allocation.width, get_main_window()->allocation.height};  // Temporary rectangle covering the area of the whole Salasaga window
+	guint				total_frames;				// The total number of frames in the animation
+	guint				total_num_layers;			// The total number of layers in the animation
+	gfloat				total_seconds;				// The duration of the entire animation in seconds
+
+
+	GString	*message = g_string_new(NULL);		// Used to construct message strings
 
 	// first step, get information about output flash parameters, create mxml DOM object
 
@@ -75,34 +111,47 @@ gint export_swf_inner(gchar *output_filename) {
 		g_string_free(message, TRUE);
 		return FALSE;
 	}
-	// dom object
+	// create empty DOM object of output mxml file
 	flex_mxml_dom_t dom = flex_mxml_create_document();
 
-	flex_mxml_shape_add_button(dom, 0,0, "test_button");
-	flex_mxml_shape_add_button(dom,20,20, "dd");
+	// just for testing
+	flex_mxml_shape_add_button(dom,0,0,100,20, "test_button");
+	flex_mxml_shape_add_button(dom,20,20,100,40, "dd");
 
+	flex_mxml_rgb_t text_color = { 0xFF, 0xFF, 0xFF };
+	flex_mxml_shape_add_text(&dom, 0,0,"This is some test text", "Times New Roman", 24, text_color);
+
+	flex_mxml_rgb_t layer_background_color = { 0x00, 0x00, 0x00 };
+	flex_mxml_set_application_bgcolor(&dom, &layer_background_color);
+	// tests end
+
+	// create mxml compiller parameters option structure
 	flex_mxml_compilation_flash_options_t* options = flex_mxml_compilation_flash_options_create();
+
+	// set output flash resolution
 	options->width = 1024;
 	options->height = 758;
 
-	// get temporary filename for output mxml file
+	// create variable, that will contain filename of output mxml file
 	gchar mxml_file_name[L_tmpnam + sizeof(".mxml") + 1];		// where to put temporary mxml file
 
+	// actually get name
 	tmpnam(mxml_file_name);
 
+	// add to filename .mxml
 	strncat (mxml_file_name, ".mxml", sizeof(".mxml"));
 
-	// save DOM to temporary file
+	// save DOM to temporary mxml file
 	flex_mxml_file_save(dom, mxml_file_name);
 
 	// compile mxml file into flash
-	if(flex_mxml_compile_to_swf(mxml_file_name, output_filename,0) !=0) {
+	if(flex_mxml_compile_to_swf(mxml_file_name, output_filename,options) !=0) {
 		g_string_printf(message, "Failed to compile swf file from mxml file %s", mxml_file_name);
 		display_warning(message->str);
 		g_string_free(message, TRUE);
 		return 0;
 	}
-	// remove temp
+	// remove temporary source mxml file
 
 	return 1;
 }

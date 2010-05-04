@@ -15,77 +15,37 @@
 
 #define XML_FILE_ENCODING "UTF-8" // use UTF-8 codepage in xml files as default codepage
 
-/**
- * Create mxml DOM in memory, add standard xml header, create root element mx:Application
- * @return xmlDocPtr allocated pointer. If was some error, this value will be 0. You must remove this pointer, using flex_mxml_close_document function
- * @see flex_mxml_close_document
- */
-flex_mxml_dom_t flex_mxml_create_document() {
-    LIBXML_TEST_VERSION;
+//---------------------------------------------------------------------------------------------
+// flash compilation functions
+//---------------------------------------------------------------------------------------------
+flex_mxml_compilation_flash_options_t* flex_mxml_compilation_flash_options_create() {
+	flex_mxml_compilation_flash_options_t* flash_options = g_malloc(sizeof(flex_mxml_compilation_flash_options_t));
 
-    flex_mxml_dom_t dom;
+	memset(flash_options, 0, sizeof(flex_mxml_compilation_flash_options_t));
 
-	//xmlDocPtr doc;	/* document pointers */
-	//xmlNodePtr root_node = NULL, node = NULL, node1 = NULL;/* node pointers */
+	flash_options->creator = g_string_new("Salasaga");
 
-    dom.doc = xmlNewDoc(BAD_CAST "1.0");
-
-    dom.root = xmlNewNode(NULL, BAD_CAST "mx:Application");
-	xmlNewProp(dom.root, BAD_CAST "xmlns:mx", BAD_CAST "http://www.adobe.com/2006/mxml");
-
-	dom.style = xmlNewChild(dom.root, NULL, BAD_CAST "mx:Style", NULL);
-	xmlNodePtr node1 = xmlNewText(BAD_CAST "@namespace mx \"http://www.adobe.com/2006/mxml\"; mx|Button { font-size: 15; color: #000000; }");
-    xmlAddChild(dom.style, node1);
-
-	xmlDocSetRootElement(dom.doc, dom.root);
-
-    return dom;
+	return flash_options;
 }
 
-void flex_mxml_file_save(flex_mxml_dom_t dom,gchar* filepathname) {
-	// save DOM to file
-	xmlSaveFile(filepathname, dom.doc);
-}
+void flex_mxml_compilation_flash_options_delete(flex_mxml_compilation_flash_options_t* flash_options) {
+	if (flash_options->title) {
+		g_string_free(flash_options->title,1);
+	}
+	if (flash_options->description) {
+		g_string_free(flash_options->description,1);
+	}
+	if (flash_options->creator) {
+		g_string_free(flash_options->creator,1);
+	}
+	if (flash_options->publisher) {
+		g_string_free(flash_options->publisher,1);
+	}
+	if (flash_options->language) {
+		g_string_free(flash_options->language,1);
+	}
 
-void flex_mxml_close_document(flex_mxml_dom_t dom) {
-	xmlFreeDoc(dom.doc);
-	xmlCleanupParser();
-}
-
-xmlNodePtr flex_mxml_shape_add_line(flex_mxml_dom_t dom, int x, int y, int width, int height, int r, int g, int b) {
-	/* Create a new XmlWriter for uri, with no compression. */
-	xmlNodePtr node = xmlNewChild(dom.root, NULL, BAD_CAST "mx:Line",NULL);
-	//xmlNewProp(dom.root, BAD_CAST "id", BAD_CAST "button1");
-
-	gchar* lineActionScript = "var lineShape:Shape = new Shape(); \
-							lineShape.graphics.lineStyle(2, 0x990000, .75);\
-							lineShape.graphics.moveTo(0,0); \
-							lineShape.graphics.lineTo(200,200); \
-							this.rawChildren.addChild(lineShape);";
-	//xmlNewProp(node, BAD_CAST "id", BAD_CAST "button1");
-	return node;
-}
-
-xmlNodePtr flex_mxml_shape_add_button(flex_mxml_dom_t dom, int x, int y, gchar* name) {
-	/* Create a new XmlWriter for uri, with no compression. */
-	GString* x_str = g_string_sized_new(50);
-	GString* y_str = g_string_sized_new(50);
-
-	g_string_printf(x_str, "%i",x);
-	g_string_printf(y_str, "%i",y);
-
-	xmlNodePtr node = xmlNewChild(dom.root, NULL, BAD_CAST "mx:Button",NULL);
-	xmlNewProp(node, BAD_CAST "id", BAD_CAST name);
-	xmlNewProp(node, BAD_CAST "label", BAD_CAST name);
-	xmlNewProp(node, BAD_CAST "x", BAD_CAST x_str->str);
-	xmlNewProp(node, BAD_CAST "y", BAD_CAST y_str->str);
-	xmlNewProp(node, BAD_CAST "width", BAD_CAST "100");
-	xmlNewProp(node, BAD_CAST "height", BAD_CAST "20");
-
-	g_string_free(x_str,1);
-	g_string_free(y_str,1);
-
-	return node;
+	g_free(flash_options);
 }
 
 gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_swf_filename,flex_mxml_compilation_flash_options_t* swf_options) {
@@ -116,6 +76,9 @@ gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_sw
 		}
 		if (swf_options->language != NULL) {
 			g_string_append_printf(mxml_compiller_parameters, "-language+=%s ", swf_options->language->str);
+		}
+		if (swf_options->background_color > 0) {
+			g_string_append_printf(mxml_compiller_parameters, "-default-background-color 0x%x ", swf_options->background_color);
 		}
 	}
 
@@ -180,32 +143,125 @@ gint flex_mxml_compile_to_swf(gchar* source_mxml_filename, gchar* destination_sw
 	return return_value;
 }
 
-flex_mxml_compilation_flash_options_t* flex_mxml_compilation_flash_options_create() {
-	flex_mxml_compilation_flash_options_t* flash_options = g_malloc(sizeof(flex_mxml_compilation_flash_options_t));
+//---------------------------------------------------------------------------------------------
+// manipulate with dom
+//---------------------------------------------------------------------------------------------
 
-	memset(flash_options, 0, sizeof(flex_mxml_compilation_flash_options_t));
+flex_mxml_dom_t flex_mxml_create_document() {
+    LIBXML_TEST_VERSION;
 
-	flash_options->creator = g_string_new("Salasaga");
+    flex_mxml_dom_t dom;
 
-	return flash_options;
+    dom.styleText = g_string_new("@namespace mx \"http://www.adobe.com/2006/mxml\";");
+    dom.actionScriptText = g_string_sized_new(250);
+
+    dom.doc = xmlNewDoc(BAD_CAST "1.0");
+
+    dom.root = xmlNewNode(NULL, BAD_CAST "mx:Application");
+	xmlNewProp(dom.root, BAD_CAST "xmlns:mx", BAD_CAST "http://www.adobe.com/2006/mxml");
+	xmlNewProp(dom.root, BAD_CAST "layout", BAD_CAST "absolute");
+
+	dom.style = xmlNewChild(dom.root, NULL, BAD_CAST "mx:Style", NULL);
+
+    return dom;
 }
 
-void flex_mxml_compilation_flash_options_delete(flex_mxml_compilation_flash_options_t* flash_options) {
-	if (flash_options->title) {
-		g_string_free(flash_options->title,1);
-	}
-	if (flash_options->description) {
-		g_string_free(flash_options->description,1);
-	}
-	if (flash_options->creator) {
-		g_string_free(flash_options->creator,1);
-	}
-	if (flash_options->publisher) {
-		g_string_free(flash_options->publisher,1);
-	}
-	if (flash_options->language) {
-		g_string_free(flash_options->language,1);
-	}
+void flex_mxml_close_document(flex_mxml_dom_t dom) {
+	g_string_free(dom.styleText, 1);
+	g_string_free(dom.actionScriptText, 1);
 
-	g_free(flash_options);
+	xmlFreeDoc(dom.doc);
+	xmlCleanupParser();
 }
+
+void flex_mxml_file_save(flex_mxml_dom_t dom,gchar* filepathname) {
+
+	xmlNodePtr styleNodeValue = xmlNewText(BAD_CAST dom.styleText->str);
+	xmlAddChild(dom.style, styleNodeValue);
+
+	xmlDocSetRootElement(dom.doc, dom.root);
+	// save DOM to file
+	xmlSaveFile(filepathname, dom.doc);
+}
+
+//---------------------------------------------------------------------------------------------
+// draw api
+//---------------------------------------------------------------------------------------------
+xmlNodePtr flex_mxml_shape_add_button(flex_mxml_dom_t dom, int x, int y, int width, int height, gchar* name) {
+	/* Create a new XmlWriter for uri, with no compression. */
+	GString* x_str = g_string_sized_new(50);
+	GString* y_str = g_string_sized_new(50);
+	GString* width_str = g_string_sized_new(50);
+	GString* height_str = g_string_sized_new(50);
+
+	g_string_printf(x_str, "%i",x);
+	g_string_printf(y_str, "%i",y);
+	g_string_printf(width_str, "%i",width);
+	g_string_printf(height_str, "%i",height);
+
+	xmlNodePtr node = xmlNewChild(dom.root, NULL, BAD_CAST "mx:Button",NULL);
+	xmlNewProp(node, BAD_CAST "id", BAD_CAST name);
+	xmlNewProp(node, BAD_CAST "label", BAD_CAST name);
+	xmlNewProp(node, BAD_CAST "x", BAD_CAST x_str->str);
+	xmlNewProp(node, BAD_CAST "y", BAD_CAST y_str->str);
+	xmlNewProp(node, BAD_CAST "width", BAD_CAST width_str->str);
+	xmlNewProp(node, BAD_CAST "height", BAD_CAST height_str->str);
+
+	g_string_free(x_str,1);
+	g_string_free(y_str,1);
+
+	return node;
+}
+
+xmlNodePtr flex_mxml_shape_add_text(flex_mxml_dom_t* dom, gint x, gint y, gchar* text, gchar* font_style, gint font_size, flex_mxml_rgb_t font_color) {
+	xmlNodePtr node = xmlNewChild(dom->root, NULL, BAD_CAST "mx:Text", NULL);
+
+	GString* color_value = g_string_sized_new(10);
+	GString* font_size_value = g_string_sized_new(7);
+
+	g_string_printf(color_value, "0x%x%x%x", font_color.red, font_color.green, font_color.blue);
+	g_string_printf(font_size_value, "%i", font_size);
+
+	xmlNewProp(node, BAD_CAST "text", BAD_CAST text);
+	xmlNewProp(node, BAD_CAST "color", BAD_CAST color_value->str);
+	xmlNewProp(node, BAD_CAST "fontFamily", BAD_CAST font_style);
+	xmlNewProp(node, BAD_CAST "fontSize", BAD_CAST font_size_value->str);
+
+	g_string_free(color_value, 1);
+	g_string_free(font_size_value, 1);
+
+	return node;
+}
+
+xmlNodePtr flex_mxml_shape_add_line(flex_mxml_dom_t dom, int x, int y, int width, int height, int r, int g, int b) {
+	/* Create a new XmlWriter for uri, with no compression. */
+	xmlNodePtr node = xmlNewChild(dom.root, NULL, BAD_CAST "mx:Line",NULL);
+	//xmlNewProp(dom.root, BAD_CAST "id", BAD_CAST "button1");
+
+	gchar* lineActionScript = "var lineShape:Shape = new Shape(); \
+							lineShape.graphics.lineStyle(2, 0x990000, .75);\
+							lineShape.graphics.moveTo(0,0); \
+							lineShape.graphics.lineTo(200,200); \
+							this.rawChildren.addChild(lineShape);";
+	//xmlNewProp(node, BAD_CAST "id", BAD_CAST "button1");
+	return node;
+}
+
+//---------------------------------------------------------------------------------------------
+// style api
+//---------------------------------------------------------------------------------------------
+void flex_mxml_set_application_bgcolor(flex_mxml_dom_t* dom, flex_mxml_rgb_t* bg_color) {
+	GString* bg_color_str = g_string_sized_new(7);
+
+	g_string_printf(bg_color_str, "0x%x%x%x", bg_color->red, bg_color->green, bg_color->blue);
+
+	printf ("%s",bg_color_str->str);
+
+	xmlNewProp(dom->root, BAD_CAST "backgroundColor", BAD_CAST bg_color_str->str);
+
+	g_string_free(bg_color_str, 1);
+
+}
+/*void flex_mxml_set_style_application (flex_mxml_dom_t dom, flex_mxml_rgb_t background_color) {
+	g_string_append_printf(dom.styleText, "mx|Application { background-color: #%x%x%x;}", background_color.red, background_color.green, background_color.blue);
+}*/
