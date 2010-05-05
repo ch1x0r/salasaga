@@ -49,7 +49,6 @@
 // fixme
 #define FIX_SWF_TEXT_LAYER_HEIGHT 3	// flash border height fix value. This size is in pixel
 
-
 gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 {
 	// Local variables

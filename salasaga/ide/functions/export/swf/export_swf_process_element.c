@@ -49,12 +49,15 @@ gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this
 	as_gstring = g_string_new(NULL);
 
 	// Is this a frame in which some action needs to take place?
-	if (TRUE == this_element->action_this)
-	{
+	if (TRUE == this_element->action_this) {
+
 		// * There is something to be done in this frame for this layer *
 
 		this_layer_info = this_element->layer_info;
 
+		this_layer_info->dictionary_shape;
+
+		/*
 		// Is this the frame in which the layer is added to the display?
 		if (TRUE == this_element->add)
 		{
@@ -179,7 +182,7 @@ gboolean export_swf_process_element(SWFMovie this_movie, swf_frame_element *this
 					SWFMovie_add(this_movie, (SWFBlock) swf_action);
 					break;
 			}
-		}
+		}*/
 	}
 
 	return TRUE;	
