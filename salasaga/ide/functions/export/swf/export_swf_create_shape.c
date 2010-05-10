@@ -642,7 +642,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 					SWFText_moveTo(text_object, text_pos_x, text_pos_y);
 				} else {
 					// if it is first line, fix position of text in text
-					SWFText_moveTo(text_object, text_pos_x, text_pos_y + FIX_SWF_TEXT_LAYER_HEIGHT);
+					SWFText_moveTo(text_object, text_pos_x, text_pos_y + SWF_TEXT_HEIGHT_CORRECTION);
 				}
 
 				// Ming has a bug that stops us from moving to x position 0, so we have to detect that and work around it
@@ -768,7 +768,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				} else
 				{
 					// text_pos_y already have height, just add board height
-					text_pos_y += (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT) + FIX_SWF_TEXT_LAYER_HEIGHT/* + line_descents[line_counter]*/;
+					text_pos_y += (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT) + SWF_TEXT_HEIGHT_CORRECTION/* + line_descents[line_counter]*/;
 				}
 
 				// Keep the largest line width known
@@ -811,7 +811,7 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 
 				// Calculate the dimensions of the text background box
 
-				text_bg_box_height = text_pos_y + (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT * 2) + FIX_SWF_TEXT_LAYER_HEIGHT;
+				text_bg_box_height = text_pos_y + (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT * 2) + SWF_TEXT_HEIGHT_CORRECTION;
 				text_bg_box_width = max_line_width + (scaled_width_ratio * TEXT_BORDER_PADDING_WIDTH * 2);
 
 				// Draw the background curved rectangle
