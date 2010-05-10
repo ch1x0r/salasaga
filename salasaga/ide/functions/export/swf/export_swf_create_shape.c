@@ -46,8 +46,8 @@
 #include "swf_add_mouse_click.h"
 #include "swf_shape_from_image_file.h"
 
-// fixme
-#define FIX_SWF_TEXT_LAYER_HEIGHT 3	// flash border height fix value. This size is in pixel
+
+#define SWF_TEXT_HEIGHT_CORRECTION 15	// hard coded value, to correct height of text layout border in flash file
 
 gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 {
@@ -810,11 +810,8 @@ gboolean export_swf_create_shape(SWFMovie this_movie, layer *this_layer_data)
 				SWFShape_setLine(text_bg, text_data->bg_border_width/2, red_component, green_component, blue_component, 0xff); // Alpha of 0xff is full opacity
 
 				// Calculate the dimensions of the text background box
-<<<<<<< .mine
-				text_bg_box_height = SWF_TEXT_HEIGHT_CORRECTION + text_pos_y + (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT * 2);
-=======
+
 				text_bg_box_height = text_pos_y + (scaled_height_ratio * TEXT_BORDER_PADDING_HEIGHT * 2) + FIX_SWF_TEXT_LAYER_HEIGHT;
->>>>>>> .r2633
 				text_bg_box_width = max_line_width + (scaled_width_ratio * TEXT_BORDER_PADDING_WIDTH * 2);
 
 				// Draw the background curved rectangle
