@@ -92,7 +92,7 @@ void menu_edit_preferences(void)
 	gfloat				*validated_gfloat;					// Receives known good gfloat values from the validation function
 	guint				*validated_guint;					// Receives known good guint values from the validation function
 	GString				*validated_string;					// Receives known good strings from the validation function
-
+	gchar 				tab_name[50];						// For storing the temperary tab name
 
 	GtkWidget			*label_default_project_folder;		// Default Project Folder
 	GtkWidget			*button_default_project_folder;		//
@@ -149,6 +149,10 @@ void menu_edit_preferences(void)
 
 	GtkWidget			*check_screenshot_key_bind;			// Label widget
 
+	GtkWidget			* notebook;							// Notebook Widget for tabbed window
+
+	GtkWidget			*tab_label;							// Widget For storing the label of tabbed window.
+
 
 	// Initialise various things
 	app_row_counter = 0;
@@ -165,8 +169,15 @@ void menu_edit_preferences(void)
 
 	// Create the main dialog window
 	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Application Preferences"), GTK_WINDOW(get_main_window()), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
-	app_dialog_table = gtk_table_new(10, 3, FALSE);
-	gtk_box_pack_start(GTK_BOX(main_dialog->vbox), GTK_WIDGET(app_dialog_table), FALSE, FALSE, 5);
+	app_dialog_table = gtk_table_new(3, 3, FALSE);
+	// Create Note Book Widget
+	notebook = gtk_notebook_new();
+	// Box pack with the notebook
+	gtk_box_pack_start(GTK_BOX(main_dialog->vbox), GTK_WIDGET(notebook), FALSE, FALSE, 5);
+
+	//Label for first tab
+	sprintf(tab_name,_("General Preferences"));
+	tab_label = gtk_label_new(tab_name);
 
 	// Default Project Folder
 	label_default_project_folder = gtk_label_new(_("Default Project Folder: "));
@@ -270,6 +281,44 @@ void menu_edit_preferences(void)
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(default_font_fg_colour_button), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
+
+	// Default Background Colour
+	temp_bg_colour = get_default_bg_colour();
+	label_default_bg_colour = gtk_label_new(_("Default Background Color: "));
+	gtk_misc_set_alignment(GTK_MISC(label_default_bg_colour), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_bg_colour), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
+	button_default_bg_colour = gtk_color_button_new_with_color(temp_bg_colour);
+	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(button_default_bg_colour), TRUE);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_bg_colour), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
+	app_row_counter = app_row_counter + 1;
+
+
+
+
+	// Whether to display help text or not
+		check_help_text = gtk_check_button_new_with_label(_("Display help text?"));
+		if (FALSE == get_display_help_text())
+		{
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_help_text), FALSE);
+		} else
+		{
+			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_help_text), TRUE);
+		}
+		gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_help_text), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
+		app_row_counter = app_row_counter + 1;
+
+
+	// Append the table widget filled so far to the notebook and create the first page
+	gtk_notebook_prepend_page (GTK_NOTEBOOK (notebook), app_dialog_table, tab_label);
+	// allocate a new table for the second page of the notebook
+	app_dialog_table = gtk_table_new(10, 3, FALSE);
+	// Label creation as Timing and Window Preferences
+	sprintf(tab_name,_("Timing & Window Preferences"));
+	// Label creation with the new name
+	tab_label = gtk_label_new(tab_name);
+	// resetting the row counter
+	app_row_counter = 0;
+
 	// Default Slide Duration
 	g_string_printf(message, "%s:", _("Default Slide Duration"));
 	label_default_slide_duration = gtk_label_new(message->str);
@@ -307,6 +356,19 @@ void menu_edit_preferences(void)
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_fps), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
+
+	// Screenshot delay time
+	label_screenshot_delay = gtk_label_new(_("Number of seconds for screenshot delay: "));
+	gtk_misc_set_alignment(GTK_MISC(label_screenshot_delay), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_delay), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
+	button_screenshot_delay = gtk_spin_button_new_with_range(get_valid_fields_min_value(SCREENSHOT_DELAY), get_valid_fields_max_value(SCREENSHOT_DELAY), 1);
+	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_screenshot_delay), get_screenshot_delay_time());
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_delay), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
+	label_screenshot_delay_seconds = gtk_label_new(_("seconds"));
+	gtk_misc_set_alignment(GTK_MISC(label_screenshot_delay_seconds), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_delay_seconds), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
+	app_row_counter = app_row_counter + 1;
+
 	// Preview width
 	label_preview_width = gtk_label_new(_("Film Strip Width: "));
 	gtk_misc_set_alignment(GTK_MISC(label_preview_width), 0, 0.5);
@@ -339,39 +401,7 @@ void menu_edit_preferences(void)
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(selector_default_zoom_level), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
-	// Default Background Colour
-	temp_bg_colour = get_default_bg_colour();
-	label_default_bg_colour = gtk_label_new(_("Default Background Color: "));
-	gtk_misc_set_alignment(GTK_MISC(label_default_bg_colour), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_bg_colour), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
-	button_default_bg_colour = gtk_color_button_new_with_color(temp_bg_colour);
-	gtk_color_button_set_use_alpha(GTK_COLOR_BUTTON(button_default_bg_colour), TRUE);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_bg_colour), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
-	app_row_counter = app_row_counter + 1;
 
-	// Screenshot delay time
-	label_screenshot_delay = gtk_label_new(_("Number of seconds for screenshot delay: "));
-	gtk_misc_set_alignment(GTK_MISC(label_screenshot_delay), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_delay), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
-	button_screenshot_delay = gtk_spin_button_new_with_range(get_valid_fields_min_value(SCREENSHOT_DELAY), get_valid_fields_max_value(SCREENSHOT_DELAY), 1);
-	gtk_spin_button_set_value(GTK_SPIN_BUTTON(button_screenshot_delay), get_screenshot_delay_time());
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_delay), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
-	label_screenshot_delay_seconds = gtk_label_new(_("seconds"));
-	gtk_misc_set_alignment(GTK_MISC(label_screenshot_delay_seconds), 0, 0.5);
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_screenshot_delay_seconds), 2, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
-	app_row_counter = app_row_counter + 1;
-
-	// Whether to display help text or not
-	check_help_text = gtk_check_button_new_with_label(_("Display help text?"));
-	if (FALSE == get_display_help_text())
-	{
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_help_text), FALSE);
-	} else
-	{
-		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_help_text), TRUE);
-	}
-	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_help_text), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
-	app_row_counter = app_row_counter + 1;
 
 	// Whether to display warning when screenshot key bind fails
 	check_screenshot_key_bind = gtk_check_button_new_with_label(_("Display warning when screenshot key isn't enabled?"));
@@ -384,6 +414,12 @@ void menu_edit_preferences(void)
 	}
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_screenshot_key_bind), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
+
+	// Appending the table to the second page of the note book widget
+	gtk_notebook_append_page (GTK_NOTEBOOK (notebook), app_dialog_table, tab_label);
+
+
+
 
 	// Ensure everything will show
 	gtk_widget_show_all(GTK_WIDGET(main_dialog));

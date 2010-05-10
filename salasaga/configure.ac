@@ -36,6 +36,10 @@ AC_CHECK_LIB(zdll, compress2, ZLIB="-lzdll" missing_zlib=0)
 dnl 2008-07-18 JC Had to comment this out for autoheader to work
 dnl AC_CHECK_LIB(zdll, compress2, AC_DEFINE([HAVE_LIBZ]) missing_zlib=0)
 
+dnl Check if the m lib has some functions we need
+AC_CHECK_LIB(m, rint) 
+AC_CHECK_LIB(m, round) 
+
 dnl Check for the ming library
 missing_ming=1
 AC_CHECK_LIB(ming, Ming_init, MINGLIB="-lming" missing_ming=0)
