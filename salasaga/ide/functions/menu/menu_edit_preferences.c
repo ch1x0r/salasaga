@@ -176,7 +176,7 @@ void menu_edit_preferences(void)
 	gtk_box_pack_start(GTK_BOX(main_dialog->vbox), GTK_WIDGET(notebook), FALSE, FALSE, 5);
 
 	//Label for first tab
-	sprintf(tab_name,"General Preferences");
+	sprintf(tab_name,_("General Preferences"));
 	tab_label = gtk_label_new(tab_name);
 
 	// Default Project Folder
@@ -313,7 +313,7 @@ void menu_edit_preferences(void)
 	// allocate a new table for the second page of the notebook
 	app_dialog_table = gtk_table_new(10, 3, FALSE);
 	// Label creation as Timing and Window Preferences
-	sprintf(tab_name,"Timing & Window Preferences");
+	sprintf(tab_name,_("Timing & Window Preferences"));
 	// Label creation with the new name
 	tab_label = gtk_label_new(tab_name);
 	// resetting the row counter
