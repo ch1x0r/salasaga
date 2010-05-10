@@ -153,7 +153,10 @@ void menu_edit_preferences(void)
 
 	GtkWidget			*tab_label;							// Widget For storing the label of tabbed window.
 
-
+	GtkWidget			*label_default_browser;				// Widget For browser selection label
+	GtkWidget			*button_default_browser;			// Wodget for browser executable selection
+	GError				*default_browser_error;				// default error
+	GString 			*valid_browser_location;			// browser location after validation
 	// Initialise various things
 	app_row_counter = 0;
 	default_gvfs = g_vfs_get_default();
@@ -166,7 +169,7 @@ void menu_edit_preferences(void)
 	valid_output_folder = g_string_new(NULL);
 	valid_output_resolution = g_string_new(NULL);
 	valid_zoom_level = g_string_new(NULL);
-
+	valid_browser_location = g_string_new(NULL);
 	// Create the main dialog window
 	main_dialog = GTK_DIALOG(gtk_dialog_new_with_buttons(_("Application Preferences"), GTK_WINDOW(get_main_window()), GTK_DIALOG_MODAL, GTK_STOCK_CANCEL, GTK_RESPONSE_REJECT, GTK_STOCK_OK, GTK_RESPONSE_ACCEPT, NULL));
 	app_dialog_table = gtk_table_new(3, 3, FALSE);
@@ -176,7 +179,7 @@ void menu_edit_preferences(void)
 	gtk_box_pack_start(GTK_BOX(main_dialog->vbox), GTK_WIDGET(notebook), FALSE, FALSE, 5);
 
 	//Label for first tab
-	sprintf(tab_name,_("General Preferences"));
+	sprintf(tab_name,"General Preferences");
 	tab_label = gtk_label_new(tab_name);
 
 	// Default Project Folder
@@ -197,6 +200,18 @@ void menu_edit_preferences(void)
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_screenshot_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
 
+	// Default Browser Folder
+	label_default_browser = gtk_label_new(_("Default Browser Location: "));
+	gtk_misc_set_alignment(GTK_MISC(label_default_browser), 0, 0.5);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(label_default_browser), 0, 1, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
+	button_default_browser = gtk_file_chooser_button_new(_("Select the Default Browser Location"), GTK_FILE_CHOOSER_ACTION_OPEN);
+	temp_gfile = g_file_new_for_path(get_default_browser_folder());
+	gtk_file_chooser_set_file(GTK_FILE_CHOOSER(button_default_browser),temp_gfile,&default_browser_error);
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_browser), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
+	app_row_counter = app_row_counter + 1;
+
+
+
 	// Default Output Folder
 	label_default_output_folder = gtk_label_new(_("Default Output Folder: "));
 	gtk_misc_set_alignment(GTK_MISC(label_default_output_folder), 0, 0.5);
@@ -205,6 +220,7 @@ void menu_edit_preferences(void)
 	gtk_file_chooser_set_current_folder(GTK_FILE_CHOOSER(button_default_output_folder), get_default_output_folder());
 	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(button_default_output_folder), 1, 2, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
 	app_row_counter = app_row_counter + 1;
+
 
 	// Default Output Resolution
 	label_default_output_res = gtk_label_new(_("Default Output Resolution: "));
@@ -295,25 +311,13 @@ void menu_edit_preferences(void)
 
 
 
-	// Whether to display help text or not
-		check_help_text = gtk_check_button_new_with_label(_("Display help text?"));
-		if (FALSE == get_display_help_text())
-		{
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_help_text), FALSE);
-		} else
-		{
-			gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_help_text), TRUE);
-		}
-		gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_help_text), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
-		app_row_counter = app_row_counter + 1;
-
 
 	// Append the table widget filled so far to the notebook and create the first page
 	gtk_notebook_prepend_page (GTK_NOTEBOOK (notebook), app_dialog_table, tab_label);
 	// allocate a new table for the second page of the notebook
 	app_dialog_table = gtk_table_new(10, 3, FALSE);
 	// Label creation as Timing and Window Preferences
-	sprintf(tab_name,_("Timing & Window Preferences"));
+	sprintf(tab_name,"Timing & Window Preferences");
 	// Label creation with the new name
 	tab_label = gtk_label_new(tab_name);
 	// resetting the row counter
@@ -402,6 +406,18 @@ void menu_edit_preferences(void)
 	app_row_counter = app_row_counter + 1;
 
 
+	// Whether to display help text or not
+	check_help_text = gtk_check_button_new_with_label(_("Display help text?"));
+	if (FALSE == get_display_help_text())
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_help_text), FALSE);
+	} else
+	{
+		gtk_toggle_button_set_active(GTK_TOGGLE_BUTTON(check_help_text), TRUE);
+	}
+	gtk_table_attach(GTK_TABLE(app_dialog_table), GTK_WIDGET(check_help_text), 0, 3, app_row_counter, app_row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_EXPAND | GTK_FILL, table_padding_x, table_padding_y);
+	app_row_counter = app_row_counter + 1;
+
 
 	// Whether to display warning when screenshot key bind fails
 	check_screenshot_key_bind = gtk_check_button_new_with_label(_("Display warning when screenshot key isn't enabled?"));
@@ -438,6 +454,7 @@ void menu_edit_preferences(void)
 			g_string_free(valid_output_folder, TRUE);
 			g_string_free(valid_output_resolution, TRUE);
 			g_string_free(valid_zoom_level, TRUE);
+			g_string_free(valid_browser_location,TRUE);
 			gtk_widget_destroy(GTK_WIDGET(main_dialog));
 			return;
 		}
@@ -483,6 +500,30 @@ void menu_edit_preferences(void)
 		g_object_unref(temp_gfile);
 		g_free(directory);
 
+		// Default Browser Location
+		retrieved_uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_default_browser));
+		if(NULL == retrieved_uri){
+			g_string_printf(message,"%s ED140: %s",_("Error"),_("Please select a valid browser Executable"));
+			display_warning(message->str);
+			usable_input = FALSE;
+		}
+		temp_gfile = g_vfs_get_file_for_uri(default_gvfs,retrieved_uri);
+		directory = g_file_get_path(temp_gfile);
+		validated_string = validate_value(FILE_PATH, V_CHAR, directory);
+		if(NULL == validated_string)
+		{
+			g_string_printf(message,"%s ED140: %s",_("Error"),_("There was some thing wrong in the default browser location"));
+			display_warning(message->str);
+			usable_input = FALSE;
+		}
+		else{
+			valid_browser_location = g_string_assign(valid_browser_location,validated_string->str);
+			g_string_free(validated_string,TRUE);
+			validated_string = NULL;
+
+		}
+		g_object_unref(temp_gfile);
+		g_free(directory);
 		// Retrieve the new default output folder input
 		retrieved_uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_default_output_folder));
 		temp_gfile = g_vfs_get_file_for_uri(default_gvfs, retrieved_uri);
@@ -624,6 +665,10 @@ void menu_edit_preferences(void)
 	// Default Screenshot Folder
 	set_screenshots_folder(valid_screenshot_folder->str);
 	g_string_free(valid_screenshot_folder, TRUE);
+
+	//Default Browser Folder
+	set_default_browser_folder(valid_browser_location->str);
+	g_string_free(valid_browser_location,TRUE);
 
 	// Default Output Folder
 	set_default_output_folder(valid_output_folder->str);

@@ -51,6 +51,7 @@ guint get_icon_height();
 guint get_preview_width();
 gchar *get_screenshots_folder();
 gsize get_screenshots_folder_length();
+gchar *get_default_browser_folder();
 void set_default_bg_colour(GdkColor *new_default_bg_colour);
 void set_default_bg_colour_pixel(guint32 new_pixel);
 void set_default_bg_colour_red(guint16 new_red);
@@ -67,6 +68,7 @@ void set_default_zoom_level(gchar *new_default_zoom_level);
 void set_icon_height(guint new_icon_height);
 void set_preview_width(guint new_preview_width);
 void set_screenshots_folder(gchar *new_screenshots_folder);
+void set_default_browser_folder(gchar* default_browser_path);
 
 
 #ifdef __cplusplus

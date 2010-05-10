@@ -46,7 +46,7 @@ static GString				*default_zoom_level;			// Default zoom level to use
 static guint				icon_height = 30;				// Height in pixels for the toolbar icons (they're scalable SVG's)
 static guint				preview_width;					// Width in pixel for the film strip preview (might turn into a structure later)
 static GString				*screenshots_folder;			// Application default for where to store screenshots
-
+static GString				*default_browser_folder_file;
 
 // Functions to get and set the variables
 GdkColor *get_default_bg_colour()
@@ -267,4 +267,18 @@ void set_screenshots_folder(gchar *new_screenshots_folder)
 	{
 		screenshots_folder = g_string_assign(screenshots_folder, new_screenshots_folder);
 	}
+}
+
+void set_default_browser_folder(gchar* default_browser_path){
+	if(NULL == default_browser_folder_file){
+		default_browser_folder_file = g_string_new(default_browser_path);
+	}
+	else{
+		default_browser_folder_file = g_string_assign(default_browser_folder_file,default_browser_path);
+	}
+}
+
+ gchar *get_default_browser_folder()
+{
+	return default_browser_folder_file->str;
 }

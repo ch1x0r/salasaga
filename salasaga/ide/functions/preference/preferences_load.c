@@ -91,7 +91,7 @@ gboolean preferences_load()
 	guint				*validated_guint;			// Receives known good guint values from the validation function
 	GString				*validated_string;			// Receives known good strings from the validation function
 
-
+	GString 			*validated_default_browser;
 	// Initialise things
 	message = g_string_new(NULL);
 	temp_gstring = g_string_new(NULL);
@@ -99,7 +99,7 @@ gboolean preferences_load()
 	valid_project_folder = g_string_new(NULL);
 	valid_screenshot_folder = g_string_new(NULL);
 	valid_zoom_level = g_string_new(NULL);
-
+	validated_default_browser = g_string_new(NULL);
 	// Check if we have a saved configuration in GConf
 	gconf_engine = gconf_engine_get_default();
 	if (FALSE == gconf_engine_dir_exists(gconf_engine, "/apps/salasaga", &error))
@@ -147,6 +147,28 @@ gboolean preferences_load()
 		g_string_free(validated_string, TRUE);
 		validated_string = NULL;
 	}
+
+
+
+	// Retrieve the default browser
+	tmp_gchar = gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/browser_default", NULL);
+	validated_string = validate_value(FILE_PATH, V_CHAR, tmp_gchar);
+	g_free(tmp_gchar);
+	if (NULL == validated_string)
+	{
+		g_string_printf(message, "%s ED187: %s", _("Error"), _("There was something wrong with the default browser preference"));
+		display_warning(message->str);
+		usable_input = FALSE;
+	} else
+	{
+		validated_default_browser = g_string_assign(validated_default_browser, validated_string->str);
+		g_string_free(validated_string, TRUE);
+		validated_string = NULL;
+	}
+
+
+
+
 
 	// Retrieve the new default output folder input
 	tmp_gchar = gconf_engine_get_string(gconf_engine, "/apps/salasaga/defaults/output_folder", NULL);
@@ -505,6 +527,9 @@ gboolean preferences_load()
 	// Set the screenshots folder preference
 	set_screenshots_folder(valid_screenshot_folder->str);
 	g_string_free(valid_screenshot_folder, TRUE);
+
+	set_default_browser_folder(validated_default_browser->str);
+	g_string_free(validated_default_browser,TRUE);
 
 	// Set the default output folder preference
 	set_default_output_folder(valid_output_folder->str);

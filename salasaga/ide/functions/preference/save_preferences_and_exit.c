@@ -81,6 +81,7 @@ void save_preferences_and_exit(void)
 	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/project_folder", get_default_project_folder(), NULL);
 	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/screenshots_folder", get_screenshots_folder(), NULL);
 	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/output_folder", get_default_output_folder(), NULL);
+	gconf_engine_set_string(gconf_engine, "/apps/salasaga/defaults/browser_default", get_default_browser_folder(), NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/project_width", get_project_width(), NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/project_height", get_project_height(), NULL);
 	gconf_engine_set_int(gconf_engine, "/apps/salasaga/defaults/output_width", get_default_output_width(), NULL);

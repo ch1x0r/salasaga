@@ -280,6 +280,8 @@ gint main(gint argc, gchar *argv[])
 		set_default_project_folder(tmp_gstring->str);
 		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "screenshots");
 		set_screenshots_folder(tmp_gstring->str);
+		g_string_printf(tmp_gstring, "%s%c%s%c%s%c%s","", G_DIR_SEPARATOR, "usr", G_DIR_SEPARATOR, "local",G_DIR_SEPARATOR,"bin");
+		set_default_browser_folder(tmp_gstring->str);
 		g_string_printf(tmp_gstring, "%s%c%s%c%s", g_get_home_dir(), G_DIR_SEPARATOR, "salasaga", G_DIR_SEPARATOR, "output");
 		set_default_output_folder(tmp_gstring->str);
 		set_project_width(gdk_screen_get_width(which_screen));
