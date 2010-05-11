@@ -156,7 +156,7 @@ gboolean preferences_load()
 	g_free(tmp_gchar);
 	if (NULL == validated_string)
 	{
-		g_string_printf(message, "%s ED187: %s", _("Error"), _("There was something wrong with the default browser preference"));
+		g_string_printf(message, "%s ED464: %s", _("Error"), _("There was something wrong with the default browser preference"));
 		display_warning(message->str);
 		usable_input = FALSE;
 	} else

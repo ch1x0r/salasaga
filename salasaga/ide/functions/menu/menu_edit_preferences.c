@@ -503,7 +503,7 @@ void menu_edit_preferences(void)
 		// Default Browser Location
 		retrieved_uri = gtk_file_chooser_get_uri(GTK_FILE_CHOOSER(button_default_browser));
 		if(NULL == retrieved_uri){
-			g_string_printf(message,"%s ED140: %s",_("Error"),_("Please select a valid browser Executable"));
+			g_string_printf(message,"%s ED463: %s",_("Error"),_("Please select a valid browser Executable"));
 			display_warning(message->str);
 			usable_input = FALSE;
 		}
