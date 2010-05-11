@@ -51,8 +51,7 @@
 #include "time_line_internal_initialise_display_buffer.h"
 #include "time_line_internal_invalidate_layer_area.h"
 #include "time_line_internal_redraw_layer_bg.h"
-
-
+#include "draw_timeline.h"
 void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
@@ -98,6 +97,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 			return;
 		if (FALSE == IS_TIME_LINE(tmp_glist->data))
 		{
+
 			g_list_free(tmp_glist);
 			return;
 		}
@@ -351,7 +351,8 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 
 	// Draw the start and end points for the layer
 	draw_layer_start_and_end_points();
-
+	// For Updating the scoll bars, just redraw the same timeline
+	draw_timeline();
 	// Free the memory allocated in this function
 	g_list_free(tmp_glist);
 }
