@@ -341,6 +341,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		undo_item_data->position_new = priv->selected_layer_num;
 		undo_item_data->layer_data_new = layer_duplicate(this_layer_data);
 		undo_history_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
+		draw_timeline();
 	}
 
 	// Free the memory used in this function
@@ -352,7 +353,7 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 	// Draw the start and end points for the layer
 	draw_layer_start_and_end_points();
 	// For Updating the scoll bars, just redraw the same timeline
-	draw_timeline();
+
 	// Free the memory allocated in this function
 	g_list_free(tmp_glist);
 }
