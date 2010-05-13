@@ -406,11 +406,11 @@ gint export_swf_inner(gchar *output_filename) {
 	}*/
 
 	// just for testing
-	flex_mxml_shape_add_button(dom,0,0,100,20, "test_button");
-	flex_mxml_shape_add_button(dom,20,20,100,40, "dd");
+	//flex_mxml_shape_add_button(dom,0,0,100,20, "test_button");
+	//flex_mxml_shape_add_button(dom,20,20,100,40, "dd");
 
-	flex_mxml_rgb_t text_color = { 0xFF, 0xFF, 0xFF };
-	flex_mxml_shape_add_text(&dom, 0,0,"This is some test text", "Times New Roman", 24, text_color);
+	//flex_mxml_rgb_t text_color = { 0xFF, 0xFF, 0xFF };
+	//flex_mxml_shape_add_text(&dom, 0,0,"This is some test text", "Times New Roman", 24, text_color);
 
 	flex_mxml_rgb_t layer_background_color = { 0x00, 0x00, 0x00 };
 	flex_mxml_set_application_bgcolor(&dom, &layer_background_color);

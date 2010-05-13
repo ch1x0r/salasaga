@@ -42,7 +42,7 @@
 gboolean text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_widgets *text_widgets)
 {
 	// Local variables
-	gint				font_face_val;
+	//gint				font_face_val;
 	GtkWidget			*font_face_widget;
 	gint				loop_counter;
 	GtkTextIter			selection_end;
@@ -50,7 +50,7 @@ gboolean text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_w
 	GtkTextBuffer		*text_buffer;
 	gboolean			text_selected;
 	GtkWidget			*text_view;
-
+	GtkTextTag 			*tag;
 
 	// Initialisation
 	font_face_widget = text_widgets->font_face_combo_box;
@@ -66,13 +66,17 @@ gboolean text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_w
 	gtk_text_iter_order(&selection_start, &selection_end);
 
 	// Retrieve the value selected in the font face drop down
-	font_face_val = gtk_combo_box_get_active(GTK_COMBO_BOX(font_face_widget));
+	//font_face_val = gtk_combo_box_get_active(GTK_COMBO_BOX(font_face_widget));
 
+	// Retrieve the value selected in font selection dialog
+	const gchar* font_face_name = gtk_font_button_get_font_name (GTK_FONT_BUTTON(font_face_widget));
+
+	// deprecated
 	// If no specific font is selected, we skip the rest of this function
-	if (-1 == font_face_val)
-	{
-		return FALSE;
-	}
+	//if (-1 == font_face_val)
+	//{
+	//	return FALSE;
+	//}
 
 	// Remove any existing font face tags from the selected text
 	for (loop_counter = 0; loop_counter < FONT_COUNT; loop_counter++)
@@ -81,7 +85,13 @@ gboolean text_layer_dialog_font_changed(GtkWidget *calling_widget, text_dialog_w
 	}
 
 	// Apply the requested font face to the selected text
-	gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(text_buffer), get_salasaga_font_name(font_face_val), &selection_start, &selection_end);
+	//gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(text_buffer), get_salasaga_font_name(font_face_val), &selection_start, &selection_end);
+	//gtk_text_buffer_apply_tag_by_name(GTK_TEXT_BUFFER(text_buffer), font_face_name, &selection_start, &selection_end);
+
+	tag = gtk_text_buffer_create_tag(GTK_TEXT_BUFFER(text_buffer), NULL, "font",font_face_name);
+	gtk_text_buffer_apply_tag (GTK_TEXT_BUFFER(text_buffer), tag, &selection_start, &selection_end);
+
+	printf("user selected font %s\n", font_face_name);
 
 	// Validate the correct # of tags are in place for all characters in the buffer
 	text_layer_dialog_validate_buffer_tag_quantity(GTK_TEXT_BUFFER(text_buffer));

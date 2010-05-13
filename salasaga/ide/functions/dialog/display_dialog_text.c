@@ -254,7 +254,7 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(font_face_label), 0, 1, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 
 	// Create the drop down list of font faces
-	selector_font_face = gtk_combo_box_new_text();
+	/*selector_font_face = gtk_combo_box_new_text();
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Bold"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Sans Bold Oblique"));
@@ -276,7 +276,10 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Condensed Bold Italic"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Condensed Italic"));
 	gtk_combo_box_append_text(GTK_COMBO_BOX(selector_font_face), _("DejaVu Serif Italic"));
-	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_font_face), get_selection_font_face(GTK_TEXT_BUFFER(text_buffer)));
+	gtk_combo_box_set_active(GTK_COMBO_BOX(selector_font_face), get_selection_font_face(GTK_TEXT_BUFFER(text_buffer)));*/
+
+	selector_font_face = gtk_font_button_new();
+
 	gtk_table_attach(GTK_TABLE(appearance_table), GTK_WIDGET(selector_font_face), 1, 2, row_counter, row_counter + 1, GTK_EXPAND | GTK_FILL, GTK_FILL, table_padding_x, table_padding_y);
 	row_counter = row_counter + 1;
 
@@ -358,7 +361,8 @@ gboolean display_dialog_text(layer *tmp_layer, gchar *dialog_title)
 
 	// Attach signal handlers to the font list, size, and colour widgets, to be called when the user changes any of them
 	font_bg_callback = g_signal_connect(G_OBJECT(fill_colour_button), "color-set", G_CALLBACK(text_layer_dialog_bg_colour_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
-	font_face_callback = g_signal_connect(G_OBJECT(selector_font_face), "changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	//font_face_callback = g_signal_connect(G_OBJECT(selector_font_face), "changed", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
+	font_face_callback = g_signal_connect(G_OBJECT(selector_font_face), "font-set", G_CALLBACK(text_layer_dialog_font_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
 	font_fg_callback = g_signal_connect(G_OBJECT(fg_colour_button), "color-set", G_CALLBACK(text_layer_dialog_fg_colour_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
 	font_size_callback = g_signal_connect(G_OBJECT(font_size_scale), "value-changed", G_CALLBACK(text_layer_dialog_size_changed), (gpointer) text_widgets);  // Pass the text widgets for use in the signal handler
 
