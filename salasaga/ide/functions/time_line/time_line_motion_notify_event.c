@@ -38,7 +38,7 @@
 #include "../global_functions.h"
 #include "time_line.h"
 #include "time_line_get_type.h"
-
+#include "time_line_internal_widget_motion_notify_handler.h"
 
 void time_line_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
@@ -80,4 +80,6 @@ void time_line_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 	// Update the mouse position
 	priv->mouse_x = event->x;
 	priv->mouse_y = event->y;
+	time_line_internal_widget_motion_notify_handler(this_time_line);
+
 }

@@ -44,7 +44,7 @@
 #include "time_line_internal_initialise_bg_image.h"
 #include "time_line_internal_initialise_display_buffer.h"
 #include "time_line_internal_widget_motion_notify_handler.h"
-
+#include "../working_area/draw_workspace.h"
 
 void time_line_init(TimeLine *time_line)
 {
@@ -90,7 +90,7 @@ void time_line_init(TimeLine *time_line)
 	// Set a periodic time out, so we rate limit the calls to the motion notify (mouse drag) handler
 	priv->mouse_x = -1;
 	priv->mouse_y = -1;
-	priv->timeout_id = g_timeout_add(25,  // Timeout interval (1/1000ths of a second)
-							(GSourceFunc) time_line_internal_widget_motion_notify_handler,  // Function to call
-							time_line);  // Pass the time line widget to the function
+	priv->timeout_id = g_timeout_add(330,  // Timeout interval (1/1000ths of a second)
+							(GSourceFunc) draw_workspace,  // Function to call
+							 NULL); //time_line);  // Pass the time line widget to the function
 }

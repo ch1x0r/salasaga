@@ -80,6 +80,9 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 	slide				*this_slide_data;			// Data for the presently selected slide
 	gfloat				time_moved;					// Number of seconds the row is being adjusted by
 
+	gint 				check_left;
+	gint				check_right;
+	gint				temp_int;
 
 	// Safety check
 	if (FALSE == IS_TIME_LINE(this_time_line))
@@ -127,66 +130,35 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 	{
 		// Yes, this is definitely an in-progress cursor drag
 
-		// Check if the drag is moving to the right
-		if (priv->stored_x < priv->mouse_x)
-		{
-			// Calculate the time and distance traveled
-			priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
-			distance_moved = priv->mouse_x - priv->stored_x;
-			time_moved = ((gfloat) distance_moved) / pps;
+		priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
+		distance_moved = priv->stored_x - priv->mouse_x;
+		time_moved = ((gfloat) distance_moved) / pps;
 
-			// Invalidate the widget area where the cursor is presently
-			area.x = left_border + (time_line_get_cursor_position(GTK_WIDGET(this_time_line)) * pps) - (CURSOR_HEAD_WIDTH / 2);
-			area.y = 0;
-			area.height = GTK_WIDGET(this_time_line)->allocation.height;
-			area.width = CURSOR_HEAD_WIDTH + 1;
-			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+		area.x = left_border + (time_line_get_cursor_position(GTK_WIDGET(this_time_line)) * pps) - (CURSOR_HEAD_WIDTH / 2);
+		area.y = 0;
+		area.height = GTK_WIDGET(this_time_line)->allocation.height;
+		area.width = CURSOR_HEAD_WIDTH + 1;
+		gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 
-			// Update the cursor position
-			time_line_set_cursor_position(GTK_WIDGET(this_time_line), time_line_get_cursor_position(GTK_WIDGET(this_time_line)) + time_moved);
-			priv->stored_x = priv->mouse_x;
+		// Update the cursor position
+		time_line_set_cursor_position(GTK_WIDGET(this_time_line), time_line_get_cursor_position(GTK_WIDGET(this_time_line)) - time_moved);
+		priv->stored_x = priv->mouse_x;
 
-			// Invalidate the widget area where the cursor has moved to
-			area.x = left_border + (time_line_get_cursor_position(GTK_WIDGET(this_time_line)) * pps) - (CURSOR_HEAD_WIDTH / 2);
-			area.y = 0;
-			area.height = GTK_WIDGET(this_time_line)->allocation.height;
-			area.width = CURSOR_HEAD_WIDTH + 1;
-			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
-		}
+		 //Invalidate the widget area where the cursor has moved to
+//		area.x = left_border + (time_line_get_cursor_position(GTK_WIDGET(this_time_line)) * pps) - (CURSOR_HEAD_WIDTH / 2);
+//		area.y = 0;
+//		area.height = GTK_WIDGET(this_time_line)->allocation.height;
+//		area.width = CURSOR_HEAD_WIDTH + 1;
+		gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 
-		// Check if the drag is moving to the left
-		if (priv->stored_x > priv->mouse_x)
-		{
-			// Calculate the time and distance traveled
-			priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
-			distance_moved = priv->stored_x - priv->mouse_x;
-			time_moved = ((gfloat) distance_moved) / pps;
 
-			// Invalidate the widget area where the cursor is presently
-			area.x = left_border + (time_line_get_cursor_position(GTK_WIDGET(this_time_line)) * pps) - (CURSOR_HEAD_WIDTH / 2);
-			area.y = 0;
-			area.height = GTK_WIDGET(this_time_line)->allocation.height;
-			area.width = CURSOR_HEAD_WIDTH + 1;
-			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
-
-			// Update the cursor position
-			time_line_set_cursor_position(GTK_WIDGET(this_time_line), time_line_get_cursor_position(GTK_WIDGET(this_time_line)) - time_moved);
-			priv->stored_x = priv->mouse_x;
-
-			// Invalidate the widget area where the cursor has moved to
-			area.x = left_border + (time_line_get_cursor_position(GTK_WIDGET(this_time_line)) * pps) - (CURSOR_HEAD_WIDTH / 2);
-			area.y = 0;
-			area.height = GTK_WIDGET(this_time_line)->allocation.height;
-			area.width = CURSOR_HEAD_WIDTH + 1;
-			gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
-		}
 
 		// Safety check
 		if (0 > time_line_get_cursor_position(GTK_WIDGET(this_time_line)))
 			time_line_set_cursor_position(GTK_WIDGET(this_time_line), 0);
 
 		// Update the workspace area
-		draw_workspace();
+		//draw_workspace();
 
 		// Mark this function as complete, and return
 		priv->mouse_x = -1;
@@ -220,6 +192,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			priv->mouse_y = -1;
 			return TRUE;
 		}
+
 
 		// Check if the user clicked on the start of the layer (i.e. wants to adjust the start time)
 		check_pixel = left_border + (this_layer_data->start_time * pps);
@@ -291,269 +264,43 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 	// Check if we're already resizing
 	if (RESIZE_NONE != priv->resize_type)
 	{
-		// Check if the resize is moving to the right
-		if (priv->stored_x < priv->mouse_x)
+		switch (priv->resize_type)
 		{
-			// Calculate the time and distance travelled
-			priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
-			distance_moved = priv->mouse_x - priv->stored_x;
-			time_moved = ((gfloat) distance_moved) / pps;
+			case RESIZE_TRANS_IN_START:
+				priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
+				time_moved = (gfloat)((priv->mouse_x - (left_border + (this_layer_data->start_time * pps))) / pps);
+				if(time_moved < this_layer_data->transition_in_duration && time_moved >= (-1*this_layer_data->start_time) && (get_valid_fields_max_value(TRANSITION_DURATION) > (this_layer_data->transition_in_duration - time_moved)) ){
+					this_layer_data->start_time += time_moved;
+					this_layer_data->transition_in_duration -= time_moved;
+				}
+				break;
 
-			// Make the needed adjustments
-			switch (priv->resize_type)
-			{
-				case RESIZE_TRANS_IN_START:
+			case RESIZE_LAYER_START:
 
-					// We're adjusting the transition in start
-					if (this_layer_data->transition_in_duration < time_moved)
-					{
-						// We've shortened the transition in to 0 duration
-						this_layer_data->start_time += time_moved;
-						this_layer_data->transition_in_duration = 0;
-						if (this_layer_data->duration < time_moved)
-						{
-							this_layer_data->duration = 0;
-							if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
-							{
-								if (this_layer_data->transition_out_duration < time_moved)
-								{
-									this_layer_data->transition_out_duration = 0;
-								} else
-								{
-									this_layer_data->transition_out_duration -= time_moved;
-								}
-							}
-						} else
-						{
-							this_layer_data->duration -= time_moved;
-						}
-					} else
-					{
-						// Adjust the layer timing
-						this_layer_data->transition_in_duration -= time_moved;
-						this_layer_data->start_time += time_moved;
-					}
-					break;
+				priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
+				time_moved = (gfloat)((priv->mouse_x - (left_border + ((this_layer_data->start_time + this_layer_data->transition_in_duration) * pps))) / pps);
+				if(time_moved < this_layer_data->duration && time_moved >= (-1 * this_layer_data->start_time)){
+					this_layer_data->start_time += time_moved;
+					this_layer_data->duration   -= time_moved;
 
-				case RESIZE_LAYER_START:
-
-					// If the adjustment would make the transition in duration longer than the maximum allowed, we limit it to the maximum allowed
-					if ((this_layer_data->transition_in_duration + time_moved) > get_valid_fields_max_value(TRANSITION_DURATION))
-					{
-						time_moved = get_valid_fields_max_value(TRANSITION_DURATION) - this_layer_data->transition_in_duration;
-						max_duration_reached = TRUE;
-					}
-
-					// We're adjusting the main layer start
-					if (this_layer_data->duration < time_moved)
-					{
-						// We've shortened the layer to 0 duration
-						this_layer_data->duration = 0;
-						if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-						{
-							this_layer_data->transition_in_duration += time_moved;
-						} else
-						{
-							this_layer_data->start_time += time_moved;
-						}
-						if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
-						{
-							if (this_layer_data->transition_out_duration < time_moved)
-							{
-								// We've shortened the transition out duration to 0 as well
-								this_layer_data->transition_out_duration = 0;
-							} else
-							{
-								this_layer_data->transition_out_duration -= time_moved;
-							}
-						}
-					} else
-					{
-						// Adjust the layer timing
-						if (FALSE == max_duration_reached)
-						{
-							this_layer_data->duration -= time_moved;  // Only do this if we haven't dragged to the right past the maximum transition duration
-							if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-							{
-								this_layer_data->transition_in_duration += time_moved;
-							} else
-							{
-								this_layer_data->start_time += time_moved;
-							}
-						}
-					}
-					break;
-
-				case RESIZE_LAYER_DURATION:
-
-					// We're adjusting the main layer duration
-					if (this_layer_data->transition_out_duration < time_moved)
-					{
-						// We've shortened the transition out duration to 0
-						this_layer_data->duration += time_moved;
-						this_layer_data->transition_out_duration = 0;
-					} else
-					{
-						// Adjust the layer timing
-						this_layer_data->duration += time_moved;
-						this_layer_data->transition_out_duration -= time_moved;
-					}
-					break;
-
-				case RESIZE_TRANS_OUT_DURATION:
-
-					// We're adjusting the transition out duration
+				}
+				break;
+			case RESIZE_LAYER_DURATION:
+				priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
+				time_moved = (gfloat)((priv->mouse_x - (left_border + ((this_layer_data->start_time + this_layer_data->transition_in_duration + this_layer_data->duration) * pps))) / pps);
+				if(time_moved > (-1 * this_layer_data->duration))
+					this_layer_data->duration += time_moved;
+				break;
+			case RESIZE_TRANS_OUT_DURATION:
+				priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
+				time_moved = (gfloat)((priv->mouse_x - (left_border + ((this_layer_data->start_time + this_layer_data->transition_in_duration + this_layer_data->duration + this_layer_data->transition_out_duration) * pps))) / pps);
+				if(time_moved >= (-1 * this_layer_data->transition_out_duration) && (get_valid_fields_max_value(TRANSITION_DURATION) > (this_layer_data->transition_out_duration+time_moved)))
 					this_layer_data->transition_out_duration += time_moved;
-					end_time += time_moved;
-
-					// If the adjustment makes the duration longer than the maximum, limit it to the maximum
-					if (this_layer_data->transition_out_duration > get_valid_fields_max_value(TRANSITION_DURATION))
-					{
-						this_layer_data->transition_out_duration = get_valid_fields_max_value(TRANSITION_DURATION);
-					}
-
-					break;
-
-				default:
-					message = g_string_new(NULL);
-					g_string_printf(message, "%s ED367: %s", _("Error"), _("Unknown layer resize type."));
-					display_warning(message->str);
-					g_string_free(message, TRUE);
-			}
+				break;
 		}
 
-		// Check if the resize is moving to the left
-		if (priv->stored_x > priv->mouse_x)
-		{
-			// Calculate the time and distance travelled
-			priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
-			distance_moved = priv->stored_x - priv->mouse_x;
-			time_moved = ((gfloat) distance_moved) / pps;
 
-			// Make the needed adjustments
-			switch (priv->resize_type)
-			{
-				case RESIZE_TRANS_IN_START:
 
-					// We're adjusting the transition in start time
-
-					// If the adjustment makes the duration longer than the maximum, limit it to the maximum
-					if ((this_layer_data->transition_in_duration + time_moved) > get_valid_fields_max_value(TRANSITION_DURATION))
-					{
-						max_moved = get_valid_fields_max_value(TRANSITION_DURATION) - this_layer_data->transition_in_duration;
-						this_layer_data->start_time -= max_moved;
-						this_layer_data->transition_in_duration += max_moved;
-					} else
-					{
-						// Make the adjustment
-						this_layer_data->start_time -= time_moved;
-						this_layer_data->transition_in_duration += time_moved;
-					}
-
-					break;
-
-				case RESIZE_LAYER_START:
-
-					// We're adjusting the main layer start
-					if (this_layer_data->transition_in_duration < time_moved)
-					{
-						// We've shortened the duration to 0
-						this_layer_data->start_time -= time_moved;
-						this_layer_data->transition_in_duration = 0;
-						this_layer_data->duration += time_moved;
-					} else
-					{
-						// Adjust the layer timing
-						if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-						{
-							this_layer_data->transition_in_duration -= time_moved;
-						} else
-						{
-							this_layer_data->start_time -= time_moved;
-						}
-						this_layer_data->duration += time_moved;
-					}
-					break;
-
-				case RESIZE_LAYER_DURATION:
-
-					// If the adjustment would make the transition out duration longer than the maximum allowed, we limit it to the maximum allowed
-					if ((this_layer_data->transition_out_duration + time_moved) > get_valid_fields_max_value(TRANSITION_DURATION))
-					{
-						time_moved = get_valid_fields_max_value(TRANSITION_DURATION) - this_layer_data->transition_out_duration;
-						max_duration_reached = TRUE;
-					}
-
-					// We're adjusting the main layer duration
-					if (this_layer_data->duration < time_moved)
-					{
-						// We've shortened the main layer duration to 0
-						this_layer_data->duration = 0;
-						this_layer_data->transition_out_duration += time_moved;
-
-						if (this_layer_data->transition_in_duration < time_moved)
-						{
-							// We've shortened the transition in duration to 0 as well
-							this_layer_data->transition_in_duration = 0;
-							this_layer_data->start_time -= time_moved;
-						} else
-						{
-							this_layer_data->transition_in_duration -= time_moved;
-						}
-					} else
-					{
-						// Adjust the layer timing
-						if (FALSE == max_duration_reached)
-						{
-							this_layer_data->duration -= time_moved;  // Only do this if we haven't dragged to the left past the maximum transition duration
-							this_layer_data->transition_out_duration += time_moved;
-						}
-					}
-					if (TRANS_LAYER_NONE == this_layer_data->transition_out_type)
-						end_time -= time_moved;
-					break;
-
-				case RESIZE_TRANS_OUT_DURATION:
-
-					// We're adjusting the transition out duration
-					if (this_layer_data->transition_out_duration < time_moved)
-					{
-						this_layer_data->transition_out_duration = 0;
-						if (this_layer_data->duration < time_moved)
-						{
-							this_layer_data->duration = 0;
-							if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
-							{
-								if (this_layer_data->transition_in_duration < time_moved)
-								{
-									this_layer_data->transition_in_duration = 0;
-									this_layer_data->start_time -= time_moved;
-								} else
-								{
-									this_layer_data->transition_in_duration -= time_moved;
-								}
-							} else
-							{
-								this_layer_data->start_time -= time_moved;
-							}
-						} else
-						{
-							this_layer_data->duration -= time_moved;
-						}
-					} else
-					{
-						this_layer_data->transition_out_duration -= time_moved;
-					}
-					end_time -= time_moved;
-					break;
-
-				default:
-					message = g_string_new(NULL);
-					g_string_printf(message, "%s ED420: %s", _("Error"), _("Unknown layer resize type."));
-					display_warning(message->str);
-					g_string_free(message, TRUE);
-			}
-		}
 
 		// Ensure the background layer end is kept correct
 		background_layer_data = g_list_nth_data(layer_pointer, end_row);
@@ -598,8 +345,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			this_layer_data->start_time = 0;
 		}
 
-		// Update the stored position of the mouse in the widget
-		priv->stored_x = priv->mouse_x;
+
 
 		// Refresh the time line display of the row
 		time_line_internal_redraw_layer_bg(priv, current_row);
@@ -624,6 +370,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		{
 			case RESIZE_TRANS_IN_START:
 				// No guide line needed
+
 				break;
 
 			case RESIZE_LAYER_START:
@@ -659,11 +406,19 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				display_warning(message->str);
 				g_string_free(message, TRUE);
 		}
+		priv->stored_x = priv->mouse_x;
+
 	}
 
 	// If we're not already dragging, nor in a resize, assume we should be dragging
-	if (RESIZE_NONE == priv->resize_type)
+	else if (RESIZE_NONE == priv->resize_type)
 	{
+
+		check_left = left_border + (this_layer_data->start_time * pps);
+		if(TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+			check_left += (this_layer_data->transition_in_duration * pps) + 5;
+		check_right = check_left + (this_layer_data->duration * pps) -10;
+
 		if (FALSE == priv->drag_active)
 		{
 			// If the user is trying to drag outside the valid layers, ignore this event
@@ -676,16 +431,20 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			}
 
 			// We're commencing a drag, so note this
-			priv->drag_active = TRUE;
-
-			// Store the mouse coordinates so we know where to drag from
-			if (priv->mouse_x < left_border)
-			{
-				priv->stored_x = left_border;
-			} else
+			// Starting point of the drag
+			if((priv->mouse_x > check_left ) && (priv->mouse_x < check_right))
 			{
 				priv->stored_x = priv->mouse_x;
 			}
+			else
+			{
+				priv->mouse_x = -1;
+				priv->mouse_y = -1;
+				return TRUE;
+			}
+
+			priv->drag_active = TRUE;
+
 			priv->stored_y = priv->mouse_y;
 		} else
 		{
@@ -761,39 +520,16 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			}
 
 			// * Check if the row should be moved horizontally *
-			if ((priv->stored_x != priv->mouse_x) && (priv->mouse_x > left_border))
+
+			if ((priv->stored_x != priv->mouse_x) && (priv->mouse_x > check_left) && (priv->mouse_x < check_right) )
 			{
-				// Check if the layer is being moved to the left
-				if (priv->stored_x > priv->mouse_x)
+
+				temp_int = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
+				distance_moved = priv->stored_x - temp_int;
+				time_moved = ((gfloat) distance_moved) / pps;
+				if((this_layer_data->start_time - time_moved) >= 0)
 				{
-					// Calculate the time and distance travelled
-					priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
-					distance_moved = priv->stored_x - priv->mouse_x;
-					time_moved = ((gfloat) distance_moved) / pps;
-
-					// Update the layer data with the new timing
-					if (0 > (this_layer_data->start_time - time_moved))
-					{
-						end_time = end_time - this_layer_data->start_time;
-						this_layer_data->start_time = 0;
-					} else
-					{
-						this_layer_data->start_time -= time_moved;
-						end_time -= time_moved;
-					}
-				}
-
-				// Check if the layer is being moved to the right
-				if (priv->stored_x < priv->mouse_x)
-				{
-					// Calculate the time and distance travelled
-					priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
-					distance_moved = priv->mouse_x - priv->stored_x;
-					time_moved = ((gfloat) distance_moved) / pps;
-
-					// Update the layer data with the new timing
-					this_layer_data->start_time += time_moved;
-					end_time += time_moved;
+					this_layer_data->start_time -= time_moved;
 				}
 
 				// Update the stored position of the row in the widget
@@ -830,7 +566,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			if (end_time > priv->stored_slide_duration)
 			{
 				// The new end time is longer than the slide duration, so update the slide and background layer to match
-				this_slide_data->duration = end_time;
+				//this_slide_data->duration = end_time;
 				background_layer_data->duration = end_time;
 
 				// Refresh the timeline display of the background layer
@@ -872,7 +608,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 	time_line_internal_draw_guide_line(GTK_WIDGET(this_time_line), priv->guide_line_end);
 
 	// Update the workspace area
-	draw_workspace();
+	//draw_workspace();
 
 	// Mark this function as complete, and return
 	priv->mouse_x = -1;
