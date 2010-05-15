@@ -519,7 +519,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 
 			// * Check if the row should be moved horizontally *
 
-			if ((priv->stored_x != priv->mouse_x) && (priv->mouse_x > left_border) && (priv->mouse_x < GTK_WIDGET(this_time_line)->allocation.width) )
+			if ((priv->stored_x != priv->mouse_x) && (priv->mouse_x > left_border) && (priv->mouse_x < GTK_WIDGET(this_time_line)->allocation.width))
 			{
 
 				temp_int = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
