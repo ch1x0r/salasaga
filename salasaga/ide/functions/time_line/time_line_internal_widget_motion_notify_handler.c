@@ -264,33 +264,58 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			case RESIZE_TRANS_IN_START:
 				priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
 				time_moved = (gfloat)((priv->mouse_x - (left_border + (this_layer_data->start_time * pps))) / pps);
-				if(time_moved < this_layer_data->transition_in_duration && time_moved >= (-1*this_layer_data->start_time) && (get_valid_fields_max_value(TRANSITION_DURATION) > (this_layer_data->transition_in_duration - time_moved)) ){
+				if(time_moved < this_layer_data->transition_in_duration && time_moved >= (-1*this_layer_data->start_time) && (get_valid_fields_max_value(TRANSITION_DURATION) >= (this_layer_data->transition_in_duration - time_moved)) ){
 					this_layer_data->start_time += time_moved;
 					this_layer_data->transition_in_duration -= time_moved;
+				}
+				else if(time_moved > this_layer_data->transition_in_duration)
+				{
+					this_layer_data->start_time = end_time - this_layer_data->duration - this_layer_data->transition_out_duration;
+					this_layer_data->transition_in_duration = 0;
 				}
 				break;
 
 			case RESIZE_LAYER_START:
+				if(priv->mouse_x>=left_border){
+					priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
+					time_moved = (gfloat)((priv->mouse_x - (left_border + ((this_layer_data->start_time + this_layer_data->transition_in_duration) * pps))) / pps);
+					if(time_moved <= this_layer_data->duration && time_moved >= (-1 * this_layer_data->start_time)){
+						this_layer_data->start_time += time_moved;
+						this_layer_data->duration   -= time_moved;
+					}
+					if(time_moved > this_layer_data->duration){
+						this_layer_data->duration  = 0;
+						this_layer_data->start_time = end_time - this_layer_data->transition_in_duration - this_layer_data->transition_out_duration;
 
-				priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
-				time_moved = (gfloat)((priv->mouse_x - (left_border + ((this_layer_data->start_time + this_layer_data->transition_in_duration) * pps))) / pps);
-				if(time_moved < this_layer_data->duration && time_moved >= (-1 * this_layer_data->start_time)){
-					this_layer_data->start_time += time_moved;
-					this_layer_data->duration   -= time_moved;
-
+					}
+				}
+				else{
+					this_layer_data->start_time = 0;
+					this_layer_data->duration = end_time - this_layer_data->transition_in_duration - this_layer_data->transition_out_duration;
 				}
 				break;
 			case RESIZE_LAYER_DURATION:
-				priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
-				time_moved = (gfloat)((priv->mouse_x - (left_border + ((this_layer_data->start_time + this_layer_data->transition_in_duration + this_layer_data->duration) * pps))) / pps);
-				if(time_moved > (-1 * this_layer_data->duration))
-					this_layer_data->duration += time_moved;
+				if(priv->mouse_x>=left_border){
+					priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
+					time_moved = (gfloat)((priv->mouse_x - (left_border + ((this_layer_data->start_time + this_layer_data->transition_in_duration + this_layer_data->duration) * pps))) / pps);
+					if(time_moved >= (-1 * this_layer_data->duration))
+						this_layer_data->duration += time_moved;
+					else if(time_moved < (-1 * this_layer_data->duration))
+						this_layer_data->duration = 0;
+
+				}
+				else
+				{
+					this_layer_data->duration = 0;
+				}
 				break;
 			case RESIZE_TRANS_OUT_DURATION:
 				priv->mouse_x = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
 				time_moved = (gfloat)((priv->mouse_x - (left_border + ((this_layer_data->start_time + this_layer_data->transition_in_duration + this_layer_data->duration + this_layer_data->transition_out_duration) * pps))) / pps);
-				if(time_moved >= (-1 * this_layer_data->transition_out_duration) && (get_valid_fields_max_value(TRANSITION_DURATION) > (this_layer_data->transition_out_duration+time_moved)))
+				if(time_moved >= (-1 * this_layer_data->transition_out_duration) && (get_valid_fields_max_value(TRANSITION_DURATION) >= (this_layer_data->transition_out_duration+time_moved)))
 					this_layer_data->transition_out_duration += time_moved;
+				else if(time_moved < (-1 * this_layer_data->transition_out_duration))
+					this_layer_data->transition_out_duration =0;
 				break;
 		}
 
@@ -521,6 +546,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 
 			if ((priv->stored_x != priv->mouse_x) && (priv->mouse_x >= 0) && (priv->mouse_x < GTK_WIDGET(this_time_line)->allocation.width))
 			{
+				//check whether this is in the main area or not
 				if(priv->mouse_x>=left_border){
 				temp_int = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
 				distance_moved = priv->stored_x - temp_int;
@@ -529,12 +555,14 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				{
 					this_layer_data->start_time -= time_moved;
 				}
+				// Update the stored position of the row in the widget
 				priv->stored_x = priv->mouse_x;
 				}
+				// if it is not start it from zero - clearing the bug
 				else{
 					this_layer_data->start_time = 0;
 				}
-				// Update the stored position of the row in the widget
+
 
 
 				// Refresh the timeline display of the row
