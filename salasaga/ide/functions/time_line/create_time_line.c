@@ -120,7 +120,6 @@ GtkWidget *create_time_line(void)
 		| GDK_BUTTON_PRESS_MASK
 		| GDK_BUTTON_RELEASE_MASK
 		| GDK_BUTTON1_MOTION_MASK
-		| GDK_POINTER_MOTION_HINT_MASK
 		| GDK_KEY_RELEASE_MASK);
 
 	// Create the time line toolbar

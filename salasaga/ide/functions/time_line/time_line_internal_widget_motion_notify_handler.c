@@ -169,7 +169,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 	this_layer_data = g_list_nth_data(layer_pointer, current_row);
 
 	// Calculate the present end time of the layer (in seconds)
-	end_time = this_layer_data->start_time + this_layer_data->duration + 1;
+	end_time = this_layer_data->start_time + this_layer_data->duration;
 	if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
 		end_time += this_layer_data->transition_in_duration;
 	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
@@ -519,9 +519,9 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 
 			// * Check if the row should be moved horizontally *
 
-			if ((priv->stored_x != priv->mouse_x) && (priv->mouse_x > left_border) && (priv->mouse_x < GTK_WIDGET(this_time_line)->allocation.width))
+			if ((priv->stored_x != priv->mouse_x) && (priv->mouse_x >= 0) && (priv->mouse_x < GTK_WIDGET(this_time_line)->allocation.width))
 			{
-
+				if(priv->mouse_x>=left_border){
 				temp_int = CLAMP(priv->mouse_x, left_border, GTK_WIDGET(this_time_line)->allocation.width);
 				distance_moved = priv->stored_x - temp_int;
 				time_moved = ((gfloat) distance_moved) / pps;
@@ -529,9 +529,13 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				{
 					this_layer_data->start_time -= time_moved;
 				}
-
-				// Update the stored position of the row in the widget
 				priv->stored_x = priv->mouse_x;
+				}
+				else{
+					this_layer_data->start_time = 0;
+				}
+				// Update the stored position of the row in the widget
+
 
 				// Refresh the timeline display of the row
 				time_line_internal_redraw_layer_bg(priv, current_row);
@@ -541,6 +545,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				// Tell the window system to update the current row area onscreen
 				time_line_internal_invalidate_layer_area(GTK_WIDGET(this_time_line), current_row);
 			}
+
 
 			// Ensure the background layer end is kept correct
 			background_layer_data = g_list_nth_data(layer_pointer, end_row);
