@@ -134,23 +134,22 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 		distance_moved = priv->stored_x - priv->mouse_x;
 		time_moved = ((gfloat) distance_moved) / pps;
 
-		area.x = left_border + (time_line_get_cursor_position(GTK_WIDGET(this_time_line)) * pps) - (CURSOR_HEAD_WIDTH / 2);
+		area.x = left_border+ (time_line_get_cursor_position(GTK_WIDGET(this_time_line)) * pps) - (CURSOR_HEAD_WIDTH );
 		area.y = 0;
 		area.height = GTK_WIDGET(this_time_line)->allocation.height;
-		area.width = CURSOR_HEAD_WIDTH + 1;
+		area.width = CURSOR_HEAD_WIDTH * 2;
 		gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
 
 		// Update the cursor position
 		time_line_set_cursor_position(GTK_WIDGET(this_time_line), time_line_get_cursor_position(GTK_WIDGET(this_time_line)) - time_moved);
-		priv->stored_x = priv->mouse_x;
-
-		gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
-
-
 
 		// Safety check
 		if (0 > time_line_get_cursor_position(GTK_WIDGET(this_time_line)))
 			time_line_set_cursor_position(GTK_WIDGET(this_time_line), 0);
+
+		area.x = left_border+ (time_line_get_cursor_position(GTK_WIDGET(this_time_line)) * pps) - (CURSOR_HEAD_WIDTH );
+		gdk_window_invalidate_rect(GTK_WIDGET(this_time_line)->window, &area, TRUE);
+		priv->stored_x = priv->mouse_x;
 
 		// Update the workspace area
 		//draw_workspace();
