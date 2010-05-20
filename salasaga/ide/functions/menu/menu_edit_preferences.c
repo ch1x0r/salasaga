@@ -155,7 +155,7 @@ void menu_edit_preferences(void)
 
 	GtkWidget			*label_default_browser;				// Widget For browser selection label
 	GtkWidget			*button_default_browser;			// Wodget for browser executable selection
-	GError				*default_browser_error;				// default error
+	GError				*default_browser_error = NULL;		// default error // Bug Fix = NULL is required
 	GString 			*valid_browser_location;			// browser location after validation
 	// Initialise various things
 	app_row_counter = 0;
