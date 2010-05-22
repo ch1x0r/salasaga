@@ -26,7 +26,7 @@
 
 
 // GTK includes
-#include <gtk/gtk.h>
+#include <gtk-2.0/gtk/gtk.h>
 
 #ifdef _WIN32
 	// Windows only code
@@ -82,13 +82,13 @@ GtkWidget *create_time_line(void)
 
 	// Create the scrolled window that the time line widgets are swapped into and out of
 	time_line_scrolled_window = GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL));
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(time_line_scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(time_line_scrolled_window), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
 	gtk_box_pack_start(GTK_BOX(get_time_line_vbox()), GTK_WIDGET(time_line_scrolled_window), TRUE, TRUE, 0);
 
 	// Create the time line View port
 	time_line_view_port = gtk_viewport_new(NULL,NULL);
 	//Create a table for the event Box / this is added for updating view port area
-	time_line_table = gtk_table_new(1,1,FALSE);
+	/* time_line_table = gtk_table_new(1,1,FALSE);
 	// Adding the table to the Viewport
 	gtk_container_add(GTK_CONTAINER(time_line_view_port),GTK_WIDGET(time_line_table));
 	// Creating an event box, to capture the events inside the table rows.
@@ -99,11 +99,13 @@ GtkWidget *create_time_line(void)
 	//Setting the view port as focusable
 	gtk_widget_set_can_focus(GTK_WIDGET(time_line_view_port), TRUE);
 	// Adding the view port to the Scrollable Window
+
+	 */
 	gtk_container_add(GTK_CONTAINER(time_line_scrolled_window), GTK_WIDGET(time_line_view_port));
 
 	// Set the time line container as the event box
-	set_time_line_container(time_line_evbox);
-
+	set_time_line_container(time_line_view_port);
+	gtk_widget_set_usize(GTK_WIDGET(time_line_view_port),500,200);
 
 	//gtk_scrolled_window_add_with_viewport(GTK_CONTAINER(time_line_scrolled_window),GTK_WIDGET(get_time_line_container()));
 	// Add signal handlers to the time line area for receiving events (i.e. mouse clicks)

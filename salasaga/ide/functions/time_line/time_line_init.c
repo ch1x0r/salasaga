@@ -75,6 +75,7 @@ void time_line_init(TimeLine *time_line)
 	priv->row_height = 20;
 	priv->top_border_height = 15;
 
+	time_line_internal_make_widgets(priv);
 	// Call our internal time line function to create the cached background image
 	time_line_internal_initialise_bg_image(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
 
