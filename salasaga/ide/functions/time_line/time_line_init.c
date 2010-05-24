@@ -44,6 +44,7 @@
 #include "time_line_internal_initialise_bg_image.h"
 #include "time_line_internal_initialise_display_buffer.h"
 #include "time_line_internal_widget_motion_notify_handler.h"
+#include "time_line_internal_make_widgets.h"
 #include "../working_area/draw_workspace.h"
 
 void time_line_init(TimeLine *time_line)
