@@ -81,33 +81,13 @@ GtkWidget *create_time_line(void)
 	set_time_line_vbox(gtk_vbox_new(FALSE, 0));
 
 	// Create the scrolled window that the time line widgets are swapped into and out of
-	time_line_scrolled_window = GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL));
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(time_line_scrolled_window), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
-	gtk_box_pack_start(GTK_BOX(get_time_line_vbox()), GTK_WIDGET(time_line_scrolled_window), TRUE, TRUE, 0);
+	//time_line_scrolled_window = GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL));
+	//gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(time_line_scrolled_window), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
+	set_time_line_container(gtk_vbox_new(FALSE, 0));
+	gtk_box_pack_start(GTK_BOX(get_time_line_vbox()), GTK_WIDGET(get_time_line_container()), TRUE, TRUE, 0);
 
-	// Create the time line View port
-	time_line_view_port = gtk_viewport_new(NULL,NULL);
-	//Create a table for the event Box / this is added for updating view port area
-	/* time_line_table = gtk_table_new(1,1,FALSE);
-	// Adding the table to the Viewport
-	gtk_container_add(GTK_CONTAINER(time_line_view_port),GTK_WIDGET(time_line_table));
-	// Creating an event box, to capture the events inside the table rows.
-	time_line_evbox = gtk_event_box_new();
-	// Attaching the event box to the table
-	gtk_table_attach_defaults(GTK_TABLE(time_line_table),GTK_WIDGET(time_line_evbox),0,1,0,1);
 
-	//Setting the view port as focusable
-	gtk_widget_set_can_focus(GTK_WIDGET(time_line_view_port), TRUE);
-	// Adding the view port to the Scrollable Window
 
-	 */
-	gtk_container_add(GTK_CONTAINER(time_line_scrolled_window), GTK_WIDGET(time_line_view_port));
-
-	// Set the time line container as the event box
-	set_time_line_container(time_line_view_port);
-	gtk_widget_set_usize(GTK_WIDGET(time_line_view_port),500,200);
-
-	//gtk_scrolled_window_add_with_viewport(GTK_CONTAINER(time_line_scrolled_window),GTK_WIDGET(get_time_line_container()));
 	// Add signal handlers to the time line area for receiving events (i.e. mouse clicks)
 	g_signal_connect(get_time_line_container(), "button_release_event", G_CALLBACK(time_line_button_release_event), NULL);
 	g_signal_connect(get_time_line_container(), "button_press_event", G_CALLBACK(time_line_button_press_event), NULL);

@@ -29,15 +29,6 @@
 #include "time_line.h"
 #include "../dialog/display_warning.h"
 
-gboolean scroll_win(GtkAdjustment *adjustment,gpointer user_data)
-{
-		TimeLinePrivate *priv = user_data;
-		GtkAdjustment * hadj = gtk_scrolled_window_get_hadjustment(priv->bot_right_swin);
-
-		return TRUE;
-}
-
-
 
 gboolean time_line_internal_make_widgets(TimeLinePrivate *priv){
 
@@ -49,12 +40,17 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv){
 
 	if(NULL == priv->main_table){
 		priv->main_table = gtk_table_new(2,2,FALSE);
+		gtk_table_set_row_spacings(GTK_TABLE(priv->main_table),0);
+		gtk_table_set_col_spacings(GTK_TABLE(priv->main_table),0);
 		if(NULL == priv->top_left_swin)
 		{
 			priv->top_left_swin = gtk_scrolled_window_new(NULL,NULL);
+			gtk_container_set_border_width(GTK_CONTAINER(priv->top_left_swin),0);
+			gtk_scrolled_window_set_shadow_type(priv->top_left_swin,GTK_SHADOW_NONE);
 			if(NULL == priv->top_left_vp){
 				priv->top_left_vp = gtk_viewport_new(NULL,NULL);
 				gtk_container_add(GTK_CONTAINER(priv->top_left_swin),GTK_WIDGET(priv->top_left_vp));
+				gtk_viewport_set_shadow_type(priv->top_left_vp,GTK_SHADOW_NONE);
 			}
 			if(NULL == priv->top_left_evb)
 			{
@@ -62,14 +58,18 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv){
 				gtk_widget_set_size_request(GTK_WIDGET(priv->bot_left_evb),120,20);
 				gtk_container_add(GTK_CONTAINER(priv->top_left_vp),GTK_WIDGET(priv->top_left_evb));
 			}
+
 			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->top_left_swin), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
 			gtk_table_attach_defaults(GTK_TABLE(priv->main_table),GTK_WIDGET(priv->top_left_swin),0,1,0,1);
 		}
 		if(NULL == priv->top_right_swin)
 		{
 			priv->top_right_swin = gtk_scrolled_window_new(NULL,NULL);
+			gtk_container_set_border_width(GTK_CONTAINER(priv->top_right_swin),0);
+			gtk_scrolled_window_set_shadow_type(priv->top_right_swin,GTK_SHADOW_NONE);
 			if(NULL == priv->top_right_vp){
 				priv->top_right_vp = gtk_viewport_new(NULL,NULL);
+				gtk_viewport_set_shadow_type(priv->top_right_vp,GTK_SHADOW_NONE);
 				gtk_container_add(GTK_CONTAINER(priv->top_right_swin),GTK_WIDGET(priv->top_right_vp));
 			}
 			if(NULL == priv->top_right_evb)
@@ -88,8 +88,11 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv){
 		if(NULL == priv->bot_left_swin)
 		{
 			priv->bot_left_swin = gtk_scrolled_window_new(NULL,NULL);
+			gtk_container_set_border_width(GTK_CONTAINER(priv->bot_left_swin),0);
+			gtk_scrolled_window_set_shadow_type(priv->bot_left_swin,GTK_SHADOW_NONE);
 			if(NULL == priv->bot_left_vp){
 				priv->bot_left_vp = gtk_viewport_new(NULL,NULL);
+				gtk_viewport_set_shadow_type(priv->bot_left_vp,GTK_SHADOW_NONE);
 				gtk_container_add(GTK_CONTAINER(priv->bot_left_swin),GTK_WIDGET(priv->bot_left_vp));
 			}
 			if(NULL == priv->bot_left_evb)
@@ -106,8 +109,11 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv){
 		if(NULL == priv->bot_right_swin)
 		{
 			priv->bot_right_swin = gtk_scrolled_window_new(NULL,NULL);
+			gtk_container_set_border_width(GTK_CONTAINER(priv->bot_right_swin),0);
+			gtk_scrolled_window_set_shadow_type(priv->bot_right_swin,GTK_SHADOW_NONE);
 			if(NULL == priv->bot_right_vp){
 				priv->bot_right_vp = gtk_viewport_new(NULL,NULL);
+				gtk_viewport_set_shadow_type(priv->bot_right_vp,GTK_SHADOW_NONE);
 				gtk_container_add(GTK_CONTAINER(priv->bot_right_swin),GTK_WIDGET(priv->bot_right_vp));
 
 			}
@@ -119,13 +125,11 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv){
 
 			}
 
-			gtk_widget_set_events(gtk_scrolled_window_get_hadjustment(priv->bot_right_swin), gtk_widget_get_events(gtk_scrolled_window_get_hadjustment(priv->bot_right_swin))| GDK_SCROLL_MASK);
 			gtk_scrolled_window_set_hadjustment(priv->top_right_swin,gtk_scrolled_window_get_hadjustment(priv->bot_right_swin));
 			gtk_scrolled_window_set_vadjustment(priv->bot_left_swin,gtk_scrolled_window_get_vadjustment(priv->bot_right_swin));
-			gtk_signal_connect(GTK_OBJECT(gtk_scrolled_window_get_hadjustment(priv->bot_right_swin)), "value-changed",G_CALLBACK(scroll_win), priv);
 
 			gtk_widget_set_size_request(GTK_WIDGET(priv->bot_right_evb),1000,400);
-			gtk_widget_set_size_request(GTK_WIDGET(priv->bot_right_vp),700,180);
+			gtk_widget_set_size_request(GTK_WIDGET(priv->bot_right_vp),700,150);
 			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->bot_right_swin), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 			gtk_table_attach_defaults(GTK_TABLE(priv->main_table),GTK_WIDGET(priv->bot_right_swin),1,2,1,2);
 		}

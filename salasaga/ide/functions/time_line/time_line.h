@@ -115,6 +115,7 @@ struct _TimeLinePrivate
 	gboolean			cached_bg_valid;			// Flag for whether the timeline background cache image is valid
 	gboolean			cursor_drag_active;			// Tracks whether we're dragging the time line cursor or not
 	gfloat				cursor_position;			// Where in the slide the cursor is positioned (in seconds or part thereof)
+
 	GdkPixmap			*display_buffer;			// The rendered version of the timeline
 	GdkPixmap			*display_buffer_top_left;
 	GdkPixmap			*display_buffer_top_right;

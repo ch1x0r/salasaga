@@ -29,7 +29,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif // __cplusplus
-gboolean scroll_win(GtkAdjustment *adjustment,gpointer user_data);
 gboolean time_line_internal_make_widgets(TimeLinePrivate *priv);
 
 #ifdef __cplusplus
