@@ -52,10 +52,10 @@ void time_line_class_init(TimeLineClass *klass)
 
 	// Set the widget functions to be used
 	widget_class = GTK_WIDGET_CLASS(klass);
-	widget_class->expose_event = &time_line_expose;
-	widget_class->realize = &time_line_realise;
-	widget_class->size_allocate = &time_line_size_allocate;
-	widget_class->size_request = &time_line_size_request;
+//	widget_class->expose_event = &time_line_expose;
+//	widget_class->realize = &time_line_realise;
+//	widget_class->size_allocate = &time_line_size_allocate;
+//	widget_class->size_request = &time_line_size_request;
 
 	// Add TimeLinePrivate to the class
 	g_type_class_add_private(klass, sizeof(TimeLinePrivate));

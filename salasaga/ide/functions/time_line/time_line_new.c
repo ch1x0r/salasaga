@@ -43,5 +43,5 @@
 
 GtkWidget* time_line_new()
 {
-	return GTK_WIDGET(g_object_new(time_line_get_type(), "name", "time_line_widget", NULL));
+	return GTK_WIDGET(g_object_new(time_line_get_type(), "name", "time_line_widget", "spacing",0,"homogeneous",FALSE, NULL));
 }

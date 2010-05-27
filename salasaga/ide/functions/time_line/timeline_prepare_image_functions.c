@@ -1,5 +1,5 @@
 /*
- * $Id: time_line_internal_make_widgets.h 2610 2010-03-23 05:48:58Z allupaku $
+ * $Id: time_line_prepare_image_functions.c  by allupaku $
  *
  * Copyright (C) 2005-2010 Digital Distribution Global Training Solutions Pty. Ltd.
  * <justin@salasaga.org>
@@ -22,17 +22,27 @@
  *
  */
 
-#ifndef TIME_LINE_INTERNAL_MAKE_WIDGETS_
-#define TIME_LINE_INTERNAL_MAKE_WIDGETS_
+#include <gtk/gtk.h>
 
-// To keep C++ programs that include this header happy
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, guint height);
+#include "../../salasaga_types.h"
+#include "../global_functions.h"
+#include "time_line.h"
+#include "../dialog/display_warning.h"
 
-#ifdef __cplusplus
+gboolean time_line_prepare_top_left(TimeLinePrivate *priv, gint width, gint height){
+
+return TRUE;
 }
-#endif // __cplusplus
+gboolean time_line_prepare_top_right(TimeLinePrivate *priv, gint width, gint height){
 
-#endif /* TIME_LINE_INTERNAL_MAKE_WIDGETS_ */
+	return TRUE;
+}
+
+gboolean time_line_prepare_bottom_left(TimeLinePrivate *priv, gint width, gint height){
+
+	return TRUE;
+}
+gboolean time_line_prepare_bottom_right(TimeLinePrivate *priv, gint width, gint height){
+
+	return TRUE;
+}

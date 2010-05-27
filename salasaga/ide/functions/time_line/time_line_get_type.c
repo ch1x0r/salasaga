@@ -64,7 +64,7 @@ GType time_line_get_type(void)
 			(GInstanceInitFunc) time_line_init,
 			NULL
 		};
-		this_type = g_type_register_static(GTK_TYPE_DRAWING_AREA, "TimeLine", &this_info, 0);
+		this_type = g_type_register_static(GTK_TYPE_VBOX, "TimeLine", &this_info, 0);
 	}
 
 	return this_type;

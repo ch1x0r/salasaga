@@ -86,8 +86,6 @@ GtkWidget *create_time_line(void)
 	set_time_line_container(gtk_vbox_new(FALSE, 0));
 	gtk_box_pack_start(GTK_BOX(get_time_line_vbox()), GTK_WIDGET(get_time_line_container()), TRUE, TRUE, 0);
 
-
-
 	// Add signal handlers to the time line area for receiving events (i.e. mouse clicks)
 	g_signal_connect(get_time_line_container(), "button_release_event", G_CALLBACK(time_line_button_release_event), NULL);
 	g_signal_connect(get_time_line_container(), "button_press_event", G_CALLBACK(time_line_button_press_event), NULL);

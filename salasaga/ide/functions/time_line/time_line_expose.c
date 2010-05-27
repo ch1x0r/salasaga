@@ -45,7 +45,7 @@
 #include "time_line_internal_draw_layer_info.h"
 #include "time_line_internal_draw_selection_highlight.h"
 #include "time_line_internal_initialise_display_buffer.h"
-
+#include "time_line_internal_make_widgets.h"
 
 gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 {
@@ -57,6 +57,11 @@ gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 	TimeLine			*this_time_line;
 	gint				width;
 
+	GString  *message;
+		message = g_string_new(NULL);
+		g_string_printf(message, "%s ED358: %s", _("Error"), _("In Expose of our widget"));
+		display_warning(message->str);
+		g_string_free(message, TRUE);
 
 	// Safety check
 	g_return_val_if_fail(widget != NULL || event != NULL, FALSE);
@@ -65,6 +70,8 @@ gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 	// Initialisation
 	this_time_line = TIME_LINE(widget);
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
+
+
 
 	// Ensure we have at least the minimum required widget size
 	if (WIDGET_MINIMUM_HEIGHT > GTK_WIDGET(widget)->allocation.height)
@@ -83,34 +90,34 @@ gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 	}
 
 	// Ensure we have a display buffer to refresh from
-	if (NULL == priv->display_buffer)
+	if (NULL == priv->display_buffer_top_left)
 	{
 		// Create the display buffer
 		time_line_internal_initialise_display_buffer(priv, width, height);
 
 		// Draw the layer information
-		time_line_internal_draw_layer_info(priv);
+		//time_line_internal_draw_layer_info(priv);
 
 		// Highlight the selected row
-		time_line_internal_draw_selection_highlight(priv, width);
+		//time_line_internal_draw_selection_highlight(priv, width);
 	}
 
 	// Create a graphic context if we don't have one already
 	if (NULL == this_gc)
 	{
-		this_gc = gdk_gc_new(GDK_DRAWABLE(widget->window));
+		this_gc = gdk_gc_new(GDK_DRAWABLE(priv->top_left_evb->window));
 	}
 
 	// Refresh the invalidated area from the local cached version
-	gdk_draw_drawable(GDK_DRAWABLE(widget->window), GDK_GC(this_gc),
-		GDK_PIXMAP(priv->display_buffer),
+	gdk_draw_drawable(GDK_DRAWABLE(priv->top_left_evb->window), GDK_GC(this_gc),
+		GDK_PIXMAP(priv->display_buffer_top_left),
 		event->area.x, event->area.y,
 		event->area.x, event->area.y,
-		event->area.width, event->area.height);
+		priv->left_border_width, priv->top_border_height);
 
 	// Draw the time line cursor
-	new_cursor_pos = round(time_line_get_cursor_position(widget) * time_line_get_pixels_per_second()) + time_line_get_left_border_width(priv);
-	time_line_internal_draw_cursor(widget, new_cursor_pos);
+//	new_cursor_pos = round(time_line_get_cursor_position(widget) * time_line_get_pixels_per_second()) + time_line_get_left_border_width(priv);
+//	time_line_internal_draw_cursor(widget, new_cursor_pos);
 
 	return TRUE;
 }

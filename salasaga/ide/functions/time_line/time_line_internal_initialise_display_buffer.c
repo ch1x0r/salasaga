@@ -52,6 +52,10 @@ gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gin
 	GString				*message;					// Used to construct message strings
 	gint				width;
 
+	gint 				main_part_width;
+	gint 				main_part_height;
+
+
 
 	// Initialisation
 	if (NULL == colourmap)
@@ -74,20 +78,22 @@ gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gin
 	{
 		width = new_width;
 	}
+	main_part_width = width;// - priv->left_border_width;
+	main_part_height = height - priv->top_border_height;
 
 	// If we already have a display buffer, we check if we can reuse it
-	if (NULL != priv->display_buffer)
+	if (NULL != priv->display_buffer_top_left)
 	{
 		// Retrieve the size of the existing cached display buffer
-		gdk_drawable_get_size(GDK_PIXMAP(priv->display_buffer), &existing_bg_width, &existing_bg_height);
+		gdk_drawable_get_size(GDK_PIXMAP(priv->display_buffer_top_left), &existing_bg_width, &existing_bg_height);
 
 		// If the existing display buffer is not of the same height and width, we discard it
-		if ((existing_bg_width != width) || (existing_bg_height != height))
+		if ((existing_bg_width != priv->left_border_width) || (existing_bg_height != priv->top_border_height))
 		{
 			// The existing display buffer is not of the same height and width
-			g_object_unref(GDK_PIXMAP(priv->display_buffer));
-			priv->display_buffer = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
-			if (NULL == priv->cached_bg_image)
+			g_object_unref(GDK_PIXMAP(priv->display_buffer_top_left));
+			priv->display_buffer_top_left = gdk_pixmap_new(NULL, priv->left_border_width, priv->top_border_height, colourmap->visual->depth);
+			if (NULL == priv->cached_bg_image_top_left)
 			{
 				// Couldn't allocate memory for a new display buffer
 				message = g_string_new(NULL);
@@ -100,8 +106,8 @@ gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gin
 	} else
 	{
 		// Create the display buffer
-		priv->display_buffer = gdk_pixmap_new(NULL, width, height, colourmap->visual->depth);
-		if (NULL == priv->cached_bg_image)
+		priv->display_buffer_top_left = gdk_pixmap_new(NULL, priv->left_border_width, priv->top_border_height, colourmap->visual->depth);
+		if (NULL == priv->cached_bg_image_top_left)
 		{
 			// Couldn't allocate memory for a new display buffer
 			message = g_string_new(NULL);
@@ -111,10 +117,133 @@ gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gin
 			return FALSE;
 		}
 	}
-	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer), GDK_COLORMAP(colourmap));
+	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer_top_left), GDK_COLORMAP(colourmap));
+
+
+	// If we already have a display buffer, we check if we can reuse it
+	if (NULL != priv->display_buffer_top_right)
+	{
+		// Retrieve the size of the existing cached display buffer
+		gdk_drawable_get_size(GDK_PIXMAP(priv->display_buffer_top_right), &existing_bg_width, &existing_bg_height);
+
+		// If the existing display buffer is not of the same height and width, we discard it
+		if ((existing_bg_width != main_part_width) || (existing_bg_height != priv->top_border_height))
+		{
+			// The existing display buffer is not of the same height and width
+			g_object_unref(GDK_PIXMAP(priv->display_buffer_top_right));
+			priv->display_buffer_top_right = gdk_pixmap_new(NULL, main_part_width, priv->top_border_height, colourmap->visual->depth);
+			if (NULL == priv->display_buffer_top_right)
+			{
+				// Couldn't allocate memory for a new display buffer
+				message = g_string_new(NULL);
+				g_string_printf(message, "%s ED360: %s", _("Error"), _("Couldn't create the time line display buffer image."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
+				return FALSE;
+			}
+		}
+	} else
+	{
+		// Create the display buffer
+		priv->display_buffer_top_right = gdk_pixmap_new(NULL, main_part_width, priv->top_border_height, colourmap->visual->depth);
+		if (NULL == priv->display_buffer_top_right)
+		{
+			// Couldn't allocate memory for a new display buffer
+			message = g_string_new(NULL);
+			g_string_printf(message, "%s ED357: %s", _("Error"), _("Couldn't create the time line display buffer image."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
+			return FALSE;
+		}
+	}
+	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer_top_right), GDK_COLORMAP(colourmap));
+
+
+
+	// If we already have a display buffer, we check if we can reuse it
+	if (NULL != priv->display_buffer_bot_right)
+	{
+		// Retrieve the size of the existing cached display buffer
+		gdk_drawable_get_size(GDK_PIXMAP(priv->display_buffer_bot_right), &existing_bg_width, &existing_bg_height);
+
+		// If the existing display buffer is not of the same height and width, we discard it
+		if ((existing_bg_width != main_part_width) || (existing_bg_height != main_part_height))
+		{
+			// The existing display buffer is not of the same height and width
+			g_object_unref(GDK_PIXMAP(priv->display_buffer_bot_right));
+			priv->display_buffer_bot_right = gdk_pixmap_new(NULL, main_part_width,main_part_height, colourmap->visual->depth);
+			if (NULL == priv->display_buffer_bot_right)
+			{
+				// Couldn't allocate memory for a new display buffer
+				message = g_string_new(NULL);
+				g_string_printf(message, "%s ED360: %s", _("Error"), _("Couldn't create the time line display buffer image."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
+				return FALSE;
+			}
+		}
+	} else
+	{
+		// Create the display buffer
+		priv->display_buffer_bot_right = gdk_pixmap_new(NULL, main_part_width, main_part_height, colourmap->visual->depth);
+		if (NULL == priv->display_buffer_bot_right)
+		{
+			// Couldn't allocate memory for a new display buffer
+			message = g_string_new(NULL);
+			g_string_printf(message, "%s ED357: %s", _("Error"), _("Couldn't create the time line display buffer image."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
+			return FALSE;
+		}
+	}
+	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_COLORMAP(colourmap));
+
+
+// If we already have a display buffer, we check if we can reuse it
+	if (NULL != priv->display_buffer_bot_left)
+	{
+		// Retrieve the size of the existing cached display buffer
+		gdk_drawable_get_size(GDK_PIXMAP(priv->display_buffer_bot_left), &existing_bg_width, &existing_bg_height);
+
+		// If the existing display buffer is not of the same height and width, we discard it
+		if ((existing_bg_width != priv->left_border_width) || (existing_bg_height != main_part_height))
+		{
+			// The existing display buffer is not of the same height and width
+			g_object_unref(GDK_PIXMAP(priv->display_buffer_bot_left));
+			priv->display_buffer_bot_left = gdk_pixmap_new(NULL, priv->left_border_width,main_part_height, colourmap->visual->depth);
+			if (NULL == priv->display_buffer_bot_left)
+			{
+				// Couldn't allocate memory for a new display buffer
+				message = g_string_new(NULL);
+				g_string_printf(message, "%s ED360: %s", _("Error"), _("Couldn't create the time line display buffer image."));
+				display_warning(message->str);
+				g_string_free(message, TRUE);
+				return FALSE;
+			}
+		}
+	} else
+	{
+		// Create the display buffer
+		priv->display_buffer_bot_left = gdk_pixmap_new(NULL, priv->left_border_width, main_part_height, colourmap->visual->depth);
+		if (NULL == priv->display_buffer_bot_left)
+		{
+			// Couldn't allocate memory for a new display buffer
+			message = g_string_new(NULL);
+			g_string_printf(message, "%s ED357: %s", _("Error"), _("Couldn't create the time line display buffer image."));
+			display_warning(message->str);
+			g_string_free(message, TRUE);
+			return FALSE;
+		}
+	}
+	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer_bot_left), GDK_COLORMAP(colourmap));
+
+
+
+
 
 	// Copy the timeline background image to the display buffer
-	time_line_internal_redraw_bg_area(priv, 0, 0, width, height);
+	time_line_internal_redraw_bg_area(priv, 0, 0,width, height);
+
 
 	return TRUE;
 }

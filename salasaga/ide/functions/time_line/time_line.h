@@ -46,17 +46,18 @@ typedef struct _TimeLine TimeLine;
 typedef struct _TimeLineClass TimeLineClass;
 struct _TimeLine
 {
-	GtkDrawingArea drawing_area;
+	//GtkDrawingArea drawing_area;
+	GtkVBox box;
 };
 
 struct _TimeLineClass
 {
-	GtkDrawingAreaClass parent_class;
+	GtkVBoxClass parent_class;
 };
 
 // fixme2: Pulled these initial sizes out of the air, they may need to be revisited
-#define WIDGET_MINIMUM_HEIGHT	150
-#define WIDGET_MINIMUM_WIDTH	500
+#define WIDGET_MINIMUM_HEIGHT	200
+#define WIDGET_MINIMUM_WIDTH	1000
 
 // Definitions for the scaling "adjustment" symbols (the plus and minus symbols)
 #define ADJUSTMENTS_X	85
@@ -84,8 +85,8 @@ enum
 typedef struct _TimeLinePrivate TimeLinePrivate;
 struct _TimeLinePrivate
 {
+	GdkPixmap			*cached_bg_image_bot_right;			// Cache of the timeline background image, for drawing upon
 	GdkPixmap			*cached_bg_image;			// Cache of the timeline background image, for drawing upon
-
 	GdkPixmap			*cached_bg_image_top_left;
 	GdkPixmap			*cached_bg_image_top_right;
 	GdkPixmap			*cached_bg_image_bot_left;
@@ -116,10 +117,14 @@ struct _TimeLinePrivate
 	gboolean			cursor_drag_active;			// Tracks whether we're dragging the time line cursor or not
 	gfloat				cursor_position;			// Where in the slide the cursor is positioned (in seconds or part thereof)
 
-	GdkPixmap			*display_buffer;			// The rendered version of the timeline
+	GdkPixmap			*display_buffer;
+	GdkPixmap			*display_buffer_bot_right;			// The rendered version of the timeline
 	GdkPixmap			*display_buffer_top_left;
 	GdkPixmap			*display_buffer_top_right;
 	GdkPixmap			*display_buffer_bot_left;
+
+	gint				main_width;
+	gint				main_height;
 
 	gboolean			drag_active;				// Tracks whether we have an active mouse drag or not
 	gint				guide_line_end;				// The pixel number of the ending guide line

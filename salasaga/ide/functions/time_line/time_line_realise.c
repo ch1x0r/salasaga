@@ -44,38 +44,38 @@
 void time_line_realise(GtkWidget *widget)
 {
 	// Local variables
-	guint				attribute_mask;
-	GdkWindowAttr		window_attributes;
+//	guint				attribute_mask;
+//	GdkWindowAttr		window_attributes;
+//
+//	// Safety checks
+//	g_return_if_fail(NULL != widget);
+//	g_return_if_fail(IS_TIME_LINE(widget));
+//
+//	// Set the widget state to "realized"
+//	GTK_WIDGET_SET_FLAGS(widget, GTK_REALIZED);
+//
+//	// Set up the GdkWindow attributes
+//	window_attributes.colormap = gtk_widget_get_colormap(widget);
+//	window_attributes.event_mask = gtk_widget_get_events(widget);
+//	window_attributes.event_mask |= GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_EXPOSURE_MASK;
+//	window_attributes.height = WIDGET_MINIMUM_HEIGHT;
+//	window_attributes.visual = gtk_widget_get_visual(widget);
+//	window_attributes.wclass = GDK_INPUT_OUTPUT;
+//	window_attributes.width = WIDGET_MINIMUM_WIDTH;
+//	window_attributes.window_type = GDK_WINDOW_CHILD;
+//	window_attributes.x = widget->allocation.x;
+//	window_attributes.y = widget->allocation.y;
+//	attribute_mask = GDK_WA_COLORMAP | GDK_WA_VISUAL | GDK_WA_X | GDK_WA_Y;
+//
+//	// Create the GdkWindow instance
+//	widget->window = gdk_window_new(widget->parent->window, &window_attributes, attribute_mask);
+//	widget->style = gtk_style_attach(widget->style, widget->window);
+//	gtk_style_set_background(widget->style, widget->window, GTK_STATE_NORMAL);
+//
+//	// Ensure GTK forwards events to our widget
+//	gdk_window_set_user_data(widget->window, TIME_LINE(widget));
+//
+//	// Display the GdkWindow
+//	gdk_window_show(widget->window);
 
-
-	// Safety checks
-	g_return_if_fail(NULL != widget);
-	g_return_if_fail(IS_TIME_LINE(widget));
-
-	// Set the widget state to "realized"
-	GTK_WIDGET_SET_FLAGS(widget, GTK_REALIZED);
-
-	// Set up the GdkWindow attributes
-	window_attributes.colormap = gtk_widget_get_colormap(widget);
-	window_attributes.event_mask = gtk_widget_get_events(widget);
-	window_attributes.event_mask |= GDK_BUTTON1_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_EXPOSURE_MASK;
-	window_attributes.height = widget->allocation.height;
-	window_attributes.visual = gtk_widget_get_visual(widget);
-	window_attributes.wclass = GDK_INPUT_OUTPUT;
-	window_attributes.width = widget->allocation.width;
-	window_attributes.window_type = GDK_WINDOW_CHILD;
-	window_attributes.x = widget->allocation.x;
-	window_attributes.y = widget->allocation.y;
-	attribute_mask = GDK_WA_COLORMAP | GDK_WA_VISUAL | GDK_WA_X | GDK_WA_Y;
-
-	// Create the GdkWindow instance
-	widget->window = gdk_window_new(widget->parent->window, &window_attributes, attribute_mask);
-	widget->style = gtk_style_attach(widget->style, widget->window);
-	gtk_style_set_background(widget->style, widget->window, GTK_STATE_NORMAL);
-
-	// Ensure GTK forwards events to our widget
-	gdk_window_set_user_data(widget->window, TIME_LINE(widget));
-
-	// Display the GdkWindow
-	gdk_window_show(widget->window);
 }

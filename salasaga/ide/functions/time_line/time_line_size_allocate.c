@@ -52,6 +52,7 @@ void time_line_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
 	TimeLinePrivate		*priv;
 	TimeLine			*this_time_line;
 	gint				width;
+	GString *message;
 
 
 	// Safety check
@@ -78,6 +79,7 @@ void time_line_size_allocate(GtkWidget *widget, GtkAllocation *allocation)
 		width = allocation->width;
 	}
 
+	//time_line_internal_make_widgets(priv,width,height);
 	// Create the background buffer
 	time_line_internal_initialise_bg_image(priv, width, height);
 

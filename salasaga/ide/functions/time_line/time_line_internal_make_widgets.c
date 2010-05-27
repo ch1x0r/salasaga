@@ -30,119 +30,119 @@
 #include "../dialog/display_warning.h"
 
 
-gboolean time_line_internal_make_widgets(TimeLinePrivate *priv){
-
-	GdkColor firstColColor;
-	GdkColor entireRowColor;
-	GtkWidget * trial_label;
-		gdk_color_parse ("red", &firstColColor);
-		gdk_color_parse ("white", &entireRowColor);
+gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, guint height){
+	GtkWidget * align;
 
 	if(NULL == priv->main_table){
+		//0. Creating a new table
 		priv->main_table = gtk_table_new(2,2,FALSE);
+		// Setting the row and col spacing ofthe table
 		gtk_table_set_row_spacings(GTK_TABLE(priv->main_table),0);
 		gtk_table_set_col_spacings(GTK_TABLE(priv->main_table),0);
-		if(NULL == priv->top_left_swin)
-		{
-			priv->top_left_swin = gtk_scrolled_window_new(NULL,NULL);
-			gtk_container_set_border_width(GTK_CONTAINER(priv->top_left_swin),0);
-			gtk_scrolled_window_set_shadow_type(priv->top_left_swin,GTK_SHADOW_NONE);
-			if(NULL == priv->top_left_vp){
-				priv->top_left_vp = gtk_viewport_new(NULL,NULL);
-				gtk_container_add(GTK_CONTAINER(priv->top_left_swin),GTK_WIDGET(priv->top_left_vp));
-				gtk_viewport_set_shadow_type(priv->top_left_vp,GTK_SHADOW_NONE);
-			}
-			if(NULL == priv->top_left_evb)
-			{
-				priv->top_left_evb = gtk_event_box_new();
-				gtk_widget_set_size_request(GTK_WIDGET(priv->bot_left_evb),120,20);
-				gtk_container_add(GTK_CONTAINER(priv->top_left_vp),GTK_WIDGET(priv->top_left_evb));
-			}
 
-			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->top_left_swin), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
-			gtk_table_attach_defaults(GTK_TABLE(priv->main_table),GTK_WIDGET(priv->top_left_swin),0,1,0,1);
-		}
-		if(NULL == priv->top_right_swin)
-		{
-			priv->top_right_swin = gtk_scrolled_window_new(NULL,NULL);
-			gtk_container_set_border_width(GTK_CONTAINER(priv->top_right_swin),0);
-			gtk_scrolled_window_set_shadow_type(priv->top_right_swin,GTK_SHADOW_NONE);
-			if(NULL == priv->top_right_vp){
-				priv->top_right_vp = gtk_viewport_new(NULL,NULL);
-				gtk_viewport_set_shadow_type(priv->top_right_vp,GTK_SHADOW_NONE);
-				gtk_container_add(GTK_CONTAINER(priv->top_right_swin),GTK_WIDGET(priv->top_right_vp));
-			}
-			if(NULL == priv->top_right_evb)
-			{
-				priv->top_right_evb = gtk_event_box_new();
-				trial_label = gtk_label_new("Hello This is a trial to know the scroll");
-				gtk_container_add(GTK_CONTAINER(priv->top_right_evb),GTK_WIDGET(trial_label));
-				gtk_container_add(GTK_CONTAINER(priv->top_right_vp),GTK_WIDGET(priv->top_right_evb));
+		//1.Creating a new scrolled window - top left part of the time line
+		priv->top_left_swin = gtk_scrolled_window_new(NULL,NULL);
+		// Setting the suitable properties
+		gtk_container_set_border_width(GTK_CONTAINER(priv->top_left_swin),0);
+		gtk_scrolled_window_set_shadow_type(priv->top_left_swin,GTK_SHADOW_NONE);
+		//Creating a view port for the top left
+		priv->top_left_vp = gtk_viewport_new(NULL,NULL);
+		gtk_container_add(GTK_CONTAINER(priv->top_left_swin),GTK_WIDGET(priv->top_left_vp));
+		gtk_viewport_set_shadow_type(priv->top_left_vp,GTK_SHADOW_NONE);
+		// Creating the event box
+		priv->top_left_evb = gtk_event_box_new();
+		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_left_evb),120,20);
+		gtk_container_add(GTK_CONTAINER(priv->top_left_vp),GTK_WIDGET(priv->top_left_evb));
 
-			}
-			gtk_widget_set_size_request(GTK_WIDGET(priv->top_right_evb),500,20);
-			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->top_right_swin), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
-			gtk_table_attach_defaults(GTK_TABLE(priv->main_table),GTK_WIDGET(priv->top_right_swin),1,2,0,1);
-		}
+		// Setting the scrolled window policy so that the scroll bar is never shown.
+		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->top_left_swin), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
+		// adding the scrolled window to the table
+		align = gtk_alignment_new(0,0,1,1);
+		gtk_container_add(GTK_CONTAINER(align),priv->top_left_swin);
+		gtk_table_attach_defaults(GTK_TABLE(priv->main_table),GTK_WIDGET(align),0,1,0,1);
 
-		if(NULL == priv->bot_left_swin)
-		{
-			priv->bot_left_swin = gtk_scrolled_window_new(NULL,NULL);
-			gtk_container_set_border_width(GTK_CONTAINER(priv->bot_left_swin),0);
-			gtk_scrolled_window_set_shadow_type(priv->bot_left_swin,GTK_SHADOW_NONE);
-			if(NULL == priv->bot_left_vp){
-				priv->bot_left_vp = gtk_viewport_new(NULL,NULL);
-				gtk_viewport_set_shadow_type(priv->bot_left_vp,GTK_SHADOW_NONE);
-				gtk_container_add(GTK_CONTAINER(priv->bot_left_swin),GTK_WIDGET(priv->bot_left_vp));
-			}
-			if(NULL == priv->bot_left_evb)
-			{
-				priv->bot_left_evb = gtk_event_box_new();
-				gtk_widget_set_size_request(GTK_WIDGET(priv->bot_left_evb),120,20);
-				gtk_container_add(GTK_CONTAINER(priv->bot_left_vp),GTK_WIDGET(priv->bot_left_evb));
-			}
-			trial_label = gtk_label_new("Hello This is a trial to know the Vertical Scroll");
-			gtk_container_add(GTK_CONTAINER(priv->bot_left_evb),GTK_WIDGET(trial_label));
-			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->bot_left_swin), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
-			gtk_table_attach_defaults(GTK_TABLE(priv->main_table),GTK_WIDGET(priv->bot_left_swin),0,1,1,2);
-		}
-		if(NULL == priv->bot_right_swin)
-		{
-			priv->bot_right_swin = gtk_scrolled_window_new(NULL,NULL);
-			gtk_container_set_border_width(GTK_CONTAINER(priv->bot_right_swin),0);
-			gtk_scrolled_window_set_shadow_type(priv->bot_right_swin,GTK_SHADOW_NONE);
-			if(NULL == priv->bot_right_vp){
-				priv->bot_right_vp = gtk_viewport_new(NULL,NULL);
-				gtk_viewport_set_shadow_type(priv->bot_right_vp,GTK_SHADOW_NONE);
-				gtk_container_add(GTK_CONTAINER(priv->bot_right_swin),GTK_WIDGET(priv->bot_right_vp));
 
-			}
-			if(NULL == priv->bot_right_evb)
-			{
-				priv->bot_right_evb = gtk_event_box_new();
+		//2. Creating the right scrolled window for the seconds / time bar - top right
+		priv->top_right_swin = gtk_scrolled_window_new(NULL,NULL);
+		gtk_container_set_border_width(GTK_CONTAINER(priv->top_right_swin),0);
+		gtk_scrolled_window_set_shadow_type(priv->top_right_swin,GTK_SHADOW_NONE);
+		// Creating the view port and setting the properties for acvoiding all kinds of borders
+		priv->top_right_vp = gtk_viewport_new(NULL,NULL);
+		gtk_viewport_set_shadow_type(priv->top_right_vp,GTK_SHADOW_NONE);
+		gtk_container_add(GTK_CONTAINER(priv->top_right_swin),GTK_WIDGET(priv->top_right_vp));
+		//creating the event box
+		priv->top_right_evb = gtk_event_box_new();
+		// Label need to be removed
+		//trial_label = gtk_label_new("Hello This is a trial to know the scroll");
+		//gtk_container_add(GTK_CONTAINER(priv->top_right_evb),GTK_WIDGET(trial_label));
+		gtk_container_add(GTK_CONTAINER(priv->top_right_vp),GTK_WIDGET(priv->top_right_evb));
+		// setting the width as 500 random.
+		gtk_widget_set_size_request(GTK_WIDGET(priv->top_right_evb),1000,20);
+		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_right_vp),400,20);
+		//never show the scroll
+		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->top_right_swin), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
 
-				gtk_container_add(GTK_CONTAINER(priv->bot_right_vp),GTK_WIDGET(priv->bot_right_evb));
+		align = gtk_alignment_new(0,0,1,1);
+		gtk_container_add(GTK_CONTAINER(align),priv->top_right_swin);
+		gtk_table_attach(GTK_TABLE(priv->main_table),GTK_WIDGET(align),1,2,0,1,GTK_FILL,GTK_FILL,0,0);
 
-			}
 
-			gtk_scrolled_window_set_hadjustment(priv->top_right_swin,gtk_scrolled_window_get_hadjustment(priv->bot_right_swin));
-			gtk_scrolled_window_set_vadjustment(priv->bot_left_swin,gtk_scrolled_window_get_vadjustment(priv->bot_right_swin));
 
-			gtk_widget_set_size_request(GTK_WIDGET(priv->bot_right_evb),1000,400);
-			gtk_widget_set_size_request(GTK_WIDGET(priv->bot_right_vp),700,150);
-			gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->bot_right_swin), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-			gtk_table_attach_defaults(GTK_TABLE(priv->main_table),GTK_WIDGET(priv->bot_right_swin),1,2,1,2);
-		}
+		// 3. creating scrolled window for left - bottom left
+		priv->bot_left_swin = gtk_scrolled_window_new(NULL,NULL);
+		gtk_container_set_border_width(GTK_CONTAINER(priv->bot_left_swin),0);
+		gtk_scrolled_window_set_shadow_type(priv->bot_left_swin,GTK_SHADOW_NONE);
+		// creating a view port and seeeing the border properties
+		priv->bot_left_vp = gtk_viewport_new(NULL,NULL);
+		gtk_viewport_set_shadow_type(priv->bot_left_vp,GTK_SHADOW_NONE);
+		gtk_container_add(GTK_CONTAINER(priv->bot_left_swin),GTK_WIDGET(priv->bot_left_vp));
+		// creating the event box.
+		priv->bot_left_evb = gtk_event_box_new();
+		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_left_evb),120,height);
+		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_left_vp),120,height-priv->top_border_height);
 
-		gtk_widget_modify_bg(GTK_WIDGET(priv->bot_right_evb),GTK_STATE_NORMAL,&entireRowColor);
-		gtk_widget_modify_bg(GTK_WIDGET(priv->top_left_evb),GTK_STATE_NORMAL,&entireRowColor);
-		gtk_widget_modify_bg(GTK_WIDGET(priv->top_right_evb),GTK_STATE_NORMAL,&firstColColor);
-		gtk_widget_modify_bg(GTK_WIDGET(priv->bot_left_evb),GTK_STATE_NORMAL,&firstColColor);
+		gtk_container_add(GTK_CONTAINER(priv->bot_left_vp),GTK_WIDGET(priv->bot_left_evb));
+		// label need to be removed.. just for testing purpose
+//		trial_label = gtk_label_new("Hello This is a trial to know the Vertical Scroll");
+//		gtk_container_add(GTK_CONTAINER(priv->bot_left_evb),GTK_WIDGET(trial_label));
+		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->bot_left_swin), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
+		gtk_table_attach(GTK_TABLE(priv->main_table),GTK_WIDGET(priv->bot_left_swin),0,1,1,2,GTK_EXPAND,GTK_EXPAND,0,0);
+
+
+		//4. Scrolled window for the layer part
+		priv->bot_right_swin = gtk_scrolled_window_new(NULL,NULL);
+		gtk_container_set_border_width(GTK_CONTAINER(priv->bot_right_swin),0);
+		gtk_scrolled_window_set_shadow_type(priv->bot_right_swin,GTK_SHADOW_NONE);
+		// view port for the important part
+		priv->bot_right_vp = gtk_viewport_new(NULL,NULL);
+		gtk_viewport_set_shadow_type(priv->bot_right_vp,GTK_SHADOW_NONE);
+		gtk_container_add(GTK_CONTAINER(priv->bot_right_swin),GTK_WIDGET(priv->bot_right_vp));
+		// creating the event box for the layers
+		priv->bot_right_evb = gtk_event_box_new();
+		gtk_container_add(GTK_CONTAINER(priv->bot_right_vp),GTK_WIDGET(priv->bot_right_evb));
+
+		// connectin the scrolled window adjustment - horizontal of the 4 the scrolled window - the main one - to the
+		// hadjustment of the second one, which is above it. So that when it is scrolled horizontally, both will be scrolled together
+		gtk_scrolled_window_set_hadjustment(priv->top_right_swin,gtk_scrolled_window_get_hadjustment(priv->bot_right_swin));
+		// similar connection for vertical scroll / adjustment for the left box, so that the layer info will scroll together with the name
+		gtk_scrolled_window_set_vadjustment(priv->bot_left_swin,gtk_scrolled_window_get_vadjustment(priv->bot_right_swin));
+
+		// arbitrarily wide values.. for the scroll bar to come up automatically - need to be corrected
+		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_right_evb),width,height-15);
+		// need to be varied accoring to the allocation width
+		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_right_vp),width,height);
+		// autmatic scroll bars
+		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->bot_right_swin), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
+		align = gtk_alignment_new(0,0,1,1);
+		gtk_container_add(GTK_CONTAINER(align),priv->bot_right_swin);
+		gtk_table_attach(GTK_TABLE(priv->main_table),GTK_WIDGET(align),1,2,1,2,GTK_EXPAND,GTK_EXPAND,0,0);
 
 
 	}
-	else
-		return TRUE;
+//	gtk_widget_set_size_request(priv->top_left_vp,priv->left_border_width,priv->top_border_height);
+//	gtk_widget_set_size_request(priv->bot_left_vp,priv->left_border_width,height-priv->top_border_height);
+//	gtk_widget_set_size_request(priv->top_right_vp,width-priv->left_border_width,priv->top_border_height);
+//	gtk_widget_set_size_request(priv->bot_right_vp,width-priv->left_border_width,height-priv->top_border_height);
 return TRUE;
 }
 

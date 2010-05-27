@@ -43,13 +43,26 @@
 
 gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint y1, gint width, gint height)
 {
-	static GdkGC		*display_buffer_gc = NULL;
-
-
+	static GdkGC		*display_buffer_gc_bot_right = NULL;
+	static GdkGC		*display_buffer_gc_top_left = NULL;
+	static GdkGC		*display_buffer_gc_top_right = NULL;
+	static GdkGC		*display_buffer_gc_bot_left = NULL;
 	// Initialisation
-	if (NULL == display_buffer_gc)
+	if (NULL == display_buffer_gc_bot_right)
 	{
-		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
+		display_buffer_gc_bot_right = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer_bot_right));
+	}
+	if (NULL == display_buffer_gc_top_left)
+	{
+		display_buffer_gc_top_left = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer_top_left));
+	}
+	if (NULL == display_buffer_gc_top_right)
+	{
+		display_buffer_gc_top_right = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer_top_right));
+	}
+	if (NULL == display_buffer_gc_bot_left)
+	{
+		display_buffer_gc_bot_left = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer_bot_left));
 	}
 
 	// Ensure the background image we're about to use is valid
@@ -60,8 +73,16 @@ gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint 
 	}
 
 	// Refresh the display buffer for the desired area
-	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc),
-			GDK_PIXMAP(priv->cached_bg_image), x1, y1, x1, y1, width, height);
+	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer_top_left), GDK_GC(display_buffer_gc_top_left),
+			GDK_PIXMAP(priv->cached_bg_image_top_left), x1, y1, x1, y1, priv->left_border_width, priv->top_border_height);
 
+	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer_top_right), GDK_GC(display_buffer_gc_top_right),
+				GDK_PIXMAP(priv->cached_bg_image_top_right), x1, y1, x1, y1, width, priv->top_border_height);
+
+	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(display_buffer_gc_bot_right),
+					GDK_PIXMAP(priv->cached_bg_image_bot_right), x1, y1, x1, y1, width, height);
+
+	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer_bot_left), GDK_GC(display_buffer_gc_bot_left),
+						GDK_PIXMAP(priv->cached_bg_image_bot_left), x1, y1, x1, y1, priv->left_border_width, height);
 	return TRUE;
 }
