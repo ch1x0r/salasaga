@@ -102,11 +102,11 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, gui
 		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_left_vp),120,height-priv->top_border_height);
 
 		gtk_container_add(GTK_CONTAINER(priv->bot_left_vp),GTK_WIDGET(priv->bot_left_evb));
-		// label need to be removed.. just for testing purpose
-//		trial_label = gtk_label_new("Hello This is a trial to know the Vertical Scroll");
-//		gtk_container_add(GTK_CONTAINER(priv->bot_left_evb),GTK_WIDGET(trial_label));
+
 		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->bot_left_swin), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
-		gtk_table_attach(GTK_TABLE(priv->main_table),GTK_WIDGET(priv->bot_left_swin),0,1,1,2,GTK_EXPAND,GTK_EXPAND,0,0);
+		align = gtk_alignment_new(0,0,1,1);
+		gtk_container_add(GTK_CONTAINER(align),priv->bot_left_swin);
+		gtk_table_attach(GTK_TABLE(priv->main_table),GTK_WIDGET(align),0,1,1,2,GTK_FILL,GTK_FILL,0,0);
 
 
 		//4. Scrolled window for the layer part
@@ -135,14 +135,9 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, gui
 		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->bot_right_swin), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
 		align = gtk_alignment_new(0,0,1,1);
 		gtk_container_add(GTK_CONTAINER(align),priv->bot_right_swin);
-		gtk_table_attach(GTK_TABLE(priv->main_table),GTK_WIDGET(align),1,2,1,2,GTK_EXPAND,GTK_EXPAND,0,0);
-
-
+		gtk_table_attach(GTK_TABLE(priv->main_table),GTK_WIDGET(align),1,2,1,2,GTK_FILL,GTK_FILL,0,0);
 	}
-//	gtk_widget_set_size_request(priv->top_left_vp,priv->left_border_width,priv->top_border_height);
-//	gtk_widget_set_size_request(priv->bot_left_vp,priv->left_border_width,height-priv->top_border_height);
-//	gtk_widget_set_size_request(priv->top_right_vp,width-priv->left_border_width,priv->top_border_height);
-//	gtk_widget_set_size_request(priv->bot_right_vp,width-priv->left_border_width,height-priv->top_border_height);
+
 return TRUE;
 }
 

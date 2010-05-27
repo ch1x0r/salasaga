@@ -108,24 +108,24 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 		old_allocation.y = y1;
 		old_allocation.width = x2;
 		old_allocation.height = 1;
-		time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
+		//time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
 		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
 
 		// Restore bottom line segment
 		old_allocation.y = y1 + y2;
-		time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
+		//time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
 		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
 
 		// Restore left line segment
 		old_allocation.y = y1;
 		old_allocation.width = 1;
 		old_allocation.height = y2;
-		time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
+		//time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
 		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
 
 		// Restore right line segment
 		old_allocation.x = width - 1;
-		time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
+		//time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
 		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
 	}
 

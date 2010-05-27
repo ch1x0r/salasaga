@@ -367,9 +367,9 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 		// The solid rows
 		gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_bot_right), GDK_GC(bg_image_gc_bot_right),
 						0,
-						0 + (loop_counter * priv->row_height),
+						(loop_counter * priv->row_height),
 						width - 1,
-						0 + (loop_counter * priv->row_height));
+						(loop_counter * priv->row_height));
 	}
 //
 //	// Draw the left border area

@@ -62,13 +62,13 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 	if (NULL == colourmap)
 	{
 		colourmap = gdk_colormap_get_system();
-		gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer), GDK_COLORMAP(colourmap));
+		gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_COLORMAP(colourmap));
 	}
 	if (NULL == display_buffer_gc)
 	{
-		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
+		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer_bot_right));
 	}
-	left_border = time_line_get_left_border_width(priv);
+	left_border = 0;// time_line_get_left_border_width(priv);
 
 	// Select the layer we're working with
 	layer_pointer = get_current_slide_layers_pointer();
@@ -76,7 +76,7 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 	layer_data = g_list_nth_data(layer_pointer, layer_number);
 
 	// Set the height related variables
-	layer_y = priv->top_border_height + (layer_number * priv->row_height) + 2;
+	layer_y =  (layer_number * priv->row_height) + 2;
 	layer_height = priv->row_height - 3;
 
 	// Check if there's a fade in transition for this layer
@@ -86,31 +86,31 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 		layer_x = left_border + (layer_data->start_time * time_line_get_pixels_per_second()) + 1;
 		layer_width = (layer_data->transition_in_duration * time_line_get_pixels_per_second());
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fade);
-		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(display_buffer_gc), TRUE,
 				layer_x, layer_y, layer_width, layer_height);
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
-		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), FALSE,
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(display_buffer_gc), FALSE,
 				layer_x, layer_y, layer_width, layer_height - 1);
 
 		// Draw the fully visible duration
 		layer_x = left_border + ((layer_data->start_time + layer_data->transition_in_duration) * time_line_get_pixels_per_second()) + 1;
 		layer_width = (layer_data->duration * time_line_get_pixels_per_second());
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
-		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
-				layer_x, layer_y, layer_width, layer_height);
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(display_buffer_gc), TRUE,
+				layer_x, layer_y, layer_width, layer_height-1);
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
-		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), FALSE,
-				layer_x - 1, layer_y, layer_width, layer_height - 1);
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(display_buffer_gc), FALSE,
+				layer_x - 1, layer_y, layer_width, layer_height);
 	} else
 	{
 		// There's no fade in transition for this layer
 		layer_x = left_border + (layer_data->start_time * time_line_get_pixels_per_second()) + 1;
 		layer_width = (layer_data->duration * time_line_get_pixels_per_second());
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_fully_visible);
-		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), TRUE,
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(display_buffer_gc), TRUE,
 				layer_x, layer_y, layer_width, layer_height);
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
-		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), FALSE,
+		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(display_buffer_gc), FALSE,
 				layer_x, layer_y, layer_width - 1, layer_height - 1);
 	}
 

@@ -87,12 +87,12 @@ GtkWidget *create_time_line(void)
 	gtk_box_pack_start(GTK_BOX(get_time_line_vbox()), GTK_WIDGET(get_time_line_container()), TRUE, TRUE, 0);
 
 	// Add signal handlers to the time line area for receiving events (i.e. mouse clicks)
-	g_signal_connect(get_time_line_container(), "button_release_event", G_CALLBACK(time_line_button_release_event), NULL);
-	g_signal_connect(get_time_line_container(), "button_press_event", G_CALLBACK(time_line_button_press_event), NULL);
-	g_signal_connect(get_time_line_container(), "motion_notify_event", G_CALLBACK(time_line_motion_notify_event), NULL);
-
-	// Add a signal handler to the time line, to be called whenever a key is pressed while it is in focus
-	g_signal_connect(get_time_line_container(), "key-release-event", G_CALLBACK(delete_key_release_event), NULL);
+//	g_signal_connect(get_time_line_container(), "button_release_event", G_CALLBACK(time_line_button_release_event), NULL);
+//	g_signal_connect(get_time_line_container(), "button_press_event", G_CALLBACK(time_line_button_press_event), NULL);
+//	g_signal_connect(get_time_line_container(), "motion_notify_event", G_CALLBACK(time_line_motion_notify_event), NULL);
+//
+//	// Add a signal handler to the time line, to be called whenever a key is pressed while it is in focus
+//	g_signal_connect(get_time_line_container(), "key-release-event", G_CALLBACK(delete_key_release_event), NULL);
 
 	// Ensure we get the signals we want
 	gtk_widget_set_events(get_time_line_container(), gtk_widget_get_events(get_time_line_container())

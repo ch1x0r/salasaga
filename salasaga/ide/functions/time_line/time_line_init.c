@@ -145,12 +145,6 @@ gboolean expose_event_bot_left(GtkWidget *widget,GdkEventExpose *event, gpointer
 
 
 
-
-
-
-
-
-
 gboolean realize_allocate(GtkWidget *widget,gpointer user_data)
 {
 
@@ -168,7 +162,9 @@ gboolean realize_allocate(GtkWidget *widget,gpointer user_data)
 	gtk_widget_set_size_request(priv->bot_left_vp,priv->left_border_width,priv->main_height);
 	gtk_widget_set_size_request(priv->top_right_vp,priv->main_width,priv->top_border_height);
 	gtk_widget_set_size_request(priv->bot_right_vp,priv->main_width,priv->main_height);
+
 	}
+	time_line_internal_draw_selection_highlight(priv, WIDGET_MINIMUM_WIDTH);
 	return TRUE;
 }
 
@@ -211,9 +207,12 @@ void time_line_init(TimeLine *time_line)
 	time_line_internal_initialise_bg_image(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
 	// Call our internal function to create the display buffer
 	time_line_internal_initialise_display_buffer(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
+	realize_allocate(get_time_line_container(),priv);
+	time_line_internal_draw_layer_info(priv);
 
 	gtk_box_pack_start(GTK_BOX(time_line), GTK_WIDGET(priv->main_table), TRUE, TRUE, 0);
 
+	//realize_allocate(get_time_line_container(),priv);
 	g_signal_connect_after(priv->main_table, "realize", G_CALLBACK(realize_allocate),priv);
 
 	g_signal_connect(priv->top_left_evb, "expose-event", G_CALLBACK(expose_event_top_left),priv);
@@ -225,10 +224,10 @@ void time_line_init(TimeLine *time_line)
 	g_signal_connect(priv->bot_left_evb, "expose-event", G_CALLBACK(expose_event_bot_left),priv);
 
 	// Draw the layer information
-	//time_line_internal_draw_layer_info(priv);
+
 
 	// Select the highlighted layer
-	//time_line_internal_draw_selection_highlight(priv, WIDGET_MINIMUM_WIDTH);
+	time_line_internal_draw_selection_highlight(priv, WIDGET_MINIMUM_WIDTH);
 
 	// Set a periodic time out, so we rate limit the calls to the motion notify (mouse drag) handler
 	priv->mouse_x = -1;
