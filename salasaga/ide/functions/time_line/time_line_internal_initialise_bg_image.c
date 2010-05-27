@@ -55,7 +55,7 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	const GdkColor		colour_left_bg_first = {0, (255 << 8), (250 << 8), (240 << 8) };
 	const GdkColor		colour_left_bg_second = {0, (253 << 8), (245 << 8), (230 << 8) };
 	const GdkColor		colour_main_first = {0, 65535, 65535, 65535 };
-	const GdkColor		colour_main_second = {0, 64000, 64000, 64000 };
+	const GdkColor		colour_main_second = {0, 65000, 65000, 65000 };
 	const GdkColor		colour_old_lace = {0, (253 << 8), (245 << 8), (230 << 8) };
 	const GdkColor		colour_white = {0, 65535, 65535, 65535 };
 	GdkColormap			*colourmap = NULL;			// Colourmap used for drawing
@@ -282,7 +282,7 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 
 
 
-	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_top_right), &colour_main_second);
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_top_right), &colour_left_bg_first);
 	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image_top_right), GDK_GC(bg_image_gc_top_right), TRUE,
 						0, 0, main_part_width, priv->top_border_height);
 
@@ -299,7 +299,14 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 						(loop_counter * time_line_get_pixels_per_second()),
 						priv->top_border_height - 5,
 						(loop_counter * time_line_get_pixels_per_second()),
-						priv->top_border_height - 1);
+						priv->top_border_height );
+
+		gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_top_right), GDK_GC(bg_image_gc_top_right),
+								((loop_counter + 0.5) * time_line_get_pixels_per_second()),
+								priv->top_border_height - 3,
+								((loop_counter + 0.5) * time_line_get_pixels_per_second()),
+								priv->top_border_height);
+
 
 		// The numbers themselves
 		g_string_printf(seconds_number, "%ds", loop_counter);
@@ -340,34 +347,34 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 //	g_object_unref(font_layout);
 //	g_string_free(seconds_number, TRUE);
 //
-//	// Draw the horizontal layer components
-//	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_antique_white_2);
-//	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
-//	loop_max = height / priv->row_height;
-//	for (loop_counter = 1; loop_counter <= loop_max; loop_counter++)
-//	{
-//		// The half second markings
-//		loop_max2 = width / time_line_get_pixels_per_second();
-//		for (loop_counter2 = 0; loop_counter2 <= loop_max2; loop_counter2++)
-//		{
-//			gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
-//							left_border + (time_line_get_pixels_per_second() >> 1) + (loop_counter2 * time_line_get_pixels_per_second()),
-//							priv->top_border_height + (loop_counter * priv->row_height) - 3,
-//							left_border + (time_line_get_pixels_per_second() >> 1) + (loop_counter2 * time_line_get_pixels_per_second()),
-//							priv->top_border_height + (loop_counter * priv->row_height));
-//		}
-//
-//		// The solid rows
-//		gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc),
-//						0,
-//						priv->top_border_height + (loop_counter * priv->row_height),
-//						width - 1,
-//						priv->top_border_height + (loop_counter * priv->row_height));
-//	}
+	// Draw the horizontal layer components
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_bot_right), &colour_antique_white_2);
+	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc_bot_right), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+	loop_max = height / priv->row_height;
+	for (loop_counter = 1; loop_counter <= loop_max; loop_counter++)
+	{
+		// The half second markings
+		loop_max2 = width / time_line_get_pixels_per_second();
+		for (loop_counter2 = 0; loop_counter2 <= loop_max2; loop_counter2++)
+		{
+			gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_bot_right), GDK_GC(bg_image_gc_bot_right),
+							(time_line_get_pixels_per_second() >> 1) + (loop_counter2 * time_line_get_pixels_per_second()),
+							(loop_counter * priv->row_height) - 3,
+							(time_line_get_pixels_per_second() >> 1) + (loop_counter2 * time_line_get_pixels_per_second()),
+							(loop_counter * priv->row_height));
+		}
+
+		// The solid rows
+		gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_bot_right), GDK_GC(bg_image_gc_bot_right),
+						0,
+						0 + (loop_counter * priv->row_height),
+						width - 1,
+						0 + (loop_counter * priv->row_height));
+	}
 //
 //	// Draw the left border area
-//	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc), &colour_black);
-//	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image), GDK_GC(bg_image_gc), left_border, priv->top_border_height, left_border, height);
+//	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_bot_right), &colour_black);
+//	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_bot_right), GDK_GC(bg_image_gc_bot_right), 0 ,0, w, height);
 
 	// Flag that we now have a valid background cache image
 	priv->cached_bg_valid = TRUE;
