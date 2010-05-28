@@ -332,7 +332,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
 			area.height = priv->row_height - 3;
 			area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
-			time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
+			//time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
 			time_line_internal_draw_layer_duration(priv, end_row);
 
 			// Refresh the newly drawn widget area
@@ -351,7 +351,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 			area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
 			area.height = priv->row_height - 3;
 			area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
-			time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
+			//time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
 			time_line_internal_draw_layer_duration(priv, end_row);
 
 			// Refresh the newly drawn widget area
@@ -585,7 +585,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
 				area.height = priv->row_height - 3;
 				area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
-				time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
+				//time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
 				time_line_internal_draw_layer_duration(priv, end_row);
 
 				// Refresh the newly drawn widget area
@@ -604,7 +604,7 @@ gboolean time_line_internal_widget_motion_notify_handler(TimeLine *this_time_lin
 				area.y = priv->top_border_height + (end_row * priv->row_height) + 2;
 				area.height = priv->row_height - 3;
 				area.width = GTK_WIDGET(this_time_line)->allocation.width - area.x;
-				time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
+				//time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
 				time_line_internal_draw_layer_duration(priv, end_row);
 
 				// Refresh the newly drawn widget area

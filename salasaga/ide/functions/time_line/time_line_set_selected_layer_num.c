@@ -51,6 +51,7 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	gint				height;
 	GtkAllocation		new_allocation;
 	GtkAllocation		old_allocation;
+	GtkAllocation		buffer_allocation;
 	TimeLinePrivate		*priv;
 	layer				*this_layer_data;			// Data for the presently selected layer
 	slide				*this_slide_data;			// Data for the presently selected slide
@@ -95,11 +96,11 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	// * Restore the background underneath the existing selection box *
 
 	// Only invalidate things if there is a gdk window set
-	if (NULL != GTK_WIDGET(widget)->window)
+	if (NULL != GTK_WIDGET(priv->bot_right_evb)->window)
 	{
 		// Calculate the corner points
 		x1 = 0;
-		y1 = priv->top_border_height + 1 + (priv->selected_layer_num * priv->row_height);
+		y1 = (priv->selected_layer_num * priv->row_height)+1;
 		x2 = width;
 		y2 = priv->row_height - 2;
 
@@ -108,25 +109,27 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 		old_allocation.y = y1;
 		old_allocation.width = x2;
 		old_allocation.height = 1;
-		//time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
-		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
+		buffer_allocation.x = 0;
+		buffer_allocation.y = (priv->selected_layer_num * priv->row_height);
+		time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height,4);
+		gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &old_allocation, TRUE);
 
 		// Restore bottom line segment
 		old_allocation.y = y1 + y2;
-		//time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
-		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
+		time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height,4);
+		gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &old_allocation, TRUE);
 
 		// Restore left line segment
 		old_allocation.y = y1;
 		old_allocation.width = 1;
 		old_allocation.height = y2;
-		//time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
-		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
+		time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height,4);
+		gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &old_allocation, TRUE);
 
 		// Restore right line segment
 		old_allocation.x = width - 1;
-		//time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height);
-		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &old_allocation, TRUE);
+		time_line_internal_redraw_bg_area(priv, old_allocation.x, old_allocation.y, old_allocation.width, old_allocation.height,4);
+		gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &old_allocation, TRUE);
 	}
 
 	// The previously selected row's selection lines have now been erased, so we can point to the new row
@@ -138,31 +141,31 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	// * Refresh the widget where the new lines were just drawn  *
 
 	// Only invalidate things if there is a gdk window set
-	if (NULL != GTK_WIDGET(widget)->window)
+	if (NULL != GTK_WIDGET(priv->bot_right_evb)->window)
 	{
 		// Update the corner points
-		y1 = priv->top_border_height + 1 + (selected_row * priv->row_height);
+		y1 = (selected_row * priv->row_height) +1 ;
 
 		// Refresh top line segment
 		new_allocation.x = x1;
 		new_allocation.y = y1;
 		new_allocation.width = x2;
 		new_allocation.height = 1;
-		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
+		gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &new_allocation, TRUE);
 
 		// Refresh bottom line segment
 		new_allocation.y = y1 + y2;
-		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
+		gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &new_allocation, TRUE);
 
 		// Refresh left line segment
 		new_allocation.y = y1;
 		new_allocation.width = 1;
 		new_allocation.height = y2;
-		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
+		gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &new_allocation, TRUE);
 
 		// Refresh right line segment
 		new_allocation.x = width - 1;
-		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &new_allocation, TRUE);
+		gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &new_allocation, TRUE);
 	}
 
 	// If the newly selected layer is an image layer, then enable the "Layer -> Image *" menu selections

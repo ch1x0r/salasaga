@@ -45,6 +45,9 @@
 #include "time_line_internal_initialise_display_buffer.h"
 #include "time_line_internal_widget_motion_notify_handler.h"
 #include "time_line_internal_make_widgets.h"
+#include "time_line_get_left_border_width.h"
+#include "time_line_get_cursor_position.h"
+#include "time_line_internal_draw_cursor.h"
 #include "../working_area/draw_workspace.h"
 
 
@@ -77,6 +80,7 @@ gboolean expose_event_top_right(GtkWidget *widget,GdkEventExpose *event, gpointe
 	static GdkGC		*this_gc = NULL;
 	GString				*message;
 	TimeLinePrivate		*priv;
+	gint				new_cursor_pos;
 	priv = (TimeLinePrivate *)user;
 
 	if(priv->top_right_evb->window == NULL || priv->display_buffer_top_right == NULL){
@@ -90,8 +94,13 @@ gboolean expose_event_top_right(GtkWidget *widget,GdkEventExpose *event, gpointe
 	{
 		this_gc = gdk_gc_new(GDK_DRAWABLE(priv->top_right_evb->window));
 	}
+
+	new_cursor_pos = round(time_line_get_cursor_position(priv->main_table->parent) * time_line_get_pixels_per_second());
+	time_line_internal_draw_cursor(priv->main_table->parent, new_cursor_pos);
+
 	gdk_draw_drawable(GDK_DRAWABLE(priv->top_right_evb->window), GDK_GC(this_gc),
 	GDK_PIXMAP(priv->display_buffer_top_right),0,0,0,0,1000, priv->top_border_height);
+
 	return TRUE;
 }
 
@@ -100,6 +109,7 @@ gboolean expose_event_bot_right(GtkWidget *widget,GdkEventExpose *event, gpointe
 	static GdkGC		*this_gc = NULL;
 	GString				*message;
 	TimeLinePrivate		*priv;
+	gint				new_cursor_pos;
 	priv = (TimeLinePrivate *)user;
 
 	if(priv->bot_right_evb->window == NULL || priv->display_buffer_bot_right == NULL){
@@ -113,8 +123,12 @@ gboolean expose_event_bot_right(GtkWidget *widget,GdkEventExpose *event, gpointe
 	{
 		this_gc = gdk_gc_new(GDK_DRAWABLE(priv->bot_right_evb->window));
 	}
+	new_cursor_pos = round(priv->cursor_position * time_line_get_pixels_per_second());
+	time_line_internal_draw_cursor(priv->main_table->parent, new_cursor_pos);
+
 	gdk_draw_drawable(GDK_DRAWABLE(priv->bot_right_evb->window), GDK_GC(this_gc),
 	GDK_PIXMAP(priv->display_buffer_bot_right),0,0,0,0,1000, 1000);
+
 	return TRUE;
 }
 
@@ -164,8 +178,18 @@ gboolean realize_allocate(GtkWidget *widget,gpointer user_data)
 	gtk_widget_set_size_request(priv->bot_right_vp,priv->main_width,priv->main_height);
 
 	}
-	time_line_internal_draw_selection_highlight(priv, WIDGET_MINIMUM_WIDTH);
+
 	return TRUE;
+}
+
+gboolean expose_table(GtkWidget *widget,GdkEventExpose *event,gpointer user_data){
+	TimeLinePrivate		*priv;
+	gint				new_cursor_pos;
+	priv = (TimeLinePrivate *)user_data;
+
+	new_cursor_pos = round(priv->cursor_position * time_line_get_pixels_per_second());
+	time_line_internal_draw_cursor(priv->main_table->parent, new_cursor_pos);
+	return FALSE;
 }
 
 void time_line_init(TimeLine *time_line)
@@ -207,20 +231,19 @@ void time_line_init(TimeLine *time_line)
 	time_line_internal_initialise_bg_image(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
 	// Call our internal function to create the display buffer
 	time_line_internal_initialise_display_buffer(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
+
 	realize_allocate(get_time_line_container(),priv);
+
 	time_line_internal_draw_layer_info(priv);
 
 	gtk_box_pack_start(GTK_BOX(time_line), GTK_WIDGET(priv->main_table), TRUE, TRUE, 0);
 
 	//realize_allocate(get_time_line_container(),priv);
 	g_signal_connect_after(priv->main_table, "realize", G_CALLBACK(realize_allocate),priv);
-
+	g_signal_connect_after(priv->main_table, "expose-event", G_CALLBACK(expose_table),priv);
 	g_signal_connect(priv->top_left_evb, "expose-event", G_CALLBACK(expose_event_top_left),priv);
-
 	g_signal_connect(priv->top_right_evb, "expose-event", G_CALLBACK(expose_event_top_right),priv);
-
 	g_signal_connect(priv->bot_right_evb, "expose-event", G_CALLBACK(expose_event_bot_right),priv);
-
 	g_signal_connect(priv->bot_left_evb, "expose-event", G_CALLBACK(expose_event_bot_left),priv);
 
 	// Draw the layer information

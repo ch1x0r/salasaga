@@ -30,7 +30,7 @@
 extern "C" {
 #endif // __cplusplus
 
-gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint y1, gint width, gint height);
+gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint y1, gint width, gint height,guint portion);
 
 #ifdef __cplusplus
 }

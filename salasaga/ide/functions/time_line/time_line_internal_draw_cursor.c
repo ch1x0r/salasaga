@@ -48,7 +48,8 @@ gboolean time_line_internal_draw_cursor(GtkWidget *widget, gint pixel_num)
 	const GdkColor		colour_blue = { 0, 0, 0, 65535 };
 	GdkPoint			cursor_points[3];			// Holds the corner points for the (triangular) cursor head
 	TimeLinePrivate		*priv;
-	static GdkGC		*this_gc = NULL;
+	static GdkGC		*this_gc_top_right = NULL;
+	static GdkGC		*this_gc_bot_right = NULL;
 	TimeLine			*this_time_line;
 
 
@@ -61,15 +62,19 @@ gboolean time_line_internal_draw_cursor(GtkWidget *widget, gint pixel_num)
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
 	// Create a graphic context if we don't have one already
-	if (NULL == this_gc)
+	if (NULL == this_gc_bot_right)
 	{
-		this_gc = gdk_gc_new(GDK_DRAWABLE(widget->window));
+		this_gc_bot_right = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer_bot_right));
+	}
+	if (NULL == this_gc_top_right)
+	{
+		this_gc_top_right = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer_top_right));
 	}
 
 	// Draw the line part of the time line cursor
-	gdk_gc_set_rgb_fg_color(GDK_GC(this_gc), &colour_blue);
-	gdk_gc_set_line_attributes(GDK_GC(this_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
-	gdk_draw_line(GDK_DRAWABLE(widget->window), GDK_GC(this_gc), pixel_num, 0, pixel_num, widget->allocation.height);
+	gdk_gc_set_rgb_fg_color(GDK_GC(this_gc_bot_right), &colour_blue);
+	gdk_gc_set_line_attributes(GDK_GC(this_gc_bot_right), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
+	gdk_draw_line(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(this_gc_bot_right), pixel_num, 0, pixel_num, widget->allocation.height);
 
 	// Draw the top part of the time line cursor
 	cursor_points[0].x = pixel_num - (CURSOR_HEAD_WIDTH / 2);
@@ -78,9 +83,9 @@ gboolean time_line_internal_draw_cursor(GtkWidget *widget, gint pixel_num)
 	cursor_points[1].y = CURSOR_HEAD_TOP;
 	cursor_points[2].x = pixel_num;
 	cursor_points[2].y = priv->top_border_height - 1;
-	gdk_draw_polygon(GDK_DRAWABLE(widget->window), GDK_GC(this_gc), TRUE, cursor_points, 3);
-	gdk_gc_set_rgb_fg_color(GDK_GC(this_gc), &colour_black);
-	gdk_draw_polygon(GDK_DRAWABLE(widget->window), GDK_GC(this_gc), FALSE, cursor_points, 3);
+	gdk_draw_polygon(GDK_DRAWABLE(priv->display_buffer_top_right), GDK_GC(this_gc_top_right), TRUE, cursor_points, 3);
+	gdk_gc_set_rgb_fg_color(GDK_GC(this_gc_top_right), &colour_black);
+	gdk_draw_polygon(GDK_DRAWABLE(priv->display_buffer_top_right), GDK_GC(this_gc_top_right), FALSE, cursor_points, 3);
 
 	return TRUE;
 }

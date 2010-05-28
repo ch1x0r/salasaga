@@ -45,6 +45,7 @@
 #include "time_line_internal_draw_layer_info.h"
 #include "time_line_internal_draw_selection_highlight.h"
 #include "time_line_internal_initialise_display_buffer.h"
+
 #include "time_line_internal_make_widgets.h"
 
 gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
@@ -117,7 +118,7 @@ gint time_line_expose(GtkWidget *widget, GdkEventExpose *event)
 
 	// Draw the time line cursor
 //	new_cursor_pos = round(time_line_get_cursor_position(widget) * time_line_get_pixels_per_second()) + time_line_get_left_border_width(priv);
-//	time_line_internal_draw_cursor(widget, new_cursor_pos);
+	time_line_internal_draw_cursor(widget, new_cursor_pos);
 
 	return TRUE;
 }

@@ -242,7 +242,7 @@ gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gin
 
 
 	// Copy the timeline background image to the display buffer
-	time_line_internal_redraw_bg_area(priv, 0, 0,width, height);
+	time_line_internal_redraw_bg_area(priv, 0, 0,width, height,0);
 
 
 	return TRUE;

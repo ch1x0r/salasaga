@@ -41,7 +41,7 @@
 #include "time_line_internal_initialise_bg_image.h"
 
 
-gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint y1, gint width, gint height)
+gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint y1, gint width, gint height, guint portion)
 {
 	static GdkGC		*display_buffer_gc_bot_right = NULL;
 	static GdkGC		*display_buffer_gc_top_left = NULL;
@@ -71,18 +71,24 @@ gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint 
 		// It's not, so recreate the timeline background image
 		time_line_internal_initialise_bg_image(priv, width, height);
 	}
-
+	if(portion == 0 || portion == 1)
 	// Refresh the display buffer for the desired area
 	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer_top_left), GDK_GC(display_buffer_gc_top_left),
 			GDK_PIXMAP(priv->cached_bg_image_top_left), x1, y1, x1, y1, priv->left_border_width, priv->top_border_height);
 
+	if(portion == 0 || portion == 2)
 	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer_top_right), GDK_GC(display_buffer_gc_top_right),
 				GDK_PIXMAP(priv->cached_bg_image_top_right), x1, y1, x1, y1, width, priv->top_border_height);
 
-	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(display_buffer_gc_bot_right),
-					GDK_PIXMAP(priv->cached_bg_image_bot_right), x1, y1, x1, y1, width, height);
+	if(portion == 0 || portion == 3)
+		gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer_bot_left), GDK_GC(display_buffer_gc_bot_left),
+								GDK_PIXMAP(priv->cached_bg_image_bot_left), x1, y1, x1, y1, priv->left_border_width, height);
 
-	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer_bot_left), GDK_GC(display_buffer_gc_bot_left),
-						GDK_PIXMAP(priv->cached_bg_image_bot_left), x1, y1, x1, y1, priv->left_border_width, height);
+	if(portion == 0 || portion == 4)
+		gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(display_buffer_gc_bot_right),
+							GDK_PIXMAP(priv->cached_bg_image_bot_right), x1, y1, x1, y1, width, height);
+
+
+
 	return TRUE;
 }

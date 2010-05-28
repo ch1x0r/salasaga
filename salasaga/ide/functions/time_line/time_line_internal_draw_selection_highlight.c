@@ -59,9 +59,9 @@ void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint wid
 	// Draw the selection
 	selected_row = priv->selected_layer_num;
 	x1 = 0;
-	y1 = (selected_row * priv->row_height);
+	y1 = (selected_row * priv->row_height)+1;
 	x2 = width - 1;
-	y2 = priv->row_height - 2;
+	y2 = priv->row_height -2;
 	gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_red);
 	gdk_gc_set_line_attributes(GDK_GC(display_buffer_gc), 1, GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	gdk_gc_set_dashes(GDK_GC(display_buffer_gc), 1, dash_list, 2);
