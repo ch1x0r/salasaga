@@ -78,8 +78,21 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	gint 				main_part_width;
 	gint 				main_part_height;
 
-	main_part_width = width;// - priv->left_border_width;
-	main_part_height = height - priv->top_border_height;
+	if (WIDGET_MINIMUM_HEIGHT > height)
+	{
+		height = WIDGET_MINIMUM_HEIGHT;
+	}
+	if (WIDGET_MINIMUM_WIDTH > width)
+	{
+		width = WIDGET_MINIMUM_WIDTH;
+	}
+
+	main_part_width = get_current_slide_duration() * time_line_get_pixels_per_second() + 10;// - priv->left_border_width;
+	main_part_height = (get_current_slide_num_layers()+1)*priv->row_height + 10;
+	if(main_part_height < height)
+		main_part_height = height;
+	if(main_part_width < width)
+			main_part_width = width;
 	// Initialisation
 	colourmap = gdk_colormap_get_system();
 	font_context = gdk_pango_context_get();
@@ -94,15 +107,17 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 		// Retrieve the size of the existing cached background image
 		gdk_drawable_get_size(GDK_PIXMAP(priv->cached_bg_image_top_left), &existing_bg_width, &existing_bg_height);
 		// If we have an existing cached background image of the correct height and width, we re-use it
-		if ((existing_bg_width == priv->left_border_width) && (existing_bg_height == priv->top_border_height))
-		return TRUE;
-		// The existing cached image isn't usable, so we free it and proceed with creating a new one
+		if ((existing_bg_width != priv->left_border_width) || (existing_bg_height != priv->top_border_height))
+		{
 		g_object_unref(GDK_PIXMAP(priv->cached_bg_image_top_left));
 		priv->cached_bg_image_top_left = NULL;
 		priv->cached_bg_valid = FALSE;
+		}
 	}
+	if(priv->cached_bg_image_top_left==NULL){
 	priv->cached_bg_image_top_left = gdk_pixmap_new(NULL, priv->left_border_width, priv->top_border_height, colourmap->visual->depth);
 	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->cached_bg_image_top_left), GDK_COLORMAP(colourmap));
+	}
 	if (NULL == priv->cached_bg_image_top_left)
 	{
 		// Creating the background image didn't work
@@ -154,15 +169,17 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 		// Retrieve the size of the existing cached background image
 		gdk_drawable_get_size(GDK_PIXMAP(priv->cached_bg_image_top_right), &existing_bg_width, &existing_bg_height);
 		// If we have an existing cached background image of the correct height and width, we re-use it
-		if ((existing_bg_width == main_part_width) && (existing_bg_height == priv->top_border_height))
-		return TRUE;
-		// The existing cached image isn't usable, so we free it and proceed with creating a new one
+		if ((existing_bg_width != main_part_width) || (existing_bg_height != priv->top_border_height))
+		{
 		g_object_unref(GDK_PIXMAP(priv->cached_bg_image_top_right));
 		priv->cached_bg_image_top_right = NULL;
 		priv->cached_bg_valid = FALSE;
+		}
 	}
+	if(NULL == priv->cached_bg_image_top_right){
 	priv->cached_bg_image_top_right = gdk_pixmap_new(NULL, main_part_width, priv->top_border_height, colourmap->visual->depth);
 	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->cached_bg_image_top_right), GDK_COLORMAP(colourmap));
+	}
 	if (NULL == priv->cached_bg_image_top_right)
 	{
 		// Creating the background image didn't work
@@ -181,15 +198,18 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 		// Retrieve the size of the existing cached background image
 		gdk_drawable_get_size(GDK_PIXMAP(priv->cached_bg_image_bot_right), &existing_bg_width, &existing_bg_height);
 		// If we have an existing cached background image of the correct height and width, we re-use it
-		if ((existing_bg_width == main_part_width) && (existing_bg_height == main_part_height))
-		return TRUE;
+		if ((existing_bg_width != main_part_width) || (existing_bg_height != main_part_height))
+		{
 		// The existing cached image isn't usable, so we free it and proceed with creating a new one
 		g_object_unref(GDK_PIXMAP(priv->cached_bg_image_bot_right));
 		priv->cached_bg_image_bot_right = NULL;
 		priv->cached_bg_valid = FALSE;
+		}
 	}
+	if(NULL==priv->cached_bg_image_bot_right){
 	priv->cached_bg_image_bot_right = gdk_pixmap_new(NULL, main_part_width, main_part_height, colourmap->visual->depth);
 	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->cached_bg_image_bot_right), GDK_COLORMAP(colourmap));
+	}
 	if (NULL == priv->cached_bg_image_bot_right)
 	{
 			// Creating the background image didn't work
@@ -209,15 +229,17 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 		// Retrieve the size of the existing cached background image
 		gdk_drawable_get_size(GDK_PIXMAP(priv->cached_bg_image_bot_left), &existing_bg_width, &existing_bg_height);
 		// If we have an existing cached background image of the correct height and width, we re-use it
-		if ((existing_bg_width == priv->left_border_width) && (existing_bg_height == main_part_height))
-		return TRUE;
-		// The existing cached image isn't usable, so we free it and proceed with creating a new one
+		if ((existing_bg_width != priv->left_border_width) || (existing_bg_height != main_part_height))
+		{
 		g_object_unref(GDK_PIXMAP(priv->cached_bg_image_bot_left));
 		priv->cached_bg_image_bot_left = NULL;
 		priv->cached_bg_valid = FALSE;
+		}
 	}
+	if(NULL == priv->cached_bg_image_bot_left){
 	priv->cached_bg_image_bot_left = gdk_pixmap_new(NULL, priv->left_border_width, main_part_height, colourmap->visual->depth);
 	gdk_drawable_set_colormap(GDK_DRAWABLE(priv->cached_bg_image_bot_left), GDK_COLORMAP(colourmap));
+	}
 	if (NULL == priv->cached_bg_image_bot_left)
 	{
 			// Creating the background image didn't work
@@ -250,7 +272,7 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 
 
 	// Horizontal alternating background rows
-	loop_max = height / priv->row_height;
+	loop_max = main_part_height / priv->row_height;
 	for (loop_counter = 0; loop_counter <= loop_max; loop_counter++)
 	{
 		if (TRUE == (flip_flop = !flip_flop))
@@ -263,7 +285,7 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 			// Background for right side
 			gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_bot_right), &colour_main_first);
 			gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image_bot_right), GDK_GC(bg_image_gc_bot_right), TRUE,
-								0, (loop_counter * priv->row_height), width, ((loop_counter + 1) * priv->row_height));
+								0, (loop_counter * priv->row_height), main_part_width, ((loop_counter + 1) * priv->row_height));
 		} else
 		{
 			// Alternative colour background for left side
@@ -273,7 +295,7 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 			// Alternative colour background for right side
 			gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_bot_right), &colour_main_second);
 			gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image_bot_right), GDK_GC(bg_image_gc_bot_right), TRUE,
-								0, (loop_counter * priv->row_height), width, ((loop_counter + 1) * priv->row_height));
+								0, (loop_counter * priv->row_height), main_part_width, ((loop_counter + 1) * priv->row_height));
 		}
 	}
 
@@ -328,19 +350,8 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 						(loop_counter * time_line_get_pixels_per_second()),
 						0,
 						(loop_counter * time_line_get_pixels_per_second()),
-						height);
+						main_part_height);
 	}
-
-
-
-
-
-
-
-
-
-
-
 
 //	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
 //	pango_font_description_free(font_description);
@@ -350,11 +361,11 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	// Draw the horizontal layer components
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_bot_right), &colour_antique_white_2);
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc_bot_right), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
-	loop_max = height / priv->row_height;
+	loop_max = main_part_height / priv->row_height;
 	for (loop_counter = 1; loop_counter <= loop_max; loop_counter++)
 	{
 		// The half second markings
-		loop_max2 = width / time_line_get_pixels_per_second();
+		loop_max2 = main_part_width / time_line_get_pixels_per_second();
 		for (loop_counter2 = 0; loop_counter2 <= loop_max2; loop_counter2++)
 		{
 			gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_bot_right), GDK_GC(bg_image_gc_bot_right),
@@ -368,7 +379,7 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 		gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_bot_right), GDK_GC(bg_image_gc_bot_right),
 						0,
 						(loop_counter * priv->row_height),
-						width - 1,
+						main_part_width - 1,
 						(loop_counter * priv->row_height));
 	}
 //

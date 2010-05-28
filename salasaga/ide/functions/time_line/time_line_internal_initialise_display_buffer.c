@@ -78,8 +78,12 @@ gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gin
 	{
 		width = new_width;
 	}
-	main_part_width = width;// - priv->left_border_width;
-	main_part_height = height - priv->top_border_height;
+	main_part_width = priv->stored_slide_duration * time_line_get_pixels_per_second() + 10;// - priv->left_border_width;
+	main_part_height = (get_current_slide_num_layers()+1)*priv->row_height + 10;
+	if(main_part_height < height)
+		main_part_height = height;
+	if(main_part_width < width)
+			main_part_width = width;
 
 	// If we already have a display buffer, we check if we can reuse it
 	if (NULL != priv->display_buffer_top_left)
@@ -242,7 +246,7 @@ gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gin
 
 
 	// Copy the timeline background image to the display buffer
-	time_line_internal_redraw_bg_area(priv, 0, 0,width, height,0);
+	time_line_internal_redraw_bg_area(priv, 0, 0,main_part_width, main_part_height,0);
 
 
 	return TRUE;

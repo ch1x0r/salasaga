@@ -52,7 +52,8 @@ gboolean time_line_regenerate_widget(GtkWidget *widget)
 	TimeLinePrivate		*priv;
 	TimeLine			*this_time_line;
 	gint				width;
-
+	gint				main_part_width;
+	gint				main_part_height;
 
 	// Safety check
 	if (NULL == widget)
@@ -69,35 +70,41 @@ gboolean time_line_regenerate_widget(GtkWidget *widget)
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
 	// Ensure we have at least the minimum required widget size
-	if (WIDGET_MINIMUM_HEIGHT > GTK_WIDGET(widget)->allocation.height)
+	if (WIDGET_MINIMUM_HEIGHT > GTK_WIDGET(priv->main_table)->allocation.height)
 	{
 		height = WIDGET_MINIMUM_HEIGHT;
 	} else
 	{
-		height = GTK_WIDGET(widget)->allocation.height;
+		height = GTK_WIDGET(priv->main_table)->allocation.height;
 	}
-	if (WIDGET_MINIMUM_WIDTH > GTK_WIDGET(widget)->allocation.width)
+	if (WIDGET_MINIMUM_WIDTH > GTK_WIDGET(priv->main_table)->allocation.width)
 	{
 		width = WIDGET_MINIMUM_WIDTH;
 	} else
 	{
-		width = GTK_WIDGET(widget)->allocation.width;
+		width = GTK_WIDGET(priv->main_table)->allocation.width;
 	}
+	main_part_width = priv->stored_slide_duration * time_line_get_pixels_per_second() + 10;// - priv->left_border_width;
+	main_part_height = get_current_slide_num_layers()*priv->row_height + 10;
+	if(main_part_height < height)
+		main_part_height = height;
+	if(main_part_width < width)
+			main_part_width = width;
 
 	// If the cached background image isn't valid, we need to recreate it
 	if (FALSE == priv->cached_bg_valid)
 	{
-		time_line_internal_initialise_bg_image(priv, width, height);
+		time_line_internal_initialise_bg_image(priv, main_part_width, main_part_height);
 	}
 
 	// Recreate the display buffer
-	time_line_internal_initialise_display_buffer(priv, width, height);
+	time_line_internal_initialise_display_buffer(priv, main_part_width, main_part_height);
 
 	// Draw the layer information
 	time_line_internal_draw_layer_info(priv);
 
 	// Highlight the selected row
-	time_line_internal_draw_selection_highlight(priv, width);
+	time_line_internal_draw_selection_highlight(priv, main_part_width);
 
 	return TRUE;
 }

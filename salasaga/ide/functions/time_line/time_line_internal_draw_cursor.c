@@ -51,7 +51,7 @@ gboolean time_line_internal_draw_cursor(GtkWidget *widget, gint pixel_num)
 	static GdkGC		*this_gc_top_right = NULL;
 	static GdkGC		*this_gc_bot_right = NULL;
 	TimeLine			*this_time_line;
-
+	guint				height;
 
 	// Safety check
 	g_return_val_if_fail(widget != NULL, FALSE);
@@ -70,11 +70,13 @@ gboolean time_line_internal_draw_cursor(GtkWidget *widget, gint pixel_num)
 	{
 		this_gc_top_right = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer_top_right));
 	}
-
+	height = get_current_slide_num_layers()*priv->row_height + 10;
+	if(height<widget->allocation.height)
+		height = widget->allocation.height;
 	// Draw the line part of the time line cursor
 	gdk_gc_set_rgb_fg_color(GDK_GC(this_gc_bot_right), &colour_blue);
 	gdk_gc_set_line_attributes(GDK_GC(this_gc_bot_right), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
-	gdk_draw_line(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(this_gc_bot_right), pixel_num, 0, pixel_num, widget->allocation.height);
+	gdk_draw_line(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(this_gc_bot_right), pixel_num, 0, pixel_num, height);
 
 	// Draw the top part of the time line cursor
 	cursor_points[0].x = pixel_num - (CURSOR_HEAD_WIDTH / 2);

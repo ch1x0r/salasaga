@@ -107,7 +107,7 @@ void draw_timeline(void)
 
 	gtk_container_add(GTK_CONTAINER(get_time_line_container()), GTK_WIDGET(slide_pointer->timeline_widget));
 	gtk_widget_show_all(GTK_WIDGET(get_time_line_container()));
-	gtk_widget_realize(get_time_line_container());
+	//gtk_widget_realize(get_time_line_container());
 
 
 	//Updating the GtkEventBox for the scroll bars
@@ -119,6 +119,6 @@ void draw_timeline(void)
 
 
 
-	if (NULL != GTK_WIDGET(get_time_line_container())->window)
-		gdk_window_invalidate_rect(GTK_WIDGET(get_time_line_container())->window, &GTK_WIDGET(get_time_line_container())->allocation, TRUE);
+	if (NULL != GTK_WIDGET(priv->bot_right_evb)->window)
+		gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &GTK_WIDGET(priv->bot_right_evb)->allocation, TRUE);
 }

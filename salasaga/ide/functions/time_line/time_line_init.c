@@ -110,6 +110,8 @@ gboolean expose_event_bot_right(GtkWidget *widget,GdkEventExpose *event, gpointe
 	GString				*message;
 	TimeLinePrivate		*priv;
 	gint				new_cursor_pos;
+	guint				width;
+	guint				height;
 	priv = (TimeLinePrivate *)user;
 
 	if(priv->bot_right_evb->window == NULL || priv->display_buffer_bot_right == NULL){
@@ -123,11 +125,17 @@ gboolean expose_event_bot_right(GtkWidget *widget,GdkEventExpose *event, gpointe
 	{
 		this_gc = gdk_gc_new(GDK_DRAWABLE(priv->bot_right_evb->window));
 	}
+
+	width = (get_current_slide_duration() * time_line_get_pixels_per_second());
+	height = (get_current_slide_num_layers()*priv->row_height)+10;
+	if(width<priv->main_table->allocation.width)
+		 width = priv->main_table->allocation.width;
+	if(height<priv->main_table->allocation.height)
+			 height = priv->main_table->allocation.height;
 	new_cursor_pos = round(priv->cursor_position * time_line_get_pixels_per_second());
 	time_line_internal_draw_cursor(priv->main_table->parent, new_cursor_pos);
-
 	gdk_draw_drawable(GDK_DRAWABLE(priv->bot_right_evb->window), GDK_GC(this_gc),
-	GDK_PIXMAP(priv->display_buffer_bot_right),0,0,0,0,1000, 1000);
+	GDK_PIXMAP(priv->display_buffer_bot_right),0,0,0,0,width, height);
 
 	return TRUE;
 }
@@ -163,20 +171,19 @@ gboolean realize_allocate(GtkWidget *widget,gpointer user_data)
 {
 
 	TimeLinePrivate		*priv;
-//	GString *message;
 	priv = (TimeLinePrivate *)user_data;
-//	message = g_string_new(NULL);
-	if(widget->allocation.width > priv->left_border_width && (widget->allocation.width <1200) ){
+	if(widget->allocation.width > priv->left_border_width ){
 	priv->main_width = widget->allocation.width - priv->left_border_width;
 	priv->main_height = widget->allocation.height - priv->top_border_height;
-//	g_string_printf(message, "%d : %d",priv->main_width,widget->allocation.height);
-//	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), message->str);
-//	g_string_free(message, TRUE);
 	gtk_widget_set_size_request(priv->top_left_vp,priv->left_border_width,priv->top_border_height);
 	gtk_widget_set_size_request(priv->bot_left_vp,priv->left_border_width,priv->main_height);
 	gtk_widget_set_size_request(priv->top_right_vp,priv->main_width,priv->top_border_height);
 	gtk_widget_set_size_request(priv->bot_right_vp,priv->main_width,priv->main_height);
 
+	time_line_internal_initialise_bg_image(priv,widget->allocation.width,widget->allocation.height);
+
+	gtk_widget_set_size_request(priv->bot_right_evb,(get_current_slide_duration() * time_line_get_pixels_per_second())+10,(get_current_slide_num_layers()*priv->row_height)+10);
+	gtk_widget_set_size_request(priv->bot_left_evb,priv->left_border_width,(get_current_slide_num_layers()*priv->row_height)+10);
 	}
 
 	return TRUE;
@@ -194,15 +201,7 @@ gboolean expose_table(GtkWidget *widget,GdkEventExpose *event,gpointer user_data
 
 void time_line_init(TimeLine *time_line)
 {
-	// Local variables
 	TimeLinePrivate		*priv;
-
-//	GString *message;
-//	message = g_string_new(NULL);
-//				g_string_printf(message, "%s ED358: %s", _("Error"), _("In initialize"));
-//				display_warning(message->str);
-//				g_string_free(message, TRUE);
-	// Initialise variable defaults
 	time_line_set_pixels_per_second(60);
 	priv = TIME_LINE_GET_PRIVATE(time_line);
 	priv->cached_bg_valid = FALSE;

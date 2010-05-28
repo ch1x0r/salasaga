@@ -72,7 +72,6 @@ gboolean time_line_internal_redraw_bg_area(TimeLinePrivate *priv, gint x1, gint 
 		time_line_internal_initialise_bg_image(priv, width, height);
 	}
 	if(portion == 0 || portion == 1)
-	// Refresh the display buffer for the desired area
 	gdk_draw_drawable(GDK_DRAWABLE(priv->display_buffer_top_left), GDK_GC(display_buffer_gc_top_left),
 			GDK_PIXMAP(priv->cached_bg_image_top_left), x1, y1, x1, y1, priv->left_border_width, priv->top_border_height);
 
