@@ -61,7 +61,8 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 	gint				x2 = 0;
 	gint				y1 = 0;
 	gint				y2 = 0;
-
+	gint				main_part_width;
+	gint 				main_part_height;
 
 	// Safety check
 	g_return_val_if_fail(widget != NULL, -1);
@@ -93,6 +94,12 @@ gboolean time_line_set_selected_layer_num(GtkWidget *widget, gint selected_row)
 		width = GTK_WIDGET(widget)->allocation.width;
 	}
 
+	main_part_width = (get_current_slide_duration()+1) * time_line_get_pixels_per_second();// - priv->left_border_width;
+	main_part_height = (get_current_slide_num_layers()+1)*priv->row_height + 10;
+	if(main_part_height > height)
+		height = main_part_height;
+	if(main_part_width > width)
+			width=main_part_width;
 	// * Restore the background underneath the existing selection box *
 
 	// Only invalidate things if there is a gdk window set

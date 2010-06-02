@@ -81,6 +81,8 @@ gboolean expose_event_top_right(GtkWidget *widget,GdkEventExpose *event, gpointe
 	GString				*message;
 	TimeLinePrivate		*priv;
 	gint				new_cursor_pos;
+	gint 				width;
+	gint				height;
 	priv = (TimeLinePrivate *)user;
 
 	if(priv->top_right_evb->window == NULL || priv->display_buffer_top_right == NULL){
@@ -94,12 +96,17 @@ gboolean expose_event_top_right(GtkWidget *widget,GdkEventExpose *event, gpointe
 	{
 		this_gc = gdk_gc_new(GDK_DRAWABLE(priv->top_right_evb->window));
 	}
-
+	width = ((get_current_slide_duration() +1)  * time_line_get_pixels_per_second());
+	height = (get_current_slide_num_layers() *priv->row_height)+10;
+	if(width<priv->main_table->allocation.width)
+		 width = priv->main_table->allocation.width;
+	if(height<priv->main_table->allocation.height)
+			 height = priv->main_table->allocation.height;
 	new_cursor_pos = round(time_line_get_cursor_position(priv->main_table->parent) * time_line_get_pixels_per_second());
 	time_line_internal_draw_cursor(priv->main_table->parent, new_cursor_pos);
 
 	gdk_draw_drawable(GDK_DRAWABLE(priv->top_right_evb->window), GDK_GC(this_gc),
-	GDK_PIXMAP(priv->display_buffer_top_right),0,0,0,0,1000, priv->top_border_height);
+	GDK_PIXMAP(priv->display_buffer_top_right),0,0,0,0,width, priv->top_border_height);
 
 	return TRUE;
 }
@@ -126,8 +133,8 @@ gboolean expose_event_bot_right(GtkWidget *widget,GdkEventExpose *event, gpointe
 		this_gc = gdk_gc_new(GDK_DRAWABLE(priv->bot_right_evb->window));
 	}
 
-	width = (get_current_slide_duration() * time_line_get_pixels_per_second());
-	height = (get_current_slide_num_layers()*priv->row_height)+10;
+	width = ((get_current_slide_duration() +1)  * time_line_get_pixels_per_second());
+	height = (get_current_slide_num_layers() *priv->row_height)+22;
 	if(width<priv->main_table->allocation.width)
 		 width = priv->main_table->allocation.width;
 	if(height<priv->main_table->allocation.height)
@@ -146,6 +153,8 @@ gboolean expose_event_bot_left(GtkWidget *widget,GdkEventExpose *event, gpointer
 	static GdkGC		*this_gc = NULL;
 	GString				*message;
 	TimeLinePrivate		*priv;
+	guint				width;
+	guint				height;
 	priv = (TimeLinePrivate *)user;
 
 	if(priv->bot_left_evb->window == NULL || priv->display_buffer_bot_left == NULL){
@@ -159,8 +168,16 @@ gboolean expose_event_bot_left(GtkWidget *widget,GdkEventExpose *event, gpointer
 	{
 		this_gc = gdk_gc_new(GDK_DRAWABLE(priv->bot_left_evb->window));
 	}
+	width = ((get_current_slide_duration() +1)  * time_line_get_pixels_per_second());
+		height = (get_current_slide_num_layers() *priv->row_height)+22;
+		if(width<priv->main_table->allocation.width)
+			 width = priv->main_table->allocation.width;
+		if(height<priv->main_table->allocation.height)
+				 height = priv->main_table->allocation.height;
+
+
 	gdk_draw_drawable(GDK_DRAWABLE(priv->bot_left_evb->window), GDK_GC(this_gc),
-	GDK_PIXMAP(priv->display_buffer_bot_left),0,0,0,0,priv->left_border_width,1000);
+	GDK_PIXMAP(priv->display_buffer_bot_left),0,0,0,0,priv->left_border_width,height);
 	return TRUE;
 }
 
@@ -171,21 +188,33 @@ gboolean realize_allocate(GtkWidget *widget,gpointer user_data)
 {
 
 	TimeLinePrivate		*priv;
+	gint width;
 	priv = (TimeLinePrivate *)user_data;
 	if(widget->allocation.width > priv->left_border_width ){
 	priv->main_width = widget->allocation.width - priv->left_border_width;
 	priv->main_height = widget->allocation.height - priv->top_border_height;
+
+	width = ((get_current_slide_duration()+1) * time_line_get_pixels_per_second());
+	//height = (get_current_slide_num_layers()*priv->row_height)+10;
+	if(width<priv->main_width)
+		width = priv->main_width;
+
 	gtk_widget_set_size_request(priv->top_left_vp,priv->left_border_width,priv->top_border_height);
 	gtk_widget_set_size_request(priv->bot_left_vp,priv->left_border_width,priv->main_height);
 	gtk_widget_set_size_request(priv->top_right_vp,priv->main_width,priv->top_border_height);
 	gtk_widget_set_size_request(priv->bot_right_vp,priv->main_width,priv->main_height);
 
-	time_line_internal_initialise_bg_image(priv,widget->allocation.width,widget->allocation.height);
-
-	gtk_widget_set_size_request(priv->bot_right_evb,(get_current_slide_duration() * time_line_get_pixels_per_second())+10,(get_current_slide_num_layers()*priv->row_height)+10);
-	gtk_widget_set_size_request(priv->bot_left_evb,priv->left_border_width,(get_current_slide_num_layers()*priv->row_height)+10);
+	gtk_widget_set_size_request(priv->top_right_evb,((get_current_slide_duration()+1) * time_line_get_pixels_per_second()),priv->top_border_height);
+	gtk_widget_set_size_request(priv->bot_right_evb,((get_current_slide_duration()+1) * time_line_get_pixels_per_second()),(get_current_slide_num_layers()*priv->row_height)+22);
+	gtk_widget_set_size_request(priv->bot_left_evb,priv->left_border_width,(get_current_slide_num_layers()*priv->row_height)+22);
 	}
+	time_line_internal_initialise_bg_image(priv,((get_current_slide_duration()+1) * time_line_get_pixels_per_second()),(get_current_slide_num_layers()*priv->row_height)+22);
 
+	time_line_internal_initialise_display_buffer(priv, ((get_current_slide_duration()+1) * time_line_get_pixels_per_second()),(get_current_slide_num_layers()*priv->row_height)+22);
+
+	time_line_internal_draw_layer_info(priv);
+
+	time_line_internal_draw_selection_highlight(priv, width);
 	return TRUE;
 }
 
@@ -227,13 +256,13 @@ void time_line_init(TimeLine *time_line)
 	//time_line_internal_make_widgets(priv);
 	time_line_internal_make_widgets(priv,WIDGET_MINIMUM_WIDTH,WIDGET_MINIMUM_HEIGHT);
 	// Call our internal time line function to create the cached background image
-	time_line_internal_initialise_bg_image(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
+	//time_line_internal_initialise_bg_image(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
 	// Call our internal function to create the display buffer
-	time_line_internal_initialise_display_buffer(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
+	//time_line_internal_initialise_display_buffer(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
 
 	realize_allocate(get_time_line_container(),priv);
 
-	time_line_internal_draw_layer_info(priv);
+	//time_line_internal_draw_layer_info(priv);
 
 	gtk_box_pack_start(GTK_BOX(time_line), GTK_WIDGET(priv->main_table), TRUE, TRUE, 0);
 
@@ -244,12 +273,6 @@ void time_line_init(TimeLine *time_line)
 	g_signal_connect(priv->top_right_evb, "expose-event", G_CALLBACK(expose_event_top_right),priv);
 	g_signal_connect(priv->bot_right_evb, "expose-event", G_CALLBACK(expose_event_bot_right),priv);
 	g_signal_connect(priv->bot_left_evb, "expose-event", G_CALLBACK(expose_event_bot_left),priv);
-
-	// Draw the layer information
-
-
-	// Select the highlighted layer
-	time_line_internal_draw_selection_highlight(priv, WIDGET_MINIMUM_WIDTH);
 
 	// Set a periodic time out, so we rate limit the calls to the motion notify (mouse drag) handler
 	priv->mouse_x = -1;

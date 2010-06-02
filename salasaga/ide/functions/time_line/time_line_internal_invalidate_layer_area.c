@@ -55,12 +55,12 @@ gboolean time_line_internal_invalidate_layer_area(GtkWidget *widget, gint layer_
 
 	// Set the height related variables
 	layer_area.x = 0;
-	layer_area.y = priv->top_border_height + (layer_number * priv->row_height) + 2;
-	layer_area.height = priv->row_height - 3;
-	layer_area.width = widget->allocation.width;
+	layer_area.y = (layer_number * priv->row_height);
+	layer_area.height = priv->row_height;
+	layer_area.width = GTK_WIDGET(priv->bot_right_evb)->allocation.width;
 
 	// Invalidate the selected area
-	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &layer_area, TRUE);
+	gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &layer_area, TRUE);
 
 	return TRUE;
 }

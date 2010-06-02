@@ -84,7 +84,7 @@ gboolean time_line_regenerate_widget(GtkWidget *widget)
 	{
 		width = GTK_WIDGET(priv->main_table)->allocation.width;
 	}
-	main_part_width = priv->stored_slide_duration * time_line_get_pixels_per_second() + 10;// - priv->left_border_width;
+	main_part_width = ((priv->stored_slide_duration +1 ) * time_line_get_pixels_per_second()) + 10;// - priv->left_border_width;
 	main_part_height = get_current_slide_num_layers()*priv->row_height + 10;
 	if(main_part_height < height)
 		main_part_height = height;

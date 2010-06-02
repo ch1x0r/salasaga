@@ -66,13 +66,13 @@ gboolean time_line_internal_draw_guide_line(GtkWidget *widget, gint pixel_num)
 	if (NULL == colourmap)
 	{
 		colourmap = gdk_colormap_get_system();
-		gdk_drawable_set_colormap(GDK_DRAWABLE(widget->window), GDK_COLORMAP(colourmap));
+		gdk_drawable_set_colormap(GDK_DRAWABLE(priv->bot_right_evb->window), GDK_COLORMAP(colourmap));
 	}
 	if (NULL == widget_gc)
 	{
-		widget_gc = gdk_gc_new(GDK_DRAWABLE(widget->window));
+		widget_gc = gdk_gc_new(GDK_DRAWABLE(priv->bot_right_evb->window));
 	}
-	gdk_drawable_get_size(GDK_DRAWABLE(widget->window), NULL, &pixmap_height);
+	gdk_drawable_get_size(GDK_DRAWABLE(priv->bot_right_evb->window), NULL, &pixmap_height);
 
 	// Set the height related variables
 	guide_area.x = pixel_num;
@@ -84,9 +84,9 @@ gboolean time_line_internal_draw_guide_line(GtkWidget *widget, gint pixel_num)
 	gdk_gc_set_rgb_fg_color(GDK_GC(widget_gc), &colour_black);
 	gdk_gc_set_line_attributes(GDK_GC(widget_gc), 1, GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	gdk_gc_set_dashes(GDK_GC(widget_gc), 1, dash_list, 2);
-	gdk_draw_line(GDK_DRAWABLE(widget->window), GDK_GC(widget_gc),
+	gdk_draw_line(GDK_DRAWABLE(priv->bot_right_evb->window), GDK_GC(widget_gc),
 			guide_area.x,
-			priv->top_border_height + 1,
+			1,
 			guide_area.x,
 			guide_area.height);
 

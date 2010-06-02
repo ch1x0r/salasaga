@@ -78,7 +78,7 @@ gboolean time_line_internal_initialise_display_buffer(TimeLinePrivate *priv, gin
 	{
 		width = new_width;
 	}
-	main_part_width = priv->stored_slide_duration * time_line_get_pixels_per_second() + 10;// - priv->left_border_width;
+	main_part_width = ((get_current_slide_duration()+1) * time_line_get_pixels_per_second());
 	main_part_height = (get_current_slide_num_layers()+1)*priv->row_height + 10;
 	if(main_part_height < height)
 		main_part_height = height;
