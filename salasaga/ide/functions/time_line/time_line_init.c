@@ -139,8 +139,10 @@ gboolean expose_event_bot_right(GtkWidget *widget,GdkEventExpose *event, gpointe
 		 width = priv->main_table->allocation.width;
 	if(height<priv->main_table->allocation.height)
 			 height = priv->main_table->allocation.height;
+
 	new_cursor_pos = round(priv->cursor_position * time_line_get_pixels_per_second());
 	time_line_internal_draw_cursor(priv->main_table->parent, new_cursor_pos);
+
 	gdk_draw_drawable(GDK_DRAWABLE(priv->bot_right_evb->window), GDK_GC(this_gc),
 	GDK_PIXMAP(priv->display_buffer_bot_right),0,0,0,0,width, height);
 

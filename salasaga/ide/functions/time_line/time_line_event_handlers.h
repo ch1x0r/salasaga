@@ -34,11 +34,20 @@ extern "C" {
 
 
 // Event Handler for bottom right
+// ----- selection , dragging , resizing , and switching layer positions
 void bot_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
 
 void bot_right_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
 
 void bot_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
+
+// Event handlers for top right
+// -----  Cursor dragging
+void top_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
+
+void top_right_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
+
+void top_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
 
 
 #ifdef __cplusplus

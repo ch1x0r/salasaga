@@ -34,6 +34,7 @@
 #include "../working_area/draw_handle_box.h"
 #include "../working_area/draw_layer_start_and_end_points.h"
 #include "../working_area/draw_workspace.h"
+#include "../film_strip/film_strip_create_thumbnail.h"
 #include "time_line.h"
 #include "time_line_get_cursor_position.h"
 #include "time_line_get_left_border_width.h"
@@ -49,7 +50,9 @@
 #include "time_line_internal_invalidate_layer_area.h"
 #include "time_line_internal_redraw_bg_area.h"
 #include "time_line_internal_redraw_layer_bg.h"
-
+#include "time_line_internal_draw_cursor.h"
+#include "draw_timeline.h"
+void top_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
 void bot_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
@@ -59,14 +62,11 @@ void bot_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 	gfloat				end_time;					// The end time in seconds of the presently selected layer
 	GtkAllocation		area;						// Area covered by an individual guide line
 	GList				*layer_pointer;				// Points to the layers in the selected slide
-	GString				*message;					// Used to construct message strings
 	gint				mouse_x;					// Mouse x position
 	gint				mouse_y;					// Mouse x position
 	TimeLinePrivate		*priv;
-	gboolean			return_code_gbool;			// Receives boolean return codes
 	layer				*this_layer_data;			// Data for the presently selected layer
 	slide				*this_slide_data;			// Data for the presently selected slide
-	GList				*tmp_glist = NULL;			// Is given a list of child widgets, if any exist
 	undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
 
 	priv = data;
@@ -79,6 +79,12 @@ void bot_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 	if (1 != event->button)
 	{
 		// Not a primary mouse, so we return
+		return;
+	}
+	if (TRUE == priv->cursor_drag_active)
+	{
+		// Note that the cursor drag has finished
+		priv->cursor_drag_active = FALSE;
 		return;
 	}
 
@@ -128,6 +134,7 @@ void bot_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 
 		// Use the status bar to communicate the drag has completed
 		gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Drag completed"));
+
 		gdk_flush();
 
 		// Store the undo item created in the button click event handler function
@@ -144,7 +151,7 @@ void bot_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 
 		// Draw the start and end points for the layer
 		draw_layer_start_and_end_points();
-
+		draw_workspace();
 
 }
 
@@ -258,7 +265,6 @@ void bot_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 {
 	GtkAllocation		area;						// Rectangular area
 	layer				*background_layer_data;		// Data for the background layer
-	gint				check_pixel;				// Used when calculating pixel positions
 	gint				current_row;				// The presently selected row
 	gint				distance_moved;				// Number of pixels the row has been scrolled by horizontally
 	gint				end_row;					// Number of the last layer in this slide
@@ -267,9 +273,7 @@ void bot_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 	GList				*layer_below;				// The layer below the selected one
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				left_border;
-	gboolean			max_duration_reached;		// Tracks whether we've hit the maximum duration for a transition with this drag
-	gfloat				max_moved;					// Used to calculate the maximum amount a duration can be expanded before it hits its limit
-	GString				*message;					// Used to construct message strings
+
 	gint				new_row;					// The row the mouse is over
 	gint				pps;						// Holds the number of pixels used to draw 1 second in the timeline
 	TimeLinePrivate		*priv;
@@ -291,7 +295,7 @@ void bot_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 	current_row = priv->selected_layer_num;
 	pps = time_line_get_pixels_per_second();
 	left_border = time_line_get_left_border_width(priv);
-	max_duration_reached = FALSE;
+
 
 	new_row = floor(event->y / priv->row_height);
 
@@ -306,7 +310,11 @@ void bot_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
 		end_time += this_layer_data->transition_out_duration;
 
-
+	if(TRUE == priv->cursor_drag_active)
+	{
+		top_right_motion_notify_event(priv->top_right_evb, event, priv);
+		return;
+	}
 
 	if (RESIZE_NONE == priv->resize_type)
 	{
@@ -411,7 +419,7 @@ void bot_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 					temp_int = CLAMP(event->x, 0, GTK_WIDGET(widget)->allocation.width);
 					distance_moved = priv->stored_x - temp_int;
 					time_moved = ((gfloat) distance_moved) / pps;
-					if((this_layer_data->start_time - time_moved) >= 0)
+					if((this_layer_data->start_time - time_moved) >= -0.01)
 					{
 							this_layer_data->start_time -= time_moved;
 					}
@@ -491,3 +499,114 @@ void bot_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 		time_line_internal_draw_guide_line(GTK_WIDGET(priv->main_table->parent), priv->guide_line_start);
 		time_line_internal_draw_guide_line(GTK_WIDGET(priv->main_table->parent), priv->guide_line_end);
 }
+
+
+void top_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	TimeLinePrivate		*priv;
+	priv = data;
+	if (NULL == widget)
+	{
+		return;
+	}
+	if (TRUE == priv->cursor_drag_active)
+	{
+		// Note that the cursor drag has finished
+		priv->cursor_drag_active = FALSE;
+	}
+	film_strip_create_thumbnail(get_current_slide_data());
+
+	// Draw the start and end points for the layer
+	draw_layer_start_and_end_points();
+
+}
+
+void top_right_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	// Local variables
+	GtkAllocation		area;						// Rectangular area
+	gint				pps;						// Holds the number of pixels per second used when drawing
+	TimeLinePrivate		*priv;
+	gfloat				tl_cursor_pos;				// Holds the position of the cursor in the time line (in seconds)
+
+	gtk_widget_grab_focus(GTK_WIDGET(widget));
+	priv = data;
+	tl_cursor_pos = priv->cursor_position;
+	pps = time_line_get_pixels_per_second();
+
+	area.x =  (tl_cursor_pos * pps) - (CURSOR_HEAD_WIDTH / 2);
+	area.y = 0;
+	area.height = GTK_WIDGET(widget)->allocation.height;
+	area.width = CURSOR_HEAD_WIDTH;
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+
+	area.height = GTK_WIDGET(priv->bot_right_evb)->allocation.height;
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+
+	// Reposition the cursor to where the mouse button down occurred
+	tl_cursor_pos = event->x/pps;
+	priv->cursor_position = tl_cursor_pos;
+	priv->cursor_drag_active = FALSE;
+
+	time_line_internal_draw_cursor(priv->main_table->parent,event->x);
+
+	// Draw the new cursor line
+	area.x = (tl_cursor_pos * pps) - (CURSOR_HEAD_WIDTH / 2);
+	area.y = 0;
+	area.height = GTK_WIDGET(widget)->allocation.height;
+	area.width = CURSOR_HEAD_WIDTH;
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+	area.height = GTK_WIDGET(priv->bot_right_evb)->allocation.height;
+	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+
+	draw_timeline();
+	// Update the workspace area
+	draw_workspace();
+	return;
+
+}
+void top_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+	TimeLinePrivate		*priv;
+	GtkAllocation		area;						// Rectangular area
+	guint 				temp_int;
+	gint 				distance_moved;
+	gfloat				time_moved;
+	gint				pps;						// Holds the number of pixels per second used when drawing
+	priv = data;
+	pps = time_line_get_pixels_per_second();
+
+	if(FALSE == priv->cursor_drag_active)
+	{
+		priv->cursor_drag_active = TRUE;
+		priv->stored_x = event->x;
+	}
+	else
+	{
+		temp_int = CLAMP(event->x, 0, GTK_WIDGET(widget)->allocation.width);
+		distance_moved = priv->stored_x - event->x;
+		time_moved = ((gfloat) distance_moved) / pps;
+
+		area.x = (priv->cursor_position * pps) - (CURSOR_HEAD_WIDTH);
+		area.y = 0;
+		area.height = GTK_WIDGET(widget)->allocation.height;
+		area.width = CURSOR_HEAD_WIDTH * 2;
+		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+
+		// Update the cursor position
+		priv->cursor_position = priv->cursor_position - time_moved;
+
+		// Safety check
+		if (0 > priv->cursor_position)
+			priv->cursor_position=0;
+		time_line_internal_draw_cursor(priv->main_table->parent,priv->cursor_position * pps);
+
+		area.x = (priv->cursor_position * pps) - (CURSOR_HEAD_WIDTH );
+		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+				priv->stored_x = event->x;
+
+		draw_timeline();
+	}
+
+}
+

@@ -61,6 +61,8 @@ gboolean time_line_internal_draw_cursor(GtkWidget *widget, gint pixel_num)
 	this_time_line = TIME_LINE(widget);
 	priv = TIME_LINE_GET_PRIVATE(this_time_line);
 
+	if(pixel_num<0)
+		pixel_num=0;
 	// Create a graphic context if we don't have one already
 	if (NULL == this_gc_bot_right)
 	{
