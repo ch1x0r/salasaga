@@ -979,7 +979,6 @@ void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 					{
 						// We're already at the acceptable scaling limit, so beep then return
 						gdk_beep();
-						g_list_free(tmp_glist);
 						return;
 					}
 
