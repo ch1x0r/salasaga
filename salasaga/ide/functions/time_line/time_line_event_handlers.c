@@ -23,6 +23,11 @@
  * <http://www.gnu.org/licenses/>.
  *
  */
+
+// Turn on C99 compatibility - needed for roundf() to work
+#define _ISOC99_SOURCE
+
+#include <math.h>
 #include <gtk/gtk.h>
 #include "../../salasaga_types.h"
 #include "../global_functions.h"
