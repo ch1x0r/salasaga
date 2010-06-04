@@ -250,7 +250,7 @@ void time_line_init(TimeLine *time_line)
 	priv->stored_slide_duration = get_current_slide_duration();
 
 	// fixme3: These may be better as widget properties
-	priv->cursor_position = 0.0;
+	priv->cursor_position = 0.01;
 	priv->left_border_width = 120;
 	priv->row_height = 20;
 	priv->top_border_height = 15;

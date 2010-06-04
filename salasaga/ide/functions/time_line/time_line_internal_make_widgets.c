@@ -162,6 +162,19 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, gui
 			| GDK_BUTTON_RELEASE_MASK
 			| GDK_BUTTON1_MOTION_MASK
 			| GDK_KEY_RELEASE_MASK);
+
+
+		g_signal_connect(priv->top_left_evb, "button_release_event", G_CALLBACK(top_left_button_release_event), priv);
+		g_signal_connect(priv->top_left_evb, "button_press_event", G_CALLBACK(top_left_button_press_event), priv);
+		g_signal_connect(priv->top_left_evb, "motion_notify_event", G_CALLBACK(top_left_motion_notify_event), priv);
+
+		// Ensure we get the signals we want
+		gtk_widget_set_events(priv->top_left_evb, gtk_widget_get_events(priv->top_left_evb)
+			| GDK_LEAVE_NOTIFY_MASK
+			| GDK_BUTTON_PRESS_MASK
+			| GDK_BUTTON_RELEASE_MASK
+			| GDK_BUTTON1_MOTION_MASK
+			| GDK_KEY_RELEASE_MASK);
 return TRUE;
 }
 

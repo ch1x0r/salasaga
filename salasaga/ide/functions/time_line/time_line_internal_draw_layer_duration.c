@@ -100,7 +100,7 @@ gboolean time_line_internal_draw_layer_duration(TimeLinePrivate *priv, gint laye
 				layer_x, layer_y, layer_width, layer_height);
 		gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
 		gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(display_buffer_gc), FALSE,
-				layer_x - 1, layer_y, layer_width, layer_height);
+				layer_x - 1, layer_y, layer_width, layer_height -1);
 	} else
 	{
 		// There's no fade in transition for this layer

@@ -52,7 +52,8 @@
 #include "time_line_internal_redraw_layer_bg.h"
 #include "time_line_internal_draw_cursor.h"
 #include "draw_timeline.h"
-void top_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
+#include "time_line_event_handlers.h"
+
 void bot_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 	// Local variables
@@ -98,6 +99,61 @@ void bot_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 	area.x = priv->guide_line_end;
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+
+
+	if (RESIZE_NONE != priv->resize_type)
+		{
+			// Note that the resize has finished
+			priv->resize_type = RESIZE_NONE;
+
+			// Mark that there are unsaved changes
+			set_changes_made(TRUE);
+
+			// Remove the resize guideline from the widget
+			area.x = priv->guide_line_resize;
+			gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+			priv->guide_line_resize = 0;
+
+			// Create pointers to things we're working with
+			this_slide_data = get_current_slide_data();
+			layer_pointer = this_slide_data->layers;
+			layer_pointer = g_list_first(layer_pointer);
+			this_layer_data = g_list_nth_data(layer_pointer, priv->selected_layer_num);
+
+			// Calculate the end time of the layer (in seconds)
+			end_time = this_layer_data->start_time + this_layer_data->duration;
+			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+				end_time += this_layer_data->transition_in_duration;
+			if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+				end_time += this_layer_data->transition_out_duration;
+
+			// Check if the new end time is longer than the slide duration
+			if (end_time > priv->stored_slide_duration)
+			{
+				// The new slide duration is longer than the old one, so update the slide and background layer to match
+				this_slide_data->duration = priv->stored_slide_duration = end_time;
+				end_row = this_slide_data->num_layers - 1;
+				background_layer_data = g_list_nth_data(layer_pointer, end_row);
+				background_layer_data->duration = priv->stored_slide_duration;
+
+				// Refresh the time line display of the background layer
+				time_line_internal_redraw_layer_bg(priv, end_row);
+				time_line_internal_draw_layer_name(priv, end_row);
+				time_line_internal_draw_layer_duration(priv, end_row);
+				time_line_internal_invalidate_layer_area(GTK_WIDGET(priv->main_table->parent), end_row);
+			}
+
+			// Use the status bar to communicate the resize has completed
+			gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _(" Resize completed"));
+			gdk_flush();
+
+			// Store the undo item created in the button click event handler function
+			undo_item_data = time_line_get_undo_item();
+			undo_item_data->position_new = priv->selected_layer_num;
+			undo_item_data->layer_data_new = layer_duplicate(this_layer_data);
+			undo_history_add_item(UNDO_CHANGE_LAYER, undo_item_data, TRUE);
+			draw_timeline();
+		}
 
 
 	if (TRUE == priv->drag_active)
@@ -273,7 +329,7 @@ void bot_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 	GList				*layer_below;				// The layer below the selected one
 	GList				*layer_pointer;				// Points to the layers in the selected slide
 	gint				left_border;
-
+	gint				check_pixel;				// Used when calculating pixel positions
 	gint				new_row;					// The row the mouse is over
 	gint				pps;						// Holds the number of pixels used to draw 1 second in the timeline
 	TimeLinePrivate		*priv;
@@ -316,6 +372,261 @@ void bot_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 		return;
 	}
 
+	if ((RESIZE_NONE == priv->resize_type) && (FALSE == priv->drag_active))
+	{
+		// If the user is trying to drag outside the valid layers, ignore this event
+		// fixme2: We should allow resizing the background layer from the end at some point
+		if ((0 > new_row) || (new_row >= end_row) || (current_row >= end_row) || (0 > current_row))
+		{
+			// Mark this function as complete, and return
+			return TRUE;
+		}
+
+
+		// Check if the user clicked on the start of the layer (i.e. wants to adjust the start time)
+		check_pixel = (this_layer_data->start_time * pps);
+		if (1 < check_pixel)
+			check_pixel -= 5;
+		if ((event->x >= check_pixel) && (event->x <= check_pixel + 10))
+		{
+			// The user clicked on the start pixel for a layer, so we're commencing a resize
+			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+			{
+				// We're adjusting the start time of a transition in
+				priv->resize_type = RESIZE_TRANS_IN_START;
+				priv->stored_x = event->x;
+			} else
+			{
+				// We're adjusting the start time of the main duration
+				priv->resize_type = RESIZE_LAYER_START;
+				priv->stored_x = event->x;
+			}
+		}
+
+		// Is there a transition in for this layer?
+		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+		{
+			// Check if the user clicked on the end of a transition in
+			check_pixel = ((this_layer_data->start_time + this_layer_data->transition_in_duration) * pps);
+			if (1 < check_pixel)
+				check_pixel -= 5;
+			if ((event->x >= check_pixel) && (event->x <= check_pixel + 10))
+			{
+				// We're adjusting the end time of the transition in
+				priv->resize_type = RESIZE_LAYER_START;
+				priv->stored_x = event->x;
+			}
+		}
+
+		// Check if the user clicked on the end of the duration for the layer (i.e. wants to adjust the duration time)
+		check_pixel = ((this_layer_data->start_time + this_layer_data->duration) * pps);
+		if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+			check_pixel += this_layer_data->transition_in_duration * pps;
+		if (1 < check_pixel)
+			check_pixel -= 5;
+		if ((event->x >= check_pixel) && (event->x <= check_pixel + 10))
+		{
+			// We're adjusting the main duration time
+			priv->resize_type = RESIZE_LAYER_DURATION;
+			priv->stored_x = event->x;
+		}
+
+		// Is there a transition out for this layer?
+		if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+		{
+			// Check if the user clicked on the end of a transition out
+			check_pixel = ((this_layer_data->start_time + this_layer_data->duration + this_layer_data->transition_out_duration) * pps);
+			if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+				check_pixel += this_layer_data->transition_in_duration * pps;
+			if (1 < check_pixel)
+				check_pixel -= 5;
+			if ((event->x >= check_pixel) && (event->x <= check_pixel + 10))
+			{
+				// We're adjusting the end time of the transition out
+				priv->resize_type = RESIZE_TRANS_OUT_DURATION;
+				priv->stored_x = event->x;
+			}
+		}
+	}
+
+	// If we started resizing
+	if (RESIZE_NONE != priv->resize_type)
+	{
+			switch (priv->resize_type)
+			{
+				case RESIZE_TRANS_IN_START:
+					temp_int = CLAMP(event->x, 0, GTK_WIDGET(widget)->allocation.width);
+					time_moved = (gfloat)((temp_int -  (this_layer_data->start_time * pps)) / pps);
+					if(time_moved < this_layer_data->transition_in_duration && time_moved >= (-1*this_layer_data->start_time) && (get_valid_fields_max_value(TRANSITION_DURATION) >= (this_layer_data->transition_in_duration - time_moved)) ){
+						this_layer_data->start_time += time_moved;
+						this_layer_data->transition_in_duration -= time_moved;
+					}
+					else if(time_moved > this_layer_data->transition_in_duration)
+					{
+						this_layer_data->start_time = end_time - this_layer_data->duration - this_layer_data->transition_out_duration;
+						this_layer_data->transition_in_duration = 0;
+					}
+					break;
+
+				case RESIZE_LAYER_START:
+					if(event->x>=0){
+						temp_int = CLAMP(event->x,0, GTK_WIDGET(widget)->allocation.width);
+						time_moved = (gfloat)((temp_int - ((this_layer_data->start_time + this_layer_data->transition_in_duration) * pps)) / pps);
+						if(time_moved <= this_layer_data->duration && time_moved >= (-1 * this_layer_data->start_time)){
+							this_layer_data->start_time += time_moved;
+							this_layer_data->duration   -= time_moved;
+						}
+						if(time_moved > this_layer_data->duration){
+							this_layer_data->duration  = 0;
+							this_layer_data->start_time = end_time - this_layer_data->transition_in_duration - this_layer_data->transition_out_duration;
+
+						}
+					}
+					else{
+						this_layer_data->start_time = 0;
+						this_layer_data->duration = end_time - this_layer_data->transition_in_duration - this_layer_data->transition_out_duration;
+					}
+					break;
+				case RESIZE_LAYER_DURATION:
+					if(event->x>=0){
+						temp_int = CLAMP(event->x, 0, GTK_WIDGET(widget)->allocation.width);
+						time_moved = (gfloat)((temp_int - ((this_layer_data->start_time + this_layer_data->transition_in_duration + this_layer_data->duration) * pps)) / pps);
+						if(time_moved >= (-1 * this_layer_data->duration))
+							this_layer_data->duration += time_moved;
+						else if(time_moved < (-1 * this_layer_data->duration))
+							this_layer_data->duration = 0;
+
+					}
+					else
+					{
+						this_layer_data->duration = 0;
+					}
+					break;
+				case RESIZE_TRANS_OUT_DURATION:
+					temp_int = CLAMP(event->x, left_border, GTK_WIDGET(widget)->allocation.width);
+					time_moved = (gfloat)((temp_int - ((this_layer_data->start_time + this_layer_data->transition_in_duration + this_layer_data->duration + this_layer_data->transition_out_duration) * pps)) / pps);
+					if(time_moved >= (-1 * this_layer_data->transition_out_duration) && (get_valid_fields_max_value(TRANSITION_DURATION) >= (this_layer_data->transition_out_duration+time_moved)))
+						this_layer_data->transition_out_duration += time_moved;
+					else if(time_moved < (-1 * this_layer_data->transition_out_duration))
+						this_layer_data->transition_out_duration =0;
+					break;
+			}
+
+
+
+
+			// Ensure the background layer end is kept correct
+			background_layer_data = g_list_nth_data(layer_pointer, end_row);
+			if (background_layer_data->duration != priv->stored_slide_duration)
+			{
+				background_layer_data->duration = priv->stored_slide_duration;
+
+				// Refresh the timeline display of the background layer
+				area.x = priv->stored_slide_duration * pps;
+				area.y = (end_row * priv->row_height) + 2;
+				area.height = priv->row_height - 3;
+				area.width = GTK_WIDGET(widget)->allocation.width;
+				gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+				//time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
+				time_line_internal_draw_layer_duration(priv, end_row);
+
+				// Refresh the newly drawn widget area
+				gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+			}
+
+			// Check if the new end time is longer than the slide duration
+			if (end_time > priv->stored_slide_duration)
+			{
+				// The new end time is longer than the slide duration, so update the slide and background layer to match
+				//this_slide_data->duration = end_time;
+				background_layer_data->duration = end_time;
+
+				// Refresh the timeline display of the background layer
+				area.x = priv->stored_slide_duration * pps;
+				area.y = (end_row * priv->row_height) + 2;
+				area.height = priv->row_height - 3;
+				area.width = GTK_WIDGET(widget)->allocation.width;
+				gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+				//time_line_internal_redraw_bg_area(priv, area.x, area.y, area.width, area.height);
+				time_line_internal_draw_layer_duration(priv, end_row);
+
+				// Refresh the newly drawn widget area
+				gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+			}
+
+			// Safety check
+			if (0 > this_layer_data->start_time)
+			{
+				this_layer_data->start_time = 0;
+			}
+
+
+
+			// Refresh the time line display of the row
+			time_line_internal_redraw_layer_bg(priv, current_row);
+			time_line_internal_draw_layer_name(priv, current_row);
+			time_line_internal_draw_layer_duration(priv, current_row);
+
+			// Tell the window system to update the current row area on screen
+			time_line_internal_invalidate_layer_area(GTK_WIDGET(priv->main_table->parent), current_row);
+
+			// Wipe existing guide line if present
+			if (0 != priv->guide_line_resize)
+			{
+				area.x = priv->guide_line_resize;
+				area.y = 0;
+				area.height = GTK_WIDGET(widget)->allocation.height;
+				area.width = 1;
+				gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+			}
+
+			// Store the resize guide line position so we know where to refresh
+			switch (priv->resize_type)
+			{
+				case RESIZE_TRANS_IN_START:
+					// No guide line needed
+
+					break;
+
+				case RESIZE_LAYER_START:
+
+					// Draw guide line if needed
+					if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+					{
+						priv->guide_line_resize = (this_layer_data->start_time * pps) + 1;
+						priv->guide_line_resize += this_layer_data->transition_in_duration * pps;
+						time_line_internal_draw_guide_line(GTK_WIDGET(priv->main_table->parent), priv->guide_line_resize);
+					}
+					break;
+
+				case RESIZE_LAYER_DURATION:
+
+					// Draw guide line if needed
+					if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
+					{
+						priv->guide_line_resize =  ((this_layer_data->start_time + this_layer_data->duration) * pps) + 1;
+						if (TRANS_LAYER_NONE != this_layer_data->transition_in_type)
+							priv->guide_line_resize += this_layer_data->transition_in_duration * pps;
+						time_line_internal_draw_guide_line(GTK_WIDGET(priv->main_table->parent), priv->guide_line_resize);
+					}
+					break;
+
+				case RESIZE_TRANS_OUT_DURATION:
+					// No guide line needed
+					break;
+
+				default:
+//					message = g_string_new(NULL);
+//					g_string_printf(message, "%s ED368: %s", _("Error"), _("Unknown layer resize type."));
+//					display_warning(message->str);
+//					g_string_free(message, TRUE);
+					break;
+			}
+			priv->stored_x = event->x;
+
+		}
+
+	// check if it is a drag!
 	if (RESIZE_NONE == priv->resize_type)
 	{
 		if(current_row == end_row)
@@ -529,7 +840,9 @@ void top_right_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 	TimeLinePrivate		*priv;
 	gfloat				tl_cursor_pos;				// Holds the position of the cursor in the time line (in seconds)
 
+	// Change the focus of the window to be this widget
 	gtk_widget_grab_focus(GTK_WIDGET(widget));
+
 	priv = data;
 	tl_cursor_pos = priv->cursor_position;
 	pps = time_line_get_pixels_per_second();
@@ -610,3 +923,156 @@ void top_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+
+	// Local variables
+		layer				*background_layer_data;		// Data for the background layer
+		GdkModifierType		button_state;				// Mouse button states
+		gint				end_row;					// Number of the last layer in this slide
+		gfloat				end_time;					// The end time in seconds of the presently selected layer
+		GtkAllocation		area;						// Area covered by an individual guide line
+		GList				*layer_pointer;				// Points to the layers in the selected slide
+		GString				*message;					// Used to construct message strings
+		gint				mouse_x;					// Mouse x position
+		gint				mouse_y;					// Mouse x position
+		TimeLinePrivate		*priv;
+		gboolean			return_code_gbool;			// Receives boolean return codes
+		layer				*this_layer_data;			// Data for the presently selected layer
+		slide				*this_slide_data;			// Data for the presently selected slide
+		TimeLine			*this_time_line;
+		GList				*tmp_glist = NULL;			// Is given a list of child widgets, if any exist
+		undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
+		priv = data;
+		if (NULL == widget)
+		{
+			return;
+		}
+
+		// Check for primary mouse button
+		if (1 != event->button)
+		{
+			// Not a primary mouse, so we return
+			return;
+		}
+
+		gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);
+
+		if ((ADJUSTMENTS_Y <= mouse_y) && (ADJUSTMENTS_Y + ADJUSTMENTS_SIZE) >= mouse_y)
+			{
+				// * It's in the correct range *
+
+				// Check if this button release is for the minus button
+				if (((ADJUSTMENTS_X <= mouse_x) && ((ADJUSTMENTS_X + ADJUSTMENTS_SIZE) >= mouse_x)) || ((ADJUSTMENTS_X + 15 <= mouse_x) && ((ADJUSTMENTS_X + 15 + ADJUSTMENTS_SIZE) >= mouse_x)))
+				{
+					// Sanity check
+					if((ADJUSTMENTS_X <= mouse_x) && ((ADJUSTMENTS_X + ADJUSTMENTS_SIZE) >= mouse_x)){
+					if (time_line_get_pixels_per_second() >= 96)
+					{
+						// We're already at the acceptable scaling limit, so beep then return
+						gdk_beep();
+						g_list_free(tmp_glist);
+						return;
+					}
+
+					// Adjust the number of pixels per second
+					time_line_set_pixels_per_second(time_line_get_pixels_per_second() * 2);
+					}
+					else{
+						if (time_line_get_pixels_per_second() <= 24)
+						{
+							// We're already at the acceptable scaling limit, so beep then return
+							gdk_beep();
+							g_list_free(tmp_glist);
+							return;
+						}
+
+					// Adjust the number of pixels per second
+					time_line_set_pixels_per_second(time_line_get_pixels_per_second() / 2);
+
+					}
+					g_object_unref(GDK_PIXMAP(priv->cached_bg_image_top_left));
+					priv->cached_bg_image_top_left = NULL;
+					g_object_unref(GDK_PIXMAP(priv->cached_bg_image_top_right));
+					priv->cached_bg_image_top_right = NULL;
+					g_object_unref(GDK_PIXMAP(priv->cached_bg_image_bot_left));
+					priv->cached_bg_image_bot_left = NULL;
+					g_object_unref(GDK_PIXMAP(priv->cached_bg_image_bot_right));
+					priv->cached_bg_image_bot_right = NULL;
+
+					// Regenerate the timeline images with the new pixel scale
+					return_code_gbool = time_line_internal_initialise_bg_image(priv, priv->main_table->allocation.width, priv->main_table->allocation.height);
+					if (FALSE == return_code_gbool)
+					{
+						g_string_printf(message, "%s ED361: %s", _("Error"), _("Couldn't recreate time line background image."));
+						display_warning(message->str);
+						g_string_free(message, TRUE);
+						g_list_free(tmp_glist);
+						return;
+					}
+					return_code_gbool = time_line_internal_initialise_display_buffer(priv, priv->main_table->allocation.width, priv->main_table->allocation.height);
+					if (FALSE == return_code_gbool)
+					{
+						g_string_printf(message, "%s ED362: %s", _("Error"), _("Couldn't recreate time line display buffer."));
+						display_warning(message->str);
+						g_string_free(message, TRUE);
+						g_list_free(tmp_glist);
+						return;
+					}
+					return_code_gbool = time_line_internal_draw_layer_info(priv);
+					if (FALSE == return_code_gbool)
+					{
+						g_string_printf(message, "%s ED363: %s", _("Error"), _("Couldn't redraw the time line layer information."));
+						display_warning(message->str);
+						g_string_free(message, TRUE);
+						g_list_free(tmp_glist);
+						return;
+					}
+					draw_timeline();
+					area.x = 0;
+					area.y = 0;
+					area.width = priv->top_right_evb->allocation.width;
+					area.height = priv->top_right_evb->allocation.height;
+					gdk_window_invalidate_rect(GTK_WIDGET(priv->top_right_evb)->window, &area, TRUE);
+					area.width = priv->bot_right_evb->allocation.width;
+					area.height = priv->bot_right_evb->allocation.height;
+					gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &area, TRUE);
+
+
+				}
+			}
+
+			// Remove guide lines from the widget
+			area.x = priv->guide_line_start;
+			area.y = 0;
+			area.height = GTK_WIDGET(priv->bot_right_evb)->allocation.height;
+			area.width = 1;
+			gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &area, TRUE);
+			area.x = priv->guide_line_end;
+			gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &area, TRUE);
+}
+
+void top_left_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+
+}
+
+void top_left_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+
+}

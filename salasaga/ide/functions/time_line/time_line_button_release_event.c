@@ -359,3 +359,20 @@ void time_line_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 	// Free the memory allocated in this function
 	g_list_free(tmp_glist);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
