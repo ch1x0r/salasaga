@@ -134,6 +134,7 @@ salasaga_SOURCES = global_functions.c \
 	time_line/time_line_button_release_event.c \
 	time_line/time_line_class_init.c \
 	time_line/time_line_expose.c \
+	time_line/time_line_event_handlers.c \
 	time_line/time_line_get_cursor_position.c \
 	time_line/time_line_get_left_border_width.c \
 	time_line/time_line_get_selected_layer_num.c \
@@ -148,6 +149,7 @@ salasaga_SOURCES = global_functions.c \
 	time_line/time_line_internal_initialise_bg_image.c \
 	time_line/time_line_internal_initialise_display_buffer.c \
 	time_line/time_line_internal_invalidate_layer_area.c \
+	time_line/time_line_internal_make_widgets.c \
 	time_line/time_line_internal_redraw_bg_area.c \
 	time_line/time_line_internal_redraw_layer_bg.c \
 	time_line/time_line_internal_widget_motion_notify_handler.c \
