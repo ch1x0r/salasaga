@@ -51,6 +51,7 @@
 #include "time_line_internal_redraw_bg_area.h"
 #include "time_line_internal_redraw_layer_bg.h"
 #include "time_line_internal_draw_cursor.h"
+#include "time_line_internal_initialise_bg_image.h"
 #include "draw_timeline.h"
 #include "time_line_event_handlers.h"
 
@@ -379,7 +380,7 @@ void bot_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 		if ((0 > new_row) || (new_row >= end_row) || (current_row >= end_row) || (0 > current_row))
 		{
 			// Mark this function as complete, and return
-			return TRUE;
+			return;
 		}
 
 
@@ -942,22 +943,14 @@ void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 {
 
 	// Local variables
-		layer				*background_layer_data;		// Data for the background layer
 		GdkModifierType		button_state;				// Mouse button states
-		gint				end_row;					// Number of the last layer in this slide
-		gfloat				end_time;					// The end time in seconds of the presently selected layer
 		GtkAllocation		area;						// Area covered by an individual guide line
-		GList				*layer_pointer;				// Points to the layers in the selected slide
 		GString				*message;					// Used to construct message strings
 		gint				mouse_x;					// Mouse x position
 		gint				mouse_y;					// Mouse x position
 		TimeLinePrivate		*priv;
 		gboolean			return_code_gbool;			// Receives boolean return codes
-		layer				*this_layer_data;			// Data for the presently selected layer
-		slide				*this_slide_data;			// Data for the presently selected slide
-		TimeLine			*this_time_line;
-		GList				*tmp_glist = NULL;			// Is given a list of child widgets, if any exist
-		undo_history_data	*undo_item_data = NULL;		// Memory structure undo history items are created in
+
 		priv = data;
 		if (NULL == widget)
 		{
