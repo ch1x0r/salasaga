@@ -44,11 +44,11 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, gui
 		priv->top_left_swin = gtk_scrolled_window_new(NULL,NULL);
 		// Setting the suitable properties
 		gtk_container_set_border_width(GTK_CONTAINER(priv->top_left_swin),0);
-		gtk_scrolled_window_set_shadow_type(priv->top_left_swin,GTK_SHADOW_NONE);
+		gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(priv->top_left_swin),GTK_SHADOW_NONE);
 		//Creating a view port for the top left
 		priv->top_left_vp = gtk_viewport_new(NULL,NULL);
 		gtk_container_add(GTK_CONTAINER(priv->top_left_swin),GTK_WIDGET(priv->top_left_vp));
-		gtk_viewport_set_shadow_type(priv->top_left_vp,GTK_SHADOW_NONE);
+		gtk_viewport_set_shadow_type(GTK_VIEWPORT(priv->top_left_vp),GTK_SHADOW_NONE);
 		// Creating the event box
 		priv->top_left_evb = gtk_event_box_new();
 		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_left_evb),120,20);
@@ -65,10 +65,10 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, gui
 		//2. Creating the right scrolled window for the seconds / time bar - top right
 		priv->top_right_swin = gtk_scrolled_window_new(NULL,NULL);
 		gtk_container_set_border_width(GTK_CONTAINER(priv->top_right_swin),0);
-		gtk_scrolled_window_set_shadow_type(priv->top_right_swin,GTK_SHADOW_NONE);
+		gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(priv->top_right_swin),GTK_SHADOW_NONE);
 		// Creating the view port and setting the properties for acvoiding all kinds of borders
 		priv->top_right_vp = gtk_viewport_new(NULL,NULL);
-		gtk_viewport_set_shadow_type(priv->top_right_vp,GTK_SHADOW_NONE);
+		gtk_viewport_set_shadow_type(GTK_VIEWPORT(priv->top_right_vp),GTK_SHADOW_NONE);
 		gtk_container_add(GTK_CONTAINER(priv->top_right_swin),GTK_WIDGET(priv->top_right_vp));
 		//creating the event box
 		priv->top_right_evb = gtk_event_box_new();
@@ -91,10 +91,10 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, gui
 		// 3. creating scrolled window for left - bottom left
 		priv->bot_left_swin = gtk_scrolled_window_new(NULL,NULL);
 		gtk_container_set_border_width(GTK_CONTAINER(priv->bot_left_swin),0);
-		gtk_scrolled_window_set_shadow_type(priv->bot_left_swin,GTK_SHADOW_NONE);
+		gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(priv->bot_left_swin),GTK_SHADOW_NONE);
 		// creating a view port and seeeing the border properties
 		priv->bot_left_vp = gtk_viewport_new(NULL,NULL);
-		gtk_viewport_set_shadow_type(priv->bot_left_vp,GTK_SHADOW_NONE);
+		gtk_viewport_set_shadow_type(GTK_VIEWPORT(priv->bot_left_vp),GTK_SHADOW_NONE);
 		gtk_container_add(GTK_CONTAINER(priv->bot_left_swin),GTK_WIDGET(priv->bot_left_vp));
 		// creating the event box.
 		priv->bot_left_evb = gtk_event_box_new();
@@ -112,10 +112,10 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, gui
 		//4. Scrolled window for the layer part
 		priv->bot_right_swin = gtk_scrolled_window_new(NULL,NULL);
 		gtk_container_set_border_width(GTK_CONTAINER(priv->bot_right_swin),0);
-		gtk_scrolled_window_set_shadow_type(priv->bot_right_swin,GTK_SHADOW_NONE);
+		gtk_scrolled_window_set_shadow_type(GTK_SCROLLED_WINDOW(priv->bot_right_swin),GTK_SHADOW_NONE);
 		// view port for the important part
 		priv->bot_right_vp = gtk_viewport_new(NULL,NULL);
-		gtk_viewport_set_shadow_type(priv->bot_right_vp,GTK_SHADOW_NONE);
+		gtk_viewport_set_shadow_type(GTK_VIEWPORT(priv->bot_right_vp),GTK_SHADOW_NONE);
 		gtk_container_add(GTK_CONTAINER(priv->bot_right_swin),GTK_WIDGET(priv->bot_right_vp));
 		// creating the event box for the layers
 		priv->bot_right_evb = gtk_event_box_new();
@@ -123,9 +123,9 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, gui
 
 		// connectin the scrolled window adjustment - horizontal of the 4 the scrolled window - the main one - to the
 		// hadjustment of the second one, which is above it. So that when it is scrolled horizontally, both will be scrolled together
-		gtk_scrolled_window_set_hadjustment(priv->top_right_swin,gtk_scrolled_window_get_hadjustment(priv->bot_right_swin));
+		gtk_scrolled_window_set_hadjustment(GTK_SCROLLED_WINDOW(priv->top_right_swin),gtk_scrolled_window_get_hadjustment(GTK_SCROLLED_WINDOW(priv->bot_right_swin)));
 		// similar connection for vertical scroll / adjustment for the left box, so that the layer info will scroll together with the name
-		gtk_scrolled_window_set_vadjustment(priv->bot_left_swin,gtk_scrolled_window_get_vadjustment(priv->bot_right_swin));
+		gtk_scrolled_window_set_vadjustment(GTK_SCROLLED_WINDOW(priv->bot_left_swin),gtk_scrolled_window_get_vadjustment(GTK_SCROLLED_WINDOW(priv->bot_right_swin)));
 
 		// arbitrarily wide values.. for the scroll bar to come up automatically - need to be corrected
 		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_right_evb),width,height-15);
