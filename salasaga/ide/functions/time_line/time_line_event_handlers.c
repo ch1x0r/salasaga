@@ -990,7 +990,7 @@ void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 						{
 							// We're already at the acceptable scaling limit, so beep then return
 							gdk_beep();
-							g_list_free(tmp_glist);
+
 							return;
 						}
 
@@ -1014,7 +1014,6 @@ void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 						g_string_printf(message, "%s ED361: %s", _("Error"), _("Couldn't recreate time line background image."));
 						display_warning(message->str);
 						g_string_free(message, TRUE);
-						g_list_free(tmp_glist);
 						return;
 					}
 					return_code_gbool = time_line_internal_initialise_display_buffer(priv, priv->main_table->allocation.width, priv->main_table->allocation.height);
@@ -1023,7 +1022,7 @@ void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 						g_string_printf(message, "%s ED362: %s", _("Error"), _("Couldn't recreate time line display buffer."));
 						display_warning(message->str);
 						g_string_free(message, TRUE);
-						g_list_free(tmp_glist);
+
 						return;
 					}
 					return_code_gbool = time_line_internal_draw_layer_info(priv);
@@ -1032,7 +1031,7 @@ void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 						g_string_printf(message, "%s ED363: %s", _("Error"), _("Couldn't redraw the time line layer information."));
 						display_warning(message->str);
 						g_string_free(message, TRUE);
-						g_list_free(tmp_glist);
+
 						return;
 					}
 					draw_timeline();
@@ -1059,12 +1058,4 @@ void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 			gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &area, TRUE);
 }
 
-void top_left_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
-{
 
-}
-
-void top_left_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
-{
-
-}

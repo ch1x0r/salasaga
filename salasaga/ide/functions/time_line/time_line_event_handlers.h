@@ -53,11 +53,6 @@ void top_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 // -----  Expansion / Reduction
 void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
 
-void top_left_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
-
-void top_left_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data);
-
-
 
 
 #ifdef __cplusplus
