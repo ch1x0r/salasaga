@@ -963,6 +963,12 @@ void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 			// Not a primary mouse, so we return
 			return;
 		}
+		if (TRUE == priv->cursor_drag_active)
+		{
+			// Note that the cursor drag has finished
+			priv->cursor_drag_active = FALSE;
+			return;
+		}
 
 		gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);
 
@@ -1058,4 +1064,40 @@ void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 			gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &area, TRUE);
 }
 
+void top_left_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
 
+}
+
+void top_left_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
+{
+
+}
+
+
+
+void bot_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data){
+
+	TimeLinePrivate		*priv;
+	priv = data;
+	if (TRUE == priv->cursor_drag_active)
+	{
+		// Note that the cursor drag has finished
+		priv->cursor_drag_active = FALSE;
+		return;
+	}
+	// same thing need to be done as done in right widget
+	bot_right_button_release_event(priv->bot_right_evb,event,data);
+
+}
+
+void bot_left_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data){
+	TimeLinePrivate		*priv;
+	priv = data;
+	bot_right_button_press_event(priv->bot_right_evb,event,data);
+}
+
+void bot_left_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data){
+
+
+}
