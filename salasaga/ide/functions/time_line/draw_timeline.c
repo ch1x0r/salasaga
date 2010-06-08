@@ -98,26 +98,8 @@ void draw_timeline(void)
 	priv = TIME_LINE_GET_PRIVATE(slide_pointer->timeline_widget);
 
 
-	//gtk_container_add(GTK_WIDGET(get_time_line_container()),GTK_WIDGET(priv->main_table));
-
-
-	//gtk_container_add(GTK_CONTAINER(get_time_line_container()), GTK_WIDGET(priv->main_table));
-
-	//gtk_box_pack_start(GTK_BOX(slide_pointer->timeline_widget), GTK_WIDGET(priv->main_table), TRUE, TRUE, 0);
-
 	gtk_container_add(GTK_CONTAINER(get_time_line_container()), GTK_WIDGET(slide_pointer->timeline_widget));
 	gtk_widget_show_all(GTK_WIDGET(get_time_line_container()));
-	//gtk_widget_realize(get_time_line_container());
-
-
-	//Updating the GtkEventBox for the scroll bars
-	// Calculating the size of the scroll bars from various parameters from private timeline as well as slide_pointer
-	// 10 pixels are extra added for horizontal duration and 5 pixel extra is added for vertical height
-	//gtk_widget_set_size_request(GTK_WIDGET(get_time_line_container()),((slide_pointer->duration*time_line_get_pixels_per_second())+priv->left_border_width + 10),((slide_pointer->num_layers+1)*20));
-
-	// Show all of the widgets in the timeline
-
-
 
 	if (NULL != GTK_WIDGET(priv->bot_right_evb)->window)
 		gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &GTK_WIDGET(priv->bot_right_evb)->allocation, TRUE);
