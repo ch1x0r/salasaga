@@ -1099,7 +1099,7 @@ void bot_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 void bot_left_button_press_event(GtkWidget *widget, GdkEventButton *event, gpointer data){
 	TimeLinePrivate		*priv;
 	priv = data;
-	bot_right_button_press_event(priv->bot_right_evb,event,data);
+	//bot_right_button_press_event(priv->bot_right_evb,event,data);
 }
 
 void bot_left_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data){
