@@ -45,6 +45,9 @@
 gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint width, gint height)
 {
 	// Local variables
+	// We create 4 back ground images for different parts via
+	// top_left,top_right
+	// bot_left, bot_right
 	static GdkGC		*bg_image_gc_bot_right = NULL;
 	static GdkGC		*bg_image_gc_top_left = NULL;
 	static GdkGC		*bg_image_gc_top_right = NULL;
@@ -353,11 +356,11 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 						main_part_height);
 	}
 
-//	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
-//	pango_font_description_free(font_description);
-//	g_object_unref(font_layout);
-//	g_string_free(seconds_number, TRUE);
-//
+
+	pango_font_description_free(font_description);
+	g_object_unref(font_layout);
+	g_string_free(seconds_number, TRUE);
+
 	// Draw the horizontal layer components
 	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_bot_right), &colour_antique_white_2);
 	gdk_gc_set_line_attributes(GDK_GC(bg_image_gc_bot_right), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
@@ -384,8 +387,8 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	}
 //
 //	// Draw the left border area
-//	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_bot_right), &colour_black);
-//	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_bot_right), GDK_GC(bg_image_gc_bot_right), 0 ,0, w, height);
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_bot_right), &colour_black);
+	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_bot_right), GDK_GC(bg_image_gc_bot_right), 0 ,0, 0, height);
 
 	// Flag that we now have a valid background cache image
 	priv->cached_bg_valid = TRUE;
