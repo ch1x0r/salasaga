@@ -43,7 +43,6 @@
 gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_number)
 {
 	// Local variables
-	GdkRectangle		clip_region;				// Used as a clip mask region
 	const GdkColor		colour_black = {0, 0, 0, 0 };
 	static GdkColormap	*colourmap = NULL;			// Colourmap used for drawing
 	static GdkGC		*display_buffer_gc = NULL;

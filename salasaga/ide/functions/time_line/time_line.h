@@ -86,7 +86,6 @@ typedef struct _TimeLinePrivate TimeLinePrivate;
 struct _TimeLinePrivate
 {
 	GdkPixmap			*cached_bg_image_bot_right;			// Cache of the timeline background image, for drawing upon
-	GdkPixmap			*cached_bg_image;			// Cache of the timeline background image, for drawing upon
 	GdkPixmap			*cached_bg_image_top_left;
 	GdkPixmap			*cached_bg_image_top_right;
 	GdkPixmap			*cached_bg_image_bot_left;
@@ -117,8 +116,7 @@ struct _TimeLinePrivate
 	gboolean			cursor_drag_active;			// Tracks whether we're dragging the time line cursor or not
 	gfloat				cursor_position;			// Where in the slide the cursor is positioned (in seconds or part thereof)
 
-	GdkPixmap			*display_buffer;
-	GdkPixmap			*display_buffer_bot_right;			// The rendered version of the timeline
+	GdkPixmap			*display_buffer_bot_right;			//  The rendered bottom right part
 	GdkPixmap			*display_buffer_top_left;
 	GdkPixmap			*display_buffer_top_right;
 	GdkPixmap			*display_buffer_bot_left;

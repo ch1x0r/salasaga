@@ -957,6 +957,7 @@ void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 		gboolean			return_code_gbool;			// Receives boolean return codes
 
 		priv = data;
+
 		if (NULL == widget)
 		{
 			return;
@@ -974,7 +975,7 @@ void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 			priv->cursor_drag_active = FALSE;
 			return;
 		}
-
+		message = g_string_new(NULL);
 		gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);
 
 		if ((ADJUSTMENTS_Y <= mouse_y) && (ADJUSTMENTS_Y + ADJUSTMENTS_SIZE) >= mouse_y)
@@ -1020,6 +1021,7 @@ void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 
 					// Regenerate the timeline images with the new pixel scale
 					return_code_gbool = time_line_internal_initialise_bg_image(priv, priv->main_table->allocation.width, priv->main_table->allocation.height);
+
 					if (FALSE == return_code_gbool)
 					{
 						g_string_printf(message, "%s ED361: %s", _("Error"), _("Couldn't recreate time line background image."));
