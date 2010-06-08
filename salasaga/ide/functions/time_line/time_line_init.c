@@ -269,25 +269,17 @@ void time_line_init(TimeLine *time_line)
 	priv->left_border_width = 120;
 	priv->row_height = 20;
 	priv->top_border_height = 15;
-
-	//time_line_internal_make_widgets(priv);
+	// make all the widgets necessary
 	time_line_internal_make_widgets(priv,WIDGET_MINIMUM_WIDTH,WIDGET_MINIMUM_HEIGHT);
-	// Call our internal time line function to create the cached background image
-	//time_line_internal_initialise_bg_image(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
-	// Call our internal function to create the display buffer
-	//time_line_internal_initialise_display_buffer(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
-
+	// allocate the size  / for initializing the size
 	realize_allocate(get_time_line_container(),priv);
-
-	//time_line_internal_draw_layer_info(priv);
-
+	// add the table to the vbox / time line.
 	gtk_box_pack_start(GTK_BOX(time_line), GTK_WIDGET(priv->main_table), TRUE, TRUE, 0);
-
-	//realize_allocate(get_time_line_container(),priv);
+	// connecting the initializing signals.
 	g_signal_connect_after(GTK_WIDGET(priv->main_table), "realize", G_CALLBACK(realize_allocate),priv);
 	g_signal_connect_after(GTK_WIDGET(priv->main_table), "expose-event", G_CALLBACK(expose_table),priv);
 	g_signal_connect(priv->main_table, "size-allocate", G_CALLBACK(size_allocate), priv);
-
+	// connecting the inner expose signals
 	g_signal_connect(GTK_WIDGET(priv->top_left_evb), "expose-event", G_CALLBACK(expose_event_top_left),priv);
 	g_signal_connect(GTK_WIDGET(priv->top_right_evb), "expose-event", G_CALLBACK(expose_event_top_right),priv);
 	g_signal_connect(GTK_WIDGET(priv->bot_right_evb), "expose-event", G_CALLBACK(expose_event_bot_right),priv);
