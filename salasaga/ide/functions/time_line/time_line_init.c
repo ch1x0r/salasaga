@@ -190,6 +190,7 @@ gboolean size_allocate(GtkWidget *widget,gpointer user_data)
 	TimeLinePrivate		*priv;
 	gint width;
 	priv = (TimeLinePrivate *)user_data;
+	// this is called only in the redrawal, ie already the widgets are there and the size is getting allocated!
 	if(priv->top_left_evb!= NULL && priv->bot_left_evb!=NULL && priv->top_right_evb!=NULL && priv->bot_right_evb != NULL){
 	if(widget->allocation.width > priv->left_border_width && old_width != widget->allocation.width){
 		draw_timeline();
