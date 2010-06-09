@@ -130,15 +130,12 @@ salasaga_SOURCES = global_functions.c \
 	time_line/create_time_line.c \
 	time_line/draw_timeline.c \
 	time_line/time_line.c \
-	time_line/time_line_button_press_event.c \
-	time_line/time_line_button_release_event.c \
 	time_line/time_line_class_init.c \
-	time_line/time_line_expose.c \
-	time_line/time_line_event_handlers.c \
 	time_line/time_line_get_cursor_position.c \
 	time_line/time_line_get_left_border_width.c \
 	time_line/time_line_get_selected_layer_num.c \
 	time_line/time_line_get_type.c \
+	time_line/time_line_internal_make_widgets.c \
 	time_line/time_line_init.c \
 	time_line/time_line_internal_draw_cursor.c \
 	time_line/time_line_internal_draw_guide_line.c \
@@ -149,19 +146,14 @@ salasaga_SOURCES = global_functions.c \
 	time_line/time_line_internal_initialise_bg_image.c \
 	time_line/time_line_internal_initialise_display_buffer.c \
 	time_line/time_line_internal_invalidate_layer_area.c \
-	time_line/time_line_internal_make_widgets.c \
-	time_line/time_line_internal_redraw_bg_area.c \
 	time_line/time_line_internal_redraw_layer_bg.c \
-	time_line/time_line_internal_widget_motion_notify_handler.c \
-	time_line/time_line_motion_notify_event.c \
+	time_line/time_line_internal_redraw_bg_area.c \
+	time_line/time_line_event_handlers.c \
 	time_line/time_line_new.c \
-	time_line/time_line_realise.c \
 	time_line/time_line_regenerate_widget.c \
 	time_line/time_line_set_cursor_position.c \
 	time_line/time_line_set_selected_layer_num.c \
 	time_line/time_line_set_stored_slide_duration.c \
-	time_line/time_line_size_allocate.c \
-	time_line/time_line_size_request.c \
 	tool_bars/create_toolbar.c \
 	tool_bars/disable_layer_toolbar_buttons.c \
 	tool_bars/disable_main_toolbar_buttons.c \
