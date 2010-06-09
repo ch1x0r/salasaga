@@ -148,7 +148,23 @@ salasaga_SOURCES = global_functions.c \
 	time_line/time_line_internal_invalidate_layer_area.c \
 	time_line/time_line_internal_redraw_layer_bg.c \
 	time_line/time_line_internal_redraw_bg_area.c \
-	time_line/time_line_event_handlers.c \
+	time_line/top_left_button_release_event.c\
+	time_line/top_right_button_press_event.c\
+	time_line/top_right_button_release_event.c\
+	time_line/top_right_motion_notify_event.c\
+	time_line/bot_left_button_press_event.c\
+	time_line/bot_left_button_release_event.c\
+	time_line/bot_left_motion_notify_event.c\
+	time_line/bot_right_button_press_event.c\
+	time_line/bot_right_button_release_event.c\
+	time_line/bot_right_motion_notify_event.c\
+	time_line/realize_allocate_table.c\
+	time_line/expose_table.c\
+	time_line/size_allocate_table.c\
+	time_line/expose_event_top_left.c\
+	time_line/expose_event_top_right.c\
+	time_line/expose_event_bot_right.c\
+	time_line/expose_event_bot_left.c\
 	time_line/time_line_new.c \
 	time_line/time_line_regenerate_widget.c \
 	time_line/time_line_set_cursor_position.c \

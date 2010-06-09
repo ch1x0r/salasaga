@@ -88,6 +88,7 @@ HHOOK					win32_keyboard_hook_handle = NULL;		// Handle used to keep track of th
 #endif
 
 
+
 // The main program loop
 gint main(gint argc, gchar *argv[])
 {

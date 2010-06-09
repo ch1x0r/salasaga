@@ -1,5 +1,5 @@
 /*
- * $Id: time_line_internal_make_widgets.c  by allupaku $
+ * $Id: time_line_internal_make_widgets.c  by Althaf $
  *
  * Copyright (C) 2005-2010 Digital Distribution Global Training Solutions Pty. Ltd.
  * <justin@salasaga.org>
@@ -28,7 +28,28 @@
 #include "../global_functions.h"
 #include "time_line.h"
 #include "../dialog/display_warning.h"
-#include "time_line_event_handlers.h"
+
+#include "top_left_button_release_event.h"
+#include "top_right_button_press_event.h"
+#include "top_right_button_release_event.h"
+#include "top_right_motion_notify_event.h"
+#include "bot_left_button_press_event.h"
+#include "bot_left_button_release_event.h"
+#include "bot_left_motion_notify_event.h"
+#include "bot_right_button_press_event.h"
+#include "bot_right_button_release_event.h"
+#include "bot_right_motion_notify_event.h"
+
+#include "realize_allocate_table.h"
+#include "expose_table.h"
+#include "size_allocate_table.h"
+
+#include "expose_event_top_left.h"
+#include "expose_event_top_right.h"
+#include "expose_event_bot_right.h"
+#include "expose_event_bot_left.h"
+
+
 
 gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, guint height){
 	GtkWidget * align;
@@ -165,8 +186,7 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, gui
 
 
 		g_signal_connect(priv->top_left_evb, "button_release_event", G_CALLBACK(top_left_button_release_event), priv);
-		g_signal_connect(priv->top_left_evb, "button_press_event", G_CALLBACK(top_left_button_press_event), priv);
-		g_signal_connect(priv->top_left_evb, "motion_notify_event", G_CALLBACK(top_left_motion_notify_event), priv);
+
 
 		// Ensure we get the signals we want
 		gtk_widget_set_events(priv->top_left_evb, gtk_widget_get_events(priv->top_left_evb)
@@ -187,6 +207,19 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, gui
 			| GDK_BUTTON_RELEASE_MASK
 			| GDK_BUTTON1_MOTION_MASK
 			| GDK_KEY_RELEASE_MASK);
+
+
+		g_signal_connect_after(GTK_WIDGET(priv->main_table), "realize", G_CALLBACK(realize_allocate_table),priv);
+		g_signal_connect_after(GTK_WIDGET(priv->main_table), "expose-event", G_CALLBACK(expose_table),priv);
+		g_signal_connect(priv->main_table, "size-allocate", G_CALLBACK(size_allocate_table), priv);
+		// connecting the inner expose signals
+		g_signal_connect(GTK_WIDGET(priv->top_left_evb), "expose-event", G_CALLBACK(expose_event_top_left),priv);
+		g_signal_connect(GTK_WIDGET(priv->top_right_evb), "expose-event", G_CALLBACK(expose_event_top_right),priv);
+		g_signal_connect(GTK_WIDGET(priv->bot_right_evb), "expose-event", G_CALLBACK(expose_event_bot_right),priv);
+		g_signal_connect(GTK_WIDGET(priv->bot_left_evb), "expose-event", G_CALLBACK(expose_event_bot_left),priv);
+
+
+
 return TRUE;
 }
 
