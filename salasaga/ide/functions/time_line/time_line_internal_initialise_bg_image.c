@@ -54,6 +54,7 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	static GdkGC		*bg_image_gc_bot_left = NULL;
 
 	const GdkColor		colour_antique_white_2 = {0, (238 << 8), (223 << 8), (204 << 8) };
+	const GdkColor		colour_resize_top_border = {0, (156 << 8), (143 << 8), (124 << 8) };
 	const GdkColor		colour_black = {0, 0, 0, 0 };
 	const GdkColor		colour_left_bg_first = {0, (255 << 8), (250 << 8), (240 << 8) };
 	const GdkColor		colour_left_bg_second = {0, (253 << 8), (245 << 8), (230 << 8) };
@@ -164,7 +165,15 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_top_left), GDK_GC(bg_image_gc_top_left),
 			ADJUSTMENTS_X + 20, ADJUSTMENTS_Y + 2, ADJUSTMENTS_X + 20, ADJUSTMENTS_Y + 9);  // Vertical line
 
-
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_top_left), &colour_resize_top_border);
+	gdk_draw_rectangle(GDK_DRAWABLE(priv->cached_bg_image_top_left), GDK_GC(bg_image_gc_top_left), TRUE, priv->left_border_width -5, 0, 5, priv->top_border_height);
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_top_left), &colour_antique_white_2);
+	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_top_left), GDK_GC(bg_image_gc_top_left),
+			priv->left_border_width -3, 0, priv->left_border_width -3, priv->top_border_height);
+	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_top_left), GDK_GC(bg_image_gc_top_left),
+				priv->left_border_width -2, 0, priv->left_border_width -2, priv->top_border_height);
+	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_top_left), GDK_GC(bg_image_gc_top_left),
+					priv->left_border_width -1, 0, priv->left_border_width -1, priv->top_border_height);
 
 	// If we already have a background image, we check if we can re-use it -- top -right part
 	if (NULL != priv->cached_bg_image_top_right)
@@ -387,8 +396,8 @@ gboolean time_line_internal_initialise_bg_image(TimeLinePrivate *priv, gint widt
 	}
 //
 //	// Draw the left border area
-	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_bot_right), &colour_black);
-	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_bot_right), GDK_GC(bg_image_gc_bot_right), 0 ,0, 0, height);
+	gdk_gc_set_rgb_fg_color(GDK_GC(bg_image_gc_bot_left), &colour_resize_top_border);
+	gdk_draw_line(GDK_DRAWABLE(priv->cached_bg_image_bot_left), GDK_GC(bg_image_gc_bot_left), priv->left_border_width-1 ,0, priv->left_border_width-1, height);
 
 	// Flag that we now have a valid background cache image
 	priv->cached_bg_valid = TRUE;

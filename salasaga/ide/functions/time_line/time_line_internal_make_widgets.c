@@ -30,6 +30,8 @@
 #include "../dialog/display_warning.h"
 
 #include "top_left_button_release_event.h"
+#include "top_left_button_press_event.h"
+#include "top_left_motion_notify_event.h"
 #include "top_right_button_press_event.h"
 #include "top_right_button_release_event.h"
 #include "top_right_motion_notify_event.h"
@@ -98,8 +100,8 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, gui
 		//gtk_container_add(GTK_CONTAINER(priv->top_right_evb),GTK_WIDGET(trial_label));
 		gtk_container_add(GTK_CONTAINER(priv->top_right_vp),GTK_WIDGET(priv->top_right_evb));
 		// setting the width as 500 random.
-		gtk_widget_set_size_request(GTK_WIDGET(priv->top_right_evb),1000,20);
-		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_right_vp),400,20);
+//		gtk_widget_set_size_request(GTK_WIDGET(priv->top_right_evb),1000,20);
+//		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_right_vp),400,20);
 		//never show the scroll
 		gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(priv->top_right_swin), GTK_POLICY_NEVER, GTK_POLICY_NEVER);
 
@@ -119,8 +121,8 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, gui
 		gtk_container_add(GTK_CONTAINER(priv->bot_left_swin),GTK_WIDGET(priv->bot_left_vp));
 		// creating the event box.
 		priv->bot_left_evb = gtk_event_box_new();
-		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_left_evb),120,height);
-		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_left_vp),120,height-priv->top_border_height);
+		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_left_evb),priv->left_border_width,height);
+		gtk_widget_set_size_request(GTK_WIDGET(priv->bot_left_vp),priv->left_border_width,height-priv->top_border_height);
 
 		gtk_container_add(GTK_CONTAINER(priv->bot_left_vp),GTK_WIDGET(priv->bot_left_evb));
 
@@ -186,7 +188,8 @@ gboolean time_line_internal_make_widgets(TimeLinePrivate *priv, guint width, gui
 
 
 		g_signal_connect(priv->top_left_evb, "button_release_event", G_CALLBACK(top_left_button_release_event), priv);
-
+		g_signal_connect(priv->top_left_evb, "button_press_event", G_CALLBACK(top_left_button_press_event), priv);
+		g_signal_connect(priv->top_left_evb, "motion_notify_event", G_CALLBACK(top_left_motion_notify_event), priv);
 
 		// Ensure we get the signals we want
 		gtk_widget_set_events(priv->top_left_evb, gtk_widget_get_events(priv->top_left_evb)

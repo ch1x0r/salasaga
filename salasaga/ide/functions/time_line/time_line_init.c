@@ -77,11 +77,12 @@ void time_line_init(TimeLine *time_line)
 	priv->top_border_height = 15;
 	// make all the widgets necessary
 	time_line_internal_make_widgets(priv,WIDGET_MINIMUM_WIDTH,WIDGET_MINIMUM_HEIGHT);
-	// allocate the size  / for initializing the size
-	realize_allocate_table(get_time_line_container(),priv);
+
 	// add the table to the vbox / time line.
 	gtk_box_pack_start(GTK_BOX(time_line), GTK_WIDGET(priv->main_table), TRUE, TRUE, 0);
-	// connecting the initializing signals.
+
+	// allocate the size  / for initializing the size
+		realize_allocate_table(get_time_line_container(),priv);
 
 	// Set a periodic time out, so we rate limit the calls to the motion notify (mouse drag) handler
 	priv->mouse_x = -1;

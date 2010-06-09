@@ -60,7 +60,7 @@ struct _TimeLineClass
 #define WIDGET_MINIMUM_WIDTH	1000
 
 // Definitions for the scaling "adjustment" symbols (the plus and minus symbols)
-#define ADJUSTMENTS_X	85
+#define ADJUSTMENTS_X	15
 #define ADJUSTMENTS_Y	2
 #define ADJUSTMENTS_SIZE	10
 
@@ -123,7 +123,7 @@ struct _TimeLinePrivate
 
 	gint				main_width;
 	gint				main_height;
-
+	gboolean			left_resize_active;			// Tracks whether the left border is getting resized
 	gboolean			drag_active;				// Tracks whether we have an active mouse drag or not
 	gint				guide_line_end;				// The pixel number of the ending guide line
 	gint				guide_line_start;			// The pixel number of the starting guide line

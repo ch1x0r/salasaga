@@ -110,6 +110,10 @@ void bot_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 	if (TRANS_LAYER_NONE != this_layer_data->transition_out_type)
 		end_time += this_layer_data->transition_out_duration;
 
+	if(TRUE == priv->left_resize_active){
+		top_left_motion_notify_event(priv->top_left_evb,event,priv);
+		return;
+	}
 	if(TRUE == priv->cursor_drag_active)
 	{
 		top_right_motion_notify_event(priv->top_right_evb, event, priv);

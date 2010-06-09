@@ -92,6 +92,10 @@ void bot_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		priv->cursor_drag_active = FALSE;
 		return;
 	}
+	if(TRUE == priv->left_resize_active){
+				priv->left_resize_active = FALSE;
+				return;
+	}
 
 	// Find out where the mouse is positioned, and which buttons and modifier keys are down (active)
 	gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);

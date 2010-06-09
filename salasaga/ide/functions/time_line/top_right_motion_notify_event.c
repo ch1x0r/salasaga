@@ -58,7 +58,7 @@
 #include "time_line_internal_draw_cursor.h"
 #include "time_line_internal_initialise_bg_image.h"
 #include "draw_timeline.h"
-
+#include "top_left_motion_notify_event.h"
 
 void top_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
@@ -71,6 +71,10 @@ void top_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 	priv = data;
 	pps = time_line_get_pixels_per_second();
 
+	if(TRUE == priv->left_resize_active){
+		top_left_motion_notify_event(priv->top_left_evb,event,data);
+		return;
+	}
 	if(FALSE == priv->cursor_drag_active)
 	{
 		priv->cursor_drag_active = TRUE;

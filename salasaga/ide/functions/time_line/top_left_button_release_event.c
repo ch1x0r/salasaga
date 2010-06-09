@@ -91,6 +91,10 @@ void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpo
 			priv->cursor_drag_active = FALSE;
 			return;
 		}
+		if(TRUE == priv->left_resize_active){
+			priv->left_resize_active = FALSE;
+			return;
+		}
 		message = g_string_new(NULL);
 		gdk_window_get_pointer(event->window, &mouse_x, &mouse_y, &button_state);
 
