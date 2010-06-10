@@ -30,8 +30,6 @@
 #include <gtk/gtk.h>
 #include "../../salasaga_types.h"
 #include "../global_functions.h"
-#include "../dialog/display_warning.h"
-#include "../layer/layer_duplicate.h"
 #include "../layer/layer_edit.h"
 #include "../other/widget_focus.h"
 #include "../undo_redo/undo_functions.h"
@@ -41,8 +39,6 @@
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "time_line.h"
 #include "time_line_get_cursor_position.h"
-#include "time_line_get_left_border_width.h"
-#include "time_line_get_type.h"
 #include "time_line_internal_draw_guide_line.h"
 #include "time_line_set_cursor_position.h"
 #include "time_line_set_selected_layer_num.h"

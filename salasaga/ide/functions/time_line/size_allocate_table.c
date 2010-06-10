@@ -37,18 +37,7 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../global_functions.h"
-#include "../dialog/display_warning.h"
 #include "time_line.h"
-#include "time_line_get_type.h"
-#include "time_line_internal_draw_layer_info.h"
-#include "time_line_internal_draw_selection_highlight.h"
-#include "time_line_internal_initialise_bg_image.h"
-#include "time_line_internal_initialise_display_buffer.h"
-#include "time_line_internal_make_widgets.h"
-#include "time_line_get_left_border_width.h"
-#include "time_line_get_cursor_position.h"
-#include "time_line_internal_draw_cursor.h"
-#include "../working_area/draw_workspace.h"
 #include "draw_timeline.h"
 
 
