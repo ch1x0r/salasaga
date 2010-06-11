@@ -45,17 +45,13 @@
 gboolean expose_event_bot_left(GtkWidget *widget,GdkEventExpose *event, gpointer user){
 
 	static GdkGC		*this_gc = NULL;
-	GString				*message;
+
 	TimeLinePrivate		*priv;
 	guint				width;
 	guint				height;
 	priv = (TimeLinePrivate *)user;
 
 	if(priv->bot_left_evb->window == NULL || priv->display_buffer_bot_left == NULL){
-				message = g_string_new(NULL);
-				g_string_printf(message, "%s ED358: %s", _("Error"), _("Null data in window"));
-				display_warning(message->str);
-				g_string_free(message, TRUE);
 				return TRUE;
 	}
 	if (NULL == this_gc)

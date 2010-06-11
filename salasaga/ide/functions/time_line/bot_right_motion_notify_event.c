@@ -40,7 +40,6 @@
 #include "../working_area/draw_workspace.h"
 #include "../film_strip/film_strip_create_thumbnail.h"
 #include "time_line.h"
-#include "time_line_get_left_border_width.h"
 #include "time_line_internal_draw_guide_line.h"
 #include "time_line_set_cursor_position.h"
 #include "time_line_set_selected_layer_num.h"
@@ -55,7 +54,8 @@
 #include "time_line_internal_draw_cursor.h"
 #include "time_line_internal_initialise_bg_image.h"
 #include "draw_timeline.h"
-
+#include "top_left_motion_notify_event.h"
+#include "top_right_motion_notify_event.h"
 
 void bot_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
@@ -474,7 +474,7 @@ void bot_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 					temp_int = CLAMP(event->x, 0, GTK_WIDGET(widget)->allocation.width);
 					distance_moved = priv->stored_x - temp_int;
 					time_moved = ((gfloat) distance_moved) / pps;
-					if((this_layer_data->start_time - time_moved) >= -0.01)
+					if((this_layer_data->start_time - time_moved) >= 0)
 					{
 							this_layer_data->start_time -= time_moved;
 					}

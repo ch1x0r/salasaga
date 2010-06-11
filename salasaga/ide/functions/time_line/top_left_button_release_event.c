@@ -33,8 +33,10 @@
 #include "../global_functions.h"
 #include "time_line.h"
 #include "draw_timeline.h"
-
-
+#include "../dialog/display_warning.h"
+#include "time_line_internal_draw_layer_info.h"
+#include "time_line_internal_initialise_bg_image.h"
+#include "time_line_internal_initialise_display_buffer.h"
 void top_left_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
 {
 

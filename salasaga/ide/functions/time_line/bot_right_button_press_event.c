@@ -33,6 +33,7 @@
 #include "../global_functions.h"
 #include "../dialog/display_warning.h"
 #include "../layer/layer_edit.h"
+#include "../layer/layer_duplicate.h"
 #include "../other/widget_focus.h"
 #include "../working_area/draw_handle_box.h"
 #include "../working_area/draw_layer_start_and_end_points.h"

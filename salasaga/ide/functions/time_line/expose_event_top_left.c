@@ -43,14 +43,11 @@
 gboolean expose_event_top_left(GtkWidget *widget,GdkEventExpose *event, gpointer user){
 
 	static GdkGC		*this_gc = NULL;
-	GString				*message;
+
 	TimeLinePrivate		*priv;
 	priv = (TimeLinePrivate *)user;
 	if(priv->top_left_evb->window == NULL || priv->display_buffer_top_left == NULL){
-				message = g_string_new(NULL);
-				g_string_printf(message, "%s ED358: %s", _("Error"), _("Null data in window"));
-				display_warning(message->str);
-				g_string_free(message, TRUE);
+
 	}
 	if (NULL == this_gc)
 	{

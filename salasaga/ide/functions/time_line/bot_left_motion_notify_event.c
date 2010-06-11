@@ -32,9 +32,7 @@
 #include "../../salasaga_types.h"
 #include "../global_functions.h"
 
-
-
 void bot_left_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpointer data){
-
-
+	//TODO : this is kept for future purpose, capturing the motion events in the left widgets
+	//			this is not required at present
 }

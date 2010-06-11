@@ -45,7 +45,6 @@
 gboolean expose_event_top_right(GtkWidget *widget,GdkEventExpose *event, gpointer user){
 
 	static GdkGC		*this_gc = NULL;
-	GString				*message;
 	TimeLinePrivate		*priv;
 	gint				new_cursor_pos;
 	gint 				width;
@@ -53,10 +52,7 @@ gboolean expose_event_top_right(GtkWidget *widget,GdkEventExpose *event, gpointe
 	priv = (TimeLinePrivate *)user;
 
 	if(priv->top_right_evb->window == NULL || priv->display_buffer_top_right == NULL){
-				message = g_string_new(NULL);
-				g_string_printf(message, "%s ED358: %s", _("Error"), _("Null data in window"));
-				display_warning(message->str);
-				g_string_free(message, TRUE);
+
 				return TRUE;
 	}
 	if (NULL == this_gc)

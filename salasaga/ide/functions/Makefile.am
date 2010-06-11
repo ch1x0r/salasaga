@@ -149,6 +149,8 @@ salasaga_SOURCES = global_functions.c \
 	time_line/time_line_internal_redraw_layer_bg.c \
 	time_line/time_line_internal_redraw_bg_area.c \
 	time_line/top_left_button_release_event.c\
+	time_line/top_left_button_press_event.c\
+	time_line/top_left_motion_notify_event.c\
 	time_line/top_right_button_press_event.c\
 	time_line/top_right_button_release_event.c\
 	time_line/top_right_motion_notify_event.c\

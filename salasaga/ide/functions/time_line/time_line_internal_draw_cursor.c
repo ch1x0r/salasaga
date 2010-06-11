@@ -74,7 +74,7 @@ gboolean time_line_internal_draw_cursor(GtkWidget *widget, gint pixel_num)
 	}
 	height = get_current_slide_num_layers()*priv->row_height + 10;
 	if(height<widget->allocation.height)
-		height = widget->allocation.height;
+		height = widget->allocation.height+10;
 	// Draw the line part of the time line cursor
 	gdk_gc_set_rgb_fg_color(GDK_GC(this_gc_bot_right), &colour_blue);
 	gdk_gc_set_line_attributes(GDK_GC(this_gc_bot_right), 1, GDK_LINE_SOLID, GDK_CAP_BUTT, GDK_JOIN_MITER);
