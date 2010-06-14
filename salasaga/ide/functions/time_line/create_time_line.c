@@ -26,7 +26,7 @@
 
 
 // GTK includes
-#include <gtk/gtk.h>
+#include <gtk-2.0/gtk/gtk.h>
 
 #ifdef _WIN32
 	// Windows only code
@@ -47,9 +47,6 @@
 #include "../layer/layer_new_mouse.h"
 #include "../layer/layer_new_text.h"
 #include "../preference/application_preferences.h"
-#include "../time_line/time_line_button_press_event.h"
-#include "../time_line/time_line_button_release_event.h"
-#include "../time_line/time_line_motion_notify_event.h"
 #include "../tool_bars/shared_toolbar_functions.h"
 
 
@@ -68,53 +65,18 @@ GtkWidget *create_time_line(void)
 
 	// Local variables
 	GtkWidget			*time_line_toolbar;			// Widget for holding the time line toolbar
-	GtkScrolledWindow	*time_line_scrolled_window;	// Widget for holding the scrolled window
 	GdkPixbuf			*tmp_gdk_pixbuf;			// Temporary GDK Pixbuf
 	GString				*tmp_gstring;				// Temporary GString
-	GtkWidget			*time_line_table;			// Table to be placed inside the view port
-	GtkWidget			*time_line_evbox;			// event box to be placed inside the table
-	GtkWidget			*time_line_view_port;		// View port to be placed inside the scrollable window
+
 	// Initialise various things
 	tmp_gstring = g_string_new(NULL);
 
 	// Create the VBox the time line elements are packed into
 	set_time_line_vbox(gtk_vbox_new(FALSE, 0));
 
-	// Create the scrolled window that the time line widgets are swapped into and out of
-	time_line_scrolled_window = GTK_SCROLLED_WINDOW(gtk_scrolled_window_new(NULL, NULL));
-	gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(time_line_scrolled_window), GTK_POLICY_AUTOMATIC, GTK_POLICY_AUTOMATIC);
-	gtk_box_pack_start(GTK_BOX(get_time_line_vbox()), GTK_WIDGET(time_line_scrolled_window), TRUE, TRUE, 0);
+	set_time_line_container(gtk_vbox_new(FALSE, 0));
+	gtk_box_pack_start(GTK_BOX(get_time_line_vbox()), GTK_WIDGET(get_time_line_container()), TRUE, TRUE, 0);
 
-	// Create the time line View port
-	time_line_view_port = gtk_viewport_new(NULL,NULL);
-	//Create a table for the event Box / this is added for updating view port area
-	time_line_table = gtk_table_new(1,1,FALSE);
-	// Adding the table to the Viewport
-	gtk_container_add(GTK_CONTAINER(time_line_view_port),GTK_WIDGET(time_line_table));
-	// Creating an event box, to capture the events inside the table rows.
-	time_line_evbox = gtk_event_box_new();
-	// Attaching the event box to the table
-	gtk_table_attach_defaults(GTK_TABLE(time_line_table),GTK_WIDGET(time_line_evbox),0,1,0,1);
-
-	//Setting the view port as focusable
-	gtk_widget_set_can_focus(GTK_WIDGET(time_line_view_port), TRUE);
-	// Adding the view port to the Scrollable Window
-	gtk_container_add(GTK_CONTAINER(time_line_scrolled_window), GTK_WIDGET(time_line_view_port));
-
-	// Set the time line container as the event box
-	set_time_line_container(time_line_evbox);
-
-
-	//gtk_scrolled_window_add_with_viewport(GTK_CONTAINER(time_line_scrolled_window),GTK_WIDGET(get_time_line_container()));
-	// Add signal handlers to the time line area for receiving events (i.e. mouse clicks)
-	g_signal_connect(get_time_line_container(), "button_release_event", G_CALLBACK(time_line_button_release_event), NULL);
-	g_signal_connect(get_time_line_container(), "button_press_event", G_CALLBACK(time_line_button_press_event), NULL);
-	g_signal_connect(get_time_line_container(), "motion_notify_event", G_CALLBACK(time_line_motion_notify_event), NULL);
-
-	// Add a signal handler to the time line, to be called whenever a key is pressed while it is in focus
-	g_signal_connect(get_time_line_container(), "key-release-event", G_CALLBACK(delete_key_release_event), NULL);
-
-	// Ensure we get the signals we want
 	gtk_widget_set_events(get_time_line_container(), gtk_widget_get_events(get_time_line_container())
 		| GDK_LEAVE_NOTIFY_MASK
 		| GDK_BUTTON_PRESS_MASK
@@ -124,6 +86,7 @@ GtkWidget *create_time_line(void)
 
 	// Create the time line toolbar
 	time_line_toolbar = gtk_toolbar_new();
+
 	gtk_box_pack_start(GTK_BOX(get_time_line_vbox()), GTK_WIDGET(time_line_toolbar), FALSE, FALSE, 0);
 
 	// Create the tooltips structure

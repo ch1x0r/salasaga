@@ -52,12 +52,12 @@ gboolean time_line_internal_redraw_layer_bg(TimeLinePrivate *priv, gint layer_nu
 
 	// Set the height related variables
 	layer_x = 0;
-	layer_y = priv->top_border_height + (layer_number * priv->row_height) + 2;
+	layer_y = (layer_number * priv->row_height) + 2;
 	layer_height = priv->row_height - 3;
 	layer_width = -1;
 
 	// Refresh the display buffer for the selected layer
-	time_line_internal_redraw_bg_area(priv, layer_x, layer_y, layer_width, layer_height);
+	time_line_internal_redraw_bg_area(priv, layer_x, layer_y, layer_width, layer_height,4);
 
 	return TRUE;
 }

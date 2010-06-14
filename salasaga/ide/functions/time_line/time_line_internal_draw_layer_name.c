@@ -43,7 +43,6 @@
 gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_number)
 {
 	// Local variables
-	GdkRectangle		clip_region;				// Used as a clip mask region
 	const GdkColor		colour_black = {0, 0, 0, 0 };
 	static GdkColormap	*colourmap = NULL;			// Colourmap used for drawing
 	static GdkGC		*display_buffer_gc = NULL;
@@ -52,13 +51,15 @@ gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_nu
 	static PangoLayout	*font_layout = NULL;
 	layer				*layer_data;
 	GList				*layer_pointer;				// Points to the layers in the selected slide
+	GString *message = NULL;
 
+	message  = g_string_new(NULL);
 
 	// Initialisation
 	if (NULL == colourmap)
 	{
 		colourmap = gdk_colormap_get_system();
-		gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer), GDK_COLORMAP(colourmap));
+		gdk_drawable_set_colormap(GDK_DRAWABLE(priv->display_buffer_bot_left), GDK_COLORMAP(colourmap));
 	}
 	if (NULL == font_context)
 	{
@@ -70,11 +71,11 @@ gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_nu
 	}
 	if (NULL == display_buffer_gc)
 	{
-		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
+		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer_bot_left));
 	}
 	if (NULL == font_description)
 	{
-		font_description = pango_font_description_from_string("Sans");
+		font_description = pango_font_description_from_string("Sans , 15px");
 		pango_layout_set_font_description(font_layout, font_description);
 	}
 
@@ -82,18 +83,19 @@ gboolean time_line_internal_draw_layer_name(TimeLinePrivate *priv, gint layer_nu
 	layer_pointer = get_current_slide_layers_pointer();
 	layer_pointer = g_list_first(layer_pointer);
 	layer_data = g_list_nth_data(layer_pointer, layer_number);
+//	g_string_printf(message, "%d  %s ",layer_number,layer_data->name->str);
 	pango_layout_set_text(font_layout, layer_data->name->str, -1);
 
 	// Set a clip mask
-	clip_region.x = 0;
-	clip_region.y = priv->top_border_height + (layer_number * priv->row_height);
-	clip_region.width = priv->left_border_width - 1;
-	clip_region.height = priv->row_height;
-	gdk_gc_set_clip_rectangle(GDK_GC(display_buffer_gc), &clip_region);
+//	clip_region.x = 0;
+//	clip_region.y = (layer_number <= 0)?0:(layer_number * priv->row_height);
+//	clip_region.width = priv->left_border_width - 1;
+//	clip_region.height = priv->row_height * 2;
+//	gdk_gc_set_clip_rectangle(GDK_GC(display_buffer_gc), &clip_region);
 
 	// Draw the text string
 	gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_black);
-	gdk_draw_layout(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), 5, ((layer_number + 1) * priv->row_height) - 3, font_layout);
+	gdk_draw_layout(GDK_DRAWABLE(priv->display_buffer_bot_left), GDK_GC(display_buffer_gc), 5, (layer_number * priv->row_height)+1,font_layout);
 
 	return TRUE;
 }

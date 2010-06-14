@@ -46,20 +46,21 @@ typedef struct _TimeLine TimeLine;
 typedef struct _TimeLineClass TimeLineClass;
 struct _TimeLine
 {
-	GtkDrawingArea drawing_area;
+	//GtkDrawingArea drawing_area;
+	GtkVBox box;
 };
 
 struct _TimeLineClass
 {
-	GtkDrawingAreaClass parent_class;
+	GtkVBoxClass parent_class;
 };
 
 // fixme2: Pulled these initial sizes out of the air, they may need to be revisited
-#define WIDGET_MINIMUM_HEIGHT	150
-#define WIDGET_MINIMUM_WIDTH	500
+#define WIDGET_MINIMUM_HEIGHT	200
+#define WIDGET_MINIMUM_WIDTH	1000
 
 // Definitions for the scaling "adjustment" symbols (the plus and minus symbols)
-#define ADJUSTMENTS_X	85
+#define ADJUSTMENTS_X	15
 #define ADJUSTMENTS_Y	2
 #define ADJUSTMENTS_SIZE	10
 
@@ -84,11 +85,45 @@ enum
 typedef struct _TimeLinePrivate TimeLinePrivate;
 struct _TimeLinePrivate
 {
-	GdkPixmap			*cached_bg_image;			// Cache of the timeline background image, for drawing upon
+	GdkPixmap			*cached_bg_image_bot_right;			// Cache of the timeline background image, for drawing upon
+	GdkPixmap			*cached_bg_image_top_left;
+	GdkPixmap			*cached_bg_image_top_right;
+	GdkPixmap			*cached_bg_image_bot_left;
+
+	// Tables used for the widget
+	GtkWidget			*main_table; // consist of 4 cells
+	GtkWidget			*top_left_table;
+	GtkWidget			*top_right_table;
+	GtkWidget			*bot_left_table;
+	GtkWidget			*bot_right_table;
+
+	GtkWidget			*top_left_vp;
+	GtkWidget			*top_right_vp;
+	GtkWidget			*bot_left_vp;
+	GtkWidget			*bot_right_vp;
+
+	GtkWidget			*top_left_swin;
+	GtkWidget			*top_right_swin;
+	GtkWidget			*bot_left_swin;
+	GtkWidget			*bot_right_swin;
+
+	GtkWidget			*top_left_evb;
+	GtkWidget			*top_right_evb;
+	GtkWidget			*bot_left_evb;
+	GtkWidget			*bot_right_evb;
+
 	gboolean			cached_bg_valid;			// Flag for whether the timeline background cache image is valid
 	gboolean			cursor_drag_active;			// Tracks whether we're dragging the time line cursor or not
 	gfloat				cursor_position;			// Where in the slide the cursor is positioned (in seconds or part thereof)
-	GdkPixmap			*display_buffer;			// The rendered version of the timeline
+
+	GdkPixmap			*display_buffer_bot_right;			//  The rendered bottom right part
+	GdkPixmap			*display_buffer_top_left;
+	GdkPixmap			*display_buffer_top_right;
+	GdkPixmap			*display_buffer_bot_left;
+
+	gint				main_width;
+	gint				main_height;
+	gboolean			left_resize_active;			// Tracks whether the left border is getting resized
 	gboolean			drag_active;				// Tracks whether we have an active mouse drag or not
 	gint				guide_line_end;				// The pixel number of the ending guide line
 	gint				guide_line_start;			// The pixel number of the starting guide line

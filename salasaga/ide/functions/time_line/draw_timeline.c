@@ -42,7 +42,7 @@
 #include "../time_line/time_line_new.h"
 #include "../time_line/time_line_regenerate_widget.h"
 #include "../time_line/time_line_set_stored_slide_duration.h"
-
+#include "time_line_internal_make_widgets.h"
 
 void draw_timeline(void)
 {
@@ -52,6 +52,8 @@ void draw_timeline(void)
 	slide				*slide_pointer;				// Points to the presently processing slide
 	GList				*tmp_glist;					// Is given a list of child widgets, if any exist
 	TimeLinePrivate		*priv;						// For holding the Timeline private structure object
+
+	//static GdkGC		*this_gc = NULL;
 
 	// If the slide doesn't have a timeline widget constructed for it yet, then make one
 
@@ -91,16 +93,14 @@ void draw_timeline(void)
 	g_list_free(tmp_glist);
 
 	// Add the timeline widget to the onscreen timeline area
-	gtk_container_add(GTK_CONTAINER(get_time_line_container()), GTK_WIDGET(slide_pointer->timeline_widget));
+
 	// Getting the private Time Line Instance for various parameters
 	priv = TIME_LINE_GET_PRIVATE(slide_pointer->timeline_widget);
-	//Updating the GtkEventBox for the scroll bars
-	// Calculating the size of the scroll bars from various parameters from private timeline as well as slide_pointer
-	// 10 pixels are extra added for horizontal duration and 5 pixel extra is added for vertical height
-	gtk_widget_set_size_request(GTK_WIDGET(get_time_line_container()),((slide_pointer->duration*time_line_get_pixels_per_second())+priv->left_border_width + 10),((slide_pointer->num_layers+1)*20));
 
-	// Show all of the widgets in the timeline
+
+	gtk_container_add(GTK_CONTAINER(get_time_line_container()), GTK_WIDGET(slide_pointer->timeline_widget));
 	gtk_widget_show_all(GTK_WIDGET(get_time_line_container()));
-	if (NULL != GTK_WIDGET(get_time_line_container())->window)
-		gdk_window_invalidate_rect(GTK_WIDGET(get_time_line_container())->window, &GTK_WIDGET(get_time_line_container())->allocation, TRUE);
+
+	if (NULL != GTK_WIDGET(priv->bot_right_evb)->window)
+		gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &GTK_WIDGET(priv->bot_right_evb)->allocation, TRUE);
 }

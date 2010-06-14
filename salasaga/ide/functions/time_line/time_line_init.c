@@ -37,27 +37,28 @@
 // Salasaga includes
 #include "../../salasaga_types.h"
 #include "../global_functions.h"
+#include "../dialog/display_warning.h"
 #include "time_line.h"
 #include "time_line_get_type.h"
 #include "time_line_internal_draw_layer_info.h"
 #include "time_line_internal_draw_selection_highlight.h"
 #include "time_line_internal_initialise_bg_image.h"
 #include "time_line_internal_initialise_display_buffer.h"
-#include "time_line_internal_widget_motion_notify_handler.h"
+#include "time_line_internal_make_widgets.h"
+#include "time_line_get_left_border_width.h"
+#include "time_line_get_cursor_position.h"
+#include "time_line_internal_draw_cursor.h"
 #include "../working_area/draw_workspace.h"
-
+#include "draw_timeline.h"
+#include "realize_allocate_table.h"
 void time_line_init(TimeLine *time_line)
 {
-	// Local variables
 	TimeLinePrivate		*priv;
-
-
-	// Initialise variable defaults
 	time_line_set_pixels_per_second(60);
 	priv = TIME_LINE_GET_PRIVATE(time_line);
 	priv->cached_bg_valid = FALSE;
 	priv->cursor_drag_active = FALSE;
-	priv->display_buffer = NULL;
+	priv->display_buffer_bot_right = NULL;
 	priv->drag_active = FALSE;
 	priv->resize_type = RESIZE_NONE;
 	priv->selected_layer_num = 0;
@@ -70,27 +71,23 @@ void time_line_init(TimeLine *time_line)
 	priv->stored_slide_duration = get_current_slide_duration();
 
 	// fixme3: These may be better as widget properties
-	priv->cursor_position = 0.0;
+	priv->cursor_position = 0.00;
 	priv->left_border_width = 120;
 	priv->row_height = 20;
 	priv->top_border_height = 15;
+	// make all the widgets necessary
+	time_line_internal_make_widgets(priv,WIDGET_MINIMUM_WIDTH,WIDGET_MINIMUM_HEIGHT);
 
-	// Call our internal time line function to create the cached background image
-	time_line_internal_initialise_bg_image(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
+	// add the table to the vbox / time line.
+	gtk_box_pack_start(GTK_BOX(time_line), GTK_WIDGET(priv->main_table), TRUE, TRUE, 0);
 
-	// Call our internal function to create the display buffer
-	time_line_internal_initialise_display_buffer(priv, WIDGET_MINIMUM_WIDTH, WIDGET_MINIMUM_HEIGHT);
-
-	// Draw the layer information
-	time_line_internal_draw_layer_info(priv);
-
-	// Select the highlighted layer
-	time_line_internal_draw_selection_highlight(priv, WIDGET_MINIMUM_WIDTH);
+	// allocate the size  / for initializing the size
+		realize_allocate_table(get_time_line_container(),priv);
 
 	// Set a periodic time out, so we rate limit the calls to the motion notify (mouse drag) handler
 	priv->mouse_x = -1;
 	priv->mouse_y = -1;
-	priv->timeout_id = g_timeout_add(330,  // Timeout interval (1/1000ths of a second)
+	priv->timeout_id = g_timeout_add(250,  // Timeout interval (1/1000ths of a second)
 							(GSourceFunc) draw_workspace,  // Function to call
 							 NULL); //time_line);  // Pass the time line widget to the function
 }

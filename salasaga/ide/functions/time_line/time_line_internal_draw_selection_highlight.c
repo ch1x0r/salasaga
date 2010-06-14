@@ -53,17 +53,17 @@ void time_line_internal_draw_selection_highlight(TimeLinePrivate *priv, gint wid
 	// Create a graphic context for the display buffer image if we don't have one already
 	if (NULL == display_buffer_gc)
 	{
-		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer));
+		display_buffer_gc = gdk_gc_new(GDK_DRAWABLE(priv->display_buffer_bot_right));
 	}
 
 	// Draw the selection
 	selected_row = priv->selected_layer_num;
 	x1 = 0;
-	y1 = priv->top_border_height + 1 + (selected_row * priv->row_height);
+	y1 = (selected_row * priv->row_height)+1;
 	x2 = width - 1;
-	y2 = priv->row_height - 2;
+	y2 = priv->row_height -2;
 	gdk_gc_set_rgb_fg_color(GDK_GC(display_buffer_gc), &colour_red);
 	gdk_gc_set_line_attributes(GDK_GC(display_buffer_gc), 1, GDK_LINE_ON_OFF_DASH, GDK_CAP_BUTT, GDK_JOIN_MITER);
 	gdk_gc_set_dashes(GDK_GC(display_buffer_gc), 1, dash_list, 2);
-	gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer), GDK_GC(display_buffer_gc), FALSE, x1, y1, x2, y2);
+	gdk_draw_rectangle(GDK_DRAWABLE(priv->display_buffer_bot_right), GDK_GC(display_buffer_gc), FALSE, x1, y1, x2, y2);
 }
