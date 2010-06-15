@@ -309,8 +309,8 @@ gint undo_history_redo_item(void)
 //	draw_workspace();
 
 	// Tell (force) the window system to redraw the working area *immediately*
-	main_drawing_area_widget = get_main_drawing_area();
-	gtk_widget_draw(GTK_WIDGET(main_drawing_area_widget), &main_drawing_area_widget->allocation);  // Yes, this is deprecated, but it *works*
+//	main_drawing_area_widget = get_main_drawing_area();
+//	gtk_widget_draw(GTK_WIDGET(main_drawing_area_widget), &main_drawing_area_widget->allocation);  // Yes, this is deprecated, but it *works*
 
 	// Redraw the film strip
 	regenerate_film_strip_thumbnails();
@@ -320,7 +320,7 @@ gint undo_history_redo_item(void)
 
 	// Use the status bar to give further feedback to the user
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _("Last action redone"));
-	gdk_flush();
+//	gdk_flush();
 
 	return TRUE;
 }
@@ -527,7 +527,7 @@ gint undo_history_undo_item(void)
 
 	// Use the status bar to give further feedback to the user
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _("Last action undone"));
-	gdk_flush();
+	//gdk_flush();
 
 	return TRUE;
 }
