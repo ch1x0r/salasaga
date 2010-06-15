@@ -48,9 +48,7 @@ void top_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 		// Note that the cursor drag has finished
 		priv->cursor_drag_active = FALSE;
 	}
-	else{
-		draw_timeline();
-	}
+
 	if(TRUE == priv->left_resize_active){
 			priv->left_resize_active = FALSE;
 	}
