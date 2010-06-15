@@ -303,10 +303,10 @@ gint undo_history_redo_item(void)
 	}
 
 	// Redraw the timeline area
-	draw_timeline();
-
-	// Redraw the workspace
-	draw_workspace();
+//	draw_timeline();
+//
+//	// Redraw the workspace
+//	draw_workspace();
 
 	// Tell (force) the window system to redraw the working area *immediately*
 	main_drawing_area_widget = get_main_drawing_area();
