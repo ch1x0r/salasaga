@@ -501,14 +501,14 @@ gint undo_history_undo_item(void)
 	undo_cursor--;
 
 	// Redraw the timeline area
-	draw_timeline();
+	//draw_timeline();
 
 	// Redraw the workspace
-	draw_workspace();
+	//draw_workspace();
 
 	// Tell (force) the window system to redraw the working area *immediately*
-	main_drawing_area_widget = get_main_drawing_area();
-	gtk_widget_draw(GTK_WIDGET(main_drawing_area_widget), &main_drawing_area_widget->allocation);  // Yes, this is deprecated, but it *works*
+//	main_drawing_area_widget = get_main_drawing_area();
+//	gtk_widget_draw(GTK_WIDGET(main_drawing_area_widget), &main_drawing_area_widget->allocation);  // Yes, this is deprecated, but it *works*
 
 	// Redraw the film strip
 	regenerate_film_strip_thumbnails();
