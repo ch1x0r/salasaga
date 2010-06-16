@@ -174,7 +174,7 @@ gint undo_history_redo_item(void)
 		case UNDO_CHANGE_LAYER:
 
 			// * We're redoing a change to a layer *
-
+			set_undoing(TRUE);
 			// Point to the layer we're going to change
 			slide_data = undo_data->slide_data;
 			layer_pointer = g_list_nth(slide_data->layers, undo_data->position_old);
@@ -313,11 +313,11 @@ gint undo_history_redo_item(void)
 //	gtk_widget_draw(GTK_WIDGET(main_drawing_area_widget), &main_drawing_area_widget->allocation);  // Yes, this is deprecated, but it *works*
 
 	// Redraw the film strip
-	regenerate_film_strip_thumbnails();
+	//regenerate_film_strip_thumbnails();
 
 	// Set the changes made variable
 	set_changes_made(TRUE);
-
+	set_undoing(FALSE);
 	// Use the status bar to give further feedback to the user
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _("Last action redone"));
 //	gdk_flush();
