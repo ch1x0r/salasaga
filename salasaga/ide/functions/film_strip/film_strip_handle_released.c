@@ -38,7 +38,7 @@
 #include "../global_functions.h"
 #include "../preference/application_preferences.h"
 #include "regenerate_film_strip_thumbnails.h"
-
+#include "../time_line/draw_timeline.h"
 
 gint film_strip_handle_released(GObject *paned, GParamSpec *pspec, gpointer data)
 {
@@ -53,6 +53,9 @@ gint film_strip_handle_released(GObject *paned, GParamSpec *pspec, gpointer data
 
 		// Set a toggle to indicate the film strip width changing has completed
 		set_film_strip_being_resized(FALSE);
+
+
+
 	}
 
 	// Indicate to the calling routine that this function finished fine

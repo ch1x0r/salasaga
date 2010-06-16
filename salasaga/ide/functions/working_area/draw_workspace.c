@@ -60,6 +60,7 @@ void draw_workspace(void)
 	if(get_undoing() == TRUE){
 		return;
 	}
+
 	if ((NULL == get_current_slide()) || (FALSE == get_project_active()))
 	{
 		return;
