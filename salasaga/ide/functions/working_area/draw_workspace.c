@@ -57,6 +57,9 @@ void draw_workspace(void)
 
 
 	// If the current slide hasn't been initialised, or there is no project active don't run this function
+	if(get_undoing() == TRUE){
+		return;
+	}
 	if ((NULL == get_current_slide()) || (FALSE == get_project_active()))
 	{
 		return;

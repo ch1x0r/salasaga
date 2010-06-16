@@ -118,7 +118,7 @@ static guint				working_height;					// Height of the display portion of the work
 static guint				working_width;					// Width of the display portion of the working area in pixels
 static guint				zoom;							// Percentage zoom to use in the drawing area
 static GtkComboBox			*zoom_selector;					// Widget for the zoom selector
-
+static gboolean				doing_undo;
 // Fonts available for use in text layers
 gchar	*salasaga_font_names[] =
 {
@@ -667,6 +667,11 @@ GtkComboBox *get_zoom_selector()
 	return zoom_selector;
 }
 
+gboolean get_undoing(){
+	return doing_undo;
+}
+
+
 void set_boundary_list(GList *new_boundary_list)
 {
 	boundary_list = new_boundary_list;
@@ -1110,4 +1115,9 @@ void set_zoom(guint new_zoom)
 void set_zoom_selector(GtkComboBox *new_zoom_selector)
 {
 	zoom_selector = new_zoom_selector;
+}
+
+void set_undoing(gboolean val){
+
+	doing_undo = val;
 }

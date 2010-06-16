@@ -220,7 +220,8 @@ void set_working_width(guint new_working_width);
 void set_zoom(guint new_zoom);
 void set_zoom_selector(GtkComboBox *new_zoom_selector);
 
-
+void set_undoing(gboolean val);
+gboolean get_undoing();
 #ifdef __cplusplus
 }
 #endif // __cplusplus

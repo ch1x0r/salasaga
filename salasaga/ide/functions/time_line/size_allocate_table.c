@@ -53,5 +53,5 @@ gboolean size_allocate_table(GtkWidget *widget,gpointer user_data)
 		draw_timeline();
 	}
 	}
-		return TRUE;
+		return FALSE;
 }
