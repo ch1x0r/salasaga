@@ -263,7 +263,7 @@ void image_resize(void)
 	regenerate_film_strip_thumbnails();
 
 	// Redraw the workspace
-	draw_workspace();
+	//draw_workspace();
 
 	// Set the changes made variable
 	set_changes_made(TRUE);

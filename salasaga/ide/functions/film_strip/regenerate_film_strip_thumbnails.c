@@ -62,7 +62,7 @@ void regenerate_film_strip_thumbnails()
 	slide				*this_slide_data;			// Points to the presently processing slide
 	GdkPixbuf			*tmp_pixbuf;				// Used to convert from a pixmap to a pixbuf
 	GdkPixmap			*tmp_pixmap;				// Used when converting from a pixmap to a pixbuf
-
+	GString				*message;
 
 	// Safety check
 	set_slides(g_list_first(get_slides()));
@@ -72,7 +72,7 @@ void regenerate_film_strip_thumbnails()
 		// There aren't any slides in this project yet, so just return
 		return;
 	}
-
+	message = g_string_new(NULL);
 	// Get the path to the presently selected thumbnail in the film strip
 	gtk_tree_view_get_cursor(GTK_TREE_VIEW(get_film_strip_view()), &new_path, NULL);
 
@@ -88,12 +88,13 @@ void regenerate_film_strip_thumbnails()
 		this_slide_data = (slide *) this_slide->data;
 
 		// If the present slide doesn't have a time line widget, then create one
-		if (FALSE == IS_TIME_LINE(this_slide_data->timeline_widget))
-		{
-			// Construct the widget used to display the slide in the timeline
-			this_slide_data->timeline_widget = time_line_new();
-			time_line_set_stored_slide_duration(this_slide_data->timeline_widget, this_slide_data->duration);
-		}
+//		if (FALSE == IS_TIME_LINE(this_slide_data->timeline_widget))
+//		{
+//
+//			// Construct the widget used to display the slide in the timeline
+//			this_slide_data->timeline_widget = time_line_new();
+//			time_line_set_stored_slide_duration(this_slide_data->timeline_widget, this_slide_data->duration);
+//		}
 
 		// Get the current time line cursor position
 		cursor_position = time_line_get_cursor_position(this_slide_data->timeline_widget);

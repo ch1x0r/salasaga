@@ -97,7 +97,6 @@ void draw_timeline(void)
 	// Getting the private Time Line Instance for various parameters
 	priv = TIME_LINE_GET_PRIVATE(slide_pointer->timeline_widget);
 
-
 	gtk_container_add(GTK_CONTAINER(get_time_line_container()), GTK_WIDGET(slide_pointer->timeline_widget));
 	gtk_widget_show_all(GTK_WIDGET(get_time_line_container()));
 

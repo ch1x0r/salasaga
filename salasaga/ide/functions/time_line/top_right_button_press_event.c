@@ -36,7 +36,7 @@
 #include "time_line_get_cursor_position.h"
 #include "time_line_set_cursor_position.h"
 #include "time_line_internal_draw_cursor.h"
-
+#include "../film_strip/film_strip_create_thumbnail.h"
 #include "draw_timeline.h"
 
 
@@ -82,6 +82,8 @@ void top_right_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 
 
 	draw_timeline();
+
+	film_strip_create_thumbnail(get_current_slide_data());
 	// Update the workspace area
 	//draw_workspace();
 	return;

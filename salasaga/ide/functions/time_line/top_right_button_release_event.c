@@ -39,10 +39,6 @@ void top_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 {
 	TimeLinePrivate		*priv;
 	priv = data;
-	if (NULL == widget)
-	{
-		return;
-	}
 	if (TRUE == priv->cursor_drag_active)
 	{
 		// Note that the cursor drag has finished
