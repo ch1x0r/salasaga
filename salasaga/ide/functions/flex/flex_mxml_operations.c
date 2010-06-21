@@ -218,17 +218,30 @@ xmlNodePtr flex_mxml_shape_add_text(flex_mxml_dom_t* dom, gint x, gint y, gchar*
 
 	GString* color_value = g_string_sized_new(10);
 	GString* font_size_value = g_string_sized_new(7);
+	GString* x_value = g_string_new(0);
+	GString* y_value = g_string_new(0);
 
+	// create color atribute for DOM node text
 	g_string_printf(color_value, "0x%x%x%x", font_color.red, font_color.green, font_color.blue);
+
+	// create font size atribute
 	g_string_printf(font_size_value, "%i", font_size);
 
+	g_string_printf(x_value, "%i", x);
+	g_string_printf(y_value, "%i", y);
+
+	// fill atributes of text node
 	xmlNewProp(node, BAD_CAST "text", BAD_CAST text);
 	xmlNewProp(node, BAD_CAST "color", BAD_CAST color_value->str);
 	xmlNewProp(node, BAD_CAST "fontFamily", BAD_CAST font_style);
 	xmlNewProp(node, BAD_CAST "fontSize", BAD_CAST font_size_value->str);
+	xmlNewProp(node, BAD_CAST "x", BAD_CAST x_value->str);
+	xmlNewProp(node, BAD_CAST "y", BAD_CAST y_value->str);
 
 	g_string_free(color_value, 1);
 	g_string_free(font_size_value, 1);
+	g_string_free(x_value, 1);
+	g_string_free(y_value, 1);
 
 	return node;
 }

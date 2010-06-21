@@ -420,11 +420,11 @@ gint export_swf_inner(gchar *output_filename) {
 	flex_mxml_compilation_flash_options_t* options = flex_mxml_compilation_flash_options_create();
 
 	// set output flash resolution
-	options->width = 1024;
-	options->height = 758;
+	options->width = get_output_width();
+	options->height = get_output_height();
 
 	// create variable, that will contain filename of output mxml file
-	gchar mxml_file_name[L_tmpnam + sizeof(".mxml") + 1];		// where to put temporary mxml file
+	gchar mxml_file_name[L_tmpnam + sizeof(".mxml") + 1];	// where to put temporary mxml file
 
 	// actually get name
 	tmpnam(mxml_file_name);

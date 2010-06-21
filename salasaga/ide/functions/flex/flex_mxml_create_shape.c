@@ -147,10 +147,6 @@ gboolean flex_create_shape( flex_mxml_dom_t* dom,layer* this_layer_data) {
 
 				font_size = rint(scaled_height_ratio * font_size_int / PANGO_SCALE);
 
-				// NOTE: FONT SIZE
-				//printf("\nfont_size %i\n", (int)font_size);
-				//return FALSE;
-
 				// Get the text tags that apply to this iter
 				applied_tags = gtk_text_iter_get_tags(&cursor_iter);
 
@@ -225,8 +221,8 @@ gboolean flex_create_shape( flex_mxml_dom_t* dom,layer* this_layer_data) {
 		// * At this point we have processed all the lines of text, and should therefore know their heights *
 
 		// Loop through the lines again, but this time create the text object
-		//text_pos_x = 0;
-		//text_pos_y = line_heights[0] - line_descents[0];
+		text_pos_x = 0;
+		text_pos_y = line_heights[0] - line_descents[0];
 		for (line_counter = 0; line_counter < num_lines; line_counter++) {
 			// Position the SWF cursor to the start of the line
 			if (line_counter > 0) {
@@ -312,7 +308,7 @@ gboolean flex_create_shape( flex_mxml_dom_t* dom,layer* this_layer_data) {
 					// Set the character to be written
 					//flex_mxml_rgb_t rgb = {red_component,green_component,blue_component};
 					flex_mxml_rgb_t rgb = {255,255,255};
-					flex_mxml_shape_add_text(dom, text_pos_x, text_pos_y, render_string->str, "tahoma", font_size, rgb);
+					flex_mxml_shape_add_text(dom, text_pos_x, text_pos_y, render_string->str, "tahoma", 36, rgb);
 
 					printf("render string %s\n",render_string->str);
 
