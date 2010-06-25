@@ -82,7 +82,7 @@ void top_right_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 
 	draw_timeline();
 	// Update the workspace area
-	draw_workspace();
+	//draw_workspace();
 	return;
 
 }
