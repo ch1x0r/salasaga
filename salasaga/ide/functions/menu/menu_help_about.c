@@ -44,7 +44,7 @@ void menu_help_about(void)
 {
 	// Local variables
 	GtkAboutDialog		*about_dialog;
-	const gchar			*authors[] = {"Justin Clift <justin@salasaga.org>", "Maxim Sditanov <feniksa@rambler.ru>", "Althaf M <allupaku@securebulls.com>", NULL};
+	const gchar			*authors[] = {"Justin Clift <justin@salasaga.org>", "Maxim Sditanov <feniksa@rambler.ru>","Althaf M<allupaku@securebulls.com>", NULL};
 	GString				*tmp_gstring;
 	gint				tmp_int;
 

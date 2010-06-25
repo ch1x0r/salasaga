@@ -36,7 +36,7 @@
 #include "time_line_get_cursor_position.h"
 #include "time_line_set_cursor_position.h"
 #include "time_line_internal_draw_cursor.h"
-
+#include "../film_strip/film_strip_create_thumbnail.h"
 #include "draw_timeline.h"
 
 
@@ -62,7 +62,7 @@ void top_right_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 
 	area.height = GTK_WIDGET(priv->bot_right_evb)->allocation.height;
-	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+	gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &area, TRUE);
 
 	// Reposition the cursor to where the mouse button down occurred
 	tl_cursor_pos = event->x/pps;
@@ -78,9 +78,12 @@ void top_right_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 	area.width = CURSOR_HEAD_WIDTH;
 	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
 	area.height = GTK_WIDGET(priv->bot_right_evb)->allocation.height;
-	gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+	gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &area, TRUE);
+
 
 	draw_timeline();
+
+	film_strip_create_thumbnail(get_current_slide_data());
 	// Update the workspace area
 	//draw_workspace();
 	return;

@@ -47,7 +47,7 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
 	gchar				*tmp_gchar;
 	GString				*tmp_string;
 
-
+	set_undoing(TRUE);
 	// Check if the width of the drawing area has changed
 	right_side_widget = get_right_side();
 	if (old_width != right_side_widget->allocation.width)
@@ -74,7 +74,7 @@ gint event_size_allocate_received(GtkWidget *widget, GdkEvent *event, gpointer d
 		// Free the memory allocated in this function
 		g_string_free(tmp_string, TRUE);
 	}
-
+	set_undoing(FALSE);
 	// Return FALSE to continue event propagation
 	return FALSE;
 }

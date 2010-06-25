@@ -48,6 +48,7 @@
 #include "time_line_internal_redraw_bg_area.h"
 #include "time_line_internal_redraw_layer_bg.h"
 #include "time_line_internal_draw_cursor.h"
+#include "top_right_button_release_event.h"
 #include "draw_timeline.h"
 
 void bot_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gpointer data)
@@ -82,6 +83,7 @@ void bot_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 	{
 		// Note that the cursor drag has finished
 		priv->cursor_drag_active = FALSE;
+		top_right_button_release_event(widget,event,data);
 		return;
 	}
 	if(TRUE == priv->left_resize_active){
@@ -207,6 +209,6 @@ void bot_right_button_release_event(GtkWidget *widget, GdkEventButton *event, gp
 
 		// Draw the start and end points for the layer
 		draw_layer_start_and_end_points();
-		draw_workspace();
+		//draw_workspace();
 
 }

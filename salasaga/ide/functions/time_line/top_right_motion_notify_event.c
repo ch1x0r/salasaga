@@ -78,6 +78,8 @@ void top_right_motion_notify_event(GtkWidget *widget, GdkEventButton *event, gpo
 
 		area.x = (priv->cursor_position * pps) - (CURSOR_HEAD_WIDTH );
 		gdk_window_invalidate_rect(GTK_WIDGET(widget)->window, &area, TRUE);
+		area.height = priv->bot_right_evb->allocation.height;
+		gdk_window_invalidate_rect(GTK_WIDGET(priv->bot_right_evb)->window, &area, TRUE);
 				priv->stored_x = event->x;
 
 		draw_timeline();

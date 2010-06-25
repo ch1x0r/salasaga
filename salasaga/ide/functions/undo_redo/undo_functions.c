@@ -174,7 +174,7 @@ gint undo_history_redo_item(void)
 		case UNDO_CHANGE_LAYER:
 
 			// * We're redoing a change to a layer *
-
+			set_undoing(TRUE);
 			// Point to the layer we're going to change
 			slide_data = undo_data->slide_data;
 			layer_pointer = g_list_nth(slide_data->layers, undo_data->position_old);
@@ -304,20 +304,21 @@ gint undo_history_redo_item(void)
 
 	// Redraw the timeline area
 	draw_timeline();
-
-	// Redraw the workspace
-	draw_workspace();
+//
+//	// Redraw the workspace
+//	draw_workspace();
 
 	// Tell (force) the window system to redraw the working area *immediately*
 	main_drawing_area_widget = get_main_drawing_area();
 	gtk_widget_draw(GTK_WIDGET(main_drawing_area_widget), &main_drawing_area_widget->allocation);  // Yes, this is deprecated, but it *works*
 
 	// Redraw the film strip
+	//film_strip_create_thumbnail(get_current_slide_data());
 	regenerate_film_strip_thumbnails();
 
 	// Set the changes made variable
 	set_changes_made(TRUE);
-
+	set_undoing(FALSE);
 	// Use the status bar to give further feedback to the user
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _("Last action redone"));
 	gdk_flush();
@@ -362,16 +363,17 @@ gint undo_history_undo_item(void)
 	{
 		case UNDO_CHANGE_LAYER:
 
-			// * We're undoing a change to a layer *
-
-			// Point to the layer we're going to change
+			set_undoing(TRUE);
+//			// * We're undoing a change to a layer *
+//
+//			// Point to the layer we're going to change
 			slide_data = undo_data->slide_data;
 			layer_pointer = g_list_nth(slide_data->layers, undo_data->position_new);
 
-			// Remove the "new" layer from the slide
+//			// Remove the "new" layer from the slide
 			slide_data->layers = g_list_remove(slide_data->layers, layer_pointer->data);
-
-			// Insert the "old" layer into the slide at the old position
+//
+//			// Insert the "old" layer into the slide at the old position
 			slide_data->layers = g_list_insert(slide_data->layers, undo_data->layer_data_old, undo_data->position_old);
 
 			break;
@@ -504,7 +506,7 @@ gint undo_history_undo_item(void)
 	draw_timeline();
 
 	// Redraw the workspace
-	draw_workspace();
+	//draw_workspace();
 
 	// Tell (force) the window system to redraw the working area *immediately*
 	main_drawing_area_widget = get_main_drawing_area();
@@ -512,6 +514,7 @@ gint undo_history_undo_item(void)
 
 	// Redraw the film strip
 	regenerate_film_strip_thumbnails();
+	//film_strip_create_thumbnail(get_current_slide_data());
 
 	// Enable the Edit -> Redo option
 	menu_enable(_("/Edit/Redo"), TRUE);
@@ -524,10 +527,10 @@ gint undo_history_undo_item(void)
 
 	// Set the changes made variable
 	set_changes_made(TRUE);
-
+	set_undoing(FALSE);
 	// Use the status bar to give further feedback to the user
 	gtk_progress_bar_set_text(GTK_PROGRESS_BAR(get_status_bar()), _("Last action undone"));
-	gdk_flush();
+	//gdk_flush();
 
 	return TRUE;
 }

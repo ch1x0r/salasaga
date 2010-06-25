@@ -101,7 +101,7 @@ void bot_right_button_press_event(GtkWidget *widget, GdkEventButton *event, gpoi
 		// Too low, the user didn't click on a valid row
 		return;
 	}
-	if (this_slide_data->num_layers >= new_row)
+	if (this_slide_data->num_layers <= new_row)
 	{
 		// Too high, the user didn't click on a valid row
 		return;
