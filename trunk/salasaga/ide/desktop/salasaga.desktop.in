@@ -1,0 +1,10 @@
+[Desktop Entry]
+Name=Salasaga
+GenericName=eLearning IDE
+Comment=Create eLearning for desktop applications
+Icon=salasaga-icon
+Exec=salasaga
+Type=Application
+Terminal=false
+StartupNotify=true
+Categories=Graphics;2DGraphics;VectorGraphics;GTK;

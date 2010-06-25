@@ -1,0 +1,49 @@
+***********
+
+Windows (MinGW) notes: After installing all of the GTK, Glib, (etc) stuff, pkg-config didn't work until I'd set the environment variable:
+PKG_CONFIG_PATH=/c/MinGW/lib/pkgconfig
+
+$ pkg-config gtk+-2.0 --cflags
+  -mms-bitfields -Ic:/MinGW/include/gtk-2.0 -Ic:/MinGW/lib/gtk-2.0/include -Ic:/MinGW/include/atk-1.0 -Ic:/MinGW/include/cairo -Ic:/MinGW/include/pango-1.0 -Ic:/devel/dist/cairo-1.0.4/include/cairo -Ic:/MinGW/include/glib-2.0 -Ic:/MinGW/lib/glib-2.0/include
+
+$ pkg-config gtk+-2.0 --libs
+  -Lc:/MinGW/lib -Lc:/devel/target/stable/lib -Lc:/opt/gnuwin32/lib -lgtk-win32-2.0 -lgdk-win32-2.0 -latk-1.0 -lgdk_pixbuf-2.0 -lpangowin32-1.0 -lgdi32 -lpangocairo-1.0 -lfontconfig -lfreetype -lpango-1.0 -lm -lcairo -lgobject-2.0 -lgmodule-2.0 -lglib-2.0 -lintl -liconv
+
+***********
+
+ It's difficult to locate some of the Gnome stuff, pre-compiled for Win32.
+ ftp.gnome.org has them, under (i.e.) /platform/2.12/2.12.2/win32/
+
+ This is a local mirror (to me) of that location.
+ http://mirror.internode.on.net/pub/gnome/platform/2.12/2.12.2/win32/
+
+***********
+
+The FDB format font outlines were created using this process.
+
+a) Convert the TTF files to FFT with "ttf2fft" from:
+
+   https://sourceforge.net/projects/ming/files/ming/ttf2fft/ttf2fft-1.0.tar.bz2/download
+  
+   It needs patching to work with Freetype 2.2+:
+
+   http://reddog.s35.xrea.com/wiki/ttf2fft%20patch%20for%20freetype2.2.html
+
+b) Convert the FFT files to FDB format with "makefdb", included in the Ming utils folder.
+
+   I used the one with Ming 0.4.2 for FDB files included with the the 0.8.0-alpha6 release. 
+
+***********
+
+I18n notes
+
+ "gettextize" version 0.17 was used to prepare the m4, po and intl directories.
+
+ Text strings are extracted with:
+ 
+  find . -type f | grep "\.c$" |sort | sed 's/\.\///' | grep -v "^intl" > po/POTFILES.in
+  echo "ide/salasaga_types.h" >> po/POTFILES.in
+  echo "ide/valid_fields.h" >> po/POTFILES.in
+  echo "screen_capture/valid_fields.h" >> po/POTFILES.in
+  xgettext -L C -k_ -kN_ --copyright-holder="Digital Distribution Global Training Solutions Pty. Ltd." --package-name="salasaga" --package-version="0.8.0-alpha8-8" --msgid-bugs-address="justin@salasaga.org" -f po/POTFILES.in -o po/salasaga.pot
+  sed -i 's/Copyright (C) YEAR/Copyright (C) 2010/' po/salasaga.pot
