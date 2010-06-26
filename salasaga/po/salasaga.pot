@@ -6,7 +6,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: salasaga 0.8.0-alpha8-8\n"
+"Project-Id-Version: salasaga 0.8.0-alpha8-9\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
 "POT-Creation-Date: 2010-06-27 01:21+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
