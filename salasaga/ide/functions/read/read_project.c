@@ -147,7 +147,7 @@ gboolean read_project(gchar *filename, guint *total_num_slides)
 
 	// Set sensible defaults for the swf information button
 	valid_info_link = g_string_new("http://www.salasaga.org");
-	valid_info_link_target = g_string_new(_("_blank"));
+	valid_info_link_target = g_string_new("_blank");
 	valid_info_text = gtk_text_buffer_new(get_text_tags_table());
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(valid_info_text), _("Created using Salasaga"), -1);
 	valid_info_display = TRUE;

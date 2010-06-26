@@ -307,7 +307,7 @@ void menu_file_new(void)
 
 	// Set the initial information text and link
 	set_info_link("http://www.salasaga.org");
-	set_info_link_target(_("_blank"));
+	set_info_link_target("_blank");
 	set_info_text(gtk_text_buffer_new(get_text_tags_table()));
 	gtk_text_buffer_set_text(GTK_TEXT_BUFFER(get_info_text()), _("Created using Salasaga"), -1);
 	set_info_display(TRUE);

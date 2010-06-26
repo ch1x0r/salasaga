@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: salasaga 0.8.0-alpha8-8\n"
 "Report-Msgid-Bugs-To: justin@salasaga.org\n"
-"POT-Creation-Date: 2010-06-15 14:31+1000\n"
+"POT-Creation-Date: 2010-06-27 01:21+1000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -362,7 +362,7 @@ msgstr ""
 #: ide/functions/time_line/top_left_button_release_event.c:132
 #: ide/functions/time_line/top_left_button_release_event.c:141
 #: ide/functions/undo_redo/undo_functions.c:286
-#: ide/functions/undo_redo/undo_functions.c:494
+#: ide/functions/undo_redo/undo_functions.c:496
 #: ide/functions/working_area/calculate_object_boundaries.c:184
 #: ide/functions/working_area/draw_highlight_box.c:54
 #: ide/functions/working_area/draw_highlight_box.c:93
@@ -1467,7 +1467,7 @@ msgstr ""
 #: ide/functions/layer/layer_duplicate.c:92
 #: ide/functions/layer/layer_new_image_inner.c:102
 #: ide/functions/menu/menu_screenshots_import.c:358
-#: ide/functions/time_line/create_time_line.c:214
+#: ide/functions/time_line/create_time_line.c:213
 msgid "Image"
 msgstr ""
 
@@ -1531,7 +1531,7 @@ msgid " Please draw the new layer"
 msgstr ""
 
 #: ide/functions/layer/layer_new_highlight_inner.c:158
-#: ide/functions/time_line/create_time_line.c:201
+#: ide/functions/time_line/create_time_line.c:200
 msgid "Highlight"
 msgstr ""
 
@@ -1889,7 +1889,7 @@ msgstr ""
 #: ide/functions/undo_redo/undo_functions.c:94
 #: ide/functions/undo_redo/undo_functions.c:133
 #: ide/functions/undo_redo/undo_functions.c:296
-#: ide/functions/undo_redo/undo_functions.c:522
+#: ide/functions/undo_redo/undo_functions.c:525
 msgid "/Edit/Undo"
 msgstr ""
 
@@ -1897,7 +1897,7 @@ msgstr ""
 #: ide/functions/undo_redo/undo_functions.c:97
 #: ide/functions/undo_redo/undo_functions.c:132
 #: ide/functions/undo_redo/undo_functions.c:302
-#: ide/functions/undo_redo/undo_functions.c:517
+#: ide/functions/undo_redo/undo_functions.c:520
 msgid "/Edit/Redo"
 msgstr ""
 
@@ -2205,12 +2205,6 @@ msgstr ""
 msgid ""
 "There was something wrong with the project frames per second value.  Please "
 "try again."
-msgstr ""
-
-#: ide/functions/menu/menu_file_new.c:310
-#: ide/functions/menu/menu_screenshots_import.c:102
-#: ide/functions/read/read_project.c:150
-msgid "_blank"
 msgstr ""
 
 #: ide/functions/menu/menu_file_new.c:312
@@ -3433,83 +3427,83 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
-#: ide/functions/time_line/bot_right_button_release_event.c:147
+#: ide/functions/time_line/bot_right_button_release_event.c:149
 msgid " Resize completed"
 msgstr ""
 
-#: ide/functions/time_line/bot_right_button_release_event.c:192
+#: ide/functions/time_line/bot_right_button_release_event.c:194
 msgid " Drag completed"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:106
+#: ide/functions/time_line/create_time_line.c:105
 msgid "Edit"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:107
+#: ide/functions/time_line/create_time_line.c:106
 #: ide/functions/tool_bars/enable_layer_toolbar_buttons.c:58
 msgid "Edit layer"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:119
+#: ide/functions/time_line/create_time_line.c:118
 msgid "Crop"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:120
+#: ide/functions/time_line/create_time_line.c:119
 #: ide/functions/tool_bars/enable_layer_toolbar_buttons.c:67
 msgid "Crop image"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:132
+#: ide/functions/time_line/create_time_line.c:131
 msgid "Delete"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:133
+#: ide/functions/time_line/create_time_line.c:132
 #: ide/functions/tool_bars/enable_layer_toolbar_buttons.c:76
 msgid "Delete selected layer"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:145
+#: ide/functions/time_line/create_time_line.c:144
 msgid "Down"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:146
+#: ide/functions/time_line/create_time_line.c:145
 #: ide/functions/tool_bars/enable_layer_toolbar_buttons.c:85
 msgid "Move layer down"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:158
+#: ide/functions/time_line/create_time_line.c:157
 msgid "Up"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:159
+#: ide/functions/time_line/create_time_line.c:158
 #: ide/functions/tool_bars/enable_layer_toolbar_buttons.c:94
 msgid "Move layer up"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:175
+#: ide/functions/time_line/create_time_line.c:174
 msgid "Mouse"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:176
+#: ide/functions/time_line/create_time_line.c:175
 #: ide/functions/tool_bars/enable_layer_toolbar_buttons.c:103
 msgid "Add a mouse pointer"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:188
+#: ide/functions/time_line/create_time_line.c:187
 msgid "Text"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:189
+#: ide/functions/time_line/create_time_line.c:188
 #: ide/functions/tool_bars/enable_layer_toolbar_buttons.c:112
 msgid "Add a text layer"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:202
+#: ide/functions/time_line/create_time_line.c:201
 #: ide/functions/tool_bars/enable_layer_toolbar_buttons.c:121
 msgid "Add a highlight layer"
 msgstr ""
 
-#: ide/functions/time_line/create_time_line.c:215
+#: ide/functions/time_line/create_time_line.c:214
 #: ide/functions/tool_bars/enable_layer_toolbar_buttons.c:130
 msgid "Add an image layer"
 msgstr ""
@@ -3669,17 +3663,17 @@ msgid "Export to Flash disabled: No project loaded"
 msgstr ""
 
 #: ide/functions/undo_redo/undo_functions.c:286
-#: ide/functions/undo_redo/undo_functions.c:494
+#: ide/functions/undo_redo/undo_functions.c:496
 msgid ""
 "Programming error.  The Undo/Redo functions were called with an unknown undo "
 "type."
 msgstr ""
 
-#: ide/functions/undo_redo/undo_functions.c:322
+#: ide/functions/undo_redo/undo_functions.c:323
 msgid "Last action redone"
 msgstr ""
 
-#: ide/functions/undo_redo/undo_functions.c:529
+#: ide/functions/undo_redo/undo_functions.c:532
 msgid "Last action undone"
 msgstr ""
 
